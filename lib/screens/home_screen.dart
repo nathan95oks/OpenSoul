@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
 import '../providers/sentence_provider.dart'; 
 import '../data/mock_cards.dart'; // Importamos nuestra base de datos simulada
+import 'package:flutter_tts/flutter_tts.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -124,7 +125,7 @@ class HomeScreen extends ConsumerWidget {
                     onSelected: (bool selected) {
                       if (selected) {
                         // Cambiamos la categoría activa en Riverpod
-                        ref.read(categoryProvider.notifier).state = categoria;
+                        ref.read(categoryProvider.notifier).setCategory(categoria);
                       }
                     },
                   ),
@@ -178,8 +179,16 @@ class HomeScreen extends ConsumerWidget {
               width: double.infinity,
               height: 60,
               child: ElevatedButton.icon(
-                onPressed: selectedWords.isEmpty ? null : () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Conectando a AWS Bedrock...')));
+                onPressed: selectedWords.isEmpty ? null : () async {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Generando audio...')));
+                  
+                  FlutterTts flutterTts = FlutterTts();
+                  await flutterTts.setLanguage("es-ES"); // Configurado en español
+                  await flutterTts.setSpeechRate(0.5); // Velocidad un poco más lenta para claridad
+                  await flutterTts.setPitch(1.0);
+                  
+                  String textToSpeak = selectedWords.join(" ");
+                  await flutterTts.speak(textToSpeak);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFFD700),

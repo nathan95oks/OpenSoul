@@ -32,6 +32,10 @@ class CategoryNotifier extends Notifier<String> {
   String build() {
     return 'Sujetos';
   }
+  
+  void setCategory(String category) {
+    state = category;
+  }
 }
 
 // Este es el "puente" para que la interfaz se conecte con la clase de arriba
