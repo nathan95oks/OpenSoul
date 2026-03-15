@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
-import '../providers/sentence_provider.dart'; 
-import '../data/mock_cards.dart'; // Importamos nuestra base de datos simulada
-import 'package:flutter_tts/flutter_tts.dart';
+
+import '../features/cards/presentation/providers/cards_provider.dart';
+import '../features/translation/presentation/providers/sentence_provider.dart';
+import '../features/translation/presentation/providers/translation_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  // Método para mostrar la ventana de video (ahora recibe la URL dinámica)
   void _mostrarVideoConfirmacion(BuildContext context, WidgetRef ref, String word, String videoUrl) {
     showModalBottomSheet(
       context: context,
@@ -37,16 +37,15 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 1. Escuchamos las palabras seleccionadas
+    // 1. Escuchamos las palabras combinadas seleccionadas (Sentence)
     final selectedWords = ref.watch(sentenceProvider);
-    // 2. Escuchamos qué categoría está activa actualmente
-    final currentCategory = ref.watch(categoryProvider);
+    
+    // 2. Escuchamos la categoría actual para mantener el estado UI
+    final currentCategory = ref.watch(currentCategoryProvider);
 
-    // 3. Filtramos las tarjetas para mostrar solo las de la categoría activa
-    final tarjetasFiltradas = baseDeDatosTarjetas.where((card) => card.category == currentCategory).toList();
-
-    // 4. Obtenemos una lista única de todas las categorías disponibles ("Sujetos", "Verbos", etc.)
-    final categoriasUnicas = baseDeDatosTarjetas.map((card) => card.category).toSet().toList();
+    // 3. Consumimos las tarjetas agrupadas por categoría (de capa de Domain)
+    final categoriesAsync = ref.watch(categoriesProvider);
+    final cardsAsync = ref.watch(cardsByCategoryProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -101,36 +100,39 @@ class HomeScreen extends ConsumerWidget {
             height: 60,
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             color: const Color(0xFF121212),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              itemCount: categoriasUnicas.length,
-              itemBuilder: (context, index) {
-                final categoria = categoriasUnicas[index];
-                final isSelected = categoria == currentCategory;
+            child: categoriesAsync.when(
+              data: (categoriasUnicas) => ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                itemCount: categoriasUnicas.length,
+                itemBuilder: (context, index) {
+                  final categoria = categoriasUnicas[index];
+                  final isSelected = categoria == currentCategory;
 
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: ChoiceChip(
-                    label: Text(
-                      categoria,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? Colors.black : Colors.white,
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: ChoiceChip(
+                      label: Text(
+                        categoria,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isSelected ? Colors.black : Colors.white,
+                        ),
                       ),
+                      selected: isSelected,
+                      selectedColor: const Color(0xFFFFD700),
+                      backgroundColor: const Color(0xFF2C2C2C),
+                      onSelected: (bool selected) {
+                        if (selected) {
+                          ref.read(currentCategoryProvider.notifier).setCategory(categoria);
+                        }
+                      },
                     ),
-                    selected: isSelected,
-                    selectedColor: const Color(0xFFFFD700),
-                    backgroundColor: const Color(0xFF2C2C2C),
-                    onSelected: (bool selected) {
-                      if (selected) {
-                        // Cambiamos la categoría activa en Riverpod
-                        ref.read(categoryProvider.notifier).setCategory(categoria);
-                      }
-                    },
-                  ),
-                );
-              },
+                  );
+                },
+              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text('Error: $err', style: const TextStyle(color: Colors.red))),
             ),
           ),
 
@@ -138,35 +140,40 @@ class HomeScreen extends ConsumerWidget {
           // ZONA 3: Grid de Tarjetas Reales (Abajo)
           // ==========================================
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(12),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.9,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemCount: tarjetasFiltradas.length,
-              itemBuilder: (context, index) {
-                final tarjeta = tarjetasFiltradas[index]; // Obtenemos la tarjeta real
-                
-                return InkWell(
-                  onTap: () => _mostrarVideoConfirmacion(context, ref, tarjeta.word, tarjeta.videoUrl),
-                  child: Card(
-                    color: const Color(0xFF2C2C2C),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    elevation: 4,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        Icon(tarjeta.icon, size: 60, color: Colors.white),
-                        const SizedBox(height: 16),
-                        Text(tarjeta.word, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                      ],
+            child: cardsAsync.when(
+              data: (tarjetasFiltradas) => GridView.builder(
+                padding: const EdgeInsets.all(12),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.9,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                ),
+                itemCount: tarjetasFiltradas.length,
+                itemBuilder: (context, index) {
+                  final tarjeta = tarjetasFiltradas[index]; 
+                  
+                  return InkWell(
+                    onTap: () => _mostrarVideoConfirmacion(context, ref, tarjeta.displayText, tarjeta.videoUrl),
+                    child: Card(
+                      color: const Color(0xFF2C2C2C),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      elevation: 4,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children:[
+                          // Fallback si no hay iconUrl (reemplazar la clase IconData por network images despues)
+                          const Icon(Icons.credit_card, size: 60, color: Colors.white),
+                          const SizedBox(height: 16),
+                          Text(tarjeta.displayText, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, stack) => Center(child: Text('Error al cargar tarjetas', style: const TextStyle(color: Colors.red))),
             ),
           ),
 
@@ -182,13 +189,11 @@ class HomeScreen extends ConsumerWidget {
                 onPressed: selectedWords.isEmpty ? null : () async {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Generando audio...')));
                   
-                  FlutterTts flutterTts = FlutterTts();
-                  await flutterTts.setLanguage("es-ES"); // Configurado en español
-                  await flutterTts.setSpeechRate(0.5); // Velocidad un poco más lenta para claridad
-                  await flutterTts.setPitch(1.0);
-                  
-                  String textToSpeak = selectedWords.join(" ");
-                  await flutterTts.speak(textToSpeak);
+                  final translateUseCase = ref.read(translateCardsUseCaseProvider);
+                  await translateUseCase(
+                    context: 'legal',
+                    cards: selectedWords,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFFD700),
