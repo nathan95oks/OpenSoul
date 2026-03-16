@@ -1,11 +1,9 @@
-// lib/main.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'screens/home_screen.dart';
+import 'features/cards/presentation/screens/home_screen.dart';
 
 void main() {
-  // ProviderScope es obligatorio para usar Riverpod
   runApp(const ProviderScope(child: LsbLegalApp()));
 }
 
@@ -17,7 +15,6 @@ class LsbLegalApp extends StatelessWidget {
     return MaterialApp(
       title: 'LSB Inclusivo',
       debugShowCheckedModeBanner: false,
-      // Diseño de Alto Contraste (Accesibilidad)
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF121212), // Fondo casi negro

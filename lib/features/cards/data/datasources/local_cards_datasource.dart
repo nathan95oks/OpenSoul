@@ -2,7 +2,6 @@ import '../../domain/entities/lsb_card.dart';
 
 class LocalCardsDataSource {
   final List<LsbCard> _cards = [
-    // CATEGORÍA: SUJETOS
     LsbCard(
       id: 's1', gloss: 'YO', displayText: 'YO', iconUrl: '',
       videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
@@ -24,7 +23,6 @@ class LocalCardsDataSource {
       categoryId: 'Sujetos', subcategoryId: 'Legal', contexts: ['juzgado'], priority: 4, suggestedNextCardIds: [], isFrequent: true, isEmergency: false,
     ),
 
-    // CATEGORÍA: VERBOS
     LsbCard(
       id: 'v1', gloss: 'VER', displayText: 'VER', iconUrl: '',
       videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
@@ -46,7 +44,6 @@ class LocalCardsDataSource {
       categoryId: 'Verbos', subcategoryId: 'Accion', contexts: ['policia'], priority: 4, suggestedNextCardIds: [], isFrequent: true, isEmergency: true,
     ),
 
-    // CATEGORÍA: DELITOS / CONTEXTO LEGAL
     LsbCard(
       id: 'c1', gloss: 'ROBO', displayText: 'ROBO', iconUrl: '',
       videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
@@ -63,7 +60,6 @@ class LocalCardsDataSource {
       categoryId: 'Delitos', subcategoryId: 'Legal', contexts: ['policia', 'juzgado'], priority: 3, suggestedNextCardIds: [], isFrequent: true, isEmergency: false,
     ),
 
-    // CATEGORÍA: TIEMPO
     LsbCard(
       id: 't1', gloss: 'AYER', displayText: 'AYER', iconUrl: '',
       videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
