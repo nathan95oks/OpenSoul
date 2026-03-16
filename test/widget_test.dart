@@ -8,7 +8,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/main.dart';
-import 'package:lsb_legal_app/screens/home_screen.dart';
+import 'package:lsb_legal_app/features/cards/presentation/screens/home_screen.dart';
 
 void main() {
   testWidgets('App load smoke test', (WidgetTester tester) async {
