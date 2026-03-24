@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../domain/repositories/translation_repository.dart';
 
@@ -19,33 +20,29 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     required String context,
     required List<String> cards,
   }) async {
-    final generatedText = cards.join(" ");
-
-    /*
     final response = await client.post(
       Uri.parse(apiGatewayUrl),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       body: jsonEncode({
         'context': context,
         'cards': cards,
-        'target_language': 'es-ES',
+        'language': 'es-BO',
+        'institutionType': 'comisaria'
       }),
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      final Map<String, dynamic> data = jsonDecode(response.body);
       return TranslationResult(
-        generatedText: data['text'],
-        audioUrl: data['audio_url'], 
+        generatedText: data['generatedText'] ?? '',
+        audioUrl: data['audioUrl'],
+        cacheHit: data['cacheHit'] ?? false,
       );
     } else {
-      throw Exception('Failed to connect to AWS Bedrock API');
+      throw Exception('Error del Backend AWS: ${response.statusCode}');
     }
-    */
-
-    await Future.delayed(const Duration(seconds: 2)); 
-    return TranslationResult(
-      generatedText: generatedText,
-    );
   }
 }

@@ -1,10 +1,12 @@
 class TranslationResult {
   final String generatedText;
   final String? audioUrl;
+  final bool cacheHit;
 
   TranslationResult({
     required this.generatedText,
     this.audioUrl,
+    this.cacheHit = false,
   });
 }
 

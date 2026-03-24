@@ -1,9 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:audioplayers/audioplayers.dart';
+
 import '../../domain/repositories/translation_repository.dart';
 import '../providers/translation_provider.dart';
 
 class TranslationController extends AsyncNotifier<TranslationResult?> {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   @override
   Future<TranslationResult?> build() async {
     return null;
@@ -17,6 +21,11 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     try {
       final result = await translateUseCase(context: context, cards: cards);
       state = AsyncValue.data(result);
+      
+      // Auto-reproducir audio si existe
+      if (result.audioUrl != null && result.audioUrl!.isNotEmpty) {
+        await _audioPlayer.play(UrlSource(result.audioUrl!));
+      }
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
