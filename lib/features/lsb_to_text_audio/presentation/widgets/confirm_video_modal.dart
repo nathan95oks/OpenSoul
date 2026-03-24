@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:video_player/video_player.dart';
-import '../../../translation/presentation/providers/sentence_provider.dart';
+import '../providers/sentence_provider.dart';
 
 void mostrarVideoConfirmacion(BuildContext context, WidgetRef ref, String word, String videoUrl) {
   showModalBottomSheet(

@@ -1,4 +1,4 @@
-import 'package:lsb_legal_app/features/translation/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/translation_repository.dart';
 
 class TranslateCardsUseCase {
   final TranslationRepository repository;

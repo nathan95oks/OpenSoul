@@ -1,4 +1,4 @@
-import 'package:lsb_legal_app/features/cards/domain/repositories/cards_repository.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/cards_repository.dart';
 
 class GetCategoriesUseCase {
   final CardsRepository repository;

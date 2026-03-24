@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../translation/presentation/providers/sentence_provider.dart';
-import '../../../translation/presentation/controllers/translation_controller.dart';
+import '../providers/sentence_provider.dart';
+import '../controllers/translation_controller.dart';
 import '../widgets/sentence_builder.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/card_grid.dart';

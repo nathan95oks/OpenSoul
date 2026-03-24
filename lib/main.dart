@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'features/cards/presentation/screens/home_screen.dart';
+import 'features/lsb_to_text_audio/presentation/screens/home_screen.dart';
 
 void main() {
   runApp(const ProviderScope(child: LsbLegalApp()));
