@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../translation/presentation/providers/sentence_provider.dart';
+import '../providers/sentence_provider.dart';
 
 class SentenceBuilder extends ConsumerWidget {
   const SentenceBuilder({super.key});
