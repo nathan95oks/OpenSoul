@@ -15,6 +15,29 @@ class HomeScreen extends ConsumerWidget {
     final selectedWords = ref.watch(sentenceProvider);
     final translationState = ref.watch(translationControllerProvider);
 
+    // Escucha cambios en el estado para mostrar SnackBars correctamente
+    ref.listen<AsyncValue<TranslationResult?>>(
+      translationControllerProvider,
+      (previous, next) {
+        if (next is AsyncData && next.value != null) {
+          final result = next.value!;
+          if (result.audioUrl != null && result.audioUrl!.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Audio generado y reproduciendo...')),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Texto generado con éxito (Sin audio disponible)')),
+            );
+          }
+        } else if (next is AsyncError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${next.error}')),
+          );
+        }
+      },
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Comisaría / Juzgado', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -35,6 +58,35 @@ class HomeScreen extends ConsumerWidget {
 
           const CardGrid(),
 
+          // Bloque UI para mostrar el texto generado persistentemente
+          if (translationState.value != null && translationState.value!.generatedText.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[900],
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.5)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Traducción Generada:',
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      translationState.value!.generatedText,
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: SizedBox(
@@ -46,9 +98,6 @@ class HomeScreen extends ConsumerWidget {
                     context: 'legal',
                     cards: selectedWords,
                   );
-                  if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Audio generado con éxito')));
-                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFFD700),
