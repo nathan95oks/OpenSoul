@@ -12,7 +12,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
 
   RemoteTranslationDataSourceImpl({
     required this.client, 
-    this.apiGatewayUrl = 'https://tudominio-aws-api-gateway.com/prod/translate', // Base placeholder
+    this.apiGatewayUrl = 'https://5kc2fwqb49.execute-api.us-east-1.amazonaws.com/translate', // Base placeholder
   });
 
   @override
