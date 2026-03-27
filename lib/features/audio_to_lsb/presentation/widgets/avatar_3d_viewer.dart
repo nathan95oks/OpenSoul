@@ -37,7 +37,7 @@ class Avatar3DViewer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(
-                        Icons.three_d_rotation,
+                        Icons.person,
                         size: 60,
                         color: Colors.blueAccent,
                       ),
