@@ -19,6 +19,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Comisaría / Juzgado', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.mic_rounded, color: Colors.blueAccent),
+            onPressed: () => context.push('/audio-to-lsb'),
+            tooltip: 'Ir a Audio -> LSB',
+          ),
           if (selectedWords.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete_sweep, color: Colors.white),
