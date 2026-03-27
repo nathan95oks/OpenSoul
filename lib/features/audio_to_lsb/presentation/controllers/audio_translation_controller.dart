@@ -52,14 +52,16 @@ class AudioTranslationState {
 }
 
 // Controller definition
-final audioTranslationControllerProvider = StateNotifierProvider<AudioTranslationController, AudioTranslationState>((ref) {
-  return AudioTranslationController(ref.read(translateAudioUseCaseProvider));
+final audioTranslationControllerProvider = NotifierProvider<AudioTranslationController, AudioTranslationState>(() {
+  return AudioTranslationController();
 });
 
-class AudioTranslationController extends StateNotifier<AudioTranslationState> {
-  final TranslateAudioUseCase _useCase;
+class AudioTranslationController extends Notifier<AudioTranslationState> {
 
-  AudioTranslationController(this._useCase) : super(AudioTranslationState());
+  @override
+  AudioTranslationState build() {
+    return AudioTranslationState();
+  }
 
   void setRecordingState() {
     state = state.copyWith(status: AudioTranslationStatus.recording);
@@ -72,7 +74,8 @@ class AudioTranslationController extends StateNotifier<AudioTranslationState> {
     );
 
     try {
-      final result = await _useCase.execute(audioPath);
+      final useCase = ref.read(translateAudioUseCaseProvider);
+      final result = await useCase.execute(audioPath);
       state = state.copyWith(
         status: AudioTranslationStatus.success,
         translationResult: result,
