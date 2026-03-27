@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/repositories/translation_repository.dart';
 import '../providers/sentence_provider.dart';
 import '../controllers/translation_controller.dart';
 import '../widgets/sentence_builder.dart';
