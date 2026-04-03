@@ -4,6 +4,7 @@ import '../models/lsb_translation_model.dart';
 
 abstract class RemoteAudioDataSource {
   Future<LsbTranslationModel> translateAudio(String audioPath);
+  Future<LsbTranslationModel> translateText(String text);
 }
 
 class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
@@ -48,4 +49,20 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
     }
     */
   }
-}
+  
+  @override
+  Future<LsbTranslationModel> translateText(String text) async {
+    // Simulate network latency
+    await Future.delayed(const Duration(seconds: 1)); 
+
+    // Basic mocked translation Logic (Just for HU2 UI verification)
+    final words = text.toUpperCase().split(' ').where((w) => w.isNotEmpty).toList();
+    
+    final mockResponse = {
+      'glosses': words.isEmpty ? ['VACIO'] : words,
+      'animationUrl': 'https://mock-3d-avatar-anim.com/anim.gltf', 
+    };
+
+    return LsbTranslationModel.fromJson(mockResponse);
+  }
+}    
