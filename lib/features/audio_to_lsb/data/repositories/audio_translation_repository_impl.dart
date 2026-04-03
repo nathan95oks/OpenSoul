@@ -19,4 +19,14 @@ class AudioTranslationRepositoryImpl implements AudioTranslationRepository {
       throw Exception('Failed to translate audio: $e');
     }
   }
+
+  @override
+  Future<LsbTranslation> translateText(String text) async {
+    try {
+      final model = await remoteDataSource.translateText(text);
+      return model;
+    } catch (e) {
+      throw Exception('Failed to translate text: $e');
+    }
+  }
 }
