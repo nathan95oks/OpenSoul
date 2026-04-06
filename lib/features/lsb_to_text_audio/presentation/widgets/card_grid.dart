@@ -40,10 +40,11 @@ class CardGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cardsAsync = ref.watch(cardsByCategoryProvider);
 
-    return Expanded(
-      child: cardsAsync.when(
-        data: (cards) => GridView.builder(
-          padding: const EdgeInsets.all(12),
+    return cardsAsync.when(
+      data: (cards) => GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(12),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             childAspectRatio: 0.85,
@@ -115,7 +116,6 @@ class CardGrid extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
           child: Text('Error al cargar tarjetas', style: const TextStyle(color: Colors.red)),
-        ),
       ),
     );
   }
