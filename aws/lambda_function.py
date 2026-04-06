@@ -661,9 +661,15 @@ def upload_audio_to_s3(audio_bytes: bytes, cache_key: str) -> str:
     s3_key = f"{APP_PREFIX}/{cache_key}.mp3"
     logger.info("Subiendo audio a S3 — Bucket: %s, Key: %s", S3_BUCKET, s3_key)
     s3_client.put_object(Bucket=S3_BUCKET, Key=s3_key, Body=audio_bytes, ContentType="audio/mpeg")
-    audio_url = f"https://{S3_BUCKET}.s3.{APP_REGION}.amazonaws.com/{s3_key}"
-    logger.info("Audio disponible en: %s", audio_url)
-    return audio_url
+    
+    # Generar una URL prefirmada (válida por 1 hora) para no requerir que el bucket sea público
+    presigned_url = s3_client.generate_presigned_url(
+        'get_object',
+        Params={'Bucket': S3_BUCKET, 'Key': s3_key},
+        ExpiresIn=3600
+    )
+    logger.info("Url prefirmada generada exitosamente")
+    return presigned_url
 
 
 # ===================================================================
