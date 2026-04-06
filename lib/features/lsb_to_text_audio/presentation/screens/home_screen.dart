@@ -66,7 +66,9 @@ class HomeScreen extends ConsumerWidget {
             ),
         ],
       ),
-      body: Column(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
         children: [
           const SentenceBuilder(),
           const CategoryFilter(),
@@ -111,6 +113,8 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
         ],
+          ),
+        ),
       ),
     );
   }
