@@ -28,7 +28,7 @@ final getCardsByCategoryUseCaseProvider = Provider<GetCardsByCategoryUseCase>((r
 
 class CurrentCategoryNotifier extends Notifier<String> {
   @override
-  String build() => 'Sujetos';
+  String build() => 'Identificación';
   
   void setCategory(String category) {
     state = category;
