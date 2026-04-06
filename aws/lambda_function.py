@@ -766,10 +766,22 @@ def lambda_handler(event, context):
     # 7. Respuesta exitosa
     logger.info("Completado — base: '%s' | final: '%s' | bedrock: %s", base_sentence, generated_text, bedrock_used)
 
+    # Construir secuencia de glosas con claves de video/animación
+    gloss_sequence = []
+    for card in cards:
+        entry = GLOSS_LEXICON.get(card.upper())
+        gloss_sequence.append({
+            "gloss": card.upper(),
+            "videoKey": f"lsb-videos/{card.upper()}.mp4",
+            "recognized": entry is not None,
+            "rol": entry["rol"] if entry else "DESCONOCIDO",
+        })
+
     return build_response(200, {
         "baseSentence": base_sentence,
         "generatedText": generated_text,
         "intermediateRepresentation": intermediate,
+        "glossSequence": gloss_sequence,
         "audioUrl": audio_url,
         "cacheHit": False,
         "bedrockUsed": bedrock_used,
