@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// Tema visual de OpenSoul — Módulo Jurídico LSB.
+/// Tema visual de OpenSoul — Módulo de Trámites Ciudadanos LSB.
 ///
 /// Paleta oscura profesional con acentos dorados que transmite
-/// seriedad institucional y accesibilidad.
+/// institucionalidad pública y accesibilidad.
 class AppTheme {
   // Colores del sistema de diseño
   static const Color background = Color(0xFF0D1117);
