@@ -8,7 +8,7 @@ class AppScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'LSB Legal App',
+      title: 'OpenSoul - Asistente Ciudadano LSB',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       routerConfig: appRouter,
