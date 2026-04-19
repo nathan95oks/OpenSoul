@@ -39,7 +39,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
         'context': context,
         'cards': cards,
         'language': 'es-BO',
-        'institutionType': 'comisaria',
+        'institutionType': 'entidad_publica',
       }),
     );
 
