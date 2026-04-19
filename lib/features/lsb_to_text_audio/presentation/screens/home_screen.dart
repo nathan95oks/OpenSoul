@@ -45,14 +45,14 @@ class HomeScreen extends ConsumerWidget {
                 color: const Color(0xFFFFD700).withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.gavel, color: Color(0xFFFFD700), size: 20),
+              child: const Icon(Icons.account_balance, color: Color(0xFFFFD700), size: 20),
             ),
             const SizedBox(width: 10),
             const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('OpenSoul', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                Text('Asistente Jurídico LSB', style: TextStyle(fontSize: 11, color: Color(0xFF8B949E))),
+                Text('Asistente Ciudadano LSB', style: TextStyle(fontSize: 11, color: Color(0xFF8B949E))),
               ],
             ),
           ],
@@ -89,7 +89,7 @@ class HomeScreen extends ConsumerWidget {
                     ? null
                     : () async {
                         await ref.read(translationControllerProvider.notifier).translateCards(
-                          context: 'legal',
+                          context: 'ciudadano',
                           cards: selectedWords,
                         );
                       },
