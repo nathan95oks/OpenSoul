@@ -11,6 +11,7 @@ Flujo:
   6. Síntesis de audio con Polly → S3
   7. Respuesta JSON con baseSentence + generatedText
 
+Dominio: Trámites y consultas ciudadanas en entidades públicas bolivianas
 Autor: Nathanael Alba — Proyecto de Grado OpenSoul
 """
 
@@ -55,7 +56,7 @@ CORS_HEADERS = {
 
 
 # ===================================================================
-# MÓDULO 1: LEXICÓN DE GLOSAS LSB — DOMINIO JURÍDICO
+# MÓDULO 1: LEXICÓN DE GLOSAS LSB — TRÁMITES Y CONSULTAS CIUDADANAS
 # ===================================================================
 
 GLOSS_LEXICON = {
@@ -78,61 +79,66 @@ GLOSS_LEXICON = {
     "AMIGO":      {"rol": "SUJETO", "es": "mi amigo", "perspectiva": "3P"},
     "VECINO":     {"rol": "SUJETO", "es": "mi vecino", "perspectiva": "3P"},
 
-    # --- AGENTES (personas externas que actúan) ---
-    "HOMBRE":     {"rol": "AGENTE", "es": "un hombre", "perspectiva": "3P"},
-    "MUJER":      {"rol": "AGENTE", "es": "una mujer", "perspectiva": "3P"},
-    "LADRON":     {"rol": "AGENTE", "es": "un ladrón", "perspectiva": "3P"},
-    "AGRESOR":    {"rol": "AGENTE", "es": "el agresor", "perspectiva": "3P"},
-    "DESCONOCIDO":{"rol": "AGENTE", "es": "una persona desconocida", "perspectiva": "3P"},
-    "GRUPO":      {"rol": "AGENTE", "es": "un grupo de personas", "perspectiva": "3P_PLURAL"},
-
-    # --- VERBOS ---
-    "DENUNCIAR":  {"rol": "VERBO", "es": "denunciar", "1p": "deseo denunciar", "3p": "denunció", "formal": "presentar denuncia por"},
-    "ROBAR":      {"rol": "VERBO", "es": "robar", "1p": "me robaron", "3p": "robó", "formal": "sustraer"},
-    "QUITAR":     {"rol": "VERBO", "es": "quitar", "1p": "me quitaron", "3p": "quitó", "formal": "arrebatar"},
+    # --- VERBOS (Acciones administrativas y ciudadanas) ---
     "NECESITAR":  {"rol": "VERBO", "es": "necesitar", "1p": "necesito", "3p": "necesita", "formal": "requiero"},
-    "PERDER":     {"rol": "VERBO", "es": "perder", "1p": "perdí", "3p": "perdió", "formal": "he extraviado"},
+    "PEDIR":      {"rol": "VERBO", "es": "pedir", "1p": "solicito", "3p": "solicita", "formal": "solicitar"},
+    "TRAMITAR":   {"rol": "VERBO", "es": "tramitar", "1p": "necesito tramitar", "3p": "necesita tramitar", "formal": "deseo realizar el trámite de"},
+    "SOLICITAR":  {"rol": "VERBO", "es": "solicitar", "1p": "solicito", "3p": "solicita", "formal": "deseo solicitar"},
+    "REGISTRAR":  {"rol": "VERBO", "es": "registrar", "1p": "necesito registrar", "3p": "necesita registrar", "formal": "deseo registrar"},
+    "CONSULTAR":  {"rol": "VERBO", "es": "consultar", "1p": "deseo consultar", "3p": "consulta", "formal": "deseo realizar una consulta sobre"},
+    "PAGAR":      {"rol": "VERBO", "es": "pagar", "1p": "necesito pagar", "3p": "necesita pagar", "formal": "deseo realizar el pago de"},
+    "RENOVAR":    {"rol": "VERBO", "es": "renovar", "1p": "necesito renovar", "3p": "necesita renovar", "formal": "deseo renovar"},
+    "INSCRIBIR":  {"rol": "VERBO", "es": "inscribir", "1p": "necesito inscribir", "3p": "necesita inscribir", "formal": "deseo realizar la inscripción de"},
+    "RECOGER":    {"rol": "VERBO", "es": "recoger", "1p": "necesito recoger", "3p": "necesita recoger", "formal": "deseo retirar"},
+    "ENTREGAR":   {"rol": "VERBO", "es": "entregar", "1p": "necesito entregar", "3p": "necesita entregar", "formal": "deseo presentar"},
+    "PREGUNTAR":  {"rol": "VERBO", "es": "preguntar", "1p": "deseo preguntar", "3p": "pregunta", "formal": "deseo realizar una consulta"},
     "AYUDAR":     {"rol": "VERBO", "es": "ayudar", "1p": "necesito ayuda", "3p": "necesita ayuda"},
     "AYUDA":      {"rol": "VERBO", "es": "ayudar", "1p": "necesito ayuda", "3p": "necesita ayuda"},
-    "PEGAR":      {"rol": "VERBO", "es": "golpear", "1p": "me golpearon", "3p": "golpeó", "formal": "agredir físicamente"},
-    "GOLPEAR":    {"rol": "VERBO", "es": "golpear", "1p": "me golpearon", "3p": "golpeó", "formal": "agredir"},
-    "AMENAZAR":   {"rol": "VERBO", "es": "amenazar", "1p": "me amenazaron", "3p": "amenazó"},
-    "SEGUIR":     {"rol": "VERBO", "es": "seguir", "1p": "me siguieron", "3p": "siguió", "formal": "acechar"},
-    "ROBO":       {"rol": "VERBO", "es": "robar", "1p": "fui víctima de un robo", "3p": "robó", "tipo_evento": "ROBO"},
-    "TRAMITE":    {"rol": "VERBO", "es": "tramitar", "1p": "necesito realizar un trámite", "3p": "tramitó"},
-    "DESCRIBIR":  {"rol": "VERBO", "es": "describir", "1p": "deseo describir", "3p": "describió"},
-    "VER":        {"rol": "VERBO", "es": "ver", "1p": "vi", "3p": "vio", "formal": "presencié"},
-    "ESCUCHAR":   {"rol": "VERBO", "es": "escuchar", "1p": "escuché", "3p": "escuchó"},
-    "SENTIR":     {"rol": "VERBO", "es": "sentir", "1p": "sentí", "3p": "sintió"},
     "TENER":      {"rol": "VERBO", "es": "tener", "1p": "tengo", "3p": "tiene"},
     "QUERER":     {"rol": "VERBO", "es": "querer", "1p": "quiero", "3p": "quiere", "formal": "deseo"},
     "PODER":      {"rol": "VERBO", "es": "poder", "1p": "puedo", "3p": "puede"},
     "SABER":      {"rol": "VERBO", "es": "saber", "1p": "sé", "3p": "sabe"},
-    "PEDIR":      {"rol": "VERBO", "es": "pedir", "1p": "solicito", "3p": "solicita", "formal": "solicitar"},
     "ESPERAR":    {"rol": "VERBO", "es": "esperar", "1p": "estoy esperando", "3p": "está esperando"},
-    "CORRER":     {"rol": "ACCION_SEQ", "es": "corriendo", "pasado": "huyó corriendo"},
-    "HUIR":       {"rol": "ACCION_SEQ", "es": "huyendo", "pasado": "huyó"},
-    "ESCAPAR":    {"rol": "ACCION_SEQ", "es": "escapando", "pasado": "escapó"},
-    "GRITAR":     {"rol": "ACCION_SEQ", "es": "gritando", "pasado": "gritó"},
-    "CAER":       {"rol": "ACCION_SEQ", "es": "cayendo", "pasado": "cayó al suelo"},
+    "PERDER":     {"rol": "VERBO", "es": "perder", "1p": "perdí", "3p": "perdió", "formal": "he extraviado"},
+    "DENUNCIAR":  {"rol": "VERBO", "es": "denunciar", "1p": "deseo presentar un reclamo", "3p": "presenta un reclamo", "formal": "deseo presentar un reclamo formal por"},
+    "VER":        {"rol": "VERBO", "es": "ver", "1p": "vi", "3p": "vio"},
+    "SENTIR":     {"rol": "VERBO", "es": "sentir", "1p": "sentí", "3p": "sintió"},
+    "FIRMAR":     {"rol": "VERBO", "es": "firmar", "1p": "necesito firmar", "3p": "necesita firmar", "formal": "deseo proceder con la firma de"},
+    "CORREGIR":   {"rol": "VERBO", "es": "corregir", "1p": "necesito corregir", "3p": "necesita corregir", "formal": "deseo solicitar la corrección de"},
+    "VERIFICAR":  {"rol": "VERBO", "es": "verificar", "1p": "necesito verificar", "3p": "necesita verificar", "formal": "deseo verificar"},
 
-    # --- OBJETOS ---
-    "MOCHILA":    {"rol": "OBJETO", "es": "mochila", "art": "la"},
-    "DOCUMENTO":  {"rol": "OBJETO", "es": "documento", "art": "el"},
-    "DOCUMENTOS": {"rol": "OBJETO", "es": "documentos", "art": "los"},
-    "CELULAR":    {"rol": "OBJETO", "es": "teléfono celular", "art": "el"},
-    "TELEFONO":   {"rol": "OBJETO", "es": "teléfono", "art": "el"},
-    "DINERO":     {"rol": "OBJETO", "es": "dinero", "art": "el"},
-    "BILLETERA":  {"rol": "OBJETO", "es": "billetera", "art": "la"},
-    "CARTERA":    {"rol": "OBJETO", "es": "cartera", "art": "la"},
-    "BOLSA":      {"rol": "OBJETO", "es": "bolsa", "art": "la"},
-    "LLAVES":     {"rol": "OBJETO", "es": "llaves", "art": "las"},
-    "AUTO":       {"rol": "OBJETO", "es": "automóvil", "art": "el"},
-    "MOTO":       {"rol": "OBJETO", "es": "motocicleta", "art": "la"},
-    "BICICLETA":  {"rol": "OBJETO", "es": "bicicleta", "art": "la"},
-    "ROPA":       {"rol": "OBJETO", "es": "ropa", "art": "la"},
-    "CREDENCIAL": {"rol": "OBJETO", "es": "credencial", "art": "la"},
-    "CARNET":     {"rol": "OBJETO", "es": "carnet de identidad", "art": "el"},
+    # --- DOCUMENTOS ---
+    "DOCUMENTO":  {"rol": "DOCUMENTO", "es": "documento", "art": "el"},
+    "DOCUMENTOS": {"rol": "DOCUMENTO", "es": "documentos", "art": "los"},
+    "CARNET":     {"rol": "DOCUMENTO", "es": "carnet de identidad", "art": "el"},
+    "CERTIFICADO":{"rol": "DOCUMENTO", "es": "certificado", "art": "el"},
+    "FORMULARIO": {"rol": "DOCUMENTO", "es": "formulario", "art": "el"},
+    "PARTIDA_NACIMIENTO": {"rol": "DOCUMENTO", "es": "partida de nacimiento", "art": "la"},
+    "CERTIFICADO_NACIMIENTO": {"rol": "DOCUMENTO", "es": "certificado de nacimiento", "art": "el"},
+    "CERTIFICADO_MATRIMONIO": {"rol": "DOCUMENTO", "es": "certificado de matrimonio", "art": "el"},
+    "CERTIFICADO_DEFUNCION": {"rol": "DOCUMENTO", "es": "certificado de defunción", "art": "el"},
+    "LICENCIA":   {"rol": "DOCUMENTO", "es": "licencia de conducir", "art": "la"},
+    "FACTURA":    {"rol": "DOCUMENTO", "es": "factura", "art": "la"},
+    "RECIBO":     {"rol": "DOCUMENTO", "es": "recibo", "art": "el"},
+    "TITULO":     {"rol": "DOCUMENTO", "es": "título de propiedad", "art": "el"},
+    "PODER":      {"rol": "DOCUMENTO", "es": "poder notarial", "art": "el"},
+    "FOTOCOPIA":  {"rol": "DOCUMENTO", "es": "fotocopia", "art": "la"},
+    "FOTO":       {"rol": "DOCUMENTO", "es": "fotografía", "art": "la"},
+    "CREDENCIAL": {"rol": "DOCUMENTO", "es": "credencial", "art": "la"},
+    "PASAPORTE":  {"rol": "DOCUMENTO", "es": "pasaporte", "art": "el"},
+    "ANTECEDENTES":{"rol": "DOCUMENTO", "es": "certificado de antecedentes", "art": "el"},
+
+    # --- TRÁMITES (tipos de gestión) ---
+    "RENOVACION": {"rol": "TRAMITE", "es": "renovación", "art": "la", "formal": "trámite de renovación"},
+    "INSCRIPCION":{"rol": "TRAMITE", "es": "inscripción", "art": "la", "formal": "trámite de inscripción"},
+    "REGISTRO":   {"rol": "TRAMITE", "es": "registro", "art": "el", "formal": "trámite de registro"},
+    "PAGO":       {"rol": "TRAMITE", "es": "pago", "art": "el", "formal": "trámite de pago"},
+    "CONSULTA":   {"rol": "TRAMITE", "es": "consulta", "art": "la", "formal": "consulta ciudadana"},
+    "RECLAMO":    {"rol": "TRAMITE", "es": "reclamo", "art": "el", "formal": "reclamo formal"},
+    "QUEJA":      {"rol": "TRAMITE", "es": "queja", "art": "la", "formal": "queja formal"},
+    "CITA":       {"rol": "TRAMITE", "es": "cita", "art": "la", "formal": "cita programada"},
+    "TURNO":      {"rol": "TRAMITE", "es": "turno", "art": "el", "formal": "turno de atención"},
+    "DUPLICADO":  {"rol": "TRAMITE", "es": "duplicado", "art": "el", "formal": "trámite de duplicado"},
 
     # --- TIEMPO ---
     "NOCHE":      {"rol": "TIEMPO", "es": "en la noche", "formal": "durante el horario nocturno"},
@@ -145,52 +151,50 @@ GLOSS_LEXICON = {
     "ANTES":      {"rol": "TIEMPO", "es": "antes", "formal": "con anterioridad"},
     "SEMANA":     {"rol": "TIEMPO", "es": "esta semana", "formal": "durante la presente semana"},
 
-    # --- LUGARES ---
-    "PARADA":     {"rol": "LUGAR", "es": "parada", "prep": "en una"},
-    "MICRO":      {"rol": "LUGAR", "es": "micro", "prep": "de"},
-    "CASA":       {"rol": "LUGAR", "es": "casa", "prep": "en mi"},
-    "CALLE":      {"rol": "LUGAR", "es": "calle", "prep": "en la"},
-    "PLAZA":      {"rol": "LUGAR", "es": "plaza", "prep": "en la"},
-    "MERCADO":    {"rol": "LUGAR", "es": "mercado", "prep": "en el"},
-    "TIENDA":     {"rol": "LUGAR", "es": "tienda", "prep": "en una"},
-    "ESQUINA":    {"rol": "LUGAR", "es": "esquina", "prep": "en la"},
-    "PARQUE":     {"rol": "LUGAR", "es": "parque", "prep": "en el"},
-    "TRABAJO":    {"rol": "LUGAR", "es": "lugar de trabajo", "prep": "en mi"},
-    "ESCUELA":    {"rol": "LUGAR", "es": "escuela", "prep": "en la"},
-    "HOSPITAL":   {"rol": "LUGAR", "es": "hospital", "prep": "en el"},
+    # --- INSTITUCIONES (entidades públicas) ---
+    "ALCALDIA":   {"rol": "INSTITUCION", "es": "alcaldía", "prep": "en la"},
+    "GOBERNACION":{"rol": "INSTITUCION", "es": "gobernación", "prep": "en la"},
+    "REGISTRO_CIVIL": {"rol": "INSTITUCION", "es": "registro civil", "prep": "en el"},
+    "SEGIP":      {"rol": "INSTITUCION", "es": "SEGIP", "prep": "en el"},
+    "IMPUESTOS":  {"rol": "INSTITUCION", "es": "oficina de impuestos", "prep": "en la"},
+    "BANCO":      {"rol": "INSTITUCION", "es": "banco", "prep": "en el"},
+    "MUNICIPIO":  {"rol": "INSTITUCION", "es": "municipio", "prep": "en el"},
+    "HOSPITAL":   {"rol": "INSTITUCION", "es": "hospital", "prep": "en el"},
+    "ESCUELA":    {"rol": "INSTITUCION", "es": "unidad educativa", "prep": "en la"},
+    "UNIVERSIDAD":{"rol": "INSTITUCION", "es": "universidad", "prep": "en la"},
+    "NOTARIA":    {"rol": "INSTITUCION", "es": "notaría", "prep": "en la"},
+    "JUZGADO":    {"rol": "INSTITUCION", "es": "juzgado", "prep": "en el"},
+    "POLICIA":    {"rol": "INSTITUCION", "es": "estación de policía", "prep": "en la"},
+    "OFICINA":    {"rol": "INSTITUCION", "es": "oficina pública", "prep": "en la"},
+    "DEFENSORIA": {"rol": "INSTITUCION", "es": "defensoría", "prep": "en la"},
+
+    # --- SERVICIOS ---
+    "ABOGADO":    {"rol": "SERVICIO", "es": "abogado", "formal": "asistencia legal"},
+    "DOCTOR":     {"rol": "SERVICIO", "es": "médico", "formal": "atención médica"},
+    "INTERPRETE": {"rol": "SERVICIO", "es": "intérprete", "formal": "intérprete de lengua de señas"},
+    "INFORMACION":{"rol": "SERVICIO", "es": "información", "formal": "servicio de información"},
+    "ATENCION":   {"rol": "SERVICIO", "es": "atención al ciudadano", "formal": "servicio de atención ciudadana"},
+    "ORIENTACION":{"rol": "SERVICIO", "es": "orientación", "formal": "servicio de orientación"},
+    "AMBULANCIA": {"rol": "SERVICIO", "es": "ambulancia", "formal": "servicio de ambulancia"},
+    "BOMBERO":    {"rol": "SERVICIO", "es": "bomberos", "formal": "servicio de bomberos"},
 
     # --- DESCRIPTORES ---
-    "ALTO":       {"rol": "DESCRIPTOR", "es": "alto"},
-    "BAJO":       {"rol": "DESCRIPTOR", "es": "bajo"},
-    "JOVEN":      {"rol": "DESCRIPTOR", "es": "joven"},
-    "VIEJO":      {"rol": "DESCRIPTOR", "es": "mayor de edad"},
+    "NUEVO":      {"rol": "DESCRIPTOR", "es": "nuevo"},
+    "VIEJO":      {"rol": "DESCRIPTOR", "es": "antiguo"},
     "GRANDE":     {"rol": "DESCRIPTOR", "es": "grande"},
     "PEQUEÑO":    {"rol": "DESCRIPTOR", "es": "pequeño"},
-    "GORDO":      {"rol": "DESCRIPTOR", "es": "de contextura gruesa"},
-    "FLACO":      {"rol": "DESCRIPTOR", "es": "de contextura delgada"},
-    "MORENO":     {"rol": "DESCRIPTOR", "es": "de tez morena"},
-    "BLANCO":     {"rol": "DESCRIPTOR", "es": "de tez clara"},
-    "ROJO":       {"rol": "DESCRIPTOR", "es": "de color rojo"},
-    "NEGRO":      {"rol": "DESCRIPTOR", "es": "de color negro"},
-    "PELO_LARGO": {"rol": "DESCRIPTOR", "es": "de cabello largo"},
-    "PELO_CORTO": {"rol": "DESCRIPTOR", "es": "de cabello corto"},
+    "PRIMERO":    {"rol": "DESCRIPTOR", "es": "por primera vez"},
+    "OTRA_VEZ":   {"rol": "DESCRIPTOR", "es": "otra vez"},
+    "GRATIS":     {"rol": "DESCRIPTOR", "es": "gratuito"},
+    "RAPIDO":     {"rol": "DESCRIPTOR", "es": "rápido"},
+    "CORRECTO":   {"rol": "DESCRIPTOR", "es": "correcto"},
+    "INCORRECTO": {"rol": "DESCRIPTOR", "es": "incorrecto"},
 
     # --- URGENCIA ---
     "URGENTE":    {"rol": "URGENCIA", "es": "urgente", "formal": "de manera urgente"},
-    "RAPIDO":     {"rol": "URGENCIA", "es": "rápidamente", "formal": "con carácter de urgencia"},
     "EMERGENCIA": {"rol": "URGENCIA", "es": "es una emergencia", "formal": "se trata de una emergencia"},
     "PELIGRO":    {"rol": "URGENCIA", "es": "hay peligro", "formal": "existe una situación de peligro"},
     "IMPORTANTE": {"rol": "URGENCIA", "es": "es importante", "formal": "reviste importancia"},
-
-    # --- SERVICIOS ---
-    "POLICIA":    {"rol": "SERVICIO", "es": "policía", "formal": "asistencia policial"},
-    "ABOGADO":    {"rol": "SERVICIO", "es": "abogado", "formal": "asistencia legal"},
-    "DOCTOR":     {"rol": "SERVICIO", "es": "médico", "formal": "atención médica"},
-    "BOMBERO":    {"rol": "SERVICIO", "es": "bomberos", "formal": "servicio de bomberos"},
-    "AMBULANCIA": {"rol": "SERVICIO", "es": "ambulancia", "formal": "servicio de ambulancia"},
-    "JUEZ":       {"rol": "SERVICIO", "es": "juez", "formal": "autoridad judicial"},
-    "FISCAL":     {"rol": "SERVICIO", "es": "fiscal", "formal": "representante del Ministerio Público"},
-    "INTERPRETE": {"rol": "SERVICIO", "es": "intérprete", "formal": "intérprete de lengua de señas"},
 
     # --- ESTADOS ---
     "ENFERMO":    {"rol": "ESTADO", "es": "enfermo/a", "formal": "con problemas de salud"},
@@ -201,6 +205,8 @@ GLOSS_LEXICON = {
     "HAMBRE":     {"rol": "ESTADO", "es": "tengo hambre", "formal": "necesito alimentación"},
     "SOLO":       {"rol": "ESTADO", "es": "estoy solo/a", "formal": "me encuentro sin acompañante"},
     "PERDIDO":    {"rol": "ESTADO", "es": "estoy perdido/a", "formal": "me encuentro extraviado/a"},
+    "CONFUNDIDO": {"rol": "ESTADO", "es": "estoy confundido/a", "formal": "no comprendo el procedimiento"},
+    "PREOCUPADO": {"rol": "ESTADO", "es": "estoy preocupado/a", "formal": "me encuentro preocupado/a"},
 }
 
 
@@ -211,12 +217,13 @@ GLOSS_LEXICON = {
 def analyze_glosses(cards: list) -> dict:
     """
     Clasifica cada glosa por su rol semántico usando el lexicón.
-    Detecta el tipo de evento basado en la combinación de verbos y objetos.
+    Detecta el tipo de evento basado en la combinación de verbos,
+    documentos, trámites e instituciones.
     """
     analysis = {
-        "sujetos": [], "agentes": [], "verbos": [], "objetos": [],
-        "tiempos": [], "lugares": [], "descriptores": [], "urgencias": [],
-        "servicios": [], "estados": [], "acciones_seq": [], "desconocidos": [],
+        "sujetos": [], "verbos": [], "documentos": [], "tramites": [],
+        "tiempos": [], "instituciones": [], "descriptores": [], "urgencias": [],
+        "servicios": [], "estados": [], "desconocidos": [],
     }
 
     for card in cards:
@@ -225,10 +232,11 @@ def analyze_glosses(cards: list) -> dict:
         if entry:
             rol = entry["rol"]
             mapping = {
-                "SUJETO": "sujetos", "AGENTE": "agentes", "VERBO": "verbos",
-                "OBJETO": "objetos", "TIEMPO": "tiempos", "LUGAR": "lugares",
+                "SUJETO": "sujetos", "VERBO": "verbos",
+                "DOCUMENTO": "documentos", "TRAMITE": "tramites",
+                "TIEMPO": "tiempos", "INSTITUCION": "instituciones",
                 "DESCRIPTOR": "descriptores", "URGENCIA": "urgencias",
-                "SERVICIO": "servicios", "ESTADO": "estados", "ACCION_SEQ": "acciones_seq",
+                "SERVICIO": "servicios", "ESTADO": "estados",
             }
             dest = mapping.get(rol, "desconocidos")
             analysis[dest].append({"glosa": key, **entry})
@@ -245,24 +253,32 @@ def analyze_glosses(cards: list) -> dict:
 
 def _detect_event_type(analysis: dict) -> str:
     verbos = [v["glosa"] for v in analysis["verbos"]]
-    objetos = [o["glosa"] for o in analysis["objetos"]]
-    servicios = [s["glosa"] for s in analysis["servicios"]]
+    tramites = [t["glosa"] for t in analysis["tramites"]]
+    documentos = [d["glosa"] for d in analysis["documentos"]]
 
-    if any(v in ["ROBO", "ROBAR", "QUITAR"] for v in verbos):
-        return "ROBO"
-    if any(v in ["DENUNCIAR"] for v in verbos):
-        return "DENUNCIA"
-    if any(v in ["PEGAR", "GOLPEAR", "AMENAZAR"] for v in verbos):
-        return "AGRESION"
+    if any(v in ["TRAMITAR", "RENOVAR", "INSCRIBIR", "REGISTRAR"] for v in verbos):
+        return "TRAMITE"
+    if any(v in ["CONSULTAR", "PREGUNTAR"] for v in verbos):
+        return "CONSULTA"
+    if any(v in ["PAGAR"] for v in verbos) or any(t in ["PAGO"] for t in tramites):
+        return "PAGO"
+    if any(v in ["SOLICITAR", "PEDIR", "NECESITAR", "AYUDA", "AYUDAR"] for v in verbos):
+        return "SOLICITUD"
+    if any(v in ["RECOGER", "ENTREGAR"] for v in verbos):
+        return "ENTREGA"
+    if any(v in ["DENUNCIAR"] for v in verbos) or any(t in ["RECLAMO", "QUEJA"] for t in tramites):
+        return "RECLAMO"
     if any(v in ["PERDER"] for v in verbos):
         return "PERDIDA"
-    if any(v in ["DESCRIBIR"] for v in verbos):
-        return "DESCRIPCION"
-    if any(v in ["NECESITAR", "AYUDA", "AYUDAR", "PEDIR"] for v in verbos):
-        return "SOLICITUD"
+    if any(v in ["FIRMAR", "CORREGIR", "VERIFICAR"] for v in verbos):
+        return "GESTION"
     if analysis["urgencias"] or any(v in ["EMERGENCIA"] for v in verbos):
         return "EMERGENCIA"
-    if servicios:
+    if tramites:
+        return "TRAMITE"
+    if documentos:
+        return "SOLICITUD"
+    if analysis["servicios"]:
         return "SOLICITUD"
     if analysis["estados"]:
         return "ESTADO"
@@ -273,7 +289,7 @@ def _detect_perspective(analysis: dict) -> str:
     for s in analysis["sujetos"]:
         if s.get("perspectiva") == "1P":
             return "PRIMERA_PERSONA"
-    return "PRIMERA_PERSONA"  # Default para LSB jurídico
+    return "PRIMERA_PERSONA"  # Default para LSB ciudadano
 
 
 # ===================================================================
@@ -285,15 +301,14 @@ def build_intermediate_representation(cards: list, analysis: dict, context_type:
         "roles": {
             "sujeto": analysis["sujetos"][0]["glosa"] if analysis["sujetos"] else None,
             "verbo_principal": analysis["verbos"][0]["glosa"] if analysis["verbos"] else None,
-            "objeto": analysis["objetos"][0]["glosa"] if analysis["objetos"] else None,
-            "agente": analysis["agentes"][0]["glosa"] if analysis["agentes"] else None,
+            "documento": [d["glosa"] for d in analysis["documentos"]] if analysis["documentos"] else None,
+            "tramite": [t["glosa"] for t in analysis["tramites"]] if analysis["tramites"] else None,
             "tiempo": analysis["tiempos"][0]["glosa"] if analysis["tiempos"] else None,
-            "lugar": [l["glosa"] for l in analysis["lugares"]] if analysis["lugares"] else None,
+            "institucion": [i["glosa"] for i in analysis["instituciones"]] if analysis["instituciones"] else None,
             "descriptores": [d["glosa"] for d in analysis["descriptores"]] if analysis["descriptores"] else None,
             "servicios": [s["glosa"] for s in analysis["servicios"]] if analysis["servicios"] else None,
             "urgencia": analysis["urgencias"][0]["glosa"] if analysis["urgencias"] else None,
             "estados": [e["glosa"] for e in analysis["estados"]] if analysis["estados"] else None,
-            "acciones_secundarias": [a["glosa"] for a in analysis["acciones_seq"]] if analysis["acciones_seq"] else None,
         },
         "tipo_evento": analysis["tipo_evento"],
         "perspectiva": analysis["perspectiva"],
@@ -312,23 +327,26 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str) -> str:
     """
     Genera una oración base en español usando reglas gramaticales propias
     y plantillas por tipo de evento. Este es el NÚCLEO del sistema.
+    Orientado a trámites y consultas ciudadanas en entidades públicas.
     """
     tipo = ir["tipo_evento"]
-    is_legal = context_type.lower() == "legal"
+    is_formal = context_type.lower() in ("ciudadano", "formal", "legal")
 
     generators = {
-        "DENUNCIA": _gen_denuncia,
-        "ROBO": _gen_robo,
-        "AGRESION": _gen_agresion,
+        "TRAMITE": _gen_tramite,
+        "CONSULTA": _gen_consulta,
+        "PAGO": _gen_pago,
         "SOLICITUD": _gen_solicitud,
+        "ENTREGA": _gen_entrega,
+        "RECLAMO": _gen_reclamo,
         "PERDIDA": _gen_perdida,
-        "DESCRIPCION": _gen_descripcion,
+        "GESTION": _gen_gestion,
         "EMERGENCIA": _gen_emergencia,
         "ESTADO": _gen_estado,
     }
 
     gen_func = generators.get(tipo, _gen_general)
-    sentence = gen_func(ir, analysis, is_legal)
+    sentence = gen_func(ir, analysis, is_formal)
 
     # Limpiar espacios y asegurar punto final
     sentence = re.sub(r'\s+', ' ', sentence).strip()
@@ -338,24 +356,42 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str) -> str:
     return sentence
 
 
-def _get_time_place(analysis, is_legal):
+def _get_time_institution(analysis, is_formal):
     parts = []
     for t in analysis["tiempos"]:
-        parts.append(t.get("formal", t["es"]) if is_legal else t["es"])
-    lugares = analysis["lugares"]
-    if lugares:
-        loc_parts = []
-        for l in lugares:
-            loc_parts.append(f"{l.get('prep', 'en')} {l['es']}")
-        parts.append(" ".join(loc_parts))
+        parts.append(t.get("formal", t["es"]) if is_formal else t["es"])
+    instituciones = analysis["instituciones"]
+    if instituciones:
+        inst_parts = []
+        for i in instituciones:
+            inst_parts.append(f"{i.get('prep', 'en')} {i['es']}")
+        parts.append(" ".join(inst_parts))
     return " ".join(parts)
 
 
-def _get_urgency(analysis, is_legal):
+def _get_urgency(analysis, is_formal):
     if analysis["urgencias"]:
         u = analysis["urgencias"][0]
-        return u.get("formal", u["es"]) if is_legal else u["es"]
+        return u.get("formal", u["es"]) if is_formal else u["es"]
     return ""
+
+
+def _get_documents_text(analysis, is_formal):
+    if not analysis["documentos"]:
+        return ""
+    docs = analysis["documentos"]
+    if len(docs) == 1:
+        d = docs[0]
+        return f'{d.get("art", "el")} {d["es"]}'
+    texts = [f'{d.get("art", "el")} {d["es"]}' for d in docs]
+    return ", ".join(texts[:-1]) + " y " + texts[-1]
+
+
+def _get_tramite_text(analysis, is_formal):
+    if not analysis["tramites"]:
+        return ""
+    t = analysis["tramites"][0]
+    return t.get("formal", t["es"]) if is_formal else f'{t.get("art", "el")} {t["es"]}'
 
 
 def _get_descriptors(analysis):
@@ -367,85 +403,92 @@ def _get_descriptors(analysis):
     return ", ".join(descs[:-1]) + " y " + descs[-1]
 
 
-def _gen_denuncia(ir, analysis, is_legal):
+def _gen_tramite(ir, analysis, is_formal):
+    """Genera oración para trámites administrativos."""
     verbo = analysis["verbos"][0] if analysis["verbos"] else None
-    objeto = analysis["objetos"][0] if analysis["objetos"] else None
-    tp = _get_time_place(analysis, is_legal)
+    doc_text = _get_documents_text(analysis, is_formal)
+    tramite_text = _get_tramite_text(analysis, is_formal)
+    tp = _get_time_institution(analysis, is_formal)
 
-    if verbo and verbo["glosa"] == "DENUNCIAR" and objeto:
-        obj_text = f'{objeto.get("art", "el")} {objeto["es"]}'
-        base = f"Deseo denunciar {obj_text}"
-    elif verbo:
-        verb_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_legal else verbo.get("1p", verbo["es"])
-        base = f"Deseo presentar una denuncia: {verb_text}" if is_legal else f"{verb_text}"
+    if verbo and doc_text:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+        base = f"{v_text} {doc_text}"
+    elif verbo and tramite_text:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+        base = f"{v_text} {tramite_text}" if "trámite" not in v_text.lower() else v_text
+    elif tramite_text:
+        base = f"Necesito realizar {tramite_text}" if not is_formal else f"Deseo realizar {tramite_text}"
+    elif doc_text:
+        base = f"Necesito tramitar {doc_text}" if not is_formal else f"Deseo tramitar {doc_text}"
     else:
-        base = "Deseo presentar una denuncia" if is_legal else "Quiero hacer una denuncia"
-
-    if "ROBO" in [v["glosa"] for v in analysis["verbos"]]:
-        base = "Deseo denunciar un robo" if is_legal else "Quiero denunciar un robo"
+        base = "Necesito realizar un trámite" if not is_formal else "Deseo realizar un trámite administrativo"
 
     if tp:
         base += f" {tp}"
     return base
 
 
-def _gen_robo(ir, analysis, is_legal):
-    agente = analysis["agentes"][0] if analysis["agentes"] else None
-    objeto = analysis["objetos"][0] if analysis["objetos"] else None
-    tp = _get_time_place(analysis, is_legal)
-
-    if agente and objeto:
-        obj_text = f'{objeto.get("art", "el")} {objeto["es"]}'
-        ag_text = agente["es"]
-        base = f"{ag_text.capitalize()} me {analysis['verbos'][0].get('3p', 'quitó') if analysis['verbos'] else 'quitó'} {obj_text}"
-    elif objeto:
-        obj_text = f'{objeto.get("art", "el")} {objeto["es"]}'
-        base = f"Me robaron {obj_text}" if not is_legal else f"Fui víctima del robo de {obj_text}"
-    else:
-        base = "Fui víctima de un robo" if is_legal else "Me robaron"
-
-    seq = analysis["acciones_seq"]
-    if seq:
-        base += f" y {seq[0].get('pasado', seq[0]['es'])}"
-
-    if tp:
-        base += f" {tp}"
-    return base
-
-
-def _gen_agresion(ir, analysis, is_legal):
-    agente = analysis["agentes"][0] if analysis["agentes"] else None
+def _gen_consulta(ir, analysis, is_formal):
+    """Genera oración para consultas ciudadanas."""
     verbo = analysis["verbos"][0] if analysis["verbos"] else None
-    tp = _get_time_place(analysis, is_legal)
+    doc_text = _get_documents_text(analysis, is_formal)
+    tramite_text = _get_tramite_text(analysis, is_formal)
+    tp = _get_time_institution(analysis, is_formal)
 
-    if agente and verbo:
-        v_text = verbo.get("formal", verbo.get("3p", verbo["es"])) if is_legal else verbo.get("3p", verbo["es"])
-        base = f"{agente['es'].capitalize()} me {v_text}"
-    elif verbo:
-        v_text = verbo.get("1p", verbo["es"])
-        base = f"Fui víctima de agresión: {v_text}" if is_legal else v_text.capitalize()
+    if verbo and doc_text:
+        base = f"Deseo consultar sobre {doc_text}" if is_formal else f"Quiero preguntar sobre {doc_text}"
+    elif verbo and tramite_text:
+        base = f"Deseo consultar sobre {tramite_text}" if is_formal else f"Quiero preguntar sobre {tramite_text}"
+    elif analysis["servicios"]:
+        svc = analysis["servicios"][0]
+        svc_text = svc.get("formal", svc["es"]) if is_formal else svc["es"]
+        base = f"Deseo consultar sobre {svc_text}" if is_formal else f"Quiero preguntar sobre {svc_text}"
     else:
-        base = "Fui víctima de una agresión" if is_legal else "Me agredieron"
+        base = "Deseo realizar una consulta" if is_formal else "Tengo una pregunta"
 
     if tp:
         base += f" {tp}"
     return base
 
 
-def _gen_solicitud(ir, analysis, is_legal):
+def _gen_pago(ir, analysis, is_formal):
+    """Genera oración para pagos en entidades públicas."""
+    doc_text = _get_documents_text(analysis, is_formal)
+    tramite_text = _get_tramite_text(analysis, is_formal)
+    tp = _get_time_institution(analysis, is_formal)
+
+    if doc_text:
+        base = f"Deseo realizar el pago de {doc_text}" if is_formal else f"Necesito pagar {doc_text}"
+    elif tramite_text:
+        base = f"Deseo realizar el pago correspondiente a {tramite_text}" if is_formal else f"Necesito pagar {tramite_text}"
+    else:
+        base = "Deseo realizar un pago" if is_formal else "Necesito hacer un pago"
+
+    if tp:
+        base += f" {tp}"
+    return base
+
+
+def _gen_solicitud(ir, analysis, is_formal):
+    """Genera oración para solicitudes generales."""
     servicios = analysis["servicios"]
     verbo = analysis["verbos"][0] if analysis["verbos"] else None
-    urg = _get_urgency(analysis, is_legal)
+    doc_text = _get_documents_text(analysis, is_formal)
+    urg = _get_urgency(analysis, is_formal)
+    tp = _get_time_institution(analysis, is_formal)
 
     parts = []
-    if verbo:
-        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_legal else verbo.get("1p", verbo["es"])
+    if verbo and doc_text:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+        parts.append(f"{v_text} {doc_text}")
+    elif verbo:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
         parts.append(v_text.capitalize())
 
     if servicios:
-        svc_texts = [s.get("formal", s["es"]) if is_legal else s["es"] for s in servicios]
-        if verbo and verbo["glosa"] in ("NECESITAR", "AYUDA", "AYUDAR", "PEDIR"):
-            parts.append("y requiero " + ", ".join(svc_texts) if len(parts) > 0 else "Requiero " + ", ".join(svc_texts))
+        svc_texts = [s.get("formal", s["es"]) if is_formal else s["es"] for s in servicios]
+        if parts:
+            parts.append("y solicito " + ", ".join(svc_texts))
         else:
             parts.append("Solicito " + ", ".join(svc_texts))
 
@@ -453,43 +496,104 @@ def _gen_solicitud(ir, analysis, is_legal):
         parts.append(urg)
 
     base = " ".join(parts) if parts else "Necesito asistencia"
-    tp = _get_time_place(analysis, is_legal)
     if tp:
         base += f" {tp}"
     return base
 
 
-def _gen_perdida(ir, analysis, is_legal):
-    objeto = analysis["objetos"][0] if analysis["objetos"] else None
-    servicios = analysis["servicios"]
+def _gen_entrega(ir, analysis, is_formal):
+    """Genera oración para entrega/recogida de documentos."""
+    verbo = analysis["verbos"][0] if analysis["verbos"] else None
+    doc_text = _get_documents_text(analysis, is_formal)
+    tp = _get_time_institution(analysis, is_formal)
 
-    if objeto:
-        obj_text = f'{objeto.get("art", "el")} {objeto["es"]}'
-        base = f"He extraviado {obj_text}" if is_legal else f"Perdí {obj_text}"
+    if verbo and doc_text:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+        base = f"{v_text} {doc_text}"
+    elif verbo:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+        base = f"{v_text} un documento"
+    elif doc_text:
+        base = f"Necesito retirar {doc_text}" if not is_formal else f"Deseo retirar {doc_text}"
     else:
-        base = "He extraviado un objeto personal" if is_legal else "Perdí algo"
+        base = "Necesito retirar un documento" if not is_formal else "Deseo retirar un documento"
 
-    if any(v["glosa"] == "TRAMITE" for v in analysis["verbos"]):
-        base += " y necesito realizar un trámite"
+    if tp:
+        base += f" {tp}"
+    return base
+
+
+def _gen_reclamo(ir, analysis, is_formal):
+    """Genera oración para reclamos y quejas ciudadanas."""
+    verbo = analysis["verbos"][0] if analysis["verbos"] else None
+    tramite_text = _get_tramite_text(analysis, is_formal)
+    servicios = analysis["servicios"]
+    tp = _get_time_institution(analysis, is_formal)
+
+    if verbo and verbo["glosa"] == "DENUNCIAR":
+        base = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+    elif tramite_text:
+        base = f"Deseo presentar {tramite_text}" if is_formal else f"Quiero presentar {tramite_text}"
+    else:
+        base = "Deseo presentar un reclamo" if is_formal else "Quiero hacer un reclamo"
+
+    if servicios:
+        svc = servicios[0]
+        svc_text = svc.get("formal", svc["es"]) if is_formal else svc["es"]
+        base += f" sobre el servicio de {svc_text}"
+
+    if tp:
+        base += f" {tp}"
+    return base
+
+
+def _gen_perdida(ir, analysis, is_formal):
+    """Genera oración para pérdida de documentos."""
+    doc_text = _get_documents_text(analysis, is_formal)
+    servicios = analysis["servicios"]
+    tp = _get_time_institution(analysis, is_formal)
+
+    if doc_text:
+        base = f"He extraviado {doc_text}" if is_formal else f"Perdí {doc_text}"
+    else:
+        base = "He extraviado un documento personal" if is_formal else "Perdí un documento"
+
+    tramites = analysis["tramites"]
+    if tramites:
+        t = tramites[0]
+        t_text = t.get("formal", t["es"]) if is_formal else t["es"]
+        base += f" y necesito {t_text}"
     elif servicios:
         svc = servicios[0]
-        base += f" y requiero {svc.get('formal', svc['es'])}" if is_legal else f" y necesito {svc['es']}"
+        base += f" y requiero {svc.get('formal', svc['es'])}" if is_formal else f" y necesito {svc['es']}"
 
+    if tp:
+        base += f" {tp}"
     return base
 
 
-def _gen_descripcion(ir, analysis, is_legal):
-    agente = analysis["agentes"][0] if analysis["agentes"] else None
-    descs = _get_descriptors(analysis)
+def _gen_gestion(ir, analysis, is_formal):
+    """Genera oración para gestiones (firmar, corregir, verificar)."""
+    verbo = analysis["verbos"][0] if analysis["verbos"] else None
+    doc_text = _get_documents_text(analysis, is_formal)
+    tp = _get_time_institution(analysis, is_formal)
 
-    target = agente["es"] if agente else "la persona"
-    base = f"Deseo describir a {target}"
-    if descs:
-        base += f": es {descs}"
+    if verbo and doc_text:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+        base = f"{v_text} {doc_text}"
+    elif verbo:
+        v_text = verbo.get("formal", verbo.get("1p", verbo["es"])) if is_formal else verbo.get("1p", verbo["es"])
+        base = v_text.capitalize()
+    else:
+        base = "Necesito realizar una gestión"
+
+    if tp:
+        base += f" {tp}"
     return base
 
 
-def _gen_emergencia(ir, analysis, is_legal):
+def _gen_emergencia(ir, analysis, is_formal):
+    """Genera oración para situaciones de emergencia."""
     sujeto = analysis["sujetos"][0] if analysis["sujetos"] else None
     servicios = analysis["servicios"]
     estados = analysis["estados"]
@@ -502,42 +606,45 @@ def _gen_emergencia(ir, analysis, is_legal):
     parts = []
     if subj and estados:
         est = estados[0]
-        parts.append(f"{subj} se encuentra {est.get('formal', est['es'])}" if is_legal else f"{subj} está {est['es']}")
+        parts.append(f"{subj} se encuentra {est.get('formal', est['es'])}" if is_formal else f"{subj} está {est['es']}")
     elif estados:
         est = estados[0]
-        parts.append(est.get("formal", est["es"]).capitalize() if is_legal else est["es"].capitalize())
+        parts.append(est.get("formal", est["es"]).capitalize() if is_formal else est["es"].capitalize())
 
     if servicios:
         svc = servicios[0]
-        svc_text = svc.get("formal", svc["es"]) if is_legal else svc["es"]
+        svc_text = svc.get("formal", svc["es"]) if is_formal else svc["es"]
         parts.append(f"y necesita {svc_text} de forma urgente" if subj else f"Necesito {svc_text} de forma urgente")
     else:
-        parts.append("Se requiere atención inmediata" if is_legal else "Es urgente")
+        parts.append("Se requiere atención inmediata" if is_formal else "Es urgente")
 
     return " ".join(parts) if parts else "Se presenta una situación de emergencia"
 
 
-def _gen_estado(ir, analysis, is_legal):
+def _gen_estado(ir, analysis, is_formal):
+    """Genera oración para expresar estado personal."""
     estados = analysis["estados"]
     if estados:
         est = estados[0]
-        return est.get("formal", est["es"]).capitalize() if is_legal else est["es"].capitalize()
+        return est.get("formal", est["es"]).capitalize() if is_formal else est["es"].capitalize()
     return "Me encuentro en una situación que requiere asistencia"
 
 
-def _gen_general(ir, analysis, is_legal):
+def _gen_general(ir, analysis, is_formal):
     """Fallback: construye oración uniendo los componentes detectados."""
     parts = []
 
     for v in analysis["verbos"]:
         parts.append(v.get("1p", v["es"]))
-    for o in analysis["objetos"]:
-        parts.append(f'{o.get("art", "")} {o["es"]}'.strip())
+    for d in analysis["documentos"]:
+        parts.append(f'{d.get("art", "")} {d["es"]}'.strip())
+    for t in analysis["tramites"]:
+        parts.append(t.get("formal", t["es"]) if is_formal else t["es"])
     for s in analysis["servicios"]:
-        svc_text = s.get("formal", s["es"]) if is_legal else s["es"]
+        svc_text = s.get("formal", s["es"]) if is_formal else s["es"]
         parts.append(svc_text)
 
-    tp = _get_time_place(analysis, is_legal)
+    tp = _get_time_institution(analysis, is_formal)
     if tp:
         parts.append(tp)
 
@@ -549,7 +656,7 @@ def _gen_general(ir, analysis, is_legal):
 
     # Último recurso: unir todas las glosas reconocidas
     all_es = []
-    for cat in ["sujetos", "verbos", "objetos", "agentes", "tiempos", "lugares", "servicios"]:
+    for cat in ["sujetos", "verbos", "documentos", "tramites", "tiempos", "instituciones", "servicios"]:
         for item in analysis[cat]:
             all_es.append(item["es"])
     for item in analysis["desconocidos"]:
@@ -567,13 +674,15 @@ def refine_with_bedrock(base_sentence: str, context_type: str) -> str:
     Envía la oración BASE (ya generada por el motor propio) a Bedrock
     para refinamiento de redacción. NO traduce glosas — solo pule.
     Si falla, retorna la oración base sin modificar (fallback elegante).
+    Utiliza Few-shot Prompting para guiar el refinamiento.
     """
     if not ENABLE_BEDROCK:
         logger.info("Bedrock deshabilitado, usando oración base directamente.")
         return base_sentence
 
-    ctx_instruction = ("Contexto jurídico/administrativo: usa vocabulario formal y preciso."
-                       if context_type.lower() == "legal"
+    ctx_instruction = ("Contexto de trámites y consultas ciudadanas en entidades públicas: "
+                       "usa vocabulario formal, respetuoso y preciso propio de gestiones administrativas."
+                       if context_type.lower() in ("ciudadano", "formal", "legal")
                        else "Contexto general: usa español claro y correcto.")
 
     prompt = f"""Recibes una oración base generada por un sistema de interpretación de Lengua de Señas Boliviana (LSB).
@@ -586,6 +695,16 @@ REGLAS:
 3. NO agregues explicaciones ni comentarios.
 4. Devuelve SOLO la oración refinada.
 5. Si la oración ya es correcta, devuélvela sin cambios.
+
+Ejemplos:
+Oración base: Necesito tramitar el carnet de identidad en el SEGIP.
+Oración refinada: Deseo realizar el trámite de carnet de identidad en las oficinas del SEGIP.
+
+Oración base: Solicito información en la alcaldía el día de hoy.
+Oración refinada: Solicito información sobre los servicios disponibles en la alcaldía el día de hoy.
+
+Oración base: Necesito pagar la factura en el banco.
+Oración refinada: Deseo realizar el pago de la factura correspondiente en el banco.
 
 Oración base: {base_sentence}
 Oración refinada:"""
