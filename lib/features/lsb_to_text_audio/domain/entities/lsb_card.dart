@@ -1,7 +1,7 @@
 /// Representa una tarjeta de glosa LSB (Lengua de Señas Boliviana).
 ///
 /// Cada tarjeta contiene la glosa, su traducción visual, categoría,
-/// y metadatos para el dominio jurídico/administrativo.
+/// y metadatos para trámites y consultas ciudadanas en entidades públicas.
 class LsbCard {
   final String id;
   final String gloss;
