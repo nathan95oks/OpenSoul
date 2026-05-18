@@ -8,7 +8,6 @@ import '../controllers/translation_controller.dart';
 import '../widgets/sentence_builder.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/card_grid.dart';
-import '../widgets/avatar_sign_viewer.dart';
 
 /// Pantalla principal del módulo LSB → Texto → Audio.
 ///
@@ -172,18 +171,6 @@ class _ResultPanel extends StatelessWidget {
                   ),
               ],
             ),
-
-            // Avatar 3D — Reproducción secuencial de señas
-            if (result.intermediateRepresentation != null) ...[
-              const SizedBox(height: 10),
-              AvatarSignViewer(
-                glosses: result.intermediateRepresentation!['glosas_originales'] != null
-                    ? List<String>.from(result.intermediateRepresentation!['glosas_originales'])
-                    : [],
-                height: 200,
-                autoPlay: true,
-              ),
-            ],
 
             // Base sentence (if Bedrock refined it)
             if (showBothTexts) ...[
