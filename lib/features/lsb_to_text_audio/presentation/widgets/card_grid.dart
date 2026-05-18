@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/cards_provider.dart';
-import 'confirm_video_modal.dart';
+import '../providers/sentence_provider.dart';
 
 /// Mapa de nombres de ícono a IconData para tarjetas.
 const _iconMap = <String, IconData>{
@@ -39,6 +39,7 @@ const _iconMap = <String, IconData>{
   'healing': Icons.healing, 'help_outline': Icons.help_outline,
   'location_off': Icons.location_off,
   'credit_card': Icons.credit_card,
+  'search': Icons.search, 'report': Icons.report,
 };
 /// Grid de tarjetas LSB con íconos semánticos por categoría.
 class CardGrid extends ConsumerWidget {
@@ -65,9 +66,9 @@ class CardGrid extends ConsumerWidget {
             final isEmergency = card.isEmergency;
 
             return InkWell(
-              onTap: () => mostrarVideoConfirmacion(
-                context, ref, card.displayText, card.videoUrl,
-              ),
+              onTap: () {
+                ref.read(sentenceProvider.notifier).addWord(card.displayText);
+              },
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 decoration: BoxDecoration(
