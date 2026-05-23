@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/context_provider.dart';
 import '../providers/guided_flow_provider.dart';
 
 class GuidedFlowHeader extends ConsumerWidget {
@@ -8,12 +9,16 @@ class GuidedFlowHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final flowState = ref.watch(guidedFlowProvider);
-    final currentStep = ref.read(guidedFlowProvider.notifier).currentStep;
+    final flowNotifier = ref.read(guidedFlowProvider.notifier);
+    final currentStep = flowNotifier.currentStep;
+    final ctx = ref.watch(contextProvider);
 
-    if (currentStep == null) return const SizedBox.shrink();
+    if (currentStep == null || ctx == null) return const SizedBox.shrink();
+
+    final isLastStep = flowState.currentStepIndex == ctx.defaultSteps.length - 1;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      padding: const EdgeInsets.all(16.0),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: const Color(0xFF161B22),
@@ -25,53 +30,99 @@ class GuidedFlowHeader extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF00ADB5).withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  'Paso ${flowState.currentStepIndex + 1}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF00ADB5),
-                  ),
+              // Indicador visual de progreso (Dots)
+              Expanded(
+                child: Row(
+                  children: List.generate(ctx.defaultSteps.length, (index) {
+                    final isActive = index == flowState.currentStepIndex;
+                    final isPast = index < flowState.currentStepIndex;
+                    return Expanded(
+                      child: Container(
+                        height: 4,
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          color: isActive 
+                            ? const Color(0xFF00ADB5) 
+                            : (isPast ? const Color(0xFF00ADB5).withOpacity(0.5) : const Color(0xFF30363D)),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    );
+                  }),
                 ),
               ),
-              const Spacer(),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                currentStep.emoji,
+                style: const TextStyle(fontSize: 32),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      currentStep.label,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      currentStep.hint,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFF8B949E),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               if (flowState.currentStepIndex > 0)
-                InkWell(
-                  onTap: () {
-                    ref.read(guidedFlowProvider.notifier).previousStep();
-                  },
-                  child: const Row(
+                TextButton.icon(
+                  onPressed: () => flowNotifier.previousStep(),
+                  icon: const Icon(Icons.arrow_back_ios, size: 14, color: Color(0xFF8B949E)),
+                  label: const Text('Anterior', style: TextStyle(color: Color(0xFF8B949E))),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                )
+              else
+                const SizedBox.shrink(),
+              
+              if (!isLastStep)
+                ElevatedButton(
+                  onPressed: () => flowNotifier.advanceStep(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF00ADB5).withOpacity(0.15),
+                    foregroundColor: const Color(0xFF00ADB5),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.arrow_back_ios, size: 12, color: Color(0xFF8B949E)),
-                      SizedBox(width: 4),
-                      Text('Anterior', style: TextStyle(color: Color(0xFF8B949E), fontSize: 12)),
+                      Text(currentStep.isOptional ? 'Saltar' : 'Siguiente', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.arrow_forward_ios, size: 14),
                     ],
                   ),
                 ),
             ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            currentStep.title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            currentStep.description,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF8B949E),
-            ),
           ),
         ],
       ),

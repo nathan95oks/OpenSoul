@@ -8,9 +8,7 @@ class SentenceNotifier extends Notifier<List<String>> {
   }
 
   void addWord(String word) {
-    state = [...state, word]; // Creamos una nueva lista con la palabra extra
-    // Avanzar flujo guiado automáticamente al agregar glosa
-    ref.read(guidedFlowProvider.notifier).advanceStep();
+    state = [...state, word];
   }
 
   void removeWord(String word) {

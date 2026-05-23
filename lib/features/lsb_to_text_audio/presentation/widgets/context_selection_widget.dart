@@ -54,16 +54,6 @@ class _ContextCard extends ConsumerWidget {
 
   const _ContextCard({required this.semanticContext});
 
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'warning_amber': return Icons.warning_amber_rounded;
-      case 'assignment': return Icons.assignment_rounded;
-      case 'local_hospital': return Icons.local_hospital_rounded;
-      case 'chat': return Icons.chat_rounded;
-      default: return Icons.help_outline;
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
@@ -81,15 +71,16 @@ class _ContextCard extends ConsumerWidget {
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              width: 52,
+              height: 52,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: const Color(0xFFFFD700).withOpacity(0.15),
+                color: const Color(0xFF30363D).withOpacity(0.5),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                _getIconData(semanticContext.icon),
-                color: const Color(0xFFFFD700),
-                size: 28,
+              child: Text(
+                semanticContext.emoji,
+                style: const TextStyle(fontSize: 28),
               ),
             ),
             const SizedBox(width: 16),

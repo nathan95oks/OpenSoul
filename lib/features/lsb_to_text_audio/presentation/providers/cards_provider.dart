@@ -65,29 +65,31 @@ final allCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
 final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final category = ref.watch(currentCategoryProvider);
   final context = ref.watch(contextProvider);
-  final flowState = ref.watch(guidedFlowProvider);
   final currentStep = ref.read(guidedFlowProvider.notifier).currentStep;
   final sentence = ref.watch(sentenceProvider);
 
-  // Si el usuario seleccionó una categoría específica distinta a 'Sugerencias', mostrar esa categoría.
   if (category != 'Sugerencias') {
     final useCase = ref.watch(getCardsByCategoryUseCaseProvider);
     return useCase(category);
   }
 
-  // De lo contrario, estamos en modo "Sugerencias" guiadas por contexto.
   final allCards = await ref.watch(allCardsProvider.future);
 
   if (context == null || currentStep == null) {
-    // Si no hay contexto, mostrar tarjetas prioritarias o frecuentes
     return allCards.where((c) => c.isFrequent).toList()..sort((a, b) => a.priority.compareTo(b.priority));
   }
 
-  // SemanticSuggestionEngine logic:
-  // 1. Filtrar por categorías sugeridas en el paso actual.
+  // Boosts semánticos según el contexto judicial/situacional
+  const contextBoosts = {
+    'denuncia_robo': ['ag01', 'ag06', 'ob06', 'ob01', 'ob02', 'ob03', 'de01', 'lu01', 'ti07', 'em01', 'in10'],
+    'violencia': ['ag02', 'ag03', 'ag04', 'id04', 'lu02', 'em01', 'em02', 'eu05', 'in10', 'in11'],
+    'accidente': ['ob07', 'ob08', 'ag04', 'em04', 'eu05', 'in07', 'sv07', 'in10'],
+  };
+
+  final boosts = contextBoosts[context.id] ?? [];
+
   List<LsbCard> suggested = allCards.where((c) => currentStep.targetCategories.contains(c.categoryId)).toList();
 
-  // 2. Si la sentencia tiene palabras, priorizar tarjetas que están en suggestedNextCardIds de las tarjetas previas.
   if (sentence.isNotEmpty) {
     final lastWord = sentence.last;
     final lastCard = allCards.firstWhere((c) => c.id == lastWord || c.displayText == lastWord || c.gloss == lastWord, orElse: () => allCards.first);
@@ -96,10 +98,20 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
       final aIsNext = lastCard.suggestedNextCardIds.contains(a.id) ? -1 : 1;
       final bIsNext = lastCard.suggestedNextCardIds.contains(b.id) ? -1 : 1;
       if (aIsNext != bIsNext) return aIsNext.compareTo(bIsNext);
+
+      final aIsBoosted = boosts.contains(a.id) ? -1 : 1;
+      final bIsBoosted = boosts.contains(b.id) ? -1 : 1;
+      if (aIsBoosted != bIsBoosted) return aIsBoosted.compareTo(bIsBoosted);
+
       return a.priority.compareTo(b.priority);
     });
   } else {
-    suggested.sort((a, b) => a.priority.compareTo(b.priority));
+    suggested.sort((a, b) {
+      final aIsBoosted = boosts.contains(a.id) ? -1 : 1;
+      final bIsBoosted = boosts.contains(b.id) ? -1 : 1;
+      if (aIsBoosted != bIsBoosted) return aIsBoosted.compareTo(bIsBoosted);
+      return a.priority.compareTo(b.priority);
+    });
   }
 
   return suggested;
