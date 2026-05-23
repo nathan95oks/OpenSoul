@@ -5,6 +5,7 @@ import '../providers/cards_provider.dart';
 
 /// Íconos y colores por categoría para el UI.
 const _categoryMeta = <String, Map<String, dynamic>>{
+  'Sugerencias': {'icon': Icons.auto_awesome, 'color': 0xFF00ADB5},
   'Identificación': {'icon': Icons.person, 'color': 0xFF4FC3F7},
   'Acciones': {'icon': Icons.flash_on, 'color': 0xFFFFD54F},
   'Trámites': {'icon': Icons.assignment, 'color': 0xFFFF8A65},
@@ -32,13 +33,15 @@ class CategoryFilter extends ConsumerWidget {
         border: Border(bottom: BorderSide(color: Colors.white.withValues(alpha: 0.06))),
       ),
       child: categoriesAsync.when(
-        data: (cats) => ListView.builder(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          itemCount: cats.length,
-          itemBuilder: (context, index) {
-            final cat = cats[index];
-            final isSelected = cat == currentCategory;
+        data: (cats) {
+          final allCats = ['Sugerencias', ...cats];
+          return ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            itemCount: allCats.length,
+            itemBuilder: (context, index) {
+              final cat = allCats[index];
+              final isSelected = cat == currentCategory;
             final meta = _categoryMeta[cat];
             final catColor = Color(meta?['color'] as int? ?? 0xFFFFD700);
             final catIcon = meta?['icon'] as IconData? ?? Icons.label;
@@ -65,7 +68,8 @@ class CategoryFilter extends ConsumerWidget {
               ),
             );
           },
-        ),
+        );
+        },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e', style: const TextStyle(color: Colors.red))),
       ),

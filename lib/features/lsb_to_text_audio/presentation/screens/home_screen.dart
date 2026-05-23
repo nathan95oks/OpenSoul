@@ -8,6 +8,10 @@ import '../controllers/translation_controller.dart';
 import '../widgets/sentence_builder.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/card_grid.dart';
+import '../widgets/avatar_sign_viewer.dart';
+import '../providers/context_provider.dart';
+import '../widgets/context_selection_widget.dart';
+import '../widgets/guided_flow_header.dart';
 
 /// Pantalla principal del módulo LSB → Texto → Audio.
 ///
@@ -19,6 +23,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedWords = ref.watch(sentenceProvider);
     final translationState = ref.watch(translationControllerProvider);
+    final contextState = ref.watch(contextProvider);
 
     ref.listen<AsyncValue<TranslationResult?>>(
       translationControllerProvider,
@@ -57,6 +62,15 @@ class HomeScreen extends ConsumerWidget {
           ],
         ),
         actions: [
+          if (contextState != null)
+            IconButton(
+              icon: const Icon(Icons.close, color: Colors.white54),
+              onPressed: () {
+                ref.read(contextProvider.notifier).clearContext();
+                ref.read(sentenceProvider.notifier).clearSentence();
+              },
+              tooltip: 'Cambiar contexto',
+            ),
           if (selectedWords.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete_sweep, color: Colors.white54),
@@ -67,11 +81,14 @@ class HomeScreen extends ConsumerWidget {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-        children: [
-          const SentenceBuilder(),
-          const CategoryFilter(),
-          const CardGrid(),
+          child: contextState == null
+              ? const ContextSelectionWidget()
+              : Column(
+                  children: [
+                    const GuidedFlowHeader(),
+                    const SentenceBuilder(),
+                    const CategoryFilter(),
+                    const CardGrid(),
 
           // Panel de resultado multimodal
           if (translationState.value != null && translationState.value!.generatedText.isNotEmpty)
@@ -112,7 +129,7 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
         ],
-          ),
+                  ),
         ),
       ),
     );

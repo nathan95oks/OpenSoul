@@ -47,7 +47,7 @@ class CardGrid extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cardsAsync = ref.watch(cardsByCategoryProvider);
+    final cardsAsync = ref.watch(dynamicCardsProvider);
 
     return cardsAsync.when(
       data: (cards) => GridView.builder(

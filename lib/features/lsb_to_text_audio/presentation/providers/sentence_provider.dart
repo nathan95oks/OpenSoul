@@ -1,5 +1,5 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'guided_flow_provider.dart';
 
 class SentenceNotifier extends Notifier<List<String>> {
   @override
@@ -9,6 +9,8 @@ class SentenceNotifier extends Notifier<List<String>> {
 
   void addWord(String word) {
     state = [...state, word]; // Creamos una nueva lista con la palabra extra
+    // Avanzar flujo guiado automáticamente al agregar glosa
+    ref.read(guidedFlowProvider.notifier).advanceStep();
   }
 
   void removeWord(String word) {
