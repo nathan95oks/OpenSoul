@@ -1,0 +1,157 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../domain/entities/lsb_card.dart';
+import '../../domain/entities/semantic_zone.dart';
+import '../../domain/services/semantic_navigation_engine.dart';
+import 'context_provider.dart';
+import 'sentence_provider.dart';
+
+/// Estado reactivo de navegación semántica.
+///
+/// Sustituye por completo a `GuidedFlowState`: ya no hay índice secuencial.
+/// Cualquier zona puede activarse en cualquier momento; el motor decide
+/// cuáles son sugeridas / prioritarias según el contexto activo y las
+/// tarjetas que el usuario ya seleccionó.
+class SemanticZonesState {
+  /// Zona actualmente seleccionada (manualmente o por sugerencia inicial).
+  final String? activeZoneId;
+
+  /// Zonas que el usuario ya activó al menos una vez.
+  final Set<String> visitedZoneIds;
+
+  /// Snapshot inmutable producido por el motor.
+  final NavigationSnapshot snapshot;
+
+  const SemanticZonesState({
+    required this.activeZoneId,
+    required this.visitedZoneIds,
+    required this.snapshot,
+  });
+
+  /// Acceso conveniente a la zona activa como entidad.
+  SemanticZone? get activeZone {
+    if (activeZoneId == null) return null;
+    for (final p in snapshot.orderedZones) {
+      if (p.zone.id == activeZoneId) return p.zone;
+    }
+    return null;
+  }
+
+  SemanticZonesState copyWith({
+    String? activeZoneId,
+    bool clearActive = false,
+    Set<String>? visitedZoneIds,
+    NavigationSnapshot? snapshot,
+  }) {
+    return SemanticZonesState(
+      activeZoneId: clearActive ? null : (activeZoneId ?? this.activeZoneId),
+      visitedZoneIds: visitedZoneIds ?? this.visitedZoneIds,
+      snapshot: snapshot ?? this.snapshot,
+    );
+  }
+}
+
+final _engineProvider =
+    Provider<SemanticNavigationEngine>((_) => const SemanticNavigationEngine());
+
+/// Estado base — no depende de [allCardsProvider] (que es async) para evitar
+/// loops circulares. Los boosts por categoría se aplican en
+/// [dynamicCardsProvider]; aquí solo necesitamos las glosas seleccionadas.
+class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
+  @override
+  SemanticZonesState build() {
+    final ctx = ref.watch(contextProvider);
+    final sentence = ref.watch(sentenceProvider);
+    final engine = ref.watch(_engineProvider);
+
+    if (ctx == null) {
+      return SemanticZonesState(
+        activeZoneId: null,
+        visitedZoneIds: const {},
+        snapshot: const NavigationSnapshot(
+          orderedZones: [],
+          activeTags: {},
+          dominantUrgency: UrgencyLevel.none,
+          suggestedZoneIds: [],
+        ),
+      );
+    }
+
+    final activeId = state.activeZoneId ?? ctx.entryZoneId;
+    final visited = {...state.visitedZoneIds, activeId};
+
+    final snapshot = engine.compute(
+      context: ctx,
+      selectedGlosses: sentence,
+      selectedCards: const <LsbCard>[],
+      activeZoneId: activeId,
+      visitedZoneIds: visited,
+    );
+
+    return SemanticZonesState(
+      activeZoneId: activeId,
+      visitedZoneIds: visited,
+      snapshot: snapshot,
+    );
+  }
+
+  /// Activa una zona libremente — no hay orden obligatorio.
+  void activateZone(String zoneId) {
+    final ctx = ref.read(contextProvider);
+    if (ctx == null) return;
+    if (ctx.zoneById(zoneId) == null) return;
+
+    final visited = {...state.visitedZoneIds, zoneId};
+    final engine = ref.read(_engineProvider);
+    final sentence = ref.read(sentenceProvider);
+
+    final snapshot = engine.compute(
+      context: ctx,
+      selectedGlosses: sentence,
+      selectedCards: const <LsbCard>[],
+      activeZoneId: zoneId,
+      visitedZoneIds: visited,
+    );
+
+    state = SemanticZonesState(
+      activeZoneId: zoneId,
+      visitedZoneIds: visited,
+      snapshot: snapshot,
+    );
+  }
+
+  void reset() {
+    final ctx = ref.read(contextProvider);
+    final engine = ref.read(_engineProvider);
+    if (ctx == null) {
+      state = const SemanticZonesState(
+        activeZoneId: null,
+        visitedZoneIds: {},
+        snapshot: NavigationSnapshot(
+          orderedZones: [],
+          activeTags: {},
+          dominantUrgency: UrgencyLevel.none,
+          suggestedZoneIds: [],
+        ),
+      );
+      return;
+    }
+    final snapshot = engine.compute(
+      context: ctx,
+      selectedGlosses: const [],
+      selectedCards: const [],
+      activeZoneId: ctx.entryZoneId,
+      visitedZoneIds: {ctx.entryZoneId},
+    );
+    state = SemanticZonesState(
+      activeZoneId: ctx.entryZoneId,
+      visitedZoneIds: {ctx.entryZoneId},
+      snapshot: snapshot,
+    );
+  }
+}
+
+final semanticZonesProvider =
+    NotifierProvider<SemanticZonesNotifier, SemanticZonesState>(
+  SemanticZonesNotifier.new,
+);

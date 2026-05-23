@@ -8,10 +8,9 @@ import '../controllers/translation_controller.dart';
 import '../widgets/sentence_builder.dart';
 import '../widgets/category_filter.dart';
 import '../widgets/card_grid.dart';
-import '../widgets/avatar_sign_viewer.dart';
 import '../providers/context_provider.dart';
 import '../widgets/context_selection_widget.dart';
-import '../widgets/guided_flow_header.dart';
+import '../widgets/semantic_zones_bar.dart';
 
 /// Pantalla principal del módulo LSB → Texto → Audio.
 ///
@@ -85,7 +84,7 @@ class HomeScreen extends ConsumerWidget {
               ? const ContextSelectionWidget()
               : Column(
                   children: [
-                    const GuidedFlowHeader(),
+                    const SemanticZonesBar(),
                     const SentenceBuilder(),
                     const CategoryFilter(),
                     const CardGrid(),
@@ -104,8 +103,9 @@ class HomeScreen extends ConsumerWidget {
                 onPressed: selectedWords.isEmpty || translationState.isLoading
                     ? null
                     : () async {
+                        final ctxId = contextState.id;
                         await ref.read(translationControllerProvider.notifier).translateCards(
-                          context: 'ciudadano',
+                          context: ctxId,
                           cards: selectedWords,
                         );
                       },

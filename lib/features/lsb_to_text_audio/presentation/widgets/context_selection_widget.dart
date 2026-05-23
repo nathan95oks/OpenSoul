@@ -23,7 +23,7 @@ class ContextSelectionWidget extends ConsumerWidget {
           ),
         ),
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, bottom: 16.0),
+          padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
           child: Text(
             'Selecciona una situación para guiarte mejor.',
             style: TextStyle(
