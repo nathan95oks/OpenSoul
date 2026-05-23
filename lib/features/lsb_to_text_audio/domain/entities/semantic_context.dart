@@ -1,14 +1,35 @@
-/// Representa un contexto semántico situacional (ej: Robo, Violencia).
+import 'semantic_zone.dart';
+
+/// Contexto situacional humano (ej: "Me robaron", "Tengo miedo").
 ///
-/// Cada contexto tiene un conjunto de [GuidedStep] que funcionan como
-/// "zonas semánticas" explorables, NO como preguntas secuenciales rígidas.
+/// Mantiene los IDs originales para no romper el datasource de tarjetas
+/// (que referencia 'denuncia_robo', 'violencia', etc.), pero los labels
+/// y descripciones ahora son cognitivamente más naturales —- centrados
+/// en lo que la persona vive, no en categorías institucionales.
+///
+/// Cada contexto expone un conjunto de [SemanticZone] **navegables
+/// libremente**, no una secuencia obligatoria. El [SemanticNavigationEngine]
+/// decide qué zonas priorizar según las glosas seleccionadas.
 class SemanticContext {
   final String id;
   final String name;
   final String icon;
   final String emoji;
+
+  /// Descripción humana en primera persona ("Me quitaron algo").
   final String description;
-  final List<GuidedStep> defaultSteps;
+
+  /// Zonas semánticas navegables.
+  final List<SemanticZone> zones;
+
+  /// ID de la zona inicial sugerida (no obligatoria — el usuario puede
+  /// entrar por donde quiera). El motor la usa solo como punto de partida
+  /// visual si el usuario aún no seleccionó nada.
+  final String entryZoneId;
+
+  /// Nivel base de urgencia del contexto en general. 'emergencia' arranca
+  /// con [UrgencyLevel.high]; trámites con [UrgencyLevel.none].
+  final UrgencyLevel baseUrgency;
 
   const SemanticContext({
     required this.id,
@@ -16,49 +37,15 @@ class SemanticContext {
     required this.icon,
     required this.emoji,
     required this.description,
-    required this.defaultSteps,
+    required this.zones,
+    required this.entryZoneId,
+    this.baseUrgency = UrgencyLevel.none,
   });
-}
 
-/// Representa una zona semántica dentro del flujo guiado.
-///
-/// NO es una pregunta interrogativa. Es una etiqueta visual corta
-/// que agrupa conceptos relacionados (ej: "Situación", "Personas").
-/// El usuario puede seleccionar múltiples glosas dentro de una zona
-/// y avanzar manualmente cuando lo desee.
-class GuidedStep {
-  /// Identificador único del paso.
-  final String id;
-
-  /// Etiqueta corta (1-2 palabras): "Situación", "Personas", "Objetos".
-  final String label;
-
-  /// Texto de apoyo breve y accesible.
-  final String hint;
-
-  /// Emoji visual para refuerzo rápido.
-  final String emoji;
-
-  /// Categorías de tarjetas a mostrar en esta zona.
-  final List<String> targetCategories;
-
-  /// Si es true, el usuario puede saltar esta zona.
-  final bool isOptional;
-
-  /// Mínimo de selecciones requeridas (0 = se puede saltar).
-  final int minSelections;
-
-  /// Máximo de selecciones permitidas (null = ilimitado).
-  final int? maxSelections;
-
-  const GuidedStep({
-    required this.id,
-    required this.label,
-    required this.hint,
-    this.emoji = '📌',
-    required this.targetCategories,
-    this.isOptional = false,
-    this.minSelections = 0,
-    this.maxSelections,
-  });
+  SemanticZone? zoneById(String zoneId) {
+    for (final z in zones) {
+      if (z.id == zoneId) return z;
+    }
+    return null;
+  }
 }
