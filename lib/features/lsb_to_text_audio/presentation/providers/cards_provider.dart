@@ -103,6 +103,16 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   if (activeZone == null) return const [];
 
   final zoneCategories = activeZone.cardCategories.toSet();
+  final zoneSubcategories = activeZone.cardSubcategories.toSet();
+  final hasSubcategoryFilter = zoneSubcategories.isNotEmpty;
+
+  bool matchesZone(LsbCard c) {
+    if (!zoneCategories.contains(c.categoryId)) return false;
+    if (hasSubcategoryFilter && !zoneSubcategories.contains(c.subcategoryId)) {
+      return false;
+    }
+    return true;
+  }
 
   // Cadena semántica: ¿la última tarjeta sugiere a alguna de estas?
   LsbCard? lastCard;
@@ -135,7 +145,7 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
 
   // Primero: tarjetas específicas del contexto.
   final specific = allCards.where((c) {
-    if (!zoneCategories.contains(c.categoryId)) return false;
+    if (!matchesZone(c)) return false;
     return c.contexts.contains(context.id);
   }).toList()
     ..sort(comparator);
@@ -144,9 +154,15 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
     return specific.take(_kMaxGuidedAnswers).toList();
   }
 
+  // Si la zona es estricta no rellenamos con cards 'general' — evita que
+  // preguntas como "¿Quién te robó?" sugieran "MI HIJO" o "YO".
+  if (activeZone.strictContext) {
+    return specific;
+  }
+
   // Si no llenamos el tope, completar con tarjetas 'general' de la zona.
   final fillers = allCards.where((c) {
-    if (!zoneCategories.contains(c.categoryId)) return false;
+    if (!matchesZone(c)) return false;
     if (c.contexts.contains(context.id)) return false; // ya están
     return c.contexts.contains('general');
   }).toList()

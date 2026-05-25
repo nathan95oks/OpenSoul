@@ -83,6 +83,11 @@ class CardGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cardsAsync = ref.watch(dynamicCardsProvider);
     final expanded = ref.watch(expandedAnswersProvider);
+    final zonesState = ref.watch(semanticZonesProvider);
+    final activeZone = zonesState.activeZone;
+    final flowComplete = zonesState.isFlowComplete;
+    final maxPicks = activeZone?.maxPicks ?? 1;
+    final showPairHint = maxPicks > 1 && !flowComplete;
 
     return cardsAsync.when(
       data: (cards) {
@@ -99,6 +104,10 @@ class CardGrid extends ConsumerWidget {
           );
         }
 
+        if (flowComplete) {
+          return const _FlowCompleteBanner();
+        }
+
         final visible = expanded
             ? cards
             : cards.take(_kAnswersPerQuestion).toList();
@@ -106,6 +115,11 @@ class CardGrid extends ConsumerWidget {
 
         return Column(
           children: [
+            if (showPairHint)
+              _PairPickHint(
+                current: zonesState.picksInActiveZone,
+                max: maxPicks,
+              ),
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -167,6 +181,105 @@ class CardGrid extends ConsumerWidget {
     ref.read(sentenceProvider.notifier).addWord(card.displayText);
     ref.read(expandedAnswersProvider.notifier).collapse();
     ref.read(semanticZonesProvider.notifier).advanceFromCard(card, allCards);
+  }
+}
+
+/// Pista visible en zonas que permiten emparejar dos cards
+/// (apariencia, vestimenta). Informa cuántos picks lleva el usuario en
+/// la zona actual sin entorpecer la selección.
+class _PairPickHint extends StatelessWidget {
+  final int current;
+  final int max;
+  const _PairPickHint({required this.current, required this.max});
+
+  @override
+  Widget build(BuildContext context) {
+    final remaining = max - current;
+    final label = current == 0
+        ? 'Puedes elegir hasta $max cards para describir mejor'
+        : 'Card $current de $max — toca otra para complementar, o salta';
+    final color =
+        remaining > 0 ? const Color(0xFF00ADB5) : const Color(0xFF8B949E);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: color.withValues(alpha: 0.35)),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.add_circle_outline, size: 14, color: color),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Banner mostrado cuando el usuario terminó de responder todas las
+/// preguntas. Reemplaza el grid de cards para impedir agregar más
+/// glosas accidentalmente; invita a traducir o a editar respuestas
+/// anteriores tocando un chip de pregunta en la barra superior.
+class _FlowCompleteBanner extends StatelessWidget {
+  const _FlowCompleteBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF3FB950).withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: const Color(0xFF3FB950).withValues(alpha: 0.4),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_circle, color: Color(0xFF3FB950), size: 28),
+            const SizedBox(height: 8),
+            const Text(
+              'Respondiste todas las preguntas',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Pulsa "TERMINÉ Y TRADUCIR" o toca una pregunta de la barra para editar tu respuesta.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.6),
+                height: 1.35,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

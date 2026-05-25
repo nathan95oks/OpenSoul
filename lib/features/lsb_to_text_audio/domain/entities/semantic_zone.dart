@@ -71,6 +71,26 @@ class SemanticZone {
   /// Categorías de tarjetas (del datasource) que esta zona expone.
   final List<String> cardCategories;
 
+  /// Subcategorías permitidas dentro de [cardCategories]. Si está vacío,
+  /// se aceptan todas las subcategorías de las categorías declaradas.
+  /// Permite que dos zonas que comparten categoría muestren cards
+  /// diferentes (ej: "Personas" → Descripción[Género,Edad] vs
+  /// "Apariencia" → Descripción[Físico,Cabello]).
+  final List<String> cardSubcategories;
+
+  /// Si es true, sólo se muestran cards cuyo `contexts` incluye el id
+  /// del contexto activo — no se rellena con cards `general`. Útil para
+  /// zonas donde los fillers genéricos (YO, FAMILIA, HIJO) carecen de
+  /// sentido (ej: "¿Quién te robó?" no debe sugerir "MI HIJO").
+  final bool strictContext;
+
+  /// Cantidad máxima de cards que el usuario puede elegir antes de que
+  /// el motor avance automáticamente a la siguiente pregunta. Default 1
+  /// (una sola respuesta por pregunta). Zonas descriptivas pueden usar
+  /// 2 para permitir combinaciones tipo "CHOMPA + NEGRO" o
+  /// "ALTO + DELGADO".
+  final int maxPicks;
+
   /// Etiquetas emocionales que esta zona "absorbe" o representa
   /// (ej: la zona `emergencia` lleva [urgente, ayuda]).
   final List<String> contextTags;
@@ -86,6 +106,9 @@ class SemanticZone {
     this.urgencyLevel = UrgencyLevel.none,
     this.relatedZones = const [],
     required this.cardCategories,
+    this.cardSubcategories = const [],
+    this.strictContext = false,
+    this.maxPicks = 1,
     this.contextTags = const [],
   });
 
@@ -104,6 +127,9 @@ class SemanticZone {
       urgencyLevel: urgencyLevel ?? this.urgencyLevel,
       relatedZones: relatedZones,
       cardCategories: cardCategories,
+      cardSubcategories: cardSubcategories,
+      strictContext: strictContext,
+      maxPicks: maxPicks,
       contextTags: contextTags,
     );
   }
