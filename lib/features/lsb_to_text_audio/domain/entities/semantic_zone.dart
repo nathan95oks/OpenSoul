@@ -45,6 +45,12 @@ class SemanticZone {
   /// Texto de apoyo breve y accesible. Sin tono interrogativo.
   final String hint;
 
+  /// Pregunta guiada en primera persona que se le muestra al usuario sordo
+  /// cuando esta zona está activa (ej: "¿Qué pasó?", "¿Quién estuvo?").
+  /// Convierte la navegación por zonas en un cuestionario asistido sin
+  /// reemplazar las tarjetas: el usuario responde tocando glosas.
+  final String question;
+
   /// Emoji de refuerzo visual.
   final String emoji;
 
@@ -73,6 +79,7 @@ class SemanticZone {
     required this.id,
     required this.label,
     required this.hint,
+    this.question = '',
     this.emoji = '📌',
     this.semanticWeight = 0.5,
     this.optional = false,
@@ -90,6 +97,7 @@ class SemanticZone {
       id: id,
       label: label,
       hint: hint,
+      question: question,
       emoji: emoji,
       semanticWeight: semanticWeight ?? this.semanticWeight,
       optional: optional,

@@ -6,15 +6,19 @@ import '../../domain/services/semantic_navigation_engine.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 
-/// Barra de zonas semánticas — exploración libre por chips.
+/// Barra de zonas semánticas — motor de preguntas guiadas + navegación libre.
 ///
-/// Cada chip representa una [SemanticZone] del contexto activo. El usuario
-/// puede tocar cualquier zona en cualquier momento; el motor resalta las
-/// sugeridas y eleva visualmente las que tienen urgencia activa.
+/// La zona activa muestra una **pregunta guiada en primera persona**
+/// ("¿Qué pasó?", "¿Quién te robó?", "¿Dónde ocurrió?") como prompt
+/// principal. El usuario sordo "responde" tocando tarjetas (entrada
+/// visual-táctil definida en el perfil de proyecto). Cada chip representa
+/// otra pregunta a la que puede saltar libremente — sin orden obligatorio.
 ///
-/// Diseño deliberadamente NO secuencial: no hay botones "Anterior /
-/// Siguiente" ni indicadores de paso. La narrativa se construye de manera
-/// asociativa, compatible con la naturaleza viso-gestual de la LSB.
+/// El motor [SemanticNavigationEngine] sugiere qué pregunta hacer a
+/// continuación según las glosas ya seleccionadas y las etiquetas
+/// emocionales detectadas (urgencia, peligro, dolor). Esto convierte la
+/// navegación en un cuestionario asistido sin perder el carácter
+/// asociativo y no secuencial propio de la LSB.
 class SemanticZonesBar extends ConsumerWidget {
   const SemanticZonesBar({super.key});
 
@@ -45,38 +49,29 @@ class SemanticZonesBar extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header con contexto y badge de urgencia
+          // Cabecera: contexto + badge de urgencia
           Row(
             children: [
-              Text(ctx.emoji, style: const TextStyle(fontSize: 22)),
+              Text(ctx.emoji, style: const TextStyle(fontSize: 20)),
               const SizedBox(width: 8),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      ctx.name,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    if (activeZone != null)
-                      Text(
-                        '${activeZone.emoji}  ${activeZone.label} · ${activeZone.hint}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF8B949E),
-                        ),
-                      ),
-                  ],
+                child: Text(
+                  ctx.name.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF8B949E),
+                    letterSpacing: 1.2,
+                  ),
                 ),
               ),
               if (urgency.index >= UrgencyLevel.high.index)
                 _UrgencyBadge(level: urgency),
             ],
           ),
+          const SizedBox(height: 10),
+          // Prompt — pregunta guiada de la zona activa
+          if (activeZone != null) _ActiveQuestion(zone: activeZone),
           // Etiquetas emocionales activas
           if (tags.isNotEmpty) ...[
             const SizedBox(height: 8),
@@ -87,7 +82,9 @@ class SemanticZonesBar extends ConsumerWidget {
             ),
           ],
           const SizedBox(height: 12),
-          // Chips de zonas — navegación libre
+          // Chips de zonas — saltar a otra pregunta
+          const _OtherQuestionsLabel(),
+          const SizedBox(height: 6),
           SizedBox(
             height: 38,
             child: ListView.separated(
@@ -241,6 +238,92 @@ class _UrgencyBadge extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Renderiza la pregunta guiada activa como prompt principal.
+///
+/// Es la materialización de la sugerencia pedagógica del docente:
+/// transformar la grilla de tarjetas en un cuestionario asistido, donde
+/// cada pregunta enfoca cognitivamente al usuario sordo en una sola
+/// dimensión del relato. Las tarjetas siguen siendo la respuesta —
+/// alineado con el módulo de entrada visual-táctil del perfil de proyecto.
+class _ActiveQuestion extends StatelessWidget {
+  final SemanticZone zone;
+  const _ActiveQuestion({required this.zone});
+
+  @override
+  Widget build(BuildContext context) {
+    final question = zone.question.isNotEmpty ? zone.question : zone.hint;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFD700).withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: const Color(0xFFFFD700).withValues(alpha: 0.35),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(zone.emoji, style: const TextStyle(fontSize: 22)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'PREGUNTA  ·  ${zone.label.toUpperCase()}',
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: Color(0xFFFFD700),
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  question,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    height: 1.25,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Toca las tarjetas para responder',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFF8B949E),
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _OtherQuestionsLabel extends StatelessWidget {
+  const _OtherQuestionsLabel();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'OTRAS PREGUNTAS',
+      style: TextStyle(
+        fontSize: 10,
+        color: Color(0xFF8B949E),
+        fontWeight: FontWeight.w700,
+        letterSpacing: 1.2,
       ),
     );
   }
