@@ -58,27 +58,40 @@ final _engineProvider =
 /// loops circulares. Los boosts por categoría se aplican en
 /// [dynamicCardsProvider]; aquí solo necesitamos las glosas seleccionadas.
 class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
+  static const _emptyState = SemanticZonesState(
+    activeZoneId: null,
+    visitedZoneIds: {},
+    snapshot: NavigationSnapshot(
+      orderedZones: [],
+      activeTags: {},
+      dominantUrgency: UrgencyLevel.none,
+      suggestedZoneIds: [],
+    ),
+  );
+
   @override
   SemanticZonesState build() {
     final ctx = ref.watch(contextProvider);
     final sentence = ref.watch(sentenceProvider);
     final engine = ref.watch(_engineProvider);
 
-    if (ctx == null) {
-      return SemanticZonesState(
-        activeZoneId: null,
-        visitedZoneIds: const {},
-        snapshot: const NavigationSnapshot(
-          orderedZones: [],
-          activeTags: {},
-          dominantUrgency: UrgencyLevel.none,
-          suggestedZoneIds: [],
-        ),
-      );
+    if (ctx == null) return _emptyState;
+
+    // En el primer build de un Notifier, `state` aún no está inicializado
+    // y leerlo lanza LateError. Lo envolvemos para que el primer ingreso
+    // al módulo no rompa la pantalla con "provider in error state".
+    String? previousActiveId;
+    Set<String> previousVisited = const {};
+    try {
+      final s = state;
+      previousActiveId = s.activeZoneId;
+      previousVisited = s.visitedZoneIds;
+    } on Error {
+      // First build — state aún no existe. Continuamos con valores por defecto.
     }
 
-    final activeId = state.activeZoneId ?? ctx.entryZoneId;
-    final visited = {...state.visitedZoneIds, activeId};
+    final activeId = previousActiveId ?? ctx.entryZoneId;
+    final visited = {...previousVisited, activeId};
 
     final snapshot = engine.compute(
       context: ctx,
@@ -118,6 +131,76 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       visitedZoneIds: visited,
       snapshot: snapshot,
     );
+  }
+
+  /// Avanza automáticamente a la siguiente pregunta después de que el
+  /// usuario respondió tocando una tarjeta.
+  ///
+  /// Estrategia de decisión:
+  /// 1. Si la tarjeta seleccionada tiene `suggestedNextCardIds`, busca
+  ///    la categoría de esas tarjetas y activa la zona que las contiene
+  ///    (siempre que no haya sido visitada todavía).
+  /// 2. Si no hay sugerencia o ya fue visitada, salta a la siguiente
+  ///    zona no visitada según la prioridad del motor.
+  /// 3. Si todas las zonas están visitadas, mantiene la zona actual —
+  ///    el usuario debería pulsar "Terminé y traducir".
+  ///
+  /// Esto es lo que materializa el flujo encadenado pregunta → respuesta
+  /// → siguiente pregunta sin obligar al usuario a navegar manualmente.
+  void advanceFromCard(LsbCard card, List<LsbCard> allCards) {
+    final ctx = ref.read(contextProvider);
+    if (ctx == null) return;
+
+    // 1. Intentar avanzar a la zona donde viven las tarjetas sugeridas.
+    String? nextZoneId;
+    if (card.suggestedNextCardIds.isNotEmpty) {
+      final suggestedCategories = <String>{};
+      for (final id in card.suggestedNextCardIds) {
+        for (final c in allCards) {
+          if (c.id == id) {
+            suggestedCategories.add(c.categoryId);
+            break;
+          }
+        }
+      }
+      for (final zone in ctx.zones) {
+        if (zone.id == state.activeZoneId) continue;
+        if (state.visitedZoneIds.contains(zone.id)) continue;
+        if (zone.cardCategories.any(suggestedCategories.contains)) {
+          nextZoneId = zone.id;
+          break;
+        }
+      }
+    }
+
+    // 2. Fallback: siguiente zona no visitada según prioridad del motor.
+    if (nextZoneId == null) {
+      for (final p in state.snapshot.orderedZones) {
+        if (p.zone.id == state.activeZoneId) continue;
+        if (state.visitedZoneIds.contains(p.zone.id)) continue;
+        nextZoneId = p.zone.id;
+        break;
+      }
+    }
+
+    // 3. Si no hay siguiente, recomputar snapshot sin cambiar zona activa
+    //    (la frase actualizada ya disparó un rebuild vía sentenceProvider).
+    if (nextZoneId == null) return;
+
+    activateZone(nextZoneId);
+  }
+
+  /// Marca la pregunta actual como visitada y salta a la siguiente.
+  void skipCurrentQuestion() {
+    final visited = {...state.visitedZoneIds};
+    if (state.activeZoneId != null) visited.add(state.activeZoneId!);
+
+    for (final p in state.snapshot.orderedZones) {
+      if (p.zone.id == state.activeZoneId) continue;
+      if (visited.contains(p.zone.id)) continue;
+      activateZone(p.zone.id);
+      return;
+    }
   }
 
   void reset() {

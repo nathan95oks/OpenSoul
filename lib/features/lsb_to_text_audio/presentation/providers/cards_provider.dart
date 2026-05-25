@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/data/repositories/cards_repository_impl.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/lsb_card.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/semantic_zone.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/cards_repository.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_cards_by_category_usecase.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_categories_usecase.dart';
@@ -64,19 +63,30 @@ final allCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   return allCards;
 });
 
-/// Sugerencias contextuales basadas en zona activa, urgencia detectada
-/// y última glosa seleccionada.
+/// Tope duro de tarjetas devueltas en modo guiado. Suficiente para que el
+/// usuario sordo tenga opciones reales pero impide que el modo "Ver más"
+/// muestre 30+ tarjetas y vuelva la experiencia confusa.
+const int _kMaxGuidedAnswers = 8;
+
+/// Opciones de respuesta para la pregunta guiada actual.
 ///
-/// Reemplaza la lógica indexada anterior (`currentStepIndex`) por consultas
-/// a [semanticZonesProvider]. Las tarjetas marcadas `isEmergency` se
-/// promueven automáticamente cuando el motor detecta urgencia.
+/// Filtro estricto modo guiado:
+/// 1. La tarjeta debe pertenecer a alguna categoría de la **zona activa**.
+/// 2. La tarjeta debe ser **relevante al contexto situacional**: primero
+///    se prueba con tarjetas cuyo `contexts` incluye el id del contexto
+///    activo; sólo si no se llega al tope se completan con tarjetas
+///    `general` (familia, tiempo universal, etc.).
+/// 3. Tope duro de [_kMaxGuidedAnswers] resultados.
+/// 4. Si el usuario activó manualmente una categoría desde el filtro
+///    avanzado, se respeta esa elección y se devuelve la categoría
+///    completa (modo libre para usuarios avanzados).
 final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final category = ref.watch(currentCategoryProvider);
   final context = ref.watch(contextProvider);
   final zonesState = ref.watch(semanticZonesProvider);
   final sentence = ref.watch(sentenceProvider);
 
-  // Si el usuario eligió manualmente otra categoría, respetamos la elección.
+  // Modo avanzado: el usuario eligió una categoría específica.
   if (category != 'Sugerencias') {
     final useCase = ref.watch(getCardsByCategoryUseCaseProvider);
     return useCase(category);
@@ -84,89 +94,64 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
 
   final allCards = await ref.watch(allCardsProvider.future);
 
-  // Sin contexto: solo las tarjetas frecuentes.
   if (context == null) {
     return allCards.where((c) => c.isFrequent).toList()
       ..sort((a, b) => a.priority.compareTo(b.priority));
   }
 
   final activeZone = zonesState.activeZone;
-  final activeTags = zonesState.snapshot.activeTags;
-  final urgencyActive = zonesState.snapshot.dominantUrgency.index >=
-      UrgencyLevel.high.index;
+  if (activeZone == null) return const [];
 
-  // Conjunto de categorías visibles: las de la zona activa + categorías de
-  // zonas sugeridas si la zona activa tiene relaciones, para que la
-  // exploración libre no quede "encerrada".
-  final visibleCategories = <String>{
-    ...?activeZone?.cardCategories,
-    for (final id in zonesState.snapshot.suggestedZoneIds)
-      ...?context.zoneById(id)?.cardCategories,
-  };
+  final zoneCategories = activeZone.cardCategories.toSet();
 
-  // Si urgencia alta/crítica, garantizamos visibilidad de Estado/Urgencia.
-  if (urgencyActive) {
-    visibleCategories.add('Estado/Urgencia');
-    visibleCategories.add('Servicios');
-  }
-
-  Iterable<LsbCard> filtered = allCards.where((c) {
-    if (visibleCategories.isEmpty) return c.isFrequent;
-    return visibleCategories.contains(c.categoryId);
-  });
-
-  // Si está bajo urgencia, no escondemos tarjetas Emergencia aunque no
-  // estén en la zona activa.
-  if (urgencyActive) {
-    final emergencyExtras =
-        allCards.where((c) => c.isEmergency && !filtered.contains(c));
-    filtered = [...filtered, ...emergencyExtras];
-  }
-
-  final suggested = filtered.toList();
-
-  // Última tarjeta seleccionada (para usar suggestedNextCardIds).
+  // Cadena semántica: ¿la última tarjeta sugiere a alguna de estas?
   LsbCard? lastCard;
   if (sentence.isNotEmpty) {
     final lastWord = sentence.last;
     for (final c in allCards) {
-      if (c.id == lastWord || c.displayText == lastWord || c.gloss == lastWord) {
+      if (c.id == lastWord ||
+          c.displayText == lastWord ||
+          c.gloss == lastWord) {
         lastCard = c;
         break;
       }
     }
   }
 
-  suggested.sort((a, b) {
-    // 1. Urgencia activa → tarjetas isEmergency primero.
-    if (urgencyActive) {
-      final ea = a.isEmergency ? 0 : 1;
-      final eb = b.isEmergency ? 0 : 1;
-      if (ea != eb) return ea.compareTo(eb);
-    }
-
-    // 2. Cadena semántica: si la última tarjeta sugiere a una de estas.
+  int comparator(LsbCard a, LsbCard b) {
+    // 1. Tarjetas que la última seleccionada sugiere específicamente.
     if (lastCard != null) {
       final aNext = lastCard.suggestedNextCardIds.contains(a.id) ? 0 : 1;
       final bNext = lastCard.suggestedNextCardIds.contains(b.id) ? 0 : 1;
       if (aNext != bNext) return aNext.compareTo(bNext);
     }
-
-    // 3. Tarjetas cuyas etiquetas de contexto coinciden con tags activas.
-    if (activeTags.isNotEmpty) {
-      final aCtx = a.contexts.any(activeTags.contains) ? 0 : 1;
-      final bCtx = b.contexts.any(activeTags.contains) ? 0 : 1;
-      if (aCtx != bCtx) return aCtx.compareTo(bCtx);
+    // 2. Frecuencia de uso.
+    if (a.isFrequent != b.isFrequent) {
+      return a.isFrequent ? -1 : 1;
     }
-
-    // 4. Coincidencia con el contexto situacional activo (id del contexto).
-    final aMatch = a.contexts.contains(context.id) ? 0 : 1;
-    final bMatch = b.contexts.contains(context.id) ? 0 : 1;
-    if (aMatch != bMatch) return aMatch.compareTo(bMatch);
-
-    // 5. Prioridad estática.
+    // 3. Prioridad estática.
     return a.priority.compareTo(b.priority);
-  });
+  }
 
-  return suggested;
+  // Primero: tarjetas específicas del contexto.
+  final specific = allCards.where((c) {
+    if (!zoneCategories.contains(c.categoryId)) return false;
+    return c.contexts.contains(context.id);
+  }).toList()
+    ..sort(comparator);
+
+  if (specific.length >= _kMaxGuidedAnswers) {
+    return specific.take(_kMaxGuidedAnswers).toList();
+  }
+
+  // Si no llenamos el tope, completar con tarjetas 'general' de la zona.
+  final fillers = allCards.where((c) {
+    if (!zoneCategories.contains(c.categoryId)) return false;
+    if (c.contexts.contains(context.id)) return false; // ya están
+    return c.contexts.contains('general');
+  }).toList()
+    ..sort(comparator);
+
+  final combined = [...specific, ...fillers];
+  return combined.take(_kMaxGuidedAnswers).toList();
 });
