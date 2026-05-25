@@ -36,15 +36,50 @@ final availableContexts = <SemanticContext>[
         contextTags: [EmotionalTag.amenaza],
         relatedZones: ['personas', 'objetos', 'emergencia'],
       ),
+      // Quién — sólo género / edad / relación / cantidad.
       SemanticZone(
         id: 'personas',
-        label: 'Personas',
-        hint: 'Quién estuvo',
+        label: 'Quién',
+        hint: 'Tipo de persona',
         question: '¿Quién te robó?',
         emoji: '👤',
-        semanticWeight: 0.8,
-        cardCategories: ['Identificación', 'Descripción'],
-        relatedZones: ['situacion', 'lugar'],
+        semanticWeight: 0.85,
+        cardCategories: ['Descripción'],
+        cardSubcategories: ['Género', 'Edad', 'Relación', 'Cantidad'],
+        strictContext: true,
+        relatedZones: ['apariencia', 'vestimenta', 'situacion'],
+      ),
+      // Cómo era físicamente — altura, contextura, piel, cabello, marcas.
+      // Acepta 2 cards: ej. ALTO + DELGADO, BARBA + LENTES.
+      SemanticZone(
+        id: 'apariencia',
+        label: 'Apariencia',
+        hint: 'Cómo era físicamente',
+        question: '¿Cómo era físicamente?',
+        emoji: '🧍',
+        semanticWeight: 0.75,
+        optional: true,
+        cardCategories: ['Descripción'],
+        cardSubcategories: ['Físico', 'Cabello', 'Marca'],
+        strictContext: true,
+        maxPicks: 2,
+        relatedZones: ['vestimenta', 'personas'],
+      ),
+      // Qué llevaba puesto — vestimenta y colores.
+      // Acepta 2 cards para emparejar prenda+color: ej. CHOMPA + NEGRO.
+      SemanticZone(
+        id: 'vestimenta',
+        label: 'Vestimenta',
+        hint: 'Qué llevaba puesto',
+        question: '¿Qué ropa llevaba?',
+        emoji: '👕',
+        semanticWeight: 0.7,
+        optional: true,
+        cardCategories: ['Descripción'],
+        cardSubcategories: ['Vestimenta', 'Color'],
+        strictContext: true,
+        maxPicks: 2,
+        relatedZones: ['apariencia', 'personas'],
       ),
       SemanticZone(
         id: 'objetos',
@@ -54,6 +89,7 @@ final availableContexts = <SemanticContext>[
         emoji: '📱',
         semanticWeight: 0.8,
         cardCategories: ['Objetos', 'Documentos'],
+        strictContext: true,
         relatedZones: ['situacion', 'lugar'],
       ),
       SemanticZone(
@@ -63,7 +99,8 @@ final availableContexts = <SemanticContext>[
         question: '¿Dónde ocurrió?',
         emoji: '📍',
         semanticWeight: 0.6,
-        cardCategories: ['Lugares', 'Instituciones'],
+        cardCategories: ['Lugares'],
+        strictContext: true,
         relatedZones: ['tiempo'],
       ),
       SemanticZone(

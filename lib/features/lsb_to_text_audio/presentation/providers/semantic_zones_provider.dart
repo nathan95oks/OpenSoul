@@ -22,10 +22,16 @@ class SemanticZonesState {
   /// Snapshot inmutable producido por el motor.
   final NavigationSnapshot snapshot;
 
+  /// Cuántas cards lleva seleccionadas el usuario en la zona activa
+  /// desde la última vez que se activó. Se usa para permitir múltiples
+  /// respuestas (ej: CHOMPA+NEGRO) y para detectar fin de flujo.
+  final int picksInActiveZone;
+
   const SemanticZonesState({
     required this.activeZoneId,
     required this.visitedZoneIds,
     required this.snapshot,
+    this.picksInActiveZone = 0,
   });
 
   /// Acceso conveniente a la zona activa como entidad.
@@ -37,16 +43,38 @@ class SemanticZonesState {
     return null;
   }
 
+  /// `true` si no hay ninguna zona pendiente además de la activa.
+  bool get _noPendingQuestion {
+    for (final p in snapshot.orderedZones) {
+      if (p.zone.id == activeZoneId) continue;
+      if (!visitedZoneIds.contains(p.zone.id)) return false;
+    }
+    return true;
+  }
+
+  /// `true` cuando el usuario ya respondió todas las preguntas y agotó
+  /// los picks permitidos en la zona activa. Sirve para bloquear la
+  /// selección de más cards y forzar al usuario a "Terminé y traducir"
+  /// o a regresar manualmente a una pregunta anterior.
+  bool get isFlowComplete {
+    final zone = activeZone;
+    if (zone == null) return false;
+    if (!_noPendingQuestion) return false;
+    return picksInActiveZone >= zone.maxPicks;
+  }
+
   SemanticZonesState copyWith({
     String? activeZoneId,
     bool clearActive = false,
     Set<String>? visitedZoneIds,
     NavigationSnapshot? snapshot,
+    int? picksInActiveZone,
   }) {
     return SemanticZonesState(
       activeZoneId: clearActive ? null : (activeZoneId ?? this.activeZoneId),
       visitedZoneIds: visitedZoneIds ?? this.visitedZoneIds,
       snapshot: snapshot ?? this.snapshot,
+      picksInActiveZone: picksInActiveZone ?? this.picksInActiveZone,
     );
   }
 }
@@ -109,6 +137,8 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
   }
 
   /// Activa una zona libremente — no hay orden obligatorio.
+  /// Al cambiar de zona se reinicia el contador de picks para que la
+  /// nueva pregunta vuelva a aceptar respuestas.
   void activateZone(String zoneId) {
     final ctx = ref.read(contextProvider);
     if (ctx == null) return;
@@ -130,6 +160,7 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       activeZoneId: zoneId,
       visitedZoneIds: visited,
       snapshot: snapshot,
+      picksInActiveZone: 0,
     );
   }
 
@@ -137,6 +168,10 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
   /// usuario respondió tocando una tarjeta.
   ///
   /// Estrategia de decisión:
+  /// 0. Incrementa el contador de picks de la zona activa. Si la zona
+  ///    permite varias respuestas (`maxPicks > 1`) y todavía no se llegó
+  ///    al máximo, se mantiene en la misma pregunta para que el usuario
+  ///    pueda agregar otra card (ej: CHOMPA + NEGRO).
   /// 1. Si la tarjeta seleccionada tiene `suggestedNextCardIds`, busca
   ///    la categoría de esas tarjetas y activa la zona que las contiene
   ///    (siempre que no haya sido visitada todavía).
@@ -150,6 +185,15 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
   void advanceFromCard(LsbCard card, List<LsbCard> allCards) {
     final ctx = ref.read(contextProvider);
     if (ctx == null) return;
+
+    final activeZone = state.activeZone;
+    final newPickCount = state.picksInActiveZone + 1;
+
+    // Si la zona acepta más respuestas, registramos el pick y nos quedamos.
+    if (activeZone != null && newPickCount < activeZone.maxPicks) {
+      state = state.copyWith(picksInActiveZone: newPickCount);
+      return;
+    }
 
     // 1. Intentar avanzar a la zona donde viven las tarjetas sugeridas.
     String? nextZoneId;
@@ -183,9 +227,13 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       }
     }
 
-    // 3. Si no hay siguiente, recomputar snapshot sin cambiar zona activa
-    //    (la frase actualizada ya disparó un rebuild vía sentenceProvider).
-    if (nextZoneId == null) return;
+    // 3. Si no hay siguiente, dejamos el contador actualizado para que
+    //    `isFlowComplete` bloquee la selección. La frase actualizada ya
+    //    disparó un rebuild vía sentenceProvider.
+    if (nextZoneId == null) {
+      state = state.copyWith(picksInActiveZone: newPickCount);
+      return;
+    }
 
     activateZone(nextZoneId);
   }
@@ -230,6 +278,7 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       activeZoneId: ctx.entryZoneId,
       visitedZoneIds: {ctx.entryZoneId},
       snapshot: snapshot,
+      picksInActiveZone: 0,
     );
   }
 }
