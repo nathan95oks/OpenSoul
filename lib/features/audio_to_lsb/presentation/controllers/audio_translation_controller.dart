@@ -32,26 +32,26 @@ class AudioTranslationState {
   final AudioTranslationStatus status;
   final LsbTranslation? translationResult;
   final String? errorMessage;
-  final String? recordedAudioPath;
+  final String? recognizedText;
 
   AudioTranslationState({
     this.status = AudioTranslationStatus.idle,
     this.translationResult,
     this.errorMessage,
-    this.recordedAudioPath,
+    this.recognizedText,
   });
 
   AudioTranslationState copyWith({
     AudioTranslationStatus? status,
     LsbTranslation? translationResult,
     String? errorMessage,
-    String? recordedAudioPath,
+    String? recognizedText,
   }) {
     return AudioTranslationState(
       status: status ?? this.status,
       translationResult: translationResult ?? this.translationResult,
       errorMessage: errorMessage ?? this.errorMessage,
-      recordedAudioPath: recordedAudioPath ?? this.recordedAudioPath,
+      recognizedText: recognizedText ?? this.recognizedText,
     );
   }
 }
@@ -69,28 +69,19 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
   }
 
   void setRecordingState() {
-    state = state.copyWith(status: AudioTranslationStatus.recording);
+    state = state.copyWith(status: AudioTranslationStatus.recording, recognizedText: "");
   }
 
-  void processAudio(String audioPath) async {
-    state = state.copyWith(
-      status: AudioTranslationStatus.processing,
-      recordedAudioPath: audioPath,
-    );
+  void updateRecognizedText(String text) {
+    state = state.copyWith(recognizedText: text);
+  }
 
-    try {
-      final useCase = ref.read(translateAudioUseCaseProvider);
-      final result = await useCase.execute(audioPath);
-      state = state.copyWith(
-        status: AudioTranslationStatus.success,
-        translationResult: result,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        status: AudioTranslationStatus.error,
-        errorMessage: e.toString(),
-      );
+  void processAudioAsText(String transcribedText) {
+    if (transcribedText.isEmpty) {
+      state = state.copyWith(status: AudioTranslationStatus.idle);
+      return;
     }
+    processText(transcribedText);
   }
 
   void processText(String text) async {
