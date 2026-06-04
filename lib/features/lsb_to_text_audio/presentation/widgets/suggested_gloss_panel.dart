@@ -69,6 +69,10 @@ class SuggestedGlossPanel extends ConsumerWidget {
   }
 
   void _onPick(WidgetRef ref, LsbCard card, List<LsbCard> allCards) {
+    final activeZoneId = ref.read(semanticZonesProvider).activeZoneId;
+    if (activeZoneId != null) {
+      ref.read(semanticZonesProvider.notifier).recordAnswer(activeZoneId, card.gloss);
+    }
     ref.read(sentenceProvider.notifier).addWord(card.gloss);
     ref.read(expandedAnswersProvider.notifier).collapse();
     ref.read(semanticZonesProvider.notifier).advanceFromCard(card, allCards);

@@ -19,6 +19,14 @@ class SemanticZonesState {
   /// Zonas que el usuario ya activó al menos una vez.
   final Set<String> visitedZoneIds;
 
+  /// Orden de activación de zonas (preserva inserción) — necesario para
+  /// construir el árbol conceptual en el orden que el usuario navegó.
+  final List<String> visitedZoneOrder;
+
+  /// Respuestas por zona: zoneId → lista de glosas seleccionadas.
+  /// Permite mostrar qué respondió el usuario en cada pregunta del árbol.
+  final Map<String, List<String>> zoneAnswers;
+
   /// Snapshot inmutable producido por el motor.
   final NavigationSnapshot snapshot;
 
@@ -31,6 +39,8 @@ class SemanticZonesState {
     required this.activeZoneId,
     required this.visitedZoneIds,
     required this.snapshot,
+    this.visitedZoneOrder = const [],
+    this.zoneAnswers = const {},
     this.picksInActiveZone = 0,
   });
 
@@ -67,12 +77,16 @@ class SemanticZonesState {
     String? activeZoneId,
     bool clearActive = false,
     Set<String>? visitedZoneIds,
+    List<String>? visitedZoneOrder,
+    Map<String, List<String>>? zoneAnswers,
     NavigationSnapshot? snapshot,
     int? picksInActiveZone,
   }) {
     return SemanticZonesState(
       activeZoneId: clearActive ? null : (activeZoneId ?? this.activeZoneId),
       visitedZoneIds: visitedZoneIds ?? this.visitedZoneIds,
+      visitedZoneOrder: visitedZoneOrder ?? this.visitedZoneOrder,
+      zoneAnswers: zoneAnswers ?? this.zoneAnswers,
       snapshot: snapshot ?? this.snapshot,
       picksInActiveZone: picksInActiveZone ?? this.picksInActiveZone,
     );
@@ -136,6 +150,14 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     );
   }
 
+  /// Registra la glosa seleccionada en la zona activa para el árbol visual.
+  void recordAnswer(String zoneId, String gloss) {
+    final current = state.zoneAnswers[zoneId] ?? [];
+    state = state.copyWith(
+      zoneAnswers: {...state.zoneAnswers, zoneId: [...current, gloss]},
+    );
+  }
+
   /// Activa una zona libremente — no hay orden obligatorio.
   /// Al cambiar de zona se reinicia el contador de picks para que la
   /// nueva pregunta vuelva a aceptar respuestas.
@@ -145,6 +167,10 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     if (ctx.zoneById(zoneId) == null) return;
 
     final visited = {...state.visitedZoneIds, zoneId};
+    // Preservar orden de inserción para el árbol conceptual
+    final order = [...state.visitedZoneOrder];
+    if (!order.contains(zoneId)) order.add(zoneId);
+
     final engine = ref.read(_engineProvider);
     final sentence = ref.read(sentenceProvider);
 
@@ -159,6 +185,8 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     state = SemanticZonesState(
       activeZoneId: zoneId,
       visitedZoneIds: visited,
+      visitedZoneOrder: order,
+      zoneAnswers: state.zoneAnswers,
       snapshot: snapshot,
       picksInActiveZone: 0,
     );
@@ -277,6 +305,8 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     state = SemanticZonesState(
       activeZoneId: ctx.entryZoneId,
       visitedZoneIds: {ctx.entryZoneId},
+      visitedZoneOrder: [ctx.entryZoneId],
+      zoneAnswers: const {},
       snapshot: snapshot,
       picksInActiveZone: 0,
     );

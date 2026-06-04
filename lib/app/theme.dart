@@ -2,69 +2,85 @@ import 'package:flutter/material.dart';
 
 /// Tema visual de OpenSoul — paleta minimalista blanco / negro / naranja.
 ///
-/// Tres colores únicos: #FFFFFF · #000000 · #FF6B00.
-/// La jerarquía visual se construye mediante tamaño, peso tipográfico,
-/// espaciado, sombras sutiles y posición — no mediante colores adicionales.
+/// Fondo blanco, texto negro, acento naranja #FF6B00.
+/// Inspirado en Linear/Notion: limpio, legible, moderno.
 class AppTheme {
   // Paleta estricta de 3 colores
-  static const Color background   = Color(0xFF000000); // negro puro
-  static const Color surface      = Color(0xFF0A0A0A); // negro profundo
-  static const Color surfaceLight = Color(0xFF141414); // gris carbón
+  static const Color background   = Color(0xFFFFFFFF); // blanco puro
+  static const Color surface      = Color(0xFFFFFFFF); // blanco
+  static const Color surfaceLight = Color(0xFFF5F5F5); // gris muy claro
   static const Color accent       = Color(0xFFFF6B00); // naranja #FF6B00
-  static const Color accentSoft   = Color(0xFFFF6B00); // alias — mismo naranja
-  static const Color textPrimary  = Color(0xFFFFFFFF); // blanco
-  static const Color textSecondary= Color(0x99FFFFFF); // blanco 60 %
-  static const Color border       = Color(0xFF1C1C1C); // borde sutil
+  static const Color accentSoft   = Color(0xFFFF6B00); // alias
+  static const Color textPrimary  = Color(0xFF000000); // negro
+  static const Color textSecondary= Color(0xFF666666); // gris oscuro
+  static const Color border       = Color(0xFF000000); // borde negro
 
-  // Compatibilidad: alias que apuntan a la nueva paleta
+  // Compatibilidad
   static const Color teal    = accent;
   static const Color success = accent;
   static const Color danger  = accent;
   static const Color orange  = accent;
 
-  static ThemeData get darkTheme {
+  static ThemeData get darkTheme => lightTheme;
+
+  static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       scaffoldBackgroundColor: background,
       primaryColor: accent,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: const ColorScheme.light(
         primary: accent,
         secondary: accent,
         surface: surface,
         error: accent,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: surface,
+      appBarTheme: AppBarTheme(
+        backgroundColor: background,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: TextStyle(
+        foregroundColor: textPrimary,
+        titleTextStyle: const TextStyle(
           fontFamily: 'Roboto',
           fontSize: 20,
           fontWeight: FontWeight.w700,
           color: textPrimary,
-          letterSpacing: 0.5,
+          letterSpacing: 0.3,
+        ),
+        shape: Border(
+          bottom: BorderSide(color: border.withValues(alpha: 0.15), width: 1),
         ),
       ),
       cardTheme: CardThemeData(
-        color: surfaceLight,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        color: surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: border.withValues(alpha: 0.2)),
+        ),
         elevation: 0,
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: surfaceLight,
+        backgroundColor: surface,
         selectedColor: accent,
-        labelStyle: const TextStyle(fontWeight: FontWeight.w600),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        labelStyle: const TextStyle(fontWeight: FontWeight.w600, color: textPrimary),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: border),
+        ),
         side: const BorderSide(color: border),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: accent,
-          foregroundColor: Colors.black,
+          foregroundColor: Colors.white,
           disabledBackgroundColor: surfaceLight,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.5),
+          disabledForegroundColor: const Color(0xFFAAAAAA),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.0,
+          ),
         ),
       ),
       fontFamily: 'Roboto',
