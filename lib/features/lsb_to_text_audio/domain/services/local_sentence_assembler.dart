@@ -83,6 +83,24 @@ class LocalSentenceAssembler {
         .toList();
     if (words.length < glosses.length) return true;
 
+    // Detecta si el backend simplemente devolvió las glosas como lista
+    // de palabras sin estructura gramatical española (sin artículos,
+    // preposiciones ni verbos conjugados). Una oración real contiene
+    // al menos una palabra de enlace.
+    const _kLinking = {
+      'de', 'en', 'con', 'el', 'la', 'los', 'las', 'un', 'una', 'unos',
+      'unas', 'me', 'te', 'se', 'le', 'mi', 'tu', 'su', 'que', 'y', 'a',
+      'por', 'para', 'del', 'al', 'fue', 'era', 'es', 'son', 'quiero',
+      'necesito', 'robó', 'golpeó', 'agredió', 'asaltó', 'amenazó',
+    };
+    final textWords = trimmed
+        .toLowerCase()
+        .split(RegExp(r'[\s.,;:!?]+'))
+        .where((w) => w.isNotEmpty)
+        .toSet();
+    final hasLinking = textWords.any(_kLinking.contains);
+    if (!hasLinking && glosses.length > 1) return true;
+
     final haystack = _stripDiacritics(trimmed.toLowerCase());
     var hits = 0;
     for (final g in glosses) {
@@ -296,11 +314,36 @@ class LocalSentenceAssembler {
 
   // ───────────────────────── Utilidades de composición ────────────────────
 
-  /// Frase del sujeto agresor con sus rasgos ("un hombre alto, con barba").
+  /// Frase del sujeto agresor con sus rasgos físicos y accesorios.
+  ///
+  /// Separa rasgos adjetivales (alto, delgado, moreno) de complementos
+  /// preposicionales (con barba, con lentes, con gorra) para producir
+  /// español natural: "un hombre alto y moreno, con tatuaje y lentes"
+  /// en vez de "un hombre alto y moreno y con tatuaje y con lentes".
   String _subjectPhrase(_Roles r) {
     final base = r.perpetrator ?? 'una persona';
     if (r.traits.isEmpty) return base;
-    return '$base ${_join(r.traits)}';
+
+    // Separa adjetivos simples de frases con preposición (empieza con "con"/"de")
+    final adjectives = r.traits
+        .where((t) => !t.startsWith('con ') && !t.startsWith('de '))
+        .toList();
+    final phrases = r.traits
+        .where((t) => t.startsWith('con ') || t.startsWith('de '))
+        .toList();
+
+    final buffer = StringBuffer(base);
+    if (adjectives.isNotEmpty) buffer.write(' ${_join(adjectives)}');
+    if (phrases.isNotEmpty) {
+      // Normaliza: quita el "con " de cada frase para re-unirlas
+      final items = phrases.map((p) {
+        if (p.startsWith('con ')) return p.substring(4);
+        if (p.startsWith('de ')) return p.substring(3);
+        return p;
+      }).toList();
+      buffer.write(', con ${_join(items)}');
+    }
+    return buffer.toString();
   }
 
   /// Oraciones de estado emocional y urgencia, reutilizadas por varios
