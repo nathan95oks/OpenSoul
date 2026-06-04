@@ -6,25 +6,21 @@ import '../../domain/repositories/translation_repository.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../controllers/translation_controller.dart';
-import '../widgets/sentence_builder.dart';
-import '../widgets/category_filter.dart';
-import '../widgets/card_grid.dart';
 import '../providers/context_provider.dart';
 import '../widgets/context_selection_widget.dart';
-import '../widgets/semantic_zones_bar.dart';
-import '../widgets/guided_flow_controls.dart';
+import '../widgets/node_flow_canvas.dart';
+import '../widgets/card_grid.dart';
 
 /// Pantalla principal del módulo LSB → Texto → Audio.
 ///
-/// Layout (flujo guiado pregunta → respuesta → siguiente pregunta):
-///   SemanticZonesBar (pregunta activa + chips de otras preguntas)
-///   → CardGrid (4-6 opciones de respuesta)
-///   → GuidedFlowControls (saltar pregunta + progreso)
-///   → SentenceBuilder (relato construido)
-///   → CategoryFilter (opcional, oculto por defecto)
-///   → ResultPanel → TranslateButton ("Terminé y traducir")
+/// Layout (fondo blanco, árbol conceptual vertical):
+///   AppBar  → "OpenSoul" + contexto activo
+///   Body    → SingleChildScrollView con NodeFlowCanvas (árbol pregunta→respuesta)
+///   Bottom  → Panel fijo: secuencia construida + botón TRADUCIR
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
+
+  static const _orange = Color(0xFFFF6B00);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,12 +30,12 @@ class HomeScreen extends ConsumerWidget {
 
     ref.listen<AsyncValue<TranslationResult?>>(
       translationControllerProvider,
-      (previous, next) {
+      (_, next) {
         if (next is AsyncError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Error: ${next.error}'),
-              backgroundColor: Colors.redAccent,
+              backgroundColor: _orange,
             ),
           );
         }
@@ -47,363 +43,477 @@ class HomeScreen extends ConsumerWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFD700).withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
+      backgroundColor: Colors.white,
+      appBar: _buildAppBar(ref, contextState, selectedWords),
+      body: SafeArea(
+        child: contextState == null
+            ? const ContextSelectionWidget()
+            : _buildFlow(context, ref, contextState, selectedWords, translationState),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(
+    WidgetRef ref,
+    dynamic contextState,
+    List<String> selectedWords,
+  ) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      elevation: 0,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
+        child: Container(height: 2, color: Colors.black),
+      ),
+      title: const Text(
+        'OpenSoul',
+        style: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+          color: Colors.black,
+          letterSpacing: -0.3,
+        ),
+      ),
+      actions: [
+        if (contextState != null)
+          TextButton(
+            onPressed: () {
+              ref.read(contextProvider.notifier).clearContext();
+              ref.read(sentenceProvider.notifier).clearSentence();
+              ref.read(semanticZonesProvider.notifier).reset();
+              ref.read(expandedAnswersProvider.notifier).collapse();
+            },
+            child: const Text(
+              '← Cambiar contexto',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
               ),
-              child: const Icon(Icons.account_balance, color: Color(0xFFFFD700), size: 20),
             ),
-            const SizedBox(width: 10),
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+      ],
+    );
+  }
+
+  Widget _buildFlow(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic contextState,
+    List<String> selectedWords,
+    AsyncValue<TranslationResult?> translationState,
+  ) {
+    return Column(
+      children: [
+        // Árbol conceptual scrollable
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
               children: [
-                Text('OpenSoul', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
-                Text('Asistente Ciudadano LSB', style: TextStyle(fontSize: 11, color: Color(0xFF8B949E))),
+                const NodeFlowCanvas(),
+                // Panel de resultado (si hay traducción)
+                if (translationState.value != null &&
+                    translationState.value!.generatedText.isNotEmpty)
+                  _ResultSection(result: translationState.value!),
+                const SizedBox(height: 12),
               ],
             ),
-          ],
+          ),
         ),
-        actions: [
-          if (contextState != null)
-            IconButton(
-              icon: const Icon(Icons.close, color: Colors.white54),
-              onPressed: () {
-                ref.read(contextProvider.notifier).clearContext();
-                ref.read(sentenceProvider.notifier).clearSentence();
-              },
-              tooltip: 'Cambiar contexto',
-            ),
-          if (selectedWords.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.delete_sweep, color: Colors.white54),
-              onPressed: () => ref.read(sentenceProvider.notifier).clearSentence(),
-              tooltip: 'Borrar secuencia',
-            ),
-        ],
+        // Panel fijo inferior: secuencia + botón traducir
+        _BottomPanel(
+          glosses: selectedWords,
+          isLoading: translationState.isLoading,
+          onTranslate: selectedWords.isEmpty || translationState.isLoading
+              ? null
+              : () async {
+                  await ref
+                      .read(translationControllerProvider.notifier)
+                      .translateCards(
+                        context: contextState.id,
+                        cards: selectedWords,
+                      );
+                },
+        ),
+      ],
+    );
+  }
+}
+
+/// Panel fijo inferior: secuencia de glosas + botón TRADUCIR.
+class _BottomPanel extends StatelessWidget {
+  final List<String> glosses;
+  final bool isLoading;
+  final VoidCallback? onTranslate;
+
+  const _BottomPanel({
+    required this.glosses,
+    required this.isLoading,
+    required this.onTranslate,
+  });
+
+  static const _orange = Color(0xFFFF6B00);
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = onTranslate != null;
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Colors.black, width: 2)),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: contextState == null
-              ? const ContextSelectionWidget()
-              : Column(
-                  children: [
-                    const SemanticZonesBar(),
-                    const CardGrid(),
-                    const GuidedFlowControls(),
-                    const SentenceBuilder(),
-                    const _AdvancedOptionsExpander(),
-
-          // Panel de resultado multimodal
-          if (translationState.value != null && translationState.value!.generatedText.isNotEmpty)
-            _ResultPanel(result: translationState.value!),
-
-          // Botón traducir
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            child: SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton.icon(
-                onPressed: selectedWords.isEmpty || translationState.isLoading
-                    ? null
-                    : () async {
-                        final ctxId = contextState.id;
-                        await ref.read(translationControllerProvider.notifier).translateCards(
-                          context: ctxId,
-                          cards: selectedWords,
-                        );
-                      },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFD700),
-                  foregroundColor: Colors.black,
-                  disabledBackgroundColor: const Color(0xFF21262D),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                ),
-                icon: translationState.isLoading
-                    ? const SizedBox(
-                        width: 22, height: 22,
-                        child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2),
-                      )
-                    : const Icon(Icons.check_circle, size: 22),
-                label: Text(
-                  translationState.isLoading ? 'PROCESANDO...' : 'TERMINÉ Y TRADUCIR',
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800, letterSpacing: 0.5),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Secuencia construida
+          if (glosses.isNotEmpty) ...[
+            const Text(
+              'Secuencia construida:',
+              style: TextStyle(
+                fontSize: 12,
+                color: Color(0xFF666666),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              glosses.map((g) => g.replaceAll('_', ' ')).join(' • '),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 12),
+          ] else ...[
+            const Text(
+              'Selecciona glosas para construir tu declaración.',
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFF999999),
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+          // Botón TRADUCIR
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: Material(
+              color: enabled ? _orange : const Color(0xFFE5E5E5),
+              borderRadius: BorderRadius.circular(16),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: onTranslate,
+                child: Center(
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2.5,
+                          ),
+                        )
+                      : Text(
+                          'TRADUCIR',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 2.0,
+                            color: enabled ? Colors.white : const Color(0xFFAAAAAA),
+                          ),
+                        ),
                 ),
               ),
             ),
           ),
         ],
-                  ),
-        ),
       ),
     );
   }
 }
 
-/// Panel de resultado multimodal integrado en la misma pantalla.
-/// Muestra baseSentence, generatedText, indicador de Bedrock y controles
-/// de audio (URL remoto AWS Polly o síntesis TTS local).
-class _ResultPanel extends ConsumerWidget {
+/// Sección de resultado de traducción — mismo lenguaje visual que el árbol.
+///
+/// Sigue exactamente el reference design:
+///   [Secuencia LSB] (card blanca, borde negro 2px)
+///        ↓
+///   [Traducción] (card naranja, texto blanco)
+///   [Audio full-width] [Copiar full-width]
+///   [Nueva declaración] (naranja full-width)
+///   [Modificar selección] (borde negro full-width)
+class _ResultSection extends ConsumerWidget {
   final TranslationResult result;
-  const _ResultPanel({required this.result});
+  const _ResultSection({required this.result});
+
+  static const _orange = Color(0xFFFF6B00);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showBothTexts = result.bedrockUsed && result.baseSentence != result.generatedText;
-    final hasText = result.generatedText.trim().isNotEmpty;
+    final glosses = ref.watch(sentenceProvider);
+    final hasAudio = result.audioUrl != null && result.audioUrl!.isNotEmpty;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: const Color(0xFF161B22),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Header
-            Row(
-              children: [
-                const Icon(Icons.check_circle, color: Color(0xFF3FB950), size: 16),
-                const SizedBox(width: 6),
-                const Text(
-                  'RESULTADO',
-                  style: TextStyle(color: Color(0xFF8B949E), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1.2),
-                ),
-                const Spacer(),
-                if (result.bedrockUsed)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF00ADB5).withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.auto_awesome, size: 12, color: Color(0xFF00ADB5)),
-                        SizedBox(width: 4),
-                        Text('IA Refinado', style: TextStyle(fontSize: 10, color: Color(0xFF00ADB5), fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
-
-            // Base sentence (if Bedrock refined it)
-            if (showBothTexts) ...[
-              const SizedBox(height: 10),
-              const Text(
-                'Motor propio:',
-                style: TextStyle(color: Color(0xFF8B949E), fontSize: 10, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                result.baseSentence,
-                style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.5), fontStyle: FontStyle.italic),
-              ),
-            ],
-
-            // Generated text (main)
-            SizedBox(height: showBothTexts ? 8 : 10),
-            if (showBothTexts)
-              const Text(
-                'Texto refinado:',
-                style: TextStyle(color: Color(0xFFFFD700), fontSize: 10, fontWeight: FontWeight.w600),
-              ),
-            const SizedBox(height: 2),
-            Text(
-              result.generatedText,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white, height: 1.4),
-            ),
-
-            // Intermediate representation (type of event)
-            if (result.intermediateRepresentation != null) ...[
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF21262D),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  'Tipo: ${result.intermediateRepresentation!['tipo_evento'] ?? 'GENERAL'}',
-                  style: const TextStyle(fontSize: 10, color: Color(0xFF8B949E), fontWeight: FontWeight.w600),
-                ),
-              ),
-            ],
-
-            // Action buttons — el audio siempre está disponible: si el
-            // backend devolvió audioUrl se reproduce esa URL (AWS Polly);
-            // si no, se sintetiza localmente con flutter_tts.
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                if (hasText)
-                  _ActionChip(
-                    icon: Icons.volume_up,
-                    label: result.audioUrl != null && result.audioUrl!.isNotEmpty
-                        ? 'Audio'
-                        : 'Audio (local)',
-                    color: const Color(0xFFFFD700),
-                    onTap: () async {
-                      await ref
-                          .read(translationControllerProvider.notifier)
-                          .replayAudio();
-                      if (!context.mounted) return;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Reproduciendo audio...'),
-                          duration: Duration(seconds: 1),
-                        ),
-                      );
-                    },
-                  ),
-                _ActionChip(
-                  icon: Icons.copy,
-                  label: 'Copiar',
-                  color: const Color(0xFF8B949E),
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(text: result.generatedText));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Texto copiado'), duration: Duration(seconds: 1)),
-                    );
-                  },
-                ),
-                // Reinicia el módulo manteniendo el contexto situacional
-                // activo, para que el usuario pueda hacer otra declaración
-                // sin volver al menú de "Me robaron / Sufrí violencia…".
-                _ActionChip(
-                  icon: Icons.refresh,
-                  label: 'Nueva declaración',
-                  color: const Color(0xFF3FB950),
-                  onTap: () async {
-                    await ref
-                        .read(translationControllerProvider.notifier)
-                        .reset();
-                    ref.read(sentenceProvider.notifier).clearSentence();
-                    ref.read(semanticZonesProvider.notifier).reset();
-                    ref.read(expandedAnswersProvider.notifier).collapse();
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Listo para una nueva declaración'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// Toggle plegable que muestra el filtro por categorías solo a demanda.
-///
-/// El flujo principal es guiado (pregunta → respuesta → siguiente pregunta).
-/// El filtro por categoría sigue disponible para usuarios avanzados o
-/// para casos donde la app no muestra la tarjeta que el usuario necesita,
-/// pero por defecto está oculto para evitar la confusión que reportó el
-/// usuario sordo durante las pruebas.
-class _AdvancedOptionsExpander extends StatefulWidget {
-  const _AdvancedOptionsExpander();
-
-  @override
-  State<_AdvancedOptionsExpander> createState() =>
-      _AdvancedOptionsExpanderState();
-}
-
-class _AdvancedOptionsExpanderState extends State<_AdvancedOptionsExpander> {
-  bool _expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: () => setState(() => _expanded = !_expanded),
-            borderRadius: BorderRadius.circular(8),
+          // ── Label ─────────────────────────────────────────────
+          const Text(
+            'Traducción lista',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: Colors.black,
+              letterSpacing: -0.3,
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'Tu declaración ha sido generada',
+            style: TextStyle(fontSize: 14, color: Color(0xFF666666)),
+          ),
+          const SizedBox(height: 20),
+
+          // ── Secuencia de glosas ────────────────────────────────
+          const Text(
+            'Secuencia de glosas:',
+            style: TextStyle(
+              fontSize: 11,
+              color: Color(0xFF888888),
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.0,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.black, width: 2),
+            ),
+            child: Text(
+              glosses.map((g) => g.replaceAll('_', ' ')).join(' • '),
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                height: 1.4,
+              ),
+            ),
+          ),
+
+          // ── Flecha ─────────────────────────────────────────────
+          const Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Column(
                 children: [
-                  Icon(
-                    _expanded ? Icons.expand_less : Icons.tune,
-                    size: 16,
-                    color: const Color(0xFF8B949E),
+                  SizedBox(
+                    height: 24,
+                    child: VerticalDivider(color: Color(0xFFBBBBBB), width: 2),
                   ),
-                  const SizedBox(width: 6),
-                  Text(
-                    _expanded
-                        ? 'Ocultar categorías'
-                        : 'Buscar por categoría',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF8B949E),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  Icon(Icons.arrow_drop_down, size: 24, color: Color(0xFFBBBBBB)),
                 ],
               ),
             ),
           ),
-          if (_expanded) const CategoryFilter(),
+
+          // ── Traducción ──────────────────────────────────────────
+          const Text(
+            'Traducción para institución pública:',
+            style: TextStyle(
+              fontSize: 11,
+              color: Color(0xFF888888),
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.0,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: _orange,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: _orange, width: 2),
+            ),
+            child: Text(
+              result.generatedText,
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                height: 1.5,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
+          // ── Nota informativa ────────────────────────────────────
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFE0E0E0)),
+            ),
+            child: const Text(
+              'Esta traducción puede ser presentada en instituciones públicas para formalizar tu declaración.',
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFF555555),
+                height: 1.5,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // ── Audio (full-width) ──────────────────────────────────
+          _FullWidthBtn(
+            label: hasAudio ? 'Reproducir Audio (Polly)' : 'Reproducir Audio (local)',
+            icon: Icons.volume_up_outlined,
+            filled: false,
+            onTap: () async {
+              await ref
+                  .read(translationControllerProvider.notifier)
+                  .replayAudio();
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Reproduciendo...'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // ── Copiar (full-width) ─────────────────────────────────
+          _FullWidthBtn(
+            label: 'Copiar texto',
+            icon: Icons.copy_outlined,
+            filled: false,
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: result.generatedText));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Texto copiado'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // ── Nueva declaración (naranja, full-width) ─────────────
+          _FullWidthBtn(
+            label: 'Nueva declaración',
+            icon: Icons.refresh_outlined,
+            filled: true,
+            onTap: () async {
+              await ref.read(translationControllerProvider.notifier).reset();
+              ref.read(sentenceProvider.notifier).clearSentence();
+              ref.read(semanticZonesProvider.notifier).reset();
+              ref.read(expandedAnswersProvider.notifier).collapse();
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // ── Modificar selección (borde negro, full-width) ───────
+          _FullWidthBtn(
+            label: 'Modificar selección',
+            icon: Icons.edit_outlined,
+            filled: false,
+            blackBorder: true,
+            onTap: () async {
+              await ref.read(translationControllerProvider.notifier).reset();
+            },
+          ),
+
+          const SizedBox(height: 28),
         ],
       ),
     );
   }
 }
 
-class _ActionChip extends StatelessWidget {
-  final IconData icon;
+/// Botón full-width — mismo radio y proporciones que el botón TRADUCIR.
+class _FullWidthBtn extends StatelessWidget {
   final String label;
-  final Color color;
+  final IconData icon;
+  final bool filled;
+  final bool blackBorder;
   final VoidCallback onTap;
-  const _ActionChip({required this.icon, required this.label, required this.color, required this.onTap});
+
+  const _FullWidthBtn({
+    required this.label,
+    required this.icon,
+    required this.filled,
+    required this.onTap,
+    this.blackBorder = false,
+  });
+
+  static const _orange = Color(0xFFFF6B00);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color.withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 14, color: color),
-            const SizedBox(width: 4),
-            Text(label, style: TextStyle(fontSize: 11, color: color, fontWeight: FontWeight.w600)),
-          ],
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: Material(
+        color: filled ? _orange : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: filled
+                    ? _orange
+                    : blackBorder
+                        ? Colors.black
+                        : const Color(0xFFCCCCCC),
+                width: filled || blackBorder ? 2 : 1.5,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 18,
+                  color: filled ? Colors.white : Colors.black,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: filled ? Colors.white : Colors.black,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
-
 
