@@ -207,6 +207,18 @@ class LocalCardsDataSource {
     LsbCard(id: 'ag07', gloss: 'PERSEGUIR', displayText: 'PERSEGUIR', iconUrl: '',
       categoryId: 'Agresión', subcategoryId: 'Acoso', contexts: ['violencia', 'denuncia_robo'],
       priority: 7, suggestedNextCardIds: ['em01'], isFrequent: false, isEmergency: true, semanticIcon: 'directions_run'),
+    LsbCard(id: 'ag08', gloss: 'ASALTAR', displayText: 'ASALTAR', iconUrl: '',
+      categoryId: 'Agresión', subcategoryId: 'Delito', contexts: ['denuncia_robo'],
+      priority: 8, suggestedNextCardIds: ['ob06', 'ob01', 'ob02'], isFrequent: true, isEmergency: true, semanticIcon: 'front_hand'),
+    LsbCard(id: 'ag09', gloss: 'ACOSAR', displayText: 'ACOSAR', iconUrl: '',
+      categoryId: 'Agresión', subcategoryId: 'Acoso', contexts: ['violencia'],
+      priority: 9, suggestedNextCardIds: ['em01', 'in11'], isFrequent: true, isEmergency: true, semanticIcon: 'directions_run'),
+    LsbCard(id: 'ag10', gloss: 'ABUSO', displayText: 'ABUSO SEXUAL', iconUrl: '',
+      categoryId: 'Agresión', subcategoryId: 'Delito', contexts: ['violencia'],
+      priority: 10, suggestedNextCardIds: ['em01', 'in11', 'sv04'], isFrequent: true, isEmergency: true, semanticIcon: 'report'),
+    LsbCard(id: 'ag11', gloss: 'SECUESTRAR', displayText: 'SECUESTRAR', iconUrl: '',
+      categoryId: 'Agresión', subcategoryId: 'Delito', contexts: ['denuncia_robo', 'violencia'],
+      priority: 11, suggestedNextCardIds: ['in10', 'em01'], isFrequent: false, isEmergency: true, semanticIcon: 'person_off'),
 
     // ═══════════════════════════════════════════════════════════
     // ACCIONES — Verbos generales y trámites
@@ -238,6 +250,9 @@ class LocalCardsDataSource {
     LsbCard(id: 'ac09', gloss: 'PERDER', displayText: 'PERDER', iconUrl: '',
       categoryId: 'Acciones', subcategoryId: 'Pérdida', contexts: ['perdida'],
       priority: 9, suggestedNextCardIds: ['ob01', 'do04'], isFrequent: true, isEmergency: false, semanticIcon: 'search_off'),
+    LsbCard(id: 'ac10', gloss: 'CORREGIR', displayText: 'CORREGIR DATOS', iconUrl: '',
+      categoryId: 'Acciones', subcategoryId: 'Gestión', contexts: ['tramite_id'],
+      priority: 10, suggestedNextCardIds: ['do04', 'do01'], isFrequent: true, isEmergency: false, semanticIcon: 'draw'),
 
     // ═══════════════════════════════════════════════════════════
     // EMOCIONES — Estados psicológicos (NUEVO)
@@ -468,6 +483,9 @@ class LocalCardsDataSource {
     LsbCard(id: 'tr04', gloss: 'PAGO', displayText: 'PAGO', iconUrl: '',
       categoryId: 'Trámites', subcategoryId: 'Gestión', contexts: ['tramite_id'],
       priority: 5, suggestedNextCardIds: ['do09'], isFrequent: false, isEmergency: false, semanticIcon: 'payments'),
+    LsbCard(id: 'tr05', gloss: 'DUPLICADO', displayText: 'DUPLICADO', iconUrl: '',
+      categoryId: 'Trámites', subcategoryId: 'Gestión', contexts: ['tramite_id'],
+      priority: 6, suggestedNextCardIds: ['do04', 'do01'], isFrequent: true, isEmergency: false, semanticIcon: 'content_copy'),
 
     // ═══════════════════════════════════════════════════════════
     // TIEMPO — Cuándo

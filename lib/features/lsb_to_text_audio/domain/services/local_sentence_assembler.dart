@@ -426,6 +426,10 @@ class LocalSentenceAssembler {
     'GRITAR': _Lex(_Role.verboAgresion, 'gritó'),
     'QUITAR': _Lex(_Role.verboAgresion, 'quitó'),
     'PERSEGUIR': _Lex(_Role.verboAgresion, 'persiguió'),
+    'ASALTAR': _Lex(_Role.verboAgresion, 'asaltó'),
+    'ACOSAR': _Lex(_Role.verboAgresion, 'acosó'),
+    'ABUSO': _Lex(_Role.verboAgresion, 'agredió sexualmente'),
+    'SECUESTRAR': _Lex(_Role.verboAgresion, 'secuestró'),
 
     // Verbos de acción / trámite (1ª persona).
     'TRAMITAR': _Lex(_Role.verboAccion, 'quiero tramitar'),
@@ -437,6 +441,7 @@ class LocalSentenceAssembler {
     'RECOGER': _Lex(_Role.verboAccion, 'quiero recoger'),
     'ENTREGAR': _Lex(_Role.verboAccion, 'quiero entregar'),
     'PERDER': _Lex(_Role.verboAccion, 'perdí'),
+    'CORREGIR': _Lex(_Role.verboAccion, 'quiero corregir'),
 
     // Armas.
     'CUCHILLO': _Lex(_Role.arma, 'con un cuchillo'),
@@ -521,6 +526,7 @@ class LocalSentenceAssembler {
     'RECLAMO': _Lex(_Role.tramite, 'un reclamo'),
     'RENOVACION': _Lex(_Role.tramite, 'una renovación'),
     'PAGO': _Lex(_Role.tramite, 'un pago'),
+    'DUPLICADO': _Lex(_Role.tramite, 'un duplicado'),
 
     // Tiempo.
     'HOY': _Lex(_Role.tiempo, 'hoy'),
