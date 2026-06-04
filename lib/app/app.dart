@@ -10,7 +10,7 @@ class AppScope extends StatelessWidget {
     return MaterialApp.router(
       title: 'OpenSoul - Asistente Ciudadano LSB',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       routerConfig: appRouter,
     );
   }

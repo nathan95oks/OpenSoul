@@ -62,11 +62,9 @@ final availableContexts = <SemanticContext>[
         cardCategories: ['Descripción'],
         cardSubcategories: ['Físico', 'Cabello', 'Marca'],
         strictContext: true,
-        maxPicks: 2,
+        maxPicks: 1,
         relatedZones: ['vestimenta', 'personas'],
       ),
-      // Qué llevaba puesto — vestimenta y colores.
-      // Acepta 2 cards para emparejar prenda+color: ej. CHOMPA + NEGRO.
       SemanticZone(
         id: 'vestimenta',
         label: 'Vestimenta',
@@ -78,7 +76,7 @@ final availableContexts = <SemanticContext>[
         cardCategories: ['Descripción'],
         cardSubcategories: ['Vestimenta', 'Color'],
         strictContext: true,
-        maxPicks: 2,
+        maxPicks: 1,
         relatedZones: ['apariencia', 'personas'],
       ),
       SemanticZone(
