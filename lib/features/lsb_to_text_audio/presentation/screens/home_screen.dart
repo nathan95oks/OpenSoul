@@ -400,23 +400,6 @@ class _ResultSection extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
 
-          // ── Copiar (full-width) ─────────────────────────────────
-          _FullWidthBtn(
-            label: 'Copiar texto',
-            icon: Icons.copy_outlined,
-            filled: false,
-            onTap: () {
-              Clipboard.setData(ClipboardData(text: result.generatedText));
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Texto copiado'),
-                  duration: Duration(seconds: 1),
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 16),
-
           // ── Nueva declaración (naranja, full-width) ─────────────
           _FullWidthBtn(
             label: 'Nueva declaración',
@@ -427,18 +410,6 @@ class _ResultSection extends ConsumerWidget {
               ref.read(sentenceProvider.notifier).clearSentence();
               ref.read(semanticZonesProvider.notifier).reset();
               ref.read(expandedAnswersProvider.notifier).collapse();
-            },
-          ),
-          const SizedBox(height: 10),
-
-          // ── Modificar selección (borde negro, full-width) ───────
-          _FullWidthBtn(
-            label: 'Modificar selección',
-            icon: Icons.edit_outlined,
-            filled: false,
-            blackBorder: true,
-            onTap: () async {
-              await ref.read(translationControllerProvider.notifier).reset();
             },
           ),
 
@@ -454,7 +425,6 @@ class _FullWidthBtn extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool filled;
-  final bool blackBorder;
   final VoidCallback onTap;
 
   const _FullWidthBtn({
@@ -462,7 +432,6 @@ class _FullWidthBtn extends StatelessWidget {
     required this.icon,
     required this.filled,
     required this.onTap,
-    this.blackBorder = false,
   });
 
   static const _orange = Color(0xFFFF6B00);
@@ -482,12 +451,8 @@ class _FullWidthBtn extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: filled
-                    ? _orange
-                    : blackBorder
-                        ? Colors.black
-                        : const Color(0xFFCCCCCC),
-                width: filled || blackBorder ? 2 : 1.5,
+                color: filled ? _orange : const Color(0xFFCCCCCC),
+                width: filled ? 2 : 1.5,
               ),
             ),
             child: Row(
