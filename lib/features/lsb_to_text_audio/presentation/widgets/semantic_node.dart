@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/lsb_card.dart';
 import 'lsb_icons.dart';
 
-/// Nodo semántico individual — unidad visual mínima del flujo progresivo.
+/// Nodo semántico individual.
 ///
-/// Diseño inspirado en Linear/Notion: fondo negro, texto blanco,
-/// naranja (#FF6B00) como único acento. Sin colores de categoría.
-/// La jerarquía visual se construye con tamaño, peso tipográfico y posición.
+/// Sin seleccionar: fondo blanco, borde negro 2px, texto negro.
+/// Seleccionado / activo: fondo naranja, borde naranja, texto blanco.
+/// Inspirado en el GlossNode del reference design.
 class SemanticNode extends StatefulWidget {
   final LsbCard card;
   final VoidCallback onTap;
+  final bool isSelected;
 
-  const SemanticNode({super.key, required this.card, required this.onTap});
+  const SemanticNode({
+    super.key,
+    required this.card,
+    required this.onTap,
+    this.isSelected = false,
+  });
 
   @override
   State<SemanticNode> createState() => _SemanticNodeState();
@@ -29,9 +35,9 @@ class _SemanticNodeState extends State<SemanticNode>
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 110),
+      duration: const Duration(milliseconds: 100),
     );
-    _scale = Tween<double>(begin: 1.0, end: 0.93).animate(
+    _scale = Tween<double>(begin: 1.0, end: 0.95).animate(
       CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
     );
   }
@@ -44,7 +50,7 @@ class _SemanticNodeState extends State<SemanticNode>
 
   @override
   Widget build(BuildContext context) {
-    final isEmergency = widget.card.isEmergency;
+    final selected = widget.isSelected;
 
     return GestureDetector(
       onTapDown: (_) => _ctrl.forward(),
@@ -55,63 +61,111 @@ class _SemanticNodeState extends State<SemanticNode>
       onTapCancel: () => _ctrl.reverse(),
       child: ScaleTransition(
         scale: _scale,
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
-            color: const Color(0xFF0F0F0F),
-            borderRadius: BorderRadius.circular(16),
+            color: selected ? _orange : Colors.white,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: isEmergency
-                  ? _orange.withValues(alpha: 0.55)
-                  : Colors.white.withValues(alpha: 0.07),
-              width: 1.0,
+              color: selected ? _orange : Colors.black,
+              width: 2,
             ),
+            boxShadow: selected
+                ? [BoxShadow(color: _orange.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
+                : null,
           ),
-          padding: const EdgeInsets.fromLTRB(14, 16, 14, 14),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
             children: [
               Icon(
                 kLsbIconMap[widget.card.semanticIcon] ?? Icons.circle_outlined,
-                size: 22,
-                color: isEmergency
-                    ? _orange
-                    : Colors.white.withValues(alpha: 0.65),
+                size: 20,
+                color: selected ? Colors.white : Colors.black,
               ),
-              const SizedBox(height: 10),
-              Text(
-                widget.card.displayText.replaceAll('_', ' '),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: isEmergency ? 1.0 : 0.9),
-                  letterSpacing: 0.2,
-                  height: 1.25,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  widget.card.displayText.replaceAll('_', ' '),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: selected ? Colors.white : Colors.black,
+                    letterSpacing: 0.2,
+                    height: 1.2,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
               ),
-              if (isEmergency) ...[
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: _orange.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: const Text(
-                    'URGENTE',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w800,
-                      color: _orange,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                ),
-              ],
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Nodo de respuesta ya seleccionada (muestra glosa, no card).
+/// Se usa en el árbol conceptual para las respuestas pasadas.
+class AnswerNode extends StatelessWidget {
+  final String gloss;
+  final VoidCallback? onTap;
+
+  const AnswerNode({super.key, required this.gloss, this.onTap});
+
+  static const _orange = Color(0xFFFF6B00);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: _orange,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: _orange, width: 2),
+        ),
+        child: Text(
+          gloss.replaceAll('_', ' ').toUpperCase(),
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Nodo de pregunta (zona semántica).
+class QuestionNode extends StatelessWidget {
+  final String question;
+  final bool dimmed;
+
+  const QuestionNode({super.key, required this.question, this.dimmed = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: dimmed ? 0.03 : 0.05),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: dimmed ? 0.08 : 0.15),
+          width: 1.5,
+        ),
+      ),
+      child: Text(
+        question,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Colors.black.withValues(alpha: dimmed ? 0.4 : 0.75),
+          fontStyle: FontStyle.italic,
         ),
       ),
     );
