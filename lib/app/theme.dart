@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
-/// Tema visual de OpenSoul — Módulo de Trámites Ciudadanos LSB.
+/// Tema visual de OpenSoul — paleta minimalista blanco / negro / naranja.
 ///
-/// Paleta oscura profesional con acentos dorados que transmite
-/// institucionalidad pública y accesibilidad.
+/// Tres colores únicos: #FFFFFF · #000000 · #FF6B00.
+/// La jerarquía visual se construye mediante tamaño, peso tipográfico,
+/// espaciado, sombras sutiles y posición — no mediante colores adicionales.
 class AppTheme {
-  // Colores del sistema de diseño
-  static const Color background = Color(0xFF0D1117);
-  static const Color surface = Color(0xFF161B22);
-  static const Color surfaceLight = Color(0xFF21262D);
-  static const Color accent = Color(0xFFFFD700);
-  static const Color accentSoft = Color(0xFFFFC107);
-  static const Color teal = Color(0xFF00ADB5);
-  static const Color textPrimary = Color(0xFFE6EDF3);
-  static const Color textSecondary = Color(0xFF8B949E);
-  static const Color danger = Color(0xFFFF6B6B);
-  static const Color success = Color(0xFF3FB950);
-  static const Color border = Color(0xFF30363D);
+  // Paleta estricta de 3 colores
+  static const Color background   = Color(0xFF000000); // negro puro
+  static const Color surface      = Color(0xFF0A0A0A); // negro profundo
+  static const Color surfaceLight = Color(0xFF141414); // gris carbón
+  static const Color accent       = Color(0xFFFF6B00); // naranja #FF6B00
+  static const Color accentSoft   = Color(0xFFFF6B00); // alias — mismo naranja
+  static const Color textPrimary  = Color(0xFFFFFFFF); // blanco
+  static const Color textSecondary= Color(0x99FFFFFF); // blanco 60 %
+  static const Color border       = Color(0xFF1C1C1C); // borde sutil
+
+  // Compatibilidad: alias que apuntan a la nueva paleta
+  static const Color teal    = accent;
+  static const Color success = accent;
+  static const Color danger  = accent;
+  static const Color orange  = accent;
 
   static ThemeData get darkTheme {
     return ThemeData(
@@ -26,9 +30,9 @@ class AppTheme {
       primaryColor: accent,
       colorScheme: const ColorScheme.dark(
         primary: accent,
-        secondary: teal,
+        secondary: accent,
         surface: surface,
-        error: danger,
+        error: accent,
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: surface,
@@ -57,7 +61,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: accent,
-          foregroundColor: Color(0xFF1A1A2E),
+          foregroundColor: Colors.black,
           disabledBackgroundColor: surfaceLight,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.5),
