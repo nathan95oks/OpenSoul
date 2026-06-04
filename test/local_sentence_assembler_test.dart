@@ -94,6 +94,47 @@ void main() {
     });
   });
 
+  group('assemble — glosas nuevas (asalto, abuso, corrección, duplicado)', () {
+    test('asalto a mano armada', () {
+      final s = asm.assemble(
+        contextId: 'denuncia_robo',
+        glosses: ['HOMBRE', 'ASALTAR', 'CUCHILLO', 'CELULAR'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'me asaltó'), true);
+      expect(has(s, 'cuchillo'), true);
+    });
+
+    test('abuso sexual se redacta con respeto gramatical', () {
+      final s = asm.assemble(
+        contextId: 'violencia',
+        glosses: ['DESCONOCIDO', 'ABUSO', 'MIEDO'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'me agredió sexualmente'), true);
+      expect(has(s, 'miedo'), true);
+    });
+
+    test('corrección de datos en el SEGIP', () {
+      final s = asm.assemble(
+        contextId: 'tramite_id',
+        glosses: ['CORREGIR', 'CARNET', 'SEGIP'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'quiero corregir'), true);
+      expect(has(s, 'en el SEGIP'), true);
+    });
+
+    test('duplicado de documento', () {
+      final s = asm.assemble(
+        contextId: 'tramite_id',
+        glosses: ['SOLICITAR', 'DUPLICADO', 'CARNET'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'un duplicado'), true);
+    });
+  });
+
   group('assemble — SEGIP (trámites)', () {
     test('renovación de carnet en el SEGIP', () {
       final s = asm.assemble(
