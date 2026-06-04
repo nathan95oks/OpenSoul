@@ -178,7 +178,11 @@ class CardGrid extends ConsumerWidget {
   /// Se colapsa la vista expandida para que la siguiente pregunta
   /// vuelva a mostrar solo sus 6 opciones más relevantes.
   void _onAnswerPicked(WidgetRef ref, LsbCard card, List<LsbCard> allCards) {
-    ref.read(sentenceProvider.notifier).addWord(card.displayText);
+    // Se almacena la GLOSA limpia (no el displayText), porque tanto el
+    // backend (GLOSS_LEXICON) como el LocalSentenceAssembler indexan por
+    // glosa. Enviar el displayText ("CUCHILLO / ARMA", "REG. CIVIL") rompía
+    // el reconocimiento de una gran parte del catálogo.
+    ref.read(sentenceProvider.notifier).addWord(card.gloss);
     ref.read(expandedAnswersProvider.notifier).collapse();
     ref.read(semanticZonesProvider.notifier).advanceFromCard(card, allCards);
   }
