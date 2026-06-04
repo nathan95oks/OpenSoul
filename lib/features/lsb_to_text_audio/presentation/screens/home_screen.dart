@@ -7,7 +7,6 @@ import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../controllers/translation_controller.dart';
 import '../providers/context_provider.dart';
-import '../providers/story_preview_provider.dart';
 import '../widgets/context_selection_widget.dart';
 import '../widgets/node_flow_canvas.dart';
 import '../widgets/card_grid.dart';
@@ -240,7 +239,15 @@ class _BottomPanel extends StatelessWidget {
   }
 }
 
-/// Sección de resultado de traducción — dentro del scroll.
+/// Sección de resultado de traducción — mismo lenguaje visual que el árbol.
+///
+/// Sigue exactamente el reference design:
+///   [Secuencia LSB] (card blanca, borde negro 2px)
+///        ↓
+///   [Traducción] (card naranja, texto blanco)
+///   [Audio full-width] [Copiar full-width]
+///   [Nueva declaración] (naranja full-width)
+///   [Modificar selección] (borde negro full-width)
 class _ResultSection extends ConsumerWidget {
   final TranslationResult result;
   const _ResultSection({required this.result});
@@ -249,80 +256,91 @@ class _ResultSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final preview = ref.watch(storyPreviewProvider);
-    final hasText = result.generatedText.trim().isNotEmpty;
+    final glosses = ref.watch(sentenceProvider);
+    final hasAudio = result.audioUrl != null && result.audioUrl!.isNotEmpty;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Separador visual
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Center(
-              child: SizedBox(
-                height: 12,
-                child: VerticalDivider(color: Color(0xFFCCCCCC), width: 1),
-              ),
+          // ── Label ─────────────────────────────────────────────
+          const Text(
+            'Traducción lista',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: Colors.black,
+              letterSpacing: -0.3,
             ),
           ),
-
-          // Glosas (secuencia LSB)
+          const SizedBox(height: 4),
           const Text(
-            'SECUENCIA DE GLOSAS:',
+            'Tu declaración ha sido generada',
+            style: TextStyle(fontSize: 14, color: Color(0xFF666666)),
+          ),
+          const SizedBox(height: 20),
+
+          // ── Secuencia de glosas ────────────────────────────────
+          const Text(
+            'Secuencia de glosas:',
             style: TextStyle(
               fontSize: 11,
               color: Color(0xFF888888),
               fontWeight: FontWeight.w700,
-              letterSpacing: 1.2,
+              letterSpacing: 1.0,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.black, width: 2),
             ),
             child: Text(
-              preview.isNotEmpty ? preview : result.baseSentence,
+              glosses.map((g) => g.replaceAll('_', ' ')).join(' • '),
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 17,
                 fontWeight: FontWeight.w700,
                 color: Colors.black,
+                height: 1.4,
               ),
             ),
           ),
 
-          const SizedBox(height: 8),
-
-          // Flecha visual
+          // ── Flecha ─────────────────────────────────────────────
           const Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 4),
-              child: Icon(Icons.keyboard_arrow_down, size: 28, color: Color(0xFFCCCCCC)),
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 24,
+                    child: VerticalDivider(color: Color(0xFFBBBBBB), width: 2),
+                  ),
+                  Icon(Icons.arrow_drop_down, size: 24, color: Color(0xFFBBBBBB)),
+                ],
+              ),
             ),
           ),
 
-          const SizedBox(height: 8),
-
-          // Traducción
+          // ── Traducción ──────────────────────────────────────────
           const Text(
-            'TRADUCCIÓN PARA INSTITUCIÓN PÚBLICA:',
+            'Traducción para institución pública:',
             style: TextStyle(
               fontSize: 11,
               color: Color(0xFF888888),
               fontWeight: FontWeight.w700,
-              letterSpacing: 1.2,
+              letterSpacing: 1.0,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: _orange,
               borderRadius: BorderRadius.circular(16),
@@ -331,7 +349,7 @@ class _ResultSection extends ConsumerWidget {
             child: Text(
               result.generatedText,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 17,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
                 height: 1.5,
@@ -339,102 +357,163 @@ class _ResultSection extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
 
-          // Acciones
-          Row(
-            children: [
-              if (hasText)
-                _ActionBtn(
-                  label: 'Audio',
-                  icon: Icons.volume_up_outlined,
-                  onTap: () async {
-                    await ref
-                        .read(translationControllerProvider.notifier)
-                        .replayAudio();
-                  },
-                ),
-              const SizedBox(width: 10),
-              _ActionBtn(
-                label: 'Copiar',
-                icon: Icons.copy_outlined,
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: result.generatedText));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Texto copiado'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                },
+          // ── Nota informativa ────────────────────────────────────
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFE0E0E0)),
+            ),
+            child: const Text(
+              'Esta traducción puede ser presentada en instituciones públicas para formalizar tu declaración.',
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFF555555),
+                height: 1.5,
               ),
-              const Spacer(),
-              _ActionBtn(
-                label: 'Nueva declaración',
-                icon: Icons.refresh_outlined,
-                filled: true,
-                onTap: () async {
-                  await ref.read(translationControllerProvider.notifier).reset();
-                  ref.read(sentenceProvider.notifier).clearSentence();
-                  ref.read(semanticZonesProvider.notifier).reset();
-                  ref.read(expandedAnswersProvider.notifier).collapse();
-                },
-              ),
-            ],
+            ),
           ),
 
           const SizedBox(height: 16),
+
+          // ── Audio (full-width) ──────────────────────────────────
+          _FullWidthBtn(
+            label: hasAudio ? 'Reproducir Audio (Polly)' : 'Reproducir Audio (local)',
+            icon: Icons.volume_up_outlined,
+            filled: false,
+            onTap: () async {
+              await ref
+                  .read(translationControllerProvider.notifier)
+                  .replayAudio();
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Reproduciendo...'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // ── Copiar (full-width) ─────────────────────────────────
+          _FullWidthBtn(
+            label: 'Copiar texto',
+            icon: Icons.copy_outlined,
+            filled: false,
+            onTap: () {
+              Clipboard.setData(ClipboardData(text: result.generatedText));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Texto copiado'),
+                  duration: Duration(seconds: 1),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // ── Nueva declaración (naranja, full-width) ─────────────
+          _FullWidthBtn(
+            label: 'Nueva declaración',
+            icon: Icons.refresh_outlined,
+            filled: true,
+            onTap: () async {
+              await ref.read(translationControllerProvider.notifier).reset();
+              ref.read(sentenceProvider.notifier).clearSentence();
+              ref.read(semanticZonesProvider.notifier).reset();
+              ref.read(expandedAnswersProvider.notifier).collapse();
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // ── Modificar selección (borde negro, full-width) ───────
+          _FullWidthBtn(
+            label: 'Modificar selección',
+            icon: Icons.edit_outlined,
+            filled: false,
+            blackBorder: true,
+            onTap: () async {
+              await ref.read(translationControllerProvider.notifier).reset();
+            },
+          ),
+
+          const SizedBox(height: 28),
         ],
       ),
     );
   }
 }
 
-class _ActionBtn extends StatelessWidget {
+/// Botón full-width — mismo radio y proporciones que el botón TRADUCIR.
+class _FullWidthBtn extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool filled;
+  final bool blackBorder;
   final VoidCallback onTap;
 
-  const _ActionBtn({
+  const _FullWidthBtn({
     required this.label,
     required this.icon,
+    required this.filled,
     required this.onTap,
-    this.filled = false,
+    this.blackBorder = false,
   });
 
   static const _orange = Color(0xFFFF6B00);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: filled ? _orange : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: filled ? _orange : Colors.black,
-            width: filled ? 2 : 1.5,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 15, color: filled ? Colors.white : Colors.black),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: filled ? Colors.white : Colors.black,
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: Material(
+        color: filled ? _orange : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: filled
+                    ? _orange
+                    : blackBorder
+                        ? Colors.black
+                        : const Color(0xFFCCCCCC),
+                width: filled || blackBorder ? 2 : 1.5,
               ),
             ),
-          ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 18,
+                  color: filled ? Colors.white : Colors.black,
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                    color: filled ? Colors.white : Colors.black,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
+
