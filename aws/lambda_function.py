@@ -107,6 +107,78 @@ GLOSS_LEXICON = {
     "CORREGIR":   {"rol": "VERBO", "es": "corregir", "1p": "necesito corregir", "3p": "necesita corregir", "formal": "deseo solicitar la corrección de"},
     "VERIFICAR":  {"rol": "VERBO", "es": "verificar", "1p": "necesito verificar", "3p": "necesita verificar", "formal": "deseo verificar"},
 
+    # --- VERBOS DE AGRESIÓN (robo / violencia) ---
+    # Antes ausentes: la Lambda clasificaba robo/violencia como GENERAL.
+    # "agresor" es la forma de 3ª persona que usa el generador de incidentes.
+    "ROBAR":      {"rol": "VERBO", "es": "robar", "agresor": "robó", "1p": "me robaron"},
+    "ASALTAR":    {"rol": "VERBO", "es": "asaltar", "agresor": "asaltó", "1p": "me asaltaron"},
+    "QUITAR":     {"rol": "VERBO", "es": "quitar", "agresor": "quitó", "1p": "me quitaron"},
+    "GOLPEAR":    {"rol": "VERBO", "es": "golpear", "agresor": "golpeó", "1p": "me golpearon"},
+    "AMENAZAR":   {"rol": "VERBO", "es": "amenazar", "agresor": "amenazó", "1p": "me amenazaron"},
+    "EMPUJAR":    {"rol": "VERBO", "es": "empujar", "agresor": "empujó", "1p": "me empujaron"},
+    "GRITAR":     {"rol": "VERBO", "es": "gritar", "agresor": "gritó", "1p": "me gritaron"},
+    "PERSEGUIR":  {"rol": "VERBO", "es": "perseguir", "agresor": "persiguió", "1p": "me persiguieron"},
+    "ACOSAR":     {"rol": "VERBO", "es": "acosar", "agresor": "acosó", "1p": "me acosaron"},
+    "SECUESTRAR": {"rol": "VERBO", "es": "secuestrar", "agresor": "secuestró", "1p": "me secuestraron"},
+    "ABUSO":      {"rol": "VERBO", "es": "abuso sexual", "agresor": "agredió sexualmente", "1p": "fui agredido sexualmente"},
+
+    # --- PERSONAS / AGRESOR (descriptores con bandera persona) ---
+    "HOMBRE":      {"rol": "DESCRIPTOR", "es": "un hombre", "persona": True},
+    "MUJER":       {"rol": "DESCRIPTOR", "es": "una mujer", "persona": True},
+    "JOVEN":       {"rol": "DESCRIPTOR", "es": "un joven", "persona": True},
+    "DESCONOCIDO": {"rol": "DESCRIPTOR", "es": "un desconocido", "persona": True},
+    "VECINO":      {"rol": "DESCRIPTOR", "es": "un vecino", "persona": True},
+    "GRUPO":       {"rol": "DESCRIPTOR", "es": "un grupo de personas", "persona": True},
+    "ADULTO":      {"rol": "DESCRIPTOR", "es": "un adulto", "persona": True},
+    "ANCIANO":     {"rol": "DESCRIPTOR", "es": "un anciano", "persona": True},
+    "CONOCIDO":    {"rol": "DESCRIPTOR", "es": "un conocido", "persona": True},
+    "ALTO":        {"rol": "DESCRIPTOR", "es": "alto"},
+    "BAJO":        {"rol": "DESCRIPTOR", "es": "bajo"},
+    "DELGADO":     {"rol": "DESCRIPTOR", "es": "delgado"},
+    "GORDO":       {"rol": "DESCRIPTOR", "es": "robusto"},
+    "MORENO":      {"rol": "DESCRIPTOR", "es": "moreno"},
+    "BARBA":       {"rol": "DESCRIPTOR", "es": "con barba"},
+    "LENTES":      {"rol": "DESCRIPTOR", "es": "con lentes"},
+
+    # --- OBJETOS (personales / sustraídos) ---
+    "CELULAR":   {"rol": "OBJETO", "es": "mi celular"},
+    "DINERO":    {"rol": "OBJETO", "es": "mi dinero"},
+    "MOCHILA":   {"rol": "OBJETO", "es": "mi mochila"},
+    "BOLSA":     {"rol": "OBJETO", "es": "mi bolsa"},
+    "LLAVE":     {"rol": "OBJETO", "es": "mis llaves"},
+    "BILLETERA": {"rol": "OBJETO", "es": "mi billetera"},
+    "TARJETA":   {"rol": "OBJETO", "es": "mi tarjeta bancaria"},
+    "RELOJ":     {"rol": "OBJETO", "es": "mi reloj"},
+    "CADENA":    {"rol": "OBJETO", "es": "mi cadena"},
+    "ANILLO":    {"rol": "OBJETO", "es": "mi anillo"},
+    "COLLAR":    {"rol": "OBJETO", "es": "mi collar"},
+    "ARETES":    {"rol": "OBJETO", "es": "mis aretes"},
+    "LAPTOP":    {"rol": "OBJETO", "es": "mi laptop"},
+    "AUDIFONOS": {"rol": "OBJETO", "es": "mis audífonos"},
+    "BICICLETA": {"rol": "OBJETO", "es": "mi bicicleta"},
+    "AUTO":      {"rol": "OBJETO", "es": "mi auto"},
+    "MOTO":      {"rol": "OBJETO", "es": "mi moto"},
+    "CUCHILLO":  {"rol": "OBJETO", "es": "un cuchillo", "arma": True},
+
+    # --- LUGARES (cotidianos) ---
+    "CALLE":   {"rol": "LUGAR", "es": "en la calle"},
+    "CASA":    {"rol": "LUGAR", "es": "en mi casa"},
+    "MERCADO": {"rol": "LUGAR", "es": "en el mercado"},
+    "PARADA":  {"rol": "LUGAR", "es": "en la parada"},
+    "MICRO":   {"rol": "LUGAR", "es": "en el micro"},
+    "PARQUE":  {"rol": "LUGAR", "es": "en el parque"},
+    "TRABAJO": {"rol": "LUGAR", "es": "en mi trabajo"},
+    "CAJERO":  {"rol": "LUGAR", "es": "en el cajero automático"},
+    "TAXI":    {"rol": "LUGAR", "es": "en un taxi"},
+    "PLAZA":   {"rol": "LUGAR", "es": "en la plaza"},
+    "ESQUINA": {"rol": "LUGAR", "es": "en la esquina"},
+    "PUENTE":  {"rol": "LUGAR", "es": "en el puente"},
+
+    # --- ESTADOS EMOCIONALES adicionales ---
+    "ENOJO":    {"rol": "ESTADO", "es": "estoy enojado", "formal": "manifiesto enojo"},
+    "TRISTE":   {"rol": "ESTADO", "es": "estoy triste", "formal": "me encuentro afectado"},
+    "NERVIOSO": {"rol": "ESTADO", "es": "estoy nervioso", "formal": "me encuentro nervioso"},
+
     # --- DOCUMENTOS ---
     "DOCUMENTO":  {"rol": "DOCUMENTO", "es": "documento", "art": "el"},
     "DOCUMENTOS": {"rol": "DOCUMENTO", "es": "documentos", "art": "los"},
@@ -223,7 +295,8 @@ def analyze_glosses(cards: list) -> dict:
     analysis = {
         "sujetos": [], "verbos": [], "documentos": [], "tramites": [],
         "tiempos": [], "instituciones": [], "descriptores": [], "urgencias": [],
-        "servicios": [], "estados": [], "desconocidos": [],
+        "servicios": [], "estados": [], "objetos": [], "lugares": [],
+        "desconocidos": [],
     }
 
     for card in cards:
@@ -237,6 +310,7 @@ def analyze_glosses(cards: list) -> dict:
                 "TIEMPO": "tiempos", "INSTITUCION": "instituciones",
                 "DESCRIPTOR": "descriptores", "URGENCIA": "urgencias",
                 "SERVICIO": "servicios", "ESTADO": "estados",
+                "OBJETO": "objetos", "LUGAR": "lugares",
             }
             dest = mapping.get(rol, "desconocidos")
             analysis[dest].append({"glosa": key, **entry})
@@ -255,6 +329,13 @@ def _detect_event_type(analysis: dict) -> str:
     verbos = [v["glosa"] for v in analysis["verbos"]]
     tramites = [t["glosa"] for t in analysis["tramites"]]
     documentos = [d["glosa"] for d in analysis["documentos"]]
+
+    # Agresión: tienen prioridad sobre el resto porque definen un incidente.
+    if any(v in ["ROBAR", "ASALTAR", "QUITAR"] for v in verbos):
+        return "ROBO"
+    if any(v in ["GOLPEAR", "AMENAZAR", "EMPUJAR", "GRITAR",
+                 "PERSEGUIR", "ACOSAR", "SECUESTRAR", "ABUSO"] for v in verbos):
+        return "AGRESION"
 
     if any(v in ["TRAMITAR", "RENOVAR", "INSCRIBIR", "REGISTRAR"] for v in verbos):
         return "TRAMITE"
@@ -309,6 +390,8 @@ def build_intermediate_representation(cards: list, analysis: dict, context_type:
             "servicios": [s["glosa"] for s in analysis["servicios"]] if analysis["servicios"] else None,
             "urgencia": analysis["urgencias"][0]["glosa"] if analysis["urgencias"] else None,
             "estados": [e["glosa"] for e in analysis["estados"]] if analysis["estados"] else None,
+            "objetos": [o["glosa"] for o in analysis["objetos"]] if analysis["objetos"] else None,
+            "lugar": [l["glosa"] for l in analysis["lugares"]] if analysis["lugares"] else None,
         },
         "tipo_evento": analysis["tipo_evento"],
         "perspectiva": analysis["perspectiva"],
@@ -333,6 +416,8 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str) -> str:
     is_formal = context_type.lower() in ("ciudadano", "formal", "legal")
 
     generators = {
+        "ROBO": _gen_robo,
+        "AGRESION": _gen_agresion,
         "TRAMITE": _gen_tramite,
         "CONSULTA": _gen_consulta,
         "PAGO": _gen_pago,
@@ -401,6 +486,96 @@ def _get_descriptors(analysis):
     if len(descs) == 1:
         return descs[0]
     return ", ".join(descs[:-1]) + " y " + descs[-1]
+
+
+def _join_es(items):
+    items = [i for i in items if i]
+    if not items:
+        return ""
+    if len(items) == 1:
+        return items[0]
+    return ", ".join(items[:-1]) + " y " + items[-1]
+
+
+def _objetos_text(analysis):
+    objs = [o["es"] for o in analysis["objetos"] if not o.get("arma")]
+    return _join_es(objs)
+
+
+def _arma_text(analysis):
+    for o in analysis["objetos"]:
+        if o.get("arma"):
+            return f'con {o["es"]}'
+    return ""
+
+
+def _lugar_text(analysis):
+    return analysis["lugares"][0]["es"] if analysis["lugares"] else ""
+
+
+def _agresor_text(analysis):
+    personas = [d for d in analysis["descriptores"] if d.get("persona")]
+    rasgos = [d for d in analysis["descriptores"] if not d.get("persona")]
+    base = personas[0]["es"] if personas else "una persona"
+    if rasgos:
+        base += " " + _join_es([r["es"] for r in rasgos])
+    return base
+
+
+def _agresor_verb(analysis, default):
+    for v in analysis["verbos"]:
+        if v.get("agresor"):
+            return v["agresor"]
+    return default
+
+
+def _compose_incident(analysis, is_formal, robo):
+    """Relato de incidente con agresor en 3ª persona (robo / violencia)."""
+    subj = _agresor_text(analysis)
+    verb = _agresor_verb(analysis, "robó" if robo else "agredió")
+    core = f"{subj} me {verb}"
+
+    objs = _objetos_text(analysis)
+    if objs:
+        core += f" {objs}"
+    arma = _arma_text(analysis)
+    if arma:
+        core += f" {arma}"
+    lugar = _lugar_text(analysis)
+    if lugar:
+        core += f" {lugar}"
+
+    tiempo = analysis["tiempos"][0]["es"] if analysis["tiempos"] else None
+    sentence = core
+    if tiempo:
+        sentence = f"{tiempo[0].upper()}{tiempo[1:]}, {core[0].lower()}{core[1:]}"
+    sentence = sentence[0].upper() + sentence[1:]
+
+    parts = [f"{sentence}."]
+    if analysis["estados"]:
+        est = _join_es([e.get("formal", e["es"]) if is_formal else e["es"]
+                        for e in analysis["estados"]])
+        if est:
+            parts.append(f"{est[0].upper()}{est[1:]}.")
+    if analysis["urgencias"]:
+        u = analysis["urgencias"][0]
+        ut = u.get("formal", u["es"]) if is_formal else u["es"]
+        parts.append(f"{ut[0].upper()}{ut[1:]}.")
+    if analysis["servicios"]:
+        svc = _join_es([s.get("formal", s["es"]) if is_formal else s["es"]
+                        for s in analysis["servicios"]])
+        parts.append(f"Necesito {svc}.")
+    return " ".join(parts)
+
+
+def _gen_robo(ir, analysis, is_formal):
+    """Genera oración para denuncia de robo / asalto."""
+    return _compose_incident(analysis, is_formal, robo=True)
+
+
+def _gen_agresion(ir, analysis, is_formal):
+    """Genera oración para violencia / agresión física o psicológica."""
+    return _compose_incident(analysis, is_formal, robo=False)
 
 
 def _gen_tramite(ir, analysis, is_formal):
