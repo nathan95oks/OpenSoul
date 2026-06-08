@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
+import 'card_grid.dart' show expandedAnswersProvider;
 import 'suggested_gloss_panel.dart';
 
 /// Canvas del árbol conceptual — flujo visual vertical de preguntas y respuestas.
@@ -29,45 +30,59 @@ class NodeFlowCanvas extends ConsumerWidget {
         .toList();
     final activeZone = zonesState.activeZone;
 
+    // Progreso: zonas ya recorridas sobre el total de zonas del contexto.
+    final totalZones = ctx.zones.length;
+    final reachedZones = zonesState.visitedZoneIds.length.clamp(1, totalZones);
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Nodo raíz — contexto
-          _RootNode(label: ctx.name.toUpperCase()),
+          // Contexto como chip discreto (breadcrumb) — ya no es el foco.
+          _ContextChip(emoji: ctx.emoji, label: ctx.name),
+          const SizedBox(height: 14),
+          // Barra de progreso naranja: posición dentro del cuestionario.
+          _ProgressBar(reached: reachedZones, total: totalZones),
 
-          // Pares pregunta → respuesta de zonas ya visitadas
+          // Pares pregunta → respuesta de zonas ya visitadas (compactos).
           for (final zoneId in orderedVisited) ...[
             _DownArrow(dimmed: false),
             _QuestionAnswerRow(
               zoneId: zoneId,
               zonesState: zonesState,
-              onEditTap: () => ref
-                  .read(semanticZonesProvider.notifier)
-                  .activateZone(zoneId),
+              onEditTap: () {
+                ref.read(expandedAnswersProvider.notifier).collapse();
+                ref.read(semanticZonesProvider.notifier).activateZone(zoneId);
+              },
             ),
           ],
 
-          // Zona activa: pregunta + opciones
-          if (activeZone != null && !zonesState.isFlowComplete) ...[
+          // Zona activa: pregunta PROTAGONISTA + opciones + controles.
+          if (activeZone != null) ...[
             _DownArrow(dimmed: orderedVisited.isEmpty),
-            _QuestionLabel(
+            const SizedBox(height: 6),
+            _ActiveQuestion(
               question: activeZone.question.isNotEmpty
                   ? activeZone.question
                   : activeZone.hint,
-              dimmed: false,
             ),
-            const SizedBox(height: 12),
-            _RightArrow(dimmed: false),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             // Opciones: SuggestedGlossPanel
             const _OptionsPanel(),
-          ],
-
-          if (zonesState.isFlowComplete) ...[
-            _DownArrow(dimmed: true),
-            _FlowCompleteNode(),
+            const SizedBox(height: 8),
+            _NavControls(
+              canGoBack: zonesState.canGoBack,
+              hasNext: zonesState.hasNextQuestion,
+              onBack: () {
+                ref.read(expandedAnswersProvider.notifier).collapse();
+                ref.read(semanticZonesProvider.notifier).goToPreviousZone();
+              },
+              onContinue: () {
+                ref.read(expandedAnswersProvider.notifier).collapse();
+                ref.read(semanticZonesProvider.notifier).goToNextZone();
+              },
+            ),
           ],
         ],
       ),
@@ -75,31 +90,77 @@ class NodeFlowCanvas extends ConsumerWidget {
   }
 }
 
-class _RootNode extends StatelessWidget {
+/// Chip discreto del contexto activo — sustituye al antiguo nodo raíz
+/// grande. Mantiene visible "dónde estoy" sin competir con la pregunta.
+class _ContextChip extends StatelessWidget {
+  final String emoji;
   final String label;
-  const _RootNode({required this.label});
+  const _ContextChip({required this.emoji, required this.label});
 
   static const _orange = Color(0xFFFF6B00);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
-        color: _orange,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _orange, width: 2),
+        color: _orange.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: _orange.withValues(alpha: 0.45), width: 1),
       ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w800,
-          color: Colors.white,
-          letterSpacing: 0.5,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(emoji, style: const TextStyle(fontSize: 13)),
+          const SizedBox(width: 6),
+          Text(
+            label.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: _orange,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Barra de progreso horizontal naranja + etiqueta "Pregunta X de Y".
+class _ProgressBar extends StatelessWidget {
+  final int reached;
+  final int total;
+  const _ProgressBar({required this.reached, required this.total});
+
+  static const _orange = Color(0xFFFF6B00);
+
+  @override
+  Widget build(BuildContext context) {
+    final value = total == 0 ? 0.0 : (reached / total).clamp(0.0, 1.0);
+    return Column(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: LinearProgressIndicator(
+            value: value,
+            minHeight: 5,
+            backgroundColor: Colors.black.withValues(alpha: 0.08),
+            valueColor: const AlwaysStoppedAnimation<Color>(_orange),
+          ),
         ),
-        textAlign: TextAlign.center,
-      ),
+        const SizedBox(height: 6),
+        Text(
+          'Pregunta $reached de $total',
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+            color: Colors.black.withValues(alpha: 0.45),
+            letterSpacing: 0.3,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -210,30 +271,163 @@ class _SkippedTag extends StatelessWidget {
   }
 }
 
-class _QuestionLabel extends StatelessWidget {
+/// Pregunta activa — elemento PRINCIPAL de la pantalla.
+///
+/// A diferencia de las preguntas ya respondidas (pequeñas, en gris), la
+/// pregunta actual se muestra grande y en negro para que el foco visual
+/// esté en lo que el usuario debe responder ahora, no en el contexto.
+class _ActiveQuestion extends StatelessWidget {
   final String question;
-  final bool dimmed;
-  const _QuestionLabel({required this.question, required this.dimmed});
+  const _ActiveQuestion({required this.question});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: dimmed ? 0.02 : 0.04),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: Colors.black.withValues(alpha: dimmed ? 0.08 : 0.14),
-          width: 1.5,
-        ),
+    return Text(
+      question,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w800,
+        color: Colors.black,
+        height: 1.25,
+        letterSpacing: -0.3,
       ),
-      child: Text(
-        question,
-        style: TextStyle(
-          fontSize: 13,
-          fontStyle: FontStyle.italic,
-          color: Colors.black.withValues(alpha: dimmed ? 0.35 : 0.65),
-          fontWeight: FontWeight.w500,
+    );
+  }
+}
+
+/// Controles de navegación manual: "Volver" (atrás) y "Continuar".
+///
+/// Reemplazan al auto-avance: el usuario decide cuándo cambiar de pregunta,
+/// pudiendo seleccionar varias glosas o corregir antes de avanzar.
+class _NavControls extends StatelessWidget {
+  final bool canGoBack;
+  final bool hasNext;
+  final VoidCallback onBack;
+  final VoidCallback onContinue;
+
+  const _NavControls({
+    required this.canGoBack,
+    required this.hasNext,
+    required this.onBack,
+    required this.onContinue,
+  });
+
+  static const _orange = Color(0xFFFF6B00);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        children: [
+          // Volver atrás
+          Expanded(
+            child: _NavButton(
+              label: 'Volver',
+              icon: Icons.arrow_back,
+              filled: false,
+              enabled: canGoBack,
+              onTap: canGoBack ? onBack : null,
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Continuar / aviso de relato completo
+          Expanded(
+            flex: 2,
+            child: hasNext
+                ? _NavButton(
+                    label: 'Continuar',
+                    icon: Icons.arrow_forward,
+                    filled: true,
+                    enabled: true,
+                    onTap: onContinue,
+                  )
+                : Container(
+                    height: 48,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: _orange.withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(14),
+                      border:
+                          Border.all(color: _orange.withValues(alpha: 0.45)),
+                    ),
+                    child: const Text(
+                      'Relato completo — pulsa TRADUCIR',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w700,
+                        color: _orange,
+                      ),
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NavButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool filled;
+  final bool enabled;
+  final VoidCallback? onTap;
+
+  const _NavButton({
+    required this.label,
+    required this.icon,
+    required this.filled,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  static const _orange = Color(0xFFFF6B00);
+
+  @override
+  Widget build(BuildContext context) {
+    final bg = filled
+        ? _orange
+        : Colors.white;
+    final fg = filled
+        ? Colors.white
+        : (enabled ? Colors.black : Colors.black.withValues(alpha: 0.3));
+    final borderColor = filled
+        ? _orange
+        : (enabled ? Colors.black : Colors.black.withValues(alpha: 0.2));
+
+    return SizedBox(
+      height: 48,
+      child: Material(
+        color: bg,
+        borderRadius: BorderRadius.circular(14),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onTap,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: borderColor, width: filled ? 2 : 1.5),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 17, color: fg),
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: fg,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -317,33 +511,4 @@ class _RightTriangle extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(_) => false;
-}
-
-class _FlowCompleteNode extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFFF6B00), width: 2),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.check_circle_outline, color: Color(0xFFFF6B00), size: 18),
-          const SizedBox(width: 8),
-          const Text(
-            'Relato completo — Traducir',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFFFF6B00),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }

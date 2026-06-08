@@ -77,7 +77,8 @@ class HomeScreen extends ConsumerWidget {
       actions: [
         if (contextState != null)
           TextButton(
-            onPressed: () {
+            onPressed: () async {
+              await ref.read(translationControllerProvider.notifier).reset();
               ref.read(contextProvider.notifier).clearContext();
               ref.read(sentenceProvider.notifier).clearSentence();
               ref.read(semanticZonesProvider.notifier).reset();
