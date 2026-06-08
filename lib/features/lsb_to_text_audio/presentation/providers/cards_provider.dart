@@ -63,10 +63,12 @@ final allCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   return allCards;
 });
 
-/// Tope duro de tarjetas devueltas en modo guiado. Suficiente para que el
-/// usuario sordo tenga opciones reales pero impide que el modo "Ver más"
-/// muestre 30+ tarjetas y vuelva la experiencia confusa.
-const int _kMaxGuidedAnswers = 8;
+/// Tope duro de tarjetas devueltas en modo guiado. La vista inicial muestra
+/// solo 6 (el resto tras "Ver más"), así que un tope de 12 mantiene baja la
+/// carga cognitiva inicial pero permite que catálogos amplios —como los
+/// documentos judiciales (antecedentes, copias, poder, declaración jurada)—
+/// sean todos alcanzables.
+const int _kMaxGuidedAnswers = 12;
 
 /// Opciones de respuesta para la pregunta guiada actual.
 ///

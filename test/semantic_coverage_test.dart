@@ -25,9 +25,13 @@ void main() {
     // emergencia
     ('emergencia', ['EMERGENCIA']),
     ('emergencia', ['ENFERMO', 'AMBULANCIA', 'URGENTE', 'HOSPITAL']),
-    // documentos / trámite
+    // documentos / trámite (contexto judicial ampliado)
     ('tramite_id', ['TRAMITAR', 'CARNET', 'SEGIP']),
     ('tramite_id', ['RENOVAR', 'LICENCIA', 'PAGO', 'SEGIP', 'HIJO']),
+    ('tramite_id', ['ANTECEDENTES', 'FISCALIA']),
+    ('tramite_id', ['TRAMITAR', 'ANTECEDENTES', 'DENUNCIA', 'FISCALIA', 'INTERPRETE', 'HOY']),
+    ('tramite_id', ['SOLICITAR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO']),
+    ('tramite_id', ['CORREGIR', 'DECLARACION_JURADA', 'NOTARIA', 'HIJO', 'AHORA']),
     // orientación / asistencia legal
     ('orientacion', ['ABOGADO', 'DEFENSORIA']),
     ('orientacion', ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA', 'HOY']),
