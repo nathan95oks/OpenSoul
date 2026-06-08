@@ -62,7 +62,7 @@ final availableContexts = <SemanticContext>[
         cardCategories: ['Descripción'],
         cardSubcategories: ['Físico', 'Cabello', 'Marca'],
         strictContext: true,
-        maxPicks: 1,
+        maxPicks: 3,
         relatedZones: ['vestimenta', 'personas'],
       ),
       SemanticZone(
@@ -76,7 +76,7 @@ final availableContexts = <SemanticContext>[
         cardCategories: ['Descripción'],
         cardSubcategories: ['Vestimenta', 'Color'],
         strictContext: true,
-        maxPicks: 1,
+        maxPicks: 3,
         relatedZones: ['apariencia', 'personas'],
       ),
       SemanticZone(
@@ -88,6 +88,7 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.8,
         cardCategories: ['Objetos', 'Documentos'],
         strictContext: true,
+        maxPicks: 3,
         relatedZones: ['situacion', 'lugar'],
       ),
       SemanticZone(
@@ -430,6 +431,7 @@ final availableContexts = <SemanticContext>[
         emoji: '📱',
         semanticWeight: 0.9,
         cardCategories: ['Objetos', 'Documentos'],
+        maxPicks: 3,
         relatedZones: ['lugar'],
       ),
       SemanticZone(
@@ -465,41 +467,59 @@ final availableContexts = <SemanticContext>[
     ],
   ),
 
-  // ─── 8. OTRA SITUACIÓN ────────────────────────────────
+  // ─── 8. TESTIGO / PRESENCIÉ UN HECHO ──────────────────
+  // Antes era "Otra situación" (genérico). Se reorienta al ámbito
+  // judicial: declaración de un testigo que presenció un hecho.
+  // El id 'otro' se conserva por compatibilidad (no lo referencia el
+  // datasource, pero evita romper estado/serialización existentes).
   SemanticContext(
     id: 'otro',
-    name: 'Otra situación',
-    icon: 'chat',
-    emoji: '💬',
-    description: 'Quiero comunicar otra cosa',
+    name: 'Presencié un hecho',
+    icon: 'visibility',
+    emoji: '👁️',
+    description: 'Fui testigo / Quiero declarar lo que vi',
     entryZoneId: 'que',
+    baseUrgency: UrgencyLevel.medium,
     zones: const [
       SemanticZone(
         id: 'que',
-        label: 'Acción',
-        hint: 'Qué necesito',
-        question: '¿Qué necesitas comunicar?',
+        label: 'Hecho',
+        hint: 'Qué presencié',
+        question: '¿Qué hecho presenciaste?',
         emoji: '⚡',
         semanticWeight: 0.85,
-        cardCategories: ['Acciones', 'Servicios', 'Trámites', 'Consultas'],
-        relatedZones: ['detalle'],
+        cardCategories: ['Agresión', 'Acciones', 'Estado/Urgencia'],
+        relatedZones: ['personas', 'lugar'],
       ),
       SemanticZone(
-        id: 'detalle',
-        label: 'Detalle',
-        hint: 'Más contexto',
-        question: '¿Quieres añadir más detalles?',
-        emoji: '📌',
-        semanticWeight: 0.5,
+        id: 'personas',
+        label: 'Personas',
+        hint: 'Quién estuvo involucrado',
+        question: '¿Quién estuvo involucrado?',
+        emoji: '👤',
+        semanticWeight: 0.7,
+        cardCategories: ['Identificación', 'Descripción'],
+        relatedZones: ['lugar'],
+      ),
+      SemanticZone(
+        id: 'lugar',
+        label: 'Lugar',
+        hint: 'Dónde ocurrió',
+        question: '¿Dónde ocurrió?',
+        emoji: '📍',
+        semanticWeight: 0.6,
+        cardCategories: ['Lugares', 'Instituciones'],
+        relatedZones: ['tiempo'],
+      ),
+      SemanticZone(
+        id: 'tiempo',
+        label: 'Tiempo',
+        hint: 'Cuándo',
+        question: '¿Cuándo ocurrió?',
+        emoji: '🕐',
+        semanticWeight: 0.45,
         optional: true,
-        cardCategories: [
-          'Documentos',
-          'Instituciones',
-          'Identificación',
-          'Lugares',
-          'Objetos',
-          'Tiempo',
-        ],
+        cardCategories: ['Tiempo'],
       ),
     ],
   ),
