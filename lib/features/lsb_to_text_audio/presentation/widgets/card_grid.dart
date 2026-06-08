@@ -128,17 +128,17 @@ class CardGrid extends ConsumerWidget {
     );
   }
 
-  /// Añade la glosa al relato y dispara el avance automático.
-  /// Se colapsa la vista expandida para que la siguiente pregunta
-  /// vuelva a mostrar solo sus 6 opciones más relevantes.
+  /// Selecciona/deselecciona la glosa en la zona activa, sin avanzar de
+  /// pregunta (el avance es explícito vía "Continuar"). Tras el toggle
+  /// reconstruye la secuencia en orden narrativo.
+  ///
+  /// Se almacena la GLOSA limpia (no el displayText), porque tanto el
+  /// backend (GLOSS_LEXICON) como el LocalSentenceAssembler indexan por
+  /// glosa.
   void _onAnswerPicked(WidgetRef ref, LsbCard card, List<LsbCard> allCards) {
-    // Se almacena la GLOSA limpia (no el displayText), porque tanto el
-    // backend (GLOSS_LEXICON) como el LocalSentenceAssembler indexan por
-    // glosa. Enviar el displayText ("CUCHILLO / ARMA", "REG. CIVIL") rompía
-    // el reconocimiento de una gran parte del catálogo.
-    ref.read(sentenceProvider.notifier).addWord(card.gloss);
-    ref.read(expandedAnswersProvider.notifier).collapse();
-    ref.read(semanticZonesProvider.notifier).advanceFromCard(card, allCards);
+    final notifier = ref.read(semanticZonesProvider.notifier);
+    notifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
   }
 }
 

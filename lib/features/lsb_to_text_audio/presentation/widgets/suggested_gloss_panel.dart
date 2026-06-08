@@ -23,14 +23,12 @@ class SuggestedGlossPanel extends ConsumerWidget {
     final cardsAsync = ref.watch(dynamicCardsProvider);
     final expanded = ref.watch(expandedAnswersProvider);
     final zonesState = ref.watch(semanticZonesProvider);
-    final flowComplete = zonesState.isFlowComplete;
     final maxPicks = zonesState.activeZone?.maxPicks ?? 1;
     final picksInZone = zonesState.picksInActiveZone;
+    final selectedGlosses = zonesState.activeAnswers.toSet();
 
     return cardsAsync.when(
       data: (cards) {
-        if (flowComplete) return const _FlowCompleteState();
-
         if (cards.isEmpty) {
           return const _EmptyState();
         }
@@ -45,7 +43,8 @@ class SuggestedGlossPanel extends ConsumerWidget {
               _PairHint(current: picksInZone, max: maxPicks),
             AdaptiveNodeLayout(
               cards: visible,
-              onCardTap: (card) => _onPick(ref, card, cards),
+              selectedGlosses: selectedGlosses,
+              onCardTap: (card) => _onPick(ref, card),
             ),
             if (!expanded && remaining > 0)
               _ExpandButton(
@@ -68,14 +67,16 @@ class SuggestedGlossPanel extends ConsumerWidget {
     );
   }
 
-  void _onPick(WidgetRef ref, LsbCard card, List<LsbCard> allCards) {
-    final activeZoneId = ref.read(semanticZonesProvider).activeZoneId;
-    if (activeZoneId != null) {
-      ref.read(semanticZonesProvider.notifier).recordAnswer(activeZoneId, card.gloss);
-    }
-    ref.read(sentenceProvider.notifier).addWord(card.gloss);
-    ref.read(expandedAnswersProvider.notifier).collapse();
-    ref.read(semanticZonesProvider.notifier).advanceFromCard(card, allCards);
+  /// Selecciona o deselecciona la glosa en la zona activa.
+  ///
+  /// NO avanza de pregunta (el cambio es explícito vía "Continuar") y NO
+  /// colapsa la lista expandida, para permitir elegir varias glosas seguidas.
+  /// Tras el toggle reconstruye la secuencia en orden narrativo y la sincroniza
+  /// con [sentenceProvider] (lo que alimenta la traducción).
+  void _onPick(WidgetRef ref, LsbCard card) {
+    final notifier = ref.read(semanticZonesProvider.notifier);
+    notifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
   }
 }
 
@@ -87,10 +88,10 @@ class _EmptyState extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       child: Text(
-        'No hay opciones para esta pregunta.\nUsa "Saltar" o "Terminé y traducir".',
+        'No hay opciones para esta pregunta.\nPulsa "Continuar" para seguir o "Volver".',
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.4),
+          color: Colors.black.withValues(alpha: 0.45),
           fontSize: 13,
           height: 1.5,
         ),
@@ -109,56 +110,8 @@ class _ErrorState extends StatelessWidget {
       child: Text(
         'Error al cargar opciones.',
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.4),
+          color: Colors.black.withValues(alpha: 0.45),
           fontSize: 13,
-        ),
-      ),
-    );
-  }
-}
-
-class _FlowCompleteState extends StatelessWidget {
-  const _FlowCompleteState();
-
-  static const _orange = Color(0xFFFF6B00);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: const Color(0xFF0F0F0F),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: _orange.withValues(alpha: 0.35)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.check_circle_outline, color: _orange, size: 28),
-            const SizedBox(height: 10),
-            const Text(
-              'Respondiste todas las preguntas',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Toca una zona superior para editar,\no presiona "Traducir".',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.5),
-                height: 1.4,
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -174,7 +127,7 @@ class _PairHint extends StatelessWidget {
   Widget build(BuildContext context) {
     final label = current == 0
         ? 'Puedes elegir hasta $max tarjetas para describir mejor'
-        : 'Tarjeta ${current + 1} de $max — toca otra o salta';
+        : 'Elegidas $current de $max — toca otra para añadir o vuelve a tocar para quitar';
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
@@ -182,7 +135,7 @@ class _PairHint extends StatelessWidget {
         label,
         style: TextStyle(
           fontSize: 11,
-          color: Colors.white.withValues(alpha: 0.45),
+          color: Colors.black.withValues(alpha: 0.5),
           fontStyle: FontStyle.italic,
         ),
       ),

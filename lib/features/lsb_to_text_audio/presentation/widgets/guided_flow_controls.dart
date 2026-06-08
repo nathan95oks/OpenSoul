@@ -63,7 +63,7 @@ class GuidedFlowControls extends ConsumerWidget {
             TextButton.icon(
               onPressed: () => ref
                   .read(semanticZonesProvider.notifier)
-                  .skipCurrentQuestion(),
+                  .goToNextZone(),
               style: TextButton.styleFrom(
                 foregroundColor: const Color(0xFF8B949E),
                 padding:
