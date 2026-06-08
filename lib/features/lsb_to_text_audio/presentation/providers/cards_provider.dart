@@ -169,5 +169,17 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
     ..sort(comparator);
 
   final combined = [...specific, ...fillers];
+
+  // Red de seguridad: si ninguna tarjeta del contexto ni 'general' encaja en
+  // la zona, no dejamos la pregunta vacía — mostramos las tarjetas de la
+  // categoría. Es el caso del contexto 'otro' (declaración de testigo), que
+  // reutiliza categorías de incidente (Agresión) no etiquetadas como
+  // 'general'. Solo aplica a zonas NO estrictas.
+  if (combined.isEmpty) {
+    return (allCards.where(matchesZone).toList()..sort(comparator))
+        .take(_kMaxGuidedAnswers)
+        .toList();
+  }
+
   return combined.take(_kMaxGuidedAnswers).toList();
 });

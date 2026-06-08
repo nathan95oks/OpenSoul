@@ -48,6 +48,7 @@ class LocalSentenceAssembler {
       case 'perdida':
         return _composeLoss(roles, tokens);
       case 'otro':
+        return _composeWitness(roles, tokens);
       default:
         return _composeGeneric(contextId, roles, tokens);
     }
@@ -287,7 +288,47 @@ class LocalSentenceAssembler {
     return _stitch(lead, sentences, tokens);
   }
 
-  /// otro / fallback → ensamblaje genérico fiel a los roles detectados.
+  /// otro → declaración de testigo (relato en tercera persona de lo que
+  /// presenció). A diferencia de [_composeIncident], el hecho no le ocurrió
+  /// al declarante: se narra como observado ("Presencié cómo …").
+  String _composeWitness(_Roles r, List<String> tokens) {
+    const lead = 'Quiero declarar como testigo lo que presencié.';
+    final sentences = <String>[];
+
+    final hasActor = r.perpetrator != null || r.traits.isNotEmpty;
+    final subject = hasActor ? _subjectPhrase(r) : 'una persona';
+
+    if (r.aggression != null) {
+      var clause = 'presencié cómo $subject ${r.aggression}';
+      final complement = _join([...r.objects, ...r.documents]);
+      if (complement.isNotEmpty) {
+        clause += ' $complement';
+      } else {
+        clause += ' a otra persona';
+      }
+      if (r.weapon != null) clause += ' ${r.weapon}';
+      if (r.place != null) clause += ' ${r.place}';
+      if (r.time != null) clause = '${_cap(r.time!)}, $clause';
+      sentences.add('${_cap(clause)}.');
+    } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
+      final what = _join([...r.objects, ...r.documents]);
+      var clause = 'presencié un hecho relacionado con $what';
+      if (r.place != null) clause += ' ${r.place}';
+      if (r.time != null) clause = '${_cap(r.time!)}, $clause';
+      sentences.add('${_cap(clause)}.');
+    } else if (hasActor) {
+      var clause = 'vi a $subject en el lugar';
+      if (r.place != null) clause += ' ${r.place}';
+      sentences.add('${_cap(clause)}.');
+    }
+
+    if (r.unknown.isNotEmpty) {
+      sentences.add('También menciono: ${_join(r.unknown)}.');
+    }
+    return _stitch(lead, sentences, tokens);
+  }
+
+  /// fallback → ensamblaje genérico fiel a los roles detectados.
   String _composeGeneric(String ctx, _Roles r, List<String> tokens) {
     const lead = 'Quiero comunicar lo siguiente.';
     final sentences = <String>[];
