@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../controllers/translation_controller.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import 'card_grid.dart' show expandedAnswersProvider;
@@ -30,6 +31,13 @@ class NodeFlowCanvas extends ConsumerWidget {
         .toList();
     final activeZone = zonesState.activeZone;
 
+    // El historial ("Tu relato hasta ahora") solo se muestra una vez que el
+    // usuario ya tradujo al menos una vez: durante la construcción inicial la
+    // vista permanece estática (solo la pregunta actual), y tras traducir se
+    // habilita la edición de respuestas anteriores.
+    final hasTranslated =
+        ref.watch(translationControllerProvider).value != null;
+
     // Progreso: zonas ya recorridas sobre el total de zonas del contexto.
     final totalZones = ctx.zones.length;
     final reachedZones = zonesState.visitedZoneIds.length.clamp(1, totalZones);
@@ -46,28 +54,18 @@ class NodeFlowCanvas extends ConsumerWidget {
           const SizedBox(height: 22),
 
           // ── Bloque ACTIVO (foco principal, arriba del todo) ────────
-          // La pregunta y sus opciones ya no quedan enterradas al final
-          // del flujo: son lo primero y siempre visible.
-          if (activeZone != null) ...[
+          // Solo la pregunta y sus opciones. Los controles Volver/Continuar
+          // viven fijos en HomeScreen (GuidedNavBar) para que nunca queden
+          // fuera de pantalla.
+          if (activeZone != null)
             _ActiveCard(
               question: activeZone.question.isNotEmpty
                   ? activeZone.question
                   : activeZone.hint,
-              canGoBack: zonesState.canGoBack,
-              hasNext: zonesState.hasNextQuestion,
-              onBack: () {
-                ref.read(expandedAnswersProvider.notifier).collapse();
-                ref.read(semanticZonesProvider.notifier).goToPreviousZone();
-              },
-              onContinue: () {
-                ref.read(expandedAnswersProvider.notifier).collapse();
-                ref.read(semanticZonesProvider.notifier).goToNextZone();
-              },
             ),
-          ],
 
-          // ── Relato construido (historial compacto, secundario) ─────
-          if (orderedVisited.isNotEmpty) ...[
+          // ── Relato construido (historial editable) — solo tras traducir ─
+          if (hasTranslated && orderedVisited.isNotEmpty) ...[
             const SizedBox(height: 26),
             const _HistoryHeader(),
             const SizedBox(height: 10),
@@ -308,29 +306,18 @@ class _MiniChip extends StatelessWidget {
   }
 }
 
-/// Tarjeta focal de la pregunta activa: agrupa la pregunta protagonista,
-/// las opciones de glosas y los controles Volver/Continuar dentro de un
-/// bloque visual contenido. Es lo primero que ve el usuario, de modo que
-/// la selección nunca queda enterrada al final del flujo.
+/// Tarjeta focal de la pregunta activa: pregunta protagonista + opciones
+/// de glosas dentro de un bloque visual contenido. Es lo primero que ve el
+/// usuario. Los controles Volver/Continuar son fijos (GuidedNavBar).
 class _ActiveCard extends StatelessWidget {
   final String question;
-  final bool canGoBack;
-  final bool hasNext;
-  final VoidCallback onBack;
-  final VoidCallback onContinue;
 
-  const _ActiveCard({
-    required this.question,
-    required this.canGoBack,
-    required this.hasNext,
-    required this.onBack,
-    required this.onContinue,
-  });
+  const _ActiveCard({required this.question});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
+      padding: const EdgeInsets.fromLTRB(14, 18, 14, 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -348,14 +335,41 @@ class _ActiveCard extends StatelessWidget {
           _ActiveQuestion(question: question),
           const SizedBox(height: 16),
           const _OptionsPanel(),
-          const SizedBox(height: 10),
-          _NavControls(
-            canGoBack: canGoBack,
-            hasNext: hasNext,
-            onBack: onBack,
-            onContinue: onContinue,
-          ),
         ],
+      ),
+    );
+  }
+}
+
+/// Barra fija de navegación del flujo guiado (Volver / Continuar).
+///
+/// Vive fuera del área scrollable, justo encima del panel de traducir, para
+/// que los controles estén SIEMPRE visibles sin necesidad de desplazarse.
+class GuidedNavBar extends ConsumerWidget {
+  const GuidedNavBar({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctx = ref.watch(contextProvider);
+    final zonesState = ref.watch(semanticZonesProvider);
+    if (ctx == null || zonesState.activeZone == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      child: _NavControls(
+        canGoBack: zonesState.canGoBack,
+        hasNext: zonesState.hasNextQuestion,
+        onBack: () {
+          ref.read(expandedAnswersProvider.notifier).collapse();
+          ref.read(semanticZonesProvider.notifier).goToPreviousZone();
+        },
+        onContinue: () {
+          ref.read(expandedAnswersProvider.notifier).collapse();
+          ref.read(semanticZonesProvider.notifier).goToNextZone();
+        },
       ),
     );
   }
