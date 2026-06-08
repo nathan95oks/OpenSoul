@@ -106,17 +106,19 @@ class HomeScreen extends ConsumerWidget {
   ) {
     return Column(
       children: [
-        // Árbol conceptual scrollable
+        // Pregunta activa + opciones (scrollable solo si hay muchas opciones)
         Expanded(
           child: SingleChildScrollView(
             child: Column(
               children: const [
                 NodeFlowCanvas(),
-                SizedBox(height: 12),
+                SizedBox(height: 8),
               ],
             ),
           ),
         ),
+        // Controles fijos Volver/Continuar — siempre visibles, sin scroll.
+        const GuidedNavBar(),
         // Panel fijo inferior: secuencia + botón traducir
         _BottomPanel(
           glosses: selectedWords,
