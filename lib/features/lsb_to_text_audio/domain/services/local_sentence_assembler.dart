@@ -199,6 +199,7 @@ class LocalSentenceAssembler {
         case _Role.emocion:       r.emotions.add(e.es); break;
         case _Role.urgencia:      r.urgencies.add(e.es); break;
         case _Role.tramite:       r.procedures.add(e.es); break;
+        case _Role.motivo:        r.purposes.add(e.es); break;
         case _Role.tiempo:        r.time ??= e.es; break;
       }
     }
@@ -285,11 +286,16 @@ class LocalSentenceAssembler {
     return _stitch(lead, sentences, tokens);
   }
 
-  /// tramite_id → solicitud administrativa.
+  /// tramite_id → solicitud administrativa / judicial.
+  ///
+  /// Cubre el flujo judicial amplio: acción, documento(s), motivo (para qué
+  /// se necesita), institución, apoyo de accesibilidad (intérprete/abogado),
+  /// para quién y plazo. Cada categoría ocupa su posición lógica.
   String _composeProcedure(_Roles r, List<String> tokens) {
     const lead = 'Quiero realizar un trámite.';
     final sentences = <String>[];
 
+    // Acción + documento(s) + tipo de gestión + institución.
     final verb = r.action ?? 'necesito tramitar';
     final what = _join([...r.documents, ...r.procedures]);
     var clause = verb;
@@ -297,8 +303,24 @@ class LocalSentenceAssembler {
     if (r.institution != null) clause += ' ${r.institution}';
     sentences.add('${_cap(clause)}.');
 
+    // Motivo / propósito judicial del documento.
+    if (r.purposes.isNotEmpty) {
+      sentences.add('Lo necesito para presentar ${_join(r.purposes)}.');
+    }
+    // Para quién es el trámite.
     if (r.subject != null && r.subject != 'yo') {
       sentences.add('El trámite es para ${r.subject}.');
+    }
+    // Apoyo de accesibilidad (intérprete de señas, abogado…).
+    if (r.services.isNotEmpty) {
+      sentences.add('Necesito ${_join(r.services)}.');
+    }
+    // Urgencia y plazo.
+    if (r.urgencies.isNotEmpty) {
+      sentences.add('${_cap(_join(r.urgencies))}.');
+    }
+    if (r.time != null) {
+      sentences.add('Lo necesito ${r.time}.');
     }
     if (r.unknown.isNotEmpty) {
       sentences.add('Detalles: ${_join(r.unknown)}.');
@@ -322,6 +344,9 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(clause)}.');
     } else if (r.institution != null) {
       sentences.add('Necesito acudir ${r.institution}.');
+    }
+    if (r.purposes.isNotEmpty) {
+      sentences.add('Quiero presentar ${_join(r.purposes)}.');
     }
     if (r.unknown.isNotEmpty) {
       sentences.add('Consulto sobre: ${_join(r.unknown)}.');
@@ -652,6 +677,11 @@ class LocalSentenceAssembler {
     'PARTIDA_NACIMIENTO': _Lex(_Role.documento, 'mi partida de nacimiento'),
     'LICENCIA': _Lex(_Role.documento, 'mi licencia de conducir'),
     'FACTURA': _Lex(_Role.documento, 'una factura'),
+    'ANTECEDENTES': _Lex(_Role.documento, 'mi certificado de antecedentes penales'),
+    'COPIA_DENUNCIA': _Lex(_Role.documento, 'una copia de la denuncia'),
+    'COPIA_SENTENCIA': _Lex(_Role.documento, 'una copia de la sentencia'),
+    'PODER': _Lex(_Role.documento, 'un poder notarial'),
+    'DECLARACION_JURADA': _Lex(_Role.documento, 'una declaración jurada'),
 
     // Lugares.
     'CALLE': _Lex(_Role.lugar, 'en la calle'),
@@ -675,6 +705,9 @@ class LocalSentenceAssembler {
     'HOSPITAL': _Lex(_Role.institucion, 'en el hospital'),
     'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
     'REGISTRO_CIVIL': _Lex(_Role.institucion, 'en el registro civil'),
+    'FISCALIA': _Lex(_Role.institucion, 'en la fiscalía'),
+    'JUZGADO': _Lex(_Role.institucion, 'en el juzgado'),
+    'NOTARIA': _Lex(_Role.institucion, 'en la notaría'),
 
     // Servicios.
     'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de señas'),
@@ -699,10 +732,11 @@ class LocalSentenceAssembler {
     'EMERGENCIA': _Lex(_Role.urgencia, 'es una emergencia'),
     'AYUDA': _Lex(_Role.urgencia, 'necesito ayuda'),
 
-    // Trámites / consultas.
-    'DENUNCIA': _Lex(_Role.tramite, 'una denuncia'),
-    'CONSULTA': _Lex(_Role.tramite, 'una consulta'),
-    'RECLAMO': _Lex(_Role.tramite, 'un reclamo'),
+    // Motivo / propósito del trámite (a qué se destina el documento).
+    'DENUNCIA': _Lex(_Role.motivo, 'una denuncia'),
+    'CONSULTA': _Lex(_Role.motivo, 'una consulta'),
+    'RECLAMO': _Lex(_Role.motivo, 'un reclamo'),
+    // Trámites (tipo de gestión).
     'RENOVACION': _Lex(_Role.tramite, 'una renovación'),
     'PAGO': _Lex(_Role.tramite, 'un pago'),
     'DUPLICADO': _Lex(_Role.tramite, 'un duplicado'),
@@ -732,6 +766,7 @@ enum _Role {
   emocion,
   urgencia,
   tramite,
+  motivo,
   tiempo,
 }
 
@@ -758,5 +793,6 @@ class _Roles {
   final List<String> emotions = [];
   final List<String> urgencies = [];
   final List<String> procedures = [];
+  final List<String> purposes = [];
   final List<String> unknown = [];
 }
