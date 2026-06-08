@@ -34,24 +34,56 @@ class LocalSentenceAssembler {
 
     final roles = _classify(tokens);
 
-    switch (contextId) {
-      case 'denuncia_robo':
-      case 'violencia':
-        return _composeIncident(contextId, roles, tokens);
-      case 'accidente':
-      case 'emergencia':
-        return _composeEmergency(contextId, roles, tokens);
-      case 'tramite_id':
-        return _composeProcedure(roles, tokens);
-      case 'orientacion':
-        return _composeGuidance(roles, tokens);
-      case 'perdida':
-        return _composeLoss(roles, tokens);
-      case 'otro':
-        return _composeWitness(roles, tokens);
-      default:
-        return _composeGeneric(contextId, roles, tokens);
+    final composed = switch (contextId) {
+      'denuncia_robo' || 'violencia' => _composeIncident(contextId, roles, tokens),
+      'accidente' || 'emergencia' => _composeEmergency(contextId, roles, tokens),
+      'tramite_id' => _composeProcedure(roles, tokens),
+      'orientacion' => _composeGuidance(roles, tokens),
+      'perdida' => _composeLoss(roles, tokens),
+      'otro' => _composeWitness(roles, tokens),
+      _ => _composeGeneric(contextId, roles, tokens),
+    };
+
+    // Regla de cobertura semántica: ninguna glosa seleccionada puede perderse.
+    return _ensureCoverage(composed, tokens);
+  }
+
+  /// Glosas inherentemente representadas por la 1ª persona ("me", "mi"…),
+  /// que no exigen aparición literal en el texto.
+  static const _inherentImplicit = {'YO'};
+
+  /// Red de seguridad de la regla de cobertura: si tras componer alguna glosa
+  /// no quedó representada (porque su rol no encajó en la plantilla del
+  /// contexto), la añadimos explícitamente para no perder valor probatorio.
+  ///
+  /// La detección es precisa: como los compositores emiten el lexema `es`
+  /// literal, una glosa está representada cuando todas las palabras
+  /// significativas de su lexema aparecen en el texto.
+  String _ensureCoverage(String text, List<String> tokens) {
+    final hay = _stripDiacritics(text.toLowerCase());
+    final missing = <String>[];
+    for (final t in tokens) {
+      if (_inherentImplicit.contains(t)) continue;
+      if (_isRepresented(t, hay)) continue;
+      final lex = _lexicon[t];
+      final frag = lex != null ? lex.es : t.toLowerCase().replaceAll('_', ' ');
+      if (!missing.contains(frag)) missing.add(frag);
     }
+    if (missing.isEmpty) return text;
+    return '$text Asimismo, menciono: ${_join(missing)}.';
+  }
+
+  /// `true` si el lexema de la glosa ya está emitido (todas sus palabras
+  /// significativas presentes). Para glosas desconocidas usa la raíz.
+  bool _isRepresented(String token, String hayLower) {
+    final lex = _lexicon[token];
+    if (lex == null) return _glossCovered(token, hayLower);
+    final words = _stripDiacritics(lex.es.toLowerCase())
+        .split(RegExp(r'\s+'))
+        .where((w) => w.length >= 3)
+        .toList();
+    if (words.isEmpty) return true; // lexema sin palabras significativas (ej. "yo")
+    return words.every(hayLower.contains);
   }
 
   // ───────────────────────── Detección de degeneración ─────────────────────
@@ -107,18 +139,35 @@ class LocalSentenceAssembler {
     for (final g in glosses) {
       if (_glossCovered(g, haystack)) hits++;
     }
-    final coverage = hits / glosses.length;
-    return coverage < 0.5;
+    // Regla estricta de cobertura: el backend solo se acepta si representa
+    // TODAS las glosas seleccionadas. Si pierde aunque sea una, se considera
+    // degenerado y se usa el motor local (que garantiza cobertura completa).
+    // Esto evita además que el backend introduzca o sustituya información.
+    return hits < glosses.length;
   }
 
   /// `true` si alguna raíz significativa de la glosa aparece en el texto.
+  ///
+  /// Considera dos vías: (1) la raíz de la propia glosa y (2) las palabras
+  /// del lexema en español (para reconocer conjugaciones: ROBAR→"robó").
   bool _glossCovered(String gloss, String haystackLower) {
     final parts = _stripDiacritics(gloss.toLowerCase())
         .split(RegExp(r'[ _/]+'))
         .where((p) => p.length >= 3); // ignora partículas cortas (de, la…)
     for (final p in parts) {
-      final stem = p.length <= 4 ? p : p.substring(0, 4);
+      // Raíz de 3 letras: tolera conjugación (robar/robó comparten "rob").
+      final stem = p.length <= 3 ? p : p.substring(0, 3);
       if (haystackLower.contains(stem)) return true;
+    }
+    // Vía lexema: alguna palabra significativa del equivalente en español.
+    final lex = _lexicon[_normalize(gloss)];
+    if (lex != null) {
+      final words = _stripDiacritics(lex.es.toLowerCase())
+          .split(RegExp(r'\s+'))
+          .where((w) => w.length >= 4);
+      for (final w in words) {
+        if (haystackLower.contains(w)) return true;
+      }
     }
     return false;
   }
@@ -186,7 +235,13 @@ class LocalSentenceAssembler {
       sentences.add('$clause.');
     }
 
+    final affected = _affectedSubjectLine(r);
+    if (affected != null) sentences.add(affected);
     sentences.addAll(_stateSentences(r));
+    final inst = _institutionLine(r, 'Quiero presentar la denuncia');
+    if (inst != null) sentences.add(inst);
+    final proc = _procedureLine(r);
+    if (proc != null) sentences.add(proc);
     if (r.unknown.isNotEmpty) {
       sentences.add('También menciono: ${_join(r.unknown)}.');
     }
@@ -205,7 +260,10 @@ class LocalSentenceAssembler {
     if (state.isNotEmpty) {
       var clause = state;
       if (r.place != null) clause += ' ${r.place}';
+      if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
       sentences.add('${_cap(clause)}.');
+    } else if (r.time != null) {
+      sentences.add('Ocurrió ${r.time}.');
     }
 
     if (r.services.isNotEmpty) {
@@ -217,6 +275,10 @@ class LocalSentenceAssembler {
     if (r.perpetrator != null && state.isEmpty) {
       sentences.add('${_cap(_subjectPhrase(r))} necesita ayuda.');
     }
+    final inst = _institutionLine(r, 'Necesito atención');
+    if (inst != null) sentences.add(inst);
+    final proc = _procedureLine(r);
+    if (proc != null) sentences.add(proc);
     if (r.unknown.isNotEmpty) {
       sentences.add('Detalles: ${_join(r.unknown)}.');
     }
@@ -278,10 +340,17 @@ class LocalSentenceAssembler {
       if (r.place != null) clause += ' ${r.place}';
       if (r.time != null) clause += ' ${r.time}';
       sentences.add('$clause.');
+    } else if (r.time != null || r.place != null) {
+      var clause = 'Ocurrió';
+      if (r.time != null) clause += ' ${r.time}';
+      if (r.place != null) clause += ' ${r.place}';
+      sentences.add('$clause.');
     }
-    if (r.services.isNotEmpty) {
-      sentences.add('Necesito ${_join(r.services)}.');
-    }
+    sentences.addAll(_stateSentences(r)); // emoción, urgencia, servicio
+    final inst = _institutionLine(r, 'Quiero reportarlo');
+    if (inst != null) sentences.add(inst);
+    final proc = _procedureLine(r);
+    if (proc != null) sentences.add(proc);
     if (r.unknown.isNotEmpty) {
       sentences.add('Detalles: ${_join(r.unknown)}.');
     }
@@ -322,6 +391,11 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(clause)}.');
     }
 
+    sentences.addAll(_stateSentences(r)); // emoción, urgencia, servicio
+    final inst = _institutionLine(r, 'Quiero declarar lo sucedido');
+    if (inst != null) sentences.add(inst);
+    final proc = _procedureLine(r);
+    if (proc != null) sentences.add(proc);
     if (r.unknown.isNotEmpty) {
       sentences.add('También menciono: ${_join(r.unknown)}.');
     }
@@ -339,14 +413,18 @@ class LocalSentenceAssembler {
       var clause = verb;
       if (what.isNotEmpty) clause += ' $what';
       if (r.institution != null) clause += ' ${r.institution}';
+      if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
       sentences.add('${_cap(clause)}.');
     } else if (what.isNotEmpty) {
-      sentences.add('${_cap(what)}.');
+      var clause = what;
+      if (r.institution != null) clause += ' ${r.institution}';
+      sentences.add('${_cap(clause)}.');
+    } else if (r.institution != null) {
+      sentences.add('Acudo ${r.institution}.');
     }
+    if (r.place != null) sentences.add('${_cap(r.place!)}.');
+    // _stateSentences ya incluye servicios — no se repite aparte.
     sentences.addAll(_stateSentences(r));
-    if (r.services.isNotEmpty) {
-      sentences.add('Necesito ${_join(r.services)}.');
-    }
     if (r.unknown.isNotEmpty) {
       sentences.add('${_cap(_join(r.unknown))}.');
     }
@@ -396,6 +474,23 @@ class LocalSentenceAssembler {
     if (r.services.isNotEmpty) out.add('Necesito ${_join(r.services)}.');
     return out;
   }
+
+  /// Oración para la institución donde se acude/denuncia. `lead` adapta el
+  /// verbo al contexto ("Quiero presentar la denuncia", "Necesito atención"…)
+  /// y se combina con el lexema locativo de la institución ("en la policía").
+  String? _institutionLine(_Roles r, String lead) =>
+      r.institution == null ? null : '$lead ${r.institution}.';
+
+  /// Oración para trámites/solicitudes explícitas (DENUNCIA, RECLAMO…).
+  String? _procedureLine(_Roles r) =>
+      r.procedures.isEmpty ? null : 'Solicito ${_join(r.procedures)}.';
+
+  /// Oración para sujetos co-afectados distintos del declarante (familia,
+  /// hijo, esposo…). "yo" es implícito en la 1ª persona.
+  String? _affectedSubjectLine(_Roles r) =>
+      (r.subject == null || r.subject == 'yo')
+          ? null
+          : 'El hecho también afectó a ${r.subject}.';
 
   /// Une el lead de contexto con las oraciones del cuerpo. Si el cuerpo
   /// quedó vacío (todas las glosas desconocidas y sin rol), cae a un
