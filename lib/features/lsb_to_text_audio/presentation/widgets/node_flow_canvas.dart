@@ -35,43 +35,24 @@ class NodeFlowCanvas extends ConsumerWidget {
     final reachedZones = zonesState.visitedZoneIds.length.clamp(1, totalZones);
 
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Contexto como chip discreto (breadcrumb) — ya no es el foco.
-          _ContextChip(emoji: ctx.emoji, label: ctx.name),
+          // ── Cabecera compacta: contexto (chip) + progreso ──────────
+          Center(child: _ContextChip(emoji: ctx.emoji, label: ctx.name)),
           const SizedBox(height: 14),
-          // Barra de progreso naranja: posición dentro del cuestionario.
           _ProgressBar(reached: reachedZones, total: totalZones),
+          const SizedBox(height: 22),
 
-          // Pares pregunta → respuesta de zonas ya visitadas (compactos).
-          for (final zoneId in orderedVisited) ...[
-            _DownArrow(dimmed: false),
-            _QuestionAnswerRow(
-              zoneId: zoneId,
-              zonesState: zonesState,
-              onEditTap: () {
-                ref.read(expandedAnswersProvider.notifier).collapse();
-                ref.read(semanticZonesProvider.notifier).activateZone(zoneId);
-              },
-            ),
-          ],
-
-          // Zona activa: pregunta PROTAGONISTA + opciones + controles.
+          // ── Bloque ACTIVO (foco principal, arriba del todo) ────────
+          // La pregunta y sus opciones ya no quedan enterradas al final
+          // del flujo: son lo primero y siempre visible.
           if (activeZone != null) ...[
-            _DownArrow(dimmed: orderedVisited.isEmpty),
-            const SizedBox(height: 6),
-            _ActiveQuestion(
+            _ActiveCard(
               question: activeZone.question.isNotEmpty
                   ? activeZone.question
                   : activeZone.hint,
-            ),
-            const SizedBox(height: 16),
-            // Opciones: SuggestedGlossPanel
-            const _OptionsPanel(),
-            const SizedBox(height: 8),
-            _NavControls(
               canGoBack: zonesState.canGoBack,
               hasNext: zonesState.hasNextQuestion,
               onBack: () {
@@ -83,6 +64,22 @@ class NodeFlowCanvas extends ConsumerWidget {
                 ref.read(semanticZonesProvider.notifier).goToNextZone();
               },
             ),
+          ],
+
+          // ── Relato construido (historial compacto, secundario) ─────
+          if (orderedVisited.isNotEmpty) ...[
+            const SizedBox(height: 26),
+            const _HistoryHeader(),
+            const SizedBox(height: 10),
+            for (final zoneId in orderedVisited)
+              _CompactAnswerRow(
+                zoneId: zoneId,
+                zonesState: zonesState,
+                onEditTap: () {
+                  ref.read(expandedAnswersProvider.notifier).collapse();
+                  ref.read(semanticZonesProvider.notifier).activateZone(zoneId);
+                },
+              ),
           ],
         ],
       ),
@@ -165,12 +162,44 @@ class _ProgressBar extends StatelessWidget {
   }
 }
 
-class _QuestionAnswerRow extends StatelessWidget {
+/// Encabezado de la sección de historial.
+class _HistoryHeader extends StatelessWidget {
+  const _HistoryHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          'TU RELATO HASTA AHORA',
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+            color: Colors.black.withValues(alpha: 0.45),
+            letterSpacing: 1.0,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Container(
+            height: 1,
+            color: Colors.black.withValues(alpha: 0.10),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Fila compacta de pregunta respondida (historial). Sustituye al árbol
+/// vertical de flechas grandes: una sola línea por respuesta, en
+/// horizontal, tocable para volver a editar esa pregunta.
+class _CompactAnswerRow extends StatelessWidget {
   final String zoneId;
   final SemanticZonesState zonesState;
   final VoidCallback onEditTap;
 
-  const _QuestionAnswerRow({
+  const _CompactAnswerRow({
     required this.zoneId,
     required this.zonesState,
     required this.onEditTap,
@@ -188,84 +217,145 @@ class _QuestionAnswerRow extends StatelessWidget {
     final question = (zone.zone.question as String).isNotEmpty
         ? zone.zone.question as String
         : zone.zone.hint as String;
-    final answers = zonesState.zoneAnswers[zoneId] ?? [];
+    final answers = (zonesState.zoneAnswers[zoneId] ?? const <String>[]);
 
-    return Column(
-      children: [
-        // Pregunta
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.04),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Colors.black.withValues(alpha: 0.12),
-              width: 1.5,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onEditTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.black.withValues(alpha: 0.10)),
             ),
-          ),
-          child: Text(
-            question,
-            style: const TextStyle(
-              fontSize: 13,
-              fontStyle: FontStyle.italic,
-              color: Color(0xFF555555),
-              fontWeight: FontWeight.w500,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        question,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: Colors.black.withValues(alpha: 0.5),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      if (answers.isEmpty)
+                        Text(
+                          'Sin responder',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.black.withValues(alpha: 0.35),
+                          ),
+                        )
+                      else
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: answers
+                              .map((g) => _MiniChip(label: g))
+                              .toList(),
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Icon(Icons.edit_outlined,
+                    size: 16, color: _orange.withValues(alpha: 0.9)),
+              ],
             ),
           ),
         ),
-        const SizedBox(height: 8),
-        _RightArrow(dimmed: false),
-        const SizedBox(height: 8),
-        // Respuestas (clickable para editar)
-        if (answers.isEmpty)
-          _SkippedTag()
-        else
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: answers.map((gloss) => GestureDetector(
-              onTap: onEditTap,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                decoration: BoxDecoration(
-                  color: _orange,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: _orange, width: 2),
-                ),
-                child: Text(
-                  gloss.replaceAll('_', ' ').toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    letterSpacing: 0.3,
-                  ),
-                ),
-              ),
-            )).toList(),
-          ),
-      ],
+      ),
     );
   }
 }
 
-class _SkippedTag extends StatelessWidget {
+/// Chip pequeño de respuesta dentro del historial compacto.
+class _MiniChip extends StatelessWidget {
+  final String label;
+  const _MiniChip({required this.label});
+
+  static const _orange = Color(0xFFFF6B00);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.2)),
+        color: _orange,
+        borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        'Saltado',
-        style: TextStyle(
+        label.replaceAll('_', ' ').toUpperCase(),
+        style: const TextStyle(
           fontSize: 12,
-          color: Colors.black.withValues(alpha: 0.4),
-          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+          letterSpacing: 0.2,
         ),
+      ),
+    );
+  }
+}
+
+/// Tarjeta focal de la pregunta activa: agrupa la pregunta protagonista,
+/// las opciones de glosas y los controles Volver/Continuar dentro de un
+/// bloque visual contenido. Es lo primero que ve el usuario, de modo que
+/// la selección nunca queda enterrada al final del flujo.
+class _ActiveCard extends StatelessWidget {
+  final String question;
+  final bool canGoBack;
+  final bool hasNext;
+  final VoidCallback onBack;
+  final VoidCallback onContinue;
+
+  const _ActiveCard({
+    required this.question,
+    required this.canGoBack,
+    required this.hasNext,
+    required this.onBack,
+    required this.onContinue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 18, 14, 14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.10)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _ActiveQuestion(question: question),
+          const SizedBox(height: 16),
+          const _OptionsPanel(),
+          const SizedBox(height: 10),
+          _NavControls(
+            canGoBack: canGoBack,
+            hasNext: hasNext,
+            onBack: onBack,
+            onContinue: onContinue,
+          ),
+        ],
       ),
     );
   }
@@ -443,72 +533,3 @@ class _OptionsPanel extends ConsumerWidget {
   }
 }
 
-class _DownArrow extends StatelessWidget {
-  final bool dimmed;
-  const _DownArrow({required this.dimmed});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = Colors.black.withValues(alpha: dimmed ? 0.2 : 0.5);
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Column(
-        children: [
-          Container(width: 1.5, height: 20, color: color),
-          ClipPath(
-            clipper: _DownTriangle(),
-            child: Container(width: 10, height: 7, color: color),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RightArrow extends StatelessWidget {
-  final bool dimmed;
-  const _RightArrow({required this.dimmed});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = Colors.black.withValues(alpha: dimmed ? 0.2 : 0.4);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(width: 24, height: 1.5, color: color),
-        ClipPath(
-          clipper: _RightTriangle(),
-          child: Container(width: 7, height: 10, color: color),
-        ),
-      ],
-    );
-  }
-}
-
-class _DownTriangle extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..moveTo(0, 0)
-      ..lineTo(size.width, 0)
-      ..lineTo(size.width / 2, size.height)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(_) => false;
-}
-
-class _RightTriangle extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    return Path()
-      ..moveTo(0, 0)
-      ..lineTo(0, size.height)
-      ..lineTo(size.width, size.height / 2)
-      ..close();
-  }
-
-  @override
-  bool shouldReclip(_) => false;
-}
