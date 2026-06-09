@@ -14,10 +14,15 @@ class AdaptiveNodeLayout extends StatelessWidget {
   final List<LsbCard> cards;
   final void Function(LsbCard) onCardTap;
 
+  /// Glosas actualmente seleccionadas en la zona activa — para resaltar
+  /// las tarjetas elegidas (selección múltiple / deselección).
+  final Set<String> selectedGlosses;
+
   const AdaptiveNodeLayout({
     super.key,
     required this.cards,
     required this.onCardTap,
+    this.selectedGlosses = const {},
   });
 
   @override
@@ -40,6 +45,7 @@ class AdaptiveNodeLayout extends StatelessWidget {
       itemCount: cards.length,
       itemBuilder: (_, i) => SemanticNode(
         card: cards[i],
+        isSelected: selectedGlosses.contains(cards[i].gloss),
         onTap: () => onCardTap(cards[i]),
       ),
     );

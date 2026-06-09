@@ -63,10 +63,12 @@ final allCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   return allCards;
 });
 
-/// Tope duro de tarjetas devueltas en modo guiado. Suficiente para que el
-/// usuario sordo tenga opciones reales pero impide que el modo "Ver más"
-/// muestre 30+ tarjetas y vuelva la experiencia confusa.
-const int _kMaxGuidedAnswers = 8;
+/// Tope duro de tarjetas devueltas en modo guiado. La vista inicial muestra
+/// solo 6 (el resto tras "Ver más"), así que un tope de 12 mantiene baja la
+/// carga cognitiva inicial pero permite que catálogos amplios —como los
+/// documentos judiciales (antecedentes, copias, poder, declaración jurada)—
+/// sean todos alcanzables.
+const int _kMaxGuidedAnswers = 12;
 
 /// Opciones de respuesta para la pregunta guiada actual.
 ///
@@ -105,6 +107,12 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final zoneCategories = activeZone.cardCategories.toSet();
   final zoneSubcategories = activeZone.cardSubcategories.toSet();
   final hasSubcategoryFilter = zoneSubcategories.isNotEmpty;
+
+  // Contextos de tarjeta que cubre este contexto (los fusionados abarcan
+  // varios ids; el resto, solo el propio). Permite migrar las glosas de
+  // 'tramite_id' y 'perdida' al contexto 'orientacion' sin tocar el datasource.
+  final sourceContexts = cardSourceContexts(context.id);
+  bool matchesContext(LsbCard c) => sourceContexts.any(c.contexts.contains);
 
   bool matchesZone(LsbCard c) {
     if (!zoneCategories.contains(c.categoryId)) return false;
@@ -146,7 +154,7 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   // Primero: tarjetas específicas del contexto.
   final specific = allCards.where((c) {
     if (!matchesZone(c)) return false;
-    return c.contexts.contains(context.id);
+    return matchesContext(c);
   }).toList()
     ..sort(comparator);
 
@@ -163,11 +171,23 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   // Si no llenamos el tope, completar con tarjetas 'general' de la zona.
   final fillers = allCards.where((c) {
     if (!matchesZone(c)) return false;
-    if (c.contexts.contains(context.id)) return false; // ya están
+    if (matchesContext(c)) return false; // ya están
     return c.contexts.contains('general');
   }).toList()
     ..sort(comparator);
 
   final combined = [...specific, ...fillers];
+
+  // Red de seguridad: si ninguna tarjeta del contexto ni 'general' encaja en
+  // la zona, no dejamos la pregunta vacía — mostramos las tarjetas de la
+  // categoría. Es el caso del contexto 'otro' (declaración de testigo), que
+  // reutiliza categorías de incidente (Agresión) no etiquetadas como
+  // 'general'. Solo aplica a zonas NO estrictas.
+  if (combined.isEmpty) {
+    return (allCards.where(matchesZone).toList()..sort(comparator))
+        .take(_kMaxGuidedAnswers)
+        .toList();
+  }
+
   return combined.take(_kMaxGuidedAnswers).toList();
 });

@@ -1,0 +1,171 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+
+/// Auditoría de cobertura semántica del motor local.
+/// Para cada caso comprueba que TODA glosa quede representada en el texto.
+void main() {
+  const asm = LocalSentenceAssembler();
+
+  // Casos por contexto: mínimos, medios, complejos y selección múltiple.
+  final cases = <(String, List<String>)>[
+    // robo
+    ('denuncia_robo', ['ROBAR']),
+    ('denuncia_robo', ['HOMBRE', 'ROBAR', 'CELULAR']),
+    ('denuncia_robo', ['HOMBRE', 'ALTO', 'TATUAJE', 'ROBAR', 'CELULAR', 'CALLE', 'NOCHE']),
+    ('denuncia_robo', ['ROBAR', 'CELULAR', 'DINERO', 'POLICIA', 'MIEDO', 'HOY']),
+    // violencia (ejemplos del usuario)
+    ('violencia', ['AMENAZAR']),
+    ('violencia', ['AMENAZAR', 'AYUDA', 'PELO_CORTO', 'POLICIA', 'ASUSTADO']),
+    ('violencia', ['ABUSO', 'TATUAJE', 'DEFENSORIA', 'TRISTE', 'URGENTE', 'HOY']),
+    ('violencia', ['GOLPEAR', 'HOMBRE', 'ALTO', 'MIEDO', 'POLICIA', 'ABOGADO']),
+    // accidente
+    ('accidente', ['DOLOR']),
+    ('accidente', ['DOLOR', 'AMBULANCIA', 'CALLE', 'HOY']),
+    ('accidente', ['DOLOR', 'ASUSTADO', 'AMBULANCIA', 'HOSPITAL', 'URGENTE']),
+    // emergencia
+    ('emergencia', ['EMERGENCIA']),
+    ('emergencia', ['ENFERMO', 'AMBULANCIA', 'URGENTE', 'HOSPITAL']),
+    // documentos / trámite (contexto judicial ampliado)
+    ('tramite_id', ['TRAMITAR', 'CARNET', 'SEGIP']),
+    ('tramite_id', ['RENOVAR', 'LICENCIA', 'PAGO', 'SEGIP', 'HIJO']),
+    ('tramite_id', ['ANTECEDENTES', 'FISCALIA']),
+    ('tramite_id', ['TRAMITAR', 'ANTECEDENTES', 'DENUNCIA', 'FISCALIA', 'INTERPRETE', 'HOY']),
+    ('tramite_id', ['SOLICITAR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO']),
+    ('tramite_id', ['CORREGIR', 'DECLARACION_JURADA', 'NOTARIA', 'HIJO', 'AHORA']),
+    // orientación / asistencia legal
+    ('orientacion', ['ABOGADO', 'DEFENSORIA']),
+    ('orientacion', ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA', 'HOY']),
+    // pérdida de documentos
+    ('perdida', ['PERDER', 'CARNET']),
+    ('perdida', ['DOCUMENTO', 'CALLE', 'AYER', 'POLICIA', 'URGENTE']),
+    // testigo
+    ('otro', ['ROBAR']),
+    ('otro', ['HOMBRE', 'TATUAJE', 'GOLPEAR', 'CALLE', 'NOCHE', 'DEFENSORIA']),
+  ];
+
+  // Glosas inherentemente implícitas (1ª persona) que no exigen aparición literal.
+  const implicit = {'YO'};
+
+  test('cobertura semántica por contexto', () {
+    var totalMissing = 0;
+    for (final (ctx, glosses) in cases) {
+      final out = asm.assemble(contextId: ctx, glosses: glosses);
+      final hay = _strip(out.toLowerCase());
+      final missing = glosses
+          .where((g) => !implicit.contains(g))
+          .where((g) => !_covered(g, hay))
+          .toList();
+      totalMissing += missing.length;
+      // ignore: avoid_print
+      print('[$ctx] ${glosses.join('+')}\n   → "$out"'
+          '${missing.isEmpty ? '' : '\n   ✗ FALTAN: $missing'}\n');
+    }
+    expect(totalMissing, 0, reason: 'Hay glosas no representadas.');
+  });
+
+  // ── Sistema reducido a 5 contextos + enrutado del contexto fusionado ──
+  test('5 contextos oficiales con enrutado de fusión', () async {
+    // 1) La UI ofrece exactamente 5 contextos.
+    final ids = availableContexts.map((c) => c.id).toList();
+    final names = availableContexts.map((c) => c.name).toList();
+    // ignore: avoid_print
+    print('CONTEXTOS (${ids.length}): $names');
+    expect(ids, ['denuncia_robo', 'violencia', 'accidente', 'otro', 'orientacion']);
+
+    // 2) Mapa glosa → categoría desde el catálogo (sin tocar datasource).
+    final ds = LocalCardsDataSource();
+    final all = <LsbCard>[];
+    for (final cat in await ds.getCategories()) {
+      all.addAll(await ds.getCardsByCategory(cat));
+    }
+    String? catOf(String g) {
+      for (final c in all) {
+        if (c.gloss == g) return c.categoryId;
+      }
+      return null;
+    }
+
+    // 3) Enrutado del contexto fusionado 'orientacion'.
+    String route(List<String> gl) =>
+        resolveAssemblerContext('orientacion', gl, catOf);
+    expect(route(['PERDER', 'CELULAR']), 'perdida');
+    expect(route(['CELULAR', 'CALLE']), 'perdida'); // objeto → pérdida
+    expect(route(['CARNET']), 'tramite_id');
+    expect(route(['ANTECEDENTES', 'FISCALIA']), 'tramite_id');
+    expect(route(['TRAMITAR', 'COPIA_DENUNCIA', 'JUZGADO']), 'tramite_id');
+    expect(route(['INTERPRETE', 'DEFENSORIA']), 'orientacion');
+    expect(route(['CONSULTAR', 'ABOGADO']), 'orientacion');
+    // Los contextos directos no se reenrutan.
+    expect(resolveAssemblerContext('denuncia_robo', ['ROBAR'], catOf),
+        'denuncia_robo');
+
+    // 4) Cobertura end-to-end del contexto fusionado (las pruebas del enunciado).
+    const asm = LocalSentenceAssembler();
+    final mergedCases = <List<String>>[
+      ['PERDER', 'CELULAR', 'CALLE', 'AYER'], // documento/objeto perdido
+      ['DOCUMENTO', 'PERDER', 'POLICIA'],
+      ['TRAMITAR', 'ANTECEDENTES', 'FISCALIA', 'INTERPRETE', 'HOY'],
+      ['SOLICITAR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO'],
+      ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA'], // consulta / derechos
+      ['CERTIFICADO', 'NOTARIA', 'AHORA'],
+    ];
+    const implicit = {'YO'};
+    var missing = 0;
+    for (final gl in mergedCases) {
+      final ctx = route(gl);
+      final out = asm.assemble(contextId: ctx, glosses: gl);
+      final hay = _strip(out.toLowerCase());
+      final miss = gl
+          .where((g) => !implicit.contains(g))
+          .where((g) => !_covered(g, hay))
+          .toList();
+      missing += miss.length;
+      // ignore: avoid_print
+      print('[orientacion→$ctx] ${gl.join('+')}\n   → "$out"'
+          '${miss.isEmpty ? '' : '\n   ✗ FALTAN: $miss'}\n');
+    }
+    expect(missing, 0, reason: 'El contexto fusionado pierde glosas.');
+  });
+}
+
+// Sinónimos de lexema para glosas no cognadas con su forma en español.
+const _synonyms = {
+  'ABUSO': 'agredi', // "agredió sexualmente"
+  'PELO_CORTO': 'cabello',
+  'PELO_LARGO': 'cabello',
+  'BLANCO_PIEL': 'piel',
+  'GORDO': 'robust',
+  'MASCARA': 'rostro',
+  'MOCHILA_USADA': 'mochila',
+  'TRES_MAS': 'personas',
+  'DOS': 'personas',
+  'SOLO': 'persona',
+  'MAÑANA': 'mañana',
+};
+
+bool _covered(String gloss, String hayLower) {
+  final syn = _synonyms[gloss];
+  if (syn != null && hayLower.contains(_strip(syn))) return true;
+  final parts = _strip(gloss.toLowerCase())
+      .split(RegExp(r'[ _/]+'))
+      .where((p) => p.length >= 3);
+  for (final p in parts) {
+    // Raíz de 3 letras: tolera conjugación (robar/robó comparten "rob").
+    final stem = p.length <= 3 ? p : p.substring(0, 3);
+    if (hayLower.contains(stem)) return true;
+  }
+  return false;
+}
+
+String _strip(String input) {
+  const from = 'áàäâéèëêíìïîóòöôúùüûñ';
+  const to = 'aaaaeeeeiiiioooouuuun';
+  var out = input;
+  for (var i = 0; i < from.length; i++) {
+    out = out.replaceAll(from[i], to[i]);
+  }
+  return out;
+}

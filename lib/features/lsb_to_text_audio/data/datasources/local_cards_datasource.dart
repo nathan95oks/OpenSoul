@@ -377,6 +377,22 @@ class LocalCardsDataSource {
     LsbCard(id: 'do09', gloss: 'FACTURA', displayText: 'FACTURA', iconUrl: '',
       categoryId: 'Documentos', subcategoryId: 'Pago', contexts: ['tramite_id'],
       priority: 6, suggestedNextCardIds: ['in05'], isFrequent: false, isEmergency: false, semanticIcon: 'receipt_long'),
+    // Documentos judiciales / legales (NUEVO)
+    LsbCard(id: 'do10', gloss: 'ANTECEDENTES', displayText: 'ANTECEDENTES PENALES', iconUrl: '',
+      categoryId: 'Documentos', subcategoryId: 'Judicial', contexts: ['tramite_id'],
+      priority: 7, suggestedNextCardIds: ['in12'], isFrequent: true, isEmergency: false, semanticIcon: 'verified_user'),
+    LsbCard(id: 'do11', gloss: 'COPIA_DENUNCIA', displayText: 'COPIA DE DENUNCIA', iconUrl: '',
+      categoryId: 'Documentos', subcategoryId: 'Judicial', contexts: ['tramite_id'],
+      priority: 8, suggestedNextCardIds: ['in12'], isFrequent: true, isEmergency: false, semanticIcon: 'content_copy'),
+    LsbCard(id: 'do12', gloss: 'COPIA_SENTENCIA', displayText: 'COPIA DE SENTENCIA', iconUrl: '',
+      categoryId: 'Documentos', subcategoryId: 'Judicial', contexts: ['tramite_id'],
+      priority: 9, suggestedNextCardIds: ['in13'], isFrequent: false, isEmergency: false, semanticIcon: 'gavel'),
+    LsbCard(id: 'do13', gloss: 'PODER', displayText: 'PODER NOTARIAL', iconUrl: '',
+      categoryId: 'Documentos', subcategoryId: 'Legal', contexts: ['tramite_id'],
+      priority: 10, suggestedNextCardIds: ['in14'], isFrequent: false, isEmergency: false, semanticIcon: 'draw'),
+    LsbCard(id: 'do14', gloss: 'DECLARACION_JURADA', displayText: 'DECLARACIÓN JURADA', iconUrl: '',
+      categoryId: 'Documentos', subcategoryId: 'Legal', contexts: ['tramite_id'],
+      priority: 11, suggestedNextCardIds: ['in14'], isFrequent: false, isEmergency: false, semanticIcon: 'assignment'),
 
     // ═══════════════════════════════════════════════════════════
     // LUGARES — Cotidianos (NUEVO)
@@ -442,6 +458,16 @@ class LocalCardsDataSource {
     LsbCard(id: 'in03', gloss: 'REGISTRO_CIVIL', displayText: 'REG. CIVIL', iconUrl: '',
       categoryId: 'Instituciones', subcategoryId: 'Civil', contexts: ['tramite_id'],
       priority: 6, suggestedNextCardIds: ['do05'], isFrequent: false, isEmergency: false, semanticIcon: 'menu_book'),
+    // Instituciones judiciales (NUEVO)
+    LsbCard(id: 'in12', gloss: 'FISCALIA', displayText: 'FISCALÍA', iconUrl: '',
+      categoryId: 'Instituciones', subcategoryId: 'Judicial', contexts: ['tramite_id', 'orientacion'],
+      priority: 7, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'gavel'),
+    LsbCard(id: 'in13', gloss: 'JUZGADO', displayText: 'JUZGADO', iconUrl: '',
+      categoryId: 'Instituciones', subcategoryId: 'Judicial', contexts: ['tramite_id', 'orientacion'],
+      priority: 8, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'balance'),
+    LsbCard(id: 'in14', gloss: 'NOTARIA', displayText: 'NOTARÍA', iconUrl: '',
+      categoryId: 'Instituciones', subcategoryId: 'Legal', contexts: ['tramite_id', 'orientacion'],
+      priority: 9, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'draw'),
 
     // ═══════════════════════════════════════════════════════════
     // SERVICIOS — Ayuda y atención
