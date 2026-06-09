@@ -108,6 +108,12 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final zoneSubcategories = activeZone.cardSubcategories.toSet();
   final hasSubcategoryFilter = zoneSubcategories.isNotEmpty;
 
+  // Contextos de tarjeta que cubre este contexto (los fusionados abarcan
+  // varios ids; el resto, solo el propio). Permite migrar las glosas de
+  // 'tramite_id' y 'perdida' al contexto 'orientacion' sin tocar el datasource.
+  final sourceContexts = cardSourceContexts(context.id);
+  bool matchesContext(LsbCard c) => sourceContexts.any(c.contexts.contains);
+
   bool matchesZone(LsbCard c) {
     if (!zoneCategories.contains(c.categoryId)) return false;
     if (hasSubcategoryFilter && !zoneSubcategories.contains(c.subcategoryId)) {
@@ -148,7 +154,7 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   // Primero: tarjetas específicas del contexto.
   final specific = allCards.where((c) {
     if (!matchesZone(c)) return false;
-    return c.contexts.contains(context.id);
+    return matchesContext(c);
   }).toList()
     ..sort(comparator);
 
@@ -165,7 +171,7 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   // Si no llenamos el tope, completar con tarjetas 'general' de la zona.
   final fillers = allCards.where((c) {
     if (!matchesZone(c)) return false;
-    if (c.contexts.contains(context.id)) return false; // ya están
+    if (matchesContext(c)) return false; // ya están
     return c.contexts.contains('general');
   }).toList()
     ..sort(comparator);

@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 
 /// Auditoría de cobertura semántica del motor local.
 /// Para cada caso comprueba que TODA glosa quede representada en el texto.
@@ -61,6 +64,70 @@ void main() {
           '${missing.isEmpty ? '' : '\n   ✗ FALTAN: $missing'}\n');
     }
     expect(totalMissing, 0, reason: 'Hay glosas no representadas.');
+  });
+
+  // ── Sistema reducido a 5 contextos + enrutado del contexto fusionado ──
+  test('5 contextos oficiales con enrutado de fusión', () async {
+    // 1) La UI ofrece exactamente 5 contextos.
+    final ids = availableContexts.map((c) => c.id).toList();
+    final names = availableContexts.map((c) => c.name).toList();
+    // ignore: avoid_print
+    print('CONTEXTOS (${ids.length}): $names');
+    expect(ids, ['denuncia_robo', 'violencia', 'accidente', 'otro', 'orientacion']);
+
+    // 2) Mapa glosa → categoría desde el catálogo (sin tocar datasource).
+    final ds = LocalCardsDataSource();
+    final all = <LsbCard>[];
+    for (final cat in await ds.getCategories()) {
+      all.addAll(await ds.getCardsByCategory(cat));
+    }
+    String? catOf(String g) {
+      for (final c in all) {
+        if (c.gloss == g) return c.categoryId;
+      }
+      return null;
+    }
+
+    // 3) Enrutado del contexto fusionado 'orientacion'.
+    String route(List<String> gl) =>
+        resolveAssemblerContext('orientacion', gl, catOf);
+    expect(route(['PERDER', 'CELULAR']), 'perdida');
+    expect(route(['CELULAR', 'CALLE']), 'perdida'); // objeto → pérdida
+    expect(route(['CARNET']), 'tramite_id');
+    expect(route(['ANTECEDENTES', 'FISCALIA']), 'tramite_id');
+    expect(route(['TRAMITAR', 'COPIA_DENUNCIA', 'JUZGADO']), 'tramite_id');
+    expect(route(['INTERPRETE', 'DEFENSORIA']), 'orientacion');
+    expect(route(['CONSULTAR', 'ABOGADO']), 'orientacion');
+    // Los contextos directos no se reenrutan.
+    expect(resolveAssemblerContext('denuncia_robo', ['ROBAR'], catOf),
+        'denuncia_robo');
+
+    // 4) Cobertura end-to-end del contexto fusionado (las pruebas del enunciado).
+    const asm = LocalSentenceAssembler();
+    final mergedCases = <List<String>>[
+      ['PERDER', 'CELULAR', 'CALLE', 'AYER'], // documento/objeto perdido
+      ['DOCUMENTO', 'PERDER', 'POLICIA'],
+      ['TRAMITAR', 'ANTECEDENTES', 'FISCALIA', 'INTERPRETE', 'HOY'],
+      ['SOLICITAR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO'],
+      ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA'], // consulta / derechos
+      ['CERTIFICADO', 'NOTARIA', 'AHORA'],
+    ];
+    const implicit = {'YO'};
+    var missing = 0;
+    for (final gl in mergedCases) {
+      final ctx = route(gl);
+      final out = asm.assemble(contextId: ctx, glosses: gl);
+      final hay = _strip(out.toLowerCase());
+      final miss = gl
+          .where((g) => !implicit.contains(g))
+          .where((g) => !_covered(g, hay))
+          .toList();
+      missing += miss.length;
+      // ignore: avoid_print
+      print('[orientacion→$ctx] ${gl.join('+')}\n   → "$out"'
+          '${miss.isEmpty ? '' : '\n   ✗ FALTAN: $miss'}\n');
+    }
+    expect(missing, 0, reason: 'El contexto fusionado pierde glosas.');
   });
 }
 

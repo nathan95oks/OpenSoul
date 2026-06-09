@@ -18,10 +18,10 @@ final availableContexts = <SemanticContext>[
   // ─── 1. ROBO ──────────────────────────────────────────
   SemanticContext(
     id: 'denuncia_robo',
-    name: 'Me robaron',
+    name: 'Denunciar robo',
     icon: 'warning_amber',
     emoji: '🚨',
-    description: 'Me quitaron algo / Hurto',
+    description: 'Me robaron / Hurto / Asalto',
     entryZoneId: 'situacion',
     baseUrgency: UrgencyLevel.medium,
     zones: const [
@@ -130,10 +130,10 @@ final availableContexts = <SemanticContext>[
   // ─── 2. VIOLENCIA ─────────────────────────────────────
   SemanticContext(
     id: 'violencia',
-    name: 'Sufrí violencia',
+    name: 'Denunciar violencia',
     icon: 'shield',
     emoji: '🛡️',
-    description: 'Me golpearon / Me amenazaron',
+    description: 'Me agredieron / Me amenazaron / Abuso',
     entryZoneId: 'situacion',
     baseUrgency: UrgencyLevel.high,
     zones: const [
@@ -207,10 +207,10 @@ final availableContexts = <SemanticContext>[
   // ─── 3. ACCIDENTE ─────────────────────────────────────
   SemanticContext(
     id: 'accidente',
-    name: 'Tuve un accidente',
+    name: 'Reportar accidente',
     icon: 'car_crash',
     emoji: '🚗',
-    description: 'Tránsito / Caída / Golpe',
+    description: 'Tránsito / Caída / Lesión / Emergencia médica',
     entryZoneId: 'situacion',
     baseUrgency: UrgencyLevel.high,
     zones: const [
@@ -269,255 +269,19 @@ final availableContexts = <SemanticContext>[
     ],
   ),
 
-  // ─── 4. EMERGENCIA ────────────────────────────────────
-  SemanticContext(
-    id: 'emergencia',
-    name: 'Es una emergencia',
-    icon: 'local_hospital',
-    emoji: '🏥',
-    description: 'Necesito ayuda urgente',
-    entryZoneId: 'estado',
-    baseUrgency: UrgencyLevel.critical,
-    zones: const [
-      SemanticZone(
-        id: 'estado',
-        label: 'Cómo estoy',
-        hint: 'Mi condición',
-        question: '¿Cómo te encuentras ahora?',
-        emoji: '🆘',
-        semanticWeight: 0.95,
-        urgencyLevel: UrgencyLevel.critical,
-        cardCategories: ['Estado/Urgencia', 'Emociones'],
-        cardSubcategories: ['Negativa', 'Estado'],
-        contextTags: [EmotionalTag.dolor, EmotionalTag.urgente, EmotionalTag.peligro],
-        relatedZones: ['ayuda'],
-      ),
-      SemanticZone(
-        id: 'ayuda',
-        label: 'Ayuda',
-        hint: 'Qué necesito',
-        question: '¿Qué ayuda necesitas?',
-        emoji: '🚑',
-        semanticWeight: 0.9,
-        urgencyLevel: UrgencyLevel.critical,
-        cardCategories: ['Servicios'],
-        contextTags: [EmotionalTag.urgente, EmotionalTag.ayuda],
-      ),
-      SemanticZone(
-        id: 'personas',
-        label: 'Personas',
-        hint: 'Quién necesita ayuda',
-        question: '¿Quién necesita ayuda?',
-        emoji: '👤',
-        semanticWeight: 0.65,
-        cardCategories: ['Identificación', 'Descripción'],
-      ),
-      SemanticZone(
-        id: 'lugar',
-        label: 'Lugar',
-        hint: 'Dónde estoy',
-        question: '¿Dónde estás?',
-        emoji: '📍',
-        semanticWeight: 0.6,
-        cardCategories: ['Lugares', 'Instituciones'],
-      ),
-    ],
-  ),
+  // NOTA: el contexto 'emergencia' se retiró de la selección (era demasiado
+  // genérico; sus casos los cubren violencia/robo/accidente/orientación). Su
+  // id sigue existiendo en datasource y motor; 'accidente' mantiene vivo el
+  // compositor _composeEmergency.
 
-  // ─── 5. DOCUMENTO / TRÁMITE LEGAL ─────────────────────
-  // Contexto judicial amplio: certificados, antecedentes, copias de
-  // denuncia/sentencia, poderes y trámites de identidad ante distintas
-  // instituciones (SEGIP, registro civil, fiscalía, juzgado, notaría).
-  SemanticContext(
-    id: 'tramite_id',
-    name: 'Documento o trámite legal',
-    icon: 'description',
-    emoji: '📄',
-    description: 'Certificados, antecedentes, copias y trámites',
-    entryZoneId: 'accion',
-    zones: const [
-      SemanticZone(
-        id: 'accion',
-        label: 'Acción',
-        hint: 'Qué necesito hacer',
-        question: '¿Qué necesitas hacer?',
-        emoji: '📋',
-        semanticWeight: 0.9,
-        cardCategories: ['Acciones', 'Trámites'],
-        relatedZones: ['documento'],
-      ),
-      SemanticZone(
-        id: 'documento',
-        label: 'Documento',
-        hint: 'Qué documento',
-        question: '¿Qué documento necesitas?',
-        emoji: '📄',
-        semanticWeight: 0.85,
-        cardCategories: ['Documentos'],
-        maxPicks: 2,
-        relatedZones: ['motivo', 'donde'],
-      ),
-      SemanticZone(
-        id: 'motivo',
-        label: 'Motivo',
-        hint: 'Para qué lo necesito',
-        question: '¿Para qué lo necesitas?',
-        emoji: '🎯',
-        semanticWeight: 0.65,
-        optional: true,
-        cardCategories: ['Consultas'],
-        relatedZones: ['donde'],
-      ),
-      SemanticZone(
-        id: 'donde',
-        label: 'Institución',
-        hint: 'Ante qué institución',
-        question: '¿Ante qué institución?',
-        emoji: '🏛️',
-        semanticWeight: 0.6,
-        cardCategories: ['Instituciones'],
-        relatedZones: ['apoyo'],
-      ),
-      SemanticZone(
-        id: 'apoyo',
-        label: 'Apoyo',
-        hint: 'Qué apoyo necesito',
-        question: '¿Necesitas apoyo?',
-        emoji: '🤝',
-        semanticWeight: 0.5,
-        optional: true,
-        cardCategories: ['Servicios'],
-        cardSubcategories: ['Accesibilidad', 'Legal', 'Atención', 'Información'],
-      ),
-      SemanticZone(
-        id: 'quien',
-        label: 'Personas',
-        hint: 'Para quién',
-        question: '¿Para quién es el trámite?',
-        emoji: '👤',
-        semanticWeight: 0.4,
-        optional: true,
-        cardCategories: ['Identificación'],
-      ),
-      SemanticZone(
-        id: 'tiempo',
-        label: 'Plazo',
-        hint: 'Para cuándo',
-        question: '¿Para cuándo lo necesitas?',
-        emoji: '🕐',
-        semanticWeight: 0.35,
-        optional: true,
-        cardCategories: ['Tiempo'],
-      ),
-    ],
-  ),
-
-  // ─── 6. ORIENTACIÓN / DERECHOS ────────────────────────
-  SemanticContext(
-    id: 'orientacion',
-    name: 'Necesito orientación',
-    icon: 'balance',
-    emoji: '⚖️',
-    description: 'Intérprete / Derechos / Consulta',
-    entryZoneId: 'necesidad',
-    zones: const [
-      SemanticZone(
-        id: 'necesidad',
-        label: 'Necesidad',
-        hint: 'Qué busco',
-        question: '¿Qué necesitas consultar?',
-        emoji: '🔎',
-        semanticWeight: 0.9,
-        cardCategories: ['Servicios', 'Acciones', 'Consultas'],
-        relatedZones: ['donde'],
-      ),
-      SemanticZone(
-        id: 'donde',
-        label: 'Lugar',
-        hint: 'Dónde ir',
-        question: '¿A qué institución acudir?',
-        emoji: '🏛️',
-        semanticWeight: 0.6,
-        cardCategories: ['Instituciones'],
-      ),
-      SemanticZone(
-        id: 'quien',
-        label: 'Personas',
-        hint: 'Para quién',
-        question: '¿Para quién es la consulta?',
-        emoji: '👤',
-        semanticWeight: 0.4,
-        optional: true,
-        cardCategories: ['Identificación'],
-      ),
-    ],
-  ),
-
-  // ─── 7. PERDÍ ALGO ────────────────────────────────────
-  SemanticContext(
-    id: 'perdida',
-    name: 'Perdí algo',
-    icon: 'search_off',
-    emoji: '📋',
-    description: 'Documento / Celular / Objeto',
-    entryZoneId: 'objetos',
-    baseUrgency: UrgencyLevel.low,
-    zones: const [
-      SemanticZone(
-        id: 'objetos',
-        label: 'Objetos',
-        hint: 'Qué perdí',
-        question: '¿Qué perdiste?',
-        emoji: '📱',
-        semanticWeight: 0.9,
-        cardCategories: ['Objetos', 'Documentos'],
-        maxPicks: 3,
-        relatedZones: ['lugar'],
-      ),
-      SemanticZone(
-        id: 'lugar',
-        label: 'Lugar',
-        hint: 'Dónde lo perdí',
-        question: '¿Dónde lo perdiste?',
-        emoji: '📍',
-        semanticWeight: 0.7,
-        cardCategories: ['Lugares', 'Instituciones'],
-      ),
-      SemanticZone(
-        id: 'tiempo',
-        label: 'Tiempo',
-        hint: 'Cuándo',
-        question: '¿Cuándo lo perdiste?',
-        emoji: '🕐',
-        semanticWeight: 0.5,
-        optional: true,
-        cardCategories: ['Tiempo'],
-      ),
-      SemanticZone(
-        id: 'ayuda',
-        label: 'Ayuda',
-        hint: 'Qué necesito',
-        question: '¿Qué ayuda necesitas?',
-        emoji: '🆘',
-        semanticWeight: 0.45,
-        optional: true,
-        cardCategories: ['Servicios', 'Acciones'],
-        contextTags: [EmotionalTag.ayuda],
-      ),
-    ],
-  ),
-
-  // ─── 8. TESTIGO / PRESENCIÉ UN HECHO ──────────────────
-  // Antes era "Otra situación" (genérico). Se reorienta al ámbito
-  // judicial: declaración de un testigo que presenció un hecho.
-  // El id 'otro' se conserva por compatibilidad (no lo referencia el
-  // datasource, pero evita romper estado/serialización existentes).
+  // ─── 4. DECLARAR COMO TESTIGO ─────────────────────────
+  // (id 'otro' conservado por compatibilidad con datasource/motor)
   SemanticContext(
     id: 'otro',
-    name: 'Presencié un hecho',
+    name: 'Declarar como testigo',
     icon: 'visibility',
     emoji: '👁️',
-    description: 'Fui testigo / Quiero declarar lo que vi',
+    description: 'Presencié un robo, violencia o accidente',
     entryZoneId: 'que',
     baseUrgency: UrgencyLevel.medium,
     zones: const [
@@ -563,7 +327,161 @@ final availableContexts = <SemanticContext>[
       ),
     ],
   ),
+
+  // ─── 5. ORIENTACIÓN Y TRÁMITES LEGALES ────────────────
+  // Fusión de los antiguos contextos 'orientacion' + 'tramite_id' +
+  // 'perdida'. Conserva el id 'orientacion'; las tarjetas de los tres
+  // dominios se reúnen vía [kContextCardSources] y el ensamblador se enruta
+  // por intención vía [resolveAssemblerContext] (motor y datasource intactos).
+  SemanticContext(
+    id: 'orientacion',
+    name: 'Orientación y trámites legales',
+    icon: 'balance',
+    emoji: '⚖️',
+    description: 'Documentos, pérdidas, antecedentes, consultas y derechos',
+    entryZoneId: 'accion',
+    zones: const [
+      SemanticZone(
+        id: 'accion',
+        label: 'Acción',
+        hint: 'Qué necesito hacer',
+        question: '¿Qué necesitas hacer?',
+        emoji: '📋',
+        semanticWeight: 0.9,
+        cardCategories: ['Acciones', 'Trámites'],
+        relatedZones: ['documento', 'motivo'],
+      ),
+      SemanticZone(
+        id: 'documento',
+        label: 'Documento',
+        hint: 'Qué documento',
+        question: '¿Qué documento necesitas?',
+        emoji: '📄',
+        semanticWeight: 0.85,
+        cardCategories: ['Documentos'],
+        maxPicks: 2,
+        relatedZones: ['motivo', 'donde'],
+      ),
+      SemanticZone(
+        id: 'objeto',
+        label: 'Objeto perdido',
+        hint: 'Qué objeto perdí',
+        question: '¿Perdiste algún objeto?',
+        emoji: '📱',
+        semanticWeight: 0.55,
+        optional: true,
+        cardCategories: ['Objetos'],
+        maxPicks: 3,
+        relatedZones: ['lugar'],
+      ),
+      SemanticZone(
+        id: 'motivo',
+        label: 'Motivo',
+        hint: 'Para qué lo necesito',
+        question: '¿Para qué lo necesitas?',
+        emoji: '🎯',
+        semanticWeight: 0.65,
+        optional: true,
+        cardCategories: ['Consultas'],
+        relatedZones: ['donde'],
+      ),
+      SemanticZone(
+        id: 'donde',
+        label: 'Institución',
+        hint: 'Ante qué institución',
+        question: '¿Ante qué institución?',
+        emoji: '🏛️',
+        semanticWeight: 0.6,
+        cardCategories: ['Instituciones'],
+        relatedZones: ['apoyo'],
+      ),
+      SemanticZone(
+        id: 'apoyo',
+        label: 'Apoyo',
+        hint: 'Qué apoyo necesito',
+        question: '¿Necesitas apoyo?',
+        emoji: '🤝',
+        semanticWeight: 0.5,
+        optional: true,
+        cardCategories: ['Servicios'],
+        cardSubcategories: ['Accesibilidad', 'Legal', 'Atención', 'Información'],
+      ),
+      SemanticZone(
+        id: 'lugar',
+        label: 'Lugar',
+        hint: 'Dónde ocurrió',
+        question: '¿Dónde ocurrió?',
+        emoji: '📍',
+        semanticWeight: 0.45,
+        optional: true,
+        cardCategories: ['Lugares'],
+      ),
+      SemanticZone(
+        id: 'quien',
+        label: 'Personas',
+        hint: 'Para quién',
+        question: '¿Para quién es el trámite?',
+        emoji: '👤',
+        semanticWeight: 0.4,
+        optional: true,
+        cardCategories: ['Identificación'],
+      ),
+      SemanticZone(
+        id: 'tiempo',
+        label: 'Plazo',
+        hint: 'Cuándo / para cuándo',
+        question: '¿Para cuándo lo necesitas?',
+        emoji: '🕐',
+        semanticWeight: 0.35,
+        optional: true,
+        cardCategories: ['Tiempo'],
+      ),
+    ],
+  ),
 ];
+
+/// Para contextos fusionados: ids de contexto de tarjeta que abarca cada
+/// contexto de la UI. El contexto 'orientacion' reúne las tarjetas de los
+/// antiguos 'orientacion', 'tramite_id' y 'perdida' sin tocar el datasource.
+/// El resto de contextos usan su propio id.
+const Map<String, List<String>> kContextCardSources = {
+  'orientacion': ['orientacion', 'tramite_id', 'perdida'],
+};
+
+/// Ids de contexto de tarjeta que cubre [contextId] (para el filtro de
+/// tarjetas). Por defecto, su propio id.
+List<String> cardSourceContexts(String contextId) =>
+    kContextCardSources[contextId] ?? [contextId];
+
+/// Resuelve el `contextId` que se envía al ensamblador (motor de traducción
+/// intacto) según las glosas seleccionadas. Solo el contexto fusionado
+/// 'orientacion' se reenruta a su sub-dominio más fiel para preservar la
+/// coherencia del compositor:
+///   - objeto perdido / PERDER  → 'perdida'   (_composeLoss)
+///   - documento / trámite      → 'tramite_id' (_composeProcedure)
+///   - resto (consulta/derechos)→ 'orientacion' (_composeGuidance)
+///
+/// `cardCategoryOf` mapea una glosa a su categoría (vía catálogo) para no
+/// duplicar conocimiento del léxico. Como el motor garantiza cobertura
+/// (`_ensureCoverage`), un reenrutado imperfecto nunca pierde glosas.
+String resolveAssemblerContext(
+  String contextId,
+  List<String> glosses,
+  String? Function(String gloss) cardCategoryOf,
+) {
+  if (contextId != 'orientacion') return contextId;
+  var hasObject = false;
+  var hasDocOrProcedure = false;
+  for (final g in glosses) {
+    if (g.toUpperCase() == 'PERDER') hasObject = true;
+    final cat = cardCategoryOf(g);
+    if (cat == 'Objetos') hasObject = true;
+    if (cat == 'Documentos' || cat == 'Trámites') hasDocOrProcedure = true;
+  }
+  if (hasObject) return 'perdida';
+  if (hasDocOrProcedure) return 'tramite_id';
+  return 'orientacion';
+}
 
 class ContextNotifier extends Notifier<SemanticContext?> {
   @override

@@ -7,6 +7,7 @@ import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../controllers/translation_controller.dart';
 import '../providers/context_provider.dart';
+import '../providers/cards_provider.dart' show allCardsProvider;
 import '../widgets/context_selection_widget.dart';
 import '../widgets/node_flow_canvas.dart';
 import '../widgets/card_grid.dart' show expandedAnswersProvider;
@@ -129,10 +130,26 @@ class HomeScreen extends ConsumerWidget {
                   // Capturamos el router ANTES del await para no depender de
                   // un BuildContext tras el gap asíncrono.
                   final router = GoRouter.of(context);
+                  // Para el contexto fusionado, resolvemos el sub-dominio más
+                  // fiel para el ensamblador (motor intacto) según las glosas.
+                  final allCards =
+                      ref.read(allCardsProvider).value ?? const [];
+                  String? categoryOf(String g) {
+                    for (final c in allCards) {
+                      if (c.gloss == g) return c.categoryId;
+                    }
+                    return null;
+                  }
+
+                  final assemblerContext = resolveAssemblerContext(
+                    contextState.id,
+                    selectedWords,
+                    categoryOf,
+                  );
                   await ref
                       .read(translationControllerProvider.notifier)
                       .translateCards(
-                        context: contextState.id,
+                        context: assemblerContext,
                         cards: selectedWords,
                       );
                   // Navega a la pantalla de resultado dedicada. El estado
