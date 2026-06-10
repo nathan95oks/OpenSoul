@@ -1,18 +1,18 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:record/record.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:permission_handler/permission_handler.dart';
 
 class RecordButton extends StatefulWidget {
-  final Future<void> Function(String audioPath) onStopRecording;
+  final Function(String) onStopRecording;
   final VoidCallback onStartRecording;
+  final Function(String) onTextRecognized;
 
   const RecordButton({
     Key? key,
     required this.onStopRecording,
     required this.onStartRecording,
+    required this.onTextRecognized,
   }) : super(key: key);
 
   @override
@@ -21,13 +21,14 @@ class RecordButton extends StatefulWidget {
 
 class _RecordButtonState extends State<RecordButton> with SingleTickerProviderStateMixin {
   bool _isRecording = false;
-  late final AudioRecorder _audioRecorder;
+  late stt.SpeechToText _speechToText;
   late AnimationController _animationController;
+  String _recognizedText = "";
 
   @override
   void initState() {
     super.initState();
-    _audioRecorder = AudioRecorder();
+    _speechToText = stt.SpeechToText();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
@@ -36,45 +37,65 @@ class _RecordButtonState extends State<RecordButton> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    _audioRecorder.dispose();
     _animationController.dispose();
     super.dispose();
   }
 
   Future<void> _startRecording() async {
     try {
-      if (await Permission.microphone.request().isGranted) {
-        final dir = await getApplicationDocumentsDirectory();
-        final path = '${dir.path}/recorded_audio_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      // In web and some environments, permission is handled inside initialize
+      bool available = await _speechToText.initialize(
+        onStatus: (status) {
+          if (status == 'done' || status == 'notListening') {
+            if (_isRecording) {
+              _stopRecording();
+            }
+          }
+        },
+        onError: (error) {
+          debugPrint('Speech recognition error: $error');
+          if (_isRecording) _stopRecording();
+        },
+      );
 
-        await _audioRecorder.start(const RecordConfig(), path: path);
-
+      if (available) {
         setState(() {
           _isRecording = true;
+          _recognizedText = "";
         });
         widget.onStartRecording();
+        
+        await _speechToText.listen(
+          onResult: (result) {
+            setState(() {
+              _recognizedText = result.recognizedWords;
+            });
+            widget.onTextRecognized(_recognizedText);
+          },
+          localeId: 'es_ES', // Spanish recognition
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Permiso de micrófono denegado')),
+          const SnackBar(content: Text('Reconocimiento de voz no disponible')),
         );
       }
     } catch (e) {
-      debugPrint("Error starting record: $e");
+      debugPrint("Error starting speech to text: $e");
     }
   }
 
   Future<void> _stopRecording() async {
+    if (!_isRecording) return;
     try {
-      final path = await _audioRecorder.stop();
+      await _speechToText.stop();
       setState(() {
         _isRecording = false;
       });
 
-      if (path != null) {
-        widget.onStopRecording(path);
-      }
+      widget.onStopRecording(_recognizedText);
+      _recognizedText = "";
     } catch (e) {
-      debugPrint("Error stopping record: $e");
+      debugPrint("Error stopping speech to text: $e");
     }
   }
 
