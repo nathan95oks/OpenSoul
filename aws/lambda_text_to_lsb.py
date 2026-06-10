@@ -151,7 +151,6 @@ def invoke_bedrock(prompt: str) -> dict:
         "anthropic_version": "bedrock-2023-05-31",
         "max_tokens": 512,
         "temperature": 0.1,  # Baja temperatura = respuestas deterministas
-        "top_p": 0.95,
         "messages": [
             {
                 "role": "user",
