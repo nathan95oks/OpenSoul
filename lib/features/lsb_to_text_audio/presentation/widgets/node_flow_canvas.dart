@@ -108,13 +108,17 @@ class _ContextChip extends StatelessWidget {
         children: [
           Text(emoji, style: const TextStyle(fontSize: 13)),
           const SizedBox(width: 6),
-          Text(
-            label.toUpperCase(),
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: _orange,
-              letterSpacing: 0.5,
+          Flexible(
+            child: Text(
+              label.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: _orange,
+                letterSpacing: 0.5,
+              ),
             ),
           ),
         ],
