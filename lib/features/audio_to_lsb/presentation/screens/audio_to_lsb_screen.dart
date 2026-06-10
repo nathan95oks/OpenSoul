@@ -139,11 +139,14 @@ class AudioToLsbScreen extends ConsumerWidget {
                         duration: const Duration(milliseconds: 300),
                         child: Text(
                           state.status == AudioTranslationStatus.recording
-                              ? 'Escuchando tu voz...'
+                              ? (state.recognizedText?.isNotEmpty == true 
+                                  ? '"${state.recognizedText}"' 
+                                  : 'Escuchando tu voz...')
                               : state.status == AudioTranslationStatus.processing
                                 ? 'Traduciendo a LSB...'
                                 : 'Mantén presionado para dictar',
-                          key: ValueKey<AudioTranslationStatus>(state.status),
+                          key: ValueKey<String>('${state.status}_${state.recognizedText}'),
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: state.status == AudioTranslationStatus.recording 
                                 ? Colors.redAccent 
@@ -160,8 +163,11 @@ class AudioToLsbScreen extends ConsumerWidget {
                         onStartRecording: () {
                           controller.setRecordingState();
                         },
-                        onStopRecording: (audioPath) async {
-                          controller.processAudio(audioPath);
+                        onTextRecognized: (text) {
+                          controller.updateRecognizedText(text);
+                        },
+                        onStopRecording: (transcribedText) {
+                          controller.processAudioAsText(transcribedText);
                         },
                       ),
                     ],

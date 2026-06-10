@@ -855,6 +855,10 @@ def refine_with_bedrock(base_sentence: str, context_type: str) -> str:
         logger.info("Bedrock deshabilitado, usando oración base directamente.")
         return base_sentence
 
+    # Mejora para desambiguación: Añadir instrucciones explícitas de polisemia
+    polisemia_rules = (" Si detectas la palabra 'Auto', asume que es una 'Resolución Judicial' "
+                       "y no un vehículo, a menos que el contexto indique transporte.")
+
     ctx_instruction = ("Contexto de trámites y consultas ciudadanas en entidades públicas: "
                        "usa vocabulario formal, respetuoso y preciso propio de gestiones administrativas."
                        if context_type.lower() in ("ciudadano", "formal", "legal")
@@ -863,6 +867,7 @@ def refine_with_bedrock(base_sentence: str, context_type: str) -> str:
     prompt = f"""Recibes una oración base generada por un sistema de interpretación de Lengua de Señas Boliviana (LSB).
 Tu ÚNICA tarea es refinar la redacción para que sea más fluida, natural y apropiada.
 {ctx_instruction}
+{polisemia_rules if context_type.lower() == "legal" else ""}
 
 REGLAS:
 1. NO cambies el significado de la oración.
