@@ -36,7 +36,7 @@ logger.setLevel(logging.INFO)
 # Variables de entorno (configurables en AWS Lambda → Configuration)
 # ---------------------------------------------------------------------------
 BEDROCK_MODEL_ID = os.environ.get(
-    "BEDROCK_MODEL_ID", "anthropic.claude-3-haiku-20240307-v1:0"
+    "BEDROCK_MODEL_ID", "us.anthropic.claude-sonnet-4-6"
 )
 APP_REGION = os.environ.get(
     "APP_REGION", os.environ.get("AWS_REGION", "us-east-1")
