@@ -36,7 +36,7 @@ logger.setLevel(logging.INFO)
 # Variables de entorno (configurables en AWS Lambda → Configuration)
 # ---------------------------------------------------------------------------
 BEDROCK_MODEL_ID = os.environ.get(
-    "BEDROCK_MODEL_ID", "us.anthropic.claude-sonnet-4-6"
+    "BEDROCK_MODEL_ID", "global.amazon.nova-2-lite-v1:0"
 )
 APP_REGION = os.environ.get(
     "APP_REGION", os.environ.get("AWS_REGION", "us-east-1")
@@ -145,36 +145,31 @@ CONTEXTO: {context}"""
 def invoke_bedrock(prompt: str) -> dict:
     """
     Envía el prompt al modelo fundacional en Bedrock y parsea la respuesta.
-    Soporta Claude 3 Haiku/Sonnet (Anthropic Messages API).
+    Utiliza la API 'converse', que soporta automáticamente cualquier modelo
+    (Nova, Titan, Claude) sin preocuparnos por el formato del JSON interno.
     """
-    request_body = {
-        "anthropic_version": "bedrock-2023-05-31",
-        "max_tokens": 512,
-        "temperature": 0.1,  # Baja temperatura = respuestas deterministas
-        "messages": [
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-    }
-
     logger.info("Invocando Bedrock con modelo: %s", BEDROCK_MODEL_ID)
 
-    response = bedrock_runtime.invoke_model(
-        modelId=BEDROCK_MODEL_ID,
-        contentType="application/json",
-        accept="application/json",
-        body=json.dumps(request_body),
-    )
+    try:
+        response = bedrock_runtime.converse(
+            modelId=BEDROCK_MODEL_ID,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [{"text": prompt}],
+                }
+            ],
+            inferenceConfig={
+                "maxTokens": 512,
+                "temperature": 0.1,
+            }
+        )
+    except Exception as e:
+        logger.error("Error en converse API: %s", str(e))
+        raise
 
-    response_body = json.loads(response["body"].read())
-
-    # Extraer texto de la respuesta de Claude 3
-    if "content" in response_body and isinstance(response_body["content"], list):
-        raw_text = response_body["content"][0].get("text", "").strip()
-    else:
-        raise ValueError("Formato de respuesta Bedrock no reconocido")
+    # La API converse estandariza la respuesta, siempre está en este formato:
+    raw_text = response["output"]["message"]["content"][0]["text"].strip()
 
     logger.info("Respuesta cruda de Bedrock: %s", raw_text[:200])
 
