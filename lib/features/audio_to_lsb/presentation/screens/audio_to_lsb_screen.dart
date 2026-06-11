@@ -89,6 +89,9 @@ class AudioToLsbScreen extends ConsumerWidget {
                           glosses: state.status == AudioTranslationStatus.success 
                             ? state.translationResult?.glosses 
                             : null,
+                          animationUrls: state.status == AudioTranslationStatus.success
+                            ? state.translationResult?.animationUrls
+                            : null,
                         ),
                       ),
                     ),
