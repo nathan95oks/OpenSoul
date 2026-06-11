@@ -65,7 +65,7 @@ class SentenceBuilder extends ConsumerWidget {
                     return Chip(
                       label: Text(
                         // La secuencia guarda la glosa cruda (p. ej.
-                        // "TRES_MAS"); para el chip se muestra legible.
+                        // "TRES"); para el chip se muestra legible.
                         word.replaceAll('_', ' ').toUpperCase(),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
