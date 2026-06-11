@@ -15,35 +15,35 @@ void main() {
     ('denuncia_robo', ['ROBAR']),
     ('denuncia_robo', ['HOMBRE', 'ROBAR', 'CELULAR']),
     ('denuncia_robo', ['HOMBRE', 'ALTO', 'TATUAJE', 'ROBAR', 'CELULAR', 'CALLE', 'NOCHE']),
-    ('denuncia_robo', ['ROBAR', 'CELULAR', 'DINERO', 'POLICIA', 'MIEDO', 'HOY']),
+    ('denuncia_robo', ['ROBAR', 'CELULAR', 'GANAR_DINERO', 'POLICIA', 'MIEDO', 'HOY']),
     // violencia (ejemplos del usuario)
     ('violencia', ['AMENAZAR']),
     ('violencia', ['AMENAZAR', 'AYUDA', 'PELO_CORTO', 'POLICIA', 'ASUSTADO']),
     ('violencia', ['ABUSO', 'TATUAJE', 'DEFENSORIA', 'TRISTE', 'URGENTE', 'HOY']),
-    ('violencia', ['GOLPEAR', 'HOMBRE', 'ALTO', 'MIEDO', 'POLICIA', 'ABOGADO']),
+    ('violencia', ['PEGAR', 'HOMBRE', 'ALTO', 'MIEDO', 'POLICIA', 'ABOGADO']),
     // accidente
     ('accidente', ['DOLOR']),
     ('accidente', ['DOLOR', 'AMBULANCIA', 'CALLE', 'HOY']),
     ('accidente', ['DOLOR', 'ASUSTADO', 'AMBULANCIA', 'HOSPITAL', 'URGENTE']),
     // emergencia
     ('emergencia', ['EMERGENCIA']),
-    ('emergencia', ['ENFERMO', 'AMBULANCIA', 'URGENTE', 'HOSPITAL']),
+    ('emergencia', ['ENFERMEDAD', 'AMBULANCIA', 'URGENTE', 'HOSPITAL']),
     // documentos / trámite (contexto judicial ampliado)
-    ('tramite_id', ['TRAMITAR', 'CARNET', 'SEGIP']),
+    ('tramite_id', ['TRAMITAR', 'CARNE', 'SEGIP']),
     ('tramite_id', ['RENOVAR', 'LICENCIA', 'PAGO', 'SEGIP', 'HIJO']),
-    ('tramite_id', ['ANTECEDENTES', 'FISCALIA']),
-    ('tramite_id', ['TRAMITAR', 'ANTECEDENTES', 'DENUNCIA', 'FISCALIA', 'INTERPRETE', 'HOY']),
-    ('tramite_id', ['SOLICITAR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO']),
+    ('tramite_id', ['ANTECEDENTES', 'FISCAL']),
+    ('tramite_id', ['TRAMITAR', 'ANTECEDENTES', 'DENUNCIA', 'FISCAL', 'INTERPRETE', 'HOY']),
+    ('tramite_id', ['PEDIR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO']),
     ('tramite_id', ['CORREGIR', 'DECLARACION_JURADA', 'NOTARIA', 'HIJO', 'AHORA']),
     // orientación / asistencia legal
     ('orientacion', ['ABOGADO', 'DEFENSORIA']),
     ('orientacion', ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA', 'HOY']),
     // pérdida de documentos
-    ('perdida', ['PERDER', 'CARNET']),
-    ('perdida', ['DOCUMENTO', 'CALLE', 'AYER', 'POLICIA', 'URGENTE']),
+    ('perdida', ['PERDER', 'CARNE']),
+    ('perdida', ['PAPEL', 'CALLE', 'AYER', 'POLICIA', 'URGENTE']),
     // testigo
     ('otro', ['ROBAR']),
-    ('otro', ['HOMBRE', 'TATUAJE', 'GOLPEAR', 'CALLE', 'NOCHE', 'DEFENSORIA']),
+    ('otro', ['HOMBRE', 'TATUAJE', 'PEGAR', 'CALLE', 'NOCHE', 'DEFENSORIA']),
   ];
 
   // Glosas inherentemente implícitas (1ª persona) que no exigen aparición literal.
@@ -93,8 +93,8 @@ void main() {
         resolveAssemblerContext('orientacion', gl, catOf);
     expect(route(['PERDER', 'CELULAR']), 'perdida');
     expect(route(['CELULAR', 'CALLE']), 'perdida'); // objeto → pérdida
-    expect(route(['CARNET']), 'tramite_id');
-    expect(route(['ANTECEDENTES', 'FISCALIA']), 'tramite_id');
+    expect(route(['CARNE']), 'tramite_id');
+    expect(route(['ANTECEDENTES', 'FISCAL']), 'tramite_id');
     expect(route(['TRAMITAR', 'COPIA_DENUNCIA', 'JUZGADO']), 'tramite_id');
     expect(route(['INTERPRETE', 'DEFENSORIA']), 'orientacion');
     expect(route(['CONSULTAR', 'ABOGADO']), 'orientacion');
@@ -106,9 +106,9 @@ void main() {
     const asm = LocalSentenceAssembler();
     final mergedCases = <List<String>>[
       ['PERDER', 'CELULAR', 'CALLE', 'AYER'], // documento/objeto perdido
-      ['DOCUMENTO', 'PERDER', 'POLICIA'],
-      ['TRAMITAR', 'ANTECEDENTES', 'FISCALIA', 'INTERPRETE', 'HOY'],
-      ['SOLICITAR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO'],
+      ['PAPEL', 'PERDER', 'POLICIA'],
+      ['TRAMITAR', 'ANTECEDENTES', 'FISCAL', 'INTERPRETE', 'HOY'],
+      ['PEDIR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO'],
       ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA'], // consulta / derechos
       ['CERTIFICADO', 'NOTARIA', 'AHORA'],
     ];
@@ -140,10 +140,14 @@ const _synonyms = {
   'GORDO': 'robust',
   'MASCARA': 'rostro',
   'MOCHILA_USADA': 'mochila',
-  'TRES_MAS': 'personas',
+  'TRES': 'personas',
   'DOS': 'personas',
   'SOLO': 'persona',
   'MAÑANA': 'mañana',
+  'PEGAR': 'golpe',
+  'PAPEL': 'documento',
+  'PEDIR': 'solicitar',
+  'GANAR_DINERO': 'dinero',
 };
 
 bool _covered(String gloss, String hayLower) {
