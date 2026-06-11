@@ -185,25 +185,45 @@ class LocalSentenceAssembler {
         continue;
       }
       switch (e.role) {
-        case _Role.sujeto:        r.subject ??= e.es; break;
-        case _Role.personaDesc:   r.perpetrator ??= e.es; break;
-        case _Role.rasgo:         r.traits.add(e.es); break;
-        case _Role.verboAgresion: r.aggression ??= e.es; break;
-        case _Role.verboAccion:   r.action ??= e.es; break;
-        case _Role.arma:          r.weapon ??= e.es; break;
-        case _Role.objeto:        r.objects.add(e.es); break;
-        case _Role.documento:     r.documents.add(e.es); break;
-        case _Role.lugar:         r.place ??= e.es; break;
-        case _Role.institucion:   r.institution ??= e.es; break;
-        case _Role.servicio:      r.services.add(e.es); break;
-        case _Role.emocion:       r.emotions.add(e.es); break;
-        case _Role.urgencia:      r.urgencies.add(e.es); break;
-        case _Role.tramite:       r.procedures.add(e.es); break;
-        case _Role.motivo:        r.purposes.add(e.es); break;
-        case _Role.tiempo:        r.time ??= e.es; break;
+        case _Role.sujeto:             r.subject ??= e.es; break;
+        case _Role.personaDesc:        r.perpetrator ??= e.es; break;
+        // Bug fix #2: personaDescPlural almacena el sujeto plural por separado
+        // para que el compositor sepa usar verbo plural (agredieron).
+        case _Role.personaDescPlural:  r.perpetratorPlural ??= e.es; break;
+        case _Role.rasgo:              r.traits.add(e.es); break;
+        case _Role.verboAgresion:      r.aggression ??= e.es; break;
+        case _Role.verboAccion:        r.action ??= e.es; break;
+        case _Role.arma:               r.weapon ??= e.es; break;
+        case _Role.objeto:             r.objects.add(e.es); break;
+        case _Role.documento:          r.documents.add(e.es); break;
+        case _Role.lugar:              r.place ??= e.es; break;
+        case _Role.institucion:        r.institution ??= e.es; break;
+        case _Role.servicio:           r.services.add(e.es); break;
+        case _Role.emocion:            r.emotions.add(e.es); break;
+        case _Role.urgencia:           r.urgencies.add(e.es); break;
+        case _Role.tramite:            r.procedures.add(e.es); break;
+        case _Role.motivo:             r.purposes.add(e.es); break;
+        case _Role.tiempo:             r.time ??= e.es; break;
       }
     }
     return r;
+  }
+
+  /// true si hay un agresor explícito (personaDesc o personaDescPlural o rasgos).
+  bool _hasAggressor(_Roles r) =>
+      r.perpetrator != null || r.perpetratorPlural != null || r.traits.isNotEmpty;
+
+  /// Convierte un verbo conjugado en 3ª singular a 3ª plural.
+  /// Solo mapea los verbos del lexicón — lista cerrada y segura.
+  static String _verbPlural(String v) {
+    const map = {
+      'robó': 'robaron', 'golpeó': 'golpearon', 'amenazó': 'amenazaron',
+      'empujó': 'empujaron', 'gritó': 'gritaron', 'quitó': 'quitaron',
+      'persiguió': 'persiguieron', 'asaltó': 'asaltaron', 'acosó': 'acosaron',
+      'agredió': 'agredieron', 'secuestró': 'secuestraron',
+      'agredió sexualmente': 'agredieron sexualmente',
+    };
+    return map[v] ?? v;
   }
 
   // ───────────────────────── Compositores por contexto ────────────────────
@@ -216,11 +236,30 @@ class LocalSentenceAssembler {
 
     final sentences = <String>[];
 
+    // Bug fix #3: CUCHILLO sin verbo de agresión → tratarlo como arma implícita
+    // de amenaza, en vez de dejar que caiga en el fallback "Asimismo, menciono".
+    if (r.weapon != null && r.aggression == null && !_hasAggressor(r)) {
+      var clause = 'Me amenazaron con un cuchillo';
+      if (r.place != null) clause += ' ${r.place}';
+      if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
+      sentences.add('$clause.');
+      sentences.addAll(_stateSentences(r));
+      final inst = _institutionLine(r, 'Quiero presentar la denuncia');
+      if (inst != null) sentences.add(inst);
+      return _stitch(lead, sentences, tokens);
+    }
+
     // Cláusula del agresor + acción.
-    final hasActor = r.perpetrator != null || r.traits.isNotEmpty;
+    final hasActor = _hasAggressor(r);
     if (r.aggression != null || hasActor) {
       final subject = _subjectPhrase(r);
-      final verb = r.aggression ?? (ctx == 'violencia' ? 'agredió' : 'asaltó');
+      // Bug fix #2: DOS/TRES (pluraDesc) usan verbo plural.
+      final isPlural = r.perpetratorPlural != null;
+      final defaultVerb = ctx == 'violencia' ? (isPlural ? 'agredieron' : 'agredió') : (isPlural ? 'asaltaron' : 'asaltó');
+      final aggression = r.aggression;
+      final verb = aggression == null
+          ? defaultVerb
+          : (isPlural ? _verbPlural(aggression) : aggression);
       var clause = '$subject me $verb';
       final complement = _join([...r.objects, ...r.documents]);
       if (complement.isNotEmpty) clause += ' $complement';
@@ -464,17 +503,27 @@ class LocalSentenceAssembler {
   /// preposicionales (con barba, con lentes, con gorra) para producir
   /// español natural: "un hombre alto y moreno, con tatuaje y lentes"
   /// en vez de "un hombre alto y moreno y con tatuaje y con lentes".
+  ///
+  /// Cuando el sujeto es genérico ("una persona") los adjetivos simples
+  /// se convierten a su forma femenina para mantener concordancia.
   String _subjectPhrase(_Roles r) {
     final base = r.perpetrator ?? 'una persona';
+    final isGeneric = r.perpetrator == null;
     if (r.traits.isEmpty) return base;
 
     // Separa adjetivos simples de frases con preposición (empieza con "con"/"de")
-    final adjectives = r.traits
+    var adjectives = r.traits
         .where((t) => !t.startsWith('con ') && !t.startsWith('de '))
         .toList();
     final phrases = r.traits
         .where((t) => t.startsWith('con ') || t.startsWith('de '))
         .toList();
+
+    // Bug fix #1: concordancia de género. Cuando el sujeto es "una persona"
+    // (genérico femenino), los adjetivos terminados en -o deben ir en -a.
+    if (isGeneric) {
+      adjectives = adjectives.map(_femAdj).toList();
+    }
 
     final buffer = StringBuffer(base);
     if (adjectives.isNotEmpty) buffer.write(' ${_join(adjectives)}');
@@ -488,6 +537,20 @@ class LocalSentenceAssembler {
       buffer.write(', con ${_join(items)}');
     }
     return buffer.toString();
+  }
+
+  /// Convierte un adjetivo masculino terminado en -o a su forma femenina (-a),
+  /// y adjetivos compuestos "de color [X]o" → "de color [X]a", etc.
+  /// Solo actúa sobre palabras que terminan en -o (no toca invariables
+  /// como "calvo" → "calva" o "moreno" → "morena").
+  static String _femAdj(String adj) {
+    // Frases tipo "de piel clara", "de cabello corto" — invariables o ya
+    // concordadas con el sustantivo interno: las dejamos tal cual.
+    if (adj.startsWith('de piel') || adj.startsWith('de cabello')) return adj;
+    // Adjetivos simples terminados en -o masculino → -a femenino.
+    if (adj.endsWith('o')) return '${adj.substring(0, adj.length - 1)}a';
+    // Adjetivos terminados en -oso → -osa (robusto → robusta ya cubierto).
+    return adj;
   }
 
   /// Oraciones de estado emocional y urgencia, reutilizadas por varios
@@ -580,12 +643,14 @@ class LocalSentenceAssembler {
     'NIÑO': _Lex(_Role.personaDesc, 'un niño'),
     'DESCONOCIDO': _Lex(_Role.personaDesc, 'un desconocido'),
     'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
+    // Bug fix #2: DOS/TRES usan role personaDescPlural para que el verbo
+    // concuerde en plural ("me agredieron" no "me agredió").
     'GRUPO': _Lex(_Role.personaDesc, 'un grupo de personas'),
     'ADULTO': _Lex(_Role.personaDesc, 'un adulto'),
     'ABUELO': _Lex(_Role.personaDesc, 'un abuelo'),
     'SOLO': _Lex(_Role.personaDesc, 'una persona'),
-    'DOS': _Lex(_Role.personaDesc, 'dos personas'),
-    'TRES': _Lex(_Role.personaDesc, 'tres personas'),
+    'DOS': _Lex(_Role.personaDescPlural, 'dos personas'),
+    'TRES': _Lex(_Role.personaDescPlural, 'tres personas'),
     'CONOCIDO': _Lex(_Role.personaDesc, 'un conocido'),
 
     // Rasgos físicos / vestimenta / color.
@@ -754,6 +819,7 @@ class LocalSentenceAssembler {
 enum _Role {
   sujeto,
   personaDesc,
+  personaDescPlural, // Bug fix #2: DOS/TRES — verbo concuerda en plural
   rasgo,
   verboAgresion,
   verboAccion,
@@ -780,6 +846,7 @@ class _Lex {
 class _Roles {
   String? subject;
   String? perpetrator;
+  String? perpetratorPlural; // Bug fix #2: sujeto plural (DOS/TRES)
   String? aggression;
   String? action;
   String? weapon;

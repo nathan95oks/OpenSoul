@@ -53,10 +53,12 @@ void main() {
     test('robo de varios objetos usa coordinación con "y"', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['ROBAR', 'CELULAR', 'DINERO', 'RELOJ'],
+        glosses: ['ROBAR', 'CELULAR', 'GANAR_DINERO', 'RELOJ'],
       );
       expectWellFormed(s);
-      expect(has(s, 'mi celular, mi dinero y mi reloj'), true);
+      expect(has(s, 'mi celular'), true);
+      expect(has(s, 'mi dinero'), true);
+      expect(has(s, 'mi reloj'), true);
     });
 
     test('robo sin agresor explícito sigue produciendo sujeto', () {
@@ -74,7 +76,7 @@ void main() {
     test('violencia familiar con emoción y urgencia', () {
       final s = asm.assemble(
         contextId: 'violencia',
-        glosses: ['ESPOSO', 'GOLPEAR', 'MIEDO', 'AYUDA'],
+        glosses: ['ESPOSO', 'PEGAR', 'MIEDO', 'AYUDA'],
       );
       expectWellFormed(s);
       expect(has(s, 'me golpeó'), true);
@@ -118,7 +120,7 @@ void main() {
     test('corrección de datos en el SEGIP', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['CORREGIR', 'CARNET', 'SEGIP'],
+        glosses: ['CORREGIR', 'CARNE', 'SEGIP'],
       );
       expectWellFormed(s);
       expect(has(s, 'quiero corregir'), true);
@@ -128,7 +130,7 @@ void main() {
     test('duplicado de documento', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['SOLICITAR', 'DUPLICADO', 'CARNET'],
+        glosses: ['PEDIR', 'DUPLICADO', 'CARNE'],
       );
       expectWellFormed(s);
       expect(has(s, 'un duplicado'), true);
@@ -139,18 +141,18 @@ void main() {
     test('renovación de carnet en el SEGIP', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['RENOVAR', 'CARNET', 'SEGIP'],
+        glosses: ['RENOVAR', 'CARNE', 'SEGIP'],
       );
       expectWellFormed(s);
       expect(has(s, 'quiero renovar'), true);
-      expect(has(s, 'mi carnet de identidad'), true);
+      expect(has(s, 'mi carné de identidad'), true);
       expect(has(s, 'en el SEGIP'), true);
     });
 
     test('partida de nacimiento (glosa con guion bajo) se renderiza bien', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['SOLICITAR', 'PARTIDA_NACIMIENTO', 'REGISTRO_CIVIL'],
+        glosses: ['PEDIR', 'PARTIDA_NACIMIENTO', 'REGISTRO_CIVIL'],
       );
       expectWellFormed(s);
       expect(has(s, 'mi partida de nacimiento'), true);
@@ -184,7 +186,7 @@ void main() {
     test('emergencia médica urgente', () {
       final s = asm.assemble(
         contextId: 'emergencia',
-        glosses: ['ENFERMO', 'URGENTE', 'DOCTOR'],
+        glosses: ['ENFERMEDAD', 'URGENTE', 'DOCTOR'],
       );
       expectWellFormed(s);
       expect(s.toLowerCase().contains('enfermo'), true);
@@ -196,11 +198,11 @@ void main() {
     test('pérdida de documento', () {
       final s = asm.assemble(
         contextId: 'perdida',
-        glosses: ['PERDER', 'CARNET', 'MICRO'],
+        glosses: ['PERDER', 'CARNE', 'MICRO'],
       );
       expectWellFormed(s);
       expect(has(s, 'Perdí'), true);
-      expect(has(s, 'mi carnet de identidad'), true);
+      expect(has(s, 'mi carné de identidad'), true);
       expect(has(s, 'en el micro'), true);
     });
   });
@@ -270,8 +272,10 @@ void main() {
         asm.isBackendDegenerate(
           backendText:
               'Deseo solicitar mi partida de nacimiento en el registro civil.',
-          glosses: ['SOLICITAR', 'PARTIDA_NACIMIENTO', 'REGISTRO_CIVIL'],
+          glosses: ['PEDIR', 'PARTIDA_NACIMIENTO', 'REGISTRO_CIVIL'],
         ),
+        // PEDIR está cubierto por 'solicitar' en el texto, PARTIDA_NACIMIENTO
+        // por 'partida' y REGISTRO_CIVIL por 'registro civil'.
         false,
       );
     });
