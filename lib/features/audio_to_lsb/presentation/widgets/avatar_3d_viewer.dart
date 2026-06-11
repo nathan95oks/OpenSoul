@@ -14,7 +14,8 @@ class Avatar3DViewer extends StatefulWidget {
   final List<String>? glosses;
   final List<String>? animationUrls;
 
-  /// Duración estimada de cada animación de seña (ajustable según los .glb)
+  /// Duración mínima de cada seña antes de avanzar a la siguiente.
+  /// El usuario también puede avanzar manualmente con el botón.
   final Duration animationDuration;
 
   const Avatar3DViewer({
@@ -22,7 +23,7 @@ class Avatar3DViewer extends StatefulWidget {
     required this.isProcessing,
     this.glosses,
     this.animationUrls,
-    this.animationDuration = const Duration(seconds: 2),
+    this.animationDuration = const Duration(seconds: 5),
   }) : super(key: key);
 
   @override
@@ -39,6 +40,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   // URLs internas de prueba (se usan cuando el usuario pulsa el botón de test)
   List<String>? _testUrls;
   List<String>? _testGlosses;
+
+  // Controla si ya se puede avanzar a la siguiente seña
+  bool _canAdvance = false;
 
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
@@ -70,6 +74,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     setState(() {
       _currentIndex = 0;
       _isPlayingSequence = true;
+      _canAdvance = false;
       if (overrideUrls != null) {
         _testUrls = overrideUrls;
         _testGlosses = overrideGlosses;
@@ -78,12 +83,23 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         _testGlosses = null;
       }
     });
-    _playNext();
+    _scheduleAdvance();
   }
 
-  void _playNext() async {
+  /// Programa el avance al siguiente modelo tras [animationDuration].
+  /// El usuario también puede avanzar manualmente antes de que venza.
+  void _scheduleAdvance() {
+    setState(() => _canAdvance = false);
+    Future.delayed(widget.animationDuration).then((_) {
+      if (mounted) setState(() => _canAdvance = true);
+    });
+  }
+
+  void _advanceToNext() {
     final urls = _testUrls ?? widget.animationUrls;
-    if (urls == null || _currentIndex >= urls.length) {
+    final nextIndex = _currentIndex + 1;
+    if (urls == null || nextIndex >= urls.length) {
+      // Fin de la secuencia
       if (mounted) {
         setState(() {
           _isPlayingSequence = false;
@@ -91,15 +107,12 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           _testGlosses = null;
         });
       }
-      return;
-    }
-
-    // Esperar duración de la animación antes de pasar a la siguiente
-    await Future.delayed(widget.animationDuration);
-
-    if (mounted) {
-      setState(() => _currentIndex++);
-      _playNext();
+    } else {
+      setState(() {
+        _currentIndex = nextIndex;
+        _canAdvance = false;
+      });
+      _scheduleAdvance();
     }
   }
 
@@ -174,27 +187,64 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           ),
         ),
 
-        // Indicador de progreso de la secuencia (bolitas)
+        // Indicador de progreso + botón de avance manual
         Positioned(
-          bottom: 14,
+          bottom: 10,
           left: 0,
           right: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(urls.length, (i) {
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: i == _currentIndex ? 20 : 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: i == _currentIndex
-                      ? Colors.deepPurpleAccent
-                      : Colors.white24,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Botón "Siguiente" (aparece cuando ya pasó el tiempo mínimo)
+              if (urls.length > 1)
+                AnimatedOpacity(
+                  opacity: _canAdvance ? 1.0 : 0.3,
+                  duration: const Duration(milliseconds: 400),
+                  child: GestureDetector(
+                    onTap: _canAdvance ? _advanceToNext : null,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18, vertical: 7),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurpleAccent.withOpacity(0.85),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Text('Siguiente',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600)),
+                          SizedBox(width: 4),
+                          Icon(Icons.skip_next_rounded,
+                              color: Colors.white, size: 16),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              );
-            }),
+              const SizedBox(height: 6),
+              // Bolitas de progreso
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(urls.length, (i) {
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: i == _currentIndex ? 20 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: i == _currentIndex
+                          ? Colors.deepPurpleAccent
+                          : Colors.white24,
+                    ),
+                  );
+                }),
+              ),
+            ],
           ),
         ),
 
