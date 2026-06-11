@@ -582,16 +582,16 @@ class LocalSentenceAssembler {
     'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
     'GRUPO': _Lex(_Role.personaDesc, 'un grupo de personas'),
     'ADULTO': _Lex(_Role.personaDesc, 'un adulto'),
-    'ANCIANO': _Lex(_Role.personaDesc, 'un anciano'),
+    'ABUELO': _Lex(_Role.personaDesc, 'un abuelo'),
     'SOLO': _Lex(_Role.personaDesc, 'una persona'),
     'DOS': _Lex(_Role.personaDesc, 'dos personas'),
-    'TRES_MAS': _Lex(_Role.personaDesc, 'tres o más personas'),
+    'TRES': _Lex(_Role.personaDesc, 'tres personas'),
     'CONOCIDO': _Lex(_Role.personaDesc, 'un conocido'),
 
     // Rasgos físicos / vestimenta / color.
     'ALTO': _Lex(_Role.rasgo, 'alto'),
     'BAJO': _Lex(_Role.rasgo, 'bajo'),
-    'DELGADO': _Lex(_Role.rasgo, 'delgado'),
+    'FLACO': _Lex(_Role.rasgo, 'flaco'),
     'GORDO': _Lex(_Role.rasgo, 'robusto'),
     'FUERTE': _Lex(_Role.rasgo, 'de contextura fuerte'),
     'MORENO': _Lex(_Role.rasgo, 'moreno'),
@@ -609,9 +609,9 @@ class LocalSentenceAssembler {
     'CAPUCHA': _Lex(_Role.rasgo, 'con capucha'),
     'CHOMPA': _Lex(_Role.rasgo, 'con chompa'),
     'CASCO': _Lex(_Role.rasgo, 'con casco'),
-    'CAMISETA': _Lex(_Role.rasgo, 'con camiseta'),
+    'CAMISA': _Lex(_Role.rasgo, 'con camisa'),
     'PANTALON': _Lex(_Role.rasgo, 'con pantalón'),
-    'ZAPATILLAS': _Lex(_Role.rasgo, 'con zapatillas'),
+    'ZAPATOS': _Lex(_Role.rasgo, 'con zapatos'),
     'MOCHILA_USADA': _Lex(_Role.rasgo, 'con una mochila'),
     'NEGRO': _Lex(_Role.rasgo, 'de color negro'),
     'BLANCO': _Lex(_Role.rasgo, 'de color blanco'),
@@ -624,7 +624,7 @@ class LocalSentenceAssembler {
 
     // Verbos de agresión (3ª persona, se antepone "me").
     'ROBAR': _Lex(_Role.verboAgresion, 'robó'),
-    'GOLPEAR': _Lex(_Role.verboAgresion, 'golpeó'),
+    'PEGAR': _Lex(_Role.verboAgresion, 'golpeó'),
     'AMENAZAR': _Lex(_Role.verboAgresion, 'amenazó'),
     'EMPUJAR': _Lex(_Role.verboAgresion, 'empujó'),
     'GRITAR': _Lex(_Role.verboAgresion, 'gritó'),
@@ -637,13 +637,13 @@ class LocalSentenceAssembler {
 
     // Verbos de acción / trámite (1ª persona).
     'TRAMITAR': _Lex(_Role.verboAccion, 'quiero tramitar'),
-    'SOLICITAR': _Lex(_Role.verboAccion, 'quiero solicitar'),
+    'PEDIR': _Lex(_Role.verboAccion, 'quiero solicitar'),
     'CONSULTAR': _Lex(_Role.verboAccion, 'quiero consultar'),
     'NECESITAR': _Lex(_Role.verboAccion, 'necesito'),
     'PAGAR': _Lex(_Role.verboAccion, 'quiero pagar'),
     'RENOVAR': _Lex(_Role.verboAccion, 'quiero renovar'),
     'RECOGER': _Lex(_Role.verboAccion, 'quiero recoger'),
-    'ENTREGAR': _Lex(_Role.verboAccion, 'quiero entregar'),
+    'DAR': _Lex(_Role.verboAccion, 'quiero entregar'),
     'PERDER': _Lex(_Role.verboAccion, 'perdí'),
     'CORREGIR': _Lex(_Role.verboAccion, 'quiero corregir'),
 
@@ -652,12 +652,12 @@ class LocalSentenceAssembler {
 
     // Objetos.
     'CELULAR': _Lex(_Role.objeto, 'mi celular'),
-    'DINERO': _Lex(_Role.objeto, 'mi dinero'),
+    'GANAR_DINERO': _Lex(_Role.objeto, 'mi dinero'),
     'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
     'BOLSA': _Lex(_Role.objeto, 'mi bolsa'),
     'LLAVE': _Lex(_Role.objeto, 'mis llaves'),
     'AUTO': _Lex(_Role.objeto, 'mi auto'),
-    'MOTO': _Lex(_Role.objeto, 'mi moto'),
+    'MOTOCICLETA': _Lex(_Role.objeto, 'mi motocicleta'),
     'BILLETERA': _Lex(_Role.objeto, 'mi billetera'),
     'TARJETA': _Lex(_Role.objeto, 'mi tarjeta bancaria'),
     'RELOJ': _Lex(_Role.objeto, 'mi reloj'),
@@ -665,14 +665,14 @@ class LocalSentenceAssembler {
     'ANILLO': _Lex(_Role.objeto, 'mi anillo'),
     'COLLAR': _Lex(_Role.objeto, 'mi collar'),
     'ARETES': _Lex(_Role.objeto, 'mis aretes'),
-    'LAPTOP': _Lex(_Role.objeto, 'mi laptop'),
+    'COMPUTADORA': _Lex(_Role.objeto, 'mi computadora'),
     'AUDIFONOS': _Lex(_Role.objeto, 'mis audífonos'),
     'LENTES_SOL': _Lex(_Role.objeto, 'mis lentes de sol'),
     'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
 
     // Documentos.
-    'CARNET': _Lex(_Role.documento, 'mi carnet de identidad'),
-    'DOCUMENTO': _Lex(_Role.documento, 'mi documento'),
+    'CARNE': _Lex(_Role.documento, 'mi carné de identidad'),
+    'PAPEL': _Lex(_Role.documento, 'mi documento'),
     'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
     'PARTIDA_NACIMIENTO': _Lex(_Role.documento, 'mi partida de nacimiento'),
     'LICENCIA': _Lex(_Role.documento, 'mi licencia de conducir'),
@@ -705,7 +705,7 @@ class LocalSentenceAssembler {
     'HOSPITAL': _Lex(_Role.institucion, 'en el hospital'),
     'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
     'REGISTRO_CIVIL': _Lex(_Role.institucion, 'en el registro civil'),
-    'FISCALIA': _Lex(_Role.institucion, 'en la fiscalía'),
+    'FISCAL': _Lex(_Role.institucion, 'en la fiscalía'),
     'JUZGADO': _Lex(_Role.institucion, 'en el juzgado'),
     'NOTARIA': _Lex(_Role.institucion, 'en la notaría'),
 
@@ -723,7 +723,7 @@ class LocalSentenceAssembler {
     'TRISTE': _Lex(_Role.emocion, 'estoy triste'),
     'ASUSTADO': _Lex(_Role.emocion, 'estoy asustado'),
     'NERVIOSO': _Lex(_Role.emocion, 'estoy nervioso'),
-    'ENFERMO': _Lex(_Role.emocion, 'estoy enfermo'),
+    'ENFERMEDAD': _Lex(_Role.emocion, 'estoy enfermo'),
     'DOLOR': _Lex(_Role.emocion, 'siento dolor'),
     'CONFUNDIDO': _Lex(_Role.emocion, 'estoy confundido'),
 
@@ -735,7 +735,7 @@ class LocalSentenceAssembler {
     // Motivo / propósito del trámite (a qué se destina el documento).
     'DENUNCIA': _Lex(_Role.motivo, 'una denuncia'),
     'CONSULTA': _Lex(_Role.motivo, 'una consulta'),
-    'RECLAMO': _Lex(_Role.motivo, 'un reclamo'),
+    'QUEJAR': _Lex(_Role.motivo, 'un reclamo'),
     // Trámites (tipo de gestión).
     'RENOVACION': _Lex(_Role.tramite, 'una renovación'),
     'PAGO': _Lex(_Role.tramite, 'un pago'),
