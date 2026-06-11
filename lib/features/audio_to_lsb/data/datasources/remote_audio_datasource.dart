@@ -13,56 +13,54 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
 
   RemoteAudioDataSourceImpl({
     required this.client,
-    this.apiGatewayUrl = 'https://tudominio-aws-api-gateway.com/prod/audio-to-lsb', // Mock URL
+    this.apiGatewayUrl = 'https://mq5eeqtb50.execute-api.us-east-1.amazonaws.com/default/OpenSoul-TextToLSB',
   });
 
   @override
   Future<LsbTranslationModel> translateAudio(String audioPath) async {
-    // Note: In a real implementation, you would probably upload the file via multipart request
-    // or upload to S3 first and then send the S3 URL to the API Gateway.
-    // Here we simulate the call with a simple POST request (e.g. sending the audio as base64 or assuming we send a path).
-    
-    // Simulating multipart request setup or similar:
-    /*
-    var request = http.MultipartRequest('POST', Uri.parse(apiGatewayUrl));
-    request.files.add(await http.MultipartFile.fromPath('audio', audioPath));
-    var response = await request.send();
-    */
-
-    // For this mock, we just wait a bit and return a mocked successful response.
-    // This allows the frontend structure to be fully functional and ready to plug the real API.
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network latency
-
-    final mockResponse = {
-      'glosses': ['HOLA', 'NOMBRE', 'MIO', 'JUAN'],
-      'animationUrl': 'https://mock-3d-avatar-anim.com/anim.gltf', // Placeholder
-    };
-
-    return LsbTranslationModel.fromJson(mockResponse);
-
-    /* Real implementation logic later:
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return LsbTranslationModel.fromJson(data);
-    } else {
-      throw Exception('Failed to translate audio: ${response.statusCode}');
-    }
-    */
+    // Note: Pending implementation for real audio upload,
+    // since the current flow uses SpeechToText on device.
+    throw UnimplementedError('translateAudio is not used when using On-Device Speech-to-Text.');
   }
   
   @override
   Future<LsbTranslationModel> translateText(String text) async {
-    // Simulate network latency
-    await Future.delayed(const Duration(seconds: 1)); 
+    try {
+      final response = await client.post(
+        Uri.parse(apiGatewayUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'text': text,
+          'context': 'legal',
+        }),
+      );
 
-    // Basic mocked translation Logic (Just for HU2 UI verification)
-    final words = text.toUpperCase().split(' ').where((w) => w.isNotEmpty).toList();
-    
-    final mockResponse = {
-      'glosses': words.isEmpty ? ['VACIO'] : words,
-      'animationUrl': 'https://mock-3d-avatar-anim.com/anim.gltf', 
-    };
-
-    return LsbTranslationModel.fromJson(mockResponse);
+      if (response.statusCode == 200) {
+        final decodedResponse = jsonDecode(response.body);
+        
+        // Extraer los nombres de archivos de animación
+        final glossDetails = decodedResponse['glossDetails'] as List<dynamic>? ?? [];
+        final s3BaseUrl = 'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/';
+        
+        List<String> urls = [];
+        for (var detail in glossDetails) {
+          final file = detail['animationFile'];
+          if (file != null && file.toString().isNotEmpty) {
+            urls.add('\$s3BaseUrl\$file');
+          }
+        }
+        
+        // Decodificamos el JSON que viene de AWS Lambda (Bedrock)
+        return LsbTranslationModel.fromJson({
+          'glosses': decodedResponse['glosses'],
+          'animationUrl': urls.isNotEmpty ? urls.first : '', 
+          'animationUrls': urls,
+        });
+      } else {
+        throw Exception('AWS API Error: \${response.statusCode} - \${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Network or Server error: \$e');
+    }
   }
-}    
+}
