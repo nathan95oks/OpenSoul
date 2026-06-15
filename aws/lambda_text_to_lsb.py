@@ -75,8 +75,10 @@ AVAILABLE_GLOSSES = {
     "YO", "TÚ", "ÉL", "ELLA", "NOSOTROS", "SÍ", "NO",
     "CUÁNDO", "DÓNDE", "QUÉ", "POR-QUÉ",
     "BUENO", "MALO", "GRANDE", "HOY", "AYER",
-    # --- Números ---
+    # --- Números y Alfabeto Dactilológico (Para señas compuestas) ---
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
+    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 }
 
 
@@ -97,17 +99,12 @@ def build_disambiguation_prompt(text: str, context: str) -> str:
     context_instruction = ""
     if context == "legal":
         context_instruction = """
-REGLAS DE DESAMBIGUACIÓN JURÍDICA:
+REGLAS DE DESAMBIGUACIÓN JURÍDICA Y SEÑAS COMPUESTAS:
 - "Auto" = Resolución judicial (NO vehículo), salvo contexto de tránsito.
 - "Fallo" = Sentencia o resolución judicial (NO error).
-- "Presentar" = Introducir formalmente un documento ante autoridad.
-- "Parte" = Sujeto procesal (demandante/demandado), NO fracción.
 - "Causa" = Expediente o proceso judicial, NO razón.
-- "Recurso" = Instrumento procesal de impugnación, NO medio económico.
 - "Cargo" = Acusación formal, NO puesto de trabajo.
-- "Declarar" = Prestar testimonio bajo juramento.
-- "Firme" = Resolución que ya no admite recurso (ejecutoriada).
-- "Apelación" = Recurso ante tribunal superior.
+- REGLA DE SEÑA COMPUESTA: Algunas palabras en LSB se forman fusionando señas base. Si la palabra requiere una seña compuesta (por ejemplo, "Fiscal"), debes descomponerla en el arreglo usando las glosas base correspondientes. Ej: Para "Fiscal", devuelve ["F", "JUEZ"]. Para otras palabras compuestas, aplica el mismo principio lógico si conoces su estructura en LSB.
 """
 
     prompt = f"""Eres un sistema experto en Lengua de Señas Boliviana (LSB) para entornos judiciales.
@@ -119,7 +116,7 @@ REGLAS LINGÜÍSTICAS OBLIGATORIAS:
 2. Elimina artículos (el, la, los, las, un, una), preposiciones (de, en, por, para, con) y conjunciones innecesarias.
 3. Los marcadores temporales (HOY, AYER) van AL INICIO del arreglo.
 4. Usa solo verbos en INFINITIVO como glosa (DENUNCIAR, no "denunció").
-5. Desambigua términos polisémicos según el contexto jurídico.
+5. Desambigua términos polisémicos y descompón palabras en SEÑAS COMPUESTAS si es lingüísticamente correcto en LSB.
 6. Cada glosa debe ser UNA SOLA PALABRA o un término compuesto con guión (POR-QUÉ).
 {context_instruction}
 
