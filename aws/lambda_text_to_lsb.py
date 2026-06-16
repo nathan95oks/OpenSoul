@@ -202,6 +202,15 @@ def parse_bedrock_json(raw_text: str) -> dict:
 # MÓDULO 3: POST-PROCESAMIENTO DE GLOSAS
 # ===================================================================
 
+def remove_accents(text: str) -> str:
+    accents = {
+        'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
+        'Ü': 'U', 'Ñ': 'N'
+    }
+    for accented_char, unaccented_char in accents.items():
+        text = text.replace(accented_char, unaccented_char)
+    return text
+
 def post_process_glosses(bedrock_result: dict) -> dict:
     """
     Valida las glosas retornadas por Bedrock contra el diccionario
@@ -214,12 +223,14 @@ def post_process_glosses(bedrock_result: dict) -> dict:
     for gloss in raw_glosses:
         gloss_upper = gloss.upper().strip()
         is_available = gloss_upper in AVAILABLE_GLOSSES
+        
+        filename = remove_accents(gloss_upper)
 
         processed.append({
             "gloss": gloss_upper,
             "available": is_available,
             "fallback": "dactilología" if not is_available else None,
-            "animationFile": f"{gloss_upper}.glb" if is_available else None,
+            "animationFile": f"{filename}.glb" if is_available else None,
         })
 
     return {
