@@ -15,6 +15,7 @@ class AudioToLsbScreen extends ConsumerWidget {
     final controller = ref.read(audioTranslationControllerProvider.notifier);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
         title: const Text(

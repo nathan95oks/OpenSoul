@@ -180,11 +180,13 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
             alt: 'Avatar LSB realizando la seña: $currentGloss',
             autoPlay: true,
             autoRotate: false,
-            cameraControls: false,    // Desactivado para mejor rendimiento
+            cameraControls: false,
             disableZoom: true,
             backgroundColor: Colors.transparent,
-            // ar: false,             // Desactivar AR reduce carga GPU
-          ),
+            // Configuración de la cámara para acercar a la parte superior del cuerpo
+            cameraTarget: "0m 0.9m 0m",   // Apunta más arriba (cara/pecho)
+            cameraOrbit: "0deg 90deg 3.0m", // Más cerca y ligeramente inclinado
+            ),
         ),
 
         // Indicador de progreso + botón de avance manual
@@ -253,32 +255,48 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           top: 14,
           left: 14,
           right: 14,
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent.withOpacity(0.85),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  currentGloss,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    letterSpacing: 1,
+              Row(
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurpleAccent.withOpacity(0.85),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      currentGloss,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        letterSpacing: 1,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${_currentIndex + 1} / ${urls.length}',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.6),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 8),
+              const SizedBox(height: 8),
+              // DEBUG: Imprimir la URL exacta para verificar por qué falla
               Text(
-                '${_currentIndex + 1} / ${urls.length}',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.6),
-                  fontSize: 12,
+                'DEBUG URL: $url',
+                style: const TextStyle(
+                  color: Colors.amber,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
                 ),
+                maxLines: 3,
               ),
             ],
           ),
@@ -408,13 +426,13 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         // ── Botón de prueba directa con S3 ──
         OutlinedButton.icon(
           onPressed: () => _startSequence(
-            overrideUrls: ['${_s3Base}ABOGADO.glb'],
+            overrideUrls: ['${_s3Base}YO.glb'],
             overrideGlosses: ['ABOGADO'],
           ),
           icon: const Icon(Icons.play_circle_outline,
               color: Colors.deepPurpleAccent, size: 18),
           label: const Text(
-            'Probar ABOGADO.glb (S3)',
+            'Probar YO.glb (S3)',
             style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 12),
           ),
           style: OutlinedButton.styleFrom(
