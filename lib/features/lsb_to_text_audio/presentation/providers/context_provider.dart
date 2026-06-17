@@ -484,16 +484,6 @@ final availableContexts = <SemanticContext>[
         cardSubcategories: ['Accesibilidad', 'Legal', 'Atención', 'Información'],
       ),
       SemanticZone(
-        id: 'lugar',
-        label: 'Lugar',
-        hint: 'Dónde ocurrió',
-        question: '¿Dónde ocurrió?',
-        emoji: '📍',
-        semanticWeight: 0.45,
-        optional: true,
-        cardCategories: ['Lugares'],
-      ),
-      SemanticZone(
         id: 'quien',
         label: 'Personas',
         hint: 'Para quién',

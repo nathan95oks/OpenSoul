@@ -903,7 +903,6 @@ class LocalSentenceAssembler {
     'TATUAJE': _Lex(_Role.rasgo, 'con un tatuaje'),
     'CICATRIZ': _Lex(_Role.rasgo, 'con una cicatriz'),
     'LENTES': _Lex(_Role.rasgo, 'con lentes'),
-    'MASCARA': _Lex(_Role.rasgo, 'con el rostro cubierto'),
     'GORRA': _Lex(_Role.rasgo, 'con gorra'),
     'CAPUCHA': _Lex(_Role.rasgo, 'con capucha'),
     'CHOMPA': _Lex(_Role.rasgo, 'con chompa'),
@@ -995,7 +994,6 @@ class LocalSentenceAssembler {
     'BANCO': _Lex(_Role.lugar, 'en el banco'),
     'TAXI': _Lex(_Role.lugar, 'en un taxi'),
     'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
-    'ESQUINA': _Lex(_Role.lugar, 'en la esquina'),
     'PUENTE': _Lex(_Role.lugar, 'en el puente'),
 
     // Instituciones.

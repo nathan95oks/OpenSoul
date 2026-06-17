@@ -127,10 +127,6 @@ class LocalCardsDataSource {
     LsbCard(id: 'dm03', gloss: 'LENTES', displayText: 'CON LENTES', iconUrl: '',
       categoryId: 'Descripción', subcategoryId: 'Marca', contexts: ['denuncia_robo', 'violencia'],
       priority: 3, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'visibility'),
-    LsbCard(id: 'dm04', gloss: 'MASCARA', displayText: 'MÁSCARA/CARA TAPADA', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Marca', contexts: ['denuncia_robo', 'violencia'],
-      priority: 4, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'theater_comedy'),
-
     // ─── Vestimenta ─────────────────────────────────────────
     LsbCard(id: 'dv01', gloss: 'GORRA', displayText: 'GORRA', iconUrl: '',
       categoryId: 'Descripción', subcategoryId: 'Vestimenta', contexts: ['denuncia_robo', 'violencia'],
@@ -439,12 +435,9 @@ class LocalCardsDataSource {
     LsbCard(id: 'lu11', gloss: 'PLAZA', displayText: 'PLAZA', iconUrl: '',
       categoryId: 'Lugares', subcategoryId: 'Público', contexts: ['denuncia_robo', 'violencia'],
       priority: 11, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'forest'),
-    LsbCard(id: 'lu12', gloss: 'ESQUINA', displayText: 'ESQUINA', iconUrl: '',
-      categoryId: 'Lugares', subcategoryId: 'Público', contexts: ['denuncia_robo', 'violencia'],
-      priority: 12, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'turn_right'),
-    LsbCard(id: 'lu13', gloss: 'PUENTE', displayText: 'PUENTE', iconUrl: '',
+    LsbCard(id: 'lu12', gloss: 'PUENTE', displayText: 'PUENTE', iconUrl: '',
       categoryId: 'Lugares', subcategoryId: 'Público', contexts: ['denuncia_robo'],
-      priority: 13, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'directions_walk'),
+      priority: 12, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'directions_walk'),
 
     // ═══════════════════════════════════════════════════════════
     // INSTITUCIONES — Entidades públicas
