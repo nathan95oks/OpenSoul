@@ -15,7 +15,7 @@ void main() {
     ('denuncia_robo', ['ROBAR']),
     ('denuncia_robo', ['HOMBRE', 'ROBAR', 'CELULAR']),
     ('denuncia_robo', ['HOMBRE', 'ALTO', 'TATUAJE', 'ROBAR', 'CELULAR', 'CALLE', 'NOCHE']),
-    ('denuncia_robo', ['ROBAR', 'CELULAR', 'GANAR_DINERO', 'POLICIA', 'MIEDO', 'HOY']),
+    ('denuncia_robo', ['ROBAR', 'CELULAR', 'DINERO', 'POLICIA', 'MIEDO', 'HOY']),
     // violencia (ejemplos del usuario)
     ('violencia', ['AMENAZAR']),
     ('violencia', ['AMENAZAR', 'AYUDA', 'PELO_CORTO', 'POLICIA', 'ASUSTADO']),
@@ -29,7 +29,7 @@ void main() {
     ('emergencia', ['EMERGENCIA']),
     ('emergencia', ['ENFERMEDAD', 'AMBULANCIA', 'URGENTE', 'HOSPITAL']),
     // documentos / trámite (contexto judicial ampliado)
-    ('tramite_id', ['TRAMITAR', 'CARNE', 'SEGIP']),
+    ('tramite_id', ['TRAMITAR', 'CARNET', 'SEGIP']),
     ('tramite_id', ['RENOVAR', 'LICENCIA', 'PAGO', 'SEGIP', 'HIJO']),
     ('tramite_id', ['ANTECEDENTES', 'FISCAL']),
     ('tramite_id', ['TRAMITAR', 'ANTECEDENTES', 'DENUNCIA', 'FISCAL', 'INTERPRETE', 'HOY']),
@@ -39,7 +39,7 @@ void main() {
     ('orientacion', ['ABOGADO', 'DEFENSORIA']),
     ('orientacion', ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA', 'HOY']),
     // pérdida de documentos
-    ('perdida', ['PERDER', 'CARNE']),
+    ('perdida', ['PERDER', 'CARNET']),
     ('perdida', ['PAPEL', 'CALLE', 'AYER', 'POLICIA', 'URGENTE']),
     // testigo
     ('otro', ['ROBAR']),
@@ -93,7 +93,7 @@ void main() {
         resolveAssemblerContext('orientacion', gl, catOf);
     expect(route(['PERDER', 'CELULAR']), 'perdida');
     expect(route(['CELULAR', 'CALLE']), 'perdida'); // objeto → pérdida
-    expect(route(['CARNE']), 'tramite_id');
+    expect(route(['CARNET']), 'tramite_id');
     expect(route(['ANTECEDENTES', 'FISCAL']), 'tramite_id');
     expect(route(['TRAMITAR', 'COPIA_DENUNCIA', 'JUZGADO']), 'tramite_id');
     expect(route(['INTERPRETE', 'DEFENSORIA']), 'orientacion');
@@ -147,7 +147,7 @@ const _synonyms = {
   'PEGAR': 'golpe',
   'PAPEL': 'documento',
   'PEDIR': 'solicitar',
-  'GANAR_DINERO': 'dinero',
+  'DINERO': 'dinero',
 };
 
 bool _covered(String gloss, String hayLower) {

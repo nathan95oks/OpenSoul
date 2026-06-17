@@ -186,7 +186,7 @@ class LocalSentenceAssembler {
       }
       switch (e.role) {
         case _Role.sujeto:             r.subject ??= e.es; break;
-        case _Role.personaDesc:        r.perpetrator ??= e.es; break;
+        case _Role.personaDesc:        if (!r.perpetrators.contains(e.es)) r.perpetrators.add(e.es); break;
         // Bug fix #2: personaDescPlural almacena el sujeto plural por separado
         // para que el compositor sepa usar verbo plural (agredieron).
         case _Role.personaDescPlural:  r.perpetratorPlural ??= e.es; break;
@@ -211,7 +211,7 @@ class LocalSentenceAssembler {
 
   /// true si hay un agresor explícito (personaDesc o personaDescPlural o rasgos).
   bool _hasAggressor(_Roles r) =>
-      r.perpetrator != null || r.perpetratorPlural != null || r.traits.isNotEmpty;
+      r.perpetrators.isNotEmpty || r.perpetratorPlural != null || r.traits.isNotEmpty;
 
   /// Convierte un verbo conjugado en 3ª singular a 3ª plural.
   /// Solo mapea los verbos del lexicón — lista cerrada y segura.
@@ -254,7 +254,7 @@ class LocalSentenceAssembler {
     if (r.aggression != null || hasActor) {
       final subject = _subjectPhrase(r);
       // Bug fix #2: DOS/TRES (pluraDesc) usan verbo plural.
-      final isPlural = r.perpetratorPlural != null;
+      final isPlural = r.perpetratorPlural != null || r.perpetrators.length > 1;
       final defaultVerb = ctx == 'violencia' ? (isPlural ? 'agredieron' : 'agredió') : (isPlural ? 'asaltaron' : 'asaltó');
       final aggression = r.aggression;
       final verb = aggression == null
@@ -296,10 +296,43 @@ class LocalSentenceAssembler {
 
     final sentences = <String>[];
 
+    // Si hay un agresor o acción violenta, mencionarlo primero
+    final hasActor = _hasAggressor(r);
+    if (r.aggression != null || hasActor) {
+      final subject = _subjectPhrase(r);
+      final isPlural = r.perpetratorPlural != null || r.perpetrators.length > 1;
+      final defaultVerb = 'estuvo involucrado';
+      final aggression = r.aggression;
+      final verb = aggression == null
+          ? (isPlural ? 'estuvieron involucrados' : defaultVerb)
+          : (isPlural ? _verbPlural(aggression) : aggression);
+      
+      var clause = aggression == null 
+          ? '$subject $verb' 
+          : '$subject me $verb';
+          
+      final complement = _join([...r.objects, ...r.documents]);
+      if (complement.isNotEmpty) {
+        if (aggression != null) {
+          clause += ' $complement';
+        } else {
+          sentences.add('Involucra $complement.');
+        }
+      }
+      if (r.weapon != null) clause += ' ${r.weapon}';
+      sentences.add('${_cap(clause)}.');
+    } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
+      final what = _join([...r.objects, ...r.documents]);
+      sentences.add('Involucra $what.');
+    }
+
     final state = _join(r.emotions);
     if (state.isNotEmpty) {
-      var clause = state;
-      if (r.place != null) clause += ' ${r.place}';
+      sentences.add('${_cap(state)}.');
+    }
+
+    if (r.place != null) {
+      var clause = 'Ocurrió ${r.place}';
       if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
       sentences.add('${_cap(clause)}.');
     } else if (r.time != null) {
@@ -312,9 +345,10 @@ class LocalSentenceAssembler {
     if (r.urgencies.isNotEmpty) {
       sentences.add('${_cap(_join(r.urgencies))}.');
     }
-    if (r.perpetrator != null && state.isEmpty) {
-      sentences.add('${_cap(_subjectPhrase(r))} necesita ayuda.');
-    }
+
+    final affected = _affectedSubjectLine(r);
+    if (affected != null) sentences.add(affected);
+
     final inst = _institutionLine(r, 'Necesito atención');
     if (inst != null) sentences.add(inst);
     final proc = _procedureLine(r);
@@ -428,7 +462,7 @@ class LocalSentenceAssembler {
     const lead = 'Quiero declarar como testigo lo que presencié.';
     final sentences = <String>[];
 
-    final hasActor = r.perpetrator != null || r.traits.isNotEmpty;
+    final hasActor = _hasAggressor(r);
     final subject = hasActor ? _subjectPhrase(r) : 'una persona';
 
     if (r.aggression != null) {
@@ -507,8 +541,8 @@ class LocalSentenceAssembler {
   /// Cuando el sujeto es genérico ("una persona") los adjetivos simples
   /// se convierten a su forma femenina para mantener concordancia.
   String _subjectPhrase(_Roles r) {
-    final base = r.perpetrator ?? 'una persona';
-    final isGeneric = r.perpetrator == null;
+    final base = r.perpetrators.isNotEmpty ? _join(r.perpetrators) : 'una persona';
+    final isGeneric = r.perpetrators.isEmpty;
     if (r.traits.isEmpty) return base;
 
     // Separa adjetivos simples de frases con preposición (empieza con "con"/"de")
@@ -717,7 +751,7 @@ class LocalSentenceAssembler {
 
     // Objetos.
     'CELULAR': _Lex(_Role.objeto, 'mi celular'),
-    'GANAR_DINERO': _Lex(_Role.objeto, 'mi dinero'),
+    'DINERO': _Lex(_Role.objeto, 'mi dinero'),
     'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
     'BOLSA': _Lex(_Role.objeto, 'mi bolsa'),
     'LLAVE': _Lex(_Role.objeto, 'mis llaves'),
@@ -736,7 +770,7 @@ class LocalSentenceAssembler {
     'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
 
     // Documentos.
-    'CARNE': _Lex(_Role.documento, 'mi carné de identidad'),
+    'CARNET': _Lex(_Role.documento, 'mi carnet de identidad'),
     'PAPEL': _Lex(_Role.documento, 'mi documento'),
     'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
     'PARTIDA_NACIMIENTO': _Lex(_Role.documento, 'mi partida de nacimiento'),
@@ -845,7 +879,7 @@ class _Lex {
 /// Acumulador mutable de roles detectados en una secuencia de glosas.
 class _Roles {
   String? subject;
-  String? perpetrator;
+  final List<String> perpetrators = [];
   String? perpetratorPlural; // Bug fix #2: sujeto plural (DOS/TRES)
   String? aggression;
   String? action;

@@ -74,13 +74,13 @@ void main() {
       'URGENTE', 'AYUDA', 'EMERGENCIA', 'ENFERMEDAD', 'DOLOR', 'CONFUNDIDO',
     ],
     'Objetos': [
-      'CELULAR', 'GANAR_DINERO', 'MOCHILA', 'BOLSA', 'LLAVE',
+      'CELULAR', 'DINERO', 'MOCHILA', 'BOLSA', 'LLAVE',
       'CUCHILLO', 'AUTO', 'MOTOCICLETA', 'BILLETERA', 'TARJETA',
       'RELOJ', 'CADENA', 'ANILLO', 'COLLAR', 'ARETES',
       'COMPUTADORA', 'AUDIFONOS', 'LENTES_SOL', 'BICICLETA',
     ],
     'Documentos': [
-      'CARNE', 'PAPEL', 'CERTIFICADO', 'PARTIDA_NACIMIENTO', 'LICENCIA',
+      'CARNET', 'PAPEL', 'CERTIFICADO', 'PARTIDA_NACIMIENTO', 'LICENCIA',
       'FACTURA', 'ANTECEDENTES', 'COPIA_DENUNCIA', 'COPIA_SENTENCIA',
       'PODER', 'DECLARACION_JURADA',
     ],
@@ -138,7 +138,7 @@ void main() {
       });
 
       test('  [COMBO] Robo con objetos múltiples', () {
-        final glosses = ['ROBAR', 'CELULAR', 'GANAR_DINERO', 'RELOJ', 'CALLE', 'NOCHE'];
+        final glosses = ['ROBAR', 'CELULAR', 'DINERO', 'RELOJ', 'CALLE', 'NOCHE'];
         final s = asm.assemble(contextId: ctx, glosses: glosses);
         // ignore: avoid_print
         print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
@@ -154,7 +154,7 @@ void main() {
       });
 
       test('  [COMBO] Trámite con documentos e institución', () {
-        final glosses = ['TRAMITAR', 'CARNE', 'SEGIP', 'HOY'];
+        final glosses = ['TRAMITAR', 'CARNET', 'SEGIP', 'HOY'];
         final s = asm.assemble(contextId: ctx, glosses: glosses);
         // ignore: avoid_print
         print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');

@@ -53,7 +53,7 @@ void main() {
     test('robo de varios objetos usa coordinación con "y"', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['ROBAR', 'CELULAR', 'GANAR_DINERO', 'RELOJ'],
+        glosses: ['ROBAR', 'CELULAR', 'DINERO', 'RELOJ'],
       );
       expectWellFormed(s);
       expect(has(s, 'mi celular'), true);
@@ -120,7 +120,7 @@ void main() {
     test('corrección de datos en el SEGIP', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['CORREGIR', 'CARNE', 'SEGIP'],
+        glosses: ['CORREGIR', 'CARNET', 'SEGIP'],
       );
       expectWellFormed(s);
       expect(has(s, 'quiero corregir'), true);
@@ -130,7 +130,7 @@ void main() {
     test('duplicado de documento', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['PEDIR', 'DUPLICADO', 'CARNE'],
+        glosses: ['PEDIR', 'DUPLICADO', 'CARNET'],
       );
       expectWellFormed(s);
       expect(has(s, 'un duplicado'), true);
@@ -141,11 +141,11 @@ void main() {
     test('renovación de carnet en el SEGIP', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['RENOVAR', 'CARNE', 'SEGIP'],
+        glosses: ['RENOVAR', 'CARNET', 'SEGIP'],
       );
       expectWellFormed(s);
       expect(has(s, 'quiero renovar'), true);
-      expect(has(s, 'mi carné de identidad'), true);
+      expect(has(s, 'mi carnet de identidad'), true);
       expect(has(s, 'en el SEGIP'), true);
     });
 
@@ -198,11 +198,11 @@ void main() {
     test('pérdida de documento', () {
       final s = asm.assemble(
         contextId: 'perdida',
-        glosses: ['PERDER', 'CARNE', 'MICRO'],
+        glosses: ['PERDER', 'CARNET', 'MICRO'],
       );
       expectWellFormed(s);
       expect(has(s, 'Perdí'), true);
-      expect(has(s, 'mi carné de identidad'), true);
+      expect(has(s, 'mi carnet de identidad'), true);
       expect(has(s, 'en el micro'), true);
     });
   });

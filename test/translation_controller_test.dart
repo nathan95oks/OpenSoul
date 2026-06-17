@@ -159,7 +159,7 @@ void main() {
       final c = _containerWith(repo);
 
       final result = await _translate(c,
-          context: 'tramite_id', cards: ['RENOVAR', 'CARNE', 'SEGIP']);
+          context: 'tramite_id', cards: ['RENOVAR', 'CARNET', 'SEGIP']);
 
       expect(result, isNotNull);
       expect(result!.generatedText, contains('SEGIP'));

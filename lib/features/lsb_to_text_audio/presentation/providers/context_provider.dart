@@ -47,6 +47,7 @@ final availableContexts = <SemanticContext>[
         cardCategories: ['Descripción'],
         cardSubcategories: ['Género', 'Edad', 'Relación', 'Cantidad'],
         strictContext: true,
+        maxPicks: 3,
         relatedZones: ['apariencia', 'vestimenta', 'situacion'],
       ),
       // Cómo era físicamente — altura, contextura, piel, cabello, marcas.
@@ -163,6 +164,7 @@ final availableContexts = <SemanticContext>[
         cardCategories: ['Identificación', 'Descripción'],
         cardSubcategories: ['Género', 'Edad', 'Relación', 'Cantidad', 'Familia'],
         strictContext: true,
+        maxPicks: 3,
         relatedZones: ['apariencia', 'vestimenta', 'situacion'],
       ),
       // Cómo era físicamente — altura, contextura, piel, cabello, marcas.
@@ -287,10 +289,11 @@ final availableContexts = <SemanticContext>[
         id: 'personas',
         label: 'Personas',
         hint: 'Quién estuvo',
-        question: '¿Quién más estuvo involucrado?',
+        question: '¿A quién le ocurrió o quién más estuvo involucrado?',
         emoji: '👤',
         semanticWeight: 0.5,
         cardCategories: ['Identificación', 'Descripción'],
+        maxPicks: 3,
       ),
       SemanticZone(
         id: 'lugar',
@@ -338,6 +341,7 @@ final availableContexts = <SemanticContext>[
         emoji: '👤',
         semanticWeight: 0.7,
         cardCategories: ['Identificación', 'Descripción'],
+        maxPicks: 3,
         relatedZones: ['lugar'],
       ),
       SemanticZone(
