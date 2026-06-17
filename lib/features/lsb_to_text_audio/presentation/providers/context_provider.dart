@@ -34,7 +34,21 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.9,
         cardCategories: ['Agresión'],
         contextTags: [EmotionalTag.amenaza],
-        relatedZones: ['personas', 'objetos', 'emergencia'],
+        relatedZones: ['arma', 'personas', 'objetos', 'emergencia'],
+      ),
+      // ¿Usó algún arma? — opcional; tarjetas de la categoría Armas.
+      SemanticZone(
+        id: 'arma',
+        label: 'Arma',
+        hint: '¿Usó algún arma?',
+        question: '¿Usó algún arma?',
+        emoji: '🔪',
+        semanticWeight: 0.7,
+        optional: true,
+        cardCategories: ['Armas'],
+        strictContext: true,
+        contextTags: [EmotionalTag.amenaza, EmotionalTag.peligro],
+        relatedZones: ['personas', 'objetos'],
       ),
       // Quién — sólo género / edad / relación / cantidad.
       SemanticZone(
@@ -148,7 +162,21 @@ final availableContexts = <SemanticContext>[
         urgencyLevel: UrgencyLevel.medium,
         cardCategories: ['Agresión'],
         contextTags: [EmotionalTag.amenaza, EmotionalTag.peligro],
-        relatedZones: ['emocion', 'personas', 'emergencia'],
+        relatedZones: ['arma', 'emocion', 'personas', 'emergencia'],
+      ),
+      // ¿Usó algún arma? — opcional; tarjetas de la categoría Armas.
+      SemanticZone(
+        id: 'arma',
+        label: 'Arma',
+        hint: '¿Usó algún arma?',
+        question: '¿Usó algún arma?',
+        emoji: '🔪',
+        semanticWeight: 0.7,
+        optional: true,
+        cardCategories: ['Armas'],
+        strictContext: true,
+        contextTags: [EmotionalTag.amenaza, EmotionalTag.peligro],
+        relatedZones: ['emocion', 'personas'],
       ),
       // Quién — tipo de persona / relación. Incluye pareja y familia para
       // cubrir violencia doméstica. Sólo identidad: los detalles físicos
@@ -248,19 +276,13 @@ final availableContexts = <SemanticContext>[
     icon: 'car_crash',
     emoji: '🚗',
     description: 'Tránsito / Caída / Lesión / Emergencia médica',
-    entryZoneId: 'situacion',
+    // El flujo arranca por el estado físico: el catálogo no tiene glosas de
+    // "acción de accidente" (caída/choque…), así que una pregunta "¿Qué pasó?"
+    // basada en Agresión mostraría verbos de delito (robar/pegar) — incoherente
+    // para un accidente. Se retira esa zona.
+    entryZoneId: 'estado',
     baseUrgency: UrgencyLevel.high,
     zones: const [
-      SemanticZone(
-        id: 'situacion',
-        label: 'Situación',
-        hint: 'Qué pasó',
-        question: '¿Qué pasó?',
-        emoji: '⚡',
-        semanticWeight: 0.9,
-        cardCategories: ['Agresión'],
-        relatedZones: ['estado', 'ayuda'],
-      ),
       SemanticZone(
         id: 'estado',
         label: 'Cómo estoy',
@@ -293,6 +315,9 @@ final availableContexts = <SemanticContext>[
         emoji: '👤',
         semanticWeight: 0.5,
         cardCategories: ['Identificación', 'Descripción'],
+        // Solo identidad (género/edad/relación/cantidad/familia): evita que
+        // adjetivos físicos como ALTO o BAJO aparezcan como respuesta a "quién".
+        cardSubcategories: ['Persona', 'Familia', 'Género', 'Edad', 'Relación', 'Cantidad'],
         maxPicks: 3,
       ),
       SemanticZone(
@@ -341,6 +366,9 @@ final availableContexts = <SemanticContext>[
         emoji: '👤',
         semanticWeight: 0.7,
         cardCategories: ['Identificación', 'Descripción'],
+        // Solo identidad: el testigo describe personas (hombre, mujer,
+        // desconocido…), no adjetivos físicos sueltos.
+        cardSubcategories: ['Persona', 'Familia', 'Género', 'Edad', 'Relación', 'Cantidad'],
         maxPicks: 3,
         relatedZones: ['lugar'],
       ),

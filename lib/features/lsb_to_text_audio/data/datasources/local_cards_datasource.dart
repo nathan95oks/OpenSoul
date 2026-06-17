@@ -38,43 +38,43 @@ class LocalCardsDataSource {
     // DESCRIPCIÓN — Tipos de personas (NUEVO)
     // ═══════════════════════════════════════════════════════════
     LsbCard(id: 'de01', gloss: 'HOMBRE', displayText: 'HOMBRE', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Género', contexts: ['denuncia_robo', 'violencia', 'accidente'],
+      categoryId: 'Descripción', subcategoryId: 'Género', contexts: ['denuncia_robo', 'violencia', 'accidente', 'otro'],
       priority: 1, suggestedNextCardIds: ['de05'], isFrequent: true, isEmergency: false, semanticIcon: 'man'),
     LsbCard(id: 'de02', gloss: 'MUJER', displayText: 'MUJER', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Género', contexts: ['denuncia_robo', 'violencia', 'accidente'],
+      categoryId: 'Descripción', subcategoryId: 'Género', contexts: ['denuncia_robo', 'violencia', 'accidente', 'otro'],
       priority: 2, suggestedNextCardIds: ['de05'], isFrequent: true, isEmergency: false, semanticIcon: 'woman'),
     LsbCard(id: 'de03', gloss: 'JOVEN', displayText: 'JOVEN', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['denuncia_robo', 'violencia', 'accidente'],
+      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['denuncia_robo', 'violencia', 'accidente', 'otro'],
       priority: 3, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'person'),
     LsbCard(id: 'de04', gloss: 'NIÑO', displayText: 'NIÑO', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['emergencia', 'accidente'],
+      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['emergencia', 'accidente', 'otro'],
       priority: 4, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'child_care'),
     LsbCard(id: 'de05', gloss: 'DESCONOCIDO', displayText: 'DESCONOCIDO', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Relación', contexts: ['denuncia_robo', 'violencia'],
+      categoryId: 'Descripción', subcategoryId: 'Relación', contexts: ['denuncia_robo', 'violencia', 'otro'],
       priority: 5, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'person_off'),
     LsbCard(id: 'de06', gloss: 'VECINO', displayText: 'VECINO', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Relación', contexts: ['violencia', 'general'],
+      categoryId: 'Descripción', subcategoryId: 'Relación', contexts: ['violencia', 'general', 'otro'],
       priority: 6, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'nature_people'),
     LsbCard(id: 'de07', gloss: 'GRUPO', displayText: 'GRUPO', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia'],
+      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia', 'otro'],
       priority: 7, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'groups'),
     LsbCard(id: 'de08', gloss: 'ADULTO', displayText: 'ADULTO', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['denuncia_robo', 'violencia', 'accidente'],
+      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['denuncia_robo', 'violencia', 'accidente', 'otro'],
       priority: 8, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'person'),
     LsbCard(id: 'de09', gloss: 'ABUELO', displayText: 'ABUELO', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['denuncia_robo', 'violencia', 'accidente'],
+      categoryId: 'Descripción', subcategoryId: 'Edad', contexts: ['denuncia_robo', 'violencia', 'accidente', 'otro'],
       priority: 9, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'elderly'),
     LsbCard(id: 'de10', gloss: 'SOLO', displayText: 'UNA PERSONA', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia'],
+      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia', 'otro'],
       priority: 10, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'person'),
     LsbCard(id: 'de11', gloss: 'DOS', displayText: 'DOS', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia'],
+      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia', 'otro'],
       priority: 11, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'people'),
     LsbCard(id: 'de12', gloss: 'TRES', displayText: 'TRES', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia'],
+      categoryId: 'Descripción', subcategoryId: 'Cantidad', contexts: ['denuncia_robo', 'violencia', 'otro'],
       priority: 12, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'groups'),
     LsbCard(id: 'de13', gloss: 'CONOCIDO', displayText: 'CONOCIDO', iconUrl: '',
-      categoryId: 'Descripción', subcategoryId: 'Relación', contexts: ['denuncia_robo', 'violencia'],
+      categoryId: 'Descripción', subcategoryId: 'Relación', contexts: ['denuncia_robo', 'violencia', 'otro'],
       priority: 13, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'person_pin'),
 
     // ─── Descripción física ─────────────────────────────────
@@ -194,7 +194,7 @@ class LocalCardsDataSource {
       priority: 2, suggestedNextCardIds: ['em01', 'em02'], isFrequent: true, isEmergency: true, semanticIcon: 'sports_mma'),
     LsbCard(id: 'ag03', gloss: 'AMENAZAR', displayText: 'AMENAZAR', iconUrl: '',
       categoryId: 'Agresión', subcategoryId: 'Psicológica', contexts: ['violencia', 'denuncia_robo'],
-      priority: 3, suggestedNextCardIds: ['em01', 'ob06'], isFrequent: true, isEmergency: true, semanticIcon: 'warning'),
+      priority: 3, suggestedNextCardIds: ['em01'], isFrequent: true, isEmergency: true, semanticIcon: 'warning'),
     LsbCard(id: 'ag04', gloss: 'EMPUJAR', displayText: 'EMPUJAR', iconUrl: '',
       categoryId: 'Agresión', subcategoryId: 'Física', contexts: ['violencia'],
       priority: 4, suggestedNextCardIds: ['eu05'], isFrequent: true, isEmergency: true, semanticIcon: 'back_hand'),
@@ -209,7 +209,7 @@ class LocalCardsDataSource {
       priority: 7, suggestedNextCardIds: ['em01'], isFrequent: false, isEmergency: true, semanticIcon: 'directions_run'),
     LsbCard(id: 'ag08', gloss: 'ASALTAR', displayText: 'ASALTAR', iconUrl: '',
       categoryId: 'Agresión', subcategoryId: 'Delito', contexts: ['denuncia_robo'],
-      priority: 8, suggestedNextCardIds: ['ob06', 'ob01', 'ob02'], isFrequent: true, isEmergency: true, semanticIcon: 'front_hand'),
+      priority: 8, suggestedNextCardIds: ['ob01', 'ob02'], isFrequent: true, isEmergency: true, semanticIcon: 'front_hand'),
     LsbCard(id: 'ag09', gloss: 'ACOSAR', displayText: 'ACOSAR', iconUrl: '',
       categoryId: 'Agresión', subcategoryId: 'Acoso', contexts: ['violencia'],
       priority: 9, suggestedNextCardIds: ['em01', 'in11'], isFrequent: true, isEmergency: true, semanticIcon: 'directions_run'),
@@ -296,6 +296,18 @@ class LocalCardsDataSource {
       priority: 6, suggestedNextCardIds: ['sv02','sv06'], isFrequent: true, isEmergency: false, semanticIcon: 'help_outline'),
 
     // ═══════════════════════════════════════════════════════════
+    // ARMAS — Objeto usado en la agresión (pregunta "¿Usó algún arma?")
+    // Glosas concretas (CUCHILLO, PISTOLA); el displayText muestra además la
+    // categoría legal ("arma blanca / arma de fuego") para el funcionario.
+    // ═══════════════════════════════════════════════════════════
+    LsbCard(id: 'arm01', gloss: 'CUCHILLO', displayText: 'CUCHILLO\n(arma blanca)', iconUrl: '',
+      categoryId: 'Armas', subcategoryId: 'Blanca', contexts: ['denuncia_robo', 'violencia'],
+      priority: 1, suggestedNextCardIds: [], isFrequent: true, isEmergency: true, semanticIcon: 'hardware'),
+    LsbCard(id: 'arm02', gloss: 'PISTOLA', displayText: 'PISTOLA\n(arma de fuego)', iconUrl: '',
+      categoryId: 'Armas', subcategoryId: 'Fuego', contexts: ['denuncia_robo', 'violencia'],
+      priority: 2, suggestedNextCardIds: [], isFrequent: true, isEmergency: true, semanticIcon: 'gpp_bad'),
+
+    // ═══════════════════════════════════════════════════════════
     // OBJETOS — Cosas personales (NUEVO)
     // ═══════════════════════════════════════════════════════════
     LsbCard(id: 'ob01', gloss: 'CELULAR', displayText: 'CELULAR', iconUrl: '',
@@ -313,9 +325,6 @@ class LocalCardsDataSource {
     LsbCard(id: 'ob05', gloss: 'LLAVE', displayText: 'LLAVE', iconUrl: '',
       categoryId: 'Objetos', subcategoryId: 'Personal', contexts: ['perdida'],
       priority: 5, suggestedNextCardIds: [], isFrequent: false, isEmergency: false, semanticIcon: 'vpn_key'),
-    LsbCard(id: 'ob06', gloss: 'CUCHILLO', displayText: 'CUCHILLO / ARMA', iconUrl: '',
-      categoryId: 'Agresión', subcategoryId: 'Arma', contexts: ['denuncia_robo', 'violencia'],
-      priority: 6, suggestedNextCardIds: ['em01'], isFrequent: true, isEmergency: true, semanticIcon: 'hardware'),
     LsbCard(id: 'ob07', gloss: 'AUTO', displayText: 'AUTO', iconUrl: '',
       categoryId: 'Objetos', subcategoryId: 'Vehículo', contexts: ['accidente', 'denuncia_robo'],
       priority: 7, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'directions_car'),
@@ -538,9 +547,9 @@ class LocalCardsDataSource {
 
   /// Orden predefinido de las categorías semánticas para exploración libre.
   static const _categoryOrder = [
-    'Identificación', 'Descripción', 'Agresión', 'Acciones', 
-    'Emociones', 'Estado/Urgencia', 'Objetos', 'Documentos', 
-    'Lugares', 'Instituciones', 'Servicios', 'Consultas', 
+    'Identificación', 'Descripción', 'Agresión', 'Armas', 'Acciones',
+    'Emociones', 'Estado/Urgencia', 'Objetos', 'Documentos',
+    'Lugares', 'Instituciones', 'Servicios', 'Consultas',
     'Trámites', 'Tiempo'
   ];
 
