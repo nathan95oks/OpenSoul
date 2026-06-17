@@ -21,27 +21,16 @@ import '../widgets/card_grid.dart' show expandedAnswersProvider;
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  static const _orange = Color(0xFFFF6B00);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedWords = ref.watch(sentenceProvider);
     final translationState = ref.watch(translationControllerProvider);
     final contextState = ref.watch(contextProvider);
 
-    ref.listen<AsyncValue<TranslationResult?>>(
-      translationControllerProvider,
-      (_, next) {
-        if (next is AsyncError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error: ${next.error}'),
-              backgroundColor: _orange,
-            ),
-          );
-        }
-      },
-    );
+    // Nota (RVP-01): no se observa AsyncError aquí porque el controlador
+    // nunca emite error — siempre degrada al motor local y entrega un
+    // resultado. El origen del texto (IA remota vs motor local) se comunica
+    // al usuario con un chip en la pantalla de resultado.
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -49,7 +38,13 @@ class HomeScreen extends ConsumerWidget {
       body: SafeArea(
         child: contextState == null
             ? const ContextSelectionWidget()
-            : _buildFlow(context, ref, contextState, selectedWords, translationState),
+            : _buildFlow(
+                context,
+                ref,
+                contextState,
+                selectedWords,
+                translationState,
+              ),
       ),
     );
   }
@@ -111,10 +106,7 @@ class HomeScreen extends ConsumerWidget {
         Expanded(
           child: SingleChildScrollView(
             child: Column(
-              children: const [
-                NodeFlowCanvas(),
-                SizedBox(height: 8),
-              ],
+              children: const [NodeFlowCanvas(), SizedBox(height: 8)],
             ),
           ),
         ),
@@ -132,8 +124,7 @@ class HomeScreen extends ConsumerWidget {
                   final router = GoRouter.of(context);
                   // Para el contexto fusionado, resolvemos el sub-dominio más
                   // fiel para el ensamblador (motor intacto) según las glosas.
-                  final allCards =
-                      ref.read(allCardsProvider).value ?? const [];
+                  final allCards = ref.read(allCardsProvider).value ?? const [];
                   String? categoryOf(String g) {
                     for (final c in allCards) {
                       if (c.gloss == g) return c.categoryId;
@@ -149,8 +140,11 @@ class HomeScreen extends ConsumerWidget {
                   await ref
                       .read(translationControllerProvider.notifier)
                       .translateCards(
-                        context: assemblerContext,
+                        // RVP-03: el backend recibe el contexto de UI real…
+                        context: contextState.id,
                         cards: selectedWords,
+                        // …y el motor local el sub-dominio resuelto.
+                        assemblerContext: assemblerContext,
                       );
                   // Navega a la pantalla de resultado dedicada. El estado
                   // del flujo permanece vivo para "Volver a editar".
@@ -226,31 +220,40 @@ class _BottomPanel extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 56,
-            child: Material(
-              color: enabled ? _orange : const Color(0xFFE5E5E5),
-              borderRadius: BorderRadius.circular(16),
-              child: InkWell(
+            // A11Y-01: anuncia el botón principal como tal, con su estado.
+            child: Semantics(
+              button: true,
+              enabled: enabled,
+              label: isLoading ? 'Traduciendo' : 'Traducir',
+              excludeSemantics: true,
+              child: Material(
+                color: enabled ? _orange : const Color(0xFFE5E5E5),
                 borderRadius: BorderRadius.circular(16),
-                onTap: onTranslate,
-                child: Center(
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2.5,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: onTranslate,
+                  child: Center(
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : Text(
+                            'TRADUCIR',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 2.0,
+                              color: enabled
+                                  ? Colors.white
+                                  : const Color(0xFFAAAAAA),
+                            ),
                           ),
-                        )
-                      : Text(
-                          'TRADUCIR',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 2.0,
-                            color: enabled ? Colors.white : const Color(0xFFAAAAAA),
-                          ),
-                        ),
+                  ),
                 ),
               ),
             ),

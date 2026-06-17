@@ -72,58 +72,70 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _hovered = true),
-        onTapUp: (_) {
-          setState(() => _hovered = false);
-          ref.read(contextProvider.notifier).setContext(widget.context);
-        },
-        onTapCancel: () => setState(() => _hovered = false),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 120),
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: _hovered ? _orange : Colors.black,
-              width: 2,
+      // A11Y-01: el lector de pantalla anuncia cada contexto como un botón con
+      // su nombre y descripción (el emoji y la flecha son decorativos).
+      child: Semantics(
+        button: true,
+        label: '${widget.context.name}. ${widget.context.description}',
+        excludeSemantics: true,
+        child: GestureDetector(
+          onTapDown: (_) => setState(() => _hovered = true),
+          onTapUp: (_) {
+            setState(() => _hovered = false);
+            ref.read(contextProvider.notifier).setContext(widget.context);
+          },
+          onTapCancel: () => setState(() => _hovered = false),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 120),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: _hovered ? _orange : Colors.black,
+                width: 2,
+              ),
             ),
-          ),
-          child: Row(
-            children: [
-              Text(widget.context.emoji, style: const TextStyle(fontSize: 26)),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.context.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: _hovered ? _orange : Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      widget.context.description,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF666666),
-                      ),
-                    ),
-                  ],
+            child: Row(
+              children: [
+                Text(
+                  widget.context.emoji,
+                  style: const TextStyle(fontSize: 26),
                 ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 14,
-                color: _hovered ? _orange : Colors.black.withValues(alpha: 0.4),
-              ),
-            ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.context.name,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: _hovered ? _orange : Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        widget.context.description,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF666666),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 14,
+                  color: _hovered
+                      ? _orange
+                      : Colors.black.withValues(alpha: 0.4),
+                ),
+              ],
+            ),
           ),
         ),
       ),

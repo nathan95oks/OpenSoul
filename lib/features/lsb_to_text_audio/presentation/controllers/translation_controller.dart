@@ -1,8 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-
+import '../../data/services/audio_output.dart';
 import '../../domain/repositories/translation_repository.dart';
 import '../../domain/services/local_sentence_assembler.dart';
 import '../providers/translation_provider.dart';
@@ -24,6 +22,15 @@ final audioPlaybackProvider =
   AudioPlaybackNotifier.new,
 );
 
+/// Provee la salida de audio. La implementación real usa los plugins nativos;
+/// los tests la sobrescriben con un doble (TST-01). El provider posee el ciclo
+/// de vida: libera los recursos al destruirse (RVP-02).
+final audioOutputProvider = Provider<AudioOutput>((ref) {
+  final output = RealAudioOutput();
+  ref.onDispose(output.dispose);
+  return output;
+});
+
 /// Controlador de la traducción híbrida.
 ///
 /// Arquitectura híbrida (declarada en el perfil):
@@ -42,15 +49,16 @@ final audioPlaybackProvider =
 /// Esto garantiza que el usuario sordo siempre obtenga salida multimodal
 /// (texto + audio) — requisito del módulo de salida en el perfil.
 class TranslationController extends AsyncNotifier<TranslationResult?> {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-  final FlutterTts _tts = FlutterTts();
   final LocalSentenceAssembler _assembler = const LocalSentenceAssembler();
-  bool _ttsConfigured = false;
-  bool _playbackWired = false;
+  late final AudioOutput _audio;
 
   @override
   Future<TranslationResult?> build() async {
-    _wirePlaybackListenersOnce();
+    // La salida de audio es inyectable (RVP-02/TST-01): el provider posee su
+    // ciclo de vida y la libera al destruirse.
+    _audio = ref.read(audioOutputProvider);
+    // Al terminar una reproducción (remota o TTS), el indicador vuelve a idle.
+    _audio.setOnComplete(() => _setPlayback(AudioPlaybackState.idle));
     return null;
   }
 
@@ -58,53 +66,16 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     ref.read(audioPlaybackProvider.notifier).set(s);
   }
 
-  /// Suscribe los eventos de fin de reproducción (audio remoto y TTS local)
-  /// para que el indicador vuelva a `idle` cuando termina. Es observación de
-  /// estado, no cambia cómo se genera/reproduce el audio.
-  void _wirePlaybackListenersOnce() {
-    if (_playbackWired) return;
-    _playbackWired = true;
-    _audioPlayer.onPlayerComplete.listen((_) {
-      _setPlayback(AudioPlaybackState.idle);
-    });
-  }
-
-  Future<void> _configureTtsOnce() async {
-    if (_ttsConfigured) return;
-    try {
-      await _tts.setLanguage('es-MX');
-      await _tts.setSpeechRate(0.5);
-      await _tts.setPitch(1.0);
-      await _tts.setVolume(1.0);
-      _tts.setCompletionHandler(() => _setPlayback(AudioPlaybackState.idle));
-      _ttsConfigured = true;
-    } catch (_) {
-      // Algunas plataformas no soportan ciertas configuraciones.
-      _ttsConfigured = true;
-    }
-  }
-
   Future<void> _speakLocally(String text) async {
     if (text.trim().isEmpty) return;
-    await _configureTtsOnce();
-    try {
-      await _tts.stop();
-      await _tts.speak(text);
-      _setPlayback(AudioPlaybackState.playing);
-    } catch (_) {
-      // Si TTS falla, no rompemos el flujo — el texto sigue visible.
-    }
+    await _audio.speak(text);
+    _setPlayback(AudioPlaybackState.playing);
   }
 
   /// Limpia el resultado actual y detiene cualquier reproducción de audio
   /// (remota o TTS local). El siguiente `translateCards` empieza de cero.
   Future<void> reset() async {
-    try {
-      await _audioPlayer.stop();
-    } catch (_) {}
-    try {
-      await _tts.stop();
-    } catch (_) {}
+    await _audio.stop();
     _setPlayback(AudioPlaybackState.idle);
     state = const AsyncValue.data(null);
   }
@@ -118,11 +89,9 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
   Future<void> replayAudio() async {
     final current = state.value;
     if (current == null) return;
-    _wirePlaybackListenersOnce();
     if (current.audioUrl != null && current.audioUrl!.isNotEmpty) {
       try {
-        await _audioPlayer.stop();
-        await _audioPlayer.play(UrlSource(current.audioUrl!));
+        await _audio.playUrl(current.audioUrl!);
         _setPlayback(AudioPlaybackState.playing);
         return;
       } catch (_) {
@@ -136,12 +105,7 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
   /// que no admite pausa real en todas las plataformas). Solo control de
   /// reproducción — no toca la generación de audio.
   Future<void> pauseAudio() async {
-    try {
-      await _audioPlayer.pause();
-    } catch (_) {}
-    try {
-      await _tts.stop();
-    } catch (_) {}
+    await _audio.pause();
     _setPlayback(AudioPlaybackState.paused);
   }
 
@@ -151,7 +115,7 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     if (current == null) return;
     if (current.audioUrl != null && current.audioUrl!.isNotEmpty) {
       try {
-        await _audioPlayer.resume();
+        await _audio.resume();
         _setPlayback(AudioPlaybackState.playing);
         return;
       } catch (_) {
@@ -161,14 +125,23 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     await replayAudio();
   }
 
+  /// Genera la declaración híbrida.
+  ///
+  /// [context] es el contexto de UI (lo que se envía al backend AWS).
+  /// [assemblerContext] es el sub-contexto resuelto que usa el motor local
+  /// (RVP-03): para el contexto fusionado 'orientacion' la UI lo enruta a
+  /// 'perdida'/'tramite_id' solo para el compositor local, sin contaminar la
+  /// llamada remota con ids internos no contractuales. Si se omite, se usa
+  /// [context] para ambos.
   Future<void> translateCards({
     required String context,
     required List<String> cards,
+    String? assemblerContext,
   }) async {
     state = const AsyncValue.loading();
 
     final localSentence = _assembler.assemble(
-      contextId: context,
+      contextId: assemblerContext ?? context,
       glosses: cards,
     );
 
@@ -203,7 +176,7 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
       // Reproducción híbrida: URL remota si existe, TTS local si no.
       if (merged.audioUrl != null && merged.audioUrl!.isNotEmpty) {
         try {
-          await _audioPlayer.play(UrlSource(merged.audioUrl!));
+          await _audio.playUrl(merged.audioUrl!);
           _setPlayback(AudioPlaybackState.playing);
         } catch (_) {
           // Si la reproducción remota falla, caemos a TTS local.
