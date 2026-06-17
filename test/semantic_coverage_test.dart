@@ -138,7 +138,6 @@ const _synonyms = {
   'PELO_LARGO': 'cabello',
   'BLANCO_PIEL': 'piel',
   'GORDO': 'robust',
-  'MASCARA': 'rostro',
   'MOCHILA_USADA': 'mochila',
   'TRES': 'personas',
   'DOS': 'personas',

@@ -5,23 +5,20 @@ import '../providers/cards_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../providers/sentence_provider.dart';
 import 'adaptive_node_layout.dart';
-import 'card_grid.dart' show expandedAnswersProvider;
 
 /// Panel de sugerencias progresivas — reemplaza CardGrid.
 ///
-/// Muestra entre 4 y 6 SemanticNodes según el motor semántico.
-/// Cada selección revela las siguientes opciones más probables,
-/// creando un flujo de árbol semántico / conversación guiada.
+/// Muestra el catálogo disponible para la zona activa sin recortar
+/// artificialmente el listado. La vista sigue ordenada por relevancia,
+/// pero el usuario puede ver todas las opciones alcanzables en el panel.
 class SuggestedGlossPanel extends ConsumerWidget {
   const SuggestedGlossPanel({super.key});
 
-  static const _kMaxVisible = 6;
   static const _orange = Color(0xFFFF6B00);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cardsAsync = ref.watch(dynamicCardsProvider);
-    final expanded = ref.watch(expandedAnswersProvider);
     final zonesState = ref.watch(semanticZonesProvider);
     final maxPicks = zonesState.activeZone?.maxPicks ?? 1;
     final picksInZone = zonesState.picksInActiveZone;
@@ -33,8 +30,7 @@ class SuggestedGlossPanel extends ConsumerWidget {
           return const _EmptyState();
         }
 
-        final visible = expanded ? cards : cards.take(_kMaxVisible).toList();
-        final remaining = cards.length - _kMaxVisible;
+        final visible = cards;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,11 +42,6 @@ class SuggestedGlossPanel extends ConsumerWidget {
               selectedGlosses: selectedGlosses,
               onCardTap: (card) => _onPick(ref, card),
             ),
-            if (!expanded && remaining > 0)
-              _ExpandButton(
-                remaining: remaining,
-                onTap: () => ref.read(expandedAnswersProvider.notifier).expand(),
-              ),
           ],
         );
       },
@@ -137,51 +128,6 @@ class _PairHint extends StatelessWidget {
           fontSize: 11,
           color: Colors.black.withValues(alpha: 0.5),
           fontStyle: FontStyle.italic,
-        ),
-      ),
-    );
-  }
-}
-
-class _ExpandButton extends StatelessWidget {
-  final int remaining;
-  final VoidCallback onTap;
-  const _ExpandButton({required this.remaining, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Colors.white.withValues(alpha: 0.06),
-              ),
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.add,
-                size: 14,
-                color: Colors.white.withValues(alpha: 0.4),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                'Ver $remaining más',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.4),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
