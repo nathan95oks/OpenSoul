@@ -322,7 +322,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       key: ValueKey('${id}_$url'), // Recrea el WebView al cambiar el URL
       src: url,
       alt: 'Avatar LSB',
-      autoPlay: false, // Controlado manualmente por Dart
+      autoPlay: true, // Debe ser true para enlazar la animación al cargarse
       autoRotate: false,
       cameraControls: false,
       disableZoom: true,
@@ -349,6 +349,8 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         const modelViewer = document.querySelector('model-viewer');
         
         modelViewer.addEventListener('load', () => {
+          modelViewer.pause();
+          modelViewer.currentTime = 0;
           if (window.ModelViewerChannel) {
             window.ModelViewerChannel.postMessage('loaded');
           }
@@ -370,6 +372,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       ''',
     );
   }
+
 
   // ─────────────────────────────────────────────
   // ESTADO 2: Reproducción en doble visor
@@ -501,6 +504,15 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                       color: Colors.white.withOpacity(0.6),
                       fontSize: 12,
                     ),
+                  ),
+                  const Spacer(),
+                  // Botón de repetición manual
+                  IconButton(
+                    icon: const Icon(Icons.replay_rounded, color: Colors.white),
+                    tooltip: 'Repetir secuencia',
+                    constraints: const BoxConstraints(),
+                    padding: EdgeInsets.zero,
+                    onPressed: () => _startSequence(),
                   ),
                 ],
               ),
