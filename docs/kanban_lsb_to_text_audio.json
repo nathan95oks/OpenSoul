@@ -1,0 +1,316 @@
+{
+  "board": "OpenSoul — lsb_to_text_audio",
+  "generated": "2026-06-17",
+  "lists": [
+    "Backlog",
+    "To Do",
+    "Doing",
+    "Testing",
+    "Done"
+  ],
+  "cards": [
+    {
+      "id": "RDS-01",
+      "name": "Timeout en la llamada HTTP remota",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Bug",
+        "Datasource remoto"
+      ],
+      "description": "[HECHO ✓ verificado con flutter test] **Epic:** Datasource remoto | **Tipo:** Bug\n\nSe añadió .timeout(12 s) (requestTimeout) a client.post. Ante red lenta/caída lanza TimeoutException y el controlador cae al motor local + TTS en vez de quedar colgado en loading. Cubierto por test del datasource (respuesta lenta -> TimeoutException).\n\n**Archivos:** data/datasources/remote_translation_datasource.dart"
+    },
+    {
+      "id": "AWS-01",
+      "name": "is_formal nunca se activaba",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Bug",
+        "AWS-Backend"
+      ],
+      "description": "[HECHO ✓] **Epic:** AWS/Backend | **Tipo:** Bug\n\nis_formal ahora se deriva de institutionType (entidad_publica) o de que el context sea un contexto institucional real, vía helper _is_formal(). Antes se comparaba contra (ciudadano,formal,legal), que la app nunca enviaba -> siempre False. Verificado con prueba de lógica Python: el tráfico real ahora produce formal=True.\n\n**Archivos:** aws/lambda_function.py (generate_base_sentence, refine_with_bedrock, handler)"
+    },
+    {
+      "id": "RDS-02",
+      "name": "Campos language/institutionType ignorados",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Bug",
+        "Datasource remoto"
+      ],
+      "description": "[HECHO ✓] **Epic:** Datasource remoto / AWS | **Tipo:** Bug\n\nEl handler ahora lee institutionType (formalidad, AWS-01) y language (selección de voz Polly vía _VOICE_BY_LANG). Contrato cliente-servidor alineado y documentado en docs/API_CONTRACT.md.\n\n**Archivos:** aws/lambda_function.py; data/datasources/remote_translation_datasource.dart"
+    },
+    {
+      "id": "RVP-01",
+      "name": "Error de UI muerto + indicador de origen",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Bug",
+        "Riverpod-Estado"
+      ],
+      "description": "[HECHO ✓] **Epic:** Riverpod/Estado | **Tipo:** Bug\n\nSe eliminó el ref.listen(AsyncError) inalcanzable (el controlador siempre degrada a data) y se añadió un chip de origen (Refinado por IA vs Motor local) en la pantalla de resultado, basado en bedrockUsed y con Semantics.\n\n**Archivos:** presentation/screens/home_screen.dart; presentation/screens/declaration_result_screen.dart"
+    },
+    {
+      "id": "RVP-02",
+      "name": "Liberar AudioPlayer y FlutterTts",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Bug",
+        "Riverpod-Estado"
+      ],
+      "description": "[HECHO ✓] **Epic:** Riverpod/Estado | **Tipo:** Bug\n\nEl ciclo de vida del audio ahora lo posee audioOutputProvider, que llama AudioOutput.dispose() al destruirse (ref.onDispose). Se eliminó la fuga de recursos / audio fantasma.\n\n**Archivos:** presentation/controllers/translation_controller.dart; data/services/audio_output.dart"
+    },
+    {
+      "id": "RVP-03",
+      "name": "Separar uiContext de assemblerContext",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Bug",
+        "Riverpod-Estado"
+      ],
+      "description": "[HECHO ✓] **Epic:** Riverpod/Estado / Arquitectura | **Tipo:** Bug\n\ntranslateCards ahora recibe context (id de UI, enviado al backend) y assemblerContext (sub-dominio resuelto, solo para el motor local). El backend ya no recibe ids internos no contractuales (perdida/tramite_id).\n\n**Archivos:** presentation/controllers/translation_controller.dart; presentation/screens/home_screen.dart"
+    },
+    {
+      "id": "ARCH-01",
+      "name": "Abstraccion AudioOutput inyectable",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Mejora",
+        "Arquitectura"
+      ],
+      "description": "[HECHO ✓] **Epic:** Riverpod/Estado / Arquitectura | **Tipo:** Mejora\n\nSe extrajo la salida de audio (Polly remoto + TTS local) detrás de la interfaz AudioOutput, provista por audioOutputProvider. El controlador orquesta la estrategia híbrida sin acoplarse a los plugins nativos: habilita el test unitario (TST-01) y separa IO de orquestación (Clean Architecture).\n\n**Archivos:** data/services/audio_output.dart (nuevo); presentation/controllers/translation_controller.dart"
+    },
+    {
+      "id": "TST-01",
+      "name": "Tests del TranslationController",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Test",
+        "Pruebas"
+      ],
+      "description": "[HECHO ✓ 4 tests verdes] **Epic:** Pruebas | **Tipo:** Test\n\nCubre las 4 ramas de la lógica híbrida con repositorio y audio falsos: backend sano (usa remoto + audio remoto), degenerado (descarta remoto, sin audioUrl), excepción (fallback local), y sano sin audioUrl (texto remoto + TTS).\n\n**Archivos:** test/translation_controller_test.dart (nuevo)"
+    },
+    {
+      "id": "TST-02",
+      "name": "Tests del RemoteTranslationDataSource",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Test",
+        "Pruebas"
+      ],
+      "description": "[HECHO ✓ 4 tests verdes] **Epic:** Pruebas | **Tipo:** Test\n\nCubre parseo 200 completo, defaults con campos ausentes, error 500 -> Exception, y el timeout (RDS-01) -> TimeoutException, con MockClient.\n\n**Archivos:** test/remote_translation_datasource_test.dart (nuevo)"
+    },
+    {
+      "id": "TD-01",
+      "name": "URL de API Gateway configurable",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Deuda",
+        "Datasource remoto"
+      ],
+      "description": "[HECHO ✓] **Epic:** Deuda / Datasource | **Tipo:** Deuda\n\nEl endpoint ahora es String.fromEnvironment('LSB_API_URL') con el valor actual como default: configurable con --dart-define sin recompilar la lógica.\n\n**Archivos:** data/datasources/remote_translation_datasource.dart"
+    },
+    {
+      "id": "A11Y-02",
+      "name": "Indicador visible de origen del texto",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "UX",
+        "Accesibilidad"
+      ],
+      "description": "[HECHO ✓] **Epic:** Accesibilidad / UX | **Tipo:** UX\n\nChip Refinado por IA / Motor local en la pantalla de resultado según result.bedrockUsed, con etiqueta Semantics para lectores de pantalla. (Implementado junto a RVP-01.)\n\n**Archivos:** presentation/screens/declaration_result_screen.dart"
+    },
+    {
+      "id": "DOC-01",
+      "name": "Contrato API documentado",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Doc",
+        "Documentacion"
+      ],
+      "description": "[HECHO ✓] **Epic:** Documentación | **Tipo:** Doc\n\ndocs/API_CONTRACT.md con request/response, tabla de campos, errores y comportamiento de resiliencia del cliente.\n\n**Archivos:** docs/API_CONTRACT.md (nuevo)"
+    },
+    {
+      "id": "TD-04",
+      "name": "Mapa de archivos Lambda",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Doc",
+        "AWS-Backend"
+      ],
+      "description": "[HECHO ✓] **Epic:** AWS/Doc | **Tipo:** Doc\n\naws/README.md mapea cada .py (desplegado/real/mock/ajeno) y documenta las variables de entorno.\n\n**Archivos:** aws/README.md (nuevo)"
+    },
+    {
+      "id": "TD-05",
+      "name": "README real del proyecto",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Doc",
+        "Documentacion"
+      ],
+      "description": "[HECHO ✓] **Epic:** Documentación | **Tipo:** Doc\n\nREADME reescrito: propósito, módulos, arquitectura híbrida con fallback, estructura, cómo ejecutar (incl. --dart-define) y cómo testear.\n\n**Archivos:** README.md"
+    },
+    {
+      "id": "TST-00",
+      "name": "Endurecer full_gloss_smoke_test",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Importante",
+        "Test",
+        "Pruebas",
+        "Prioridad media"
+      ],
+      "description": "[HECHO ✓ verificado con flutter test]\n\n**Epic:** Pruebas | **Tipo:** Test | **Prioridad:** Media | **Esfuerzo:** M\n\nEl smoke test genera frases para 154 glosas x 5 contextos pero sin assertions de calidad (solo >=3 palabras). Promover casos correctos a assertions o fijar un baseline golden por glosa clave.\n\n**Archivos:** test/full_gloss_smoke_test.dart\n\n**Riesgo:** Falsa sensación de cobertura; pasa aunque la gramática se degrade."
+    },
+    {
+      "id": "TST-03",
+      "name": "Tests de enrutado y dynamicCardsProvider",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Importante",
+        "Test",
+        "Pruebas",
+        "Prioridad media"
+      ],
+      "description": "[HECHO ✓ verificado con flutter test]\n\n**Epic:** Pruebas | **Tipo:** Test | **Prioridad:** Media | **Esfuerzo:** M\n\ndynamicCardsProvider (filtro zona/contexto, tope, zonas estrictas, red de seguridad) sin tests; ampliar resolveAssemblerContext.\n\n**Archivos:** test/semantic_coverage_test.dart; test/dynamic_cards_provider_test.dart (nuevo)\n\n**Riesgo:** El filtrado guiado (UX central) puede romperse sin detección."
+    },
+    {
+      "id": "TST-04",
+      "name": "Test de widget de flujo completo",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Importante",
+        "Test",
+        "Pruebas",
+        "Prioridad media"
+      ],
+      "description": "[HECHO ✓ verificado con flutter test]\n\n**Epic:** Pruebas | **Tipo:** Test | **Prioridad:** Media | **Esfuerzo:** L\n\nTest que selecciona glosas, pulsa TRADUCIR y verifica navegación a DeclarationResultScreen con el texto generado, con providers overrideados.\n\n**Archivos:** test/home_to_result_flow_test.dart (nuevo)\n\n**Riesgo:** Regresiones de integración UI no detectadas."
+    },
+    {
+      "id": "AWS-02",
+      "name": "Cache real (DynamoDB / lookup S3)",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Importante",
+        "Backend",
+        "AWS-Backend",
+        "Prioridad media"
+      ],
+      "description": "[HECHO ✓ logica validada; requiere redeploy del lambda] **Epic:** AWS/Backend | **Tipo:** Backend\n\nCache sobre S3 (sin DynamoDB): la respuesta completa se guarda en lsb-to-text-audio/cache/<cache_key>.json. Peticiones identicas posteriores devuelven cacheHit:true SIN invocar Nova ni Polly; solo se regenera la URL prefirmada del MP3. Degrada con elegancia si S3 falla. Requiere s3:GetObject en el rol IAM.\n\n**Archivos:** aws/lambda_function.py (get_cached_response, put_cached_response, handler)"
+    },
+    {
+      "id": "TD-03",
+      "name": "Voz/idioma local consistente (parcial)",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Opcional",
+        "Deuda",
+        "Audio-fallback",
+        "Prioridad baja"
+      ],
+      "description": "[HECHO ✓] **Epic:** Audio y fallback / Deuda | **Tipo:** Deuda\n\nEl TTS local ya no esta fijo en es-MX: elige el primer locale de español disponible en el dispositivo segun una preferencia (es-US primero, para sonar coherente con la voz remota de Polly Lupe/es-US), con fallback a es-MX/es-419/es-ES/es. Junto con RDS-02 (el backend honra `language`), la voz online y offline quedan alineadas.\n\n**Archivos:** data/services/audio_output.dart"
+    },
+    {
+      "id": "A11Y-01",
+      "name": "Semantics en todas las tarjetas y botones",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Opcional",
+        "A11y",
+        "Accesibilidad",
+        "Prioridad baja"
+      ],
+      "description": "[HECHO ✓ verificado con flutter test] **Epic:** Accesibilidad | **Tipo:** A11y\n\nSemantics(button:true, label, excludeSemantics) en las tarjetas de respuesta (card_grid), las tarjetas de contexto (context_selection), el boton TRADUCIR (home_screen) y los botones de accion del resultado (_FullWidthBtn). Cubierto por test/accessibility_semantics_test.dart y asserts en el test de flujo.\n\n**Archivos:** card_grid.dart, context_selection_widget.dart, home_screen.dart, declaration_result_screen.dart"
+    },
+    {
+      "id": "DONE-A",
+      "name": "Motor semantico local con roles gramaticales",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Dominio"
+      ],
+      "description": "[YA EXISTÍA ✓] **Epic:** Dominio — local_sentence_assembler.dart (865 líneas): clasificación por rol, compositores por contexto, concordancia género/plural, regla de cobertura _ensureCoverage. Núcleo defendible."
+    },
+    {
+      "id": "DONE-B",
+      "name": "Estrategia hibrida con fallback degradado",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Audio-fallback"
+      ],
+      "description": "[YA EXISTÍA ✓, reforzado] **Epic:** Audio y fallback — siempre entrega texto + audio (Polly o TTS local). Ahora más robusto con timeout (RDS-01) y audio inyectable (ARCH-01)."
+    },
+    {
+      "id": "DONE-C",
+      "name": "Deteccion de degeneracion del backend",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Dominio"
+      ],
+      "description": "[YA EXISTÍA ✓] **Epic:** Dominio — isBackendDegenerate: tolerante a guiones bajos, acentos y conjugación; evita falsos positivos. Cubierto por pruebas (y ahora también por TST-01)."
+    },
+    {
+      "id": "DONE-D",
+      "name": "Suite de pruebas del ensamblador",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Pruebas"
+      ],
+      "description": "[YA EXISTÍA ✓] **Epic:** Pruebas — local_sentence_assembler_test.dart y semantic_coverage_test.dart: cobertura semántica real por institución y contexto."
+    },
+    {
+      "id": "DONE-E",
+      "name": "Fusion de contextos orientacion",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Dominio"
+      ],
+      "description": "[YA EXISTÍA ✓] **Epic:** Dominio — kContextCardSources + resolveAssemblerContext sin tocar datasource ni motor. Ahora el contexto resuelto ya no contamina el backend (RVP-03)."
+    },
+    {
+      "id": "DONE-F",
+      "name": "Clean Architecture en la rama de tarjetas",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Dominio"
+      ],
+      "description": "[YA EXISTÍA ✓, ampliado] **Epic:** Dominio — datasource -> repo -> usecase -> provider. Ahora también la salida de audio está tras una abstracción inyectable (ARCH-01)."
+    },
+    {
+      "id": "AWS-03",
+      "name": "Integracion Nova 2 Lite + guardia anti-alucinacion",
+      "list": "Done",
+      "labels": [
+        "Done",
+        "Mejora",
+        "AWS-Backend"
+      ],
+      "description": "[HECHO ✓ desplegado y verificado en AWS] **Epic:** AWS/Backend | **Tipo:** Mejora\n\nBedrock pasa de un modelo legacy (Titan, caido) a Amazon Nova 2 Lite, ACTIVO y funcionando. Incluye: soporte del formato de peticion/respuesta de Nova, parser robusto ante encabezados/markdown, prompt apto para modelo de chat con regla anti-invencion, y un guardia anti-alucinacion en el backend (descarta el refinamiento si no comparte contenido con la oracion base, espejo del isBackendDegenerate del cliente). Modelo por defecto: global.amazon.nova-2-lite-v1:0.\n\n**Archivos:** aws/lambda_function.py (_build_bedrock_request_body, _parse_bedrock_response, _refinement_is_safe, refine_with_bedrock, prompt)"
+    }
+  ]
+}
