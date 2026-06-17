@@ -71,8 +71,9 @@ AVAILABLE_GLOSSES = {
     "DENUNCIAR", "ROBAR", "GOLPEAR", "DETENER", "FIRMAR", "DECLARAR",
     "PAGAR", "AYUDAR", "QUERER", "PODER", "TENER", "IR", "VER", "DECIR",
     "ENTENDER",
-    # --- Pronombres y Conectores ---
-    "YO", "TÚ", "ÉL", "ELLA", "NOSOTROS", "SÍ", "NO",
+    # --- Pronombres, Posesivos y Conectores ---
+    "YO", "TÚ", "TU", "ÉL", "EL", "ELLA", "ELLOS", "ELLAS", "NOSOTROS", "USTEDES",
+    "MÍO", "MIO", "TUYO", "NUESTRO", "SUYO", "SÍ", "NO",
     "CUÁNDO", "DÓNDE", "QUÉ", "POR-QUÉ",
     "BUENO", "MALO", "GRANDE", "HOY", "AYER",
     # --- Números y Alfabeto Dactilológico (Para señas compuestas) ---
@@ -107,26 +108,46 @@ REGLAS DE DESAMBIGUACIÓN JURÍDICA Y SEÑAS COMPUESTAS:
 - REGLA DE SEÑA COMPUESTA: Algunas palabras en LSB se forman fusionando señas base. Si la palabra requiere una seña compuesta (por ejemplo, "Fiscal"), debes descomponerla en el arreglo usando las glosas base correspondientes. Ej: Para "Fiscal", devuelve ["F", "JUEZ"]. Para otras palabras compuestas, aplica el mismo principio lógico si conoces su estructura en LSB.
 """
 
-    prompt = f"""Eres un sistema experto en Lengua de Señas Boliviana (LSB) para entornos judiciales.
+    prompt = f"""Eres un sistema experto en Lengua de Señas Boliviana (LSB) para entornos judiciales y de trámites.
 
 Tu tarea es recibir una frase en español y convertirla en un ARREGLO ORDENADO DE GLOSAS LSB.
 
-REGLAS LINGÜÍSTICAS OBLIGATORIAS:
-1. La LSB usa estructura OSV (Objeto-Sujeto-Verbo) para acciones transitivas, pero para frases equitativas (Sujeto + Oficio/Profesión) el orden es SUJETO luego OFICIO (Ej: "Yo soy abogado" -> ["YO", "ABOGADO"]). NO inviertas los pronombres en estos casos.
-2. Elimina artículos (el, la, los, las, un, una), preposiciones (de, en, por, para, con) y conjunciones innecesarias.
-3. Los marcadores temporales (HOY, AYER) van AL INICIO del arreglo.
-4. Usa solo verbos en INFINITIVO como glosa (DENUNCIAR, no "denunció").
-5. Desambigua términos polisémicos y descompón palabras en SEÑAS COMPUESTAS si es lingüísticamente correcto en LSB.
-6. Cada glosa debe ser UNA SOLA PALABRA o un término compuesto con guión (POR-QUÉ).
+REGLAS LINGÜÍSTICAS Y GRAMATICALES OBLIGATORIAS DE LSB:
+1. ESTRUCTURA GRAMATICAL:
+   - Usa estructura OSV (Objeto-Sujeto-Verbo) para oraciones de acción transitivas.
+   - Para frases equitativas o de identidad (Sujeto + Oficio/Profesión, ej. "Yo soy abogado", "Ellos son policías", "Ustedes son abogados"), el orden obligatorio es SUJETO luego OFICIO (Ej: "Yo soy abogado" -> ["YO", "ABOGADO"], "Ellos son policías" -> ["ELLOS", "POLICÍA"]). NO inviertas este orden ni uses verbos auxiliares de ser/estar.
+
+2. MANEJO EXACTO DE PRONOMBRES Y POSESIVOS EN LSB:
+   - Pronombres Personales Singulares:
+     * "yo" -> "YO"
+     * "tú", "usted" -> "TÚ" o "TU"
+     * "él", "ella" -> "ÉL" o "EL" o "ELLA"
+   - Pronombres Personales Plurales:
+     * "nosotros", "nosotras" -> "NOSOTROS"
+     * "ustedes", "vosotros" -> "USTEDES"
+     * "ellos", "ellas" -> "ELLOS" o "ELLAS"
+   - Pronombres/Adjetivos Posesivos (¡Diferenciar estrictamente de los personales!):
+     * "mi", "mío", "mía", "mis" -> "MÍO" o "MIO"
+     * "tu", "tuyo", "tuya", "tus" -> "TUYO"
+     * "nuestro", "nuestra", "nuestros", "nuestras" -> "NUESTRO"
+     * "su", "suyo", "suya", "suyos", "suyas" (de él/ella/ellos/ustedes) -> "SUYO"
+
+3. SIMPLIFICACIÓN:
+   - Elimina totalmente artículos (el, la, los, las, un, una, unos, unas), preposiciones (de, en, por, para, con, a, desde) y conjunciones (y, o, que) innecesarias.
+   - Los marcadores temporales (HOY, AYER) se colocan siempre AL INICIO del arreglo de glosas.
+   - Los verbos deben ir en INFINITIVO como glosa (Ej: "robó" -> "ROBAR", "denunció" -> "DENUNCIAR").
+
+4. LÉXICO Y DESAMBIGUACIÓN:
+   - Desambigua términos según el contexto jurídico o general.
+   - Si una palabra en español no tiene glosa directa, usa la más cercana disponible o descompón en señas compuestas si aplica.
+   - Si no hay equivalente posible en la lista de glosas disponibles, escribe la palabra original en mayúsculas (el sistema la deletreará con dactilología).
+
 {context_instruction}
 
 GLOSAS DISPONIBLES EN EL DICCIONARIO DEL AVATAR:
 [{gloss_list}]
 
-Si una palabra NO tiene equivalente en la lista, usa la palabra más cercana disponible.
-Si no hay equivalente posible, incluye la palabra original en MAYÚSCULAS (el sistema usará dactilología).
-
-FORMATO DE RESPUESTA (JSON estricto, sin explicaciones):
+FORMATO DE RESPUESTA (JSON estricto, sin explicaciones ni markdown fuera del bloque JSON):
 {{"glosses": ["GLOSA1", "GLOSA2", "GLOSA3"], "disambiguation": [{{"original": "palabra_ambigua", "meaning": "significado_elegido", "reason": "justificación_breve"}}]}}
 
 FRASE A TRADUCIR: "{text}"
