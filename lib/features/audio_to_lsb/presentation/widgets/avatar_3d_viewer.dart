@@ -1,21 +1,24 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 /// Widget que reproduce secuencialmente animaciones 3D de Lengua de Señas
 /// Boliviana (LSB) cargando archivos .GLB desde el Bucket S3 de OpenSoul.
 ///
-/// Flujo:
-///   1. Recibe [animationUrls] → lista de URLs de S3 (ej: DENUNCIAR.glb, ROBO.glb)
-///   2. Muestra el primer modelo y lo reproduce automáticamente.
-///   3. Tras [animationDuration], carga el siguiente en la secuencia.
-///   4. Al terminar todos, muestra el estado de reposo.
+/// Implementa una arquitectura de DOBLE VISOR en Stack para evitar vacíos visuales
+/// (black flashes) al cambiar de modelo:
+///   - Viewer A y Viewer B se alternan en la pantalla con Opacity.
+///   - Mientras uno se reproduce, el otro precarga la siguiente animación en segundo plano.
+///   - Se usan canales JS directos al WebGL para detectar carga y término de animación de forma exacta.
 class Avatar3DViewer extends StatefulWidget {
   final bool isProcessing;
   final List<String>? glosses;
   final List<String>? animationUrls;
 
   /// Duración mínima de cada seña antes de avanzar a la siguiente.
-  /// El usuario también puede avanzar manualmente con el botón.
+  /// (Mantenido por compatibilidad de firma, ya no se usa para cortar animaciones).
   final Duration animationDuration;
 
   const Avatar3DViewer({
@@ -23,7 +26,7 @@ class Avatar3DViewer extends StatefulWidget {
     required this.isProcessing,
     this.glosses,
     this.animationUrls,
-    this.animationDuration = const Duration(seconds: 5),
+    this.animationDuration = const Duration(milliseconds: 2500),
   }) : super(key: key);
 
   @override
@@ -36,13 +39,23 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   bool _isPlayingSequence = false;
+  bool _isDownloadingFiles = false;
 
-  // URLs internas de prueba (se usan cuando el usuario pulsa el botón de test)
+  // URLs internas de prueba
   List<String>? _testUrls;
   List<String>? _testGlosses;
+  List<String> _localUrls = [];
 
-  // Controla si ya se puede avanzar a la siguiente seña
-  bool _canAdvance = false;
+  // Lógica del Doble Visor
+  String _activeViewer = 'A'; // 'A' o 'B'
+  String? _urlA;
+  String? _urlB;
+  bool _isLoadedA = false;
+  bool _isLoadedB = false;
+  bool _hasFinishedPlayingCurrent = false;
+
+  dynamic _controllerA;
+  dynamic _controllerB;
 
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
@@ -71,10 +84,22 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   }
 
   void _startSequence({List<String>? overrideUrls, List<String>? overrideGlosses}) {
+    if (!mounted) return;
     setState(() {
       _currentIndex = 0;
-      _isPlayingSequence = true;
-      _canAdvance = false;
+      _isPlayingSequence = false;
+      _isDownloadingFiles = true;
+
+      // Reiniciar estado del reproductor dual
+      _activeViewer = 'A';
+      _urlA = null;
+      _urlB = null;
+      _isLoadedA = false;
+      _isLoadedB = false;
+      _controllerA = null;
+      _controllerB = null;
+      _hasFinishedPlayingCurrent = false;
+
       if (overrideUrls != null) {
         _testUrls = overrideUrls;
         _testGlosses = overrideGlosses;
@@ -83,37 +108,162 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         _testGlosses = null;
       }
     });
-    _scheduleAdvance();
+    _downloadAndStartSequence();
   }
 
-  /// Programa el avance al siguiente modelo tras [animationDuration].
-  /// El usuario también puede avanzar manualmente antes de que venza.
-  void _scheduleAdvance() {
-    setState(() => _canAdvance = false);
-    Future.delayed(widget.animationDuration).then((_) {
-      if (mounted) setState(() => _canAdvance = true);
-    });
-  }
-
-  void _advanceToNext() {
-    final urls = _testUrls ?? widget.animationUrls;
-    final nextIndex = _currentIndex + 1;
-    if (urls == null || nextIndex >= urls.length) {
-      // Fin de la secuencia
-      if (mounted) {
-        setState(() {
-          _isPlayingSequence = false;
-          _testUrls = null;
-          _testGlosses = null;
-        });
-      }
-    } else {
-      setState(() {
-        _currentIndex = nextIndex;
-        _canAdvance = false;
-      });
-      _scheduleAdvance();
+  Future<void> _downloadAndStartSequence() async {
+    final urlsToDownload = _testUrls ?? widget.animationUrls;
+    if (urlsToDownload == null || urlsToDownload.isEmpty) {
+      if (mounted) setState(() => _isDownloadingFiles = false);
+      return;
     }
+
+    List<String> localPaths = [];
+    final tempDir = await getTemporaryDirectory();
+
+    for (var urlStr in urlsToDownload) {
+      try {
+        final uri = Uri.parse(urlStr);
+        final fileName = uri.pathSegments.last;
+        final file = File('${tempDir.path}/$fileName');
+
+        if (!await file.exists()) {
+          final response = await http.get(uri);
+          if (response.statusCode == 200) {
+            await file.writeAsBytes(response.bodyBytes);
+          }
+        }
+        // Usar scheme file:// para que ModelViewer lo lea de la caché local
+        localPaths.add('file://${file.path}');
+      } catch (e) {
+        // Fallback al URL original si falla la descarga
+        localPaths.add(urlStr);
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        _localUrls = localPaths;
+        _isDownloadingFiles = false;
+        _isPlayingSequence = true;
+
+        if (_localUrls.isNotEmpty) {
+          _urlA = _localUrls[0];
+          _isLoadedA = false;
+
+          if (_localUrls.length > 1) {
+            _urlB = _localUrls[1];
+            _isLoadedB = false;
+          } else {
+            _urlB = null;
+          }
+        }
+      });
+    }
+  }
+
+  void _handleJsMessage(String viewerId, String message) {
+    debugPrint('Mensaje JS recibido de Visor $viewerId: $message');
+    if (message == 'loaded') {
+      _handleLoaded(viewerId);
+    } else if (message == 'finished') {
+      _handleFinished(viewerId);
+    }
+  }
+
+  void _handleLoaded(String viewerId) {
+    if (!mounted) return;
+    setState(() {
+      if (viewerId == 'A') {
+        _isLoadedA = true;
+      } else {
+        _isLoadedB = true;
+      }
+    });
+
+    // Si es el visor activo que carga el primer elemento del recorrido, iniciamos reproducción
+    if (viewerId == _activeViewer &&
+        _currentIndex == 0 &&
+        !_hasFinishedPlayingCurrent &&
+        _localUrls.isNotEmpty) {
+      _playViewer(viewerId);
+      return;
+    }
+
+    // Si el visor activo ya terminó de reproducir y el de fondo se acaba de cargar
+    final nextViewerId = _activeViewer == 'A' ? 'B' : 'A';
+    if (viewerId == nextViewerId && _hasFinishedPlayingCurrent) {
+      _transitionTo(nextViewerId);
+    }
+  }
+
+  void _handleFinished(String viewerId) {
+    if (!mounted) return;
+
+    // Si solo hay un elemento, lo reproducimos en bucle en el mismo visor
+    if (_localUrls.length == 1) {
+      _hasFinishedPlayingCurrent = false;
+      _playViewer(viewerId);
+      return;
+    }
+
+    setState(() {
+      _hasFinishedPlayingCurrent = true;
+    });
+
+    final nextViewerId = _activeViewer == 'A' ? 'B' : 'A';
+    final isNextLoaded = nextViewerId == 'A' ? _isLoadedA : _isLoadedB;
+
+    if (isNextLoaded) {
+      _transitionTo(nextViewerId);
+    }
+  }
+
+  void _playViewer(String id) {
+    final controller = id == 'A' ? _controllerA : _controllerB;
+    if (controller != null) {
+      debugPrint('Enviando play JS a Visor $id');
+      controller.runJavaScript(
+        "document.querySelector('model-viewer').currentTime = 0; document.querySelector('model-viewer').play();"
+      ).catchError((e) {
+        debugPrint('Error ejecutando play JS: $e');
+      });
+    } else {
+      debugPrint('Controlador nulo para Visor $id en _playViewer.');
+    }
+  }
+
+  void _transitionTo(String nextViewerId) {
+    if (!mounted) return;
+    debugPrint('Transicionando a Visor: $nextViewerId');
+
+    setState(() {
+      _activeViewer = nextViewerId;
+      _hasFinishedPlayingCurrent = false;
+
+      // Avanzar índice global secuencial
+      _currentIndex = (_currentIndex + 1) % _localUrls.length;
+
+      // Precargar la siguiente animación en el visor que ahora pasa a fondo
+      final otherViewerId = nextViewerId == 'A' ? 'B' : 'A';
+      final nextNextIndex = (_currentIndex + 1) % _localUrls.length;
+
+      if (_localUrls.length > 1) {
+        final nextNextUrl = _localUrls[nextNextIndex];
+        if (otherViewerId == 'A') {
+          _urlA = nextNextUrl;
+          _isLoadedA = false;
+          _controllerA = null;
+        } else {
+          _urlB = nextNextUrl;
+          _isLoadedB = false;
+          _controllerB = null;
+        }
+      }
+    });
+
+    // Reproducir inmediatamente el nuevo visor activo
+    _playViewer(nextViewerId);
   }
 
   @override
@@ -126,6 +276,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   // ESTADO 1: Procesando (Spinner + texto)
   // ─────────────────────────────────────────────
   Widget _buildProcessingState() {
+    final title = _isDownloadingFiles ? 'Descargando animaciones 3D...' : 'Analizando con IA...';
+    final subtitle = _isDownloadingFiles ? 'Guardando en caché local para fluidez' : 'Desambiguando contexto LSB';
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -140,9 +293,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           ),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'Analizando con IA...',
-          style: TextStyle(
+        Text(
+          title,
+          style: const TextStyle(
             color: Colors.white70,
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -151,7 +304,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         ),
         const SizedBox(height: 8),
         Text(
-          'Desambiguando contexto jurídico',
+          subtitle,
           style: TextStyle(
             color: Colors.white.withOpacity(0.4),
             fontSize: 12,
@@ -161,35 +314,101 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     );
   }
 
+  // Instancia individual de ModelViewer
+  Widget _buildModelViewerInstance(String id, String? url) {
+    if (url == null) return const SizedBox.shrink();
+
+    return ModelViewer(
+      key: ValueKey('${id}_$url'), // Recrea el WebView al cambiar el URL
+      src: url,
+      alt: 'Avatar LSB',
+      autoPlay: false, // Controlado manualmente por Dart
+      autoRotate: false,
+      cameraControls: false,
+      disableZoom: true,
+      backgroundColor: Colors.transparent,
+      cameraTarget: "0m 0.9m 0m",   // Cara / pecho
+      cameraOrbit: "0deg 90deg 3.0m", // Más zoom
+      onWebViewCreated: (controller) {
+        debugPrint('WebView Creada para Visor $id con URL: $url');
+        if (id == 'A') {
+          _controllerA = controller;
+        } else {
+          _controllerB = controller;
+        }
+      },
+      javascriptChannels: {
+        JavascriptChannel(
+          'ModelViewerChannel',
+          onMessageReceived: (message) {
+            _handleJsMessage(id, message.message);
+          },
+        ),
+      },
+      relatedJs: '''
+        const modelViewer = document.querySelector('model-viewer');
+        
+        modelViewer.addEventListener('load', () => {
+          if (window.ModelViewerChannel) {
+            window.ModelViewerChannel.postMessage('loaded');
+          }
+        });
+
+        modelViewer.addEventListener('finished', () => {
+          modelViewer.pause();
+          if (window.ModelViewerChannel) {
+            window.ModelViewerChannel.postMessage('finished');
+          }
+        });
+
+        modelViewer.addEventListener('loop', () => {
+          modelViewer.pause();
+          if (window.ModelViewerChannel) {
+            window.ModelViewerChannel.postMessage('finished');
+          }
+        });
+      ''',
+    );
+  }
+
   // ─────────────────────────────────────────────
-  // ESTADO 2: Reproduciendo animación 3D
+  // ESTADO 2: Reproducción en doble visor
   // ─────────────────────────────────────────────
-  Widget _buildModelViewer(String url) {
-    final urls = _testUrls ?? widget.animationUrls!;
+  Widget _buildDualModelViewer() {
     final activeGlosses = _testGlosses ?? widget.glosses;
     final currentGloss = (activeGlosses != null && _currentIndex < activeGlosses.length)
         ? activeGlosses[_currentIndex]
         : '';
 
+    final nextViewerId = _activeViewer == 'A' ? 'B' : 'A';
+    final isNextLoaded = nextViewerId == 'A' ? _isLoadedA : _isLoadedB;
+    final canAdvance = _localUrls.length > 1 && isNextLoaded;
+
     return Stack(
       children: [
-        // Visor 3D principal
+        // Visor A
         Positioned.fill(
-          child: ModelViewer(
-            src: url,
-            alt: 'Avatar LSB realizando la seña: $currentGloss',
-            autoPlay: true,
-            autoRotate: false,
-            cameraControls: false,
-            disableZoom: true,
-            backgroundColor: Colors.transparent,
-            // Configuración de la cámara para acercar a la parte superior del cuerpo
-            cameraTarget: "0m 0.9m 0m",   // Apunta más arriba (cara/pecho)
-            cameraOrbit: "0deg 90deg 3.0m", // Más cerca y ligeramente inclinado
+          child: Opacity(
+            opacity: _activeViewer == 'A' ? 1.0 : 0.0,
+            child: IgnorePointer(
+              ignoring: _activeViewer != 'A',
+              child: _buildModelViewerInstance('A', _urlA),
             ),
+          ),
         ),
 
-        // Indicador de progreso + botón de avance manual
+        // Visor B
+        Positioned.fill(
+          child: Opacity(
+            opacity: _activeViewer == 'B' ? 1.0 : 0.0,
+            child: IgnorePointer(
+              ignoring: _activeViewer != 'B',
+              child: _buildModelViewerInstance('B', _urlB),
+            ),
+          ),
+        ),
+
+        // Barra inferior con botón "Siguiente" y bolitas de progreso
         Positioned(
           bottom: 10,
           left: 0,
@@ -197,13 +416,12 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Botón "Siguiente" (aparece cuando ya pasó el tiempo mínimo)
-              if (urls.length > 1)
+              if (_localUrls.length > 1)
                 AnimatedOpacity(
-                  opacity: _canAdvance ? 1.0 : 0.3,
+                  opacity: canAdvance ? 1.0 : 0.3,
                   duration: const Duration(milliseconds: 400),
                   child: GestureDetector(
-                    onTap: _canAdvance ? _advanceToNext : null,
+                    onTap: canAdvance ? () => _transitionTo(nextViewerId) : null,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 18, vertical: 7),
@@ -228,10 +446,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                   ),
                 ),
               const SizedBox(height: 6),
-              // Bolitas de progreso
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(urls.length, (i) {
+                children: List.generate(_localUrls.length, (i) {
                   return AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -250,7 +467,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           ),
         ),
 
-        // Chip con el nombre de la glosa actual
+        // Indicador de glosa actual y estado de debug
         Positioned(
           top: 14,
           left: 14,
@@ -279,7 +496,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${_currentIndex + 1} / ${urls.length}',
+                    '${_currentIndex + 1} / ${_localUrls.length}',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.6),
                       fontSize: 12,
@@ -288,9 +505,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                 ],
               ),
               const SizedBox(height: 8),
-              // DEBUG: Imprimir la URL exacta para verificar por qué falla
+              // DEBUG URL
               Text(
-                'DEBUG URL: $url',
+                'DEBUG: Visor=$_activeViewer | Seña=$_currentIndex | LoadedA=$_isLoadedA | LoadedB=$_isLoadedB',
                 style: const TextStyle(
                   color: Colors.amber,
                   fontSize: 10,
@@ -307,6 +524,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   // ─────────────────────────────────────────────
   // ESTADO 3: Resultado mostrado (secuencia terminada)
+  // Nota: En reproducción en bucle continuo, este estado no se alcanza a menos que se fuerce.
   // ─────────────────────────────────────────────
   Widget _buildFinishedState() {
     return Column(
@@ -365,7 +583,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         ),
         const SizedBox(height: 16),
         TextButton.icon(
-          onPressed: _startSequence,
+          onPressed: () => _startSequence(),
           icon: const Icon(Icons.replay_rounded,
               color: Colors.deepPurpleAccent),
           label: const Text(
@@ -426,13 +644,13 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         // ── Botón de prueba directa con S3 ──
         OutlinedButton.icon(
           onPressed: () => _startSequence(
-            overrideUrls: ['${_s3Base}YO.glb'],
-            overrideGlosses: ['ABOGADO'],
+            overrideUrls: ['${_s3Base}YO.glb', '${_s3Base}ABOGADO.glb'],
+            overrideGlosses: ['YO', 'ABOGADO'],
           ),
           icon: const Icon(Icons.play_circle_outline,
               color: Colors.deepPurpleAccent, size: 18),
           label: const Text(
-            'Probar YO.glb (S3)',
+            'Probar YO + ABOGADO',
             style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 12),
           ),
           style: OutlinedButton.styleFrom(
@@ -448,22 +666,13 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   @override
   Widget build(BuildContext context) {
-    final urls = widget.animationUrls;
-
-    // Determinar el estado actual del widget
     Widget bodyContent;
 
-    // Combinar las URLs reales con las de test
-    final activeUrls = _testUrls ?? urls;
-
-    if (widget.isProcessing) {
+    if (widget.isProcessing || _isDownloadingFiles) {
       bodyContent = _buildProcessingState();
-    } else if (activeUrls != null &&
-        activeUrls.isNotEmpty &&
-        _isPlayingSequence &&
-        _currentIndex < activeUrls.length) {
-      bodyContent = _buildModelViewer(activeUrls[_currentIndex]);
-    } else if (activeUrls != null && activeUrls.isNotEmpty && !_isPlayingSequence) {
+    } else if (_localUrls.isNotEmpty && _isPlayingSequence) {
+      bodyContent = _buildDualModelViewer();
+    } else if (_localUrls.isNotEmpty && !_isPlayingSequence) {
       bodyContent = _buildFinishedState();
     } else {
       bodyContent = _buildIdleState();

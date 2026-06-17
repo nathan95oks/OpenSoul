@@ -112,7 +112,7 @@ REGLAS DE DESAMBIGUACIÓN JURÍDICA Y SEÑAS COMPUESTAS:
 Tu tarea es recibir una frase en español y convertirla en un ARREGLO ORDENADO DE GLOSAS LSB.
 
 REGLAS LINGÜÍSTICAS OBLIGATORIAS:
-1. La LSB usa estructura OSV (Objeto-Sujeto-Verbo). Reordena la frase.
+1. La LSB usa estructura OSV (Objeto-Sujeto-Verbo) para acciones transitivas, pero para frases equitativas (Sujeto + Oficio/Profesión) el orden es SUJETO luego OFICIO (Ej: "Yo soy abogado" -> ["YO", "ABOGADO"]). NO inviertas los pronombres en estos casos.
 2. Elimina artículos (el, la, los, las, un, una), preposiciones (de, en, por, para, con) y conjunciones innecesarias.
 3. Los marcadores temporales (HOY, AYER) van AL INICIO del arreglo.
 4. Usa solo verbos en INFINITIVO como glosa (DENUNCIAR, no "denunció").
