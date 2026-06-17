@@ -15,13 +15,26 @@ abstract class RemoteTranslationDataSource {
 /// Envía las tarjetas LSB seleccionadas y recibe la respuesta completa
 /// del sistema híbrido (motor propio + Bedrock + Polly + S3).
 class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
+  /// Endpoint por defecto. Configurable en compilación sin tocar código:
+  ///   flutter run --dart-define=LSB_API_URL=https://otra-url/translate
+  /// (TD-01) — evita acoplar el binario a un endpoint concreto.
+  static const String defaultApiGatewayUrl = String.fromEnvironment(
+    'LSB_API_URL',
+    defaultValue:
+        'https://5kc2fwqb49.execute-api.us-east-1.amazonaws.com/translate',
+  );
+
+  /// Tope de espera de la llamada remota. Si el backend no responde a tiempo
+  /// (red lenta o caída), se lanza [TimeoutException] y el controlador cae al
+  /// motor local — nunca se queda colgado en `loading` (RDS-01).
+  static const Duration requestTimeout = Duration(seconds: 12);
+
   final http.Client client;
   final String apiGatewayUrl;
 
   RemoteTranslationDataSourceImpl({
     required this.client,
-    this.apiGatewayUrl =
-        'https://5kc2fwqb49.execute-api.us-east-1.amazonaws.com/translate',
+    this.apiGatewayUrl = defaultApiGatewayUrl,
   });
 
   @override
@@ -29,19 +42,21 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     required String context,
     required List<String> cards,
   }) async {
-    final response = await client.post(
-      Uri.parse(apiGatewayUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: jsonEncode({
-        'context': context,
-        'cards': cards,
-        'language': 'es-BO',
-        'institutionType': 'entidad_publica',
-      }),
-    );
+    final response = await client
+        .post(
+          Uri.parse(apiGatewayUrl),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: jsonEncode({
+            'context': context,
+            'cards': cards,
+            'language': 'es-BO',
+            'institutionType': 'entidad_publica',
+          }),
+        )
+        .timeout(requestTimeout);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);

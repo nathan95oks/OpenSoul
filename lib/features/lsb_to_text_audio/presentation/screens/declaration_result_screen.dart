@@ -79,7 +79,14 @@ class DeclarationResultScreen extends ConsumerWidget {
                     const SizedBox(height: 20),
 
                     // ── Traducción (lo más importante, arriba) ───────────
-                    const _Label('Traducción para institución pública:'),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: _Label('Traducción para institución pública:'),
+                        ),
+                        _OriginChip(bedrockUsed: result.bedrockUsed),
+                      ],
+                    ),
                     const SizedBox(height: 8),
                     Container(
                       width: double.infinity,
@@ -105,7 +112,8 @@ class DeclarationResultScreen extends ConsumerWidget {
                     _AudioControls(
                       playback: playback,
                       hasRemoteAudio:
-                          result.audioUrl != null && result.audioUrl!.isNotEmpty,
+                          result.audioUrl != null &&
+                          result.audioUrl!.isNotEmpty,
                       onPlay: () {
                         if (playback == AudioPlaybackState.paused) {
                           ref
@@ -216,6 +224,51 @@ class DeclarationResultScreen extends ConsumerWidget {
   }
 }
 
+/// Indica al usuario el origen de la declaración (RVP-01): si la oración fue
+/// refinada por la IA remota (Bedrock) o producida por el motor local —que
+/// actúa como fallback cuando el backend cae, degenera o no está disponible.
+class _OriginChip extends StatelessWidget {
+  final bool bedrockUsed;
+  const _OriginChip({required this.bedrockUsed});
+
+  static const _orange = Color(0xFFFF6B00);
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, label, color) = bedrockUsed
+        ? (Icons.auto_awesome, 'Refinado por IA', _orange)
+        : (Icons.offline_bolt_outlined, 'Motor local', const Color(0xFF555555));
+    return Semantics(
+      label: bedrockUsed
+          ? 'Declaración refinada por inteligencia artificial'
+          : 'Declaración generada por el motor local sin conexión',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: color.withValues(alpha: 0.35)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 13, color: color),
+            const SizedBox(width: 5),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _Label extends StatelessWidget {
   final String text;
   const _Label(this.text);
@@ -259,9 +312,9 @@ class _AudioControls extends StatelessWidget {
       AudioPlaybackState.playing => (Icons.graphic_eq, 'Reproduciendo…'),
       AudioPlaybackState.paused => (Icons.pause_circle_outline, 'En pausa'),
       AudioPlaybackState.idle => (
-          Icons.volume_up_outlined,
-          hasRemoteAudio ? 'Audio listo (Polly)' : 'Audio listo (local)'
-        ),
+        Icons.volume_up_outlined,
+        hasRemoteAudio ? 'Audio listo (Polly)' : 'Audio listo (local)',
+      ),
     };
 
     return Column(
@@ -349,35 +402,42 @@ class _FullWidthBtn extends StatelessWidget {
 
     return SizedBox(
       height: 52,
-      child: Material(
-        color: bg,
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
+      // A11Y-01: cada acción se anuncia como botón con su etiqueta y estado.
+      child: Semantics(
+        button: true,
+        enabled: enabled,
+        label: label,
+        excludeSemantics: true,
+        child: Material(
+          color: bg,
           borderRadius: BorderRadius.circular(16),
-          onTap: onTap,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: borderColor, width: filled ? 2 : 1.5),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 18, color: fg),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    label,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: fg,
-                      letterSpacing: 0.2,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: onTap,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: borderColor, width: filled ? 2 : 1.5),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 18, color: fg),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      label,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: fg,
+                        letterSpacing: 0.2,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

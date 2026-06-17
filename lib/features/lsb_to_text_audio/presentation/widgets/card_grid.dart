@@ -18,8 +18,9 @@ class ExpandedAnswersNotifier extends Notifier<bool> {
   void collapse() => state = false;
 }
 
-final expandedAnswersProvider =
-    NotifierProvider<ExpandedAnswersNotifier, bool>(ExpandedAnswersNotifier.new);
+final expandedAnswersProvider = NotifierProvider<ExpandedAnswersNotifier, bool>(
+  ExpandedAnswersNotifier.new,
+);
 
 /// Grid de respuestas guiadas a la pregunta activa.
 ///
@@ -95,12 +96,18 @@ class CardGrid extends ConsumerWidget {
             ),
             if (hasMore)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
                 child: TextButton.icon(
                   onPressed: () =>
                       ref.read(expandedAnswersProvider.notifier).expand(),
-                  icon: const Icon(Icons.expand_more,
-                      size: 18, color: Color(0xFF8B949E)),
+                  icon: const Icon(
+                    Icons.expand_more,
+                    size: 18,
+                    color: Color(0xFF8B949E),
+                  ),
                   label: Text(
                     'Ver más opciones (${cards.length - _kAnswersPerQuestion})',
                     style: const TextStyle(
@@ -121,8 +128,10 @@ class CardGrid extends ConsumerWidget {
       error: (e, _) => const Padding(
         padding: EdgeInsets.all(24),
         child: Center(
-          child: Text('Error al cargar opciones',
-              style: TextStyle(color: Colors.red)),
+          child: Text(
+            'Error al cargar opciones',
+            style: TextStyle(color: Colors.red),
+          ),
         ),
       ),
     );
@@ -156,8 +165,9 @@ class _PairPickHint extends StatelessWidget {
     final label = current == 0
         ? 'Puedes elegir hasta $max cards para describir mejor'
         : 'Card $current de $max — toca otra para complementar, o salta';
-    final color =
-        remaining > 0 ? const Color(0xFF00ADB5) : const Color(0xFF8B949E);
+    final color = remaining > 0
+        ? const Color(0xFF00ADB5)
+        : const Color(0xFF8B949E);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
@@ -249,49 +259,57 @@ class _AnswerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isEmergency = card.isEmergency;
-    final accent =
-        isEmergency ? Colors.redAccent : const Color(0xFFFFD700);
+    final accent = isEmergency ? Colors.redAccent : const Color(0xFFFFD700);
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF21262D),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: accent.withValues(alpha: 0.35)),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                kLsbIconMap[card.semanticIcon] ?? Icons.credit_card,
-                size: 22,
-                color: accent,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                card.displayText,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  letterSpacing: 0.3,
+    // A11Y-01: el lector de pantalla anuncia la tarjeta como un botón con su
+    // significado; el ícono es decorativo y se excluye (excludeSemantics).
+    return Semantics(
+      button: true,
+      label: isEmergency
+          ? '${card.displayText}, opción de emergencia'
+          : card.displayText,
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF21262D),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: accent.withValues(alpha: 0.35)),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                child: Icon(
+                  kLsbIconMap[card.semanticIcon] ?? Icons.credit_card,
+                  size: 22,
+                  color: accent,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  card.displayText,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    letterSpacing: 0.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
