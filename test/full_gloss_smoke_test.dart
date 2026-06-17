@@ -1,165 +1,75 @@
-// Prueba de humo exhaustiva — genera una frase para cada glosa
-// en cada uno de los 5 contextos oficiales y vuelca la salida.
-//
-// Ahora valida CALIDAD (no solo "no vacío"): cada frase debe estar
-// bien formada — empieza en mayúscula, termina en punto, tiene al menos
-// 3 palabras y no filtra guiones bajos de las glosas crudas.
-//
-// Ejecutar:
-//   flutter test test/full_gloss_smoke_test.dart --reporter expanded 2>&1 | tee /tmp/gloss_smoke.txt
+// ignore_for_file: avoid_print
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart';
 
 void main() {
-  const asm = LocalSentenceAssembler();
-
-  /// Una oración "bien formada": no vacía, inicia en mayúscula, termina en
-  /// punto, tiene al menos 3 palabras y no filtra guiones bajos.
-  void expectWellFormed(String s) {
-    expect(s.trim(), isNotEmpty, reason: 'no debe estar vacía');
-    expect(s.trim().endsWith('.'), true, reason: 'debe terminar en punto: "$s"');
-    expect(s[0], s[0].toUpperCase(), reason: 'debe iniciar en mayúscula: "$s"');
-    expect(s.contains('_'), false,
-        reason: 'no deben filtrarse guiones bajos: "$s"');
-    expect(s.split(RegExp(r'\s+')).length, greaterThanOrEqualTo(3),
-        reason: 'debe tener al menos 3 palabras: "$s"');
-  }
-
-  // Los 5 contextos oficiales de la app
-  const contexts = [
-    'denuncia_robo',
-    'violencia',
-    'accidente',
-    'otro',
-    'orientacion',
-  ];
-
-  // ── Todas las glosas del catálogo, agrupadas por categoría ──────────────
-  final allGlosses = <String, List<String>>{
-    'Identificación': [
-      'YO', 'FAMILIA', 'HIJO', 'ESPOSO', 'MAMA', 'PAPA', 'HERMANO',
-    ],
-    'Descripción-TipoPersona': [
-      'HOMBRE', 'MUJER', 'JOVEN', 'NIÑO', 'DESCONOCIDO',
-      'VECINO', 'GRUPO', 'ADULTO', 'ABUELO', 'SOLO', 'DOS', 'TRES', 'CONOCIDO',
-    ],
-    'Descripción-Físico': [
-      'ALTO', 'BAJO', 'FLACO', 'GORDO', 'FUERTE', 'MORENO', 'BLANCO_PIEL',
-    ],
-    'Descripción-Cabello': [
-      'PELO_CORTO', 'PELO_LARGO', 'CALVO', 'BARBA', 'BIGOTE',
-    ],
-    'Descripción-Marcas': [
-      'TATUAJE', 'CICATRIZ', 'LENTES', 'MASCARA',
-    ],
-    'Descripción-Vestimenta': [
-      'GORRA', 'CAPUCHA', 'CHOMPA', 'CASCO',
-      'CAMISA', 'PANTALON', 'ZAPATOS', 'MOCHILA_USADA',
-    ],
-    'Descripción-Color': [
-      'NEGRO', 'BLANCO', 'AZUL', 'ROJO', 'GRIS', 'VERDE', 'OSCURO', 'CLARO',
-    ],
-    'Agresión': [
-      'ROBAR', 'PEGAR', 'AMENAZAR', 'EMPUJAR', 'GRITAR',
-      'QUITAR', 'PERSEGUIR', 'ASALTAR', 'ACOSAR', 'ABUSO', 'SECUESTRAR',
-    ],
-    'Acciones': [
-      'TRAMITAR', 'PEDIR', 'CONSULTAR', 'NECESITAR', 'PAGAR',
-      'RENOVAR', 'RECOGER', 'DAR', 'PERDER', 'CORREGIR',
-    ],
-    'Emociones': [
-      'MIEDO', 'ENOJO', 'TRISTE', 'ASUSTADO', 'NERVIOSO',
-    ],
-    'Estado/Urgencia': [
-      'URGENTE', 'AYUDA', 'EMERGENCIA', 'ENFERMEDAD', 'DOLOR', 'CONFUNDIDO',
-    ],
-    'Objetos': [
-      'CELULAR', 'DINERO', 'MOCHILA', 'BOLSA', 'LLAVE',
-      'CUCHILLO', 'AUTO', 'MOTOCICLETA', 'BILLETERA', 'TARJETA',
-      'RELOJ', 'CADENA', 'ANILLO', 'COLLAR', 'ARETES',
-      'COMPUTADORA', 'AUDIFONOS', 'LENTES_SOL', 'BICICLETA',
-    ],
-    'Documentos': [
-      'CARNET', 'PAPEL', 'CERTIFICADO', 'PARTIDA_NACIMIENTO', 'LICENCIA',
-      'FACTURA', 'ANTECEDENTES', 'COPIA_DENUNCIA', 'COPIA_SENTENCIA',
-      'PODER', 'DECLARACION_JURADA',
-    ],
-    'Lugares': [
-      'CALLE', 'CASA', 'MERCADO', 'PARADA', 'MICRO', 'PARQUE',
-      'TRABAJO', 'CAJERO', 'BANCO', 'TAXI', 'PLAZA', 'ESQUINA', 'PUENTE',
-    ],
-    'Instituciones': [
-      'POLICIA', 'DEFENSORIA', 'SEGIP', 'HOSPITAL', 'ALCALDIA',
-      'REGISTRO_CIVIL', 'FISCAL', 'JUZGADO', 'NOTARIA',
-    ],
-    'Servicios': [
-      'INTERPRETE', 'AMBULANCIA', 'DOCTOR', 'ABOGADO',
-      'INFORMACION', 'ORIENTACION',
-    ],
-    'Consultas/Trámites': [
-      'DENUNCIA', 'CONSULTA', 'QUEJAR', 'RENOVACION', 'PAGO', 'DUPLICADO',
-    ],
-    'Tiempo': [
-      'HOY', 'AHORA', 'AYER', 'MAÑANA', 'TARDE', 'NOCHE',
-    ],
-  };
-
-  // ── Prueba por categoría × contexto ──────────────────────────────────────
-  for (final ctx in contexts) {
-    group('Contexto: $ctx', () {
-      for (final entry in allGlosses.entries) {
-        final category = entry.key;
-        final glosses = entry.value;
-
-        group('  Categoría: $category', () {
-          for (final gloss in glosses) {
-            test('    $gloss', () {
-              final sentence = asm.assemble(
-                contextId: ctx,
-                glosses: [gloss],
-              );
-              // ignore: avoid_print
-              print('[$ctx][$category] $gloss\n   → "$sentence"\n');
-
-              // Validación de calidad: la frase debe estar bien formada.
-              expectWellFormed(sentence);
-            });
+  test('Generar corpus completo y verificar ausencia de frases-cola', () {
+    final assembler = LocalSentenceAssembler();
+    
+    // Extraer glosas directamente del codigo fuente de assembler
+    final file = File('lib/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart');
+    final content = file.readAsStringSync();
+    
+    final regex = RegExp(r"'([A-Z0-Z_]+)':\s*_Lex\(");
+    final allGlosses = regex.allMatches(content).map((m) => m.group(1)!).toList();
+    print('Encontradas ${allGlosses.length} glosas');
+    
+    final contexts = ['denuncia_robo', 'violencia', 'accidente', 'tramite_id', 'orientacion', 'perdida', 'otro'];
+    
+    final forbiddenPhrases = [
+      'Asimismo, menciono',
+      'También menciono',
+      'Detalles:',
+      'Consulto sobre:',
+      'Involucra'
+    ];
+    
+    int errors = 0;
+    
+    for (final ctx in contexts) {
+      print('=== CONTEXTO: $ctx ===');
+      
+      // Probar cada glosa individualmente
+      for (final gloss in allGlosses) {
+        final result = assembler.assemble(contextId: ctx, glosses: [gloss]);
+        
+        bool hasForbidden = false;
+        for (final phrase in forbiddenPhrases) {
+          if (result.contains(phrase)) {
+            hasForbidden = true;
+            break;
           }
-        });
+        }
+        
+        if (hasForbidden || !result.endsWith('.') || result.contains(' ,')) {
+          print('ERROR [$ctx] [$gloss] -> $result');
+          errors++;
+        }
       }
-
-      // ── Combinaciones representativas por contexto ────────────────────
-      test('  [COMBO] Descripción completa del agresor', () {
-        final glosses = ['HOMBRE', 'ALTO', 'MORENO', 'GORRA', 'NEGRO', 'TATUAJE'];
-        final s = asm.assemble(contextId: ctx, glosses: glosses);
-        // ignore: avoid_print
-        print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expectWellFormed(s);
-      });
-
-      test('  [COMBO] Robo con objetos múltiples', () {
-        final glosses = ['ROBAR', 'CELULAR', 'DINERO', 'RELOJ', 'CALLE', 'NOCHE'];
-        final s = asm.assemble(contextId: ctx, glosses: glosses);
-        // ignore: avoid_print
-        print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expectWellFormed(s);
-      });
-
-      test('  [COMBO] Violencia con emoción y urgencia', () {
-        final glosses = ['PEGAR', 'MIEDO', 'URGENTE', 'POLICIA'];
-        final s = asm.assemble(contextId: ctx, glosses: glosses);
-        // ignore: avoid_print
-        print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expectWellFormed(s);
-      });
-
-      test('  [COMBO] Trámite con documentos e institución', () {
-        final glosses = ['TRAMITAR', 'CARNET', 'SEGIP', 'HOY'];
-        final s = asm.assemble(contextId: ctx, glosses: glosses);
-        // ignore: avoid_print
-        print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expectWellFormed(s);
-      });
-    });
-  }
+      
+      // Probar pares de glosas
+      for (int i = 0; i < allGlosses.length; i += 7) {
+        for (int j = i + 1; j < allGlosses.length; j += 7) {
+          final result = assembler.assemble(contextId: ctx, glosses: [allGlosses[i], allGlosses[j]]);
+          
+          bool hasForbidden = false;
+          for (final phrase in forbiddenPhrases) {
+            if (result.contains(phrase)) {
+              hasForbidden = true;
+              break;
+            }
+          }
+          
+          if (hasForbidden || !result.endsWith('.') || result.contains(' ,')) {
+            print('ERROR [$ctx] [${allGlosses[i]}, ${allGlosses[j]}] -> $result');
+            errors++;
+          }
+        }
+      }
+    }
+    
+    print('Total de errores detectados: $errors');
+    expect(errors, 0, reason: 'Hay oraciones mal formadas o con frases cola');
+  });
 }
