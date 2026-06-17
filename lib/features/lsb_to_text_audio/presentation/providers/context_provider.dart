@@ -254,7 +254,18 @@ final availableContexts = <SemanticContext>[
         question: '¿Dónde ocurrió?',
         emoji: '📍',
         semanticWeight: 0.55,
-        cardCategories: ['Lugares', 'Instituciones'],
+        cardCategories: ['Lugares'],
+      ),
+      // Subflujo propio para la institución (antes se mezclaba con el lugar).
+      SemanticZone(
+        id: 'institucion',
+        label: 'Institución',
+        hint: 'A dónde acudir',
+        question: '¿A qué institución quieres acudir?',
+        emoji: '🏛️',
+        semanticWeight: 0.5,
+        optional: true,
+        cardCategories: ['Instituciones'],
       ),
       SemanticZone(
         id: 'tiempo',
@@ -327,7 +338,18 @@ final availableContexts = <SemanticContext>[
         question: '¿Dónde ocurrió?',
         emoji: '📍',
         semanticWeight: 0.5,
-        cardCategories: ['Lugares', 'Instituciones'],
+        cardCategories: ['Lugares'],
+      ),
+      // Subflujo propio para la institución (hospital, policía…).
+      SemanticZone(
+        id: 'institucion',
+        label: 'Institución',
+        hint: 'A dónde acudir',
+        question: '¿A qué institución acudiste o quieres acudir?',
+        emoji: '🏛️',
+        semanticWeight: 0.45,
+        optional: true,
+        cardCategories: ['Instituciones'],
       ),
     ],
   ),
@@ -379,7 +401,7 @@ final availableContexts = <SemanticContext>[
         question: '¿Dónde ocurrió?',
         emoji: '📍',
         semanticWeight: 0.6,
-        cardCategories: ['Lugares', 'Instituciones'],
+        cardCategories: ['Lugares'],
         relatedZones: ['tiempo'],
       ),
       SemanticZone(
