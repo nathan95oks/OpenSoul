@@ -24,15 +24,9 @@ import re
 import boto3
 from botocore.exceptions import ClientError
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
 logger = logging.getLogger("lsb-to-text-audio")
 logger.setLevel(logging.INFO)
 
-# ---------------------------------------------------------------------------
-# Variables de entorno
-# ---------------------------------------------------------------------------
 S3_BUCKET = os.environ.get("S3_BUCKET", "opensoul-lsb-audio-dev")
 APP_PREFIX = os.environ.get("APP_PREFIX", "lsb-to-text-audio")
 VOICE_ID = os.environ.get("VOICE_ID", "Lupe")
@@ -40,9 +34,6 @@ BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "global.amazon.nova-2-lite
 APP_REGION = os.environ.get("APP_REGION", os.environ.get("AWS_REGION", "us-east-1"))
 ENABLE_BEDROCK = os.environ.get("ENABLE_BEDROCK", "true").lower() == "true"
 
-# ---------------------------------------------------------------------------
-# Clientes AWS
-# ---------------------------------------------------------------------------
 bedrock_runtime = boto3.client("bedrock-runtime", region_name=APP_REGION)
 polly_client = boto3.client("polly", region_name=APP_REGION)
 s3_client = boto3.client("s3", region_name=APP_REGION)
@@ -54,13 +45,7 @@ CORS_HEADERS = {
     "Content-Type": "application/json",
 }
 
-
-# ===================================================================
-# MÓDULO 1: LEXICÓN DE GLOSAS LSB — TRÁMITES Y CONSULTAS CIUDADANAS
-# ===================================================================
-
 GLOSS_LEXICON = {
-    # --- SUJETOS ---
     "YO":         {"rol": "SUJETO", "es": "yo", "perspectiva": "1P"},
     "NOSOTROS":   {"rol": "SUJETO", "es": "nosotros", "perspectiva": "1P_PLURAL"},
     "HIJO":       {"rol": "SUJETO", "es": "mi hijo", "perspectiva": "3P"},
@@ -79,7 +64,6 @@ GLOSS_LEXICON = {
     "AMIGO":      {"rol": "SUJETO", "es": "mi amigo", "perspectiva": "3P"},
     "VECINO":     {"rol": "SUJETO", "es": "mi vecino", "perspectiva": "3P"},
 
-    # --- VERBOS (Acciones administrativas y ciudadanas) ---
     "NECESITAR":  {"rol": "VERBO", "es": "necesitar", "1p": "necesito", "3p": "necesita", "formal": "requiero"},
     "PEDIR":      {"rol": "VERBO", "es": "pedir", "1p": "solicito", "3p": "solicita", "formal": "solicitar"},
     "TRAMITAR":   {"rol": "VERBO", "es": "tramitar", "1p": "necesito tramitar", "3p": "necesita tramitar", "formal": "deseo realizar el trámite de"},
@@ -107,9 +91,6 @@ GLOSS_LEXICON = {
     "CORREGIR":   {"rol": "VERBO", "es": "corregir", "1p": "necesito corregir", "3p": "necesita corregir", "formal": "deseo solicitar la corrección de"},
     "VERIFICAR":  {"rol": "VERBO", "es": "verificar", "1p": "necesito verificar", "3p": "necesita verificar", "formal": "deseo verificar"},
 
-    # --- VERBOS DE AGRESIÓN (robo / violencia) ---
-    # Antes ausentes: la Lambda clasificaba robo/violencia como GENERAL.
-    # "agresor" es la forma de 3ª persona que usa el generador de incidentes.
     "ROBAR":      {"rol": "VERBO", "es": "robar", "agresor": "robó", "1p": "me robaron"},
     "ASALTAR":    {"rol": "VERBO", "es": "asaltar", "agresor": "asaltó", "1p": "me asaltaron"},
     "QUITAR":     {"rol": "VERBO", "es": "quitar", "agresor": "quitó", "1p": "me quitaron"},
@@ -122,7 +103,6 @@ GLOSS_LEXICON = {
     "SECUESTRAR": {"rol": "VERBO", "es": "secuestrar", "agresor": "secuestró", "1p": "me secuestraron"},
     "ABUSO":      {"rol": "VERBO", "es": "abuso sexual", "agresor": "agredió sexualmente", "1p": "fui agredido sexualmente"},
 
-    # --- PERSONAS / AGRESOR (descriptores con bandera persona) ---
     "HOMBRE":      {"rol": "DESCRIPTOR", "es": "un hombre", "persona": True},
     "MUJER":       {"rol": "DESCRIPTOR", "es": "una mujer", "persona": True},
     "JOVEN":       {"rol": "DESCRIPTOR", "es": "un joven", "persona": True},
@@ -140,7 +120,6 @@ GLOSS_LEXICON = {
     "BARBA":       {"rol": "DESCRIPTOR", "es": "con barba"},
     "LENTES":      {"rol": "DESCRIPTOR", "es": "con lentes"},
 
-    # --- OBJETOS (personales / sustraídos) ---
     "CELULAR":   {"rol": "OBJETO", "es": "mi celular"},
     "DINERO":    {"rol": "OBJETO", "es": "mi dinero"},
     "MOCHILA":   {"rol": "OBJETO", "es": "mi mochila"},
@@ -160,7 +139,6 @@ GLOSS_LEXICON = {
     "MOTO":      {"rol": "OBJETO", "es": "mi moto"},
     "CUCHILLO":  {"rol": "OBJETO", "es": "un cuchillo", "arma": True},
 
-    # --- LUGARES (cotidianos) ---
     "CALLE":   {"rol": "LUGAR", "es": "en la calle"},
     "CASA":    {"rol": "LUGAR", "es": "en mi casa"},
     "MERCADO": {"rol": "LUGAR", "es": "en el mercado"},
@@ -174,12 +152,10 @@ GLOSS_LEXICON = {
     "ESQUINA": {"rol": "LUGAR", "es": "en la esquina"},
     "PUENTE":  {"rol": "LUGAR", "es": "en el puente"},
 
-    # --- ESTADOS EMOCIONALES adicionales ---
     "ENOJO":    {"rol": "ESTADO", "es": "estoy enojado", "formal": "manifiesto enojo"},
     "TRISTE":   {"rol": "ESTADO", "es": "estoy triste", "formal": "me encuentro afectado"},
     "NERVIOSO": {"rol": "ESTADO", "es": "estoy nervioso", "formal": "me encuentro nervioso"},
 
-    # --- DOCUMENTOS ---
     "DOCUMENTO":  {"rol": "DOCUMENTO", "es": "documento", "art": "el"},
     "DOCUMENTOS": {"rol": "DOCUMENTO", "es": "documentos", "art": "los"},
     "CARNET":     {"rol": "DOCUMENTO", "es": "carnet de identidad", "art": "el"},
@@ -200,7 +176,6 @@ GLOSS_LEXICON = {
     "PASAPORTE":  {"rol": "DOCUMENTO", "es": "pasaporte", "art": "el"},
     "ANTECEDENTES":{"rol": "DOCUMENTO", "es": "certificado de antecedentes", "art": "el"},
 
-    # --- TRÁMITES (tipos de gestión) ---
     "RENOVACION": {"rol": "TRAMITE", "es": "renovación", "art": "la", "formal": "trámite de renovación"},
     "INSCRIPCION":{"rol": "TRAMITE", "es": "inscripción", "art": "la", "formal": "trámite de inscripción"},
     "REGISTRO":   {"rol": "TRAMITE", "es": "registro", "art": "el", "formal": "trámite de registro"},
@@ -212,7 +187,6 @@ GLOSS_LEXICON = {
     "TURNO":      {"rol": "TRAMITE", "es": "turno", "art": "el", "formal": "turno de atención"},
     "DUPLICADO":  {"rol": "TRAMITE", "es": "duplicado", "art": "el", "formal": "trámite de duplicado"},
 
-    # --- TIEMPO ---
     "NOCHE":      {"rol": "TIEMPO", "es": "en la noche", "formal": "durante el horario nocturno"},
     "DIA":        {"rol": "TIEMPO", "es": "durante el día", "formal": "en horas del día"},
     "MAÑANA":     {"rol": "TIEMPO", "es": "en la mañana", "formal": "durante la mañana"},
@@ -223,7 +197,6 @@ GLOSS_LEXICON = {
     "ANTES":      {"rol": "TIEMPO", "es": "antes", "formal": "con anterioridad"},
     "SEMANA":     {"rol": "TIEMPO", "es": "esta semana", "formal": "durante la presente semana"},
 
-    # --- INSTITUCIONES (entidades públicas) ---
     "ALCALDIA":   {"rol": "INSTITUCION", "es": "alcaldía", "prep": "en la"},
     "GOBERNACION":{"rol": "INSTITUCION", "es": "gobernación", "prep": "en la"},
     "REGISTRO_CIVIL": {"rol": "INSTITUCION", "es": "registro civil", "prep": "en el"},
@@ -240,7 +213,6 @@ GLOSS_LEXICON = {
     "OFICINA":    {"rol": "INSTITUCION", "es": "oficina pública", "prep": "en la"},
     "DEFENSORIA": {"rol": "INSTITUCION", "es": "defensoría", "prep": "en la"},
 
-    # --- SERVICIOS ---
     "ABOGADO":    {"rol": "SERVICIO", "es": "abogado", "formal": "asistencia legal"},
     "DOCTOR":     {"rol": "SERVICIO", "es": "médico", "formal": "atención médica"},
     "INTERPRETE": {"rol": "SERVICIO", "es": "intérprete", "formal": "intérprete de lengua de señas"},
@@ -250,7 +222,6 @@ GLOSS_LEXICON = {
     "AMBULANCIA": {"rol": "SERVICIO", "es": "ambulancia", "formal": "servicio de ambulancia"},
     "BOMBERO":    {"rol": "SERVICIO", "es": "bomberos", "formal": "servicio de bomberos"},
 
-    # --- DESCRIPTORES ---
     "NUEVO":      {"rol": "DESCRIPTOR", "es": "nuevo"},
     "VIEJO":      {"rol": "DESCRIPTOR", "es": "antiguo"},
     "GRANDE":     {"rol": "DESCRIPTOR", "es": "grande"},
@@ -262,13 +233,11 @@ GLOSS_LEXICON = {
     "CORRECTO":   {"rol": "DESCRIPTOR", "es": "correcto"},
     "INCORRECTO": {"rol": "DESCRIPTOR", "es": "incorrecto"},
 
-    # --- URGENCIA ---
     "URGENTE":    {"rol": "URGENCIA", "es": "urgente", "formal": "de manera urgente"},
     "EMERGENCIA": {"rol": "URGENCIA", "es": "es una emergencia", "formal": "se trata de una emergencia"},
     "PELIGRO":    {"rol": "URGENCIA", "es": "hay peligro", "formal": "existe una situación de peligro"},
     "IMPORTANTE": {"rol": "URGENCIA", "es": "es importante", "formal": "reviste importancia"},
 
-    # --- ESTADOS ---
     "ENFERMO":    {"rol": "ESTADO", "es": "enfermo/a", "formal": "con problemas de salud"},
     "HERIDO":     {"rol": "ESTADO", "es": "herido/a", "formal": "con lesiones físicas"},
     "ASUSTADO":   {"rol": "ESTADO", "es": "asustado/a", "formal": "en estado de temor"},
@@ -280,11 +249,6 @@ GLOSS_LEXICON = {
     "CONFUNDIDO": {"rol": "ESTADO", "es": "estoy confundido/a", "formal": "no comprendo el procedimiento"},
     "PREOCUPADO": {"rol": "ESTADO", "es": "estoy preocupado/a", "formal": "me encuentro preocupado/a"},
 }
-
-
-# ===================================================================
-# MÓDULO 2: ANÁLISIS SEMÁNTICO
-# ===================================================================
 
 def analyze_glosses(cards: list) -> dict:
     """
@@ -317,20 +281,16 @@ def analyze_glosses(cards: list) -> dict:
         else:
             analysis["desconocidos"].append({"glosa": key, "rol": "DESCONOCIDO", "es": key.lower()})
 
-    # Detectar tipo de evento
     analysis["tipo_evento"] = _detect_event_type(analysis)
-    # Detectar perspectiva
     analysis["perspectiva"] = _detect_perspective(analysis)
 
     return analysis
-
 
 def _detect_event_type(analysis: dict) -> str:
     verbos = [v["glosa"] for v in analysis["verbos"]]
     tramites = [t["glosa"] for t in analysis["tramites"]]
     documentos = [d["glosa"] for d in analysis["documentos"]]
 
-    # Agresión: tienen prioridad sobre el resto porque definen un incidente.
     if any(v in ["ROBAR", "ASALTAR", "QUITAR"] for v in verbos):
         return "ROBO"
     if any(v in ["GOLPEAR", "AMENAZAR", "EMPUJAR", "GRITAR",
@@ -365,17 +325,11 @@ def _detect_event_type(analysis: dict) -> str:
         return "ESTADO"
     return "GENERAL"
 
-
 def _detect_perspective(analysis: dict) -> str:
     for s in analysis["sujetos"]:
         if s.get("perspectiva") == "1P":
             return "PRIMERA_PERSONA"
-    return "PRIMERA_PERSONA"  # Default para LSB ciudadano
-
-
-# ===================================================================
-# MÓDULO 3: REPRESENTACIÓN INTERMEDIA
-# ===================================================================
+    return "PRIMERA_PERSONA"  
 
 def build_intermediate_representation(cards: list, analysis: dict, context_type: str) -> dict:
     return {
@@ -401,30 +355,14 @@ def build_intermediate_representation(cards: list, analysis: dict, context_type:
         "glosas_reconocidas": len(cards) - len(analysis["desconocidos"]),
     }
 
-
-# ===================================================================
-# MÓDULO 4: GENERADOR DE ORACIÓN BASE (REGLAS PROPIAS)
-# ===================================================================
-
-# ===================================================================
-# FORMALIDAD Y VOZ — Contrato con la app Flutter (AWS-01 / RDS-02)
-# ===================================================================
-
-# Marcadores de entidad pública enviados en `institutionType`.
 _FORMAL_INSTITUTIONS = {"entidad_publica", "formal", "legal", "ciudadano", "judicial"}
 
-# Contextos reales que emite la app (todos son gestiones ante entidad pública
-# y, por tanto, exigen registro formal). Antes la formalidad se comparaba contra
-# ("ciudadano","formal","legal"), que la app NUNCA envía → is_formal era siempre
-# False (bug AWS-01). Ahora se deriva de institutionType + contexto real.
 _FORMAL_CONTEXTS = {
     "ciudadano", "formal", "legal",
     "denuncia_robo", "violencia", "accidente", "emergencia",
     "otro", "orientacion", "tramite_id", "perdida",
 }
 
-# Selección de voz Polly por idioma solicitado (RDS-02). Polly no tiene voz
-# boliviana; 'Lupe' (es-US) es la opción neutra más cercana para LatAm.
 _VOICE_BY_LANG = {
     "es-bo": ("Lupe", "es-US"),
     "es-mx": ("Mia", "es-MX"),
@@ -432,12 +370,10 @@ _VOICE_BY_LANG = {
     "es":    ("Lupe", "es-US"),
 }
 
-
 def _is_formal(context_type: str, institution_type: str = "") -> bool:
     """True si la solicitud corresponde a una gestión formal/entidad pública."""
     return (institution_type.lower() in _FORMAL_INSTITUTIONS
             or context_type.lower() in _FORMAL_CONTEXTS)
-
 
 def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
                            institution_type: str = "") -> str:
@@ -467,13 +403,11 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
     gen_func = generators.get(tipo, _gen_general)
     sentence = gen_func(ir, analysis, is_formal)
 
-    # Limpiar espacios y asegurar punto final
     sentence = re.sub(r'\s+', ' ', sentence).strip()
     if sentence and not sentence.endswith('.'):
         sentence += '.'
 
     return sentence
-
 
 def _get_time_institution(analysis, is_formal):
     parts = []
@@ -487,13 +421,11 @@ def _get_time_institution(analysis, is_formal):
         parts.append(" ".join(inst_parts))
     return " ".join(parts)
 
-
 def _get_urgency(analysis, is_formal):
     if analysis["urgencias"]:
         u = analysis["urgencias"][0]
         return u.get("formal", u["es"]) if is_formal else u["es"]
     return ""
-
 
 def _get_documents_text(analysis, is_formal):
     if not analysis["documentos"]:
@@ -505,21 +437,12 @@ def _get_documents_text(analysis, is_formal):
     texts = [f'{d.get("art", "el")} {d["es"]}' for d in docs]
     return ", ".join(texts[:-1]) + " y " + texts[-1]
 
-
 def _get_tramite_text(analysis, is_formal):
     if not analysis["tramites"]:
         return ""
     t = analysis["tramites"][0]
     return t.get("formal", t["es"]) if is_formal else f'{t.get("art", "el")} {t["es"]}'
 
-
-def _get_descriptors(analysis):
-    if not analysis["descriptores"]:
-        return ""
-    descs = [d["es"] for d in analysis["descriptores"]]
-    if len(descs) == 1:
-        return descs[0]
-    return ", ".join(descs[:-1]) + " y " + descs[-1]
 
 
 def _join_es(items):
@@ -530,11 +453,9 @@ def _join_es(items):
         return items[0]
     return ", ".join(items[:-1]) + " y " + items[-1]
 
-
 def _objetos_text(analysis):
     objs = [o["es"] for o in analysis["objetos"] if not o.get("arma")]
     return _join_es(objs)
-
 
 def _arma_text(analysis):
     for o in analysis["objetos"]:
@@ -542,10 +463,8 @@ def _arma_text(analysis):
             return f'con {o["es"]}'
     return ""
 
-
 def _lugar_text(analysis):
     return analysis["lugares"][0]["es"] if analysis["lugares"] else ""
-
 
 def _agresor_text(analysis):
     personas = [d for d in analysis["descriptores"] if d.get("persona")]
@@ -555,13 +474,11 @@ def _agresor_text(analysis):
         base += " " + _join_es([r["es"] for r in rasgos])
     return base
 
-
 def _agresor_verb(analysis, default):
     for v in analysis["verbos"]:
         if v.get("agresor"):
             return v["agresor"]
     return default
-
 
 def _compose_incident(analysis, is_formal, robo):
     """Relato de incidente con agresor en 3ª persona (robo / violencia)."""
@@ -601,16 +518,13 @@ def _compose_incident(analysis, is_formal, robo):
         parts.append(f"Necesito {svc}.")
     return " ".join(parts)
 
-
 def _gen_robo(ir, analysis, is_formal):
     """Genera oración para denuncia de robo / asalto."""
     return _compose_incident(analysis, is_formal, robo=True)
 
-
 def _gen_agresion(ir, analysis, is_formal):
     """Genera oración para violencia / agresión física o psicológica."""
     return _compose_incident(analysis, is_formal, robo=False)
-
 
 def _gen_tramite(ir, analysis, is_formal):
     """Genera oración para trámites administrativos."""
@@ -636,7 +550,6 @@ def _gen_tramite(ir, analysis, is_formal):
         base += f" {tp}"
     return base
 
-
 def _gen_consulta(ir, analysis, is_formal):
     """Genera oración para consultas ciudadanas."""
     verbo = analysis["verbos"][0] if analysis["verbos"] else None
@@ -659,7 +572,6 @@ def _gen_consulta(ir, analysis, is_formal):
         base += f" {tp}"
     return base
 
-
 def _gen_pago(ir, analysis, is_formal):
     """Genera oración para pagos en entidades públicas."""
     doc_text = _get_documents_text(analysis, is_formal)
@@ -676,7 +588,6 @@ def _gen_pago(ir, analysis, is_formal):
     if tp:
         base += f" {tp}"
     return base
-
 
 def _gen_solicitud(ir, analysis, is_formal):
     """Genera oración para solicitudes generales."""
@@ -709,7 +620,6 @@ def _gen_solicitud(ir, analysis, is_formal):
         base += f" {tp}"
     return base
 
-
 def _gen_entrega(ir, analysis, is_formal):
     """Genera oración para entrega/recogida de documentos."""
     verbo = analysis["verbos"][0] if analysis["verbos"] else None
@@ -730,7 +640,6 @@ def _gen_entrega(ir, analysis, is_formal):
     if tp:
         base += f" {tp}"
     return base
-
 
 def _gen_reclamo(ir, analysis, is_formal):
     """Genera oración para reclamos y quejas ciudadanas."""
@@ -754,7 +663,6 @@ def _gen_reclamo(ir, analysis, is_formal):
     if tp:
         base += f" {tp}"
     return base
-
 
 def _gen_perdida(ir, analysis, is_formal):
     """Genera oración para pérdida de documentos."""
@@ -780,7 +688,6 @@ def _gen_perdida(ir, analysis, is_formal):
         base += f" {tp}"
     return base
 
-
 def _gen_gestion(ir, analysis, is_formal):
     """Genera oración para gestiones (firmar, corregir, verificar)."""
     verbo = analysis["verbos"][0] if analysis["verbos"] else None
@@ -799,7 +706,6 @@ def _gen_gestion(ir, analysis, is_formal):
     if tp:
         base += f" {tp}"
     return base
-
 
 def _gen_emergencia(ir, analysis, is_formal):
     """Genera oración para situaciones de emergencia."""
@@ -829,7 +735,6 @@ def _gen_emergencia(ir, analysis, is_formal):
 
     return " ".join(parts) if parts else "Se presenta una situación de emergencia"
 
-
 def _gen_estado(ir, analysis, is_formal):
     """Genera oración para expresar estado personal."""
     estados = analysis["estados"]
@@ -837,7 +742,6 @@ def _gen_estado(ir, analysis, is_formal):
         est = estados[0]
         return est.get("formal", est["es"]).capitalize() if is_formal else est["es"].capitalize()
     return "Me encuentro en una situación que requiere asistencia"
-
 
 def _gen_general(ir, analysis, is_formal):
     """Fallback: construye oración uniendo los componentes detectados."""
@@ -863,7 +767,6 @@ def _gen_general(ir, analysis, is_formal):
             sentence += " " + " ".join(parts[1:])
         return sentence
 
-    # Último recurso: unir todas las glosas reconocidas
     all_es = []
     for cat in ["sujetos", "verbos", "documentos", "tramites", "tiempos", "instituciones", "servicios"]:
         for item in analysis[cat]:
@@ -872,11 +775,6 @@ def _gen_general(ir, analysis, is_formal):
         all_es.append(item["es"])
 
     return " ".join(all_es).capitalize() if all_es else " ".join(ir["glosas_originales"]).capitalize()
-
-
-# ===================================================================
-# MÓDULO 5: REFINAMIENTO CON BEDROCK (COMPLEMENTARIO)
-# ===================================================================
 
 def refine_with_bedrock(base_sentence: str, context_type: str,
                         institution_type: str = "") -> str:
@@ -894,7 +792,6 @@ def refine_with_bedrock(base_sentence: str, context_type: str,
 
     is_formal = _is_formal(context_type, institution_type)
 
-    # Mejora para desambiguación: Añadir instrucciones explícitas de polisemia
     polisemia_rules = (" Si detectas la palabra 'Auto', asume que es una 'Resolución Judicial' "
                        "y no un vehículo, a menos que el contexto indique transporte.")
 
@@ -944,12 +841,9 @@ Tu respuesta (solo la oración refinada):"""
         logger.warning("Bedrock falló, usando oración base como fallback: %s", str(e))
         return base_sentence
 
-
 def _build_bedrock_request_body(prompt_text: str) -> dict:
     model_id_lower = BEDROCK_MODEL_ID.lower()
     if "nova" in model_id_lower:
-        # Amazon Nova usa un esquema de mensajes propio (content como lista de
-        # bloques) e inferenceConfig. Distinto al de Titan/Claude/Llama.
         return {"messages": [{"role": "user", "content": [{"text": prompt_text}]}],
                 "inferenceConfig": {"maxTokens": 256, "temperature": 0.2, "topP": 0.9}}
     elif "anthropic" in model_id_lower or "claude" in model_id_lower:
@@ -965,7 +859,6 @@ def _build_bedrock_request_body(prompt_text: str) -> dict:
         return {"anthropic_version": "bedrock-2023-05-31", "max_tokens": 256,
                 "temperature": 0.2, "top_p": 0.9,
                 "messages": [{"role": "user", "content": prompt_text}]}
-
 
 def _refinement_is_safe(base: str, refined: str) -> bool:
     """Defensa anti-alucinación del backend (espejo del `isBackendDegenerate`
@@ -984,14 +877,9 @@ def _refinement_is_safe(base: str, refined: str) -> bool:
     refined_w = content_words(refined)
     if not refined_w:
         return False
-    # Rechaza solo divergencias graves: sin ninguna palabra significativa en
-    # común con la base. Un refinamiento legítimo casi siempre conserva al
-    # menos un sustantivo clave (p. ej. "hombre", "celular").
     return len(base_w & refined_w) >= 1
 
-
 def _parse_bedrock_response(response_body: dict) -> str:
-    # Amazon Nova: output.message.content[0].text
     if "output" in response_body and isinstance(response_body.get("output"), dict):
         raw = (response_body["output"].get("message", {})
                .get("content", [{}])[0].get("text", "").strip())
@@ -1004,10 +892,6 @@ def _parse_bedrock_response(response_body: dict) -> str:
     else:
         raise ValueError("Respuesta Bedrock no reconocida")
 
-    # Limpieza robusta: modelos de chat (Nova) suelen anteponer un encabezado
-    # en markdown ("**Oración refinada:**") en su propia línea, y la oración va
-    # en la siguiente. Tomamos la primera línea real, descartando etiquetas y
-    # markdown, en vez de quedarnos ciegamente con la línea 0.
     labels = ("oracion refinada", "oración refinada", "salida", "respuesta",
               "resultado", "texto refinado", "oracion", "oración")
     result = ""
@@ -1016,10 +900,8 @@ def _parse_bedrock_response(response_body: dict) -> str:
         if not l:
             continue
         low = l.lower()
-        # Línea que es SOLO una etiqueta (con o sin ':') → se ignora.
         if low.rstrip(":").strip() in labels:
             continue
-        # Línea "Etiqueta: <texto>" → nos quedamos con <texto>.
         for lab in labels:
             if low.startswith(lab) and ":" in l:
                 l = l.split(":", 1)[1].strip()
@@ -1029,19 +911,11 @@ def _parse_bedrock_response(response_body: dict) -> str:
             break
     if not result:
         result = raw.replace("*", "").replace("#", "").strip()
-    # Quita comillas envolventes si las hubiera.
     if result.startswith('"') and result.endswith('"'):
         result = result[1:-1].strip()
     return result
 
-
-# ===================================================================
-# MÓDULO 6: SALIDA MULTIMODAL (Polly + S3)
-# ===================================================================
-
 def synthesize_audio(text: str, language: str = "es") -> bytes:
-    # RDS-02: honra el `language` solicitado por la app. Si VOICE_ID está fijado
-    # por variable de entorno, esa elección manda; si no, se elige por idioma.
     default_voice, default_lang = _VOICE_BY_LANG.get(language.lower(), (VOICE_ID, "es-US"))
     voice_id = os.environ.get("VOICE_ID") or default_voice
     lang_code = default_lang
@@ -1054,14 +928,11 @@ def synthesize_audio(text: str, language: str = "es") -> bytes:
     logger.info("Audio sintetizado: %d bytes", len(audio_bytes))
     return audio_bytes
 
-
 def _audio_s3_key(cache_key: str) -> str:
     return f"{APP_PREFIX}/{cache_key}.mp3"
 
-
 def _cache_s3_key(cache_key: str) -> str:
     return f"{APP_PREFIX}/cache/{cache_key}.json"
-
 
 def _presign_audio(s3_key: str) -> str:
     """URL prefirmada (válida 1 h) — se regenera en cada respuesta porque las
@@ -1072,7 +943,6 @@ def _presign_audio(s3_key: str) -> str:
         ExpiresIn=3600,
     )
 
-
 def upload_audio_to_s3(audio_bytes: bytes, cache_key: str) -> str:
     s3_key = _audio_s3_key(cache_key)
     logger.info("Subiendo audio a S3 — Bucket: %s, Key: %s", S3_BUCKET, s3_key)
@@ -1080,17 +950,6 @@ def upload_audio_to_s3(audio_bytes: bytes, cache_key: str) -> str:
     presigned_url = _presign_audio(s3_key)
     logger.info("Url prefirmada generada exitosamente")
     return presigned_url
-
-
-# ===================================================================
-# CACHÉ (AWS-02) — sobre S3, sin infraestructura adicional
-# ===================================================================
-# La combinación contexto+glosas se hashea en `cache_key`. La primera vez se
-# ejecuta todo el pipeline (Nova + Polly) y se guarda la respuesta en
-# S3 (.../cache/<key>.json). Las siguientes peticiones idénticas devuelven esa
-# respuesta sin invocar Bedrock ni Polly — solo se regenera la URL prefirmada
-# del MP3 ya almacenado. Esto baja costo y latencia y hace que `cacheHit`
-# deje de ser siempre falso.
 
 def get_cached_response(cache_key: str):
     """Devuelve la respuesta cacheada (con audioUrl prefirmado fresco) o None."""
@@ -1111,7 +970,6 @@ def get_cached_response(cache_key: str):
     data["cacheHit"] = True
     return data
 
-
 def put_cached_response(cache_key: str, payload: dict, audio_key: str) -> None:
     """Guarda la respuesta (sin la URL firmada efímera) para futuros aciertos."""
     try:
@@ -1126,20 +984,13 @@ def put_cached_response(cache_key: str, payload: dict, audio_key: str) -> None:
     except Exception as e:
         logger.warning("No se pudo escribir la caché %s: %s", cache_key, e)
 
-
-# ===================================================================
-# UTILIDADES
-# ===================================================================
-
 def build_response(status_code: int, body: dict) -> dict:
     return {"statusCode": status_code, "headers": CORS_HEADERS,
             "body": json.dumps(body, ensure_ascii=False)}
 
-
 def generate_cache_key(context_type: str, cards: list) -> str:
     normalized = f"{context_type.lower().strip()}|{'|'.join(c.upper().strip() for c in cards)}"
     return hashlib.md5(normalized.encode("utf-8")).hexdigest()
-
 
 def validate_request(body: dict) -> tuple:
     if not isinstance(body, dict):
@@ -1156,11 +1007,6 @@ def validate_request(body: dict) -> tuple:
             return False, f"La glosa en posición {i} no es válida."
     return True, None
 
-
-# ===================================================================
-# HANDLER PRINCIPAL
-# ===================================================================
-
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -1169,7 +1015,6 @@ def lambda_handler(event, context):
     request_id = context.aws_request_id if context and hasattr(context, "aws_request_id") else ""
     logger.info("Solicitud recibida — request_id: %s", request_id)
 
-    # 1. Parsear y validar
     try:
         raw_body = event.get("body", "{}")
         body = json.loads(raw_body) if isinstance(raw_body, str) else (raw_body or {})
@@ -1182,7 +1027,6 @@ def lambda_handler(event, context):
 
     cards = [c.strip().upper() for c in body["cards"]]
     context_type = body.get("context", "general").strip().lower()
-    # Campos del contrato con la app (RDS-02): antes se ignoraban silenciosamente.
     institution_type = (body.get("institutionType") or "").strip().lower()
     language = (body.get("language") or "es").strip()
     cache_key = generate_cache_key(context_type, cards)
@@ -1191,26 +1035,20 @@ def lambda_handler(event, context):
         cards, context_type, institution_type, language, cache_key,
     )
 
-    # 1b. CACHÉ (AWS-02) — si esta combinación ya se procesó, se devuelve sin
-    # invocar Nova ni Polly (solo se regenera la URL prefirmada del audio).
     cached = get_cached_response(cache_key)
     if cached is not None:
         logger.info("Cache HIT — respuesta servida desde caché: %s", cache_key)
         return build_response(200, cached)
     logger.info("Cache MISS — procesando pipeline completo: %s", cache_key)
 
-    # 2. MOTOR INTELIGENTE PROPIO — Análisis semántico
     analysis = analyze_glosses(cards)
     logger.info("Análisis semántico: tipo_evento=%s", analysis["tipo_evento"])
 
-    # 3. MOTOR INTELIGENTE PROPIO — Representación intermedia
     intermediate = build_intermediate_representation(cards, analysis, context_type)
 
-    # 4. MOTOR INTELIGENTE PROPIO — Generación de oración base
     base_sentence = generate_base_sentence(intermediate, analysis, context_type, institution_type)
     logger.info("Oración base generada: %s", base_sentence)
 
-    # 5. CAPA COMPLEMENTARIA — Refinamiento con Bedrock
     try:
         generated_text = refine_with_bedrock(base_sentence, context_type, institution_type)
     except Exception as e:
@@ -1219,7 +1057,6 @@ def lambda_handler(event, context):
 
     bedrock_used = generated_text != base_sentence
 
-    # 6. SALIDA MULTIMODAL — Polly + S3
     try:
         audio_bytes = synthesize_audio(generated_text, language)
     except ClientError as e:
@@ -1238,10 +1075,8 @@ def lambda_handler(event, context):
         logger.error("Error inesperado en S3: %s", str(e), exc_info=True)
         return build_response(500, {"error": "S3_ERROR", "message": "Error interno al guardar audio."})
 
-    # 7. Respuesta exitosa
     logger.info("Completado — base: '%s' | final: '%s' | bedrock: %s", base_sentence, generated_text, bedrock_used)
 
-    # Construir secuencia de glosas con claves de video/animación
     gloss_sequence = []
     for card in cards:
         entry = GLOSS_LEXICON.get(card.upper())
@@ -1262,7 +1097,6 @@ def lambda_handler(event, context):
         "bedrockUsed": bedrock_used,
     }
 
-    # Guardar en caché para que la próxima petición idéntica sea un HIT.
     put_cached_response(cache_key, response_payload, _audio_s3_key(cache_key))
 
     return build_response(200, response_payload)
