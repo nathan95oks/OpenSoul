@@ -1,19 +1,29 @@
-/// Prueba de humo exhaustiva — genera una frase para cada glosa
-/// en cada uno de los 5 contextos oficiales y vuelca la salida
-/// para revisión humana.
-///
-/// No hace assertions rígidas de string; sólo verifica que:
-///   1. La frase no sea vacía.
-///   2. Tenga al menos 5 palabras (no es un placeholder).
-///   3. No contenga la glosa cruda en mayúsculas como único contenido.
-///
-/// Ejecutar:
-///   flutter test test/full_gloss_smoke_test.dart --reporter expanded 2>&1 | tee /tmp/gloss_smoke.txt
+// Prueba de humo exhaustiva — genera una frase para cada glosa
+// en cada uno de los 5 contextos oficiales y vuelca la salida.
+//
+// Ahora valida CALIDAD (no solo "no vacío"): cada frase debe estar
+// bien formada — empieza en mayúscula, termina en punto, tiene al menos
+// 3 palabras y no filtra guiones bajos de las glosas crudas.
+//
+// Ejecutar:
+//   flutter test test/full_gloss_smoke_test.dart --reporter expanded 2>&1 | tee /tmp/gloss_smoke.txt
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart';
 
 void main() {
   const asm = LocalSentenceAssembler();
+
+  /// Una oración "bien formada": no vacía, inicia en mayúscula, termina en
+  /// punto, tiene al menos 3 palabras y no filtra guiones bajos.
+  void expectWellFormed(String s) {
+    expect(s.trim(), isNotEmpty, reason: 'no debe estar vacía');
+    expect(s.trim().endsWith('.'), true, reason: 'debe terminar en punto: "$s"');
+    expect(s[0], s[0].toUpperCase(), reason: 'debe iniciar en mayúscula: "$s"');
+    expect(s.contains('_'), false,
+        reason: 'no deben filtrarse guiones bajos: "$s"');
+    expect(s.split(RegExp(r'\s+')).length, greaterThanOrEqualTo(3),
+        reason: 'debe tener al menos 3 palabras: "$s"');
+  }
 
   // Los 5 contextos oficiales de la app
   const contexts = [
@@ -111,11 +121,8 @@ void main() {
               // ignore: avoid_print
               print('[$ctx][$category] $gloss\n   → "$sentence"\n');
 
-              // Validaciones mínimas
-              expect(sentence.isNotEmpty, true,
-                  reason: 'La frase no puede estar vacía');
-              expect(sentence.split(' ').length, greaterThanOrEqualTo(3),
-                  reason: 'La frase debe tener al menos 3 palabras');
+              // Validación de calidad: la frase debe estar bien formada.
+              expectWellFormed(sentence);
             });
           }
         });
@@ -127,7 +134,7 @@ void main() {
         final s = asm.assemble(contextId: ctx, glosses: glosses);
         // ignore: avoid_print
         print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expect(s.isNotEmpty, true);
+        expectWellFormed(s);
       });
 
       test('  [COMBO] Robo con objetos múltiples', () {
@@ -135,7 +142,7 @@ void main() {
         final s = asm.assemble(contextId: ctx, glosses: glosses);
         // ignore: avoid_print
         print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expect(s.isNotEmpty, true);
+        expectWellFormed(s);
       });
 
       test('  [COMBO] Violencia con emoción y urgencia', () {
@@ -143,7 +150,7 @@ void main() {
         final s = asm.assemble(contextId: ctx, glosses: glosses);
         // ignore: avoid_print
         print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expect(s.isNotEmpty, true);
+        expectWellFormed(s);
       });
 
       test('  [COMBO] Trámite con documentos e institución', () {
@@ -151,7 +158,7 @@ void main() {
         final s = asm.assemble(contextId: ctx, glosses: glosses);
         // ignore: avoid_print
         print('[$ctx][COMBO] ${glosses.join('+')} → "$s"\n');
-        expect(s.isNotEmpty, true);
+        expectWellFormed(s);
       });
     });
   }
