@@ -248,9 +248,9 @@ class LocalSentenceAssembler {
 
     final sentences = <String>[];
 
-    // CUCHILLO sin verbo de agresión → amenaza implícita con arma.
+    // Arma sin verbo de agresión → amenaza implícita con esa arma.
     if (r.weapon != null && r.aggression == null && !_hasAggressor(r)) {
-      var clause = 'Me amenazaron con un cuchillo';
+      var clause = 'Me amenazaron ${r.weapon}';
       if (r.place != null) {
         clause += ' ${r.place}';
         r.place = null;
@@ -948,6 +948,7 @@ class LocalSentenceAssembler {
 
     // Armas.
     'CUCHILLO': _Lex(_Role.arma, 'con un cuchillo'),
+    'PISTOLA': _Lex(_Role.arma, 'con una pistola'),
 
     // Objetos.
     'CELULAR': _Lex(_Role.objeto, 'mi celular'),
