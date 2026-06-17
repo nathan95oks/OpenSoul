@@ -70,7 +70,11 @@ class LocalSentenceAssembler {
       if (!missing.contains(frag)) missing.add(frag);
     }
     if (missing.isEmpty) return text;
-    return '$text Asimismo, menciono: ${_join(missing)}.';
+    // Red de seguridad de último recurso. Con los bloques semánticos
+    // (`_supplements`) integrando todos los roles, esta rama prácticamente no
+    // se ejecuta; si lo hiciera, usa un conector formal natural (nunca
+    // "Asimismo, menciono").
+    return '$text Para completar mi declaración, hago constar ${_join(missing)}.';
   }
 
   /// `true` si el lexema de la glosa ya está emitido (todas sus palabras
@@ -78,12 +82,20 @@ class LocalSentenceAssembler {
   bool _isRepresented(String token, String hayLower) {
     final lex = _lexicon[token];
     if (lex == null) return _glossCovered(token, hayLower);
-    final words = _stripDiacritics(lex.es.toLowerCase())
-        .split(RegExp(r'\s+'))
-        .where((w) => w.length >= 3)
-        .toList();
-    if (words.isEmpty) return true; // lexema sin palabras significativas (ej. "yo")
-    return words.every(hayLower.contains);
+    // Considera variantes morfológicas para no disparar la red de seguridad
+    // por error cuando el compositor conjugó/concordó la palabra:
+    //  - plural del verbo: "golpeó" → "golpearon" (agresor plural);
+    //  - femenino del adjetivo: "alto" → "alta" (sujeto femenino).
+    final variants = <String>{lex.es, _verbPlural(lex.es), _femAdj(lex.es)};
+    for (final variant in variants) {
+      final words = _stripDiacritics(variant.toLowerCase())
+          .split(RegExp(r'\s+'))
+          .where((w) => w.length >= 3)
+          .toList();
+      if (words.isEmpty) return true; // lexema sin palabras significativas
+      if (words.every(hayLower.contains)) return true;
+    }
+    return false;
   }
 
   // ───────────────────────── Detección de degeneración ─────────────────────
@@ -236,55 +248,71 @@ class LocalSentenceAssembler {
 
     final sentences = <String>[];
 
-    // Bug fix #3: CUCHILLO sin verbo de agresión → tratarlo como arma implícita
-    // de amenaza, en vez de dejar que caiga en el fallback "Asimismo, menciono".
+    // CUCHILLO sin verbo de agresión → amenaza implícita con arma.
     if (r.weapon != null && r.aggression == null && !_hasAggressor(r)) {
       var clause = 'Me amenazaron con un cuchillo';
-      if (r.place != null) clause += ' ${r.place}';
-      if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        r.time = null;
+      }
       sentences.add('$clause.');
-      sentences.addAll(_stateSentences(r));
-      final inst = _institutionLine(r, 'Quiero presentar la denuncia');
-      if (inst != null) sentences.add(inst);
-      return _stitch(lead, sentences, tokens);
-    }
-
-    // Cláusula del agresor + acción.
-    final hasActor = _hasAggressor(r);
-    if (r.aggression != null || hasActor) {
+      r.weapon = null;
+    } else if (r.aggression != null || _hasAggressor(r)) {
+      // Cláusula del agresor + acción.
       final subject = _subjectPhrase(r);
-      // Bug fix #2: DOS/TRES (pluraDesc) usan verbo plural.
       final isPlural = r.perpetratorPlural != null || r.perpetrators.length > 1;
-      final defaultVerb = ctx == 'violencia' ? (isPlural ? 'agredieron' : 'agredió') : (isPlural ? 'asaltaron' : 'asaltó');
+      final defaultVerb = ctx == 'violencia'
+          ? (isPlural ? 'agredieron' : 'agredió')
+          : (isPlural ? 'asaltaron' : 'asaltó');
       final aggression = r.aggression;
       final verb = aggression == null
           ? defaultVerb
           : (isPlural ? _verbPlural(aggression) : aggression);
       var clause = '$subject me $verb';
       final complement = _join([...r.objects, ...r.documents]);
-      if (complement.isNotEmpty) clause += ' $complement';
-      if (r.weapon != null) clause += ' ${r.weapon}';
-      if (r.place != null) clause += ' ${r.place}';
-      if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
+      if (complement.isNotEmpty) {
+        clause += ' $complement';
+        r.objects.clear();
+        r.documents.clear();
+      }
+      if (r.weapon != null) {
+        clause += ' ${r.weapon}';
+        r.weapon = null;
+      }
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        r.time = null;
+      }
       sentences.add('${_cap(clause)}.');
+      r.aggression = null;
+      r.perpetrators.clear();
+      r.perpetratorPlural = null;
+      r.traits.clear();
     } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
       final what = _join([...r.objects, ...r.documents]);
-      var clause = 'Me quitaron $what';
-      if (r.place != null) clause += ' ${r.place}';
-      if (r.time != null) clause += ' ${r.time}';
+      var clause = 'Me sustrajeron $what';
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause += ' ${r.time}';
+        r.time = null;
+      }
       sentences.add('$clause.');
+      r.objects.clear();
+      r.documents.clear();
     }
 
-    final affected = _affectedSubjectLine(r);
-    if (affected != null) sentences.add(affected);
-    sentences.addAll(_stateSentences(r));
-    final inst = _institutionLine(r, 'Quiero presentar la denuncia');
-    if (inst != null) sentences.add(inst);
-    final proc = _procedureLine(r);
-    if (proc != null) sentences.add(proc);
-    if (r.unknown.isNotEmpty) {
-      sentences.add('También menciono: ${_join(r.unknown)}.');
-    }
+    _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
   }
 
@@ -296,66 +324,43 @@ class LocalSentenceAssembler {
 
     final sentences = <String>[];
 
-    // Si hay un agresor o acción violenta, mencionarlo primero
-    final hasActor = _hasAggressor(r);
-    if (r.aggression != null || hasActor) {
-      final subject = _subjectPhrase(r);
-      final isPlural = r.perpetratorPlural != null || r.perpetrators.length > 1;
-      final defaultVerb = 'estuvo involucrado';
-      final aggression = r.aggression;
-      final verb = aggression == null
-          ? (isPlural ? 'estuvieron involucrados' : defaultVerb)
-          : (isPlural ? _verbPlural(aggression) : aggression);
-      
-      var clause = aggression == null 
-          ? '$subject $verb' 
-          : '$subject me $verb';
-          
-      final complement = _join([...r.objects, ...r.documents]);
-      if (complement.isNotEmpty) {
-        if (aggression != null) {
-          clause += ' $complement';
-        } else {
-          sentences.add('Involucra $complement.');
-        }
+    // Bloque de estado físico/emocional integrando lugar y tiempo.
+    if (r.emotions.isNotEmpty) {
+      var clause = _join(r.emotions);
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
       }
-      if (r.weapon != null) clause += ' ${r.weapon}';
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        r.time = null;
+      }
       sentences.add('${_cap(clause)}.');
-    } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
-      final what = _join([...r.objects, ...r.documents]);
-      sentences.add('Involucra $what.');
+      r.emotions.clear();
+    } else if (r.place != null || r.time != null) {
+      var clause = 'Ocurrió';
+      if (r.time != null) {
+        clause += ' ${r.time}';
+        r.time = null;
+      }
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      sentences.add('$clause.');
     }
 
-    final state = _join(r.emotions);
-    if (state.isNotEmpty) {
-      sentences.add('${_cap(state)}.');
-    }
-
-    if (r.place != null) {
-      var clause = 'Ocurrió ${r.place}';
-      if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
-      sentences.add('${_cap(clause)}.');
-    } else if (r.time != null) {
-      sentences.add('Ocurrió ${r.time}.');
-    }
-
+    // Ayuda requerida y urgencia, prioritarias en este contexto.
     if (r.services.isNotEmpty) {
       sentences.add('Necesito ${_join(r.services)}.');
+      r.services.clear();
     }
     if (r.urgencies.isNotEmpty) {
       sentences.add('${_cap(_join(r.urgencies))}.');
+      r.urgencies.clear();
     }
 
-    final affected = _affectedSubjectLine(r);
-    if (affected != null) sentences.add(affected);
-
-    final inst = _institutionLine(r, 'Necesito atención');
-    if (inst != null) sentences.add(inst);
-    final proc = _procedureLine(r);
-    if (proc != null) sentences.add(proc);
-    if (r.unknown.isNotEmpty) {
-      sentences.add('Detalles: ${_join(r.unknown)}.');
-    }
+    _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
   }
 
@@ -373,31 +378,27 @@ class LocalSentenceAssembler {
     final what = _join([...r.documents, ...r.procedures]);
     var clause = verb;
     if (what.isNotEmpty) clause += ' $what';
-    if (r.institution != null) clause += ' ${r.institution}';
+    if (r.institution != null) {
+      clause += ' ${r.institution}';
+      r.institution = null;
+    }
     sentences.add('${_cap(clause)}.');
+    r.action = null;
+    r.documents.clear();
+    r.procedures.clear();
 
     // Motivo / propósito judicial del documento.
     if (r.purposes.isNotEmpty) {
       sentences.add('Lo necesito para presentar ${_join(r.purposes)}.');
+      r.purposes.clear();
     }
     // Para quién es el trámite.
     if (r.subject != null && r.subject != 'yo') {
       sentences.add('El trámite es para ${r.subject}.');
+      r.subject = null;
     }
-    // Apoyo de accesibilidad (intérprete de señas, abogado…).
-    if (r.services.isNotEmpty) {
-      sentences.add('Necesito ${_join(r.services)}.');
-    }
-    // Urgencia y plazo.
-    if (r.urgencies.isNotEmpty) {
-      sentences.add('${_cap(_join(r.urgencies))}.');
-    }
-    if (r.time != null) {
-      sentences.add('Lo necesito ${r.time}.');
-    }
-    if (r.unknown.isNotEmpty) {
-      sentences.add('Detalles: ${_join(r.unknown)}.');
-    }
+
+    _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
   }
 
@@ -407,23 +408,39 @@ class LocalSentenceAssembler {
     final sentences = <String>[];
 
     if (r.services.isNotEmpty) {
-      var clause = 'Solicito ${_join(r.services)}';
-      if (r.institution != null) clause += ' ${r.institution}';
+      // Si el usuario eligió un verbo (necesito/quiero solicitar...), encabeza
+      // la oración para no dejarlo suelto y mantener la fluidez.
+      final verb = r.action != null ? _cap(r.action!) : 'Solicito';
+      var clause = '$verb ${_join(r.services)}';
+      if (r.institution != null) {
+        clause += ' ${r.institution}';
+        r.institution = null;
+      }
       sentences.add('$clause.');
+      r.services.clear();
+      r.action = null;
     } else if (r.action != null) {
       var clause = r.action!;
-      if (r.procedures.isNotEmpty) clause += ' ${_join(r.procedures)}';
-      if (r.institution != null) clause += ' ${r.institution}';
+      if (r.procedures.isNotEmpty) {
+        clause += ' ${_join(r.procedures)}';
+        r.procedures.clear();
+      }
+      if (r.institution != null) {
+        clause += ' ${r.institution}';
+        r.institution = null;
+      }
       sentences.add('${_cap(clause)}.');
+      r.action = null;
     } else if (r.institution != null) {
       sentences.add('Necesito acudir ${r.institution}.');
+      r.institution = null;
     }
     if (r.purposes.isNotEmpty) {
-      sentences.add('Quiero presentar ${_join(r.purposes)}.');
+      sentences.add('Deseo presentar ${_join(r.purposes)}.');
+      r.purposes.clear();
     }
-    if (r.unknown.isNotEmpty) {
-      sentences.add('Consulto sobre: ${_join(r.unknown)}.');
-    }
+
+    _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
   }
 
@@ -432,26 +449,38 @@ class LocalSentenceAssembler {
     const lead = 'Quiero reportar la pérdida de un objeto.';
     final sentences = <String>[];
 
+    // El verbo PERDER ('perdí') ya queda expresado por la cláusula "Perdí …";
+    // lo consumimos para que `_supplements` no lo repita como "Perdí." suelto.
+    if (r.action == 'perdí') r.action = null;
+
     final what = _join([...r.objects, ...r.documents]);
     if (what.isNotEmpty) {
       var clause = 'Perdí $what';
-      if (r.place != null) clause += ' ${r.place}';
-      if (r.time != null) clause += ' ${r.time}';
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause += ' ${r.time}';
+        r.time = null;
+      }
       sentences.add('$clause.');
+      r.objects.clear();
+      r.documents.clear();
     } else if (r.time != null || r.place != null) {
       var clause = 'Ocurrió';
-      if (r.time != null) clause += ' ${r.time}';
-      if (r.place != null) clause += ' ${r.place}';
+      if (r.time != null) {
+        clause += ' ${r.time}';
+        r.time = null;
+      }
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
       sentences.add('$clause.');
     }
-    sentences.addAll(_stateSentences(r)); // emoción, urgencia, servicio
-    final inst = _institutionLine(r, 'Quiero reportarlo');
-    if (inst != null) sentences.add(inst);
-    final proc = _procedureLine(r);
-    if (proc != null) sentences.add(proc);
-    if (r.unknown.isNotEmpty) {
-      sentences.add('Detalles: ${_join(r.unknown)}.');
-    }
+
+    _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
   }
 
@@ -464,39 +493,67 @@ class LocalSentenceAssembler {
 
     final hasActor = _hasAggressor(r);
     final subject = hasActor ? _subjectPhrase(r) : 'una persona';
+    final isPlural = r.perpetratorPlural != null || r.perpetrators.length > 1;
 
     if (r.aggression != null) {
-      var clause = 'presencié cómo $subject ${r.aggression}';
+      final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
+      var clause = 'presencié cómo $subject $verb';
       final complement = _join([...r.objects, ...r.documents]);
       if (complement.isNotEmpty) {
         clause += ' $complement';
+        r.objects.clear();
+        r.documents.clear();
       } else {
         clause += ' a otra persona';
       }
-      if (r.weapon != null) clause += ' ${r.weapon}';
-      if (r.place != null) clause += ' ${r.place}';
-      if (r.time != null) clause = '${_cap(r.time!)}, $clause';
+      if (r.weapon != null) {
+        clause += ' ${r.weapon}';
+        r.weapon = null;
+      }
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, $clause';
+        r.time = null;
+      }
       sentences.add('${_cap(clause)}.');
+      r.aggression = null;
+      r.perpetrators.clear();
+      r.perpetratorPlural = null;
+      r.traits.clear();
     } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
       final what = _join([...r.objects, ...r.documents]);
       var clause = 'presencié un hecho relacionado con $what';
-      if (r.place != null) clause += ' ${r.place}';
-      if (r.time != null) clause = '${_cap(r.time!)}, $clause';
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, $clause';
+        r.time = null;
+      }
       sentences.add('${_cap(clause)}.');
+      r.objects.clear();
+      r.documents.clear();
     } else if (hasActor) {
-      var clause = 'vi a $subject en el lugar';
-      if (r.place != null) clause += ' ${r.place}';
+      var clause = 'observé a $subject';
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, $clause';
+        r.time = null;
+      }
       sentences.add('${_cap(clause)}.');
+      r.perpetrators.clear();
+      r.perpetratorPlural = null;
+      r.traits.clear();
     }
 
-    sentences.addAll(_stateSentences(r)); // emoción, urgencia, servicio
-    final inst = _institutionLine(r, 'Quiero declarar lo sucedido');
-    if (inst != null) sentences.add(inst);
-    final proc = _procedureLine(r);
-    if (proc != null) sentences.add(proc);
-    if (r.unknown.isNotEmpty) {
-      sentences.add('También menciono: ${_join(r.unknown)}.');
-    }
+    _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
   }
 
@@ -509,24 +566,164 @@ class LocalSentenceAssembler {
     final what = _join([...r.documents, ...r.procedures, ...r.objects]);
     if (verb != null) {
       var clause = verb;
-      if (what.isNotEmpty) clause += ' $what';
-      if (r.institution != null) clause += ' ${r.institution}';
-      if (r.time != null) clause = '${_cap(r.time!)}, ${_decap(clause)}';
+      if (what.isNotEmpty) {
+        clause += ' $what';
+        r.documents.clear();
+        r.procedures.clear();
+        r.objects.clear();
+      }
+      if (r.institution != null) {
+        clause += ' ${r.institution}';
+        r.institution = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        r.time = null;
+      }
       sentences.add('${_cap(clause)}.');
+      r.action = null;
     } else if (what.isNotEmpty) {
       var clause = what;
-      if (r.institution != null) clause += ' ${r.institution}';
+      if (r.institution != null) {
+        clause += ' ${r.institution}';
+        r.institution = null;
+      }
       sentences.add('${_cap(clause)}.');
-    } else if (r.institution != null) {
-      sentences.add('Acudo ${r.institution}.');
+      r.documents.clear();
+      r.procedures.clear();
+      r.objects.clear();
     }
-    if (r.place != null) sentences.add('${_cap(r.place!)}.');
-    // _stateSentences ya incluye servicios — no se repite aparte.
-    sentences.addAll(_stateSentences(r));
-    if (r.unknown.isNotEmpty) {
-      sentences.add('${_cap(_join(r.unknown))}.');
-    }
+
+    _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
+  }
+
+  /// Bloques semánticos complementarios — integra de forma NATURAL todos los
+  /// roles que el compositor principal no consumió, garantizando cobertura
+  /// total SIN frases-cola ("Asimismo", "Detalles:", "Consulto sobre:",
+  /// "También menciono:"). Cada bloque limpia los roles que emite para que no
+  /// se repitan ni los recoja la red de seguridad [_ensureCoverage].
+  void _supplements(_Roles r, List<String> sentences) {
+    // 1. Evento residual: agresor y/o agresión no integrados por el contexto.
+    if (r.aggression != null || _hasAggressor(r)) {
+      final hasActor = _hasAggressor(r);
+      final subject = hasActor ? _subjectPhrase(r) : 'una persona';
+      if (r.aggression != null) {
+        final isPlural =
+            r.perpetratorPlural != null || r.perpetrators.length > 1;
+        final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
+        var clause = '$subject me $verb';
+        final comp = _join([...r.objects, ...r.documents]);
+        if (comp.isNotEmpty) {
+          clause += ' $comp';
+          r.objects.clear();
+          r.documents.clear();
+        }
+        if (r.weapon != null) {
+          clause += ' ${r.weapon}';
+          r.weapon = null;
+        }
+        if (r.place != null) {
+          clause += ' ${r.place}';
+          r.place = null;
+        }
+        if (r.time != null) {
+          clause = '${_cap(r.time!)}, ${_decap(clause)}';
+          r.time = null;
+        }
+        sentences.add('${_cap(clause)}.');
+      } else {
+        // Solo se describió a una persona, sin acción.
+        sentences.add('La persona involucrada era ${_decap(subject)}.');
+      }
+      r.aggression = null;
+      r.perpetrators.clear();
+      r.perpetratorPlural = null;
+      r.traits.clear();
+    }
+
+    // 2. Objetos / documentos no usados → se dejan constar formalmente.
+    final things = _join([...r.objects, ...r.documents]);
+    if (things.isNotEmpty) {
+      sentences.add('Quiero hacer constar $things.');
+      r.objects.clear();
+      r.documents.clear();
+    }
+
+    // 3. Arma residual.
+    if (r.weapon != null) {
+      final w = r.weapon!.replaceFirst(RegExp(r'^con '), '');
+      sentences.add('Se utilizó $w.');
+      r.weapon = null;
+    }
+
+    // 4. Acción de trámite residual (1ª persona).
+    if (r.action != null) {
+      var clause = r.action!;
+      if (r.procedures.isNotEmpty) {
+        clause += ' ${_join(r.procedures)}';
+        r.procedures.clear();
+      }
+      sentences.add('${_cap(clause)}.');
+      r.action = null;
+    }
+
+    // 5. Propósito y 6. procedimientos restantes.
+    if (r.purposes.isNotEmpty) {
+      sentences.add('Lo requiero para presentar ${_join(r.purposes)}.');
+      r.purposes.clear();
+    }
+    if (r.procedures.isNotEmpty) {
+      sentences.add('Solicito ${_join(r.procedures)}.');
+      r.procedures.clear();
+    }
+
+    // 7. Lugar / tiempo residuales.
+    if (r.place != null || r.time != null) {
+      var clause = 'Ocurrió';
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause += ' ${r.time}';
+        r.time = null;
+      }
+      sentences.add('$clause.');
+    }
+
+    // 8. Sujeto co-afectado (familia, hijo, esposo…).
+    final affected = _affectedSubjectLine(r);
+    if (affected != null) {
+      sentences.add(affected);
+      r.subject = null;
+    }
+
+    // 9. Estado: emociones, urgencias, servicios.
+    if (r.emotions.isNotEmpty) {
+      sentences.add('${_cap(_join(r.emotions))}.');
+      r.emotions.clear();
+    }
+    if (r.urgencies.isNotEmpty) {
+      sentences.add('${_cap(_join(r.urgencies))}.');
+      r.urgencies.clear();
+    }
+    if (r.services.isNotEmpty) {
+      sentences.add('Necesito ${_join(r.services)}.');
+      r.services.clear();
+    }
+
+    // 10. Institución residual (lexema locativo: "en la policía").
+    if (r.institution != null) {
+      sentences.add('Realizaré esta gestión ${r.institution}.');
+      r.institution = null;
+    }
+
+    // 11. Glosas sin rol (caso raro: el catálogo las tiene todas mapeadas).
+    if (r.unknown.isNotEmpty) {
+      sentences.add('Adicionalmente, hago referencia a ${_join(r.unknown)}.');
+      r.unknown.clear();
+    }
   }
 
   // ───────────────────────── Utilidades de composición ────────────────────
@@ -541,8 +738,33 @@ class LocalSentenceAssembler {
   /// Cuando el sujeto es genérico ("una persona") los adjetivos simples
   /// se convierten a su forma femenina para mantener concordancia.
   String _subjectPhrase(_Roles r) {
-    final base = r.perpetrators.isNotEmpty ? _join(r.perpetrators) : 'una persona';
-    final isGeneric = r.perpetrators.isEmpty;
+    String base;
+    if (r.perpetratorPlural != null) {
+      base = r.perpetratorPlural!;
+      if (r.perpetrators.isNotEmpty) {
+        base += ' (${_join(r.perpetrators)})';
+      }
+    } else {
+      if (r.perpetrators.isNotEmpty) {
+        final parts = <String>[];
+        for (var i = 0; i < r.perpetrators.length; i++) {
+          var p = r.perpetrators[i];
+          if (i > 0) {
+            p = p.replaceFirst(RegExp(r'^un\s+'), '').replaceFirst(RegExp(r'^una\s+'), '');
+          }
+          parts.add(p);
+        }
+        base = _join(parts);
+      } else {
+        base = 'una persona';
+      }
+    }
+    
+    // Concordancia de género: cualquier sujeto femenino ("una persona", "una
+    // mujer"…) feminiza sus adjetivos simples ("alto" → "alta"), no solo el
+    // genérico. Los complementos preposicionales ("con gorra", "de color
+    // negro") son invariables y se dejan tal cual.
+    final isFeminine = base.startsWith('una ');
     if (r.traits.isEmpty) return base;
 
     // Separa adjetivos simples de frases con preposición (empieza con "con"/"de")
@@ -553,9 +775,7 @@ class LocalSentenceAssembler {
         .where((t) => t.startsWith('con ') || t.startsWith('de '))
         .toList();
 
-    // Bug fix #1: concordancia de género. Cuando el sujeto es "una persona"
-    // (genérico femenino), los adjetivos terminados en -o deben ir en -a.
-    if (isGeneric) {
+    if (isFeminine) {
       adjectives = adjectives.map(_femAdj).toList();
     }
 
@@ -587,26 +807,6 @@ class LocalSentenceAssembler {
     return adj;
   }
 
-  /// Oraciones de estado emocional y urgencia, reutilizadas por varios
-  /// contextos.
-  List<String> _stateSentences(_Roles r) {
-    final out = <String>[];
-    if (r.emotions.isNotEmpty) out.add('${_cap(_join(r.emotions))}.');
-    if (r.urgencies.isNotEmpty) out.add('${_cap(_join(r.urgencies))}.');
-    if (r.services.isNotEmpty) out.add('Necesito ${_join(r.services)}.');
-    return out;
-  }
-
-  /// Oración para la institución donde se acude/denuncia. `lead` adapta el
-  /// verbo al contexto ("Quiero presentar la denuncia", "Necesito atención"…)
-  /// y se combina con el lexema locativo de la institución ("en la policía").
-  String? _institutionLine(_Roles r, String lead) =>
-      r.institution == null ? null : '$lead ${r.institution}.';
-
-  /// Oración para trámites/solicitudes explícitas (DENUNCIA, RECLAMO…).
-  String? _procedureLine(_Roles r) =>
-      r.procedures.isEmpty ? null : 'Solicito ${_join(r.procedures)}.';
-
   /// Oración para sujetos co-afectados distintos del declarante (familia,
   /// hijo, esposo…). "yo" es implícito en la 1ª persona.
   String? _affectedSubjectLine(_Roles r) =>
@@ -619,10 +819,10 @@ class LocalSentenceAssembler {
   /// ensamblaje mínimo para no perder la declaración del usuario.
   String _stitch(String lead, List<String> sentences, List<String> tokens) {
     final body = sentences.where((s) => s.trim().isNotEmpty).toList();
-    if (body.isEmpty) {
-      final raw = tokens.map((t) => t.toLowerCase().replaceAll('_', ' ')).toList();
-      return '$lead ${_cap(_join(raw))}.';
-    }
+    // Si el cuerpo quedó vacío, el lead ya es una oración completa. No se
+    // vuelcan glosas crudas: la red de seguridad `_ensureCoverage` integra de
+    // forma natural cualquier glosa que el lead no exprese.
+    if (body.isEmpty) return lead;
     return '$lead ${body.join(' ')}';
   }
 
