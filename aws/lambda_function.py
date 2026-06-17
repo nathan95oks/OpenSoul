@@ -36,7 +36,7 @@ logger.setLevel(logging.INFO)
 S3_BUCKET = os.environ.get("S3_BUCKET", "opensoul-lsb-audio-dev")
 APP_PREFIX = os.environ.get("APP_PREFIX", "lsb-to-text-audio")
 VOICE_ID = os.environ.get("VOICE_ID", "Lupe")
-BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "amazon.titan-text-express-v1")
+BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "global.amazon.nova-2-lite-v1:0").strip()
 APP_REGION = os.environ.get("APP_REGION", os.environ.get("AWS_REGION", "us-east-1"))
 ENABLE_BEDROCK = os.environ.get("ENABLE_BEDROCK", "true").lower() == "true"
 
@@ -406,14 +406,48 @@ def build_intermediate_representation(cards: list, analysis: dict, context_type:
 # MÓDULO 4: GENERADOR DE ORACIÓN BASE (REGLAS PROPIAS)
 # ===================================================================
 
-def generate_base_sentence(ir: dict, analysis: dict, context_type: str) -> str:
+# ===================================================================
+# FORMALIDAD Y VOZ — Contrato con la app Flutter (AWS-01 / RDS-02)
+# ===================================================================
+
+# Marcadores de entidad pública enviados en `institutionType`.
+_FORMAL_INSTITUTIONS = {"entidad_publica", "formal", "legal", "ciudadano", "judicial"}
+
+# Contextos reales que emite la app (todos son gestiones ante entidad pública
+# y, por tanto, exigen registro formal). Antes la formalidad se comparaba contra
+# ("ciudadano","formal","legal"), que la app NUNCA envía → is_formal era siempre
+# False (bug AWS-01). Ahora se deriva de institutionType + contexto real.
+_FORMAL_CONTEXTS = {
+    "ciudadano", "formal", "legal",
+    "denuncia_robo", "violencia", "accidente", "emergencia",
+    "otro", "orientacion", "tramite_id", "perdida",
+}
+
+# Selección de voz Polly por idioma solicitado (RDS-02). Polly no tiene voz
+# boliviana; 'Lupe' (es-US) es la opción neutra más cercana para LatAm.
+_VOICE_BY_LANG = {
+    "es-bo": ("Lupe", "es-US"),
+    "es-mx": ("Mia", "es-MX"),
+    "es-us": ("Lupe", "es-US"),
+    "es":    ("Lupe", "es-US"),
+}
+
+
+def _is_formal(context_type: str, institution_type: str = "") -> bool:
+    """True si la solicitud corresponde a una gestión formal/entidad pública."""
+    return (institution_type.lower() in _FORMAL_INSTITUTIONS
+            or context_type.lower() in _FORMAL_CONTEXTS)
+
+
+def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
+                           institution_type: str = "") -> str:
     """
     Genera una oración base en español usando reglas gramaticales propias
     y plantillas por tipo de evento. Este es el NÚCLEO del sistema.
     Orientado a trámites y consultas ciudadanas en entidades públicas.
     """
     tipo = ir["tipo_evento"]
-    is_formal = context_type.lower() in ("ciudadano", "formal", "legal")
+    is_formal = _is_formal(context_type, institution_type)
 
     generators = {
         "ROBO": _gen_robo,
@@ -844,7 +878,8 @@ def _gen_general(ir, analysis, is_formal):
 # MÓDULO 5: REFINAMIENTO CON BEDROCK (COMPLEMENTARIO)
 # ===================================================================
 
-def refine_with_bedrock(base_sentence: str, context_type: str) -> str:
+def refine_with_bedrock(base_sentence: str, context_type: str,
+                        institution_type: str = "") -> str:
     """
     Envía la oración BASE (ya generada por el motor propio) a Bedrock
     para refinamiento de redacción. NO traduce glosas — solo pule.
@@ -855,39 +890,39 @@ def refine_with_bedrock(base_sentence: str, context_type: str) -> str:
         logger.info("Bedrock deshabilitado, usando oración base directamente.")
         return base_sentence
 
+    logger.info("Refinando con modelo Bedrock: %s", BEDROCK_MODEL_ID)
+
+    is_formal = _is_formal(context_type, institution_type)
+
     # Mejora para desambiguación: Añadir instrucciones explícitas de polisemia
     polisemia_rules = (" Si detectas la palabra 'Auto', asume que es una 'Resolución Judicial' "
                        "y no un vehículo, a menos que el contexto indique transporte.")
 
     ctx_instruction = ("Contexto de trámites y consultas ciudadanas en entidades públicas: "
                        "usa vocabulario formal, respetuoso y preciso propio de gestiones administrativas."
-                       if context_type.lower() in ("ciudadano", "formal", "legal")
+                       if is_formal
                        else "Contexto general: usa español claro y correcto.")
 
-    prompt = f"""Recibes una oración base generada por un sistema de interpretación de Lengua de Señas Boliviana (LSB).
-Tu ÚNICA tarea es refinar la redacción para que sea más fluida, natural y apropiada.
+    prompt = f"""Eres un asistente que mejora la redacción de declaraciones en español formal boliviano para trámites en entidades públicas.
 {ctx_instruction}
-{polisemia_rules if context_type.lower() == "legal" else ""}
+{polisemia_rules if is_formal else ""}
 
-REGLAS:
-1. NO cambies el significado de la oración.
-2. NO agregues hechos, personas ni circunstancias nuevas.
-3. NO agregues explicaciones ni comentarios.
-4. Devuelve SOLO la oración refinada.
-5. Si la oración ya es correcta, devuélvela sin cambios.
+Te daré UNA sola "oración base". Devuelve esa MISMA oración con una redacción más fluida y formal, conservando exactamente su significado.
 
-Ejemplos:
-Oración base: Necesito tramitar el carnet de identidad en el SEGIP.
-Oración refinada: Deseo realizar el trámite de carnet de identidad en las oficinas del SEGIP.
+REGLAS ESTRICTAS:
+1. Refina ÚNICAMENTE la oración base que aparece al final. NO inventes hechos, personas, objetos, lugares ni trámites que no estén en ella.
+2. Conserva el mismo evento y los mismos elementos: si habla de un robo, sigue siendo un robo; NO lo cambies por un pago, un banco ni una factura.
+3. Responde SOLO con la oración refinada, en una sola línea, sin etiquetas, sin markdown (nada de **, #) y sin comillas.
+4. Si ya está bien redactada, devuélvela igual.
 
-Oración base: Solicito información en la alcaldía el día de hoy.
-Oración refinada: Solicito información sobre los servicios disponibles en la alcaldía el día de hoy.
+Estos ejemplos son SOLO de estilo (NO copies su contenido):
+- "Necesito tramitar el carnet de identidad en el SEGIP." -> "Deseo realizar el trámite de mi carnet de identidad en las oficinas del SEGIP."
+- "Un hombre me robó el celular en la calle." -> "Un hombre me sustrajo el teléfono celular en la vía pública."
 
-Oración base: Necesito pagar la factura en el banco.
-Oración refinada: Deseo realizar el pago de la factura correspondiente en el banco.
+Oración base a refinar:
+"{base_sentence}"
 
-Oración base: {base_sentence}
-Oración refinada:"""
+Tu respuesta (solo la oración refinada):"""
 
     try:
         request_body = _build_bedrock_request_body(prompt)
@@ -897,6 +932,12 @@ Oración refinada:"""
         )
         response_body = json.loads(response["body"].read())
         refined = _parse_bedrock_response(response_body)
+        if not _refinement_is_safe(base_sentence, refined):
+            logger.warning(
+                "Refinamiento DESCARTADO por divergencia (posible alucinación): '%s' → '%s'",
+                base_sentence, refined,
+            )
+            return base_sentence
         logger.info("Bedrock refinó: '%s' → '%s'", base_sentence, refined)
         return refined
     except Exception as e:
@@ -906,7 +947,12 @@ Oración refinada:"""
 
 def _build_bedrock_request_body(prompt_text: str) -> dict:
     model_id_lower = BEDROCK_MODEL_ID.lower()
-    if "anthropic" in model_id_lower or "claude" in model_id_lower:
+    if "nova" in model_id_lower:
+        # Amazon Nova usa un esquema de mensajes propio (content como lista de
+        # bloques) e inferenceConfig. Distinto al de Titan/Claude/Llama.
+        return {"messages": [{"role": "user", "content": [{"text": prompt_text}]}],
+                "inferenceConfig": {"maxTokens": 256, "temperature": 0.2, "topP": 0.9}}
+    elif "anthropic" in model_id_lower or "claude" in model_id_lower:
         return {"anthropic_version": "bedrock-2023-05-31", "max_tokens": 256,
                 "temperature": 0.2, "top_p": 0.9,
                 "messages": [{"role": "user", "content": prompt_text}]}
@@ -921,8 +967,35 @@ def _build_bedrock_request_body(prompt_text: str) -> dict:
                 "messages": [{"role": "user", "content": prompt_text}]}
 
 
+def _refinement_is_safe(base: str, refined: str) -> bool:
+    """Defensa anti-alucinación del backend (espejo del `isBackendDegenerate`
+    del cliente). Acepta el refinamiento solo si conserva contenido de la
+    oración base; si no comparte ninguna palabra significativa, casi seguro el
+    modelo alucinó (p. ej. copió un ejemplo del prompt) y se descarta."""
+    trans = str.maketrans("áéíóúüñ", "aeiouun")
+
+    def content_words(s: str) -> set:
+        s = s.lower().translate(trans)
+        return {w for w in re.findall(r"[a-z]+", s) if len(w) >= 4}
+
+    base_w = content_words(base)
+    if not base_w:
+        return True
+    refined_w = content_words(refined)
+    if not refined_w:
+        return False
+    # Rechaza solo divergencias graves: sin ninguna palabra significativa en
+    # común con la base. Un refinamiento legítimo casi siempre conserva al
+    # menos un sustantivo clave (p. ej. "hombre", "celular").
+    return len(base_w & refined_w) >= 1
+
+
 def _parse_bedrock_response(response_body: dict) -> str:
-    if "content" in response_body and isinstance(response_body["content"], list):
+    # Amazon Nova: output.message.content[0].text
+    if "output" in response_body and isinstance(response_body.get("output"), dict):
+        raw = (response_body["output"].get("message", {})
+               .get("content", [{}])[0].get("text", "").strip())
+    elif "content" in response_body and isinstance(response_body["content"], list):
         raw = response_body["content"][0].get("text", "").strip()
     elif "results" in response_body and isinstance(response_body["results"], list):
         raw = response_body["results"][0].get("outputText", "").strip()
@@ -931,12 +1004,33 @@ def _parse_bedrock_response(response_body: dict) -> str:
     else:
         raise ValueError("Respuesta Bedrock no reconocida")
 
-    lines = [l.strip() for l in raw.split("\n") if l.strip()]
-    result = lines[0] if lines else raw
-    for prefix in ["Oración refinada:", "Salida:", "Respuesta:"]:
-        if result.lower().startswith(prefix.lower()):
-            result = result[len(prefix):].strip()
-    if (result.startswith('"') and result.endswith('"')):
+    # Limpieza robusta: modelos de chat (Nova) suelen anteponer un encabezado
+    # en markdown ("**Oración refinada:**") en su propia línea, y la oración va
+    # en la siguiente. Tomamos la primera línea real, descartando etiquetas y
+    # markdown, en vez de quedarnos ciegamente con la línea 0.
+    labels = ("oracion refinada", "oración refinada", "salida", "respuesta",
+              "resultado", "texto refinado", "oracion", "oración")
+    result = ""
+    for line in raw.split("\n"):
+        l = line.replace("*", "").replace("#", "").replace("`", "").strip()
+        if not l:
+            continue
+        low = l.lower()
+        # Línea que es SOLO una etiqueta (con o sin ':') → se ignora.
+        if low.rstrip(":").strip() in labels:
+            continue
+        # Línea "Etiqueta: <texto>" → nos quedamos con <texto>.
+        for lab in labels:
+            if low.startswith(lab) and ":" in l:
+                l = l.split(":", 1)[1].strip()
+                break
+        if l:
+            result = l
+            break
+    if not result:
+        result = raw.replace("*", "").replace("#", "").strip()
+    # Quita comillas envolventes si las hubiera.
+    if result.startswith('"') and result.endswith('"'):
         result = result[1:-1].strip()
     return result
 
@@ -945,30 +1039,92 @@ def _parse_bedrock_response(response_body: dict) -> str:
 # MÓDULO 6: SALIDA MULTIMODAL (Polly + S3)
 # ===================================================================
 
-def synthesize_audio(text: str) -> bytes:
-    logger.info("Sintetizando audio con Polly — Voz: %s", VOICE_ID)
+def synthesize_audio(text: str, language: str = "es") -> bytes:
+    # RDS-02: honra el `language` solicitado por la app. Si VOICE_ID está fijado
+    # por variable de entorno, esa elección manda; si no, se elige por idioma.
+    default_voice, default_lang = _VOICE_BY_LANG.get(language.lower(), (VOICE_ID, "es-US"))
+    voice_id = os.environ.get("VOICE_ID") or default_voice
+    lang_code = default_lang
+    logger.info("Sintetizando audio con Polly — Voz: %s, Idioma: %s", voice_id, lang_code)
     response = polly_client.synthesize_speech(
-        Text=text, OutputFormat="mp3", VoiceId=VOICE_ID,
-        Engine="neural", LanguageCode="es-US",
+        Text=text, OutputFormat="mp3", VoiceId=voice_id,
+        Engine="neural", LanguageCode=lang_code,
     )
     audio_bytes = response["AudioStream"].read()
     logger.info("Audio sintetizado: %d bytes", len(audio_bytes))
     return audio_bytes
 
 
-def upload_audio_to_s3(audio_bytes: bytes, cache_key: str) -> str:
-    s3_key = f"{APP_PREFIX}/{cache_key}.mp3"
-    logger.info("Subiendo audio a S3 — Bucket: %s, Key: %s", S3_BUCKET, s3_key)
-    s3_client.put_object(Bucket=S3_BUCKET, Key=s3_key, Body=audio_bytes, ContentType="audio/mpeg")
-    
-    # Generar una URL prefirmada (válida por 1 hora) para no requerir que el bucket sea público
-    presigned_url = s3_client.generate_presigned_url(
+def _audio_s3_key(cache_key: str) -> str:
+    return f"{APP_PREFIX}/{cache_key}.mp3"
+
+
+def _cache_s3_key(cache_key: str) -> str:
+    return f"{APP_PREFIX}/cache/{cache_key}.json"
+
+
+def _presign_audio(s3_key: str) -> str:
+    """URL prefirmada (válida 1 h) — se regenera en cada respuesta porque las
+    firmas caducan; por eso la caché guarda la clave S3, no la URL firmada."""
+    return s3_client.generate_presigned_url(
         'get_object',
         Params={'Bucket': S3_BUCKET, 'Key': s3_key},
-        ExpiresIn=3600
+        ExpiresIn=3600,
     )
+
+
+def upload_audio_to_s3(audio_bytes: bytes, cache_key: str) -> str:
+    s3_key = _audio_s3_key(cache_key)
+    logger.info("Subiendo audio a S3 — Bucket: %s, Key: %s", S3_BUCKET, s3_key)
+    s3_client.put_object(Bucket=S3_BUCKET, Key=s3_key, Body=audio_bytes, ContentType="audio/mpeg")
+    presigned_url = _presign_audio(s3_key)
     logger.info("Url prefirmada generada exitosamente")
     return presigned_url
+
+
+# ===================================================================
+# CACHÉ (AWS-02) — sobre S3, sin infraestructura adicional
+# ===================================================================
+# La combinación contexto+glosas se hashea en `cache_key`. La primera vez se
+# ejecuta todo el pipeline (Nova + Polly) y se guarda la respuesta en
+# S3 (.../cache/<key>.json). Las siguientes peticiones idénticas devuelven esa
+# respuesta sin invocar Bedrock ni Polly — solo se regenera la URL prefirmada
+# del MP3 ya almacenado. Esto baja costo y latencia y hace que `cacheHit`
+# deje de ser siempre falso.
+
+def get_cached_response(cache_key: str):
+    """Devuelve la respuesta cacheada (con audioUrl prefirmado fresco) o None."""
+    try:
+        obj = s3_client.get_object(Bucket=S3_BUCKET, Key=_cache_s3_key(cache_key))
+        data = json.loads(obj["Body"].read())
+    except ClientError as e:
+        code = e.response.get("Error", {}).get("Code", "")
+        if code not in ("NoSuchKey", "404", "NotFound"):
+            logger.warning("No se pudo leer la caché %s: %s", cache_key, e)
+        return None
+    except Exception as e:
+        logger.warning("Caché ilegible %s: %s", cache_key, e)
+        return None
+
+    audio_key = data.pop("audioKey", None)
+    data["audioUrl"] = _presign_audio(audio_key) if audio_key else None
+    data["cacheHit"] = True
+    return data
+
+
+def put_cached_response(cache_key: str, payload: dict, audio_key: str) -> None:
+    """Guarda la respuesta (sin la URL firmada efímera) para futuros aciertos."""
+    try:
+        body = {k: v for k, v in payload.items() if k not in ("audioUrl", "cacheHit")}
+        body["audioKey"] = audio_key
+        s3_client.put_object(
+            Bucket=S3_BUCKET,
+            Key=_cache_s3_key(cache_key),
+            Body=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+            ContentType="application/json",
+        )
+    except Exception as e:
+        logger.warning("No se pudo escribir la caché %s: %s", cache_key, e)
 
 
 # ===================================================================
@@ -1026,8 +1182,22 @@ def lambda_handler(event, context):
 
     cards = [c.strip().upper() for c in body["cards"]]
     context_type = body.get("context", "general").strip().lower()
+    # Campos del contrato con la app (RDS-02): antes se ignoraban silenciosamente.
+    institution_type = (body.get("institutionType") or "").strip().lower()
+    language = (body.get("language") or "es").strip()
     cache_key = generate_cache_key(context_type, cards)
-    logger.info("Procesando — cards: %s, context: %s, cache_key: %s", cards, context_type, cache_key)
+    logger.info(
+        "Procesando — cards: %s, context: %s, institutionType: %s, language: %s, cache_key: %s",
+        cards, context_type, institution_type, language, cache_key,
+    )
+
+    # 1b. CACHÉ (AWS-02) — si esta combinación ya se procesó, se devuelve sin
+    # invocar Nova ni Polly (solo se regenera la URL prefirmada del audio).
+    cached = get_cached_response(cache_key)
+    if cached is not None:
+        logger.info("Cache HIT — respuesta servida desde caché: %s", cache_key)
+        return build_response(200, cached)
+    logger.info("Cache MISS — procesando pipeline completo: %s", cache_key)
 
     # 2. MOTOR INTELIGENTE PROPIO — Análisis semántico
     analysis = analyze_glosses(cards)
@@ -1037,12 +1207,12 @@ def lambda_handler(event, context):
     intermediate = build_intermediate_representation(cards, analysis, context_type)
 
     # 4. MOTOR INTELIGENTE PROPIO — Generación de oración base
-    base_sentence = generate_base_sentence(intermediate, analysis, context_type)
+    base_sentence = generate_base_sentence(intermediate, analysis, context_type, institution_type)
     logger.info("Oración base generada: %s", base_sentence)
 
     # 5. CAPA COMPLEMENTARIA — Refinamiento con Bedrock
     try:
-        generated_text = refine_with_bedrock(base_sentence, context_type)
+        generated_text = refine_with_bedrock(base_sentence, context_type, institution_type)
     except Exception as e:
         logger.warning("Refinamiento con Bedrock falló, usando oración base: %s", str(e))
         generated_text = base_sentence
@@ -1051,7 +1221,7 @@ def lambda_handler(event, context):
 
     # 6. SALIDA MULTIMODAL — Polly + S3
     try:
-        audio_bytes = synthesize_audio(generated_text)
+        audio_bytes = synthesize_audio(generated_text, language)
     except ClientError as e:
         logger.error("Error de Polly: %s", str(e), exc_info=True)
         return build_response(500, {"error": "POLLY_ERROR", "message": "Error al sintetizar el audio."})
@@ -1082,7 +1252,7 @@ def lambda_handler(event, context):
             "rol": entry["rol"] if entry else "DESCONOCIDO",
         })
 
-    return build_response(200, {
+    response_payload = {
         "baseSentence": base_sentence,
         "generatedText": generated_text,
         "intermediateRepresentation": intermediate,
@@ -1090,4 +1260,9 @@ def lambda_handler(event, context):
         "audioUrl": audio_url,
         "cacheHit": False,
         "bedrockUsed": bedrock_used,
-    })
+    }
+
+    # Guardar en caché para que la próxima petición idéntica sea un HIT.
+    put_cached_response(cache_key, response_payload, _audio_s3_key(cache_key))
+
+    return build_response(200, response_payload)
