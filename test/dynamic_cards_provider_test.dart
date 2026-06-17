@@ -106,7 +106,7 @@ void main() {
     });
 
     test('documento / trámite → tramite_id', () {
-      expect(resolveAssemblerContext('orientacion', ['CARNE'], catOf), 'tramite_id');
+      expect(resolveAssemblerContext('orientacion', ['CARNET'], catOf), 'tramite_id');
       expect(
           resolveAssemblerContext('orientacion', ['ANTECEDENTES', 'FISCAL'], catOf),
           'tramite_id');
