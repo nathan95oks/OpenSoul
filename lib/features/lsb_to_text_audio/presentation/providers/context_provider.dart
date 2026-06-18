@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/semantic_context.dart';
 import '../../domain/entities/semantic_zone.dart';
+import '../../domain/services/local_sentence_assembler.dart' show kVictimMarker;
 
 /// Catálogo de contextos situacionales — labels en primera persona,
 /// IDs preservados porque el datasource de tarjetas los referencia.
@@ -378,13 +379,14 @@ final availableContexts = <SemanticContext>[
         emoji: '⚡',
         semanticWeight: 0.85,
         cardCategories: ['Agresión'],
-        relatedZones: ['personas', 'lugar'],
+        relatedZones: ['personas', 'victima', 'lugar'],
       ),
+      // Quién cometió el hecho (agresor). Solo identidad.
       SemanticZone(
         id: 'personas',
-        label: 'Personas',
-        hint: 'Quién estuvo involucrado',
-        question: '¿Quién estuvo involucrado?',
+        label: 'Quién agredió',
+        hint: 'Quién cometió el hecho',
+        question: '¿Quién cometió el hecho?',
         emoji: '👤',
         semanticWeight: 0.7,
         cardCategories: ['Identificación', 'Descripción'],
@@ -392,6 +394,24 @@ final availableContexts = <SemanticContext>[
         // desconocido…), no adjetivos físicos sueltos.
         cardSubcategories: ['Persona', 'Familia', 'Género', 'Edad', 'Relación', 'Cantidad'],
         maxPicks: 3,
+        relatedZones: ['victima', 'lugar'],
+      ),
+      // Quién fue agredido (víctima). Subflujo propio: sus descriptores se
+      // marcan con [kVictimMarker] para que el motor NO los confunda con el
+      // agresor (antes "mujer joven" del agresor y otra persona víctima se
+      // fundían como si todos hubieran agredido).
+      SemanticZone(
+        id: 'victima',
+        label: 'A quién agredió',
+        hint: 'Quién fue agredido',
+        question: '¿A quién agredió?',
+        emoji: '🧑‍🤝‍🧑',
+        semanticWeight: 0.6,
+        optional: true,
+        cardCategories: ['Identificación', 'Descripción'],
+        cardSubcategories: ['Persona', 'Familia', 'Género', 'Edad', 'Relación', 'Cantidad'],
+        maxPicks: 3,
+        leadGloss: kVictimMarker,
         relatedZones: ['lugar'],
       ),
       SemanticZone(

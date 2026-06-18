@@ -186,6 +186,25 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     return out;
   }
 
+  /// Igual que [orderedGlosses] pero inyecta el `leadGloss` de cada zona antes
+  /// de sus respuestas (cuando la zona lo declara y tiene respuestas). Es la
+  /// secuencia que se envía a los motores de traducción: el marcador permite
+  /// distinguir roles (p. ej. agresor vs. persona agredida en el flujo de
+  /// testigo) SIN contaminar [sentenceProvider], que sigue mostrando solo las
+  /// glosas reales del usuario en la UI.
+  List<String> orderedGlossesMarked() {
+    final ctx = ref.read(contextProvider);
+    final out = <String>[];
+    for (final zoneId in state.visitedZoneOrder) {
+      final answers = state.zoneAnswers[zoneId] ?? const [];
+      if (answers.isEmpty) continue;
+      final lead = ctx?.zoneById(zoneId)?.leadGloss;
+      if (lead != null) out.add(lead);
+      out.addAll(answers);
+    }
+    return out;
+  }
+
   /// Selecciona / deselecciona una glosa en la zona activa.
   ///
   /// - Si la glosa ya estaba elegida → se quita (deseleccionar).
