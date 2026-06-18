@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../../domain/entities/lsb_card.dart';
 import '../providers/cards_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -53,7 +54,7 @@ class CardGrid extends ConsumerWidget {
               child: Text(
                 'No hay opciones disponibles para esta pregunta.\nUsa "Saltar" o "Terminé y traducir".',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Color(0xFF8B949E), fontSize: 13),
+                style: TextStyle(color: AppTheme.lightTextSub, fontSize: 13),
               ),
             ),
           );
@@ -106,12 +107,12 @@ class CardGrid extends ConsumerWidget {
                   icon: const Icon(
                     Icons.expand_more,
                     size: 18,
-                    color: Color(0xFF8B949E),
+                    color: AppTheme.lightTextSub,
                   ),
                   label: Text(
                     'Ver más opciones (${cards.length - _kAnswersPerQuestion})',
                     style: const TextStyle(
-                      color: Color(0xFF8B949E),
+                      color: AppTheme.lightTextSub,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
@@ -130,7 +131,7 @@ class CardGrid extends ConsumerWidget {
         child: Center(
           child: Text(
             'Error al cargar opciones',
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: AppTheme.errorLight),
           ),
         ),
       ),
@@ -166,8 +167,8 @@ class _PairPickHint extends StatelessWidget {
         ? 'Puedes elegir hasta $max cards para describir mejor'
         : 'Card $current de $max — toca otra para complementar, o salta';
     final color = remaining > 0
-        ? const Color(0xFF00ADB5)
-        : const Color(0xFF8B949E);
+        ? AppTheme.brandPrimary
+        : AppTheme.lightTextSub;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
@@ -214,16 +215,16 @@ class _FlowCompleteBanner extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFF3FB950).withValues(alpha: 0.08),
+          color: AppTheme.successLight.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: const Color(0xFF3FB950).withValues(alpha: 0.4),
+            color: AppTheme.successLight.withValues(alpha: 0.4),
           ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle, color: Color(0xFF3FB950), size: 28),
+            const Icon(Icons.check_circle, color: AppTheme.successLight, size: 28),
             const SizedBox(height: 8),
             const Text(
               'Respondiste todas las preguntas',
@@ -231,7 +232,7 @@ class _FlowCompleteBanner extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: AppTheme.lightText,
               ),
             ),
             const SizedBox(height: 4),
@@ -240,7 +241,7 @@ class _FlowCompleteBanner extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.white.withValues(alpha: 0.6),
+                color: AppTheme.lightTextSub,
                 height: 1.35,
               ),
             ),
@@ -259,7 +260,7 @@ class _AnswerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isEmergency = card.isEmergency;
-    final accent = isEmergency ? Colors.redAccent : const Color(0xFFFFD700);
+    final accent = isEmergency ? AppTheme.errorLight : AppTheme.brandPrimary;
 
     // A11Y-01: el lector de pantalla anuncia la tarjeta como un botón con su
     // significado; el ícono es decorativo y se excluye (excludeSemantics).
@@ -274,9 +275,10 @@ class _AnswerCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF21262D),
+            color: AppTheme.lightSurface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: accent.withValues(alpha: 0.35)),
+            boxShadow: AppTheme.cardShadow,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Row(
@@ -301,7 +303,7 @@ class _AnswerCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: AppTheme.lightText,
                     letterSpacing: 0.3,
                   ),
                   maxLines: 2,

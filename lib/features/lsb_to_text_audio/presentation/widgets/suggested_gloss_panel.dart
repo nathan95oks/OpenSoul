@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../../domain/entities/lsb_card.dart';
 import '../providers/cards_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -14,7 +15,7 @@ import 'adaptive_node_layout.dart';
 class SuggestedGlossPanel extends ConsumerWidget {
   const SuggestedGlossPanel({super.key});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -82,7 +83,7 @@ class _EmptyState extends StatelessWidget {
         'No hay opciones para esta pregunta.\nPulsa "Continuar" para seguir o "Volver".',
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: Colors.black.withValues(alpha: 0.45),
+          color: AppTheme.lightTextSub,
           fontSize: 13,
           height: 1.5,
         ),
@@ -101,7 +102,7 @@ class _ErrorState extends StatelessWidget {
       child: Text(
         'Error al cargar opciones.',
         style: TextStyle(
-          color: Colors.black.withValues(alpha: 0.45),
+          color: AppTheme.lightTextSub,
           fontSize: 13,
         ),
       ),
@@ -126,7 +127,7 @@ class _PairHint extends StatelessWidget {
         label,
         style: TextStyle(
           fontSize: 11,
-          color: Colors.black.withValues(alpha: 0.5),
+          color: AppTheme.lightTextSub,
           fontStyle: FontStyle.italic,
         ),
       ),

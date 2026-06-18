@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../app/theme.dart';
 import '../../domain/entities/lsb_card.dart';
 import 'lsb_icons.dart';
 
@@ -28,7 +29,7 @@ class _SemanticNodeState extends State<SemanticNode>
   late final AnimationController _ctrl;
   late final Animation<double> _scale;
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   void initState() {
@@ -64,15 +65,15 @@ class _SemanticNodeState extends State<SemanticNode>
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
-            color: selected ? _orange : Colors.white,
+            color: selected ? _orange : AppTheme.lightSurface,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: selected ? _orange : Colors.black,
-              width: 2,
+              color: selected ? _orange : AppTheme.lightBorder,
+              width: selected ? 2 : 1.5,
             ),
             boxShadow: selected
                 ? [BoxShadow(color: _orange.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
-                : null,
+                : AppTheme.cardShadow,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           child: Row(
@@ -80,7 +81,7 @@ class _SemanticNodeState extends State<SemanticNode>
               Icon(
                 kLsbIconMap[widget.card.semanticIcon] ?? Icons.circle_outlined,
                 size: 20,
-                color: selected ? Colors.white : Colors.black,
+                color: selected ? Colors.white : AppTheme.lightText,
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -89,7 +90,7 @@ class _SemanticNodeState extends State<SemanticNode>
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: selected ? Colors.white : Colors.black,
+                    color: selected ? Colors.white : AppTheme.lightText,
                     letterSpacing: 0.2,
                     height: 1.2,
                   ),
@@ -113,7 +114,7 @@ class AnswerNode extends StatelessWidget {
 
   const AnswerNode({super.key, required this.gloss, this.onTap});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -152,10 +153,10 @@ class QuestionNode extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: dimmed ? 0.03 : 0.05),
+        color: AppTheme.lightSubtle.withValues(alpha: dimmed ? 0.5 : 1.0),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.black.withValues(alpha: dimmed ? 0.08 : 0.15),
+          color: AppTheme.lightBorder,
           width: 1.5,
         ),
       ),
@@ -164,7 +165,7 @@ class QuestionNode extends StatelessWidget {
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: Colors.black.withValues(alpha: dimmed ? 0.4 : 0.75),
+          color: AppTheme.lightText.withValues(alpha: dimmed ? 0.4 : 0.75),
           fontStyle: FontStyle.italic,
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/theme.dart';
 import '../../domain/repositories/translation_repository.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -33,7 +34,7 @@ class HomeScreen extends ConsumerWidget {
     // al usuario con un chip en la pantalla de resultado.
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.lightBg,
       appBar: _buildAppBar(ref, contextState, selectedWords),
       body: SafeArea(
         child: contextState == null
@@ -55,18 +56,18 @@ class HomeScreen extends ConsumerWidget {
     List<String> selectedWords,
   ) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.lightBg,
       elevation: 0,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
-        child: Container(height: 2, color: Colors.black),
+        child: Container(height: 1, color: AppTheme.lightBorder),
       ),
       title: const Text(
         'OpenSoul',
         style: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.w800,
-          color: Colors.black,
+          color: AppTheme.brandPrimary,
           letterSpacing: -0.3,
         ),
       ),
@@ -85,7 +86,7 @@ class HomeScreen extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: AppTheme.brandPrimary,
               ),
             ),
           ),
@@ -177,15 +178,15 @@ class _BottomPanel extends StatelessWidget {
     required this.onTranslate,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
     final enabled = onTranslate != null;
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(top: BorderSide(color: Colors.black, width: 2)),
+        color: AppTheme.lightSurface,
+        border: Border(top: BorderSide(color: AppTheme.lightBorder, width: 1)),
       ),
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
       child: Column(
@@ -198,7 +199,7 @@ class _BottomPanel extends StatelessWidget {
               'Secuencia construida:',
               style: TextStyle(
                 fontSize: 12,
-                color: Color(0xFF666666),
+                color: AppTheme.lightTextSub,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -208,7 +209,7 @@ class _BottomPanel extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
-                color: Colors.black,
+                color: AppTheme.lightText,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -219,7 +220,7 @@ class _BottomPanel extends StatelessWidget {
               'Selecciona glosas para construir tu declaración.',
               style: TextStyle(
                 fontSize: 13,
-                color: Color(0xFF999999),
+                color: AppTheme.lightTextSub,
                 fontStyle: FontStyle.italic,
               ),
             ),
@@ -236,7 +237,7 @@ class _BottomPanel extends StatelessWidget {
               label: isLoading ? 'Traduciendo' : 'Traducir',
               excludeSemantics: true,
               child: Material(
-                color: enabled ? _orange : const Color(0xFFE5E5E5),
+                color: enabled ? _orange : AppTheme.lightBorder,
                 borderRadius: BorderRadius.circular(16),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(16),
@@ -259,7 +260,7 @@ class _BottomPanel extends StatelessWidget {
                               letterSpacing: 2.0,
                               color: enabled
                                   ? Colors.white
-                                  : const Color(0xFFAAAAAA),
+                                  : AppTheme.lightTextSub,
                             ),
                           ),
                   ),

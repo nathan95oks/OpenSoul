@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../providers/sentence_provider.dart';
 
 /// Panel de construcción de secuencia de glosas.
@@ -16,8 +17,8 @@ class SentenceBuilder extends ConsumerWidget {
       constraints: const BoxConstraints(minHeight: 72),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       decoration: const BoxDecoration(
-        color: Color(0xFF161B22),
-        border: Border(bottom: BorderSide(color: Color(0xFFFFD700), width: 2)),
+        color: AppTheme.lightSurface,
+        border: Border(bottom: BorderSide(color: AppTheme.brandPrimary, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,12 +26,12 @@ class SentenceBuilder extends ConsumerWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.sign_language, size: 16, color: Color(0xFFFFD700)),
+              const Icon(Icons.sign_language, size: 16, color: AppTheme.brandPrimary),
               const SizedBox(width: 6),
               const Text(
                 'SECUENCIA LSB',
                 style: TextStyle(
-                  color: Color(0xFF8B949E),
+                  color: AppTheme.lightTextSub,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.2,
@@ -40,7 +41,7 @@ class SentenceBuilder extends ConsumerWidget {
               if (selectedWords.isNotEmpty)
                 Text(
                   '${selectedWords.length} glosas',
-                  style: const TextStyle(color: Color(0xFF8B949E), fontSize: 11),
+                  style: const TextStyle(color: AppTheme.lightTextSub, fontSize: 11),
                 ),
             ],
           ),
@@ -55,7 +56,7 @@ class SentenceBuilder extends ConsumerWidget {
                       style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontSize: 13,
-                        color: Colors.white.withValues(alpha: 0.3),
+                        color: AppTheme.lightTextSub.withValues(alpha: 0.7),
                       ),
                     ),
                   ]
@@ -70,19 +71,19 @@ class SentenceBuilder extends ConsumerWidget {
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 12,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ),
                       avatar: CircleAvatar(
                         radius: 10,
-                        backgroundColor: Colors.black26,
+                        backgroundColor: Colors.white24,
                         child: Text(
                           '${idx + 1}',
-                          style: const TextStyle(fontSize: 9, color: Colors.black, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 9, color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
-                      backgroundColor: const Color(0xFFFFD700),
-                      deleteIconColor: Colors.black54,
+                      backgroundColor: AppTheme.brandPrimary,
+                      deleteIconColor: Colors.white70,
                       visualDensity: VisualDensity.compact,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       onDeleted: () => ref.read(sentenceProvider.notifier).removeWord(word),

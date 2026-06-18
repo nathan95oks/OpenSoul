@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../providers/cards_provider.dart';
 
 
 /// Íconos y colores por categoría para el UI.
+///
+/// Los colores por categoría son funcionales (diferencian categorías) y se
+/// conservan; el resto del chrome usa los tokens del design system.
 const _categoryMeta = <String, Map<String, dynamic>>{
-  'Sugerencias': {'icon': Icons.auto_awesome, 'color': 0xFF00ADB5},
+  'Sugerencias': {'icon': Icons.auto_awesome, 'color': 0xFF2563EB},
   'Identificación': {'icon': Icons.person, 'color': 0xFF4FC3F7},
   'Acciones': {'icon': Icons.flash_on, 'color': 0xFFFFD54F},
   'Trámites': {'icon': Icons.assignment, 'color': 0xFFFF8A65},
@@ -28,9 +32,9 @@ class CategoryFilter extends ConsumerWidget {
     return Container(
       height: 56,
       padding: const EdgeInsets.symmetric(vertical: 6),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0D1117),
-        border: Border(bottom: BorderSide(color: Colors.white.withValues(alpha: 0.06))),
+      decoration: const BoxDecoration(
+        color: AppTheme.lightBg,
+        border: Border(bottom: BorderSide(color: AppTheme.lightBorder)),
       ),
       child: categoriesAsync.when(
         data: (cats) {
@@ -43,26 +47,26 @@ class CategoryFilter extends ConsumerWidget {
               final cat = allCats[index];
               final isSelected = cat == currentCategory;
             final meta = _categoryMeta[cat];
-            final catColor = Color(meta?['color'] as int? ?? 0xFFFFD700);
+            final catColor = Color(meta?['color'] as int? ?? 0xFF2563EB);
             final catIcon = meta?['icon'] as IconData? ?? Icons.label;
 
             return Padding(
               padding: const EdgeInsets.only(right: 8),
               child: FilterChip(
-                avatar: Icon(catIcon, size: 16, color: isSelected ? Colors.black : catColor),
+                avatar: Icon(catIcon, size: 16, color: isSelected ? AppTheme.lightText : catColor),
                 label: Text(
                   cat,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: isSelected ? Colors.black : Colors.white70,
+                    color: isSelected ? AppTheme.lightText : AppTheme.lightTextSub,
                   ),
                 ),
                 selected: isSelected,
                 selectedColor: catColor,
-                backgroundColor: const Color(0xFF21262D),
-                checkmarkColor: Colors.black,
-                side: BorderSide(color: isSelected ? catColor : const Color(0xFF30363D)),
+                backgroundColor: AppTheme.lightSurface,
+                checkmarkColor: AppTheme.lightText,
+                side: BorderSide(color: isSelected ? catColor : AppTheme.lightBorder),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 onSelected: (_) => ref.read(currentCategoryProvider.notifier).setCategory(cat),
               ),
@@ -71,7 +75,7 @@ class CategoryFilter extends ConsumerWidget {
         );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e', style: const TextStyle(color: Colors.red))),
+        error: (e, _) => Center(child: Text('Error: $e', style: const TextStyle(color: AppTheme.errorLight))),
       ),
     );
   }

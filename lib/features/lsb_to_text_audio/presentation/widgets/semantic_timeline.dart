@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 
@@ -11,7 +12,7 @@ import '../providers/semantic_zones_provider.dart';
 class SemanticTimeline extends ConsumerWidget {
   const SemanticTimeline({super.key});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -41,7 +42,7 @@ class SemanticTimeline extends ConsumerWidget {
                   Container(
                     width: 1,
                     height: 16,
-                    color: Colors.white.withValues(alpha: 0.08),
+                    color: AppTheme.lightBorder,
                   ),
               ],
             ],
@@ -67,8 +68,8 @@ class SemanticTimeline extends ConsumerWidget {
                             ? _orange
                             : zonesState.visitedZoneIds
                                     .contains(zones[i].zone.id)
-                                ? Colors.white.withValues(alpha: 0.5)
-                                : Colors.white.withValues(alpha: 0.25),
+                                ? AppTheme.lightTextSub
+                                : AppTheme.lightTextSub.withValues(alpha: 0.5),
                       ),
                     ),
                   ),
@@ -94,7 +95,7 @@ class _TimelinePoint extends StatelessWidget {
     required this.isVisited,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +111,8 @@ class _TimelinePoint extends StatelessWidget {
           color: isActive
               ? _orange
               : isVisited
-                  ? Colors.white.withValues(alpha: 0.5)
-                  : Colors.white.withValues(alpha: 0.12),
+                  ? AppTheme.lightTextSub
+                  : AppTheme.lightBorder,
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:ui';
+import '../../../../app/theme.dart';
 import '../controllers/audio_translation_controller.dart';
 import '../widgets/avatar_3d_viewer.dart';
 import '../widgets/record_button.dart';
@@ -14,9 +15,23 @@ class AudioToLsbScreen extends ConsumerWidget {
     final state = ref.watch(audioTranslationControllerProvider);
     final controller = ref.read(audioTranslationControllerProvider.notifier);
 
+    // El módulo Audio/Texto → LSB usa el tema oscuro del design system.
+    return Theme(
+      data: AppTheme.darkTheme,
+      child: Builder(builder: (context) {
+        return _buildScreen(context, state, controller);
+      }),
+    );
+  }
+
+  Widget _buildScreen(
+    BuildContext context,
+    AudioTranslationState state,
+    AudioTranslationController controller,
+  ) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: AppTheme.darkBg,
       appBar: AppBar(
         title: const Text(
           'Traductor a LSB',
@@ -72,13 +87,20 @@ class AudioToLsbScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.03),
+                        // Halo/glow azul sutil detrás del avatar para destacarlo.
+                        gradient: RadialGradient(
+                          colors: [
+                            AppTheme.brandElectric.withValues(alpha: 0.12),
+                            AppTheme.darkSurface,
+                          ],
+                          radius: 0.9,
+                        ),
                         borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: Colors.white12),
+                        border: Border.all(color: AppTheme.darkBorder),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 20,
+                            color: AppTheme.brandPrimary.withValues(alpha: 0.18),
+                            blurRadius: 30,
                             offset: const Offset(0, 10),
                           ),
                         ],
@@ -152,9 +174,9 @@ class AudioToLsbScreen extends ConsumerWidget {
                           key: ValueKey<String>('${state.status}_${state.recognizedText}'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: state.status == AudioTranslationStatus.recording 
-                                ? Colors.redAccent 
-                                : Colors.white54,
+                            color: state.status == AudioTranslationStatus.recording
+                                ? AppTheme.errorDark
+                                : AppTheme.darkTextSub,
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.5,
                           ),

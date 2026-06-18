@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme.dart';
 import '../../domain/entities/semantic_zone.dart';
 import '../../domain/services/semantic_navigation_engine.dart';
 import '../providers/context_provider.dart';
@@ -39,12 +40,13 @@ class SemanticZonesBar extends ConsumerWidget {
       margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF161B22),
+        color: AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: _urgencyBorder(urgency),
           width: urgency == UrgencyLevel.critical ? 1.5 : 1.0,
         ),
+        boxShadow: AppTheme.cardShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +62,7 @@ class SemanticZonesBar extends ConsumerWidget {
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: Color(0xFF8B949E),
+                    color: AppTheme.lightTextSub,
                     letterSpacing: 1.2,
                   ),
                 ),
@@ -115,13 +117,13 @@ class SemanticZonesBar extends ConsumerWidget {
   Color _urgencyBorder(UrgencyLevel level) {
     switch (level) {
       case UrgencyLevel.critical:
-        return Colors.redAccent.withValues(alpha: 0.7);
+        return AppTheme.errorLight.withValues(alpha: 0.7);
       case UrgencyLevel.high:
-        return Colors.orangeAccent.withValues(alpha: 0.6);
+        return AppTheme.warningLight.withValues(alpha: 0.6);
       case UrgencyLevel.medium:
-        return const Color(0xFF00ADB5).withValues(alpha: 0.4);
+        return AppTheme.brandPrimary.withValues(alpha: 0.4);
       default:
-        return const Color(0xFF30363D);
+        return AppTheme.lightBorder;
     }
   }
 }
@@ -146,20 +148,20 @@ class _ZoneChip extends StatelessWidget {
     final isSuggested = priority.isSuggested;
 
     final Color baseColor = isActive
-        ? const Color(0xFFFFD700)
+        ? AppTheme.brandPrimary
         : isUrgent
-            ? Colors.redAccent
+            ? AppTheme.errorLight
             : isSuggested
-                ? const Color(0xFF00ADB5)
-                : const Color(0xFF30363D);
+                ? AppTheme.brandPrimary
+                : AppTheme.lightBorder;
 
     final Color textColor = isActive
-        ? Colors.black
+        ? Colors.white
         : isUrgent
-            ? Colors.redAccent
+            ? AppTheme.errorLight
             : isSuggested
-                ? const Color(0xFF00ADB5)
-                : Colors.white70;
+                ? AppTheme.brandPrimary
+                : AppTheme.lightTextSub;
 
     return InkWell(
       onTap: onTap,
@@ -214,7 +216,7 @@ class _UrgencyBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isCritical = level == UrgencyLevel.critical;
-    final color = isCritical ? Colors.redAccent : Colors.orangeAccent;
+    final color = isCritical ? AppTheme.errorLight : AppTheme.warningLight;
     final label = isCritical ? 'URGENTE' : 'ATENCIÓN';
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -260,10 +262,10 @@ class _ActiveQuestion extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFD700).withValues(alpha: 0.08),
+        color: AppTheme.brandPrimary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xFFFFD700).withValues(alpha: 0.35),
+          color: AppTheme.brandPrimary.withValues(alpha: 0.35),
         ),
       ),
       child: Row(
@@ -279,7 +281,7 @@ class _ActiveQuestion extends StatelessWidget {
                   'PREGUNTA  ·  ${zone.label.toUpperCase()}',
                   style: const TextStyle(
                     fontSize: 10,
-                    color: Color(0xFFFFD700),
+                    color: AppTheme.brandPrimary,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.0,
                   ),
@@ -290,7 +292,7 @@ class _ActiveQuestion extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: AppTheme.lightText,
                     height: 1.25,
                   ),
                 ),
@@ -299,7 +301,7 @@ class _ActiveQuestion extends StatelessWidget {
                   'Toca las tarjetas para responder',
                   style: TextStyle(
                     fontSize: 11,
-                    color: Color(0xFF8B949E),
+                    color: AppTheme.lightTextSub,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -321,7 +323,7 @@ class _OtherQuestionsLabel extends StatelessWidget {
       'OTRAS PREGUNTAS',
       style: TextStyle(
         fontSize: 10,
-        color: Color(0xFF8B949E),
+        color: AppTheme.lightTextSub,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.2,
       ),
@@ -338,15 +340,15 @@ class _TagPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: const Color(0xFF21262D),
+        color: AppTheme.lightSubtle,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.redAccent.withValues(alpha: 0.3)),
+        border: Border.all(color: AppTheme.errorLight.withValues(alpha: 0.3)),
       ),
       child: Text(
         '#$label',
         style: const TextStyle(
           fontSize: 10,
-          color: Colors.redAccent,
+          color: AppTheme.errorLight,
           fontWeight: FontWeight.w600,
         ),
       ),

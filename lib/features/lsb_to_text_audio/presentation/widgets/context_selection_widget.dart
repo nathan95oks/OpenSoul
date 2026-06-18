@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../providers/context_provider.dart';
 import '../../domain/entities/semantic_context.dart';
 
@@ -22,7 +23,7 @@ class ContextSelectionWidget extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.w800,
-                color: Colors.black,
+                color: AppTheme.lightText,
                 letterSpacing: -0.5,
               ),
             ),
@@ -31,7 +32,7 @@ class ContextSelectionWidget extends ConsumerWidget {
               '¿Sobre qué necesitas hacer una declaración?',
               style: TextStyle(
                 fontSize: 15,
-                color: Color(0xFF666666),
+                color: AppTheme.lightTextSub,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -43,7 +44,7 @@ class ContextSelectionWidget extends ConsumerWidget {
                 'Diseñado para ser accesible y fácil de usar',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.black.withValues(alpha: 0.35),
+                  color: AppTheme.lightTextSub.withValues(alpha: 0.8),
                 ),
               ),
             ),
@@ -66,7 +67,7 @@ class _ContextButton extends ConsumerStatefulWidget {
 class _ContextButtonState extends ConsumerState<_ContextButton> {
   bool _hovered = false;
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +91,13 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppTheme.lightSurface,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: _hovered ? _orange : Colors.black,
-                width: 2,
+                color: _hovered ? _orange : AppTheme.lightBorder,
+                width: _hovered ? 2 : 1.5,
               ),
+              boxShadow: AppTheme.cardShadow,
             ),
             child: Row(
               children: [
@@ -113,7 +115,7 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
-                          color: _hovered ? _orange : Colors.black,
+                          color: _hovered ? _orange : AppTheme.lightText,
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -121,7 +123,7 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
                         widget.context.description,
                         style: const TextStyle(
                           fontSize: 13,
-                          color: Color(0xFF666666),
+                          color: AppTheme.lightTextSub,
                         ),
                       ),
                     ],
@@ -132,7 +134,7 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
                   size: 14,
                   color: _hovered
                       ? _orange
-                      : Colors.black.withValues(alpha: 0.4),
+                      : AppTheme.lightTextSub,
                 ),
               ],
             ),

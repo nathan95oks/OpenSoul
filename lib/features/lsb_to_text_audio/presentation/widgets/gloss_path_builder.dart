@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../providers/sentence_provider.dart';
 
 /// Constructor de ruta de glosas — reemplaza SentenceBuilder.
@@ -12,7 +13,7 @@ import '../providers/sentence_provider.dart';
 class GlossPathBuilder extends ConsumerWidget {
   const GlossPathBuilder({super.key});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,10 +24,10 @@ class GlossPathBuilder extends ConsumerWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
-          top: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
-          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.06)),
+          top: BorderSide(color: AppTheme.lightBorder),
+          bottom: BorderSide(color: AppTheme.lightBorder),
         ),
       ),
       child: Column(
@@ -37,7 +38,7 @@ class GlossPathBuilder extends ConsumerWidget {
               Icon(
                 Icons.sign_language,
                 size: 13,
-                color: Colors.white.withValues(alpha: 0.35),
+                color: AppTheme.lightTextSub,
               ),
               const SizedBox(width: 6),
               Text(
@@ -45,7 +46,7 @@ class GlossPathBuilder extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.35),
+                  color: AppTheme.lightTextSub,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -78,7 +79,7 @@ class GlossPathBuilder extends ConsumerWidget {
                       child: Text(
                         '›',
                         style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: AppTheme.lightTextSub.withValues(alpha: 0.6),
                           fontSize: 16,
                           fontWeight: FontWeight.w300,
                         ),
@@ -105,7 +106,7 @@ class _GlossNode extends StatelessWidget {
     required this.onRemove,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +138,7 @@ class _GlossNode extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: Colors.white,
+                color: AppTheme.lightText,
                 letterSpacing: 0.3,
               ),
             ),
