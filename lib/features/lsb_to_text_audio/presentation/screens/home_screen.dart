@@ -132,9 +132,18 @@ class HomeScreen extends ConsumerWidget {
                     return null;
                   }
 
+                  // Secuencia con marcadores de rol (p. ej. agresor vs.
+                  // persona agredida en testigo). [sentenceProvider] sigue
+                  // puro para la UI; el marcador solo viaja a los motores.
+                  final markedCards = ref
+                      .read(semanticZonesProvider.notifier)
+                      .orderedGlossesMarked();
+                  final cardsForEngines =
+                      markedCards.isEmpty ? selectedWords : markedCards;
+
                   final assemblerContext = resolveAssemblerContext(
                     contextState.id,
-                    selectedWords,
+                    cardsForEngines,
                     categoryOf,
                   );
                   await ref
@@ -142,7 +151,7 @@ class HomeScreen extends ConsumerWidget {
                       .translateCards(
                         // RVP-03: el backend recibe el contexto de UI real…
                         context: contextState.id,
-                        cards: selectedWords,
+                        cards: cardsForEngines,
                         // …y el motor local el sub-dominio resuelto.
                         assemblerContext: assemblerContext,
                       );

@@ -305,12 +305,24 @@ def analyze_glosses(cards: list) -> dict:
         "sujetos": [], "verbos": [], "documentos": [], "tramites": [],
         "tiempos": [], "instituciones": [], "descriptores": [], "urgencias": [],
         "servicios": [], "estados": [], "objetos": [], "lugares": [],
+        # Descriptores de la persona AGREDIDA (tras el marcador VICTIMA en el
+        # flujo de testigo). Se separan para no fundirlos con el agresor.
+        "victima_descriptores": [],
         "desconocidos": [],
     }
 
+    # Tras el marcador VICTIMA, los descriptores describen a la persona
+    # agredida (no al agresor). Mantiene la coherencia del relato de testigo.
+    victim_mode = False
     for card in cards:
         key = card.upper().strip()
+        if key == "VICTIMA":
+            victim_mode = True
+            continue
         entry = GLOSS_LEXICON.get(key)
+        if entry and entry["rol"] == "DESCRIPTOR" and victim_mode:
+            analysis["victima_descriptores"].append({"glosa": key, **entry})
+            continue
         if entry:
             rol = entry["rol"]
             mapping = {
@@ -514,7 +526,17 @@ def _lugar_text(analysis):
 def _agresor_text(analysis):
     personas = [d for d in analysis["descriptores"] if d.get("persona")]
     rasgos = [d for d in analysis["descriptores"] if not d.get("persona")]
-    base = personas[0]["es"] if personas else "una persona"
+    if personas:
+        # Varios descriptores de persona (género + edad + relación) describen a
+        # UNA misma persona, no a varias: se concatenan como una sola frase
+        # nominal. El primero conserva su artículo ("una mujer") y el resto se
+        # anexa como modificador sin artículo ("una mujer" + "un joven" →
+        # "una mujer joven"). Antes solo se usaba personas[0] y se perdía el resto.
+        base = personas[0]["es"]
+        for p in personas[1:]:
+            base += " " + re.sub(r'^(un|una|unos|unas)\s+', '', p["es"])
+    else:
+        base = "una persona"
     if rasgos:
         base += " " + _join_es([r["es"] for r in rasgos])
     return base

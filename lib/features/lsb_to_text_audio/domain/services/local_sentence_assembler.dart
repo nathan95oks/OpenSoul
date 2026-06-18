@@ -17,6 +17,13 @@
 /// con sintaxis española correcta, reflejando el dialecto LSB de Cochabamba
 /// documentado en el perfil. Espeja —de forma compacta y offline— la lógica
 /// del `GLOSS_LEXICON` del backend Lambda.
+/// Marcador sintético (no es una glosa del catálogo) que separa, en la
+/// secuencia plana, a la persona AGRESORA de la persona AGREDIDA en el flujo
+/// de testigo. La capa de presentación lo inyecta antes de las respuestas de
+/// la zona "víctima" (ver `SemanticZone.leadGloss`); el ensamblador y el
+/// backend lo usan para no fundir ambos descriptores en una sola persona.
+const String kVictimMarker = 'VICTIMA';
+
 class LocalSentenceAssembler {
   const LocalSentenceAssembler();
 
@@ -63,6 +70,7 @@ class LocalSentenceAssembler {
     final hay = _stripDiacritics(text.toLowerCase());
     final missing = <String>[];
     for (final t in tokens) {
+      if (t == kVictimMarker) continue; // marcador de control, no es contenido
       if (_inherentImplicit.contains(t)) continue;
       if (_isRepresented(t, hay)) continue;
       final lex = _lexicon[t];
@@ -118,6 +126,11 @@ class LocalSentenceAssembler {
     required String backendText,
     required List<String> glosses,
   }) {
+    // Los marcadores de control (p. ej. VICTIMA) no son contenido: no cuentan
+    // para el conteo de palabras ni para la cobertura.
+    glosses = glosses
+        .where((g) => g.trim().toUpperCase() != kVictimMarker)
+        .toList();
     final trimmed = backendText.trim();
     if (trimmed.isEmpty) return true;
     if (glosses.isEmpty) return false;
@@ -188,7 +201,14 @@ class LocalSentenceAssembler {
 
   _Roles _classify(List<String> tokens) {
     final r = _Roles();
+    // Tras el marcador [kVictimMarker], los descriptores de persona pasan a
+    // describir a la persona AGREDIDA (no al agresor). Flujo de testigo.
+    var victimMode = false;
     for (final t in tokens) {
+      if (t == kVictimMarker) {
+        victimMode = true;
+        continue;
+      }
       final e = _lexicon[t];
       if (e == null) {
         // Glosa desconocida: la conservamos como objeto/detalle genérico
@@ -198,11 +218,25 @@ class LocalSentenceAssembler {
       }
       switch (e.role) {
         case _Role.sujeto:             r.subject ??= e.es; break;
-        case _Role.personaDesc:        if (!r.perpetrators.contains(e.es)) r.perpetrators.add(e.es); break;
+        case _Role.personaDesc:
+          if (victimMode) {
+            if (!r.victims.contains(e.es)) r.victims.add(e.es);
+          } else if (!r.perpetrators.contains(e.es)) {
+            r.perpetrators.add(e.es);
+          }
+          break;
         // Bug fix #2: personaDescPlural almacena el sujeto plural por separado
         // para que el compositor sepa usar verbo plural (agredieron).
-        case _Role.personaDescPlural:  r.perpetratorPlural ??= e.es; break;
-        case _Role.rasgo:              r.traits.add(e.es); break;
+        case _Role.personaDescPlural:
+          if (victimMode) {
+            r.victimPlural ??= e.es;
+          } else {
+            r.perpetratorPlural ??= e.es;
+          }
+          break;
+        case _Role.rasgo:
+          (victimMode ? r.victimTraits : r.traits).add(e.es);
+          break;
         case _Role.verboAgresion:      r.aggression ??= e.es; break;
         case _Role.verboAccion:        r.action ??= e.es; break;
         case _Role.arma:               r.weapon ??= e.es; break;
@@ -264,7 +298,7 @@ class LocalSentenceAssembler {
     } else if (r.aggression != null || _hasAggressor(r)) {
       // Cláusula del agresor + acción.
       final subject = _subjectPhrase(r);
-      final isPlural = r.perpetratorPlural != null || r.perpetrators.length > 1;
+      final isPlural = r.isPlural;
       final defaultVerb = ctx == 'violencia'
           ? (isPlural ? 'agredieron' : 'agredió')
           : (isPlural ? 'asaltaron' : 'asaltó');
@@ -493,7 +527,12 @@ class LocalSentenceAssembler {
 
     final hasActor = _hasAggressor(r);
     final subject = hasActor ? _subjectPhrase(r) : 'una persona';
-    final isPlural = r.perpetratorPlural != null || r.perpetrators.length > 1;
+    final isPlural = r.isPlural;
+    // Persona AGREDIDA (separada del agresor por [kVictimMarker]). Si no se
+    // indicó, el complemento por defecto sigue siendo "otra persona".
+    final victim = _hasVictim(r)
+        ? _personPhrase(r.victims, r.victimPlural, r.victimTraits)
+        : null;
 
     if (r.aggression != null) {
       final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
@@ -503,7 +542,13 @@ class LocalSentenceAssembler {
         clause += ' $complement';
         r.objects.clear();
         r.documents.clear();
-      } else {
+      }
+      // Objeto directo: la persona agredida ("a un hombre mayor"). Si hubo
+      // objeto sustraído y víctima → "robó el celular a un hombre". Si no hay
+      // ni objeto ni víctima, se mantiene el genérico "a otra persona".
+      if (victim != null) {
+        clause += ' a $victim';
+      } else if (complement.isEmpty) {
         clause += ' a otra persona';
       }
       if (r.weapon != null) {
@@ -523,6 +568,7 @@ class LocalSentenceAssembler {
       r.perpetrators.clear();
       r.perpetratorPlural = null;
       r.traits.clear();
+      _clearVictim(r);
     } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
       final what = _join([...r.objects, ...r.documents]);
       var clause = 'presencié un hecho relacionado con $what';
@@ -537,8 +583,10 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(clause)}.');
       r.objects.clear();
       r.documents.clear();
-    } else if (hasActor) {
-      var clause = 'observé a $subject';
+    } else if (hasActor || victim != null) {
+      // Se describió a personas pero sin acción explícita.
+      var clause = hasActor ? 'observé a $subject' : 'observé a $victim';
+      if (hasActor && victim != null) clause += ' y a $victim';
       if (r.place != null) {
         clause += ' ${r.place}';
         r.place = null;
@@ -551,10 +599,21 @@ class LocalSentenceAssembler {
       r.perpetrators.clear();
       r.perpetratorPlural = null;
       r.traits.clear();
+      _clearVictim(r);
     }
 
     _supplements(r, sentences);
     return _stitch(lead, sentences, tokens);
+  }
+
+  /// true si se describió a la persona agredida (flujo de testigo).
+  bool _hasVictim(_Roles r) =>
+      r.victims.isNotEmpty || r.victimPlural != null || r.victimTraits.isNotEmpty;
+
+  void _clearVictim(_Roles r) {
+    r.victims.clear();
+    r.victimPlural = null;
+    r.victimTraits.clear();
   }
 
   /// fallback → ensamblaje genérico fiel a los roles detectados.
@@ -609,8 +668,7 @@ class LocalSentenceAssembler {
       final hasActor = _hasAggressor(r);
       final subject = hasActor ? _subjectPhrase(r) : 'una persona';
       if (r.aggression != null) {
-        final isPlural =
-            r.perpetratorPlural != null || r.perpetrators.length > 1;
+        final isPlural = r.isPlural;
         final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
         var clause = '$subject me $verb';
         final comp = _join([...r.objects, ...r.documents]);
@@ -737,41 +795,53 @@ class LocalSentenceAssembler {
   ///
   /// Cuando el sujeto es genérico ("una persona") los adjetivos simples
   /// se convierten a su forma femenina para mantener concordancia.
-  String _subjectPhrase(_Roles r) {
+  String _subjectPhrase(_Roles r) =>
+      _personPhrase(r.perpetrators, r.perpetratorPlural, r.traits);
+
+  /// Frase nominal de una persona a partir de sus descriptores, su forma
+  /// plural explícita (DOS/TRES) y sus rasgos. Reutilizable para el agresor
+  /// ([_subjectPhrase]) y para la persona agredida (flujo de testigo).
+  String _personPhrase(
+      List<String> persons, String? plural, List<String> traits) {
     String base;
-    if (r.perpetratorPlural != null) {
-      base = r.perpetratorPlural!;
-      if (r.perpetrators.isNotEmpty) {
-        base += ' (${_join(r.perpetrators)})';
+    if (plural != null) {
+      base = plural;
+      if (persons.isNotEmpty) {
+        base += ' (${_join(persons)})';
       }
     } else {
-      if (r.perpetrators.isNotEmpty) {
+      if (persons.isNotEmpty) {
+        // Los descriptores describen a UNA persona (género + edad + relación),
+        // no a varias: se concatenan como una sola frase nominal — el primero
+        // conserva su artículo ("una mujer") y el resto se anexa como
+        // modificador sin artículo ni "y" ("una mujer" + "un joven" →
+        // "una mujer joven"). Unirlos con "y" sugeriría personas distintas.
         final parts = <String>[];
-        for (var i = 0; i < r.perpetrators.length; i++) {
-          var p = r.perpetrators[i];
+        for (var i = 0; i < persons.length; i++) {
+          var p = persons[i];
           if (i > 0) {
             p = p.replaceFirst(RegExp(r'^un\s+'), '').replaceFirst(RegExp(r'^una\s+'), '');
           }
           parts.add(p);
         }
-        base = _join(parts);
+        base = parts.join(' ');
       } else {
         base = 'una persona';
       }
     }
-    
+
     // Concordancia de género: cualquier sujeto femenino ("una persona", "una
     // mujer"…) feminiza sus adjetivos simples ("alto" → "alta"), no solo el
     // genérico. Los complementos preposicionales ("con gorra", "de color
     // negro") son invariables y se dejan tal cual.
     final isFeminine = base.startsWith('una ');
-    if (r.traits.isEmpty) return base;
+    if (traits.isEmpty) return base;
 
     // Separa adjetivos simples de frases con preposición (empieza con "con"/"de")
-    var adjectives = r.traits
+    var adjectives = traits
         .where((t) => !t.startsWith('con ') && !t.startsWith('de '))
         .toList();
-    final phrases = r.traits
+    final phrases = traits
         .where((t) => t.startsWith('con ') || t.startsWith('de '))
         .toList();
 
@@ -1080,6 +1150,10 @@ class _Roles {
   String? subject;
   final List<String> perpetrators = [];
   String? perpetratorPlural; // Bug fix #2: sujeto plural (DOS/TRES)
+  // Persona AGREDIDA (flujo de testigo): descriptores tras [kVictimMarker].
+  final List<String> victims = [];
+  String? victimPlural;
+  final List<String> victimTraits = [];
   String? aggression;
   String? action;
   String? weapon;
@@ -1095,4 +1169,11 @@ class _Roles {
   final List<String> procedures = [];
   final List<String> purposes = [];
   final List<String> unknown = [];
+
+  /// El sujeto es plural SÓLO cuando se eligió una cantidad explícita
+  /// (DOS/TRES → [perpetratorPlural]). Varios descriptores de persona
+  /// (p. ej. MUJER + JOVEN) describen a UNA misma persona —género, edad,
+  /// relación— y no implican varias personas. Sin esto, "mujer joven"
+  /// se interpretaba como dos agresores con verbo en plural.
+  bool get isPlural => perpetratorPlural != null;
 }

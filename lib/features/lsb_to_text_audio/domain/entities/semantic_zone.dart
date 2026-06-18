@@ -95,6 +95,13 @@ class SemanticZone {
   /// (ej: la zona `emergencia` lleva [urgente, ayuda]).
   final List<String> contextTags;
 
+  /// Glosa sintética (no del catálogo) que la capa de presentación inyecta en
+  /// la secuencia ANTES de las respuestas de esta zona al aplanarla. Permite
+  /// marcar un cambio de rol semántico —p. ej. el flujo de testigo usa el
+  /// marcador de "persona agredida" para que el motor no confunda a la víctima
+  /// con el agresor. Si es null, no se inyecta nada.
+  final String? leadGloss;
+
   const SemanticZone({
     required this.id,
     required this.label,
@@ -110,6 +117,7 @@ class SemanticZone {
     this.strictContext = false,
     this.maxPicks = 1,
     this.contextTags = const [],
+    this.leadGloss,
   });
 
   SemanticZone copyWith({
@@ -131,6 +139,7 @@ class SemanticZone {
       strictContext: strictContext,
       maxPicks: maxPicks,
       contextTags: contextTags,
+      leadGloss: leadGloss,
     );
   }
 }

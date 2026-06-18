@@ -290,4 +290,114 @@ void main() {
       );
     });
   });
+
+  // Regresión: varios descriptores de persona (género + edad + relación)
+  // describen a UNA misma persona y NO deben tratarse como varias ni usar
+  // verbo en plural. La pluralidad solo proviene de una cantidad explícita
+  // (DOS/TRES). Reportado en el flujo "Declarar como testigo": al elegir
+  // MUJER + JOVEN se generaba "una mujer y joven … agredieron".
+  group('assemble — descriptores de persona = una sola persona', () {
+    test('testigo: MUJER + JOVEN es una persona en singular', () {
+      final s = asm.assemble(
+        contextId: 'otro',
+        glosses: ['PEGAR', 'MUJER', 'JOVEN'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'una mujer joven'), true,
+          reason: 'debe combinarse en una sola frase nominal: "$s"');
+      // No debe unir los descriptores con "y" (sugeriría dos personas).
+      expect(has(s, 'mujer y joven'), false, reason: '"$s"');
+      // Verbo en singular: una sola persona.
+      expect(has(s, 'golpeó'), true, reason: '"$s"');
+      expect(has(s, 'golpearon'), false, reason: '"$s"');
+    });
+
+    test('testigo: solo descriptores (sin verbo) es una persona', () {
+      final s = asm.assemble(
+        contextId: 'otro',
+        glosses: ['MUJER', 'JOVEN'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'una mujer joven'), true, reason: '"$s"');
+      expect(has(s, 'mujer y joven'), false, reason: '"$s"');
+    });
+
+    test('robo: HOMBRE + ANCIANO en singular', () {
+      final s = asm.assemble(
+        contextId: 'denuncia_robo',
+        glosses: ['HOMBRE', 'ANCIANO', 'ROBAR', 'CELULAR'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'me robó'), true, reason: 'singular: "$s"');
+      expect(has(s, 'robaron'), false, reason: '"$s"');
+    });
+
+    test('DOS sí produce sujeto y verbo en plural', () {
+      final s = asm.assemble(
+        contextId: 'denuncia_robo',
+        glosses: ['DOS', 'HOMBRE', 'ROBAR', 'CELULAR'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'dos personas'), true, reason: '"$s"');
+      expect(has(s, 'robaron'), true, reason: 'plural con cantidad: "$s"');
+    });
+  });
+
+  // Flujo de testigo: separación agresor / persona agredida mediante el
+  // marcador [kVictimMarker]. Los descriptores tras el marcador describen a
+  // la víctima, no al agresor.
+  group('assemble — testigo: agresor vs. persona agredida', () {
+    test('agresor y víctima distintos', () {
+      final s = asm.assemble(
+        contextId: 'otro',
+        glosses: ['PEGAR', 'MUJER', 'JOVEN', kVictimMarker, 'HOMBRE'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'una mujer joven golpeó a un hombre'), true, reason: '"$s"');
+      // El marcador de control nunca debe aparecer como contenido.
+      expect(s.toLowerCase().contains('victima'), false, reason: '"$s"');
+    });
+
+    test('sin víctima usa el genérico "a otra persona"', () {
+      final s = asm.assemble(
+        contextId: 'otro',
+        glosses: ['PEGAR', 'MUJER', 'JOVEN'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'a otra persona'), true, reason: '"$s"');
+    });
+
+    test('víctima con cantidad explícita va en plural', () {
+      final s = asm.assemble(
+        contextId: 'otro',
+        glosses: ['PEGAR', 'HOMBRE', kVictimMarker, 'DOS', 'NIÑO'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'a dos personas'), true, reason: '"$s"');
+      expect(s.toLowerCase().contains('victima'), false, reason: '"$s"');
+    });
+
+    test('robo presenciado: objeto y víctima coexisten', () {
+      final s = asm.assemble(
+        contextId: 'otro',
+        glosses: ['ROBAR', 'HOMBRE', 'CELULAR', kVictimMarker, 'MUJER'],
+      );
+      expectWellFormed(s);
+      expect(has(s, 'mi celular'), true, reason: '"$s"');
+      expect(has(s, 'a una mujer'), true, reason: '"$s"');
+    });
+
+    test('el marcador no afecta la detección de degeneración', () {
+      // El backend produce un texto válido; el marcador no debe contar como
+      // glosa no cubierta ni inflar el conteo de palabras.
+      expect(
+        asm.isBackendDegenerate(
+          backendText:
+              'Presencié cómo un hombre golpeó a una mujer en la calle.',
+          glosses: ['PEGAR', 'HOMBRE', kVictimMarker, 'MUJER', 'CALLE'],
+        ),
+        false,
+      );
+    });
+  });
 }
