@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../domain/repositories/translation_repository.dart';
 import '../controllers/translation_controller.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -106,6 +108,15 @@ class DeclarationResultScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 12),
+
+                    // ── Copiar la declaración al portapapeles ────────────
+                    _FullWidthBtn(
+                      label: 'Copiar al portapapeles',
+                      icon: Icons.copy_outlined,
+                      filled: false,
+                      onTap: () => _copyToClipboard(context, result),
+                    ),
                     const SizedBox(height: 16),
 
                     // ── Controles de audio + indicador ───────────────────
@@ -205,6 +216,27 @@ class DeclarationResultScreen extends ConsumerWidget {
     } else {
       context.go('/lsb-to-audio');
     }
+  }
+
+  /// Copia la declaración generada al portapapeles del sistema. Prefiere el
+  /// texto refinado ([generatedText]); si estuviera vacío, recurre a la oración
+  /// base del motor local ([baseSentence]). Confirma con un SnackBar.
+  Future<void> _copyToClipboard(
+      BuildContext context, TranslationResult result) async {
+    final text = result.generatedText.isNotEmpty
+        ? result.generatedText
+        : result.baseSentence;
+    await Clipboard.setData(ClipboardData(text: text));
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        const SnackBar(
+          content: Text('Declaración copiada al portapapeles'),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
   }
 
   /// Limpia todo el estado y regresa al inicio del flujo (misma categoría

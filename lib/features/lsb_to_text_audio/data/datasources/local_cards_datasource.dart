@@ -538,6 +538,11 @@ class LocalCardsDataSource {
       priority: 6, suggestedNextCardIds: [], isFrequent: true, isEmergency: false, semanticIcon: 'nights_stay'),
   ];
 
+  /// Vista pública e inmutable del catálogo completo de tarjetas.
+  /// Usada por las pruebas de cobertura del lexicón (catálogo ↔ ensamblador
+  /// local ↔ GLOSS_LEXICON del backend) sin exponer la lista mutable interna.
+  List<LsbCard> get cards => List.unmodifiable(_cards);
+
   /// Orden predefinido de las categorías semánticas para exploración libre.
   static const _categoryOrder = [
     'Identificación', 'Descripción', 'Agresión', 'Armas', 'Acciones',
