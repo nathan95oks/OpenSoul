@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 
@@ -36,21 +37,21 @@ class GuidedFlowControls extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF161B22),
+              color: AppTheme.lightSubtle,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFF30363D)),
+              border: Border.all(color: AppTheme.lightBorder),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(Icons.check_circle_outline,
-                    size: 14, color: Color(0xFF3FB950)),
+                    size: 14, color: AppTheme.successLight),
                 const SizedBox(width: 6),
                 Text(
                   'Pregunta $answered de $total',
                   style: const TextStyle(
                     fontSize: 11,
-                    color: Color(0xFF8B949E),
+                    color: AppTheme.lightTextSub,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -65,7 +66,7 @@ class GuidedFlowControls extends ConsumerWidget {
                   .read(semanticZonesProvider.notifier)
                   .goToNextZone(),
               style: TextButton.styleFrom(
-                foregroundColor: const Color(0xFF8B949E),
+                foregroundColor: AppTheme.lightTextSub,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               ),

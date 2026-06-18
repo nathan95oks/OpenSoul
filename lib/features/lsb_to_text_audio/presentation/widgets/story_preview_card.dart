@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/story_preview_provider.dart';
 
@@ -14,7 +15,7 @@ import '../providers/story_preview_provider.dart';
 class StoryPreviewCard extends ConsumerWidget {
   const StoryPreviewCard({super.key});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,11 +30,10 @@ class StoryPreviewCard extends ConsumerWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF0A0A0A),
+          color: AppTheme.lightSurface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.06),
-          ),
+          border: Border.all(color: AppTheme.lightBorder),
+          boxShadow: AppTheme.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +45,7 @@ class StoryPreviewCard extends ConsumerWidget {
                 Icon(
                   Icons.auto_stories_outlined,
                   size: 13,
-                  color: Colors.white.withValues(alpha: 0.35),
+                  color: AppTheme.lightTextSub,
                 ),
                 const SizedBox(width: 6),
                 Text(
@@ -53,7 +53,7 @@ class StoryPreviewCard extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white.withValues(alpha: 0.35),
+                    color: AppTheme.lightTextSub,
                     letterSpacing: 1.2,
                   ),
                 ),
@@ -68,10 +68,10 @@ class StoryPreviewCard extends ConsumerWidget {
               child: Text(
                 preview.isNotEmpty ? preview : '...',
                 key: ValueKey(preview),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: AppTheme.lightText,
                   height: 1.45,
                 ),
               ),
@@ -99,7 +99,7 @@ class StoryPreviewCard extends ConsumerWidget {
                       '·',
                       style: TextStyle(
                         fontSize: 11,
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: AppTheme.lightTextSub.withValues(alpha: 0.6),
                       ),
                     ),
                 ],

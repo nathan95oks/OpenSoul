@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../controllers/translation_controller.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -92,7 +93,7 @@ class _ContextChip extends StatelessWidget {
   final String label;
   const _ContextChip({required this.emoji, required this.label});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +134,7 @@ class _ProgressBar extends StatelessWidget {
   final int total;
   const _ProgressBar({required this.reached, required this.total});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -145,17 +146,17 @@ class _ProgressBar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: value,
             minHeight: 5,
-            backgroundColor: Colors.black.withValues(alpha: 0.08),
+            backgroundColor: AppTheme.lightBorder,
             valueColor: const AlwaysStoppedAnimation<Color>(_orange),
           ),
         ),
         const SizedBox(height: 6),
         Text(
           'Pregunta $reached de $total',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Colors.black.withValues(alpha: 0.45),
+            color: AppTheme.lightTextSub,
             letterSpacing: 0.3,
           ),
         ),
@@ -177,7 +178,7 @@ class _HistoryHeader extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
-            color: Colors.black.withValues(alpha: 0.45),
+            color: AppTheme.lightTextSub,
             letterSpacing: 1.0,
           ),
         ),
@@ -185,7 +186,7 @@ class _HistoryHeader extends StatelessWidget {
         Expanded(
           child: Container(
             height: 1,
-            color: Colors.black.withValues(alpha: 0.10),
+            color: AppTheme.lightBorder,
           ),
         ),
       ],
@@ -207,7 +208,7 @@ class _CompactAnswerRow extends StatelessWidget {
     required this.onEditTap,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +225,7 @@ class _CompactAnswerRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
-        color: Colors.white,
+        color: AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
@@ -233,7 +234,7 @@ class _CompactAnswerRow extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.black.withValues(alpha: 0.10)),
+              border: Border.all(color: AppTheme.lightBorder),
             ),
             child: Row(
               children: [
@@ -243,9 +244,9 @@ class _CompactAnswerRow extends StatelessWidget {
                     children: [
                       Text(
                         question,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 11.5,
-                          color: Colors.black.withValues(alpha: 0.5),
+                          color: AppTheme.lightTextSub,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -256,7 +257,7 @@ class _CompactAnswerRow extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 13,
                             fontStyle: FontStyle.italic,
-                            color: Colors.black.withValues(alpha: 0.35),
+                            color: AppTheme.lightTextSub.withValues(alpha: 0.7),
                           ),
                         )
                       else
@@ -287,7 +288,7 @@ class _MiniChip extends StatelessWidget {
   final String label;
   const _MiniChip({required this.label});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -323,12 +324,12 @@ class _ActiveCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 18, 14, 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.10)),
+        border: Border.all(color: AppTheme.lightBorder),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppTheme.brandPrimary.withValues(alpha: 0.08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -361,7 +362,7 @@ class GuidedNavBar extends ConsumerWidget {
     }
 
     return Container(
-      color: Colors.white,
+      color: AppTheme.lightBg,
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
       child: _NavControls(
         canGoBack: zonesState.canGoBack,
@@ -396,7 +397,7 @@ class _ActiveQuestion extends StatelessWidget {
       style: const TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.w800,
-        color: Colors.black,
+        color: AppTheme.lightText,
         height: 1.25,
         letterSpacing: -0.3,
       ),
@@ -421,7 +422,7 @@ class _NavControls extends StatelessWidget {
     required this.onContinue,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -492,19 +493,19 @@ class _NavButton extends StatelessWidget {
     required this.onTap,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
     final bg = filled
         ? _orange
-        : Colors.white;
+        : AppTheme.lightSurface;
     final fg = filled
         ? Colors.white
-        : (enabled ? Colors.black : Colors.black.withValues(alpha: 0.3));
+        : (enabled ? AppTheme.lightText : AppTheme.lightTextSub.withValues(alpha: 0.5));
     final borderColor = filled
         ? _orange
-        : (enabled ? Colors.black : Colors.black.withValues(alpha: 0.2));
+        : (enabled ? AppTheme.lightBorder : AppTheme.lightBorder.withValues(alpha: 0.5));
 
     return SizedBox(
       height: 48,

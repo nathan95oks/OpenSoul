@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../app/theme.dart';
 import '../../domain/entities/semantic_zone.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -14,7 +15,7 @@ import '../providers/semantic_zones_provider.dart';
 class ContextPathIndicator extends ConsumerWidget {
   const ContextPathIndicator({super.key});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,10 +49,10 @@ class ContextPathIndicator extends ConsumerWidget {
               const SizedBox(width: 8),
               Text(
                 ctx.name.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: AppTheme.lightTextSub,
                   letterSpacing: 1.0,
                 ),
               ),
@@ -61,7 +62,7 @@ class ContextPathIndicator extends ConsumerWidget {
                   child: Text(
                     '›',
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.25),
+                      color: AppTheme.lightTextSub.withValues(alpha: 0.6),
                       fontSize: 13,
                     ),
                   ),
@@ -74,7 +75,7 @@ class ContextPathIndicator extends ConsumerWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: AppTheme.lightText,
                       height: 1.2,
                     ),
                     maxLines: 1,
@@ -152,7 +153,7 @@ class _ZoneChip extends StatelessWidget {
     required this.onTap,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +170,7 @@ class _ZoneChip extends StatelessWidget {
                 ? _orange
                 : isSuggested
                     ? _orange.withValues(alpha: 0.35)
-                    : Colors.white.withValues(alpha: 0.1),
+                    : AppTheme.lightBorder,
           ),
         ),
         child: Row(
@@ -183,8 +184,8 @@ class _ZoneChip extends StatelessWidget {
                 fontSize: 11,
                 fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
                 color: isActive
-                    ? Colors.black
-                    : Colors.white.withValues(alpha: isVisited ? 0.55 : 0.85),
+                    ? Colors.white
+                    : AppTheme.lightText.withValues(alpha: isVisited ? 0.55 : 0.85),
               ),
             ),
             if (isVisited && !isActive) ...[
@@ -192,7 +193,7 @@ class _ZoneChip extends StatelessWidget {
               Icon(
                 Icons.check,
                 size: 10,
-                color: Colors.white.withValues(alpha: 0.4),
+                color: AppTheme.lightTextSub,
               ),
             ],
           ],

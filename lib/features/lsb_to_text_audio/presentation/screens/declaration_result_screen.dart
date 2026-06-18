@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/theme.dart';
 import '../../domain/repositories/translation_repository.dart';
 import '../controllers/translation_controller.dart';
 import '../providers/sentence_provider.dart';
@@ -23,7 +24,7 @@ import '../widgets/card_grid.dart' show expandedAnswersProvider;
 class DeclarationResultScreen extends ConsumerWidget {
   const DeclarationResultScreen({super.key});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,25 +34,25 @@ class DeclarationResultScreen extends ConsumerWidget {
     final playback = ref.watch(audioPlaybackProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppTheme.lightBg,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.lightBg,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: AppTheme.lightText),
           tooltip: 'Volver a editar',
           onPressed: () => _backToEdit(context, ref),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(height: 2, color: Colors.black),
+          child: Container(height: 1, color: AppTheme.lightBorder),
         ),
         title: const Text(
           'Declaración',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
-            color: Colors.black,
+            color: AppTheme.lightText,
             letterSpacing: -0.3,
           ),
         ),
@@ -69,14 +70,14 @@ class DeclarationResultScreen extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
-                        color: Colors.black,
+                        color: AppTheme.lightText,
                         letterSpacing: -0.3,
                       ),
                     ),
                     const SizedBox(height: 4),
                     const Text(
                       'Tu declaración ha sido generada',
-                      style: TextStyle(fontSize: 14, color: Color(0xFF666666)),
+                      style: TextStyle(fontSize: 14, color: AppTheme.lightTextSub),
                     ),
                     const SizedBox(height: 20),
 
@@ -149,16 +150,17 @@ class DeclarationResultScreen extends ConsumerWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppTheme.lightSurface,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.black, width: 2),
+                        border: Border.all(color: AppTheme.lightBorder, width: 1.5),
+                        boxShadow: AppTheme.cardShadow,
                       ),
                       child: Text(
                         glosses.map((g) => g.replaceAll('_', ' ')).join(' • '),
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: Colors.black,
+                          color: AppTheme.lightText,
                           height: 1.4,
                         ),
                       ),
@@ -169,16 +171,16 @@ class DeclarationResultScreen extends ConsumerWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F5F5),
+                        color: AppTheme.lightSubtle,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFE0E0E0)),
+                        border: Border.all(color: AppTheme.lightBorder),
                       ),
                       child: const Text(
                         'Esta traducción puede ser presentada en instituciones '
                         'públicas para formalizar tu declaración.',
                         style: TextStyle(
                           fontSize: 13,
-                          color: Color(0xFF555555),
+                          color: AppTheme.lightTextSub,
                           height: 1.5,
                         ),
                       ),
@@ -263,13 +265,13 @@ class _OriginChip extends StatelessWidget {
   final bool bedrockUsed;
   const _OriginChip({required this.bedrockUsed});
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
     final (icon, label, color) = bedrockUsed
         ? (Icons.auto_awesome, 'Refinado por IA', _orange)
-        : (Icons.offline_bolt_outlined, 'Motor local', const Color(0xFF555555));
+        : (Icons.offline_bolt_outlined, 'Motor local', AppTheme.lightTextSub);
     return Semantics(
       label: bedrockUsed
           ? 'Declaración refinada por inteligencia artificial'
@@ -311,7 +313,7 @@ class _Label extends StatelessWidget {
       text,
       style: const TextStyle(
         fontSize: 11,
-        color: Color(0xFF888888),
+        color: AppTheme.lightTextSub,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.0,
       ),
@@ -334,7 +336,7 @@ class _AudioControls extends StatelessWidget {
     required this.onPause,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
@@ -417,20 +419,20 @@ class _FullWidthBtn extends StatelessWidget {
     required this.onTap,
   });
 
-  static const _orange = Color(0xFFFF6B00);
+  static const _orange = AppTheme.brandPrimary;
 
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
     final fg = filled
         ? Colors.white
-        : (enabled ? Colors.black : Colors.black.withValues(alpha: 0.3));
+        : (enabled ? AppTheme.lightText : AppTheme.lightTextSub.withValues(alpha: 0.5));
     final bg = filled
-        ? (enabled ? _orange : const Color(0xFFE5E5E5))
-        : Colors.white;
+        ? (enabled ? _orange : AppTheme.lightBorder)
+        : AppTheme.lightSurface;
     final borderColor = filled
         ? bg
-        : (enabled ? const Color(0xFFCCCCCC) : const Color(0xFFE5E5E5));
+        : (enabled ? AppTheme.lightBorder : AppTheme.lightBorder.withValues(alpha: 0.5));
 
     return SizedBox(
       height: 52,
@@ -493,7 +495,7 @@ class _EmptyResult extends StatelessWidget {
             const Text(
               'No hay ninguna declaración generada todavía.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15, color: Color(0xFF666666)),
+              style: TextStyle(fontSize: 15, color: AppTheme.lightTextSub),
             ),
             const SizedBox(height: 16),
             _FullWidthBtn(
