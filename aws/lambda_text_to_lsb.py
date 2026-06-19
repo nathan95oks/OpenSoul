@@ -126,6 +126,17 @@ REGLAS LINGÜÍSTICAS Y GRAMATICALES OBLIGATORIAS DE LSB:
    - Los nombres propios de personas, apellidos, calles, marcas y siglas (ej: "Isaac", "Segip", "FELCC") deben deletrearse obligatoriamente letra por letra. Descomponlos en sus letras individuales en la lista de glosas (ej: "Isaac" -> ["I", "S", "A", "A", "C"], "Segip" -> ["S", "E", "G", "I", "P"]).
    - Los sustantivos comunes y verbos que NO estén en la lista de glosas disponibles (ej: "testigo", "discriminación") NO deben deletrearse letra por letra. Deben ser colocados como la palabra completa en mayúsculas en la lista de glosas (ej: "TESTIGO", "DISCRIMINACION") para mostrar la simulación en la interfaz.
 
+6. MANEJO DE TIEMPOS VERBALES (PASADO, PRESENTE, FUTURO) EN LSB:
+   - En LSB los verbos no se conjugan; se escriben siempre en INFINITIVO (ej: "llamé" / "llame" -> "LLAMAR", "comí" -> "COMER", "iré" -> "IR").
+   - El tiempo de la oración se debe indicar agregando un MARCADOR TEMPORAL al inicio de la frase LSB:
+     * Tiempo Pasado: Si la acción ocurrió en el pasado (ej. "llamé", "llamó", "llame" en contexto pasado), agrega obligatoriamente la glosa general "PASADO" (o "AYER"/"ANTES" si se menciona explícitamente) al inicio de la frase LSB.
+       Ejemplo: "Yo llamé al policía" o "Yo llame al policía" (pasado) -> ["PASADO", "YO", "POLICIA", "LLAMAR"]
+       Ejemplo: "Ayer yo llamé al policía" -> ["AYER", "YO", "POLICIA", "LLAMAR"]
+     * Tiempo Futuro: Si la acción ocurrirá en el futuro (ej. "llamaré", "llamará"), agrega obligatoriamente la glosa general "FUTURO" (o "MAÑANA"/"DESPUES" si se menciona explícitamente) al inicio de la frase LSB.
+       Ejemplo: "Yo llamaré al policía" -> ["FUTURO", "YO", "POLICIA", "LLAMAR"]
+     * Tiempo Presente: Si la acción ocurre en el presente (ej. "llamo", "llama" actual), se puede agregar la glosa "AHORA" o "HOY" al inicio si es necesario para enfatizar el tiempo.
+       Ejemplo: "Yo llamo al policía" -> ["AHORA", "YO", "POLICIA", "LLAMAR"]
+
 GLOSAS DISPONIBLES EN EL DICCIONARIO DEL AVATAR:
 [{gloss_list}]
 
