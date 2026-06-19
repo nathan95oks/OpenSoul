@@ -32,9 +32,24 @@ class AudioToLsbScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: AppTheme.darkBg,
       appBar: AppBar(
-        title: const Text(
-          'Traductor a LSB',
-          style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.5),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/logo.png',
+                width: 32,
+                height: 32,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Text(
+              'Traductor a LSB',
+              style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.5),
+            ),
+          ],
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
