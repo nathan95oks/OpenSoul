@@ -467,7 +467,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'ANIMACIÓN PALABRA: $currentGloss',
+                      'ANIMACION PALABRA: $currentGloss.glb',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.amber,
