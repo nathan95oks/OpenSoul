@@ -62,14 +62,28 @@ class HomeScreen extends ConsumerWidget {
         preferredSize: const Size.fromHeight(1),
         child: Container(height: 1, color: AppTheme.lightBorder),
       ),
-      title: const Text(
-        'OpenSoul',
-        style: TextStyle(
-          fontSize: 22,
-          fontWeight: FontWeight.w800,
-          color: AppTheme.brandPrimary,
-          letterSpacing: -0.3,
-        ),
+      title: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/logo.png',
+              width: 32,
+              height: 32,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(width: 10),
+          const Text(
+            'OpenSoul',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: AppTheme.brandPrimary,
+              letterSpacing: -0.3,
+            ),
+          ),
+        ],
       ),
       actions: [
         if (contextState != null)
