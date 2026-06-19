@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'splash_screen.dart';
 import 'main_navigation_screen.dart';
 import '../features/lsb_to_text_audio/presentation/screens/home_screen.dart';
 import '../features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
@@ -9,6 +10,10 @@ final appRouter = GoRouter(
   routes: [
     GoRoute(
       path: '/',
+      builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: '/home',
       builder: (context, state) => const MainNavigationScreen(),
     ),
     GoRoute(
