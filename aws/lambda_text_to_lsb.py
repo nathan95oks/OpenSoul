@@ -127,6 +127,10 @@ REGLAS LINGÜÍSTICAS Y GRAMATICALES OBLIGATORIAS DE LSB:
 4. REGLAS DE DESAMBIGUACIÓN DE "LLAMA":
 {context_instruction}
 
+5. REGLAS DACTILOLÓGICAS (DELETREO COMPLETO) EN LSB:
+   - Los nombres propios de personas, apellidos, calles, marcas y siglas (ej: "Isaac", "Segip", "FELCC") deben deletrearse obligatoriamente letra por letra. Descomponlos en sus letras individuales en la lista de glosas (ej: "Isaac" -> ["I", "S", "A", "A", "C"], "Segip" -> ["S", "E", "G", "I", "P"]).
+   - Los sustantivos comunes y verbos que NO estén en la lista de glosas disponibles (ej: "testigo", "discriminación") NO deben deletrearse letra por letra. Deben ser colocados como la palabra completa en mayúsculas en la lista de glosas (ej: "TESTIGO", "DISCRIMINACION") para mostrar la simulación en la interfaz.
+
 GLOSAS DISPONIBLES EN EL DICCIONARIO DEL AVATAR:
 [{gloss_list}]
 
