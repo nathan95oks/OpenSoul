@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:lsb_legal_app/app/theme.dart';
 import '../controllers/audio_translation_controller.dart';
 import '../widgets/avatar_3d_viewer.dart';
-import '../widgets/record_button.dart';
 import '../widgets/text_input_widget.dart';
 
 class AudioToLsbScreen extends ConsumerWidget {
@@ -158,7 +157,48 @@ class AudioToLsbScreen extends ConsumerWidget {
                           controller.processText(text);
                         },
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 16),
+
+                      // Recordatorio temporal de la frase ingresada
+                      if (state.status == AudioTranslationStatus.success &&
+                          state.recognizedText != null &&
+                          state.recognizedText!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                            decoration: BoxDecoration(
+                              color: AppTheme.darkSurface,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: AppTheme.darkBorder),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'FRASE TRADUCIDA:',
+                                  style: TextStyle(
+                                    color: AppTheme.brandLight,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.0,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  '"${state.recognizedText}"',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: 8),
                       
                       // Status Text
                       AnimatedSwitcher(
@@ -170,7 +210,7 @@ class AudioToLsbScreen extends ConsumerWidget {
                                   : 'Escuchando tu voz...')
                               : state.status == AudioTranslationStatus.processing
                                 ? 'Traduciendo a LSB...'
-                                : 'Mantén presionado para dictar',
+                                : 'Presiona el micrófono para dictar',
                           key: ValueKey<String>('${state.status}_${state.recognizedText}'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -181,20 +221,6 @@ class AudioToLsbScreen extends ConsumerWidget {
                             letterSpacing: 0.5,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      
-                      // Record Button
-                      RecordButton(
-                        onStartRecording: () {
-                          controller.setRecordingState();
-                        },
-                        onTextRecognized: (text) {
-                          controller.updateRecognizedText(text);
-                        },
-                        onStopRecording: (transcribedText) {
-                          controller.processAudioAsText(transcribedText);
-                        },
                       ),
                     ],
                   ),

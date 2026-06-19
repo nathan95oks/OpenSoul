@@ -87,6 +87,7 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
   void processText(String text) async {
     state = state.copyWith(
       status: AudioTranslationStatus.processing,
+      recognizedText: text,
     );
 
     try {
