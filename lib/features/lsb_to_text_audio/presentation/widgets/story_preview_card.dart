@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../app/theme.dart';
+import 'package:lsb_legal_app/app/theme.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/story_preview_provider.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../app/theme.dart';
+import 'package:lsb_legal_app/app/theme.dart';
 import '../../domain/entities/semantic_zone.dart';
 import '../../domain/services/semantic_navigation_engine.dart';
 import '../providers/context_provider.dart';

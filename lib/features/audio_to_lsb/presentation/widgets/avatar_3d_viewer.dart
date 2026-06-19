@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:http/http.dart' as http;
@@ -57,6 +58,13 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   dynamic _controllerA;
   dynamic _controllerB;
 
+  Timer? _placeholderTimer;
+
+  void _cancelPlaceholderTimer() {
+    _placeholderTimer?.cancel();
+    _placeholderTimer = null;
+  }
+
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
 
@@ -85,6 +93,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   void _startSequence({List<String>? overrideUrls, List<String>? overrideGlosses}) {
     if (!mounted) return;
+    _cancelPlaceholderTimer();
     setState(() {
       _currentIndex = 0;
       _isPlayingSequence = false;
@@ -122,6 +131,10 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     final tempDir = await getTemporaryDirectory();
 
     for (var urlStr in urlsToDownload) {
+      if (urlStr.startsWith('placeholder://')) {
+        localPaths.add(urlStr);
+        continue;
+      }
       try {
         final uri = Uri.parse(urlStr);
         final fileName = uri.pathSegments.last;
@@ -149,16 +162,21 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
         if (_localUrls.isNotEmpty) {
           _urlA = _localUrls[0];
-          _isLoadedA = false;
+          _isLoadedA = _urlA!.startsWith('placeholder://');
 
           if (_localUrls.length > 1) {
             _urlB = _localUrls[1];
-            _isLoadedB = false;
+            _isLoadedB = _urlB!.startsWith('placeholder://');
           } else {
             _urlB = null;
           }
         }
       });
+
+      // Si la primera seña es un placeholder, debemos disparar la simulación de inmediato
+      if (_localUrls.isNotEmpty && _localUrls[0].startsWith('placeholder://')) {
+        _playViewer('A');
+      }
     }
   }
 
@@ -220,6 +238,16 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   }
 
   void _playViewer(String id) {
+    final currentUrl = id == 'A' ? _urlA : _urlB;
+    if (currentUrl != null && currentUrl.startsWith('placeholder://')) {
+      debugPrint('Visor $id es un placeholder: $currentUrl. Programando temporizador.');
+      _cancelPlaceholderTimer();
+      _placeholderTimer = Timer(widget.animationDuration, () {
+        _handleFinished(id);
+      });
+      return;
+    }
+
     final controller = id == 'A' ? _controllerA : _controllerB;
     if (controller != null) {
       debugPrint('Enviando play JS a Visor $id');
@@ -235,6 +263,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   void _transitionTo(String nextViewerId) {
     if (!mounted) return;
+    _cancelPlaceholderTimer();
     debugPrint('Transicionando a Visor: $nextViewerId');
 
     setState(() {
@@ -252,11 +281,11 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         final nextNextUrl = _localUrls[nextNextIndex];
         if (otherViewerId == 'A') {
           _urlA = nextNextUrl;
-          _isLoadedA = false;
+          _isLoadedA = nextNextUrl.startsWith('placeholder://');
           _controllerA = null;
         } else {
           _urlB = nextNextUrl;
-          _isLoadedB = false;
+          _isLoadedB = nextNextUrl.startsWith('placeholder://');
           _controllerB = null;
         }
       }
@@ -316,7 +345,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   // Instancia individual de ModelViewer
   Widget _buildModelViewerInstance(String id, String? url) {
-    if (url == null) return const SizedBox.shrink();
+    if (url == null || url.startsWith('placeholder://')) return const SizedBox.shrink();
 
     return ModelViewer(
       key: ValueKey('${id}_$url'), // Recrea el WebView al cambiar el URL
@@ -387,6 +416,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     final isNextLoaded = nextViewerId == 'A' ? _isLoadedA : _isLoadedB;
     final canAdvance = _localUrls.length > 1 && isNextLoaded;
 
+    final currentUrl = _currentIndex < _localUrls.length ? _localUrls[_currentIndex] : '';
+    final isPlaceholder = currentUrl.startsWith('placeholder://');
+
     return Stack(
       children: [
         // Visor A
@@ -410,6 +442,61 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
             ),
           ),
         ),
+
+        // Overlay de Simulación si es Placeholder
+        if (isPlaceholder)
+          Positioned.fill(
+            child: Container(
+              color: const Color(0xFF1E1E2F).withOpacity(0.9),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.amber, width: 2),
+                      ),
+                      child: const Icon(
+                        Icons.text_fields_rounded,
+                        color: Colors.amber,
+                        size: 40,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'ANIMACIÓN PALABRA: $currentGloss',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.amber,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Seña no disponible en 3D (Simulación)',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Mostrando comportamiento y desambiguación contextual',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.4),
+                        fontSize: 11,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
 
         // Barra inferior con botón "Siguiente" y bolitas de progreso
         Positioned(
@@ -653,23 +740,58 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           ),
         ),
         const SizedBox(height: 16),
-        // ── Botón de prueba directa con S3 ──
-        OutlinedButton.icon(
-          onPressed: () => _startSequence(
-            overrideUrls: ['${_s3Base}YO.glb', '${_s3Base}ABOGADO.glb'],
-            overrideGlosses: ['YO', 'ABOGADO'],
-          ),
-          icon: const Icon(Icons.play_circle_outline,
-              color: Colors.deepPurpleAccent, size: 18),
-          label: const Text(
-            'Probar YO + ABOGADO',
-            style: TextStyle(color: Colors.deepPurpleAccent, fontSize: 12),
-          ),
-          style: OutlinedButton.styleFrom(
-            side: BorderSide(
-                color: Colors.deepPurpleAccent.withOpacity(0.5)),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        // ── Botones de prueba offline de desambiguación y simulación ──
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              OutlinedButton.icon(
+                onPressed: () => _startSequence(
+                  overrideUrls: [
+                    '${_s3Base}YO.glb',
+                    '${_s3Base}POLICIA.glb',
+                    '${_s3Base}LLAMAR.glb',
+                  ],
+                  overrideGlosses: ['YO', 'POLICIA', 'LLAMAR'],
+                ),
+                icon: const Icon(Icons.play_circle_outline,
+                    color: Colors.greenAccent, size: 18),
+                label: const Text(
+                  'Probar: YO + POLICÍA + LLAMAR',
+                  style: TextStyle(color: Colors.greenAccent, fontSize: 11),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                      color: Colors.greenAccent.withOpacity(0.5)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () => _startSequence(
+                  overrideUrls: [
+                    '${_s3Base}JUEZ.glb',
+                    '${_s3Base}FUEGO-LLAMA.glb',
+                    'placeholder://VER',
+                  ],
+                  overrideGlosses: ['JUEZ', 'FUEGO-LLAMA', 'VER'],
+                ),
+                icon: const Icon(Icons.play_circle_outline,
+                    color: Colors.amberAccent, size: 18),
+                label: const Text(
+                  'Probar: JUEZ + FUEGO-LLAMA + VER (Placeholder)',
+                  style: TextStyle(color: Colors.amberAccent, fontSize: 11),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                      color: Colors.amberAccent.withOpacity(0.5)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+            ],
           ),
         ),
       ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../app/theme.dart';
+import 'package:lsb_legal_app/app/theme.dart';
 import '../../domain/entities/lsb_card.dart';
 import 'lsb_icons.dart';
 

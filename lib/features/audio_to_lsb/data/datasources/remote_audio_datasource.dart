@@ -45,6 +45,7 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
         List<String> urls = [];
         for (var detail in glossDetails) {
           final file = detail['animationFile'];
+          final gloss = detail['gloss'] ?? '';
           if (file != null && file.toString().isNotEmpty) {
             // Limpieza robusta de tildes en Dart para la URL de S3
             String cleanFile = file.toString()
@@ -52,6 +53,9 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
                 .replaceAll('Í', 'I').replaceAll('Ó', 'O')
                 .replaceAll('Ú', 'U').replaceAll('Ñ', 'N');
             urls.add('$s3BaseUrl$cleanFile');
+          } else {
+            // Es una glosa no disponible, agregamos un placeholder
+            urls.add('placeholder://$gloss');
           }
         }
         

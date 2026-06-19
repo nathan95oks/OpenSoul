@@ -63,20 +63,18 @@ CORS_HEADERS = {
 # dactilología (deletreo) como fallback.
 # ===================================================================
 AVAILABLE_GLOSSES = {
-    # --- Sustantivos Jurídicos ---
-    "JUEZ", "ABOGADO", "POLICÍA", "FISCAL", "PERSONA", "HOMBRE", "MUJER",
-    "VÍCTIMA", "TESTIGO", "CULPABLE", "INOCENTE", "DENUNCIA", "DOCUMENTO",
-    "LEY", "DERECHO", "CÁRCEL", "TRIBUNAL", "CASA", "DINERO", "ROBO",
-    # --- Verbos ---
-    "DENUNCIAR", "ROBAR", "GOLPEAR", "DETENER", "FIRMAR", "DECLARAR",
-    "PAGAR", "AYUDAR", "QUERER", "PODER", "TENER", "IR", "VER", "DECIR",
-    "ENTENDER",
-    # --- Pronombres, Posesivos y Conectores ---
-    "YO", "TÚ", "TU", "ÉL", "EL", "ELLA", "ELLOS", "ELLAS", "NOSOTROS", "USTEDES",
-    "MÍO", "MIO", "TUYO", "NUESTRO", "SUYO", "SÍ", "NO",
-    "CUÁNDO", "DÓNDE", "QUÉ", "POR-QUÉ",
-    "BUENO", "MALO", "GRANDE", "HOY", "AYER",
-    # --- Números y Alfabeto Dactilológico (Para señas compuestas) ---
+    # --- Sustantivos Jurídicos Disponibles (Módulo Isaac) ---
+    "ABOGADO", "POLICIA", "JUEZ", 
+    
+    # --- Pronombres y Posesivos Disponibles ---
+    "YO", "TU", "EL", "ELLA", "NOSOTROS", "ELLOS", "ELLAS", "USTEDES", "MIO", "TUYO", "SUYO", "NUESTRO",
+    
+    # --- Palabras Polisémicas Desambiguadas ---
+    "LLAMAR",        # Para el Verbo (llamar/notificar)
+    "ANIMAL-LLAMA",  # Para el Camélido
+    "FUEGO-LLAMA",   # Para el Fuego (incendio/peritaje)
+    
+    # --- Alfabeto Dactilológico y Números (Para dactilología offline/fallback) ---
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
     "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
@@ -91,7 +89,7 @@ def build_disambiguation_prompt(text: str, context: str) -> str:
     """
     Construye el Prompt que se inyecta en Bedrock para que el modelo
     fundacional realice la desambiguación semántica y la reestructuración
-    gramatical de Español (SVO) a LSB (OSV).
+    gramatical de Español (SVO) a LSB (OSV / SOV).
     """
 
     # Lista de glosas disponibles para que la IA solo use términos válidos
@@ -100,12 +98,13 @@ def build_disambiguation_prompt(text: str, context: str) -> str:
     context_instruction = ""
     if context == "legal":
         context_instruction = """
-REGLAS DE DESAMBIGUACIÓN JURÍDICA Y SEÑAS COMPUESTAS:
-- "Auto" = Resolución judicial (NO vehículo), salvo contexto de tránsito.
-- "Fallo" = Sentencia o resolución judicial (NO error).
-- "Causa" = Expediente o proceso judicial, NO razón.
-- "Cargo" = Acusación formal, NO puesto de trabajo.
-- REGLA DE SEÑA COMPUESTA: Algunas palabras en LSB se forman fusionando señas base. Si la palabra requiere una seña compuesta (por ejemplo, "Fiscal"), debes descomponerla en el arreglo usando las glosas base correspondientes. Ej: Para "Fiscal", devuelve ["F", "JUEZ"]. Para otras palabras compuestas, aplica el mismo principio lógico si conoces su estructura en LSB.
+REGLAS DE DESAMBIGUACIÓN JURÍDICA Y PALABRAS POLISÉMICAS:
+- "llama" (Verbo llamar / notificar): Se interpreta como la acción de convocar, citar o pedir presencia. Mapear a la glosa "LLAMAR".
+  * Ejemplo: "Yo llamo al policía." -> ["YO", "POLICIA", "LLAMAR"]
+- "llama" (Animal / Camélido): Objeto de propiedad o conflicto civil de ganadería. Mapear a la glosa "ANIMAL-LLAMA".
+  * Ejemplo: "La llama es de ustedes." -> ["USTEDES", "ANIMAL-LLAMA"]
+- "llama" (Fuego / Incendio): Elemento en caso de daños o peritajes. Mapear a la glosa "FUEGO-LLAMA".
+  * Ejemplo: "El juez mira la llama." -> ["JUEZ", "FUEGO-LLAMA", "VER"] (Nota: la palabra "VER" no está en el diccionario, se deletreará).
 """
 
     prompt = f"""Eres un sistema experto en Lengua de Señas Boliviana (LSB) para entornos judiciales y de trámites.
@@ -114,34 +113,18 @@ Tu tarea es recibir una frase en español y convertirla en un ARREGLO ORDENADO D
 
 REGLAS LINGÜÍSTICAS Y GRAMATICALES OBLIGATORIAS DE LSB:
 1. ESTRUCTURA GRAMATICAL:
-   - Usa estructura OSV (Objeto-Sujeto-Verbo) para oraciones de acción transitivas.
-   - Para frases equitativas o de identidad (Sujeto + Oficio/Profesión, ej. "Yo soy abogado", "Ellos son policías", "Ustedes son abogados"), el orden obligatorio es SUJETO luego OFICIO (Ej: "Yo soy abogado" -> ["YO", "ABOGADO"], "Ellos son policías" -> ["ELLOS", "POLICÍA"]). NO inviertas este orden ni uses verbos auxiliares de ser/estar.
+   - Usa estructura OSV (Objeto-Sujeto-Verbo) o SOV para las oraciones.
+   - Para frases de identidad o profesión (Sujeto + Oficio), el orden obligatorio es SUJETO luego OFICIO (Ej: "Yo soy abogado" -> ["YO", "ABOGADO"], "Ellos son policías" -> ["ELLOS", "POLICIA"]). NO uses verbos auxiliares de ser/estar.
 
 2. MANEJO EXACTO DE PRONOMBRES Y POSESIVOS EN LSB:
-   - Pronombres Personales Singulares:
-     * "yo" -> "YO"
-     * "tú", "usted" -> "TÚ" o "TU"
-     * "él", "ella" -> "ÉL" o "EL" o "ELLA"
-   - Pronombres Personales Plurales:
-     * "nosotros", "nosotras" -> "NOSOTROS"
-     * "ustedes", "vosotros" -> "USTEDES"
-     * "ellos", "ellas" -> "ELLOS" o "ELLAS"
-   - Pronombres/Adjetivos Posesivos (¡Diferenciar estrictamente de los personales!):
-     * "mi", "mío", "mía", "mis" -> "MÍO" o "MIO"
-     * "tu", "tuyo", "tuya", "tus" -> "TUYO"
-     * "nuestro", "nuestra", "nuestros", "nuestras" -> "NUESTRO"
-     * "su", "suyo", "suya", "suyos", "suyas" (de él/ella/ellos/ustedes) -> "SUYO"
+   - Pronombres Personales: "yo" -> "YO", "tú" -> "TU", "él/ella" -> "EL"/"ELLA", "nosotros" -> "NOSOTROS", "ellos/ellas" -> "ELLOS"/"ELLAS", "ustedes" -> "USTEDES".
+   - Pronombres/Adjetivos Posesivos: "mi/mío" -> "MIO", "tu/tuyo" -> "TUYO", "su/suyo" -> "SUYO", "nuestro" -> "NUESTRO". ¡No los confundas con los personales!
 
 3. SIMPLIFICACIÓN:
-   - Elimina totalmente artículos (el, la, los, las, un, una, unos, unas), preposiciones (de, en, por, para, con, a, desde) y conjunciones (y, o, que) innecesarias.
-   - Los marcadores temporales (HOY, AYER) se colocan siempre AL INICIO del arreglo de glosas.
-   - Los verbos deben ir en INFINITIVO como glosa (Ej: "robó" -> "ROBAR", "denunció" -> "DENUNCIAR").
+   - Elimina totalmente artículos (el, la, los, las, un, una), preposiciones (de, en, por, para, con, a) y conjunciones innecesarias.
+   - Los verbos deben ir en INFINITIVO (Ej: "llamó" -> "LLAMAR", "miró" -> "VER").
 
-4. LÉXICO Y DESAMBIGUACIÓN:
-   - Desambigua términos según el contexto jurídico o general.
-   - Si una palabra en español no tiene glosa directa, usa la más cercana disponible o descompón en señas compuestas si aplica.
-   - Si no hay equivalente posible en la lista de glosas disponibles, escribe la palabra original en mayúsculas (el sistema la deletreará con dactilología).
-
+4. REGLAS DE DESAMBIGUACIÓN DE "LLAMA":
 {context_instruction}
 
 GLOSAS DISPONIBLES EN EL DICCIONARIO DEL AVATAR:
@@ -154,6 +137,7 @@ FRASE A TRADUCIR: "{text}"
 CONTEXTO: {context}"""
 
     return prompt
+
 
 
 # ===================================================================
