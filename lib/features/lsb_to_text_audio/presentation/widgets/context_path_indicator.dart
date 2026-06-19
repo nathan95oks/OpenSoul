@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../app/theme.dart';
+import 'package:lsb_legal_app/app/theme.dart';
 import '../../domain/entities/semantic_zone.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';

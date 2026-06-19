@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:ui';
-import '../../../../app/theme.dart';
+import 'package:lsb_legal_app/app/theme.dart';
 import '../controllers/audio_translation_controller.dart';
 import '../widgets/avatar_3d_viewer.dart';
 import '../widgets/record_button.dart';
