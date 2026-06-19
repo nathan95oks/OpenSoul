@@ -1,13 +1,7 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/home_screen.dart';
+import 'package:lsb_legal_app/app/splash_screen.dart';
 import 'package:lsb_legal_app/app/app.dart';
 
 void main() {
@@ -15,7 +9,14 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const ProviderScope(child: AppScope()));
 
-    // Verify that the HomeScreen is rendered.
+    // Verify that the SplashScreen is rendered.
+    expect(find.byType(SplashScreen), findsOneWidget);
+
+    // Advance time by 3 seconds to let the splash screen Timer fire and navigate
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pump();
+
+    // Verify that the HomeScreen is rendered after splash transitions.
     expect(find.byType(HomeScreen), findsOneWidget);
   });
 }
