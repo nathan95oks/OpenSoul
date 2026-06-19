@@ -484,14 +484,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                         fontSize: 13,
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Mostrando comportamiento y desambiguación contextual',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.4),
-                        fontSize: 11,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -605,14 +597,17 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
               ),
               const SizedBox(height: 8),
               // DEBUG URL
-              Text(
-                'DEBUG: Visor=$_activeViewer | Seña=$_currentIndex | LoadedA=$_isLoadedA | LoadedB=$_isLoadedB',
-                style: const TextStyle(
-                  color: Colors.amber,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
+              Visibility(
+                visible: false,
+                child: Text(
+                  'DEBUG: Visor=$_activeViewer | Seña=$_currentIndex | LoadedA=$_isLoadedA | LoadedB=$_isLoadedB',
+                  style: const TextStyle(
+                    color: Colors.amber,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 3,
                 ),
-                maxLines: 3,
               ),
             ],
           ),
