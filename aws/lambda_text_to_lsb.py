@@ -69,11 +69,6 @@ AVAILABLE_GLOSSES = {
     # --- Pronombres y Posesivos Disponibles ---
     "YO", "TU", "EL", "ELLA", "NOSOTROS", "ELLOS", "ELLAS", "USTEDES", "MIO", "TUYO", "SUYO", "NUESTRO",
     
-    # --- Palabras Polisémicas Desambiguadas ---
-    "LLAMAR",        # Para el Verbo (llamar/notificar)
-    "ANIMAL-LLAMA",  # Para el Camélido
-    "FUEGO-LLAMA",   # Para el Fuego (incendio/peritaje)
-    
     # --- Alfabeto Dactilológico y Números (Para dactilología offline/fallback) ---
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 

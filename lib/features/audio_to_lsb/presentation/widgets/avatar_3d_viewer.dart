@@ -751,7 +751,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                   overrideUrls: [
                     '${_s3Base}YO.glb',
                     '${_s3Base}POLICIA.glb',
-                    '${_s3Base}LLAMAR.glb',
+                    'placeholder://LLAMAR',
                   ],
                   overrideGlosses: ['YO', 'POLICIA', 'LLAMAR'],
                 ),
@@ -773,7 +773,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                 onPressed: () => _startSequence(
                   overrideUrls: [
                     '${_s3Base}JUEZ.glb',
-                    '${_s3Base}FUEGO-LLAMA.glb',
+                    'placeholder://FUEGO-LLAMA',
                     'placeholder://VER',
                   ],
                   overrideGlosses: ['JUEZ', 'FUEGO-LLAMA', 'VER'],
