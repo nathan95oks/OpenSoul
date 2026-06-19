@@ -43,33 +43,51 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
         final s3BaseUrl = 'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/';
         
         List<String> urls = [];
+        List<String> expandedGlosses = [];
+        
         for (var detail in glossDetails) {
           final file = detail['animationFile'];
           final gloss = detail['gloss'] ?? '';
+          
           if (file != null && file.toString().isNotEmpty) {
-            // Limpieza robusta de tildes en Dart para la URL de S3
-            String cleanFile = file.toString()
-                .replaceAll('Á', 'A').replaceAll('É', 'E')
-                .replaceAll('Í', 'I').replaceAll('Ó', 'O')
-                .replaceAll('Ú', 'U').replaceAll('Ñ', 'N');
-            urls.add('$s3BaseUrl$cleanFile');
+            final fileStr = file.toString();
+            if (fileStr.contains('+')) {
+              // Es una seña compuesta (ej: F.glb+ABOGADO.glb)
+              final parts = fileStr.split('+');
+              for (var part in parts) {
+                String cleanFile = part.trim()
+                    .replaceAll('Á', 'A').replaceAll('É', 'E')
+                    .replaceAll('Í', 'I').replaceAll('Ó', 'O')
+                    .replaceAll('Ú', 'U').replaceAll('Ñ', 'N');
+                urls.add('$s3BaseUrl$cleanFile');
+                expandedGlosses.add(gloss); // Duplicar la glosa original
+              }
+            } else {
+              String cleanFile = fileStr
+                  .replaceAll('Á', 'A').replaceAll('É', 'E')
+                  .replaceAll('Í', 'I').replaceAll('Ó', 'O')
+                  .replaceAll('Ú', 'U').replaceAll('Ñ', 'N');
+              urls.add('$s3BaseUrl$cleanFile');
+              expandedGlosses.add(gloss);
+            }
           } else {
             // Es una glosa no disponible, agregamos un placeholder
             urls.add('placeholder://$gloss');
+            expandedGlosses.add(gloss);
           }
         }
         
         // Decodificamos el JSON que viene de AWS Lambda (Bedrock)
         return LsbTranslationModel.fromJson({
-          'glosses': decodedResponse['glosses'],
+          'glosses': expandedGlosses,
           'animationUrl': urls.isNotEmpty ? urls.first : '', 
           'animationUrls': urls,
         });
       } else {
-        throw Exception('AWS API Error: \${response.statusCode} - \${response.body}');
+        throw Exception('AWS API Error: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      throw Exception('Network or Server error: \$e');
+      throw Exception('Network or Server error: $e');
     }
   }
 }
