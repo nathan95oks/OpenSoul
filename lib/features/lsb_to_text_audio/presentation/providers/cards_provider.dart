@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/data/repositories/cards_repository_impl.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/cards_repository.dart';
@@ -10,13 +10,10 @@ import 'context_provider.dart';
 import 'semantic_zones_provider.dart';
 import 'sentence_provider.dart';
 
-final localCardsDataSourceProvider = Provider<LocalCardsDataSource>((ref) {
-  return LocalCardsDataSource();
-});
-
+/// El catálogo proviene del diccionario evolutivo del núcleo
+/// ([lexiconRepositoryProvider]); ya no existe un datasource hardcodeado.
 final cardsRepositoryProvider = Provider<CardsRepository>((ref) {
-  final dataSource = ref.watch(localCardsDataSourceProvider);
-  return CardsRepositoryImpl(dataSource);
+  return CardsRepositoryImpl(ref.watch(lexiconRepositoryProvider));
 });
 
 final getCategoriesUseCaseProvider = Provider<GetCategoriesUseCase>((ref) {

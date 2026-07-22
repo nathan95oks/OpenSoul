@@ -9,6 +9,15 @@ Funciones Lambda del proyecto. Solo `lambda_function.py` pertenece al módulo
 | `lambda_text_to_lsb.py` | Real | `audio_to_lsb` (compañero) | Texto/voz → glosas LSB. **No es de este módulo**, no auditar aquí. |
 | `lambda_bedrock_polly.py` | Referencia/experimento | — | Prototipo previo de integración Bedrock+Polly. No se despliega. |
 | `lambda_mock.py` | Mock | — | Respuesta fija para pruebas locales sin AWS. |
+| `lambda_dictionary.py` | **Nuevo (Fase 2), pendiente de despliegue** | núcleo compartido | API del diccionario evolutivo: `GET /dictionary` (mismo contrato que `assets/dictionary/official_dictionary.json`) y `POST /dictionary/proposals` (propuestas `pending`). |
+| `seed_dictionary.py` | Script local | núcleo compartido | Crea/puebla la tabla DynamoDB `OpenSoul-Dictionary` desde el JSON canónico del repo. |
+
+## Despliegue del diccionario (Fase 2)
+
+1. `python3 aws/seed_dictionary.py --create-table` (crea la tabla on-demand y la siembra).
+2. Desplegar `lambda_dictionary.py` con rol de lectura/escritura sobre la tabla y exponerla en API Gateway (`GET /dictionary`, `POST /dictionary/proposals`).
+3. Compilar la app con `--dart-define=LSB_DICTIONARY_API_URL=https://<api>/dictionary` — sin esa variable la app funciona 100 % local (asset + caché).
+4. En `OpenSoul-TextToLSB` (lambda_text_to_lsb) definir `DICTIONARY_TABLE=OpenSoul-Dictionary` + permiso `dynamodb:Query`: las señas nuevas aprobadas quedan disponibles para el avatar sin redesplegar.
 
 ## Variables de entorno (`lambda_function.py`)
 

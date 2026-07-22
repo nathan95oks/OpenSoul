@@ -1,11 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+
+import 'helpers/official_dictionary.dart';
 
 /// Pruebas del filtrado guiado de tarjetas y del enrutado de contexto (TST-03).
 ///
@@ -15,6 +16,10 @@ SemanticContext _ctx(String id) =>
     availableContexts.firstWhere((c) => c.id == id);
 
 void main() {
+  // El diccionario se carga desde el asset empaquetado vía rootBundle:
+  // requiere el binding de pruebas inicializado.
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   ProviderContainer makeContainer() {
     final c = ProviderContainer();
     addTearDown(c.dispose);
@@ -85,11 +90,7 @@ void main() {
     late String? Function(String) catOf;
 
     setUp(() async {
-      final ds = LocalCardsDataSource();
-      final all = <LsbCard>[];
-      for (final cat in await ds.getCategories()) {
-        all.addAll(await ds.getCardsByCategory(cat));
-      }
+      final List<LsbCard> all = loadOfficialEntries();
       catOf = (g) {
         for (final card in all) {
           if (card.gloss == g) return card.categoryId;
