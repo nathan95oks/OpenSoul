@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 import '../domain/dictionary_document.dart';
+import '../domain/dictionary_proposal.dart';
 
 /// Cliente HTTP del diccionario remoto (API Gateway → lambda_dictionary).
 ///
@@ -33,5 +36,24 @@ class RemoteLexiconDataSource {
       throw Exception('Dictionary API error: ${response.statusCode}');
     }
     return DictionaryDocument.fromJsonString(response.body);
+  }
+
+  /// Envía una propuesta a `POST <apiUrl>/proposals`. Lanza si falla,
+  /// para que el repositorio decida encolarla (outbox offline).
+  Future<void> postProposal(DictionaryProposal proposal) async {
+    final response = await client
+        .post(
+          Uri.parse('$apiUrl/proposals'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: jsonEncode(proposal.toJson()),
+        )
+        .timeout(requestTimeout);
+
+    if (response.statusCode != 201 && response.statusCode != 200) {
+      throw Exception('Proposal API error: ${response.statusCode}');
+    }
   }
 }

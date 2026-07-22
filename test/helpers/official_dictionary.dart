@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:lsb_legal_app/core/dictionary/domain/dictionary_document.dart';
+import 'package:lsb_legal_app/core/dictionary/domain/dictionary_proposal.dart';
 import 'package:lsb_legal_app/core/dictionary/domain/lexicon_repository.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 
@@ -40,4 +41,14 @@ class FakeLexiconRepository implements LexiconRepository {
 
   @override
   Future<bool> refresh() async => false;
+
+  /// Propuestas registradas durante la prueba, para aserciones.
+  final List<DictionaryProposal> submitted = [];
+
+  @override
+  Future<ProposalSubmissionResult> submitProposal(
+      DictionaryProposal proposal) async {
+    submitted.add(proposal);
+    return ProposalSubmissionResult.sent;
+  }
 }

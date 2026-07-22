@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/features/dictionary_proposals/presentation/widgets/propose_sign_sheet.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../controllers/translation_controller.dart';
@@ -35,7 +36,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppTheme.lightBg,
-      appBar: _buildAppBar(ref, contextState, selectedWords),
+      appBar: _buildAppBar(context, ref, contextState, selectedWords),
       body: SafeArea(
         child: contextState == null
             ? const ContextSelectionWidget()
@@ -51,6 +52,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   PreferredSizeWidget _buildAppBar(
+    BuildContext context,
     WidgetRef ref,
     dynamic contextState,
     List<String> selectedWords,
@@ -86,6 +88,16 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       actions: [
+        // Diccionario evolutivo (Fase 3): cualquier palabra que falte en el
+        // catálogo puede proponerse; queda pendiente de validación.
+        IconButton(
+          icon: const Icon(Icons.playlist_add, color: AppTheme.brandPrimary),
+          tooltip: 'Proponer palabra o seña',
+          onPressed: () => ProposeSignSheet.show(
+            context,
+            contextId: contextState?.id as String?,
+          ),
+        ),
         if (contextState != null)
           TextButton(
             onPressed: () async {
