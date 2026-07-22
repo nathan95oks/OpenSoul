@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:ui';
 import 'package:lsb_legal_app/app/theme.dart';
 import '../controllers/audio_translation_controller.dart';
-import '../widgets/avatar_3d_viewer.dart';
+import 'package:lsb_legal_app/core/generators/avatar_generator/avatar_3d_viewer.dart';
 import '../widgets/text_input_widget.dart';
 
 class AudioToLsbScreen extends ConsumerWidget {

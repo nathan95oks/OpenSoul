@@ -1,4 +1,4 @@
-import '../entities/lsb_translation.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 
 abstract class AudioTranslationRepository {
   /// Sends the recorded audio file to the backend and returns the LSB translation.

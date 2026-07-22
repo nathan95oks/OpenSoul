@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/remote_translation_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
 
 /// Pruebas del datasource remoto (TST-02).
 ///

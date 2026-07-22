@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/services/audio_output.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/generators/audio_generator/audio_output.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';

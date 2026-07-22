@@ -1,6 +1,6 @@
-import '../entities/lsb_card.dart';
-import '../entities/semantic_context.dart';
-import '../entities/semantic_zone.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
 
 /// Resultado inmutable de un cálculo de prioridades por el motor.
 class ZonePriority {

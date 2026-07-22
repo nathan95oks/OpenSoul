@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
-import '../../domain/entities/semantic_zone.dart';
-import '../../domain/services/semantic_navigation_engine.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
+import 'package:lsb_legal_app/core/engines/context_engine/semantic_navigation_engine.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 

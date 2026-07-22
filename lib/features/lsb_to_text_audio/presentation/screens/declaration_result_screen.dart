@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
-import '../../domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import '../controllers/translation_controller.dart';
+import '../providers/context_provider.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../widgets/card_grid.dart' show expandedAnswersProvider;
@@ -189,6 +191,13 @@ class DeclarationResultScreen extends ConsumerWidget {
 
                     // ── Acciones principales ─────────────────────────────
                     _FullWidthBtn(
+                      label: 'Enviar a la conversación',
+                      icon: Icons.forum_outlined,
+                      filled: true,
+                      onTap: () => _sendToConversation(context, ref, result),
+                    ),
+                    const SizedBox(height: 10),
+                    _FullWidthBtn(
                       label: 'Volver a editar',
                       icon: Icons.edit_outlined,
                       filled: false,
@@ -206,6 +215,32 @@ class DeclarationResultScreen extends ConsumerWidget {
               ),
       ),
     );
+  }
+
+  /// Incorpora la declaración como turno de la persona sorda en la
+  /// conversación y regresa a ella. El estado del flujo guiado se limpia
+  /// (misma secuencia que "Nueva declaración") para que el siguiente turno
+  /// empiece de cero.
+  Future<void> _sendToConversation(
+      BuildContext context, WidgetRef ref, TranslationResult result) async {
+    ref.read(conversationProvider.notifier).addDeafDeclaration(
+          result: result,
+          glosses: ref.read(sentenceProvider),
+          contextId: ref.read(contextProvider)?.id,
+        );
+    // Los notifiers se capturan antes de navegar: tras el go() esta
+    // pantalla se desmonta y su ref deja de ser utilizable.
+    final translation = ref.read(translationControllerProvider.notifier);
+    final sentence = ref.read(sentenceProvider.notifier);
+    final zones = ref.read(semanticZonesProvider.notifier);
+    final expanded = ref.read(expandedAnswersProvider.notifier);
+    // Navegar primero evita que esta pantalla se reconstruya vacía
+    // mientras se limpia el estado del flujo guiado.
+    context.go('/home');
+    await translation.reset();
+    sentence.clearSentence();
+    zones.reset();
+    expanded.collapse();
   }
 
   /// Vuelve al flujo guiado conservando todas las respuestas. El estado

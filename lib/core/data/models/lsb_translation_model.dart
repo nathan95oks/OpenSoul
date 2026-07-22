@@ -1,4 +1,4 @@
-import '../../domain/entities/lsb_translation.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 
 class LsbTranslationModel extends LsbTranslation {
   LsbTranslationModel({

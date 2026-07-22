@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/semantic_context.dart';
-import '../../domain/entities/semantic_zone.dart';
-import '../../domain/services/local_sentence_assembler.dart' show kVictimMarker;
+import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
+import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart' show kVictimMarker;
 
 /// Catálogo de contextos situacionales — labels en primera persona,
 /// IDs preservados porque el datasource de tarjetas los referencia.

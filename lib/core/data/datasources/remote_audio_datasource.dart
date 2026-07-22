@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/lsb_translation_model.dart';
+import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
+import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_resolver.dart';
 
 abstract class RemoteAudioDataSource {
   Future<LsbTranslationModel> translateAudio(String audioPath);
@@ -8,12 +9,23 @@ abstract class RemoteAudioDataSource {
 }
 
 class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
+  /// Endpoint por defecto. Configurable en compilación sin tocar código
+  /// (misma convención que el datasource de declaración, TD-01):
+  ///   flutter run --dart-define=LSB_TEXT_API_URL=https://otra-url
+  static const String defaultApiGatewayUrl = String.fromEnvironment(
+    'LSB_TEXT_API_URL',
+    defaultValue:
+        'https://mq5eeqtb50.execute-api.us-east-1.amazonaws.com/default/OpenSoul-TextToLSB',
+  );
+
   final http.Client client;
   final String apiGatewayUrl;
+  final AnimationUrlResolver animationResolver;
 
   RemoteAudioDataSourceImpl({
     required this.client,
-    this.apiGatewayUrl = 'https://mq5eeqtb50.execute-api.us-east-1.amazonaws.com/default/OpenSoul-TextToLSB',
+    this.apiGatewayUrl = defaultApiGatewayUrl,
+    this.animationResolver = const AnimationUrlResolver(),
   });
 
   @override
@@ -22,7 +34,7 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
     // since the current flow uses SpeechToText on device.
     throw UnimplementedError('translateAudio is not used when using On-Device Speech-to-Text.');
   }
-  
+
   @override
   Future<LsbTranslationModel> translateText(String text) async {
     try {
@@ -37,39 +49,27 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
 
       if (response.statusCode == 200) {
         final decodedResponse = jsonDecode(response.body);
-        
-        // Extraer los nombres de archivos de animación
+
         final glossDetails = decodedResponse['glossDetails'] as List<dynamic>? ?? [];
-        final s3BaseUrl = 'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/';
-        
-        List<String> urls = [];
-        for (var detail in glossDetails) {
-          final file = detail['animationFile'];
-          final gloss = detail['gloss'] ?? '';
-          if (file != null && file.toString().isNotEmpty) {
-            // Limpieza robusta de tildes en Dart para la URL de S3
-            String cleanFile = file.toString()
-                .replaceAll('Á', 'A').replaceAll('É', 'E')
-                .replaceAll('Í', 'I').replaceAll('Ó', 'O')
-                .replaceAll('Ú', 'U').replaceAll('Ñ', 'N');
-            urls.add('$s3BaseUrl$cleanFile');
-          } else {
-            // Es una glosa no disponible, agregamos un placeholder
-            urls.add('placeholder://$gloss');
-          }
-        }
-        
+        final urls = <String>[
+          for (final detail in glossDetails)
+            animationResolver.resolve(
+              gloss: (detail['gloss'] ?? '').toString(),
+              animationFile: detail['animationFile']?.toString(),
+            ),
+        ];
+
         // Decodificamos el JSON que viene de AWS Lambda (Bedrock)
         return LsbTranslationModel.fromJson({
           'glosses': decodedResponse['glosses'],
-          'animationUrl': urls.isNotEmpty ? urls.first : '', 
+          'animationUrl': urls.isNotEmpty ? urls.first : '',
           'animationUrls': urls,
         });
       } else {
-        throw Exception('AWS API Error: \${response.statusCode} - \${response.body}');
+        throw Exception('AWS API Error: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      throw Exception('Network or Server error: \$e');
+      throw Exception('Network or Server error: $e');
     }
   }
 }

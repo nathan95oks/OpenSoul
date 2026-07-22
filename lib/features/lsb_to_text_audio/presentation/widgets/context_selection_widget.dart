@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import '../providers/context_provider.dart';
-import '../../domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 
 /// Pantalla de selección de contexto — estilo reference design.
 /// Fondo blanco, botones con borde negro, hover naranja.

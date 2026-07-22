@@ -1,5 +1,5 @@
-import '../../domain/repositories/translation_repository.dart';
-import '../datasources/remote_translation_datasource.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
 
 class TranslationRepositoryImpl implements TranslationRepository {
   final RemoteTranslationDataSource remoteDataSource;

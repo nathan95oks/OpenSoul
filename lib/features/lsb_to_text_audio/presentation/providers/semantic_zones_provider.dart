@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../domain/entities/lsb_card.dart';
-import '../../domain/entities/semantic_zone.dart';
-import '../../domain/services/semantic_navigation_engine.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
+import 'package:lsb_legal_app/core/engines/context_engine/semantic_navigation_engine.dart';
 import 'context_provider.dart';
 import 'sentence_provider.dart';
 

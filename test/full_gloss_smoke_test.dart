@@ -1,14 +1,14 @@
 // ignore_for_file: avoid_print
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
 
 void main() {
   test('Generar corpus completo y verificar ausencia de frases-cola', () {
     final assembler = LocalSentenceAssembler();
     
     // Extraer glosas directamente del codigo fuente de assembler
-    final file = File('lib/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart');
+    final file = File('lib/core/engines/semantic_engine/local_sentence_assembler.dart');
     final content = file.readAsStringSync();
     
     final regex = RegExp(r"'([A-Z0-Z_]+)':\s*_Lex\(");
