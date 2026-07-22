@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+
+import 'helpers/official_dictionary.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 
 /// Auditoría de cobertura semántica del motor local.
@@ -75,12 +76,8 @@ void main() {
     print('CONTEXTOS (${ids.length}): $names');
     expect(ids, ['denuncia_robo', 'violencia', 'accidente', 'otro', 'orientacion']);
 
-    // 2) Mapa glosa → categoría desde el catálogo (sin tocar datasource).
-    final ds = LocalCardsDataSource();
-    final all = <LsbCard>[];
-    for (final cat in await ds.getCategories()) {
-      all.addAll(await ds.getCardsByCategory(cat));
-    }
+    // 2) Mapa glosa → categoría desde el diccionario canónico.
+    final List<LsbCard> all = loadOfficialEntries();
     String? catOf(String g) {
       for (final c in all) {
         if (c.gloss == g) return c.categoryId;

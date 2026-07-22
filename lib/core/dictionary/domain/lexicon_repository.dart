@@ -1,0 +1,24 @@
+import '../../domain/entities/lsb_card.dart';
+import 'dictionary_document.dart';
+
+/// Puerto del diccionario evolutivo LSB.
+///
+/// Única fuente de vocabulario para toda la aplicación (ambas direcciones
+/// de la conversación). La implementación resuelve el origen con política
+/// offline-first: caché de la última sincronización → asset empaquetado,
+/// con refresco remoto en segundo plano.
+abstract class LexiconRepository {
+  /// Documento activo del diccionario (memoizado).
+  Future<DictionaryDocument> getDocument();
+
+  /// Entradas visibles (oficiales + comunitarias), sin propuestas pendientes.
+  Future<List<LsbCard>> getEntries();
+
+  /// Categorías presentes, en el orden semántico definido por el documento.
+  Future<List<String>> getCategories();
+
+  /// Intenta sincronizar con el diccionario remoto. Devuelve `true` si se
+  /// aplicó una versión más nueva. Nunca lanza: sin red, el diccionario
+  /// local sigue siendo válido.
+  Future<bool> refresh();
+}

@@ -12,6 +12,9 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/translation_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/home_screen.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
+
+import 'helpers/official_dictionary.dart';
 
 /// Prueba de widget del flujo completo (TST-04): seleccionar contexto + glosas,
 /// pulsar TRADUCIR y verificar la navegación a la pantalla de resultado con la
@@ -74,6 +77,7 @@ void main() {
     final container = ProviderContainer(overrides: [
       translationRepositoryProvider.overrideWithValue(_FakeRepository(generated)),
       audioOutputProvider.overrideWithValue(_NoopAudio()),
+      lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
     ]);
     addTearDown(container.dispose);
 

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
+
+import 'helpers/official_dictionary.dart';
 
 /// Pruebas de cobertura del lexicón.
 ///
@@ -13,9 +14,8 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_
 /// en otro lenguaje (Python). Las claves de glosa incluyen la letra `Ñ`
 /// (NIÑO, MAÑANA), por eso el patrón añade `Ñ` al rango `[A-Z0-9_]`.
 void main() {
-  final dataSource = LocalCardsDataSource();
   final catalogGlosses =
-      dataSource.cards.map((c) => c.gloss).toSet();
+      loadOfficialEntries().map((c) => c.gloss).toSet();
 
   test('todas las glosas del catálogo están en el lexicón del motor local', () {
     final content = File(

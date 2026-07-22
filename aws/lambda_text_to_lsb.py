@@ -41,6 +41,11 @@ BEDROCK_MODEL_ID = os.environ.get(
 APP_REGION = os.environ.get(
     "APP_REGION", os.environ.get("AWS_REGION", "us-east-1")
 )
+# Tabla del diccionario evolutivo (Fase 2). Si está definida, las glosas
+# disponibles para el avatar se leen de DynamoDB (nuevas señas aprobadas en
+# el portal quedan disponibles SIN redesplegar esta lambda). Vacía = solo
+# el set estático de fallback.
+DICTIONARY_TABLE = os.environ.get("DICTIONARY_TABLE", "")
 
 # ---------------------------------------------------------------------------
 # Clientes AWS
@@ -71,9 +76,58 @@ AVAILABLE_GLOSSES = {
     
     # --- Alfabeto Dactilológico y Números (Para dactilología offline/fallback) ---
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
     "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 }
+
+# Caché de proceso del mapa glosa → archivo de animación (warm starts).
+_avatar_animations_cache = None
+
+
+def get_avatar_animations() -> dict:
+    """Mapa glosa → animationFile disponible para el avatar 3D.
+
+    Fuente única (Fase 2): tabla del diccionario evolutivo en DynamoDB,
+    donde cada ENTRY aprobada puede declarar su `animationFile`. El set
+    estático AVAILABLE_GLOSSES queda como base garantizada (alfabeto
+    dactilológico, números y señas fundacionales) y como fallback total
+    si la tabla no está configurada o falla la consulta.
+    """
+    global _avatar_animations_cache
+    if _avatar_animations_cache is not None:
+        return _avatar_animations_cache
+
+    animations = {g: f"{remove_accents(g)}.glb" for g in AVAILABLE_GLOSSES}
+
+    if DICTIONARY_TABLE:
+        try:
+            from boto3.dynamodb.conditions import Key
+
+            table = boto3.resource(
+                "dynamodb", region_name=APP_REGION
+            ).Table(DICTIONARY_TABLE)
+            kwargs = {"KeyConditionExpression": Key("pk").eq("ENTRY")}
+            while True:
+                resp = table.query(**kwargs)
+                for item in resp.get("Items", []):
+                    if item.get("status") == "pending":
+                        continue
+                    animation = item.get("animationFile")
+                    if animation:
+                        animations[str(item["gloss"]).upper()] = str(animation)
+                last = resp.get("LastEvaluatedKey")
+                if not last:
+                    break
+                kwargs["ExclusiveStartKey"] = last
+            logger.info(
+                "Diccionario dinámico cargado: %d glosas con animación",
+                len(animations),
+            )
+        except Exception as exc:  # noqa: BLE001 — nunca romper la traducción
+            logger.warning("Fallo leyendo diccionario dinámico: %s", exc)
+
+    _avatar_animations_cache = animations
+    return animations
 
 
 # ===================================================================
@@ -88,7 +142,8 @@ def build_disambiguation_prompt(text: str, context: str) -> str:
     """
 
     # Lista de glosas disponibles para que la IA solo use términos válidos
-    gloss_list = ", ".join(sorted(AVAILABLE_GLOSSES))
+    # (incluye las señas nuevas aprobadas en el diccionario evolutivo).
+    gloss_list = ", ".join(sorted(get_avatar_animations()))
 
     context_instruction = ""
     if context == "legal":
@@ -234,18 +289,19 @@ def post_process_glosses(bedrock_result: dict) -> dict:
     raw_glosses = bedrock_result.get("glosses", [])
     disambiguation = bedrock_result.get("disambiguation", [])
 
+    animations = get_avatar_animations()
+
     processed = []
     for gloss in raw_glosses:
         gloss_upper = gloss.upper().strip()
-        is_available = gloss_upper in AVAILABLE_GLOSSES
-        
-        filename = remove_accents(gloss_upper)
+        animation_file = animations.get(gloss_upper)
+        is_available = animation_file is not None
 
         processed.append({
             "gloss": gloss_upper,
             "available": is_available,
             "fallback": "dactilología" if not is_available else None,
-            "animationFile": f"{filename}.glb" if is_available else None,
+            "animationFile": animation_file,
         })
 
     return {

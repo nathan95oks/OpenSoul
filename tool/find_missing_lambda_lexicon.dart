@@ -1,9 +1,10 @@
 // ignore_for_file: avoid_print
 // Utilidad de diagnóstico — NO es una prueba.
 //
-// Reporta, sin depender del runner de pruebas, qué glosas del catálogo local
-// (LocalCardsDataSource) no tienen representación en el lexicón del motor local
-// (LocalSentenceAssembler) ni en el GLOSS_LEXICON del backend (lambda_function.py).
+// Reporta, sin depender del runner de pruebas, qué glosas del diccionario
+// oficial (assets/dictionary/official_dictionary.json) no tienen representación
+// en el lexicón del motor local (LocalSentenceAssembler) ni en el
+// GLOSS_LEXICON del backend (lambda_function.py).
 //
 // Lee los tres archivos como TEXTO, por lo que se ejecuta sin compilar Flutter:
 //
@@ -16,15 +17,14 @@ Set<String> _matchAll(String content, RegExp re) =>
     re.allMatches(content).map((m) => m.group(1)!).toSet();
 
 void main() {
-  final dsPath =
-      'lib/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
+  const dsPath = 'assets/dictionary/official_dictionary.json';
   final asmPath =
       'lib/core/engines/semantic_engine/local_sentence_assembler.dart';
   const lambdaPath = 'aws/lambda_function.py';
 
   final catalog = _matchAll(
     File(dsPath).readAsStringSync(),
-    RegExp(r"gloss:\s*'([A-Z0-9_Ñ]+)'"),
+    RegExp(r'"gloss":\s*"([A-Z0-9_Ñ]+)"'),
   );
   final assembler = _matchAll(
     File(asmPath).readAsStringSync(),
