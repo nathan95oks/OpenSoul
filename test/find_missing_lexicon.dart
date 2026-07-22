@@ -19,7 +19,7 @@ void main() {
 
   test('todas las glosas del catálogo están en el lexicón del motor local', () {
     final content = File(
-      'lib/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart',
+      'lib/core/engines/semantic_engine/local_sentence_assembler.dart',
     ).readAsStringSync();
 
     final regex = RegExp(r"'([A-Z0-9_Ñ]+)':\s*_Lex\(");

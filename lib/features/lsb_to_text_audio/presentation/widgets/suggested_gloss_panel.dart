@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/theme.dart';
-import '../../domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import '../providers/cards_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../providers/sentence_provider.dart';

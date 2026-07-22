@@ -1,6 +1,6 @@
-import '../../domain/entities/lsb_translation.dart';
-import '../../domain/repositories/audio_translation_repository.dart';
-import '../datasources/remote_audio_datasource.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
+import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart';
 
 class AudioTranslationRepositoryImpl implements AudioTranslationRepository {
   final RemoteAudioDataSource remoteDataSource;

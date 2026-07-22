@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:lsb_legal_app/features/audio_to_lsb/domain/entities/lsb_translation.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/domain/usecases/translate_text_usecase.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 

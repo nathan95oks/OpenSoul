@@ -1,28 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import '../../domain/entities/lsb_translation.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import '../../domain/usecases/translate_audio_usecase.dart';
 import '../../domain/usecases/translate_text_usecase.dart';
-import '../../data/datasources/remote_audio_datasource.dart';
-import '../../data/repositories/audio_translation_repository_impl.dart';
 
-// Providers for dependencies
-final httpClientProviderForAudio = Provider((ref) => http.Client());
-
-final remoteAudioDataSourceProvider = Provider<RemoteAudioDataSource>((ref) {
-  return RemoteAudioDataSourceImpl(client: ref.read(httpClientProviderForAudio));
-});
-
-final audioTranslationRepositoryProvider = Provider((ref) {
-  return AudioTranslationRepositoryImpl(remoteDataSource: ref.read(remoteAudioDataSourceProvider));
-});
+/// La cadena http → datasource → repositorio vive en el núcleo compartido
+/// (`core/di`), común a ambas direcciones de la conversación.
+export 'package:lsb_legal_app/core/di/core_providers.dart'
+    show remoteAudioDataSourceProvider, audioTranslationRepositoryProvider;
 
 final translateAudioUseCaseProvider = Provider((ref) {
-  return TranslateAudioUseCase(ref.read(audioTranslationRepositoryProvider));
+  return TranslateAudioUseCase(ref.watch(audioTranslationRepositoryProvider));
 });
 
 final translateTextUseCaseProvider = Provider((ref) {
-  return TranslateTextUseCase(ref.read(audioTranslationRepositoryProvider));
+  return TranslateTextUseCase(ref.watch(audioTranslationRepositoryProvider));
 });
 
 // State definitions

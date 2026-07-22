@@ -7,7 +7,16 @@ import '../controllers/audio_translation_controller.dart';
 class TextInputWidget extends ConsumerStatefulWidget {
   final Function(String) onSubmit;
 
-  const TextInputWidget({Key? key, required this.onSubmit}) : super(key: key);
+  /// Callback específico para texto proveniente del dictado por voz.
+  /// Si no se provee, se usa [onSubmit]. Permite al dueño del widget
+  /// distinguir el canal de entrada (voz vs. texto) sin duplicar el widget.
+  final Function(String)? onSpeechSubmit;
+
+  const TextInputWidget({
+    Key? key,
+    required this.onSubmit,
+    this.onSpeechSubmit,
+  }) : super(key: key);
 
   @override
   ConsumerState<TextInputWidget> createState() => _TextInputWidgetState();
@@ -101,8 +110,17 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
       });
 
       final text = _controller.text.trim();
-      ref.read(audioTranslationControllerProvider.notifier).processAudioAsText(text);
       _controller.clear();
+      if (text.isEmpty) {
+        // Dictado vacío: solo salimos del estado de grabación.
+        ref
+            .read(audioTranslationControllerProvider.notifier)
+            .processAudioAsText('');
+      } else {
+        // El destino del mensaje lo decide el dueño del widget (pantalla
+        // clásica o conversación), igual que con el texto escrito.
+        (widget.onSpeechSubmit ?? widget.onSubmit)(text);
+      }
     } catch (e) {
       debugPrint("Error stopping speech to text: $e");
     }

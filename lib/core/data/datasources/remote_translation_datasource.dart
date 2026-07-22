@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 
 /// Contrato abstracto para el datasource remoto de traducción.
 abstract class RemoteTranslationDataSource {

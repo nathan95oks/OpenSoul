@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 
 /// Auditoría de cobertura semántica del motor local.

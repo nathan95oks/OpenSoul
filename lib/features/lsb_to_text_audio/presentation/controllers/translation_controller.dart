@@ -1,9 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../data/services/audio_output.dart';
-import '../../domain/repositories/translation_repository.dart';
-import '../../domain/services/local_sentence_assembler.dart';
-import '../providers/translation_provider.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/generators/audio_generator/audio_output.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+
+/// El provider de la salida de audio vive en el núcleo compartido
+/// (`core/di`); se re-exporta para mantener estables a los consumidores
+/// y tests que lo sobrescriben desde aquí.
+export 'package:lsb_legal_app/core/di/core_providers.dart'
+    show audioOutputProvider;
 
 /// Estado de reproducción del audio de la declaración. Alimenta únicamente
 /// el indicador visual de la pantalla de resultado; no altera la lógica de
@@ -22,34 +27,18 @@ final audioPlaybackProvider =
   AudioPlaybackNotifier.new,
 );
 
-/// Provee la salida de audio. La implementación real usa los plugins nativos;
-/// los tests la sobrescriben con un doble (TST-01). El provider posee el ciclo
-/// de vida: libera los recursos al destruirse (RVP-02).
-final audioOutputProvider = Provider<AudioOutput>((ref) {
-  final output = RealAudioOutput();
-  ref.onDispose(output.dispose);
-  return output;
-});
-
-/// Controlador de la traducción híbrida.
+/// Controlador de presentación de la declaración (flujo de tarjetas).
 ///
-/// Arquitectura híbrida (declarada en el perfil):
-///   1. **Motor semántico propio** ([LocalSentenceAssembler]) — siempre
-///      construye una `baseSentence` fiel a las glosas seleccionadas.
-///   2. **Modelo fundacional** (backend AWS Bedrock) — refina la oración
-///      cuando responde correctamente.
-///
-/// Para la síntesis de voz seguimos la misma estrategia híbrida:
-///   - Si el backend entrega un `audioUrl` válido (AWS Polly), se
-///     reproduce ese audio neuronal remoto.
-///   - Si no hay `audioUrl` (backend degenerado o caído), se sintetiza
-///     localmente con `flutter_tts` usando el motor TTS nativo del
-///     dispositivo en español latinoamericano.
+/// La estrategia híbrida (motor semántico local + Bedrock/Polly con
+/// degradación elegante) vive en el [ConversationEngine] del núcleo; este
+/// controlador solo orquesta el estado de la pantalla y la reproducción:
+///   - Si la declaración trae `audioUrl` (AWS Polly), reproduce ese audio
+///     neuronal remoto.
+///   - Si no, sintetiza localmente con `flutter_tts` en español.
 ///
 /// Esto garantiza que el usuario sordo siempre obtenga salida multimodal
 /// (texto + audio) — requisito del módulo de salida en el perfil.
 class TranslationController extends AsyncNotifier<TranslationResult?> {
-  final LocalSentenceAssembler _assembler = const LocalSentenceAssembler();
   late final AudioOutput _audio;
 
   @override
@@ -140,62 +129,28 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
   }) async {
     state = const AsyncValue.loading();
 
-    final localSentence = _assembler.assemble(
-      contextId: assemblerContext ?? context,
+    // La fusión híbrida (motor local + backend, detección de degeneración,
+    // fallback sin red) es responsabilidad del motor de conversación.
+    final engine = ref.read(conversationEngineProvider);
+    final result = await engine.generateDeclaration(
+      contextId: context,
       glosses: cards,
+      assemblerContextId: assemblerContext,
     );
 
-    // Garantía: si por alguna razón el motor local no produjo texto,
-    // construimos un texto mínimo desde las glosas para que el panel
-    // de resultado siempre tenga algo que mostrar.
-    final safeLocal = localSentence.isNotEmpty
-        ? localSentence
-        : cards.join(' ');
+    state = AsyncValue.data(result);
 
-    try {
-      final translateUseCase = ref.read(translateCardsUseCaseProvider);
-      final remote = await translateUseCase(context: context, cards: cards);
-
-      final degenerate = _assembler.isBackendDegenerate(
-        backendText: remote.generatedText,
-        glosses: cards,
-      );
-
-      final merged = TranslationResult(
-        baseSentence: safeLocal,
-        generatedText: degenerate ? safeLocal : remote.generatedText,
-        audioUrl: degenerate ? null : remote.audioUrl,
-        cacheHit: remote.cacheHit,
-        bedrockUsed: !degenerate && remote.bedrockUsed,
-        intermediateRepresentation: remote.intermediateRepresentation,
-        glossSequence: remote.glossSequence,
-      );
-
-      state = AsyncValue.data(merged);
-
-      // Reproducción híbrida: URL remota si existe, TTS local si no.
-      if (merged.audioUrl != null && merged.audioUrl!.isNotEmpty) {
-        try {
-          await _audio.playUrl(merged.audioUrl!);
-          _setPlayback(AudioPlaybackState.playing);
-        } catch (_) {
-          // Si la reproducción remota falla, caemos a TTS local.
-          await _speakLocally(merged.generatedText);
-        }
-      } else {
-        await _speakLocally(merged.generatedText);
+    // Reproducción híbrida: URL remota si existe, TTS local si no.
+    if (result.audioUrl != null && result.audioUrl!.isNotEmpty) {
+      try {
+        await _audio.playUrl(result.audioUrl!);
+        _setPlayback(AudioPlaybackState.playing);
+      } catch (_) {
+        // Si la reproducción remota falla, caemos a TTS local.
+        await _speakLocally(result.generatedText);
       }
-    } catch (_) {
-      // El backend falló — usar exclusivamente el motor propio + TTS local.
-      final fallback = TranslationResult(
-        baseSentence: safeLocal,
-        generatedText: safeLocal,
-        audioUrl: null,
-        cacheHit: false,
-        bedrockUsed: false,
-      );
-      state = AsyncValue.data(fallback);
-      await _speakLocally(safeLocal);
+    } else {
+      await _speakLocally(result.generatedText);
     }
   }
 }

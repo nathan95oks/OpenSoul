@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
 import 'context_provider.dart';
 import 'sentence_provider.dart';
 

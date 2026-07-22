@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lsb_legal_app/app/theme.dart';
-import '../../domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'lsb_icons.dart';
 
 /// Nodo semántico individual.

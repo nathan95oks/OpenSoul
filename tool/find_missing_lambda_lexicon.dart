@@ -19,7 +19,7 @@ void main() {
   final dsPath =
       'lib/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
   final asmPath =
-      'lib/features/lsb_to_text_audio/domain/services/local_sentence_assembler.dart';
+      'lib/core/engines/semantic_engine/local_sentence_assembler.dart';
   const lambdaPath = 'aws/lambda_function.py';
 
   final catalog = _matchAll(

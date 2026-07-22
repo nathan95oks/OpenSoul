@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/data/repositories/cards_repository_impl.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/cards_repository.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_cards_by_category_usecase.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_categories_usecase.dart';

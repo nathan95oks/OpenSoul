@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'semantic_node.dart';
 
 /// Disposición adaptativa de nodos semánticos.

@@ -1,4 +1,4 @@
-import '../entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import '../repositories/cards_repository.dart';
 
 class GetCardsByCategoryUseCase {

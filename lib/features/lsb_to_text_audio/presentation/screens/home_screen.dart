@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
-import '../../domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../controllers/translation_controller.dart';

@@ -1,4 +1,4 @@
-import '../../domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 
 /// Fuente de datos local con el catálogo de tarjetas LSB
 /// especializadas en contextos reales: judiciales, policiales,

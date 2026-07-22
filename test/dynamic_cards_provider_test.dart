@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/local_cards_datasource.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/lsb_card.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
