@@ -1,5 +1,6 @@
 import '../../domain/entities/lsb_card.dart';
 import 'dictionary_document.dart';
+import 'dictionary_proposal.dart';
 
 /// Puerto del diccionario evolutivo LSB.
 ///
@@ -19,6 +20,12 @@ abstract class LexiconRepository {
 
   /// Intenta sincronizar con el diccionario remoto. Devuelve `true` si se
   /// aplicó una versión más nueva. Nunca lanza: sin red, el diccionario
-  /// local sigue siendo válido.
+  /// local sigue siendo válido. También reintenta el envío de propuestas
+  /// encoladas offline.
   Future<bool> refresh();
+
+  /// Envía una propuesta de la comunidad al backend (queda `pending`).
+  /// Sin conexión, la encola en disco y la reenviará en la próxima
+  /// sincronización. Nunca lanza: el desenlace viaja en el resultado.
+  Future<ProposalSubmissionResult> submitProposal(DictionaryProposal proposal);
 }
