@@ -77,6 +77,33 @@ class Conversation {
     return null;
   }
 
+  /// Último turno de la persona oyente, esté o no respondido.
+  ConversationTurn? get lastHearingTurn {
+    for (final turn in turns.reversed) {
+      if (turn.message.speaker == SpeakerRole.hearing) return turn;
+    }
+    return null;
+  }
+
+  /// Turno del oyente que sigue esperando respuesta, si lo hay.
+  ///
+  /// Es la pregunta que la persona sorda está a punto de contestar: de ella
+  /// salen el contexto sugerido y el enunciado que se le muestra como
+  /// referencia mientras construye su respuesta.
+  ConversationTurn? get pendingReply {
+    final last = lastTurn;
+    if (last == null) return null;
+    return last.message.speaker == SpeakerRole.hearing ? last : null;
+  }
+
+  /// Contexto desde el que conviene abrir el flujo de tarjetas.
+  ///
+  /// Prioriza lo inferido del enunciado que se está respondiendo —es la
+  /// información más fresca— y recurre al último contexto confirmado cuando
+  /// no hay inferencia. Nulo si no hay ninguna de las dos cosas.
+  String? get suggestedReplyContextId =>
+      pendingReply?.message.contextSuggestion?.contextId ?? activeContextId;
+
   Conversation addTurn(ConversationTurn turn) => Conversation(
         id: id,
         turns: [...turns, turn],

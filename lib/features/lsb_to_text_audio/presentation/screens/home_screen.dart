@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/dictionary_proposals/presentation/widgets/propose_sign_sheet.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -127,8 +128,14 @@ class HomeScreen extends ConsumerWidget {
     List<String> selectedWords,
     AsyncValue<TranslationResult?> translationState,
   ) {
+    // Frase del oyente que se está respondiendo: se mantiene a la vista
+    // durante todo el flujo guiado para no obligar a recordarla.
+    final replyingTo =
+        ref.watch(conversationProvider).conversation.pendingReply?.outputs.text;
+
     return Column(
       children: [
+        if (replyingTo != null) _ReplyingToStrip(text: replyingTo),
         // Pregunta activa + opciones (scrollable solo si hay muchas opciones)
         Expanded(
           child: SingleChildScrollView(
@@ -188,6 +195,47 @@ class HomeScreen extends ConsumerWidget {
                 },
         ),
       ],
+    );
+  }
+}
+
+/// Franja superior con la frase del oyente que se está respondiendo.
+class _ReplyingToStrip extends StatelessWidget {
+  final String text;
+
+  const _ReplyingToStrip({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Respondiendo a: $text',
+      excludeSemantics: true,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        color: AppTheme.brandPrimary.withValues(alpha: 0.07),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(Icons.record_voice_over,
+                size: 15, color: AppTheme.brandPrimary),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                '«$text»',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 13,
+                  height: 1.3,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.lightText,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

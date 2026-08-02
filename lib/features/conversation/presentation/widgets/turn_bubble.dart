@@ -97,6 +97,38 @@ class TurnBubble extends StatelessWidget {
                   ),
                 ),
               ],
+              // Ambigüedades que el motor resolvió al interpretar la frase.
+              // Se muestran para que la decisión sea auditable por quien
+              // conversa, no un salto opaco entre español y LSB.
+              if (turn.message.disambiguations.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  children: [
+                    for (final d in turn.message.disambiguations)
+                      Tooltip(
+                        message: d.reason,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.14),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '${d.original} → ${d.meaning}',
+                            style: const TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
               const SizedBox(height: 4),
               Align(
                 alignment: Alignment.centerRight,

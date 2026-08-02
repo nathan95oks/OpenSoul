@@ -86,6 +86,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(conversationProvider);
+    // Carga el diccionario en cuanto se abre la conversación: la inferencia
+    // de contexto se construye sobre él y debe estar lista para el primer
+    // turno, no para el segundo.
+    ref.watch(lexiconEntriesProvider);
     ref.listen(conversationProvider, (prev, next) {
       if ((prev?.conversation.turns.length ?? 0) <
           next.conversation.turns.length) {

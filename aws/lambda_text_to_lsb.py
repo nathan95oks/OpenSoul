@@ -134,20 +134,7 @@ def get_avatar_animations() -> dict:
 # MÓDULO 1: PROMPT ENGINEERING — Desambiguación Semántica Jurídica
 # ===================================================================
 
-def build_disambiguation_prompt(text: str, context: str) -> str:
-    """
-    Construye el Prompt que se inyecta en Bedrock para que el modelo
-    fundacional realice la desambiguación semántica y la reestructuración
-    gramatical de Español (SVO) a LSB (OSV / SOV).
-    """
-
-    # Lista de glosas disponibles para que la IA solo use términos válidos
-    # (incluye las señas nuevas aprobadas en el diccionario evolutivo).
-    gloss_list = ", ".join(sorted(get_avatar_animations()))
-
-    context_instruction = ""
-    if context == "legal":
-        context_instruction = """
+LEGAL_DISAMBIGUATION_RULES = """
 REGLAS DE DESAMBIGUACIÓN JURÍDICA Y PALABRAS POLISÉMICAS:
 - "llama" (Verbo llamar / notificar): Se interpreta como la acción de convocar, citar o pedir presencia. Mapear a la glosa "LLAMAR".
   * Ejemplo: "Yo llamo al policía." -> ["YO", "POLICIA", "LLAMAR"]
@@ -157,7 +144,54 @@ REGLAS DE DESAMBIGUACIÓN JURÍDICA Y PALABRAS POLISÉMICAS:
   * Ejemplo: "El juez mira la llama." -> ["JUEZ", "FUEGO-LLAMA", "VER"] (Nota: la palabra "VER" no está en el diccionario, se deletreará).
 """
 
+# Situaciones reconocidas de la conversación, con la etiqueta legible que se
+# inyecta en el prompt. Deben coincidir con los contextos del catálogo de la
+# app (`context_catalog.dart`) y con los `contexts` del diccionario.
+SITUATION_LABELS = {
+    "denuncia_robo": "denuncia de robo, hurto o asalto",
+    "violencia": "denuncia de violencia o agresión",
+    "accidente": "reporte de un accidente",
+    "orientacion": "consulta de orientación o trámite legal",
+    "tramite_id": "trámite de documentos de identidad",
+    "perdida": "pérdida o extravío de objetos o documentos",
+    "emergencia": "situación de emergencia",
+    "otro": "declaración general",
+}
+
+
+def build_disambiguation_prompt(text: str, context: str = "legal", situation: str = None) -> str:
+    """
+    Construye el Prompt que se inyecta en Bedrock para que el modelo
+    fundacional realice la desambiguación semántica y la reestructuración
+    gramatical de Español (SVO) a LSB (OSV / SOV).
+
+    [situation] es el contexto situacional vigente en la conversación
+    ('denuncia_robo', 'violencia'…). Cuando llega, orienta al modelo hacia el
+    vocabulario propio de esa situación. Es opcional: sin él, el prompt es
+    exactamente el de siempre.
+    """
+
+    # Lista de glosas disponibles para que la IA solo use términos válidos
+    # (incluye las señas nuevas aprobadas en el diccionario evolutivo).
+    gloss_list = ", ".join(sorted(get_avatar_animations()))
+
+    # Las reglas de desambiguación jurídica son el núcleo de este sistema y se
+    # aplican en todo el dominio legal —que es el único de la aplicación—.
+    # Antes se exigía `context == "legal"` exacto, de modo que cualquier otra
+    # etiqueta las eliminaba en silencio y "llama" volvía a ser ambigua.
+    context_instruction = "" if context == "general" else LEGAL_DISAMBIGUATION_RULES
+
+    situation_instruction = ""
+    if situation and situation in SITUATION_LABELS:
+        situation_instruction = f"""
+SITUACIÓN DE LA CONVERSACIÓN: {SITUATION_LABELS[situation]}.
+La frase forma parte de un diálogo sobre esa situación. Ante dos glosas
+igualmente válidas, prefiere la propia de este ámbito. No inventes contenido
+que la frase no diga: la situación orienta el vocabulario, no lo añade.
+"""
+
     prompt = f"""Eres un sistema experto en Lengua de Señas Boliviana (LSB) para entornos judiciales y de trámites.
+{situation_instruction}
 
 Tu tarea es recibir una frase en español y convertirla en un ARREGLO ORDENADO DE GLOSAS LSB.
 
@@ -327,10 +361,19 @@ def build_response(status_code: int, body: dict) -> dict:
     }
 
 
-def generate_cache_key(text: str) -> str:
-    """Genera un hash MD5 determinista de la frase normalizada."""
+def generate_cache_key(text: str, situation: str = None) -> str:
+    """
+    Genera un hash MD5 determinista de la frase normalizada.
+
+    La situación forma parte de la clave porque forma parte del resultado:
+    la misma frase traducida bajo 'denuncia_robo' y bajo 'violencia' puede
+    producir glosas distintas, y servir una por la otra desde el caché sería
+    devolver la traducción de otra conversación.
+    """
     normalized = text.lower().strip()
     normalized = re.sub(r'\s+', ' ', normalized)
+    if situation:
+        normalized = f"{normalized}|{situation}"
     return hashlib.md5(normalized.encode("utf-8")).hexdigest()
 
 
@@ -357,9 +400,11 @@ def lambda_handler(event, context):
     """
     Punto de entrada de la función Lambda.
     Recibe una petición HTTP POST con:
-      { "text": "frase en español", "context": "legal" }
+      { "text": "frase en español", "context": "legal",
+        "situation": "denuncia_robo" }   # situation es opcional
     Retorna:
-      { "glosses": [...], "glossDetails": [...], "disambiguation": [...] }
+      { "glosses": [...], "glossDetails": [...], "disambiguation": [...],
+        "situation": "denuncia_robo" }
     """
 
     # 0. Manejar preflight CORS
@@ -395,9 +440,18 @@ def lambda_handler(event, context):
 
     text = body["text"].strip()
     context_type = body.get("context", "legal").strip().lower()
-    cache_key = generate_cache_key(text)
+    # Contexto situacional de la conversación. Opcional y validado: una
+    # etiqueta desconocida se ignora en lugar de contaminar el prompt.
+    situation = (body.get("situation") or "").strip().lower() or None
+    if situation and situation not in SITUATION_LABELS:
+        logger.warning("Situación desconocida ignorada: %s", situation)
+        situation = None
+    cache_key = generate_cache_key(text, situation)
 
-    logger.info("Texto recibido: '%s' | Contexto: %s | Hash: %s", text, context_type, cache_key)
+    logger.info(
+        "Texto recibido: '%s' | Contexto: %s | Situación: %s | Hash: %s",
+        text, context_type, situation or "-", cache_key,
+    )
 
     # 3. (FUTURO) Verificar caché en DynamoDB
     # cached = check_dynamodb_cache(cache_key)
@@ -406,7 +460,7 @@ def lambda_handler(event, context):
     #     return build_response(200, {**cached, "cacheHit": True})
 
     # 4. Construir el Prompt de desambiguación semántica
-    prompt = build_disambiguation_prompt(text, context_type)
+    prompt = build_disambiguation_prompt(text, context_type, situation)
     logger.info("Prompt construido (%d caracteres)", len(prompt))
 
     # 5. Invocar Amazon Bedrock
@@ -442,6 +496,7 @@ def lambda_handler(event, context):
     return build_response(200, {
         "originalText": text,
         "context": context_type,
+        "situation": situation,
         "cacheHit": False,
         "cacheKey": cache_key,
         **result,

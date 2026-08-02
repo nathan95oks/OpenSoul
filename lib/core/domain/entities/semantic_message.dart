@@ -1,3 +1,35 @@
+import 'context_suggestion.dart';
+
+/// Decisión de desambiguación tomada sobre una palabra polisémica.
+///
+/// El motor de traducción resuelve ambigüedades del español al pasar a LSB
+/// ("llama" → convocar / animal / fuego). Esa decisión es parte del
+/// significado del mensaje, no un detalle de implementación: se conserva
+/// para poder mostrarla y justificarla ante quien conversa.
+class SemanticDisambiguation {
+  /// Palabra ambigua tal como apareció en el enunciado.
+  final String original;
+
+  /// Sentido elegido.
+  final String meaning;
+
+  /// Justificación breve de la elección.
+  final String reason;
+
+  const SemanticDisambiguation({
+    required this.original,
+    required this.meaning,
+    this.reason = '',
+  });
+
+  factory SemanticDisambiguation.fromJson(Map<String, dynamic> json) =>
+      SemanticDisambiguation(
+        original: (json['original'] ?? '').toString(),
+        meaning: (json['meaning'] ?? '').toString(),
+        reason: (json['reason'] ?? '').toString(),
+      );
+}
+
 /// Quién produce el mensaje dentro de la conversación.
 ///
 /// En el modo de un solo dispositivo, el teléfono se pasa entre ambas
@@ -22,9 +54,25 @@ class SemanticMessage {
   /// Secuencia de glosas LSB del enunciado (p. ej. ['HOMBRE','ROBAR','CELULAR']).
   final List<String> glosses;
 
-  /// Contexto situacional en el que se emitió ('denuncia_robo', 'violencia'…).
-  /// Nulo cuando el canal de entrada no lo determina (voz/texto libre).
+  /// Contexto situacional **confirmado** por quien emite el mensaje
+  /// ('denuncia_robo', 'violencia'…). Nulo cuando el canal de entrada no lo
+  /// determina (voz/texto libre). Nunca contiene una inferencia del sistema:
+  /// para eso está [contextSuggestion].
   final String? contextId;
+
+  /// Contexto **inferido** del enunciado, pendiente de confirmación.
+  ///
+  /// Es lo que permite que el turno de la persona oyente proponga a la
+  /// persona sorda desde qué contexto responder, en lugar de obligarla a
+  /// declararlo de nuevo desde cero.
+  final ContextSuggestion? contextSuggestion;
+
+  /// Id del mensaje al que responde este turno. Enlaza ambas direcciones de
+  /// la conversación: sin él los turnos serían una lista, no un diálogo.
+  final String? replyToId;
+
+  /// Ambigüedades resueltas al interpretar el enunciado.
+  final List<SemanticDisambiguation> disambiguations;
 
   /// Forma de superficie en español del enunciado.
   final String text;
@@ -42,6 +90,9 @@ class SemanticMessage {
     required this.glosses,
     required this.text,
     this.contextId,
+    this.contextSuggestion,
+    this.replyToId,
+    this.disambiguations = const [],
     this.intermediateRepresentation,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
