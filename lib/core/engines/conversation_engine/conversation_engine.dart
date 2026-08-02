@@ -148,6 +148,7 @@ class ConversationEngine {
       outputs: GeneratedOutputs(
         text: text,
         animationUrls: translation.animationUrls,
+        animationGlosses: translation.animationGlosses,
       ),
     );
   }

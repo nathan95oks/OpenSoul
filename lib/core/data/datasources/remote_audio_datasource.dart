@@ -61,19 +61,30 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
         final decodedResponse = jsonDecode(response.body);
 
         final glossDetails = decodedResponse['glossDetails'] as List<dynamic>? ?? [];
-        final urls = <String>[
-          for (final detail in glossDetails)
-            animationResolver.resolve(
-              gloss: (detail['gloss'] ?? '').toString(),
-              animationFile: detail['animationFile']?.toString(),
-            ),
-        ];
+
+        // Una seña compuesta (`F.glb+ABOGADO.glb`) son varias animaciones de
+        // una sola glosa. El visor avanza por índice, así que la glosa se
+        // repite tantas veces como animaciones tenga: si las dos listas se
+        // desalinean, el avatar acaba rotulando cada seña con el nombre de
+        // otra.
+        final urls = <String>[];
+        final animationGlosses = <String>[];
+        for (final detail in glossDetails) {
+          final gloss = (detail['gloss'] ?? '').toString();
+          final resolved = animationResolver.resolveAll(
+            gloss: gloss,
+            animationFile: detail['animationFile']?.toString(),
+          );
+          urls.addAll(resolved);
+          animationGlosses.addAll(List.filled(resolved.length, gloss));
+        }
 
         // Decodificamos el JSON que viene de AWS Lambda (Bedrock)
         return LsbTranslationModel.fromJson({
           'glosses': decodedResponse['glosses'],
           'animationUrl': urls.isNotEmpty ? urls.first : '',
           'animationUrls': urls,
+          'animationGlosses': animationGlosses,
           'disambiguation': decodedResponse['disambiguation'],
         });
       } else {
