@@ -7,6 +7,8 @@ import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import '../providers/conversation_provider.dart';
 import '../widgets/avatar_playback_sheet.dart';
 import '../widgets/turn_bubble.dart';
@@ -57,6 +59,22 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       }
     }
     await audio.speak(turn.outputs.text);
+  }
+
+  /// Abre el flujo de tarjetas para responder al turno del oyente.
+  ///
+  /// Si se va a empezar una respuesta nueva, se suelta el contexto de la
+  /// respuesta anterior: de lo contrario el flujo entraría directo al
+  /// contexto viejo y la persona sorda nunca vería el que se le propone
+  /// para *esta* pregunta. Una declaración a medias (con glosas ya
+  /// elegidas) se respeta y se conserva intacta.
+  void _openCardsFlow() {
+    final startingFresh = ref.read(conversationProvider).conversation.pendingReply != null &&
+        ref.read(sentenceProvider).isEmpty;
+    if (startingFresh) {
+      ref.read(contextProvider.notifier).clearContext();
+    }
+    context.push('/lsb-to-audio');
   }
 
   Future<void> _confirmNewConversation() async {
@@ -182,7 +200,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 onHearingSpeech: (text) => ref
                     .read(conversationProvider.notifier)
                     .sendHearingMessage(text, source: MessageSource.speech),
-                onDeafCards: () => context.push('/lsb-to-audio'),
+                onDeafCards: _openCardsFlow,
               ),
             ],
           ),

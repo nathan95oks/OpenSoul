@@ -104,13 +104,18 @@ Sorda pulsa "Responder con tarjetas LSB"
 5. **Degradación limpia.** Si el diccionario aún no ha cargado,
    `ContextInferenceEngine.empty()` no sugiere nada y la conversación funciona
    igual, solo sin preselección.
+6. **Empezar una respuesta nueva suelta el contexto anterior.** `contextProvider`
+   sobrevive a la conversación, así que sin esto el flujo entraba directo al
+   contexto de la respuesta previa y la propuesta no llegaba a verse nunca
+   (detectado al ejecutar la app, no por las pruebas). Una declaración a medias
+   —con glosas ya elegidas— se respeta y se conserva intacta.
 
 ## Verificación
 
 - `flutter analyze`: 0 errores, 0 warnings.
-- `flutter test`: **82/82 en verde** (68 previos + 14 nuevos, sin tocar ninguno
+- `flutter test`: **83/83 en verde** (68 previos + 15 nuevos, sin tocar ninguno
   existente: los campos nuevos son opcionales y el catálogo se re-exporta).
-  - `context_inference_engine_test.dart` — 9 casos auditados **contra el
+  - `context_inference_engine_test.dart` — 10 casos auditados **contra el
     diccionario canónico real**, no contra un léxico de laboratorio: si las
     etiquetas del diccionario se degradan, la prueba falla.
   - `conversation_bidirectional_test.dart` — 5 casos del ciclo completo, con un
@@ -119,6 +124,11 @@ Sorda pulsa "Responder con tarjetas LSB"
 - Lambda auditado localmente con Bedrock simulado: sin `situation` la respuesta
   es idéntica campo a campo a la actual; con `situation` cambia el prompt y la
   clave de caché.
+- **Ciclo completo ejecutado en emulador Android** contra el backend real:
+  «Le robaron su celular» → glosas `PASADO · SUYO · CELULAR · ROBAR` → *Denunciar
+  robo* propuesto con distintivo SUGERIDO y evidencia `ROBAR · CELULAR` →
+  declaración con audio de Polly → de vuelta al hilo. Un segundo turno sin
+  evidencia («Recuerda la hora») cae correctamente al distintivo CONTEXTO ACTUAL.
 
 ## Deuda y siguientes pasos
 
