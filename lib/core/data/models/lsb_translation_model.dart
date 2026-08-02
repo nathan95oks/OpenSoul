@@ -6,6 +6,7 @@ class LsbTranslationModel extends LsbTranslation {
     required super.glosses,
     required super.animationUrl,
     super.animationUrls = const [],
+    super.animationGlosses = const [],
     super.disambiguations = const [],
   });
 
@@ -14,6 +15,7 @@ class LsbTranslationModel extends LsbTranslation {
       glosses: List<String>.from(json['glosses'] ?? []),
       animationUrl: json['animationUrl'] ?? '',
       animationUrls: List<String>.from(json['animationUrls'] ?? []),
+      animationGlosses: List<String>.from(json['animationGlosses'] ?? []),
       disambiguations: [
         for (final item in (json['disambiguation'] as List? ?? const []))
           SemanticDisambiguation.fromJson(
@@ -28,6 +30,7 @@ class LsbTranslationModel extends LsbTranslation {
       'glosses': glosses,
       'animationUrl': animationUrl,
       'animationUrls': animationUrls,
+      'animationGlosses': animationGlosses,
       'disambiguation': [
         for (final d in disambiguations)
           {'original': d.original, 'meaning': d.meaning, 'reason': d.reason},

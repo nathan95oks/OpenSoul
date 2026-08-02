@@ -19,6 +19,11 @@ class GeneratedOutputs {
   /// Animaciones del avatar 3D, en orden de reproducción.
   final List<String> animationUrls;
 
+  /// Glosa que rotula cada animación, alineada con [animationUrls]. Difiere
+  /// de las glosas del mensaje cuando hay señas compuestas (varias
+  /// animaciones para una sola glosa).
+  final List<String> animationGlosses;
+
   /// Si el texto fue refinado por el modelo fundacional (Bedrock).
   final bool refinedByAi;
 
@@ -27,6 +32,7 @@ class GeneratedOutputs {
     this.baseText = '',
     this.audioUrl,
     this.animationUrls = const [],
+    this.animationGlosses = const [],
     this.refinedByAi = false,
   });
 

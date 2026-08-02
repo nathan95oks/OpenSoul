@@ -19,12 +19,33 @@ class AnimationUrlResolver {
 
   const AnimationUrlResolver({this.baseUrl = defaultBaseUrl});
 
+  /// Separador de señas compuestas en el `animationFile` del backend.
+  ///
+  /// Algunas señas no tienen un modelo propio y se ejecutan encadenando
+  /// varios: FISCAL es la letra F deletreada seguida del rol
+  /// (`F.glb+ABOGADO.glb`). Para el avatar son varias animaciones; para la
+  /// conversación siguen siendo **una sola glosa**.
+  static const String compositeSeparator = '+';
+
   /// URL reproducible para [animationFile], o placeholder si no hay archivo.
-  String resolve({required String gloss, String? animationFile}) {
+  ///
+  /// Con una seña compuesta devuelve la primera de la secuencia; usa
+  /// [resolveAll] para reproducirla entera.
+  String resolve({required String gloss, String? animationFile}) =>
+      resolveAll(gloss: gloss, animationFile: animationFile).first;
+
+  /// Secuencia completa de URLs de [animationFile].
+  ///
+  /// Siempre devuelve al menos un elemento: sin archivo, el placeholder que
+  /// el visor muestra como texto.
+  List<String> resolveAll({required String gloss, String? animationFile}) {
     if (animationFile == null || animationFile.isEmpty) {
-      return '$placeholderScheme$gloss';
+      return ['$placeholderScheme$gloss'];
     }
-    return '$baseUrl${_sanitizeFileName(animationFile)}';
+    return [
+      for (final part in animationFile.split(compositeSeparator))
+        if (part.trim().isNotEmpty) '$baseUrl${_sanitizeFileName(part.trim())}',
+    ];
   }
 
   /// Los archivos en S3 se nombran sin tildes ni eñes; las glosas sí las

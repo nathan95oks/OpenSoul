@@ -68,20 +68,82 @@ CORS_HEADERS = {
 # dactilología (deletreo) como fallback.
 # ===================================================================
 AVAILABLE_GLOSSES = {
-    # --- Sustantivos Jurídicos Disponibles (Módulo Isaac) ---
-    "ABOGADO", "POLICIA", "JUEZ", 
+    # --- Sustantivos Jurídicos y Compuestos ---
+    "ABOGADO", "POLICIA", "JUEZ", "FISCAL",
     
     # --- Pronombres y Posesivos Disponibles ---
     "YO", "TU", "EL", "ELLA", "NOSOTROS", "ELLOS", "ELLAS", "USTEDES", "MIO", "TUYO", "SUYO", "NUESTRO",
     
+    # --- Saludos y Respuestas Disponibles ---
+    "CHAO", "HOLA", "NO", "PERMISO", "PORFAVOR", "SALUDOS", "SI",
+    
+    # --- Tiempos y Marcadores Temporales Disponibles ---
+    "AHORA", "AYER", "DESPUES", "HOY", "MAÑANA", "PASADO",
+    
+    # --- Desambiguación Llama ---
+    "LLAMAR", "ANIMAL-LLAMA", "FUEGO-LLAMA",
+
     # --- Alfabeto Dactilológico y Números (Para dactilología offline/fallback) ---
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
     "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 }
 
+# Variantes con las que el modelo nombra una misma seña. Se unifican antes de
+# buscar la animación: sin esto, "POR FAVOR" caería en dactilología pese a
+# existir la seña PORFAVOR.
+GLOSS_ALIASES = {
+    "POR FAVOR": "PORFAVOR",
+    "POR_FAVOR": "PORFAVOR",
+    "SÍ": "SI",
+}
+
+# Glosas cuyo archivo de animación no se llama como la glosa. Se aplican sobre
+# la base estática; el diccionario dinámico (DynamoDB) sigue teniendo la última
+# palabra, así que una seña propia aprobada en el portal reemplaza a estas.
+#
+# Varios archivos separados por '+' describen una seña COMPUESTA: se reproducen
+# en orden como una sola glosa. FISCAL no tiene seña propia — se deletrea la F
+# y se encadena el rol —, y cuál es ese rol depende de la frase, así que su
+# variante se resuelve en [resolve_animation_file].
+ANIMATION_FILE_OVERRIDES = {
+    "LLAMAR": "LLAMA.glb",
+    "FISCAL": "F.glb+ABOGADO.glb",
+}
+
+# Palabras que hacen que FISCAL se componga con JUEZ en vez de con ABOGADO.
+_FISCAL_JUDICIAL_HINTS = ("juez", "juzgado", "juicio")
+
+
+def resolve_animation_file(gloss: str, animations: dict, text: str):
+    """Archivo(s) de animación de [gloss], o `None` si toca dactilología.
+
+    [text] es la frase completa: la única seña cuya composición depende del
+    enunciado —FISCAL— la necesita para elegir con qué rol se encadena.
+    """
+    if gloss == "FISCAL" and "FISCAL" not in _dynamic_gloss_overrides():
+        lowered = text.lower()
+        if any(hint in lowered for hint in _FISCAL_JUDICIAL_HINTS):
+            return "F.glb+JUEZ.glb"
+    return animations.get(gloss)
+
+
 # Caché de proceso del mapa glosa → archivo de animación (warm starts).
 _avatar_animations_cache = None
+
+# Glosas cuya animación vino del diccionario dinámico y no de la base estática.
+_dynamic_gloss_overrides_cache = set()
+
+
+def _dynamic_gloss_overrides() -> set:
+    """Glosas que el diccionario dinámico definió por su cuenta.
+
+    Permite que una seña aprobada en el portal desactive las reglas
+    compuestas escritas a mano: si algún día existe una seña propia de
+    FISCAL, manda ella.
+    """
+    get_avatar_animations()
+    return _dynamic_gloss_overrides_cache
 
 
 def get_avatar_animations() -> dict:
@@ -93,11 +155,13 @@ def get_avatar_animations() -> dict:
     dactilológico, números y señas fundacionales) y como fallback total
     si la tabla no está configurada o falla la consulta.
     """
-    global _avatar_animations_cache
+    global _avatar_animations_cache, _dynamic_gloss_overrides_cache
     if _avatar_animations_cache is not None:
         return _avatar_animations_cache
 
     animations = {g: f"{remove_accents(g)}.glb" for g in AVAILABLE_GLOSSES}
+    animations.update(ANIMATION_FILE_OVERRIDES)
+    dynamic = set()
 
     if DICTIONARY_TABLE:
         try:
@@ -114,7 +178,9 @@ def get_avatar_animations() -> dict:
                         continue
                     animation = item.get("animationFile")
                     if animation:
-                        animations[str(item["gloss"]).upper()] = str(animation)
+                        gloss = str(item["gloss"]).upper()
+                        animations[gloss] = str(animation)
+                        dynamic.add(gloss)
                 last = resp.get("LastEvaluatedKey")
                 if not last:
                     break
@@ -127,6 +193,7 @@ def get_avatar_animations() -> dict:
             logger.warning("Fallo leyendo diccionario dinámico: %s", exc)
 
     _avatar_animations_cache = animations
+    _dynamic_gloss_overrides_cache = dynamic
     return animations
 
 
@@ -141,7 +208,9 @@ REGLAS DE DESAMBIGUACIÓN JURÍDICA Y PALABRAS POLISÉMICAS:
 - "llama" (Animal / Camélido): Objeto de propiedad o conflicto civil de ganadería. Mapear a la glosa "ANIMAL-LLAMA".
   * Ejemplo: "La llama es de ustedes." -> ["USTEDES", "ANIMAL-LLAMA"]
 - "llama" (Fuego / Incendio): Elemento en caso de daños o peritajes. Mapear a la glosa "FUEGO-LLAMA".
-  * Ejemplo: "El juez mira la llama." -> ["JUEZ", "FUEGO-LLAMA", "VER"] (Nota: la palabra "VER" no está en el diccionario, se deletreará).
+  * Ejemplo: "El juez mira la llama." -> ["JUEZ", "FUEGO-LLAMA", "VER"]
+- "fiscal" (Prosecutor): Mapear a la glosa "FISCAL".
+  * Ejemplo: "El fiscal llama al abogado." -> ["FISCAL", "ABOGADO", "LLAMAR"]
 """
 
 # Situaciones reconocidas de la conversación, con la etiqueta legible que se
@@ -208,22 +277,22 @@ REGLAS LINGÜÍSTICAS Y GRAMATICALES OBLIGATORIAS DE LSB:
    - Elimina totalmente artículos (el, la, los, las, un, una), preposiciones (de, en, por, para, con, a) y conjunciones innecesarias.
    - Los verbos deben ir en INFINITIVO (Ej: "llamó" -> "LLAMAR", "miró" -> "VER").
 
-4. REGLAS DE DESAMBIGUACIÓN DE "LLAMA":
+4. REGLAS DE DESAMBIGUACIÓN Y PALABRAS LEGALES:
 {context_instruction}
 
 5. REGLAS DACTILOLÓGICAS (DELETREO COMPLETO) EN LSB:
    - Los nombres propios de personas, apellidos, calles, marcas y siglas (ej: "Isaac", "Segip", "FELCC") deben deletrearse obligatoriamente letra por letra. Descomponlos en sus letras individuales en la lista de glosas (ej: "Isaac" -> ["I", "S", "A", "A", "C"], "Segip" -> ["S", "E", "G", "I", "P"]).
-   - Los sustantivos comunes y verbos que NO estén en la lista de glosas disponibles (ej: "testigo", "discriminación") NO deben deletrearse letra por letra. Deben ser colocados como la palabra completa en mayúsculas en la lista de glosas (ej: "TESTIGO", "DISCRIMINACION") para mostrar la simulación en la interfaz.
+   - Los sustantivos comunes y verbos que NO estén en la lista de glosas disponibles (ej: "testigo", "recinto") NO deben deletrearse letra por letra. Deben ser colocados como la palabra completa en mayúsculas en la lista de glosas (ej: "TESTIGO", "RECINTO") para mostrar la simulación en la interfaz.
 
 6. MANEJO DE TIEMPOS VERBALES (PASADO, PRESENTE, FUTURO) EN LSB:
-   - En LSB los verbos no se conjugan; se escriben siempre en INFINITIVO (ej: "llamé" / "llame" -> "LLAMAR", "comí" -> "COMER", "iré" -> "IR").
+   - En LSB los verbos no se conjugan; se escriben siempre en INFINITIVO (ej: "llamé" -> "LLAMAR", "comí" -> "COMER", "iré" -> "IR").
    - El tiempo de la oración se debe indicar agregando un MARCADOR TEMPORAL al inicio de la frase LSB:
-     * Tiempo Pasado: Si la acción ocurrió en el pasado (ej. "llamé", "llamó", "llame" en contexto pasado), agrega obligatoriamente la glosa general "PASADO" (o "AYER"/"ANTES" si se menciona explícitamente) al inicio de la frase LSB.
-       Ejemplo: "Yo llamé al policía" o "Yo llame al policía" (pasado) -> ["PASADO", "YO", "POLICIA", "LLAMAR"]
+     * Tiempo Pasado: Si la acción ocurrió en el pasado (ej. "llamé", "llamó"), agrega la glosa "AYER" (si se menciona) o "PASADO" al inicio de la frase LSB.
+       Ejemplo: "Yo llamé al policía" -> ["PASADO", "YO", "POLICIA", "LLAMAR"]
        Ejemplo: "Ayer yo llamé al policía" -> ["AYER", "YO", "POLICIA", "LLAMAR"]
-     * Tiempo Futuro: Si la acción ocurrirá en el futuro (ej. "llamaré", "llamará"), agrega obligatoriamente la glosa general "FUTURO" (o "MAÑANA"/"DESPUES" si se menciona explícitamente) al inicio de la frase LSB.
-       Ejemplo: "Yo llamaré al policía" -> ["FUTURO", "YO", "POLICIA", "LLAMAR"]
-     * Tiempo Presente: Si la acción ocurre en el presente (ej. "llamo", "llama" actual), se puede agregar la glosa "AHORA" o "HOY" al inicio si es necesario para enfatizar el tiempo.
+     * Tiempo Futuro: Si la acción ocurrirá en el futuro (ej. "llamaré"), agrega la glosa "MAÑANA" (si se menciona) o "DESPUES" al inicio de la frase LSB.
+       Ejemplo: "Yo llamaré al policía" -> ["DESPUES", "YO", "POLICIA", "LLAMAR"]
+     * Tiempo Presente: Si la acción ocurre en el presente (ej. "llamo"), se puede agregar la glosa "AHORA" o "HOY" al inicio si es necesario para enfatizar el tiempo.
        Ejemplo: "Yo llamo al policía" -> ["AHORA", "YO", "POLICIA", "LLAMAR"]
 
 GLOSAS DISPONIBLES EN EL DICCIONARIO DEL AVATAR:
@@ -315,7 +384,7 @@ def remove_accents(text: str) -> str:
         text = text.replace(accented_char, unaccented_char)
     return text
 
-def post_process_glosses(bedrock_result: dict) -> dict:
+def post_process_glosses(bedrock_result: dict, text: str) -> dict:
     """
     Valida las glosas retornadas por Bedrock contra el diccionario
     del avatar y marca cuáles requieren dactilología.
@@ -328,7 +397,11 @@ def post_process_glosses(bedrock_result: dict) -> dict:
     processed = []
     for gloss in raw_glosses:
         gloss_upper = gloss.upper().strip()
-        animation_file = animations.get(gloss_upper)
+        # El modelo devuelve variantes de la misma seña; se unifican antes de
+        # buscarla, o una glosa válida caería en dactilología por un espacio.
+        gloss_upper = GLOSS_ALIASES.get(gloss_upper, gloss_upper)
+
+        animation_file = resolve_animation_file(gloss_upper, animations, text)
         is_available = animation_file is not None
 
         processed.append({
@@ -481,7 +554,7 @@ def lambda_handler(event, context):
         })
 
     # 6. Post-procesar las glosas
-    result = post_process_glosses(bedrock_result)
+    result = post_process_glosses(bedrock_result, text)
 
     # 7. (FUTURO) Guardar en caché DynamoDB
     # save_to_dynamodb_cache(cache_key, result)

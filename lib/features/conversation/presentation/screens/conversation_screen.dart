@@ -184,7 +184,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                             onPlayAudio: () => _playDeafTurn(turn),
                             onShowAvatar: () => AvatarPlaybackSheet.show(
                               context,
-                              glosses: turn.message.glosses,
+                              // Las etiquetas del visor van por animación, no
+                              // por glosa: una seña compuesta ocupa varias.
+                              glosses: turn.outputs.animationGlosses.isNotEmpty
+                                  ? turn.outputs.animationGlosses
+                                  : turn.message.glosses,
                               animationUrls: turn.outputs.animationUrls,
                             ),
                           );
