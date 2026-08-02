@@ -53,6 +53,21 @@ void main() {
 
       expect(suggestion?.contextId, 'orientacion');
     });
+
+    test('la evidencia mostrada son glosas, nunca raices internas', () {
+      // Las raices lexicas ('rob') puntuan pero no se enseñan: no significan
+      // nada para quien lee la pantalla.
+      final suggestion = engine.infer(
+        glosses: ['ROBAR', 'CELULAR'],
+        text: 'Le robaron su celular',
+      );
+
+      expect(suggestion!.evidence, isNotEmpty);
+      for (final item in suggestion.evidence) {
+        expect(item, isNot('ROB'));
+        expect(item, anyOf('ROBAR', 'CELULAR'));
+      }
+    });
   });
 
   group('prudencia: mejor no sugerir que sugerir mal', () {

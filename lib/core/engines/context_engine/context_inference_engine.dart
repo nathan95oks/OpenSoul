@@ -116,9 +116,14 @@ class ContextInferenceEngine {
     final scores = <String, double>{};
     final evidence = <String, Map<String, double>>{};
 
-    void award(String contextId, String token, double weight) {
+    /// [asEvidence] distingue lo que se puede enseñar al usuario de lo que
+    /// solo sirve para puntuar: una raíz léxica interna ('rob') no significa
+    /// nada para quien lee la pantalla, una glosa ('ROBAR') sí.
+    void award(String contextId, String token, double weight,
+        {bool asEvidence = true}) {
       if (weight <= 0) return;
       scores[contextId] = (scores[contextId] ?? 0) + weight;
+      if (!asEvidence) return;
       final perContext = evidence.putIfAbsent(contextId, () => {});
       // Un mismo token no debe contar dos veces (glosa + texto).
       final previous = perContext[token] ?? 0;
@@ -153,7 +158,7 @@ class ContextInferenceEngine {
       for (final entry in _contextStems.entries) {
         for (final stem in textStems) {
           if (entry.value.contains(stem)) {
-            award(entry.key, stem, _contextNameWeight);
+            award(entry.key, stem, _contextNameWeight, asEvidence: false);
           }
         }
       }
