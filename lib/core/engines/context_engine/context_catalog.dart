@@ -568,3 +568,15 @@ String resolveAssemblerContext(
   if (hasDocOrProcedure) return 'tramite_id';
   return 'orientacion';
 }
+
+/// Contexto del catálogo con ese id, o `null` si no existe.
+///
+/// Permite que la conversación resuelva un `contextId` inferido —que viaja
+/// como texto en el mensaje semántico— al contexto real con el que abrir el
+/// flujo guiado, sin que la capa de presentación reimplemente la búsqueda.
+SemanticContext? contextById(String id) {
+  for (final context in availableContexts) {
+    if (context.id == id) return context;
+  }
+  return null;
+}

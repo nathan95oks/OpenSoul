@@ -77,13 +77,18 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(width: 10),
-          const Text(
-            'OpenSoul',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: AppTheme.brandPrimary,
-              letterSpacing: -0.3,
+          // Flexible: con la flecha de volver y las dos acciones, el título
+          // no cabía y desbordaba por 4 px (franja de depuración visible).
+          const Flexible(
+            child: Text(
+              'OpenSoul',
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.brandPrimary,
+                letterSpacing: -0.3,
+              ),
             ),
           ),
         ],
@@ -109,7 +114,7 @@ class HomeScreen extends ConsumerWidget {
               ref.read(expandedAnswersProvider.notifier).collapse();
             },
             child: const Text(
-              '← Cambiar contexto',
+              'Cambiar contexto',
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
@@ -130,12 +135,20 @@ class HomeScreen extends ConsumerWidget {
   ) {
     // Frase del oyente que se está respondiendo: se mantiene a la vista
     // durante todo el flujo guiado para no obligar a recordarla.
-    final replyingTo =
-        ref.watch(conversationProvider).conversation.pendingReply?.outputs.text;
+    final pending = ref.watch(conversationProvider).conversation.pendingReply;
+    // Se entró directo a este contexto por inferencia, no porque nadie lo
+    // eligiera: hay que decirlo, o una suposición equivocada pasaría por
+    // decisión propia.
+    final wasInferred =
+        pending?.message.contextSuggestion?.contextId == contextState?.id;
 
     return Column(
       children: [
-        if (replyingTo != null) _ReplyingToStrip(text: replyingTo),
+        if (pending != null)
+          _ReplyingToStrip(
+            text: pending.outputs.text,
+            inferredContextName: wasInferred ? contextState.name as String : null,
+          ),
         // Pregunta activa + opciones (scrollable solo si hay muchas opciones)
         Expanded(
           child: SingleChildScrollView(
@@ -200,39 +213,68 @@ class HomeScreen extends ConsumerWidget {
 }
 
 /// Franja superior con la frase del oyente que se está respondiendo.
+///
+/// Cuando el contexto se dedujo de esa frase, lo declara: la persona sorda
+/// entra directa a la primera pregunta —así se responde rápido— pero debe
+/// poder ver de un vistazo que el sistema supuso, y corregirlo.
 class _ReplyingToStrip extends StatelessWidget {
   final String text;
+  final String? inferredContextName;
 
-  const _ReplyingToStrip({required this.text});
+  const _ReplyingToStrip({required this.text, this.inferredContextName});
 
   @override
   Widget build(BuildContext context) {
+    final inferred = inferredContextName;
     return Semantics(
-      label: 'Respondiendo a: $text',
+      label: [
+        'Respondiendo a: $text',
+        if (inferred != null)
+          'Contexto sugerido: $inferred. Usa Cambiar contexto si no corresponde.',
+      ].join(' '),
       excludeSemantics: true,
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         color: AppTheme.brandPrimary.withValues(alpha: 0.07),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.record_voice_over,
-                size: 15, color: AppTheme.brandPrimary),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                '«$text»',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 13,
-                  height: 1.3,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.lightText,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.record_voice_over,
+                    size: 15, color: AppTheme.brandPrimary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '«$text»',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      height: 1.3,
+                      fontWeight: FontWeight.w600,
+                      color: AppTheme.lightText,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (inferred != null) ...[
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.only(left: 23),
+                child: Text(
+                  'Contexto sugerido: $inferred · cámbialo arriba si no corresponde',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.lightTextSub.withValues(alpha: 0.95),
+                  ),
                 ),
               ),
-            ),
+            ],
           ],
         ),
       ),

@@ -63,16 +63,31 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
   /// Abre el flujo de tarjetas para responder al turno del oyente.
   ///
-  /// Si se va a empezar una respuesta nueva, se suelta el contexto de la
-  /// respuesta anterior: de lo contrario el flujo entraría directo al
-  /// contexto viejo y la persona sorda nunca vería el que se le propone
-  /// para *esta* pregunta. Una declaración a medias (con glosas ya
-  /// elegidas) se respeta y se conserva intacta.
+  /// Cuando la conversación puede proponer un contexto, se entra **directo a
+  /// la primera pregunta**: en un diálogo real, obligar a confirmar una
+  /// pantalla intermedia entre cada turno hace la comunicación lenta. La
+  /// propuesta se anuncia dentro del flujo y se corrige con "Cambiar
+  /// contexto"; la flecha de volver regresa a la conversación en cualquier
+  /// momento. Sin propuesta, se elige contexto como siempre.
+  ///
+  /// Una declaración a medias (con glosas ya elegidas) nunca se toca: se
+  /// vuelve a ella tal como se dejó.
   void _openCardsFlow() {
-    final startingFresh = ref.read(conversationProvider).conversation.pendingReply != null &&
-        ref.read(sentenceProvider).isEmpty;
+    final conversation = ref.read(conversationProvider).conversation;
+    final startingFresh =
+        conversation.pendingReply != null && ref.read(sentenceProvider).isEmpty;
+
     if (startingFresh) {
-      ref.read(contextProvider.notifier).clearContext();
+      final proposedId = conversation.suggestedReplyContextId;
+      final proposed = proposedId == null ? null : contextById(proposedId);
+      final notifier = ref.read(contextProvider.notifier);
+      if (proposed != null) {
+        notifier.setContext(proposed);
+      } else {
+        // Sin nada que proponer, no se hereda el contexto de la respuesta
+        // anterior: se vuelve a preguntar.
+        notifier.clearContext();
+      }
     }
     context.push('/lsb-to-audio');
   }
