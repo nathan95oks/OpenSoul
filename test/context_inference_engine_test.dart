@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lsb_legal_app/core/engines/context_engine/context_catalog.dart';
 import 'package:lsb_legal_app/core/engines/context_engine/context_inference_engine.dart';
 
 import 'helpers/official_dictionary.dart';
@@ -83,6 +84,26 @@ void main() {
       final empty = ContextInferenceEngine.empty();
 
       expect(empty.infer(glosses: ['ROBAR'], text: 'me robaron'), isNull);
+    });
+  });
+
+  group('resolución del contexto propuesto', () {
+    test('todo contexto sugerible existe en el catálogo', () {
+      // Si la inferencia propusiera un id sin contexto real, el flujo de
+      // tarjetas no podría abrirse y la respuesta se quedaría bloqueada.
+      for (final frase in const [
+        'Le robaron su celular',
+        'Su esposo le pego',
+        'Necesito renovar mi carnet',
+      ]) {
+        final suggestion = engine.infer(text: frase);
+        expect(suggestion, isNotNull, reason: frase);
+        expect(contextById(suggestion!.contextId), isNotNull, reason: frase);
+      }
+    });
+
+    test('un id desconocido no resuelve a ningún contexto', () {
+      expect(contextById('no_existe'), isNull);
     });
   });
 }

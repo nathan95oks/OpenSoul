@@ -22,6 +22,7 @@ distingue una conversación de dos módulos compartiendo pantalla.
 | P9 | La **desambiguación se descartaba**: el lambda la calculaba y el datasource la tiraba | Se conserva en `SemanticMessage.disambiguations` y se muestra en la burbuja |
 | P10 | El catálogo de contextos vivía en la capa de presentación de un feature, inaccesible para el núcleo | Promovido a `core/engines/context_engine/context_catalog.dart`, re-exportado desde su ubicación histórica |
 | P11 | (Backend) Si `context` no era exactamente `"legal"`, **se perdían en silencio todas las reglas de desambiguación de "LLAMA"** | Las reglas jurídicas pasan a ser el comportamiento por defecto del dominio |
+| P12 | El título de la AppBar del flujo de tarjetas **desbordaba 4 px** (franja de depuración a la vista) al coincidir la flecha de volver con las dos acciones | Título `Flexible` con elipsis y etiqueta de acción más corta |
 
 ## Inferencia de contexto: dirigida por datos, no por palabras clave
 
@@ -78,22 +79,34 @@ Oyente habla o escribe
             └─ burbuja: "Ver en avatar" + chips de desambiguación
 
 Sorda pulsa "Responder con tarjetas LSB"
-  └─ ContextSelectionWidget
-       ├─ «¿Le robaron su celular?»                (la pregunta, a la vista)
-       ├─ 🚨 Denunciar robo  [SUGERIDO]            (primero, resaltado)
-       │     Detectado: ROBAR · CELULAR            (evidencia explicable)
-       └─ el resto de contextos debajo             (la decisión sigue siendo suya)
-            └─ flujo guiado → "Enviar a la conversación"
-                 └─ turno sordo con contextId confirmado + replyToId
-                      └─ el siguiente turno oyente ya viaja con ese contexto
+  └─ con contexto propuesto → DIRECTO a la primera pregunta
+  │    ├─ «Le robaron su celular»                  (la pregunta, a la vista)
+  │    ├─ Contexto sugerido: Denunciar robo        (se declara la suposición)
+  │    └─ ¿Qué pasó?  [ROBAR] [AMENAZAR] [QUITAR]  (responder ya, sin escalas)
+  │         ├─ "Cambiar contexto" → pantalla de selección, sugerido primero
+  │         │                        con la evidencia (Detectado: ROBAR · CELULAR)
+  │         └─ ← volver            → de vuelta a la conversación
+  └─ sin propuesta → pantalla de selección, como siempre
+       └─ flujo guiado → "Enviar a la conversación"
+            └─ turno sordo con contextId confirmado + replyToId
+                 └─ el siguiente turno oyente ya viaja con ese contexto
 ```
 
 ## Decisiones de diseño
 
-1. **Sugerir y confirmar, no auto-entrar.** Un toque de más a cambio de que la
-   persona sorda nunca quede atrapada en un contexto que ella no eligió.
-2. **La sugerencia debe ser explicable.** Se muestra la evidencia ("Detectado:
-   ROBAR · CELULAR"): una propuesta que no puede justificarse no debería hacerse.
+1. **Directo a la pregunta, con la suposición declarada y reversible.** En un
+   diálogo real, una pantalla de confirmación entre cada turno vuelve lenta la
+   comunicación: un solo toque lleva de la conversación a «¿Qué pasó?». Para que
+   eso no se convierta en decidir por la persona sorda, el contexto supuesto se
+   anuncia en la franja superior ("Contexto sugerido: Denunciar robo") y hay dos
+   salidas siempre visibles: *Cambiar contexto* abre la selección con el
+   propuesto primero, y la flecha de volver regresa a la conversación para
+   preguntar o escribir otra cosa. Sin propuesta, se elige contexto como siempre.
+2. **La sugerencia debe ser explicable.** Al elegir contexto se muestra la
+   evidencia ("Detectado: ROBAR · CELULAR"): una propuesta que no puede
+   justificarse no debería hacerse. Solo se enseñan glosas reales — las raíces
+   léxicas internas del lematizador puntúan, pero no significan nada para quien
+   lee la pantalla.
 3. **`context` y `situation` son cosas distintas en el backend.** `context` es el
    dominio de la aplicación (siempre `legal`, y de él dependen las reglas de
    desambiguación jurídica); `situation` es la situación de la conversación. No
@@ -113,9 +126,9 @@ Sorda pulsa "Responder con tarjetas LSB"
 ## Verificación
 
 - `flutter analyze`: 0 errores, 0 warnings.
-- `flutter test`: **83/83 en verde** (68 previos + 15 nuevos, sin tocar ninguno
+- `flutter test`: **85/85 en verde** (68 previos + 17 nuevos, sin tocar ninguno
   existente: los campos nuevos son opcionales y el catálogo se re-exporta).
-  - `context_inference_engine_test.dart` — 10 casos auditados **contra el
+  - `context_inference_engine_test.dart` — 12 casos auditados **contra el
     diccionario canónico real**, no contra un léxico de laboratorio: si las
     etiquetas del diccionario se degradan, la prueba falla.
   - `conversation_bidirectional_test.dart` — 5 casos del ciclo completo, con un
@@ -125,10 +138,12 @@ Sorda pulsa "Responder con tarjetas LSB"
   es idéntica campo a campo a la actual; con `situation` cambia el prompt y la
   clave de caché.
 - **Ciclo completo ejecutado en emulador Android** contra el backend real:
-  «Le robaron su celular» → glosas `PASADO · SUYO · CELULAR · ROBAR` → *Denunciar
-  robo* propuesto con distintivo SUGERIDO y evidencia `ROBAR · CELULAR` →
-  declaración con audio de Polly → de vuelta al hilo. Un segundo turno sin
-  evidencia («Recuerda la hora») cae correctamente al distintivo CONTEXTO ACTUAL.
+  «Le robaron su celular» → glosas `PASADO · SUYO · CELULAR · ROBAR` → un toque
+  lleva directo a «¿Qué pasó?» en *Denunciar robo*, con la suposición declarada →
+  declaración con audio de Polly → de vuelta al hilo. Verificadas las dos
+  salidas: *Cambiar contexto* abre la selección con el sugerido y su evidencia,
+  y volver deja el cursor listo para escribir en la conversación. Un turno sin
+  evidencia («Recuerda la hora») cae al distintivo CONTEXTO ACTUAL.
 
 ## Deuda y siguientes pasos
 
