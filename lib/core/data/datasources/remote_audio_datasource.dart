@@ -5,7 +5,12 @@ import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_res
 
 abstract class RemoteAudioDataSource {
   Future<LsbTranslationModel> translateAudio(String audioPath);
-  Future<LsbTranslationModel> translateText(String text);
+
+  /// [situation] es el contexto situacional vigente en la conversación
+  /// ('denuncia_robo', 'violencia'…). Viaja aparte del dominio para que el
+  /// motor remoto afine el vocabulario. Nulo en el primer turno, cuando
+  /// todavía no se ha declarado ningún contexto.
+  Future<LsbTranslationModel> translateText(String text, {String? situation});
 }
 
 class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
@@ -36,14 +41,19 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
   }
 
   @override
-  Future<LsbTranslationModel> translateText(String text) async {
+  Future<LsbTranslationModel> translateText(String text,
+      {String? situation}) async {
     try {
       final response = await client.post(
         Uri.parse(apiGatewayUrl),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'text': text,
+          // Dominio de la aplicación: fijo. De él dependen las reglas de
+          // desambiguación jurídica del backend, así que no se sustituye
+          // por el contexto situacional — este viaja en 'situation'.
           'context': 'legal',
+          if (situation != null && situation.isNotEmpty) 'situation': situation,
         }),
       );
 
@@ -64,6 +74,7 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           'glosses': decodedResponse['glosses'],
           'animationUrl': urls.isNotEmpty ? urls.first : '',
           'animationUrls': urls,
+          'disambiguation': decodedResponse['disambiguation'],
         });
       } else {
         throw Exception('AWS API Error: ${response.statusCode} - ${response.body}');

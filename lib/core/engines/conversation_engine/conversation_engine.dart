@@ -2,6 +2,7 @@ import '../../domain/entities/conversation.dart';
 import '../../domain/entities/semantic_message.dart';
 import '../../domain/repositories/audio_translation_repository.dart';
 import '../../domain/repositories/translation_repository.dart';
+import '../context_engine/context_inference_engine.dart';
 import '../semantic_engine/local_sentence_assembler.dart';
 
 /// Motor de conversación: única puerta de entrada para convertir cualquier
@@ -28,11 +29,16 @@ class ConversationEngine {
   /// Generación remota para el sentido texto/voz → glosas/avatar.
   final AudioTranslationRepository signRepository;
 
-  const ConversationEngine({
+  /// Deduce de qué se está hablando para que el turno del oyente pueda
+  /// proponer un contexto a la persona sorda.
+  final ContextInferenceEngine contextInference;
+
+  ConversationEngine({
     required this.assembler,
     required this.declarationRepository,
     required this.signRepository,
-  });
+    ContextInferenceEngine? contextInference,
+  }) : contextInference = contextInference ?? ContextInferenceEngine.empty();
 
   /// Turno de la persona sorda: tarjetas (glosas) → texto + audio.
   ///
@@ -103,13 +109,26 @@ class ConversationEngine {
 
   /// Turno de la persona oyente: voz/texto → glosas + animaciones del avatar.
   ///
+  /// [activeContextId] es el contexto vigente de la conversación: viaja al
+  /// motor remoto para acotar el vocabulario de la traducción. En el primer
+  /// turno es nulo y el backend se comporta como siempre.
+  ///
+  /// [replyToId] enlaza este turno con el mensaje al que responde.
+  ///
+  /// Además de traducir, infiere de qué se está hablando: esa sugerencia es
+  /// la que después permite a la persona sorda responder sin volver a
+  /// declarar el contexto desde cero.
+  ///
   /// Lanza si el backend no responde: sin diccionario remoto todavía no
   /// existe generación local de señas (llegará con el diccionario offline).
   Future<ConversationTurn> composeHearingTurn({
     required String text,
     MessageSource source = MessageSource.text,
+    String? activeContextId,
+    String? replyToId,
   }) async {
-    final translation = await signRepository.translateText(text);
+    final translation =
+        await signRepository.translateText(text, situation: activeContextId);
 
     final message = SemanticMessage(
       id: _newId(),
@@ -117,6 +136,12 @@ class ConversationEngine {
       source: source,
       glosses: translation.glosses,
       text: text,
+      replyToId: replyToId,
+      disambiguations: translation.disambiguations,
+      contextSuggestion: contextInference.infer(
+        glosses: translation.glosses,
+        text: text,
+      ),
     );
     return ConversationTurn(
       message: message,
@@ -134,6 +159,7 @@ class ConversationEngine {
     required TranslationResult result,
     required List<String> glosses,
     String? contextId,
+    String? replyToId,
   }) {
     final message = SemanticMessage(
       id: _newId(),
@@ -141,6 +167,7 @@ class ConversationEngine {
       source: MessageSource.cards,
       glosses: glosses,
       contextId: contextId,
+      replyToId: replyToId,
       text: result.generatedText,
       intermediateRepresentation: result.intermediateRepresentation,
     );

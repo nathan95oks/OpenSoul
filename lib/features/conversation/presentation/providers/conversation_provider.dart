@@ -43,9 +43,16 @@ class ConversationNotifier extends Notifier<ConversationState> {
       processing: true,
     );
     try {
-      final turn = await ref
-          .read(conversationEngineProvider)
-          .composeHearingTurn(text: trimmed, source: source);
+      final conversation = state.conversation;
+      final turn =
+          await ref.read(conversationEngineProvider).composeHearingTurn(
+                text: trimmed,
+                source: source,
+                // El contexto ya declarado en la conversación acota el
+                // vocabulario del motor remoto en este turno.
+                activeContextId: conversation.activeContextId,
+                replyToId: conversation.lastTurn?.message.id,
+              );
       state = ConversationState(conversation: state.conversation.addTurn(turn));
     } catch (_) {
       state = ConversationState(
@@ -68,6 +75,8 @@ class ConversationNotifier extends Notifier<ConversationState> {
           result: result,
           glosses: glosses,
           contextId: contextId,
+          // Queda enlazada con la pregunta que estaba respondiendo.
+          replyToId: state.conversation.pendingReply?.message.id,
         );
     state = ConversationState(conversation: state.conversation.addTurn(turn));
   }

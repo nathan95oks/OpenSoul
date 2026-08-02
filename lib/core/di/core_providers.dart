@@ -10,8 +10,10 @@ import '../dictionary/data/lexicon_cache.dart';
 import '../dictionary/data/lexicon_repository_impl.dart';
 import '../dictionary/data/remote_lexicon_datasource.dart';
 import '../dictionary/domain/lexicon_repository.dart';
+import '../domain/entities/lsb_card.dart';
 import '../domain/repositories/audio_translation_repository.dart';
 import '../domain/repositories/translation_repository.dart';
+import '../engines/context_engine/context_inference_engine.dart';
 import '../engines/conversation_engine/conversation_engine.dart';
 import '../engines/semantic_engine/local_sentence_assembler.dart';
 import '../generators/audio_generator/audio_output.dart';
@@ -76,6 +78,25 @@ final lexiconRepositoryProvider = Provider<LexiconRepository>((ref) {
   );
 });
 
+/// Entradas visibles del diccionario, en crudo. Alimentan la inferencia de
+/// contexto, que necesita el vocabulario completo y no el filtrado por zona
+/// que hacen los providers de tarjetas.
+final lexiconEntriesProvider = FutureProvider<List<LsbCard>>((ref) {
+  return ref.watch(lexiconRepositoryProvider).getEntries();
+});
+
+// ── Motor de contexto ─────────────────────────────────────────────────────
+
+/// Inferencia de contexto construida sobre el diccionario ya cargado.
+/// Mientras el diccionario carga, el motor vacío no sugiere nada: la
+/// conversación funciona igual, solo sin preselección de contexto.
+final contextInferenceEngineProvider = Provider<ContextInferenceEngine>((ref) {
+  final entries = ref.watch(lexiconEntriesProvider).value;
+  return entries == null || entries.isEmpty
+      ? ContextInferenceEngine.empty()
+      : ContextInferenceEngine.fromLexicon(entries);
+});
+
 // ── Motor de conversación ─────────────────────────────────────────────────
 
 final conversationEngineProvider = Provider<ConversationEngine>((ref) {
@@ -83,5 +104,6 @@ final conversationEngineProvider = Provider<ConversationEngine>((ref) {
     assembler: const LocalSentenceAssembler(),
     declarationRepository: ref.watch(translationRepositoryProvider),
     signRepository: ref.watch(audioTranslationRepositoryProvider),
+    contextInference: ref.watch(contextInferenceEngineProvider),
   );
 });
