@@ -39,9 +39,16 @@ class NodeFlowCanvas extends ConsumerWidget {
     final hasTranslated =
         ref.watch(translationControllerProvider).value != null;
 
-    // Progreso: zonas ya recorridas sobre el total de zonas del contexto.
-    final totalZones = ctx.zones.length;
-    final reachedZones = zonesState.visitedZoneIds.length.clamp(1, totalZones);
+    // Progreso. Cuando el enunciado del oyente señaló preguntas concretas, se
+    // mide sobre esas: anunciar "Pregunta 1 de 9" cuando en realidad solo se
+    // preguntaron dos desanima sin motivo.
+    final requested = zonesState.requestedZoneIds;
+    final answeringRequest =
+        requested.isNotEmpty && requested.contains(zonesState.activeZoneId);
+    final totalZones = answeringRequest ? requested.length : ctx.zones.length;
+    final reachedZones = answeringRequest
+        ? (requested.indexOf(zonesState.activeZoneId!) + 1)
+        : zonesState.visitedZoneIds.length.clamp(1, totalZones);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
@@ -51,7 +58,11 @@ class NodeFlowCanvas extends ConsumerWidget {
           // ── Cabecera compacta: contexto (chip) + progreso ──────────
           Center(child: _ContextChip(emoji: ctx.emoji, label: ctx.name)),
           const SizedBox(height: 14),
-          _ProgressBar(reached: reachedZones, total: totalZones),
+          _ProgressBar(
+            reached: reachedZones,
+            total: totalZones,
+            label: answeringRequest ? 'Respondiendo' : 'Pregunta',
+          ),
           const SizedBox(height: 22),
 
           // ── Bloque ACTIVO (foco principal, arriba del todo) ────────
@@ -132,7 +143,16 @@ class _ContextChip extends StatelessWidget {
 class _ProgressBar extends StatelessWidget {
   final int reached;
   final int total;
-  const _ProgressBar({required this.reached, required this.total});
+
+  /// "Pregunta" en el recorrido libre; "Respondiendo" cuando se contestan las
+  /// preguntas concretas que hizo la persona oyente.
+  final String label;
+
+  const _ProgressBar({
+    required this.reached,
+    required this.total,
+    this.label = 'Pregunta',
+  });
 
   static const _orange = AppTheme.brandPrimary;
 
@@ -152,7 +172,7 @@ class _ProgressBar extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'Pregunta $reached de $total',
+          '$label $reached de $total',
           style: const TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,

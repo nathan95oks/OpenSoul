@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
 import 'package:lsb_legal_app/core/engines/context_engine/semantic_navigation_engine.dart';
+import 'package:lsb_legal_app/core/engines/context_engine/zone_inference_engine.dart';
 import 'context_provider.dart';
 import 'sentence_provider.dart';
 
@@ -30,13 +32,28 @@ class SemanticZonesState {
   /// Snapshot inmutable producido por el motor.
   final NavigationSnapshot snapshot;
 
+  /// Zonas por las que preguntó la persona oyente, en el orden en que las
+  /// preguntó. Vacía en uso autónomo o si la pregunta no señalaba ninguna.
+  ///
+  /// Guían el recorrido —el flujo abre en la primera y "Continuar" sigue por
+  /// ellas— pero no lo encierran: agotadas, el resto del árbol continúa
+  /// disponible por si la persona quiere añadir algo que no le preguntaron.
+  final List<String> requestedZoneIds;
+
   const SemanticZonesState({
     required this.activeZoneId,
     required this.visitedZoneIds,
     required this.snapshot,
     this.visitedZoneOrder = const [],
     this.zoneAnswers = const {},
+    this.requestedZoneIds = const [],
   });
+
+  /// Zonas preguntadas que aún no se han visitado.
+  List<String> get pendingRequestedZones => [
+        for (final id in requestedZoneIds)
+          if (!visitedZoneIds.contains(id)) id,
+      ];
 
   /// Cuántas glosas lleva seleccionadas el usuario en la zona activa.
   /// Derivado de [zoneAnswers] — fuente única de verdad, sin contador
@@ -93,6 +110,7 @@ class SemanticZonesState {
     List<String>? visitedZoneOrder,
     Map<String, List<String>>? zoneAnswers,
     NavigationSnapshot? snapshot,
+    List<String>? requestedZoneIds,
   }) {
     return SemanticZonesState(
       activeZoneId: clearActive ? null : (activeZoneId ?? this.activeZoneId),
@@ -100,6 +118,7 @@ class SemanticZonesState {
       visitedZoneOrder: visitedZoneOrder ?? this.visitedZoneOrder,
       zoneAnswers: zoneAnswers ?? this.zoneAnswers,
       snapshot: snapshot ?? this.snapshot,
+      requestedZoneIds: requestedZoneIds ?? this.requestedZoneIds,
     );
   }
 }
@@ -153,7 +172,16 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       // First build — state aún no existe. Continuamos con valores por defecto.
     }
 
-    final activeId = previousActiveId ?? ctx.entryZoneId;
+    // Si la persona oyente preguntó algo concreto, el flujo abre por ahí en
+    // vez de por el principio del árbol: se responde lo que se preguntó.
+    final pending = ref.watch(pendingReplyProvider);
+    final requested = pending == null
+        ? const <String>[]
+        : const ZoneInferenceEngine()
+            .zonesFor(context: ctx, text: pending.question);
+
+    final activeId = previousActiveId ??
+        (requested.isNotEmpty ? requested.first : ctx.entryZoneId);
     final visited = {...previousVisited, activeId};
     final order = [...previousOrder];
     if (!order.contains(activeId)) order.add(activeId);
@@ -172,6 +200,7 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       visitedZoneOrder: order,
       zoneAnswers: previousAnswers,
       snapshot: snapshot,
+      requestedZoneIds: requested,
     );
   }
 
@@ -267,6 +296,7 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       visitedZoneOrder: order,
       zoneAnswers: state.zoneAnswers,
       snapshot: snapshot,
+      requestedZoneIds: state.requestedZoneIds,
     );
   }
 
@@ -287,6 +317,13 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     final idx = order.indexOf(id);
     if (idx >= 0 && idx < order.length - 1) {
       activateZone(order[idx + 1]);
+      return;
+    }
+    // Lo que preguntó la persona oyente va antes que la prioridad del motor:
+    // primero se contesta lo preguntado, después se puede añadir el resto.
+    final requested = state.pendingRequestedZones;
+    if (requested.isNotEmpty) {
+      activateZone(requested.first);
       return;
     }
     for (final p in state.snapshot.orderedZones) {
