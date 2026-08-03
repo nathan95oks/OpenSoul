@@ -41,6 +41,30 @@ La frase de la persona oyente determina el contexto desde el que se le propone
 responder, y el contexto que ella confirma vuelve al motor de traducción para
 acotar el vocabulario del turno siguiente. Cada turno condiciona al próximo.
 
+### Se responde lo que se preguntó
+
+El enunciado del oyente no solo fija el contexto: también determina **qué
+preguntas del flujo guiado se recorren y en qué orden**.
+
+```
+Oyente: «¿A qué hora y dónde te robaron?»
+   │
+   ├─ Respondiendo 1 de 2 · ¿Cuándo pasó?    → NOCHE
+   ├─ Respondiendo 2 de 2 · ¿Dónde ocurrió?  → CALLE
+   │
+   └─ «Quiero denunciar un robo. Ocurrió en la calle por la noche.»
+        un audio · un turno · de vuelta a la conversación
+```
+
+Dos preguntas en lugar de las nueve del contexto. Las zonas detectadas guían el
+recorrido pero no lo encierran: agotadas, el resto del árbol sigue disponible
+por si la persona quiere añadir algo que no le preguntaron.
+
+La declaración se genera **una sola vez, al final**. Partirla en una por
+sub-pregunta produciría frases sueltas —«Fue de noche.», «Fue en la calle.»— en
+lugar de una oración con valor documental, y obligaría a pasarse el teléfono una
+vez por cada dato.
+
 ## Por qué está construido así
 
 **El motor de generación es propio, y la IA solo refina.** Un modelo de lenguaje
@@ -137,7 +161,8 @@ lib/
 │   ├── engines/
 │   │   ├── conversation_engine/   orquesta ambos sentidos
 │   │   ├── semantic_engine/       LocalSentenceAssembler (glosas → español)
-│   │   └── context_engine/        catálogo, navegación e inferencia de contexto
+│   │   └── context_engine/        catálogo, navegación, inferencia de
+│   │                              contexto y de preguntas
 │   ├── generators/          audio (Polly/TTS) y avatar 3D
 │   ├── dictionary/          diccionario evolutivo offline-first
 │   ├── data/                datasources y repositorios remotos
@@ -192,7 +217,9 @@ flutter test                                             # suite completa
 flutter test test/local_sentence_assembler_test.dart     # motor semántico
 flutter test test/conversation_bidirectional_test.dart   # ciclo conversacional
 flutter test test/context_inference_engine_test.dart     # inferencia de contexto
+flutter test test/zone_inference_engine_test.dart        # inferencia de preguntas
 flutter test test/composite_sign_test.dart               # señas compuestas
+flutter test test/module_boundaries_test.dart            # fronteras entre módulos
 ```
 
 Evaluación cuantitativa del motor de generación:
