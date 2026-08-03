@@ -8,6 +8,7 @@ import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import '../providers/conversation_provider.dart';
 import '../widgets/avatar_playback_sheet.dart';
@@ -88,6 +89,15 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         // anterior: se vuelve a preguntar.
         notifier.clearContext();
       }
+      // El recorrido de la respuesta anterior también se descarta: si no, su
+      // zona activa sobrevive y el flujo abre donde quedó la vez pasada en
+      // lugar de donde pregunta el enunciado nuevo.
+      //
+      // Tiene que ser `reset()` y no `invalidate`: al invalidar, Riverpod
+      // vuelve a ejecutar `build()` sobre el mismo Notifier, y `build()`
+      // preserva a propósito la zona activa —para no deshacer el árbol cada
+      // vez que se elige una glosa—, con lo que el estado viejo sobrevivía.
+      ref.read(semanticZonesProvider.notifier).reset();
     }
     context.push('/lsb-to-audio');
   }

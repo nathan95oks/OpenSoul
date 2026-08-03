@@ -361,19 +361,29 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       );
       return;
     }
+    // Reiniciar no debe perder de vista lo que preguntó la persona oyente:
+    // tras cambiar de contexto se sigue respondiendo la misma pregunta.
+    final pending = ref.read(pendingReplyProvider);
+    final requested = pending == null
+        ? const <String>[]
+        : const ZoneInferenceEngine()
+            .zonesFor(context: ctx, text: pending.question);
+    final entry = requested.isNotEmpty ? requested.first : ctx.entryZoneId;
+
     final snapshot = engine.compute(
       context: ctx,
       selectedGlosses: const [],
       selectedCards: const [],
-      activeZoneId: ctx.entryZoneId,
-      visitedZoneIds: {ctx.entryZoneId},
+      activeZoneId: entry,
+      visitedZoneIds: {entry},
     );
     state = SemanticZonesState(
-      activeZoneId: ctx.entryZoneId,
-      visitedZoneIds: {ctx.entryZoneId},
-      visitedZoneOrder: [ctx.entryZoneId],
+      activeZoneId: entry,
+      visitedZoneIds: {entry},
+      visitedZoneOrder: [entry],
       zoneAnswers: const {},
       snapshot: snapshot,
+      requestedZoneIds: requested,
     );
   }
 }

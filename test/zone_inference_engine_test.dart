@@ -1,7 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
-import 'package:lsb_legal_app/core/engines/context_engine/context_catalog.dart';
+import 'package:lsb_legal_app/core/domain/ports/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/engines/context_engine/zone_inference_engine.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 
 /// El enunciado del oyente debe llevar a la pregunta que hizo, no al principio
 /// del árbol. Sin esto, «¿a qué hora y dónde te robaron?» obliga a la persona
@@ -68,6 +72,66 @@ void main() {
       for (final id in zones) {
         expect(orientacion.zoneById(id), isNotNull);
       }
+    });
+  });
+
+  group('el flujo guiado abre donde se preguntó', () {
+    ProviderContainer containerAsking(String question) {
+      final container = ProviderContainer(overrides: [
+        pendingReplyProvider
+            .overrideWithValue(ReplyPrompt(question: question)),
+      ]);
+      addTearDown(container.dispose);
+      container.read(contextProvider.notifier).setContext(robo);
+      return container;
+    }
+
+    test('abre en la zona preguntada, no en la de entrada', () {
+      final container = containerAsking('Donde te robaron');
+
+      final state = container.read(semanticZonesProvider);
+      expect(state.activeZoneId, 'lugar');
+      expect(state.requestedZoneIds, ['lugar']);
+    });
+
+    test('sin pregunta reconocible abre en la zona de entrada', () {
+      final container = containerAsking('Le robaron su celular');
+
+      expect(container.read(semanticZonesProvider).activeZoneId,
+          robo.entryZoneId);
+    });
+
+    test('responder una pregunta nueva no hereda el recorrido anterior', () {
+      // El fallo que esto fija: tras responder una vez, la zona activa
+      // sobrevivía y la siguiente pregunta abría donde quedó la anterior.
+      final container = containerAsking('Que paso');
+      expect(container.read(semanticZonesProvider).activeZoneId, 'situacion');
+
+      container.read(semanticZonesProvider.notifier).reset();
+
+      // `reset` recalcula desde la pregunta vigente del puerto.
+      expect(container.read(semanticZonesProvider).activeZoneId, 'situacion');
+    });
+
+    test('reset respeta la zona preguntada', () {
+      final container = containerAsking('Donde te robaron');
+      container.read(semanticZonesProvider.notifier).activateZone('personas');
+      expect(container.read(semanticZonesProvider).activeZoneId, 'personas');
+
+      container.read(semanticZonesProvider.notifier).reset();
+
+      expect(container.read(semanticZonesProvider).activeZoneId, 'lugar');
+    });
+
+    test('Continuar sigue por las zonas preguntadas antes que por el motor',
+        () {
+      final container = containerAsking('A que hora y donde te robaron');
+      final notifier = container.read(semanticZonesProvider.notifier);
+      expect(container.read(semanticZonesProvider).activeZoneId, 'tiempo');
+
+      notifier.goToNextZone();
+
+      expect(container.read(semanticZonesProvider).activeZoneId, 'lugar');
     });
   });
 
