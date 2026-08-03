@@ -181,7 +181,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   }
 
   void _handleJsMessage(String viewerId, String message) {
-    debugPrint('Mensaje JS recibido de Visor $viewerId: $message');
     if (message == 'loaded') {
       _handleLoaded(viewerId);
     } else if (message == 'finished') {
@@ -240,7 +239,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   void _playViewer(String id) {
     final currentUrl = id == 'A' ? _urlA : _urlB;
     if (currentUrl != null && currentUrl.startsWith('placeholder://')) {
-      debugPrint('Visor $id es un placeholder: $currentUrl. Programando temporizador.');
       _cancelPlaceholderTimer();
       _placeholderTimer = Timer(widget.animationDuration, () {
         _handleFinished(id);
@@ -250,21 +248,17 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
     final controller = id == 'A' ? _controllerA : _controllerB;
     if (controller != null) {
-      debugPrint('Enviando play JS a Visor $id');
       controller.runJavaScript(
         "document.querySelector('model-viewer').currentTime = 0; document.querySelector('model-viewer').play();"
       ).catchError((e) {
-        debugPrint('Error ejecutando play JS: $e');
       });
     } else {
-      debugPrint('Controlador nulo para Visor $id en _playViewer.');
     }
   }
 
   void _transitionTo(String nextViewerId) {
     if (!mounted) return;
     _cancelPlaceholderTimer();
-    debugPrint('Transicionando a Visor: $nextViewerId');
 
     setState(() {
       _activeViewer = nextViewerId;
@@ -359,7 +353,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       cameraTarget: "0m 0.9m 0m",   // Cara / pecho
       cameraOrbit: "0deg 90deg 3.0m", // Más zoom
       onWebViewCreated: (controller) {
-        debugPrint('WebView Creada para Visor $id con URL: $url');
         if (id == 'A') {
           _controllerA = controller;
         } else {
