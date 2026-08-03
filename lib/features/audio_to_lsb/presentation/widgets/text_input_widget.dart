@@ -65,7 +65,6 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           }
         },
         onError: (error) {
-          debugPrint('Speech recognition error: $error');
           if (_isRecording) _stopRecording();
         },
       );
@@ -92,13 +91,23 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           localeId: 'es_ES',
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Reconocimiento de voz no disponible')),
-        );
+        _warn('Reconocimiento de voz no disponible');
       }
-    } catch (e) {
-      debugPrint("Error starting speech to text: $e");
+    } catch (_) {
+      if (mounted) setState(() => _isRecording = false);
+      _warn('No se pudo iniciar el dictado. Escribe el mensaje.');
     }
+  }
+
+  /// Avisa al usuario de un fallo del dictado.
+  ///
+  /// La alternativa —registrarlo por consola— deja a quien usa la aplicación
+  /// esperando un micrófono que nunca se activó.
+  void _warn(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   Future<void> _stopRecording() async {
@@ -121,8 +130,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
         // clásica o conversación), igual que con el texto escrito.
         (widget.onSpeechSubmit ?? widget.onSubmit)(text);
       }
-    } catch (e) {
-      debugPrint("Error stopping speech to text: $e");
+    } catch (_) {
+      if (mounted) setState(() => _isRecording = false);
+      _warn('No se pudo completar el dictado. Intenta de nuevo.');
     }
   }
 
