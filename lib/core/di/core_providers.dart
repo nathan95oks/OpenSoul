@@ -11,6 +11,7 @@ import '../dictionary/data/lexicon_repository_impl.dart';
 import '../dictionary/data/remote_lexicon_datasource.dart';
 import '../dictionary/domain/lexicon_repository.dart';
 import '../domain/entities/lsb_card.dart';
+import '../domain/ports/conversation_bridge.dart';
 import '../domain/repositories/audio_translation_repository.dart';
 import '../domain/repositories/translation_repository.dart';
 import '../engines/context_engine/context_inference_engine.dart';
@@ -96,6 +97,23 @@ final contextInferenceEngineProvider = Provider<ContextInferenceEngine>((ref) {
       ? ContextInferenceEngine.empty()
       : ContextInferenceEngine.fromLexicon(entries);
 });
+
+// ── Puente con la conversación (dependencia invertida) ────────────────────
+//
+// Ambos providers vienen desactivados: con estos valores el flujo de tarjetas
+// es una aplicación autónoma. El módulo de conversación los sobrescribe al
+// componer la app (`main.dart`), y solo entonces el flujo pasa a responder
+// preguntas y a entregar sus declaraciones a un hilo.
+//
+// Es lo que rompe el ciclo entre features: `lsb_to_text_audio` depende de
+// estas abstracciones del núcleo, nunca del módulo de conversación.
+
+/// Pregunta de la persona oyente pendiente de responder, si hay conversación.
+final pendingReplyProvider = Provider<ReplyPrompt?>((ref) => null);
+
+/// Destino de una declaración terminada.
+final conversationBridgeProvider =
+    Provider<ConversationBridge>((ref) => const NoConversationBridge());
 
 // ── Motor de conversación ─────────────────────────────────────────────────
 

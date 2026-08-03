@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/features/dictionary_proposals/presentation/widgets/propose_sign_sheet.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -135,18 +135,17 @@ class HomeScreen extends ConsumerWidget {
   ) {
     // Frase del oyente que se está respondiendo: se mantiene a la vista
     // durante todo el flujo guiado para no obligar a recordarla.
-    final pending = ref.watch(conversationProvider).conversation.pendingReply;
+    final pending = ref.watch(pendingReplyProvider);
     // Se entró directo a este contexto por inferencia, no porque nadie lo
     // eligiera: hay que decirlo, o una suposición equivocada pasaría por
     // decisión propia.
-    final wasInferred =
-        pending?.message.contextSuggestion?.contextId == contextState?.id;
+    final wasInferred = pending?.suggestion?.contextId == contextState?.id;
 
     return Column(
       children: [
         if (pending != null)
           _ReplyingToStrip(
-            text: pending.outputs.text,
+            text: pending.question,
             inferredContextName: wasInferred ? contextState.name as String : null,
           ),
         // Pregunta activa + opciones (scrollable solo si hay muchas opciones)

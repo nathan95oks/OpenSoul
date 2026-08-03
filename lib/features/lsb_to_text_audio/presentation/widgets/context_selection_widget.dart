@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import '../providers/context_provider.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 
 /// Pantalla de selección de contexto — estilo reference design.
 /// Fondo blanco, botones con borde negro, hover naranja.
@@ -18,10 +18,9 @@ class ContextSelectionWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final conversation = ref.watch(conversationProvider).conversation;
-    final pending = conversation.pendingReply;
-    final suggestion = pending?.message.contextSuggestion;
-    final highlightedId = conversation.suggestedReplyContextId;
+    final pending = ref.watch(pendingReplyProvider);
+    final suggestion = pending?.suggestion;
+    final highlightedId = pending?.proposedContextId;
 
     // El contexto propuesto encabeza la lista; el resto conserva su orden.
     final ordered = [
@@ -39,7 +38,7 @@ class ContextSelectionWidget extends ConsumerWidget {
           children: [
             const SizedBox(height: 16),
             if (pending != null) ...[
-              _ReplyingToBanner(text: pending.outputs.text),
+              _ReplyingToBanner(text: pending.question),
               const SizedBox(height: 20),
             ],
             Text(
