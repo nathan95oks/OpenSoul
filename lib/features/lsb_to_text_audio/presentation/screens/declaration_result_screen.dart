@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
+import 'package:lsb_legal_app/core/di/core_providers.dart';
 import '../controllers/translation_controller.dart';
 import '../providers/context_provider.dart';
 import '../providers/sentence_provider.dart';
@@ -223,7 +223,7 @@ class DeclarationResultScreen extends ConsumerWidget {
   /// empiece de cero.
   Future<void> _sendToConversation(
       BuildContext context, WidgetRef ref, TranslationResult result) async {
-    ref.read(conversationProvider.notifier).addDeafDeclaration(
+    ref.read(conversationBridgeProvider).submitDeclaration(
           result: result,
           glosses: ref.read(sentenceProvider),
           contextId: ref.read(contextProvider)?.id,

@@ -108,6 +108,28 @@ compuestas encadenan varias animaciones bajo una sola glosa.
 Conversation Engine → Semantic Engine / Context Engine → Generadores → UI
 ```
 
+### Fronteras entre módulos
+
+Los dos módulos de traducción son independientes: **no se conocen entre sí ni
+conocen al de conversación**. La única dirección de dependencia permitida es la
+del integrador hacia sus partes.
+
+```
+conversation ──→ lsb_to_text_audio
+     │      ╲──→ audio_to_lsb
+     ▼
+   core/  ←── los tres dependen solo del núcleo
+```
+
+Donde el flujo de tarjetas necesita saber de una conversación en curso —qué
+pregunta se está respondiendo, dónde entregar la declaración terminada— la
+dependencia está invertida: el núcleo declara los puertos
+(`core/domain/ports/conversation_bridge.dart`) desactivados por defecto, y el
+módulo de conversación los implementa al componer la aplicación en `main.dart`.
+
+Con los puertos desactivados, el flujo de tarjetas funciona como una aplicación
+autónoma. La propiedad está verificada en `test/module_boundaries_test.dart`.
+
 ```
 lib/
 ├── core/
