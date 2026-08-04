@@ -46,4 +46,44 @@ la URL prefirmada del MP3 ya almacenado. No requiere DynamoDB ni infraestructura
 
 ```bash
 python3 -c "import ast; ast.parse(open('aws/lambda_function.py').read()); print('OK')"
+python3 -m unittest discover -s aws/tests -v   # regresiones de seguridad
 ```
+
+## Seguridad
+
+### Cotas de entrada (ya en el código)
+
+| Lambda | Cota | Por qué |
+|---|---|---|
+| `lambda_function.py` | `MAX_CARDS=64`, `MAX_CARD_LENGTH=64` | Cada invocación consume Bedrock por token y Polly por carácter. Sin techo, una sola petición podía inflar el prompt sin límite. |
+| `lambda_text_to_lsb.py` | `text` ≤ 1000 car., glosas devueltas validadas contra `_VALID_GLOSS` | La frase es entrada de usuario que acaba en el prompt (OWASP LLM01), y lo que devuelve el modelo es igual de poco confiable. |
+| `lambda_dictionary.py` | `MAX_BODY_BYTES=16 KB`, tipo y longitud por campo | `POST /proposals` es público: sin validar valores, cualquiera podía llenar DynamoDB hasta 400 KB por item. |
+
+Cubiertas por `aws/tests/test_security.py`.
+
+### Pendiente: los endpoints no tienen autenticación ni límite de tasa
+
+**Esto no se arregla en el código de las Lambdas — es configuración de API
+Gateway.** Hoy las cuatro funciones aceptan cualquier petición: `CORS` está en
+`*` y las cabeceras `Authorization` / `X-Api-Key` se **declaran permitidas pero
+nunca se verifican**. Las URLs, además, están como valores por defecto en el
+binario de la app (`String.fromEnvironment`), así que se extraen de un APK sin
+esfuerzo.
+
+Consecuencia concreta: cualquiera que lea esas URLs puede invocar Bedrock y
+Polly a cargo de la cuenta. No es robo de datos, es la factura.
+
+Mitigación mínima recomendada, en orden de coste:
+
+1. **Usage plan + API key** en API Gateway, con *throttling* (p. ej. 10 req/s,
+   ráfaga 20) y **cuota diaria**. La cuota es lo que convierte un incidente de
+   facturación en un incidente de disponibilidad, que es mucho más barato.
+2. **AWS Budgets con alarma** sobre el gasto de Bedrock/Polly. Detección, no
+   prevención, pero es lo que avisa de que algo va mal.
+3. **CORS por origen concreto** en vez de `*` (una app móvil no necesita `*`).
+4. Para el diccionario, exigir la API key también en `POST /proposals`, o
+   moverlo detrás de un autorizador cuando exista el portal de validación.
+5. A medio plazo: WAF con *rate-based rule* por IP.
+
+> Mientras 1 y 2 no estén, conviene no publicar las URLs de producción en un
+> repositorio público.
