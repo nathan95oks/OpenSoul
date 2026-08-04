@@ -49,6 +49,12 @@ python3 -c "import ast; ast.parse(open('aws/lambda_function.py').read()); print(
 python3 -m unittest discover -s aws/tests -v   # regresiones de seguridad
 ```
 
+Las regresiones corren solas en CI (`.github/workflows/ci.yml`, job
+*Lambdas (Python)*) sobre Python 3.12 y 3.13, sin instalar dependencias:
+`test_security.py` sustituye `boto3` por un doble antes de importar las
+Lambdas. `flutter test` **no** las ve, que es justo por lo que necesitan job
+propio.
+
 ## Seguridad
 
 ### Cotas de entrada (ya en el código)

@@ -1,0 +1,87 @@
+name: CI
+
+# La suite de Dart y la de Python se ejecutan por separado porque son dos
+# entornos distintos: `flutter test` no ve `aws/tests/`, así que las
+# regresiones de seguridad del backend se quedaban sin ejecutar en cada cambio.
+# Ese era justamente el riesgo: un parche de validación que alguien revierte
+# sin que nada avise.
+
+on:
+  push:
+    branches: [main, 'security/**', 'Update*']
+  pull_request:
+    branches: [main]
+  # Permite lanzarlo a mano desde la pestaña Actions.
+  workflow_dispatch:
+
+# Un push nuevo sobre la misma rama cancela la ejecución anterior: no tiene
+# sentido pagar minutos por validar un commit ya superado.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Lambdas (Python)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 3.12 y 3.13 son runtimes vigentes de AWS Lambda. Mantener las dos
+        # avisa antes de tiempo si el código deja de ser portable entre ellas.
+        # Si se fija un runtime concreto al desplegar, reducir esta lista al
+        # que se use de verdad.
+        python-version: ['3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # Las Lambdas se importan en las pruebas y crean sus clientes AWS al
+      # importarse; `aws/tests/test_security.py` sustituye boto3 por un doble,
+      # así que no hace falta instalar nada ni tener credenciales.
+      - name: Regresiones de seguridad
+        run: python -m unittest discover -s aws/tests -v
+
+      # Las demás Lambdas no tienen pruebas todavía. Comprobar al menos que
+      # compilan evita subir un archivo que ni siquiera parsea.
+      - name: Comprobar sintaxis de todas las Lambdas
+        run: python -m compileall -q aws
+
+  app:
+    name: App (Flutter)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          # Debe seguir a `environment.sdk` de pubspec.yaml (^3.11.1).
+          flutter-version: '3.41.4'
+          channel: stable
+          cache: true
+
+      - name: Dependencias
+        run: flutter pub get
+
+      # El repositorio se mantiene en cero ERRORES y cero WARNINGS, y eso es
+      # lo que se exige aquí. Los `info` no rompen la ejecución porque hay 37
+      # heredados (29 de ellos `withOpacity` deprecado) y arrancar el CI en
+      # rojo lo vuelve ruido que nadie mira. Cuando se limpien, quitar el flag
+      # para que tampoco vuelvan a entrar.
+      - name: Analizador
+        run: flutter analyze --no-fatal-infos
+
+      - name: Pruebas
+        run: flutter test
+
+      # Auditoría de cobertura del léxico: no es una prueba del runner, así
+      # que `flutter test` no la ejecuta. Sale con código 1 si alguna glosa del
+      # diccionario canónico se queda fuera de los motores.
+      - name: Cobertura del diccionario
+        run: dart run tool/find_missing_lambda_lexicon.dart
