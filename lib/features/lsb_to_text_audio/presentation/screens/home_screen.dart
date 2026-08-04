@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/features/dictionary_proposals/presentation/widgets/propose_sign_sheet.dart';
+import '../providers/cards_flow_session.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../controllers/translation_controller.dart';
@@ -13,7 +14,6 @@ import '../providers/context_provider.dart';
 import '../providers/cards_provider.dart' show allCardsProvider;
 import '../widgets/context_selection_widget.dart';
 import '../widgets/node_flow_canvas.dart';
-import '../widgets/card_grid.dart' show expandedAnswersProvider;
 
 /// Pantalla principal del módulo LSB → Texto → Audio.
 ///
@@ -106,13 +106,7 @@ class HomeScreen extends ConsumerWidget {
         ),
         if (contextState != null)
           TextButton(
-            onPressed: () async {
-              await ref.read(translationControllerProvider.notifier).reset();
-              ref.read(contextProvider.notifier).clearContext();
-              ref.read(sentenceProvider.notifier).clearSentence();
-              ref.read(semanticZonesProvider.notifier).reset();
-              ref.read(expandedAnswersProvider.notifier).collapse();
-            },
+            onPressed: () => ref.read(cardsFlowSessionProvider).reset(),
             child: const Text(
               'Cambiar contexto',
               style: TextStyle(

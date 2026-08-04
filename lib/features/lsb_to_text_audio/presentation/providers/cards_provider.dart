@@ -26,9 +26,14 @@ final getCardsByCategoryUseCaseProvider = Provider<GetCardsByCategoryUseCase>((r
   return GetCardsByCategoryUseCase(repository);
 });
 
+/// Categoría por defecto: no es una categoría del diccionario sino el modo
+/// guiado, donde las opciones las elige el motor semántico. Cualquier otro
+/// valor significa que el usuario tomó el control desde el filtro avanzado.
+const String kSuggestionsCategory = 'Sugerencias';
+
 class CurrentCategoryNotifier extends Notifier<String> {
   @override
-  String build() => 'Sugerencias';
+  String build() => kSuggestionsCategory;
 
   void setCategory(String category) {
     state = category;
@@ -86,7 +91,7 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final sentence = ref.watch(sentenceProvider);
 
   // Modo avanzado: el usuario eligió una categoría específica.
-  if (category != 'Sugerencias') {
+  if (category != kSuggestionsCategory) {
     final useCase = ref.watch(getCardsByCategoryUseCaseProvider);
     return useCase(category);
   }
