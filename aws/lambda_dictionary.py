@@ -52,11 +52,62 @@ CORS_HEADERS = {
     "Content-Type": "application/json",
 }
 
-# Campos admitidos en una propuesta (todo lo demás se descarta).
+# Campos admitidos en una propuesta (todo lo demás se descarta) y su forma.
+#
+# La allowlist de nombres ya estaba, pero los VALORES se copiaban tal cual:
+# `item[field] = body[field]` aceptaba cualquier tipo JSON y cualquier tamaño.
+# Como el endpoint es público y sin autenticación, una propuesta podía llegar
+# con un `description` de cientos de KB o un `contexts` anidado hasta el límite
+# de 400 KB por item de DynamoDB — almacenamiento y coste ilimitados escritos
+# por cualquiera, y datos con los que después tiene que lidiar el portal de
+# validación.
+#
+# Formato: campo → (tipo, longitud máxima). Para listas, la longitud aplica a
+# cada elemento y MAX_LIST_ITEMS al número de elementos.
+MAX_LIST_ITEMS = 12
 PROPOSAL_FIELDS = {
-    "word", "gloss", "displayText", "categoryId", "subcategoryId",
-    "contexts", "description", "videoUrl", "dialect", "proposedBy",
+    "word": (str, 80),
+    "gloss": (str, 80),
+    "displayText": (str, 120),
+    "categoryId": (str, 60),
+    "subcategoryId": (str, 60),
+    "contexts": (list, 40),
+    "description": (str, 600),
+    "videoUrl": (str, 500),
+    "dialect": (str, 40),
+    "proposedBy": (str, 120),
 }
+
+# Tope del cuerpo entero, antes incluso de parsearlo.
+MAX_BODY_BYTES = 16 * 1024
+
+
+def _clean_field(name: str, value):
+    """Valor admisible para [name], o `None` si no lo es.
+
+    Lista blanca estricta de tipo y tamaño: lo que no encaja se descarta en
+    lugar de truncarse, para que una propuesta malformada no se guarde a
+    medias y parezca legítima en el portal.
+    """
+    expected, limit = PROPOSAL_FIELDS[name]
+
+    if expected is str:
+        if not isinstance(value, str):
+            return None
+        cleaned = value.strip()
+        return cleaned[:limit] if cleaned else None
+
+    if expected is list:
+        if not isinstance(value, list):
+            return None
+        items = [
+            v.strip()[:limit]
+            for v in value[:MAX_LIST_ITEMS]
+            if isinstance(v, str) and v.strip()
+        ]
+        return items or None
+
+    return None
 
 
 class _DecimalEncoder(json.JSONEncoder):
@@ -116,16 +167,24 @@ def get_dictionary() -> dict:
 
 
 def create_proposal(raw_body: str) -> dict:
+    raw_body = raw_body or "{}"
+    # Se mide antes de parsear: un JSON de megabytes no debe llegar siquiera
+    # a construirse en memoria.
+    if len(raw_body.encode("utf-8")) > MAX_BODY_BYTES:
+        return _response(413, {"error": "Propuesta demasiado grande"})
+
     try:
-        body = json.loads(raw_body or "{}")
+        body = json.loads(raw_body)
     except json.JSONDecodeError:
         return _response(400, {"error": "JSON inválido"})
+    if not isinstance(body, dict):
+        return _response(400, {"error": "El cuerpo debe ser un objeto JSON"})
 
-    word = str(body.get("word") or body.get("gloss") or "").strip()
+    word = _clean_field("word", body.get("word")) or _clean_field(
+        "gloss", body.get("gloss")
+    )
     if not word:
         return _response(400, {"error": "Se requiere 'word' o 'gloss'"})
-    if len(word) > 80:
-        return _response(400, {"error": "'word' demasiado largo"})
 
     now = datetime.now(timezone.utc).isoformat()
     proposal_id = str(uuid.uuid4())
@@ -137,8 +196,13 @@ def create_proposal(raw_body: str) -> dict:
         "createdAt": now,
     }
     for field in PROPOSAL_FIELDS:
-        if field in body and body[field] is not None:
-            item[field] = body[field]
+        if field not in body or body[field] is None:
+            continue
+        cleaned = _clean_field(field, body[field])
+        if cleaned is not None:
+            item[field] = cleaned
+    # 'word' se fija al final: ni siquiera un 'word' inválido en el cuerpo
+    # puede sustituir al valor ya validado.
     item["word"] = word
 
     table.put_item(Item=item)

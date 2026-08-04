@@ -1,9 +1,10 @@
-import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+
+import 'animation_cache.dart';
+import 'animation_url_resolver.dart';
 
 /// Widget que reproduce secuencialmente animaciones 3D de Lengua de Señas
 /// Boliviana (LSB) cargando archivos .GLB desde el Bucket S3 de OpenSoul.
@@ -23,12 +24,12 @@ class Avatar3DViewer extends StatefulWidget {
   final Duration animationDuration;
 
   const Avatar3DViewer({
-    Key? key,
+    super.key,
     required this.isProcessing,
     this.glosses,
     this.animationUrls,
     this.animationDuration = const Duration(milliseconds: 2500),
-  }) : super(key: key);
+  });
 
   @override
   State<Avatar3DViewer> createState() => _Avatar3DViewerState();
@@ -54,6 +55,10 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   bool _isLoadedA = false;
   bool _isLoadedB = false;
   bool _hasFinishedPlayingCurrent = false;
+
+  /// Política de descarga de animaciones: allowlist de origen, nombre local
+  /// derivado de un hash y tope de tamaño. Ver [AnimationCache].
+  final AnimationCache _cache = AnimationCache();
 
   dynamic _controllerA;
   dynamic _controllerB;
@@ -131,26 +136,27 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     final tempDir = await getTemporaryDirectory();
 
     for (var urlStr in urlsToDownload) {
-      if (urlStr.startsWith('placeholder://')) {
+      if (urlStr.startsWith(AnimationUrlResolver.placeholderScheme)) {
         localPaths.add(urlStr);
         continue;
       }
-      try {
-        final uri = Uri.parse(urlStr);
-        final fileName = uri.pathSegments.last;
-        final file = File('${tempDir.path}/$fileName');
-
-        if (!await file.exists()) {
-          final response = await http.get(uri);
-          if (response.statusCode == 200) {
-            await file.writeAsBytes(response.bodyBytes);
-          }
-        }
-        // Usar scheme file:// para que ModelViewer lo lea de la caché local
-        localPaths.add('file://${file.path}');
-      } catch (e) {
-        // Fallback al URL original si falla la descarga
+      // El nombre del archivo local ya no sale del URL: lo decide
+      // [AnimationCache] a partir de un hash. Ver esa clase para el porqué.
+      final localPath = await _cache.localPathFor(urlStr, tempDir);
+      if (localPath != null) {
+        // Scheme file:// para que ModelViewer lo lea de la caché local.
+        localPaths.add('file://$localPath');
+      } else if (_cache.isAllowed(urlStr)) {
+        // El origen es legítimo y solo falló la descarga (red intermitente,
+        // disco lleno). Se carga desde la red, como se hacía antes de existir
+        // la caché: degradar aquí a texto dejaría sin señas a quien esté en
+        // una comisaría con mala cobertura, que es justo el escenario de uso.
+        // Es seguro porque el esquema y el host ya pasaron la política.
         localPaths.add(urlStr);
+      } else {
+        // Origen rechazado: la glosa se rotula como texto en vez de apuntar
+        // a un destino que no pasó la política.
+        localPaths.add('${AnimationUrlResolver.placeholderScheme}$urlStr');
       }
     }
 
@@ -329,7 +335,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Text(
           subtitle,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.4),
+            color: Colors.white.withValues(alpha: 0.4),
             fontSize: 12,
           ),
         ),
@@ -440,7 +446,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         if (isPlaceholder)
           Positioned.fill(
             child: Container(
-              color: const Color(0xFF1E1E2F).withOpacity(0.9),
+              color: const Color(0xFF1E1E2F).withValues(alpha: 0.9),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -448,7 +454,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.amber.withOpacity(0.1),
+                        color: Colors.amber.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.amber, width: 2),
                       ),
@@ -501,7 +507,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                       padding: const EdgeInsets.symmetric(
                           horizontal: 18, vertical: 7),
                       decoration: BoxDecoration(
-                        color: Colors.deepPurpleAccent.withOpacity(0.85),
+                        color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -556,7 +562,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent.withOpacity(0.85),
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -573,7 +579,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                   Text(
                     '${_currentIndex + 1} / ${_localUrls.length}',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -620,10 +626,10 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.deepPurpleAccent.withOpacity(0.15),
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.15),
             shape: BoxShape.circle,
             border: Border.all(
-              color: Colors.deepPurpleAccent.withOpacity(0.4),
+              color: Colors.deepPurpleAccent.withValues(alpha: 0.4),
               width: 2,
             ),
           ),
@@ -652,10 +658,10 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
               padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
+                color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
                 border:
-                    Border.all(color: Colors.white.withOpacity(0.15)),
+                    Border.all(color: Colors.white.withValues(alpha: 0.15)),
               ),
               child: Text(
                 g,
@@ -698,7 +704,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  Colors.deepPurpleAccent.withOpacity(0.3),
+                  Colors.deepPurpleAccent.withValues(alpha: 0.3),
                   Colors.transparent,
                 ],
               ),
@@ -706,7 +712,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
             child: Icon(
               Icons.person_outline_rounded,
               size: 70,
-              color: Colors.white.withOpacity(0.25),
+              color: Colors.white.withValues(alpha: 0.25),
             ),
           ),
         ),
@@ -714,7 +720,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Text(
           'Avatar LSB',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -723,7 +729,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Text(
           'Habla o escribe para ver las señas',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             fontSize: 13,
           ),
         ),
@@ -751,7 +757,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                 ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(
-                      color: Colors.greenAccent.withOpacity(0.5)),
+                      color: Colors.greenAccent.withValues(alpha: 0.5)),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
@@ -774,7 +780,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                 ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(
-                      color: Colors.amberAccent.withOpacity(0.5)),
+                      color: Colors.amberAccent.withValues(alpha: 0.5)),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
@@ -807,11 +813,11 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         color: const Color(0xFF1A1A2E),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.deepPurpleAccent.withOpacity(0.25),
+          color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.deepPurpleAccent.withOpacity(0.1),
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.1),
             blurRadius: 30,
             spreadRadius: 2,
           ),

@@ -1059,6 +1059,23 @@ def generate_cache_key(context_type: str, cards: list) -> str:
     normalized = f"{context_type.lower().strip()}|{'|'.join(c.upper().strip() for c in cards)}"
     return hashlib.md5(normalized.encode("utf-8")).hexdigest()
 
+# ---------------------------------------------------------------------------
+# Cotas de entrada
+# ---------------------------------------------------------------------------
+# El endpoint es público y cada invocación consume Bedrock (por token) y Polly
+# (por carácter). Sin un techo, `cards` era una lista sin límite de longitud ni
+# de tamaño por elemento: una sola petición podía inflar el prompt hasta agotar
+# el presupuesto de la cuenta. Su gemela `lambda_text_to_lsb` ya acotaba el
+# texto a 1000 caracteres; esta no acotaba nada.
+#
+# Los valores salen del uso real: una declaración guiada rara vez pasa de una
+# docena de glosas, y la glosa más larga del diccionario canónico
+# ('PARTIDA_NACIMIENTO') tiene 18 caracteres.
+MAX_CARDS = 64
+MAX_CARD_LENGTH = 64
+MAX_CONTEXT_LENGTH = 64
+
+
 def validate_request(body: dict) -> tuple:
     if not isinstance(body, dict):
         return False, "El cuerpo de la solicitud debe ser un objeto JSON válido."
@@ -1069,9 +1086,23 @@ def validate_request(body: dict) -> tuple:
         return False, "El campo 'cards' debe ser una lista de glosas."
     if len(cards) == 0:
         return False, "El campo 'cards' no puede estar vacío."
+    if len(cards) > MAX_CARDS:
+        return False, f"No se admiten más de {MAX_CARDS} glosas por solicitud."
     for i, card in enumerate(cards):
         if not isinstance(card, str) or not card.strip():
             return False, f"La glosa en posición {i} no es válida."
+        if len(card) > MAX_CARD_LENGTH:
+            return False, (
+                f"La glosa en posición {i} excede los "
+                f"{MAX_CARD_LENGTH} caracteres."
+            )
+
+    context_type = body.get("context")
+    if context_type is not None:
+        if not isinstance(context_type, str):
+            return False, "El campo 'context' debe ser una cadena."
+        if len(context_type) > MAX_CONTEXT_LENGTH:
+            return False, "El campo 'context' es demasiado largo."
     return True, None
 
 def lambda_handler(event, context):
