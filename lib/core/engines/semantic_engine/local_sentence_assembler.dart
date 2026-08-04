@@ -145,7 +145,7 @@ class LocalSentenceAssembler {
     // de palabras sin estructura gramatical española (sin artículos,
     // preposiciones ni verbos conjugados). Una oración real contiene
     // al menos una palabra de enlace.
-    const _kLinking = {
+    const kLinking = {
       'de', 'en', 'con', 'el', 'la', 'los', 'las', 'un', 'una', 'unos',
       'unas', 'me', 'te', 'se', 'le', 'mi', 'tu', 'su', 'que', 'y', 'a',
       'por', 'para', 'del', 'al', 'fue', 'era', 'es', 'son', 'quiero',
@@ -156,7 +156,7 @@ class LocalSentenceAssembler {
         .split(RegExp(r'[\s.,;:!?]+'))
         .where((w) => w.isNotEmpty)
         .toSet();
-    final hasLinking = textWords.any(_kLinking.contains);
+    final hasLinking = textWords.any(kLinking.contains);
     if (!hasLinking && glosses.length > 1) return true;
 
     final haystack = _stripDiacritics(trimmed.toLowerCase());

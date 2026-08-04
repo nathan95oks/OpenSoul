@@ -13,10 +13,10 @@ class TextInputWidget extends ConsumerStatefulWidget {
   final Function(String)? onSpeechSubmit;
 
   const TextInputWidget({
-    Key? key,
+    super.key,
     required this.onSubmit,
     this.onSpeechSubmit,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<TextInputWidget> createState() => _TextInputWidgetState();
@@ -88,7 +88,12 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
             ref.read(audioTranslationControllerProvider.notifier)
                 .updateRecognizedText(result.recognizedWords);
           },
-          localeId: 'es_ES',
+          // `listen(localeId:)` quedó obsoleto en speech_to_text 7. Este
+          // objeto es equivalente al que construía internamente la ruta
+          // antigua: el resto de opciones conserva sus valores por defecto
+          // (partialResults true, onDevice false, ListenMode.confirmation),
+          // que son los mismos en ambos caminos.
+          listenOptions: stt.SpeechListenOptions(localeId: 'es_ES'),
         );
       } else {
         _warn('Reconocimiento de voz no disponible');
@@ -152,12 +157,12 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1F1F1F).withOpacity(0.8),
+        color: const Color(0xFF1F1F1F).withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -187,12 +192,12 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _isRecording
-                      ? Colors.red.withOpacity(0.15 + (_animationController.value * 0.2))
+                      ? Colors.red.withValues(alpha: 0.15 + (_animationController.value * 0.2))
                       : Colors.transparent,
                   boxShadow: _isRecording
                       ? [
                           BoxShadow(
-                            color: Colors.redAccent.withOpacity(0.3),
+                            color: Colors.redAccent.withValues(alpha: 0.3),
                             spreadRadius: _animationController.value * 6,
                             blurRadius: 8,
                           )

@@ -42,19 +42,42 @@ class AnimationUrlResolver {
     if (animationFile == null || animationFile.isEmpty) {
       return ['$placeholderScheme$gloss'];
     }
-    return [
-      for (final part in animationFile.split(compositeSeparator))
-        if (part.trim().isNotEmpty) '$baseUrl${_sanitizeFileName(part.trim())}',
-    ];
+    final urls = <String>[];
+    for (final part in animationFile.split(compositeSeparator)) {
+      final safe = _sanitizeFileName(part.trim());
+      if (safe == null || safe.isEmpty) continue;
+      urls.add('$baseUrl$safe');
+    }
+    // Un `animationFile` entero rechazado equivale a no tener animación: la
+    // glosa se rotula como texto en vez de apuntar a una ruta inventada.
+    return urls.isEmpty ? ['$placeholderScheme$gloss'] : urls;
   }
 
+  /// Caracteres admitidos en un nombre de archivo de animación.
+  ///
+  /// **Lista blanca, no negra.** El `animationFile` llega en la respuesta del
+  /// backend y en el diccionario remoto, así que es entrada no confiable: una
+  /// lista negra de `..` y `/` se sortea con `%2E%2E%2F`, con `\` o con
+  /// codificaciones dobles. Enumerar lo permitido no tiene esa clase de
+  /// agujero, y el conjunto real de nombres —`ABOGADO.glb`, `F.glb`,
+  /// `PARTIDA_NACIMIENTO.glb`— cabe de sobra aquí.
+  static final RegExp _allowedFileName = RegExp(r'^[A-Za-z0-9._-]+$');
+
   /// Los archivos en S3 se nombran sin tildes ni eñes; las glosas sí las
-  /// llevan. Normaliza para que la URL siempre exista.
-  String _sanitizeFileName(String file) => file
-      .replaceAll('Á', 'A')
-      .replaceAll('É', 'E')
-      .replaceAll('Í', 'I')
-      .replaceAll('Ó', 'O')
-      .replaceAll('Ú', 'U')
-      .replaceAll('Ñ', 'N');
+  /// llevan. Normaliza para que la URL siempre exista, y descarta el nombre
+  /// entero si contiene algo que no sea un nombre de archivo llano.
+  ///
+  /// Devuelve `null` cuando el nombre no es admisible: quien llama lo trata
+  /// como "sin animación" y la glosa cae a su placeholder, que es
+  /// exactamente el comportamiento que ya existía para una seña sin modelo.
+  String? _sanitizeFileName(String file) {
+    final normalized = file
+        .replaceAll('Á', 'A')
+        .replaceAll('É', 'E')
+        .replaceAll('Í', 'I')
+        .replaceAll('Ó', 'O')
+        .replaceAll('Ú', 'U')
+        .replaceAll('Ñ', 'N');
+    return _allowedFileName.hasMatch(normalized) ? normalized : null;
+  }
 }

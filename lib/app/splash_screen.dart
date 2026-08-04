@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'theme.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -106,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: AppTheme.brandPrimary.withOpacity(0.3),
+                          color: AppTheme.brandPrimary.withValues(alpha: 0.3),
                           blurRadius: 30,
                           spreadRadius: 5,
                         ),
@@ -150,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
-                          color: AppTheme.darkTextSub.withOpacity(0.8),
+                          color: AppTheme.darkTextSub.withValues(alpha: 0.8),
                           letterSpacing: 1.5,
                         ),
                       ),
