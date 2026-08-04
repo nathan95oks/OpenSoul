@@ -84,6 +84,14 @@ sincronización remota, y la comunidad puede proponer señas nuevas desde la app
 generar cualquier salida. No hay caminos directos de texto a avatar ni de
 tarjetas a audio: ambos sentidos comparten núcleo.
 
+**Un enunciado vale desde que se dice, no desde que el backend contesta.** El
+turno de la persona oyente entra en la conversación de inmediato y el contexto
+se deduce en local, así que la persona sorda puede abrir las tarjetas y empezar
+a responder mientras la traducción todavía viaja; las señas se incorporan al
+mismo turno cuando llegan. Antes ese ida y vuelta era tiempo muerto en el centro
+de la conversación. Si el backend no responde, el turno se queda y se contesta
+igual.
+
 ---
 
 ## Los tres módulos
@@ -154,6 +162,29 @@ módulo de conversación los implementa al componer la aplicación en `main.dart
 Con los puertos desactivados, el flujo de tarjetas funciona como una aplicación
 autónoma. La propiedad está verificada en `test/module_boundaries_test.dart`.
 
+### Una sesión por superficie
+
+Los tres módulos comparten el `ProviderScope` raíz, pero no la sesión. Cada
+módulo de traducción tiene dos dueños posibles —la conversación, donde responde
+a un turno, y su pestaña autónoma, donde es una herramienta suelta— y la regla
+que los separa es una sola:
+
+> Los módulos de traducción no guardan nada entre superficies; solo la
+> conversación tiene memoria.
+
+El estado se descarta en **cada cruce**, no solo al entrar en una pestaña: de lo
+contrario la fuga queda invertida y lo construido como herramienta suelta
+reaparece como respuesta de un turno. Quien abre "Tarjetas LSB" o "Voz a LSB"
+los encuentra como si nunca los hubiera tocado, y la pregunta del oyente no
+enruta un recorrido que allí nadie pidió.
+
+El precio, asumido: salir de la conversación a una pestaña autónoma descarta una
+respuesta a medio construir. Es preferible a que reaparezca donde no
+corresponde — una declaración que se cuela en otro contexto no es un
+inconveniente, es falsa. El historial de la conversación nunca se toca.
+
+Verificado en `test/module_isolation_test.dart`.
+
 ```
 lib/
 ├── core/
@@ -220,6 +251,8 @@ flutter test test/context_inference_engine_test.dart     # inferencia de context
 flutter test test/zone_inference_engine_test.dart        # inferencia de preguntas
 flutter test test/composite_sign_test.dart               # señas compuestas
 flutter test test/module_boundaries_test.dart            # fronteras entre módulos
+flutter test test/module_isolation_test.dart             # sesión por superficie
+flutter test test/conversation_fluidity_test.dart        # camino crítico del turno
 ```
 
 Evaluación cuantitativa del motor de generación:
@@ -241,4 +274,5 @@ Resultados y metodología en
 | [Fase 2](docs/architecture/fase-2-diccionario-evolutivo.md) | Diccionario fuera del código, fuente canónica única |
 | [Fase 3](docs/architecture/fase-3-propuestas-comunidad.md) | Propuestas de señas desde la aplicación |
 | [Fase 4](docs/architecture/fase-4-contexto-conversacional.md) | Contexto conversacional entre módulos |
+| [Aislamiento y fluidez](docs/architecture/aislamiento-superficies-y-fluidez.md) | Sesión por superficie y camino crítico del turno |
 | [Evaluación](docs/architecture/evaluacion-motor-semantico.md) | Medición del motor semántico |
