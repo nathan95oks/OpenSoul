@@ -255,6 +255,17 @@ flutter test test/module_isolation_test.dart             # sesión por superfici
 flutter test test/conversation_fluidity_test.dart        # camino crítico del turno
 ```
 
+Regresiones de seguridad del backend. No las ve `flutter test` —son Python—,
+así que tienen job propio en CI:
+
+```bash
+python3 -m unittest discover -s aws/tests -v
+```
+
+Todo lo anterior se ejecuta en cada push y pull request
+([`.github/workflows/ci.yml`](.github/workflows/ci.yml)): analizador, suite de
+Dart, cobertura del diccionario y las Lambdas sobre Python 3.12 y 3.13.
+
 Evaluación cuantitativa del motor de generación:
 
 ```bash
