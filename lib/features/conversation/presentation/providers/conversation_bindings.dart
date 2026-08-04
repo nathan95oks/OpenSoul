@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/core/domain/ports/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/session/flow_surface.dart';
 
 import 'conversation_provider.dart';
 
@@ -38,6 +39,13 @@ class _ConversationBridge implements ConversationBridge {
 /// Sobrescrituras que activan la integración. Se aplican en `AppScope`.
 List<Override> conversationOverrides() => [
       pendingReplyProvider.overrideWith((ref) {
+        // Fuera de la conversación el flujo de tarjetas no le responde a
+        // nadie: en la pestaña autónoma es una herramienta suelta. Heredar
+        // allí la pregunta del oyente enrutaría el recorrido —y mostraría la
+        // franja «respondiendo a…»— por una conversación que el usuario dejó
+        // atrás.
+        if (!ref.watch(flowSurfaceProvider).isConversation) return null;
+
         final pending = ref.watch(conversationProvider).conversation.pendingReply;
         if (pending == null) return null;
         return ReplyPrompt(

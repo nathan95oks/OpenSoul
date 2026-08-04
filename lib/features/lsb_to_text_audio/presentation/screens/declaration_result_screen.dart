@@ -6,11 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/session/flow_surface.dart';
 import '../controllers/translation_controller.dart';
+import '../providers/cards_flow_session.dart';
 import '../providers/context_provider.dart';
 import '../providers/sentence_provider.dart';
-import '../providers/semantic_zones_provider.dart';
-import '../widgets/card_grid.dart' show expandedAnswersProvider;
 
 /// Pantalla de resultado dedicada (CAMBIO #4).
 ///
@@ -34,6 +34,7 @@ class DeclarationResultScreen extends ConsumerWidget {
     final result = translationState.value;
     final glosses = ref.watch(sentenceProvider);
     final playback = ref.watch(audioPlaybackProvider);
+    final servesConversation = ref.watch(flowSurfaceProvider).isConversation;
 
     return Scaffold(
       backgroundColor: AppTheme.lightBg,
@@ -190,13 +191,19 @@ class DeclarationResultScreen extends ConsumerWidget {
                     const SizedBox(height: 24),
 
                     // ── Acciones principales ─────────────────────────────
-                    _FullWidthBtn(
-                      label: 'Enviar a la conversación',
-                      icon: Icons.forum_outlined,
-                      filled: true,
-                      onTap: () => _sendToConversation(context, ref, result),
-                    ),
-                    const SizedBox(height: 10),
+                    // Solo cuando el flujo está sirviendo a una conversación.
+                    // En la pestaña autónoma no hay hilo al que enviar nada, y
+                    // ofrecerlo metería una declaración suelta en un diálogo
+                    // del que esta persona ya se había salido.
+                    if (servesConversation) ...[
+                      _FullWidthBtn(
+                        label: 'Enviar a la conversación',
+                        icon: Icons.forum_outlined,
+                        filled: true,
+                        onTap: () => _sendToConversation(context, ref, result),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
                     _FullWidthBtn(
                       label: 'Volver a editar',
                       icon: Icons.edit_outlined,
@@ -228,19 +235,13 @@ class DeclarationResultScreen extends ConsumerWidget {
           glosses: ref.read(sentenceProvider),
           contextId: ref.read(contextProvider)?.id,
         );
-    // Los notifiers se capturan antes de navegar: tras el go() esta
-    // pantalla se desmonta y su ref deja de ser utilizable.
-    final translation = ref.read(translationControllerProvider.notifier);
-    final sentence = ref.read(sentenceProvider.notifier);
-    final zones = ref.read(semanticZonesProvider.notifier);
-    final expanded = ref.read(expandedAnswersProvider.notifier);
+    // La sesión se captura antes de navegar: tras el go() esta pantalla se
+    // desmonta y su ref deja de ser utilizable.
+    final session = ref.read(cardsFlowSessionProvider);
     // Navegar primero evita que esta pantalla se reconstruya vacía
     // mientras se limpia el estado del flujo guiado.
     context.go('/home');
-    await translation.reset();
-    sentence.clearSentence();
-    zones.reset();
-    expanded.collapse();
+    await session.reset();
   }
 
   /// Vuelve al flujo guiado conservando todas las respuestas. El estado
@@ -280,10 +281,9 @@ class DeclarationResultScreen extends ConsumerWidget {
   /// de contexto). Reutiliza exactamente la misma secuencia de limpieza
   /// que ya existía para "Nueva declaración".
   Future<void> _newDeclaration(BuildContext context, WidgetRef ref) async {
-    await ref.read(translationControllerProvider.notifier).reset();
-    ref.read(sentenceProvider.notifier).clearSentence();
-    ref.read(semanticZonesProvider.notifier).reset();
-    ref.read(expandedAnswersProvider.notifier).collapse();
+    // Otro relato dentro del mismo trámite: el contexto situacional sigue
+    // siendo el mismo y volver a preguntarlo sería un paso de más.
+    await ref.read(cardsFlowSessionProvider).reset(keepContext: true);
     if (!context.mounted) return;
     if (context.canPop()) {
       context.pop();
