@@ -31,6 +31,13 @@ class ConversationNotifier extends Notifier<ConversationState> {
       ConversationState(conversation: Conversation.start());
 
   /// Turno de la persona oyente: voz o texto → glosas + avatar.
+  ///
+  /// El turno entra en el hilo **antes** de traducirse. El enunciado y el
+  /// contexto inferido en local están disponibles de inmediato, así que la
+  /// persona sorda puede abrir las tarjetas y empezar a responder mientras el
+  /// motor remoto todavía trabaja; las señas se incorporan al mismo turno
+  /// cuando llegan. Antes ese ida y vuelta —uno o dos segundos— era tiempo
+  /// muerto en el que la conversación no avanzaba.
   Future<void> sendHearingMessage(
     String text, {
     MessageSource source = MessageSource.text,
@@ -38,27 +45,38 @@ class ConversationNotifier extends Notifier<ConversationState> {
     final trimmed = text.trim();
     if (trimmed.isEmpty || state.processing) return;
 
+    final engine = ref.read(conversationEngineProvider);
+    final conversation = state.conversation;
+    final draft = engine.draftHearingTurn(
+      text: trimmed,
+      source: source,
+      replyToId: conversation.lastTurn?.message.id,
+    );
+
     state = ConversationState(
-      conversation: state.conversation,
+      conversation: conversation.addTurn(draft),
       processing: true,
     );
+
     try {
-      final conversation = state.conversation;
-      final turn =
-          await ref.read(conversationEngineProvider).composeHearingTurn(
-                text: trimmed,
-                source: source,
-                // El contexto ya declarado en la conversación acota el
-                // vocabulario del motor remoto en este turno.
-                activeContextId: conversation.activeContextId,
-                replyToId: conversation.lastTurn?.message.id,
-              );
-      state = ConversationState(conversation: state.conversation.addTurn(turn));
-    } catch (_) {
+      final turn = await engine.translateHearingTurn(
+        draft,
+        // El contexto ya declarado en la conversación acota el vocabulario
+        // del motor remoto en este turno.
+        activeContextId: conversation.activeContextId,
+      );
       state = ConversationState(
-        conversation: state.conversation,
-        error:
-            'No se pudo traducir el mensaje a señas. Revisa tu conexión e intenta de nuevo.',
+        conversation: state.conversation.replaceTurn(turn),
+      );
+    } catch (_) {
+      // El turno se queda: lo dicho se dijo, y con el contexto inferido en
+      // local la persona sorda todavía puede responderlo. Solo se retira el
+      // indicador de que faltan señas por llegar.
+      state = ConversationState(
+        conversation:
+            state.conversation.replaceTurn(draft.copyWith(pending: false)),
+        error: 'No se pudo traducir el mensaje a señas. '
+            'Revisa tu conexión e intenta de nuevo.',
       );
     }
   }

@@ -126,27 +126,83 @@ class ConversationEngine {
     MessageSource source = MessageSource.text,
     String? activeContextId,
     String? replyToId,
-  }) async {
-    final translation =
-        await signRepository.translateText(text, situation: activeContextId);
-
-    final message = SemanticMessage(
-      id: _newId(),
-      speaker: SpeakerRole.hearing,
-      source: source,
-      glosses: translation.glosses,
-      text: text,
-      replyToId: replyToId,
-      disambiguations: translation.disambiguations,
-      contextSuggestion: contextInference.infer(
-        glosses: translation.glosses,
-        text: text,
-      ),
+  }) {
+    return translateHearingTurn(
+      draftHearingTurn(text: text, source: source, replyToId: replyToId),
+      activeContextId: activeContextId,
     );
+  }
+
+  /// Turno del oyente listo para mostrarse **ya**, sin esperar al backend.
+  ///
+  /// Un enunciado vale desde que se dice, no desde que el motor remoto
+  /// contesta. Antes el turno no existía hasta que Bedrock respondía, así que
+  /// durante uno o dos segundos no había ni burbuja en el hilo ni pregunta
+  /// pendiente: la persona sorda **no podía siquiera empezar a responder**
+  /// aunque ya hubiera entendido la pregunta. Ese tiempo muerto estaba en el
+  /// centro de la conversación, no en un borde.
+  ///
+  /// El contexto se infiere aquí mismo con el diccionario local —el motor de
+  /// inferencia ya acepta el texto en español como señal—, de modo que el
+  /// enrutado a la pregunta concreta funciona sin red. Cuando llegue la
+  /// traducción, [translateHearingTurn] la reemplaza por la inferida sobre
+  /// las glosas, que es más fiable.
+  ConversationTurn draftHearingTurn({
+    required String text,
+    MessageSource source = MessageSource.text,
+    String? replyToId,
+  }) {
     return ConversationTurn(
-      message: message,
-      outputs: GeneratedOutputs(
+      pending: true,
+      message: SemanticMessage(
+        id: _newId(),
+        speaker: SpeakerRole.hearing,
+        source: source,
+        glosses: const [],
         text: text,
+        replyToId: replyToId,
+        contextSuggestion: contextInference.infer(text: text),
+      ),
+      outputs: GeneratedOutputs(text: text),
+    );
+  }
+
+  /// Completa [draft] con las señas del motor remoto, conservando su id.
+  ///
+  /// [activeContextId] es el contexto vigente de la conversación: viaja al
+  /// motor remoto para acotar el vocabulario de la traducción. En el primer
+  /// turno es nulo y el backend se comporta como siempre.
+  Future<ConversationTurn> translateHearingTurn(
+    ConversationTurn draft, {
+    String? activeContextId,
+  }) async {
+    final message = draft.message;
+    final translation = await signRepository.translateText(
+      message.text,
+      situation: activeContextId,
+    );
+
+    return ConversationTurn(
+      pending: false,
+      message: SemanticMessage(
+        id: message.id,
+        speaker: message.speaker,
+        source: message.source,
+        glosses: translation.glosses,
+        text: message.text,
+        replyToId: message.replyToId,
+        createdAt: message.createdAt,
+        disambiguations: translation.disambiguations,
+        // Las glosas ya vienen desambiguadas: son mejor señal que el texto
+        // crudo con el que se infirió el borrador.
+        contextSuggestion: contextInference.infer(
+              glosses: translation.glosses,
+              text: message.text,
+            ) ??
+            message.contextSuggestion,
+      ),
+      outputs: GeneratedOutputs(
+        text: message.text,
         animationUrls: translation.animationUrls,
         animationGlosses: translation.animationGlosses,
       ),
