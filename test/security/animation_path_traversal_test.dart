@@ -127,6 +127,35 @@ void main() {
     });
   });
 
+  group('rechazar por política y fallar la descarga son casos distintos', () {
+    // El visor los trata distinto y debe seguir haciéndolo: un origen
+    // rechazado se rotula como texto, pero un origen legítimo cuya descarga
+    // falló se carga desde la red —como antes de existir la caché—, porque
+    // degradarlo a texto dejaría sin señas a quien esté con mala cobertura.
+    test('un origen legítimo sigue siendo legítimo aunque no se descargue',
+        () async {
+      final dir = await Directory.systemTemp.createTemp('anim_offline');
+      addTearDown(() => dir.delete(recursive: true));
+
+      final cache = AnimationCache(
+        client: MockClient((_) async => throw const SocketException('sin red')),
+      );
+      const url = '${bucket}ROBAR.glb';
+
+      expect(await cache.localPathFor(url, dir), isNull);
+      expect(cache.isAllowed(url), isTrue,
+          reason: 'Es lo que permite al visor caer al URL remoto en vez de '
+              'perder la seña.');
+    });
+
+    test('un origen rechazado no se vuelve legítimo por reintentar', () {
+      final cache = AnimationCache(
+        client: MockClient((_) async => http.Response('x', 200)),
+      );
+      expect(cache.isAllowed('https://atacante.example/evil.glb'), isFalse);
+    });
+  });
+
   group('el tope de tamaño corta un archivo desmedido', () {
     test('un modelo por encima del tope no se escribe', () async {
       final dir = await Directory.systemTemp.createTemp('anim_size_test');

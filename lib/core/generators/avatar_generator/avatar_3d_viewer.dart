@@ -146,9 +146,16 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       if (localPath != null) {
         // Scheme file:// para que ModelViewer lo lea de la caché local.
         localPaths.add('file://$localPath');
+      } else if (_cache.isAllowed(urlStr)) {
+        // El origen es legítimo y solo falló la descarga (red intermitente,
+        // disco lleno). Se carga desde la red, como se hacía antes de existir
+        // la caché: degradar aquí a texto dejaría sin señas a quien esté en
+        // una comisaría con mala cobertura, que es justo el escenario de uso.
+        // Es seguro porque el esquema y el host ya pasaron la política.
+        localPaths.add(urlStr);
       } else {
-        // Rechazado o no descargable: la glosa se rotula como texto en vez
-        // de apuntar a un origen que no pasó la política.
+        // Origen rechazado: la glosa se rotula como texto en vez de apuntar
+        // a un destino que no pasó la política.
         localPaths.add('${AnimationUrlResolver.placeholderScheme}$urlStr');
       }
     }
