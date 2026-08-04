@@ -69,13 +69,12 @@ jobs:
       - name: Dependencias
         run: flutter pub get
 
-      # El repositorio se mantiene en cero ERRORES y cero WARNINGS, y eso es
-      # lo que se exige aquí. Los `info` no rompen la ejecución porque hay 37
-      # heredados (29 de ellos `withOpacity` deprecado) y arrancar el CI en
-      # rojo lo vuelve ruido que nadie mira. Cuando se limpien, quitar el flag
-      # para que tampoco vuelvan a entrar.
+      # El repositorio está en cero: ni errores, ni warnings, ni infos. Sin
+      # flags que releven de nada, así que cualquier hallazgo nuevo —incluido
+      # un `info`— rompe la ejecución en vez de acumularse hasta que nadie
+      # los mire.
       - name: Analizador
-        run: flutter analyze --no-fatal-infos
+        run: flutter analyze
 
       - name: Pruebas
         run: flutter test

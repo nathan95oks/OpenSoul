@@ -114,7 +114,7 @@ class ContextPathIndicator extends ConsumerWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: zonesState.snapshot.orderedZones.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              separatorBuilder: (_, _) => const SizedBox(width: 6),
               itemBuilder: (_, i) {
                 final p = zonesState.snapshot.orderedZones[i];
                 final isActive = p.zone.id == zonesState.activeZoneId;

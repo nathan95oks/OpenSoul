@@ -24,12 +24,12 @@ class Avatar3DViewer extends StatefulWidget {
   final Duration animationDuration;
 
   const Avatar3DViewer({
-    Key? key,
+    super.key,
     required this.isProcessing,
     this.glosses,
     this.animationUrls,
     this.animationDuration = const Duration(milliseconds: 2500),
-  }) : super(key: key);
+  });
 
   @override
   State<Avatar3DViewer> createState() => _Avatar3DViewerState();
@@ -328,7 +328,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Text(
           subtitle,
           style: TextStyle(
-            color: Colors.white.withOpacity(0.4),
+            color: Colors.white.withValues(alpha: 0.4),
             fontSize: 12,
           ),
         ),
@@ -439,7 +439,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         if (isPlaceholder)
           Positioned.fill(
             child: Container(
-              color: const Color(0xFF1E1E2F).withOpacity(0.9),
+              color: const Color(0xFF1E1E2F).withValues(alpha: 0.9),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -447,7 +447,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.amber.withOpacity(0.1),
+                        color: Colors.amber.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.amber, width: 2),
                       ),
@@ -500,7 +500,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                       padding: const EdgeInsets.symmetric(
                           horizontal: 18, vertical: 7),
                       decoration: BoxDecoration(
-                        color: Colors.deepPurpleAccent.withOpacity(0.85),
+                        color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -555,7 +555,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent.withOpacity(0.85),
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -572,7 +572,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                   Text(
                     '${_currentIndex + 1} / ${_localUrls.length}',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 12,
                     ),
                   ),
@@ -619,10 +619,10 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.deepPurpleAccent.withOpacity(0.15),
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.15),
             shape: BoxShape.circle,
             border: Border.all(
-              color: Colors.deepPurpleAccent.withOpacity(0.4),
+              color: Colors.deepPurpleAccent.withValues(alpha: 0.4),
               width: 2,
             ),
           ),
@@ -651,10 +651,10 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
               padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.08),
+                color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(12),
                 border:
-                    Border.all(color: Colors.white.withOpacity(0.15)),
+                    Border.all(color: Colors.white.withValues(alpha: 0.15)),
               ),
               child: Text(
                 g,
@@ -697,7 +697,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  Colors.deepPurpleAccent.withOpacity(0.3),
+                  Colors.deepPurpleAccent.withValues(alpha: 0.3),
                   Colors.transparent,
                 ],
               ),
@@ -705,7 +705,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
             child: Icon(
               Icons.person_outline_rounded,
               size: 70,
-              color: Colors.white.withOpacity(0.25),
+              color: Colors.white.withValues(alpha: 0.25),
             ),
           ),
         ),
@@ -713,7 +713,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Text(
           'Avatar LSB',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -722,7 +722,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         Text(
           'Habla o escribe para ver las señas',
           style: TextStyle(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
             fontSize: 13,
           ),
         ),
@@ -750,7 +750,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                 ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(
-                      color: Colors.greenAccent.withOpacity(0.5)),
+                      color: Colors.greenAccent.withValues(alpha: 0.5)),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
@@ -773,7 +773,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                 ),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(
-                      color: Colors.amberAccent.withOpacity(0.5)),
+                      color: Colors.amberAccent.withValues(alpha: 0.5)),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
@@ -806,11 +806,11 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         color: const Color(0xFF1A1A2E),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Colors.deepPurpleAccent.withOpacity(0.25),
+          color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.deepPurpleAccent.withOpacity(0.1),
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.1),
             blurRadius: 30,
             spreadRadius: 2,
           ),

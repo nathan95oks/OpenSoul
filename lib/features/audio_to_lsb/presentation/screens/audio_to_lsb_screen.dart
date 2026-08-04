@@ -7,7 +7,7 @@ import 'package:lsb_legal_app/core/generators/avatar_generator/avatar_3d_viewer.
 import '../widgets/text_input_widget.dart';
 
 class AudioToLsbScreen extends ConsumerWidget {
-  const AudioToLsbScreen({Key? key}) : super(key: key);
+  const AudioToLsbScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,7 +67,7 @@ class AudioToLsbScreen extends ConsumerWidget {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0),
@@ -83,7 +83,7 @@ class AudioToLsbScreen extends ConsumerWidget {
               height: 250,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.secondary.withOpacity(0.15),
+                color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0),
@@ -142,9 +142,9 @@ class AudioToLsbScreen extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.redAccent.withOpacity(0.2),
+                        color: Colors.redAccent.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.redAccent.withOpacity(0.5)),
+                        border: Border.all(color: Colors.redAccent.withValues(alpha: 0.5)),
                       ),
                       child: Row(
                         children: [
