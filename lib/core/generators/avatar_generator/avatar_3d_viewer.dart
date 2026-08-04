@@ -1,9 +1,10 @@
-import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+
+import 'animation_cache.dart';
+import 'animation_url_resolver.dart';
 
 /// Widget que reproduce secuencialmente animaciones 3D de Lengua de Señas
 /// Boliviana (LSB) cargando archivos .GLB desde el Bucket S3 de OpenSoul.
@@ -54,6 +55,10 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   bool _isLoadedA = false;
   bool _isLoadedB = false;
   bool _hasFinishedPlayingCurrent = false;
+
+  /// Política de descarga de animaciones: allowlist de origen, nombre local
+  /// derivado de un hash y tope de tamaño. Ver [AnimationCache].
+  final AnimationCache _cache = AnimationCache();
 
   dynamic _controllerA;
   dynamic _controllerB;
@@ -131,26 +136,20 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     final tempDir = await getTemporaryDirectory();
 
     for (var urlStr in urlsToDownload) {
-      if (urlStr.startsWith('placeholder://')) {
+      if (urlStr.startsWith(AnimationUrlResolver.placeholderScheme)) {
         localPaths.add(urlStr);
         continue;
       }
-      try {
-        final uri = Uri.parse(urlStr);
-        final fileName = uri.pathSegments.last;
-        final file = File('${tempDir.path}/$fileName');
-
-        if (!await file.exists()) {
-          final response = await http.get(uri);
-          if (response.statusCode == 200) {
-            await file.writeAsBytes(response.bodyBytes);
-          }
-        }
-        // Usar scheme file:// para que ModelViewer lo lea de la caché local
-        localPaths.add('file://${file.path}');
-      } catch (e) {
-        // Fallback al URL original si falla la descarga
-        localPaths.add(urlStr);
+      // El nombre del archivo local ya no sale del URL: lo decide
+      // [AnimationCache] a partir de un hash. Ver esa clase para el porqué.
+      final localPath = await _cache.localPathFor(urlStr, tempDir);
+      if (localPath != null) {
+        // Scheme file:// para que ModelViewer lo lea de la caché local.
+        localPaths.add('file://$localPath');
+      } else {
+        // Rechazado o no descargable: la glosa se rotula como texto en vez
+        // de apuntar a un origen que no pasó la política.
+        localPaths.add('${AnimationUrlResolver.placeholderScheme}$urlStr');
       }
     }
 

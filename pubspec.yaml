@@ -37,6 +37,9 @@ dependencies:
   flutter_riverpod: ^3.3.1
   cached_network_image: ^3.4.1
   http: ^1.6.0
+  # Nombre local de las animaciones derivado de un hash del URL, para que una
+  # ruta que viene de la red no decida dónde se escribe (ver AnimationCache).
+  crypto: ^3.0.0
   audioplayers: ^6.6.0
   flutter_tts: ^4.2.0
   go_router: ^17.1.0
