@@ -45,7 +45,31 @@ class ConversationTurn {
   final SemanticMessage message;
   final GeneratedOutputs outputs;
 
-  const ConversationTurn({required this.message, required this.outputs});
+  /// El turno ya forma parte de la conversación pero sus salidas todavía se
+  /// están generando.
+  ///
+  /// Existe porque un turno del oyente vale desde que se dice, no desde que
+  /// el motor remoto contesta: aparece en el hilo al instante —con el
+  /// contexto ya inferido en local— y las señas se incorporan cuando llegan.
+  /// Mientras tanto la persona sorda ya puede empezar a responder.
+  final bool pending;
+
+  const ConversationTurn({
+    required this.message,
+    required this.outputs,
+    this.pending = false,
+  });
+
+  ConversationTurn copyWith({
+    SemanticMessage? message,
+    GeneratedOutputs? outputs,
+    bool? pending,
+  }) =>
+      ConversationTurn(
+        message: message ?? this.message,
+        outputs: outputs ?? this.outputs,
+        pending: pending ?? this.pending,
+      );
 }
 
 /// Agregado raíz de la comunicación bidireccional.
@@ -115,4 +139,20 @@ class Conversation {
         turns: [...turns, turn],
         startedAt: startedAt,
       );
+
+  /// Sustituye el turno que comparte id con [turn], conservando su posición.
+  ///
+  /// Es cómo un turno mostrado al instante recibe después sus señas sin
+  /// saltar al final del hilo. Si el id ya no está —conversación reiniciada
+  /// mientras se traducía—, devuelve la conversación intacta: una traducción
+  /// tardía no puede resucitar un turno que el usuario borró.
+  Conversation replaceTurn(ConversationTurn turn) {
+    final index = turns.indexWhere((t) => t.message.id == turn.message.id);
+    if (index < 0) return this;
+    return Conversation(
+      id: id,
+      turns: [...turns]..[index] = turn,
+      startedAt: startedAt,
+    );
+  }
 }

@@ -205,14 +205,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                         },
                       ),
               ),
-              if (state.processing)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 6),
-                  child: _StatusChip(
-                    icon: Icons.sync,
-                    text: 'Traduciendo a señas…',
-                  ),
-                ),
+              // El progreso ya no se anuncia aquí abajo: el turno entra en el
+              // hilo al instante y es su propia burbuja la que dice que le
+              // faltan señas. Un aviso global además de ese sugeriría que la
+              // conversación está bloqueada, cuando ya se puede responder.
               if (state.error != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

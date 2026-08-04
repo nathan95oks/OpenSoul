@@ -144,11 +144,51 @@ class TurnBubble extends StatelessWidget {
                             label: 'Ver en avatar',
                             onTap: onShowAvatar,
                           )
-                        : const SizedBox.shrink()),
+                        // El turno ya está dicho y se puede responder; lo que
+                        // falta son las señas. Se anuncia en la propia
+                        // burbuja para que se vea de quién se espera qué.
+                        : (turn.pending
+                            ? const _PendingSigns()
+                            : const SizedBox.shrink())),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Señas todavía en camino para un turno ya visible.
+class _PendingSigns extends StatelessWidget {
+  const _PendingSigns();
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Traduciendo a señas',
+      excludeSemantics: true,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            width: 11,
+            height: 11,
+            child: CircularProgressIndicator(
+              strokeWidth: 1.8,
+              color: Colors.white70,
+            ),
+          ),
+          const SizedBox(width: 7),
+          Text(
+            'Traduciendo a señas…',
+            style: TextStyle(
+              fontSize: 10.5,
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withValues(alpha: 0.75),
+            ),
+          ),
+        ],
       ),
     );
   }

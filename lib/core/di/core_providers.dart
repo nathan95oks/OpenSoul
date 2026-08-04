@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../data/datasources/remote_audio_datasource.dart';
 import '../data/datasources/remote_translation_datasource.dart';
 import '../data/repositories/audio_translation_repository_impl.dart';
+import '../data/repositories/caching_audio_translation_repository.dart';
 import '../data/repositories/translation_repository_impl.dart';
 import '../dictionary/data/asset_lexicon_datasource.dart';
 import '../dictionary/data/lexicon_cache.dart';
@@ -49,10 +50,15 @@ final remoteAudioDataSourceProvider = Provider<RemoteAudioDataSource>((ref) {
   return RemoteAudioDataSourceImpl(client: ref.watch(httpClientProvider));
 });
 
+/// Envuelto en caché de sesión: en una toma de declaración las mismas
+/// preguntas se repiten constantemente, y sin memoria cada repetición vuelve
+/// a pagar el viaje completo a Bedrock.
 final audioTranslationRepositoryProvider =
     Provider<AudioTranslationRepository>((ref) {
-  return AudioTranslationRepositoryImpl(
-    remoteDataSource: ref.watch(remoteAudioDataSourceProvider),
+  return CachingAudioTranslationRepository(
+    AudioTranslationRepositoryImpl(
+      remoteDataSource: ref.watch(remoteAudioDataSourceProvider),
+    ),
   );
 });
 
