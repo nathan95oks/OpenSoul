@@ -21,7 +21,10 @@ import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_res
 /// Cada prueba ejecuta el payload original contra el código parcheado y pasa
 /// solo si el ataque queda bloqueado.
 void main() {
-  const bucket = 'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/';
+  // Bucket ficticio para no filtrar el endpoint real en un archivo trackeado.
+  // Los tests no lo golpean por red — MockClient intercepta las descargas.
+  const bucket = 'https://test-animations-bucket.s3.us-east-1.amazonaws.com/';
+  final bucketHost = Uri.parse(bucket).host;
 
   /// Payloads de la fase de explotación, tal cual.
   const traversalPayloads = <String>[
@@ -69,6 +72,7 @@ void main() {
       rejected = [];
       cache = AnimationCache(
         client: MockClient((_) async => http.Response('modelo', 200)),
+        allowedHosts: {bucketHost},
         onRejected: (url, reason) => rejected.add('$url :: $reason'),
       );
     });
@@ -83,8 +87,7 @@ void main() {
 
     test('rechaza http en claro', () {
       expect(
-        cache.isAllowed(
-            'http://opensoul-3d-animations.s3.us-east-1.amazonaws.com/a.glb'),
+        cache.isAllowed('http://$bucketHost/a.glb'),
         isFalse,
       );
     });
@@ -139,6 +142,7 @@ void main() {
 
       final cache = AnimationCache(
         client: MockClient((_) async => throw const SocketException('sin red')),
+        allowedHosts: {bucketHost},
       );
       const url = '${bucket}ROBAR.glb';
 
@@ -165,6 +169,7 @@ void main() {
         maxBytes: 1024,
         client: MockClient(
             (_) async => http.Response.bytes(List.filled(4096, 65), 200)),
+        allowedHosts: {bucketHost},
       );
 
       final path = await cache.localPathFor('${bucket}ROBAR.glb', dir);
@@ -175,7 +180,7 @@ void main() {
   });
 
   group('el resolutor rechaza nombres que no son nombres de archivo', () {
-    const resolver = AnimationUrlResolver();
+    const resolver = AnimationUrlResolver(baseUrl: bucket);
 
     test('un animationFile con traversal cae a placeholder', () {
       for (final payload in traversalPayloads) {

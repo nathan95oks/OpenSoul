@@ -223,23 +223,36 @@ Detalles de despliegue en [`aws/README.md`](aws/README.md).
 
 ## Ejecutar
 
+Los endpoints de AWS no viven en el código: se leen de un archivo `.env`
+local (git-ignored) y se inyectan como `--dart-define` en tiempo de
+compilación.
+
 ```bash
 flutter pub get
-flutter run
+cp .env.example .env        # y rellena con tus endpoints reales
 ```
 
-Endpoints y recursos configurables sin tocar código:
+Luego, según tu sistema:
+
+```powershell
+# Windows
+.\run.ps1                              # dispositivo por defecto
+.\run.ps1 -Device emulator-5554        # dispositivo concreto
+```
 
 ```bash
-flutter run \
-  --dart-define=LSB_API_URL=https://…/translate \
-  --dart-define=LSB_TEXT_API_URL=https://…/OpenSoul-TextToLSB \
-  --dart-define=LSB_DICTIONARY_API_URL=https://…/dictionary \
-  --dart-define=LSB_ANIMATIONS_BASE_URL=https://…/
+# Linux / macOS
+./run.sh                               # dispositivo por defecto
+./run.sh -d emulator-5554              # dispositivo concreto
 ```
 
-Sin `LSB_DICTIONARY_API_URL` la aplicación funciona con el diccionario
-empaquetado, en modo totalmente local.
+Los scripts leen `.env`, montan un `--dart-define` por línea y llaman a
+`flutter run`. Sin `.env` la app compila pero las traducciones remotas
+fallan, el diccionario cae al asset empaquetado (modo offline) y las
+animaciones 3D caen al placeholder de texto.
+
+Variables disponibles y su comportamiento por defecto se documentan en
+[`.env.example`](.env.example).
 
 ## Pruebas
 

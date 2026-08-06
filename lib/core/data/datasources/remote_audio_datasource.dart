@@ -14,14 +14,12 @@ abstract class RemoteAudioDataSource {
 }
 
 class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
-  /// Endpoint por defecto. Configurable en compilación sin tocar código
-  /// (misma convención que el datasource de declaración, TD-01):
-  ///   flutter run --dart-define=LSB_TEXT_API_URL=https://otra-url
-  static const String defaultApiGatewayUrl = String.fromEnvironment(
-    'LSB_TEXT_API_URL',
-    defaultValue:
-        'https://mq5eeqtb50.execute-api.us-east-1.amazonaws.com/default/OpenSoul-TextToLSB',
-  );
+  /// Endpoint del API Gateway. Se inyecta en compilación desde `.env` vía
+  /// `run.ps1` / `run.sh`, misma convención que el datasource de
+  /// declaración. Sin la variable el valor es `''` y el POST falla al
+  /// parsear el URI.
+  static const String defaultApiGatewayUrl =
+      String.fromEnvironment('LSB_TEXT_API_URL');
 
   /// Tope de espera de la llamada remota, igual que en el datasource de
   /// declaración (RDS-01). Sin él, un turno colgado dejaba la conversación

@@ -35,7 +35,7 @@ class Avatar3DViewer extends StatefulWidget {
   State<Avatar3DViewer> createState() => _Avatar3DViewerState();
 }
 
-const _s3Base = 'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/';
+const _s3Base = AnimationUrlResolver.defaultBaseUrl;
 
 class _Avatar3DViewerState extends State<Avatar3DViewer>
     with SingleTickerProviderStateMixin {
