@@ -4,12 +4,12 @@
 /// normalizar el nombre de archivo. Antes estaba incrustado en el datasource
 /// HTTP, acoplando la capa de datos a detalles de presentación del avatar.
 class AnimationUrlResolver {
-  /// Bucket de animaciones. Configurable en compilación:
-  ///   flutter run --dart-define=LSB_ANIMATIONS_BASE_URL=https://otro-bucket/
-  static const String defaultBaseUrl = String.fromEnvironment(
-    'LSB_ANIMATIONS_BASE_URL',
-    defaultValue: 'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/',
-  );
+  /// Bucket de animaciones. Se inyecta en compilación desde `.env` vía
+  /// `run.ps1` / `run.sh`. Sin la variable el valor es `''`,
+  /// `AnimationCache.defaultAllowedHosts()` queda vacío y toda descarga se
+  /// rechaza — el visor cae al placeholder de texto.
+  static const String defaultBaseUrl =
+      String.fromEnvironment('LSB_ANIMATIONS_BASE_URL');
 
   /// Esquema para glosas sin animación disponible; el visor las muestra
   /// como texto en lugar de intentar cargar un modelo.
