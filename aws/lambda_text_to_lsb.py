@@ -47,10 +47,20 @@ APP_REGION = os.environ.get(
 # el set estático de fallback.
 DICTIONARY_TABLE = os.environ.get("DICTIONARY_TABLE", "")
 
+# Caché de resultados semánticos. Vacío = caché deshabilitada y la lambda
+# funciona exactamente igual que antes, invocando Bedrock en cada petición.
+CACHE_BUCKET = os.environ.get("S3_BUCKET", "")
+CACHE_PREFIX = os.environ.get("APP_PREFIX", "text-to-lsb")
+# Se versiona la clave para poder invalidar toda la caché de golpe cuando
+# cambien las reglas del prompt: el texto de entrada sería el mismo, pero la
+# traducción esperada ya no.
+CACHE_VERSION = os.environ.get("CACHE_VERSION", "v1")
+
 # ---------------------------------------------------------------------------
 # Clientes AWS
 # ---------------------------------------------------------------------------
 bedrock_runtime = boto3.client("bedrock-runtime", region_name=APP_REGION)
+s3 = boto3.client("s3", region_name=APP_REGION)
 
 # ---------------------------------------------------------------------------
 # Encabezados CORS (para API Gateway → Flutter)
@@ -373,7 +383,13 @@ def invoke_bedrock(prompt: str) -> dict:
             ],
             inferenceConfig={
                 "maxTokens": 512,
-                "temperature": 0.1,
+                # Temperatura 0 y topP 1: en un dominio judicial la misma
+                # frase debe producir siempre la misma traducción. Con 0.1 el
+                # muestreo seguía abierto y el modelo descartaba glosas de
+                # forma intermitente — "hola yo abogado" devolvía unas veces
+                # HOLA·YO·ABOGADO y otras solo YO·ABOGADO.
+                "temperature": 0,
+                "topP": 1,
             }
         )
     except Exception as e:
@@ -505,7 +521,71 @@ def generate_cache_key(text: str, situation: str = None) -> str:
     normalized = re.sub(r'\s+', ' ', normalized)
     if situation:
         normalized = f"{normalized}|{situation}"
-    return hashlib.md5(normalized.encode("utf-8")).hexdigest()
+    # El modelo forma parte de la clave: cambiar BEDROCK_MODEL_ID cambia la
+    # traducción, y servir la del modelo anterior sería devolver el resultado
+    # de un sistema que ya no está en producción.
+    seed = f"{CACHE_VERSION}|{BEDROCK_MODEL_ID}|{normalized}"
+    return hashlib.md5(seed.encode("utf-8")).hexdigest()
+
+
+# ---------------------------------------------------------------------------
+# Caché de resultados semánticos (Amazon S3)
+# ---------------------------------------------------------------------------
+# En una ventanilla las mismas frases se repiten constantemente ("¿me permite
+# su carnet?", "¿dónde ocurrió el hecho?"). Guardar el resultado indexado por
+# el hash de la frase convierte esa repetición en una lectura de objeto, en
+# lugar de una inferencia facturada de varios segundos.
+#
+# Se usa S3 y no DynamoDB porque el bucket ya existe y el volumen de escritura
+# del proyecto es moderado. La caché es *best effort*: si S3 no responde o el
+# rol carece de permisos se registra el aviso y se sigue traduciendo. Una
+# caché capaz de tumbar la traducción es peor que no tener caché.
+
+def _cache_object_key(cache_key: str) -> str:
+    return f"{CACHE_PREFIX.strip('/')}/cache/{cache_key}.json"
+
+
+def check_cache(cache_key: str):
+    """Devuelve el resultado precalculado, o None si no hay acierto."""
+    if not CACHE_BUCKET:
+        return None
+    try:
+        obj = s3.get_object(Bucket=CACHE_BUCKET, Key=_cache_object_key(cache_key))
+        return json.loads(obj["Body"].read())
+    except ClientError as e:
+        code = e.response.get("Error", {}).get("Code", "")
+        # Sin s3:ListBucket, un objeto inexistente responde 403 en vez de 404:
+        # los dos son un fallo de caché normal, no una incidencia.
+        if code in ("NoSuchKey", "404", "AccessDenied", "403"):
+            return None
+        logger.warning("Caché ilegible (%s) — se continúa sin ella", code)
+        return None
+    except (ValueError, KeyError) as e:
+        logger.warning("Entrada de caché corrupta en %s: %s", cache_key, e)
+        return None
+
+
+def save_to_cache(cache_key: str, payload: dict) -> None:
+    """Persiste el resultado. Un fallo aquí nunca interrumpe la respuesta."""
+    if not CACHE_BUCKET:
+        return
+    # Una traducción sin glosas es un tropiezo puntual del modelo, no un
+    # resultado. Cachearla congelaría el fallo: esa frase no volvería a
+    # traducirse nunca y el avatar se quedaría mudo para siempre ante ella.
+    # Sin guardar, el siguiente intento vuelve a pasar por Bedrock.
+    if not payload.get("glosses"):
+        logger.warning("Resultado sin glosas — no se cachea: %s", cache_key)
+        return
+    try:
+        s3.put_object(
+            Bucket=CACHE_BUCKET,
+            Key=_cache_object_key(cache_key),
+            Body=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+            ContentType="application/json",
+        )
+    except ClientError as e:
+        code = e.response.get("Error", {}).get("Code", "")
+        logger.warning("No se pudo guardar en caché (%s) — se continúa", code)
 
 
 def validate_request(body: dict) -> tuple:
@@ -584,11 +664,11 @@ def lambda_handler(event, context):
         text, context_type, situation or "-", cache_key,
     )
 
-    # 3. (FUTURO) Verificar caché en DynamoDB
-    # cached = check_dynamodb_cache(cache_key)
-    # if cached:
-    #     logger.info("Cache HIT — devolviendo resultado precalculado")
-    #     return build_response(200, {**cached, "cacheHit": True})
+    # 3. Verificar caché antes de gastar una invocación de Bedrock
+    cached = check_cache(cache_key)
+    if cached:
+        logger.info("Cache HIT — respuesta servida desde caché: %s", cache_key)
+        return build_response(200, {**cached, "cacheHit": True})
 
     # 4. Construir el Prompt de desambiguación semántica
     prompt = build_disambiguation_prompt(text, context_type, situation)
@@ -614,8 +694,7 @@ def lambda_handler(event, context):
     # 6. Post-procesar las glosas
     result = post_process_glosses(bedrock_result, text)
 
-    # 7. (FUTURO) Guardar en caché DynamoDB
-    # save_to_dynamodb_cache(cache_key, result)
+    # 7. Guardar en caché para que la próxima vez sea una lectura
 
     # 8. Respuesta exitosa
     logger.info(
@@ -624,11 +703,16 @@ def lambda_handler(event, context):
         result["availableInAvatar"],
     )
 
-    return build_response(200, {
+    # `cacheHit` se añade fuera del payload persistido: al servir desde caché
+    # el resto de la respuesta debe ser idéntico byte a byte, y solo ese campo
+    # distingue una traducción recién calculada de una recuperada.
+    payload = {
         "originalText": text,
         "context": context_type,
         "situation": situation,
-        "cacheHit": False,
         "cacheKey": cache_key,
         **result,
-    })
+    }
+    save_to_cache(cache_key, payload)
+
+    return build_response(200, {**payload, "cacheHit": False})
