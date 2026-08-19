@@ -24,7 +24,15 @@ class RemoteLexiconDataSource {
 
   RemoteLexiconDataSource({required this.client, this.apiUrl = defaultApiUrl});
 
-  bool get isConfigured => apiUrl.isNotEmpty;
+  /// Vacío es un estado válido y buscado: sin `LSB_DICTIONARY_API_URL` la app
+  /// trabaja solo con el asset empaquetado y su caché. Por eso aquí no se cae
+  /// a ningún endpoint por defecto — pero sí se exige que, cuando haya valor,
+  /// sea una URL absoluta: una ruta relativa haría fallar `Uri.parse` en
+  /// mitad de la sincronización en lugar de omitirla limpiamente.
+  bool get isConfigured {
+    final uri = Uri.tryParse(apiUrl);
+    return uri != null && uri.hasScheme && uri.host.isNotEmpty;
+  }
 
   Future<DictionaryDocument> fetch() async {
     final response = await client.get(

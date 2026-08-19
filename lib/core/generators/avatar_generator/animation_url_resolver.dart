@@ -6,10 +6,17 @@
 class AnimationUrlResolver {
   /// Bucket de animaciones. Configurable en compilación:
   ///   flutter run --dart-define=LSB_ANIMATIONS_BASE_URL=https://otro-bucket/
-  static const String defaultBaseUrl = String.fromEnvironment(
-    'LSB_ANIMATIONS_BASE_URL',
-    defaultValue: 'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/',
-  );
+  static const String _envBaseUrl =
+      String.fromEnvironment('LSB_ANIMATIONS_BASE_URL');
+
+  static const String _fallbackBaseUrl =
+      'https://opensoul-3d-animations.s3.us-east-1.amazonaws.com/';
+
+  /// Igual que en los datasources HTTP: una variable definida pero vacía
+  /// anularía el bucket por defecto y el visor intentaría cargar los `.glb`
+  /// desde una ruta relativa, quedándose en negro sin error visible.
+  static const String defaultBaseUrl =
+      _envBaseUrl.length == 0 ? _fallbackBaseUrl : _envBaseUrl;
 
   /// Esquema para glosas sin animación disponible; el visor las muestra
   /// como texto en lugar de intentar cargar un modelo.

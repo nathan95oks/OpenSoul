@@ -83,6 +83,20 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     _pulseAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
+
+    // El visor puede montarse con las URLs **ya resueltas**: es justo lo que
+    // pasa al abrir el panel del avatar desde un mensaje ya traducido, donde
+    // la secuencia existe antes que el widget. `didUpdateWidget` no llega a
+    // dispararse nunca en ese camino —no hay widget anterior con el que
+    // comparar—, así que la secuencia no arrancaba y el visor se quedaba en
+    // reposo mostrando «Habla o escribe para ver las señas», con las glosas
+    // visibles en la cabecera. Post-frame porque `_startSequence` hace
+    // `setState`, que no puede ejecutarse durante `initState`.
+    if (widget.animationUrls?.isNotEmpty ?? false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startSequence();
+      });
+    }
   }
 
   @override
