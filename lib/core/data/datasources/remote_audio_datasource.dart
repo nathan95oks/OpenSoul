@@ -15,26 +15,12 @@ abstract class RemoteAudioDataSource {
 }
 
 class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
-  /// Endpoint por defecto. Configurable en compilación sin tocar código
-  /// (misma convención que el datasource de declaración, TD-01):
-  ///   flutter run --dart-define=LSB_TEXT_API_URL=https://otra-url
-  static const String _envApiGatewayUrl =
-      String.fromEnvironment('LSB_TEXT_API_URL');
-
-  /// Endpoint real: API Gateway (stage `default`) + recurso `OpenSoul-TextToLSB`.
-  /// El stage por sí solo (`.../default`) devuelve 403: falta el recurso.
-  static const String _fallbackApiGatewayUrl =
-      'https://mq5eeqtb50.execute-api.us-east-1.amazonaws.com/default/OpenSoul-TextToLSB';
-
-  /// Una variable **definida pero vacía** (campo en blanco en la configuración
-  /// de ejecución del IDE, o `--dart-define=LSB_TEXT_API_URL=$VAR` con la
-  /// variable de shell sin exportar) hace que `String.fromEnvironment` ignore
-  /// su `defaultValue` y devuelva `''`. La petición moría entonces con
-  /// «Invalid argument(s): No host specified in URI», que el catch de más
-  /// abajo disfrazaba de fallo de red. Se compara con `.length == 0` porque
-  /// `isEmpty` no es una operación válida en contexto constante.
+  /// Endpoint del API Gateway. Se inyecta en compilación desde `.env` vía
+  /// `run.ps1` / `run.sh`, misma convención que el datasource de
+  /// declaración. Sin la variable el valor es `''` y el POST falla al
+  /// parsear el URI.
   static const String defaultApiGatewayUrl =
-      _envApiGatewayUrl.length == 0 ? _fallbackApiGatewayUrl : _envApiGatewayUrl;
+      String.fromEnvironment('LSB_TEXT_API_URL');
 
   /// Tope de espera de la llamada remota, igual que en el datasource de
   /// declaración (RDS-01). Sin él, un turno colgado dejaba la conversación
@@ -62,8 +48,10 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
   @override
   Future<LsbTranslationModel> translateText(String text,
       {String? situation}) async {
-    // Fuera del try: un endpoint mal configurado no es un fallo de red y no
-    // debe llegar a la persona usuaria como si lo fuera.
+    // Fuera del try: sin `.env` la URL llega vacía y `http` aborta con
+    // «Invalid argument(s): No host specified in URI», que el catch de abajo
+    // presentaba como caída de red y mandaba a buscar el fallo en la nube.
+    // Es un arranque mal configurado, y el mensaje debe decirlo.
     final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_TEXT_API_URL');
 
     try {
@@ -121,4 +109,3 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
     }
   }
 }
-
