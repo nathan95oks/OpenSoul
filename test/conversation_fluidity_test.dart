@@ -226,7 +226,10 @@ void main() {
             RemoteAudioDataSourceImpl.requestTimeout * 2);
         return http.Response('{}', 200);
       });
-      final datasource = RemoteAudioDataSourceImpl(client: client);
+      final datasource = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
+        client: client,
+      );
 
       await expectLater(
         datasource.translateText('¿Le robaron su celular?'),

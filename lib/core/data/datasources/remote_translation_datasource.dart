@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lsb_legal_app/core/data/datasources/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 
 /// Contrato abstracto para el datasource remoto de traducción.
@@ -41,9 +42,11 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     required String context,
     required List<String> cards,
   }) async {
+    final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_API_URL');
+
     final response = await client
         .post(
-          Uri.parse(apiGatewayUrl),
+          uri,
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',

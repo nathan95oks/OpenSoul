@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
+import 'package:lsb_legal_app/core/data/datasources/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_resolver.dart';
 
 abstract class RemoteAudioDataSource {
@@ -47,10 +48,16 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
   @override
   Future<LsbTranslationModel> translateText(String text,
       {String? situation}) async {
+    // Fuera del try: sin `.env` la URL llega vacía y `http` aborta con
+    // «Invalid argument(s): No host specified in URI», que el catch de abajo
+    // presentaba como caída de red y mandaba a buscar el fallo en la nube.
+    // Es un arranque mal configurado, y el mensaje debe decirlo.
+    final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_TEXT_API_URL');
+
     try {
       final response = await client
           .post(
-            Uri.parse(apiGatewayUrl),
+            uri,
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'text': text,

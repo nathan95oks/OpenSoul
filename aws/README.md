@@ -7,8 +7,6 @@ Funciones Lambda del proyecto. Solo `lambda_function.py` pertenece al módulo
 |---------|--------|-------------|-------------|
 | `lambda_function.py` | **Desplegado (real)** | `lsb_to_text_audio` | Motor híbrido: análisis semántico propio + refinamiento Bedrock + Polly + S3. Es el backend del contrato en [`../docs/API_CONTRACT.md`](../docs/API_CONTRACT.md). |
 | `lambda_text_to_lsb.py` | Real | `audio_to_lsb` (compañero) | Texto/voz → glosas LSB. **No es de este módulo**, no auditar aquí. |
-| `lambda_bedrock_polly.py` | Referencia/experimento | — | Prototipo previo de integración Bedrock+Polly. No se despliega. |
-| `lambda_mock.py` | Mock | — | Respuesta fija para pruebas locales sin AWS. |
 | `lambda_dictionary.py` | **Nuevo (Fase 2), pendiente de despliegue** | núcleo compartido | API del diccionario evolutivo: `GET /dictionary` (mismo contrato que `assets/dictionary/official_dictionary.json`) y `POST /dictionary/proposals` (propuestas `pending`). |
 | `seed_dictionary.py` | Script local | núcleo compartido | Crea/puebla la tabla DynamoDB `OpenSoul-Dictionary` desde el JSON canónico del repo. |
 

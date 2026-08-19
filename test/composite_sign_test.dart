@@ -60,6 +60,7 @@ void main() {
 
     test('la glosa compuesta no se duplica en la lista semántica', () async {
       final datasource = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
         client: MockClient(respondingWith({
           'glosses': ['FISCAL', 'LLAMAR'],
           'glossDetails': [
@@ -88,6 +89,7 @@ void main() {
     test('el contexto situacional viaja aparte del dominio', () async {
       late Map<String, dynamic> sent;
       final datasource = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
         client: MockClient((request) async {
           sent = jsonDecode(request.body) as Map<String, dynamic>;
           return http.Response(jsonEncode({'glosses': [], 'glossDetails': []}),
