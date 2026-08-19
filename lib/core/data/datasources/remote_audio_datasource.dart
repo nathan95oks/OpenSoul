@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
+import 'package:lsb_legal_app/core/data/datasources/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_resolver.dart';
 
 abstract class RemoteAudioDataSource {
@@ -17,11 +18,23 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
   /// Endpoint por defecto. Configurable en compilación sin tocar código
   /// (misma convención que el datasource de declaración, TD-01):
   ///   flutter run --dart-define=LSB_TEXT_API_URL=https://otra-url
-  static const String defaultApiGatewayUrl = String.fromEnvironment(
-    'LSB_TEXT_API_URL',
-    defaultValue:
-        'https://mq5eeqtb50.execute-api.us-east-1.amazonaws.com/default/OpenSoul-TextToLSB',
-  );
+  static const String _envApiGatewayUrl =
+      String.fromEnvironment('LSB_TEXT_API_URL');
+
+  /// Endpoint real: API Gateway (stage `default`) + recurso `OpenSoul-TextToLSB`.
+  /// El stage por sí solo (`.../default`) devuelve 403: falta el recurso.
+  static const String _fallbackApiGatewayUrl =
+      'https://mq5eeqtb50.execute-api.us-east-1.amazonaws.com/default/OpenSoul-TextToLSB';
+
+  /// Una variable **definida pero vacía** (campo en blanco en la configuración
+  /// de ejecución del IDE, o `--dart-define=LSB_TEXT_API_URL=$VAR` con la
+  /// variable de shell sin exportar) hace que `String.fromEnvironment` ignore
+  /// su `defaultValue` y devuelva `''`. La petición moría entonces con
+  /// «Invalid argument(s): No host specified in URI», que el catch de más
+  /// abajo disfrazaba de fallo de red. Se compara con `.length == 0` porque
+  /// `isEmpty` no es una operación válida en contexto constante.
+  static const String defaultApiGatewayUrl =
+      _envApiGatewayUrl.length == 0 ? _fallbackApiGatewayUrl : _envApiGatewayUrl;
 
   /// Tope de espera de la llamada remota, igual que en el datasource de
   /// declaración (RDS-01). Sin él, un turno colgado dejaba la conversación
@@ -49,10 +62,14 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
   @override
   Future<LsbTranslationModel> translateText(String text,
       {String? situation}) async {
+    // Fuera del try: un endpoint mal configurado no es un fallo de red y no
+    // debe llegar a la persona usuaria como si lo fuera.
+    final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_TEXT_API_URL');
+
     try {
       final response = await client
           .post(
-            Uri.parse(apiGatewayUrl),
+            uri,
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
               'text': text,
@@ -104,3 +121,4 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
     }
   }
 }
+

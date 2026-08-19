@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:lsb_legal_app/core/data/datasources/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 
 /// Contrato abstracto para el datasource remoto de traducción.
@@ -18,11 +19,18 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
   /// Endpoint por defecto. Configurable en compilación sin tocar código:
   ///   flutter run --dart-define=LSB_API_URL=https://otra-url/translate
   /// (TD-01) — evita acoplar el binario a un endpoint concreto.
-  static const String defaultApiGatewayUrl = String.fromEnvironment(
-    'LSB_API_URL',
-    defaultValue:
-        'https://5kc2fwqb49.execute-api.us-east-1.amazonaws.com/translate',
-  );
+  static const String _envApiGatewayUrl =
+      String.fromEnvironment('LSB_API_URL');
+
+  static const String _fallbackApiGatewayUrl =
+      'https://5kc2fwqb49.execute-api.us-east-1.amazonaws.com/translate';
+
+  /// Ver la nota equivalente en `remote_audio_datasource.dart`: una variable
+  /// definida pero vacía anula el `defaultValue` de `String.fromEnvironment`
+  /// y deja la app sin endpoint. `.length == 0` en lugar de `isEmpty` por la
+  /// restricción del contexto constante.
+  static const String defaultApiGatewayUrl =
+      _envApiGatewayUrl.length == 0 ? _fallbackApiGatewayUrl : _envApiGatewayUrl;
 
   /// Tope de espera de la llamada remota. Si el backend no responde a tiempo
   /// (red lenta o caída), se lanza [TimeoutException] y el controlador cae al
@@ -42,9 +50,11 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     required String context,
     required List<String> cards,
   }) async {
+    final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_API_URL');
+
     final response = await client
         .post(
-          Uri.parse(apiGatewayUrl),
+          uri,
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
