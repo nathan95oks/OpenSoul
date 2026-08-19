@@ -16,21 +16,13 @@ abstract class RemoteTranslationDataSource {
 /// Envía las tarjetas LSB seleccionadas y recibe la respuesta completa
 /// del sistema híbrido (motor propio + Bedrock + Polly + S3).
 class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
-  /// Endpoint por defecto. Configurable en compilación sin tocar código:
-  ///   flutter run --dart-define=LSB_API_URL=https://otra-url/translate
-  /// (TD-01) — evita acoplar el binario a un endpoint concreto.
-  static const String _envApiGatewayUrl =
-      String.fromEnvironment('LSB_API_URL');
-
-  static const String _fallbackApiGatewayUrl =
-      'https://5kc2fwqb49.execute-api.us-east-1.amazonaws.com/translate';
-
-  /// Ver la nota equivalente en `remote_audio_datasource.dart`: una variable
-  /// definida pero vacía anula el `defaultValue` de `String.fromEnvironment`
-  /// y deja la app sin endpoint. `.length == 0` en lugar de `isEmpty` por la
-  /// restricción del contexto constante.
+  /// Endpoint del API Gateway. Se inyecta en compilación desde `.env` vía
+  /// `run.ps1` / `run.sh`, que traducen las entradas del archivo a
+  /// `--dart-define=LSB_API_URL=...`. Sin la variable el valor es `''` y
+  /// el POST fallará al parsear el URI — es la señal de "endpoint no
+  /// configurado", no un fallback silencioso a un endpoint publicado.
   static const String defaultApiGatewayUrl =
-      _envApiGatewayUrl.length == 0 ? _fallbackApiGatewayUrl : _envApiGatewayUrl;
+      String.fromEnvironment('LSB_API_URL');
 
   /// Tope de espera de la llamada remota. Si el backend no responde a tiempo
   /// (red lenta o caída), se lanza [TimeoutException] y el controlador cae al

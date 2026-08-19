@@ -50,3 +50,12 @@ app.*.map.json
 node_modules/
 /docs/node_modules/
 /docs/mermaid_images/
+
+# Configuración local con endpoints AWS (leída por run.ps1 / run.sh).
+# .env.example sí se versiona como plantilla.
+.env
+.env.*
+!.env.example
+
+# Ruta al Flutter SDK local, generada por `flutter build`.
+android/local.properties
