@@ -569,6 +569,13 @@ def save_to_cache(cache_key: str, payload: dict) -> None:
     """Persiste el resultado. Un fallo aquí nunca interrumpe la respuesta."""
     if not CACHE_BUCKET:
         return
+    # Una traducción sin glosas es un tropiezo puntual del modelo, no un
+    # resultado. Cachearla congelaría el fallo: esa frase no volvería a
+    # traducirse nunca y el avatar se quedaría mudo para siempre ante ella.
+    # Sin guardar, el siguiente intento vuelve a pasar por Bedrock.
+    if not payload.get("glosses"):
+        logger.warning("Resultado sin glosas — no se cachea: %s", cache_key)
+        return
     try:
         s3.put_object(
             Bucket=CACHE_BUCKET,
