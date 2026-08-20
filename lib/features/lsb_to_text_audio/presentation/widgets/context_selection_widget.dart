@@ -13,22 +13,31 @@ import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 /// de ser una lista neutra: muestra la frase que se está respondiendo y
 /// propone el contexto inferido de ella, con la evidencia que lo justifica.
 /// La sugerencia se ofrece, no se impone — la persona sorda decide.
-class ContextSelectionWidget extends ConsumerWidget {
+class ContextSelectionWidget extends ConsumerStatefulWidget {
   const ContextSelectionWidget({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ContextSelectionWidget> createState() =>
+      _ContextSelectionWidgetState();
+}
+
+class _ContextSelectionWidgetState
+    extends ConsumerState<ContextSelectionWidget> {
+  /// Familia desplegada. `null` mientras se muestran las cuatro entradas.
+  ContextFamily? _abierta;
+
+  @override
+  Widget build(BuildContext context) {
     final pending = ref.watch(pendingReplyProvider);
     final suggestion = pending?.suggestion;
     final highlightedId = pending?.proposedContextId;
 
-    // El contexto propuesto encabeza la lista; el resto conserva su orden.
-    final ordered = [
-      for (final ctx in availableContexts)
-        if (ctx.id == highlightedId) ctx,
-      for (final ctx in availableContexts)
-        if (ctx.id != highlightedId) ctx,
-    ];
+    // Una familia con un solo contexto entra directo; con varios se despliega
+    // para preguntar de cuál se trata.
+    final familia = _abierta;
+    final desplegados = familia == null
+        ? const <SemanticContext>[]
+        : contextsOfFamily(familia);
 
     return SingleChildScrollView(
       child: Padding(
@@ -56,7 +65,7 @@ class ContextSelectionWidget extends ConsumerWidget {
             Text(
               pending != null
                   ? 'Puedes aceptar el contexto propuesto o elegir otro.'
-                  : '¿Sobre qué necesitas hacer una declaración?',
+                  : '¿Qué necesitas hacer?',
               style: const TextStyle(
                 fontSize: 15,
                 color: AppTheme.lightTextSub,
@@ -64,13 +73,38 @@ class ContextSelectionWidget extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 28),
-            ...ordered.map(
-              (ctx) => _ContextButton(
-                context: ctx,
-                highlighted: ctx.id == highlightedId,
-                suggestion: ctx.id == suggestion?.contextId ? suggestion : null,
+            if (familia == null)
+              ...contextFamilies.map(
+                (f) => _FamilyButton(
+                  family: f,
+                  onTap: () {
+                    final contextos = contextsOfFamily(f);
+                    if (contextos.length == 1) {
+                      ref.read(contextProvider.notifier).setContext(contextos.first);
+                    } else {
+                      setState(() => _abierta = f);
+                    }
+                  },
+                ),
+              )
+            else ...[
+              TextButton.icon(
+                onPressed: () => setState(() => _abierta = null),
+                icon: const Icon(Icons.arrow_back, size: 18),
+                label: const Text('Volver'),
+                style: TextButton.styleFrom(
+                    foregroundColor: AppTheme.lightTextSub),
               ),
-            ),
+              const SizedBox(height: 8),
+              ...desplegados.map(
+                (ctx) => _ContextButton(
+                  context: ctx,
+                  highlighted: ctx.id == highlightedId,
+                  suggestion:
+                      ctx.id == suggestion?.contextId ? suggestion : null,
+                ),
+              ),
+            ],
             const SizedBox(height: 32),
             Center(
               child: Text(
@@ -83,6 +117,74 @@ class ContextSelectionWidget extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Entrada de primer nivel: la gestión que trae la persona.
+///
+/// Deliberadamente sin la urgencia ni la evidencia que muestra
+/// [_ContextButton]: aquí todavía no se ha dicho qué pasó, y teñir de rojo
+/// "Denuncias" antes de saberlo presiona la elección.
+class _FamilyButton extends StatelessWidget {
+  final ContextFamily family;
+  final VoidCallback onTap;
+
+  const _FamilyButton({required this.family, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: '${family.name}. ${family.description}',
+      excludeSemantics: true,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+            decoration: BoxDecoration(
+              color: AppTheme.lightSurface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppTheme.lightBorder),
+              boxShadow: AppTheme.cardShadow,
+            ),
+            child: Row(
+              children: [
+                Text(family.emoji, style: const TextStyle(fontSize: 30)),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        family.name,
+                        style: const TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w800,
+                          color: AppTheme.lightText,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        family.description,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.lightTextSub,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right, color: AppTheme.lightTextSub),
+              ],
+            ),
+          ),
         ),
       ),
     );
