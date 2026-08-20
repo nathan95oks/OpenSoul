@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import '../../../../app/theme.dart';
 import '../controllers/audio_translation_controller.dart';
 
 class TextInputWidget extends ConsumerStatefulWidget {
@@ -203,7 +204,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                   boxShadow: _isRecording
                       ? [
                           BoxShadow(
-                            color: Colors.redAccent.withValues(alpha: 0.3),
+                            color: AppTheme.errorDark.withValues(alpha: 0.3),
                             spreadRadius: _animationController.value * 6,
                             blurRadius: 8,
                           )
@@ -213,7 +214,8 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                 child: IconButton(
                   icon: Icon(
                     _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-                    color: _isRecording ? Colors.redAccent : const Color(0xFFFFD700),
+                    color:
+                        _isRecording ? AppTheme.errorDark : AppTheme.brandLight,
                   ),
                   onPressed: _toggleRecording,
                   tooltip: _isRecording ? 'Detener grabación' : 'Grabar voz',
@@ -223,7 +225,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           ),
           const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.send_rounded, color: Color(0xFFFFD700)),
+            icon: const Icon(Icons.send_rounded, color: AppTheme.brandLight),
             onPressed: _submit,
             tooltip: 'Enviar mensaje',
           ),
