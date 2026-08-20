@@ -14,6 +14,59 @@ import '../semantic_engine/local_sentence_assembler.dart' show kVictimMarker;
 /// tarjetas (entrada visual-táctil definida en el perfil de proyecto)
 /// son las que responden esa pregunta; el motor semántico encadena las
 /// respuestas para construir el relato.
+/// Contexto de preguntas: la persona sorda arma una pregunta en vez de narrar
+/// un hecho. Es el único contexto cuya salida no es una declaración, así que
+/// entra por la interrogativa —lo que la LSB coloca primero— y luego acota de
+/// quién o de qué se pregunta.
+final preguntasContext = SemanticContext(
+  id: 'preguntas',
+  name: 'Preguntas',
+  icon: 'question_answer',
+  emoji: '❓',
+  description: 'Quiero preguntar algo',
+  entryZoneId: 'interrogativa',
+  zones: const [
+    SemanticZone(
+      id: 'interrogativa',
+      label: 'Pregunta',
+      hint: 'Qué quiero preguntar',
+      question: '¿Qué quieres preguntar?',
+      emoji: '❓',
+      semanticWeight: 0.95,
+      cardCategories: ['Preguntas'],
+      relatedZones: ['sobre_quien', 'tema'],
+    ),
+    SemanticZone(
+      id: 'sobre_quien',
+      label: 'Persona',
+      hint: 'Sobre quién pregunto',
+      question: '¿Sobre quién preguntas?',
+      emoji: '👤',
+      semanticWeight: 0.7,
+      optional: true,
+      cardCategories: ['Preguntas', 'Identificación', 'Instituciones'],
+      relatedZones: ['tema'],
+    ),
+    SemanticZone(
+      id: 'tema',
+      label: 'Tema',
+      hint: 'De qué se trata',
+      question: '¿Sobre qué tema?',
+      emoji: '📋',
+      semanticWeight: 0.8,
+      optional: true,
+      cardCategories: ['Documentos', 'Trámites', 'Consultas', 'Servicios', 'Lugares'],
+      relatedZones: [],
+    ),
+  ],
+);
+
+/// Contextos de **declaración**: los que narran un hecho.
+///
+/// El de preguntas queda fuera a propósito. Esta lista alimenta la inferencia
+/// de contexto a partir de glosas, y una pregunta no es un relato: incluirlo
+/// hacía que 'preguntas' compitiera por glosas como ROBAR y ganara por
+/// solapamiento de categorías, desviando denuncias reales.
 final availableContexts = <SemanticContext>[
   // ─── 1. ROBO ──────────────────────────────────────────
   SemanticContext(
@@ -532,7 +585,84 @@ final availableContexts = <SemanticContext>[
 /// El resto de contextos usan su propio id.
 const Map<String, List<String>> kContextCardSources = {
   'orientacion': ['orientacion', 'tramite_id', 'perdida'],
+  // Las tarjetas de pregunta se etiquetan con su propio contexto, pero la
+  // persona también pregunta por instituciones y documentos del resto.
+  'preguntas': ['preguntas', 'orientacion', 'tramite_id'],
 };
+
+/// Familia de contextos: lo que la persona elige en la primera pantalla.
+///
+/// La selección se presenta por *qué gestión trae*, no por el subtipo del
+/// hecho. Antes la primera pantalla mezclaba los dos niveles —"Denunciar
+/// robo" junto a "Orientación y trámites"— y obligaba a decidir el detalle
+/// del delito antes de haber dicho a qué se venía.
+///
+/// Los contextos de debajo no cambian: conservan sus zonas, sus preguntas y
+/// su enrutado al motor. Esto es solo cómo se agrupan para elegirlos.
+class ContextFamily {
+  final String id;
+  final String name;
+  final String emoji;
+  final String description;
+
+  /// Contextos que agrupa. Con uno solo se entra directo; con varios, la
+  /// pantalla pide primero de cuál se trata.
+  final List<String> contextIds;
+
+  const ContextFamily({
+    required this.id,
+    required this.name,
+    required this.emoji,
+    required this.description,
+    required this.contextIds,
+  });
+}
+
+/// Las cuatro entradas de "Selecciona el contexto".
+const List<ContextFamily> contextFamilies = [
+  ContextFamily(
+    id: 'denuncias',
+    name: 'Denuncias',
+    emoji: '🚨',
+    description: 'Robo, violencia, accidente o declarar como testigo',
+    contextIds: ['denuncia_robo', 'violencia', 'accidente', 'otro'],
+  ),
+  ContextFamily(
+    id: 'consultas',
+    name: 'Consultas',
+    emoji: '💬',
+    description: 'Orientación sobre mis derechos y qué debo hacer',
+    contextIds: ['orientacion'],
+  ),
+  ContextFamily(
+    id: 'tramites',
+    name: 'Trámites',
+    emoji: '📋',
+    description: 'Documentos, certificados, pérdidas y antecedentes',
+    contextIds: ['orientacion'],
+  ),
+  ContextFamily(
+    id: 'preguntas',
+    name: 'Preguntas',
+    emoji: '❓',
+    description: 'Quiero preguntar algo',
+    contextIds: ['preguntas'],
+  ),
+];
+
+/// Todos los contextos seleccionables, incluido el de preguntas.
+///
+/// [availableContexts] es el subconjunto que infiere y narra; esta lista es la
+/// que la interfaz puede abrir.
+List<SemanticContext> get allSelectableContexts =>
+    [...availableContexts, preguntasContext];
+
+/// Contextos de una familia, en el orden del catálogo.
+List<SemanticContext> contextsOfFamily(ContextFamily family) => [
+      for (final id in family.contextIds)
+        for (final ctx in allSelectableContexts)
+          if (ctx.id == id) ctx,
+    ];
 
 /// Ids de contexto de tarjeta que cubre [contextId] (para el filtro de
 /// tarjetas). Por defecto, su propio id.
@@ -555,6 +685,11 @@ String resolveAssemblerContext(
   List<String> glosses,
   String? Function(String gloss) cardCategoryOf,
 ) {
+  // El motor de ensamblado tiene siete contextos y ninguno redacta preguntas;
+  // 'orientacion' es el que produce la formulación más cercana ("Necesito
+  // orientación…") sin inventarle al backend un contexto que no existe.
+  // Redactar la pregunta como tal queda pendiente de tocar el ensamblador.
+  if (contextId == 'preguntas') return 'orientacion';
   if (contextId != 'orientacion') return contextId;
   var hasObject = false;
   var hasDocOrProcedure = false;
