@@ -139,6 +139,34 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     _downloadAndStartSequence();
   }
 
+  /// Devuelve el visor a reposo y lo deja listo para una interacción nueva.
+  ///
+  /// No es lo mismo que volver a reproducir: descarta la secuencia cargada,
+  /// suelta los dos visores y limpia el progreso. Sirve cuando la frase
+  /// anterior ya no interesa y se va a dictar otra — sin esto, el avatar se
+  /// quedaba congelado en la última seña de un mensaje que ya nadie estaba
+  /// leyendo.
+  void _resetToIdle() {
+    if (!mounted) return;
+    _cancelPlaceholderTimer();
+    setState(() {
+      _localUrls = [];
+      _testUrls = null;
+      _testGlosses = null;
+      _currentIndex = 0;
+      _isPlayingSequence = false;
+      _isDownloadingFiles = false;
+      _hasFinishedPlayingCurrent = false;
+      _activeViewer = 'A';
+      _urlA = null;
+      _urlB = null;
+      _isLoadedA = false;
+      _isLoadedB = false;
+      _controllerA = null;
+      _controllerB = null;
+    });
+  }
+
   Future<void> _downloadAndStartSequence() async {
     final urlsToDownload = _testUrls ?? widget.animationUrls;
     if (urlsToDownload == null || urlsToDownload.isEmpty) {
@@ -237,10 +265,19 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   void _handleFinished(String viewerId) {
     if (!mounted) return;
 
-    // Si solo hay un elemento, lo reproducimos en bucle en el mismo visor
-    if (_localUrls.length == 1) {
-      _hasFinishedPlayingCurrent = false;
-      _playViewer(viewerId);
+    // Última seña de la frase: el avatar se detiene y queda inactivo.
+    //
+    // Antes se repetía indefinidamente —la secuencia de un solo elemento
+    // rearrancaba el mismo visor y la de varios volvía al índice 0—, y esa
+    // repetición borraba el límite del mensaje: quien mira no distingue si el
+    // avatar sigue diciendo algo o ya empezó otra vez. Ahora el final se ve, y
+    // repetir es una decisión de quien lee, no del reproductor.
+    if (_currentIndex >= _localUrls.length - 1) {
+      _cancelPlaceholderTimer();
+      setState(() {
+        _isPlayingSequence = false;
+        _hasFinishedPlayingCurrent = true;
+      });
       return;
     }
 
@@ -284,14 +321,18 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       _activeViewer = nextViewerId;
       _hasFinishedPlayingCurrent = false;
 
-      // Avanzar índice global secuencial
-      _currentIndex = (_currentIndex + 1) % _localUrls.length;
+      // Avanzar índice global secuencial. Sin módulo: el desbordamiento ya
+      // no existe porque `_handleFinished` corta en la última seña, y
+      // envolverlo aquí era justo lo que reiniciaba la frase.
+      _currentIndex = _currentIndex + 1;
 
-      // Precargar la siguiente animación en el visor que ahora pasa a fondo
+      // Precargar la siguiente animación en el visor que ahora pasa a fondo.
+      // Si no hay siguiente, no se precarga nada: el visor de fondo se queda
+      // como está y la secuencia termina en el activo.
       final otherViewerId = nextViewerId == 'A' ? 'B' : 'A';
-      final nextNextIndex = (_currentIndex + 1) % _localUrls.length;
+      final nextNextIndex = _currentIndex + 1;
 
-      if (_localUrls.length > 1) {
+      if (nextNextIndex < _localUrls.length) {
         final nextNextUrl = _localUrls[nextNextIndex];
         if (otherViewerId == 'A') {
           _urlA = nextNextUrl;
@@ -689,14 +730,29 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           }).toList(),
         ),
         const SizedBox(height: 16),
-        TextButton.icon(
-          onPressed: () => _startSequence(),
-          icon: const Icon(Icons.replay_rounded,
-              color: Colors.deepPurpleAccent),
-          label: const Text(
-            'Reproducir de nuevo',
-            style: TextStyle(color: Colors.deepPurpleAccent),
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton.icon(
+              onPressed: _resetToIdle,
+              icon: const Icon(Icons.refresh_rounded,
+                  color: Colors.white54, size: 20),
+              label: const Text(
+                'Refrescar',
+                style: TextStyle(color: Colors.white54),
+              ),
+            ),
+            const SizedBox(width: 4),
+            TextButton.icon(
+              onPressed: () => _startSequence(),
+              icon: const Icon(Icons.replay_rounded,
+                  color: Colors.deepPurpleAccent),
+              label: const Text(
+                'Reproducir',
+                style: TextStyle(color: Colors.deepPurpleAccent),
+              ),
+            ),
+          ],
         ),
       ],
     );
