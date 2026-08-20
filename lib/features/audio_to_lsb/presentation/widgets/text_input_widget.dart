@@ -12,10 +12,16 @@ class TextInputWidget extends ConsumerStatefulWidget {
   /// distinguir el canal de entrada (voz vs. texto) sin duplicar el widget.
   final Function(String)? onSpeechSubmit;
 
+  /// Texto de ayuda del campo. El widget lo comparten el módulo de voz y el
+  /// chat, y cada uno pide algo distinto a quien escribe, así que la etiqueta
+  /// es del llamador y no del widget.
+  final String hintText;
+
   const TextInputWidget({
     super.key,
     required this.onSubmit,
     this.onSpeechSubmit,
+    this.hintText = 'Ingresar texto',
   });
 
   @override
@@ -176,11 +182,11 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
               controller: _controller,
               enabled: !_isRecording,
               style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                hintText: "Escribe o usa el micrófono...",
-                hintStyle: TextStyle(color: Colors.white54),
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                hintStyle: const TextStyle(color: Colors.white54),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 14),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
               onSubmitted: (_) => _submit(),
             ),
