@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import '../providers/sign_images_provider.dart';
 import 'semantic_node.dart';
 
 /// Disposición adaptativa de nodos semánticos.
@@ -10,7 +12,7 @@ import 'semantic_node.dart';
 ///   1      nodo  → 1 columna (ancho completo)
 ///   2      nodos → 2 columnas
 ///   3–6    nodos → 2 columnas (3 filas máx)
-class AdaptiveNodeLayout extends StatelessWidget {
+class AdaptiveNodeLayout extends ConsumerWidget {
   final List<LsbCard> cards;
   final void Function(LsbCard) onCardTap;
 
@@ -26,11 +28,18 @@ class AdaptiveNodeLayout extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (cards.isEmpty) return const SizedBox.shrink();
 
     final columns = cards.length == 1 ? 1 : 2;
-    final ratio = cards.length == 1 ? 3.5 : 1.5;
+
+    // La tarjeta con imagen apila seña sobre palabra y necesita más alto. Con
+    // la proporción de la versión sin imagen desbordaba, y el desborde tapaba
+    // justo la palabra: la tarjeta quedaba sin su etiqueta.
+    final conImagen = ref.watch(signImagesEnabledProvider);
+    final ratio = cards.length == 1
+        ? (conImagen ? 2.6 : 3.5)
+        : (conImagen ? 1.05 : 1.5);
 
     return GridView.builder(
       shrinkWrap: true,

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import '../providers/sign_images_provider.dart';
 import 'lsb_icons.dart';
+import 'sign_image.dart';
 
 /// Nodo semántico individual.
 ///
 /// Sin seleccionar: fondo blanco, borde negro 2px, texto negro.
 /// Seleccionado / activo: fondo naranja, borde naranja, texto blanco.
 /// Inspirado en el GlossNode del reference design.
-class SemanticNode extends StatefulWidget {
+class SemanticNode extends ConsumerStatefulWidget {
   final LsbCard card;
   final VoidCallback onTap;
   final bool isSelected;
@@ -21,10 +24,10 @@ class SemanticNode extends StatefulWidget {
   });
 
   @override
-  State<SemanticNode> createState() => _SemanticNodeState();
+  ConsumerState<SemanticNode> createState() => _SemanticNodeState();
 }
 
-class _SemanticNodeState extends State<SemanticNode>
+class _SemanticNodeState extends ConsumerState<SemanticNode>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _scale;
@@ -52,6 +55,8 @@ class _SemanticNodeState extends State<SemanticNode>
   @override
   Widget build(BuildContext context) {
     final selected = widget.isSelected;
+    final colorContenido = selected ? Colors.white : AppTheme.lightText;
+    final conImagen = ref.watch(signImagesEnabledProvider);
 
     return GestureDetector(
       onTapDown: (_) => _ctrl.forward(),
@@ -75,35 +80,57 @@ class _SemanticNodeState extends State<SemanticNode>
                 ? [BoxShadow(color: _orange.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
                 : AppTheme.cardShadow,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
-            children: [
-              Icon(
-                kLsbIconMap[widget.card.semanticIcon] ?? Icons.circle_outlined,
-                size: 20,
-                color: selected ? Colors.white : AppTheme.lightText,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  widget.card.displayText.replaceAll('_', ' '),
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: selected ? Colors.white : AppTheme.lightText,
-                    letterSpacing: 0.2,
-                    height: 1.2,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: conImagen ? 10 : 14,
           ),
+          // Con imagen la tarjeta se apila —la seña arriba, la palabra
+          // debajo—, porque es la seña lo que se reconoce primero. Sin ella
+          // se mantiene en fila, que ocupa menos y deja ver más opciones.
+          child: conImagen
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SignImage(
+                      gloss: widget.card.gloss,
+                      semanticIcon: widget.card.semanticIcon,
+                      size: 56,
+                      color: colorContenido,
+                    ),
+                    const SizedBox(height: 8),
+                    _etiqueta(colorContenido, TextAlign.center),
+                  ],
+                )
+              : Row(
+                  children: [
+                    Icon(
+                      kLsbIconMap[widget.card.semanticIcon] ??
+                          Icons.circle_outlined,
+                      size: 20,
+                      color: colorContenido,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(child: _etiqueta(colorContenido, TextAlign.start)),
+                  ],
+                ),
         ),
       ),
     );
   }
+
+  Widget _etiqueta(Color color, TextAlign alineacion) => Text(
+        widget.card.displayText.replaceAll('_', ' '),
+        textAlign: alineacion,
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: color,
+          letterSpacing: 0.2,
+          height: 1.2,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      );
 }
 
 /// Nodo de respuesta ya seleccionada (muestra glosa, no card).
