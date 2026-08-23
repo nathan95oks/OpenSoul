@@ -55,7 +55,7 @@ final preguntasContext = SemanticContext(
       emoji: '📋',
       semanticWeight: 0.8,
       optional: true,
-      cardCategories: ['Documentos', 'Trámites', 'Consultas', 'Servicios', 'Lugares'],
+      cardCategories: ['Documentos', 'Objetos', 'Conceptos jurídicos', 'Instituciones', 'Lugares'],
       relatedZones: [],
     ),
   ],
@@ -85,7 +85,7 @@ final availableContexts = <SemanticContext>[
         question: '¿Qué pasó?',
         emoji: '⚡',
         semanticWeight: 0.9,
-        cardCategories: ['Agresión'],
+        cardCategories: ['Hechos y urgencia'],
         contextTags: [EmotionalTag.amenaza],
         relatedZones: ['arma', 'personas', 'objetos', 'emergencia'],
       ),
@@ -98,7 +98,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🔪',
         semanticWeight: 0.7,
         optional: true,
-        cardCategories: ['Armas'],
+        cardCategories: ['Hechos y urgencia'],
         strictContext: true,
         contextTags: [EmotionalTag.amenaza, EmotionalTag.peligro],
         relatedZones: ['personas', 'objetos'],
@@ -154,7 +154,7 @@ final availableContexts = <SemanticContext>[
         question: '¿Qué se llevaron?',
         emoji: '📱',
         semanticWeight: 0.8,
-        cardCategories: ['Objetos', 'Documentos'],
+        cardCategories: ['Documentos', 'Objetos'],
         strictContext: true,
         maxPicks: 3,
         relatedZones: ['situacion', 'lugar'],
@@ -178,7 +178,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🆘',
         semanticWeight: 0.3,
         urgencyLevel: UrgencyLevel.high,
-        cardCategories: ['Estado/Urgencia', 'Servicios'],
+        cardCategories: ['Hechos y urgencia', 'Instituciones'],
         contextTags: [EmotionalTag.urgente, EmotionalTag.ayuda, EmotionalTag.peligro],
         relatedZones: ['situacion'],
       ),
@@ -213,7 +213,7 @@ final availableContexts = <SemanticContext>[
         emoji: '⚡',
         semanticWeight: 0.95,
         urgencyLevel: UrgencyLevel.medium,
-        cardCategories: ['Agresión'],
+        cardCategories: ['Hechos y urgencia'],
         contextTags: [EmotionalTag.amenaza, EmotionalTag.peligro],
         relatedZones: ['arma', 'emocion', 'personas', 'emergencia'],
       ),
@@ -226,7 +226,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🔪',
         semanticWeight: 0.7,
         optional: true,
-        cardCategories: ['Armas'],
+        cardCategories: ['Hechos y urgencia'],
         strictContext: true,
         contextTags: [EmotionalTag.amenaza, EmotionalTag.peligro],
         relatedZones: ['emocion', 'personas'],
@@ -284,7 +284,7 @@ final availableContexts = <SemanticContext>[
         question: '¿Cómo te sientes?',
         emoji: '💔',
         semanticWeight: 0.7,
-        cardCategories: ['Emociones', 'Estado/Urgencia'],
+        cardCategories: ['Estado y emoción', 'Hechos y urgencia'],
         cardSubcategories: ['Negativa', 'Estado'],
         contextTags: [EmotionalTag.miedo, EmotionalTag.dolor],
         relatedZones: ['emergencia'],
@@ -297,7 +297,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🆘',
         semanticWeight: 0.5,
         urgencyLevel: UrgencyLevel.critical,
-        cardCategories: ['Estado/Urgencia', 'Servicios'],
+        cardCategories: ['Hechos y urgencia', 'Instituciones'],
         contextTags: [EmotionalTag.urgente, EmotionalTag.ayuda],
       ),
       SemanticZone(
@@ -355,7 +355,7 @@ final availableContexts = <SemanticContext>[
         emoji: '💔',
         semanticWeight: 0.85,
         urgencyLevel: UrgencyLevel.high,
-        cardCategories: ['Emociones', 'Estado/Urgencia'],
+        cardCategories: ['Estado y emoción', 'Hechos y urgencia'],
         cardSubcategories: ['Negativa', 'Estado'],
         contextTags: [EmotionalTag.dolor, EmotionalTag.urgente],
         relatedZones: ['ayuda'],
@@ -368,7 +368,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🚑',
         semanticWeight: 0.7,
         urgencyLevel: UrgencyLevel.high,
-        cardCategories: ['Servicios'],
+        cardCategories: ['Instituciones'],
         contextTags: [EmotionalTag.urgente, EmotionalTag.ayuda],
       ),
       SemanticZone(
@@ -430,7 +430,7 @@ final availableContexts = <SemanticContext>[
         question: '¿Qué hecho presenciaste?',
         emoji: '⚡',
         semanticWeight: 0.85,
-        cardCategories: ['Agresión'],
+        cardCategories: ['Hechos y urgencia'],
         relatedZones: ['personas', 'victima', 'lugar'],
       ),
       // Quién cometió el hecho (agresor). Solo identidad.
@@ -509,7 +509,7 @@ final availableContexts = <SemanticContext>[
         question: '¿Qué necesitas hacer?',
         emoji: '📋',
         semanticWeight: 0.9,
-        cardCategories: ['Acciones', 'Trámites'],
+        cardCategories: ['Acciones', 'Conceptos jurídicos'],
         relatedZones: ['documento', 'motivo'],
       ),
       SemanticZone(
@@ -531,7 +531,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🎯',
         semanticWeight: 0.65,
         optional: true,
-        cardCategories: ['Consultas'],
+        cardCategories: ['Acciones', 'Comunicación'],
         relatedZones: ['donde'],
       ),
       SemanticZone(
@@ -552,7 +552,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🤝',
         semanticWeight: 0.5,
         optional: true,
-        cardCategories: ['Servicios'],
+        cardCategories: ['Instituciones'],
         cardSubcategories: ['Accesibilidad', 'Legal', 'Atención', 'Información'],
       ),
       SemanticZone(
@@ -697,7 +697,7 @@ String resolveAssemblerContext(
     if (g.toUpperCase() == 'PERDER') hasObject = true;
     final cat = cardCategoryOf(g);
     if (cat == 'Objetos') hasObject = true;
-    if (cat == 'Documentos' || cat == 'Trámites') hasDocOrProcedure = true;
+    if (cat == 'Documentos' || cat == 'Conceptos jurídicos') hasDocOrProcedure = true;
   }
   if (hasObject) return 'perdida';
   if (hasDocOrProcedure) return 'tramite_id';

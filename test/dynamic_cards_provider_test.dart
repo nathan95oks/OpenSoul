@@ -46,9 +46,17 @@ void main() {
       final cards = await c.read(dynamicCardsProvider.future);
 
       expect(cards, isNotEmpty);
-      // La zona "situacion" de denuncia_robo expone la categoría "Agresión".
-      expect(cards.every((x) => x.categoryId == 'Agresión'), true,
-          reason: 'la zona activa solo ofrece tarjetas de su categoría');
+      // La zona activa solo ofrece tarjetas de las categorías que declara.
+      // Se leen del propio catálogo en vez de fijar un nombre: así la prueba
+      // sigue valiendo cuando el corpus reorganiza sus categorías.
+      final zona =
+          _ctx('denuncia_robo').zones.firstWhere((z) => z.id == 'situacion');
+      expect(
+        cards.every((x) => zona.cardCategories.contains(x.categoryId)),
+        true,
+        reason: 'esperadas ${zona.cardCategories}; '
+            'recibidas ${cards.map((x) => x.categoryId).toSet()}',
+      );
       expect(cards.length, lessThanOrEqualTo(12),
           reason: 'se respeta el tope _kMaxGuidedAnswers');
     });
@@ -100,29 +108,29 @@ void main() {
     });
 
     test('objeto / PERDER → perdida', () {
-      expect(resolveAssemblerContext('orientacion', ['PERDER', 'CELULAR'], catOf),
+      expect(resolveAssemblerContext('orientacion', ['FALTA', 'TELEFONO'], catOf),
           'perdida');
-      expect(resolveAssemblerContext('orientacion', ['CELULAR', 'CALLE'], catOf),
+      expect(resolveAssemblerContext('orientacion', ['TELEFONO', 'CALLE'], catOf),
           'perdida');
     });
 
     test('documento / trámite → tramite_id', () {
-      expect(resolveAssemblerContext('orientacion', ['CARNET'], catOf), 'tramite_id');
+      expect(resolveAssemblerContext('orientacion', ['PASAPORTE'], catOf), 'tramite_id');
       expect(
-          resolveAssemblerContext('orientacion', ['ANTECEDENTES', 'FISCAL'], catOf),
+          resolveAssemblerContext('orientacion', ['INVESTIGACION', 'FISCAL'], catOf),
           'tramite_id');
     });
 
     test('consulta / derechos → orientacion', () {
       expect(
-          resolveAssemblerContext('orientacion', ['INTERPRETE', 'DEFENSORIA'], catOf),
+          resolveAssemblerContext('orientacion', ['INTERPRETE', 'INSTITUCION'], catOf),
           'orientacion');
     });
 
     test('los contextos directos no se reenrutan', () {
       expect(resolveAssemblerContext('denuncia_robo', ['ROBAR'], catOf),
           'denuncia_robo');
-      expect(resolveAssemblerContext('violencia', ['PEGAR'], catOf), 'violencia');
+      expect(resolveAssemblerContext('violencia', ['MALTRATAR'], catOf), 'violencia');
     });
   });
 }

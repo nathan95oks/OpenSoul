@@ -3,6 +3,13 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
 
+/// Una oración está bien terminada si acaba en punto o en interrogación.
+///
+/// El módulo ya no solo declara: desde que existe el contexto de preguntas
+/// puede producir "¿Dónde está la fiscalía?", que es una salida válida y no
+/// una frase cola.
+bool _bienTerminada(String s) => s.endsWith('.') || s.endsWith('?');
+
 void main() {
   test('Generar corpus completo y verificar ausencia de frases-cola', () {
     final assembler = LocalSentenceAssembler();
@@ -42,7 +49,7 @@ void main() {
           }
         }
         
-        if (hasForbidden || !result.endsWith('.') || result.contains(' ,')) {
+        if (hasForbidden || !_bienTerminada(result) || result.contains(' ,')) {
           print('ERROR [$ctx] [$gloss] -> $result');
           errors++;
         }
@@ -61,7 +68,7 @@ void main() {
             }
           }
           
-          if (hasForbidden || !result.endsWith('.') || result.contains(' ,')) {
+          if (hasForbidden || !_bienTerminada(result) || result.contains(' ,')) {
             print('ERROR [$ctx] [${allGlosses[i]}, ${allGlosses[j]}] -> $result');
             errors++;
           }

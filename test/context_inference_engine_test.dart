@@ -16,7 +16,7 @@ void main() {
 
   group('inferencia a partir de las glosas del motor de traducción', () {
     test('glosa exclusiva de robo decide el contexto', () {
-      final suggestion = engine.infer(glosses: ['PASADO', 'TU', 'ROBAR']);
+      final suggestion = engine.infer(glosses: ['AYER', 'TU', 'ROBAR']);
 
       expect(suggestion, isNotNull);
       expect(suggestion!.contextId, 'denuncia_robo');
@@ -24,13 +24,13 @@ void main() {
     });
 
     test('glosa exclusiva de violencia decide el contexto', () {
-      final suggestion = engine.infer(glosses: ['ESPOSO', 'PEGAR']);
+      final suggestion = engine.infer(glosses: ['HOMBRE', 'MALTRATAR']);
 
       expect(suggestion?.contextId, 'violencia');
     });
 
     test('los trámites resuelven al contexto de orientación', () {
-      final suggestion = engine.infer(glosses: ['CARNET', 'RENOVAR']);
+      final suggestion = engine.infer(glosses: ['PASAPORTE', 'GESTIONAR']);
 
       expect(suggestion?.contextId, 'orientacion');
     });
@@ -44,13 +44,13 @@ void main() {
 
   group('respaldo por texto cuando no hay glosas', () {
     test('reconoce la raíz léxica aunque el verbo esté conjugado', () {
-      final suggestion = engine.infer(text: '¿Le robaron su celular?');
+      final suggestion = engine.infer(text: '¿Le robaron su teléfono?');
 
       expect(suggestion?.contextId, 'denuncia_robo');
     });
 
     test('reconoce una consulta de trámite', () {
-      final suggestion = engine.infer(text: 'Necesito renovar mi carnet');
+      final suggestion = engine.infer(text: 'Necesito gestionar mi pasaporte');
 
       expect(suggestion?.contextId, 'orientacion');
     });
@@ -59,14 +59,14 @@ void main() {
       // Las raices lexicas ('rob') puntuan pero no se enseñan: no significan
       // nada para quien lee la pantalla.
       final suggestion = engine.infer(
-        glosses: ['ROBAR', 'CELULAR'],
-        text: 'Le robaron su celular',
+        glosses: ['ROBAR', 'TELEFONO'],
+        text: 'Le robaron su teléfono',
       );
 
       expect(suggestion!.evidence, isNotEmpty);
       for (final item in suggestion.evidence) {
         expect(item, isNot('ROB'));
-        expect(item, anyOf('ROBAR', 'CELULAR'));
+        expect(item, anyOf('ROBAR', 'TELEFONO'));
       }
     });
   });
@@ -92,9 +92,9 @@ void main() {
       // Si la inferencia propusiera un id sin contexto real, el flujo de
       // tarjetas no podría abrirse y la respuesta se quedaría bloqueada.
       for (final frase in const [
-        'Le robaron su celular',
-        'Su esposo le pego',
-        'Necesito renovar mi carnet',
+        'Le robaron su teléfono',
+        'Un hombre la maltrató',
+        'Necesito gestionar mi pasaporte',
       ]) {
         final suggestion = engine.infer(text: frase);
         expect(suggestion, isNotNull, reason: frase);
