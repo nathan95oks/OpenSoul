@@ -78,25 +78,95 @@ CORS_HEADERS = {
 # dactilología (deletreo) como fallback.
 # ===================================================================
 AVAILABLE_GLOSSES = {
-    # --- Sustantivos Jurídicos y Compuestos ---
-    "ABOGADO", "POLICIA", "JUEZ", "FISCAL",
-    
-    # --- Pronombres y Posesivos Disponibles ---
-    "YO", "TU", "EL", "ELLA", "NOSOTROS", "ELLOS", "ELLAS", "USTEDES", "MIO", "TUYO", "SUYO", "NUESTRO",
-    
-    # --- Saludos y Respuestas Disponibles ---
-    "CHAO", "HOLA", "NO", "PERMISO", "PORFAVOR", "SALUDOS", "SI",
-    
-    # --- Tiempos y Marcadores Temporales Disponibles ---
-    "AHORA", "AYER", "DESPUES", "HOY", "MAÑANA", "PASADO",
-    
-    # --- Desambiguación Llama ---
-    "LLAMAR", "ANIMAL-LLAMA", "FUEGO-LLAMA",
+    # GENERADO por tool/sync_vocabulary.dart — no editar a mano.
+    # Fuente: assets/dictionary/official_dictionary.json
+    # --- Cortesía (5) ---
+    "GRACIAS", "HOLA", "LO_SIENTO", "PERMISO", "POR_FAVOR",
+    # --- Respuesta (8) ---
+    "ESTOY_BIEN", "MAS_O_MENOS", "NO", "NO_PUEDO", "NO_SABER", "PUEDO",
+    "SABER", "SI",
+    # --- Preguntas (16) ---
+    "COMO", "CUAL", "CUANDO", "CUANTOS", "DONDE", "EL",
+    "ELLA", "ELLOS", "NOSOTROS", "PARA_QUE", "POR_QUE", "QUE",
+    "QUIEN", "TU", "USTEDES", "YO",
+    # --- Identificación (9) ---
+    "HOMBRE", "IDENTIDAD", "LADRON", "MILITAR", "MUJER", "NOMBRE",
+    "SOLDADO", "TESTIGO", "VECINO",
+    # --- Instituciones (16) ---
+    "ABOGADO", "ALCALDIA", "ASISTENTE", "AUTORIDAD", "COORDINADOR", "DOCTOR",
+    "ENFERMERA", "FISCAL", "GOBIERNO", "INSTITUCION", "INTERPRETE", "JUEZ",
+    "MINISTERIO", "OFICIAL", "ORGANO_JUDICIAL", "POLICIA",
+    # --- Conceptos jurídicos (17) ---
+    "ACUERDO_SOCIAL", "ARTICULO", "CONFIRMACION", "CONTEXTO", "DECRETO_SUPREMO", "ESTADO",
+    "INVESTIGACION", "JUICIO", "JUSTICIA", "LEY", "NORMA", "PERSONERIA_JURIDICA",
+    "PODER", "REGLAMENTO", "RESOLUCION", "TESTIMONIO", "TRAMITE",
+    # --- Acciones (25) ---
+    "ACOMPANAR", "ADMINISTRAR", "ANOTAR", "AVISAR", "CONFESAR", "COORDINAR",
+    "COPIAR", "CUMPLIR", "DECIDIR", "ESCRIBIR", "EXIGIR", "GESTIONAR",
+    "IDENTIFICAR", "JURAR", "MOSTRAR", "NARRAR", "OBSERVAR", "PEDIR",
+    "PRESENTAR", "PROTEGER", "QUEJAR", "RECOGER", "RECONOCER", "SOLUCIONAR",
+    "TRATAR",
+    # --- Hechos y urgencia (18) ---
+    "ABUSAR", "ACCIDENTE", "AMENAZAR", "ARRESTAR", "ASISTENCIA", "AUXILIO",
+    "CORRER", "CRISIS", "DANAR", "DISCRIMINACION", "HERIDA", "MALTRATAR",
+    "PARAR", "ROBAR", "SALVAR", "SOBORNO", "VIOLACION", "VIOLENCIA",
+    # --- Descripción (17) ---
+    "AMARILLO", "AZUL", "BLANCO", "CAFE", "CELESTE", "CORRECTO",
+    "DELGADO", "GRUESO", "INOCENTE", "LILA", "NARANJA", "NEGRO",
+    "PELIGROSO", "PRESO", "ROJO", "ROSADO", "VERDE",
+    # --- Estado y emoción (9) ---
+    "CONFIANZA", "CONFUSION", "FALTA", "MAL", "PROBLEMA", "RAZON",
+    "SITUACION", "TEMOR", "VERGUENZA",
+    # --- Tiempo (14) ---
+    "AHORA", "ANO", "ANTEAYER", "AYER", "DIA", "FECHA",
+    "HORA", "HOY", "MANANA", "MES", "MINUTO", "PASADO_MANANA",
+    "SEGUNDO", "SEMANA",
+    # --- Lugares (12) ---
+    "AEROPUERTO", "AVENIDA", "CALLE", "CARCEL", "CASA", "COCHABAMBA",
+    "DIRECCION", "FARMACIA", "HOSPITAL", "MERCADO", "PLAZA", "UBICACION_GPS",
+    # --- Documentos (12) ---
+    "ARCHIVADOR", "CARPETA", "CARTA", "FORMULARIO", "FOTOCOPIA", "LICENCIA",
+    "LICENCIA_DECONDUCIR", "PAPEL", "PASAPORTE", "SELLO", "TEXTO", "TITULO",
+    # --- Objetos (11) ---
+    "AUTO", "AVION", "BICICLETA", "DINERO", "MICRO", "MOCHILA",
+    "MOTOCICLETA", "TAXI", "TELEFONO", "TREN", "TRUFI",
+    # --- Comunicación (7) ---
+    "ACEPTAR", "ATENDER", "AYUDAR", "COMPRENDER", "HABLAR", "RECHAZAR",
+    "RESPONDER",
+    # --- Comunicación digital (4) ---
+    "VIDEOLLAMADA", "WHATSAPP", "WIFI", "ZOOM",
+    # --- Integridad (8) ---
+    "AUTONOMIA", "COMPROMISO", "CORRUPTO", "DIGNIDAD", "ETICA", "FIRME",
+    "GARANTE", "HONESTIDAD",
+    # --- Abecedario (27) ---
+    "A", "B", "C", "D", "E", "F",
+    "G", "H", "I", "J", "K", "L",
+    "M", "N", "O", "P", "Q", "R",
+    "S", "T", "U", "V", "W", "X",
+    "Y", "Z", "Ñ",
+    # --- Números (10) ---
+    "0", "1", "2", "3", "4", "5",
+    "6", "7", "8", "9",
+}
 
-    # --- Alfabeto Dactilológico y Números (Para dactilología offline/fallback) ---
-    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+# ===================================================================
+# GLOSAS CON ANIMACIÓN REAL EN S3
+# ===================================================================
+# El vocabulario y la animación son cosas distintas. AVAILABLE_GLOSSES dice
+# qué puede *decir* el sistema —lo mismo que ofrecen las tarjetas—; esta lista
+# dice qué puede *representar* el avatar hoy.
+#
+# Antes se derivaba una de la otra, así que al unificar el vocabulario la
+# Lambda habría declarado 245 animaciones existiendo ~21 archivos: el avatar
+# pediría .glb inexistentes y se quedaría en negro en vez de deletrear.
+#
+# Lo que no está aquí cae en dactilología, que es su comportamiento correcto.
+ANIMATED_GLOSSES = {
+    "ABOGADO", "POLICIA", "JUEZ",
+    "YO", "TU", "EL", "ELLA", "NOSOTROS", "ELLOS", "ELLAS", "USTEDES",
+    "MIO", "TUYO", "SUYO", "NUESTRO",
+    "CHAO", "HOLA", "NO", "PERMISO", "POR_FAVOR",
+    "F",
 }
 
 # Variantes con las que el modelo nombra una misma seña. Se unifican antes de
@@ -161,15 +231,19 @@ def get_avatar_animations() -> dict:
 
     Fuente única (Fase 2): tabla del diccionario evolutivo en DynamoDB,
     donde cada ENTRY aprobada puede declarar su `animationFile`. El set
-    estático AVAILABLE_GLOSSES queda como base garantizada (alfabeto
-    dactilológico, números y señas fundacionales) y como fallback total
-    si la tabla no está configurada o falla la consulta.
+    estático ANIMATED_GLOSSES queda como base garantizada —las señas que ya
+    están grabadas y subidas— y como fallback total si la tabla no está
+    configurada o falla la consulta.
+
+    No se deriva de AVAILABLE_GLOSSES: el vocabulario dice qué se puede decir
+    y esta función qué se puede representar. Confundirlos hacía que el avatar
+    pidiera archivos inexistentes.
     """
     global _avatar_animations_cache, _dynamic_gloss_overrides_cache
     if _avatar_animations_cache is not None:
         return _avatar_animations_cache
 
-    animations = {g: f"{remove_accents(g)}.glb" for g in AVAILABLE_GLOSSES}
+    animations = {g: f"{remove_accents(g)}.glb" for g in ANIMATED_GLOSSES}
     animations.update(ANIMATION_FILE_OVERRIDES)
     dynamic = set()
 
