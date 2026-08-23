@@ -1105,6 +1105,125 @@ def validate_request(body: dict) -> tuple:
             return False, "El campo 'context' es demasiado largo."
     return True, None
 
+# ===================================================================
+# SUGERENCIA GENERATIVA DE OPCIONES
+# ===================================================================
+# El flujo guiado ofrecía las tarjetas de la categoría de la zona ordenadas por
+# prioridad. Ante "¿Qué pasó?" en un robo eso proponía ARRESTAR y ASISTENCIA
+# —que no responden la pregunta— y enterraba ROBAR por orden alfabético. Era un
+# árbol de decisión escrito a mano, no un sistema capaz de reaccionar a lo que
+# venga de la conversación.
+#
+# Aquí el modelo elige y ordena, pero **solo dentro del vocabulario que el
+# cliente le entrega**. Esa restricción no se le pide en el prompt: se aplica
+# después, descartando lo que no venga en `candidates`. Una glosa inventada no
+# puede sobrevivir a esa comprobación, que es lo que exige el control de
+# alucinaciones.
+
+MAX_SUGERENCIAS = 8
+
+
+def invoke_bedrock_json(prompt: str) -> dict:
+    """Invoca el modelo y devuelve el JSON que trae en su respuesta.
+
+    Reutiliza los mismos ayudantes que el refinamiento —el cuerpo por familia
+    de modelo y el desempaquetado— para no duplicar el conocimiento de qué
+    forma tiene cada proveedor.
+    """
+    respuesta = bedrock_runtime.invoke_model(
+        modelId=BEDROCK_MODEL_ID,
+        body=json.dumps(_build_bedrock_request_body(prompt)),
+    )
+    crudo = _parse_bedrock_response(json.loads(respuesta["body"].read()))
+    # El modelo suele envolver el JSON en explicaciones o en un bloque de
+    # markdown; se extrae el objeto en lugar de exigir una salida limpia.
+    inicio, fin = crudo.find("{"), crudo.rfind("}")
+    if inicio < 0 or fin <= inicio:
+        raise ValueError("la respuesta no contiene un objeto JSON")
+    return json.loads(crudo[inicio:fin + 1])
+
+
+def build_suggestion_prompt(context_type, selected, candidates, question):
+    """Prompt para elegir las siguientes opciones y redactar su pregunta."""
+    contexto = f"La persona está en el contexto '{context_type}'."
+    if question:
+        contexto += (
+            f"\nUna persona oyente acaba de decirle: «{question}». "
+            "Las opciones deben servir para RESPONDER a eso."
+        )
+    if selected:
+        contexto += f"\nYa eligió, en orden: {', '.join(selected)}."
+    else:
+        contexto += "\nTodavía no ha elegido nada."
+
+    return f"""Eres un asistente de una aplicación que ayuda a una persona sorda boliviana a construir una declaración en una institución pública.
+
+{contexto}
+
+Tu tarea es elegir las siguientes GLOSAS que conviene ofrecerle y redactar la pregunta que las presenta.
+
+REGLAS:
+1. Elige como máximo {MAX_SUGERENCIAS} glosas, ordenadas de más a menos probable.
+2. SOLO puedes usar glosas de la lista de disponibles. No inventes ninguna, no traduzcas, no cambies su escritura.
+3. No repitas glosas ya elegidas.
+4. La pregunta va en segunda persona, es corta y concreta: "¿Quién te robó?", "¿Dónde ocurrió?".
+5. Si la persona ya dijo lo esencial, ofrece glosas que añadan detalle útil para la declaración.
+
+GLOSAS DISPONIBLES:
+{', '.join(candidates)}
+
+FORMATO (JSON estricto, sin texto alrededor):
+{{"question": "...", "options": ["GLOSA1", "GLOSA2"]}}"""
+
+
+def suggest_options(body):
+    """Devuelve la pregunta y las opciones siguientes, validadas contra el corpus."""
+    context_type = (body.get("context") or "general").strip().lower()
+    selected = [str(c).strip().upper() for c in (body.get("selected") or [])]
+    candidates = [str(c).strip().upper() for c in (body.get("candidates") or [])]
+    question = (body.get("question") or "").strip()
+
+    if not candidates:
+        return build_response(400, {
+            "error": "VALIDATION_ERROR",
+            "message": "candidates es obligatorio: el modelo solo elige dentro de él.",
+        })
+
+    disponibles = [c for c in candidates if c not in selected]
+    if not disponibles:
+        return build_response(200, {"question": "", "options": [], "generated": False})
+
+    try:
+        prompt = build_suggestion_prompt(context_type, selected, disponibles, question)
+        crudo = invoke_bedrock_json(prompt)
+    except Exception as e:  # noqa: BLE001 — cualquier fallo cae al orden del cliente
+        logger.warning("Sugerencia no generada (%s) — el cliente usará su orden", e)
+        return build_response(200, {"question": "", "options": [], "generated": False})
+
+    permitidas = set(disponibles)
+    opciones, vistas = [], set()
+    for o in crudo.get("options", []):
+        if not isinstance(o, str):
+            continue
+        g = o.strip().upper()
+        # La comprobación que hace inofensiva una alucinación: si el modelo se
+        # inventa una seña, aquí desaparece.
+        if g in permitidas and g not in vistas:
+            opciones.append(g)
+            vistas.add(g)
+        elif g not in permitidas:
+            logger.info("Glosa descartada por no estar en el corpus: %.40r", o)
+
+    if not opciones:
+        return build_response(200, {"question": "", "options": [], "generated": False})
+
+    return build_response(200, {
+        "question": str(crudo.get("question", "")).strip()[:120],
+        "options": opciones[:MAX_SUGERENCIAS],
+        "generated": True,
+    })
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -1118,6 +1237,10 @@ def lambda_handler(event, context):
         body = json.loads(raw_body) if isinstance(raw_body, str) else (raw_body or {})
     except (json.JSONDecodeError, TypeError) as e:
         return build_response(400, {"error": "JSON_PARSE_ERROR", "message": "JSON inválido."})
+
+    # La sugerencia de opciones no valida `cards`: su entrada es otra.
+    if (body.get("action") or "").strip().lower() == "suggest":
+        return suggest_options(body)
 
     is_valid, err = validate_request(body)
     if not is_valid:
