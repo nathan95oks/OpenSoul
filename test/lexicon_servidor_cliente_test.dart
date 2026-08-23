@@ -70,4 +70,35 @@ void main() {
         reason: 'la declaración cambiaría según haya red o no:\n'
             '${discrepantes.take(8).join('\n')}');
   });
+
+  test('todo rol generado es uno que el backend sabe leer', () {
+    final fuente = File('aws/lambda_function.py').readAsStringSync();
+
+    // Tabla con la que el backend reparte cada glosa en su cubo de análisis.
+    final tabla = RegExp(r'mapping = \{(.*?)\}', dotAll: true).firstMatch(fuente);
+    expect(tabla, isNotNull, reason: 'no se encontró el mapping de roles');
+    final reconocidos = RegExp('"([A-Z_]+)":')
+        .allMatches(tabla!.group(1)!)
+        .map((m) => m.group(1)!)
+        .toSet();
+
+    final bloque =
+        RegExp(r'GLOSS_LEXICON = \{(.*?)\n\}', dotAll: true).firstMatch(fuente);
+    final usados = RegExp('"rol": "([A-Z_]+)"')
+        .allMatches(bloque!.group(1)!)
+        .map((m) => m.group(1)!)
+        .toSet();
+
+    // DESCONOCIDO es deliberado: cortesías e interrogativas no tienen cubo en
+    // el backend y las recupera su regla de cobertura.
+    final huerfanos = usados.difference(reconocidos)..remove('DESCONOCIDO');
+
+    expect(
+      huerfanos,
+      isEmpty,
+      reason: 'estos roles caerían en "desconocidos" sin querer, y la oración '
+          'saldría gramatical pero incompleta: $huerfanos\n'
+          'revisa la tabla _roles de tool/sync_vocabulary.dart',
+    );
+  });
 }

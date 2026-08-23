@@ -123,26 +123,36 @@ void sincronizarLexicon(bool soloVerificar) {
 }
 
 /// Roles del ensamblador del cliente y su nombre en el backend.
+/// Roles del ensamblador del cliente y su nombre en el backend.
+///
+/// No son la misma lista: el backend agrupa más grueso —un verbo es VERBO
+/// venga de una agresión o de un trámite, y una persona y un rasgo son ambos
+/// DESCRIPTOR—. Traducir mal esta tabla no rompe nada visiblemente: las glosas
+/// caen en "desconocidos" y la oración sale gramatical pero incompleta, que es
+/// justo lo que pasó con "HOMBRE ROBAR TELEFONO CALLE" -> "Un hombre robó."
 const _roles = {
   'sujeto': 'SUJETO',
-  'personaDesc': 'PERSONA_DESC',
-  'personaDescPlural': 'PERSONA_DESC_PLURAL',
-  'rasgo': 'RASGO',
-  'verboAgresion': 'VERBO_AGRESION',
-  'verboAccion': 'VERBO_ACCION',
-  'arma': 'ARMA',
+  'personaDesc': 'DESCRIPTOR',
+  'personaDescPlural': 'DESCRIPTOR',
+  'rasgo': 'DESCRIPTOR',
+  'verboAgresion': 'VERBO',
+  'verboAccion': 'VERBO',
+  'arma': 'OBJETO',
   'objeto': 'OBJETO',
   'documento': 'DOCUMENTO',
   'lugar': 'LUGAR',
   'institucion': 'INSTITUCION',
   'servicio': 'SERVICIO',
-  'emocion': 'EMOCION',
+  'emocion': 'ESTADO',
   'urgencia': 'URGENCIA',
   'tramite': 'TRAMITE',
-  'motivo': 'MOTIVO',
+  'motivo': 'ESTADO',
   'tiempo': 'TIEMPO',
-  'marcador': 'MARCADOR',
-  'interrogativa': 'INTERROGATIVA',
+  // El backend no tiene concepto de cortesía ni de interrogativa: caen en
+  // "desconocidos" y los recupera su regla de cobertura. El cliente sí las
+  // compone, y es su versión la que manda cuando ambas difieren.
+  'marcador': 'DESCONOCIDO',
+  'interrogativa': 'DESCONOCIDO',
 };
 
 /// Lexicón del cliente: glosa → (rol, forma en español).
