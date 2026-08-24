@@ -30,7 +30,7 @@ void main() {
     final bloque =
         RegExp(r'GLOSS_LEXICON = \{(.*?)\n\}', dotAll: true).firstMatch(fuente);
     expect(bloque, isNotNull, reason: 'no se encontró GLOSS_LEXICON');
-    final patron = RegExp(r'"([A-ZÑ_0-9]+)":\s*\{"rol": "[A-Z_]+", "es": "([^"]*)"\}');
+    final patron = RegExp(r'"([A-ZÑ_0-9]+)":\s*\{"rol": "[A-Z_]+", "es": "([^"]*)"[^}]*\}');
     return {
       for (final m in patron.allMatches(bloque!.group(1)!))
         m.group(1)!: m.group(2)!,
@@ -100,5 +100,61 @@ void main() {
           'saldría gramatical pero incompleta: $huerfanos\n'
           'revisa la tabla _roles de tool/sync_vocabulary.dart',
     );
+  });
+
+  test('el servidor recibe los flags persona y agresor para evitar duplicación de sujeto', () {
+    final cliente = File(
+      'lib/core/engines/semantic_engine/local_sentence_assembler.dart',
+    ).readAsStringSync();
+    
+    final patronCliente =
+        RegExp(r"'([A-ZÑ_0-9]+)':\s*_Lex\(_Role\.(\w+),\s*'((?:[^'\\]|\\')*)'\)");
+    final rolesCliente = {
+      for (final m in patronCliente.allMatches(cliente))
+        m.group(1)!: (rol: m.group(2)!, es: m.group(3)!)
+    };
+    
+    final servidor = File('aws/lambda_function.py').readAsStringSync();
+    final bloque =
+        RegExp(r'GLOSS_LEXICON = \{(.*?)\n\}', dotAll: true).firstMatch(servidor);
+    final patronServidor = RegExp(r'"([A-ZÑ_0-9]+)":\s*\{(.*?)\}');
+    final propsServidor = {
+      for (final m in patronServidor.allMatches(bloque!.group(1)!))
+        m.group(1)!: m.group(2)!
+    };
+
+    final fallasPersona = <String>[];
+    final fallasAgresor = <String>[];
+
+    for (final entry in rolesCliente.entries) {
+      final g = entry.key;
+      final rol = entry.value.rol;
+      final es = entry.value.es;
+      final props = propsServidor[g];
+      if (props == null) continue;
+
+      if (rol == 'personaDesc' || rol == 'personaDescPlural') {
+        if (!props.contains('"persona": True')) {
+          fallasPersona.add(g);
+        }
+      } else {
+        if (props.contains('"persona":')) {
+          fallasPersona.add('+$g');
+        }
+      }
+
+      if (rol == 'verboAgresion') {
+        if (!props.contains('"agresor": "$es"')) {
+          fallasAgresor.add(g);
+        }
+      } else {
+        if (props.contains('"agresor":')) {
+          fallasAgresor.add('+$g');
+        }
+      }
+    }
+
+    expect(fallasPersona, isEmpty, reason: 'glosas con rol personaDesc(Plural) sin flag "persona": True, o viceversa');
+    expect(fallasAgresor, isEmpty, reason: 'glosas con rol verboAgresion sin flag "agresor", o viceversa');
   });
 }
