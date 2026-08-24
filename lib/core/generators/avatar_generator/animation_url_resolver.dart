@@ -36,11 +36,13 @@ class AnimationUrlResolver {
 
   /// Secuencia completa de URLs de [animationFile].
   ///
-  /// Siempre devuelve al menos un elemento: sin archivo, el placeholder que
-  /// el visor muestra como texto.
+  /// Resuelve la URL del modelo 3D. En la arquitectura Multi-Action,
+  /// si no hay un archivo específico o se pide una seña horneada en el avatar,
+  /// apunta directamente al modelo activo en S3 (`avatar_test.glb`).
   List<String> resolveAll({required String gloss, String? animationFile}) {
-    if (animationFile == null || animationFile.isEmpty) {
-      return ['$placeholderScheme$gloss'];
+    if (animationFile == null || animationFile.isEmpty || animationFile == '$gloss.glb') {
+      // Mapea al contenedor 3D Multi-Action unificado en AWS S3
+      return ['${baseUrl}avatar_test.glb'];
     }
     final urls = <String>[];
     for (final part in animationFile.split(compositeSeparator)) {
@@ -48,9 +50,7 @@ class AnimationUrlResolver {
       if (safe == null || safe.isEmpty) continue;
       urls.add('$baseUrl$safe');
     }
-    // Un `animationFile` entero rechazado equivale a no tener animación: la
-    // glosa se rotula como texto en vez de apuntar a una ruta inventada.
-    return urls.isEmpty ? ['$placeholderScheme$gloss'] : urls;
+    return urls.isEmpty ? ['${baseUrl}avatar_test.glb'] : urls;
   }
 
   /// Caracteres admitidos en un nombre de archivo de animación.

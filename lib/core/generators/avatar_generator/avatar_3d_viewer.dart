@@ -48,13 +48,15 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   List<String>? _testGlosses;
   List<String> _localUrls = [];
 
-  // Lógica del Visor 3D Continuo
+  // Control de estado
   String _activeViewer = 'A';
   String? _urlA;
   String? _urlB;
   bool _isLoadedA = false;
   bool _isLoadedB = false;
   bool _hasFinishedPlayingCurrent = false;
+
+  AnimationController? _pulseController;
 
   /// Política de descarga de animaciones: allowlist de origen, nombre local
   /// derivado de un hash y tope de tamaño. Ver [AnimationCache].
@@ -70,19 +72,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     _placeholderTimer = null;
   }
 
-  late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
-
   @override
   void initState() {
     super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    )..repeat(reverse: true);
-    _pulseAnimation = Tween<double>(begin: 0.95, end: 1.05).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
 
     // El visor puede montarse con las URLs **ya resueltas**: es justo lo que
     // pasa al abrir el panel del avatar desde un mensaje ya traducido, donde
@@ -365,7 +357,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   @override
   void dispose() {
-    _pulseController.dispose();
+    _pulseController?.dispose();
     super.dispose();
   }
 
