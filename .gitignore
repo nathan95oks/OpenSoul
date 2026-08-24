@@ -57,5 +57,12 @@ node_modules/
 .env.*
 !.env.example
 
+# Salidas locales de tareas puntuales (imágenes generadas, listados de
+# pendientes, recorridos de depuración) — no son parte del código versionado.
+/generadas/
+/imagenes_pendientes.tsv
+/docs/recorrido-lsb_to_text_audio.md
+/docs/recorrido-paso-a-paso-lsb_to_text_audio.md
+
 # Ruta al Flutter SDK local, generada por `flutter build`.
 android/local.properties
