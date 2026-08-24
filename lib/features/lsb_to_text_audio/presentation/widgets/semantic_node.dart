@@ -94,6 +94,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                     SignImage(
                       gloss: widget.card.gloss,
                       semanticIcon: widget.card.semanticIcon,
+                      frames: widget.card.imageFrames,
                       size: 56,
                       color: colorContenido,
                     ),
