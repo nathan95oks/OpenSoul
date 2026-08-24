@@ -48,8 +48,8 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   List<String>? _testGlosses;
   List<String> _localUrls = [];
 
-  // Lógica del Doble Visor
-  String _activeViewer = 'A'; // 'A' o 'B'
+  // Lógica del Visor 3D Continuo
+  String _activeViewer = 'A';
   String? _urlA;
   String? _urlB;
   bool _isLoadedA = false;
@@ -238,22 +238,25 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     if (!mounted) return;
 
     // Si solo hay un elemento, lo reproducimos en bucle en el mismo visor
-    if (_localUrls.length == 1) {
+    if (_localUrls.length <= 1) {
       _hasFinishedPlayingCurrent = false;
       _playViewer(viewerId);
       return;
     }
 
+    _advanceToNextAction();
+  }
+
+  void _advanceToNextAction() {
+    if (!mounted) return;
+    _cancelPlaceholderTimer();
+
     setState(() {
-      _hasFinishedPlayingCurrent = true;
+      _currentIndex = (_currentIndex + 1) % _localUrls.length;
+      _hasFinishedPlayingCurrent = false;
     });
 
-    final nextViewerId = _activeViewer == 'A' ? 'B' : 'A';
-    final isNextLoaded = nextViewerId == 'A' ? _isLoadedA : _isLoadedB;
-
-    if (isNextLoaded) {
-      _transitionTo(nextViewerId);
-    }
+    _playViewer('A');
   }
 
   void _playViewer(String id) {
@@ -266,13 +269,18 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       return;
     }
 
+    final activeGlosses = _testGlosses ?? widget.glosses;
+    final currentGloss = (activeGlosses != null && _currentIndex < activeGlosses.length)
+        ? activeGlosses[_currentIndex]
+        : null;
+
     final controller = id == 'A' ? _controllerA : _controllerB;
     if (controller != null) {
+      final animJs = currentGloss != null ? "document.querySelector('model-viewer').animationName = '$currentGloss';" : "";
       controller.runJavaScript(
-        "document.querySelector('model-viewer').currentTime = 0; document.querySelector('model-viewer').play();"
+        "$animJs document.querySelector('model-viewer').currentTime = 0; document.querySelector('model-viewer').play();"
       ).catchError((e) {
       });
-    } else {
     }
   }
 
@@ -361,17 +369,25 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   Widget _buildModelViewerInstance(String id, String? url) {
     if (url == null || url.startsWith('placeholder://')) return const SizedBox.shrink();
 
+    final activeGlosses = _testGlosses ?? widget.glosses;
+    final currentGloss = (activeGlosses != null && _currentIndex < activeGlosses.length)
+        ? activeGlosses[_currentIndex]
+        : null;
+
     return ModelViewer(
-      key: ValueKey('${id}_$url'), // Recrea el WebView al cambiar el URL
+      key: ValueKey('${id}_$url'), // Mantiene vivo el WebView del modelo sin destruirlo
       src: url,
       alt: 'Avatar LSB',
-      autoPlay: true, // Debe ser true para enlazar la animación al cargarse
+      animationName: currentGloss, // Seña específica (ej: 'HOLA' o 'SI')
+      autoPlay: true,
       autoRotate: false,
       cameraControls: false,
       disableZoom: true,
       backgroundColor: Colors.transparent,
-      cameraTarget: "0m 0.9m 0m",   // Cara / pecho
-      cameraOrbit: "0deg 90deg 3.0m", // Más zoom
+      // Plano medio: Enfoca torso, brazos, manos y rostro
+      cameraTarget: "0m 1.25m 0m",
+      cameraOrbit: "0deg 90deg 1.7m",
+      fieldOfView: "30deg",
       onWebViewCreated: (controller) {
         if (id == 'A') {
           _controllerA = controller;
@@ -391,22 +407,18 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         const modelViewer = document.querySelector('model-viewer');
         
         modelViewer.addEventListener('load', () => {
-          modelViewer.pause();
-          modelViewer.currentTime = 0;
           if (window.ModelViewerChannel) {
             window.ModelViewerChannel.postMessage('loaded');
           }
         });
 
         modelViewer.addEventListener('finished', () => {
-          modelViewer.pause();
           if (window.ModelViewerChannel) {
             window.ModelViewerChannel.postMessage('finished');
           }
         });
 
         modelViewer.addEventListener('loop', () => {
-          modelViewer.pause();
           if (window.ModelViewerChannel) {
             window.ModelViewerChannel.postMessage('finished');
           }
@@ -417,7 +429,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
 
   // ─────────────────────────────────────────────
-  // ESTADO 2: Reproducción en doble visor
+  // ESTADO 2: Reproducción en visor 3D continuo (Multi-Action sin pantalla negra)
   // ─────────────────────────────────────────────
   Widget _buildDualModelViewer() {
     final activeGlosses = _testGlosses ?? widget.glosses;
@@ -425,35 +437,14 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         ? activeGlosses[_currentIndex]
         : '';
 
-    final nextViewerId = _activeViewer == 'A' ? 'B' : 'A';
-    final isNextLoaded = nextViewerId == 'A' ? _isLoadedA : _isLoadedB;
-    final canAdvance = _localUrls.length > 1 && isNextLoaded;
-
     final currentUrl = _currentIndex < _localUrls.length ? _localUrls[_currentIndex] : '';
     final isPlaceholder = currentUrl.startsWith('placeholder://');
 
     return Stack(
       children: [
-        // Visor A
+        // Visor 3D Principal Único y Continuo (Evita parpadeos o pantallas negras)
         Positioned.fill(
-          child: Opacity(
-            opacity: _activeViewer == 'A' ? 1.0 : 0.0,
-            child: IgnorePointer(
-              ignoring: _activeViewer != 'A',
-              child: _buildModelViewerInstance('A', _urlA),
-            ),
-          ),
-        ),
-
-        // Visor B
-        Positioned.fill(
-          child: Opacity(
-            opacity: _activeViewer == 'B' ? 1.0 : 0.0,
-            child: IgnorePointer(
-              ignoring: _activeViewer != 'B',
-              child: _buildModelViewerInstance('B', _urlB),
-            ),
-          ),
+          child: _buildModelViewerInstance('A', _localUrls.isNotEmpty ? _localUrls.first : _urlA),
         ),
 
         // Overlay de Simulación si es Placeholder
@@ -512,31 +503,27 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
             mainAxisSize: MainAxisSize.min,
             children: [
               if (_localUrls.length > 1)
-                AnimatedOpacity(
-                  opacity: canAdvance ? 1.0 : 0.3,
-                  duration: const Duration(milliseconds: 400),
-                  child: GestureDetector(
-                    onTap: canAdvance ? () => _transitionTo(nextViewerId) : null,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 18, vertical: 7),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Text('Siguiente',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600)),
-                          SizedBox(width: 4),
-                          Icon(Icons.skip_next_rounded,
-                              color: Colors.white, size: 16),
-                        ],
-                      ),
+                GestureDetector(
+                  onTap: () => _advanceToNextAction(),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 7),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text('Siguiente',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600)),
+                        SizedBox(width: 4),
+                        Icon(Icons.skip_next_rounded,
+                            color: Colors.white, size: 16),
+                      ],
                     ),
                   ),
                 ),
@@ -562,65 +549,45 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
           ),
         ),
 
-        // Indicador de glosa actual y estado de debug
+        // Indicador de glosa actual y estado
         Positioned(
           top: 14,
           left: 14,
           right: 14,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      currentGloss,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    '${_currentIndex + 1} / ${_localUrls.length}',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
-                      fontSize: 12,
-                    ),
-                  ),
-                  const Spacer(),
-                  // Botón de repetición manual
-                  IconButton(
-                    icon: const Icon(Icons.replay_rounded, color: Colors.white),
-                    tooltip: 'Repetir secuencia',
-                    constraints: const BoxConstraints(),
-                    padding: EdgeInsets.zero,
-                    onPressed: () => _startSequence(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              // DEBUG URL
-              Visibility(
-                visible: false,
-                child: Text(
-                  'DEBUG: Visor=$_activeViewer | Seña=$_currentIndex | LoadedA=$_isLoadedA | LoadedB=$_isLoadedB',
-                  style: const TextStyle(
-                    color: Colors.amber,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 3,
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                child: Text(
+                  currentGloss,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    letterSpacing: 1,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${_currentIndex + 1} / ${_localUrls.length}',
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                  fontSize: 12,
+                ),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.replay_rounded, color: Colors.white),
+                tooltip: 'Repetir secuencia',
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
+                onPressed: () => _startSequence(),
               ),
             ],
           ),
@@ -703,52 +670,65 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   }
 
   // ─────────────────────────────────────────────
-  // ESTADO 4: Reposo / Sin datos aún
+  // ESTADO 4: Reposo / Inicial (Avatar siempre visible en reposo)
   // ─────────────────────────────────────────────
   Widget _buildIdleState() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Stack(
       children: [
-        ScaleTransition(
-          scale: _pulseAnimation,
+        // Avatar 3D cargado de fondo en pose neutra/espera (Nunca pantalla vacía)
+        Positioned.fill(
+          child: ModelViewer(
+            key: const ValueKey('idle_avatar_viewer'),
+            src: '${_s3Base}avatar_test.glb',
+            alt: 'Avatar LSB Reposo',
+            animationName: 'T-Pose', // Pose neutra o quieta exportada
+            autoPlay: false,
+            autoRotate: false,
+            cameraControls: false,
+            disableZoom: true,
+            backgroundColor: Colors.transparent,
+            cameraTarget: "0m 1.25m 0m",
+            cameraOrbit: "0deg 90deg 1.7m",
+            fieldOfView: "30deg",
+          ),
+        ),
+
+        // Overlay suave con información y botones de acción
+        Positioned.fill(
           child: Container(
-            width: 100,
-            height: 100,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: RadialGradient(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
                 colors: [
-                  Colors.deepPurpleAccent.withValues(alpha: 0.3),
                   Colors.transparent,
+                  const Color(0xFF1A1A2E).withValues(alpha: 0.85),
                 ],
               ),
             ),
-            child: Icon(
-              Icons.person_outline_rounded,
-              size: 70,
-              color: Colors.white.withValues(alpha: 0.25),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          'Avatar LSB',
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.5),
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Habla o escribe para ver las señas',
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.3),
-            fontSize: 13,
-          ),
-        ),
-        const SizedBox(height: 16),
-        // ── Botones de prueba offline de desambiguación y simulación ──
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const SizedBox(height: 8),
+                Text(
+                  'Avatar LSB Listo',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.9),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Habla o escribe para ver las señas',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // ── Botones de prueba ──
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -799,7 +779,54 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
               ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () => _startSequence(
+                  overrideUrls: [
+                    '${_s3Base}avatar_test.glb',
+                  ],
+                  overrideGlosses: ['HOLA'],
+                ),
+                icon: const Icon(Icons.touch_app_rounded,
+                    color: Colors.lightGreenAccent, size: 18),
+                label: const Text(
+                  'Probar Seña: Solo HOLA',
+                  style: TextStyle(color: Colors.lightGreenAccent, fontSize: 11, fontWeight: FontWeight.bold),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                      color: Colors.lightGreenAccent.withValues(alpha: 0.7)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () => _startSequence(
+                  overrideUrls: [
+                    '${_s3Base}avatar_test.glb',
+                    '${_s3Base}avatar_test.glb',
+                  ],
+                  overrideGlosses: ['HOLA', 'SI'],
+                ),
+                icon: const Icon(Icons.star_rounded,
+                    color: Colors.cyanAccent, size: 18),
+                label: const Text(
+                  'Probar Secuencia: HOLA + SI (Multi-Action)',
+                  style: TextStyle(color: Colors.cyanAccent, fontSize: 11, fontWeight: FontWeight.bold),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                      color: Colors.cyanAccent.withValues(alpha: 0.7)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                ),
+              ),
             ],
+          ),
+        ),
+              ],
+            ),
           ),
         ),
       ],
