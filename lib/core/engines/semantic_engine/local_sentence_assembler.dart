@@ -39,20 +39,39 @@ class LocalSentenceAssembler {
 
     if (tokens.isEmpty) return '';
 
-    final roles = _classify(tokens);
+    // Dactilología: una racha de letras sueltas es una palabra deletreada, no
+    // ocho glosas. El corpus tiene 208 señas verificadas y no piensa crecer con
+    // invenciones, así que lo que no está en él se representa como lo
+    // representa la propia LSB —letra a letra—, y aquí se vuelve a juntar para
+    // que la declaración diga "cuchillo" y no "C. U. C. H...".
+    final unidos = _joinSpelled(tokens);
 
-    final composed = switch (contextId) {
-      'denuncia_robo' || 'violencia' => _composeIncident(contextId, roles, tokens),
-      'accidente' || 'emergencia' => _composeEmergency(contextId, roles, tokens),
-      'tramite_id' => _composeProcedure(roles, tokens),
-      'orientacion' => _composeGuidance(roles, tokens),
-      'perdida' => _composeLoss(roles, tokens),
-      'otro' => _composeWitness(roles, tokens),
-      _ => _composeGeneric(contextId, roles, tokens),
+    final roles = _classify(unidos);
+
+    // Una interrogativa manda sobre el contexto: si se eligió ¿DÓNDE?, lo que
+    // la persona construye es una pregunta, y ninguno de los composers de
+    // declaración sabe redactarla.
+    final composed = roles.question != null
+        ? _composeQuestion(roles)
+        : switch (contextId) {
+      'denuncia_robo' || 'violencia' => _composeIncident(contextId, roles, unidos),
+      'accidente' || 'emergencia' => _composeEmergency(contextId, roles, unidos),
+      'tramite_id' => _composeProcedure(roles, unidos),
+      'orientacion' => _composeGuidance(roles, unidos),
+      'perdida' => _composeLoss(roles, unidos),
+      'otro' => _composeWitness(roles, unidos),
+      _ => _composeGeneric(contextId, roles, unidos),
     };
 
+    // Las cortesías y respuestas encabezan, en su orden de selección: "Hola.
+    // Sí. Quiero denunciar un robo." Un único punto de inserción para los
+    // siete composers, en vez de repetir la regla en cada uno.
+    final conMarcadores = roles.markers.isEmpty
+        ? composed
+        : '${roles.markers.map(_asSentence).join(' ')} $composed'.trim();
+
     // Regla de cobertura semántica: ninguna glosa seleccionada puede perderse.
-    return _ensureCoverage(composed, tokens);
+    return _ensureCoverage(conMarcadores, unidos);
   }
 
   /// Glosas inherentemente representadas por la 1ª persona ("me", "mi"…),
@@ -250,6 +269,8 @@ class LocalSentenceAssembler {
         case _Role.tramite:            r.procedures.add(e.es); break;
         case _Role.motivo:             r.purposes.add(e.es); break;
         case _Role.tiempo:             r.time ??= e.es; break;
+        case _Role.marcador:           r.markers.add(e.es); break;
+        case _Role.interrogativa:      r.question ??= e.es; break;
       }
     }
     return r;
@@ -275,6 +296,95 @@ class LocalSentenceAssembler {
   // ───────────────────────── Compositores por contexto ────────────────────
 
   /// denuncia_robo / violencia → relato de incidente con agresor.
+  /// Une las rachas de letras sueltas en la palabra que deletrean.
+  ///
+  /// Solo actúa sobre secuencias de dos o más: una letra aislada es una
+  /// inicial legítima y se respeta. Los dígitos no se tocan —"2" es una
+  /// cantidad, no media palabra.
+  List<String> _joinSpelled(List<String> tokens) {
+    final salida = <String>[];
+    var i = 0;
+    while (i < tokens.length) {
+      if (_esLetra(tokens[i])) {
+        var j = i;
+        while (j < tokens.length && _esLetra(tokens[j])) {
+          j++;
+        }
+        if (j - i >= 2) {
+          salida.add(tokens.sublist(i, j).join());
+          i = j;
+          continue;
+        }
+      }
+      salida.add(tokens[i]);
+      i++;
+    }
+    return salida;
+  }
+
+  static bool _esLetra(String g) =>
+      g.length == 1 && RegExp(r'^[A-ZÑ]$').hasMatch(g);
+
+  /// Convierte una forma suelta en oración: mayúscula inicial y punto.
+  String _asSentence(String texto) {
+    if (texto.isEmpty) return texto;
+    final t = texto[0].toUpperCase() + texto.substring(1);
+    return t.endsWith('.') || t.endsWith('?') || t.endsWith('!') ? t : '$t.';
+  }
+
+  /// Redacta una pregunta a partir de la interrogativa y su complemento.
+  ///
+  /// La cópula la decide el complemento: un lugar o una institución *están*,
+  /// lo demás *es*. Sin esa distinción salían preguntas como "¿Dónde es la
+  /// fiscalía?", que es justo el error que delata a una máquina.
+  ///
+  /// Cuando no hay complemento, la interrogativa vale por sí sola: "¿Dónde?"
+  /// es una pregunta legítima en un mostrador, y forzar un objeto inventado
+  /// sería peor que devolverla tal cual.
+  String _composeQuestion(_Roles r) {
+    final interrogativa = r.question!;
+
+    // Cada interrogativa pregunta por una clase de cosa. Sin esta restricción
+    // el composer emparejaba la primera glosa que encontrara y salían
+    // preguntas como "¿Quién es mi motocicleta?": una persona no es un objeto,
+    // y un lugar no responde a "cuándo".
+    final personas = [
+      ...r.perpetrators,
+      ...r.services,
+      if (r.institution != null) r.institution!,
+    ];
+    final lugares = [if (r.place != null) r.place!, if (r.institution != null) r.institution!];
+    final cosas = [...r.objects, ...r.documents, ...r.procedures];
+
+    final (List<String> admitidos, bool esUbicacion) = switch (interrogativa) {
+      'quién' || 'cuántos' => (personas, false),
+      'dónde' => (lugares, true),
+      'cuándo' => ([if (r.time != null) r.time!], false),
+      'qué' || 'cuál' => (cosas, false),
+      _ => (r.procedures, false),
+    };
+
+    if (admitidos.isEmpty) {
+      // La interrogativa sola es una pregunta legítima en un mostrador; el
+      // resto de glosas lo recupera la regla de cobertura.
+      return '¿${_capitalizar(interrogativa)}?';
+    }
+
+    // Los lugares llevan la preposición dentro de su forma porque el resto de
+    // composers la necesita ("...en la calle"). Una pregunta no: sin quitarla
+    // saldría "¿Dónde está en la fiscalía?".
+    final complemento = admitidos.first.startsWith('en ')
+        ? admitidos.first.substring(3)
+        : admitidos.first;
+
+    final copula = esUbicacion ? 'está' : 'es';
+    return '¿${_capitalizar(interrogativa)} $copula $complemento?';
+  }
+
+
+  String _capitalizar(String t) =>
+      t.isEmpty ? t : t[0].toUpperCase() + t.substring(1);
+
   String _composeIncident(String ctx, _Roles r, List<String> tokens) {
     final lead = ctx == 'violencia'
         ? 'Quiero reportar un caso de violencia.'
@@ -931,191 +1041,247 @@ class LocalSentenceAssembler {
   // Espeja los roles del GLOSS_LEXICON del backend para garantizar fidelidad
   // offline. Las claves son las glosas del catálogo (LsbCard.gloss).
   static const Map<String, _Lex> _lexicon = {
-    // Sujetos (1ª persona / familia).
+    // ── Cortesía (5) ──
+    'GRACIAS': _Lex(_Role.marcador, 'gracias'),
+    'HOLA': _Lex(_Role.marcador, 'hola'),
+    'PERMISO': _Lex(_Role.marcador, 'con permiso'),
+    'POR_FAVOR': _Lex(_Role.marcador, 'por favor'),
+    'LO_SIENTO': _Lex(_Role.marcador, 'lo siento'),
+
+    // ── Respuesta (8) ──
+    'ESTOY_BIEN': _Lex(_Role.marcador, 'estoy bien'),
+    'NO': _Lex(_Role.marcador, 'no'),
+    'NO_PUEDO': _Lex(_Role.marcador, 'no puedo'),
+    'NO_SABER': _Lex(_Role.marcador, 'no sé'),
+    'PUEDO': _Lex(_Role.marcador, 'sí puedo'),
+    'SABER': _Lex(_Role.marcador, 'sí sé'),
+    'SI': _Lex(_Role.marcador, 'sí'),
+    'MAS_O_MENOS': _Lex(_Role.marcador, 'más o menos'),
+
+    // ── Preguntas (16) ──
+    'COMO': _Lex(_Role.interrogativa, 'cómo'),
+    'CUAL': _Lex(_Role.interrogativa, 'cuál'),
+    'CUANDO': _Lex(_Role.interrogativa, 'cuándo'),
+    'DONDE': _Lex(_Role.interrogativa, 'dónde'),
+    'EL': _Lex(_Role.sujeto, 'él'),
+    'ELLA': _Lex(_Role.sujeto, 'ella'),
+    'POR_QUE': _Lex(_Role.interrogativa, 'por qué'),
+    'QUE': _Lex(_Role.interrogativa, 'qué'),
+    'QUIEN': _Lex(_Role.interrogativa, 'quién'),
+    'TU': _Lex(_Role.sujeto, 'tú'),
     'YO': _Lex(_Role.sujeto, 'yo'),
-    'FAMILIA': _Lex(_Role.sujeto, 'mi familia'),
-    'HIJO': _Lex(_Role.sujeto, 'mi hijo'),
-    'ESPOSO': _Lex(_Role.sujeto, 'mi esposo'),
-    'MAMA': _Lex(_Role.sujeto, 'mi madre'),
-    'PAPA': _Lex(_Role.sujeto, 'mi padre'),
-    'HERMANO': _Lex(_Role.sujeto, 'mi hermano'),
+    'CUANTOS': _Lex(_Role.interrogativa, 'cuántos'),
+    'ELLOS': _Lex(_Role.sujeto, 'ellos'),
+    'NOSOTROS': _Lex(_Role.sujeto, 'nosotros'),
+    'PARA_QUE': _Lex(_Role.interrogativa, 'para qué'),
+    'USTEDES': _Lex(_Role.sujeto, 'ustedes'),
 
-    // Personas / agresor (3ª persona).
+    // ── Identificación (9) ──
     'HOMBRE': _Lex(_Role.personaDesc, 'un hombre'),
+    'IDENTIDAD': _Lex(_Role.personaDesc, 'mi identidad'),
+    'LADRON': _Lex(_Role.personaDesc, 'un ladrón'),
     'MUJER': _Lex(_Role.personaDesc, 'una mujer'),
-    'JOVEN': _Lex(_Role.personaDesc, 'un joven'),
-    'NIÑO': _Lex(_Role.personaDesc, 'un niño'),
-    'DESCONOCIDO': _Lex(_Role.personaDesc, 'un desconocido'),
+    'NOMBRE': _Lex(_Role.personaDesc, 'mi nombre'),
+    'TESTIGO': _Lex(_Role.personaDesc, 'un testigo'),
     'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
-    // Bug fix #2: DOS/TRES usan role personaDescPlural para que el verbo
-    // concuerde en plural ("me agredieron" no "me agredió").
-    'GRUPO': _Lex(_Role.personaDesc, 'un grupo de personas'),
-    'ADULTO': _Lex(_Role.personaDesc, 'un adulto'),
-    'ABUELO': _Lex(_Role.personaDesc, 'un abuelo'),
-    'SOLO': _Lex(_Role.personaDesc, 'una persona'),
-    'DOS': _Lex(_Role.personaDescPlural, 'dos personas'),
-    'TRES': _Lex(_Role.personaDescPlural, 'tres personas'),
-    'CONOCIDO': _Lex(_Role.personaDesc, 'un conocido'),
+    'MILITAR': _Lex(_Role.personaDesc, 'un militar'),
+    'SOLDADO': _Lex(_Role.personaDesc, 'un soldado'),
 
-    // Rasgos físicos / vestimenta / color.
-    'ALTO': _Lex(_Role.rasgo, 'alto'),
-    'BAJO': _Lex(_Role.rasgo, 'bajo'),
-    'FLACO': _Lex(_Role.rasgo, 'flaco'),
-    'GORDO': _Lex(_Role.rasgo, 'robusto'),
-    'FUERTE': _Lex(_Role.rasgo, 'de contextura fuerte'),
-    'MORENO': _Lex(_Role.rasgo, 'moreno'),
-    'BLANCO_PIEL': _Lex(_Role.rasgo, 'de piel clara'),
-    'PELO_CORTO': _Lex(_Role.rasgo, 'de cabello corto'),
-    'PELO_LARGO': _Lex(_Role.rasgo, 'de cabello largo'),
-    'CALVO': _Lex(_Role.rasgo, 'calvo'),
-    'BARBA': _Lex(_Role.rasgo, 'con barba'),
-    'BIGOTE': _Lex(_Role.rasgo, 'con bigote'),
-    'TATUAJE': _Lex(_Role.rasgo, 'con un tatuaje'),
-    'CICATRIZ': _Lex(_Role.rasgo, 'con una cicatriz'),
-    'LENTES': _Lex(_Role.rasgo, 'con lentes'),
-    'GORRA': _Lex(_Role.rasgo, 'con gorra'),
-    'CAPUCHA': _Lex(_Role.rasgo, 'con capucha'),
-    'CHOMPA': _Lex(_Role.rasgo, 'con chompa'),
-    'CASCO': _Lex(_Role.rasgo, 'con casco'),
-    'CAMISA': _Lex(_Role.rasgo, 'con camisa'),
-    'PANTALON': _Lex(_Role.rasgo, 'con pantalón'),
-    'ZAPATOS': _Lex(_Role.rasgo, 'con zapatos'),
-    'MOCHILA_USADA': _Lex(_Role.rasgo, 'con una mochila'),
-    'NEGRO': _Lex(_Role.rasgo, 'de color negro'),
-    'BLANCO': _Lex(_Role.rasgo, 'de color blanco'),
-    'AZUL': _Lex(_Role.rasgo, 'de color azul'),
-    'ROJO': _Lex(_Role.rasgo, 'de color rojo'),
-    'GRIS': _Lex(_Role.rasgo, 'de color gris'),
-    'VERDE': _Lex(_Role.rasgo, 'de color verde'),
-    'OSCURO': _Lex(_Role.rasgo, 'de color oscuro'),
-    'CLARO': _Lex(_Role.rasgo, 'de color claro'),
-
-    // Verbos de agresión (3ª persona, se antepone "me").
-    'ROBAR': _Lex(_Role.verboAgresion, 'robó'),
-    'PEGAR': _Lex(_Role.verboAgresion, 'golpeó'),
-    'AMENAZAR': _Lex(_Role.verboAgresion, 'amenazó'),
-    'EMPUJAR': _Lex(_Role.verboAgresion, 'empujó'),
-    'GRITAR': _Lex(_Role.verboAgresion, 'gritó'),
-    'QUITAR': _Lex(_Role.verboAgresion, 'quitó'),
-    'PERSEGUIR': _Lex(_Role.verboAgresion, 'persiguió'),
-    'ASALTAR': _Lex(_Role.verboAgresion, 'asaltó'),
-    'ACOSAR': _Lex(_Role.verboAgresion, 'acosó'),
-    'ABUSO': _Lex(_Role.verboAgresion, 'agredió sexualmente'),
-    'SECUESTRAR': _Lex(_Role.verboAgresion, 'secuestró'),
-
-    // Verbos de acción / trámite (1ª persona).
-    'TRAMITAR': _Lex(_Role.verboAccion, 'quiero tramitar'),
-    'PEDIR': _Lex(_Role.verboAccion, 'quiero solicitar'),
-    'CONSULTAR': _Lex(_Role.verboAccion, 'quiero consultar'),
-    'NECESITAR': _Lex(_Role.verboAccion, 'necesito'),
-    'PAGAR': _Lex(_Role.verboAccion, 'quiero pagar'),
-    'RENOVAR': _Lex(_Role.verboAccion, 'quiero renovar'),
-    'RECOGER': _Lex(_Role.verboAccion, 'quiero recoger'),
-    'DAR': _Lex(_Role.verboAccion, 'quiero entregar'),
-    'PERDER': _Lex(_Role.verboAccion, 'perdí'),
-    'CORREGIR': _Lex(_Role.verboAccion, 'quiero corregir'),
-
-    // Armas.
-    'CUCHILLO': _Lex(_Role.arma, 'con un cuchillo'),
-    'PISTOLA': _Lex(_Role.arma, 'con una pistola'),
-
-    // Objetos.
-    'CELULAR': _Lex(_Role.objeto, 'mi celular'),
-    'DINERO': _Lex(_Role.objeto, 'mi dinero'),
-    'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
-    'BOLSA': _Lex(_Role.objeto, 'mi bolsa'),
-    'LLAVE': _Lex(_Role.objeto, 'mis llaves'),
-    'AUTO': _Lex(_Role.objeto, 'mi auto'),
-    'MOTOCICLETA': _Lex(_Role.objeto, 'mi motocicleta'),
-    'BILLETERA': _Lex(_Role.objeto, 'mi billetera'),
-    'TARJETA': _Lex(_Role.objeto, 'mi tarjeta bancaria'),
-    'RELOJ': _Lex(_Role.objeto, 'mi reloj'),
-    'CADENA': _Lex(_Role.objeto, 'mi cadena'),
-    'ANILLO': _Lex(_Role.objeto, 'mi anillo'),
-    'COLLAR': _Lex(_Role.objeto, 'mi collar'),
-    'ARETES': _Lex(_Role.objeto, 'mis aretes'),
-    'COMPUTADORA': _Lex(_Role.objeto, 'mi computadora'),
-    'AUDIFONOS': _Lex(_Role.objeto, 'mis audífonos'),
-    'LENTES_SOL': _Lex(_Role.objeto, 'mis lentes de sol'),
-    'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
-
-    // Documentos.
-    'CARNET': _Lex(_Role.documento, 'mi carnet de identidad'),
-    'PAPEL': _Lex(_Role.documento, 'mi documento'),
-    'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
-    'PARTIDA_NACIMIENTO': _Lex(_Role.documento, 'mi partida de nacimiento'),
-    'LICENCIA': _Lex(_Role.documento, 'mi licencia de conducir'),
-    'FACTURA': _Lex(_Role.documento, 'una factura'),
-    'ANTECEDENTES': _Lex(_Role.documento, 'mi certificado de antecedentes penales'),
-    'COPIA_DENUNCIA': _Lex(_Role.documento, 'una copia de la denuncia'),
-    'COPIA_SENTENCIA': _Lex(_Role.documento, 'una copia de la sentencia'),
-    'PODER': _Lex(_Role.documento, 'un poder notarial'),
-    'DECLARACION_JURADA': _Lex(_Role.documento, 'una declaración jurada'),
-
-    // Lugares.
-    'CALLE': _Lex(_Role.lugar, 'en la calle'),
-    'CASA': _Lex(_Role.lugar, 'en mi casa'),
-    'MERCADO': _Lex(_Role.lugar, 'en el mercado'),
-    'PARADA': _Lex(_Role.lugar, 'en la parada'),
-    'MICRO': _Lex(_Role.lugar, 'en el micro'),
-    'PARQUE': _Lex(_Role.lugar, 'en el parque'),
-    'TRABAJO': _Lex(_Role.lugar, 'en mi trabajo'),
-    'CAJERO': _Lex(_Role.lugar, 'en el cajero automático'),
-    'BANCO': _Lex(_Role.lugar, 'en el banco'),
-    'TAXI': _Lex(_Role.lugar, 'en un taxi'),
-    'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
-    'PUENTE': _Lex(_Role.lugar, 'en el puente'),
-
-    // Instituciones.
-    'POLICIA': _Lex(_Role.institucion, 'en la policía'),
-    'DEFENSORIA': _Lex(_Role.institucion, 'en la defensoría'),
-    'SEGIP': _Lex(_Role.institucion, 'en el SEGIP'),
-    'HOSPITAL': _Lex(_Role.institucion, 'en el hospital'),
-    'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
-    'REGISTRO_CIVIL': _Lex(_Role.institucion, 'en el registro civil'),
-    'FISCAL': _Lex(_Role.institucion, 'en la fiscalía'),
-    'JUZGADO': _Lex(_Role.institucion, 'en el juzgado'),
-    'NOTARIA': _Lex(_Role.institucion, 'en la notaría'),
-
-    // Servicios.
-    'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de señas'),
-    'AMBULANCIA': _Lex(_Role.servicio, 'una ambulancia'),
-    'DOCTOR': _Lex(_Role.servicio, 'un médico'),
+    // ── Instituciones (16) ──
     'ABOGADO': _Lex(_Role.servicio, 'un abogado'),
-    'INFORMACION': _Lex(_Role.servicio, 'información'),
-    'ORIENTACION': _Lex(_Role.servicio, 'orientación'),
+    'AUTORIDAD': _Lex(_Role.institucion, 'en la autoridad'),
+    'FISCAL': _Lex(_Role.institucion, 'en la fiscalía'),
+    'INSTITUCION': _Lex(_Role.institucion, 'en la institución'),
+    'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de señas'),
+    'JUEZ': _Lex(_Role.institucion, 'en el juez'),
+    'OFICIAL': _Lex(_Role.institucion, 'en el oficial'),
+    'ORGANO_JUDICIAL': _Lex(_Role.institucion, 'en el órgano judicial'),
+    'POLICIA': _Lex(_Role.institucion, 'en la policía'),
+    'ASISTENTE': _Lex(_Role.servicio, 'un asistente'),
+    'COORDINADOR': _Lex(_Role.servicio, 'un coordinador'),
+    'DOCTOR': _Lex(_Role.servicio, 'un doctor'),
+    'ENFERMERA': _Lex(_Role.servicio, 'una enfermera'),
+    'GOBIERNO': _Lex(_Role.institucion, 'en el gobierno'),
+    'MINISTERIO': _Lex(_Role.institucion, 'en el ministerio'),
+    'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
 
-    // Emociones / estado.
-    'MIEDO': _Lex(_Role.emocion, 'tengo miedo'),
-    'ENOJO': _Lex(_Role.emocion, 'estoy enojado'),
-    'TRISTE': _Lex(_Role.emocion, 'estoy triste'),
-    'ASUSTADO': _Lex(_Role.emocion, 'estoy asustado'),
-    'NERVIOSO': _Lex(_Role.emocion, 'estoy nervioso'),
-    'ENFERMEDAD': _Lex(_Role.emocion, 'estoy enfermo'),
-    'DOLOR': _Lex(_Role.emocion, 'siento dolor'),
-    'CONFUNDIDO': _Lex(_Role.emocion, 'estoy confundido'),
+    // ── Conceptos jurídicos (17) ──
+    'INVESTIGACION': _Lex(_Role.tramite, 'una investigación'),
+    'JUICIO': _Lex(_Role.tramite, 'un juicio'),
+    'JUSTICIA': _Lex(_Role.documento, 'la justicia'),
+    'LEY': _Lex(_Role.documento, 'la ley'),
+    'RESOLUCION': _Lex(_Role.documento, 'la resolución'),
+    'TESTIMONIO': _Lex(_Role.documento, 'mi testimonio'),
+    'TRAMITE': _Lex(_Role.tramite, 'un trámite'),
+    'ACUERDO_SOCIAL': _Lex(_Role.documento, 'un acuerdo'),
+    'ARTICULO': _Lex(_Role.documento, 'el artículo'),
+    'CONFIRMACION': _Lex(_Role.documento, 'la confirmación'),
+    'CONTEXTO': _Lex(_Role.documento, 'el contexto'),
+    'ESTADO': _Lex(_Role.documento, 'el estado del trámite'),
+    'NORMA': _Lex(_Role.documento, 'la norma'),
+    'PODER': _Lex(_Role.documento, 'un poder notarial'),
+    'REGLAMENTO': _Lex(_Role.documento, 'el reglamento'),
+    'DECRETO_SUPREMO': _Lex(_Role.documento, 'el decreto supremo'),
+    'PERSONERIA_JURIDICA': _Lex(_Role.documento, 'la personería jurídica'),
 
-    // Urgencia.
-    'URGENTE': _Lex(_Role.urgencia, 'es urgente'),
-    'EMERGENCIA': _Lex(_Role.urgencia, 'es una emergencia'),
-    'AYUDA': _Lex(_Role.urgencia, 'necesito ayuda'),
+    // ── Acciones (25) ──
+    'ANOTAR': _Lex(_Role.verboAccion, 'quiero anotar'),
+    'AVISAR': _Lex(_Role.verboAccion, 'quiero avisar'),
+    'ESCRIBIR': _Lex(_Role.verboAccion, 'quiero escribir'),
+    'IDENTIFICAR': _Lex(_Role.verboAccion, 'quiero identificar'),
+    'MOSTRAR': _Lex(_Role.verboAccion, 'quiero mostrar'),
+    'NARRAR': _Lex(_Role.verboAccion, 'quiero narrar'),
+    'OBSERVAR': _Lex(_Role.verboAccion, 'quiero observar'),
+    'PEDIR': _Lex(_Role.verboAccion, 'quiero solicitar'),
+    'PRESENTAR': _Lex(_Role.verboAccion, 'quiero presentar'),
+    'PROTEGER': _Lex(_Role.verboAccion, 'necesito protección'),
+    'QUEJAR': _Lex(_Role.verboAccion, 'quiero presentar una queja'),
+    'RECONOCER': _Lex(_Role.verboAccion, 'quiero reconocer'),
+    'ACOMPANAR': _Lex(_Role.verboAccion, 'necesito que me acompañen'),
+    'CONFESAR': _Lex(_Role.verboAccion, 'quiero confesar'),
+    'COORDINAR': _Lex(_Role.verboAccion, 'quiero coordinar'),
+    'COPIAR': _Lex(_Role.verboAccion, 'quiero una copia'),
+    'CUMPLIR': _Lex(_Role.verboAccion, 'quiero cumplir'),
+    'DECIDIR': _Lex(_Role.verboAccion, 'quiero decidir'),
+    'EXIGIR': _Lex(_Role.verboAccion, 'quiero exigir'),
+    'GESTIONAR': _Lex(_Role.verboAccion, 'quiero gestionar'),
+    'JURAR': _Lex(_Role.verboAccion, 'quiero jurar'),
+    'RECOGER': _Lex(_Role.verboAccion, 'quiero recoger'),
+    'SOLUCIONAR': _Lex(_Role.verboAccion, 'quiero solucionar'),
+    'TRATAR': _Lex(_Role.verboAccion, 'quiero tratar'),
+    'ADMINISTRAR': _Lex(_Role.verboAccion, 'quiero administrar'),
 
-    // Motivo / propósito del trámite (a qué se destina el documento).
-    'DENUNCIA': _Lex(_Role.motivo, 'una denuncia'),
-    'CONSULTA': _Lex(_Role.motivo, 'una consulta'),
-    'QUEJAR': _Lex(_Role.motivo, 'un reclamo'),
-    // Trámites (tipo de gestión).
-    'RENOVACION': _Lex(_Role.tramite, 'una renovación'),
-    'PAGO': _Lex(_Role.tramite, 'un pago'),
-    'DUPLICADO': _Lex(_Role.tramite, 'un duplicado'),
+    // ── Hechos y urgencia (18) ──
+    'ABUSAR': _Lex(_Role.verboAgresion, 'abusó sexualmente'),
+    'ACCIDENTE': _Lex(_Role.urgencia, 'hubo un accidente'),
+    'AMENAZAR': _Lex(_Role.verboAgresion, 'amenazó'),
+    'ARRESTAR': _Lex(_Role.verboAgresion, 'arrestó'),
+    'ASISTENCIA': _Lex(_Role.urgencia, 'necesito asistencia'),
+    'AUXILIO': _Lex(_Role.urgencia, 'necesito auxilio'),
+    'DANAR': _Lex(_Role.verboAgresion, 'dañó'),
+    'DISCRIMINACION': _Lex(_Role.verboAgresion, 'discriminó'),
+    'MALTRATAR': _Lex(_Role.verboAgresion, 'maltrató'),
+    'PARAR': _Lex(_Role.verboAgresion, 'se detuvo'),
+    'ROBAR': _Lex(_Role.verboAgresion, 'robó'),
+    'SALVAR': _Lex(_Role.verboAgresion, 'me salvó'),
+    'VIOLENCIA': _Lex(_Role.verboAgresion, 'ejerció violencia'),
+    'CORRER': _Lex(_Role.verboAgresion, 'salió corriendo'),
+    'CRISIS': _Lex(_Role.urgencia, 'es una crisis'),
+    'HERIDA': _Lex(_Role.urgencia, 'tengo una herida'),
+    'SOBORNO': _Lex(_Role.verboAgresion, 'ofreció un soborno'),
+    'VIOLACION': _Lex(_Role.verboAgresion, 'violó'),
 
-    // Tiempo.
-    'HOY': _Lex(_Role.tiempo, 'hoy'),
+    // ── Descripción (17) ──
+    'CORRECTO': _Lex(_Role.rasgo, 'correcto'),
+    'PELIGROSO': _Lex(_Role.rasgo, 'peligroso'),
+    'AMARILLO': _Lex(_Role.rasgo, 'de color amarillo'),
+    'AZUL': _Lex(_Role.rasgo, 'de color azul'),
+    'BLANCO': _Lex(_Role.rasgo, 'de color blanco'),
+    'CAFE': _Lex(_Role.rasgo, 'de color café'),
+    'DELGADO': _Lex(_Role.rasgo, 'delgado'),
+    'INOCENTE': _Lex(_Role.rasgo, 'inocente'),
+    'NEGRO': _Lex(_Role.rasgo, 'de color negro'),
+    'PRESO': _Lex(_Role.rasgo, 'detenido'),
+    'ROJO': _Lex(_Role.rasgo, 'de color rojo'),
+    'VERDE': _Lex(_Role.rasgo, 'de color verde'),
+    'CELESTE': _Lex(_Role.rasgo, 'de color celeste'),
+    'GRUESO': _Lex(_Role.rasgo, 'grueso'),
+    'LILA': _Lex(_Role.rasgo, 'de color lila'),
+    'NARANJA': _Lex(_Role.rasgo, 'de color naranja'),
+    'ROSADO': _Lex(_Role.rasgo, 'de color rosado'),
+
+    // ── Estado y emoción (9) ──
+    'CONFUSION': _Lex(_Role.emocion, 'estoy confundido'),
+    'MAL': _Lex(_Role.emocion, 'me siento mal'),
+    'PROBLEMA': _Lex(_Role.motivo, 'por un problema'),
+    'SITUACION': _Lex(_Role.motivo, 'por esta situación'),
+    'TEMOR': _Lex(_Role.emocion, 'siento temor'),
+    'CONFIANZA': _Lex(_Role.emocion, 'tengo confianza'),
+    'FALTA': _Lex(_Role.motivo, 'por una falta'),
+    'RAZON': _Lex(_Role.motivo, 'por esa razón'),
+    'VERGUENZA': _Lex(_Role.emocion, 'siento vergüenza'),
+
+    // ── Tiempo (14) ──
     'AHORA': _Lex(_Role.tiempo, 'ahora mismo'),
     'AYER': _Lex(_Role.tiempo, 'ayer'),
-    'MAÑANA': _Lex(_Role.tiempo, 'por la mañana'),
-    'TARDE': _Lex(_Role.tiempo, 'por la tarde'),
-    'NOCHE': _Lex(_Role.tiempo, 'por la noche'),
+    'DIA': _Lex(_Role.tiempo, 'ese día'),
+    'FECHA': _Lex(_Role.tiempo, 'en esa fecha'),
+    'HORA': _Lex(_Role.tiempo, 'hace una hora'),
+    'HOY': _Lex(_Role.tiempo, 'hoy'),
+    'MANANA': _Lex(_Role.tiempo, 'mañana'),
+    'MINUTO': _Lex(_Role.tiempo, 'hace unos minutos'),
+    'ANO': _Lex(_Role.tiempo, 'este año'),
+    'ANTEAYER': _Lex(_Role.tiempo, 'anteayer'),
+    'MES': _Lex(_Role.tiempo, 'este mes'),
+    'SEGUNDO': _Lex(_Role.tiempo, 'hace un segundo'),
+    'SEMANA': _Lex(_Role.tiempo, 'esta semana'),
+    'PASADO_MANANA': _Lex(_Role.tiempo, 'pasado mañana'),
+
+    // ── Lugares (12) ──
+    'CALLE': _Lex(_Role.lugar, 'en la calle'),
+    'CASA': _Lex(_Role.lugar, 'en mi casa'),
+    'DIRECCION': _Lex(_Role.lugar, 'en esa dirección'),
+    'HOSPITAL': _Lex(_Role.lugar, 'en el hospital'),
+    'AVENIDA': _Lex(_Role.lugar, 'en la avenida'),
+    'CARCEL': _Lex(_Role.lugar, 'en la cárcel'),
+    'COCHABAMBA': _Lex(_Role.lugar, 'en Cochabamba'),
+    'FARMACIA': _Lex(_Role.lugar, 'en la farmacia'),
+    'MERCADO': _Lex(_Role.lugar, 'en el mercado'),
+    'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
+    'UBICACION_GPS': _Lex(_Role.lugar, 'en esta ubicación'),
+    'AEROPUERTO': _Lex(_Role.lugar, 'en el aeropuerto'),
+
+    // ── Documentos (15) ──
+    'DINERO': _Lex(_Role.objeto, 'mi dinero'),
+    'FORMULARIO': _Lex(_Role.documento, 'el formulario'),
+    'LICENCIA_DECONDUCIR': _Lex(_Role.documento, 'mi licencia de conducir'),
+    'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
+    'PAPEL': _Lex(_Role.documento, 'el documento'),
+    'TELEFONO': _Lex(_Role.objeto, 'mi teléfono'),
+    'TEXTO': _Lex(_Role.documento, 'el texto'),
+    'ARCHIVADOR': _Lex(_Role.documento, 'el archivador'),
+    'CARPETA': _Lex(_Role.documento, 'la carpeta'),
+    'CARTA': _Lex(_Role.documento, 'la carta'),
+    'FOTOCOPIA': _Lex(_Role.documento, 'una fotocopia'),
+    'LICENCIA': _Lex(_Role.documento, 'mi licencia'),
+    'PASAPORTE': _Lex(_Role.documento, 'mi pasaporte'),
+    'SELLO': _Lex(_Role.documento, 'el sello'),
+    'TITULO': _Lex(_Role.documento, 'mi título'),
+
+    // ── Transporte (8) ──
+    'AUTO': _Lex(_Role.objeto, 'mi auto'),
+    'MICRO': _Lex(_Role.objeto, 'el micro'),
+    'MOTOCICLETA': _Lex(_Role.objeto, 'mi motocicleta'),
+    'TAXI': _Lex(_Role.objeto, 'el taxi'),
+    'TRUFI': _Lex(_Role.objeto, 'el trufi'),
+    'AVION': _Lex(_Role.objeto, 'el avión'),
+    'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
+    'TREN': _Lex(_Role.objeto, 'el tren'),
+
+    // ── Comunicación (7) ──
+    'ACEPTAR': _Lex(_Role.verboAccion, 'acepto'),
+    'ATENDER': _Lex(_Role.verboAccion, 'necesito que me atiendan'),
+    'AYUDAR': _Lex(_Role.verboAccion, 'necesito ayuda'),
+    'COMPRENDER': _Lex(_Role.verboAccion, 'quiero comprender'),
+    'HABLAR': _Lex(_Role.verboAccion, 'quiero hablar'),
+    'RECHAZAR': _Lex(_Role.verboAccion, 'rechazo'),
+    'RESPONDER': _Lex(_Role.verboAccion, 'quiero responder'),
+
+    // ── Comunicación digital (4) ──
+    'VIDEOLLAMADA': _Lex(_Role.objeto, 'una videollamada'),
+    'WHATSAPP': _Lex(_Role.objeto, 'WhatsApp'),
+    'WIFI': _Lex(_Role.objeto, 'wifi'),
+    'ZOOM': _Lex(_Role.objeto, 'Zoom'),
+
+    // ── Integridad (8) ──
+    'AUTONOMIA': _Lex(_Role.motivo, 'autónomo'),
+    'COMPROMISO': _Lex(_Role.motivo, 'comprometido'),
+    'CORRUPTO': _Lex(_Role.rasgo, 'corrupto'),
+    'DIGNIDAD': _Lex(_Role.rasgo, 'digno'),
+    'FIRME': _Lex(_Role.rasgo, 'firme'),
+    'GARANTE': _Lex(_Role.motivo, 'garante'),
+    'HONESTIDAD': _Lex(_Role.rasgo, 'honesto'),
+    'ETICA': _Lex(_Role.rasgo, 'ético'),
   };
 }
 
@@ -1137,6 +1303,18 @@ enum _Role {
   tramite,
   motivo,
   tiempo,
+  /// Fórmula de cortesía o respuesta suelta (HOLA, GRACIAS, SÍ, NO PUEDO).
+  ///
+  /// No ocupa lugar en la oración: no es sujeto, ni verbo, ni complemento.
+  /// Se antepone como frase independiente, que es como funciona en el
+  /// diálogo real —quien saluda no está narrando todavía.
+  marcador,
+
+  /// Palabra interrogativa (¿QUIÉN?, ¿DÓNDE?, ¿CUÁNDO?).
+  ///
+  /// Cambia la naturaleza de la salida: con una de estas, lo que se compone
+  /// deja de ser una declaración y pasa a ser una pregunta.
+  interrogativa,
 }
 
 class _Lex {
@@ -1169,6 +1347,12 @@ class _Roles {
   final List<String> procedures = [];
   final List<String> purposes = [];
   final List<String> unknown = [];
+
+  /// Cortesías y respuestas, en el orden en que se eligieron.
+  final List<String> markers = [];
+
+  /// Palabra interrogativa. Su presencia convierte la salida en pregunta.
+  String? question;
 
   /// El sujeto es plural SÓLO cuando se eligió una cantidad explícita
   /// (DOS/TRES → [perpetratorPlural]). Varios descriptores de persona

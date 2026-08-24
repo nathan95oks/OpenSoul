@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/core/di/core_providers.dart';
 import 'package:lsb_legal_app/features/dictionary_proposals/presentation/widgets/propose_sign_sheet.dart';
+import '../providers/sign_images_provider.dart';
 import '../providers/cards_flow_session.dart';
 import '../providers/sentence_provider.dart';
 import '../providers/semantic_zones_provider.dart';
@@ -94,6 +95,21 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       actions: [
+        // Mostrar u ocultar la imagen de la seña en cada tarjeta. Quien ya
+        // reconoce las señas lee más rápido una cuadrícula de palabras, y sin
+        // imagen caben más opciones en pantalla. La elección se recuerda.
+        Builder(builder: (_) {
+          final conImagen = ref.watch(signImagesEnabledProvider);
+          return IconButton(
+            icon: Icon(
+              conImagen ? Icons.image : Icons.image_not_supported_outlined,
+              color: AppTheme.brandPrimary,
+            ),
+            tooltip: conImagen ? 'Ocultar imágenes' : 'Mostrar imágenes',
+            onPressed: () =>
+                ref.read(signImagesEnabledProvider.notifier).alternar(),
+          );
+        }),
         // Diccionario evolutivo (Fase 3): cualquier palabra que falte en el
         // catálogo puede proponerse; queda pendiente de validación.
         IconButton(

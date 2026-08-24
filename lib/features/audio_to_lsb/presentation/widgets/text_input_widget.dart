@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import '../../../../app/theme.dart';
 import '../controllers/audio_translation_controller.dart';
 
 class TextInputWidget extends ConsumerStatefulWidget {
@@ -12,10 +13,16 @@ class TextInputWidget extends ConsumerStatefulWidget {
   /// distinguir el canal de entrada (voz vs. texto) sin duplicar el widget.
   final Function(String)? onSpeechSubmit;
 
+  /// Texto de ayuda del campo. El widget lo comparten el módulo de voz y el
+  /// chat, y cada uno pide algo distinto a quien escribe, así que la etiqueta
+  /// es del llamador y no del widget.
+  final String hintText;
+
   const TextInputWidget({
     super.key,
     required this.onSubmit,
     this.onSpeechSubmit,
+    this.hintText = 'Ingresar texto',
   });
 
   @override
@@ -176,11 +183,11 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
               controller: _controller,
               enabled: !_isRecording,
               style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                hintText: "Escribe o usa el micrófono...",
-                hintStyle: TextStyle(color: Colors.white54),
+              decoration: InputDecoration(
+                hintText: widget.hintText,
+                hintStyle: const TextStyle(color: Colors.white54),
                 border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 14),
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
               onSubmitted: (_) => _submit(),
             ),
@@ -197,7 +204,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                   boxShadow: _isRecording
                       ? [
                           BoxShadow(
-                            color: Colors.redAccent.withValues(alpha: 0.3),
+                            color: AppTheme.errorDark.withValues(alpha: 0.3),
                             spreadRadius: _animationController.value * 6,
                             blurRadius: 8,
                           )
@@ -207,7 +214,8 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                 child: IconButton(
                   icon: Icon(
                     _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-                    color: _isRecording ? Colors.redAccent : const Color(0xFFFFD700),
+                    color:
+                        _isRecording ? AppTheme.errorDark : AppTheme.brandLight,
                   ),
                   onPressed: _toggleRecording,
                   tooltip: _isRecording ? 'Detener grabación' : 'Grabar voz',
@@ -217,7 +225,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           ),
           const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.send_rounded, color: Color(0xFFFFD700)),
+            icon: const Icon(Icons.send_rounded, color: AppTheme.brandLight),
             onPressed: _submit,
             tooltip: 'Enviar mensaje',
           ),

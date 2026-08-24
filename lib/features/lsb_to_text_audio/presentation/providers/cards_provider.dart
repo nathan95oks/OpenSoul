@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/cards_repository.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_cards_by_category_usecase.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_categories_usecase.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
 import 'context_provider.dart';
 import 'semantic_zones_provider.dart';
 import 'sentence_provider.dart';
@@ -84,7 +85,52 @@ const int _kMaxGuidedAnswers = 12;
 /// 4. Si el usuario activó manualmente una categoría desde el filtro
 ///    avanzado, se respeta esa elección y se devuelve la categoría
 ///    completa (modo libre para usuarios avanzados).
+/// Paso propuesto por el modelo para el estado actual del relato.
+///
+/// El orden determinista de [_localCandidates] entra como candidatas y el
+/// modelo elige y ordena dentro de ellas. Si no hay red, si el backend falla o
+/// si el modelo devuelve algo que no estaba en la lista, esto queda vacío y el
+/// flujo sigue con el orden local: la sugerencia mejora la pantalla, no es
+/// condición para declarar.
+final generatedStepProvider = FutureProvider<GeneratedStep>((ref) async {
+  final context = ref.watch(contextProvider);
+  if (context == null) return GeneratedStep.vacio;
+
+  final candidatas = await ref.watch(_localCandidatesProvider.future);
+  if (candidatas.isEmpty) return GeneratedStep.vacio;
+
+  final pendiente = ref.watch(pendingReplyProvider);
+
+  return ref.read(suggestionDataSourceProvider).suggest(
+        contextId: context.id,
+        selected: ref.watch(sentenceProvider),
+        candidates: [for (final c in candidatas) c.gloss],
+        replyingTo: pendiente?.question,
+      );
+});
+
+/// Tarjetas del paso actual: las que propone el modelo, o el orden local.
 final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
+  final locales = await ref.watch(_localCandidatesProvider.future);
+
+  final generado = await ref.watch(generatedStepProvider.future);
+  if (generado.isEmpty) return locales;
+
+  // Se reordenan las tarjetas locales según la propuesta. No se construyen
+  // tarjetas nuevas: lo que se muestra sale siempre del catálogo, con su
+  // ícono, su imagen y su categoría.
+  final porGlosa = {for (final c in locales) c.gloss: c};
+  final ordenadas = [
+    for (final g in generado.options)
+      if (porGlosa.containsKey(g)) porGlosa[g]!,
+  ];
+  return ordenadas.isEmpty ? locales : ordenadas;
+});
+
+/// Orden determinista de siempre: filtro por zona, contexto y cadena de
+/// sugerencias del catálogo. Es la base sobre la que el modelo decide y el
+/// respaldo cuando no hay modelo.
+final _localCandidatesProvider = FutureProvider<List<LsbCard>>((ref) async {
   final category = ref.watch(currentCategoryProvider);
   final context = ref.watch(contextProvider);
   final zonesState = ref.watch(semanticZonesProvider);

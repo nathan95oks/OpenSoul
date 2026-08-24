@@ -197,7 +197,7 @@ class DeclarationResultScreen extends ConsumerWidget {
                     // del que esta persona ya se había salido.
                     if (servesConversation) ...[
                       _FullWidthBtn(
-                        label: 'Enviar a la conversación',
+                        label: 'Enviar al chat',
                         icon: Icons.forum_outlined,
                         filled: true,
                         onTap: () => _sendToConversation(context, ref, result),
