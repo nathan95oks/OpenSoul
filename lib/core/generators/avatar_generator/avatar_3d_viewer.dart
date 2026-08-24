@@ -269,6 +269,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
     if (_localUrls.length <= 1) {
       _hasFinishedPlayingCurrent = false;
       _playViewer(viewerId);
+    }
     // Última seña de la frase: el avatar se detiene y queda inactivo.
     //
     // Antes se repetía indefinidamente —la secuencia de un solo elemento
