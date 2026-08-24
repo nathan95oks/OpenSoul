@@ -11,40 +11,51 @@ void main() {
   const asm = LocalSentenceAssembler();
 
   // Casos por contexto: mínimos, medios, complejos y selección múltiple.
+  // Todos los casos usan **solo** vocabulario del corpus verificado. Lo que el
+  // corpus no trae —un arma, una sigla institucional— no se inventa: se
+  // deletrea, que es lo que hace la LSB y lo que el sistema ahora soporta.
   final cases = <(String, List<String>)>[
     // robo
     ('denuncia_robo', ['ROBAR']),
-    ('denuncia_robo', ['HOMBRE', 'ROBAR', 'CELULAR']),
-    ('denuncia_robo', ['HOMBRE', 'ALTO', 'TATUAJE', 'ROBAR', 'CELULAR', 'CALLE', 'NOCHE']),
-    ('denuncia_robo', ['ROBAR', 'CELULAR', 'DINERO', 'POLICIA', 'MIEDO', 'HOY']),
-    // violencia (ejemplos del usuario)
+    ('denuncia_robo', ['HOMBRE', 'ROBAR', 'TELEFONO']),
+    ('denuncia_robo', ['HOMBRE', 'ROBAR', 'TELEFONO', 'CALLE', 'AYER']),
+    ('denuncia_robo', ['ROBAR', 'TELEFONO', 'DINERO', 'POLICIA', 'TEMOR', 'HOY']),
+    // robo con arma deletreada: CUCHILLO no está en el corpus
+    ('denuncia_robo',
+        ['HOMBRE', 'ROBAR', 'TELEFONO', 'C', 'U', 'C', 'H', 'I', 'L', 'L', 'O']),
+    // violencia
     ('violencia', ['AMENAZAR']),
-    ('violencia', ['AMENAZAR', 'AYUDA', 'PELO_CORTO', 'POLICIA', 'ASUSTADO']),
-    ('violencia', ['ABUSO', 'TATUAJE', 'DEFENSORIA', 'TRISTE', 'URGENTE', 'HOY']),
-    ('violencia', ['PEGAR', 'HOMBRE', 'ALTO', 'MIEDO', 'POLICIA', 'ABOGADO']),
+    ('violencia', ['AMENAZAR', 'AUXILIO', 'POLICIA', 'TEMOR']),
+    ('violencia', ['ABUSAR', 'MAL', 'AUXILIO', 'HOY']),
+    ('violencia', ['MALTRATAR', 'HOMBRE', 'TEMOR', 'POLICIA', 'ABOGADO']),
     // accidente
-    ('accidente', ['DOLOR']),
-    ('accidente', ['DOLOR', 'AMBULANCIA', 'CALLE', 'HOY']),
-    ('accidente', ['DOLOR', 'ASUSTADO', 'AMBULANCIA', 'HOSPITAL', 'URGENTE']),
+    ('accidente', ['MAL']),
+    ('accidente', ['MAL', 'ASISTENCIA', 'CALLE', 'HOY']),
+    ('accidente', ['HERIDA', 'TEMOR', 'ASISTENCIA', 'HOSPITAL', 'AUXILIO']),
     // emergencia
-    ('emergencia', ['EMERGENCIA']),
-    ('emergencia', ['ENFERMEDAD', 'AMBULANCIA', 'URGENTE', 'HOSPITAL']),
-    // documentos / trámite (contexto judicial ampliado)
-    ('tramite_id', ['TRAMITAR', 'CARNET', 'SEGIP']),
-    ('tramite_id', ['RENOVAR', 'LICENCIA', 'PAGO', 'SEGIP', 'HIJO']),
-    ('tramite_id', ['ANTECEDENTES', 'FISCAL']),
-    ('tramite_id', ['TRAMITAR', 'ANTECEDENTES', 'DENUNCIA', 'FISCAL', 'INTERPRETE', 'HOY']),
-    ('tramite_id', ['PEDIR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO']),
-    ('tramite_id', ['CORREGIR', 'DECLARACION_JURADA', 'NOTARIA', 'HIJO', 'AHORA']),
-    // orientación / asistencia legal
-    ('orientacion', ['ABOGADO', 'DEFENSORIA']),
-    ('orientacion', ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA', 'HOY']),
-    // pérdida de documentos
-    ('perdida', ['PERDER', 'CARNET']),
-    ('perdida', ['PAPEL', 'CALLE', 'AYER', 'POLICIA', 'URGENTE']),
+    ('emergencia', ['CRISIS']),
+    ('emergencia', ['HERIDA', 'ASISTENCIA', 'AUXILIO', 'HOSPITAL']),
+    // trámites
+    ('tramite_id', ['GESTIONAR', 'IDENTIDAD']),
+    ('tramite_id', ['GESTIONAR', 'LICENCIA_DECONDUCIR', 'ALCALDIA']),
+    ('tramite_id', ['INVESTIGACION', 'FISCAL']),
+    ('tramite_id', ['GESTIONAR', 'INVESTIGACION', 'FISCAL', 'INTERPRETE', 'HOY']),
+    ('tramite_id', ['PEDIR', 'FOTOCOPIA', 'PODER', 'ORGANO_JUDICIAL', 'ABOGADO']),
+    ('tramite_id', ['SOLUCIONAR', 'TESTIMONIO', 'INSTITUCION', 'AHORA']),
+    // trámite en una institución cuya sigla se deletrea
+    ('tramite_id', ['GESTIONAR', 'IDENTIDAD', 'S', 'E', 'G', 'I', 'P']),
+    // orientación
+    ('orientacion', ['ABOGADO', 'INSTITUCION']),
+    ('orientacion', ['HABLAR', 'INTERPRETE', 'INSTITUCION', 'HOY']),
+    // cortesía: saludo y respuesta no ocupan lugar en la oración
+    ('orientacion', ['HOLA', 'PEDIR', 'INTERPRETE']),
+    ('orientacion', ['SI', 'HABLAR', 'ABOGADO']),
+    // pérdida
+    ('perdida', ['FALTA', 'IDENTIDAD']),
+    ('perdida', ['PAPEL', 'CALLE', 'AYER', 'POLICIA', 'AUXILIO']),
     // testigo
     ('otro', ['ROBAR']),
-    ('otro', ['HOMBRE', 'TATUAJE', 'PEGAR', 'CALLE', 'NOCHE', 'DEFENSORIA']),
+    ('otro', ['HOMBRE', 'MALTRATAR', 'CALLE', 'AYER', 'INSTITUCION']),
   ];
 
   // Glosas inherentemente implícitas (1ª persona) que no exigen aparición literal.
@@ -55,7 +66,7 @@ void main() {
     for (final (ctx, glosses) in cases) {
       final out = asm.assemble(contextId: ctx, glosses: glosses);
       final hay = _strip(out.toLowerCase());
-      final missing = glosses
+      final missing = _joinSpelled(glosses)
           .where((g) => !implicit.contains(g))
           .where((g) => !_covered(g, hay))
           .toList();
@@ -75,6 +86,9 @@ void main() {
     // ignore: avoid_print
     print('CONTEXTOS (${ids.length}): $names');
     expect(ids, ['denuncia_robo', 'violencia', 'accidente', 'otro', 'orientacion']);
+    // 'preguntas' se ofrece en la interfaz pero no narra un hecho, así que
+    // queda fuera de la lista que alimenta la inferencia de contexto.
+    expect(allSelectableContexts.map((c) => c.id), contains('preguntas'));
 
     // 2) Mapa glosa → categoría desde el diccionario canónico.
     final List<LsbCard> all = loadOfficialEntries();
@@ -88,13 +102,13 @@ void main() {
     // 3) Enrutado del contexto fusionado 'orientacion'.
     String route(List<String> gl) =>
         resolveAssemblerContext('orientacion', gl, catOf);
-    expect(route(['PERDER', 'CELULAR']), 'perdida');
-    expect(route(['CELULAR', 'CALLE']), 'perdida'); // objeto → pérdida
-    expect(route(['CARNET']), 'tramite_id');
-    expect(route(['ANTECEDENTES', 'FISCAL']), 'tramite_id');
-    expect(route(['TRAMITAR', 'COPIA_DENUNCIA', 'JUZGADO']), 'tramite_id');
-    expect(route(['INTERPRETE', 'DEFENSORIA']), 'orientacion');
-    expect(route(['CONSULTAR', 'ABOGADO']), 'orientacion');
+    expect(route(['FALTA', 'TELEFONO']), 'perdida');
+    expect(route(['TELEFONO', 'CALLE']), 'perdida'); // objeto → pérdida
+    expect(route(['PASAPORTE']), 'tramite_id');
+    expect(route(['INVESTIGACION', 'FISCAL']), 'tramite_id');
+    expect(route(['GESTIONAR', 'FOTOCOPIA', 'ORGANO_JUDICIAL']), 'tramite_id');
+    expect(route(['INTERPRETE', 'INSTITUCION']), 'orientacion');
+    expect(route(['HABLAR', 'ABOGADO']), 'orientacion');
     // Los contextos directos no se reenrutan.
     expect(resolveAssemblerContext('denuncia_robo', ['ROBAR'], catOf),
         'denuncia_robo');
@@ -102,12 +116,12 @@ void main() {
     // 4) Cobertura end-to-end del contexto fusionado (las pruebas del enunciado).
     const asm = LocalSentenceAssembler();
     final mergedCases = <List<String>>[
-      ['PERDER', 'CELULAR', 'CALLE', 'AYER'], // documento/objeto perdido
-      ['PAPEL', 'PERDER', 'POLICIA'],
-      ['TRAMITAR', 'ANTECEDENTES', 'FISCAL', 'INTERPRETE', 'HOY'],
-      ['PEDIR', 'COPIA_DENUNCIA', 'PODER', 'JUZGADO', 'ABOGADO'],
-      ['CONSULTAR', 'INTERPRETE', 'DEFENSORIA'], // consulta / derechos
-      ['CERTIFICADO', 'NOTARIA', 'AHORA'],
+      ['FALTA', 'TELEFONO', 'CALLE', 'AYER'], // documento/objeto perdido
+      ['PAPEL', 'FALTA', 'POLICIA'],
+      ['GESTIONAR', 'INVESTIGACION', 'FISCAL', 'INTERPRETE', 'HOY'],
+      ['PEDIR', 'FOTOCOPIA', 'PODER', 'ORGANO_JUDICIAL', 'ABOGADO'],
+      ['HABLAR', 'INTERPRETE', 'INSTITUCION'], // consulta / derechos
+      ['PAPEL', 'INSTITUCION', 'AHORA'],
     ];
     const implicit = {'YO'};
     var missing = 0;
@@ -115,7 +129,7 @@ void main() {
       final ctx = route(gl);
       final out = asm.assemble(contextId: ctx, glosses: gl);
       final hay = _strip(out.toLowerCase());
-      final miss = gl
+      final miss = _joinSpelled(gl)
           .where((g) => !implicit.contains(g))
           .where((g) => !_covered(g, hay))
           .toList();
@@ -130,6 +144,18 @@ void main() {
 
 // Sinónimos de lexema para glosas no cognadas con su forma en español.
 const _synonyms = {
+  // Glosas de una o dos letras: la regla de raíz de 3 no puede alcanzarlas.
+  'SI': 'sí',
+  'NO': 'no',
+  'EL': 'él',
+  'TU': 'tú',
+  'YO': 'yo',
+  // Corpus: la forma natural en español no comparte raíz con la glosa.
+  'MAL': 'mal',
+  'FALTA': 'falta',
+  'HABLAR': 'habl',
+  'PEDIR': 'solicit',
+  'AUXILIO': 'auxilio',
   'ABUSO': 'agredi', // "agredió sexualmente"
   'PELO_CORTO': 'cabello',
   'PELO_LARGO': 'cabello',
@@ -142,9 +168,33 @@ const _synonyms = {
   'MAÑANA': 'mañana',
   'PEGAR': 'golpe',
   'PAPEL': 'documento',
-  'PEDIR': 'solicitar',
   'DINERO': 'dinero',
 };
+
+/// Une las rachas de letras en la palabra que deletrean, igual que hace el
+/// ensamblador. Sin esto la prueba buscaría cada letra por separado y daría
+/// por perdida una palabra que sí está representada.
+List<String> _joinSpelled(List<String> glosses) {
+  final salida = <String>[];
+  var i = 0;
+  while (i < glosses.length) {
+    final esLetra = RegExp(r'^[A-ZÑ]$');
+    if (esLetra.hasMatch(glosses[i])) {
+      var j = i;
+      while (j < glosses.length && esLetra.hasMatch(glosses[j])) {
+        j++;
+      }
+      if (j - i >= 2) {
+        salida.add(glosses.sublist(i, j).join());
+        i = j;
+        continue;
+      }
+    }
+    salida.add(glosses[i]);
+    i++;
+  }
+  return salida;
+}
 
 bool _covered(String gloss, String hayLower) {
   final syn = _synonyms[gloss];

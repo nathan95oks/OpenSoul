@@ -61,7 +61,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.forum),
-            label: 'Conversación',
+            label: 'Chat',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sign_language),

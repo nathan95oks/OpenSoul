@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
+import '../providers/cards_provider.dart';
 import '../providers/context_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 
@@ -69,9 +70,24 @@ class ContextPathIndicator extends ConsumerWidget {
                 ),
                 Expanded(
                   child: Text(
-                    activeZone.question.isNotEmpty
-                        ? activeZone.question
-                        : activeZone.hint,
+                    // La pregunta que redacta el modelo manda sobre la escrita
+                    // en el catálogo: se ajusta a lo que la persona ya eligió y
+                    // a lo que le acaban de preguntar. La del catálogo queda
+                    // como respaldo cuando no hay generación.
+                    ref
+                            .watch(generatedStepProvider)
+                            .maybeWhen(
+                              data: (paso) => paso.question,
+                              orElse: () => '',
+                            )
+                            .isNotEmpty
+                        ? ref
+                            .watch(generatedStepProvider)
+                            .requireValue
+                            .question
+                        : activeZone.question.isNotEmpty
+                            ? activeZone.question
+                            : activeZone.hint,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,

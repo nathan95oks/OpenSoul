@@ -1,0 +1,1689 @@
+{
+ "version": 1,
+ "dialect": "cochabamba",
+ "origin": "Corpus_LSB_Ambito_Judicial_OpenSoul (1).md",
+ "note": "Ingesta literal del corpus. Ninguna glosa se inventa: cada entrada conserva su categoría, prioridad y fuente oficial para poder rastrearla hasta el diccionario o el módulo del que salió.",
+ "categoryOrder": [
+  "1. Comunicación básica y control del diálogo",
+  "2. Preguntas y referencia personal",
+  "3. Identificación y personas",
+  "4. Roles e instituciones",
+  "5. Conceptos jurídicos y administrativos",
+  "6. Acciones del relato y del proceso",
+  "7. Hechos, seguridad y urgencia",
+  "8. Tiempo y secuencia",
+  "9. Lugares y ubicación",
+  "10. Documentos y objetos frecuentes",
+  "11. Transporte",
+  "12. Estado, emoción y comprensión",
+  "13. Descripción visual básica",
+  "14. Comunicación digital",
+  "15. Integridad, organización y garantías"
+ ],
+ "entries": [
+  {
+   "id": "c001",
+   "gloss": "HOLA",
+   "displayText": "HOLA",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c002",
+   "gloss": "PERMISO",
+   "displayText": "PERMISO",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c003",
+   "gloss": "GRACIAS",
+   "displayText": "GRACIAS",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c004",
+   "gloss": "POR_FAVOR",
+   "displayText": "POR FAVOR",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c005",
+   "gloss": "PUEDO",
+   "displayText": "PUEDO",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c006",
+   "gloss": "NO_PUEDO",
+   "displayText": "NO PUEDO",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c007",
+   "gloss": "SI",
+   "displayText": "SÍ",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c008",
+   "gloss": "NO",
+   "displayText": "NO",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c009",
+   "gloss": "LO_SIENTO",
+   "displayText": "LO SIENTO",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 2,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c010",
+   "gloss": "HABLAR",
+   "displayText": "HABLAR",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Verbos p.101"
+  },
+  {
+   "id": "c011",
+   "gloss": "COMPRENDER",
+   "displayText": "COMPRENDER",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Verbos p.101"
+  },
+  {
+   "id": "c012",
+   "gloss": "ATENDER",
+   "displayText": "ATENDER",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Verbos p.101"
+  },
+  {
+   "id": "c013",
+   "gloss": "AYUDAR",
+   "displayText": "AYUDAR",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M1, Verbos p.101"
+  },
+  {
+   "id": "c014",
+   "gloss": "SABER",
+   "displayText": "SABER",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c015",
+   "gloss": "NO_SABER",
+   "displayText": "NO SABER",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c016",
+   "gloss": "ACEPTAR",
+   "displayText": "ACEPTAR",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c017",
+   "gloss": "RECHAZAR",
+   "displayText": "RECHAZAR",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c018",
+   "gloss": "RESPONDER",
+   "displayText": "RESPONDER",
+   "corpusCategory": "1. Comunicación básica y control del diálogo",
+   "priority": 1,
+   "source": "D2024 #495"
+  },
+  {
+   "id": "c019",
+   "gloss": "QUIEN",
+   "displayText": "¿QUIÉN?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c020",
+   "gloss": "DONDE",
+   "displayText": "¿DÓNDE?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c021",
+   "gloss": "COMO",
+   "displayText": "¿CÓMO?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c022",
+   "gloss": "POR_QUE",
+   "displayText": "¿POR QUÉ?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c023",
+   "gloss": "QUE",
+   "displayText": "¿QUÉ?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1,Preguntas p.97"
+  },
+  {
+   "id": "c024",
+   "gloss": "CUAL",
+   "displayText": "¿CUÁL?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c025",
+   "gloss": "PARA_QUE",
+   "displayText": "¿PARA QUÉ?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 2,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c026",
+   "gloss": "CUANTOS",
+   "displayText": "¿CUÁNTOS?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 2,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c027",
+   "gloss": "CUANDO",
+   "displayText": "¿CUÁNDO?",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Preguntas p.97"
+  },
+  {
+   "id": "c028",
+   "gloss": "YO",
+   "displayText": "YO",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Pronombres p.113"
+  },
+  {
+   "id": "c029",
+   "gloss": "TU",
+   "displayText": "TÚ",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Pronombres p.113"
+  },
+  {
+   "id": "c030",
+   "gloss": "EL",
+   "displayText": "ÉL",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Pronombres p.113"
+  },
+  {
+   "id": "c031",
+   "gloss": "ELLA",
+   "displayText": "ELLA",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 1,
+   "source": "M1, Pronombres p.113"
+  },
+  {
+   "id": "c032",
+   "gloss": "NOSOTROS",
+   "displayText": "NOSOTROS",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 2,
+   "source": "M1,Pronombres p.113"
+  },
+  {
+   "id": "c033",
+   "gloss": "USTEDES",
+   "displayText": "USTEDES",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 2,
+   "source": "M1, Pronombres p.113"
+  },
+  {
+   "id": "c034",
+   "gloss": "ELLOS",
+   "displayText": "ELLOS",
+   "corpusCategory": "2. Preguntas y referencia personal",
+   "priority": 2,
+   "source": "M1, Pronombres p.113"
+  },
+  {
+   "id": "c035",
+   "gloss": "NOMBRE",
+   "displayText": "NOMBRE",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c036",
+   "gloss": "HOMBRE",
+   "displayText": "HOMBRE",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 1,
+   "source": "M1, Familia p.59"
+  },
+  {
+   "id": "c037",
+   "gloss": "MUJER",
+   "displayText": "MUJER",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 1,
+   "source": "M1, Familia p.59"
+  },
+  {
+   "id": "c038",
+   "gloss": "IDENTIDAD",
+   "displayText": "IDENTIDAD",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 1,
+   "source": "D2024 #297"
+  },
+  {
+   "id": "c039",
+   "gloss": "IDENTIFICAR",
+   "displayText": "IDENTIFICAR",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 1,
+   "source": "D2024 #298"
+  },
+  {
+   "id": "c040",
+   "gloss": "VECINO/A",
+   "displayText": "VECINO/A",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 2,
+   "source": "D2024 #586"
+  },
+  {
+   "id": "c041",
+   "gloss": "LADRON/A",
+   "displayText": "LADRÓN/A",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 1,
+   "source": "D2024 #326"
+  },
+  {
+   "id": "c042",
+   "gloss": "TESTIGO",
+   "displayText": "TESTIGO",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 1,
+   "source": "D2024 #557"
+  },
+  {
+   "id": "c043",
+   "gloss": "INOCENTE",
+   "displayText": "INOCENTE",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 2,
+   "source": "D2024 #311"
+  },
+  {
+   "id": "c044",
+   "gloss": "MILITAR",
+   "displayText": "MILITAR",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 3,
+   "source": "D2024 #374"
+  },
+  {
+   "id": "c045",
+   "gloss": "SOLDADO",
+   "displayText": "SOLDADO",
+   "corpusCategory": "3. Identificación y personas",
+   "priority": 3,
+   "source": "D2024#528"
+  },
+  {
+   "id": "c046",
+   "gloss": "ABOGADO",
+   "displayText": "ABOGADO",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "M2, Trabajo p.79"
+  },
+  {
+   "id": "c047",
+   "gloss": "POLICIA",
+   "displayText": "POLICÍA",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "M2, Trabajo p.79"
+  },
+  {
+   "id": "c048",
+   "gloss": "JUEZ",
+   "displayText": "JUEZ",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c049",
+   "gloss": "FISCAL",
+   "displayText": "FISCAL",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "M3,Escuela p.77"
+  },
+  {
+   "id": "c050",
+   "gloss": "AUTORIDAD",
+   "displayText": "AUTORIDAD",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c051",
+   "gloss": "OFICIAL",
+   "displayText": "OFICIAL",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c052",
+   "gloss": "INTERPRETE",
+   "displayText": "INTÉRPRETE",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "M4, General II p.99"
+  },
+  {
+   "id": "c053",
+   "gloss": "COORDINADOR/A",
+   "displayText": "COORDINADOR/A",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 2,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c054",
+   "gloss": "ASISTENTE",
+   "displayText": "ASISTENTE",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c055",
+   "gloss": "DOCTOR",
+   "displayText": "DOCTOR",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 2,
+   "source": "M2, Trabajo p.79"
+  },
+  {
+   "id": "c056",
+   "gloss": "ENFERMERA",
+   "displayText": "ENFERMERA",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 2,
+   "source": "M2, Trabajo p.79"
+  },
+  {
+   "id": "c057",
+   "gloss": "INSTITUCION",
+   "displayText": "INSTITUCIÓN",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "D2024 #312"
+  },
+  {
+   "id": "c058",
+   "gloss": "ORGANO_JUDICIAL",
+   "displayText": "ÓRGANO JUDICIAL",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 1,
+   "source": "D2024#412"
+  },
+  {
+   "id": "c059",
+   "gloss": "MINISTERIO",
+   "displayText": "MINISTERIO",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c060",
+   "gloss": "GOBIERNO",
+   "displayText": "GOBIERNO",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 2,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c061",
+   "gloss": "ALCALDIA",
+   "displayText": "ALCALDÍA",
+   "corpusCategory": "4. Roles e instituciones",
+   "priority": 3,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c062",
+   "gloss": "LEY",
+   "displayText": "LEY",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 1,
+   "source": "M3,PolíticaIp.43"
+  },
+  {
+   "id": "c063",
+   "gloss": "REGLAMENTO",
+   "displayText": "REGLAMENTO",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c064",
+   "gloss": "JUICIO",
+   "displayText": "JUICIO",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 1,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c065",
+   "gloss": "JUSTICIA",
+   "displayText": "JUSTICIA",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 1,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c066",
+   "gloss": "INVESTIGACION",
+   "displayText": "INVESTIGACIÓN",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 1,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c067",
+   "gloss": "TRAMITE",
+   "displayText": "TRÁMITE",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 1,
+   "source": "D2024 #569"
+  },
+  {
+   "id": "c068",
+   "gloss": "RESOLUCION",
+   "displayText": "RESOLUCIÓN",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 1,
+   "source": "D2024 #494"
+  },
+  {
+   "id": "c069",
+   "gloss": "NORMA",
+   "displayText": "NORMA",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "D2024 #401"
+  },
+  {
+   "id": "c070",
+   "gloss": "ARTICULO",
+   "displayText": "ARTÍCULO",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "D2024 #57"
+  },
+  {
+   "id": "c071",
+   "gloss": "TESTIMONIO",
+   "displayText": "TESTIMONIO",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 1,
+   "source": "D2024 #558"
+  },
+  {
+   "id": "c072",
+   "gloss": "ACUERDO_SOCIAL",
+   "displayText": "ACUERDO SOCIAL",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c073",
+   "gloss": "JURAR",
+   "displayText": "JURAR",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "M3, Política I p.43"
+  },
+  {
+   "id": "c074",
+   "gloss": "DIGNIDAD",
+   "displayText": "DIGNIDAD",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "D2024 #186"
+  },
+  {
+   "id": "c075",
+   "gloss": "ETICA",
+   "displayText": "ÉTICA",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 3,
+   "source": "D2024 #227"
+  },
+  {
+   "id": "c076",
+   "gloss": "FIRME",
+   "displayText": "FIRME",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "D2024 #245"
+  },
+  {
+   "id": "c077",
+   "gloss": "CONFIRMACION",
+   "displayText": "CONFIRMACIÓN",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "D2024 #138"
+  },
+  {
+   "id": "c078",
+   "gloss": "ESTADO",
+   "displayText": "ESTADO",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "D2024#223"
+  },
+  {
+   "id": "c079",
+   "gloss": "CONTEXTO",
+   "displayText": "CONTEXTO",
+   "corpusCategory": "5. Conceptos jurídicos y administrativos",
+   "priority": 2,
+   "source": "D2024 #144"
+  },
+  {
+   "id": "c080",
+   "gloss": "PRESENTAR",
+   "displayText": "PRESENTAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "D2024#471"
+  },
+  {
+   "id": "c081",
+   "gloss": "ANOTAR",
+   "displayText": "ANOTAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "D2024 #39"
+  },
+  {
+   "id": "c082",
+   "gloss": "MOSTRAR",
+   "displayText": "MOSTRAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "D2024 #387"
+  },
+  {
+   "id": "c083",
+   "gloss": "NARRAR",
+   "displayText": "NARRAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "D2024 #396"
+  },
+  {
+   "id": "c084",
+   "gloss": "OBSERVAR",
+   "displayText": "OBSERVAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "D2024 #407"
+  },
+  {
+   "id": "c085",
+   "gloss": "RECONOCER",
+   "displayText": "RECONOCER",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "D2024 #490"
+  },
+  {
+   "id": "c086",
+   "gloss": "DECIDIR",
+   "displayText": "DECIDIR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "D2024 #168"
+  },
+  {
+   "id": "c087",
+   "gloss": "EXIGIR",
+   "displayText": "EXIGIR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "D2024 #231"
+  },
+  {
+   "id": "c088",
+   "gloss": "COORDINAR",
+   "displayText": "COORDINAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "D2024 #146"
+  },
+  {
+   "id": "c089",
+   "gloss": "GESTIONAR",
+   "displayText": "GESTIONAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "D2024 #267"
+  },
+  {
+   "id": "c090",
+   "gloss": "TRATAR",
+   "displayText": "TRATAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "D2024 #573"
+  },
+  {
+   "id": "c091",
+   "gloss": "SOLUCIONAR",
+   "displayText": "SOLUCIONAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "D2024#530"
+  },
+  {
+   "id": "c092",
+   "gloss": "PEDIR",
+   "displayText": "PEDIR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "M1, Verbos p.101"
+  },
+  {
+   "id": "c093",
+   "gloss": "ESCRIBIR",
+   "displayText": "ESCRIBIR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "M1, Verbos p.101"
+  },
+  {
+   "id": "c094",
+   "gloss": "COPIAR",
+   "displayText": "COPIAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "M1, Verbos p.101"
+  },
+  {
+   "id": "c095",
+   "gloss": "RECOGER",
+   "displayText": "RECOGER",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c096",
+   "gloss": "ACOMPANAR",
+   "displayText": "ACOMPAÑAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c097",
+   "gloss": "AVISAR",
+   "displayText": "AVISAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c098",
+   "gloss": "PROTEGER",
+   "displayText": "PROTEGER",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "M3, Verbos III p.55"
+  },
+  {
+   "id": "c099",
+   "gloss": "ADMINISTRAR",
+   "displayText": "ADMINISTRAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 3,
+   "source": "M4, General II p.99"
+  },
+  {
+   "id": "c100",
+   "gloss": "CUMPLIR",
+   "displayText": "CUMPLIR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c101",
+   "gloss": "QUEJAR",
+   "displayText": "QUEJAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 1,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c102",
+   "gloss": "CONFESAR",
+   "displayText": "CONFESAR",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "priority": 2,
+   "source": "M4,PolíticaIIp.89"
+  },
+  {
+   "id": "c103",
+   "gloss": "AUXILIO",
+   "displayText": "AUXILIO",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #73"
+  },
+  {
+   "id": "c104",
+   "gloss": "ASISTENCIA",
+   "displayText": "ASISTENCIA",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024#64"
+  },
+  {
+   "id": "c105",
+   "gloss": "PELIGROSO",
+   "displayText": "PELIGROSO",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #443"
+  },
+  {
+   "id": "c106",
+   "gloss": "ARRESTAR",
+   "displayText": "ARRESTAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #48"
+  },
+  {
+   "id": "c107",
+   "gloss": "ROBAR",
+   "displayText": "ROBAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #499"
+  },
+  {
+   "id": "c108",
+   "gloss": "MALTRATAR",
+   "displayText": "MALTRATAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #354"
+  },
+  {
+   "id": "c109",
+   "gloss": "VIOLENCIA",
+   "displayText": "VIOLENCIA",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #597"
+  },
+  {
+   "id": "c110",
+   "gloss": "VIOLACION",
+   "displayText": "VIOLACIÓN",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 2,
+   "source": "D2024 #596"
+  },
+  {
+   "id": "c111",
+   "gloss": "ABUSAR",
+   "displayText": "ABUSAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #5"
+  },
+  {
+   "id": "c112",
+   "gloss": "CORRER",
+   "displayText": "CORRER",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 2,
+   "source": "D2024 #150"
+  },
+  {
+   "id": "c113",
+   "gloss": "PARAR",
+   "displayText": "PARAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #433"
+  },
+  {
+   "id": "c114",
+   "gloss": "AMENAZAR",
+   "displayText": "AMENAZAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "M3, VerbosIIIp.55"
+  },
+  {
+   "id": "c115",
+   "gloss": "DANAR",
+   "displayText": "DAÑAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "M4, General II p.99"
+  },
+  {
+   "id": "c116",
+   "gloss": "ACCIDENTE",
+   "displayText": "ACCIDENTE",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "M4, General II p.99"
+  },
+  {
+   "id": "c117",
+   "gloss": "HERIDA",
+   "displayText": "HERIDA",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 2,
+   "source": "M3, Salud III"
+  },
+  {
+   "id": "c118",
+   "gloss": "PRESO",
+   "displayText": "PRESO",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c119",
+   "gloss": "CARCEL",
+   "displayText": "CÁRCEL",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c120",
+   "gloss": "CRISIS",
+   "displayText": "CRISIS",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c121",
+   "gloss": "SALVAR",
+   "displayText": "SALVAR",
+   "corpusCategory": "7. Hechos, seguridad y urgencia",
+   "priority": 1,
+   "source": "D2024 #507"
+  },
+  {
+   "id": "c122",
+   "gloss": "MES",
+   "displayText": "MES",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 2,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c123",
+   "gloss": "DIA",
+   "displayText": "DÍA",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c124",
+   "gloss": "SEMANA",
+   "displayText": "SEMANA",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 2,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c125",
+   "gloss": "ANO",
+   "displayText": "AÑO",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 2,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c126",
+   "gloss": "AYER",
+   "displayText": "AYER",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c127",
+   "gloss": "ANTEAYER",
+   "displayText": "ANTEAYER",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 2,
+   "source": "M1,Tiempo p.117"
+  },
+  {
+   "id": "c128",
+   "gloss": "HOY",
+   "displayText": "HOY",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c129",
+   "gloss": "AHORA",
+   "displayText": "AHORA",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c130",
+   "gloss": "MANANA",
+   "displayText": "MAÑANA",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c131",
+   "gloss": "PASADO_MANANA",
+   "displayText": "PASADO MAÑANA",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 3,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c132",
+   "gloss": "FECHA",
+   "displayText": "FECHA",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M1, Tiempo p.117"
+  },
+  {
+   "id": "c133",
+   "gloss": "SEGUNDO",
+   "displayText": "SEGUNDO",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 2,
+   "source": "M3, Tiempo III p.129"
+  },
+  {
+   "id": "c134",
+   "gloss": "MINUTO",
+   "displayText": "MINUTO",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M3, Tiempo III p.129"
+  },
+  {
+   "id": "c135",
+   "gloss": "HORA",
+   "displayText": "HORA",
+   "corpusCategory": "8. Tiempo y secuencia",
+   "priority": 1,
+   "source": "M3, Tiempo III p.129"
+  },
+  {
+   "id": "c136",
+   "gloss": "CASA",
+   "displayText": "CASA",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 1,
+   "source": "M1, Lugares p.71"
+  },
+  {
+   "id": "c137",
+   "gloss": "CALLE",
+   "displayText": "CALLE",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 1,
+   "source": "M3, Lugares II p.123"
+  },
+  {
+   "id": "c138",
+   "gloss": "DIRECCION",
+   "displayText": "DIRECCIÓN",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 1,
+   "source": "M3, Lugares II p.123"
+  },
+  {
+   "id": "c139",
+   "gloss": "AVENIDA",
+   "displayText": "AVENIDA",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 2,
+   "source": "M3, Lugares II p.123"
+  },
+  {
+   "id": "c140",
+   "gloss": "PLAZA",
+   "displayText": "PLAZA",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 2,
+   "source": "M1,Lugares p.71"
+  },
+  {
+   "id": "c141",
+   "gloss": "HOSPITAL",
+   "displayText": "HOSPITAL",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 1,
+   "source": "M1, Lugares p.71"
+  },
+  {
+   "id": "c142",
+   "gloss": "FARMACIA",
+   "displayText": "FARMACIA",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 2,
+   "source": "M1, Lugares p.71"
+  },
+  {
+   "id": "c143",
+   "gloss": "MERCADO",
+   "displayText": "MERCADO",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 2,
+   "source": "M1, Lugares p.71"
+  },
+  {
+   "id": "c144",
+   "gloss": "AEROPUERTO",
+   "displayText": "AEROPUERTO",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 3,
+   "source": "D2024 #17"
+  },
+  {
+   "id": "c145",
+   "gloss": "COCHABAMBA",
+   "displayText": "COCHABAMBA",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 2,
+   "source": "M1, Deptos. de Bolivia p.89"
+  },
+  {
+   "id": "c146",
+   "gloss": "UBICACION_GPS",
+   "displayText": "UBICACIÓN GPS",
+   "corpusCategory": "9. Lugares y ubicación",
+   "priority": 2,
+   "source": "D2024 #578"
+  },
+  {
+   "id": "c147",
+   "gloss": "FORMULARIO",
+   "displayText": "FÓRMULARIO",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 1,
+   "source": "D2024 #253"
+  },
+  {
+   "id": "c148",
+   "gloss": "CARTA",
+   "displayText": "CARTA",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "D2024 #101"
+  },
+  {
+   "id": "c149",
+   "gloss": "TEXTO",
+   "displayText": "TEXTO",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 1,
+   "source": "D2024 #559"
+  },
+  {
+   "id": "c150",
+   "gloss": "TITULO",
+   "displayText": "TÍTULO",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "D2024 #563"
+  },
+  {
+   "id": "c151",
+   "gloss": "LICENCIA",
+   "displayText": "LICENCIA",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "D2024 #337"
+  },
+  {
+   "id": "c152",
+   "gloss": "LICENCIA_DECONDUCIR",
+   "displayText": "LICENCIA DECONDUCIR",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 1,
+   "source": "D2024#338"
+  },
+  {
+   "id": "c153",
+   "gloss": "PASAPORTE",
+   "displayText": "PASAPORTE",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c154",
+   "gloss": "PAPEL",
+   "displayText": "PAPEL",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 1,
+   "source": "M1, Sustantivos p.107"
+  },
+  {
+   "id": "c155",
+   "gloss": "TELEFONO",
+   "displayText": "TELÉFONO",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 1,
+   "source": "M1, Sustantivos p.107"
+  },
+  {
+   "id": "c156",
+   "gloss": "MOCHILA",
+   "displayText": "MOCHILA",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 1,
+   "source": "M3, Sustantivos III p.73"
+  },
+  {
+   "id": "c157",
+   "gloss": "ARCHIVADOR",
+   "displayText": "ARCHIVADOR",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "M3, Sustantivos III p.73"
+  },
+  {
+   "id": "c158",
+   "gloss": "FOTOCOPIA",
+   "displayText": "FOTOCOPIA",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "M3, Sustantivos III p.73"
+  },
+  {
+   "id": "c159",
+   "gloss": "CARPETA",
+   "displayText": "CARPETA",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "M3, Sustantivos III p.73"
+  },
+  {
+   "id": "c160",
+   "gloss": "SELLO",
+   "displayText": "SELLO",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 2,
+   "source": "M3, Sustantivos III p.73"
+  },
+  {
+   "id": "c161",
+   "gloss": "DINERO",
+   "displayText": "DINERO",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "priority": 1,
+   "source": "D2024 #188"
+  },
+  {
+   "id": "c162",
+   "gloss": "AUTO",
+   "displayText": "AUTO",
+   "corpusCategory": "11. Transporte",
+   "priority": 1,
+   "source": "M1, Transporte p.93"
+  },
+  {
+   "id": "c163",
+   "gloss": "MICRO",
+   "displayText": "MICRO",
+   "corpusCategory": "11. Transporte",
+   "priority": 2,
+   "source": "M1, Transporte p.93"
+  },
+  {
+   "id": "c164",
+   "gloss": "TRUFI",
+   "displayText": "TRUFI",
+   "corpusCategory": "11. Transporte",
+   "priority": 2,
+   "source": "M1, Transporte p.93"
+  },
+  {
+   "id": "c165",
+   "gloss": "TAXI",
+   "displayText": "TAXI",
+   "corpusCategory": "11. Transporte",
+   "priority": 2,
+   "source": "M1, Transporte p.93"
+  },
+  {
+   "id": "c166",
+   "gloss": "MOTOCICLETA",
+   "displayText": "MOTOCICLETA",
+   "corpusCategory": "11. Transporte",
+   "priority": 2,
+   "source": "M1, Transporte p.93"
+  },
+  {
+   "id": "c167",
+   "gloss": "TREN",
+   "displayText": "TREN",
+   "corpusCategory": "11. Transporte",
+   "priority": 3,
+   "source": "M1,Transporte p.93"
+  },
+  {
+   "id": "c168",
+   "gloss": "AVION",
+   "displayText": "AVIÓN",
+   "corpusCategory": "11. Transporte",
+   "priority": 3,
+   "source": "M1, Transporte p.93"
+  },
+  {
+   "id": "c169",
+   "gloss": "BICICLETA",
+   "displayText": "BICICLETA",
+   "corpusCategory": "11. Transporte",
+   "priority": 3,
+   "source": "M1, Transporte p.93"
+  },
+  {
+   "id": "c170",
+   "gloss": "TEMOR",
+   "displayText": "TEMOR",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 1,
+   "source": "D2024 #552"
+  },
+  {
+   "id": "c171",
+   "gloss": "CONFUSION",
+   "displayText": "CONFUSIÓN",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 1,
+   "source": "M4, General II p.99"
+  },
+  {
+   "id": "c172",
+   "gloss": "VERGUENZA",
+   "displayText": "VERGÜENZA",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 2,
+   "source": "M4, General II p.99"
+  },
+  {
+   "id": "c173",
+   "gloss": "CONFIANZA",
+   "displayText": "CONFIANZA",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 2,
+   "source": "M4, General II p.99"
+  },
+  {
+   "id": "c174",
+   "gloss": "MAL",
+   "displayText": "MAL",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c175",
+   "gloss": "ESTOY_BIEN",
+   "displayText": "ESTOY BIEN",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 1,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c176",
+   "gloss": "MAS_O_MENOS",
+   "displayText": "MÁS O MENOS",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 2,
+   "source": "M1, Saludos p.55"
+  },
+  {
+   "id": "c177",
+   "gloss": "PROBLEMA",
+   "displayText": "PROBLEMA",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 1,
+   "source": "D2024 #474"
+  },
+  {
+   "id": "c178",
+   "gloss": "SITUACION",
+   "displayText": "SITUACIÓN",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 1,
+   "source": "D2024 #527"
+  },
+  {
+   "id": "c179",
+   "gloss": "CORRECTO/A",
+   "displayText": "CORRECTO/A",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 1,
+   "source": "D2024 #149"
+  },
+  {
+   "id": "c180",
+   "gloss": "FALTA",
+   "displayText": "FALTA",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 2,
+   "source": "D2024 #237"
+  },
+  {
+   "id": "c181",
+   "gloss": "RAZON",
+   "displayText": "RAZÓN",
+   "corpusCategory": "12. Estado, emoción y comprensión",
+   "priority": 2,
+   "source": "D2024#487"
+  },
+  {
+   "id": "c182",
+   "gloss": "ROJO",
+   "displayText": "ROJO",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c183",
+   "gloss": "AMARILLO",
+   "displayText": "AMARILLO",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c184",
+   "gloss": "CAFE",
+   "displayText": "CAFÉ",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c185",
+   "gloss": "AZUL",
+   "displayText": "AZUL",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c186",
+   "gloss": "BLANCO",
+   "displayText": "BLANCO",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c187",
+   "gloss": "VERDE",
+   "displayText": "VERDE",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c188",
+   "gloss": "ROSADO",
+   "displayText": "ROSADO",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 3,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c189",
+   "gloss": "NEGRO",
+   "displayText": "NEGRO",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c190",
+   "gloss": "NARANJA",
+   "displayText": "NARANJA",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 3,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c191",
+   "gloss": "CELESTE",
+   "displayText": "CELESTE",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 3,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c192",
+   "gloss": "LILA",
+   "displayText": "LILA",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 3,
+   "source": "M1, Colores p.81"
+  },
+  {
+   "id": "c193",
+   "gloss": "DELGADO/A",
+   "displayText": "DELGADO/A",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 2,
+   "source": "D2024 #173"
+  },
+  {
+   "id": "c194",
+   "gloss": "GRUESO",
+   "displayText": "GRUESO",
+   "corpusCategory": "13. Descripción visual básica",
+   "priority": 3,
+   "source": "D2024#276"
+  },
+  {
+   "id": "c195",
+   "gloss": "VIDEOLLAMADA",
+   "displayText": "VIDEOLLAMADA",
+   "corpusCategory": "14. Comunicación digital",
+   "priority": 2,
+   "source": "D2024 #595"
+  },
+  {
+   "id": "c196",
+   "gloss": "WHATSAPP",
+   "displayText": "WHATSAPP",
+   "corpusCategory": "14. Comunicación digital",
+   "priority": 2,
+   "source": "D2024 #606"
+  },
+  {
+   "id": "c197",
+   "gloss": "WIFI",
+   "displayText": "WIFI",
+   "corpusCategory": "14. Comunicación digital",
+   "priority": 3,
+   "source": "D2024 #608"
+  },
+  {
+   "id": "c198",
+   "gloss": "ZOOM",
+   "displayText": "ZOOM",
+   "corpusCategory": "14. Comunicación digital",
+   "priority": 3,
+   "source": "D2024#611"
+  },
+  {
+   "id": "c199",
+   "gloss": "GARANTE",
+   "displayText": "GARANTE",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c200",
+   "gloss": "AUTONOMIA",
+   "displayText": "AUTONOMÍA",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 2,
+   "source": "M4,PolíticaIIp.89"
+  },
+  {
+   "id": "c201",
+   "gloss": "CORRUPTO",
+   "displayText": "CORRUPTO",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c202",
+   "gloss": "HONESTIDAD",
+   "displayText": "HONESTIDAD",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c203",
+   "gloss": "SOBORNO",
+   "displayText": "SOBORNO",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c204",
+   "gloss": "DISCRIMINACION",
+   "displayText": "DISCRIMINACIÓN",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 1,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c205",
+   "gloss": "PODER",
+   "displayText": "PODER",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c206",
+   "gloss": "COMPROMISO",
+   "displayText": "COMPROMISO",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 2,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c207",
+   "gloss": "PERSONERIA_JURIDICA",
+   "displayText": "PERSONERÍA JURÍDICA",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 3,
+   "source": "M4, Política II p.89"
+  },
+  {
+   "id": "c208",
+   "gloss": "DECRETO_SUPREMO",
+   "displayText": "DECRETO SUPREMO",
+   "corpusCategory": "15. Integridad, organización y garantías",
+   "priority": 3,
+   "source": "M4, Política II p.89"
+  }
+ ]
+}

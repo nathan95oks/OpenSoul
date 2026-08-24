@@ -136,11 +136,11 @@ void main() {
       final c = _containerWith(repo);
 
       final result = await _translate(c,
-          context: 'violencia', cards: ['ESPOSO', 'PEGAR', 'MIEDO']);
+          context: 'violencia', cards: ['HOMBRE', 'MALTRATAR', 'TEMOR']);
 
       expect(result, isNotNull);
       expect(result!.generatedText.isNotEmpty, true);
-      expect(result.generatedText.toLowerCase(), contains('golpeó'));
+      expect(result.generatedText.toLowerCase(), contains('maltrató'));
       expect(result.audioUrl, isNull);
       expect(result.bedrockUsed, false);
       // baseSentence y generatedText coinciden en el fallback puro.

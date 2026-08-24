@@ -106,9 +106,9 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Nueva conversación'),
+        title: const Text('Nuevo chat'),
         content: const Text(
-            'Se borrará el historial de esta conversación. ¿Continuar?'),
+            'Se borrará el historial de este chat. ¿Continuar?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -162,7 +162,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
               ),
               const SizedBox(width: 10),
               const Text(
-                'Conversación',
+                'Chat',
                 style:
                     TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.4),
               ),
@@ -172,7 +172,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             if (!state.conversation.isEmpty)
               IconButton(
                 icon: const Icon(Icons.restart_alt),
-                tooltip: 'Nueva conversación',
+                tooltip: 'Nuevo chat',
                 onPressed: _confirmNewConversation,
               ),
           ],
@@ -341,7 +341,7 @@ class _EmptyConversation extends StatelessWidget {
                 size: 56, color: AppTheme.brandLight),
             const SizedBox(height: 18),
             const Text(
-              'Una conversación, dos idiomas',
+              'Un chat, dos idiomas',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

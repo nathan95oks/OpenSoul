@@ -17,6 +17,13 @@ class LsbCard {
   final String gloss;
   final String displayText;
   final String iconUrl;
+
+  /// Fotogramas que componen la imagen de la seña.
+  ///
+  /// Una seña con movimiento no cabe en una fotografía: se documenta por
+  /// partes y sus archivos se nombran `GLOSA_1.png`, `GLOSA_2.png`… El valor
+  /// por defecto, 1, es la seña estática de un solo `GLOSA.png`.
+  final int imageFrames;
   final String categoryId;
   final String subcategoryId;
   final List<String> contexts;
@@ -44,6 +51,7 @@ class LsbCard {
     required this.gloss,
     required this.displayText,
     required this.iconUrl,
+    this.imageFrames = 1,
     required this.categoryId,
     required this.subcategoryId,
     required this.contexts,
@@ -63,6 +71,7 @@ class LsbCard {
       gloss: json['gloss'] as String,
       displayText: json['displayText'] as String,
       iconUrl: json['iconUrl'] as String? ?? '',
+      imageFrames: (json['imageFrames'] as num?)?.toInt() ?? 1,
       categoryId: json['categoryId'] as String,
       subcategoryId: json['subcategoryId'] as String? ?? '',
       contexts: List<String>.from(json['contexts'] as List? ?? const []),
@@ -86,6 +95,7 @@ class LsbCard {
         'gloss': gloss,
         'displayText': displayText,
         'iconUrl': iconUrl,
+        'imageFrames': imageFrames,
         'categoryId': categoryId,
         'subcategoryId': subcategoryId,
         'contexts': contexts,

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../data/datasources/remote_audio_datasource.dart';
+import '../data/datasources/remote_suggestion_datasource.dart';
 import '../data/datasources/remote_translation_datasource.dart';
 import '../data/repositories/audio_translation_repository_impl.dart';
 import '../data/repositories/caching_audio_translation_repository.dart';
@@ -116,6 +117,14 @@ final contextInferenceEngineProvider = Provider<ContextInferenceEngine>((ref) {
 
 /// Pregunta de la persona oyente pendiente de responder, si hay conversación.
 final pendingReplyProvider = Provider<ReplyPrompt?>((ref) => null);
+
+/// Generador de opciones del flujo guiado.
+///
+/// Vive en el núcleo porque el módulo de tarjetas no debe conocer el cliente
+/// HTTP ni el endpoint: solo pide qué ofrecer a continuación.
+final suggestionDataSourceProvider = Provider<RemoteSuggestionDataSource>(
+  (ref) => RemoteSuggestionDataSource(client: ref.watch(httpClientProvider)),
+);
 
 /// Destino de una declaración terminada.
 final conversationBridgeProvider =

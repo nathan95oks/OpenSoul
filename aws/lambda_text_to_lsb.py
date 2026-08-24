@@ -78,25 +78,95 @@ CORS_HEADERS = {
 # dactilología (deletreo) como fallback.
 # ===================================================================
 AVAILABLE_GLOSSES = {
-    # --- Sustantivos Jurídicos y Compuestos ---
-    "ABOGADO", "POLICIA", "JUEZ", "FISCAL",
-    
-    # --- Pronombres y Posesivos Disponibles ---
-    "YO", "TU", "EL", "ELLA", "NOSOTROS", "ELLOS", "ELLAS", "USTEDES", "MIO", "TUYO", "SUYO", "NUESTRO",
-    
-    # --- Saludos y Respuestas Disponibles ---
-    "CHAO", "HOLA", "NO", "PERMISO", "PORFAVOR", "SALUDOS", "SI",
-    
-    # --- Tiempos y Marcadores Temporales Disponibles ---
-    "AHORA", "AYER", "DESPUES", "HOY", "MAÑANA", "PASADO",
-    
-    # --- Desambiguación Llama ---
-    "LLAMAR", "ANIMAL-LLAMA", "FUEGO-LLAMA",
+    # GENERADO por tool/sync_vocabulary.dart — no editar a mano.
+    # Fuente: assets/dictionary/official_dictionary.json
+    # --- Cortesía (5) ---
+    "GRACIAS", "HOLA", "LO_SIENTO", "PERMISO", "POR_FAVOR",
+    # --- Respuesta (8) ---
+    "ESTOY_BIEN", "MAS_O_MENOS", "NO", "NO_PUEDO", "NO_SABER", "PUEDO",
+    "SABER", "SI",
+    # --- Preguntas (16) ---
+    "COMO", "CUAL", "CUANDO", "CUANTOS", "DONDE", "EL",
+    "ELLA", "ELLOS", "NOSOTROS", "PARA_QUE", "POR_QUE", "QUE",
+    "QUIEN", "TU", "USTEDES", "YO",
+    # --- Identificación (9) ---
+    "HOMBRE", "IDENTIDAD", "LADRON", "MILITAR", "MUJER", "NOMBRE",
+    "SOLDADO", "TESTIGO", "VECINO",
+    # --- Instituciones (16) ---
+    "ABOGADO", "ALCALDIA", "ASISTENTE", "AUTORIDAD", "COORDINADOR", "DOCTOR",
+    "ENFERMERA", "FISCAL", "GOBIERNO", "INSTITUCION", "INTERPRETE", "JUEZ",
+    "MINISTERIO", "OFICIAL", "ORGANO_JUDICIAL", "POLICIA",
+    # --- Conceptos jurídicos (17) ---
+    "ACUERDO_SOCIAL", "ARTICULO", "CONFIRMACION", "CONTEXTO", "DECRETO_SUPREMO", "ESTADO",
+    "INVESTIGACION", "JUICIO", "JUSTICIA", "LEY", "NORMA", "PERSONERIA_JURIDICA",
+    "PODER", "REGLAMENTO", "RESOLUCION", "TESTIMONIO", "TRAMITE",
+    # --- Acciones (25) ---
+    "ACOMPANAR", "ADMINISTRAR", "ANOTAR", "AVISAR", "CONFESAR", "COORDINAR",
+    "COPIAR", "CUMPLIR", "DECIDIR", "ESCRIBIR", "EXIGIR", "GESTIONAR",
+    "IDENTIFICAR", "JURAR", "MOSTRAR", "NARRAR", "OBSERVAR", "PEDIR",
+    "PRESENTAR", "PROTEGER", "QUEJAR", "RECOGER", "RECONOCER", "SOLUCIONAR",
+    "TRATAR",
+    # --- Hechos y urgencia (18) ---
+    "ABUSAR", "ACCIDENTE", "AMENAZAR", "ARRESTAR", "ASISTENCIA", "AUXILIO",
+    "CORRER", "CRISIS", "DANAR", "DISCRIMINACION", "HERIDA", "MALTRATAR",
+    "PARAR", "ROBAR", "SALVAR", "SOBORNO", "VIOLACION", "VIOLENCIA",
+    # --- Descripción (17) ---
+    "AMARILLO", "AZUL", "BLANCO", "CAFE", "CELESTE", "CORRECTO",
+    "DELGADO", "GRUESO", "INOCENTE", "LILA", "NARANJA", "NEGRO",
+    "PELIGROSO", "PRESO", "ROJO", "ROSADO", "VERDE",
+    # --- Estado y emoción (9) ---
+    "CONFIANZA", "CONFUSION", "FALTA", "MAL", "PROBLEMA", "RAZON",
+    "SITUACION", "TEMOR", "VERGUENZA",
+    # --- Tiempo (14) ---
+    "AHORA", "ANO", "ANTEAYER", "AYER", "DIA", "FECHA",
+    "HORA", "HOY", "MANANA", "MES", "MINUTO", "PASADO_MANANA",
+    "SEGUNDO", "SEMANA",
+    # --- Lugares (12) ---
+    "AEROPUERTO", "AVENIDA", "CALLE", "CARCEL", "CASA", "COCHABAMBA",
+    "DIRECCION", "FARMACIA", "HOSPITAL", "MERCADO", "PLAZA", "UBICACION_GPS",
+    # --- Documentos (12) ---
+    "ARCHIVADOR", "CARPETA", "CARTA", "FORMULARIO", "FOTOCOPIA", "LICENCIA",
+    "LICENCIA_DECONDUCIR", "PAPEL", "PASAPORTE", "SELLO", "TEXTO", "TITULO",
+    # --- Objetos (11) ---
+    "AUTO", "AVION", "BICICLETA", "DINERO", "MICRO", "MOCHILA",
+    "MOTOCICLETA", "TAXI", "TELEFONO", "TREN", "TRUFI",
+    # --- Comunicación (7) ---
+    "ACEPTAR", "ATENDER", "AYUDAR", "COMPRENDER", "HABLAR", "RECHAZAR",
+    "RESPONDER",
+    # --- Comunicación digital (4) ---
+    "VIDEOLLAMADA", "WHATSAPP", "WIFI", "ZOOM",
+    # --- Integridad (8) ---
+    "AUTONOMIA", "COMPROMISO", "CORRUPTO", "DIGNIDAD", "ETICA", "FIRME",
+    "GARANTE", "HONESTIDAD",
+    # --- Abecedario (27) ---
+    "A", "B", "C", "D", "E", "F",
+    "G", "H", "I", "J", "K", "L",
+    "M", "N", "O", "P", "Q", "R",
+    "S", "T", "U", "V", "W", "X",
+    "Y", "Z", "Ñ",
+    # --- Números (10) ---
+    "0", "1", "2", "3", "4", "5",
+    "6", "7", "8", "9",
+}
 
-    # --- Alfabeto Dactilológico y Números (Para dactilología offline/fallback) ---
-    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+# ===================================================================
+# GLOSAS CON ANIMACIÓN REAL EN S3
+# ===================================================================
+# El vocabulario y la animación son cosas distintas. AVAILABLE_GLOSSES dice
+# qué puede *decir* el sistema —lo mismo que ofrecen las tarjetas—; esta lista
+# dice qué puede *representar* el avatar hoy.
+#
+# Antes se derivaba una de la otra, así que al unificar el vocabulario la
+# Lambda habría declarado 245 animaciones existiendo ~21 archivos: el avatar
+# pediría .glb inexistentes y se quedaría en negro en vez de deletrear.
+#
+# Lo que no está aquí cae en dactilología, que es su comportamiento correcto.
+ANIMATED_GLOSSES = {
+    "ABOGADO", "POLICIA", "JUEZ",
+    "YO", "TU", "EL", "ELLA", "NOSOTROS", "ELLOS", "ELLAS", "USTEDES",
+    "MIO", "TUYO", "SUYO", "NUESTRO",
+    "CHAO", "HOLA", "NO", "PERMISO", "POR_FAVOR",
+    "F",
 }
 
 # Variantes con las que el modelo nombra una misma seña. Se unifican antes de
@@ -161,15 +231,19 @@ def get_avatar_animations() -> dict:
 
     Fuente única (Fase 2): tabla del diccionario evolutivo en DynamoDB,
     donde cada ENTRY aprobada puede declarar su `animationFile`. El set
-    estático AVAILABLE_GLOSSES queda como base garantizada (alfabeto
-    dactilológico, números y señas fundacionales) y como fallback total
-    si la tabla no está configurada o falla la consulta.
+    estático ANIMATED_GLOSSES queda como base garantizada —las señas que ya
+    están grabadas y subidas— y como fallback total si la tabla no está
+    configurada o falla la consulta.
+
+    No se deriva de AVAILABLE_GLOSSES: el vocabulario dice qué se puede decir
+    y esta función qué se puede representar. Confundirlos hacía que el avatar
+    pidiera archivos inexistentes.
     """
     global _avatar_animations_cache, _dynamic_gloss_overrides_cache
     if _avatar_animations_cache is not None:
         return _avatar_animations_cache
 
-    animations = {g: f"{remove_accents(g)}.glb" for g in AVAILABLE_GLOSSES}
+    animations = {g: f"{remove_accents(g)}.glb" for g in ANIMATED_GLOSSES}
     animations.update(ANIMATION_FILE_OVERRIDES)
     dynamic = set()
 
@@ -296,6 +370,13 @@ REGLAS LINGÜÍSTICAS Y GRAMATICALES OBLIGATORIAS DE LSB:
 5. REGLAS DACTILOLÓGICAS (DELETREO COMPLETO) EN LSB:
    - Los nombres propios de personas, apellidos, calles, marcas y siglas (ej: "Isaac", "Segip", "FELCC") deben deletrearse obligatoriamente letra por letra. Descomponlos en sus letras individuales en la lista de glosas (ej: "Isaac" -> ["I", "S", "A", "A", "C"], "Segip" -> ["S", "E", "G", "I", "P"]).
    - Los sustantivos comunes y verbos que NO estén en la lista de glosas disponibles (ej: "testigo", "recinto") NO deben deletrearse letra por letra. Deben ser colocados como la palabra completa en mayúsculas en la lista de glosas (ej: "TESTIGO", "RECINTO") para mostrar la simulación en la interfaz.
+   - PROHIBIDO deletrear un sustantivo común: "cuchillo" es ["CUCHILLO"], nunca ["C","U","C","H","I","L","L","O"] ni ["C"]. Solo se deletrea lo que va en mayúscula por ser nombre propio.
+   - PROHIBIDO emitir una letra suelta que no forme parte del deletreo completo de un nombre propio.
+
+7. FIDELIDAD A LO DICHO:
+   - No sustituyas una palabra por un sinónimo ni la reformules. Traduces lo que se dijo, no lo que podría haberse dicho mejor.
+   - No añadas conceptos que la frase no contenga, ni resumas quitando los que sí contiene.
+   - Lo único que puedes transformar es lo que estas reglas exigen: pasar los verbos a infinitivo, quitar partículas que la LSB no signa y reordenar según OSV.
 
 6. MANEJO DE TIEMPOS VERBALES (PASADO, PRESENTE, FUTURO) EN LSB:
    - En LSB los verbos no se conjugan; se escriben siempre en INFINITIVO (ej: "llamé" -> "LLAMAR", "comí" -> "COMER", "iré" -> "IR").
@@ -449,6 +530,141 @@ def remove_accents(text: str) -> str:
 _VALID_GLOSS = re.compile(r"^[A-ZÑ0-9][A-ZÑ0-9_-]{0,63}$")
 
 
+# ---------------------------------------------------------------------------
+# Reconocimiento: qué escribió exactamente la persona
+# ---------------------------------------------------------------------------
+# Separado a propósito de la generación. El modelo decide *cómo se representa*
+# una frase en LSB; no decide *qué se dijo*. Antes esa frontera no existía y el
+# modelo se llevaba palabras por delante: "cuchillo" volvía como ['C'] y
+# "carnet" como ['C','A','R','N','E','T'], deletreado pese a que la regla 5 del
+# propio prompt reserva el deletreo para los nombres propios.
+
+_PALABRA = re.compile(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{2,}")
+
+# Palabras que la LSB no signa y que por tanto pueden desaparecer sin que se
+# pierda contenido. Se excluyen del control de cobertura para no reinyectarlas.
+_PALABRAS_FUNCION = frozenset("""
+EL LA LOS LAS UN UNA UNOS UNAS AL DEL LO
+DE EN POR PARA CON SIN SOBRE ENTRE HASTA DESDE HACIA TRAS ANTE BAJO
+Y O U NI QUE QUE SE ME TE NOS LES LE SU MIS TUS SUS
+ES SON ERA ERAN FUE FUERON SER ESTAR ESTA ESTAN HAY HABER HA HAN
+MUY MAS TAN YA PERO SI NO
+""".split())
+
+
+def recognize_input(text: str) -> list:
+    """Palabras con contenido de la frase, tal y como las escribió la persona.
+
+    No normaliza más allá de separar palabras: es el registro de lo dicho, y
+    cualquier arreglo posterior se compara contra esto.
+    """
+    return [w for w in _PALABRA.findall(text)
+            if remove_accents(w.upper()) not in _PALABRAS_FUNCION]
+
+
+def _clave(palabra: str) -> str:
+    return remove_accents(palabra.upper())
+
+
+def _es_nombre_propio(palabra: str, text: str) -> bool:
+    """Mayúscula inicial en posición que no es principio de frase.
+
+    Es la señal disponible sin diccionario de nombres. Se usa solo para
+    *proteger* deletreos legítimos ("Isaac" -> I,S,A,A,C), nunca para crearlos.
+    """
+    if not palabra[:1].isupper():
+        return False
+    pos = text.find(palabra)
+    if pos <= 0:
+        return False
+    return text[:pos].strip()[-1:] not in ("", ".", "?", "!")
+
+
+def _cubre(gloss: str, palabra: str) -> bool:
+    """`gloss` representa a `palabra`.
+
+    Admite la lematización que la LSB exige —"sustrajo" se signa SUSTRAER— con
+    un prefijo común largo, en lugar de exigir igualdad y marcar como perdida
+    una traducción correcta.
+    """
+    g, p = _clave(gloss), _clave(palabra)
+    if g == p or g in p or p in g:
+        return True
+    comun = 0
+    for a, b in zip(g, p):
+        if a != b:
+            break
+        comun += 1
+    return comun >= 4
+
+
+def repair_coverage(glosses: list, text: str) -> tuple:
+    """Devuelve (glosas, incidencias) reparando la pérdida de palabras.
+
+    Repara solo los dos fallos que se pueden demostrar mirando la salida, y no
+    intenta juzgar si una traducción es fiel:
+
+      1. Un deletreo que reconstruye una palabra común se colapsa en la glosa
+         entera —"carnet" volvía como C,A,R,N,E,T—, mientras que el de un
+         nombre propio se respeta, que es para lo que existe la dactilología.
+      2. Las letras sueltas que no reconstruyen nada son ruido y se descartan;
+         si alguna era la inicial de una palabra de la frase, esa palabra se
+         devuelve completa —"cuchillo" volvía como ['C'] y perdía el objeto
+         del delito.
+
+    Deliberadamente NO comprueba que cada palabra tenga glosa. La LSB omite
+    partículas y lematiza los verbos, y ningún parecido de cadenas distingue
+    esa traducción correcta de una pérdida: "detuvo" y DETENER comparten tres
+    letras, "dijo" y DECIR solo una. Reinyectar por sospecha corrompería
+    traducciones buenas, que es peor que el fallo que se arregla.
+    """
+    palabras = recognize_input(text)
+    propios = {_clave(w) for w in palabras if _es_nombre_propio(w, text)}
+    incidencias = []
+
+    resultado, huerfanas, i = [], [], 0
+    while i < len(glosses):
+        if len(glosses[i]) == 1 and glosses[i].isalpha():
+            j = i
+            while j < len(glosses) and len(glosses[j]) == 1 and glosses[j].isalpha():
+                j += 1
+            racha = "".join(glosses[i:j])
+            objetivo = next((w for w in palabras if _clave(w) == _clave(racha)), None)
+            if objetivo and _clave(objetivo) in propios:
+                resultado.extend(glosses[i:j])
+            elif objetivo:
+                resultado.append(_clave(objetivo))
+                incidencias.append({"palabra": objetivo, "accion": "deletreo_colapsado"})
+            else:
+                for suelta in glosses[i:j]:
+                    huerfanas.append(_clave(suelta))
+                    incidencias.append({"palabra": suelta, "accion": "letra_descartada"})
+            i = j
+            continue
+        resultado.append(glosses[i])
+        i += 1
+
+    # Una inicial huérfana es la huella de un deletreo truncado: la palabra que
+    # empezaba por ahí se quedó sin representación y se devuelve entera.
+    iniciales = set(huerfanas)
+    for palabra in palabras:
+        clave = _clave(palabra)
+        if clave in propios or clave[:1] not in iniciales:
+            continue
+        if not any(_cubre(g, palabra) for g in resultado):
+            resultado.append(clave)
+            incidencias.append({"palabra": palabra, "accion": "palabra_recuperada"})
+
+    # Salida vacía con entrada que sí decía algo: se devuelve lo dicho antes
+    # que nada, para que el avatar no se quede mudo.
+    if not resultado and palabras:
+        for palabra in palabras:
+            resultado.append(_clave(palabra))
+            incidencias.append({"palabra": palabra, "accion": "palabra_recuperada"})
+
+    return resultado, incidencias
+
+
 def post_process_glosses(bedrock_result: dict, text: str) -> dict:
     """
     Valida las glosas retornadas por Bedrock contra el diccionario
@@ -459,21 +675,33 @@ def post_process_glosses(bedrock_result: dict, text: str) -> dict:
 
     animations = get_avatar_animations()
 
-    processed = []
+    # Saneado de forma: lo que devuelve el modelo es tan poco confiable como lo
+    # que entró. Se filtra antes de comprobar cobertura, para que la reparación
+    # trabaje sobre glosas ya bien formadas.
+    limpias = []
     for gloss in raw_glosses:
-        # Lo que devuelve el modelo es tan poco confiable como lo que entró:
-        # una inyección de prompt puede hacerle emitir cualquier cadena, y esa
-        # cadena termina rotulando una seña en la pantalla del usuario. Se
-        # descarta lo que no tenga forma de glosa en lugar de reenviarlo.
         if not isinstance(gloss, str):
             continue
+        candidata = gloss.upper().strip()
+        if not _VALID_GLOSS.match(candidata):
+            logger.warning("Glosa descartada por formato: %.60r", gloss)
+            continue
+        limpias.append(GLOSS_ALIASES.get(candidata, candidata))
+
+    # Reconocimiento frente a generación: aquí se comprueba que la
+    # representación no haya perdido ninguna palabra de lo que se dijo.
+    raw_glosses, incidencias = repair_coverage(limpias, text)
+    if incidencias:
+        logger.info("Fidelidad corregida: %s", incidencias)
+
+    processed = []
+    for gloss in raw_glosses:
+        # Una palabra recuperada puede no tener forma de glosa (acentos, signos)
+        # y no debe rotular una seña en pantalla si no la tiene.
         gloss_upper = gloss.upper().strip()
         if not _VALID_GLOSS.match(gloss_upper):
             logger.warning("Glosa descartada por formato: %.60r", gloss)
             continue
-        # El modelo devuelve variantes de la misma seña; se unifican antes de
-        # buscarla, o una glosa válida caería en dactilología por un espacio.
-        gloss_upper = GLOSS_ALIASES.get(gloss_upper, gloss_upper)
 
         animation_file = resolve_animation_file(gloss_upper, animations, text)
         is_available = animation_file is not None
@@ -489,6 +717,9 @@ def post_process_glosses(bedrock_result: dict, text: str) -> dict:
         "glosses": [g["gloss"] for g in processed],
         "glossDetails": processed,
         "disambiguation": disambiguation,
+        # Reconocimiento: qué se dijo, separado de cómo se representa.
+        "inputWords": recognize_input(text),
+        "fidelityFixes": incidencias,
         "totalGlosses": len(processed),
         "availableInAvatar": sum(1 for g in processed if g["available"]),
         "requiresDactylology": sum(1 for g in processed if not g["available"]),

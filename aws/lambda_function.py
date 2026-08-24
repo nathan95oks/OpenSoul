@@ -46,253 +46,217 @@ CORS_HEADERS = {
 }
 
 GLOSS_LEXICON = {
-    "YO":         {"rol": "SUJETO", "es": "yo", "perspectiva": "1P"},
-    "NOSOTROS":   {"rol": "SUJETO", "es": "nosotros", "perspectiva": "1P_PLURAL"},
-    "HIJO":       {"rol": "SUJETO", "es": "mi hijo", "perspectiva": "3P"},
-    "HIJA":       {"rol": "SUJETO", "es": "mi hija", "perspectiva": "3P"},
-    "MAMA":       {"rol": "SUJETO", "es": "mi madre", "perspectiva": "3P"},
-    "PAPA":       {"rol": "SUJETO", "es": "mi padre", "perspectiva": "3P"},
-    "HERMANO":    {"rol": "SUJETO", "es": "mi hermano", "perspectiva": "3P"},
-    "HERMANA":    {"rol": "SUJETO", "es": "mi hermana", "perspectiva": "3P"},
-    "ESPOSO":     {"rol": "SUJETO", "es": "mi esposo", "perspectiva": "3P"},
-    "ESPOSA":     {"rol": "SUJETO", "es": "mi esposa", "perspectiva": "3P"},
-    "FAMILIA":    {"rol": "SUJETO", "es": "mi familia", "perspectiva": "3P"},
-    "PERSONA":    {"rol": "SUJETO", "es": "una persona", "perspectiva": "3P"},
-    "NIÑO":       {"rol": "SUJETO", "es": "un niño", "perspectiva": "3P"},
-    "NIÑA":       {"rol": "SUJETO", "es": "una niña", "perspectiva": "3P"},
-    "BEBE":       {"rol": "SUJETO", "es": "un bebé", "perspectiva": "3P"},
-    "AMIGO":      {"rol": "SUJETO", "es": "mi amigo", "perspectiva": "3P"},
-    "VECINO":     {"rol": "SUJETO", "es": "mi vecino", "perspectiva": "3P"},
-
-    "NECESITAR":  {"rol": "VERBO", "es": "necesitar", "1p": "necesito", "3p": "necesita", "formal": "requiero"},
-    "PEDIR":      {"rol": "VERBO", "es": "pedir", "1p": "solicito", "3p": "solicita", "formal": "solicitar"},
-    "TRAMITAR":   {"rol": "VERBO", "es": "tramitar", "1p": "necesito tramitar", "3p": "necesita tramitar", "formal": "deseo realizar el trámite de"},
-    "SOLICITAR":  {"rol": "VERBO", "es": "solicitar", "1p": "solicito", "3p": "solicita", "formal": "deseo solicitar"},
-    "REGISTRAR":  {"rol": "VERBO", "es": "registrar", "1p": "necesito registrar", "3p": "necesita registrar", "formal": "deseo registrar"},
-    "CONSULTAR":  {"rol": "VERBO", "es": "consultar", "1p": "deseo consultar", "3p": "consulta", "formal": "deseo realizar una consulta sobre"},
-    "PAGAR":      {"rol": "VERBO", "es": "pagar", "1p": "necesito pagar", "3p": "necesita pagar", "formal": "deseo realizar el pago de"},
-    "RENOVAR":    {"rol": "VERBO", "es": "renovar", "1p": "necesito renovar", "3p": "necesita renovar", "formal": "deseo renovar"},
-    "INSCRIBIR":  {"rol": "VERBO", "es": "inscribir", "1p": "necesito inscribir", "3p": "necesita inscribir", "formal": "deseo realizar la inscripción de"},
-    "RECOGER":    {"rol": "VERBO", "es": "recoger", "1p": "necesito recoger", "3p": "necesita recoger", "formal": "deseo retirar"},
-    "ENTREGAR":   {"rol": "VERBO", "es": "entregar", "1p": "necesito entregar", "3p": "necesita entregar", "formal": "deseo presentar"},
-    "DAR":        {"rol": "VERBO", "es": "dar", "1p": "necesito entregar", "3p": "necesita entregar", "formal": "deseo presentar"},
-    "PREGUNTAR":  {"rol": "VERBO", "es": "preguntar", "1p": "deseo preguntar", "3p": "pregunta", "formal": "deseo realizar una consulta"},
-    "QUEJAR":     {"rol": "VERBO", "es": "quejar", "1p": "deseo presentar una queja", "3p": "presenta una queja", "formal": "deseo presentar una queja formal por"},
-    "AYUDAR":     {"rol": "VERBO", "es": "ayudar", "1p": "necesito ayuda", "3p": "necesita ayuda"},
-    "AYUDA":      {"rol": "VERBO", "es": "ayudar", "1p": "necesito ayuda", "3p": "necesita ayuda"},
-    "TENER":      {"rol": "VERBO", "es": "tener", "1p": "tengo", "3p": "tiene"},
-    "QUERER":     {"rol": "VERBO", "es": "querer", "1p": "quiero", "3p": "quiere", "formal": "deseo"},
-    "PODER":      {"rol": "VERBO", "es": "poder", "1p": "puedo", "3p": "puede"},
-    "SABER":      {"rol": "VERBO", "es": "saber", "1p": "sé", "3p": "sabe"},
-    "ESPERAR":    {"rol": "VERBO", "es": "esperar", "1p": "estoy esperando", "3p": "está esperando"},
-    "PERDER":     {"rol": "VERBO", "es": "perder", "1p": "perdí", "3p": "perdió", "formal": "he extraviado"},
-    "DENUNCIAR":  {"rol": "VERBO", "es": "denunciar", "1p": "deseo presentar un reclamo", "3p": "presenta un reclamo", "formal": "deseo presentar un reclamo formal por"},
-    "VER":        {"rol": "VERBO", "es": "ver", "1p": "vi", "3p": "vio"},
-    "SENTIR":     {"rol": "VERBO", "es": "sentir", "1p": "sentí", "3p": "sintió"},
-    "FIRMAR":     {"rol": "VERBO", "es": "firmar", "1p": "necesito firmar", "3p": "necesita firmar", "formal": "deseo proceder con la firma de"},
-    "CORREGIR":   {"rol": "VERBO", "es": "corregir", "1p": "necesito corregir", "3p": "necesita corregir", "formal": "deseo solicitar la corrección de"},
-    "VERIFICAR":  {"rol": "VERBO", "es": "verificar", "1p": "necesito verificar", "3p": "necesita verificar", "formal": "deseo verificar"},
-
-    "ROBAR":      {"rol": "VERBO", "es": "robar", "agresor": "robó", "1p": "me robaron"},
-    "ASALTAR":    {"rol": "VERBO", "es": "asaltar", "agresor": "asaltó", "1p": "me asaltaron"},
-    "QUITAR":     {"rol": "VERBO", "es": "quitar", "agresor": "quitó", "1p": "me quitaron"},
-    "GOLPEAR":    {"rol": "VERBO", "es": "golpear", "agresor": "golpeó", "1p": "me golpearon"},
-    "PEGAR":      {"rol": "VERBO", "es": "pegar", "agresor": "golpeó", "1p": "me golpearon"},
-    "AMENAZAR":   {"rol": "VERBO", "es": "amenazar", "agresor": "amenazó", "1p": "me amenazaron"},
-    "EMPUJAR":    {"rol": "VERBO", "es": "empujar", "agresor": "empujó", "1p": "me empujaron"},
-    "GRITAR":     {"rol": "VERBO", "es": "gritar", "agresor": "gritó", "1p": "me gritaron"},
-    "PERSEGUIR":  {"rol": "VERBO", "es": "perseguir", "agresor": "persiguió", "1p": "me persiguieron"},
-    "ACOSAR":     {"rol": "VERBO", "es": "acosar", "agresor": "acosó", "1p": "me acosaron"},
-    "SECUESTRAR": {"rol": "VERBO", "es": "secuestrar", "agresor": "secuestró", "1p": "me secuestraron"},
-    "ABUSO":      {"rol": "VERBO", "es": "abuso sexual", "agresor": "agredió sexualmente", "1p": "fui agredido sexualmente"},
-
-    "HOMBRE":      {"rol": "DESCRIPTOR", "es": "un hombre", "persona": True},
-    "MUJER":       {"rol": "DESCRIPTOR", "es": "una mujer", "persona": True},
-    "JOVEN":       {"rol": "DESCRIPTOR", "es": "un joven", "persona": True},
-    "DESCONOCIDO": {"rol": "DESCRIPTOR", "es": "un desconocido", "persona": True},
-    "VECINO":      {"rol": "DESCRIPTOR", "es": "un vecino", "persona": True},
-    "GRUPO":       {"rol": "DESCRIPTOR", "es": "un grupo de personas", "persona": True},
-    "ADULTO":      {"rol": "DESCRIPTOR", "es": "un adulto", "persona": True},
-    "ANCIANO":     {"rol": "DESCRIPTOR", "es": "un anciano", "persona": True},
-    "ABUELO":      {"rol": "DESCRIPTOR", "es": "un abuelo", "persona": True},
-    "CONOCIDO":    {"rol": "DESCRIPTOR", "es": "un conocido", "persona": True},
-    "DOS":         {"rol": "DESCRIPTOR", "es": "dos personas", "persona": True},
-    "TRES":        {"rol": "DESCRIPTOR", "es": "tres personas", "persona": True},
-    "ALTO":        {"rol": "DESCRIPTOR", "es": "alto"},
-    "BAJO":        {"rol": "DESCRIPTOR", "es": "bajo"},
-    "DELGADO":     {"rol": "DESCRIPTOR", "es": "delgado"},
-    "FLACO":       {"rol": "DESCRIPTOR", "es": "flaco"},
-    "GORDO":       {"rol": "DESCRIPTOR", "es": "robusto"},
-    "FUERTE":      {"rol": "DESCRIPTOR", "es": "de contextura fuerte"},
-    "MORENO":      {"rol": "DESCRIPTOR", "es": "moreno"},
-    "BLANCO_PIEL": {"rol": "DESCRIPTOR", "es": "de piel clara"},
-    "PELO_CORTO":  {"rol": "DESCRIPTOR", "es": "de cabello corto"},
-    "PELO_LARGO":  {"rol": "DESCRIPTOR", "es": "de cabello largo"},
-    "CALVO":       {"rol": "DESCRIPTOR", "es": "calvo"},
-    "BARBA":       {"rol": "DESCRIPTOR", "es": "con barba"},
-    "BIGOTE":      {"rol": "DESCRIPTOR", "es": "con bigote"},
-    "TATUAJE":     {"rol": "DESCRIPTOR", "es": "con un tatuaje"},
-    "CICATRIZ":    {"rol": "DESCRIPTOR", "es": "con una cicatriz"},
-    "LENTES":      {"rol": "DESCRIPTOR", "es": "con lentes"},
-    # Vestimenta del sospechoso (rasgos descriptivos).
-    "GORRA":       {"rol": "DESCRIPTOR", "es": "con gorra"},
-    "CAPUCHA":     {"rol": "DESCRIPTOR", "es": "con capucha"},
-    "CHOMPA":      {"rol": "DESCRIPTOR", "es": "con chompa"},
-    "CASCO":       {"rol": "DESCRIPTOR", "es": "con casco"},
-    "CAMISA":      {"rol": "DESCRIPTOR", "es": "con camisa"},
-    "PANTALON":    {"rol": "DESCRIPTOR", "es": "con pantalón"},
-    "ZAPATOS":     {"rol": "DESCRIPTOR", "es": "con zapatos"},
-    "MOCHILA_USADA": {"rol": "DESCRIPTOR", "es": "con una mochila"},
-    # Colores (modifican la vestimenta descrita).
-    "NEGRO":       {"rol": "DESCRIPTOR", "es": "de color negro"},
-    "BLANCO":      {"rol": "DESCRIPTOR", "es": "de color blanco"},
-    "AZUL":        {"rol": "DESCRIPTOR", "es": "de color azul"},
-    "ROJO":        {"rol": "DESCRIPTOR", "es": "de color rojo"},
-    "GRIS":        {"rol": "DESCRIPTOR", "es": "de color gris"},
-    "VERDE":       {"rol": "DESCRIPTOR", "es": "de color verde"},
-    "OSCURO":      {"rol": "DESCRIPTOR", "es": "de color oscuro"},
-    "CLARO":       {"rol": "DESCRIPTOR", "es": "de color claro"},
-
-    "CELULAR":   {"rol": "OBJETO", "es": "mi celular"},
-    "DINERO":    {"rol": "OBJETO", "es": "mi dinero"},
-    "MOCHILA":   {"rol": "OBJETO", "es": "mi mochila"},
-    "BOLSA":     {"rol": "OBJETO", "es": "mi bolsa"},
-    "LLAVE":     {"rol": "OBJETO", "es": "mis llaves"},
-    "BILLETERA": {"rol": "OBJETO", "es": "mi billetera"},
-    "TARJETA":   {"rol": "OBJETO", "es": "mi tarjeta bancaria"},
-    "RELOJ":     {"rol": "OBJETO", "es": "mi reloj"},
-    "CADENA":    {"rol": "OBJETO", "es": "mi cadena"},
-    "ANILLO":    {"rol": "OBJETO", "es": "mi anillo"},
-    "COLLAR":    {"rol": "OBJETO", "es": "mi collar"},
-    "ARETES":    {"rol": "OBJETO", "es": "mis aretes"},
-    "LAPTOP":    {"rol": "OBJETO", "es": "mi laptop"},
-    "COMPUTADORA": {"rol": "OBJETO", "es": "mi computadora"},
-    "AUDIFONOS": {"rol": "OBJETO", "es": "mis audífonos"},
-    "LENTES_SOL": {"rol": "OBJETO", "es": "mis lentes de sol"},
+    # GENERADO por tool/sync_vocabulary.dart — no editar a mano.
+    # Fuente: el lexicón del cliente, para que servidor y cliente
+    # compongan la misma oración a partir de las mismas glosas.
+    "ABOGADO": {"rol": "SERVICIO", "es": "un abogado"},
+    "ABUSAR": {"rol": "VERBO", "es": "abusó sexualmente", "agresor": "abusó sexualmente"},
+    "ACCIDENTE": {"rol": "URGENCIA", "es": "hubo un accidente"},
+    "ACEPTAR": {"rol": "VERBO", "es": "acepto"},
+    "ACOMPANAR": {"rol": "VERBO", "es": "necesito que me acompañen"},
+    "ACUERDO_SOCIAL": {"rol": "DOCUMENTO", "es": "un acuerdo"},
+    "ADMINISTRAR": {"rol": "VERBO", "es": "quiero administrar"},
+    "AEROPUERTO": {"rol": "LUGAR", "es": "en el aeropuerto"},
+    "AHORA": {"rol": "TIEMPO", "es": "ahora mismo"},
+    "ALCALDIA": {"rol": "INSTITUCION", "es": "en la alcaldía"},
+    "AMARILLO": {"rol": "DESCRIPTOR", "es": "de color amarillo"},
+    "AMENAZAR": {"rol": "VERBO", "es": "amenazó", "agresor": "amenazó"},
+    "ANO": {"rol": "TIEMPO", "es": "este año"},
+    "ANOTAR": {"rol": "VERBO", "es": "quiero anotar"},
+    "ANTEAYER": {"rol": "TIEMPO", "es": "anteayer"},
+    "ARCHIVADOR": {"rol": "DOCUMENTO", "es": "el archivador"},
+    "ARRESTAR": {"rol": "VERBO", "es": "arrestó", "agresor": "arrestó"},
+    "ARTICULO": {"rol": "DOCUMENTO", "es": "el artículo"},
+    "ASISTENCIA": {"rol": "URGENCIA", "es": "necesito asistencia"},
+    "ASISTENTE": {"rol": "SERVICIO", "es": "un asistente"},
+    "ATENDER": {"rol": "VERBO", "es": "necesito que me atiendan"},
+    "AUTO": {"rol": "OBJETO", "es": "mi auto"},
+    "AUTONOMIA": {"rol": "ESTADO", "es": "autónomo"},
+    "AUTORIDAD": {"rol": "INSTITUCION", "es": "en la autoridad"},
+    "AUXILIO": {"rol": "URGENCIA", "es": "necesito auxilio"},
+    "AVENIDA": {"rol": "LUGAR", "es": "en la avenida"},
+    "AVION": {"rol": "OBJETO", "es": "el avión"},
+    "AVISAR": {"rol": "VERBO", "es": "quiero avisar"},
+    "AYER": {"rol": "TIEMPO", "es": "ayer"},
+    "AYUDAR": {"rol": "VERBO", "es": "necesito ayuda"},
+    "AZUL": {"rol": "DESCRIPTOR", "es": "de color azul"},
     "BICICLETA": {"rol": "OBJETO", "es": "mi bicicleta"},
-    "AUTO":      {"rol": "OBJETO", "es": "mi auto"},
-    "MOTO":      {"rol": "OBJETO", "es": "mi moto"},
-    "MOTOCICLETA": {"rol": "OBJETO", "es": "mi motocicleta"},
-    "CUCHILLO":  {"rol": "OBJETO", "es": "un cuchillo", "arma": True},
-    "PISTOLA":   {"rol": "OBJETO", "es": "una pistola", "arma": True},
-
-    "CALLE":   {"rol": "LUGAR", "es": "en la calle"},
-    "CASA":    {"rol": "LUGAR", "es": "en mi casa"},
+    "BLANCO": {"rol": "DESCRIPTOR", "es": "de color blanco"},
+    "CAFE": {"rol": "DESCRIPTOR", "es": "de color café"},
+    "CALLE": {"rol": "LUGAR", "es": "en la calle"},
+    "CARCEL": {"rol": "LUGAR", "es": "en la cárcel"},
+    "CARPETA": {"rol": "DOCUMENTO", "es": "la carpeta"},
+    "CARTA": {"rol": "DOCUMENTO", "es": "la carta"},
+    "CASA": {"rol": "LUGAR", "es": "en mi casa"},
+    "CELESTE": {"rol": "DESCRIPTOR", "es": "de color celeste"},
+    "COCHABAMBA": {"rol": "LUGAR", "es": "en Cochabamba"},
+    "COMO": {"rol": "DESCONOCIDO", "es": "cómo"},
+    "COMPRENDER": {"rol": "VERBO", "es": "quiero comprender"},
+    "COMPROMISO": {"rol": "ESTADO", "es": "comprometido"},
+    "CONFESAR": {"rol": "VERBO", "es": "quiero confesar"},
+    "CONFIANZA": {"rol": "ESTADO", "es": "tengo confianza"},
+    "CONFIRMACION": {"rol": "DOCUMENTO", "es": "la confirmación"},
+    "CONFUSION": {"rol": "ESTADO", "es": "estoy confundido"},
+    "CONTEXTO": {"rol": "DOCUMENTO", "es": "el contexto"},
+    "COORDINADOR": {"rol": "SERVICIO", "es": "un coordinador"},
+    "COORDINAR": {"rol": "VERBO", "es": "quiero coordinar"},
+    "COPIAR": {"rol": "VERBO", "es": "quiero una copia"},
+    "CORRECTO": {"rol": "DESCRIPTOR", "es": "correcto"},
+    "CORRER": {"rol": "VERBO", "es": "salió corriendo", "agresor": "salió corriendo"},
+    "CORRUPTO": {"rol": "DESCRIPTOR", "es": "corrupto"},
+    "CRISIS": {"rol": "URGENCIA", "es": "es una crisis"},
+    "CUAL": {"rol": "DESCONOCIDO", "es": "cuál"},
+    "CUANDO": {"rol": "DESCONOCIDO", "es": "cuándo"},
+    "CUANTOS": {"rol": "DESCONOCIDO", "es": "cuántos"},
+    "CUMPLIR": {"rol": "VERBO", "es": "quiero cumplir"},
+    "DANAR": {"rol": "VERBO", "es": "dañó", "agresor": "dañó"},
+    "DECIDIR": {"rol": "VERBO", "es": "quiero decidir"},
+    "DECRETO_SUPREMO": {"rol": "DOCUMENTO", "es": "el decreto supremo"},
+    "DELGADO": {"rol": "DESCRIPTOR", "es": "delgado"},
+    "DIA": {"rol": "TIEMPO", "es": "ese día"},
+    "DIGNIDAD": {"rol": "DESCRIPTOR", "es": "digno"},
+    "DINERO": {"rol": "OBJETO", "es": "mi dinero"},
+    "DIRECCION": {"rol": "LUGAR", "es": "en esa dirección"},
+    "DISCRIMINACION": {"rol": "VERBO", "es": "discriminó", "agresor": "discriminó"},
+    "DOCTOR": {"rol": "SERVICIO", "es": "un doctor"},
+    "DONDE": {"rol": "DESCONOCIDO", "es": "dónde"},
+    "EL": {"rol": "SUJETO", "es": "él"},
+    "ELLA": {"rol": "SUJETO", "es": "ella"},
+    "ELLOS": {"rol": "SUJETO", "es": "ellos"},
+    "ENFERMERA": {"rol": "SERVICIO", "es": "una enfermera"},
+    "ESCRIBIR": {"rol": "VERBO", "es": "quiero escribir"},
+    "ESTADO": {"rol": "DOCUMENTO", "es": "el estado del trámite"},
+    "ESTOY_BIEN": {"rol": "DESCONOCIDO", "es": "estoy bien"},
+    "ETICA": {"rol": "DESCRIPTOR", "es": "ético"},
+    "EXIGIR": {"rol": "VERBO", "es": "quiero exigir"},
+    "FALTA": {"rol": "ESTADO", "es": "por una falta"},
+    "FARMACIA": {"rol": "LUGAR", "es": "en la farmacia"},
+    "FECHA": {"rol": "TIEMPO", "es": "en esa fecha"},
+    "FIRME": {"rol": "DESCRIPTOR", "es": "firme"},
+    "FISCAL": {"rol": "INSTITUCION", "es": "en la fiscalía"},
+    "FORMULARIO": {"rol": "DOCUMENTO", "es": "el formulario"},
+    "FOTOCOPIA": {"rol": "DOCUMENTO", "es": "una fotocopia"},
+    "GARANTE": {"rol": "ESTADO", "es": "garante"},
+    "GESTIONAR": {"rol": "VERBO", "es": "quiero gestionar"},
+    "GOBIERNO": {"rol": "INSTITUCION", "es": "en el gobierno"},
+    "GRACIAS": {"rol": "DESCONOCIDO", "es": "gracias"},
+    "GRUESO": {"rol": "DESCRIPTOR", "es": "grueso"},
+    "HABLAR": {"rol": "VERBO", "es": "quiero hablar"},
+    "HERIDA": {"rol": "URGENCIA", "es": "tengo una herida"},
+    "HOLA": {"rol": "DESCONOCIDO", "es": "hola"},
+    "HOMBRE": {"rol": "DESCRIPTOR", "es": "un hombre", "persona": True},
+    "HONESTIDAD": {"rol": "DESCRIPTOR", "es": "honesto"},
+    "HORA": {"rol": "TIEMPO", "es": "hace una hora"},
+    "HOSPITAL": {"rol": "LUGAR", "es": "en el hospital"},
+    "HOY": {"rol": "TIEMPO", "es": "hoy"},
+    "IDENTIDAD": {"rol": "DESCRIPTOR", "es": "mi identidad", "persona": True},
+    "IDENTIFICAR": {"rol": "VERBO", "es": "quiero identificar"},
+    "INOCENTE": {"rol": "DESCRIPTOR", "es": "inocente"},
+    "INSTITUCION": {"rol": "INSTITUCION", "es": "en la institución"},
+    "INTERPRETE": {"rol": "SERVICIO", "es": "un intérprete de señas"},
+    "INVESTIGACION": {"rol": "TRAMITE", "es": "una investigación"},
+    "JUEZ": {"rol": "INSTITUCION", "es": "en el juez"},
+    "JUICIO": {"rol": "TRAMITE", "es": "un juicio"},
+    "JURAR": {"rol": "VERBO", "es": "quiero jurar"},
+    "JUSTICIA": {"rol": "DOCUMENTO", "es": "la justicia"},
+    "LADRON": {"rol": "DESCRIPTOR", "es": "un ladrón", "persona": True},
+    "LEY": {"rol": "DOCUMENTO", "es": "la ley"},
+    "LICENCIA": {"rol": "DOCUMENTO", "es": "mi licencia"},
+    "LICENCIA_DECONDUCIR": {"rol": "DOCUMENTO", "es": "mi licencia de conducir"},
+    "LILA": {"rol": "DESCRIPTOR", "es": "de color lila"},
+    "LO_SIENTO": {"rol": "DESCONOCIDO", "es": "lo siento"},
+    "MAL": {"rol": "ESTADO", "es": "me siento mal"},
+    "MALTRATAR": {"rol": "VERBO", "es": "maltrató", "agresor": "maltrató"},
+    "MANANA": {"rol": "TIEMPO", "es": "mañana"},
+    "MAS_O_MENOS": {"rol": "DESCONOCIDO", "es": "más o menos"},
     "MERCADO": {"rol": "LUGAR", "es": "en el mercado"},
-    "PARADA":  {"rol": "LUGAR", "es": "en la parada"},
-    "MICRO":   {"rol": "LUGAR", "es": "en el micro"},
-    "PARQUE":  {"rol": "LUGAR", "es": "en el parque"},
-    "TRABAJO": {"rol": "LUGAR", "es": "en mi trabajo"},
-    "CAJERO":  {"rol": "LUGAR", "es": "en el cajero automático"},
-    "TAXI":    {"rol": "LUGAR", "es": "en un taxi"},
-    "PLAZA":   {"rol": "LUGAR", "es": "en la plaza"},
-    "ESQUINA": {"rol": "LUGAR", "es": "en la esquina"},
-    "PUENTE":  {"rol": "LUGAR", "es": "en el puente"},
-
-    "ENOJO":    {"rol": "ESTADO", "es": "estoy enojado", "formal": "manifiesto enojo"},
-    "TRISTE":   {"rol": "ESTADO", "es": "estoy triste", "formal": "me encuentro afectado"},
-    "NERVIOSO": {"rol": "ESTADO", "es": "estoy nervioso", "formal": "me encuentro nervioso"},
-
-    "DOCUMENTO":  {"rol": "DOCUMENTO", "es": "documento", "art": "el"},
-    "DOCUMENTOS": {"rol": "DOCUMENTO", "es": "documentos", "art": "los"},
-    "CARNET":     {"rol": "DOCUMENTO", "es": "carnet de identidad", "art": "el"},
-    "CERTIFICADO":{"rol": "DOCUMENTO", "es": "certificado", "art": "el"},
-    "FORMULARIO": {"rol": "DOCUMENTO", "es": "formulario", "art": "el"},
-    "PARTIDA_NACIMIENTO": {"rol": "DOCUMENTO", "es": "partida de nacimiento", "art": "la"},
-    "CERTIFICADO_NACIMIENTO": {"rol": "DOCUMENTO", "es": "certificado de nacimiento", "art": "el"},
-    "CERTIFICADO_MATRIMONIO": {"rol": "DOCUMENTO", "es": "certificado de matrimonio", "art": "el"},
-    "CERTIFICADO_DEFUNCION": {"rol": "DOCUMENTO", "es": "certificado de defunción", "art": "el"},
-    "LICENCIA":   {"rol": "DOCUMENTO", "es": "licencia de conducir", "art": "la"},
-    "FACTURA":    {"rol": "DOCUMENTO", "es": "factura", "art": "la"},
-    "RECIBO":     {"rol": "DOCUMENTO", "es": "recibo", "art": "el"},
-    "TITULO":     {"rol": "DOCUMENTO", "es": "título de propiedad", "art": "el"},
-    "PODER":      {"rol": "DOCUMENTO", "es": "poder notarial", "art": "el"},
-    "FOTOCOPIA":  {"rol": "DOCUMENTO", "es": "fotocopia", "art": "la"},
-    "FOTO":       {"rol": "DOCUMENTO", "es": "fotografía", "art": "la"},
-    "CREDENCIAL": {"rol": "DOCUMENTO", "es": "credencial", "art": "la"},
-    "PASAPORTE":  {"rol": "DOCUMENTO", "es": "pasaporte", "art": "el"},
-    "PAPEL":      {"rol": "DOCUMENTO", "es": "documento", "art": "el"},
-    "ANTECEDENTES":{"rol": "DOCUMENTO", "es": "certificado de antecedentes", "art": "el"},
-    "COPIA_DENUNCIA": {"rol": "DOCUMENTO", "es": "copia de la denuncia", "art": "la"},
-    "COPIA_SENTENCIA": {"rol": "DOCUMENTO", "es": "copia de la sentencia", "art": "la"},
-    "DECLARACION_JURADA": {"rol": "DOCUMENTO", "es": "declaración jurada", "art": "la"},
-
-    "RENOVACION": {"rol": "TRAMITE", "es": "renovación", "art": "la", "formal": "trámite de renovación"},
-    "INSCRIPCION":{"rol": "TRAMITE", "es": "inscripción", "art": "la", "formal": "trámite de inscripción"},
-    "REGISTRO":   {"rol": "TRAMITE", "es": "registro", "art": "el", "formal": "trámite de registro"},
-    "PAGO":       {"rol": "TRAMITE", "es": "pago", "art": "el", "formal": "trámite de pago"},
-    "CONSULTA":   {"rol": "TRAMITE", "es": "consulta", "art": "la", "formal": "consulta ciudadana"},
-    "RECLAMO":    {"rol": "TRAMITE", "es": "reclamo", "art": "el", "formal": "reclamo formal"},
-    "QUEJA":      {"rol": "TRAMITE", "es": "queja", "art": "la", "formal": "queja formal"},
-    "DENUNCIA":   {"rol": "TRAMITE", "es": "denuncia", "art": "la", "formal": "denuncia formal"},
-    "CITA":       {"rol": "TRAMITE", "es": "cita", "art": "la", "formal": "cita programada"},
-    "TURNO":      {"rol": "TRAMITE", "es": "turno", "art": "el", "formal": "turno de atención"},
-    "DUPLICADO":  {"rol": "TRAMITE", "es": "duplicado", "art": "el", "formal": "trámite de duplicado"},
-
-    "NOCHE":      {"rol": "TIEMPO", "es": "en la noche", "formal": "durante el horario nocturno"},
-    "DIA":        {"rol": "TIEMPO", "es": "durante el día", "formal": "en horas del día"},
-    "MAÑANA":     {"rol": "TIEMPO", "es": "en la mañana", "formal": "durante la mañana"},
-    "TARDE":      {"rol": "TIEMPO", "es": "en la tarde", "formal": "durante la tarde"},
-    "AYER":       {"rol": "TIEMPO", "es": "ayer", "formal": "el día de ayer"},
-    "HOY":        {"rol": "TIEMPO", "es": "hoy", "formal": "el día de hoy"},
-    "AHORA":      {"rol": "TIEMPO", "es": "ahora", "formal": "en este momento"},
-    "ANTES":      {"rol": "TIEMPO", "es": "antes", "formal": "con anterioridad"},
-    "SEMANA":     {"rol": "TIEMPO", "es": "esta semana", "formal": "durante la presente semana"},
-
-    "ALCALDIA":   {"rol": "INSTITUCION", "es": "alcaldía", "prep": "en la"},
-    "GOBERNACION":{"rol": "INSTITUCION", "es": "gobernación", "prep": "en la"},
-    "REGISTRO_CIVIL": {"rol": "INSTITUCION", "es": "registro civil", "prep": "en el"},
-    "SEGIP":      {"rol": "INSTITUCION", "es": "SEGIP", "prep": "en el"},
-    "IMPUESTOS":  {"rol": "INSTITUCION", "es": "oficina de impuestos", "prep": "en la"},
-    "BANCO":      {"rol": "INSTITUCION", "es": "banco", "prep": "en el"},
-    "MUNICIPIO":  {"rol": "INSTITUCION", "es": "municipio", "prep": "en el"},
-    "HOSPITAL":   {"rol": "INSTITUCION", "es": "hospital", "prep": "en el"},
-    "ESCUELA":    {"rol": "INSTITUCION", "es": "unidad educativa", "prep": "en la"},
-    "UNIVERSIDAD":{"rol": "INSTITUCION", "es": "universidad", "prep": "en la"},
-    "NOTARIA":    {"rol": "INSTITUCION", "es": "notaría", "prep": "en la"},
-    "JUZGADO":    {"rol": "INSTITUCION", "es": "juzgado", "prep": "en el"},
-    "FISCAL":     {"rol": "INSTITUCION", "es": "fiscalía", "prep": "en la"},
-    "POLICIA":    {"rol": "INSTITUCION", "es": "estación de policía", "prep": "en la"},
-    "OFICINA":    {"rol": "INSTITUCION", "es": "oficina pública", "prep": "en la"},
-    "DEFENSORIA": {"rol": "INSTITUCION", "es": "defensoría", "prep": "en la"},
-
-    "ABOGADO":    {"rol": "SERVICIO", "es": "abogado", "formal": "asistencia legal"},
-    "DOCTOR":     {"rol": "SERVICIO", "es": "médico", "formal": "atención médica"},
-    "INTERPRETE": {"rol": "SERVICIO", "es": "intérprete", "formal": "intérprete de lengua de señas"},
-    "INFORMACION":{"rol": "SERVICIO", "es": "información", "formal": "servicio de información"},
-    "ATENCION":   {"rol": "SERVICIO", "es": "atención al ciudadano", "formal": "servicio de atención ciudadana"},
-    "ORIENTACION":{"rol": "SERVICIO", "es": "orientación", "formal": "servicio de orientación"},
-    "AMBULANCIA": {"rol": "SERVICIO", "es": "ambulancia", "formal": "servicio de ambulancia"},
-    "BOMBERO":    {"rol": "SERVICIO", "es": "bomberos", "formal": "servicio de bomberos"},
-
-    "NUEVO":      {"rol": "DESCRIPTOR", "es": "nuevo"},
-    "VIEJO":      {"rol": "DESCRIPTOR", "es": "antiguo"},
-    "GRANDE":     {"rol": "DESCRIPTOR", "es": "grande"},
-    "PEQUEÑO":    {"rol": "DESCRIPTOR", "es": "pequeño"},
-    "PRIMERO":    {"rol": "DESCRIPTOR", "es": "por primera vez"},
-    "OTRA_VEZ":   {"rol": "DESCRIPTOR", "es": "otra vez"},
-    "GRATIS":     {"rol": "DESCRIPTOR", "es": "gratuito"},
-    "RAPIDO":     {"rol": "DESCRIPTOR", "es": "rápido"},
-    "CORRECTO":   {"rol": "DESCRIPTOR", "es": "correcto"},
-    "INCORRECTO": {"rol": "DESCRIPTOR", "es": "incorrecto"},
-
-    "URGENTE":    {"rol": "URGENCIA", "es": "urgente", "formal": "de manera urgente"},
-    "EMERGENCIA": {"rol": "URGENCIA", "es": "es una emergencia", "formal": "se trata de una emergencia"},
-    "PELIGRO":    {"rol": "URGENCIA", "es": "hay peligro", "formal": "existe una situación de peligro"},
-    "IMPORTANTE": {"rol": "URGENCIA", "es": "es importante", "formal": "reviste importancia"},
-
-    "ENFERMO":    {"rol": "ESTADO", "es": "enfermo/a", "formal": "con problemas de salud"},
-    "ENFERMEDAD": {"rol": "ESTADO", "es": "estoy enfermo/a", "formal": "presento un problema de salud"},
-    "HERIDO":     {"rol": "ESTADO", "es": "herido/a", "formal": "con lesiones físicas"},
-    "ASUSTADO":   {"rol": "ESTADO", "es": "asustado/a", "formal": "en estado de temor"},
-    "MIEDO":      {"rol": "ESTADO", "es": "tengo miedo", "formal": "siento temor"},
-    "DOLOR":      {"rol": "ESTADO", "es": "siento dolor", "formal": "presento dolor"},
-    "HAMBRE":     {"rol": "ESTADO", "es": "tengo hambre", "formal": "necesito alimentación"},
-    # SOLO en el catálogo OpenSoul es "una persona" (cantidad), no un estado.
-    "SOLO":       {"rol": "DESCRIPTOR", "es": "una persona", "persona": True},
-    "PERDIDO":    {"rol": "ESTADO", "es": "estoy perdido/a", "formal": "me encuentro extraviado/a"},
-    "CONFUNDIDO": {"rol": "ESTADO", "es": "estoy confundido/a", "formal": "no comprendo el procedimiento"},
-    "PREOCUPADO": {"rol": "ESTADO", "es": "estoy preocupado/a", "formal": "me encuentro preocupado/a"},
+    "MES": {"rol": "TIEMPO", "es": "este mes"},
+    "MICRO": {"rol": "OBJETO", "es": "el micro"},
+    "MILITAR": {"rol": "DESCRIPTOR", "es": "un militar", "persona": True},
+    "MINISTERIO": {"rol": "INSTITUCION", "es": "en el ministerio"},
+    "MINUTO": {"rol": "TIEMPO", "es": "hace unos minutos"},
+    "MOCHILA": {"rol": "OBJETO", "es": "mi mochila"},
+    "MOSTRAR": {"rol": "VERBO", "es": "quiero mostrar"},
+    "MOTOCICLETA": {"rol": "OBJETO", "es": "mi motocicleta"},
+    "MUJER": {"rol": "DESCRIPTOR", "es": "una mujer", "persona": True},
+    "NARANJA": {"rol": "DESCRIPTOR", "es": "de color naranja"},
+    "NARRAR": {"rol": "VERBO", "es": "quiero narrar"},
+    "NEGRO": {"rol": "DESCRIPTOR", "es": "de color negro"},
+    "NO": {"rol": "DESCONOCIDO", "es": "no"},
+    "NOMBRE": {"rol": "DESCRIPTOR", "es": "mi nombre", "persona": True},
+    "NORMA": {"rol": "DOCUMENTO", "es": "la norma"},
+    "NOSOTROS": {"rol": "SUJETO", "es": "nosotros"},
+    "NO_PUEDO": {"rol": "DESCONOCIDO", "es": "no puedo"},
+    "NO_SABER": {"rol": "DESCONOCIDO", "es": "no sé"},
+    "OBSERVAR": {"rol": "VERBO", "es": "quiero observar"},
+    "OFICIAL": {"rol": "INSTITUCION", "es": "en el oficial"},
+    "ORGANO_JUDICIAL": {"rol": "INSTITUCION", "es": "en el órgano judicial"},
+    "PAPEL": {"rol": "DOCUMENTO", "es": "el documento"},
+    "PARAR": {"rol": "VERBO", "es": "se detuvo", "agresor": "se detuvo"},
+    "PARA_QUE": {"rol": "DESCONOCIDO", "es": "para qué"},
+    "PASADO_MANANA": {"rol": "TIEMPO", "es": "pasado mañana"},
+    "PASAPORTE": {"rol": "DOCUMENTO", "es": "mi pasaporte"},
+    "PEDIR": {"rol": "VERBO", "es": "quiero solicitar"},
+    "PELIGROSO": {"rol": "DESCRIPTOR", "es": "peligroso"},
+    "PERMISO": {"rol": "DESCONOCIDO", "es": "con permiso"},
+    "PERSONERIA_JURIDICA": {"rol": "DOCUMENTO", "es": "la personería jurídica"},
+    "PLAZA": {"rol": "LUGAR", "es": "en la plaza"},
+    "PODER": {"rol": "DOCUMENTO", "es": "un poder notarial"},
+    "POLICIA": {"rol": "INSTITUCION", "es": "en la policía"},
+    "POR_FAVOR": {"rol": "DESCONOCIDO", "es": "por favor"},
+    "POR_QUE": {"rol": "DESCONOCIDO", "es": "por qué"},
+    "PRESENTAR": {"rol": "VERBO", "es": "quiero presentar"},
+    "PRESO": {"rol": "DESCRIPTOR", "es": "detenido"},
+    "PROBLEMA": {"rol": "ESTADO", "es": "por un problema"},
+    "PROTEGER": {"rol": "VERBO", "es": "necesito protección"},
+    "PUEDO": {"rol": "DESCONOCIDO", "es": "sí puedo"},
+    "QUE": {"rol": "DESCONOCIDO", "es": "qué"},
+    "QUEJAR": {"rol": "VERBO", "es": "quiero presentar una queja"},
+    "QUIEN": {"rol": "DESCONOCIDO", "es": "quién"},
+    "RAZON": {"rol": "ESTADO", "es": "por esa razón"},
+    "RECHAZAR": {"rol": "VERBO", "es": "rechazo"},
+    "RECOGER": {"rol": "VERBO", "es": "quiero recoger"},
+    "RECONOCER": {"rol": "VERBO", "es": "quiero reconocer"},
+    "REGLAMENTO": {"rol": "DOCUMENTO", "es": "el reglamento"},
+    "RESOLUCION": {"rol": "DOCUMENTO", "es": "la resolución"},
+    "RESPONDER": {"rol": "VERBO", "es": "quiero responder"},
+    "ROBAR": {"rol": "VERBO", "es": "robó", "agresor": "robó"},
+    "ROJO": {"rol": "DESCRIPTOR", "es": "de color rojo"},
+    "ROSADO": {"rol": "DESCRIPTOR", "es": "de color rosado"},
+    "SABER": {"rol": "DESCONOCIDO", "es": "sí sé"},
+    "SALVAR": {"rol": "VERBO", "es": "me salvó", "agresor": "me salvó"},
+    "SEGUNDO": {"rol": "TIEMPO", "es": "hace un segundo"},
+    "SELLO": {"rol": "DOCUMENTO", "es": "el sello"},
+    "SEMANA": {"rol": "TIEMPO", "es": "esta semana"},
+    "SI": {"rol": "DESCONOCIDO", "es": "sí"},
+    "SITUACION": {"rol": "ESTADO", "es": "por esta situación"},
+    "SOBORNO": {"rol": "VERBO", "es": "ofreció un soborno", "agresor": "ofreció un soborno"},
+    "SOLDADO": {"rol": "DESCRIPTOR", "es": "un soldado", "persona": True},
+    "SOLUCIONAR": {"rol": "VERBO", "es": "quiero solucionar"},
+    "TAXI": {"rol": "OBJETO", "es": "el taxi"},
+    "TELEFONO": {"rol": "OBJETO", "es": "mi teléfono"},
+    "TEMOR": {"rol": "ESTADO", "es": "siento temor"},
+    "TESTIGO": {"rol": "DESCRIPTOR", "es": "un testigo", "persona": True},
+    "TESTIMONIO": {"rol": "DOCUMENTO", "es": "mi testimonio"},
+    "TEXTO": {"rol": "DOCUMENTO", "es": "el texto"},
+    "TITULO": {"rol": "DOCUMENTO", "es": "mi título"},
+    "TRAMITE": {"rol": "TRAMITE", "es": "un trámite"},
+    "TRATAR": {"rol": "VERBO", "es": "quiero tratar"},
+    "TREN": {"rol": "OBJETO", "es": "el tren"},
+    "TRUFI": {"rol": "OBJETO", "es": "el trufi"},
+    "TU": {"rol": "SUJETO", "es": "tú"},
+    "UBICACION_GPS": {"rol": "LUGAR", "es": "en esta ubicación"},
+    "USTEDES": {"rol": "SUJETO", "es": "ustedes"},
+    "VECINO": {"rol": "DESCRIPTOR", "es": "un vecino", "persona": True},
+    "VERDE": {"rol": "DESCRIPTOR", "es": "de color verde"},
+    "VERGUENZA": {"rol": "ESTADO", "es": "siento vergüenza"},
+    "VIDEOLLAMADA": {"rol": "OBJETO", "es": "una videollamada"},
+    "VIOLACION": {"rol": "VERBO", "es": "violó", "agresor": "violó"},
+    "VIOLENCIA": {"rol": "VERBO", "es": "ejerció violencia", "agresor": "ejerció violencia"},
+    "WHATSAPP": {"rol": "OBJETO", "es": "WhatsApp"},
+    "WIFI": {"rol": "OBJETO", "es": "wifi"},
+    "YO": {"rol": "SUJETO", "es": "yo"},
+    "ZOOM": {"rol": "OBJETO", "es": "Zoom"},
 }
 
 def analyze_glosses(cards: list) -> dict:
@@ -908,22 +872,22 @@ Tu respuesta (solo la oración refinada):"""
         logger.warning("Bedrock falló, usando oración base como fallback: %s", str(e))
         return base_sentence
 
-def _build_bedrock_request_body(prompt_text: str) -> dict:
+def _build_bedrock_request_body(prompt_text: str, max_tokens: int = 256) -> dict:
     model_id_lower = BEDROCK_MODEL_ID.lower()
     if "nova" in model_id_lower:
         return {"messages": [{"role": "user", "content": [{"text": prompt_text}]}],
-                "inferenceConfig": {"maxTokens": 256, "temperature": 0.2, "topP": 0.9}}
+                "inferenceConfig": {"maxTokens": max_tokens, "temperature": 0.2, "topP": 0.9}}
     elif "anthropic" in model_id_lower or "claude" in model_id_lower:
-        return {"anthropic_version": "bedrock-2023-05-31", "max_tokens": 256,
+        return {"anthropic_version": "bedrock-2023-05-31", "max_tokens": max_tokens,
                 "temperature": 0.2, "top_p": 0.9,
                 "messages": [{"role": "user", "content": prompt_text}]}
     elif "titan" in model_id_lower:
         return {"inputText": prompt_text,
-                "textGenerationConfig": {"maxTokenCount": 256, "temperature": 0.2, "topP": 0.9, "stopSequences": []}}
+                "textGenerationConfig": {"maxTokenCount": max_tokens, "temperature": 0.2, "topP": 0.9, "stopSequences": []}}
     elif "llama" in model_id_lower or "meta" in model_id_lower:
-        return {"prompt": prompt_text, "max_gen_len": 256, "temperature": 0.2, "top_p": 0.9}
+        return {"prompt": prompt_text, "max_gen_len": max_tokens, "temperature": 0.2, "top_p": 0.9}
     else:
-        return {"anthropic_version": "bedrock-2023-05-31", "max_tokens": 256,
+        return {"anthropic_version": "bedrock-2023-05-31", "max_tokens": max_tokens,
                 "temperature": 0.2, "top_p": 0.9,
                 "messages": [{"role": "user", "content": prompt_text}]}
 
@@ -1105,6 +1069,130 @@ def validate_request(body: dict) -> tuple:
             return False, "El campo 'context' es demasiado largo."
     return True, None
 
+# ===================================================================
+# SUGERENCIA GENERATIVA DE OPCIONES
+# ===================================================================
+# El flujo guiado ofrecía las tarjetas de la categoría de la zona ordenadas por
+# prioridad. Ante "¿Qué pasó?" en un robo eso proponía ARRESTAR y ASISTENCIA
+# —que no responden la pregunta— y enterraba ROBAR por orden alfabético. Era un
+# árbol de decisión escrito a mano, no un sistema capaz de reaccionar a lo que
+# venga de la conversación.
+#
+# Aquí el modelo elige y ordena, pero **solo dentro del vocabulario que el
+# cliente le entrega**. Esa restricción no se le pide en el prompt: se aplica
+# después, descartando lo que no venga en `candidates`. Una glosa inventada no
+# puede sobrevivir a esa comprobación, que es lo que exige el control de
+# alucinaciones.
+
+MAX_SUGERENCIAS = 8
+
+
+def invoke_bedrock_json(prompt: str) -> dict:
+    """Invoca el modelo y devuelve el JSON que trae en su respuesta.
+
+    Reutiliza los mismos ayudantes que el refinamiento —el cuerpo por familia
+    de modelo y el desempaquetado— para no duplicar el conocimiento de qué
+    forma tiene cada proveedor.
+    """
+    respuesta = bedrock_runtime.invoke_model(
+        modelId=BEDROCK_MODEL_ID,
+        contentType="application/json",
+        accept="application/json",
+        # Un JSON con la pregunta y hasta ocho glosas no cabe en los 256
+        # tokens que basta para refinar una frase; truncado, deja de ser JSON
+        # y la sugerencia se descartaba entera sin que se notara.
+        body=json.dumps(_build_bedrock_request_body(prompt, max_tokens=800)),
+    )
+    crudo = _parse_bedrock_response(json.loads(respuesta["body"].read()))
+    # El modelo suele envolver el JSON en explicaciones o en un bloque de
+    # markdown; se extrae el objeto en lugar de exigir una salida limpia.
+    inicio, fin = crudo.find("{"), crudo.rfind("}")
+    if inicio < 0 or fin <= inicio:
+        raise ValueError("la respuesta no contiene un objeto JSON")
+    return json.loads(crudo[inicio:fin + 1])
+
+
+def build_suggestion_prompt(context_type, selected, candidates, question):
+    """Prompt para elegir las siguientes opciones y redactar su pregunta."""
+    contexto = f"La persona está en el contexto '{context_type}'."
+    if question:
+        contexto += (
+            f"\nUna persona oyente acaba de decirle: «{question}». "
+            "Las opciones deben servir para RESPONDER a eso."
+        )
+    if selected:
+        contexto += f"\nYa eligió, en orden: {', '.join(selected)}."
+    else:
+        contexto += "\nTodavía no ha elegido nada."
+
+    return f"""Eres un asistente de una aplicación que ayuda a una persona sorda boliviana a construir una declaración en una institución pública.
+
+{contexto}
+
+Tu tarea es elegir las siguientes GLOSAS que conviene ofrecerle y redactar la pregunta que las presenta.
+
+REGLAS:
+1. Elige como máximo {MAX_SUGERENCIAS} glosas, ordenadas de más a menos probable.
+2. SOLO puedes usar glosas de la lista de disponibles. No inventes ninguna, no traduzcas, no cambies su escritura.
+3. No repitas glosas ya elegidas.
+4. La pregunta va en segunda persona, es corta y concreta: "¿Quién te robó?", "¿Dónde ocurrió?".
+5. Si la persona ya dijo lo esencial, ofrece glosas que añadan detalle útil para la declaración.
+
+GLOSAS DISPONIBLES:
+{', '.join(candidates)}
+
+FORMATO (JSON estricto, sin texto alrededor):
+{{"question": "...", "options": ["GLOSA1", "GLOSA2"]}}"""
+
+
+def suggest_options(body):
+    """Devuelve la pregunta y las opciones siguientes, validadas contra el corpus."""
+    context_type = (body.get("context") or "general").strip().lower()
+    selected = [str(c).strip().upper() for c in (body.get("selected") or [])]
+    candidates = [str(c).strip().upper() for c in (body.get("candidates") or [])]
+    question = (body.get("question") or "").strip()
+
+    if not candidates:
+        return build_response(400, {
+            "error": "VALIDATION_ERROR",
+            "message": "candidates es obligatorio: el modelo solo elige dentro de él.",
+        })
+
+    disponibles = [c for c in candidates if c not in selected]
+    if not disponibles:
+        return build_response(200, {"question": "", "options": [], "generated": False})
+
+    try:
+        prompt = build_suggestion_prompt(context_type, selected, disponibles, question)
+        crudo = invoke_bedrock_json(prompt)
+    except Exception as e:  # noqa: BLE001 — cualquier fallo cae al orden del cliente
+        logger.warning("Sugerencia no generada (%s) — el cliente usará su orden", e)
+        return build_response(200, {"question": "", "options": [], "generated": False})
+
+    permitidas = set(disponibles)
+    opciones, vistas = [], set()
+    for o in crudo.get("options", []):
+        if not isinstance(o, str):
+            continue
+        g = o.strip().upper()
+        # La comprobación que hace inofensiva una alucinación: si el modelo se
+        # inventa una seña, aquí desaparece.
+        if g in permitidas and g not in vistas:
+            opciones.append(g)
+            vistas.add(g)
+        elif g not in permitidas:
+            logger.info("Glosa descartada por no estar en el corpus: %.40r", o)
+
+    if not opciones:
+        return build_response(200, {"question": "", "options": [], "generated": False})
+
+    return build_response(200, {
+        "question": str(crudo.get("question", "")).strip()[:120],
+        "options": opciones[:MAX_SUGERENCIAS],
+        "generated": True,
+    })
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -1118,6 +1206,10 @@ def lambda_handler(event, context):
         body = json.loads(raw_body) if isinstance(raw_body, str) else (raw_body or {})
     except (json.JSONDecodeError, TypeError) as e:
         return build_response(400, {"error": "JSON_PARSE_ERROR", "message": "JSON inválido."})
+
+    # La sugerencia de opciones no valida `cards`: su entrada es otra.
+    if (body.get("action") or "").strip().lower() == "suggest":
+        return suggest_options(body)
 
     is_valid, err = validate_request(body)
     if not is_valid:

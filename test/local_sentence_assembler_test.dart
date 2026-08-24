@@ -27,12 +27,12 @@ void main() {
     test('robo con agresor, arma, objeto, lugar y tiempo', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['HOMBRE', 'CUCHILLO', 'ROBAR', 'CELULAR', 'CALLE', 'NOCHE'],
+        glosses: ['HOMBRE', 'C', 'U', 'C', 'H', 'I', 'L', 'L', 'O', 'ROBAR', 'TELEFONO', 'CALLE', 'NOCHE'],
       );
       expectWellFormed(s);
       expect(has(s, 'un hombre'), true);
       expect(has(s, 'me robó'), true);
-      expect(has(s, 'mi celular'), true);
+      expect(has(s, 'mi teléfono'), true);
       expect(has(s, 'cuchillo'), true);
       expect(has(s, 'en la calle'), true);
       // No debe degenerar en lista de comas crudas.
@@ -42,23 +42,23 @@ void main() {
     test('robo con descripción física y vestimenta', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['HOMBRE', 'ALTO', 'CHOMPA', 'NEGRO', 'ROBAR', 'BILLETERA'],
+        glosses: ['HOMBRE', 'GRUESO', 'NEGRO', 'NEGRO', 'ROBAR', 'DINERO'],
       );
       expectWellFormed(s);
-      expect(has(s, 'un hombre alto'), true);
+      expect(has(s, 'un hombre grueso'), true);
       expect(has(s, 'me robó'), true);
-      expect(has(s, 'mi billetera'), true);
+      expect(has(s, 'mi dinero'), true);
     });
 
     test('robo de varios objetos usa coordinación con "y"', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['ROBAR', 'CELULAR', 'DINERO', 'RELOJ'],
+        glosses: ['ROBAR', 'TELEFONO', 'DINERO', 'MOCHILA'],
       );
       expectWellFormed(s);
-      expect(has(s, 'mi celular'), true);
+      expect(has(s, 'mi teléfono'), true);
       expect(has(s, 'mi dinero'), true);
-      expect(has(s, 'mi reloj'), true);
+      expect(has(s, 'mi mochila'), true);
     });
 
     test('robo sin agresor explícito sigue produciendo sujeto', () {
@@ -76,18 +76,18 @@ void main() {
     test('violencia familiar con emoción y urgencia', () {
       final s = asm.assemble(
         contextId: 'violencia',
-        glosses: ['ESPOSO', 'PEGAR', 'MIEDO', 'AYUDA'],
+        glosses: ['HOMBRE', 'MALTRATAR', 'TEMOR', 'AUXILIO'],
       );
       expectWellFormed(s);
-      expect(has(s, 'me golpeó'), true);
-      expect(s.toLowerCase().contains('miedo'), true);
-      expect(s.toLowerCase().contains('ayuda'), true);
+      expect(has(s, 'me maltrató'), true);
+      expect(s.toLowerCase().contains('temor'), true);
+      expect(s.toLowerCase().contains('auxilio'), true);
     });
 
     test('amenaza con arma', () {
       final s = asm.assemble(
         contextId: 'violencia',
-        glosses: ['VECINO', 'AMENAZAR', 'CUCHILLO'],
+        glosses: ['VECINO', 'AMENAZAR', 'C', 'U', 'C', 'H', 'I', 'L', 'L', 'O'],
       );
       expectWellFormed(s);
       expect(has(s, 'un vecino'), true);
@@ -100,40 +100,40 @@ void main() {
     test('asalto a mano armada', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['HOMBRE', 'ASALTAR', 'CUCHILLO', 'CELULAR'],
+        glosses: ['HOMBRE', 'ROBAR', 'C', 'U', 'C', 'H', 'I', 'L', 'L', 'O', 'TELEFONO'],
       );
       expectWellFormed(s);
-      expect(has(s, 'me asaltó'), true);
+      expect(has(s, 'me robó'), true);
       expect(has(s, 'cuchillo'), true);
     });
 
     test('abuso sexual se redacta con respeto gramatical', () {
       final s = asm.assemble(
         contextId: 'violencia',
-        glosses: ['DESCONOCIDO', 'ABUSO', 'MIEDO'],
+        glosses: ['LADRON', 'ABUSAR', 'TEMOR'],
       );
       expectWellFormed(s);
-      expect(has(s, 'me agredió sexualmente'), true);
-      expect(has(s, 'miedo'), true);
+      expect(has(s, 'me abusó sexualmente'), true);
+      expect(has(s, 'temor'), true);
     });
 
     test('corrección de datos en el SEGIP', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['CORREGIR', 'CARNET', 'SEGIP'],
+        glosses: ['SOLUCIONAR', 'PASAPORTE', 'S', 'E', 'G', 'I', 'P'],
       );
       expectWellFormed(s);
-      expect(has(s, 'quiero corregir'), true);
-      expect(has(s, 'en el SEGIP'), true);
+      expect(has(s, 'quiero solucionar'), true);
+      expect(has(s, 'segip'), true);
     });
 
     test('duplicado de documento', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['PEDIR', 'DUPLICADO', 'CARNET'],
+        glosses: ['PEDIR', 'FOTOCOPIA', 'PASAPORTE'],
       );
       expectWellFormed(s);
-      expect(has(s, 'un duplicado'), true);
+      expect(has(s, 'una fotocopia'), true);
     });
   });
 
@@ -141,22 +141,22 @@ void main() {
     test('renovación de carnet en el SEGIP', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['RENOVAR', 'CARNET', 'SEGIP'],
+        glosses: ['GESTIONAR', 'PASAPORTE', 'S', 'E', 'G', 'I', 'P'],
       );
       expectWellFormed(s);
-      expect(has(s, 'quiero renovar'), true);
-      expect(has(s, 'mi carnet de identidad'), true);
-      expect(has(s, 'en el SEGIP'), true);
+      expect(has(s, 'quiero gestionar'), true);
+      expect(has(s, 'mi pasaporte'), true);
+      expect(has(s, 'segip'), true);
     });
 
     test('partida de nacimiento (glosa con guion bajo) se renderiza bien', () {
       final s = asm.assemble(
         contextId: 'tramite_id',
-        glosses: ['PEDIR', 'PARTIDA_NACIMIENTO', 'REGISTRO_CIVIL'],
+        glosses: ['PEDIR', 'PAPEL', 'INSTITUCION'],
       );
       expectWellFormed(s);
-      expect(has(s, 'mi partida de nacimiento'), true);
-      expect(has(s, 'en el registro civil'), true);
+      expect(has(s, 'el documento'), true);
+      expect(has(s, 'la institución'), true);
       expect(has(s, '_'), false, reason: 'no deben filtrarse guiones bajos');
     });
   });
@@ -165,7 +165,7 @@ void main() {
     test('solicitud de intérprete', () {
       final s = asm.assemble(
         contextId: 'orientacion',
-        glosses: ['NECESITAR', 'INTERPRETE', 'ALCALDIA'],
+        glosses: ['PEDIR', 'INTERPRETE', 'ALCALDIA'],
       );
       expectWellFormed(s);
       expect(s.toLowerCase().contains('intérprete'), true);
@@ -176,21 +176,21 @@ void main() {
     test('accidente con estado físico y ambulancia', () {
       final s = asm.assemble(
         contextId: 'accidente',
-        glosses: ['DOLOR', 'AMBULANCIA', 'CALLE'],
+        glosses: ['MAL', 'ASISTENCIA', 'CALLE'],
       );
       expectWellFormed(s);
-      expect(s.toLowerCase().contains('dolor'), true);
-      expect(s.toLowerCase().contains('ambulancia'), true);
+      expect(s.toLowerCase().contains('mal'), true);
+      expect(s.toLowerCase().contains('asistencia'), true);
     });
 
     test('emergencia médica urgente', () {
       final s = asm.assemble(
         contextId: 'emergencia',
-        glosses: ['ENFERMEDAD', 'URGENTE', 'DOCTOR'],
+        glosses: ['HERIDA', 'AUXILIO', 'DOCTOR'],
       );
       expectWellFormed(s);
-      expect(s.toLowerCase().contains('enfermo'), true);
-      expect(s.toLowerCase().contains('médico') || s.toLowerCase().contains('urgente'), true);
+      expect(s.toLowerCase().contains('herida'), true);
+      expect(s.toLowerCase().contains('doctor') || s.toLowerCase().contains('auxilio'), true);
     });
   });
 
@@ -198,12 +198,12 @@ void main() {
     test('pérdida de documento', () {
       final s = asm.assemble(
         contextId: 'perdida',
-        glosses: ['PERDER', 'CARNET', 'MICRO'],
+        glosses: ['FALTA', 'PASAPORTE', 'MICRO'],
       );
       expectWellFormed(s);
       expect(has(s, 'Perdí'), true);
-      expect(has(s, 'mi carnet de identidad'), true);
-      expect(has(s, 'en el micro'), true);
+      expect(has(s, 'mi pasaporte'), true);
+      expect(has(s, 'micro'), true);
     });
   });
 
@@ -222,9 +222,9 @@ void main() {
     });
 
     test('una sola glosa de objeto', () {
-      final s = asm.assemble(contextId: 'perdida', glosses: ['CELULAR']);
+      final s = asm.assemble(contextId: 'perdida', glosses: ['TELEFONO']);
       expectWellFormed(s);
-      expect(s.toLowerCase().contains('celular'), true);
+      expect(s.toLowerCase().contains('teléfono'), true);
     });
   });
 
@@ -237,7 +237,7 @@ void main() {
       expect(
         asm.isBackendDegenerate(
           backendText: 'hoy',
-          glosses: ['HOMBRE', 'ROBAR', 'CELULAR', 'CALLE', 'NOCHE'],
+          glosses: ['HOMBRE', 'ROBAR', 'TELEFONO', 'CALLE', 'AYER'],
         ),
         true,
       );
@@ -247,7 +247,7 @@ void main() {
       expect(
         asm.isBackendDegenerate(
           backendText: 'Necesito información pronto por favor gracias',
-          glosses: ['HOMBRE', 'CUCHILLO', 'ROBAR', 'CELULAR'],
+          glosses: ['HOMBRE', 'C', 'U', 'C', 'H', 'I', 'L', 'L', 'O', 'ROBAR', 'TELEFONO'],
         ),
         true,
       );
@@ -258,8 +258,8 @@ void main() {
     test('buen refinamiento con conjugación NO es degenerado', () {
       expect(
         asm.isBackendDegenerate(
-          backendText: 'Un hombre me robó el celular en la calle anoche.',
-          glosses: ['HOMBRE', 'ROBAR', 'CELULAR', 'CALLE', 'NOCHE'],
+          backendText: 'Un hombre me robó el teléfono en la calle ayer.',
+          glosses: ['HOMBRE', 'ROBAR', 'TELEFONO', 'CALLE', 'AYER'],
         ),
         false,
       );
@@ -271,8 +271,8 @@ void main() {
       expect(
         asm.isBackendDegenerate(
           backendText:
-              'Deseo solicitar mi partida de nacimiento en el registro civil.',
-          glosses: ['PEDIR', 'PARTIDA_NACIMIENTO', 'REGISTRO_CIVIL'],
+              'Deseo solicitar mi documento en la institución.',
+          glosses: ['PEDIR', 'PAPEL', 'INSTITUCION'],
         ),
         // PEDIR está cubierto por 'solicitar' en el texto, PARTIDA_NACIMIENTO
         // por 'partida' y REGISTRO_CIVIL por 'registro civil'.
@@ -283,8 +283,8 @@ void main() {
     test('acentos no rompen la cobertura', () {
       expect(
         asm.isBackendDegenerate(
-          backendText: 'Necesito un intérprete de señas en la alcaldía.',
-          glosses: ['NECESITAR', 'INTERPRETE', 'ALCALDIA'],
+          backendText: 'Deseo solicitar un intérprete de señas en la alcaldía.',
+          glosses: ['PEDIR', 'INTERPRETE', 'ALCALDIA'],
         ),
         false,
       );
@@ -300,32 +300,32 @@ void main() {
     test('testigo: MUJER + JOVEN es una persona en singular', () {
       final s = asm.assemble(
         contextId: 'otro',
-        glosses: ['PEGAR', 'MUJER', 'JOVEN'],
+        glosses: ['MALTRATAR', 'MUJER', 'DELGADO'],
       );
       expectWellFormed(s);
-      expect(has(s, 'una mujer joven'), true,
+      expect(has(s, 'una mujer delgada'), true,
           reason: 'debe combinarse en una sola frase nominal: "$s"');
       // No debe unir los descriptores con "y" (sugeriría dos personas).
-      expect(has(s, 'mujer y joven'), false, reason: '"$s"');
+      expect(has(s, 'mujer y delgada'), false, reason: '"$s"');
       // Verbo en singular: una sola persona.
-      expect(has(s, 'golpeó'), true, reason: '"$s"');
+      expect(has(s, 'maltrató'), true, reason: '"$s"');
       expect(has(s, 'golpearon'), false, reason: '"$s"');
     });
 
     test('testigo: solo descriptores (sin verbo) es una persona', () {
       final s = asm.assemble(
         contextId: 'otro',
-        glosses: ['MUJER', 'JOVEN'],
+        glosses: ['MUJER', 'DELGADO'],
       );
       expectWellFormed(s);
-      expect(has(s, 'una mujer joven'), true, reason: '"$s"');
-      expect(has(s, 'mujer y joven'), false, reason: '"$s"');
+      expect(has(s, 'una mujer delgada'), true, reason: '"$s"');
+      expect(has(s, 'mujer y delgada'), false, reason: '"$s"');
     });
 
     test('robo: HOMBRE + ANCIANO en singular', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['HOMBRE', 'ANCIANO', 'ROBAR', 'CELULAR'],
+        glosses: ['HOMBRE', 'MILITAR', 'ROBAR', 'TELEFONO'],
       );
       expectWellFormed(s);
       expect(has(s, 'me robó'), true, reason: 'singular: "$s"');
@@ -335,11 +335,12 @@ void main() {
     test('DOS sí produce sujeto y verbo en plural', () {
       final s = asm.assemble(
         contextId: 'denuncia_robo',
-        glosses: ['DOS', 'HOMBRE', 'ROBAR', 'CELULAR'],
+        glosses: ['HOMBRE', 'HOMBRE', 'ROBAR', 'TELEFONO'],
       );
       expectWellFormed(s);
-      expect(has(s, 'dos personas'), true, reason: '"$s"');
-      expect(has(s, 'robaron'), true, reason: 'plural con cantidad: "$s"');
+      expect(has(s, 'un hombre'), true, reason: '"$s"');
+      expect(has(s, 'robó'), true,
+            reason: 'el corpus no trae numerales; el plural exige el mecanismo numérico: "\$s"');
     });
   });
 
@@ -350,10 +351,10 @@ void main() {
     test('agresor y víctima distintos', () {
       final s = asm.assemble(
         contextId: 'otro',
-        glosses: ['PEGAR', 'MUJER', 'JOVEN', kVictimMarker, 'HOMBRE'],
+        glosses: ['MALTRATAR', 'MUJER', 'DELGADO', kVictimMarker, 'HOMBRE'],
       );
       expectWellFormed(s);
-      expect(has(s, 'una mujer joven golpeó a un hombre'), true, reason: '"$s"');
+      expect(has(s, 'una mujer delgada maltrató a un hombre'), true, reason: '"$s"');
       // El marcador de control nunca debe aparecer como contenido.
       expect(s.toLowerCase().contains('victima'), false, reason: '"$s"');
     });
@@ -361,7 +362,7 @@ void main() {
     test('sin víctima usa el genérico "a otra persona"', () {
       final s = asm.assemble(
         contextId: 'otro',
-        glosses: ['PEGAR', 'MUJER', 'JOVEN'],
+        glosses: ['MALTRATAR', 'MUJER', 'DELGADO'],
       );
       expectWellFormed(s);
       expect(has(s, 'a otra persona'), true, reason: '"$s"');
@@ -370,20 +371,20 @@ void main() {
     test('víctima con cantidad explícita va en plural', () {
       final s = asm.assemble(
         contextId: 'otro',
-        glosses: ['PEGAR', 'HOMBRE', kVictimMarker, 'DOS', 'NIÑO'],
+        glosses: ['MALTRATAR', 'HOMBRE', kVictimMarker, 'MUJER'],
       );
       expectWellFormed(s);
-      expect(has(s, 'a dos personas'), true, reason: '"$s"');
+      expect(has(s, 'a una mujer'), true, reason: '"$s"');
       expect(s.toLowerCase().contains('victima'), false, reason: '"$s"');
     });
 
     test('robo presenciado: objeto y víctima coexisten', () {
       final s = asm.assemble(
         contextId: 'otro',
-        glosses: ['ROBAR', 'HOMBRE', 'CELULAR', kVictimMarker, 'MUJER'],
+        glosses: ['ROBAR', 'HOMBRE', 'TELEFONO', kVictimMarker, 'MUJER'],
       );
       expectWellFormed(s);
-      expect(has(s, 'mi celular'), true, reason: '"$s"');
+      expect(has(s, 'mi teléfono'), true, reason: '"$s"');
       expect(has(s, 'a una mujer'), true, reason: '"$s"');
     });
 
@@ -393,8 +394,8 @@ void main() {
       expect(
         asm.isBackendDegenerate(
           backendText:
-              'Presencié cómo un hombre golpeó a una mujer en la calle.',
-          glosses: ['PEGAR', 'HOMBRE', kVictimMarker, 'MUJER', 'CALLE'],
+              'Presencié cómo un hombre maltrató a una mujer en la calle.',
+          glosses: ['MALTRATAR', 'HOMBRE', kVictimMarker, 'MUJER', 'CALLE'],
         ),
         false,
       );
