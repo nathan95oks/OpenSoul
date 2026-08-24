@@ -1,8 +1,8 @@
 {
- "version": 4,
+ "version": 5,
  "dialect": "cochabamba",
  "origin": "Corpus_LSB_Ambito_Judicial_OpenSoul (1).md",
- "note": "Catálogo derivado del corpus judicial: toda glosa se rastrea a su categoría, prioridad y fuente oficial. Las categorías Abecedario y Números NO son corpus: son los mecanismos con los que la LSB representa lo que no tiene seña, y van marcados con `mechanism` para no confundirlos con señas verificadas.",
+ "note": "Catálogo derivado del corpus judicial: toda glosa se rastrea a su categoría, prioridad y fuente oficial. Las categorías Abecedario y Números NO son corpus: son los mecanismos con los que la LSB representa lo que no tiene seña, y van marcados con `mechanism` para no confundirlos con señas verificadas. Una seña con movimiento no cabe en una fotografía: `imageFrames` dice cuántas la componen, y sus archivos se nombran GLOSA_1.png, GLOSA_2.png… Sin el campo, la seña es una sola imagen GLOSA.png.",
  "categoryOrder": [
   "Cortesía",
   "Respuesta",
@@ -613,7 +613,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "2. Preguntas y referencia personal",
-   "source": "M1, Preguntas p.97"
+   "source": "M1, Preguntas p.97",
+   "imageFrames": 2
   },
   {
    "id": "g026",
@@ -634,7 +635,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "2. Preguntas y referencia personal",
-   "source": "M1, Pronombres p.113"
+   "source": "M1, Pronombres p.113",
+   "imageFrames": 2
   },
   {
    "id": "g027",
@@ -676,7 +678,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "2. Preguntas y referencia personal",
-   "source": "M1, Preguntas p.97"
+   "source": "M1, Preguntas p.97",
+   "imageFrames": 2
   },
   {
    "id": "g029",
@@ -1058,7 +1061,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "4. Roles e instituciones",
-   "source": "M3, Política I p.43"
+   "source": "M3, Política I p.43",
+   "imageFrames": 2
   },
   {
    "id": "g045",
@@ -1162,7 +1166,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "4. Roles e instituciones",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g049",
@@ -1188,7 +1193,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "4. Roles e instituciones",
-   "source": "M3, Política I p.43"
+   "source": "M3, Política I p.43",
+   "imageFrames": 3
   },
   {
    "id": "g050",
@@ -1383,7 +1389,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "5. Conceptos jurídicos y administrativos",
-   "source": "M3, Política I p.43"
+   "source": "M3, Política I p.43",
+   "imageFrames": 2
   },
   {
    "id": "g058",
@@ -1667,7 +1674,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g071",
@@ -1689,7 +1697,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g072",
@@ -2053,7 +2062,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "6. Acciones del relato y del proceso",
-   "source": "M1, Verbos p.101"
+   "source": "M1, Verbos p.101",
+   "imageFrames": 2
   },
   {
    "id": "g088",
@@ -2099,7 +2109,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "6. Acciones del relato y del proceso",
-   "source": "D2024 #168"
+   "source": "D2024 #168",
+   "imageFrames": 2
   },
   {
    "id": "g090",
@@ -2300,7 +2311,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "7. Hechos, seguridad y urgencia",
-   "source": "M4, General II p.99"
+   "source": "M4, General II p.99",
+   "imageFrames": 3
   },
   {
    "id": "g099",
@@ -2597,7 +2609,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "7. Hechos, seguridad y urgencia",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g112",
@@ -2642,7 +2655,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g114",
@@ -2759,7 +2773,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "13. Descripción visual básica",
-   "source": "M1, Colores p.81"
+   "source": "M1, Colores p.81",
+   "imageFrames": 2
   },
   {
    "id": "g119",
@@ -3096,7 +3111,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "12. Estado, emoción y comprensión",
-   "source": "M4, General II p.99"
+   "source": "M4, General II p.99",
+   "imageFrames": 2
   },
   {
    "id": "g133",
@@ -3221,7 +3237,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "12. Estado, emoción y comprensión",
-   "source": "M4, General II p.99"
+   "source": "M4, General II p.99",
+   "imageFrames": 2
   },
   {
    "id": "g138",
@@ -3842,7 +3859,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "9. Lugares y ubicación",
-   "source": "M1, Deptos. de Bolivia p.89"
+   "source": "M1, Deptos. de Bolivia p.89",
+   "imageFrames": 3
   },
   {
    "id": "g162",
@@ -4083,7 +4101,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "10. Documentos y objetos frecuentes",
-   "source": "M3, Sustantivos III p.73"
+   "source": "M3, Sustantivos III p.73",
+   "imageFrames": 2
   },
   {
    "id": "g175",
@@ -4104,7 +4123,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "10. Documentos y objetos frecuentes",
-   "source": "M3, Sustantivos III p.73"
+   "source": "M3, Sustantivos III p.73",
+   "imageFrames": 2
   },
   {
    "id": "g176",
@@ -4149,7 +4169,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "10. Documentos y objetos frecuentes",
-   "source": "M3, Sustantivos III p.73"
+   "source": "M3, Sustantivos III p.73",
+   "imageFrames": 2
   },
   {
    "id": "g178",
@@ -4191,7 +4212,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "10. Documentos y objetos frecuentes",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g180",
@@ -4400,7 +4422,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "11. Transporte",
-   "source": "M1, Transporte p.93"
+   "source": "M1, Transporte p.93",
+   "imageFrames": 2
   },
   {
    "id": "g186",
@@ -4579,7 +4602,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "1. Comunicación básica y control del diálogo",
-   "source": "M1, Verbos p.101"
+   "source": "M1, Verbos p.101",
+   "imageFrames": 2
   },
   {
    "id": "g194",
@@ -4776,7 +4800,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g203",
@@ -4798,7 +4823,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g204",
@@ -4864,7 +4890,8 @@
    "status": "official",
    "animationFile": "",
    "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89"
+   "source": "M4, Política II p.89",
+   "imageFrames": 2
   },
   {
    "id": "g207",

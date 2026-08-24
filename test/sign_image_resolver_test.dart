@@ -50,4 +50,34 @@ void main() {
       });
     }
   });
+
+  group('señas con movimiento', () {
+    test('una sola imagen conserva el nombre llano', () {
+      expect(resolver.urlsFor('JUEZ'), ['${base}JUEZ.png']);
+    });
+
+    test('varias fotografías se numeran en orden', () {
+      expect(resolver.urlsFor('ACCIDENTE', frames: 3), [
+        '${base}ACCIDENTE_1.png',
+        '${base}ACCIDENTE_2.png',
+        '${base}ACCIDENTE_3.png',
+      ]);
+    });
+
+    test('la numeración respeta el guion bajo de las glosas compuestas', () {
+      expect(resolver.urlsFor('PARA QUE', frames: 2), [
+        '${base}PARA_QUE_1.png',
+        '${base}PARA_QUE_2.png',
+      ]);
+    });
+
+    test('urlFor devuelve el primer fotograma', () {
+      expect(resolver.urlFor('ACCIDENTE'), '${base}ACCIDENTE.png');
+    });
+
+    test('sin almacén no hay fotogramas', () {
+      const sinBase = SignImageResolver(baseUrl: '');
+      expect(sinBase.urlsFor('ACCIDENTE', frames: 3), isEmpty);
+    });
+  });
 }
