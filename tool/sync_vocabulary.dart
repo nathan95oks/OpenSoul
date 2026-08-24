@@ -96,7 +96,14 @@ void sincronizarLexicon(bool soloVerificar) {
       exit(1);
     }
     final es = e.es.replaceAll(r"\'", "'").replaceAll('"', r'\"');
-    buffer.writeln('    "$g": {"rol": "$rol", "es": "$es"},');
+    final extras = StringBuffer();
+    if (e.rol == 'personaDesc' || e.rol == 'personaDescPlural') {
+      extras.write(', "persona": True');
+    }
+    if (e.rol == 'verboAgresion') {
+      extras.write(', "agresor": "$es"');
+    }
+    buffer.writeln('    "$g": {"rol": "$rol", "es": "$es"$extras},');
   }
   buffer.write('}');
   final bloqueNuevo = buffer.toString();
