@@ -86,6 +86,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
         
         await _speechToText.listen(
           onResult: (result) {
+            _lastRecognizedWords = result.recognizedWords;
             setState(() {
               _controller.text = result.recognizedWords;
               _controller.selection = TextSelection.fromPosition(
@@ -122,6 +123,8 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
     );
   }
 
+  String _lastRecognizedWords = '';
+
   Future<void> _stopRecording() async {
     if (!_isRecording) return;
     try {
@@ -130,16 +133,18 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
         _isRecording = false;
       });
 
-      final text = _controller.text.trim();
+      final text = _controller.text.trim().isNotEmpty
+          ? _controller.text.trim()
+          : _lastRecognizedWords.trim();
+
       _controller.clear();
+      _lastRecognizedWords = '';
+
       if (text.isEmpty) {
-        // Dictado vacío: solo salimos del estado de grabación.
         ref
             .read(audioTranslationControllerProvider.notifier)
             .processAudioAsText('');
       } else {
-        // El destino del mensaje lo decide el dueño del widget (pantalla
-        // clásica o conversación), igual que con el texto escrito.
         (widget.onSpeechSubmit ?? widget.onSubmit)(text);
       }
     } catch (_) {
