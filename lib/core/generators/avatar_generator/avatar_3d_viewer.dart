@@ -94,10 +94,15 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   @override
   void didUpdateWidget(Avatar3DViewer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Cuando llegan nuevas animationUrls, comenzar la secuencia desde el inicio
-    if (widget.animationUrls != oldWidget.animationUrls &&
+    // Cuando llegan nuevas animationUrls o nuevas glosas, comenzar la secuencia
+    final hasNewUrls = widget.animationUrls != oldWidget.animationUrls &&
         widget.animationUrls != null &&
-        widget.animationUrls!.isNotEmpty) {
+        widget.animationUrls!.isNotEmpty;
+    final hasNewGlosses = widget.glosses != oldWidget.glosses &&
+        widget.glosses != null &&
+        widget.glosses!.isNotEmpty;
+
+    if (hasNewUrls || hasNewGlosses) {
       _startSequence();
     }
   }

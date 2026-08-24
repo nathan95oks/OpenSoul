@@ -83,19 +83,45 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
         // otra.
         final urls = <String>[];
         final animationGlosses = <String>[];
-        for (final detail in glossDetails) {
-          final gloss = (detail['gloss'] ?? '').toString();
-          final resolved = animationResolver.resolveAll(
-            gloss: gloss,
-            animationFile: detail['animationFile']?.toString(),
-          );
-          urls.addAll(resolved);
-          animationGlosses.addAll(List.filled(resolved.length, gloss));
+
+        if (glossDetails.isNotEmpty) {
+          for (final detail in glossDetails) {
+            final gloss = (detail['gloss'] ?? '').toString();
+            final resolved = animationResolver.resolveAll(
+              gloss: gloss,
+              animationFile: detail['animationFile']?.toString(),
+            );
+            urls.addAll(resolved);
+            animationGlosses.addAll(List.filled(resolved.length, gloss));
+          }
+        } else {
+          // Si el backend devuelve solo la lista de 'glosses' (ej: ["SI"] o ["HOLA"])
+          final glossList = (decodedResponse['glosses'] as List<dynamic>? ?? [])
+              .map((g) => g.toString().toUpperCase().trim())
+              .toList();
+
+          for (final gloss in glossList) {
+            final resolved = animationResolver.resolveAll(gloss: gloss);
+            urls.addAll(resolved);
+            animationGlosses.addAll(List.filled(resolved.length, gloss));
+          }
         }
+
+        // Si aún así no hay URLs pero sí texto original
+        if (urls.isEmpty && text.trim().isNotEmpty) {
+          final singleGloss = text.trim().toUpperCase();
+          final resolved = animationResolver.resolveAll(gloss: singleGloss);
+          urls.addAll(resolved);
+          animationGlosses.add(singleGloss);
+        }
+
+        final glossesList = (decodedResponse['glosses'] as List<dynamic>? ?? [])
+            .map((e) => e.toString().toUpperCase())
+            .toList();
 
         // Decodificamos el JSON que viene de AWS Lambda (Bedrock)
         return LsbTranslationModel.fromJson({
-          'glosses': decodedResponse['glosses'],
+          'glosses': glossesList.isNotEmpty ? glossesList : animationGlosses,
           'animationUrl': urls.isNotEmpty ? urls.first : '',
           'animationUrls': urls,
           'animationGlosses': animationGlosses,
