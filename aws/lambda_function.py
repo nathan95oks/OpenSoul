@@ -476,7 +476,17 @@ def analyze_glosses(cards: list) -> dict:
 
     return analysis
 
-def _detect_event_type(analysis: dict) -> str:
+def _detect_event_type(analysis: dict, context_type: str = "") -> str:
+    # CAMBIO (paridad Dart): el cliente NO deduce la plantilla, la elige el
+    # contexto — `'accidente' || 'emergencia' => _composeEmergency`. Aquí se
+    # deducía por heurística y ganaba la rama equivocada: con
+    # [MAL, DOCTOR, AHORA] el servicio (DOCTOR) se evaluaba antes que el
+    # estado y caía en "SOLICITUD", cuyo generador ignora los estados. El
+    # resultado era "Solicito un doctor ahora mismo": un trámite, no una
+    # urgencia vital, y el estado de salud desaparecía de la declaración.
+    if (context_type or "").strip().lower() in ("accidente", "emergencia"):
+        return "EMERGENCIA"
+
     verbos = [v["glosa"] for v in analysis["verbos"]]
     tramites = [t["glosa"] for t in analysis["tramites"]]
     documentos = [d["glosa"] for d in analysis["documentos"]]
@@ -538,6 +548,10 @@ def build_intermediate_representation(cards: list, analysis: dict, context_type:
     # SIEMPRE precede a la generación: en el handler, cualquier otro punto de
     # entrada perdía el complemento temporal en silencio.
     _resolve_time(analysis, context_type)
+
+    # CAMBIO: se reevalúa aquí porque `analyze_glosses` no conoce el contexto
+    # y la plantilla depende de él (ver _detect_event_type).
+    analysis["tipo_evento"] = _detect_event_type(analysis, context_type)
 
     return {
         "roles": {
@@ -610,6 +624,13 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
     gen_func = generators.get(tipo, _gen_general)
     sentence = gen_func(ir, analysis, is_formal)
 
+    # CAMBIO: red de seguridad de estados. Solo 2 de los 13 generadores leen
+    # `estados`; los otros 11 los descartaban en silencio, así que un "me
+    # siento mal" desaparecía de la declaración según qué plantilla tocara.
+    # Se resuelve en UN punto —como `_ensureCoverage` en el cliente— en vez de
+    # repetir la regla en cada plantilla, que es lo que dejó el agujero.
+    sentence = _append_unused_states(sentence, analysis, is_formal)
+
     sentence = re.sub(r'\s+', ' ', sentence).strip()
     # CAMBIO: varios generadores devuelven la frase en minúscula porque la
     # construyen a partir del lexema del verbo ("quiero solicitar…"). Se
@@ -621,6 +642,39 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
         sentence += '.'
 
     return sentence
+
+def _append_unused_states(sentence: str, analysis: dict, is_formal: bool) -> str:
+    """Ningún estado físico o emocional puede perderse.
+
+    En un accidente, "me siento mal" es el núcleo del parte: omitirlo degrada
+    una urgencia vital a un trámite. Y en cualquier contexto, una glosa que la
+    persona eligió y no aparece hace que el cliente descarte la respuesta
+    entera por cobertura incompleta.
+    """
+    if not analysis["estados"]:
+        return sentence
+
+    plano = _normalizar(sentence)
+    clausulas, adjuntos = [], []
+    for estado in analysis["estados"]:
+        texto = estado.get("formal", estado["es"]) if is_formal else estado["es"]
+        if _normalizar(texto) in plano:
+            continue  # el generador ya lo integró
+        # Los motivos ("por un problema", "por esta situación") no son una
+        # oración: se pegan a la anterior. El resto sí lo es.
+        (adjuntos if texto.startswith("por ") else clausulas).append(texto)
+
+    if adjuntos:
+        sentence = sentence.rstrip(".") + " " + _join_es(adjuntos)
+    for texto in clausulas:
+        sentence = sentence.rstrip(".") + ". " + texto[0].upper() + texto[1:]
+    return sentence
+
+
+def _normalizar(texto: str) -> str:
+    tabla = str.maketrans("áéíóúÁÉÍÓÚñÑ", "aeiouAEIOUnN")
+    return texto.translate(tabla).lower()
+
 
 def _get_time_institution(analysis, is_formal):
     """Complemento de tiempo + institución, sin artículos ni nexos duplicados.
@@ -1001,7 +1055,13 @@ def _gen_emergencia(ir, analysis, is_formal):
     if servicios:
         svc = servicios[0]
         svc_text = svc.get("formal", svc["es"]) if is_formal else svc["es"]
-        parts.append(f"y necesita {svc_text} de forma urgente" if subj else f"Necesito {svc_text} de forma urgente")
+        # CAMBIO: "de forma urgente" sobra cuando la persona ya eligió un
+        # marcador temporal ("ahora mismo"): salía "un doctor de forma urgente
+        # ahora mismo". El cliente redacta "Necesito un doctor." y deja que el
+        # tiempo hable por sí solo.
+        apremio = "" if analysis["tiempos"] else " de forma urgente"
+        parts.append(f"y necesita {svc_text}{apremio}" if subj
+                     else f"Necesito {svc_text}{apremio}")
     else:
         parts.append("Se requiere atención inmediata" if is_formal else "Es urgente")
 
