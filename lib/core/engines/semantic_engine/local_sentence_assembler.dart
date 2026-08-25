@@ -356,6 +356,20 @@ class LocalSentenceAssembler {
   /// del lexema en español (para reconocer conjugaciones: ROBAR→"robó").
   bool _glossCovered(String gloss, String haystackLower) {
     final normalizada = _stripDiacritics(gloss.toLowerCase());
+
+    // Un dígito de una cadena temporal se redacta como palabra: el 2 de
+    // [SEMANA]+[2] sale en el texto como "hace DOS semanas". Sin esto, el
+    // detector de degeneración daba por perdida la cantidad y descartaba una
+    // respuesta del backend que era correcta — el motor local acababa
+    // rehaciendo trabajo ya bien hecho.
+    final cardinal = _cardinales[gloss];
+    if (cardinal != null) {
+      if (RegExp('\\b$cardinal\\b').hasMatch(haystackLower)) return true;
+      // El 1 concuerda en género con su unidad: "una hora", "un día".
+      if (gloss == '1' && RegExp(r'\buna?\b').hasMatch(haystackLower)) {
+        return true;
+      }
+    }
     final parts = normalizada
         .split(RegExp(r'[ _/]+'))
         .where((p) => p.length >= 3); // ignora partículas cortas (de, la…)

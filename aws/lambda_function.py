@@ -312,6 +312,105 @@ GLOSS_LEXICON = {
     "ZOOM": {"rol": "OBJETO", "es": "Zoom"},
 }
 
+# ===================================================================
+# COMPOSICIÓN DE TIEMPO — paridad 1:1 con LocalSentenceAssembler (Dart)
+# ===================================================================
+# Una unidad de tiempo no cierra la respuesta: encadena a una cantidad.
+# [SEMANA]+[2] no es "esta semana" más un dos huérfano, es "hace dos semanas".
+#
+# La dirección NO la elige la persona: el diccionario no tiene PASADO ni
+# FUTURO —se verificó, no existe ningún marcador de dirección— así que la
+# aporta el flujo, que ya sabe si narra un hecho consumado o pide un plazo.
+#
+# Si esto no existiera, el servidor devolvería "esta semana" y perdería el
+# dígito; `isBackendDegenerate` en el cliente detectaría la glosa no
+# representada y descartaría la respuesta entera. La paridad no es estética.
+
+# Género y formas de cada unidad. El género importa para la cantidad 1
+# ("hace UNA semana" pero "hace UN día"); el plural, para el resto.
+_TIME_UNITS = {
+    "MINUTO": {"femenino": False, "singular": "minuto", "plural": "minutos"},
+    "HORA":   {"femenino": True,  "singular": "hora",   "plural": "horas"},
+    "DIA":    {"femenino": False, "singular": "día",    "plural": "días"},
+    "SEMANA": {"femenino": True,  "singular": "semana", "plural": "semanas"},
+    "MES":    {"femenino": False, "singular": "mes",    "plural": "meses"},
+    "ANO":    {"femenino": False, "singular": "año",    "plural": "años"},
+}
+
+_CARDINALES = {
+    "1": "un", "2": "dos", "3": "tres", "4": "cuatro", "5": "cinco",
+    "6": "seis", "7": "siete", "8": "ocho", "9": "nueve",
+}
+
+# Contextos que narran un hecho ya ocurrido. Incluye los dos juegos de
+# nombres: el cliente manda el id de UI ('tramite', 'consulta') mientras que
+# su motor local trabaja con el contexto ya resuelto ('perdida',
+# 'tramite_id'). Sin ambos, un documento perdido saldría "hace dos semanas"
+# en el cliente y "dentro de dos semanas" en el servidor.
+_PAST_CONTEXTS = {
+    "denuncia_robo", "violencia", "accidente", "emergencia", "otro", "perdida",
+}
+
+
+def _time_direction_is_past(analysis: dict, context_type: str) -> bool:
+    """Réplica de `resolveAssemblerContext` + `_pastContexts` del cliente.
+
+    'tramite' es el único id de UI ambiguo: se reparte entre pérdida (pasado)
+    y gestión (futuro) según lo que la persona haya elegido, exactamente con
+    el mismo criterio que el cliente —un objeto o la glosa PERDER.
+    """
+    ctx = (context_type or "").strip().lower()
+    if ctx in _PAST_CONTEXTS:
+        return True
+    if ctx == "tramite":
+        if analysis["objetos"]:
+            return True
+        return any(v["glosa"] == "PERDER" for v in analysis["verbos"])
+    return False
+
+
+def _resolve_time(analysis: dict, context_type: str) -> None:
+    """Funde unidad + cantidad en un único complemento temporal ya redactado.
+
+    Deja `analysis["tiempos"]` con una sola entrada para que los generadores
+    no cambien: siguen leyendo `tiempos[0]["es"]` como siempre.
+    """
+    unidad = analysis.pop("_tiempo_unidad", None)
+    cantidad = analysis.pop("_tiempo_cantidad", None)
+    if not unidad:
+        return
+
+    spec = _TIME_UNITS[unidad]
+
+    # Unidad sin cantidad: la cadena quedó abierta y se resuelve con la forma
+    # deíctica del propio lexema ("esta semana"), que sigue siendo válida.
+    if not cantidad:
+        entry = GLOSS_LEXICON.get(unidad)
+        if entry and not analysis["tiempos"]:
+            analysis["tiempos"].insert(0, {"glosa": unidad, **entry})
+        return
+
+    if cantidad == "1":
+        cardinal = "una" if spec["femenino"] else "un"
+        medida = spec["singular"]
+    else:
+        cardinal = _CARDINALES[cantidad]
+        medida = spec["plural"]
+
+    es_pasado = _time_direction_is_past(analysis, context_type)
+    direccion = "hace" if es_pasado else "dentro de"
+
+    # Se antepone: es el complemento temporal principal del relato.
+    analysis["tiempos"].insert(0, {
+        "glosa": unidad,
+        "rol": "TIEMPO",
+        "es": f"{direccion} {cardinal} {medida}",
+        # Los generadores de trámite lo consultan para no narrar un plazo en
+        # pasado ("Ocurrió dentro de dos semanas").
+        "futuro": not es_pasado,
+    })
+
+
 def analyze_glosses(cards: list) -> dict:
     """
     Clasifica cada glosa por su rol semántico usando el lexicón.
@@ -336,6 +435,23 @@ def analyze_glosses(cards: list) -> dict:
         if key == "VICTIMA":
             victim_mode = True
             continue
+
+        # CAMBIO (paridad Dart): el rol de cantidad es POSICIONAL, no léxico.
+        # Un dígito solo cuenta como cantidad si viene detrás de una unidad de
+        # tiempo que aún no la tiene. Fuera de esa posición sigue siendo
+        # dactilología —el número de un NUREJ, un teléfono— y cae en
+        # "desconocidos", que es donde debe estar.
+        if (key in _CARDINALES
+                and analysis.get("_tiempo_unidad")
+                and not analysis.get("_tiempo_cantidad")):
+            analysis["_tiempo_cantidad"] = key
+            continue
+
+        # Una unidad de tiempo abre la cadena en vez de cerrar la respuesta.
+        if key in _TIME_UNITS:
+            analysis.setdefault("_tiempo_unidad", key)
+            continue
+
         entry = GLOSS_LEXICON.get(key)
         if entry and entry["rol"] == "DESCRIPTOR" and victim_mode:
             analysis["victima_descriptores"].append({"glosa": key, **entry})
@@ -365,10 +481,20 @@ def _detect_event_type(analysis: dict) -> str:
     tramites = [t["glosa"] for t in analysis["tramites"]]
     documentos = [d["glosa"] for d in analysis["documentos"]]
 
-    if any(v in ["ROBAR", "ASALTAR", "QUITAR"] for v in verbos):
+    # CAMBIO: estas dos ramas enumeraban glosas a mano y quedaron obsoletas
+    # con la sustitución del corpus: de las 32 que nombraba esta función, 24 ya
+    # no existen (GOLPEAR, SECUESTRAR, ASALTAR, EMPUJAR…), y de los 13 verbos
+    # de agresión reales solo ROBAR y AMENAZAR figuraban. El resto —MALTRATAR,
+    # ABUSAR, VIOLACION, DISCRIMINACION, DANAR, VIOLENCIA— caía a "GENERAL",
+    # cuyo generador ignora descriptores y lugares: una denuncia de violencia
+    # perdía al agresor y el domicilio y salía como "Maltrató.".
+    #
+    # Ahora se deduce del propio lexicón. El flag `agresor` lo emite
+    # tool/sync_vocabulary.dart para todo verbo de rol `verboAgresion`, así que
+    # un verbo nuevo del corpus se clasifica solo, sin tocar esta lista.
+    if "ROBAR" in verbos:
         return "ROBO"
-    if any(v in ["GOLPEAR", "AMENAZAR", "EMPUJAR", "GRITAR",
-                 "PERSEGUIR", "ACOSAR", "SECUESTRAR", "ABUSO"] for v in verbos):
+    if any(v.get("agresor") for v in analysis["verbos"]):
         return "AGRESION"
 
     if any(v in ["TRAMITAR", "RENOVAR", "INSCRIBIR", "REGISTRAR"] for v in verbos):
@@ -406,6 +532,13 @@ def _detect_perspective(analysis: dict) -> str:
     return "PRIMERA_PERSONA"  
 
 def build_intermediate_representation(cards: list, analysis: dict, context_type: str) -> dict:
+    # CAMBIO (paridad Dart): cierra la cadena temporal antes de generar.
+    # Va aquí, y no en analyze_glosses, porque la dirección depende del
+    # contexto; y aquí, y no en el handler, porque es el único paso que
+    # SIEMPRE precede a la generación: en el handler, cualquier otro punto de
+    # entrada perdía el complemento temporal en silencio.
+    _resolve_time(analysis, context_type)
+
     return {
         "roles": {
             "sujeto": analysis["sujetos"][0]["glosa"] if analysis["sujetos"] else None,
@@ -478,22 +611,37 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
     sentence = gen_func(ir, analysis, is_formal)
 
     sentence = re.sub(r'\s+', ' ', sentence).strip()
+    # CAMBIO: varios generadores devuelven la frase en minúscula porque la
+    # construyen a partir del lexema del verbo ("quiero solicitar…"). Se
+    # normaliza en un único punto —igual que `_asSentence` en el cliente— en
+    # vez de repetir la regla en cada plantilla.
+    if sentence:
+        sentence = sentence[0].upper() + sentence[1:]
     if sentence and not sentence.endswith('.'):
         sentence += '.'
 
     return sentence
 
 def _get_time_institution(analysis, is_formal):
+    """Complemento de tiempo + institución, sin artículos ni nexos duplicados.
+
+    CAMBIO: antes anteponía `i.get('prep', 'en')` al lexema. Pero el lexema
+    del backend se genera desde el cliente y YA trae la preposición dentro
+    ("en la fiscalía"), y las claves `prep`/`art`/`formal` dejaron de emitirse
+    cuando `tool/sync_vocabulary.dart` pasó a generar el GLOSS_LEXICON. El
+    `.get(..., 'en')` caía siempre al valor por defecto y producía
+    "En EN LA fiscalía EN EN EL despacho".
+
+    Y unía las instituciones con un espacio: la segunda quedaba pegada sin
+    nexo. Ahora se enlazan con `_join_es`, que ya pone la coma y la "y".
+    """
     parts = []
     for t in analysis["tiempos"]:
-        parts.append(t.get("formal", t["es"]) if is_formal else t["es"])
-    instituciones = analysis["instituciones"]
+        parts.append(t["es"])
+    instituciones = [i["es"] for i in analysis["instituciones"]]
     if instituciones:
-        inst_parts = []
-        for i in instituciones:
-            inst_parts.append(f"{i.get('prep', 'en')} {i['es']}")
-        parts.append(" ".join(inst_parts))
-    return " ".join(parts)
+        parts.append(_join_es(instituciones))
+    return " ".join(p for p in parts if p)
 
 def _get_urgency(analysis, is_formal):
     if analysis["urgencias"]:
@@ -504,18 +652,16 @@ def _get_urgency(analysis, is_formal):
 def _get_documents_text(analysis, is_formal):
     if not analysis["documentos"]:
         return ""
-    docs = analysis["documentos"]
-    if len(docs) == 1:
-        d = docs[0]
-        return f'{d.get("art", "el")} {d["es"]}'
-    texts = [f'{d.get("art", "el")} {d["es"]}' for d in docs]
-    return ", ".join(texts[:-1]) + " y " + texts[-1]
+    # CAMBIO: mismo defecto que en las instituciones. El lexema ya trae su
+    # determinante ("un certificado", "mi carnet de identidad") y el
+    # `.get("art", "el")` lo duplicaba: "el un certificado".
+    return _join_es([d["es"] for d in analysis["documentos"]])
 
 def _get_tramite_text(analysis, is_formal):
     if not analysis["tramites"]:
         return ""
-    t = analysis["tramites"][0]
-    return t.get("formal", t["es"]) if is_formal else f'{t.get("art", "el")} {t["es"]}'
+    # CAMBIO: idéntico al anterior — "el un trámite".
+    return analysis["tramites"][0]["es"]
 
 
 
@@ -537,8 +683,28 @@ def _arma_text(analysis):
             return f'con {o["es"]}'
     return ""
 
+def _a_destino(complemento: str) -> str:
+    """Convierte un complemento locativo en destino. Paridad con `_toDestino`.
+
+    Las instituciones se lexicalizan como complemento de "estar" ("en la
+    fiscalía"), pero "acudir" rige "a": "acudir en la fiscalía" no es español.
+    """
+    if complemento.startswith("en el "):
+        return "al " + complemento[6:]
+    if complemento.startswith("en la "):
+        return "a la " + complemento[6:]
+    if complemento.startswith("en "):
+        return "a " + complemento[3:]
+    return complemento
+
+
 def _lugar_text(analysis):
-    return analysis["lugares"][0]["es"] if analysis["lugares"] else ""
+    """CAMBIO: devolvía solo `lugares[0]` y el resto se perdía.
+
+    Con dos lugares elegidos, el segundo no aparecía en la oración y la red de
+    cobertura del cliente lo soltaba al final ("…hago constar en la plaza").
+    """
+    return _join_es([l["es"] for l in analysis["lugares"]])
 
 def _agresor_text(analysis):
     personas = [d for d in analysis["descriptores"] if d.get("persona")]
@@ -613,6 +779,15 @@ def _compose_incident(analysis, is_formal, robo):
         svc = _join_es([s.get("formal", s["es"]) if is_formal else s["es"]
                         for s in analysis["servicios"]])
         parts.append(f"Necesito {svc}.")
+    # CAMBIO (Tarea 2): el relato de incidente no leía las instituciones. Con
+    # DISCRIMINACION + OFICIAL, la institución no aparecía en ninguna parte y
+    # la red de cobertura del cliente la soltaba como "…hago constar en el
+    # oficial" —o descartaba la respuesta entera—. Ahora cierra el relato con
+    # el destino, que es lo que la persona quiere decir al nombrarla.
+    instituciones = _join_es(
+        [_a_destino(i["es"]) for i in analysis["instituciones"]])
+    if instituciones:
+        parts.append(f"Quiero acudir {instituciones}.")
     return " ".join(parts)
 
 def _gen_robo(ir, analysis, is_formal):
@@ -830,7 +1005,30 @@ def _gen_emergencia(ir, analysis, is_formal):
     else:
         parts.append("Se requiere atención inmediata" if is_formal else "Es urgente")
 
-    return " ".join(parts) if parts else "Se presenta una situación de emergencia"
+    # CAMBIO: los tramos son oraciones independientes y se unían con un
+    # espacio, produciendo "Me siento mal Se requiere atención inmediata".
+    # Además se perdían la urgencia, el lugar y el tiempo: el generador de
+    # emergencia no los leía y el cliente descartaba la respuesta entera por
+    # cobertura incompleta.
+    urgencia = _get_urgency(analysis, is_formal)
+    if urgencia:
+        parts.append(urgencia)
+
+    if not parts:
+        return "Se presenta una situación de emergencia"
+
+    # Cada tramo es una oración propia: se separan con punto y cada una abre
+    # en mayúscula. El lugar y el tiempo NO lo son —son complementos— y se
+    # adjuntan a la última, con espacio.
+    oraciones = [p.strip().rstrip(".") for p in parts if p.strip()]
+    oraciones = [o[0].upper() + o[1:] for o in oraciones if o]
+
+    complementos = [c for c in (_lugar_text(analysis),
+                                _get_time_institution(analysis, is_formal)) if c]
+    if complementos:
+        oraciones[-1] = " ".join([oraciones[-1], *complementos])
+
+    return ". ".join(oraciones)
 
 def _gen_estado(ir, analysis, is_formal):
     """Genera oración para expresar estado personal."""
@@ -1299,6 +1497,10 @@ def lambda_handler(event, context):
 
     analysis = analyze_glosses(cards)
     logger.info("Análisis semántico: tipo_evento=%s", analysis["tipo_evento"])
+
+    # CAMBIO (paridad Dart): cierra la cadena temporal antes de generar. Debe
+    # ir aquí y no en analyze_glosses porque la dirección depende del contexto.
+    _resolve_time(analysis, context_type)
 
     intermediate = build_intermediate_representation(cards, analysis, context_type)
 

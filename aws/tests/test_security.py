@@ -12,7 +12,6 @@ los módulos, porque las Lambdas crean sus clientes AWS al importarse.
 import json
 import os
 import sys
-import types
 import unittest
 
 # ---------------------------------------------------------------------------
@@ -20,64 +19,9 @@ import unittest
 # ---------------------------------------------------------------------------
 
 
-class _FakeTable:
-    """Registra lo que se habría escrito en DynamoDB."""
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-    def __init__(self):
-        self.items = []
-
-    def put_item(self, Item):  # noqa: N803 — firma de boto3
-        self.items.append(Item)
-
-    def get_item(self, Key):  # noqa: N803
-        return {}
-
-    def query(self, **kwargs):
-        return {"Items": []}
-
-
-_fake_table = _FakeTable()
-
-
-def _install_boto3_stub():
-    boto3 = types.ModuleType("boto3")
-    boto3.client = lambda *a, **k: types.SimpleNamespace()
-    boto3.resource = lambda *a, **k: types.SimpleNamespace(
-        Table=lambda name: _fake_table
-    )
-
-    conditions = types.ModuleType("boto3.dynamodb.conditions")
-
-    class _Key:
-        def __init__(self, name):
-            self.name = name
-
-        def eq(self, value):
-            return (self.name, value)
-
-    conditions.Key = _Key
-
-    dynamodb_mod = types.ModuleType("boto3.dynamodb")
-    dynamodb_mod.conditions = conditions
-    boto3.dynamodb = dynamodb_mod
-
-    exceptions = types.ModuleType("botocore.exceptions")
-
-    class ClientError(Exception):
-        def __init__(self, *a, **k):
-            super().__init__(*a)
-            self.response = {"Error": {"Code": ""}}
-
-    exceptions.ClientError = ClientError
-    botocore = types.ModuleType("botocore")
-    botocore.exceptions = exceptions
-
-    sys.modules.setdefault("boto3", boto3)
-    sys.modules.setdefault("boto3.dynamodb", dynamodb_mod)
-    sys.modules.setdefault("boto3.dynamodb.conditions", conditions)
-    sys.modules.setdefault("botocore", botocore)
-    sys.modules.setdefault("botocore.exceptions", exceptions)
-
+from boto3_stub import fake_table as _fake_table, install as _install_boto3_stub  # noqa: E402
 
 _install_boto3_stub()
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
