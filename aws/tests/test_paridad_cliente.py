@@ -109,6 +109,48 @@ class NingunaGlosaSeQuedaFuera(unittest.TestCase):
         self.assertIn("maltrat", texto)
 
 
+class NingunEstadoSePierde(unittest.TestCase):
+    """En un accidente, el estado es el núcleo del parte, no un adorno.
+
+    Solo 2 de los 13 generadores leían `estados`. Con [MAL, DOCTOR, AHORA] la
+    heurística elegía la plantilla de SOLICITUD —el servicio se evaluaba antes
+    que el estado— y salía "Solicito un doctor ahora mismo": un trámite. La
+    urgencia vital desaparecía de la declaración.
+    """
+
+    def test_un_accidente_declara_primero_el_estado(self):
+        texto = frase("accidente", ["MAL", "DOCTOR", "AHORA"])
+        self.assertTrue(texto.lower().startswith("me siento mal"), texto)
+        self.assertIn("doctor", texto.lower())
+        self.assertIn("ahora mismo", texto.lower())
+
+    def test_el_contexto_manda_sobre_la_heuristica(self):
+        # Paridad: el cliente enruta 'accidente' a _composeEmergency sin
+        # deducir nada. Aquí se deducía y ganaba la rama equivocada.
+        analysis = L.analyze_glosses(["MAL", "DOCTOR", "AHORA"])
+        self.assertEqual(
+            L._detect_event_type(analysis, "accidente"), "EMERGENCIA")
+        self.assertEqual(
+            L._detect_event_type(analysis, "orientacion"), "SOLICITUD",
+            "fuera de una urgencia la heurística sigue mandando")
+
+    def test_el_estado_sobrevive_a_cualquier_plantilla(self):
+        # _gen_solicitud ignora los estados; la red de seguridad los recupera.
+        texto = frase("orientacion", ["PEDIR", "CARNET", "MAL"]).lower()
+        self.assertIn("carnet", texto)
+        self.assertIn("me siento mal", texto)
+
+    def test_un_motivo_se_adjunta_y_no_abre_oracion(self):
+        # "por un problema" no es una oración: se pega a la anterior.
+        texto = frase("tramite", ["PEDIR", "CERTIFICADO", "PROBLEMA"])
+        self.assertIn("por un problema", texto.lower())
+        self.assertNotIn("Por un problema", texto)
+
+    def test_no_se_duplica_el_estado_que_la_plantilla_ya_integro(self):
+        texto = frase("violencia", ["MALTRATAR", "PAREJA", "MIEDO"]).lower()
+        self.assertEqual(texto.count("tengo miedo"), 1, texto)
+
+
 class SinArticulosDuplicados(unittest.TestCase):
     """El lexema ya trae su determinante; anteponerle otro lo duplicaba."""
 
