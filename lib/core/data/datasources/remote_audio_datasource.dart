@@ -115,16 +115,29 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           animationGlosses.add(singleGloss);
         }
 
-        final glossesList = (decodedResponse['glosses'] as List<dynamic>? ?? [])
-            .map((e) => e.toString().toUpperCase())
-            .toList();
+        // Si el backend devolvió glosses múltiples (ej. ["HOLA", "SI"]) pero no en glossDetails
+        final effectiveGlosses = animationGlosses.isNotEmpty
+            ? animationGlosses
+            : (decodedResponse['glosses'] as List<dynamic>? ?? [])
+                .map((e) => e.toString().toUpperCase())
+                .toList();
+
+        // Garantizar que la lista de URLs coincida 1:1 con la cantidad de glosas
+        final finalUrls = <String>[];
+        for (int i = 0; i < effectiveGlosses.length; i++) {
+          if (i < urls.length) {
+            finalUrls.add(urls[i]);
+          } else {
+            finalUrls.add('${animationResolver.baseUrl}avatar_test.glb');
+          }
+        }
 
         // Decodificamos el JSON que viene de AWS Lambda (Bedrock)
         return LsbTranslationModel.fromJson({
-          'glosses': glossesList.isNotEmpty ? glossesList : animationGlosses,
-          'animationUrl': urls.isNotEmpty ? urls.first : '',
-          'animationUrls': urls,
-          'animationGlosses': animationGlosses,
+          'glosses': effectiveGlosses,
+          'animationUrl': finalUrls.isNotEmpty ? finalUrls.first : '',
+          'animationUrls': finalUrls,
+          'animationGlosses': effectiveGlosses,
           'disambiguation': decodedResponse['disambiguation'],
         });
       } else {
