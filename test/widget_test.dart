@@ -4,8 +4,16 @@ import 'package:lsb_legal_app/app/main_navigation_screen.dart';
 import 'package:lsb_legal_app/app/splash_screen.dart';
 import 'package:lsb_legal_app/app/app.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/screens/conversation_screen.dart';
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
+
+import 'support/fake_webview_platform.dart';
 
 void main() {
+  // La pantalla de conversación incluye el avatar 3D, que crea un
+  // WebViewController real en initState. Sin un WebViewPlatform registrado,
+  // pumpWidget revienta con una aserción ajena a lo que esta prueba verifica.
+  WebViewPlatform.instance = FakeWebViewPlatform();
+
   testWidgets('App load smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const ProviderScope(child: AppScope()));
