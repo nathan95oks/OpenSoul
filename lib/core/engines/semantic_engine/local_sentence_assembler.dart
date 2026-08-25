@@ -59,6 +59,7 @@ class LocalSentenceAssembler {
       'tramite_id' => _composeProcedure(roles, unidos),
       'orientacion' => _composeGuidance(roles, unidos),
       'perdida' => _composeLoss(roles, unidos),
+      'preguntas' => _composeQuestion(roles),
       'otro' => _composeWitness(roles, unidos),
       _ => _composeGeneric(contextId, roles, unidos),
     };
@@ -97,6 +98,13 @@ class LocalSentenceAssembler {
       if (!missing.contains(frag)) missing.add(frag);
     }
     if (missing.isEmpty) return text;
+    // Una pregunta no tiene "declaración que completar": pegarle este
+    // relleno detrás produce un despropósito ("¿Qué trámite necesitas? Para
+    // completar mi declaración, hago constar mi expediente."), la pregunta
+    // se responde a sí misma en la misma frase. Mejor una pregunta genérica
+    // pero coherente que forzar el dato dentro de un acto de habla que no
+    // es el suyo.
+    if (text.trim().endsWith('?')) return text;
     // Red de seguridad de último recurso. Con los bloques semánticos
     // (`_supplements`) integrando todos los roles, esta rama prácticamente no
     // se ejecuta; si lo hiciera, usa un conector formal natural (nunca
@@ -109,6 +117,55 @@ class LocalSentenceAssembler {
   bool _isRepresented(String token, String hayLower) {
     final lex = _lexicon[token];
     if (lex == null) return _glossCovered(token, hayLower);
+    switch (token) {
+      case 'FISCAL':
+        if (hayLower.contains('fiscal') || hayLower.contains('fiscalia')) {
+          return true;
+        }
+        break;
+      case 'JUEZ':
+        if (hayLower.contains('juez') || hayLower.contains('juzgado')) {
+          return true;
+        }
+        break;
+      case 'OFICIAL':
+        if (hayLower.contains('oficial')) return true;
+        break;
+      case 'AUTORIDAD':
+        if (hayLower.contains('autoridad')) return true;
+        break;
+      case 'POLICIA':
+        if (hayLower.contains('policia')) return true;
+        break;
+      case 'PAPEL':
+        if (hayLower.contains('papel') ||
+            hayLower.contains('documento') ||
+            hayLower.contains('soporte')) {
+          return true;
+        }
+        break;
+      case 'ARCHIVADOR':
+        if (hayLower.contains('archivador') ||
+            hayLower.contains('documento') ||
+            hayLower.contains('soporte')) {
+          return true;
+        }
+        break;
+      case 'CARPETA':
+        if (hayLower.contains('carpeta') ||
+            hayLower.contains('documento') ||
+            hayLower.contains('soporte')) {
+          return true;
+        }
+        break;
+      case 'HOJA':
+        if (hayLower.contains('hoja') ||
+            hayLower.contains('documento') ||
+            hayLower.contains('soporte')) {
+          return true;
+        }
+        break;
+    }
     // Considera variantes morfológicas para no disparar la red de seguridad
     // por error cuando el compositor conjugó/concordó la palabra:
     //  - plural del verbo: "golpeó" → "golpearon" (agresor plural);
@@ -181,7 +238,13 @@ class LocalSentenceAssembler {
     final haystack = _stripDiacritics(trimmed.toLowerCase());
     var hits = 0;
     for (final g in glosses) {
-      if (_glossCovered(g, haystack)) hits++;
+      // _isRepresented exige TODAS las palabras del lexema (correcto para
+      // decidir si omitir el relleno de _composeGeneric), lo que es
+      // demasiado estricto aquí: el backend puede parafrasear parte de una
+      // frase de varias palabras ("deseo" en vez de "quiero solicitar") y
+      // seguir representando la glosa. _glossCovered acepta que cualquier
+      // palabra significativa coincida, así que basta con una de las dos.
+      if (_isRepresented(g, haystack) || _glossCovered(g, haystack)) hits++;
     }
     // Regla estricta de cobertura: el backend solo se acepta si representa
     // TODAS las glosas seleccionadas. Si pierde aunque sea una, se considera
@@ -326,9 +389,18 @@ class LocalSentenceAssembler {
       g.length == 1 && RegExp(r'^[A-ZÑ]$').hasMatch(g);
 
   /// Convierte una forma suelta en oración: mayúscula inicial y punto.
+  ///
+  /// Mayusculiza la primera LETRA, no el carácter 0: formas como
+  /// "¿puede repetir?" empiezan con signo de apertura, y capitalizar el
+  /// índice 0 no hace nada (deja "¿puede…" en vez de "¿Puede…").
   String _asSentence(String texto) {
     if (texto.isEmpty) return texto;
-    final t = texto[0].toUpperCase() + texto.substring(1);
+    final i = texto.indexOf(RegExp(r'[a-zA-ZÀ-ÿ]'));
+    final t = i < 0
+        ? texto
+        : texto.substring(0, i) +
+            texto[i].toUpperCase() +
+            texto.substring(i + 1);
     return t.endsWith('.') || t.endsWith('?') || t.endsWith('!') ? t : '$t.';
   }
 
@@ -342,6 +414,10 @@ class LocalSentenceAssembler {
   /// es una pregunta legítima en un mostrador, y forzar un objeto inventado
   /// sería peor que devolverla tal cual.
   String _composeQuestion(_Roles r) {
+    if (r.question == null) {
+      return _composeInquiry(r);
+    }
+
     final interrogativa = r.question!;
 
     // Cada interrogativa pregunta por una clase de cosa. Sin esta restricción
@@ -353,37 +429,141 @@ class LocalSentenceAssembler {
       ...r.services,
       if (r.institution != null) r.institution!,
     ];
-    final lugares = [if (r.place != null) r.place!, if (r.institution != null) r.institution!];
-    final cosas = [...r.objects, ...r.documents, ...r.procedures];
-
-    final (List<String> admitidos, bool esUbicacion) = switch (interrogativa) {
-      'quién' || 'cuántos' => (personas, false),
-      'dónde' => (lugares, true),
-      'cuándo' => ([if (r.time != null) r.time!], false),
-      'qué' || 'cuál' => (cosas, false),
-      _ => (r.procedures, false),
-    };
-
-    if (admitidos.isEmpty) {
-      // La interrogativa sola es una pregunta legítima en un mostrador; el
-      // resto de glosas lo recupera la regla de cobertura.
-      return '¿${_capitalizar(interrogativa)}?';
+    if (interrogativa == 'qué' || interrogativa == 'cuál') {
+      if (r.procedures.isNotEmpty) return '¿Qué trámite necesitas?';
+      if (r.documents.isNotEmpty) {
+        return _looksLikeSupportDocument(r.documents)
+            ? '¿Qué soporte necesitas?'
+            : '¿Qué documento necesitas?';
+      }
+      if (r.objects.isNotEmpty) return '¿Qué necesitas?';
+      if (r.services.isNotEmpty) return '¿Qué apoyo necesitas?';
+      if (r.institution != null) return '¿Qué institución?';
+      return '¿Qué necesitas?';
     }
 
-    // Los lugares llevan la preposición dentro de su forma porque el resto de
-    // composers la necesita ("...en la calle"). Una pregunta no: sin quitarla
-    // saldría "¿Dónde está en la fiscalía?".
-    final complemento = admitidos.first.startsWith('en ')
-        ? admitidos.first.substring(3)
-        : admitidos.first;
+    if (interrogativa == 'dónde') {
+      if (r.institution != null) {
+        final complemento = r.institution!.startsWith('en ')
+            ? r.institution!.substring(3)
+            : r.institution!;
+        return '¿Dónde está $complemento?';
+      }
+      if (r.place != null) {
+        final complemento = r.place!.startsWith('en ')
+            ? r.place!.substring(3)
+            : r.place!;
+        return '¿Dónde está $complemento?';
+      }
+      return '¿Dónde ocurrió?';
+    }
 
-    final copula = esUbicacion ? 'está' : 'es';
-    return '¿${_capitalizar(interrogativa)} $copula $complemento?';
+    if (interrogativa == 'cuándo') {
+      return '¿Cuándo ocurrió?';
+    }
+
+    if (interrogativa == 'quién' || interrogativa == 'cuántos') {
+      if (personas.isEmpty) {
+        return '¿${_capitalizar(interrogativa)}?';
+      }
+      if (r.institution != null) {
+        return '¿${_capitalizar(interrogativa)} es ${_whoLabelForInstitution(r.institution!)}?';
+      }
+      final complemento = personas.first.startsWith('en ')
+          ? personas.first.substring(3)
+          : personas.first;
+      return '¿${_capitalizar(interrogativa)} es $complemento?';
+    }
+
+    if (interrogativa == 'para qué') {
+      return '¿Para qué lo necesitas?';
+    }
+
+    if (interrogativa == 'cómo') {
+      return '¿Cómo es?';
+    }
+
+    if (interrogativa == 'por qué') {
+      return '¿Por qué?';
+    }
+
+    final admitidos = [...r.procedures];
+    if (admitidos.isEmpty) {
+      return '¿${_capitalizar(interrogativa)}?';
+    }
+    return '¿${_capitalizar(interrogativa)} ${admitidos.first}?';
+  }
+
+  /// Contexto de preguntas sin una interrogativa clara.
+  ///
+  /// Se usa como red de seguridad cuando el usuario entra a la zona de
+  /// preguntas pero todavía no eligió la palabra interrogativa. En vez de
+  /// caer en una frase burocrática, devuelve una pregunta corta y propia del
+  /// corpus.
+  String _composeInquiry(_Roles r) {
+    final institution = r.institution?.replaceFirst(RegExp(r'^en\s+'), '');
+    final place = r.place?.replaceFirst(RegExp(r'^en\s+'), '');
+    final documents = r.documents.isNotEmpty ? _join(r.documents) : '';
+    final objects = r.objects.isNotEmpty ? _join(r.objects) : '';
+    final procedures = r.procedures.isNotEmpty ? _join(r.procedures) : '';
+    final services = r.services.isNotEmpty ? _join(r.services) : '';
+    final person = _personPhrase(r.perpetrators, r.perpetratorPlural, r.traits);
+    final victim = _hasVictim(r)
+        ? _personPhrase(r.victims, r.victimPlural, r.victimTraits)
+        : '';
+
+    if (institution != null) return '¿Ante qué institución?';
+    if (place != null) return '¿Dónde ocurrió?';
+    if (documents.isNotEmpty) {
+      return _looksLikeSupportDocument(r.documents)
+          ? '¿Qué soporte necesitas?'
+          : '¿Qué necesitas?';
+    }
+    if (objects.isNotEmpty) return '¿Qué necesitas?';
+    if (procedures.isNotEmpty) return '¿Qué trámite necesitas?';
+    if (services.isNotEmpty) return '¿Qué apoyo necesitas?';
+    if (victim.isNotEmpty) return '¿Quién es $victim?';
+    if (person != 'una persona') return '¿Quién es $person?';
+    return '¿Qué quieres preguntar?';
+  }
+
+  /// Convierte una institución o cargo institucional en una etiqueta más
+  /// natural para preguntas sobre personas.
+  String _whoLabelForInstitution(String institution) {
+    final normalized = institution.replaceAll('en ', '').trim();
+    if (normalized.contains('fiscalía')) return 'el fiscal';
+    if (normalized.contains('juzgado')) return 'el juez';
+    if (normalized.contains('oficial')) return 'el oficial';
+    if (normalized.contains('policía')) return 'el policía';
+    if (normalized.contains('autoridad')) return 'la autoridad';
+    return normalized;
+  }
+
+  /// Detecta si los documentos seleccionados son soporte físico más que
+  /// documentos formales. Sirve para no preguntar "qué documento" cuando la
+  /// selección real es "papel", "carpeta" u "hoja".
+  bool _looksLikeSupportDocument(List<String> documents) {
+    const supportMarkers = ['papel', 'carpeta', 'archivador', 'hoja'];
+    return documents.any((doc) {
+      final normalized = _stripDiacritics(doc.toLowerCase());
+      return supportMarkers.any(normalized.contains);
+    });
   }
 
 
   String _capitalizar(String t) =>
       t.isEmpty ? t : t[0].toUpperCase() + t.substring(1);
+
+  /// Las instituciones se redactan como complemento de "estar" ("en la
+  /// fiscalía"), pero "acudir" rige "a", no "en" — "acudir en la fiscalía"
+  /// no es español. Convierte el complemento locativo al destino ("a la
+  /// fiscalía", "al ministerio") para los verbos de movimiento.
+  String _toDestino(String institucion) {
+    if (institucion.startsWith('en el ')) return 'al ${institucion.substring(6)}';
+    if (institucion.startsWith('en la ')) return 'a la ${institucion.substring(6)}';
+    if (institucion.startsWith('en ')) return 'a ${institucion.substring(3)}';
+    return institucion;
+  }
 
   String _composeIncident(String ctx, _Roles r, List<String> tokens) {
     final lead = ctx == 'violencia'
@@ -416,7 +596,10 @@ class LocalSentenceAssembler {
       final verb = aggression == null
           ? defaultVerb
           : (isPlural ? _verbPlural(aggression) : aggression);
-      var clause = '$subject me $verb';
+      // Un sujeto en aposición ("mi pareja, una mujer") necesita la coma de
+      // cierre antes de seguir la cláusula, si no el "una mujer me agredió"
+      // se lee pegado a la aposición como si fuera una sola frase corrida.
+      var clause = '${subject.contains(',') ? '$subject,' : subject} me $verb';
       final complement = _join([...r.objects, ...r.documents]);
       if (complement.isNotEmpty) {
         clause += ' $complement';
@@ -564,9 +747,16 @@ class LocalSentenceAssembler {
       r.services.clear();
       r.action = null;
     } else if (r.action != null) {
+      // Un documento ("un comprobante") y un trámite ("una audiencia") son
+      // ambos lo que se está pidiendo: sin sumar r.documents aquí, "Quiero
+      // solicitar." salía suelto y el comprobante quedaba en una oración
+      // aparte por la red de cobertura ("Necesito un comprobante."), como si
+      // fueran dos peticiones distintas en vez de una sola.
       var clause = r.action!;
-      if (r.procedures.isNotEmpty) {
-        clause += ' ${_join(r.procedures)}';
+      final what = _join([...r.documents, ...r.procedures]);
+      if (what.isNotEmpty) {
+        clause += ' $what';
+        r.documents.clear();
         r.procedures.clear();
       }
       if (r.institution != null) {
@@ -576,7 +766,7 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(clause)}.');
       r.action = null;
     } else if (r.institution != null) {
-      sentences.add('Necesito acudir ${r.institution}.');
+      sentences.add('Necesito acudir ${_toDestino(r.institution!)}.');
       r.institution = null;
     }
     if (r.purposes.isNotEmpty) {
@@ -780,7 +970,7 @@ class LocalSentenceAssembler {
       if (r.aggression != null) {
         final isPlural = r.isPlural;
         final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
-        var clause = '$subject me $verb';
+        var clause = '${subject.contains(',') ? '$subject,' : subject} me $verb';
         final comp = _join([...r.objects, ...r.documents]);
         if (comp.isNotEmpty) {
           clause += ' $comp';
@@ -810,10 +1000,10 @@ class LocalSentenceAssembler {
       r.traits.clear();
     }
 
-    // 2. Objetos / documentos no usados → se dejan constar formalmente.
+    // 2. Objetos / documentos no usados → se expresan como necesidad.
     final things = _join([...r.objects, ...r.documents]);
     if (things.isNotEmpty) {
-      sentences.add('Quiero hacer constar $things.');
+      sentences.add('Necesito $things.');
       r.objects.clear();
       r.documents.clear();
     }
@@ -921,20 +1111,35 @@ class LocalSentenceAssembler {
       }
     } else {
       if (persons.isNotEmpty) {
-        // Los descriptores describen a UNA persona (género + edad + relación),
-        // no a varias: se concatenan como una sola frase nominal — el primero
-        // conserva su artículo ("una mujer") y el resto se anexa como
-        // modificador sin artículo ni "y" ("una mujer" + "un joven" →
-        // "una mujer joven"). Unirlos con "y" sugeriría personas distintas.
-        final parts = <String>[];
-        for (var i = 0; i < persons.length; i++) {
-          var p = persons[i];
-          if (i > 0) {
-            p = p.replaceFirst(RegExp(r'^un\s+'), '').replaceFirst(RegExp(r'^una\s+'), '');
+        // Un descriptor "mi X" (PAREJA, EXPAREJA, FAMILIAR…) ya es una frase
+        // nominal completa y específica, no un rasgo apilable como "un
+        // joven". Pegarlo detrás de "una mujer" da "una mujer mi pareja"
+        // (agramatical). Si hay alguno, va primero y el resto (género/edad)
+        // se suma en aposición con comas: "mi pareja, una mujer" — así no se
+        // pierde el dato de género y la red de cobertura sigue viendo la
+        // glosa representada en el texto.
+        final relacionales = persons.where((p) => p.startsWith('mi ')).toList();
+        if (relacionales.isNotEmpty) {
+          final otros = persons.where((p) => !p.startsWith('mi ')).toList();
+          base = otros.isEmpty
+              ? _join(relacionales)
+              : '${_join(relacionales)}, ${otros.join(', ')}';
+        } else {
+          // Los descriptores describen a UNA persona (género + edad + relación),
+          // no a varias: se concatenan como una sola frase nominal — el primero
+          // conserva su artículo ("una mujer") y el resto se anexa como
+          // modificador sin artículo ni "y" ("una mujer" + "un joven" →
+          // "una mujer joven"). Unirlos con "y" sugeriría personas distintas.
+          final parts = <String>[];
+          for (var i = 0; i < persons.length; i++) {
+            var p = persons[i];
+            if (i > 0) {
+              p = p.replaceFirst(RegExp(r'^un\s+'), '').replaceFirst(RegExp(r'^una\s+'), '');
+            }
+            parts.add(p);
           }
-          parts.add(p);
+          base = parts.join(' ');
         }
-        base = parts.join(' ');
       } else {
         base = 'una persona';
       }
@@ -1048,7 +1253,7 @@ class LocalSentenceAssembler {
     'POR_FAVOR': _Lex(_Role.marcador, 'por favor'),
     'LO_SIENTO': _Lex(_Role.marcador, 'lo siento'),
 
-    // ── Respuesta (8) ──
+    // ── Respuesta (11) ──
     'ESTOY_BIEN': _Lex(_Role.marcador, 'estoy bien'),
     'NO': _Lex(_Role.marcador, 'no'),
     'NO_PUEDO': _Lex(_Role.marcador, 'no puedo'),
@@ -1057,6 +1262,9 @@ class LocalSentenceAssembler {
     'SABER': _Lex(_Role.marcador, 'sí sé'),
     'SI': _Lex(_Role.marcador, 'sí'),
     'MAS_O_MENOS': _Lex(_Role.marcador, 'más o menos'),
+    'NO_RECUERDO': _Lex(_Role.marcador, 'no recuerdo'),
+    'NO_ENTIENDO': _Lex(_Role.marcador, 'no entiendo'),
+    'PUEDE_REPETIR': _Lex(_Role.marcador, '¿puede repetir?'),
 
     // ── Preguntas (16) ──
     'COMO': _Lex(_Role.interrogativa, 'cómo'),
@@ -1076,7 +1284,7 @@ class LocalSentenceAssembler {
     'PARA_QUE': _Lex(_Role.interrogativa, 'para qué'),
     'USTEDES': _Lex(_Role.sujeto, 'ustedes'),
 
-    // ── Identificación (9) ──
+    // ── Identificación (12) ──
     'HOMBRE': _Lex(_Role.personaDesc, 'un hombre'),
     'IDENTIDAD': _Lex(_Role.personaDesc, 'mi identidad'),
     'LADRON': _Lex(_Role.personaDesc, 'un ladrón'),
@@ -1086,14 +1294,17 @@ class LocalSentenceAssembler {
     'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
     'MILITAR': _Lex(_Role.personaDesc, 'un militar'),
     'SOLDADO': _Lex(_Role.personaDesc, 'un soldado'),
+    'FAMILIAR': _Lex(_Role.personaDesc, 'un familiar'),
+    'PAREJA': _Lex(_Role.personaDesc, 'mi pareja'),
+    'EXPAREJA': _Lex(_Role.personaDesc, 'mi expareja'),
 
-    // ── Instituciones (16) ──
+    // ── Instituciones (19) ──
     'ABOGADO': _Lex(_Role.servicio, 'un abogado'),
     'AUTORIDAD': _Lex(_Role.institucion, 'en la autoridad'),
     'FISCAL': _Lex(_Role.institucion, 'en la fiscalía'),
     'INSTITUCION': _Lex(_Role.institucion, 'en la institución'),
     'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de señas'),
-    'JUEZ': _Lex(_Role.institucion, 'en el juez'),
+    'JUEZ': _Lex(_Role.institucion, 'en el juzgado'),
     'OFICIAL': _Lex(_Role.institucion, 'en el oficial'),
     'ORGANO_JUDICIAL': _Lex(_Role.institucion, 'en el órgano judicial'),
     'POLICIA': _Lex(_Role.institucion, 'en la policía'),
@@ -1104,8 +1315,11 @@ class LocalSentenceAssembler {
     'GOBIERNO': _Lex(_Role.institucion, 'en el gobierno'),
     'MINISTERIO': _Lex(_Role.institucion, 'en el ministerio'),
     'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
+    'DESPACHO': _Lex(_Role.institucion, 'en el despacho'),
+    'OFICINA': _Lex(_Role.institucion, 'en la oficina'),
+    'VENTANILLA': _Lex(_Role.institucion, 'en la ventanilla'),
 
-    // ── Conceptos jurídicos (17) ──
+    // ── Conceptos jurídicos (28) ──
     'INVESTIGACION': _Lex(_Role.tramite, 'una investigación'),
     'JUICIO': _Lex(_Role.tramite, 'un juicio'),
     'JUSTICIA': _Lex(_Role.documento, 'la justicia'),
@@ -1123,8 +1337,18 @@ class LocalSentenceAssembler {
     'REGLAMENTO': _Lex(_Role.documento, 'el reglamento'),
     'DECRETO_SUPREMO': _Lex(_Role.documento, 'el decreto supremo'),
     'PERSONERIA_JURIDICA': _Lex(_Role.documento, 'la personería jurídica'),
+    'EXPEDIENTE': _Lex(_Role.tramite, 'mi expediente'),
+    'NOTIFICACION': _Lex(_Role.tramite, 'una notificación'),
+    'CITACION': _Lex(_Role.tramite, 'una citación'),
+    'AUDIENCIA': _Lex(_Role.tramite, 'una audiencia'),
+    'SUBSANACION': _Lex(_Role.tramite, 'una subsanación'),
+    'REQUISITO': _Lex(_Role.tramite, 'un requisito'),
+    'CODIGO': _Lex(_Role.tramite, 'el código'),
+    'CASO': _Lex(_Role.tramite, 'mi caso'),
+    'NUREJ': _Lex(_Role.tramite, 'mi NUREJ'),
+    'WEBID': _Lex(_Role.tramite, 'mi WebID'),
 
-    // ── Acciones (25) ──
+    // ── Acciones (31) ──
     'ANOTAR': _Lex(_Role.verboAccion, 'quiero anotar'),
     'AVISAR': _Lex(_Role.verboAccion, 'quiero avisar'),
     'ESCRIBIR': _Lex(_Role.verboAccion, 'quiero escribir'),
@@ -1150,6 +1374,12 @@ class LocalSentenceAssembler {
     'SOLUCIONAR': _Lex(_Role.verboAccion, 'quiero solucionar'),
     'TRATAR': _Lex(_Role.verboAccion, 'quiero tratar'),
     'ADMINISTRAR': _Lex(_Role.verboAccion, 'quiero administrar'),
+    'SEGUIMIENTO': _Lex(_Role.verboAccion, 'quiero seguir'),
+    'CORREGIR': _Lex(_Role.verboAccion, 'quiero corregir'),
+    'ACLARAR': _Lex(_Role.verboAccion, 'quiero aclarar'),
+    'RECORDAR': _Lex(_Role.verboAccion, 'recuerdo'),
+    'IMPRIMIR': _Lex(_Role.verboAccion, 'quiero imprimir'),
+    'CONOCER': _Lex(_Role.verboAccion, 'conozco'),
 
     // ── Hechos y urgencia (18) ──
     'ABUSAR': _Lex(_Role.verboAgresion, 'abusó sexualmente'),
@@ -1171,9 +1401,10 @@ class LocalSentenceAssembler {
     'SOBORNO': _Lex(_Role.verboAgresion, 'ofreció un soborno'),
     'VIOLACION': _Lex(_Role.verboAgresion, 'violó'),
 
-    // ── Descripción (17) ──
+    // ── Descripción (18) ──
     'CORRECTO': _Lex(_Role.rasgo, 'correcto'),
     'PELIGROSO': _Lex(_Role.rasgo, 'peligroso'),
+    'SEGURO': _Lex(_Role.rasgo, 'seguro'),
     'AMARILLO': _Lex(_Role.rasgo, 'de color amarillo'),
     'AZUL': _Lex(_Role.rasgo, 'de color azul'),
     'BLANCO': _Lex(_Role.rasgo, 'de color blanco'),
@@ -1190,7 +1421,7 @@ class LocalSentenceAssembler {
     'NARANJA': _Lex(_Role.rasgo, 'de color naranja'),
     'ROSADO': _Lex(_Role.rasgo, 'de color rosado'),
 
-    // ── Estado y emoción (9) ──
+    // ── Estado y emoción (11) ──
     'CONFUSION': _Lex(_Role.emocion, 'estoy confundido'),
     'MAL': _Lex(_Role.emocion, 'me siento mal'),
     'PROBLEMA': _Lex(_Role.motivo, 'por un problema'),
@@ -1200,8 +1431,10 @@ class LocalSentenceAssembler {
     'FALTA': _Lex(_Role.motivo, 'por una falta'),
     'RAZON': _Lex(_Role.motivo, 'por esa razón'),
     'VERGUENZA': _Lex(_Role.emocion, 'siento vergüenza'),
+    'MIEDO': _Lex(_Role.emocion, 'tengo miedo'),
+    'SOSPECHA': _Lex(_Role.emocion, 'tengo una sospecha'),
 
-    // ── Tiempo (14) ──
+    // ── Tiempo (17) ──
     'AHORA': _Lex(_Role.tiempo, 'ahora mismo'),
     'AYER': _Lex(_Role.tiempo, 'ayer'),
     'DIA': _Lex(_Role.tiempo, 'ese día'),
@@ -1216,8 +1449,11 @@ class LocalSentenceAssembler {
     'SEGUNDO': _Lex(_Role.tiempo, 'hace un segundo'),
     'SEMANA': _Lex(_Role.tiempo, 'esta semana'),
     'PASADO_MANANA': _Lex(_Role.tiempo, 'pasado mañana'),
+    'VARIAS_VECES': _Lex(_Role.tiempo, 'varias veces'),
+    'ANTERIORMENTE': _Lex(_Role.tiempo, 'anteriormente'),
+    'PRIMERA_VEZ': _Lex(_Role.tiempo, 'es la primera vez'),
 
-    // ── Lugares (12) ──
+    // ── Lugares (16) ──
     'CALLE': _Lex(_Role.lugar, 'en la calle'),
     'CASA': _Lex(_Role.lugar, 'en mi casa'),
     'DIRECCION': _Lex(_Role.lugar, 'en esa dirección'),
@@ -1230,13 +1466,17 @@ class LocalSentenceAssembler {
     'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
     'UBICACION_GPS': _Lex(_Role.lugar, 'en esta ubicación'),
     'AEROPUERTO': _Lex(_Role.lugar, 'en el aeropuerto'),
+    'CENTRO_DE_SALUD': _Lex(_Role.lugar, 'en el centro de salud'),
+    'PARADA': _Lex(_Role.lugar, 'en la parada'),
+    'PISO': _Lex(_Role.lugar, 'en el piso'),
+    'DEPARTAMENTO': _Lex(_Role.lugar, 'en el departamento'),
 
-    // ── Documentos (15) ──
+    // ── Documentos (24) ──
     'DINERO': _Lex(_Role.objeto, 'mi dinero'),
     'FORMULARIO': _Lex(_Role.documento, 'el formulario'),
     'LICENCIA_DECONDUCIR': _Lex(_Role.documento, 'mi licencia de conducir'),
     'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
-    'PAPEL': _Lex(_Role.documento, 'el documento'),
+    'PAPEL': _Lex(_Role.documento, 'el papel'),
     'TELEFONO': _Lex(_Role.objeto, 'mi teléfono'),
     'TEXTO': _Lex(_Role.documento, 'el texto'),
     'ARCHIVADOR': _Lex(_Role.documento, 'el archivador'),
@@ -1247,6 +1487,15 @@ class LocalSentenceAssembler {
     'PASAPORTE': _Lex(_Role.documento, 'mi pasaporte'),
     'SELLO': _Lex(_Role.documento, 'el sello'),
     'TITULO': _Lex(_Role.documento, 'mi título'),
+    'CONSTANCIA': _Lex(_Role.documento, 'una constancia'),
+    'MEMORIAL': _Lex(_Role.documento, 'un memorial'),
+    'COMPROBANTE': _Lex(_Role.documento, 'un comprobante'),
+    'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
+    'OBSERVACION': _Lex(_Role.documento, 'una observación'),
+    'ANEXO': _Lex(_Role.documento, 'un anexo'),
+    'HOJA': _Lex(_Role.documento, 'una hoja'),
+    'FORMATO': _Lex(_Role.documento, 'el formato'),
+    'RESPALDO': _Lex(_Role.documento, 'un respaldo'),
 
     // ── Transporte (8) ──
     'AUTO': _Lex(_Role.objeto, 'mi auto'),
@@ -1257,6 +1506,15 @@ class LocalSentenceAssembler {
     'AVION': _Lex(_Role.objeto, 'el avión'),
     'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
     'TREN': _Lex(_Role.objeto, 'el tren'),
+
+    // ── Objetos (7) ──
+    'BILLETERA': _Lex(_Role.objeto, 'mi billetera'),
+    'MENSAJE': _Lex(_Role.objeto, 'un mensaje'),
+    'FOTOGRAFIA': _Lex(_Role.objeto, 'una fotografía'),
+    'PRUEBA': _Lex(_Role.objeto, 'una prueba'),
+    'CAMARA': _Lex(_Role.objeto, 'una cámara'),
+    'CUENTA': _Lex(_Role.objeto, 'mi cuenta'),
+    'PRODUCTO': _Lex(_Role.objeto, 'el producto'),
 
     // ── Comunicación (7) ──
     'ACEPTAR': _Lex(_Role.verboAccion, 'acepto'),

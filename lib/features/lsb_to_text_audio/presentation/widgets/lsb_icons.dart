@@ -10,6 +10,7 @@ const Map<String, IconData> kLsbIconMap = {
   'record_voice_over': Icons.record_voice_over,
   'assignment': Icons.assignment, 'send': Icons.send, 'help': Icons.help,
   'payments': Icons.payments, 'autorenew': Icons.autorenew,
+  'inventory_2': Icons.inventory_2,
   'app_registration': Icons.app_registration,
   'how_to_reg': Icons.how_to_reg,
   'download': Icons.download, 'upload': Icons.upload, 'draw': Icons.draw,
