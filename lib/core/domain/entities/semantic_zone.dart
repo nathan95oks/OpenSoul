@@ -78,6 +78,30 @@ class SemanticZone {
   /// "Apariencia" → Descripción[Físico,Cabello]).
   final List<String> cardSubcategories;
 
+  /// Glosas exactas que responden esta pregunta, en orden de probabilidad.
+  ///
+  /// Cuando no está vacía **manda sobre [cardCategories] y
+  /// [cardSubcategories]**: la zona muestra estas glosas y ninguna más.
+  ///
+  /// Existe porque la taxonomía del diccionario es *gramatical* y la
+  /// coherencia de una pregunta es *conversacional*: la categoría "Tiempo"
+  /// nunca distinguirá AYER (responde "¿cuándo?") de FECHA ("en esa fecha",
+  /// que presupone el dato en vez de aportarlo), ni "Objetos" distinguirá
+  /// una pertenencia sustraíble de un micro. Afinar el filtro por categoría
+  /// no cierra esa brecha; enumerar sí.
+  ///
+  /// El orden es parte del diseño: en "¿Quién te agredió?" PAREJA y EXPAREJA
+  /// van primero porque el corpus pregunta literalmente por el vínculo.
+  final List<String> glossAllowlist;
+
+  /// Glosas cuya elección **encadena** a [chainZoneId] en vez de cerrar la
+  /// respuesta. Hoy son las unidades de tiempo: elegir SEMANA no responde
+  /// "¿cuándo?", abre "¿cuántas semanas?".
+  final List<String> chainTriggers;
+
+  /// Zona a la que se salta cuando se elige una glosa de [chainTriggers].
+  final String? chainZoneId;
+
   /// Si es true, sólo se muestran cards cuyo `contexts` incluye el id
   /// del contexto activo — no se rellena con cards `general`. Útil para
   /// zonas donde los fillers genéricos (YO, FAMILIA, HIJO) carecen de
@@ -112,8 +136,11 @@ class SemanticZone {
     this.optional = false,
     this.urgencyLevel = UrgencyLevel.none,
     this.relatedZones = const [],
-    required this.cardCategories,
+    this.cardCategories = const [],
     this.cardSubcategories = const [],
+    this.glossAllowlist = const [],
+    this.chainTriggers = const [],
+    this.chainZoneId,
     this.strictContext = false,
     this.maxPicks = 1,
     this.contextTags = const [],
@@ -136,6 +163,9 @@ class SemanticZone {
       relatedZones: relatedZones,
       cardCategories: cardCategories,
       cardSubcategories: cardSubcategories,
+      glossAllowlist: glossAllowlist,
+      chainTriggers: chainTriggers,
+      chainZoneId: chainZoneId,
       strictContext: strictContext,
       maxPicks: maxPicks,
       contextTags: contextTags,

@@ -24,6 +24,17 @@
 /// backend lo usan para no fundir ambos descriptores en una sola persona.
 const String kVictimMarker = 'VICTIMA';
 
+/// Marcador de zona: lo que sigue es EVIDENCIA del caso, no lo sustraído.
+///
+/// Sin él, elegir "tengo mensajes" en la zona de pruebas se fundía con el
+/// objeto directo del verbo y salía "me amenazó un mensaje y WhatsApp".
+const String kEvidenceMarker = 'PRUEBA_MARCADOR';
+
+/// Marcador de zona: lo que sigue es el VEHÍCULO involucrado en el siniestro.
+/// Sin él, un auto o una moto se leían como un servicio solicitado
+/// ("Necesito mi motocicleta").
+const String kVehicleMarker = 'VEHICULO_MARCADOR';
+
 class LocalSentenceAssembler {
   const LocalSentenceAssembler();
 
@@ -47,6 +58,14 @@ class LocalSentenceAssembler {
     final unidos = _joinSpelled(tokens);
 
     final roles = _classify(unidos);
+
+    // Composición de tiempo: una unidad suelta no responde "¿cuándo?", abre una
+    // cadena. [SEMANA]+[2] no es "esta semana" más un dos huérfano: es "hace dos
+    // semanas". La dirección —hace / dentro de— no la elige la persona porque no
+    // hay glosa que la exprese (el diccionario no tiene PASADO ni FUTURO): la
+    // aporta el flujo, que ya sabe si narra un hecho consumado o pide un plazo.
+    roles.narrativeIsPast = _pastContexts.contains(contextId);
+    final consumidasPorTiempo = _resolveTime(roles, contextId);
 
     // Una interrogativa manda sobre el contexto: si se eligió ¿DÓNDE?, lo que
     // la persona construye es una pregunta, y ninguno de los composers de
@@ -72,7 +91,77 @@ class LocalSentenceAssembler {
         : '${roles.markers.map(_asSentence).join(' ')} $composed'.trim();
 
     // Regla de cobertura semántica: ninguna glosa seleccionada puede perderse.
-    return _ensureCoverage(conMarcadores, unidos);
+    return _ensureCoverage(conMarcadores, unidos, skip: consumidasPorTiempo);
+  }
+
+  // ───────────────────────── Composición de tiempo ────────────────────────
+
+  /// Unidades de tiempo componibles: género y formas para concordar.
+  ///
+  /// El género importa para la cantidad 1 — "hace **una** semana" pero
+  /// "hace **un** día"—; el plural, para todo lo demás.
+  static const Map<String, ({bool femenino, String singular, String plural})>
+      _timeUnits = {
+    'MINUTO': (femenino: false, singular: 'minuto', plural: 'minutos'),
+    'HORA':   (femenino: true,  singular: 'hora',   plural: 'horas'),
+    'DIA':    (femenino: false, singular: 'día',    plural: 'días'),
+    'SEMANA': (femenino: true,  singular: 'semana', plural: 'semanas'),
+    'MES':    (femenino: false, singular: 'mes',    plural: 'meses'),
+    'ANO':    (femenino: false, singular: 'año',    plural: 'años'),
+  };
+
+  /// Marcadores de reincidencia. Su rol léxico es `tiempo`, pero no responden
+  /// "¿cuándo?" sino "¿cuántas veces?": mezclarlos con la fecha dejaba uno de
+  /// los dos huérfano y la red de cobertura lo soltaba al final de la
+  /// declaración ("…hago constar varias veces").
+  static const _frequencyGlosses = {
+    'PRIMERA_VEZ': 'Es la primera vez que ocurre',
+    'VARIAS_VECES': 'Ha ocurrido varias veces',
+    'ANTERIORMENTE': 'Ya había ocurrido anteriormente',
+  };
+
+  static const _cardinales = {
+    '1': 'un', '2': 'dos', '3': 'tres', '4': 'cuatro', '5': 'cinco',
+    '6': 'seis', '7': 'siete', '8': 'ocho', '9': 'nueve',
+  };
+
+  /// Contextos que narran un hecho ya ocurrido. El resto pide un plazo.
+  ///
+  /// De aquí sale la dirección de la cadena temporal: una denuncia solo puede
+  /// mirar atrás ("hace dos semanas") y un trámite solo adelante ("dentro de
+  /// dos semanas"). Derivarla del flujo, en vez de pedir una tarjeta más, le
+  /// ahorra un paso a la persona: en una denuncia no hay otra opción posible.
+  static const _pastContexts = {
+    'denuncia_robo', 'violencia', 'accidente', 'emergencia', 'otro', 'perdida',
+  };
+
+  /// Cierra la cadena temporal y deja [_Roles.time] listo para los composers.
+  ///
+  /// Devuelve las glosas que consumió, para que la red de cobertura no las
+  /// reclame: "hace dos semanas" ya representa a SEMANA y a 2, pero ninguna
+  /// aparece con su lexema literal.
+  Set<String> _resolveTime(_Roles r, String contextId) {
+    final unit = r.timeUnit;
+    if (unit == null) return const {};
+    final spec = _timeUnits[unit]!;
+    final count = r.timeCount;
+
+    // Unidad sin cantidad: la cadena quedó abierta y se resuelve con la forma
+    // deíctica propia del lexema ("esta semana"), que sigue siendo una
+    // respuesta válida — no todo el mundo precisa el número.
+    if (count == null) {
+      r.time ??= _lexicon[unit]!.es;
+      return {unit};
+    }
+
+    final cardinal = count == '1'
+        ? (spec.femenino ? 'una' : 'un')
+        : _cardinales[count]!;
+    final medida = count == '1' ? spec.singular : spec.plural;
+    final esPasado = _pastContexts.contains(contextId);
+    r.timeIsFuture = !esPasado;
+    r.time = '${esPasado ? 'hace' : 'dentro de'} $cardinal $medida';
+    return {unit, count};
   }
 
   /// Glosas inherentemente representadas por la 1ª persona ("me", "mi"…),
@@ -86,12 +175,19 @@ class LocalSentenceAssembler {
   /// La detección es precisa: como los compositores emiten el lexema `es`
   /// literal, una glosa está representada cuando todas las palabras
   /// significativas de su lexema aparecen en el texto.
-  String _ensureCoverage(String text, List<String> tokens) {
+  String _ensureCoverage(String text, List<String> tokens,
+      {Set<String> skip = const {}}) {
     final hay = _stripDiacritics(text.toLowerCase());
     final missing = <String>[];
     for (final t in tokens) {
-      if (t == kVictimMarker) continue; // marcador de control, no es contenido
+      // Marcadores de control de zona: no son contenido declarable.
+      if (t == kVictimMarker || t == kEvidenceMarker || t == kVehicleMarker) {
+        continue;
+      }
       if (_inherentImplicit.contains(t)) continue;
+      // Consumida por la cadena temporal: "hace dos semanas" representa a
+      // SEMANA y a 2 sin que ninguno aparezca con su lexema literal.
+      if (skip.contains(t)) continue;
       if (_isRepresented(t, hay)) continue;
       final lex = _lexicon[t];
       final frag = lex != null ? lex.es : t.toLowerCase().replaceAll('_', ' ');
@@ -204,8 +300,9 @@ class LocalSentenceAssembler {
   }) {
     // Los marcadores de control (p. ej. VICTIMA) no son contenido: no cuentan
     // para el conteo de palabras ni para la cobertura.
+    const marcadores = {kVictimMarker, kEvidenceMarker, kVehicleMarker};
     glosses = glosses
-        .where((g) => g.trim().toUpperCase() != kVictimMarker)
+        .where((g) => !marcadores.contains(g.trim().toUpperCase()))
         .toList();
     final trimmed = backendText.trim();
     if (trimmed.isEmpty) return true;
@@ -258,9 +355,15 @@ class LocalSentenceAssembler {
   /// Considera dos vías: (1) la raíz de la propia glosa y (2) las palabras
   /// del lexema en español (para reconocer conjugaciones: ROBAR→"robó").
   bool _glossCovered(String gloss, String haystackLower) {
-    final parts = _stripDiacritics(gloss.toLowerCase())
+    final normalizada = _stripDiacritics(gloss.toLowerCase());
+    final parts = normalizada
         .split(RegExp(r'[ _/]+'))
         .where((p) => p.length >= 3); // ignora partículas cortas (de, la…)
+    // Glosa entera de una o dos letras —un dígito de dactilología, una letra
+    // suelta—: ninguna parte supera el umbral de raíz, así que sin esta rama
+    // se daba por no cubierta aunque estuviera literalmente en el texto, y la
+    // red de seguridad la repetía al final.
+    if (parts.isEmpty) return haystackLower.contains(normalizada);
     for (final p in parts) {
       // Raíz de 3 letras: tolera conjugación (robar/robó comparten "rob").
       final stem = p.length <= 3 ? p : p.substring(0, 3);
@@ -286,11 +389,68 @@ class LocalSentenceAssembler {
     // Tras el marcador [kVictimMarker], los descriptores de persona pasan a
     // describir a la persona AGREDIDA (no al agresor). Flujo de testigo.
     var victimMode = false;
-    for (final t in tokens) {
+    var evidenceMode = false;
+    var vehicleMode = false;
+    for (var i = 0; i < tokens.length; i++) {
+      final t = tokens[i];
       if (t == kVictimMarker) {
         victimMode = true;
         continue;
       }
+      if (t == kEvidenceMarker) {
+        evidenceMode = true;
+        continue;
+      }
+      if (t == kVehicleMarker) {
+        vehicleMode = true;
+        continue;
+      }
+
+      // Reincidencia antes que tiempo: "varias veces" no es una fecha.
+      final frecuencia = _frequencyGlosses[t];
+      if (frecuencia != null) {
+        r.frequency ??= frecuencia;
+        continue;
+      }
+
+      // Tras el marcador de zona, objetos y documentos cambian de papel: son
+      // la evidencia que se aporta o el vehículo del siniestro, no lo que se
+      // llevaron ni un servicio que se pide.
+      // Solo cambia el papel de lo que puede serlo: un vehículo es un objeto,
+      // una prueba es un objeto o un documento. El resto —lugar, servicio,
+      // tiempo— sigue su curso normal, porque el marcador no sabe dónde
+      // termina la zona y si no se acotara se tragaría el resto del relato
+      // ("Estuvo involucrado mi motocicleta, en la avenida y un doctor").
+      if (evidenceMode || vehicleMode) {
+        final lex = _lexicon[t];
+        final admite = lex != null &&
+            (lex.role == _Role.objeto ||
+                (evidenceMode && lex.role == _Role.documento));
+        if (admite) {
+          final destino = evidenceMode ? r.evidence : r.vehicles;
+          if (!destino.contains(lex.es)) destino.add(lex.es);
+          continue;
+        }
+      }
+
+      // Cantidad de una cadena temporal. El rol es *posicional*, no léxico: un
+      // dígito solo cuenta como cantidad si viene detrás de una unidad de
+      // tiempo que aún no la tiene. Fuera de esa posición un dígito sigue
+      // siendo dactilología —el número de un NUREJ, un teléfono— y cae por la
+      // rama de desconocidos, que es donde debe estar.
+      if (_cardinales.containsKey(t) &&
+          r.timeUnit != null &&
+          r.timeCount == null) {
+        r.timeCount = t;
+        continue;
+      }
+
+      // Unidad de tiempo: abre la cadena en vez de cerrar la respuesta.
+      if (_timeUnits.containsKey(t)) {
+        r.timeUnit ??= t;
+        continue;
+      }
+
       final e = _lexicon[t];
       if (e == null) {
         // Glosa desconocida: la conservamos como objeto/detalle genérico
@@ -319,7 +479,15 @@ class LocalSentenceAssembler {
         case _Role.rasgo:
           (victimMode ? r.victimTraits : r.traits).add(e.es);
           break;
-        case _Role.verboAgresion:      r.aggression ??= e.es; break;
+        case _Role.verboAgresion:
+          // Dos agresiones en un mismo relato son dos hechos, no uno: la
+          // segunda se guarda aparte en vez de perderse.
+          if (r.aggression == null) {
+            r.aggression = e.es;
+          } else if (!r.extraAggressions.contains(e.es)) {
+            r.extraAggressions.add(e.es);
+          }
+          break;
         case _Role.verboAccion:        r.action ??= e.es; break;
         case _Role.arma:               r.weapon ??= e.es; break;
         case _Role.objeto:             r.objects.add(e.es); break;
@@ -1036,11 +1204,43 @@ class LocalSentenceAssembler {
       r.procedures.clear();
     }
 
+    // 6-bis. Agresión secundaria, reincidencia, evidencia y vehículo.
+    // Cada uno es una oración propia: fundirlos con el núcleo del relato
+    // producía "me amenazó un mensaje y WhatsApp" o "Necesito mi motocicleta".
+    if (r.extraAggressions.isNotEmpty) {
+      sentences.add('Además me ${_join(r.extraAggressions)}.');
+      r.extraAggressions.clear();
+    }
+    if (r.frequency != null) {
+      sentences.add('${r.frequency}.');
+      r.frequency = null;
+    }
+    if (r.vehicles.isNotEmpty) {
+      sentences.add(r.vehicles.length == 1
+          ? 'El vehículo involucrado fue ${r.vehicles.single}.'
+          : 'Los vehículos involucrados fueron ${_join(r.vehicles)}.');
+      r.vehicles.clear();
+    }
+    if (r.evidence.isNotEmpty) {
+      sentences.add('Como prueba tengo ${_join(r.evidence)}.');
+      r.evidence.clear();
+    }
+
     // 7. Lugar / tiempo residuales.
+    // Un plazo futuro no "ocurrió": se necesita. Sin esta rama, pedir un
+    // certificado para dentro de dos semanas salía como "Ocurrió dentro de dos
+    // semanas", que mezcla un pasado narrativo con un complemento de futuro.
+    if (r.time != null && r.timeIsFuture) {
+      sentences.add('Lo necesito ${r.time}.');
+      r.time = null;
+    }
     if (r.place != null || r.time != null) {
-      var clause = 'Ocurrió';
+      // En un trámite o una consulta el lugar residual es a dónde hay que ir,
+      // no dónde pasó algo: "Ocurrió en el piso" no dice nada.
+      final narra = r.narrativeIsPast;
+      var clause = narra ? 'Ocurrió' : 'Debo acudir';
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' ${narra ? r.place : _toDestino(r.place!)}';
         r.place = null;
       }
       if (r.time != null) {
@@ -1357,6 +1557,7 @@ class LocalSentenceAssembler {
     'NARRAR': _Lex(_Role.verboAccion, 'quiero narrar'),
     'OBSERVAR': _Lex(_Role.verboAccion, 'quiero observar'),
     'PEDIR': _Lex(_Role.verboAccion, 'quiero solicitar'),
+    'PERDER': _Lex(_Role.verboAccion, 'perdí'),
     'PRESENTAR': _Lex(_Role.verboAccion, 'quiero presentar'),
     'PROTEGER': _Lex(_Role.verboAccion, 'necesito protección'),
     'QUEJAR': _Lex(_Role.verboAccion, 'quiero presentar una queja'),
@@ -1481,6 +1682,7 @@ class LocalSentenceAssembler {
     'TEXTO': _Lex(_Role.documento, 'el texto'),
     'ARCHIVADOR': _Lex(_Role.documento, 'el archivador'),
     'CARPETA': _Lex(_Role.documento, 'la carpeta'),
+    'CARNET': _Lex(_Role.documento, 'mi carnet de identidad'),
     'CARTA': _Lex(_Role.documento, 'la carta'),
     'FOTOCOPIA': _Lex(_Role.documento, 'una fotocopia'),
     'LICENCIA': _Lex(_Role.documento, 'mi licencia'),
@@ -1596,6 +1798,32 @@ class _Roles {
   String? place;
   String? institution;
   String? time;
+
+  /// Unidad temporal pendiente de cantidad (SEMANA, DIA…) y su cantidad.
+  /// [LocalSentenceAssembler._resolveTime] los funde en [time] con la
+  /// dirección que dicta el contexto.
+  String? timeUnit;
+  String? timeCount;
+
+  /// `true` si [time] expresa un plazo por venir ("dentro de dos semanas").
+  /// Los composers lo consultan para no narrarlo en pasado.
+  bool timeIsFuture = false;
+
+  /// `true` si el contexto narra un hecho consumado. Una consulta o un
+  /// trámite no "ocurren": se gestionan.
+  bool narrativeIsPast = true;
+
+  /// Reincidencia del hecho, ya redactada ("Ha ocurrido varias veces").
+  String? frequency;
+
+  /// Evidencia aportada y vehículo del siniestro. Se llenan solo detrás de
+  /// [kEvidenceMarker] y [kVehicleMarker]: fuera de sus zonas, un mensaje o
+  /// una moto siguen siendo un objeto cualquiera.
+  final List<String> evidence = [];
+  final List<String> vehicles = [];
+
+  /// Agresiones adicionales a la principal.
+  final List<String> extraAggressions = [];
   final List<String> traits = [];
   final List<String> objects = [];
   final List<String> documents = [];

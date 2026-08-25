@@ -29,10 +29,18 @@ void main() {
       expect(suggestion?.contextId, 'violencia');
     });
 
-    test('los trámites resuelven al contexto de orientación', () {
+    test('los trámites resuelven al contexto de trámite', () {
       final suggestion = engine.infer(glosses: ['PASAPORTE', 'GESTIONAR']);
 
-      expect(suggestion?.contextId, 'orientacion');
+      expect(suggestion?.contextId, 'tramite');
+    });
+
+    test('una consulta de estado no se confunde con un trámite', () {
+      final suggestion = engine.infer(glosses: ['ESTADO', 'SEGUIMIENTO']);
+
+      expect(suggestion?.contextId, 'consulta',
+          reason: 'desde la escisión, consultar el estado de un caso y '
+              'presentar documentación son flujos distintos');
     });
 
     test('las glosas presentes en todos los contextos no sugieren nada', () {
@@ -49,10 +57,10 @@ void main() {
       expect(suggestion?.contextId, 'denuncia_robo');
     });
 
-    test('reconoce una consulta de trámite', () {
+    test('reconoce una gestión de trámite', () {
       final suggestion = engine.infer(text: 'Necesito gestionar mi pasaporte');
 
-      expect(suggestion?.contextId, 'orientacion');
+      expect(suggestion?.contextId, 'tramite');
     });
 
     test('la evidencia mostrada son glosas, nunca raices internas', () {

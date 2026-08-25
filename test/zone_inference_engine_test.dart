@@ -66,11 +66,11 @@ void main() {
     });
 
     test('solo devuelve zonas que existen en el contexto dado', () {
-      // 'orientacion' no tiene zona de objetos sustraídos ni de arma.
-      final orientacion = contextById('orientacion')!;
-      final zones = zonesOf('¿Qué se llevaron y usó algún arma?', orientacion);
+      // 'tramite' no tiene zona de objetos sustraídos ni de arma.
+      final tramite = contextById('tramite')!;
+      final zones = zonesOf('¿Qué se llevaron y usó algún arma?', tramite);
       for (final id in zones) {
-        expect(orientacion.zoneById(id), isNotNull);
+        expect(tramite.zoneById(id), isNotNull);
       }
     });
   });

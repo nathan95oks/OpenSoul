@@ -78,14 +78,15 @@ void main() {
     expect(totalMissing, 0, reason: 'Hay glosas no representadas.');
   });
 
-  // ── Sistema reducido a 5 contextos + enrutado del contexto fusionado ──
-  test('5 contextos oficiales con enrutado de fusión', () async {
-    // 1) La UI ofrece exactamente 5 contextos.
+  // ── 6 contextos: Trámites y Consultas dejaron de ser el mismo flujo ──
+  test('6 contextos oficiales con enrutado por intención', () async {
+    // 1) La UI ofrece exactamente 6 contextos.
     final ids = availableContexts.map((c) => c.id).toList();
     final names = availableContexts.map((c) => c.name).toList();
     // ignore: avoid_print
     print('CONTEXTOS (${ids.length}): $names');
-    expect(ids, ['denuncia_robo', 'violencia', 'accidente', 'otro', 'orientacion']);
+    expect(ids,
+        ['denuncia_robo', 'violencia', 'accidente', 'otro', 'tramite', 'consulta']);
     // 'preguntas' se ofrece en la interfaz pero no narra un hecho, así que
     // queda fuera de la lista que alimenta la inferencia de contexto.
     expect(allSelectableContexts.map((c) => c.id), contains('preguntas'));
@@ -99,9 +100,10 @@ void main() {
       return null;
     }
 
-    // 3) Enrutado del contexto fusionado 'orientacion'.
+    // 3) Enrutado interno de 'tramite': reparte entre los tres compositores
+    //    del antiguo contexto fusionado según lo que la persona eligió.
     String route(List<String> gl) =>
-        resolveAssemblerContext('orientacion', gl, catOf);
+        resolveAssemblerContext('tramite', gl, catOf);
     expect(route(['FALTA', 'TELEFONO']), 'perdida');
     expect(route(['TELEFONO', 'CALLE']), 'perdida'); // objeto → pérdida
     expect(route(['PASAPORTE']), 'tramite_id');
@@ -109,6 +111,10 @@ void main() {
     expect(route(['GESTIONAR', 'FOTOCOPIA', 'ORGANO_JUDICIAL']), 'tramite_id');
     expect(route(['INTERPRETE', 'INSTITUCION']), 'orientacion');
     expect(route(['HABLAR', 'ABOGADO']), 'orientacion');
+    expect(route(['PERDER', 'CARNET']), 'perdida',
+        reason: 'la pérdida ya no depende solo de que aparezca un objeto');
+    // Consultas usa siempre el compositor de orientación, sin repartos.
+    expect(resolveAssemblerContext('consulta', ['ESTADO'], catOf), 'orientacion');
     // Los contextos directos no se reenrutan.
     expect(resolveAssemblerContext('denuncia_robo', ['ROBAR'], catOf),
         'denuncia_robo');

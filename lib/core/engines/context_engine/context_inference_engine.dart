@@ -64,16 +64,21 @@ class ContextInferenceEngine {
     // 'orientacion'. Reutilizamos [cardSourceContexts] para no duplicar ese
     // conocimiento. Los que no resuelven a un contexto de UI ('general',
     // 'emergencia') se descartan por no ser discriminativos.
-    final sourceToUi = <String, String>{
-      for (final ui in contextIds)
-        for (final source in cardSourceContexts(ui)) source: ui,
-    };
+    // 1:N y no 1:1. Desde que 'orientacion' se escindió en 'tramite' y
+    // 'consulta', una misma fuente alimenta dos contextos de UI: con un mapa
+    // 1:1 el segundo sobrescribía al primero en silencio y toda glosa de
+    // orientación acababa contando como evidencia de un solo lado.
+    final sourceToUi = <String, Set<String>>{};
+    for (final ui in contextIds) {
+      for (final source in cardSourceContexts(ui)) {
+        sourceToUi.putIfAbsent(source, () => <String>{}).add(ui);
+      }
+    }
 
     final glossContexts = <String, Set<String>>{};
     for (final entry in entries) {
       final uiContexts = <String>{
-        for (final source in entry.contexts)
-          if (sourceToUi[source] != null) sourceToUi[source]!,
+        for (final source in entry.contexts) ...?sourceToUi[source],
       };
       if (uiContexts.isEmpty) continue;
       glossContexts
