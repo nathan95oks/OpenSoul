@@ -61,6 +61,10 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_lints: ^6.0.0
   mocktail: ^1.0.5
+  # Solo para el doble de WebViewPlatform en test/support/fake_webview_platform.dart
+  # — model_viewer_plus la trae transitivamente, pero se declara aquí porque
+  # se importa directamente en las pruebas.
+  webview_flutter_platform_interface: ^2.10.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

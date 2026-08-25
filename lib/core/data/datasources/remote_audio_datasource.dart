@@ -132,9 +132,22 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           }
         }
 
+        // 'glosses' es la lista semántica (una entrada por glosa real, para
+        // la inferencia de contexto); 'animationGlosses' es la expandida
+        // (una entrada por animación, alineada con animationUrls). Una seña
+        // compuesta (FISCAL = F.glb+ABOGADO.glb) tiene dos animaciones pero
+        // sigue siendo UNA glosa: usar effectiveGlosses para ambas contaba
+        // FISCAL dos veces en la lista semántica. El backend ya manda la
+        // lista semántica correcta en 'glosses'; solo se cae a la expandida
+        // cuando esa lista no vino (por ejemplo, el respaldo de solo-texto).
+        final semanticGlosses = (decodedResponse['glosses'] as List<dynamic>?)
+                ?.map((e) => e.toString().toUpperCase().trim())
+                .toList() ??
+            effectiveGlosses;
+
         // Decodificamos el JSON que viene de AWS Lambda (Bedrock)
         return LsbTranslationModel.fromJson({
-          'glosses': effectiveGlosses,
+          'glosses': semanticGlosses,
           'animationUrl': finalUrls.isNotEmpty ? finalUrls.first : '',
           'animationUrls': finalUrls,
           'animationGlosses': effectiveGlosses,

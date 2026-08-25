@@ -16,10 +16,13 @@ void main() {
   const resolver = AnimationUrlResolver(baseUrl: 'https://s3/');
 
   group('AnimationUrlResolver', () {
-    test('una seña simple produce una animación', () {
+    test('una seña simple (archivo == glosa.glb) apunta al modelo Multi-Action', () {
+      // Arquitectura Multi-Action: un solo modelo 3D unificado en S3 con
+      // varias animaciones internas, no un .glb por glosa. Una seña sin
+      // secuencia compuesta apunta siempre al mismo contenedor.
       expect(
         resolver.resolveAll(gloss: 'POLICIA', animationFile: 'POLICIA.glb'),
-        ['https://s3/POLICIA.glb'],
+        ['https://s3/avatar_test.glb'],
       );
     });
 
@@ -30,10 +33,10 @@ void main() {
       );
     });
 
-    test('sin archivo se devuelve el placeholder que el visor rotula', () {
+    test('sin archivo también apunta al modelo Multi-Action', () {
       expect(
         resolver.resolveAll(gloss: 'TESTIGO'),
-        ['placeholder://TESTIGO'],
+        ['https://s3/avatar_test.glb'],
       );
     });
 

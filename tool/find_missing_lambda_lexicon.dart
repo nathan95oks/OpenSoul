@@ -6,11 +6,16 @@
 // en el lexicón del motor local (LocalSentenceAssembler) ni en el
 // GLOSS_LEXICON del backend (lambda_function.py).
 //
-// Lee los tres archivos como TEXTO, por lo que se ejecuta sin compilar Flutter:
+// El motor local y GLOSS_LEXICON se leen como TEXTO (regex), así que corre
+// sin compilar Flutter. El catálogo sí se parsea como JSON, para poder
+// excluir las glosas `mechanism` (Abecedario, Números): esas son dactilología
+// — se deletrean letra por letra, nunca entran al lexicón compositivo por
+// diseño — y contarlas como "faltantes" es un falso positivo.
 //
 //   dart run tool/find_missing_lambda_lexicon.dart
 //
 // Salida con código 1 si falta alguna glosa; 0 si la cobertura es completa.
+import 'dart:convert';
 import 'dart:io';
 
 Set<String> _matchAll(String content, RegExp re) =>
@@ -22,10 +27,13 @@ void main() {
       'lib/core/engines/semantic_engine/local_sentence_assembler.dart';
   const lambdaPath = 'aws/lambda_function.py';
 
-  final catalog = _matchAll(
-    File(dsPath).readAsStringSync(),
-    RegExp(r'"gloss":\s*"([A-Z0-9_Ñ]+)"'),
-  );
+  final catalogJson =
+      jsonDecode(File(dsPath).readAsStringSync()) as Map<String, dynamic>;
+  final catalog = (catalogJson['entries'] as List)
+      .cast<Map<String, dynamic>>()
+      .where((e) => e['mechanism'] == null)
+      .map((e) => e['gloss'] as String)
+      .toSet();
   final assembler = _matchAll(
     File(asmPath).readAsStringSync(),
     RegExp(r"'([A-Z0-9_Ñ]+)':\s*_Lex\("),
