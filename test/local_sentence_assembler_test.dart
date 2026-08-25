@@ -155,7 +155,7 @@ void main() {
         glosses: ['PEDIR', 'PAPEL', 'INSTITUCION'],
       );
       expectWellFormed(s);
-      expect(has(s, 'el documento'), true);
+      expect(has(s, 'el papel'), true);
       expect(has(s, 'la institución'), true);
       expect(has(s, '_'), false, reason: 'no deben filtrarse guiones bajos');
     });
@@ -169,6 +169,53 @@ void main() {
       );
       expectWellFormed(s);
       expect(s.toLowerCase().contains('intérprete'), true);
+    });
+  });
+
+  group('assemble — PREGUNTAS', () {
+    test('pregunta por soporte', () {
+      final s = asm.assemble(
+        contextId: 'preguntas',
+        glosses: ['QUE', 'PAPEL'],
+      );
+      expect(s.trim().endsWith('?'), true, reason: '"$s"');
+      expect(has(s, 'qué soporte necesitas'), true, reason: '"$s"');
+    });
+
+    test('pregunta por institución', () {
+      final s = asm.assemble(
+        contextId: 'preguntas',
+        glosses: ['DONDE', 'FISCAL'],
+      );
+      expect(s.trim().endsWith('?'), true, reason: '"$s"');
+      expect(has(s, 'dónde está la fiscalía'), true, reason: '"$s"');
+    });
+
+    test('pregunta por juzgado', () {
+      final s = asm.assemble(
+        contextId: 'preguntas',
+        glosses: ['DONDE', 'JUEZ'],
+      );
+      expect(s.trim().endsWith('?'), true, reason: '"$s"');
+      expect(has(s, 'dónde está el juzgado'), true, reason: '"$s"');
+    });
+
+    test('pregunta por fiscal asignado', () {
+      final s = asm.assemble(
+        contextId: 'preguntas',
+        glosses: ['QUIEN', 'FISCAL'],
+      );
+      expect(s.trim().endsWith('?'), true, reason: '"$s"');
+      expect(has(s, 'quién es el fiscal'), true, reason: '"$s"');
+    });
+
+    test('pregunta por policía', () {
+      final s = asm.assemble(
+        contextId: 'preguntas',
+        glosses: ['QUIEN', 'POLICIA'],
+      );
+      expect(s.trim().endsWith('?'), true, reason: '"$s"');
+      expect(has(s, 'quién es el policía'), true, reason: '"$s"');
     });
   });
 

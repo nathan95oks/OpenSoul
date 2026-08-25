@@ -53,6 +53,7 @@ GLOSS_LEXICON = {
     "ABUSAR": {"rol": "VERBO", "es": "abusó sexualmente", "agresor": "abusó sexualmente"},
     "ACCIDENTE": {"rol": "URGENCIA", "es": "hubo un accidente"},
     "ACEPTAR": {"rol": "VERBO", "es": "acepto"},
+    "ACLARAR": {"rol": "VERBO", "es": "quiero aclarar"},
     "ACOMPANAR": {"rol": "VERBO", "es": "necesito que me acompañen"},
     "ACUERDO_SOCIAL": {"rol": "DOCUMENTO", "es": "un acuerdo"},
     "ADMINISTRAR": {"rol": "VERBO", "es": "quiero administrar"},
@@ -61,15 +62,18 @@ GLOSS_LEXICON = {
     "ALCALDIA": {"rol": "INSTITUCION", "es": "en la alcaldía"},
     "AMARILLO": {"rol": "DESCRIPTOR", "es": "de color amarillo"},
     "AMENAZAR": {"rol": "VERBO", "es": "amenazó", "agresor": "amenazó"},
+    "ANEXO": {"rol": "DOCUMENTO", "es": "un anexo"},
     "ANO": {"rol": "TIEMPO", "es": "este año"},
     "ANOTAR": {"rol": "VERBO", "es": "quiero anotar"},
     "ANTEAYER": {"rol": "TIEMPO", "es": "anteayer"},
+    "ANTERIORMENTE": {"rol": "TIEMPO", "es": "anteriormente"},
     "ARCHIVADOR": {"rol": "DOCUMENTO", "es": "el archivador"},
     "ARRESTAR": {"rol": "VERBO", "es": "arrestó", "agresor": "arrestó"},
     "ARTICULO": {"rol": "DOCUMENTO", "es": "el artículo"},
     "ASISTENCIA": {"rol": "URGENCIA", "es": "necesito asistencia"},
     "ASISTENTE": {"rol": "SERVICIO", "es": "un asistente"},
     "ATENDER": {"rol": "VERBO", "es": "necesito que me atiendan"},
+    "AUDIENCIA": {"rol": "TRAMITE", "es": "una audiencia"},
     "AUTO": {"rol": "OBJETO", "es": "mi auto"},
     "AUTONOMIA": {"rol": "ESTADO", "es": "autónomo"},
     "AUTORIDAD": {"rol": "INSTITUCION", "es": "en la autoridad"},
@@ -81,38 +85,52 @@ GLOSS_LEXICON = {
     "AYUDAR": {"rol": "VERBO", "es": "necesito ayuda"},
     "AZUL": {"rol": "DESCRIPTOR", "es": "de color azul"},
     "BICICLETA": {"rol": "OBJETO", "es": "mi bicicleta"},
+    "BILLETERA": {"rol": "OBJETO", "es": "mi billetera"},
     "BLANCO": {"rol": "DESCRIPTOR", "es": "de color blanco"},
     "CAFE": {"rol": "DESCRIPTOR", "es": "de color café"},
     "CALLE": {"rol": "LUGAR", "es": "en la calle"},
+    "CAMARA": {"rol": "OBJETO", "es": "una cámara"},
     "CARCEL": {"rol": "LUGAR", "es": "en la cárcel"},
     "CARPETA": {"rol": "DOCUMENTO", "es": "la carpeta"},
     "CARTA": {"rol": "DOCUMENTO", "es": "la carta"},
     "CASA": {"rol": "LUGAR", "es": "en mi casa"},
+    "CASO": {"rol": "TRAMITE", "es": "mi caso"},
     "CELESTE": {"rol": "DESCRIPTOR", "es": "de color celeste"},
+    "CENTRO_DE_SALUD": {"rol": "LUGAR", "es": "en el centro de salud"},
+    "CERTIFICADO": {"rol": "DOCUMENTO", "es": "un certificado"},
+    "CITACION": {"rol": "TRAMITE", "es": "una citación"},
     "COCHABAMBA": {"rol": "LUGAR", "es": "en Cochabamba"},
+    "CODIGO": {"rol": "TRAMITE", "es": "el código"},
     "COMO": {"rol": "DESCONOCIDO", "es": "cómo"},
     "COMPRENDER": {"rol": "VERBO", "es": "quiero comprender"},
+    "COMPROBANTE": {"rol": "DOCUMENTO", "es": "un comprobante"},
     "COMPROMISO": {"rol": "ESTADO", "es": "comprometido"},
     "CONFESAR": {"rol": "VERBO", "es": "quiero confesar"},
     "CONFIANZA": {"rol": "ESTADO", "es": "tengo confianza"},
     "CONFIRMACION": {"rol": "DOCUMENTO", "es": "la confirmación"},
     "CONFUSION": {"rol": "ESTADO", "es": "estoy confundido"},
+    "CONOCER": {"rol": "VERBO", "es": "conozco"},
+    "CONSTANCIA": {"rol": "DOCUMENTO", "es": "una constancia"},
     "CONTEXTO": {"rol": "DOCUMENTO", "es": "el contexto"},
     "COORDINADOR": {"rol": "SERVICIO", "es": "un coordinador"},
     "COORDINAR": {"rol": "VERBO", "es": "quiero coordinar"},
     "COPIAR": {"rol": "VERBO", "es": "quiero una copia"},
     "CORRECTO": {"rol": "DESCRIPTOR", "es": "correcto"},
+    "CORREGIR": {"rol": "VERBO", "es": "quiero corregir"},
     "CORRER": {"rol": "VERBO", "es": "salió corriendo", "agresor": "salió corriendo"},
     "CORRUPTO": {"rol": "DESCRIPTOR", "es": "corrupto"},
     "CRISIS": {"rol": "URGENCIA", "es": "es una crisis"},
     "CUAL": {"rol": "DESCONOCIDO", "es": "cuál"},
     "CUANDO": {"rol": "DESCONOCIDO", "es": "cuándo"},
     "CUANTOS": {"rol": "DESCONOCIDO", "es": "cuántos"},
+    "CUENTA": {"rol": "OBJETO", "es": "mi cuenta"},
     "CUMPLIR": {"rol": "VERBO", "es": "quiero cumplir"},
     "DANAR": {"rol": "VERBO", "es": "dañó", "agresor": "dañó"},
     "DECIDIR": {"rol": "VERBO", "es": "quiero decidir"},
     "DECRETO_SUPREMO": {"rol": "DOCUMENTO", "es": "el decreto supremo"},
     "DELGADO": {"rol": "DESCRIPTOR", "es": "delgado"},
+    "DEPARTAMENTO": {"rol": "LUGAR", "es": "en el departamento"},
+    "DESPACHO": {"rol": "INSTITUCION", "es": "en el despacho"},
     "DIA": {"rol": "TIEMPO", "es": "ese día"},
     "DIGNIDAD": {"rol": "DESCRIPTOR", "es": "digno"},
     "DINERO": {"rol": "OBJETO", "es": "mi dinero"},
@@ -129,13 +147,18 @@ GLOSS_LEXICON = {
     "ESTOY_BIEN": {"rol": "DESCONOCIDO", "es": "estoy bien"},
     "ETICA": {"rol": "DESCRIPTOR", "es": "ético"},
     "EXIGIR": {"rol": "VERBO", "es": "quiero exigir"},
+    "EXPAREJA": {"rol": "DESCRIPTOR", "es": "mi expareja", "persona": True},
+    "EXPEDIENTE": {"rol": "TRAMITE", "es": "mi expediente"},
     "FALTA": {"rol": "ESTADO", "es": "por una falta"},
+    "FAMILIAR": {"rol": "DESCRIPTOR", "es": "un familiar", "persona": True},
     "FARMACIA": {"rol": "LUGAR", "es": "en la farmacia"},
     "FECHA": {"rol": "TIEMPO", "es": "en esa fecha"},
     "FIRME": {"rol": "DESCRIPTOR", "es": "firme"},
     "FISCAL": {"rol": "INSTITUCION", "es": "en la fiscalía"},
+    "FORMATO": {"rol": "DOCUMENTO", "es": "el formato"},
     "FORMULARIO": {"rol": "DOCUMENTO", "es": "el formulario"},
     "FOTOCOPIA": {"rol": "DOCUMENTO", "es": "una fotocopia"},
+    "FOTOGRAFIA": {"rol": "OBJETO", "es": "una fotografía"},
     "GARANTE": {"rol": "ESTADO", "es": "garante"},
     "GESTIONAR": {"rol": "VERBO", "es": "quiero gestionar"},
     "GOBIERNO": {"rol": "INSTITUCION", "es": "en el gobierno"},
@@ -143,6 +166,7 @@ GLOSS_LEXICON = {
     "GRUESO": {"rol": "DESCRIPTOR", "es": "grueso"},
     "HABLAR": {"rol": "VERBO", "es": "quiero hablar"},
     "HERIDA": {"rol": "URGENCIA", "es": "tengo una herida"},
+    "HOJA": {"rol": "DOCUMENTO", "es": "una hoja"},
     "HOLA": {"rol": "DESCONOCIDO", "es": "hola"},
     "HOMBRE": {"rol": "DESCRIPTOR", "es": "un hombre", "persona": True},
     "HONESTIDAD": {"rol": "DESCRIPTOR", "es": "honesto"},
@@ -151,11 +175,12 @@ GLOSS_LEXICON = {
     "HOY": {"rol": "TIEMPO", "es": "hoy"},
     "IDENTIDAD": {"rol": "DESCRIPTOR", "es": "mi identidad", "persona": True},
     "IDENTIFICAR": {"rol": "VERBO", "es": "quiero identificar"},
+    "IMPRIMIR": {"rol": "VERBO", "es": "quiero imprimir"},
     "INOCENTE": {"rol": "DESCRIPTOR", "es": "inocente"},
     "INSTITUCION": {"rol": "INSTITUCION", "es": "en la institución"},
     "INTERPRETE": {"rol": "SERVICIO", "es": "un intérprete de señas"},
     "INVESTIGACION": {"rol": "TRAMITE", "es": "una investigación"},
-    "JUEZ": {"rol": "INSTITUCION", "es": "en el juez"},
+    "JUEZ": {"rol": "INSTITUCION", "es": "en el juzgado"},
     "JUICIO": {"rol": "TRAMITE", "es": "un juicio"},
     "JURAR": {"rol": "VERBO", "es": "quiero jurar"},
     "JUSTICIA": {"rol": "DOCUMENTO", "es": "la justicia"},
@@ -169,9 +194,12 @@ GLOSS_LEXICON = {
     "MALTRATAR": {"rol": "VERBO", "es": "maltrató", "agresor": "maltrató"},
     "MANANA": {"rol": "TIEMPO", "es": "mañana"},
     "MAS_O_MENOS": {"rol": "DESCONOCIDO", "es": "más o menos"},
+    "MEMORIAL": {"rol": "DOCUMENTO", "es": "un memorial"},
+    "MENSAJE": {"rol": "OBJETO", "es": "un mensaje"},
     "MERCADO": {"rol": "LUGAR", "es": "en el mercado"},
     "MES": {"rol": "TIEMPO", "es": "este mes"},
     "MICRO": {"rol": "OBJETO", "es": "el micro"},
+    "MIEDO": {"rol": "ESTADO", "es": "tengo miedo"},
     "MILITAR": {"rol": "DESCRIPTOR", "es": "un militar", "persona": True},
     "MINISTERIO": {"rol": "INSTITUCION", "es": "en el ministerio"},
     "MINUTO": {"rol": "TIEMPO", "es": "hace unos minutos"},
@@ -186,20 +214,29 @@ GLOSS_LEXICON = {
     "NOMBRE": {"rol": "DESCRIPTOR", "es": "mi nombre", "persona": True},
     "NORMA": {"rol": "DOCUMENTO", "es": "la norma"},
     "NOSOTROS": {"rol": "SUJETO", "es": "nosotros"},
+    "NOTIFICACION": {"rol": "TRAMITE", "es": "una notificación"},
+    "NO_ENTIENDO": {"rol": "DESCONOCIDO", "es": "no entiendo"},
     "NO_PUEDO": {"rol": "DESCONOCIDO", "es": "no puedo"},
+    "NO_RECUERDO": {"rol": "DESCONOCIDO", "es": "no recuerdo"},
     "NO_SABER": {"rol": "DESCONOCIDO", "es": "no sé"},
+    "NUREJ": {"rol": "TRAMITE", "es": "mi NUREJ"},
+    "OBSERVACION": {"rol": "DOCUMENTO", "es": "una observación"},
     "OBSERVAR": {"rol": "VERBO", "es": "quiero observar"},
     "OFICIAL": {"rol": "INSTITUCION", "es": "en el oficial"},
+    "OFICINA": {"rol": "INSTITUCION", "es": "en la oficina"},
     "ORGANO_JUDICIAL": {"rol": "INSTITUCION", "es": "en el órgano judicial"},
-    "PAPEL": {"rol": "DOCUMENTO", "es": "el documento"},
+    "PAPEL": {"rol": "DOCUMENTO", "es": "el papel"},
+    "PARADA": {"rol": "LUGAR", "es": "en la parada"},
     "PARAR": {"rol": "VERBO", "es": "se detuvo", "agresor": "se detuvo"},
     "PARA_QUE": {"rol": "DESCONOCIDO", "es": "para qué"},
+    "PAREJA": {"rol": "DESCRIPTOR", "es": "mi pareja", "persona": True},
     "PASADO_MANANA": {"rol": "TIEMPO", "es": "pasado mañana"},
     "PASAPORTE": {"rol": "DOCUMENTO", "es": "mi pasaporte"},
     "PEDIR": {"rol": "VERBO", "es": "quiero solicitar"},
     "PELIGROSO": {"rol": "DESCRIPTOR", "es": "peligroso"},
     "PERMISO": {"rol": "DESCONOCIDO", "es": "con permiso"},
     "PERSONERIA_JURIDICA": {"rol": "DOCUMENTO", "es": "la personería jurídica"},
+    "PISO": {"rol": "LUGAR", "es": "en el piso"},
     "PLAZA": {"rol": "LUGAR", "es": "en la plaza"},
     "PODER": {"rol": "DOCUMENTO", "es": "un poder notarial"},
     "POLICIA": {"rol": "INSTITUCION", "es": "en la policía"},
@@ -207,8 +244,12 @@ GLOSS_LEXICON = {
     "POR_QUE": {"rol": "DESCONOCIDO", "es": "por qué"},
     "PRESENTAR": {"rol": "VERBO", "es": "quiero presentar"},
     "PRESO": {"rol": "DESCRIPTOR", "es": "detenido"},
+    "PRIMERA_VEZ": {"rol": "TIEMPO", "es": "es la primera vez"},
     "PROBLEMA": {"rol": "ESTADO", "es": "por un problema"},
+    "PRODUCTO": {"rol": "OBJETO", "es": "el producto"},
     "PROTEGER": {"rol": "VERBO", "es": "necesito protección"},
+    "PRUEBA": {"rol": "OBJETO", "es": "una prueba"},
+    "PUEDE_REPETIR": {"rol": "DESCONOCIDO", "es": "¿puede repetir?"},
     "PUEDO": {"rol": "DESCONOCIDO", "es": "sí puedo"},
     "QUE": {"rol": "DESCONOCIDO", "es": "qué"},
     "QUEJAR": {"rol": "VERBO", "es": "quiero presentar una queja"},
@@ -217,15 +258,20 @@ GLOSS_LEXICON = {
     "RECHAZAR": {"rol": "VERBO", "es": "rechazo"},
     "RECOGER": {"rol": "VERBO", "es": "quiero recoger"},
     "RECONOCER": {"rol": "VERBO", "es": "quiero reconocer"},
+    "RECORDAR": {"rol": "VERBO", "es": "recuerdo"},
     "REGLAMENTO": {"rol": "DOCUMENTO", "es": "el reglamento"},
+    "REQUISITO": {"rol": "TRAMITE", "es": "un requisito"},
     "RESOLUCION": {"rol": "DOCUMENTO", "es": "la resolución"},
+    "RESPALDO": {"rol": "DOCUMENTO", "es": "un respaldo"},
     "RESPONDER": {"rol": "VERBO", "es": "quiero responder"},
     "ROBAR": {"rol": "VERBO", "es": "robó", "agresor": "robó"},
     "ROJO": {"rol": "DESCRIPTOR", "es": "de color rojo"},
     "ROSADO": {"rol": "DESCRIPTOR", "es": "de color rosado"},
     "SABER": {"rol": "DESCONOCIDO", "es": "sí sé"},
     "SALVAR": {"rol": "VERBO", "es": "me salvó", "agresor": "me salvó"},
+    "SEGUIMIENTO": {"rol": "VERBO", "es": "quiero seguir"},
     "SEGUNDO": {"rol": "TIEMPO", "es": "hace un segundo"},
+    "SEGURO": {"rol": "DESCRIPTOR", "es": "seguro"},
     "SELLO": {"rol": "DOCUMENTO", "es": "el sello"},
     "SEMANA": {"rol": "TIEMPO", "es": "esta semana"},
     "SI": {"rol": "DESCONOCIDO", "es": "sí"},
@@ -233,6 +279,8 @@ GLOSS_LEXICON = {
     "SOBORNO": {"rol": "VERBO", "es": "ofreció un soborno", "agresor": "ofreció un soborno"},
     "SOLDADO": {"rol": "DESCRIPTOR", "es": "un soldado", "persona": True},
     "SOLUCIONAR": {"rol": "VERBO", "es": "quiero solucionar"},
+    "SOSPECHA": {"rol": "ESTADO", "es": "tengo una sospecha"},
+    "SUBSANACION": {"rol": "TRAMITE", "es": "una subsanación"},
     "TAXI": {"rol": "OBJETO", "es": "el taxi"},
     "TELEFONO": {"rol": "OBJETO", "es": "mi teléfono"},
     "TEMOR": {"rol": "ESTADO", "es": "siento temor"},
@@ -247,12 +295,15 @@ GLOSS_LEXICON = {
     "TU": {"rol": "SUJETO", "es": "tú"},
     "UBICACION_GPS": {"rol": "LUGAR", "es": "en esta ubicación"},
     "USTEDES": {"rol": "SUJETO", "es": "ustedes"},
+    "VARIAS_VECES": {"rol": "TIEMPO", "es": "varias veces"},
     "VECINO": {"rol": "DESCRIPTOR", "es": "un vecino", "persona": True},
+    "VENTANILLA": {"rol": "INSTITUCION", "es": "en la ventanilla"},
     "VERDE": {"rol": "DESCRIPTOR", "es": "de color verde"},
     "VERGUENZA": {"rol": "ESTADO", "es": "siento vergüenza"},
     "VIDEOLLAMADA": {"rol": "OBJETO", "es": "una videollamada"},
     "VIOLACION": {"rol": "VERBO", "es": "violó", "agresor": "violó"},
     "VIOLENCIA": {"rol": "VERBO", "es": "ejerció violencia", "agresor": "ejerció violencia"},
+    "WEBID": {"rol": "TRAMITE", "es": "mi WebID"},
     "WHATSAPP": {"rol": "OBJETO", "es": "WhatsApp"},
     "WIFI": {"rol": "OBJETO", "es": "wifi"},
     "YO": {"rol": "SUJETO", "es": "yo"},
@@ -491,14 +542,24 @@ def _agresor_text(analysis):
     personas = [d for d in analysis["descriptores"] if d.get("persona")]
     rasgos = [d for d in analysis["descriptores"] if not d.get("persona")]
     if personas:
-        # Varios descriptores de persona (género + edad + relación) describen a
-        # UNA misma persona, no a varias: se concatenan como una sola frase
-        # nominal. El primero conserva su artículo ("una mujer") y el resto se
-        # anexa como modificador sin artículo ("una mujer" + "un joven" →
-        # "una mujer joven"). Antes solo se usaba personas[0] y se perdía el resto.
-        base = personas[0]["es"]
-        for p in personas[1:]:
-            base += " " + re.sub(r'^(un|una|unos|unas)\s+', '', p["es"])
+        # Un descriptor "mi X" (PAREJA, EXPAREJA, FAMILIAR…) ya es una frase
+        # nominal completa y específica, no un rasgo apilable como "un joven".
+        # Pegarlo detrás de "una mujer" da "una mujer mi pareja" (agramatical).
+        # Si hay alguno, ese manda: es más informativo que un género/edad
+        # genérico y no hace falta repetir ambos.
+        relacionales = [p["es"] for p in personas if p["es"].startswith("mi ")]
+        if relacionales:
+            otros = [p["es"] for p in personas if not p["es"].startswith("mi ")]
+            base = _join_es(relacionales) if not otros else f'{_join_es(relacionales)}, {", ".join(otros)}'
+        else:
+            # Varios descriptores de persona (género + edad + relación) describen a
+            # UNA misma persona, no a varias: se concatenan como una sola frase
+            # nominal. El primero conserva su artículo ("una mujer") y el resto se
+            # anexa como modificador sin artículo ("una mujer" + "un joven" →
+            # "una mujer joven"). Antes solo se usaba personas[0] y se perdía el resto.
+            base = personas[0]["es"]
+            for p in personas[1:]:
+                base += " " + re.sub(r'^(un|una|unos|unas)\s+', '', p["es"])
     else:
         base = "una persona"
     if rasgos:
@@ -515,7 +576,10 @@ def _compose_incident(analysis, is_formal, robo):
     """Relato de incidente con agresor en 3ª persona (robo / violencia)."""
     subj = _agresor_text(analysis)
     verb = _agresor_verb(analysis, "robó" if robo else "agredió")
-    core = f"{subj} me {verb}"
+    # Un sujeto en aposición ("mi pareja, una mujer") necesita la coma de
+    # cierre antes de seguir la cláusula.
+    subj_clause = f"{subj}," if "," in subj else subj
+    core = f"{subj_clause} me {verb}"
 
     objs = _objetos_text(analysis)
     if objs:
