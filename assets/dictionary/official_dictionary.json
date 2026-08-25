@@ -1574,8 +1574,8 @@
    "categoryId": "Conceptos jurídicos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "consulta"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -1887,9 +1887,9 @@
    "categoryId": "Acciones",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion",
     "otro",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -2048,9 +2048,9 @@
    "categoryId": "Acciones",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion",
     "otro",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -2142,7 +2142,7 @@
    "categoryId": "Acciones",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion"
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -2186,9 +2186,9 @@
    "categoryId": "Acciones",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion",
     "otro",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -3999,7 +3999,7 @@
    "categoryId": "Documentos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion"
+    "tramite"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -4020,7 +4020,7 @@
    "categoryId": "Documentos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion"
+    "tramite"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -4200,7 +4200,7 @@
    "categoryId": "Documentos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion"
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -4245,8 +4245,8 @@
    "contexts": [
     "denuncia_robo",
     "violencia",
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -4546,8 +4546,8 @@
    "categoryId": "Comunicación",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "consulta"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -4590,7 +4590,7 @@
    "categoryId": "Comunicación",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion"
+    "consulta"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -5906,8 +5906,8 @@
    "categoryId": "Documentos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -5928,8 +5928,8 @@
    "categoryId": "Documentos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -5951,8 +5951,8 @@
    "subcategoryId": "documento",
    "contexts": [
     "otro",
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -5975,8 +5975,8 @@
    "contexts": [
     "violencia",
     "accidente",
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -6019,8 +6019,8 @@
    "categoryId": "Conceptos jurídicos",
    "subcategoryId": "tramite",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "consulta"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -6041,8 +6041,8 @@
    "categoryId": "Conceptos jurídicos",
    "subcategoryId": "tramite",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "consulta"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -6063,8 +6063,8 @@
    "categoryId": "Conceptos jurídicos",
    "subcategoryId": "tramite",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "consulta"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -6085,8 +6085,8 @@
    "categoryId": "Conceptos jurídicos",
    "subcategoryId": "tramite",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 3,
    "suggestedNextCardIds": [],
@@ -6107,8 +6107,8 @@
    "categoryId": "Documentos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -6195,8 +6195,8 @@
    "categoryId": "Documentos",
    "subcategoryId": "documento",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 3,
    "suggestedNextCardIds": [],
@@ -6719,8 +6719,8 @@
    "categoryId": "Acciones",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "consulta"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -6741,8 +6741,8 @@
    "categoryId": "Acciones",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "tramite"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -6763,8 +6763,8 @@
    "categoryId": "Acciones",
    "subcategoryId": "verboAccion",
    "contexts": [
-    "orientacion",
-    "preguntas"
+    "preguntas",
+    "consulta"
    ],
    "priority": 2,
    "suggestedNextCardIds": [],
@@ -7066,6 +7066,52 @@
    "animationFile": "",
    "corpusCategory": "8. Tiempo y secuencia",
    "source": "Corpus conversacional judicial 2026"
+  },
+  {
+   "id": "g297",
+   "gloss": "CARNET",
+   "displayText": "CARNET",
+   "iconUrl": "",
+   "categoryId": "Documentos",
+   "subcategoryId": "documento",
+   "contexts": [
+    "denuncia_robo",
+    "otro",
+    "preguntas",
+    "tramite"
+   ],
+   "priority": 1,
+   "suggestedNextCardIds": [],
+   "isFrequent": true,
+   "isEmergency": false,
+   "semanticIcon": "badge",
+   "dialect": "cochabamba",
+   "status": "official",
+   "animationFile": "",
+   "corpusCategory": "10. Documentos y objetos frecuentes",
+   "source": "Corpus conversacional judicial 2026 — incorporación de auditoría semántica"
+  },
+  {
+   "id": "g298",
+   "gloss": "PERDER",
+   "displayText": "PERDER",
+   "iconUrl": "",
+   "categoryId": "Acciones",
+   "subcategoryId": "verboAccion",
+   "contexts": [
+    "preguntas",
+    "tramite"
+   ],
+   "priority": 1,
+   "suggestedNextCardIds": [],
+   "isFrequent": true,
+   "isEmergency": false,
+   "semanticIcon": "assignment",
+   "dialect": "cochabamba",
+   "status": "official",
+   "animationFile": "",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "source": "Corpus conversacional judicial 2026 — incorporación de auditoría semántica"
   }
  ]
 }

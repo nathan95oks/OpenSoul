@@ -152,6 +152,19 @@ final _localCandidatesProvider = FutureProvider<List<LsbCard>>((ref) async {
   final activeZone = zonesState.activeZone;
   if (activeZone == null) return const [];
 
+  // Lista blanca: manda sobre todo lo demás. Una zona que enumera sus glosas
+  // muestra exactamente esas, en su orden — el orden es la decisión de diseño
+  // (en "¿Quién te agredió?" PAREJA va antes que HOMBRE porque el corpus
+  // pregunta por el vínculo). No se cruza con el contexto de la tarjeta ni se
+  // rellena con 'general': la zona ya dijo qué responde su pregunta.
+  if (activeZone.glossAllowlist.isNotEmpty) {
+    final porGlosa = {for (final c in allCards) c.gloss: c};
+    return [
+      for (final g in activeZone.glossAllowlist)
+        if (porGlosa.containsKey(g)) porGlosa[g]!,
+    ].take(_kMaxGuidedAnswers).toList();
+  }
+
   final zoneCategories = activeZone.cardCategories.toSet();
   final zoneSubcategories = activeZone.cardSubcategories.toSet();
   final hasSubcategoryFilter = zoneSubcategories.isNotEmpty;
