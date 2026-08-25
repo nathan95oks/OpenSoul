@@ -185,6 +185,10 @@ class GlosasDevueltasPorElModelo(unittest.TestCase):
         self.assertEqual(resultado["glosses"], ["ROBAR"])
 
     def test_las_glosas_reales_del_diccionario_pasan(self):
+        # Sin letra suelta: una "A" sin nada en el texto que la explique no
+        # es una glosa real, es ruido de deletreo huérfano — y por diseño
+        # repair_coverage la descarta (ver clase RepairCoverage abajo). Este
+        # caso solo valida el formato (guion, guion bajo, tilde, dígito).
         resultado = lambda_text_to_lsb.post_process_glosses(
             {
                 "glosses": [
@@ -192,15 +196,53 @@ class GlosasDevueltasPorElModelo(unittest.TestCase):
                     "PARTIDA_NACIMIENTO",
                     "NIÑO",
                     "5",
-                    "A",
                 ]
             },
             text="da igual",
         )
         self.assertEqual(
             resultado["glosses"],
-            ["ANIMAL-LLAMA", "PARTIDA_NACIMIENTO", "NIÑO", "5", "A"],
+            ["ANIMAL-LLAMA", "PARTIDA_NACIMIENTO", "NIÑO", "5"],
         )
+
+
+class RepairCoverage(unittest.TestCase):
+    """repair_coverage no tenía ninguna prueba: su propio diseño documentado
+    (colapsar deletreos de palabras comunes, proteger nombres propios,
+    descartar letras huérfanas) nunca se verificó y se rompió sin que nada
+    avisara — es lo que pasó con la "A" del caso anterior.
+    """
+
+    def test_deletreo_de_palabra_comun_se_colapsa(self):
+        glosas, incidencias = lambda_text_to_lsb.repair_coverage(
+            ["C", "U", "C", "H", "I", "L", "L", "O"],
+            "me amenazó con un cuchillo",
+        )
+        self.assertEqual(glosas, ["CUCHILLO"])
+        self.assertEqual(incidencias[0]["accion"], "deletreo_colapsado")
+
+    def test_nombre_propio_conserva_el_deletreo(self):
+        glosas, incidencias = lambda_text_to_lsb.repair_coverage(
+            ["I", "S", "A", "A", "C"],
+            "declaro que fue Isaac quien me amenazó",
+        )
+        self.assertEqual(glosas, ["I", "S", "A", "A", "C"])
+        self.assertEqual(incidencias, [])
+
+    def test_letra_huerfana_sin_texto_que_la_explique_se_descarta(self):
+        # La "A" se descarta como ruido; como no queda ninguna glosa, la red
+        # de seguridad de salida vacía devuelve el texto reconocido tal cual
+        # ("DA", "IGUAL") para que el avatar no se quede mudo.
+        glosas, incidencias = lambda_text_to_lsb.repair_coverage(["A"], "da igual")
+        self.assertEqual(glosas, ["DA", "IGUAL"])
+        self.assertEqual(incidencias[0]["accion"], "letra_descartada")
+
+    def test_inicial_huerfana_recupera_la_palabra_completa(self):
+        glosas, incidencias = lambda_text_to_lsb.repair_coverage(
+            ["ROBAR", "C"], "me robaron con un cuchillo"
+        )
+        self.assertIn("CUCHILLO", glosas)
+        self.assertEqual(incidencias[-1]["accion"], "palabra_recuperada")
 
 
 class PropuestasSinAutenticacion(unittest.TestCase):

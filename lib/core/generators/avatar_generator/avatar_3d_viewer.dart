@@ -52,8 +52,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
   String _activeViewer = 'A';
   String? _urlA;
   String? _urlB;
-  bool _isLoadedA = false;
-  bool _isLoadedB = false;
   bool _hasFinishedPlayingCurrent = false;
 
   AnimationController? _pulseController;
@@ -119,8 +117,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       _activeViewer = 'A';
       _urlA = null;
       _urlB = null;
-      _isLoadedA = false;
-      _isLoadedB = false;
       _controllerA = null;
       _controllerB = null;
       _hasFinishedPlayingCurrent = false;
@@ -157,8 +153,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       _activeViewer = 'A';
       _urlA = null;
       _urlB = null;
-      _isLoadedA = false;
-      _isLoadedB = false;
       _controllerA = null;
       _controllerB = null;
     });
@@ -207,11 +201,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
         if (_localUrls.isNotEmpty) {
           _urlA = _localUrls[0];
-          _isLoadedA = _urlA!.startsWith('placeholder://');
 
           if (_localUrls.length > 1) {
             _urlB = _localUrls[1];
-            _isLoadedB = _urlB!.startsWith('placeholder://');
           } else {
             _urlB = null;
           }
@@ -235,13 +227,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   void _handleLoaded(String viewerId) {
     if (!mounted) return;
-    setState(() {
-      if (viewerId == 'A') {
-        _isLoadedA = true;
-      } else {
-        _isLoadedB = true;
-      }
-    });
 
     // Si es el visor activo que carga el primer elemento del recorrido, iniciamos reproducción
     if (viewerId == _activeViewer &&
@@ -346,11 +331,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
         final nextNextUrl = _localUrls[nextNextIndex];
         if (otherViewerId == 'A') {
           _urlA = nextNextUrl;
-          _isLoadedA = nextNextUrl.startsWith('placeholder://');
           _controllerA = null;
         } else {
           _urlB = nextNextUrl;
-          _isLoadedB = nextNextUrl.startsWith('placeholder://');
           _controllerB = null;
         }
       }

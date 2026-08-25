@@ -45,7 +45,7 @@ final preguntasContext = SemanticContext(
       semanticWeight: 0.7,
       optional: true,
       cardCategories: ['Preguntas', 'Identificación', 'Instituciones'],
-      cardSubcategories: const ['cargo'],
+      cardSubcategories: ['cargo'],
       relatedZones: ['tema'],
     ),
     SemanticZone(
@@ -57,7 +57,7 @@ final preguntasContext = SemanticContext(
       semanticWeight: 0.68,
       optional: true,
       cardCategories: ['Instituciones'],
-      cardSubcategories: const ['institucion'],
+      cardSubcategories: ['institucion'],
       relatedZones: ['tema'],
     ),
     SemanticZone(
@@ -323,7 +323,7 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.58,
         optional: true,
         cardCategories: ['Lugares'],
-        cardSubcategories: const ['salud'],
+        cardSubcategories: ['salud'],
         relatedZones: ['emergencia'],
       ),
       SemanticZone(
@@ -407,7 +407,7 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.58,
         optional: true,
         cardCategories: ['Lugares'],
-        cardSubcategories: const ['salud'],
+        cardSubcategories: ['salud'],
         relatedZones: ['ayuda'],
       ),
       SemanticZone(
@@ -570,7 +570,7 @@ final availableContexts = <SemanticContext>[
       emoji: '📄',
       semanticWeight: 0.85,
       cardCategories: ['Documentos'],
-      cardSubcategories: const ['documento'],
+      cardSubcategories: ['documento'],
       maxPicks: 2,
       relatedZones: ['tramite', 'motivo', 'donde'],
     ),
@@ -583,7 +583,7 @@ final availableContexts = <SemanticContext>[
       semanticWeight: 0.7,
       optional: true,
       cardCategories: ['Documentos'],
-      cardSubcategories: const ['soporte'],
+      cardSubcategories: ['soporte'],
       relatedZones: ['documento', 'motivo'],
     ),
       SemanticZone(
@@ -605,7 +605,7 @@ final availableContexts = <SemanticContext>[
       emoji: '🏛️',
       semanticWeight: 0.6,
       cardCategories: ['Instituciones'],
-      cardSubcategories: const ['institucion'],
+      cardSubcategories: ['institucion'],
       relatedZones: ['apoyo'],
       ),
       SemanticZone(
