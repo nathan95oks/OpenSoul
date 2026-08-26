@@ -260,6 +260,55 @@ void main() {
     });
   });
 
+  group('dominio penal judicial', () {
+    test('la zona institucional ofrece las dependencias penales', () {
+      for (final ctx in ['tramite', 'consulta']) {
+        final zona = contextById(ctx)!.zoneById(ctx == 'tramite' ? 'donde' : 'donde');
+        expect(zona!.glossAllowlist, containsAll(['FISCALIA', 'FELCC', 'FELCV']),
+            reason: 'en $ctx faltan las unidades del ámbito penal');
+        expect(zona.glossAllowlist.contains('ALCALDIA'), false,
+            reason: 'una alcaldía no recibe una denuncia penal');
+      }
+    });
+
+    test('existe la rama de seguimiento de investigación', () {
+      final consulta = contextById('consulta')!;
+      final avance = consulta.zoneById('avance');
+      expect(avance, isNotNull, reason: 'el corpus penal lo exige');
+      expect(avance!.question, '¿Qué necesita saber?');
+      expect(avance.glossAllowlist, containsAll(['AVANCE', 'CASO']));
+
+      final defensa = consulta.zoneById('defensa');
+      expect(defensa, isNotNull);
+      expect(defensa!.question, '¿Tiene abogado?');
+      expect(defensa.glossAllowlist, containsAll(['SI', 'NO', 'DEFENSA_PUBLICA']));
+    });
+
+    test('las dos respuestas frecuentes están a un toque', () {
+      final necesidad = contextById('consulta')!.zoneById('necesidad')!;
+      expect(necesidad.glossAllowlist, containsAll(['INTERPRETE', 'CASO']),
+          reason: 'son las que el corpus penal ve una y otra vez');
+    });
+
+    test('el dominio penal no rompe la dactilología ni el tiempo', () {
+      final ctx = resolveAssemblerContext(
+          'consulta', ['AUDIENCIA', 'JUZGADO', 'CASO', '4', '0', '7'],
+          (g) => catalogo[g]);
+      final f = asm.assemble(
+        contextId: ctx,
+        glosses: ['AUDIENCIA', 'JUZGADO', 'CASO', '4', '0', '7'],
+      );
+      expect(f, contains('407'), reason: 'el número de caso sigue uniéndose');
+
+      final t = asm.assemble(
+        contextId: 'denuncia_robo',
+        glosses: ['ROBAR', 'FISCALIA', 'SEMANA', '2'],
+      );
+      expect(t.toLowerCase(), contains('hace dos semanas'),
+          reason: 'la composición temporal sigue intacta');
+    });
+  });
+
   test('los íconos declarados existen en el catálogo', () {
     final catalogo = jsonDecode(
       File('assets/dictionary/official_dictionary.json').readAsStringSync(),

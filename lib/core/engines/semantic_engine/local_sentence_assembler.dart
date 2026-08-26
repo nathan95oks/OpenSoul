@@ -1876,7 +1876,17 @@ class LocalSentenceAssembler {
     // ── Instituciones (19) ──
     'ABOGADO': _Lex(_Role.servicio, 'un abogado'),
     'AUTORIDAD': _Lex(_Role.institucion, 'en la autoridad'),
+    // Ámbito penal boliviano. FISCAL se conserva para "¿quién lleva tu
+    // caso?" —donde se pregunta por la persona— y FISCALIA nombra la
+    // dependencia; las listas blancas nunca ofrecen las dos en la misma zona.
     'FISCAL': _Lex(_Role.institucion, 'en la fiscalía'),
+    'FISCALIA': _Lex(_Role.institucion, 'en la Fiscalía'),
+    'FELCC': _Lex(_Role.institucion, 'en la FELCC'),
+    'FELCV': _Lex(_Role.institucion, 'en la FELCV'),
+    'TRIBUNAL': _Lex(_Role.institucion, 'en el tribunal'),
+    'JUZGADO': _Lex(_Role.institucion, 'en el juzgado de instrucción penal'),
+    'SEPAV': _Lex(_Role.institucion, 'en el SEPAV'),
+    'DEFENSA_PUBLICA': _Lex(_Role.institucion, 'en la Defensa Pública'),
     'INSTITUCION': _Lex(_Role.institucion, 'en la institución'),
     'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de señas'),
     'JUEZ': _Lex(_Role.institucion, 'en el juzgado'),
@@ -1916,6 +1926,7 @@ class LocalSentenceAssembler {
     'NOTIFICACION': _Lex(_Role.tramite, 'una notificación'),
     'CITACION': _Lex(_Role.tramite, 'una citación'),
     'AUDIENCIA': _Lex(_Role.tramite, 'una audiencia'),
+    'AVANCE': _Lex(_Role.tramite, 'el avance de la investigación'),
     'SUBSANACION': _Lex(_Role.tramite, 'una subsanación'),
     'REQUISITO': _Lex(_Role.tramite, 'un requisito'),
     'CODIGO': _Lex(_Role.tramite, 'el código'),

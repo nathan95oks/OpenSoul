@@ -154,12 +154,15 @@ void main() {
       expect(cards.isNotEmpty, true);
       expect(cards.any((x) => x.gloss == 'ABOGADO'), false,
           reason: 'ABOGADO debe vivir en apoyo, no en institución');
-      // POLICIA y FISCAL entran pese a su subcategoría `cargo`: sus formas en
-      // español son institucionales. Es el caso que justifica la lista blanca.
-      expect(cards.any((x) => x.gloss == 'POLICIA'), true,
-          reason: 'la policía es un destino institucional válido');
-      expect(cards.any((x) => x.gloss == 'FISCAL'), true,
-          reason: '"en la fiscalía" es una institución, no solo un cargo');
+      // Dominio penal: las dependencias que reciben una denuncia. POLICIA y
+      // ALCALDIA salen —genérica la una, municipal la otra— y entran las
+      // unidades reales del ámbito judicial boliviano.
+      expect(cards.any((x) => x.gloss == 'FISCALIA'), true,
+          reason: 'el Ministerio Público recibe la denuncia');
+      expect(cards.any((x) => x.gloss == 'FELCC'), true,
+          reason: 'la FELCC es la unidad policial que investiga');
+      expect(cards.any((x) => x.gloss == 'ALCALDIA'), false,
+          reason: 'una alcaldía no recibe una denuncia penal');
     });
 
     test('la zona de apoyo sí ofrece abogado e intérprete', () async {
@@ -315,7 +318,7 @@ void main() {
       // interrogativa.
       c.read(semanticZonesProvider.notifier).activateZone('lugar_pregunta');
       final lugares = await c.read(dynamicCardsProvider.future);
-      expect(lugares.any((x) => x.gloss == 'FISCAL'), true);
+      expect(lugares.any((x) => x.gloss == 'FISCALIA'), true);
       expect(lugares.any((x) => x.gloss == 'MOCHILA'), false,
           reason: 'un objeto no responde "¿dónde está…?"');
       expect(lugares.length <= 12, true);
