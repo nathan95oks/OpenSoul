@@ -563,7 +563,12 @@ class LocalSentenceAssembler {
         case _Role.objeto:             r.objects.add(e.es); break;
         case _Role.documento:          r.documents.add(e.es); break;
         case _Role.lugar:              r.place ??= e.es; break;
-        case _Role.institucion:        r.institution ??= e.es; break;
+        case _Role.institucion:
+          // Varias instituciones son varios destinos, no uno: con `??=` la
+          // segunda se perdía y la red de cobertura la soltaba al final
+          // ("…hago constar en el despacho").
+          if (!r.institutions.contains(e.es)) r.institutions.add(e.es);
+          break;
         case _Role.servicio:           r.services.add(e.es); break;
         case _Role.emocion:            r.emotions.add(e.es); break;
         case _Role.urgencia:           r.urgencies.add(e.es); break;
@@ -638,7 +643,15 @@ class LocalSentenceAssembler {
     return salida;
   }
 
-  static bool _esDigito(String g) => g.length == 1 && _cardinales.containsKey(g);
+  /// Dígitos de dactilología. Incluye el 0, que [_cardinales] no lleva a
+  /// propósito: sirve para deletrear un NUREJ pero jamás es una cantidad
+  /// —"hace cero semanas" no significa nada—. Sin el 0 aquí, un número como
+  /// "1 0 2 4" se partía en trozos y el primer dígito se perdía.
+  static const _digitos = {
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+  };
+
+  static bool _esDigito(String g) => _digitos.contains(g);
 
   static bool _esLetra(String g) =>
       g.length == 1 && RegExp(r'^[A-ZÑ]$').hasMatch(g);
@@ -996,13 +1009,20 @@ class LocalSentenceAssembler {
     const lead = 'Necesito orientación.';
     final sentences = <String>[];
 
-    if (r.services.isNotEmpty) {
+    // Un servicio solo es complemento del verbo cuando el verbo es de
+    // solicitud. Con cualquier otro salía "Quiero corregir un intérprete de
+    // señas": el apoyo de accesibilidad se tragaba el objeto real del trámite.
+    // En ese caso el servicio va en su propia oración, al final.
+    final verboPideServicio = r.action == null ||
+        const {'quiero solicitar', 'necesito ayuda', 'quiero una copia'}
+            .contains(r.action);
+    if (r.services.isNotEmpty && verboPideServicio) {
       // Si el usuario eligió un verbo (necesito/quiero solicitar...), encabeza
       // la oración para no dejarlo suelto y mantener la fluidez.
       final verb = r.action != null ? _cap(r.action!) : 'Solicito';
       var clause = '$verb ${_join(r.services)}';
       if (r.institution != null) {
-        clause += ' ${r.institution}';
+        clause += ' ${_join(r.institutions)}';
         r.institution = null;
       }
       sentences.add('$clause.');
@@ -1022,7 +1042,7 @@ class LocalSentenceAssembler {
         r.procedures.clear();
       }
       if (r.institution != null) {
-        clause += ' ${r.institution}';
+        clause += ' ${_join(r.institutions)}';
         r.institution = null;
       }
       sentences.add('${_cap(clause)}.');
@@ -1194,7 +1214,7 @@ class LocalSentenceAssembler {
         r.objects.clear();
       }
       if (r.institution != null) {
-        clause += ' ${r.institution}';
+        clause += ' ${_join(r.institutions)}';
         r.institution = null;
       }
       if (r.time != null) {
@@ -1206,7 +1226,7 @@ class LocalSentenceAssembler {
     } else if (what.isNotEmpty) {
       var clause = what;
       if (r.institution != null) {
-        clause += ' ${r.institution}';
+        clause += ' ${_join(r.institutions)}';
         r.institution = null;
       }
       sentences.add('${_cap(clause)}.');
@@ -1832,10 +1852,12 @@ class LocalSentenceAssembler {
     'RESPONDER': _Lex(_Role.verboAccion, 'quiero responder'),
 
     // ── Comunicación digital (4) ──
-    'VIDEOLLAMADA': _Lex(_Role.objeto, 'una videollamada'),
-    'WHATSAPP': _Lex(_Role.objeto, 'WhatsApp'),
-    'WIFI': _Lex(_Role.objeto, 'wifi'),
-    'ZOOM': _Lex(_Role.objeto, 'Zoom'),
+    'VIDEOLLAMADA': _Lex(_Role.objeto, 'por videollamada'),
+    // Canales, no objetos: sin la preposición el compositor los tomaba
+    // como complemento directo — "me amenazó WhatsApp".
+    'WHATSAPP': _Lex(_Role.objeto, 'por WhatsApp'),
+    'WIFI': _Lex(_Role.objeto, 'por wifi'),
+    'ZOOM': _Lex(_Role.objeto, 'por Zoom'),
 
     // ── Integridad (8) ──
     'AUTONOMIA': _Lex(_Role.motivo, 'autónomo'),
@@ -1896,6 +1918,18 @@ class _Roles {
   final List<String> victims = [];
   String? victimPlural;
   final List<String> victimTraits = [];
+  /// Instituciones nombradas, en orden de selección. [institution] devuelve
+  /// la primera y [institutionText] todas enlazadas.
+  final List<String> institutions = [];
+
+  /// Compatibilidad con los composers: la primera institución, o `null`.
+  String? get institution => institutions.isEmpty ? null : institutions.first;
+
+  set institution(String? v) {
+    institutions.clear();
+    if (v != null) institutions.add(v);
+  }
+
   String? aggression;
 
   /// Huida del agresor ("salió corriendo"). Cierra el relato, no lo abre.
@@ -1903,7 +1937,6 @@ class _Roles {
   String? action;
   String? weapon;
   String? place;
-  String? institution;
   String? time;
 
   /// Unidad temporal pendiente de cantidad (SEMANA, DIA…) y su cantidad.

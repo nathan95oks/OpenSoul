@@ -1,0 +1,358 @@
+{
+  "_nota": "Casos derivados del CORPUS CONVERSACIONAL PRELIMINAR (Cochabamba 2026). Fuente única para las suites de Python y Dart: si los dos motores no producen la MISMA salida, la paridad está rota. Cada `glosas` es lo que la persona sorda elige en las tarjetas; `esperado` es la declaración que ambos motores deben redactar. Regenerable con: python3 aws/tests/regenerar_casos_corpus.py",
+  "casos": [
+    {
+      "case_id": "CP-001",
+      "corpus": "§2.1 Inicio de denuncia y relato libre",
+      "descripcion": "Relato base: hecho, agresor, lugar y tiempo absoluto",
+      "input_natural": "Ayer un hombre me robó mi mochila en la calle.",
+      "contexto": "denuncia_robo",
+      "glosas": [
+        "AYER",
+        "HOMBRE",
+        "ROBAR",
+        "MOCHILA",
+        "CALLE"
+      ],
+      "reglas": [],
+      "esperado_backend": "Ayer, un hombre me robó mi mochila en la calle.",
+      "lsb_icons": [
+        "access_time",
+        "explore",
+        "person",
+        "shopping_bag",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-002",
+      "corpus": "§2.3 Robo o hurto de pertenencias",
+      "descripcion": "Regla CORRER: la huida cierra el relato tras el lugar, no es agresión sufrida",
+      "input_natural": "Me robaron el celular en el mercado y la persona salió corriendo.",
+      "contexto": "denuncia_robo",
+      "glosas": [
+        "ROBAR",
+        "TELEFONO",
+        "MERCADO",
+        "CORRER"
+      ],
+      "reglas": [
+        "corre_cierra_relato"
+      ],
+      "esperado_backend": "Una persona me robó mi teléfono en el mercado y salió corriendo.",
+      "lsb_icons": [
+        "explore",
+        "shopping_bag",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-003",
+      "corpus": "§2.3 Robo — descripción del autor y evidencia",
+      "descripcion": "Regla EVIDENCIA: la fotografía se aporta, no se sustrae",
+      "input_natural": "Un hombre delgado me robó la billetera en la parada; tengo una fotografía como prueba.",
+      "contexto": "denuncia_robo",
+      "glosas": [
+        "HOMBRE",
+        "DELGADO",
+        "ROBAR",
+        "BILLETERA",
+        "PARADA",
+        "FOTOGRAFIA"
+      ],
+      "reglas": [
+        "evidencia_no_es_botin"
+      ],
+      "esperado_backend": "Un hombre delgado me robó mi billetera en la parada. Como prueba tengo una fotografía.",
+      "lsb_icons": [
+        "brush",
+        "explore",
+        "inventory_2",
+        "person",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-004",
+      "corpus": "§2.2 Violencia familiar o amenazas",
+      "descripcion": "Regla SEGURO: es estado del declarante, nunca rasgo del agresor",
+      "input_natural": "Mi expareja me amenazó en mi casa. Tengo miedo, pero ahora estoy en un lugar seguro.",
+      "contexto": "violencia",
+      "glosas": [
+        "EXPAREJA",
+        "AMENAZAR",
+        "CASA",
+        "MIEDO",
+        "SEGURO"
+      ],
+      "reglas": [
+        "seguro_es_estado"
+      ],
+      "esperado_backend": "Mi expareja me amenazó en mi casa. Tengo miedo y me encuentro en un lugar seguro.",
+      "lsb_icons": [
+        "brush",
+        "explore",
+        "person",
+        "sentiment_dissatisfied",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-005",
+      "corpus": "§2.2 Violencia — reincidencia con fecha",
+      "descripcion": "Regla TEMPORAL: AYER manda como fecha; PRIMERA_VEZ es reincidencia aparte",
+      "input_natural": "Ayer mi pareja me maltrató en mi casa. Es la primera vez que ocurre.",
+      "contexto": "violencia",
+      "glosas": [
+        "AYER",
+        "PAREJA",
+        "MALTRATAR",
+        "CASA",
+        "PRIMERA_VEZ"
+      ],
+      "reglas": [
+        "ayer_manda_sobre_primera_vez"
+      ],
+      "esperado_backend": "Ayer, mi pareja me maltrató en mi casa. Es la primera vez que ocurre.",
+      "lsb_icons": [
+        "access_time",
+        "explore",
+        "person",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-006",
+      "corpus": "§2.2 Violencia — hecho repetido en el tiempo",
+      "descripcion": "Composición temporal en pasado: unidad + cantidad",
+      "input_natural": "Hace dos semanas una mujer me maltrató en mi casa y ya había ocurrido antes.",
+      "contexto": "violencia",
+      "glosas": [
+        "SEMANA",
+        "2",
+        "MUJER",
+        "MALTRATAR",
+        "CASA",
+        "ANTERIORMENTE"
+      ],
+      "reglas": [
+        "cadena_temporal_pasado"
+      ],
+      "esperado_backend": "Hace dos semanas, una mujer me maltrató en mi casa. Ya había ocurrido anteriormente.",
+      "lsb_icons": [
+        "access_time",
+        "explore",
+        "person",
+        "sports_mma",
+        "straighten"
+      ]
+    },
+    {
+      "case_id": "CP-007",
+      "corpus": "§2.6 Amenazas por mensajes o llamadas",
+      "descripcion": "Evidencia digital: mensajes conservados como prueba",
+      "input_natural": "Un vecino me amenazó por mensajes; los guardé como prueba.",
+      "contexto": "violencia",
+      "glosas": [
+        "VECINO",
+        "AMENAZAR",
+        "MENSAJE",
+        "WHATSAPP"
+      ],
+      "reglas": [
+        "evidencia_no_es_botin"
+      ],
+      "esperado_backend": "Un vecino me amenazó por WhatsApp. Como prueba tengo un mensaje.",
+      "lsb_icons": [
+        "inventory_2",
+        "person",
+        "smartphone",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-008",
+      "corpus": "§2.5 Agresión o lesiones",
+      "descripcion": "Urgencia múltiple: herida y auxilio no se excluyen",
+      "input_natural": "Me agredieron, tengo una herida y necesito auxilio.",
+      "contexto": "violencia",
+      "glosas": [
+        "VIOLENCIA",
+        "HERIDA",
+        "AUXILIO"
+      ],
+      "reglas": [
+        "urgencias_multiples"
+      ],
+      "esperado_backend": "Una persona me ejerció violencia. Tengo una herida y necesito auxilio.",
+      "lsb_icons": [
+        "emergency",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-009",
+      "corpus": "§2.5 Agresión — atención médica y certificado",
+      "descripcion": "El certificado médico es prueba, no lo dañado",
+      "input_natural": "Me agredieron anteayer; fui al centro de salud y tengo un certificado.",
+      "contexto": "violencia",
+      "glosas": [
+        "ANTEAYER",
+        "MALTRATAR",
+        "CENTRO_DE_SALUD",
+        "CERTIFICADO"
+      ],
+      "reglas": [
+        "evidencia_no_es_botin"
+      ],
+      "esperado_backend": "Anteayer, una persona me maltrató en el centro de salud. Como prueba tengo un certificado.",
+      "lsb_icons": [
+        "access_time",
+        "description",
+        "explore",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-010",
+      "corpus": "§2.7 Daño a bienes o propiedad",
+      "descripcion": "Daño material con sospecha y fotografías",
+      "input_natural": "Dañaron mi motocicleta en la avenida. Tengo una sospecha y tomé fotografías.",
+      "contexto": "denuncia_robo",
+      "glosas": [
+        "DANAR",
+        "MOTOCICLETA",
+        "AVENIDA",
+        "SOSPECHA",
+        "FOTOGRAFIA"
+      ],
+      "reglas": [
+        "evidencia_no_es_botin"
+      ],
+      "esperado_backend": "Una persona me dañó mi motocicleta en la avenida. Tengo una sospecha. Como prueba tengo una fotografía.",
+      "lsb_icons": [
+        "directions_car",
+        "explore",
+        "inventory_2",
+        "sentiment_dissatisfied",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-011",
+      "corpus": "§3.5 Consulta de expediente mediante NUREJ y WebID",
+      "descripcion": "Regla DÍGITOS: una racha se agrupa como número deletreado",
+      "input_natural": "Quiero consultar mi expediente; mi NUREJ es 1 0 2 4.",
+      "contexto": "consulta",
+      "glosas": [
+        "SEGUIMIENTO",
+        "EXPEDIENTE",
+        "NUREJ",
+        "1",
+        "0",
+        "2",
+        "4"
+      ],
+      "reglas": [
+        "digitos_en_racha_se_agrupan"
+      ],
+      "esperado_backend": "Quiero seguir mi expediente. Adicionalmente, hago referencia a mi NUREJ y 1024.",
+      "lsb_icons": [
+        "app_registration",
+        "assignment",
+        "straighten"
+      ]
+    },
+    {
+      "case_id": "CP-012",
+      "corpus": "§3.1 Consulta sobre el estado de una denuncia",
+      "descripcion": "Regla DÍGITOS: un dígito huérfano sin unidad temporal se descarta",
+      "input_natural": "No sé el estado de mi caso y no recuerdo el código.",
+      "contexto": "consulta",
+      "glosas": [
+        "NO_SABER",
+        "ESTADO",
+        "CASO",
+        "NO_RECUERDO",
+        "7"
+      ],
+      "reglas": [
+        "digito_huerfano_se_descarta"
+      ],
+      "esperado_backend": "No sé. No recuerdo. Necesito realizar mi caso. Adicionalmente, hago referencia al estado del trámite.",
+      "lsb_icons": [
+        "app_registration",
+        "description",
+        "straighten",
+        "waving_hand"
+      ]
+    },
+    {
+      "case_id": "CP-013",
+      "corpus": "§3.2 Consulta sobre fiscal o autoridad asignada",
+      "descripcion": "Dos destinos institucionales enlazados con conjunción",
+      "input_natural": "Quiero saber quién lleva mi caso: ¿la fiscalía o el despacho?",
+      "contexto": "consulta",
+      "glosas": [
+        "COMPRENDER",
+        "CASO",
+        "FISCAL",
+        "DESPACHO"
+      ],
+      "reglas": [
+        "instituciones_con_conjuncion"
+      ],
+      "esperado_backend": "Quiero comprender mi caso en la fiscalía y en el despacho.",
+      "lsb_icons": [
+        "account_balance",
+        "app_registration",
+        "assignment"
+      ]
+    },
+    {
+      "case_id": "CP-014",
+      "corpus": "§4.1 Presentación de un documento o memorial",
+      "descripcion": "Trámite con plazo futuro: la dirección la aporta el contexto",
+      "input_natural": "Quiero presentar un memorial en el órgano judicial dentro de tres días.",
+      "contexto": "tramite",
+      "glosas": [
+        "PRESENTAR",
+        "MEMORIAL",
+        "ORGANO_JUDICIAL",
+        "DIA",
+        "3"
+      ],
+      "reglas": [
+        "cadena_temporal_futuro"
+      ],
+      "esperado_backend": "Quiero presentar un memorial dentro de tres días en el órgano judicial.",
+      "lsb_icons": [
+        "access_time",
+        "account_balance",
+        "assignment",
+        "description",
+        "straighten"
+      ]
+    },
+    {
+      "case_id": "CP-015",
+      "corpus": "§4.6 Subsanación o corrección de un documento",
+      "descripcion": "Observación y requisito con apoyo de intérprete",
+      "input_natural": "Me observaron el formulario y debo corregirlo; necesito un intérprete.",
+      "contexto": "tramite",
+      "glosas": [
+        "CORREGIR",
+        "FORMULARIO",
+        "OBSERVACION",
+        "INTERPRETE"
+      ],
+      "reglas": [],
+      "esperado_backend": "Quiero corregir el formulario y una observación. Necesito un intérprete de señas.",
+      "lsb_icons": [
+        "assignment",
+        "description",
+        "support_agent"
+      ]
+    }
+  ]
+}
