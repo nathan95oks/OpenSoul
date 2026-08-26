@@ -1,5 +1,6 @@
 import '../../domain/entities/conversation.dart';
 import '../../domain/entities/semantic_message.dart';
+import 'speech_act.dart';
 import '../../domain/repositories/audio_translation_repository.dart';
 import '../../domain/repositories/translation_repository.dart';
 import '../context_engine/context_inference_engine.dart';
@@ -167,6 +168,7 @@ class ConversationEngine {
       message: SemanticMessage(
         id: _newId(),
         speaker: SpeakerRole.hearing,
+        speechAct: classifySpeechAct(text),
         source: source,
         glosses: const [],
         text: text,
@@ -198,6 +200,7 @@ class ConversationEngine {
         id: message.id,
         speaker: message.speaker,
         source: message.source,
+        speechAct: message.speechAct,
         glosses: translation.glosses,
         text: message.text,
         replyToId: message.replyToId,

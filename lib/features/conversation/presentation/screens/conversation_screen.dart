@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/engines/conversation_engine/speech_act.dart';
 
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/di/core_providers.dart';
@@ -13,6 +17,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import '../providers/conversation_provider.dart';
 import '../widgets/avatar_playback_sheet.dart';
 import '../widgets/turn_bubble.dart';
+import '../widgets/quick_reply_bar.dart';
 
 /// Pantalla central de OpenSoul: la conversación bidireccional.
 ///
@@ -102,6 +107,54 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     context.push('/lsb-to-audio');
   }
 
+  /// Turno del oyente que dio una instrucción y sigue sin contestar.
+  ConversationTurn? _instruccionPendiente(ConversationState state) {
+    final pendiente = state.conversation.pendingReply;
+    if (pendiente == null) return null;
+    return pendiente.message.speechAct == SpeechAct.instruction
+        ? pendiente
+        : null;
+  }
+
+  /// Contesta una instrucción con una glosa suelta, sin abrir el flujo.
+  ///
+  /// El audio sale por el altavoz hacia el funcionario, que es a quien va
+  /// dirigida la respuesta.
+  Future<void> _enviarRespuestaRapida(
+      List<String> glosses, String text) async {
+    ref.read(conversationProvider.notifier).addDeafDeclaration(
+          result: TranslationResult(baseSentence: text, generatedText: text),
+          glosses: glosses,
+        );
+    await ref.read(audioOutputProvider).speak(text);
+  }
+
+  /// Acción dual del botón de repetir.
+  ///
+  /// Quien no estaba mirando la pantalla se quedó sin el mensaje y además
+  /// necesita pedir que se lo repitan. Son dos cosas distintas y aquí ocurren
+  /// a la vez: se vuelve a animar lo último que dijo el funcionario, y el
+  /// altavoz se lo pide en voz alta. Sin esto había que deletrear la petición
+  /// tarjeta por tarjeta mientras la otra persona espera.
+  Future<void> _pedirRepeticion(ConversationState state) async {
+    final ultimo = state.conversation.lastHearingTurn;
+    if (ultimo == null) return;
+
+    final audio = ref.read(audioOutputProvider);
+    // Primero la voz: es lo que desbloquea a la otra persona. La animación
+    // puede correr mientras habla.
+    unawaited(audio.speak('¿Puede repetir, por favor?'));
+
+    if (!mounted) return;
+    AvatarPlaybackSheet.show(
+      context,
+      glosses: ultimo.outputs.animationGlosses.isNotEmpty
+          ? ultimo.outputs.animationGlosses
+          : ultimo.message.glosses,
+      animationUrls: ultimo.outputs.animationUrls,
+    );
+  }
+
   Future<void> _confirmNewConversation() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -177,6 +230,16 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
               ),
           ],
         ),
+        // Siempre accesible, no dentro de un turno: quien no estaba mirando
+        // la pantalla cuando el avatar animó no sabe en qué burbuja buscar.
+        floatingActionButton: state.conversation.lastHearingTurn == null
+            ? null
+            : FloatingActionButton.extended(
+                onPressed: () => _pedirRepeticion(state),
+                backgroundColor: AppTheme.brandPrimary,
+                icon: const Icon(Icons.replay),
+                label: const Text('¿Puede repetir?'),
+              ),
         body: SafeArea(
           child: Column(
             children: [
@@ -218,6 +281,12 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                     color: AppTheme.errorDark,
                   ),
                 ),
+              // Una instrucción no se contesta con un cuestionario: se
+              // contesta que se entendió, o se pide lo único que suele
+              // faltar. Solo aparece mientras esa instrucción está sin
+              // responder.
+              if (_instruccionPendiente(state) != null)
+                QuickReplyBar(onReply: _enviarRespuestaRapida),
               _InputArea(
                 onHearingText: (text) => ref
                     .read(conversationProvider.notifier)

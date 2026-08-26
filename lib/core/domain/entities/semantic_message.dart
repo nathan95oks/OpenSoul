@@ -1,3 +1,4 @@
+import '../../engines/conversation_engine/speech_act.dart';
 import 'context_suggestion.dart';
 
 /// Decisión de desambiguación tomada sobre una palabra polisémica.
@@ -83,7 +84,14 @@ class SemanticMessage {
 
   final DateTime createdAt;
 
+  /// Qué hace el enunciado: preguntar, instruir o informar.
+  ///
+  /// Decide qué se le ofrece a la persona sorda debajo del turno. Solo tiene
+  /// sentido en los del oyente; en los propios queda en [SpeechAct.statement].
+  final SpeechAct speechAct;
+
   SemanticMessage({
+    this.speechAct = SpeechAct.statement,
     required this.id,
     required this.speaker,
     required this.source,
