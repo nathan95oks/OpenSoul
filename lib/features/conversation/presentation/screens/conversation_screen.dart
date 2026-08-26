@@ -129,32 +129,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     await ref.read(audioOutputProvider).speak(text);
   }
 
-  /// Acción dual del botón de repetir.
-  ///
-  /// Quien no estaba mirando la pantalla se quedó sin el mensaje y además
-  /// necesita pedir que se lo repitan. Son dos cosas distintas y aquí ocurren
-  /// a la vez: se vuelve a animar lo último que dijo el funcionario, y el
-  /// altavoz se lo pide en voz alta. Sin esto había que deletrear la petición
-  /// tarjeta por tarjeta mientras la otra persona espera.
-  Future<void> _pedirRepeticion(ConversationState state) async {
-    final ultimo = state.conversation.lastHearingTurn;
-    if (ultimo == null) return;
-
-    final audio = ref.read(audioOutputProvider);
-    // Primero la voz: es lo que desbloquea a la otra persona. La animación
-    // puede correr mientras habla.
-    unawaited(audio.speak('¿Puede repetir, por favor?'));
-
-    if (!mounted) return;
-    AvatarPlaybackSheet.show(
-      context,
-      glosses: ultimo.outputs.animationGlosses.isNotEmpty
-          ? ultimo.outputs.animationGlosses
-          : ultimo.message.glosses,
-      animationUrls: ultimo.outputs.animationUrls,
-    );
-  }
-
   Future<void> _confirmNewConversation() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -230,16 +204,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
               ),
           ],
         ),
-        // Siempre accesible, no dentro de un turno: quien no estaba mirando
-        // la pantalla cuando el avatar animó no sabe en qué burbuja buscar.
-        floatingActionButton: state.conversation.lastHearingTurn == null
-            ? null
-            : FloatingActionButton.extended(
-                onPressed: () => _pedirRepeticion(state),
-                backgroundColor: AppTheme.brandPrimary,
-                icon: const Icon(Icons.replay),
-                label: const Text('¿Puede repetir?'),
-              ),
         body: SafeArea(
           child: Column(
             children: [
