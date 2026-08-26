@@ -491,6 +491,119 @@
         "shopping_bag",
         "straighten"
       ]
+    },
+    {
+      "case_id": "CP-021",
+      "corpus": "Corpus penal — recepción de denuncia",
+      "descripcion": "Instituciones del ámbito penal: Ministerio Público y unidad policial investigadora",
+      "input_natural": "Me robaron el celular; quiero acudir a la Fiscalía y a la FELCC.",
+      "contexto": "denuncia_robo",
+      "glosas": [
+        "ROBAR",
+        "TELEFONO",
+        "FISCALIA",
+        "FELCC"
+      ],
+      "reglas": [
+        "instituciones_penales"
+      ],
+      "esperado_backend": "Una persona me robó mi teléfono. Quiero acudir a la Fiscalía y a la FELCC.",
+      "lsb_icons": [
+        "account_balance",
+        "shopping_bag",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-022",
+      "corpus": "Corpus penal — violencia y unidad especializada",
+      "descripcion": "La FELCV es la unidad que recibe una denuncia de violencia",
+      "input_natural": "Mi expareja me maltrató; quiero ir a la FELCV y necesito la Defensa Pública.",
+      "contexto": "violencia",
+      "glosas": [
+        "EXPAREJA",
+        "MALTRATAR",
+        "FELCV",
+        "DEFENSA_PUBLICA"
+      ],
+      "reglas": [
+        "instituciones_penales"
+      ],
+      "esperado_backend": "Mi expareja me maltrató. Quiero acudir a la FELCV y a la Defensa Pública.",
+      "lsb_icons": [
+        "account_balance",
+        "person",
+        "sports_mma"
+      ]
+    },
+    {
+      "case_id": "CP-023",
+      "corpus": "Corpus penal — seguimiento de investigación",
+      "descripcion": "Escenario nuevo: el ciudadano pregunta en qué quedó su caso",
+      "input_natural": "Quiero saber el avance de mi caso y si tengo abogado.",
+      "contexto": "consulta",
+      "glosas": [
+        "SEGUIMIENTO",
+        "AVANCE",
+        "CASO",
+        "DEFENSA_PUBLICA"
+      ],
+      "reglas": [
+        "seguimiento_de_investigacion"
+      ],
+      "esperado_backend": "Quiero seguir el avance de la investigación en la Defensa Pública. Adicionalmente, hago referencia a mi caso.",
+      "lsb_icons": [
+        "account_balance",
+        "app_registration",
+        "assignment"
+      ]
+    },
+    {
+      "case_id": "CP-024",
+      "corpus": "Corpus penal — etapa preparatoria",
+      "descripcion": "Juzgado de instrucción penal con número de caso deletreado",
+      "input_natural": "Tengo audiencia en el juzgado; mi caso es el 4 0 7.",
+      "contexto": "consulta",
+      "glosas": [
+        "AUDIENCIA",
+        "JUZGADO",
+        "CASO",
+        "4",
+        "0",
+        "7"
+      ],
+      "reglas": [
+        "digitos_en_racha_se_agrupan",
+        "instituciones_penales"
+      ],
+      "esperado_backend": "Necesito realizar una audiencia en el juzgado de instrucción penal. Adicionalmente, hago referencia a mi caso y 407.",
+      "lsb_icons": [
+        "account_balance",
+        "app_registration",
+        "straighten"
+      ]
+    },
+    {
+      "case_id": "CP-025",
+      "corpus": "Corpus penal — accesibilidad en ventanilla",
+      "descripcion": "Las dos respuestas más frecuentes del corpus, juntas",
+      "input_natural": "Necesito un intérprete y quiero saber el avance de mi caso.",
+      "contexto": "consulta",
+      "glosas": [
+        "INTERPRETE",
+        "SEGUIMIENTO",
+        "AVANCE",
+        "CASO"
+      ],
+      "reglas": [
+        "respuestas_frecuentes"
+      ],
+      "esperado_backend": "Quiero seguir el avance de la investigación. Necesito un intérprete de señas. Adicionalmente, hago referencia a mi caso.",
+      "lsb_icons": [
+        "app_registration",
+        "assignment",
+        "support_agent"
+      ]
     }
   ],
   "_lagunas_detectadas": [

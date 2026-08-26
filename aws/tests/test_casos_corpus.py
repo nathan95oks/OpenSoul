@@ -228,5 +228,45 @@ class PrecisionDeDatos(unittest.TestCase):
         self.assertNotIn("hago constar", texto)
 
 
+class DominioPenal(unittest.TestCase):
+    """El escenario no es administrativo genérico: es penal judicial."""
+
+    def test_la_denuncia_nombra_las_dependencias_reales(self):
+        texto = frase(por_id("CP-021"))
+        self.assertIn("Fiscalía", texto)
+        self.assertIn("FELCC", texto)
+        self.assertIn("acudir a", texto, "acudir rige 'a', no 'en'")
+
+    def test_la_violencia_va_a_su_unidad_especializada(self):
+        texto = frase(por_id("CP-022"))
+        self.assertIn("FELCV", texto)
+        self.assertIn("Defensa Pública", texto)
+
+    def test_el_seguimiento_de_investigacion_se_puede_expresar(self):
+        # Escenario que el corpus penal exige y no existía.
+        texto = frase(por_id("CP-023")).lower()
+        self.assertIn("avance de la investigación", texto)
+        self.assertIn("caso", texto)
+
+    def test_la_etapa_preparatoria_conserva_el_numero_de_caso(self):
+        # El dominio penal no rompe la dactilología: "4 0 7" sigue uniéndose.
+        self.assertIn("407", frase(por_id("CP-024")))
+        self.assertIn("juzgado", frase(por_id("CP-024")).lower())
+
+    def test_las_dos_respuestas_frecuentes_conviven(self):
+        texto = frase(por_id("CP-025")).lower()
+        self.assertIn("intérprete", texto)
+        self.assertIn("avance", texto)
+
+    def test_el_prompt_declara_el_ambito_penal(self):
+        analysis = L.analyze_glosses(["ROBAR", "FISCALIA"])
+        prompt = L.build_generation_prompt(
+            ["ROBAR", "FISCALIA"], analysis,
+            "Una persona me robó.", "denuncia_robo", True)
+        self.assertIn("PENAL Y JUDICIAL", prompt)
+        self.assertIn("FELCC", prompt)
+        self.assertIn("acta", prompt)
+
+
 if __name__ == "__main__":
     unittest.main()

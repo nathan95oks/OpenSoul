@@ -78,6 +78,7 @@ GLOSS_LEXICON = {
     "AUTONOMIA": {"rol": "ESTADO", "es": "autónomo"},
     "AUTORIDAD": {"rol": "INSTITUCION", "es": "en la autoridad"},
     "AUXILIO": {"rol": "URGENCIA", "es": "necesito auxilio"},
+    "AVANCE": {"rol": "TRAMITE", "es": "el avance de la investigación"},
     "AVENIDA": {"rol": "LUGAR", "es": "en la avenida"},
     "AVION": {"rol": "OBJETO", "es": "el avión"},
     "AVISAR": {"rol": "VERBO", "es": "quiero avisar"},
@@ -129,6 +130,7 @@ GLOSS_LEXICON = {
     "DANAR": {"rol": "VERBO", "es": "dañó", "agresor": "dañó"},
     "DECIDIR": {"rol": "VERBO", "es": "quiero decidir"},
     "DECRETO_SUPREMO": {"rol": "DOCUMENTO", "es": "el decreto supremo"},
+    "DEFENSA_PUBLICA": {"rol": "INSTITUCION", "es": "en la Defensa Pública"},
     "DELGADO": {"rol": "DESCRIPTOR", "es": "delgado"},
     "DEPARTAMENTO": {"rol": "LUGAR", "es": "en el departamento"},
     "DESPACHO": {"rol": "INSTITUCION", "es": "en el despacho"},
@@ -155,8 +157,11 @@ GLOSS_LEXICON = {
     "FAMILIAR": {"rol": "DESCRIPTOR", "es": "un familiar", "persona": True},
     "FARMACIA": {"rol": "LUGAR", "es": "en la farmacia"},
     "FECHA": {"rol": "TIEMPO", "es": "en esa fecha"},
+    "FELCC": {"rol": "INSTITUCION", "es": "en la FELCC"},
+    "FELCV": {"rol": "INSTITUCION", "es": "en la FELCV"},
     "FIRME": {"rol": "DESCRIPTOR", "es": "firme"},
     "FISCAL": {"rol": "INSTITUCION", "es": "en la fiscalía"},
+    "FISCALIA": {"rol": "INSTITUCION", "es": "en la Fiscalía"},
     "FORMATO": {"rol": "DOCUMENTO", "es": "el formato"},
     "FORMULARIO": {"rol": "DOCUMENTO", "es": "el formulario"},
     "FOTOCOPIA": {"rol": "DOCUMENTO", "es": "una fotocopia"},
@@ -186,6 +191,7 @@ GLOSS_LEXICON = {
     "JUICIO": {"rol": "TRAMITE", "es": "un juicio"},
     "JURAR": {"rol": "VERBO", "es": "quiero jurar"},
     "JUSTICIA": {"rol": "DOCUMENTO", "es": "la justicia"},
+    "JUZGADO": {"rol": "INSTITUCION", "es": "en el juzgado de instrucción penal"},
     "LADRON": {"rol": "DESCRIPTOR", "es": "un ladrón", "persona": True},
     "LEY": {"rol": "DOCUMENTO", "es": "la ley"},
     "LICENCIA": {"rol": "DOCUMENTO", "es": "mi licencia"},
@@ -278,6 +284,7 @@ GLOSS_LEXICON = {
     "SEGURO": {"rol": "ESTADO", "es": "me encuentro en un lugar seguro"},
     "SELLO": {"rol": "DOCUMENTO", "es": "el sello"},
     "SEMANA": {"rol": "TIEMPO", "es": "esta semana"},
+    "SEPAV": {"rol": "INSTITUCION", "es": "en el SEPAV"},
     "SI": {"rol": "DESCONOCIDO", "es": "sí"},
     "SITUACION": {"rol": "ESTADO", "es": "por esta situación"},
     "SOBORNO": {"rol": "VERBO", "es": "ofreció un soborno", "agresor": "ofreció un soborno"},
@@ -295,6 +302,7 @@ GLOSS_LEXICON = {
     "TRAMITE": {"rol": "TRAMITE", "es": "un trámite"},
     "TRATAR": {"rol": "VERBO", "es": "quiero tratar"},
     "TREN": {"rol": "OBJETO", "es": "el tren"},
+    "TRIBUNAL": {"rol": "INSTITUCION", "es": "en el tribunal"},
     "TRUFI": {"rol": "OBJETO", "es": "el trufi"},
     "TU": {"rol": "SUJETO", "es": "tú"},
     "UBICACION_GPS": {"rol": "LUGAR", "es": "en esta ubicación"},
@@ -1541,10 +1549,12 @@ def build_generation_prompt(cards: list, analysis: dict, base_sentence: str,
             significados.append(f'- {key}: {entry["es"]}')
     hechos = "\n".join(significados) or "- (sin glosas reconocidas)"
 
-    registro = ("formal y respetuoso, propio de una ventanilla judicial"
-                if is_formal else "claro, cercano y correcto")
+    registro = ("formal, legal y preciso, propio de un acta de denuncia"
+                if is_formal else "claro, correcto y respetuoso")
 
-    return f"""Eres quien redacta, en español de Bolivia, la declaración de una persona sorda ante una institución pública. Ella se comunica eligiendo señas; tú conviertes esas señas en la declaración que leerá o escuchará el funcionario.
+    return f"""Eres quien redacta, en español de Bolivia, la declaración de una persona sorda en el ámbito PENAL Y JUDICIAL. Ella se comunica eligiendo señas; tú conviertes esas señas en la declaración que leerá o escuchará el funcionario que la recibe.
+
+ÁMBITO: Ministerio Público (Fiscalía), FELCC y FELCV, juzgados de instrucción penal y tribunales, Defensa Pública y SEPAV. Cuando el texto nombre un lugar institucional, se refiere a una de estas dependencias, no a una oficina cualquiera. El registro es el de un acta de recepción de denuncia o de una diligencia preliminar.
 
 REGISTRO: {registro}. Escribe con empatía y sin dramatizar. La persona puede estar asustada o herida: su declaración debe sonar digna, nunca infantil ni telegráfica.
 

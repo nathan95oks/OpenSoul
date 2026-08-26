@@ -56,7 +56,8 @@ final preguntasContext = SemanticContext(
       semanticWeight: 0.8,
       optional: true,
       glossAllowlist: [
-        'ORGANO_JUDICIAL', 'FISCAL', 'POLICIA', 'ALCALDIA',
+        'FISCALIA', 'FELCC', 'FELCV', 'JUZGADO',
+        'DEFENSA_PUBLICA', 'SEPAV', 'TRIBUNAL',
         'OFICINA', 'VENTANILLA', 'DESPACHO', 'HOSPITAL',
       ],
     ),
@@ -785,8 +786,15 @@ final availableContexts = <SemanticContext>[
         // fiscalía"). Es el caso que demuestra por qué la lista blanca manda
         // sobre la taxonomía gramatical.
         glossAllowlist: [
-          'ORGANO_JUDICIAL', 'FISCAL', 'POLICIA', 'ALCALDIA',
-          'MINISTERIO', 'GOBIERNO', 'OFICINA', 'VENTANILLA', 'DESPACHO',
+          // Ámbito penal judicial boliviano: recepción e investigación
+          // (Ministerio Público/Fiscalía), intervención policial especializada
+          // (FELCC para delitos, FELCV para violencia), etapa preparatoria
+          // (juzgado de instrucción penal, tribunal) y asistencia legal
+          // (Defensa Pública, SEPAV). Las municipales y genéricas salen: no
+          // reciben una denuncia penal y desviaban a quien las elegía.
+          'FISCALIA', 'FELCC', 'FELCV', 'JUZGADO',
+          'DEFENSA_PUBLICA', 'SEPAV', 'TRIBUNAL', 'ORGANO_JUDICIAL',
+          'OFICINA', 'VENTANILLA', 'DESPACHO',
         ],
         relatedZones: ['apoyo'],
       ),
@@ -888,11 +896,45 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.9,
         // Verbos de duda y necesidad. No existe EXPLICAR en el diccionario:
         // ACLARAR ("quiero aclarar") cubre ese valor en el corpus §3.3.
+        // INTERPRETE y CASO entran aquí porque son las dos respuestas que el
+        // corpus penal ve una y otra vez en ventanilla —"necesito un
+        // intérprete", "quiero saber el avance de mi caso"— y estaban a dos
+        // preguntas de distancia.
         glossAllowlist: [
-          'NO_SABER', 'COMPRENDER', 'ACLARAR', 'AYUDAR',
-          'ATENDER', 'SEGUIMIENTO', 'HABLAR',
+          'SEGUIMIENTO', 'CASO', 'INTERPRETE', 'NO_SABER',
+          'COMPRENDER', 'ACLARAR', 'AYUDAR', 'ATENDER',
         ],
-        relatedZones: ['materia', 'identificador', 'donde'],
+        relatedZones: ['avance', 'materia', 'identificador', 'donde'],
+      ),
+      // Seguimiento de investigación. El corpus penal lo trata como un
+      // escenario propio: el ciudadano no viene a denunciar ni a tramitar,
+      // viene a preguntar en qué quedó lo suyo. Antes se resolvía con las
+      // preguntas de consulta genérica, que no llegan a la etapa procesal ni
+      // a si tiene defensa.
+      SemanticZone(
+        id: 'avance',
+        label: 'Avance',
+        hint: 'Qué quiero saber de la investigación',
+        question: '¿Qué necesita saber?',
+        emoji: '🔎',
+        semanticWeight: 0.88,
+        optional: true,
+        glossAllowlist: ['AVANCE', 'CASO', 'ESTADO', 'INVESTIGACION', 'AUDIENCIA'],
+        relatedZones: ['defensa', 'identificador'],
+      ),
+      SemanticZone(
+        id: 'defensa',
+        label: 'Defensa',
+        hint: 'Si tengo abogado',
+        question: '¿Tiene abogado?',
+        emoji: '⚖️',
+        semanticWeight: 0.75,
+        optional: true,
+        // SI y NO son respuestas cerradas legítimas aquí: la pregunta del
+        // funcionario admite las dos y la Defensa Pública es la salida cuando
+        // la respuesta es no.
+        glossAllowlist: ['SI', 'NO', 'DEFENSA_PUBLICA', 'ABOGADO'],
+        relatedZones: ['identificador'],
       ),
       SemanticZone(
         id: 'materia',
@@ -945,8 +987,15 @@ final availableContexts = <SemanticContext>[
         // ambiguo, pero el corpus §3.2 lo usa literal — "en qué piso u
         // oficina debo preguntar".
         glossAllowlist: [
-          'ORGANO_JUDICIAL', 'FISCAL', 'POLICIA', 'ALCALDIA',
-          'MINISTERIO', 'OFICINA', 'VENTANILLA', 'DESPACHO', 'PISO',
+          // Ámbito penal judicial boliviano: recepción e investigación
+          // (Ministerio Público/Fiscalía), intervención policial especializada
+          // (FELCC para delitos, FELCV para violencia), etapa preparatoria
+          // (juzgado de instrucción penal, tribunal) y asistencia legal
+          // (Defensa Pública, SEPAV). Las municipales y genéricas salen: no
+          // reciben una denuncia penal y desviaban a quien las elegía.
+          'FISCALIA', 'FELCC', 'FELCV', 'JUZGADO',
+          'DEFENSA_PUBLICA', 'SEPAV', 'TRIBUNAL', 'ORGANO_JUDICIAL',
+          'OFICINA', 'VENTANILLA', 'DESPACHO', 'PISO',
         ],
       ),
       // Corpus §3.3 t.11: "Debe llevar su identificación y los documentos que
