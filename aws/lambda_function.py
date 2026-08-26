@@ -63,9 +63,11 @@ GLOSS_LEXICON = {
     "AMENAZAR": {"rol": "VERBO", "es": "amenazó", "agresor": "amenazó"},
     "ANEXO": {"rol": "DOCUMENTO", "es": "un anexo"},
     "ANO": {"rol": "TIEMPO", "es": "este año"},
+    "ANOS_EDAD": {"rol": "DESCONOCIDO", "es": "tengo esa edad"},
     "ANOTAR": {"rol": "VERBO", "es": "quiero anotar"},
     "ANTEAYER": {"rol": "TIEMPO", "es": "anteayer"},
     "ANTERIORMENTE": {"rol": "TIEMPO", "es": "anteriormente"},
+    "APELLIDO": {"rol": "DESCONOCIDO", "es": "mi apellido es"},
     "ARRESTAR": {"rol": "VERBO", "es": "arrestó", "agresor": "arrestó"},
     "ARTICULO": {"rol": "DOCUMENTO", "es": "el artículo"},
     "ASISTENCIA": {"rol": "URGENCIA", "es": "necesito asistencia"},
@@ -133,6 +135,7 @@ GLOSS_LEXICON = {
     "DISCRIMINACION": {"rol": "VERBO", "es": "discriminó", "agresor": "discriminó"},
     "DOCTOR": {"rol": "SERVICIO", "es": "un doctor"},
     "DONDE": {"rol": "DESCONOCIDO", "es": "dónde"},
+    "EDAD": {"rol": "DESCONOCIDO", "es": "tengo esa edad"},
     "EL": {"rol": "SUJETO", "es": "él"},
     "ELLA": {"rol": "SUJETO", "es": "ella"},
     "ELLOS": {"rol": "SUJETO", "es": "ellos"},
@@ -167,7 +170,7 @@ GLOSS_LEXICON = {
     "HORA": {"rol": "TIEMPO", "es": "hace una hora"},
     "HOSPITAL": {"rol": "LUGAR", "es": "en el hospital"},
     "HOY": {"rol": "TIEMPO", "es": "hoy"},
-    "IDENTIDAD": {"rol": "DESCRIPTOR", "es": "mi identidad", "persona": True},
+    "IDENTIDAD": {"rol": "DESCONOCIDO", "es": "quiero identificarme"},
     "IDENTIFICAR": {"rol": "VERBO", "es": "quiero identificar"},
     "IMPRIMIR": {"rol": "VERBO", "es": "quiero imprimir"},
     "INOCENTE": {"rol": "DESCRIPTOR", "es": "inocente"},
@@ -206,7 +209,7 @@ GLOSS_LEXICON = {
     "NARRAR": {"rol": "VERBO", "es": "quiero narrar"},
     "NEGRO": {"rol": "DESCRIPTOR", "es": "de color negro"},
     "NO": {"rol": "DESCONOCIDO", "es": "no"},
-    "NOMBRE": {"rol": "DESCRIPTOR", "es": "mi nombre", "persona": True},
+    "NOMBRE": {"rol": "DESCONOCIDO", "es": "mi nombre es"},
     "NORMA": {"rol": "DOCUMENTO", "es": "la norma"},
     "NOSOTROS": {"rol": "SUJETO", "es": "nosotros"},
     "NOTIFICACION": {"rol": "TRAMITE", "es": "una notificación"},
@@ -378,6 +381,10 @@ _ADMITE_DETALLE = {
     # una placa.
     "CASO": "numero", "CODIGO": "numero", "NUREJ": "numero",
     "WEBID": "numero", "EXPEDIENTE": "numero",
+    # Fase 1: identidad. La edad se teclea entera, el nombre se deletrea.
+    "EDAD": "edad", "ANOS_EDAD": "edad",
+    "NOMBRE": "nombre", "APELLIDO": "apellido",
+    "CARNET": "carnet",
 }
 
 _DIGITOS = set("0123456789")
@@ -387,6 +394,8 @@ _MARKER_GLOSSES = {
     "HOLA", "GRACIAS", "PERMISO", "POR_FAVOR", "LO_SIENTO", "SI", "NO",
     "NO_SABER", "NO_PUEDO", "NO_RECUERDO", "NO_ENTIENDO", "PUEDE_REPETIR",
     "PUEDO", "SABER", "MAS_O_MENOS", "ESTOY_BIEN",
+    # Fase 1: uno se identifica antes de contar nada, así que encabezan.
+    "NOMBRE", "APELLIDO", "IDENTIDAD", "EDAD", "ANOS_EDAD",
 }
 
 # Reincidencia, no fecha. Espejo de _frequencyGlosses en el cliente: sin esta
@@ -569,11 +578,18 @@ def _con_detalle(gloss: str, lexema: str, detalles: dict) -> str:
     if not detalle:
         return lexema
     etiqueta = _ADMITE_DETALLE.get(gloss)
+    propio = f"{detalle[:1].upper()}{detalle[1:].lower()}"
     if etiqueta == "placa":
         return f"{lexema} con placa {detalle}"
-    if etiqueta == "numero":
+    if etiqueta in ("numero", "carnet"):
         return f"{lexema} número {detalle}"
-    return f"{lexema} {detalle[:1].upper()}{detalle[1:].lower()}"
+    if etiqueta == "edad":
+        return f"tengo {detalle} años"
+    if etiqueta == "nombre":
+        return f"mi nombre es {propio}"
+    if etiqueta == "apellido":
+        return f"mi apellido es {propio}"
+    return f"{lexema} {propio}"
 
 
 def _resolve_gender(analysis: dict) -> set:
@@ -704,8 +720,10 @@ def analyze_glosses(cards: list) -> dict:
             }
             dest = mapping.get(rol, "desconocidos")
             registro = {"glosa": key, **entry}
-            if rol in ("LUGAR", "OBJETO", "TRAMITE"):
-                registro["es"] = _con_detalle(key, registro["es"], detalles)
+            # El detalle vale para cualquier rol: acotarlo a unos pocos dejaba
+            # fuera los marcadores de Fase 1 —el nombre y la edad— y salía
+            # "mi nombre es." sin el nombre.
+            registro["es"] = _con_detalle(key, registro["es"], detalles)
             if rol == "VERBO" and negar_siguiente_verbo:
                 registro["es"] = f'no {registro["es"]}'
                 negar_siguiente_verbo = False
@@ -740,6 +758,11 @@ def _detect_event_type(analysis: dict, context_type: str = "") -> str:
     # denuncia sin verbo de delito —una estafa, que el diccionario no puede
     # nombrar— caía en la plantilla de ESTADO y salía "Por un problema.",
     # perdiendo el dinero, el producto y el canal.
+    # Fase 1 no narra un hecho: la declaración son los datos, que viajan como
+    # marcadores y encabezan. Sin esta rama caía en la plantilla de solicitud
+    # y salía "Necesito asistencia", que nadie pidió.
+    if ctx == "identificacion":
+        return "IDENTIFICACION"
     if ctx == "denuncia_robo":
         return "ROBO"
     if ctx == "violencia":
@@ -878,6 +901,7 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
         "GESTION": _gen_gestion,
         "EMERGENCIA": _gen_emergencia,
         "ESTADO": _gen_estado,
+        "IDENTIFICACION": _gen_identificacion,
     }
 
     gen_func = generators.get(tipo, _gen_general)
@@ -914,11 +938,24 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
     # declaración ("No sé. No recuerdo. …"). El cliente las antepone; aquí
     # caían en "desconocidos" y salían como "hago referencia a no sé".
     marcadores = [d["es"] for d in analysis.get("desconocidos", [])
-                  if d["glosa"] in _MARKER_GLOSSES]
+                  if d["glosa"] in _MARKER_GLOSSES or d["glosa"] in _ADMITE_DETALLE]
     if marcadores:
-        analysis["desconocidos"] = [d for d in analysis["desconocidos"]
-                                    if d["glosa"] not in _MARKER_GLOSSES]
-        cabecera = " ".join(f"{m[0].upper()}{m[1:]}." for m in marcadores)
+        analysis["desconocidos"] = [
+            d for d in analysis["desconocidos"]
+            if d["glosa"] not in _MARKER_GLOSSES
+            and d["glosa"] not in _ADMITE_DETALLE]
+        # EDAD y ANOS_EDAD son la misma respuesta: dicha una vez, la segunda
+        # sonaría a tartamudeo.
+        hay_edad = any(m.startswith("tengo ") and m.endswith(" años")
+                       for m in marcadores)
+        vistos, unicos = set(), []
+        for m in marcadores:
+            if m == "tengo esa edad" and hay_edad:
+                continue
+            if m not in vistos:
+                vistos.add(m)
+                unicos.append(m)
+        cabecera = " ".join(f"{m[0].upper()}{m[1:]}." for m in unicos)
         sentence = f"{cabecera} {sentence}".strip()
 
     # Todos los roles que una plantilla puede dejarse: cubrir solo trámites
@@ -938,6 +975,12 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
     residuo += [l["es"] for l in analysis.get("lugares", [])]
     residuo += [d["es"] for d in analysis.get("desconocidos", [])]
     faltan = [x for x in residuo if _normalizar(x) not in _normalizar(sentence)]
+    # Sin relato al que añadir —Fase 1: los datos SON la declaración— el
+    # residuo es la frase, no un apéndice: "Adicionalmente, hago referencia a
+    # mi carnet" presupone algo dicho antes que aquí no existe.
+    if faltan and not sentence.strip(" ."):
+        sentence = " ".join(f"{x[0].upper()}{x[1:]}." for x in faltan)
+        faltan = []
     if faltan:
         # Los complementos que ya traen su preposición ("por WhatsApp", "en esa
         # dirección") no encajan tras "hago referencia a": se adjuntan tal cual.
@@ -1471,6 +1514,18 @@ def _gen_emergencia(ir, analysis, is_formal):
         oraciones[-1] = " ".join([oraciones[-1], *complementos])
 
     return ". ".join(oraciones)
+
+def _gen_identificacion(ir, analysis, is_formal):
+    """Fase 1: los datos SON la declaración.
+
+    Nombre, apellido y edad viajan como marcadores y encabezan solos, así que
+    aquí solo queda el documento. Sin frase de encuadre a propósito: el
+    funcionario está esperando un dato, no un preámbulo.
+    """
+    documentos = [d["es"] for d in analysis["documentos"]]
+    analysis["documentos"] = []
+    return " ".join(f"{d[0].upper()}{d[1:]}." for d in documentos)
+
 
 def _gen_estado(ir, analysis, is_formal):
     """Genera oración para expresar estado personal."""

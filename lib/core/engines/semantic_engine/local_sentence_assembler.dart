@@ -73,6 +73,14 @@ class LocalSentenceAssembler {
     // aporta el flujo, que ya sabe si narra un hecho consumado o pide un plazo.
     roles.narrativeIsPast = _pastContexts.contains(contextId);
     final consumidas = <String>{
+      // Una glosa con detalle ya se dijo, pero con otras palabras que su
+      // lexema base: EDAD sale como "tengo 25 años", nunca como "tengo esa
+      // edad". Sin esto la red de cobertura la reclamaba al final.
+      ...detalles.keys,
+      // Dicha la edad, EDAD y ANOS_EDAD están las dos representadas: son la
+      // misma respuesta y repetirla sonaría a tartamudeo.
+      if (roles.markers.any((m) => m.startsWith('tengo ') && m.endsWith(' años')))
+        ...const {'EDAD', 'ANOS_EDAD'},
       ..._resolveGender(roles),
       ..._resolveTime(roles, contextId, unidos),
     };
@@ -89,6 +97,7 @@ class LocalSentenceAssembler {
       'orientacion' => _composeGuidance(roles, unidos),
       'perdida' => _composeLoss(roles, unidos),
       'preguntas' => _composeQuestion(roles),
+      'identificacion' => _composeIdentification(roles),
       'otro' => _composeWitness(roles, unidos),
       _ => _composeGeneric(contextId, roles, unidos),
     };
@@ -216,6 +225,10 @@ class LocalSentenceAssembler {
     return switch (etiqueta) {
       'placa' => '$lexema con placa $detalle',
       'numero' => '$lexema número $detalle',
+      'edad' => 'tengo $detalle años',
+      'nombre' => 'mi nombre es $propio',
+      'apellido' => 'mi apellido es $propio',
+      'carnet' => '$lexema número $detalle',
       _ => '$lexema $propio',
     };
   }
@@ -316,6 +329,11 @@ class LocalSentenceAssembler {
     // se deletrea, igual que una placa.
     'CASO': 'numero', 'CODIGO': 'numero', 'NUREJ': 'numero',
     'WEBID': 'numero', 'EXPEDIENTE': 'numero',
+    // Fase 1. La edad se teclea entera —"25", no un dígito—, el nombre se
+    // deletrea y el carnet mezcla letras y números.
+    'EDAD': 'edad', 'ANOS_EDAD': 'edad',
+    'NOMBRE': 'nombre', 'APELLIDO': 'apellido',
+    'CARNET': 'carnet',
   };
 
   /// Etiqueta del detalle que admite [gloss], o `null` si no admite ninguno.
@@ -750,7 +768,7 @@ class LocalSentenceAssembler {
           }
           break;
         case _Role.objeto:             r.objects.add(_conDetalle(t, e.es, r)); break;
-        case _Role.documento:          r.documents.add(e.es); break;
+        case _Role.documento:          r.documents.add(_conDetalle(t, e.es, r)); break;
         case _Role.lugar:              r.place ??= _conDetalle(t, e.es, r); break;
         case _Role.institucion:
           // Varias instituciones son varios destinos, no uno: con `??=` la
@@ -764,7 +782,17 @@ class LocalSentenceAssembler {
         case _Role.tramite:            r.procedures.add(_conDetalle(t, e.es, r)); break;
         case _Role.motivo:             r.purposes.add(e.es); break;
         case _Role.tiempo:             r.time ??= e.es; break;
-        case _Role.marcador:           r.markers.add(e.es); break;
+        case _Role.marcador:
+          final conDetalle = _conDetalle(t, e.es, r);
+          // EDAD y ANOS_EDAD son la misma respuesta: si ya se dijo la edad,
+          // la segunda no añade nada y sonaría a tartamudeo.
+          if (!r.markers.contains(conDetalle) &&
+              !(conDetalle == 'tengo esa edad' &&
+                  r.markers.any((m) => m.startsWith('tengo ') &&
+                      m.endsWith(' años')))) {
+            r.markers.add(conDetalle);
+          }
+          break;
         case _Role.interrogativa:      r.question ??= e.es; break;
       }
     }
@@ -1020,6 +1048,22 @@ class LocalSentenceAssembler {
     if (institucion.startsWith('en la ')) return 'a la ${institucion.substring(6)}';
     if (institucion.startsWith('en ')) return 'a ${institucion.substring(3)}';
     return institucion;
+  }
+
+  /// Fase 1: los datos SON la declaración.
+  ///
+  /// Nombre, apellido y edad viajan como marcadores y encabezan solos, así
+  /// que aquí solo queda el documento. No hay frase de encuadre a propósito:
+  /// "quiero comunicar lo siguiente" antes de un nombre suena a formulario, y
+  /// el funcionario está esperando un dato, no un preámbulo.
+  String _composeIdentification(_Roles r) {
+    final sentences = <String>[];
+    final documentos = [...r.documents];
+    r.documents.clear();
+    for (final d in documentos) {
+      sentences.add('${_cap(d)}.');
+    }
+    return sentences.join(' ');
   }
 
   String _composeIncident(String ctx, _Roles r, List<String> tokens) {
@@ -1807,11 +1851,17 @@ class LocalSentenceAssembler {
     'USTEDES': _Lex(_Role.sujeto, 'ustedes'),
 
     // ── Identificación (12) ──
+    // ── Fase 1: identidad. Son marcadores porque abren la declaración —uno
+    // se identifica antes de contar nada— y porque como `personaDesc` se
+    // confundían con el agresor: "mi nombre me robó".
+    'NOMBRE': _Lex(_Role.marcador, 'mi nombre es'),
+    'APELLIDO': _Lex(_Role.marcador, 'mi apellido es'),
+    'IDENTIDAD': _Lex(_Role.marcador, 'quiero identificarme'),
+    'EDAD': _Lex(_Role.marcador, 'tengo esa edad'),
+    'ANOS_EDAD': _Lex(_Role.marcador, 'tengo esa edad'),
     'HOMBRE': _Lex(_Role.personaDesc, 'un hombre'),
-    'IDENTIDAD': _Lex(_Role.personaDesc, 'mi identidad'),
     'LADRON': _Lex(_Role.personaDesc, 'un ladrón'),
     'MUJER': _Lex(_Role.personaDesc, 'una mujer'),
-    'NOMBRE': _Lex(_Role.personaDesc, 'mi nombre'),
     'TESTIGO': _Lex(_Role.personaDesc, 'un testigo'),
     'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
     'MILITAR': _Lex(_Role.personaDesc, 'un militar'),

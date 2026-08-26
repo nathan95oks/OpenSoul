@@ -114,6 +114,44 @@ final preguntasContext = SemanticContext(
   ],
 );
 
+/// Fase 1: identidad. Toda atención en ventanilla empieza por aquí —"¿cómo se
+/// llama?", "¿qué edad tiene?"— y hasta ahora la persona sorda no tenía con
+/// qué contestarlo, así que no se llegaba a la Fase 2, que es su relato.
+///
+/// Las respuestas son datos, no señas del corpus: el nombre se deletrea, la
+/// edad y el carnet se teclean. Por eso las zonas son cortas y cada glosa
+/// abre su propio teclado.
+final identificacionContext = SemanticContext(
+  id: 'identificacion',
+  name: 'Mis datos',
+  icon: 'badge',
+  emoji: '🪪',
+  description: 'Mi nombre, mi edad y mi documento',
+  entryZoneId: 'identidad',
+  zones: const [
+    SemanticZone(
+      id: 'identidad',
+      label: 'Identidad',
+      hint: 'Cómo me llamo',
+      question: '¿Cuál es su nombre?',
+      emoji: '🪪',
+      semanticWeight: 0.95,
+      maxPicks: 3,
+      glossAllowlist: ['NOMBRE', 'APELLIDO', 'CARNET', 'IDENTIDAD'],
+      relatedZones: ['edad'],
+    ),
+    SemanticZone(
+      id: 'edad',
+      label: 'Edad',
+      hint: 'Qué edad tengo',
+      question: '¿Qué edad tiene?',
+      emoji: '🎂',
+      semanticWeight: 0.9,
+      glossAllowlist: ['EDAD', 'ANOS_EDAD'],
+    ),
+  ],
+);
+
 /// Contextos de **declaración**: los que narran un hecho.
 ///
 /// El de preguntas queda fuera a propósito. Esta lista alimenta la inferencia
@@ -1100,6 +1138,13 @@ class ContextFamily {
 /// Las cuatro entradas de "Selecciona el contexto".
 const List<ContextFamily> contextFamilies = [
   ContextFamily(
+    id: 'identificacion',
+    name: 'Mis datos',
+    emoji: '🪪',
+    description: 'Nombre, edad y documento',
+    contextIds: ['identificacion'],
+  ),
+  ContextFamily(
     id: 'denuncias',
     name: 'Denuncias',
     emoji: '🚨',
@@ -1134,7 +1179,7 @@ const List<ContextFamily> contextFamilies = [
 /// [availableContexts] es el subconjunto que infiere y narra; esta lista es la
 /// que la interfaz puede abrir.
 List<SemanticContext> get allSelectableContexts =>
-    [...availableContexts, preguntasContext];
+    [...availableContexts, preguntasContext, identificacionContext];
 
 /// Contextos de una familia, en el orden del catálogo.
 List<SemanticContext> contextsOfFamily(ContextFamily family) => [
@@ -1175,6 +1220,9 @@ String resolveAssemblerContext(
   // El contexto de preguntas conserva su dominio: no debe colarse como
   // orientación porque la salida cambia de intención.
   if (contextId == 'preguntas') return 'preguntas';
+  // Fase 1 no narra: sus glosas son marcadores que encabezan la
+  // declaración, y el compositor genérico las emite tal cual.
+  if (contextId == 'identificacion') return 'identificacion';
 
   // Consultas usa el compositor de orientación tal cual.
   if (contextId == 'consulta') return 'orientacion';
@@ -1206,7 +1254,7 @@ String resolveAssemblerContext(
 /// como texto en el mensaje semántico— al contexto real con el que abrir el
 /// flujo guiado, sin que la capa de presentación reimplemente la búsqueda.
 SemanticContext? contextById(String id) {
-  for (final context in availableContexts) {
+  for (final context in allSelectableContexts) {
     if (context.id == id) return context;
   }
   return null;

@@ -736,7 +736,8 @@
     "denuncia_robo",
     "violencia",
     "accidente",
-    "otro"
+    "otro",
+    "identificacion"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -805,7 +806,8 @@
     "denuncia_robo",
     "violencia",
     "accidente",
-    "otro"
+    "otro",
+    "identificacion"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -6690,7 +6692,8 @@
     "denuncia_robo",
     "otro",
     "preguntas",
-    "tramite"
+    "tramite",
+    "identificacion"
    ],
    "priority": 1,
    "suggestedNextCardIds": [],
@@ -6980,6 +6983,87 @@
    "animationFile": "",
    "corpusCategory": "5. Conceptos jurídicos y administrativos",
    "source": "Corpus LSB ámbito penal judicial — Ministerio Público, FELCC/FELCV, juzgados, SEPAV"
+  },
+  {
+   "id": "g309",
+   "gloss": "EDAD",
+   "displayText": "EDAD",
+   "iconUrl": "",
+   "categoryId": "Identificación",
+   "subcategoryId": "personaDesc",
+   "contexts": [
+    "identificacion",
+    "denuncia_robo",
+    "violencia",
+    "otro",
+    "tramite",
+    "consulta",
+    "preguntas"
+   ],
+   "priority": 1,
+   "suggestedNextCardIds": [],
+   "isFrequent": true,
+   "isEmergency": false,
+   "semanticIcon": "person",
+   "dialect": "cochabamba",
+   "status": "official",
+   "animationFile": "",
+   "corpusCategory": "3. Identificación y personas",
+   "source": "Corpus penal judicial — Fase 1, datos personales e identidad"
+  },
+  {
+   "id": "g310",
+   "gloss": "ANOS_EDAD",
+   "displayText": "AÑOS (EDAD)",
+   "iconUrl": "",
+   "categoryId": "Identificación",
+   "subcategoryId": "personaDesc",
+   "contexts": [
+    "identificacion",
+    "denuncia_robo",
+    "violencia",
+    "otro",
+    "tramite",
+    "consulta",
+    "preguntas"
+   ],
+   "priority": 1,
+   "suggestedNextCardIds": [],
+   "isFrequent": true,
+   "isEmergency": false,
+   "semanticIcon": "person",
+   "dialect": "cochabamba",
+   "status": "official",
+   "animationFile": "",
+   "corpusCategory": "3. Identificación y personas",
+   "source": "Corpus penal judicial — Fase 1, datos personales e identidad"
+  },
+  {
+   "id": "g311",
+   "gloss": "APELLIDO",
+   "displayText": "APELLIDO",
+   "iconUrl": "",
+   "categoryId": "Identificación",
+   "subcategoryId": "personaDesc",
+   "contexts": [
+    "identificacion",
+    "denuncia_robo",
+    "violencia",
+    "otro",
+    "tramite",
+    "consulta",
+    "preguntas"
+   ],
+   "priority": 1,
+   "suggestedNextCardIds": [],
+   "isFrequent": true,
+   "isEmergency": false,
+   "semanticIcon": "person",
+   "dialect": "cochabamba",
+   "status": "official",
+   "animationFile": "",
+   "corpusCategory": "3. Identificación y personas",
+   "source": "Corpus penal judicial — Fase 1, datos personales e identidad"
   }
  ]
 }

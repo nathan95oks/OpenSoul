@@ -65,6 +65,7 @@ Future<List<String>?> mostrarTecladoDactilologico(
   BuildContext context, {
   required String titulo,
   required bool alfanumerico,
+  bool soloDigitos = false,
 }) {
   return showModalBottomSheet<List<String>>(
     context: context,
@@ -73,6 +74,7 @@ Future<List<String>?> mostrarTecladoDactilologico(
     builder: (context) => _TecladoDactilologico(
       titulo: titulo,
       alfanumerico: alfanumerico,
+      soloDigitos: soloDigitos,
     ),
   );
 }
@@ -80,7 +82,16 @@ Future<List<String>?> mostrarTecladoDactilologico(
 class _TecladoDactilologico extends StatefulWidget {
   final String titulo;
   final bool alfanumerico;
-  const _TecladoDactilologico({required this.titulo, required this.alfanumerico});
+
+  /// Sin letras: una edad o un número de carnet no se deletrean con el
+  /// abecedario, y ofrecerlo entero invita a equivocarse.
+  final bool soloDigitos;
+
+  const _TecladoDactilologico({
+    required this.titulo,
+    required this.alfanumerico,
+    this.soloDigitos = false,
+  });
 
   @override
   State<_TecladoDactilologico> createState() => _TecladoDactilologicoState();
@@ -96,10 +107,10 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
 
   @override
   Widget build(BuildContext context) {
-    final teclas = [
-      ..._abecedario,
-      if (widget.alfanumerico) ...['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-    ];
+    const digitos = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    final teclas = widget.soloDigitos
+        ? digitos
+        : [..._abecedario, if (widget.alfanumerico) ...digitos];
 
     return SafeArea(
       child: Padding(
@@ -215,13 +226,17 @@ class _Tecla extends StatelessWidget {
 ///
 /// Se consulta al elegir la tarjeta: la interfaz decide con esto si abre una
 /// hoja o deja seguir.
-({String titulo, bool alfanumerico})? detalleQuePide(String gloss) {
+({String titulo, bool alfanumerico, bool soloDigitos})? detalleQuePide(String gloss) {
   final etiqueta = LocalSentenceAssembler.etiquetaDeDetalle(gloss);
   if (etiqueta == null) return null;
   return switch (etiqueta) {
-    'placa' => (titulo: 'Deletrea la placa', alfanumerico: true),
-    'numero' => (titulo: 'Deletrea el número de tu caso', alfanumerico: true),
-    _ => (titulo: 'Deletrea el nombre de la $etiqueta', alfanumerico: false),
+    'placa' => (titulo: 'Deletrea la placa', alfanumerico: true, soloDigitos: false),
+    'numero' => (titulo: 'Escribe el número de tu caso', alfanumerico: true, soloDigitos: false),
+    'edad' => (titulo: '¿Qué edad tienes?', alfanumerico: true, soloDigitos: true),
+    'carnet' => (titulo: 'Escribe tu número de carnet', alfanumerico: true, soloDigitos: false),
+    'nombre' => (titulo: 'Deletrea tu nombre', alfanumerico: false, soloDigitos: false),
+    'apellido' => (titulo: 'Deletrea tu apellido', alfanumerico: false, soloDigitos: false),
+    _ => (titulo: 'Deletrea el nombre de la $etiqueta', alfanumerico: false, soloDigitos: false),
   };
 }
 
@@ -256,6 +271,7 @@ Future<void> elegirGlosa(
         context,
         titulo: pide.titulo,
         alfanumerico: pide.alfanumerico,
+        soloDigitos: pide.soloDigitos,
       );
       if (letras != null && letras.isNotEmpty) {
         notifier.appendQualifiers(card.gloss, letras);

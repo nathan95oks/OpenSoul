@@ -112,6 +112,24 @@ const Map<String, String> _interrogatives = {
   'cuchillo': 'daño',
   'te amenazo': 'daño',
   'te hizo daño': 'daño',
+  // ── Fase 1: identidad. Toda atención empieza por aquí y hasta ahora
+  // ninguna de estas preguntas abría nada.
+  'como se llama': 'nombre',
+  'como te llamas': 'nombre',
+  'cual es su nombre': 'nombre',
+  'su nombre': 'nombre',
+  'tu nombre': 'nombre',
+  'nombre completo': 'nombre',
+  'apellido': 'nombre',
+  'que edad': 'edad',
+  'cuantos anos': 'edad',
+  'su edad': 'edad',
+  'tu edad': 'edad',
+  'edad tiene': 'edad',
+  'carnet': 'identidad',
+  'cedula': 'identidad',
+  'identifica': 'identidad',
+  'identidad': 'identidad',
   // ── Consultas y trámites: el funcionario dirige, y hasta ahora ninguna de
   // estas preguntas abría nada. Es el hueco por el que "¿sabes qué documento
   // debes llevar?" no llevaba a ningún sitio.
