@@ -57,7 +57,14 @@ class LocalSentenceAssembler {
     // que la declaración diga "cuchillo" y no "C. U. C. H...".
     final unidos = _joinSpelled(tokens);
 
-    final roles = _classify(unidos);
+    // Detalle dactilológico: la racha que sigue a un lugar o a un vehículo es
+    // su nombre propio o su matrícula. Se extrae ANTES de clasificar porque el
+    // lexema se compone en el momento de leer la glosa: si el detalle llegara
+    // después, el lugar ya estaría escrito sin él.
+    final detalles = <String, String>{};
+    final limpios = _extractDetails(unidos, detalles);
+
+    final roles = _classify(limpios, detalles);
 
     // Composición de tiempo: una unidad suelta no responde "¿cuándo?", abre una
     // cadena. [SEMANA]+[2] no es "esta semana" más un dos huérfano: es "hace dos
@@ -65,7 +72,10 @@ class LocalSentenceAssembler {
     // hay glosa que la exprese (el diccionario no tiene PASADO ni FUTURO): la
     // aporta el flujo, que ya sabe si narra un hecho consumado o pide un plazo.
     roles.narrativeIsPast = _pastContexts.contains(contextId);
-    final consumidasPorTiempo = _resolveTime(roles, contextId, unidos);
+    final consumidas = <String>{
+      ..._resolveGender(roles),
+      ..._resolveTime(roles, contextId, unidos),
+    };
 
     // Una interrogativa manda sobre el contexto: si se eligió ¿DÓNDE?, lo que
     // la persona construye es una pregunta, y ninguno de los composers de
@@ -91,7 +101,7 @@ class LocalSentenceAssembler {
         : '${roles.markers.map(_asSentence).join(' ')} $composed'.trim();
 
     // Regla de cobertura semántica: ninguna glosa seleccionada puede perderse.
-    return _ensureCoverage(conMarcadores, unidos, skip: consumidasPorTiempo);
+    return _ensureCoverage(conMarcadores, limpios, skip: consumidas);
   }
 
   // ───────────────────────── Composición de tiempo ────────────────────────
@@ -151,6 +161,100 @@ class LocalSentenceAssembler {
     'IMPRIMIR', 'COORDINAR', 'SOLUCIONAR', 'TRATAR', 'EXIGIR',
   };
 
+  /// Hace concordar en género los oficios epicenos y absorbe la glosa de
+  /// género que ya no aporta nada.
+  ///
+  /// En una denuncia el género no es estilo: identifica a quien se busca.
+  /// VECINO + MUJER es "una vecina", no "un vecino una mujer"; y MILITAR +
+  /// HOMBRE es "un militar", porque el masculino ya era la forma por defecto
+  /// —"un militar hombre" no lo dice nadie—.
+  ///
+  /// Devuelve las glosas consumidas para que la red de cobertura no las
+  /// reclame: "una vecina" ya representa a MUJER.
+  /// Separa las rachas deletreadas que califican a la glosa anterior.
+  ///
+  /// Devuelve los tokens sin ellas y llena [destino] con glosa → detalle.
+  List<String> _extractDetails(List<String> tokens, Map<String, String> destino) {
+    final salida = <String>[];
+    for (var i = 0; i < tokens.length; i++) {
+      final t = tokens[i];
+      final anterior = salida.isEmpty ? null : salida.last;
+      final esRacha = t.length > 1 && _lexicon[t] == null && !_esDigito(t) &&
+          RegExp(r'^[A-ZÑ0-9]+$').hasMatch(t);
+      if (anterior != null &&
+          _admiteDetalle.containsKey(anterior) &&
+          !destino.containsKey(anterior) &&
+          esRacha) {
+        // Una matrícula mezcla letras y dígitos ("234ABC") y `_joinSpelled`
+        // junta cada tipo por separado: hay que reunir los tramos seguidos o
+        // la placa se parte en dos y la mitad se pierde como ruido.
+        final buffer = StringBuffer(t);
+        while (i + 1 < tokens.length) {
+          final siguiente = tokens[i + 1];
+          final continua = siguiente.length > 1 &&
+              _lexicon[siguiente] == null &&
+              RegExp(r'^[A-ZÑ0-9]+$').hasMatch(siguiente);
+          if (!continua) break;
+          buffer.write(siguiente);
+          i++;
+        }
+        destino[anterior] = buffer.toString();
+        continue;
+      }
+      salida.add(t);
+    }
+    return salida;
+  }
+
+  /// Engancha el detalle deletreado al lexema: "en la plaza Murillo",
+  /// "mi auto con placa 234ABC".
+  String _conDetalle(String gloss, String lexema, _Roles r) {
+    final detalle = r.details.remove(gloss);
+    if (detalle == null) return lexema;
+    final etiqueta = _admiteDetalle[gloss];
+    final propio = _capitalizarPropio(detalle);
+    return etiqueta == 'placa'
+        ? '$lexema con placa $detalle'
+        : '$lexema $propio';
+  }
+
+  /// Un nombre propio se escribe con inicial mayúscula; una matrícula, tal
+  /// cual la deletreó la persona.
+  String _capitalizarPropio(String s) =>
+      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1).toLowerCase();
+
+  Set<String> _resolveGender(_Roles r) {
+    final consumidas = <String>{};
+
+    void concordar(List<String> personas) {
+      if (personas.length < 2) return;
+      final femenino = personas.contains('una mujer');
+      final masculino = personas.contains('un hombre');
+      if (!femenino && !masculino) return;
+
+      // ¿Hay algún oficio que pueda llevar el género?
+      final llevaGenero = personas.any(
+          (p) => p != 'una mujer' && p != 'un hombre' && _feminino.containsKey(p));
+      if (!llevaGenero) return;
+
+      if (femenino) {
+        for (var i = 0; i < personas.length; i++) {
+          personas[i] = _feminino[personas[i]] ?? personas[i];
+        }
+        personas.remove('una mujer');
+        consumidas.add('MUJER');
+      } else {
+        // El masculino ya es la forma del lexema: la glosa sobra.
+        personas.remove('un hombre');
+        consumidas.add('HOMBRE');
+      }
+    }
+
+    concordar(r.perpetrators);
+    concordar(r.victims);
+    return consumidas;
+  }
+
   /// Cierra la cadena temporal y deja [_Roles.time] listo para los composers.
   ///
   /// Devuelve las glosas que consumió, para que la red de cobertura no las
@@ -193,6 +297,41 @@ class LocalSentenceAssembler {
     r.time = '${esPasado ? 'hace' : 'dentro de'} $cardinal $medida';
     return {unit, count};
   }
+
+  /// Glosas que admiten un nombre propio o una matrícula deletreada detrás.
+  ///
+  /// "Me robaron en la plaza" no sirve en una denuncia: el oficial necesita
+  /// QUÉ plaza. La interfaz abre el teclado dactilológico al elegirlas y las
+  /// letras llegan como una racha que `_joinSpelled` ya reconstruye; aquí solo
+  /// hay que engancharlas al sitio correcto de la frase.
+  static const _admiteDetalle = {
+    'PLAZA': 'plaza', 'CALLE': 'calle', 'AVENIDA': 'avenida',
+    'MERCADO': 'mercado', 'PARADA': 'parada',
+    'AUTO': 'placa', 'MOTOCICLETA': 'placa', 'MICRO': 'placa',
+    'TAXI': 'placa', 'TRUFI': 'placa', 'BICICLETA': 'placa',
+  };
+
+  /// Etiqueta del detalle que admite [gloss], o `null` si no admite ninguno.
+  ///
+  /// La interfaz la consulta para decidir si abre el teclado dactilológico.
+  /// Vive aquí, junto a la tabla, para que no haya dos listas que mantener.
+  static String? etiquetaDeDetalle(String gloss) =>
+      _admiteDetalle[gloss.trim().toUpperCase()];
+
+  /// Oficios y relaciones cuyo lexema viene en masculino por defecto y que
+  /// concuerdan si la persona además eligió MUJER.
+  ///
+  /// En una denuncia el género no es un detalle de estilo: identifica a quien
+  /// se busca. "Un vecino" y "una vecina" no señalan a la misma persona.
+  static const _feminino = {
+    'un vecino': 'una vecina',
+    'un militar': 'una militar',
+    'un soldado': 'una soldado',
+    'un testigo': 'una testigo',
+    'un ladrón': 'una ladrona',
+    'un doctor': 'una doctora',
+    'un abogado': 'una abogada',
+  };
 
   /// Glosas que son material probatorio en cualquier flujo.
   ///
@@ -458,8 +597,8 @@ class LocalSentenceAssembler {
 
   // ───────────────────────── Clasificación de roles ───────────────────────
 
-  _Roles _classify(List<String> tokens) {
-    final r = _Roles();
+  _Roles _classify(List<String> tokens, [Map<String, String> detalles = const {}]) {
+    final r = _Roles()..details.addAll(detalles);
     // Tras el marcador [kVictimMarker], los descriptores de persona pasan a
     // describir a la persona AGREDIDA (no al agresor). Flujo de testigo.
     var victimMode = false;
@@ -612,9 +751,9 @@ class LocalSentenceAssembler {
           }
           break;
         case _Role.arma:               r.weapon ??= e.es; break;
-        case _Role.objeto:             r.objects.add(e.es); break;
+        case _Role.objeto:             r.objects.add(_conDetalle(t, e.es, r)); break;
         case _Role.documento:          r.documents.add(e.es); break;
-        case _Role.lugar:              r.place ??= e.es; break;
+        case _Role.lugar:              r.place ??= _conDetalle(t, e.es, r); break;
         case _Role.institucion:
           // Varias instituciones son varios destinos, no uno: con `??=` la
           // segunda se perdía y la red de cobertura la soltaba al final
@@ -2056,6 +2195,9 @@ class _Roles {
 
   /// Huida del agresor ("salió corriendo"). Cierra el relato, no lo abre.
   String? flight;
+
+  /// Detalle deletreado por glosa: PLAZA → "MURILLO", AUTO → "234ABC".
+  final Map<String, String> details = {};
 
   /// Verbos de acción adicionales. Con `??=` el segundo se perdía: "pagué" y
   /// "no me entregaron" son dos hechos del mismo relato, no uno.

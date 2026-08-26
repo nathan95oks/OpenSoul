@@ -268,6 +268,49 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     );
   }
 
+  /// `true` si [gloss] ya estaba elegida en la zona activa.
+  bool activeAnswersOf(String gloss) =>
+      (state.zoneAnswers[state.activeZoneId] ?? const <String>[]).contains(gloss);
+
+  /// Nombre en español de la unidad temporal, si [gloss] lo es y la zona
+  /// activa la declara encadenable. `null` en cualquier otro caso.
+  ///
+  /// Se consulta la zona y no solo la glosa: SEMANA abre la cantidad cuando
+  /// responde "¿cuándo?", no cuando aparece en otra pregunta.
+  String? unidadTemporalDe(String gloss) {
+    final zona = ref.read(contextProvider)?.zoneById(state.activeZoneId ?? '');
+    if (zona == null || !zona.chainTriggers.contains(gloss)) return null;
+    const nombres = {
+      'MINUTO': 'minutos', 'HORA': 'horas', 'DIA': 'días',
+      'SEMANA': 'semanas', 'MES': 'meses', 'ANO': 'años',
+    };
+    return nombres[gloss];
+  }
+
+  /// Añade calificadores detrás de una glosa ya elegida, en la misma zona.
+  ///
+  /// No son respuestas nuevas —no cuentan para `maxPicks`— sino la precisión
+  /// de la anterior: las letras de "Murillo" detrás de PLAZA, el "2" detrás de
+  /// SEMANA. El motor los lee por posición, así que el orden es el contrato.
+  void appendQualifiers(String gloss, List<String> qualifiers) {
+    final zoneId = state.activeZoneId;
+    if (zoneId == null || qualifiers.isEmpty) return;
+
+    final current = [...(state.zoneAnswers[zoneId] ?? const <String>[])];
+    final at = current.lastIndexOf(gloss);
+    if (at < 0) return;
+
+    // Se reemplaza el tramo posterior por si la persona rehace el detalle:
+    // deletrear dos veces no debe dejar el primer intento dentro.
+    final hasta = current.length;
+    current.removeRange(at + 1, hasta);
+    current.insertAll(at + 1, qualifiers);
+
+    state = state.copyWith(
+      zoneAnswers: {...state.zoneAnswers, zoneId: current},
+    );
+  }
+
   /// Activa una zona libremente — no hay orden obligatorio.
   void activateZone(String zoneId) {
     final ctx = ref.read(contextProvider);
@@ -314,15 +357,11 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     final id = state.activeZoneId;
     if (id == null) return;
 
-    // Encadenamiento condicional. Una unidad de tiempo no responde "¿cuándo?",
-    // abre "¿cuántas semanas?"; un tiempo absoluto (AYER, HOY) la cierra. Sin
-    // esto, la zona de cantidad era una pregunta suelta más del recorrido y
-    // permitía "AYER" seguido de "2", que no significa nada.
-    final chained = _chainTargetFor(id);
-    if (chained != null && !state.visitedZoneIds.contains(chained)) {
-      activateZone(chained);
-      return;
-    }
+    // La cantidad ya NO es una pantalla: se pide en una hoja superpuesta al
+    // elegir la unidad (ver `qualifier_sheets.dart`). Llevar a la persona a
+    // otra pregunta completa para un dato de un toque rompía el hilo de lo que
+    // estaba contando. `chainZoneId` sigue declarado porque es el que dice qué
+    // glosas abren esa hoja y qué zonas no se navegan.
 
     final order = state.visitedZoneOrder;
     final idx = order.indexOf(id);
@@ -347,20 +386,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       activateZone(p.zone.id);
       return;
     }
-  }
-
-  /// Zona a la que encadena [zoneId] si lo elegido lo dispara, o `null`.
-  String? _chainTargetFor(String zoneId) {
-    final context = ref.read(contextProvider);
-    if (context == null) return null;
-    final zone = context.zoneById(zoneId);
-    final destino = zone?.chainZoneId;
-    if (zone == null || destino == null || zone.chainTriggers.isEmpty) {
-      return null;
-    }
-    final elegidas = state.zoneAnswers[zoneId] ?? const <String>[];
-    final disparo = elegidas.any(zone.chainTriggers.contains);
-    return disparo ? destino : null;
   }
 
   /// Ids que son destino de cadena de alguna zona del contexto activo.
