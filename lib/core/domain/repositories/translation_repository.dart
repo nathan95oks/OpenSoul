@@ -19,6 +19,16 @@ class TranslationResult {
   /// Indica si Amazon Bedrock fue utilizado para refinar la oración.
   final bool bedrockUsed;
 
+  /// El servidor comprobó, con las mismas reglas que el motor local, que el
+  /// texto generado representa TODAS las glosas elegidas.
+  ///
+  /// Existe porque desde que el backend REDACTA en vez de pulir, exigir en el
+  /// cliente una coincidencia literal con el lexicón descartaría toda
+  /// redacción natural: "resulté con una herida" no contiene "tengo una
+  /// herida". La comprobación no desaparece — se hace una sola vez, donde
+  /// están los hechos verificados.
+  final bool coverageValidated;
+
   /// Representación intermedia generada por el motor de análisis semántico.
   /// Contiene roles (sujeto, verbo, objeto…), tipo de evento y metadatos.
   final Map<String, dynamic>? intermediateRepresentation;
@@ -33,6 +43,7 @@ class TranslationResult {
     this.audioUrl,
     this.cacheHit = false,
     this.bedrockUsed = false,
+    this.coverageValidated = false,
     this.intermediateRepresentation,
     this.glossSequence,
   });

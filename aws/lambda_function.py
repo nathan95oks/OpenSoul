@@ -1523,6 +1523,124 @@ def _gen_general(ir, analysis, is_formal):
 
     return " ".join(all_es).capitalize() if all_es else " ".join(ir["glosas_originales"]).capitalize()
 
+def build_generation_prompt(cards: list, analysis: dict, base_sentence: str,
+                            context_type: str, is_formal: bool) -> str:
+    """Prompt de redacción libre anclada a hechos verificados.
+
+    El modelo NO traduce glosas: recibe el significado de cada una ya resuelto
+    por el lexicón y la oración que el ensamblador determinista compuso con
+    ellas. Sobre eso redacta. Así la fluidez la pone el modelo y la fidelidad
+    la pone el código — que es el único de los dos en el que se puede confiar
+    para una declaración que puede acabar en un expediente.
+    """
+    significados = []
+    for card in cards:
+        key = str(card).upper().strip()
+        entry = GLOSS_LEXICON.get(key)
+        if entry:
+            significados.append(f'- {key}: {entry["es"]}')
+    hechos = "\n".join(significados) or "- (sin glosas reconocidas)"
+
+    registro = ("formal y respetuoso, propio de una ventanilla judicial"
+                if is_formal else "claro, cercano y correcto")
+
+    return f"""Eres quien redacta, en español de Bolivia, la declaración de una persona sorda ante una institución pública. Ella se comunica eligiendo señas; tú conviertes esas señas en la declaración que leerá o escuchará el funcionario.
+
+REGISTRO: {registro}. Escribe con empatía y sin dramatizar. La persona puede estar asustada o herida: su declaración debe sonar digna, nunca infantil ni telegráfica.
+
+SEÑAS QUE ELIGIÓ, con su significado ya resuelto:
+{hechos}
+
+HECHOS VERIFICADOS (composición literal de esas señas — es la verdad del caso):
+"{base_sentence}"
+
+REGLAS INNEGOCIABLES:
+1. Di TODO lo que aparece en los hechos verificados. Si omites una seña, la persona pierde parte de su declaración y no puede saberlo.
+2. NO añadas ningún hecho que no esté ahí: ni un lugar, ni una hora, ni un objeto, ni un motivo, ni una emoción. Si los hechos no dicen dónde ocurrió, tu texto tampoco lo dice.
+3. NO califiques jurídicamente. Escribe lo que ocurrió, no cómo se llama el delito: nunca "estafa", "hurto agravado", "tentativa".
+4. NO opines, no aconsejes, no consueles y no te dirijas a la persona. Solo su declaración.
+5. Mantén la primera persona: es ella quien habla, no tú sobre ella.
+6. Puedes —y debes— reordenar, unir oraciones, añadir los conectores que falten y elegir el verbo que suene más natural. Ahí está tu trabajo.
+7. Pero conserva LITERALMENTE las palabras que nombran objetos, lugares, fechas, personas, documentos y cantidades. Si los hechos dicen "mi mochila" no escribas "mi bolso"; si dicen "en la calle" no escribas "en la vía pública". Un funcionario transcribe lo que lee, y un sinónimo cambia el acta.
+8. Responde SOLO con la declaración, en texto plano, sin comillas, sin markdown y sin encabezados.
+
+Declaración:"""
+
+
+def _generation_is_safe(cards: list, generated: str, base: str) -> tuple:
+    """Cobertura y no-invención. Espejo de `isBackendDegenerate` del cliente.
+
+    Devuelve (es_segura, motivo). Comprueba lo que se puede comprobar: que
+    cada seña elegida siga representada en el texto. Lo que no se puede
+    comprobar por texto —un hecho inventado plausible— se acota en el prompt y
+    se limita con el tope de longitud: un texto mucho más largo que los hechos
+    verificados está adornando.
+    """
+    if not generated or not generated.strip():
+        return False, "vacío"
+
+    plano = _normalizar(generated)
+
+    faltantes = []
+    for card in cards:
+        key = str(card).upper().strip()
+        entry = GLOSS_LEXICON.get(key)
+        if not entry:
+            continue
+        # Basta una palabra significativa del lexema, o su raíz: el modelo
+        # puede decir "mi celular" donde el lexema dice "mi teléfono".
+        palabras = [w for w in _normalizar(entry["es"]).split() if len(w) >= 4]
+        raiz = _normalizar(key)[:4]
+        if any(w in plano for w in palabras) or (len(raiz) >= 4 and raiz in plano):
+            continue
+        faltantes.append(key)
+
+    if faltantes:
+        return False, f"omite {', '.join(faltantes)}"
+
+    # Adorno: el doble de palabras que los hechos verificados es reescritura,
+    # más que eso es literatura.
+    if len(generated.split()) > max(24, len(base.split()) * 2):
+        return False, "demasiado largo frente a los hechos"
+
+    return True, ""
+
+
+def generate_with_bedrock(cards: list, analysis: dict, base_sentence: str,
+                          context_type: str, institution_type: str = "") -> tuple:
+    """Redacción final con Bedrock, anclada y validada.
+
+    Devuelve (texto, validado). Ante cualquier duda —Bedrock apagado, error de
+    red, cobertura incompleta— devuelve la oración determinista, que nunca
+    miente aunque suene más seca.
+    """
+    if not ENABLE_BEDROCK:
+        return base_sentence, False
+
+    is_formal = _is_formal(context_type, institution_type)
+    prompt = build_generation_prompt(
+        cards, analysis, base_sentence, context_type, is_formal)
+
+    try:
+        request_body = _build_bedrock_request_body(prompt, max_tokens=400)
+        response = bedrock_runtime.invoke_model(
+            modelId=BEDROCK_MODEL_ID, contentType="application/json",
+            accept="application/json", body=json.dumps(request_body),
+        )
+        texto = _parse_bedrock_response(json.loads(response["body"].read()))
+    except Exception as e:  # noqa: BLE001 — cualquier fallo cae al determinista
+        logger.warning("Generación con Bedrock falló: %s", e)
+        return base_sentence, False
+
+    texto = (texto or "").strip().strip('"').strip()
+    seguro, motivo = _generation_is_safe(cards, texto, base_sentence)
+    if not seguro:
+        logger.warning("Generación descartada (%s): %.200r", motivo, texto)
+        return base_sentence, False
+
+    return texto, True
+
+
 def refine_with_bedrock(base_sentence: str, context_type: str,
                         institution_type: str = "") -> str:
     """
@@ -1960,11 +2078,12 @@ def lambda_handler(event, context):
     base_sentence = generate_base_sentence(intermediate, analysis, context_type, institution_type)
     logger.info("Oración base generada: %s", base_sentence)
 
-    try:
-        generated_text = refine_with_bedrock(base_sentence, context_type, institution_type)
-    except Exception as e:
-        logger.warning("Refinamiento con Bedrock falló, usando oración base: %s", str(e))
-        generated_text = base_sentence
+    # CAMBIO: el modelo REDACTA a partir de las glosas y de los hechos
+    # verificados, en vez de pulir una frase ya hecha. La fluidez la pone el
+    # modelo; la fidelidad, el ensamblador determinista, que sigue siendo
+    # quien garantiza que ninguna seña se pierda.
+    generated_text, generation_validated = generate_with_bedrock(
+        cards, analysis, base_sentence, context_type, institution_type)
 
     bedrock_used = generated_text != base_sentence
 
@@ -2006,6 +2125,13 @@ def lambda_handler(event, context):
         "audioUrl": audio_url,
         "cacheHit": False,
         "bedrockUsed": bedrock_used,
+        # El servidor ya comprobó, con las mismas reglas que el cliente, que
+        # el texto generado representa TODAS las glosas. El cliente lo usa
+        # para no volver a exigir una coincidencia literal que una redacción
+        # libre —"me sustrajo el celular" por ROBAR + TELEFONO— nunca cumple.
+        # Es una promesa de nuestro propio código sobre la salida del modelo,
+        # no una promesa del modelo.
+        "coverageValidated": generation_validated,
     }
 
     put_cached_response(cache_key, response_payload, _audio_s3_key(cache_key))

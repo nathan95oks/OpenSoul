@@ -84,6 +84,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
         audioUrl: data['audioUrl'],
         cacheHit: data['cacheHit'] ?? false,
         bedrockUsed: data['bedrockUsed'] ?? false,
+        coverageValidated: data['coverageValidated'] ?? false,
         intermediateRepresentation: intermediateRepr,
         glossSequence: glossSeq,
       );

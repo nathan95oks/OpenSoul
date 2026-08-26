@@ -227,3 +227,68 @@ def _sin_tildes(texto):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GeneracionAnclada(unittest.TestCase):
+    """El modelo redacta; el código sigue garantizando qué se dice.
+
+    La fluidez la pone Bedrock, pero una declaración puede acabar en un
+    expediente: lo que el modelo escribe se valida contra los hechos que el
+    ensamblador determinista compuso, y ante cualquier duda se devuelve ese.
+    """
+
+    CARDS = ["HOMBRE", "ROBAR", "MOCHILA", "CALLE", "HERIDA", "AUXILIO"]
+
+    def base(self):
+        return frase("denuncia_robo", self.CARDS)
+
+    def test_acepta_una_redaccion_natural(self):
+        ok, motivo = L._generation_is_safe(
+            self.CARDS,
+            "Quiero denunciar que un hombre me robó mi mochila en la calle. "
+            "Resulté con una herida y necesito auxilio.",
+            self.base(),
+        )
+        self.assertTrue(ok, motivo)
+
+    def test_rechaza_una_omision(self):
+        # Perder "auxilio" en una denuncia no es un matiz de estilo.
+        ok, motivo = L._generation_is_safe(
+            self.CARDS, "Un hombre me robó mi mochila en la calle.", self.base())
+        self.assertFalse(ok)
+        self.assertIn("omite", motivo)
+
+    def test_rechaza_el_adorno(self):
+        ok, motivo = L._generation_is_safe(
+            self.CARDS,
+            "Un hombre me robó mi mochila en la calle a las tres de la tarde "
+            "mientras volvía del trabajo, y estaba muy asustado porque además "
+            "me empujó contra la pared y salió corriendo hacia la avenida "
+            "principal, donde lo perdí de vista por completo y ya no supe más "
+            "de él ni de mis pertenencias, tengo una herida y necesito auxilio.",
+            self.base(),
+        )
+        self.assertFalse(ok)
+        self.assertIn("largo", motivo)
+
+    def test_rechaza_lo_vacio(self):
+        self.assertFalse(L._generation_is_safe(self.CARDS, "   ", self.base())[0])
+
+    def test_sin_bedrock_cae_al_determinista_sin_marcar_validado(self):
+        # ENABLE_BEDROCK apagado o cualquier fallo: se devuelve la oración
+        # determinista y `validated` queda en False, de modo que el cliente
+        # vuelve a comprobar por su cuenta.
+        analysis = L.analyze_glosses(self.CARDS)
+        texto, validado = L.generate_with_bedrock(
+            self.CARDS, analysis, self.base(), "denuncia_robo")
+        self.assertEqual(texto, self.base())
+        self.assertFalse(validado)
+
+    def test_el_prompt_no_filtra_glosas_crudas(self):
+        analysis = L.analyze_glosses(self.CARDS)
+        prompt = L.build_generation_prompt(
+            self.CARDS, analysis, self.base(), "denuncia_robo", True)
+        # El significado va resuelto; la glosa cruda solo como etiqueta.
+        self.assertIn("mi mochila", prompt)
+        self.assertIn("HECHOS VERIFICADOS", prompt)
+        self.assertIn("NO califiques jurídicamente", prompt)
