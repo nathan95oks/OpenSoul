@@ -97,7 +97,7 @@ void sincronizarLexicon(bool soloVerificar) {
     }
     final es = e.es.replaceAll(r"\'", "'").replaceAll('"', r'\"');
     final extras = StringBuffer();
-    if (e.rol == 'personaDesc' || e.rol == 'personaDescPlural') {
+    if (e.rol == 'personaDesc') {
       extras.write(', "persona": True');
     }
     if (e.rol == 'verboAgresion') {
@@ -140,7 +140,6 @@ void sincronizarLexicon(bool soloVerificar) {
 const _roles = {
   'sujeto': 'SUJETO',
   'personaDesc': 'DESCRIPTOR',
-  'personaDescPlural': 'DESCRIPTOR',
   'rasgo': 'DESCRIPTOR',
   'verboAgresion': 'VERBO',
   'verboAccion': 'VERBO',

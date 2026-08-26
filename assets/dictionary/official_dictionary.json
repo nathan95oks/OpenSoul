@@ -1248,32 +1248,6 @@
    "source": "M2, Trabajo p.79"
   },
   {
-   "id": "g052",
-   "gloss": "GOBIERNO",
-   "displayText": "GOBIERNO",
-   "iconUrl": "",
-   "categoryId": "Instituciones",
-   "subcategoryId": "institucion",
-   "contexts": [
-    "denuncia_robo",
-    "violencia",
-    "accidente",
-    "otro",
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "account_balance",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "4. Roles e instituciones",
-   "source": "M3, Política I p.43"
-  },
-  {
    "id": "g053",
    "gloss": "MINISTERIO",
    "displayText": "MINISTERIO",
@@ -1652,52 +1626,6 @@
    "animationFile": "",
    "corpusCategory": "5. Conceptos jurídicos y administrativos",
    "source": "M3, Política I p.43"
-  },
-  {
-   "id": "g070",
-   "gloss": "DECRETO_SUPREMO",
-   "displayText": "DECRETO SUPREMO",
-   "iconUrl": "",
-   "categoryId": "Conceptos jurídicos",
-   "subcategoryId": "documento",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 3,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "description",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89",
-   "imageFrames": 2
-  },
-  {
-   "id": "g071",
-   "gloss": "PERSONERIA_JURIDICA",
-   "displayText": "PERSONERÍA JURÍDICA",
-   "iconUrl": "",
-   "categoryId": "Conceptos jurídicos",
-   "subcategoryId": "documento",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 3,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "description",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89",
-   "imageFrames": 2
   },
   {
    "id": "g072",
@@ -2246,29 +2174,6 @@
    "animationFile": "",
    "corpusCategory": "6. Acciones del relato y del proceso",
    "source": "D2024 #573"
-  },
-  {
-   "id": "g096",
-   "gloss": "ADMINISTRAR",
-   "displayText": "ADMINISTRAR",
-   "iconUrl": "",
-   "categoryId": "Acciones",
-   "subcategoryId": "verboAccion",
-   "contexts": [
-    "orientacion",
-    "otro",
-    "preguntas"
-   ],
-   "priority": 3,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "assignment",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "6. Acciones del relato y del proceso",
-   "source": "M4, General II p.99"
   },
   {
    "id": "g097",
@@ -4082,50 +3987,6 @@
    "source": "D2024 #559"
   },
   {
-   "id": "g174",
-   "gloss": "ARCHIVADOR",
-   "displayText": "ARCHIVADOR",
-   "iconUrl": "",
-   "categoryId": "Documentos",
-   "subcategoryId": "soporte",
-   "contexts": [
-    "orientacion"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "description",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "10. Documentos y objetos frecuentes",
-   "source": "M3, Sustantivos III p.73",
-   "imageFrames": 2
-  },
-  {
-   "id": "g175",
-   "gloss": "CARPETA",
-   "displayText": "CARPETA",
-   "iconUrl": "",
-   "categoryId": "Documentos",
-   "subcategoryId": "soporte",
-   "contexts": [
-    "orientacion"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "description",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "10. Documentos y objetos frecuentes",
-   "source": "M3, Sustantivos III p.73",
-   "imageFrames": 2
-  },
-  {
    "id": "g176",
    "gloss": "CARTA",
    "displayText": "CARTA",
@@ -4448,29 +4309,6 @@
    "source": "M1, Transporte p.93"
   },
   {
-   "id": "g187",
-   "gloss": "AVION",
-   "displayText": "AVIÓN",
-   "iconUrl": "",
-   "categoryId": "Objetos",
-   "subcategoryId": "objeto",
-   "contexts": [
-    "denuncia_robo",
-    "accidente",
-    "otro"
-   ],
-   "priority": 3,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "directions_car",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "11. Transporte",
-   "source": "M1, Transporte p.93"
-  },
-  {
    "id": "g188",
    "gloss": "BICICLETA",
    "displayText": "BICICLETA",
@@ -4714,95 +4552,6 @@
    "source": "D2024 #606"
   },
   {
-   "id": "g199",
-   "gloss": "WIFI",
-   "displayText": "WIFI",
-   "iconUrl": "",
-   "categoryId": "Comunicación digital",
-   "subcategoryId": "objeto",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 3,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "smartphone",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "14. Comunicación digital",
-   "source": "D2024 #608"
-  },
-  {
-   "id": "g200",
-   "gloss": "ZOOM",
-   "displayText": "ZOOM",
-   "iconUrl": "",
-   "categoryId": "Comunicación digital",
-   "subcategoryId": "objeto",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 3,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "smartphone",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "14. Comunicación digital",
-   "source": "D2024#611"
-  },
-  {
-   "id": "g201",
-   "gloss": "AUTONOMIA",
-   "displayText": "AUTONOMÍA",
-   "iconUrl": "",
-   "categoryId": "Integridad",
-   "subcategoryId": "motivo",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "info",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4,PolíticaIIp.89"
-  },
-  {
-   "id": "g202",
-   "gloss": "COMPROMISO",
-   "displayText": "COMPROMISO",
-   "iconUrl": "",
-   "categoryId": "Integridad",
-   "subcategoryId": "motivo",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "info",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89",
-   "imageFrames": 2
-  },
-  {
    "id": "g203",
    "gloss": "CORRUPTO",
    "displayText": "CORRUPTO",
@@ -4824,117 +4573,6 @@
    "corpusCategory": "15. Integridad, organización y garantías",
    "source": "M4, Política II p.89",
    "imageFrames": 2
-  },
-  {
-   "id": "g204",
-   "gloss": "DIGNIDAD",
-   "displayText": "DIGNIDAD",
-   "iconUrl": "",
-   "categoryId": "Integridad",
-   "subcategoryId": "rasgo",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "straighten",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "5. Conceptos jurídicos y administrativos",
-   "source": "D2024 #186"
-  },
-  {
-   "id": "g205",
-   "gloss": "FIRME",
-   "displayText": "FIRME",
-   "iconUrl": "",
-   "categoryId": "Integridad",
-   "subcategoryId": "rasgo",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "straighten",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "5. Conceptos jurídicos y administrativos",
-   "source": "D2024 #245"
-  },
-  {
-   "id": "g206",
-   "gloss": "GARANTE",
-   "displayText": "GARANTE",
-   "iconUrl": "",
-   "categoryId": "Integridad",
-   "subcategoryId": "motivo",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "info",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89",
-   "imageFrames": 2
-  },
-  {
-   "id": "g207",
-   "gloss": "HONESTIDAD",
-   "displayText": "HONESTIDAD",
-   "iconUrl": "",
-   "categoryId": "Integridad",
-   "subcategoryId": "rasgo",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 2,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "straighten",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "15. Integridad, organización y garantías",
-   "source": "M4, Política II p.89"
-  },
-  {
-   "id": "g208",
-   "gloss": "ETICA",
-   "displayText": "ÉTICA",
-   "iconUrl": "",
-   "categoryId": "Integridad",
-   "subcategoryId": "rasgo",
-   "contexts": [
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 3,
-   "suggestedNextCardIds": [],
-   "isFrequent": false,
-   "isEmergency": false,
-   "semanticIcon": "straighten",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "5. Conceptos jurídicos y administrativos",
-   "source": "D2024 #227"
   },
   {
    "id": "d209",
