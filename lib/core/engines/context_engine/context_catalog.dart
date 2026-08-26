@@ -206,9 +206,15 @@ final availableContexts = <SemanticContext>[
         // Solo pertenencias sustraíbles. Fuera: los soportes (PAPEL, TEXTO),
         // la evidencia del caso (PRUEBA, FOTOGRAFIA, MENSAJE) y el transporte
         // público (MICRO, TAXI, TRUFI), que no es de nadie.
+        //
+        // AUTO y MOTOCICLETA quedan fuera por perfil de usuario: el declarante
+        // no conduce, así que en 1ª persona no son suyos. Siguen disponibles
+        // donde el vehículo es de un tercero — la zona 'vehiculo' de accidente
+        // y el flujo de testigo—, que es donde el corpus los necesita.
+        // BICICLETA se queda: sí es una pertenencia habitual.
         glossAllowlist: [
           'TELEFONO', 'MOCHILA', 'DINERO', 'BILLETERA', 'CARNET',
-          'MOTOCICLETA', 'BICICLETA', 'AUTO', 'CAMARA',
+          'BICICLETA', 'CAMARA',
           'PASAPORTE', 'LICENCIA_DECONDUCIR',
         ],
         relatedZones: ['lugar'],
@@ -651,6 +657,24 @@ final availableContexts = <SemanticContext>[
         leadGloss: kVictimMarker,
         relatedZones: ['lugar'],
       ),
+      // El testigo SÍ describe vehículos: no son suyos, son del hecho que
+      // presenció. Es el flujo al que se retiran AUTO y MOTOCICLETA desde la
+      // zona de pertenencias robadas.
+      SemanticZone(
+        id: 'vehiculo',
+        label: 'Vehículo',
+        hint: 'Qué vehículo vi',
+        question: '¿Qué vehículo estuvo involucrado?',
+        emoji: '🚗',
+        semanticWeight: 0.55,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: [
+          'AUTO', 'MOTOCICLETA', 'BICICLETA', 'MICRO', 'TAXI', 'TRUFI',
+        ],
+        leadGloss: kVehicleMarker,
+        relatedZones: ['lugar'],
+      ),
       SemanticZone(
         id: 'lugar',
         label: 'Lugar',
@@ -738,7 +762,7 @@ final availableContexts = <SemanticContext>[
       SemanticZone(
         id: 'caso',
         label: 'Caso',
-        hint: 'A qué expediente corresponde',
+        hint: 'Número de caso o expediente al que corresponde',
         question: '¿Sobre qué caso?',
         emoji: '🧾',
         semanticWeight: 0.82,
@@ -913,7 +937,7 @@ final availableContexts = <SemanticContext>[
       SemanticZone(
         id: 'donde',
         label: 'Dónde ir',
-        hint: 'A qué oficina acudo',
+        hint: 'A qué institución u oficina acudo',
         question: '¿Dónde debes ir?',
         emoji: '🏛️',
         semanticWeight: 0.65,

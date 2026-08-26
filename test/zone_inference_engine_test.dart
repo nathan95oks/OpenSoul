@@ -75,6 +75,40 @@ void main() {
     });
   });
 
+  group('preguntas de ventanilla — consultas y trámites', () {
+    // El hueco real: hasta ahora el motor solo reconocía lugar y tiempo, así
+    // que "¿sabes qué documento debes llevar?" no abría nada y la persona
+    // tenía que buscar la pregunta a mano.
+    List<String> enTramite(String t) =>
+        engine.zonesFor(context: contextById('tramite')!, text: t);
+    List<String> enConsulta(String t) =>
+        engine.zonesFor(context: contextById('consulta')!, text: t);
+
+    test('el funcionario pregunta por un documento', () {
+      expect(enTramite('¿Sabes qué documento debes llevar?'), ['documento']);
+      expect(enConsulta('¿Qué documentación necesita?'), contains('documento'));
+    });
+
+    test('el funcionario pide el número de caso', () {
+      expect(enTramite('¿Tiene el número de su caso?'), contains('caso'));
+      expect(enConsulta('¿Me da su NUREJ?'), contains('identificador'));
+    });
+
+    test('el funcionario pregunta a dónde acudir', () {
+      expect(enTramite('¿Ante qué institución?'), contains('donde'));
+      expect(enConsulta('¿Ante qué institución?'), contains('donde'));
+    });
+
+    test('el funcionario ofrece apoyo', () {
+      expect(enTramite('¿Necesita un intérprete?'), contains('apoyo'));
+    });
+
+    test('una pregunta sin marcador sigue sin abrir nada', () {
+      // Prudencia: mejor la zona de entrada que una adivinada.
+      expect(enTramite('Buenos días, tome asiento'), isEmpty);
+    });
+  });
+
   group('el flujo guiado abre donde se preguntó', () {
     ProviderContainer containerAsking(String question) {
       final container = ProviderContainer(overrides: [

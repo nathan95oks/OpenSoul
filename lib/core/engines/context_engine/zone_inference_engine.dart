@@ -95,10 +95,9 @@ const Map<String, String> _interrogatives = {
   'como era': 'como era',
   'como eran': 'como era',
   'que aspecto': 'como era',
-  // Vestimenta
-  'que ropa': 'ropa',
-  'como vestia': 'ropa',
-  'como estaba vestido': 'ropa',
+  // La zona de vestimenta se retiró: el diccionario no tiene ninguna prenda,
+  // así que "¿qué ropa llevaba?" no tenía respuesta posible. Sus marcadores
+  // se van con ella — apuntaban a una zona inexistente y nunca acertaban.
   // Objetos sustraídos
   'que se llevaron': 'llevaron',
   'que te llevaron': 'llevaron',
@@ -106,10 +105,39 @@ const Map<String, String> _interrogatives = {
   'que le robaron': 'llevaron',
   'que te quitaron': 'llevaron',
   'que objetos': 'llevaron',
-  // Arma
-  'arma': 'arma',
-  'cuchillo': 'arma',
-  'pistola': 'arma',
+  // Agravante (antes "arma"). No hay glosa de arma en el diccionario: la
+  // pregunta del funcionario se responde en la zona de agravante, que sí
+  // existe, y el arma concreta se deletrea.
+  'arma': 'daño',
+  'cuchillo': 'daño',
+  'te amenazo': 'daño',
+  'te hizo daño': 'daño',
+  // ── Consultas y trámites: el funcionario dirige, y hasta ahora ninguna de
+  // estas preguntas abría nada. Es el hueco por el que "¿sabes qué documento
+  // debes llevar?" no llevaba a ningún sitio.
+  'que documento': 'documento',
+  'documento': 'documento',
+  'que papeles': 'documento',
+  'documentacion': 'documento',
+  'numero de su caso': 'numero',
+  'numero de caso': 'numero',
+  'numero de tu caso': 'numero',
+  'codigo': 'numero',
+  'nurej': 'numero',
+  'su caso': 'caso',
+  'tu caso': 'caso',
+  'del caso': 'caso',
+  'webid': 'numero',
+  'que institucion': 'institucion',
+  'que oficina': 'institucion',
+  'ante quien': 'institucion',
+  'interprete': 'interprete',
+  'necesita apoyo': 'interprete',
+  'necesitas apoyo': 'interprete',
+  'que necesita hacer': 'necesitas hacer',
+  'que necesitas hacer': 'necesitas hacer',
+  'que tramite': 'tramite',
+  'para cuando': 'para cuando',
   // Ayuda urgente
   'necesita ayuda': 'ayuda',
   'necesitas ayuda': 'ayuda',

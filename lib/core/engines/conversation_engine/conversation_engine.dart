@@ -85,16 +85,26 @@ class ConversationEngine {
         context: contextId,
         cards: glosses,
       );
-      final degenerate = assembler.isBackendDegenerate(
-        backendText: remote.generatedText,
-        glosses: glosses,
-      );
+      // El backend REDACTA, ya no pule: su texto no coincide literalmente con
+      // el lexicón y exigirlo aquí descartaría toda redacción natural
+      // —"resulté con una herida" no contiene "tengo una herida"—. Cuando el
+      // servidor declara que él mismo validó la cobertura contra los hechos
+      // verificados, esa comprobación ya se hizo y repetirla sobra. Si no lo
+      // declara, el cliente la hace: es la ruta de una Lambda antigua o de un
+      // texto que el propio servidor no pudo garantizar.
+      final degenerate = remote.coverageValidated
+          ? remote.generatedText.trim().isEmpty
+          : assembler.isBackendDegenerate(
+              backendText: remote.generatedText,
+              glosses: glosses,
+            );
       result = TranslationResult(
         baseSentence: safeLocal,
         generatedText: degenerate ? safeLocal : remote.generatedText,
         audioUrl: degenerate ? null : remote.audioUrl,
         cacheHit: remote.cacheHit,
         bedrockUsed: !degenerate && remote.bedrockUsed,
+        coverageValidated: !degenerate && remote.coverageValidated,
         intermediateRepresentation: remote.intermediateRepresentation,
         glossSequence: remote.glossSequence,
       );
