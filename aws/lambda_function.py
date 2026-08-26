@@ -302,14 +302,14 @@ GLOSS_LEXICON = {
     "VENTANILLA": {"rol": "INSTITUCION", "es": "en la ventanilla"},
     "VERDE": {"rol": "DESCRIPTOR", "es": "de color verde"},
     "VERGUENZA": {"rol": "ESTADO", "es": "siento vergüenza"},
-    "VIDEOLLAMADA": {"rol": "OBJETO", "es": "una videollamada"},
+    "VIDEOLLAMADA": {"rol": "OBJETO", "es": "por videollamada"},
     "VIOLACION": {"rol": "VERBO", "es": "violó", "agresor": "violó"},
     "VIOLENCIA": {"rol": "VERBO", "es": "ejerció violencia", "agresor": "ejerció violencia"},
     "WEBID": {"rol": "TRAMITE", "es": "mi WebID"},
-    "WHATSAPP": {"rol": "OBJETO", "es": "WhatsApp"},
-    "WIFI": {"rol": "OBJETO", "es": "wifi"},
+    "WHATSAPP": {"rol": "OBJETO", "es": "por WhatsApp"},
+    "WIFI": {"rol": "OBJETO", "es": "por wifi"},
     "YO": {"rol": "SUJETO", "es": "yo"},
-    "ZOOM": {"rol": "OBJETO", "es": "Zoom"},
+    "ZOOM": {"rol": "OBJETO", "es": "por Zoom"},
 }
 
 # ===================================================================
@@ -355,6 +355,18 @@ _INHERENT_EVIDENCE = {
 # La huida es lo que hizo el agresor DESPUÉS, no lo que me hizo. Como agresión
 # producía "un hombre me salió corriendo": falso y agramatical.
 _FLIGHT_VERBS = {"CORRER"}
+
+# Dígitos de dactilología. Incluye el 0, que _CARDINALES no lleva a propósito:
+# sirve para deletrear un NUREJ pero nunca es una cantidad. Sin el 0 aquí, un
+# número como "1 0 2 4" se partía en trozos y el primer dígito se perdía.
+_DIGITOS = set("0123456789")
+
+# Cortesías y respuestas sueltas: encabezan, no son contenido del relato.
+_MARKER_GLOSSES = {
+    "HOLA", "GRACIAS", "PERMISO", "POR_FAVOR", "LO_SIENTO", "SI", "NO",
+    "NO_SABER", "NO_PUEDO", "NO_RECUERDO", "NO_ENTIENDO", "PUEDE_REPETIR",
+    "PUEDO", "SABER", "MAS_O_MENOS", "ESTOY_BIEN",
+}
 
 # Reincidencia, no fecha. Espejo de _frequencyGlosses en el cliente: sin esta
 # separación PRIMERA_VEZ ocupaba el complemento temporal y desplazaba a AYER,
@@ -440,9 +452,9 @@ def _join_spelled_digits(cards: list) -> list:
     salida, i = [], 0
     normalizadas = [str(c).upper().strip() for c in cards]
     while i < len(normalizadas):
-        if normalizadas[i] in _CARDINALES:
+        if normalizadas[i] in _DIGITOS:
             j = i
-            while j < len(normalizadas) and normalizadas[j] in _CARDINALES:
+            while j < len(normalizadas) and normalizadas[j] in _DIGITOS:
                 j += 1
             if j - i >= 2:
                 salida.append("".join(normalizadas[i:j]))
@@ -536,7 +548,7 @@ def analyze_glosses(cards: list) -> dict:
             }
             dest = mapping.get(rol, "desconocidos")
             analysis[dest].append({"glosa": key, **entry})
-        elif key in _CARDINALES:
+        elif key in _DIGITOS:
             # CAMBIO (paridad Dart): dígito huérfano —sin unidad de tiempo
             # delante— no significa nada por sí solo. Emitirlo producía
             # "Adicionalmente, hago referencia a 2" en una declaración que
@@ -725,12 +737,38 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
     # fuera del corpus— no se emitían en ninguna plantilla, mientras que el
     # cliente sí los conserva. Toda glosa que el cliente represente y el
     # servidor no hace que la respuesta entera se descarte.
+    # CAMBIO (paridad Dart): las cortesías y respuestas sueltas encabezan la
+    # declaración ("No sé. No recuerdo. …"). El cliente las antepone; aquí
+    # caían en "desconocidos" y salían como "hago referencia a no sé".
+    marcadores = [d["es"] for d in analysis.get("desconocidos", [])
+                  if d["glosa"] in _MARKER_GLOSSES]
+    if marcadores:
+        analysis["desconocidos"] = [d for d in analysis["desconocidos"]
+                                    if d["glosa"] not in _MARKER_GLOSSES]
+        cabecera = " ".join(f"{m[0].upper()}{m[1:]}." for m in marcadores)
+        sentence = f"{cabecera} {sentence}".strip()
+
+    # Todos los roles que una plantilla puede dejarse: cubrir solo trámites
+    # dejaba fuera documentos (ESTADO es DOCUMENTO, no TRAMITE) y servicios
+    # (un intérprete pedido y no emitido). Cualquier glosa que el cliente
+    # represente y el servidor no hace que se descarte la respuesta entera.
+    # Un servicio pedido no es "una referencia": es una necesidad, y tiene su
+    # propia oración.
+    servicios = [x["es"] for x in analysis.get("servicios", [])
+                 if _normalizar(x["es"]) not in _normalizar(sentence)]
+    if servicios:
+        sentence = sentence.rstrip(".") + f". Necesito {_join_es(servicios)}"
+
     residuo = [t["es"] for t in analysis.get("tramites", [])]
+    residuo += [d["es"] for d in analysis.get("documentos", [])]
     residuo += [d["es"] for d in analysis.get("desconocidos", [])]
     faltan = [x for x in residuo if _normalizar(x) not in _normalizar(sentence)]
     if faltan:
-        sentence = (sentence.rstrip(".")
-                    + f". Adicionalmente, hago referencia a {_join_es(faltan)}")
+        # "a el estado" no es español: la preposición y el artículo se
+        # contraen.
+        cola = _join_es(faltan)
+        prep = "al " + cola[3:] if cola.startswith("el ") else f"a {cola}"
+        sentence = sentence.rstrip(".") + f". Adicionalmente, hago referencia {prep}"
 
     sentence = re.sub(r'\s+', ' ', sentence).strip()
     # CAMBIO: varios generadores devuelven la frase en minúscula porque la
