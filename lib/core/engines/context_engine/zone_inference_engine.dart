@@ -156,6 +156,48 @@ const Map<String, String> _interrogatives = {
   'que necesitas hacer': 'necesitas hacer',
   'que tramite': 'tramite',
   'para cuando': 'para cuando',
+  // ── Corpus §4: las trece preguntas del funcionario ────────────────────
+  // Cada marcador apunta a una palabra que ya está en el texto de la zona
+  // (`question`, `hint` o `label`), que es lo que el motor busca. Las zonas
+  // 'conocimiento', 'testigos', 'denuncia' y 'apoyo_legal' se añadieron al
+  // catálogo para estas preguntas: antes no había dónde contestarlas.
+  'conoce a la persona': 'conoces',
+  'conoces a la persona': 'conoces',
+  'la conoce': 'conoces',
+  'lo conoce': 'conoces',
+  'conoce al agresor': 'conoces',
+  'persona involucrada': 'conoces',
+  'hay testigos': 'testigos',
+  'algun testigo': 'testigos',
+  'habia testigos': 'testigos',
+  'hubo testigos': 'testigos',
+  'alguien vio': 'testigos',
+  'desea realizar una denuncia': 'denuncia',
+  'desea denunciar': 'denuncia',
+  'quiere denunciar': 'denuncia',
+  'realizar la denuncia': 'denuncia',
+  'apoyo legal': 'apoyo legal',
+  'asistencia legal': 'apoyo legal',
+  'necesita abogado': 'apoyo legal',
+  'necesita un abogado': 'apoyo legal',
+  'describir a la persona': 'como era',
+  'puede describir': 'como era',
+  // Pruebas. La zona pregunta "¿Tienes pruebas?", así que 'prueba' basta;
+  // 'fotografia' y 'evidencia' se nombran porque el funcionario las usa.
+  'pruebas': 'pruebas',
+  'fotografias': 'pruebas',
+  'fotografia': 'pruebas',
+  'evidencia': 'pruebas',
+  // Estado físico. "¿Está herido?" y "¿Necesita atención médica?" son la
+  // misma zona: la que declara la urgencia.
+  'atencion medica': 'ayuda',
+  'esta herida': 'ayuda',
+  'necesita un medico': 'ayuda',
+  'necesita atencion': 'ayuda',
+  // ── Corpus §6: preguntas del ciudadano ────────────────────────────────
+  'debo volver': 'cuando',
+  'tiene que volver': 'cuando',
+  'cuando vuelve': 'cuando',
   // Ayuda urgente
   'necesita ayuda': 'ayuda',
   'necesitas ayuda': 'ayuda',

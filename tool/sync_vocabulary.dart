@@ -142,6 +142,11 @@ const _roles = {
   'personaDesc': 'DESCRIPTOR',
   'rasgo': 'DESCRIPTOR',
   'verboAgresion': 'VERBO',
+  // Rol propio, no DESCRIPTOR: como descriptor de persona el backend lo
+  // metía en `descriptores` y `_agresor_text` lo tomaba por el autor del
+  // delito — "Un testigo me robó". Mismo defecto que en el cliente, y se
+  // arregla en los dos sitios o la declaración cambia según haya red.
+  'testigo': 'TESTIGO',
   'verboAccion': 'VERBO',
   'arma': 'OBJETO',
   'objeto': 'OBJETO',

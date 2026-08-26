@@ -107,7 +107,7 @@ GLOSS_LEXICON = {
     "CONFIANZA": {"rol": "ESTADO", "es": "tengo confianza"},
     "CONFIRMACION": {"rol": "DOCUMENTO", "es": "la confirmación"},
     "CONFUSION": {"rol": "ESTADO", "es": "estoy confundido"},
-    "CONOCER": {"rol": "VERBO", "es": "conozco"},
+    "CONOCER": {"rol": "VERBO", "es": "conozco a esa persona"},
     "CONSTANCIA": {"rol": "DOCUMENTO", "es": "una constancia"},
     "CONTEXTO": {"rol": "DOCUMENTO", "es": "el contexto"},
     "COORDINADOR": {"rol": "SERVICIO", "es": "un coordinador"},
@@ -127,7 +127,9 @@ GLOSS_LEXICON = {
     "DECIDIR": {"rol": "VERBO", "es": "quiero decidir"},
     "DEFENSA_PUBLICA": {"rol": "INSTITUCION", "es": "en la Defensa Pública"},
     "DELGADO": {"rol": "DESCRIPTOR", "es": "delgado"},
+    "DENUNCIAR": {"rol": "VERBO", "es": "quiero presentar una denuncia"},
     "DEPARTAMENTO": {"rol": "LUGAR", "es": "en el departamento"},
+    "DESCONOCER": {"rol": "VERBO", "es": "no conozco a esa persona"},
     "DESPACHO": {"rol": "INSTITUCION", "es": "en el despacho"},
     "DIA": {"rol": "TIEMPO", "es": "ese día"},
     "DINERO": {"rol": "OBJETO", "es": "mi dinero"},
@@ -283,7 +285,7 @@ GLOSS_LEXICON = {
     "TAXI": {"rol": "OBJETO", "es": "el taxi"},
     "TELEFONO": {"rol": "OBJETO", "es": "mi teléfono"},
     "TEMOR": {"rol": "ESTADO", "es": "siento temor"},
-    "TESTIGO": {"rol": "DESCRIPTOR", "es": "un testigo", "persona": True},
+    "TESTIGO": {"rol": "TESTIGO", "es": "un testigo"},
     "TESTIMONIO": {"rol": "DOCUMENTO", "es": "mi testimonio"},
     "TEXTO": {"rol": "DOCUMENTO", "es": "el texto"},
     "TITULO": {"rol": "DOCUMENTO", "es": "mi título"},
@@ -303,6 +305,7 @@ GLOSS_LEXICON = {
     "VIDEOLLAMADA": {"rol": "OBJETO", "es": "por videollamada"},
     "VIOLACION": {"rol": "VERBO", "es": "violó", "agresor": "violó"},
     "VIOLENCIA": {"rol": "VERBO", "es": "ejerció violencia", "agresor": "ejerció violencia"},
+    "VOLVER": {"rol": "VERBO", "es": "debo volver"},
     "WEBID": {"rol": "TRAMITE", "es": "mi WebID"},
     "WHATSAPP": {"rol": "OBJETO", "es": "por WhatsApp"},
     "YO": {"rol": "SUJETO", "es": "yo"},
@@ -637,6 +640,13 @@ def analyze_glosses(cards: list) -> dict:
         # flujo de testigo). Se separan para no fundirlos con el agresor.
         "victima_descriptores": [],
         "evidencias": [],
+        # Quien PRESENCIÓ el hecho. Bucket propio, no `descriptores`: ahí
+        # `_agresor_text` lo tomaba por el autor del delito y el acta recogía
+        # "Un testigo me robó", que acusa a quien solo miraba. Espejo de
+        # `_Role.testigo` en el cliente.
+        "testigos": [],
+        "testigos_negados": False,
+        "testigos_afirmados": False,
         "huida": None,
         "frecuencia": None,
         "desconocidos": [],
@@ -646,6 +656,7 @@ def analyze_glosses(cards: list) -> dict:
     # agredida (no al agresor). Mantiene la coherencia del relato de testigo.
     victim_mode = False
     negar_siguiente_verbo = False
+    afirmar_siguiente_verbo = False
     detalles = {}
     normalizadas = _extract_details(_join_spelled_digits(
         [str(c).upper().strip() for c in cards]), detalles)
@@ -656,10 +667,15 @@ def analyze_glosses(cards: list) -> dict:
         # prefijo. NO delante de un verbo lo niega ("NO ENTREGAR" → "no me
         # entregaron"). Sin esto el NO quedaba suelto y el verbo se afirmaba,
         # que es decir lo contrario de lo que la persona quiso decir.
-        if key == "NO" and indice + 1 < len(normalizadas):
+        if key in ("NO", "SI") and indice + 1 < len(normalizadas):
             siguiente = GLOSS_LEXICON.get(normalizadas[indice + 1].upper().strip())
-            if siguiente and siguiente["rol"] == "VERBO":
-                negar_siguiente_verbo = True
+            # Alcanza también a TESTIGO: "¿Hay testigos?" se responde sí o no
+            # y su respuesta no es un verbo, sino la persona misma.
+            if siguiente and siguiente["rol"] in ("VERBO", "TESTIGO"):
+                if key == "NO":
+                    negar_siguiente_verbo = True
+                else:
+                    afirmar_siguiente_verbo = True
                 continue
         if key == "VICTIMA":
             victim_mode = True
@@ -705,6 +721,16 @@ def analyze_glosses(cards: list) -> dict:
             continue
 
         entry = GLOSS_LEXICON.get(key)
+        if entry and entry["rol"] == "TESTIGO":
+            analysis["testigos_negados"] = (
+                analysis["testigos_negados"] or negar_siguiente_verbo)
+            analysis["testigos_afirmados"] = (
+                analysis["testigos_afirmados"] or afirmar_siguiente_verbo)
+            negar_siguiente_verbo = False
+            afirmar_siguiente_verbo = False
+            if entry["es"] not in analysis["testigos"]:
+                analysis["testigos"].append(entry["es"])
+            continue
         if entry and entry["rol"] == "DESCRIPTOR" and victim_mode:
             analysis["victima_descriptores"].append({"glosa": key, **entry})
             continue
@@ -724,9 +750,13 @@ def analyze_glosses(cards: list) -> dict:
             # fuera los marcadores de Fase 1 —el nombre y la edad— y salía
             # "mi nombre es." sin el nombre.
             registro["es"] = _con_detalle(key, registro["es"], detalles)
-            if rol == "VERBO" and negar_siguiente_verbo:
-                registro["es"] = f'no {registro["es"]}'
+            if rol == "VERBO":
+                if negar_siguiente_verbo:
+                    registro["es"] = f'no {registro["es"]}'
+                elif afirmar_siguiente_verbo:
+                    registro["es"] = f'sí {registro["es"]}'
                 negar_siguiente_verbo = False
+                afirmar_siguiente_verbo = False
             analysis[dest].append(registro)
         elif key in _DIGITOS:
             # CAMBIO (paridad Dart): dígito huérfano —sin unidad de tiempo
@@ -928,6 +958,23 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
         if _normalizar(frec) not in _normalizar(sentence):
             sentence = sentence.rstrip(".") + f". {frec}"
 
+    # Testigos: su propia oración, después del relato. Quién presenció el
+    # hecho no es parte de lo que ocurrió. Espejo de `_withWitnesses` en el
+    # cliente, y en el mismo sitio: un punto único para los trece
+    # generadores, en vez de la regla repetida trece veces.
+    sentence = _append_witnesses(sentence, analysis)
+
+    # Verbos de acción que la plantilla no recogió. `_compose_incident` narra
+    # con el verbo de agresión y descarta el resto, así que responder "¿conoce
+    # a la persona?" dentro de una denuncia perdía la respuesta entera: el
+    # cliente sí la compone, y una glosa que él representa y el servidor no
+    # hace que se descarte TODA la redacción por cobertura incompleta.
+    sueltos = [v["es"] for v in analysis.get("verbos", [])
+               if not v.get("agresor")
+               and _normalizar(v["es"]) not in _normalizar(sentence)]
+    for texto in sueltos:
+        sentence = sentence.rstrip(".") + ". " + texto[0].upper() + texto[1:]
+
     # CAMBIO: trámites y glosas desconocidas que ninguna plantilla recogió.
     # _gen_solicitud, por ejemplo, lee documentos pero no trámites, así que un
     # NUREJ se perdía; y los "desconocidos" —un número deletreado, una palabra
@@ -1034,6 +1081,27 @@ def _append_unused_states(sentence: str, analysis: dict, is_formal: bool) -> str
     for texto in clausulas:
         sentence = sentence.rstrip(".") + ". " + texto[0].upper() + texto[1:]
     return sentence
+
+
+def _append_witnesses(sentence: str, analysis: dict) -> str:
+    """Cierra el relato con quién lo presenció.
+
+    "¿Hay testigos?" se responde sí o no, así que la negativa tiene forma
+    propia: que no los haya es un dato del acta, no un silencio.
+    """
+    testigos = analysis.get("testigos") or []
+    if not testigos:
+        return sentence
+    if analysis.get("testigos_negados"):
+        clausula = "No hay testigos"
+    else:
+        afirmacion = "Sí, hay" if analysis.get("testigos_afirmados") else "Hay"
+        clausula = (f"{afirmacion} {testigos[0]}" if len(testigos) == 1
+                    else f"{afirmacion} testigos")
+    base = sentence.strip()
+    if not base:
+        return f"{clausula}."
+    return f'{base.rstrip(".")}. {clausula}.'
 
 
 def _normalizar(texto: str) -> str:

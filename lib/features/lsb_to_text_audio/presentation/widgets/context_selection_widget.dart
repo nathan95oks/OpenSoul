@@ -77,6 +77,8 @@ class _ContextSelectionWidgetState
               ...contextFamilies.map(
                 (f) => _FamilyButton(
                   family: f,
+                  highlighted: highlightedId != null &&
+                      f.contextIds.contains(highlightedId),
                   onTap: () {
                     final contextos = contextsOfFamily(f);
                     if (contextos.length == 1) {
@@ -132,13 +134,27 @@ class _FamilyButton extends StatelessWidget {
   final ContextFamily family;
   final VoidCallback onTap;
 
-  const _FamilyButton({required this.family, required this.onTap});
+  /// La familia que contiene el contexto inferido de la pregunta del oyente.
+  ///
+  /// Sin esto la inferencia era invisible justo donde más falta hace: «Mis
+  /// datos» agrupa un solo contexto, así que se entra directo y el botón
+  /// resaltado de dentro no llega a dibujarse nunca. Acertar el contexto y no
+  /// enseñarlo deja a la persona buscándolo a mano igual que antes.
+  final bool highlighted;
+
+  const _FamilyButton({
+    required this.family,
+    required this.onTap,
+    this.highlighted = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: '${family.name}. ${family.description}',
+      label: highlighted
+          ? '${family.name}. ${family.description}. Sugerido para responder.'
+          : '${family.name}. ${family.description}',
       excludeSemantics: true,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),
@@ -150,7 +166,10 @@ class _FamilyButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppTheme.lightSurface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.lightBorder),
+              border: Border.all(
+                color: highlighted ? AppTheme.brandPrimary : AppTheme.lightBorder,
+                width: highlighted ? 2 : 1,
+              ),
               boxShadow: AppTheme.cardShadow,
             ),
             child: Row(
