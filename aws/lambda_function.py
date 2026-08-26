@@ -115,7 +115,7 @@ GLOSS_LEXICON = {
     "CONTEXTO": {"rol": "DOCUMENTO", "es": "el contexto"},
     "COORDINADOR": {"rol": "SERVICIO", "es": "un coordinador"},
     "COORDINAR": {"rol": "VERBO", "es": "quiero coordinar"},
-    "COPIAR": {"rol": "VERBO", "es": "quiero una copia"},
+    "COPIAR": {"rol": "VERBO", "es": "quiero copiar"},
     "CORRECTO": {"rol": "DESCRIPTOR", "es": "correcto"},
     "CORREGIR": {"rol": "VERBO", "es": "quiero corregir"},
     "CORRER": {"rol": "VERBO", "es": "salió corriendo", "agresor": "salió corriendo"},
@@ -359,6 +359,8 @@ _FLIGHT_VERBS = {"CORRER"}
 # Dígitos de dactilología. Incluye el 0, que _CARDINALES no lleva a propósito:
 # sirve para deletrear un NUREJ pero nunca es una cantidad. Sin el 0 aquí, un
 # número como "1 0 2 4" se partía en trozos y el primer dígito se perdía.
+_PREPOSICIONES = {"por", "en", "con", "a", "de"}
+
 _DIGITOS = set("0123456789")
 
 # Cortesías y respuestas sueltas: encabezan, no son contenido del relato.
@@ -393,9 +395,13 @@ def _time_direction_is_past(analysis: dict, context_type: str) -> bool:
     if ctx in _PAST_CONTEXTS:
         return True
     if ctx == "tramite":
-        if analysis["objetos"]:
+        if any(v["glosa"] == "PERDER" for v in analysis["verbos"]):
             return True
-        return any(v["glosa"] == "PERDER" for v in analysis["verbos"])
+        # Un objeto solo indica pérdida si no se nombra además un documento o
+        # un trámite: "corregir mi carnet y mi teléfono" es una gestión, no un
+        # extravío, y su plazo mira hacia adelante.
+        return bool(analysis["objetos"]) and not (
+            analysis["documentos"] or analysis["tramites"])
     return False
 
 
@@ -570,8 +576,18 @@ def _detect_event_type(analysis: dict, context_type: str = "") -> str:
     # estado y caía en "SOLICITUD", cuyo generador ignora los estados. El
     # resultado era "Solicito un doctor ahora mismo": un trámite, no una
     # urgencia vital, y el estado de salud desaparecía de la declaración.
-    if (context_type or "").strip().lower() in ("accidente", "emergencia"):
+    ctx = (context_type or "").strip().lower()
+    if ctx in ("accidente", "emergencia"):
         return "EMERGENCIA"
+    # Misma regla para el relato de un hecho: el cliente enruta por contexto
+    # (`'denuncia_robo' || 'violencia' => _composeIncident`). Sin esto, una
+    # denuncia sin verbo de delito —una estafa, que el diccionario no puede
+    # nombrar— caía en la plantilla de ESTADO y salía "Por un problema.",
+    # perdiendo el dinero, el producto y el canal.
+    if ctx == "denuncia_robo":
+        return "ROBO"
+    if ctx == "violencia":
+        return "AGRESION"
 
     verbos = [v["glosa"] for v in analysis["verbos"]]
     tramites = [t["glosa"] for t in analysis["tramites"]]
@@ -761,14 +777,24 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
 
     residuo = [t["es"] for t in analysis.get("tramites", [])]
     residuo += [d["es"] for d in analysis.get("documentos", [])]
+    residuo += [o["es"] for o in analysis.get("objetos", []) if not o.get("arma")]
+    residuo += [l["es"] for l in analysis.get("lugares", [])]
     residuo += [d["es"] for d in analysis.get("desconocidos", [])]
     faltan = [x for x in residuo if _normalizar(x) not in _normalizar(sentence)]
     if faltan:
-        # "a el estado" no es español: la preposición y el artículo se
-        # contraen.
-        cola = _join_es(faltan)
-        prep = "al " + cola[3:] if cola.startswith("el ") else f"a {cola}"
-        sentence = sentence.rstrip(".") + f". Adicionalmente, hago referencia {prep}"
+        # Los complementos que ya traen su preposición ("por WhatsApp", "en esa
+        # dirección") no encajan tras "hago referencia a": se adjuntan tal cual.
+        preposicionales = [x for x in faltan
+                           if x.split(" ")[0] in _PREPOSICIONES]
+        nominales = [x for x in faltan if x not in preposicionales]
+        if nominales:
+            # "a el estado" no es español: preposición y artículo se contraen.
+            cola = _join_es(nominales)
+            prep = "al " + cola[3:] if cola.startswith("el ") else f"a {cola}"
+            sentence = (sentence.rstrip(".")
+                        + f". Adicionalmente, hago referencia {prep}")
+        if preposicionales:
+            sentence = sentence.rstrip(".") + " " + _join_es(preposicionales)
 
     sentence = re.sub(r'\s+', ' ', sentence).strip()
     # CAMBIO: varios generadores devuelven la frase en minúscula porque la
@@ -870,8 +896,19 @@ def _join_es(items):
     return ", ".join(items[:-1]) + " y " + items[-1]
 
 def _objetos_text(analysis):
+    """Objetos sustraídos o afectados, sin los canales.
+
+    Un canal ("por WhatsApp") ya trae su preposición y no es un objeto
+    directo: unirlo con "y" daba "me robó mi dinero, el producto y por
+    WhatsApp". Se antepone la lista nominal y el canal se adjunta detrás.
+    """
     objs = [o["es"] for o in analysis["objetos"] if not o.get("arma")]
-    return _join_es(objs)
+    nominales = [o for o in objs if o.split(" ")[0] not in _PREPOSICIONES]
+    canales = [o for o in objs if o.split(" ")[0] in _PREPOSICIONES]
+    texto = _join_es(nominales)
+    if canales:
+        texto = f"{texto} {_join_es(canales)}".strip()
+    return texto
 
 def _arma_text(analysis):
     for o in analysis["objetos"]:

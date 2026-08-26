@@ -1105,7 +1105,11 @@ String resolveAssemblerContext(
     if (cat == 'Objetos') hasObject = true;
     if (cat == 'Documentos' || cat == 'Conceptos jurídicos') hasDocOrProcedure = true;
   }
-  if (hasObject) return 'perdida';
+  // Un objeto solo indica pérdida si no se nombra además un documento o un
+  // trámite: "corregir mi carnet y mi teléfono" es una gestión, no un
+  // extravío. Solo PERDER lo decide por sí mismo.
+  final dijoPerder = glosses.any((g) => g.toUpperCase() == 'PERDER');
+  if (dijoPerder || (hasObject && !hasDocOrProcedure)) return 'perdida';
   if (hasDocOrProcedure) return 'tramite_id';
   return 'orientacion';
 }

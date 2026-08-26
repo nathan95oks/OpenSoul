@@ -353,6 +353,141 @@
         "description",
         "support_agent"
       ]
+    },
+    {
+      "case_id": "CP-016",
+      "corpus": "§2.4 Estafa o incumplimiento con entrega de dinero",
+      "descripcion": "Denuncia patrimonial sin verbo de delito: el diccionario no tiene ESTAFAR ni PAGAR, y el corpus §8 prohíbe que la app califique jurídicamente el hecho",
+      "input_natural": "Quiero denunciar un problema con un pago: entregué mi dinero por un producto y tengo el comprobante y los mensajes de WhatsApp.",
+      "contexto": "denuncia_robo",
+      "glosas": [
+        "PROBLEMA",
+        "DINERO",
+        "PRODUCTO",
+        "COMPROBANTE",
+        "MENSAJE",
+        "WHATSAPP"
+      ],
+      "reglas": [
+        "evidencia_no_es_botin",
+        "canal_digital_con_preposicion"
+      ],
+      "esperado_backend": "Una persona me robó mi dinero y el producto por WhatsApp. Por un problema. Como prueba tengo un comprobante y un mensaje.",
+      "lsb_icons": [
+        "description",
+        "info",
+        "inventory_2",
+        "shopping_bag",
+        "smartphone"
+      ]
+    },
+    {
+      "case_id": "CP-017",
+      "corpus": "§3.3 Consulta sobre citación, notificación o audiencia",
+      "descripcion": "Consulta de fecha con número de caso deletreado que incluye un cero",
+      "input_natural": "Recibí una notificación y no entiendo la fecha de la audiencia. Mi caso es el 3 0 5.",
+      "contexto": "consulta",
+      "glosas": [
+        "NO_ENTIENDO",
+        "NOTIFICACION",
+        "AUDIENCIA",
+        "CASO",
+        "3",
+        "0",
+        "5"
+      ],
+      "reglas": [
+        "digitos_en_racha_se_agrupan",
+        "marcadores_encabezan"
+      ],
+      "esperado_backend": "No entiendo. Necesito realizar una notificación. Adicionalmente, hago referencia a una audiencia, mi caso y 305.",
+      "lsb_icons": [
+        "app_registration",
+        "straighten",
+        "waving_hand"
+      ]
+    },
+    {
+      "case_id": "CP-018",
+      "corpus": "§3.4 Consulta sobre documentos o pruebas presentadas",
+      "descripcion": "Valida que ESTADO (rol DOCUMENTO, no TRAMITE) sobreviva a la plantilla. Sin cadena temporal: el corpus pregunta por algo ya presentado y la composición de tiempo en consulta mira al futuro",
+      "input_natural": "Presenté documentos y fotografías; quiero verificar el estado de mi caso.",
+      "contexto": "consulta",
+      "glosas": [
+        "SEGUIMIENTO",
+        "ESTADO",
+        "CASO",
+        "PAPEL",
+        "FOTOGRAFIA"
+      ],
+      "reglas": [
+        "estado_es_documento",
+        "evidencia_no_es_botin"
+      ],
+      "esperado_backend": "Quiero seguir el estado del trámite y el papel. Como prueba tengo una fotografía. Adicionalmente, hago referencia a mi caso.",
+      "lsb_icons": [
+        "app_registration",
+        "assignment",
+        "description",
+        "inventory_2"
+      ]
+    },
+    {
+      "case_id": "CP-019",
+      "corpus": "§4.3 Solicitud de copia o constancia",
+      "descripcion": "Flujo de servicios: dos destinos institucionales que no deben pisarse",
+      "input_natural": "Necesito una copia de la constancia; quiero recogerla en la ventanilla de la alcaldía con un intérprete.",
+      "contexto": "tramite",
+      "glosas": [
+        "COPIAR",
+        "CONSTANCIA",
+        "VENTANILLA",
+        "ALCALDIA",
+        "INTERPRETE"
+      ],
+      "reglas": [
+        "instituciones_con_conjuncion"
+      ],
+      "esperado_backend": "Quiero copiar una constancia y solicito un intérprete de señas en la ventanilla y en la alcaldía.",
+      "lsb_icons": [
+        "account_balance",
+        "assignment",
+        "description",
+        "support_agent"
+      ]
+    },
+    {
+      "case_id": "CP-020",
+      "corpus": "§4.4 Actualización de datos de contacto",
+      "descripcion": "Trámite de corrección con documento de respaldo y plazo futuro",
+      "input_natural": "Cambié mi teléfono y mi dirección; quiero corregir mis datos en la oficina y llevo mi carnet.",
+      "contexto": "tramite",
+      "glosas": [
+        "CORREGIR",
+        "DIRECCION",
+        "TELEFONO",
+        "CARNET",
+        "OFICINA",
+        "DIA",
+        "2"
+      ],
+      "reglas": [
+        "cadena_temporal_futuro"
+      ],
+      "esperado_backend": "Quiero corregir mi carnet de identidad dentro de dos días en la oficina. Adicionalmente, hago referencia a mi teléfono en esa dirección.",
+      "lsb_icons": [
+        "access_time",
+        "account_balance",
+        "assignment",
+        "badge",
+        "explore",
+        "shopping_bag",
+        "straighten"
+      ]
     }
+  ],
+  "_lagunas_detectadas": [
+    "§2.4 Estafa — el diccionario no tiene ESTAFAR, PAGAR, ENGAÑAR, INCUMPLIR ni ENTREGAR. CP-016 lo modela con PROBLEMA + DINERO + PRODUCTO + evidencia, sin nombrar el delito. El corpus §8 prohíbe que la app haga la calificación jurídica, así que no nombrarlo es correcto; pero tampoco puede decirse 'pagué y no me entregaron'. Candidatas a incorporar, previa validación con intérprete: PAGAR y ENTREGAR.",
+    "§3.4 Consulta sobre algo ya presentado — la composición temporal deriva la dirección del contexto, y 'consulta' es futuro. Una consulta sobre documentos presentados 'la semana pasada' saldría como 'dentro de una semana'. CP-018 evita la cadena temporal por eso. Si se necesita, la dirección tendría que depender también del verbo (SEGUIMIENTO mira atrás, plazo mira adelante)."
   ]
 }

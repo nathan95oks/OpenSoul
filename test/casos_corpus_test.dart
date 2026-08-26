@@ -19,10 +19,21 @@ void main() {
   ) as Map<String, dynamic>;
   final casos = (datos['casos'] as List).cast<Map<String, dynamic>>();
 
+  // El enrutado depende de la categoría de cada glosa: pasarle `(_) => null`
+  // lo desactivaba y la prueba no ejercitaba el reparto real de 'tramite'
+  // entre pérdida, gestión y orientación.
+  final catalogo = {
+    for (final e in ((jsonDecode(
+              File('assets/dictionary/official_dictionary.json').readAsStringSync(),
+            ) as Map<String, dynamic>)['entries'] as List)
+        .cast<Map<String, dynamic>>())
+      e['gloss'] as String: e['categoryId'] as String,
+  };
+
   String contextoDelMotor(Map<String, dynamic> caso) => resolveAssemblerContext(
         caso['contexto'] as String,
         (caso['glosas'] as List).cast<String>(),
-        (_) => null,
+        (g) => catalogo[g],
       );
 
   test('hay casos y todos declaran lo necesario', () {

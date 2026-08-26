@@ -868,7 +868,9 @@ class LocalSentenceAssembler {
       // cierre antes de seguir la cláusula, si no el "una mujer me agredió"
       // se lee pegado a la aposición como si fuera una sola frase corrida.
       var clause = '${subject.contains(',') ? '$subject,' : subject} me $verb';
-      final complement = _join([...r.objects, ...r.documents]);
+      // Un canal ("por WhatsApp") ya trae su preposición: unirlo con "y" a
+      // los objetos daba "me robó mi dinero, el producto y por WhatsApp".
+      final complement = _joinConCanales([...r.objects, ...r.documents]);
       if (complement.isNotEmpty) {
         clause += ' $complement';
         r.objects.clear();
@@ -1014,8 +1016,7 @@ class LocalSentenceAssembler {
     // señas": el apoyo de accesibilidad se tragaba el objeto real del trámite.
     // En ese caso el servicio va en su propia oración, al final.
     final verboPideServicio = r.action == null ||
-        const {'quiero solicitar', 'necesito ayuda', 'quiero una copia'}
-            .contains(r.action);
+        const {'quiero solicitar', 'necesito ayuda'}.contains(r.action);
     if (r.services.isNotEmpty && verboPideServicio) {
       // Si el usuario eligió un verbo (necesito/quiero solicitar...), encabeza
       // la oración para no dejarlo suelto y mantener la fluidez.
@@ -1119,7 +1120,9 @@ class LocalSentenceAssembler {
     if (r.aggression != null) {
       final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
       var clause = 'presencié cómo $subject $verb';
-      final complement = _join([...r.objects, ...r.documents]);
+      // Un canal ("por WhatsApp") ya trae su preposición: unirlo con "y" a
+      // los objetos daba "me robó mi dinero, el producto y por WhatsApp".
+      final complement = _joinConCanales([...r.objects, ...r.documents]);
       if (complement.isNotEmpty) {
         clause += ' $complement';
         r.objects.clear();
@@ -1533,6 +1536,18 @@ class LocalSentenceAssembler {
   }
 
   /// Une una lista con comas y "y" final ("a, b y c").
+  /// Une objetos separando los que ya traen preposición, que se adjuntan
+  /// detrás en vez de entrar en la enumeración.
+  String _joinConCanales(List<String> items) {
+    const preposiciones = {'por', 'en', 'con', 'a', 'de'};
+    bool esCanal(String s) => preposiciones.contains(s.split(' ').first);
+    final nominales = items.where((s) => !esCanal(s)).toList();
+    final canales = items.where(esCanal).toList();
+    final texto = _join(nominales);
+    if (canales.isEmpty) return texto;
+    return texto.isEmpty ? _join(canales) : '$texto ${_join(canales)}';
+  }
+
   String _join(List<String> items) {
     final clean = items.where((s) => s.trim().isNotEmpty).toList();
     if (clean.isEmpty) return '';
@@ -1686,7 +1701,9 @@ class LocalSentenceAssembler {
     'ACOMPANAR': _Lex(_Role.verboAccion, 'necesito que me acompañen'),
     'CONFESAR': _Lex(_Role.verboAccion, 'quiero confesar'),
     'COORDINAR': _Lex(_Role.verboAccion, 'quiero coordinar'),
-    'COPIAR': _Lex(_Role.verboAccion, 'quiero una copia'),
+    // Verbo, no sintagma: 'quiero una copia' seguido del documento daba
+    // "quiero una copia una constancia", sin la preposición.
+    'COPIAR': _Lex(_Role.verboAccion, 'quiero copiar'),
     'CUMPLIR': _Lex(_Role.verboAccion, 'quiero cumplir'),
     'DECIDIR': _Lex(_Role.verboAccion, 'quiero decidir'),
     'EXIGIR': _Lex(_Role.verboAccion, 'quiero exigir'),
