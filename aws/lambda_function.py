@@ -273,7 +273,7 @@ GLOSS_LEXICON = {
     "SALVAR": {"rol": "VERBO", "es": "me salvó", "agresor": "me salvó"},
     "SEGUIMIENTO": {"rol": "VERBO", "es": "quiero seguir"},
     "SEGUNDO": {"rol": "TIEMPO", "es": "hace un segundo"},
-    "SEGURO": {"rol": "DESCRIPTOR", "es": "seguro"},
+    "SEGURO": {"rol": "ESTADO", "es": "me encuentro en un lugar seguro"},
     "SELLO": {"rol": "DOCUMENTO", "es": "el sello"},
     "SEMANA": {"rol": "TIEMPO", "es": "esta semana"},
     "SI": {"rol": "DESCONOCIDO", "es": "sí"},
@@ -347,6 +347,24 @@ _CARDINALES = {
 # su motor local trabaja con el contexto ya resuelto ('perdida',
 # 'tramite_id'). Sin ambos, un documento perdido saldría "hace dos semanas"
 # en el cliente y "dentro de dos semanas" en el servidor.
+# Espejo de _inherentEvidence / _flightVerbs en el cliente.
+# Nadie roba una fotografía ni daña un certificado: se aportan para acreditar.
+_INHERENT_EVIDENCE = {
+    "FOTOGRAFIA", "PRUEBA", "MENSAJE", "COMPROBANTE", "CERTIFICADO", "RESPALDO",
+}
+# La huida es lo que hizo el agresor DESPUÉS, no lo que me hizo. Como agresión
+# producía "un hombre me salió corriendo": falso y agramatical.
+_FLIGHT_VERBS = {"CORRER"}
+
+# Reincidencia, no fecha. Espejo de _frequencyGlosses en el cliente: sin esta
+# separación PRIMERA_VEZ ocupaba el complemento temporal y desplazaba a AYER,
+# con lo que la denuncia perdía cuándo ocurrió el hecho.
+_FREQUENCY_GLOSSES = {
+    "PRIMERA_VEZ": "Es la primera vez que ocurre",
+    "VARIAS_VECES": "Ha ocurrido varias veces",
+    "ANTERIORMENTE": "Ya había ocurrido anteriormente",
+}
+
 _PAST_CONTEXTS = {
     "denuncia_robo", "violencia", "accidente", "emergencia", "otro", "perdida",
 }
@@ -411,6 +429,30 @@ def _resolve_time(analysis: dict, context_type: str) -> None:
     })
 
 
+def _join_spelled_digits(cards: list) -> list:
+    """Une rachas de dígitos en un solo número. Espejo de `_joinSpelled`.
+
+    Una racha es UN número deletreado —el NUREJ, un teléfono— y debe
+    conservarse entero ("1","2","3" → "123"). Un dígito aislado no se toca:
+    si sigue a una unidad de tiempo lo recoge la cadena temporal, y si no, es
+    ruido que se descarta.
+    """
+    salida, i = [], 0
+    normalizadas = [str(c).upper().strip() for c in cards]
+    while i < len(normalizadas):
+        if normalizadas[i] in _CARDINALES:
+            j = i
+            while j < len(normalizadas) and normalizadas[j] in _CARDINALES:
+                j += 1
+            if j - i >= 2:
+                salida.append("".join(normalizadas[i:j]))
+                i = j
+                continue
+        salida.append(normalizadas[i])
+        i += 1
+    return salida
+
+
 def analyze_glosses(cards: list) -> dict:
     """
     Clasifica cada glosa por su rol semántico usando el lexicón.
@@ -424,16 +466,42 @@ def analyze_glosses(cards: list) -> dict:
         # Descriptores de la persona AGREDIDA (tras el marcador VICTIMA en el
         # flujo de testigo). Se separan para no fundirlos con el agresor.
         "victima_descriptores": [],
+        "evidencias": [],
+        "huida": None,
+        "frecuencia": None,
         "desconocidos": [],
     }
 
     # Tras el marcador VICTIMA, los descriptores describen a la persona
     # agredida (no al agresor). Mantiene la coherencia del relato de testigo.
     victim_mode = False
-    for card in cards:
+    for card in _join_spelled_digits(cards):
         key = card.upper().strip()
         if key == "VICTIMA":
             victim_mode = True
+            continue
+
+        # CAMBIO (paridad Dart): reincidencia antes que tiempo.
+        if key in _FREQUENCY_GLOSSES:
+            analysis.setdefault("frecuencia", None)
+            if not analysis["frecuencia"]:
+                analysis["frecuencia"] = _FREQUENCY_GLOSSES[key]
+            continue
+
+        # CAMBIO (paridad Dart): material probatorio, venga de donde venga.
+        # Sin esto una fotografía acababa como botín del robo o como lo dañado:
+        # "me robó mi motocicleta y una fotografía".
+        if key in _INHERENT_EVIDENCE:
+            entry = GLOSS_LEXICON.get(key)
+            if entry:
+                analysis.setdefault("evidencias", []).append({"glosa": key, **entry})
+            continue
+
+        # CAMBIO (paridad Dart): huida del agresor, no agresión contra mí.
+        if key in _FLIGHT_VERBS:
+            entry = GLOSS_LEXICON.get(key)
+            if entry:
+                analysis["huida"] = entry["es"]
             continue
 
         # CAMBIO (paridad Dart): el rol de cantidad es POSICIONAL, no léxico.
@@ -468,6 +536,12 @@ def analyze_glosses(cards: list) -> dict:
             }
             dest = mapping.get(rol, "desconocidos")
             analysis[dest].append({"glosa": key, **entry})
+        elif key in _CARDINALES:
+            # CAMBIO (paridad Dart): dígito huérfano —sin unidad de tiempo
+            # delante— no significa nada por sí solo. Emitirlo producía
+            # "Adicionalmente, hago referencia a 2" en una declaración que
+            # puede acabar en un expediente.
+            continue
         else:
             analysis["desconocidos"].append({"glosa": key, "rol": "DESCONOCIDO", "es": key.lower()})
 
@@ -630,6 +704,33 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
     # Se resuelve en UN punto —como `_ensureCoverage` en el cliente— en vez de
     # repetir la regla en cada plantilla, que es lo que dejó el agujero.
     sentence = _append_unused_states(sentence, analysis, is_formal)
+    # CAMBIO: evidencia y huida sobreviven a cualquier plantilla, igual que los
+    # estados. Once de los trece generadores no las leen.
+    if analysis.get("evidencias"):
+        pruebas = _join_es([e["es"] for e in analysis["evidencias"]])
+        if _normalizar(pruebas) not in _normalizar(sentence):
+            sentence = sentence.rstrip(".") + f". Como prueba tengo {pruebas}"
+    if analysis.get("huida"):
+        huida = analysis["huida"]
+        if _normalizar(huida) not in _normalizar(sentence):
+            sentence = sentence.rstrip(".") + f". {huida[0].upper()}{huida[1:]}"
+    if analysis.get("frecuencia"):
+        frec = analysis["frecuencia"]
+        if _normalizar(frec) not in _normalizar(sentence):
+            sentence = sentence.rstrip(".") + f". {frec}"
+
+    # CAMBIO: trámites y glosas desconocidas que ninguna plantilla recogió.
+    # _gen_solicitud, por ejemplo, lee documentos pero no trámites, así que un
+    # NUREJ se perdía; y los "desconocidos" —un número deletreado, una palabra
+    # fuera del corpus— no se emitían en ninguna plantilla, mientras que el
+    # cliente sí los conserva. Toda glosa que el cliente represente y el
+    # servidor no hace que la respuesta entera se descarte.
+    residuo = [t["es"] for t in analysis.get("tramites", [])]
+    residuo += [d["es"] for d in analysis.get("desconocidos", [])]
+    faltan = [x for x in residuo if _normalizar(x) not in _normalizar(sentence)]
+    if faltan:
+        sentence = (sentence.rstrip(".")
+                    + f". Adicionalmente, hago referencia a {_join_es(faltan)}")
 
     sentence = re.sub(r'\s+', ' ', sentence).strip()
     # CAMBIO: varios generadores devuelven la frase en minúscula porque la
@@ -698,10 +799,13 @@ def _get_time_institution(analysis, is_formal):
     return " ".join(p for p in parts if p)
 
 def _get_urgency(analysis, is_formal):
-    if analysis["urgencias"]:
-        u = analysis["urgencias"][0]
-        return u.get("formal", u["es"]) if is_formal else u["es"]
-    return ""
+    """CAMBIO: devolvía solo `urgencias[0]` y el resto se perdía.
+
+    Con HERIDA y AUXILIO juntos salía "Tengo una herida" y el auxilio —lo más
+    apremiante de la denuncia— desaparecía. Mismo patrón de índice [0] que ya
+    se corrigió en lugares e instituciones.
+    """
+    return _join_es([u["es"] for u in analysis["urgencias"]])
 
 def _get_documents_text(analysis, is_formal):
     if not analysis["documentos"]:
@@ -812,6 +916,11 @@ def _compose_incident(analysis, is_formal, robo):
     lugar = _lugar_text(analysis)
     if lugar:
         core += f" {lugar}"
+    # CAMBIO (paridad Dart): la huida cierra el relato, después del lugar —
+    # "…me robó mi motocicleta en el mercado y salió corriendo".
+    if analysis.get("huida"):
+        core += f' y {analysis["huida"]}'
+        analysis["huida"] = None
 
     tiempo = analysis["tiempos"][0]["es"] if analysis["tiempos"] else None
     sentence = core
@@ -825,10 +934,15 @@ def _compose_incident(analysis, is_formal, robo):
                         for e in analysis["estados"]])
         if est:
             parts.append(f"{est[0].upper()}{est[1:]}.")
-    if analysis["urgencias"]:
-        u = analysis["urgencias"][0]
-        ut = u.get("formal", u["es"]) if is_formal else u["es"]
-        parts.append(f"{ut[0].upper()}{ut[1:]}.")
+    urg = _get_urgency(analysis, is_formal)
+    if urg:
+        parts.append(f"{urg[0].upper()}{urg[1:]}.")
+    # CAMBIO (paridad Dart): la evidencia es su propia oración, no el objeto
+    # directo de la agresión.
+    if analysis.get("evidencias"):
+        pruebas = _join_es([e["es"] for e in analysis["evidencias"]])
+        parts.append(f"Como prueba tengo {pruebas}.")
+        analysis["evidencias"] = []
     if analysis["servicios"]:
         svc = _join_es([s.get("formal", s["es"]) if is_formal else s["es"]
                         for s in analysis["servicios"]])

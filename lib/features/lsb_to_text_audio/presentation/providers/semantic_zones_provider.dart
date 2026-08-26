@@ -313,6 +313,17 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
   void goToNextZone() {
     final id = state.activeZoneId;
     if (id == null) return;
+
+    // Encadenamiento condicional. Una unidad de tiempo no responde "¿cuándo?",
+    // abre "¿cuántas semanas?"; un tiempo absoluto (AYER, HOY) la cierra. Sin
+    // esto, la zona de cantidad era una pregunta suelta más del recorrido y
+    // permitía "AYER" seguido de "2", que no significa nada.
+    final chained = _chainTargetFor(id);
+    if (chained != null && !state.visitedZoneIds.contains(chained)) {
+      activateZone(chained);
+      return;
+    }
+
     final order = state.visitedZoneOrder;
     final idx = order.indexOf(id);
     if (idx >= 0 && idx < order.length - 1) {
@@ -326,12 +337,40 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       activateZone(requested.first);
       return;
     }
+    final soloPorCadena = _chainOnlyZoneIds();
     for (final p in state.snapshot.orderedZones) {
       if (p.zone.id == state.activeZoneId) continue;
       if (state.visitedZoneIds.contains(p.zone.id)) continue;
+      // Una zona de cadena solo se alcanza desde su disparador, nunca por el
+      // recorrido normal: preguntar "¿cuántos?" sin unidad no tiene respuesta.
+      if (soloPorCadena.contains(p.zone.id)) continue;
       activateZone(p.zone.id);
       return;
     }
+  }
+
+  /// Zona a la que encadena [zoneId] si lo elegido lo dispara, o `null`.
+  String? _chainTargetFor(String zoneId) {
+    final context = ref.read(contextProvider);
+    if (context == null) return null;
+    final zone = context.zoneById(zoneId);
+    final destino = zone?.chainZoneId;
+    if (zone == null || destino == null || zone.chainTriggers.isEmpty) {
+      return null;
+    }
+    final elegidas = state.zoneAnswers[zoneId] ?? const <String>[];
+    final disparo = elegidas.any(zone.chainTriggers.contains);
+    return disparo ? destino : null;
+  }
+
+  /// Ids que son destino de cadena de alguna zona del contexto activo.
+  Set<String> _chainOnlyZoneIds() {
+    final context = ref.read(contextProvider);
+    if (context == null) return const {};
+    return {
+      for (final z in context.zones)
+        if (z.chainZoneId != null) z.chainZoneId!,
+    };
   }
 
   /// Vuelve a la pregunta anterior del recorrido, conservando todas las

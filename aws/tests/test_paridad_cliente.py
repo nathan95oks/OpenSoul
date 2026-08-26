@@ -151,6 +151,58 @@ class NingunEstadoSePierde(unittest.TestCase):
         self.assertEqual(texto.count("tengo miedo"), 1, texto)
 
 
+class CoherenciaDeRoles(unittest.TestCase):
+    """Casos de UAT: cada glosa en el papel que le toca."""
+
+    ROBO = ["ROBAR", "AHORA", "HOMBRE", "DELGADO", "CORRER",
+            "MOTOCICLETA", "MERCADO", "FOTOGRAFIA", "HERIDA", "AUXILIO", "2"]
+    VIOLENCIA = ["DANAR", "HOMBRE", "PRIMERA_VEZ", "TEMOR", "SEGURO", "CASA",
+                 "CERTIFICADO", "HERIDA", "DELGADO", "AYER", "2"]
+
+    def test_el_digito_huerfano_no_llega_a_la_declaracion(self):
+        # Sin unidad de tiempo delante, un "2" no significa nada. Salía como
+        # "Adicionalmente, hago referencia a 2".
+        for cards, ctx in ((self.ROBO, "denuncia_robo"),
+                           (self.VIOLENCIA, "violencia")):
+            texto = frase(ctx, cards).lower()
+            self.assertNotIn("referencia a 2", texto)
+            self.assertNotIn(" 2", texto)
+
+    def test_una_racha_de_digitos_si_es_un_numero(self):
+        # Un NUREJ deletreado sí debe conservarse: se junta en un solo token.
+        texto = frase("consulta", ["PEDIR", "NUREJ", "1", "2", "3"])
+        self.assertIn("123", texto)
+
+    def test_seguro_no_describe_al_agresor(self):
+        # Responde "¿estás en un lugar seguro?"; como rasgo se pegaba al
+        # agresor: "un hombre seguro y delgado".
+        texto = frase("violencia", self.VIOLENCIA).lower()
+        self.assertNotIn("hombre seguro", texto)
+        self.assertIn("lugar seguro", texto)
+
+    def test_la_evidencia_no_es_el_botin(self):
+        texto = frase("denuncia_robo", self.ROBO).lower()
+        self.assertIn("me robó mi motocicleta", texto)
+        self.assertNotIn("motocicleta y una fotografía", texto)
+        self.assertIn("como prueba tengo una fotografía", texto)
+
+    def test_la_evidencia_no_es_lo_daniado(self):
+        texto = frase("violencia", self.VIOLENCIA).lower()
+        self.assertNotIn("dañó un certificado", texto)
+        self.assertIn("como prueba tengo un certificado", texto)
+
+    def test_la_huida_cierra_el_relato_y_no_es_agresion(self):
+        texto = frase("denuncia_robo", self.ROBO).lower()
+        self.assertNotIn("me salió corriendo", texto)
+        self.assertIn("en el mercado y salió corriendo", texto)
+
+    def test_la_reincidencia_no_desplaza_a_la_fecha(self):
+        # PRIMERA_VEZ ocupaba el complemento temporal y AYER se perdía.
+        texto = frase("violencia", self.VIOLENCIA).lower()
+        self.assertTrue(texto.startswith("ayer"), texto)
+        self.assertIn("es la primera vez", texto)
+
+
 class SinArticulosDuplicados(unittest.TestCase):
     """El lexema ya trae su determinante; anteponerle otro lo duplicaba."""
 

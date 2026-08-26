@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/theme.dart';
@@ -5,7 +6,7 @@ import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import '../providers/cards_provider.dart';
 import '../providers/semantic_zones_provider.dart';
 import '../providers/sentence_provider.dart';
-import 'lsb_icons.dart';
+import 'sign_image.dart';
 
 /// Cuántas opciones de respuesta se muestran por pregunta en modo guiado.
 const int _kAnswersPerQuestion = 6;
@@ -252,13 +253,25 @@ class _FlowCompleteBanner extends StatelessWidget {
   }
 }
 
-class _AnswerCard extends StatelessWidget {
+/// Tarjeta de la cuadrícula de respuestas.
+///
+/// Es `Consumer` porque dibuja la imagen de la seña, y esa decisión depende de
+/// dos providers (el resolutor y la preferencia de mostrarlas). Antes era
+/// `StatelessWidget` y pintaba solo el ícono: `SignImage` existía pero se
+/// usaba únicamente en el flujo guiado, así que en esta cuadrícula NINGUNA
+/// seña se veía por más que estuviera subida a S3.
+@visibleForTesting
+class AnswerCardForTest extends _AnswerCard {
+  const AnswerCardForTest({super.key, required super.card, required super.onTap});
+}
+
+class _AnswerCard extends ConsumerWidget {
   final LsbCard card;
   final VoidCallback onTap;
-  const _AnswerCard({required this.card, required this.onTap});
+  const _AnswerCard({super.key, required this.card, required this.onTap});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isEmergency = card.isEmergency;
     final accent = isEmergency ? AppTheme.errorLight : AppTheme.brandPrimary;
 
@@ -290,9 +303,12 @@ class _AnswerCard extends StatelessWidget {
                   color: accent.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  kLsbIconMap[card.semanticIcon] ?? Icons.credit_card,
-                  size: 22,
+                clipBehavior: Clip.antiAlias,
+                child: SignImage(
+                  gloss: card.gloss,
+                  semanticIcon: card.semanticIcon,
+                  frames: card.imageFrames,
+                  size: 44,
                   color: accent,
                 ),
               ),
