@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'qualifier_sheets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
@@ -41,7 +43,7 @@ class SuggestedGlossPanel extends ConsumerWidget {
             AdaptiveNodeLayout(
               cards: visible,
               selectedGlosses: selectedGlosses,
-              onCardTap: (card) => _onPick(ref, card),
+              onCardTap: (card) => _onPick(context, ref, card),
             ),
           ],
         );
@@ -65,11 +67,9 @@ class SuggestedGlossPanel extends ConsumerWidget {
   /// colapsa la lista expandida, para permitir elegir varias glosas seguidas.
   /// Tras el toggle reconstruye la secuencia en orden narrativo y la sincroniza
   /// con [sentenceProvider] (lo que alimenta la traducción).
-  void _onPick(WidgetRef ref, LsbCard card) {
-    final notifier = ref.read(semanticZonesProvider.notifier);
-    notifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
-  }
+  Future<void> _onPick(
+          BuildContext context, WidgetRef ref, LsbCard card) =>
+      elegirGlosa(context, ref, card);
 }
 
 class _EmptyState extends StatelessWidget {

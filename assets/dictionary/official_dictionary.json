@@ -6256,32 +6256,6 @@
    "source": "Corpus conversacional judicial 2026"
   },
   {
-   "id": "g278",
-   "gloss": "PRUEBA",
-   "displayText": "PRUEBA",
-   "iconUrl": "",
-   "categoryId": "Objetos",
-   "subcategoryId": "objeto",
-   "contexts": [
-    "denuncia_robo",
-    "violencia",
-    "accidente",
-    "otro",
-    "orientacion",
-    "preguntas"
-   ],
-   "priority": 1,
-   "suggestedNextCardIds": [],
-   "isFrequent": true,
-   "isEmergency": false,
-   "semanticIcon": "inventory_2",
-   "dialect": "cochabamba",
-   "status": "official",
-   "animationFile": "",
-   "corpusCategory": "10. Documentos y objetos frecuentes",
-   "source": "Corpus conversacional judicial 2026"
-  },
-  {
    "id": "g279",
    "gloss": "CAMARA",
    "displayText": "CÁMARA",

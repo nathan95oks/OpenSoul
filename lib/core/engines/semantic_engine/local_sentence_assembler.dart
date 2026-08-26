@@ -213,9 +213,11 @@ class LocalSentenceAssembler {
     if (detalle == null) return lexema;
     final etiqueta = _admiteDetalle[gloss];
     final propio = _capitalizarPropio(detalle);
-    return etiqueta == 'placa'
-        ? '$lexema con placa $detalle'
-        : '$lexema $propio';
+    return switch (etiqueta) {
+      'placa' => '$lexema con placa $detalle',
+      'numero' => '$lexema número $detalle',
+      _ => '$lexema $propio',
+    };
   }
 
   /// Un nombre propio se escribe con inicial mayúscula; una matrícula, tal
@@ -309,6 +311,11 @@ class LocalSentenceAssembler {
     'MERCADO': 'mercado', 'PARADA': 'parada',
     'AUTO': 'placa', 'MOTOCICLETA': 'placa', 'MICRO': 'placa',
     'TAXI': 'placa', 'TRUFI': 'placa', 'BICICLETA': 'placa',
+    // Un expediente sin su número no identifica nada: quien consulta por "mi
+    // caso" a secas obliga al funcionario a preguntarlo otra vez. El número
+    // se deletrea, igual que una placa.
+    'CASO': 'numero', 'CODIGO': 'numero', 'NUREJ': 'numero',
+    'WEBID': 'numero', 'EXPEDIENTE': 'numero',
   };
 
   /// Etiqueta del detalle que admite [gloss], o `null` si no admite ninguno.
@@ -342,7 +349,8 @@ class LocalSentenceAssembler {
   static const _flightVerbs = {'CORRER'};
 
   static const _inherentEvidence = {
-    'FOTOGRAFIA', 'PRUEBA', 'MENSAJE', 'COMPROBANTE', 'CERTIFICADO', 'RESPALDO',
+    'FOTOGRAFIA', 'MENSAJE', 'COMPROBANTE', 'CERTIFICADO', 'RESPALDO',
+    'VIDEOLLAMADA',
   };
 
   /// Glosas inherentemente representadas por la 1ª persona ("me", "mi"…),
@@ -753,7 +761,7 @@ class LocalSentenceAssembler {
         case _Role.servicio:           r.services.add(e.es); break;
         case _Role.emocion:            r.emotions.add(e.es); break;
         case _Role.urgencia:           r.urgencies.add(e.es); break;
-        case _Role.tramite:            r.procedures.add(e.es); break;
+        case _Role.tramite:            r.procedures.add(_conDetalle(t, e.es, r)); break;
         case _Role.motivo:             r.purposes.add(e.es); break;
         case _Role.tiempo:             r.time ??= e.es; break;
         case _Role.marcador:           r.markers.add(e.es); break;
@@ -2041,7 +2049,6 @@ class LocalSentenceAssembler {
     'BILLETERA': _Lex(_Role.objeto, 'mi billetera'),
     'MENSAJE': _Lex(_Role.objeto, 'un mensaje'),
     'FOTOGRAFIA': _Lex(_Role.objeto, 'una fotografía'),
-    'PRUEBA': _Lex(_Role.objeto, 'una prueba'),
     'CAMARA': _Lex(_Role.objeto, 'una cámara'),
     'CUENTA': _Lex(_Role.objeto, 'mi cuenta'),
     'PRODUCTO': _Lex(_Role.objeto, 'el producto'),
