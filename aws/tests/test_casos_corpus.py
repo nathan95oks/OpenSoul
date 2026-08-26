@@ -137,5 +137,50 @@ class ReglasDeOro(unittest.TestCase):
         self.assertIn("necesito un intérprete", texto)
 
 
+class LagunasCerradas(unittest.TestCase):
+    """Las dos que el corpus pedía y el diccionario no podía expresar."""
+
+    def test_una_estafa_se_relata_sin_nombrar_el_delito(self):
+        # §2.4 + corpus §8: la app facilita la comunicación, no califica.
+        texto = frase(por_id("CP-016")).lower()
+        self.assertIn("pagué por whatsapp", texto)
+        self.assertIn("no me entregaron el producto", texto)
+        for juicio in ("robó", "estafa", "sustrajeron", "agredió"):
+            self.assertNotIn(juicio, texto,
+                             f"la declaración no puede calificar el hecho: {texto}")
+
+    def test_la_negacion_es_una_glosa_aparte(self):
+        # En LSB se niega con una seña propia, no con un prefijo horneado.
+        con_no = frase({"glosas": ["PAGAR", "NO", "ENTREGAR", "PRODUCTO"],
+                        "contexto": "denuncia_robo"}).lower()
+        sin_no = frase({"glosas": ["PAGAR", "ENTREGAR", "PRODUCTO"],
+                        "contexto": "denuncia_robo"}).lower()
+        self.assertIn("no me entregaron", con_no)
+        self.assertNotIn("no me entregaron", sin_no)
+        self.assertIn("me entregaron", sin_no)
+
+    def test_un_verbo_de_revision_mira_al_pasado(self):
+        # §3.4: el flujo de consulta apunta a un plazo por defecto, pero
+        # SEGUIMIENTO consulta algo que ya ocurrió.
+        texto = frase(por_id("CP-018")).lower()
+        self.assertIn("hace una semana", texto)
+        self.assertNotIn("dentro de", texto)
+
+    def test_un_verbo_de_gestion_mira_al_futuro(self):
+        texto = frase({"glosas": ["PRESENTAR", "MEMORIAL", "DIA", "3"],
+                       "contexto": "consulta"}).lower()
+        self.assertIn("dentro de tres días", texto)
+
+    def test_el_verbo_manda_sobre_el_contexto(self):
+        # Mismo contexto, direcciones opuestas según el verbo: es la prueba de
+        # que la dirección ya no la fija solo el flujo.
+        revisar = frase({"glosas": ["SEGUIMIENTO", "CASO", "SEMANA", "2"],
+                         "contexto": "consulta"}).lower()
+        gestionar = frase({"glosas": ["GESTIONAR", "CASO", "SEMANA", "2"],
+                           "contexto": "consulta"}).lower()
+        self.assertIn("hace dos semanas", revisar)
+        self.assertIn("dentro de dos semanas", gestionar)
+
+
 if __name__ == "__main__":
     unittest.main()

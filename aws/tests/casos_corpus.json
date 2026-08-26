@@ -357,28 +357,30 @@
     {
       "case_id": "CP-016",
       "corpus": "§2.4 Estafa o incumplimiento con entrega de dinero",
-      "descripcion": "Denuncia patrimonial sin verbo de delito: el diccionario no tiene ESTAFAR ni PAGAR, y el corpus §8 prohíbe que la app califique jurídicamente el hecho",
-      "input_natural": "Quiero denunciar un problema con un pago: entregué mi dinero por un producto y tengo el comprobante y los mensajes de WhatsApp.",
+      "descripcion": "§2.4 con verbos neutros: la app relata el hecho sin nombrar el delito. La negación va como glosa aparte (NO + verbo), como en LSB",
+      "input_natural": "Pagué por WhatsApp y nunca me entregaron el producto; tengo el comprobante.",
       "contexto": "denuncia_robo",
       "glosas": [
-        "PROBLEMA",
-        "DINERO",
+        "PAGAR",
+        "WHATSAPP",
+        "NO",
+        "ENTREGAR",
         "PRODUCTO",
-        "COMPROBANTE",
-        "MENSAJE",
-        "WHATSAPP"
+        "COMPROBANTE"
       ],
       "reglas": [
+        "negacion_posicional",
         "evidencia_no_es_botin",
-        "canal_digital_con_preposicion"
+        "canal_digital_con_preposicion",
+        "sin_calificacion_juridica"
       ],
-      "esperado_backend": "Una persona me robó mi dinero y el producto por WhatsApp. Por un problema. Como prueba tengo un comprobante y un mensaje.",
+      "esperado_backend": "Pagué por WhatsApp y no me entregaron el producto. Como prueba tengo un comprobante.",
       "lsb_icons": [
+        "assignment",
         "description",
-        "info",
         "inventory_2",
-        "shopping_bag",
-        "smartphone"
+        "smartphone",
+        "waving_hand"
       ]
     },
     {
@@ -410,26 +412,31 @@
     {
       "case_id": "CP-018",
       "corpus": "§3.4 Consulta sobre documentos o pruebas presentadas",
-      "descripcion": "Valida que ESTADO (rol DOCUMENTO, no TRAMITE) sobreviva a la plantilla. Sin cadena temporal: el corpus pregunta por algo ya presentado y la composición de tiempo en consulta mira al futuro",
-      "input_natural": "Presenté documentos y fotografías; quiero verificar el estado de mi caso.",
+      "descripcion": "§3.4: un verbo de revisión (SEGUIMIENTO) hace que el complemento temporal mire al pasado aunque el flujo de consulta apunte, por defecto, a un plazo futuro",
+      "input_natural": "Presenté documentos y fotografías hace una semana; quiero verificar el estado de mi caso.",
       "contexto": "consulta",
       "glosas": [
         "SEGUIMIENTO",
         "ESTADO",
         "CASO",
         "PAPEL",
-        "FOTOGRAFIA"
+        "FOTOGRAFIA",
+        "SEMANA",
+        "1"
       ],
       "reglas": [
         "estado_es_documento",
-        "evidencia_no_es_botin"
+        "evidencia_no_es_botin",
+        "direccion_temporal_por_verbo"
       ],
-      "esperado_backend": "Quiero seguir el estado del trámite y el papel. Como prueba tengo una fotografía. Adicionalmente, hago referencia a mi caso.",
+      "esperado_backend": "Quiero seguir el estado del trámite y el papel hace una semana. Como prueba tengo una fotografía. Adicionalmente, hago referencia a mi caso.",
       "lsb_icons": [
+        "access_time",
         "app_registration",
         "assignment",
         "description",
-        "inventory_2"
+        "inventory_2",
+        "straighten"
       ]
     },
     {
@@ -487,7 +494,7 @@
     }
   ],
   "_lagunas_detectadas": [
-    "§2.4 Estafa — el diccionario no tiene ESTAFAR, PAGAR, ENGAÑAR, INCUMPLIR ni ENTREGAR. CP-016 lo modela con PROBLEMA + DINERO + PRODUCTO + evidencia, sin nombrar el delito. El corpus §8 prohíbe que la app haga la calificación jurídica, así que no nombrarlo es correcto; pero tampoco puede decirse 'pagué y no me entregaron'. Candidatas a incorporar, previa validación con intérprete: PAGAR y ENTREGAR.",
-    "§3.4 Consulta sobre algo ya presentado — la composición temporal deriva la dirección del contexto, y 'consulta' es futuro. Una consulta sobre documentos presentados 'la semana pasada' saldría como 'dentro de una semana'. CP-018 evita la cadena temporal por eso. Si se necesita, la dirección tendría que depender también del verbo (SEGUIMIENTO mira atrás, plazo mira adelante)."
+    "Cerrada: §2.4 ya se puede relatar con PAGAR y ENTREGAR, verbos neutros que no califican el hecho (corpus §8). La negación es una glosa aparte —NO delante del verbo—, como en LSB.",
+    "Cerrada: §3.4 — la dirección temporal la decide primero el verbo (_pastVerbs / _futureVerbs) y solo después el contexto, así que consultar algo presentado 'hace una semana' ya no sale como un plazo futuro."
   ]
 }
