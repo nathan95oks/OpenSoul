@@ -1,10 +1,8 @@
 import '../../domain/entities/lsb_card.dart';
 import '../domain/dictionary_document.dart';
-import '../domain/dictionary_proposal.dart';
 import '../domain/lexicon_repository.dart';
 import 'asset_lexicon_datasource.dart';
 import 'lexicon_cache.dart';
-import 'proposal_outbox.dart';
 import 'remote_lexicon_datasource.dart';
 
 /// Implementación offline-first del diccionario evolutivo.
@@ -22,7 +20,6 @@ class LexiconRepositoryImpl implements LexiconRepository {
   final AssetLexiconDataSource assetDataSource;
   final RemoteLexiconDataSource remoteDataSource;
   final LexiconCache cache;
-  final ProposalOutbox outbox;
 
   DictionaryDocument? _active;
   Future<DictionaryDocument>? _loading;
@@ -32,8 +29,7 @@ class LexiconRepositoryImpl implements LexiconRepository {
     required this.assetDataSource,
     required this.remoteDataSource,
     required this.cache,
-    ProposalOutbox? outbox,
-  }) : outbox = outbox ?? ProposalOutbox();
+  });
 
   @override
   Future<DictionaryDocument> getDocument() {
@@ -80,9 +76,6 @@ class LexiconRepositoryImpl implements LexiconRepository {
   Future<bool> refresh() async {
     if (!remoteDataSource.isConfigured) return false;
 
-    // Cada sincronización es una oportunidad de vaciar la cola offline.
-    await _flushOutbox();
-
     try {
       final current = await getDocument();
       final remote = await remoteDataSource.fetch();
@@ -96,41 +89,4 @@ class LexiconRepositoryImpl implements LexiconRepository {
     }
   }
 
-  @override
-  Future<ProposalSubmissionResult> submitProposal(
-      DictionaryProposal proposal) async {
-    if (remoteDataSource.isConfigured) {
-      // Primero lo pendiente (preserva el orden de redacción), luego lo nuevo.
-      await _flushOutbox();
-      try {
-        await remoteDataSource.postProposal(proposal);
-        return ProposalSubmissionResult.sent;
-      } catch (_) {
-        // Sin red: cae a la cola offline.
-      }
-    }
-    final queued = await outbox.add(proposal);
-    return queued
-        ? ProposalSubmissionResult.queued
-        : ProposalSubmissionResult.failed;
-  }
-
-  /// Reenvía las propuestas encoladas. Conserva en la cola las que sigan
-  /// fallando; nunca lanza.
-  Future<void> _flushOutbox() async {
-    final pending = await outbox.readAll();
-    if (pending.isEmpty) return;
-
-    final remaining = <DictionaryProposal>[];
-    for (final proposal in pending) {
-      try {
-        await remoteDataSource.postProposal(proposal);
-      } catch (_) {
-        remaining.add(proposal);
-      }
-    }
-    if (remaining.length != pending.length) {
-      await outbox.writeAll(remaining);
-    }
-  }
 }

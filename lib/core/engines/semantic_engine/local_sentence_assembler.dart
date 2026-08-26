@@ -710,15 +710,6 @@ class LocalSentenceAssembler {
             r.perpetrators.add(e.es);
           }
           break;
-        // Bug fix #2: personaDescPlural almacena el sujeto plural por separado
-        // para que el compositor sepa usar verbo plural (agredieron).
-        case _Role.personaDescPlural:
-          if (victimMode) {
-            r.victimPlural ??= e.es;
-          } else {
-            r.perpetratorPlural ??= e.es;
-          }
-          break;
         case _Role.rasgo:
           (victimMode ? r.victimTraits : r.traits).add(e.es);
           break;
@@ -750,7 +741,6 @@ class LocalSentenceAssembler {
             r.extraActions.add(forma);
           }
           break;
-        case _Role.arma:               r.weapon ??= e.es; break;
         case _Role.objeto:             r.objects.add(_conDetalle(t, e.es, r)); break;
         case _Role.documento:          r.documents.add(e.es); break;
         case _Role.lugar:              r.place ??= _conDetalle(t, e.es, r); break;
@@ -773,9 +763,9 @@ class LocalSentenceAssembler {
     return r;
   }
 
-  /// true si hay un agresor explícito (personaDesc o personaDescPlural o rasgos).
+  /// true si hay un agresor explícito (descriptor de persona o rasgos).
   bool _hasAggressor(_Roles r) =>
-      r.perpetrators.isNotEmpty || r.perpetratorPlural != null || r.traits.isNotEmpty;
+      r.perpetrators.isNotEmpty || r.traits.isNotEmpty;
 
   /// Convierte un verbo conjugado en 3ª singular a 3ª plural.
   /// Solo mapea los verbos del lexicón — lista cerrada y segura.
@@ -966,9 +956,9 @@ class LocalSentenceAssembler {
     final objects = r.objects.isNotEmpty ? _join(r.objects) : '';
     final procedures = r.procedures.isNotEmpty ? _join(r.procedures) : '';
     final services = r.services.isNotEmpty ? _join(r.services) : '';
-    final person = _personPhrase(r.perpetrators, r.perpetratorPlural, r.traits);
+    final person = _personPhrase(r.perpetrators, r.traits);
     final victim = _hasVictim(r)
-        ? _personPhrase(r.victims, r.victimPlural, r.victimTraits)
+        ? _personPhrase(r.victims, r.victimTraits)
         : '';
 
     if (institution != null) return '¿Ante qué institución?';
@@ -1031,30 +1021,11 @@ class LocalSentenceAssembler {
 
     final sentences = <String>[];
 
-    // Arma sin verbo de agresión → amenaza implícita con esa arma.
-    if (r.weapon != null && r.aggression == null && !_hasAggressor(r)) {
-      var clause = 'Me amenazaron ${r.weapon}';
-      if (r.place != null) {
-        clause += ' ${r.place}';
-        r.place = null;
-      }
-      if (r.time != null) {
-        clause = '${_cap(r.time!)}, ${_decap(clause)}';
-        r.time = null;
-      }
-      sentences.add('$clause.');
-      r.weapon = null;
-    } else if (r.aggression != null || _hasAggressor(r)) {
+    if (r.aggression != null || _hasAggressor(r)) {
       // Cláusula del agresor + acción.
       final subject = _subjectPhrase(r);
-      final isPlural = r.isPlural;
-      final defaultVerb = ctx == 'violencia'
-          ? (isPlural ? 'agredieron' : 'agredió')
-          : (isPlural ? 'asaltaron' : 'asaltó');
-      final aggression = r.aggression;
-      final verb = aggression == null
-          ? defaultVerb
-          : (isPlural ? _verbPlural(aggression) : aggression);
+      final defaultVerb = ctx == 'violencia' ? 'agredió' : 'asaltó';
+      final verb = r.aggression ?? defaultVerb;
       // Un sujeto en aposición ("mi pareja, una mujer") necesita la coma de
       // cierre antes de seguir la cláusula, si no el "una mujer me agredió"
       // se lee pegado a la aposición como si fuera una sola frase corrida.
@@ -1066,10 +1037,6 @@ class LocalSentenceAssembler {
         clause += ' $complement';
         r.objects.clear();
         r.documents.clear();
-      }
-      if (r.weapon != null) {
-        clause += ' ${r.weapon}';
-        r.weapon = null;
       }
       if (r.place != null) {
         clause += ' ${r.place}';
@@ -1089,7 +1056,6 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(clause)}.');
       r.aggression = null;
       r.perpetrators.clear();
-      r.perpetratorPlural = null;
       r.traits.clear();
     } else if (r.action != null &&
         (r.objects.isNotEmpty || r.documents.isNotEmpty)) {
@@ -1338,15 +1304,14 @@ class LocalSentenceAssembler {
 
     final hasActor = _hasAggressor(r);
     final subject = hasActor ? _subjectPhrase(r) : 'una persona';
-    final isPlural = r.isPlural;
     // Persona AGREDIDA (separada del agresor por [kVictimMarker]). Si no se
     // indicó, el complemento por defecto sigue siendo "otra persona".
     final victim = _hasVictim(r)
-        ? _personPhrase(r.victims, r.victimPlural, r.victimTraits)
+        ? _personPhrase(r.victims, r.victimTraits)
         : null;
 
     if (r.aggression != null) {
-      final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
+      final verb = r.aggression!;
       var clause = 'presencié cómo $subject $verb';
       // Un canal ("por WhatsApp") ya trae su preposición: unirlo con "y" a
       // los objetos daba "me robó mi dinero, el producto y por WhatsApp".
@@ -1364,10 +1329,6 @@ class LocalSentenceAssembler {
       } else if (complement.isEmpty) {
         clause += ' a otra persona';
       }
-      if (r.weapon != null) {
-        clause += ' ${r.weapon}';
-        r.weapon = null;
-      }
       if (r.place != null) {
         clause += ' ${r.place}';
         r.place = null;
@@ -1379,7 +1340,6 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(clause)}.');
       r.aggression = null;
       r.perpetrators.clear();
-      r.perpetratorPlural = null;
       r.traits.clear();
       _clearVictim(r);
     } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
@@ -1410,7 +1370,6 @@ class LocalSentenceAssembler {
       }
       sentences.add('${_cap(clause)}.');
       r.perpetrators.clear();
-      r.perpetratorPlural = null;
       r.traits.clear();
       _clearVictim(r);
     }
@@ -1421,11 +1380,10 @@ class LocalSentenceAssembler {
 
   /// true si se describió a la persona agredida (flujo de testigo).
   bool _hasVictim(_Roles r) =>
-      r.victims.isNotEmpty || r.victimPlural != null || r.victimTraits.isNotEmpty;
+      r.victims.isNotEmpty || r.victimTraits.isNotEmpty;
 
   void _clearVictim(_Roles r) {
     r.victims.clear();
-    r.victimPlural = null;
     r.victimTraits.clear();
   }
 
@@ -1481,18 +1439,13 @@ class LocalSentenceAssembler {
       final hasActor = _hasAggressor(r);
       final subject = hasActor ? _subjectPhrase(r) : 'una persona';
       if (r.aggression != null) {
-        final isPlural = r.isPlural;
-        final verb = isPlural ? _verbPlural(r.aggression!) : r.aggression!;
+            final verb = r.aggression!;
         var clause = '${subject.contains(',') ? '$subject,' : subject} me $verb';
         final comp = _join([...r.objects, ...r.documents]);
         if (comp.isNotEmpty) {
           clause += ' $comp';
           r.objects.clear();
           r.documents.clear();
-        }
-        if (r.weapon != null) {
-          clause += ' ${r.weapon}';
-          r.weapon = null;
         }
         if (r.place != null) {
           clause += ' ${r.place}';
@@ -1509,7 +1462,6 @@ class LocalSentenceAssembler {
       }
       r.aggression = null;
       r.perpetrators.clear();
-      r.perpetratorPlural = null;
       r.traits.clear();
     }
 
@@ -1519,13 +1471,6 @@ class LocalSentenceAssembler {
       sentences.add('Necesito $things.');
       r.objects.clear();
       r.documents.clear();
-    }
-
-    // 3. Arma residual.
-    if (r.weapon != null) {
-      final w = r.weapon!.replaceFirst(RegExp(r'^con '), '');
-      sentences.add('Se utilizó $w.');
-      r.weapon = null;
     }
 
     // 4. Acción de trámite residual (1ª persona).
@@ -1659,20 +1604,14 @@ class LocalSentenceAssembler {
   /// Cuando el sujeto es genérico ("una persona") los adjetivos simples
   /// se convierten a su forma femenina para mantener concordancia.
   String _subjectPhrase(_Roles r) =>
-      _personPhrase(r.perpetrators, r.perpetratorPlural, r.traits);
+      _personPhrase(r.perpetrators, r.traits);
 
   /// Frase nominal de una persona a partir de sus descriptores, su forma
   /// plural explícita (DOS/TRES) y sus rasgos. Reutilizable para el agresor
   /// ([_subjectPhrase]) y para la persona agredida (flujo de testigo).
-  String _personPhrase(
-      List<String> persons, String? plural, List<String> traits) {
+  String _personPhrase(List<String> persons, List<String> traits) {
     String base;
-    if (plural != null) {
-      base = plural;
-      if (persons.isNotEmpty) {
-        base += ' (${_join(persons)})';
-      }
-    } else {
+    {
       if (persons.isNotEmpty) {
         // Un descriptor "mi X" (PAREJA, EXPAREJA, FAMILIAR…) ya es una frase
         // nominal completa y específica, no un rasgo apilable como "un
@@ -1897,7 +1836,6 @@ class LocalSentenceAssembler {
     'COORDINADOR': _Lex(_Role.servicio, 'un coordinador'),
     'DOCTOR': _Lex(_Role.servicio, 'un doctor'),
     'ENFERMERA': _Lex(_Role.servicio, 'una enfermera'),
-    'GOBIERNO': _Lex(_Role.institucion, 'en el gobierno'),
     'MINISTERIO': _Lex(_Role.institucion, 'en el ministerio'),
     'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
     'DESPACHO': _Lex(_Role.institucion, 'en el despacho'),
@@ -1920,8 +1858,6 @@ class LocalSentenceAssembler {
     'NORMA': _Lex(_Role.documento, 'la norma'),
     'PODER': _Lex(_Role.documento, 'un poder notarial'),
     'REGLAMENTO': _Lex(_Role.documento, 'el reglamento'),
-    'DECRETO_SUPREMO': _Lex(_Role.documento, 'el decreto supremo'),
-    'PERSONERIA_JURIDICA': _Lex(_Role.documento, 'la personería jurídica'),
     'EXPEDIENTE': _Lex(_Role.tramite, 'mi expediente'),
     'NOTIFICACION': _Lex(_Role.tramite, 'una notificación'),
     'CITACION': _Lex(_Role.tramite, 'una citación'),
@@ -1967,7 +1903,6 @@ class LocalSentenceAssembler {
     'RECOGER': _Lex(_Role.verboAccion, 'quiero recoger'),
     'SOLUCIONAR': _Lex(_Role.verboAccion, 'quiero solucionar'),
     'TRATAR': _Lex(_Role.verboAccion, 'quiero tratar'),
-    'ADMINISTRAR': _Lex(_Role.verboAccion, 'quiero administrar'),
     'SEGUIMIENTO': _Lex(_Role.verboAccion, 'quiero seguir'),
     'CORREGIR': _Lex(_Role.verboAccion, 'quiero corregir'),
     'ACLARAR': _Lex(_Role.verboAccion, 'quiero aclarar'),
@@ -2076,8 +2011,6 @@ class LocalSentenceAssembler {
     'PAPEL': _Lex(_Role.documento, 'el papel'),
     'TELEFONO': _Lex(_Role.objeto, 'mi teléfono'),
     'TEXTO': _Lex(_Role.documento, 'el texto'),
-    'ARCHIVADOR': _Lex(_Role.documento, 'el archivador'),
-    'CARPETA': _Lex(_Role.documento, 'la carpeta'),
     'CARNET': _Lex(_Role.documento, 'mi carnet de identidad'),
     'CARTA': _Lex(_Role.documento, 'la carta'),
     'FOTOCOPIA': _Lex(_Role.documento, 'una fotocopia'),
@@ -2101,7 +2034,6 @@ class LocalSentenceAssembler {
     'MOTOCICLETA': _Lex(_Role.objeto, 'mi motocicleta'),
     'TAXI': _Lex(_Role.objeto, 'el taxi'),
     'TRUFI': _Lex(_Role.objeto, 'el trufi'),
-    'AVION': _Lex(_Role.objeto, 'el avión'),
     'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
     'TREN': _Lex(_Role.objeto, 'el tren'),
 
@@ -2128,29 +2060,18 @@ class LocalSentenceAssembler {
     // Canales, no objetos: sin la preposición el compositor los tomaba
     // como complemento directo — "me amenazó WhatsApp".
     'WHATSAPP': _Lex(_Role.objeto, 'por WhatsApp'),
-    'WIFI': _Lex(_Role.objeto, 'por wifi'),
-    'ZOOM': _Lex(_Role.objeto, 'por Zoom'),
 
     // ── Integridad (8) ──
-    'AUTONOMIA': _Lex(_Role.motivo, 'autónomo'),
-    'COMPROMISO': _Lex(_Role.motivo, 'comprometido'),
     'CORRUPTO': _Lex(_Role.rasgo, 'corrupto'),
-    'DIGNIDAD': _Lex(_Role.rasgo, 'digno'),
-    'FIRME': _Lex(_Role.rasgo, 'firme'),
-    'GARANTE': _Lex(_Role.motivo, 'garante'),
-    'HONESTIDAD': _Lex(_Role.rasgo, 'honesto'),
-    'ETICA': _Lex(_Role.rasgo, 'ético'),
   };
 }
 
 enum _Role {
   sujeto,
   personaDesc,
-  personaDescPlural, // Bug fix #2: DOS/TRES — verbo concuerda en plural
   rasgo,
   verboAgresion,
   verboAccion,
-  arma,
   objeto,
   documento,
   lugar,
@@ -2184,11 +2105,9 @@ class _Lex {
 /// Acumulador mutable de roles detectados en una secuencia de glosas.
 class _Roles {
   String? subject;
-  final List<String> perpetrators = [];
-  String? perpetratorPlural; // Bug fix #2: sujeto plural (DOS/TRES)
+  final List<String> perpetrators = []; // Bug fix #2: sujeto plural (DOS/TRES)
   // Persona AGREDIDA (flujo de testigo): descriptores tras [kVictimMarker].
   final List<String> victims = [];
-  String? victimPlural;
   final List<String> victimTraits = [];
   /// Instituciones nombradas, en orden de selección. [institution] devuelve
   /// la primera y [institutionText] todas enlazadas.
@@ -2214,7 +2133,6 @@ class _Roles {
   /// "no me entregaron" son dos hechos del mismo relato, no uno.
   final List<String> extraActions = [];
   String? action;
-  String? weapon;
   String? place;
   String? time;
 
@@ -2259,10 +2177,4 @@ class _Roles {
   /// Palabra interrogativa. Su presencia convierte la salida en pregunta.
   String? question;
 
-  /// El sujeto es plural SÓLO cuando se eligió una cantidad explícita
-  /// (DOS/TRES → [perpetratorPlural]). Varios descriptores de persona
-  /// (p. ej. MUJER + JOVEN) describen a UNA misma persona —género, edad,
-  /// relación— y no implican varias personas. Sin esto, "mujer joven"
-  /// se interpretaba como dos agresores con verbo en plural.
-  bool get isPlural => perpetratorPlural != null;
 }

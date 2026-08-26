@@ -9,7 +9,6 @@ No requiere instalar nada: `boto3` se sustituye por un doble antes de importar
 los módulos, porque las Lambdas crean sus clientes AWS al importarse.
 """
 
-import json
 import os
 import sys
 import unittest
@@ -21,12 +20,11 @@ import unittest
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from boto3_stub import fake_table as _fake_table, install as _install_boto3_stub  # noqa: E402
+from boto3_stub import install as _install_boto3_stub  # noqa: E402
 
 _install_boto3_stub()
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-import lambda_dictionary  # noqa: E402
 import lambda_function  # noqa: E402
 import lambda_text_to_lsb  # noqa: E402
 
@@ -189,87 +187,8 @@ class RepairCoverage(unittest.TestCase):
         self.assertEqual(incidencias[-1]["accion"], "palabra_recuperada")
 
 
-class PropuestasSinAutenticacion(unittest.TestCase):
-    """`POST /proposals` es público y escribía valores sin validar.
-
-    La allowlist de NOMBRES ya estaba; los VALORES se copiaban tal cual, así
-    que cualquiera podía llenar DynamoDB hasta el límite de 400 KB por item.
-    """
-
-    def setUp(self):
-        _fake_table.items.clear()
-
-    def test_cuerpo_desmedido_se_rechaza_antes_de_parsear(self):
-        cuerpo = json.dumps({"word": "X", "description": "A" * 2_000_000})
-        resp = lambda_dictionary.create_proposal(cuerpo)
-        self.assertEqual(resp["statusCode"], 413)
-        self.assertEqual(_fake_table.items, [])
-
-    def test_campos_de_tipo_inesperado_no_se_guardan(self):
-        cuerpo = json.dumps(
-            {
-                "word": "TESTIGO",
-                "contexts": {"$ne": None},
-                "description": {"anidado": ["mucho"] * 100},
-                "proposedBy": 12345,
-            }
-        )
-        resp = lambda_dictionary.create_proposal(cuerpo)
-        self.assertEqual(resp["statusCode"], 201)
-
-        item = _fake_table.items[0]
-        self.assertEqual(item["word"], "TESTIGO")
-        self.assertNotIn("contexts", item)
-        self.assertNotIn("description", item)
-        self.assertNotIn("proposedBy", item)
-
-    def test_los_textos_largos_se_acotan(self):
-        cuerpo = json.dumps({"word": "TESTIGO", "description": "A" * 5_000})
-        lambda_dictionary.create_proposal(cuerpo)
-        self.assertEqual(len(_fake_table.items[0]["description"]), 600)
-
-    def test_una_lista_de_contextos_desmedida_se_acota(self):
-        # 500 elementos caben en el tope de cuerpo, así que llegan a
-        # _clean_field: lo que los corta es MAX_LIST_ITEMS, no el tope de 16 KB.
-        cuerpo = json.dumps({"word": "TESTIGO", "contexts": ["x"] * 500})
-        self.assertLessEqual(
-            len(cuerpo.encode("utf-8")), lambda_dictionary.MAX_BODY_BYTES
-        )
-        lambda_dictionary.create_proposal(cuerpo)
-        self.assertEqual(len(_fake_table.items[0]["contexts"]), 12)
-
-    def test_una_lista_que_revienta_el_cuerpo_se_rechaza_antes(self):
-        cuerpo = json.dumps({"word": "TESTIGO", "contexts": ["x"] * 5_000})
-        resp = lambda_dictionary.create_proposal(cuerpo)
-        self.assertEqual(resp["statusCode"], 413)
-        self.assertEqual(_fake_table.items, [])
-
-    def test_no_se_puede_forzar_el_estado_ni_la_clave(self):
-        cuerpo = json.dumps(
-            {"word": "TESTIGO", "status": "official", "pk": "ENTRY"}
-        )
-        lambda_dictionary.create_proposal(cuerpo)
-        item = _fake_table.items[0]
-        # Aprobar es competencia exclusiva del portal de validación.
-        self.assertEqual(item["status"], "pending")
-        self.assertEqual(item["pk"], "PROPOSAL")
-
-    def test_una_propuesta_legitima_sigue_funcionando(self):
-        cuerpo = json.dumps(
-            {
-                "word": "TESTIGO",
-                "gloss": "TESTIGO",
-                "categoryId": "Identificación",
-                "contexts": ["denuncia_robo", "general"],
-                "description": "Persona que presenció el hecho.",
-            }
-        )
-        resp = lambda_dictionary.create_proposal(cuerpo)
-        self.assertEqual(resp["statusCode"], 201)
-        item = _fake_table.items[0]
-        self.assertEqual(item["contexts"], ["denuncia_robo", "general"])
-        self.assertEqual(item["categoryId"], "Identificación")
-
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
+# La clase PropuestasSinAutenticacion se retiró junto con el endpoint que
+# probaba: `POST /proposals` ya no existe. Sus pruebas acotaban el tamaño del
+# cuerpo, el tipo de los campos y la allowlist de nombres; nada de eso tiene
+# objeto cuando la ruta devuelve 404. La superficie de ataque desapareció, que
+# es mejor que tenerla acotada.

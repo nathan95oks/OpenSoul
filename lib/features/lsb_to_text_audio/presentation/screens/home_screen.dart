@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/core/di/core_providers.dart';
-import 'package:lsb_legal_app/features/dictionary_proposals/presentation/widgets/propose_sign_sheet.dart';
 import '../providers/sign_images_provider.dart';
 import '../providers/cards_flow_session.dart';
 import '../providers/sentence_provider.dart';
@@ -110,16 +109,6 @@ class HomeScreen extends ConsumerWidget {
                 ref.read(signImagesEnabledProvider.notifier).alternar(),
           );
         }),
-        // Diccionario evolutivo (Fase 3): cualquier palabra que falte en el
-        // catálogo puede proponerse; queda pendiente de validación.
-        IconButton(
-          icon: const Icon(Icons.playlist_add, color: AppTheme.brandPrimary),
-          tooltip: 'Proponer palabra o seña',
-          onPressed: () => ProposeSignSheet.show(
-            context,
-            contextId: contextState?.id as String?,
-          ),
-        ),
         if (contextState != null)
           TextButton(
             onPressed: () => ref.read(cardsFlowSessionProvider).reset(),

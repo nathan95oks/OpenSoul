@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/generators/avatar_generator/avatar_3d_viewer.dart';
-import 'package:lsb_legal_app/features/dictionary_proposals/presentation/widgets/propose_sign_sheet.dart';
 
 /// Hoja modal que reproduce en el avatar 3D las señas de un turno de la
 /// persona oyente. Reutiliza el visor de doble buffer del núcleo; no
@@ -109,10 +108,11 @@ class AvatarPlaybackSheet extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    // Informativo, no accionable: el diccionario judicial es
+                    // oficial y cerrado. Saber que una palabra se deletrea
+                    // sigue siendo útil; proponerla ya no procede.
                     for (final gloss in missing)
-                      ActionChip(
-                        avatar: const Icon(Icons.playlist_add,
-                            size: 16, color: AppTheme.brandLight),
+                      Chip(
                         label: Text(
                           gloss,
                           style: const TextStyle(
@@ -120,9 +120,6 @@ class AvatarPlaybackSheet extends StatelessWidget {
                         ),
                         backgroundColor: AppTheme.darkElevated,
                         side: const BorderSide(color: AppTheme.darkBorder),
-                        tooltip: 'Proponer seña para $gloss',
-                        onPressed: () =>
-                            ProposeSignSheet.show(context, initialWord: gloss),
                       ),
                   ],
                 ),

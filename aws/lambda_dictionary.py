@@ -166,49 +166,6 @@ def get_dictionary() -> dict:
     })
 
 
-def create_proposal(raw_body: str) -> dict:
-    raw_body = raw_body or "{}"
-    # Se mide antes de parsear: un JSON de megabytes no debe llegar siquiera
-    # a construirse en memoria.
-    if len(raw_body.encode("utf-8")) > MAX_BODY_BYTES:
-        return _response(413, {"error": "Propuesta demasiado grande"})
-
-    try:
-        body = json.loads(raw_body)
-    except json.JSONDecodeError:
-        return _response(400, {"error": "JSON inválido"})
-    if not isinstance(body, dict):
-        return _response(400, {"error": "El cuerpo debe ser un objeto JSON"})
-
-    word = _clean_field("word", body.get("word")) or _clean_field(
-        "gloss", body.get("gloss")
-    )
-    if not word:
-        return _response(400, {"error": "Se requiere 'word' o 'gloss'"})
-
-    now = datetime.now(timezone.utc).isoformat()
-    proposal_id = str(uuid.uuid4())
-    item = {
-        "pk": "PROPOSAL",
-        "sk": f"{now}#{proposal_id}",
-        "id": proposal_id,
-        "status": "pending",
-        "createdAt": now,
-    }
-    for field in PROPOSAL_FIELDS:
-        if field not in body or body[field] is None:
-            continue
-        cleaned = _clean_field(field, body[field])
-        if cleaned is not None:
-            item[field] = cleaned
-    # 'word' se fija al final: ni siquiera un 'word' inválido en el cuerpo
-    # puede sustituir al valor ya validado.
-    item["word"] = word
-
-    table.put_item(Item=item)
-    return _response(201, {"id": proposal_id, "status": "pending"})
-
-
 def lambda_handler(event, context):
     method, path = _method_and_path(event)
 
@@ -216,7 +173,9 @@ def lambda_handler(event, context):
         return _response(204, {})
     if method == "GET":
         return get_dictionary()
-    if method == "POST" and path.rstrip("/").endswith("proposals"):
-        return create_proposal(event.get("body"))
+    # POST /proposals se retiró: el diccionario del ámbito judicial es oficial
+    # y cerrado, y era el único endpoint de escritura público y sin
+    # autenticar de todo el sistema. Quitarlo elimina la superficie, no solo
+    # la función.
 
     return _response(404, {"error": f"Ruta no soportada: {method} {path}"})

@@ -56,7 +56,6 @@ GLOSS_LEXICON = {
     "ACLARAR": {"rol": "VERBO", "es": "quiero aclarar"},
     "ACOMPANAR": {"rol": "VERBO", "es": "necesito que me acompañen"},
     "ACUERDO_SOCIAL": {"rol": "DOCUMENTO", "es": "un acuerdo"},
-    "ADMINISTRAR": {"rol": "VERBO", "es": "quiero administrar"},
     "AEROPUERTO": {"rol": "LUGAR", "es": "en el aeropuerto"},
     "AHORA": {"rol": "TIEMPO", "es": "ahora mismo"},
     "ALCALDIA": {"rol": "INSTITUCION", "es": "en la alcaldía"},
@@ -67,7 +66,6 @@ GLOSS_LEXICON = {
     "ANOTAR": {"rol": "VERBO", "es": "quiero anotar"},
     "ANTEAYER": {"rol": "TIEMPO", "es": "anteayer"},
     "ANTERIORMENTE": {"rol": "TIEMPO", "es": "anteriormente"},
-    "ARCHIVADOR": {"rol": "DOCUMENTO", "es": "el archivador"},
     "ARRESTAR": {"rol": "VERBO", "es": "arrestó", "agresor": "arrestó"},
     "ARTICULO": {"rol": "DOCUMENTO", "es": "el artículo"},
     "ASISTENCIA": {"rol": "URGENCIA", "es": "necesito asistencia"},
@@ -75,12 +73,10 @@ GLOSS_LEXICON = {
     "ATENDER": {"rol": "VERBO", "es": "necesito que me atiendan"},
     "AUDIENCIA": {"rol": "TRAMITE", "es": "una audiencia"},
     "AUTO": {"rol": "OBJETO", "es": "mi auto"},
-    "AUTONOMIA": {"rol": "ESTADO", "es": "autónomo"},
     "AUTORIDAD": {"rol": "INSTITUCION", "es": "en la autoridad"},
     "AUXILIO": {"rol": "URGENCIA", "es": "necesito auxilio"},
     "AVANCE": {"rol": "TRAMITE", "es": "el avance de la investigación"},
     "AVENIDA": {"rol": "LUGAR", "es": "en la avenida"},
-    "AVION": {"rol": "OBJETO", "es": "el avión"},
     "AVISAR": {"rol": "VERBO", "es": "quiero avisar"},
     "AYER": {"rol": "TIEMPO", "es": "ayer"},
     "AYUDAR": {"rol": "VERBO", "es": "necesito ayuda"},
@@ -93,7 +89,6 @@ GLOSS_LEXICON = {
     "CAMARA": {"rol": "OBJETO", "es": "una cámara"},
     "CARCEL": {"rol": "LUGAR", "es": "en la cárcel"},
     "CARNET": {"rol": "DOCUMENTO", "es": "mi carnet de identidad"},
-    "CARPETA": {"rol": "DOCUMENTO", "es": "la carpeta"},
     "CARTA": {"rol": "DOCUMENTO", "es": "la carta"},
     "CASA": {"rol": "LUGAR", "es": "en mi casa"},
     "CASO": {"rol": "TRAMITE", "es": "mi caso"},
@@ -106,7 +101,6 @@ GLOSS_LEXICON = {
     "COMO": {"rol": "DESCONOCIDO", "es": "cómo"},
     "COMPRENDER": {"rol": "VERBO", "es": "quiero comprender"},
     "COMPROBANTE": {"rol": "DOCUMENTO", "es": "un comprobante"},
-    "COMPROMISO": {"rol": "ESTADO", "es": "comprometido"},
     "CONFESAR": {"rol": "VERBO", "es": "quiero confesar"},
     "CONFIANZA": {"rol": "ESTADO", "es": "tengo confianza"},
     "CONFIRMACION": {"rol": "DOCUMENTO", "es": "la confirmación"},
@@ -129,13 +123,11 @@ GLOSS_LEXICON = {
     "CUMPLIR": {"rol": "VERBO", "es": "quiero cumplir"},
     "DANAR": {"rol": "VERBO", "es": "dañó", "agresor": "dañó"},
     "DECIDIR": {"rol": "VERBO", "es": "quiero decidir"},
-    "DECRETO_SUPREMO": {"rol": "DOCUMENTO", "es": "el decreto supremo"},
     "DEFENSA_PUBLICA": {"rol": "INSTITUCION", "es": "en la Defensa Pública"},
     "DELGADO": {"rol": "DESCRIPTOR", "es": "delgado"},
     "DEPARTAMENTO": {"rol": "LUGAR", "es": "en el departamento"},
     "DESPACHO": {"rol": "INSTITUCION", "es": "en el despacho"},
     "DIA": {"rol": "TIEMPO", "es": "ese día"},
-    "DIGNIDAD": {"rol": "DESCRIPTOR", "es": "digno"},
     "DINERO": {"rol": "OBJETO", "es": "mi dinero"},
     "DIRECCION": {"rol": "LUGAR", "es": "en esa dirección"},
     "DISCRIMINACION": {"rol": "VERBO", "es": "discriminó", "agresor": "discriminó"},
@@ -149,7 +141,6 @@ GLOSS_LEXICON = {
     "ESCRIBIR": {"rol": "VERBO", "es": "quiero escribir"},
     "ESTADO": {"rol": "DOCUMENTO", "es": "el estado del trámite"},
     "ESTOY_BIEN": {"rol": "DESCONOCIDO", "es": "estoy bien"},
-    "ETICA": {"rol": "DESCRIPTOR", "es": "ético"},
     "EXIGIR": {"rol": "VERBO", "es": "quiero exigir"},
     "EXPAREJA": {"rol": "DESCRIPTOR", "es": "mi expareja", "persona": True},
     "EXPEDIENTE": {"rol": "TRAMITE", "es": "mi expediente"},
@@ -159,16 +150,13 @@ GLOSS_LEXICON = {
     "FECHA": {"rol": "TIEMPO", "es": "en esa fecha"},
     "FELCC": {"rol": "INSTITUCION", "es": "en la FELCC"},
     "FELCV": {"rol": "INSTITUCION", "es": "en la FELCV"},
-    "FIRME": {"rol": "DESCRIPTOR", "es": "firme"},
     "FISCAL": {"rol": "INSTITUCION", "es": "en la fiscalía"},
     "FISCALIA": {"rol": "INSTITUCION", "es": "en la Fiscalía"},
     "FORMATO": {"rol": "DOCUMENTO", "es": "el formato"},
     "FORMULARIO": {"rol": "DOCUMENTO", "es": "el formulario"},
     "FOTOCOPIA": {"rol": "DOCUMENTO", "es": "una fotocopia"},
     "FOTOGRAFIA": {"rol": "OBJETO", "es": "una fotografía"},
-    "GARANTE": {"rol": "ESTADO", "es": "garante"},
     "GESTIONAR": {"rol": "VERBO", "es": "quiero gestionar"},
-    "GOBIERNO": {"rol": "INSTITUCION", "es": "en el gobierno"},
     "GRACIAS": {"rol": "DESCONOCIDO", "es": "gracias"},
     "GRUESO": {"rol": "DESCRIPTOR", "es": "grueso"},
     "HABLAR": {"rol": "VERBO", "es": "quiero hablar"},
@@ -176,7 +164,6 @@ GLOSS_LEXICON = {
     "HOJA": {"rol": "DOCUMENTO", "es": "una hoja"},
     "HOLA": {"rol": "DESCONOCIDO", "es": "hola"},
     "HOMBRE": {"rol": "DESCRIPTOR", "es": "un hombre", "persona": True},
-    "HONESTIDAD": {"rol": "DESCRIPTOR", "es": "honesto"},
     "HORA": {"rol": "TIEMPO", "es": "hace una hora"},
     "HOSPITAL": {"rol": "LUGAR", "es": "en el hospital"},
     "HOY": {"rol": "TIEMPO", "es": "hoy"},
@@ -245,7 +232,6 @@ GLOSS_LEXICON = {
     "PELIGROSO": {"rol": "DESCRIPTOR", "es": "peligroso"},
     "PERDER": {"rol": "VERBO", "es": "perdí"},
     "PERMISO": {"rol": "DESCONOCIDO", "es": "con permiso"},
-    "PERSONERIA_JURIDICA": {"rol": "DOCUMENTO", "es": "la personería jurídica"},
     "PISO": {"rol": "LUGAR", "es": "en el piso"},
     "PLAZA": {"rol": "LUGAR", "es": "en la plaza"},
     "PODER": {"rol": "DOCUMENTO", "es": "un poder notarial"},
@@ -317,9 +303,7 @@ GLOSS_LEXICON = {
     "VIOLENCIA": {"rol": "VERBO", "es": "ejerció violencia", "agresor": "ejerció violencia"},
     "WEBID": {"rol": "TRAMITE", "es": "mi WebID"},
     "WHATSAPP": {"rol": "OBJETO", "es": "por WhatsApp"},
-    "WIFI": {"rol": "OBJETO", "es": "por wifi"},
     "YO": {"rol": "SUJETO", "es": "yo"},
-    "ZOOM": {"rol": "OBJETO", "es": "por Zoom"},
 }
 
 # ===================================================================
@@ -943,7 +927,7 @@ def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
 
     residuo = [t["es"] for t in analysis.get("tramites", [])]
     residuo += [d["es"] for d in analysis.get("documentos", [])]
-    residuo += [o["es"] for o in analysis.get("objetos", []) if not o.get("arma")]
+    residuo += [o["es"] for o in analysis.get("objetos", [])]
     residuo += [l["es"] for l in analysis.get("lugares", [])]
     residuo += [d["es"] for d in analysis.get("desconocidos", [])]
     faltan = [x for x in residuo if _normalizar(x) not in _normalizar(sentence)]
@@ -1068,19 +1052,13 @@ def _objetos_text(analysis):
     directo: unirlo con "y" daba "me robó mi dinero, el producto y por
     WhatsApp". Se antepone la lista nominal y el canal se adjunta detrás.
     """
-    objs = [o["es"] for o in analysis["objetos"] if not o.get("arma")]
+    objs = [o["es"] for o in analysis["objetos"]]
     nominales = [o for o in objs if o.split(" ")[0] not in _PREPOSICIONES]
     canales = [o for o in objs if o.split(" ")[0] in _PREPOSICIONES]
     texto = _join_es(nominales)
     if canales:
         texto = f"{texto} {_join_es(canales)}".strip()
     return texto
-
-def _arma_text(analysis):
-    for o in analysis["objetos"]:
-        if o.get("arma"):
-            return f'con {o["es"]}'
-    return ""
 
 def _a_destino(complemento: str) -> str:
     """Convierte un complemento locativo en destino. Paridad con `_toDestino`.
@@ -1112,7 +1090,7 @@ def _compose_action_report(analysis, is_formal):
     última: "Pagué por WhatsApp y no me entregaron el producto".
     """
     acciones = [v["es"] for v in analysis["verbos"]]
-    objetos = [o["es"] for o in analysis["objetos"] if not o.get("arma")]
+    objetos = [o["es"] for o in analysis["objetos"]]
     objetos += [d["es"] for d in analysis["documentos"]]
     analysis["objetos"] = []
     analysis["documentos"] = []
@@ -1196,9 +1174,6 @@ def _compose_incident(analysis, is_formal, robo):
     objs = _objetos_text(analysis)
     if objs:
         core += f" {objs}"
-    arma = _arma_text(analysis)
-    if arma:
-        core += f" {arma}"
     lugar = _lugar_text(analysis)
     if lugar:
         core += f" {lugar}"
