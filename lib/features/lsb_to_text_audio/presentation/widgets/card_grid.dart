@@ -4,7 +4,6 @@ import 'package:lsb_legal_app/app/theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import '../providers/cards_provider.dart';
 import '../providers/semantic_zones_provider.dart';
-import '../providers/sentence_provider.dart';
 import 'qualifier_sheets.dart';
 import 'sign_image.dart';
 
@@ -147,36 +146,9 @@ class CardGrid extends ConsumerWidget {
   /// backend (GLOSS_LEXICON) como el LocalSentenceAssembler indexan por
   /// glosa.
   Future<void> _onAnswerPicked(
-      BuildContext context, WidgetRef ref, LsbCard card) async {
-    final notifier = ref.read(semanticZonesProvider.notifier);
-    final yaEstaba = notifier.activeAnswersOf(card.gloss);
-    notifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
-    if (yaEstaba) return; // se deseleccionó: no hay nada que precisar
+          BuildContext context, WidgetRef ref, LsbCard card) =>
+      elegirGlosa(context, ref, card);
 
-    // Precisión en el sitio. Un lugar o un vehículo genéricos no sirven en una
-    // denuncia —"me robaron en la plaza" no dice cuál— y una unidad de tiempo
-    // sin cantidad deja la fecha a medias. Antes esto era otra pantalla; que
-    // el dato se pida encima y se resuelva ahí mantiene el hilo del relato.
-    final cantidadDe = notifier.unidadTemporalDe(card.gloss);
-    if (cantidadDe != null) {
-      final n = await mostrarSelectorCantidad(context, unidad: cantidadDe);
-      if (n != null) notifier.appendQualifiers(card.gloss, [n]);
-    } else {
-      final pide = detalleQuePide(card.gloss);
-      if (pide != null) {
-        final letras = await mostrarTecladoDactilologico(
-          context,
-          titulo: pide.titulo,
-          alfanumerico: pide.alfanumerico,
-        );
-        if (letras != null && letras.isNotEmpty) {
-          notifier.appendQualifiers(card.gloss, letras);
-        }
-      }
-    }
-    ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
-  }
 }
 
 /// Pista visible en zonas que permiten emparejar dos cards

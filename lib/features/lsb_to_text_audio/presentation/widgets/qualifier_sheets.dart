@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import '../providers/semantic_zones_provider.dart';
+import '../providers/sentence_provider.dart';
 
 import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/app/theme.dart';
@@ -213,7 +218,49 @@ class _Tecla extends StatelessWidget {
 ({String titulo, bool alfanumerico})? detalleQuePide(String gloss) {
   final etiqueta = LocalSentenceAssembler.etiquetaDeDetalle(gloss);
   if (etiqueta == null) return null;
-  return etiqueta == 'placa'
-      ? (titulo: 'Deletrea la placa', alfanumerico: true)
-      : (titulo: 'Deletrea el nombre de la $etiqueta', alfanumerico: false);
+  return switch (etiqueta) {
+    'placa' => (titulo: 'Deletrea la placa', alfanumerico: true),
+    'numero' => (titulo: 'Deletrea el número de tu caso', alfanumerico: true),
+    _ => (titulo: 'Deletrea el nombre de la $etiqueta', alfanumerico: false),
+  };
+}
+
+
+/// Elige una glosa y, si necesita precisión, la pide antes de seguir.
+///
+/// Vive aquí y no en cada cuadrícula porque hay DOS superficies que añaden
+/// glosas —la rejilla de respuestas y el panel del flujo guiado— y tener la
+/// regla en una sola hizo que la otra no la aplicara: elegir SEMANA en el
+/// flujo guiado no abría nada y la unidad entraba suelta, que es justo la
+/// incoherencia que la cadena de tiempo venía a evitar.
+Future<void> elegirGlosa(
+  BuildContext context,
+  WidgetRef ref,
+  LsbCard card,
+) async {
+  final notifier = ref.read(semanticZonesProvider.notifier);
+  final yaEstaba = notifier.activeAnswersOf(card.gloss);
+
+  notifier.toggleAnswer(card.gloss);
+  ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
+  if (yaEstaba) return; // se deseleccionó: no hay nada que precisar
+
+  final unidad = notifier.unidadTemporalDe(card.gloss);
+  if (unidad != null) {
+    final n = await mostrarSelectorCantidad(context, unidad: unidad);
+    if (n != null) notifier.appendQualifiers(card.gloss, [n]);
+  } else {
+    final pide = detalleQuePide(card.gloss);
+    if (pide != null) {
+      final letras = await mostrarTecladoDactilologico(
+        context,
+        titulo: pide.titulo,
+        alfanumerico: pide.alfanumerico,
+      );
+      if (letras != null && letras.isNotEmpty) {
+        notifier.appendQualifiers(card.gloss, letras);
+      }
+    }
+  }
+  ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
 }

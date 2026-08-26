@@ -247,7 +247,11 @@ final availableContexts = <SemanticContext>[
         optional: true,
         maxPicks: 3,
         glossAllowlist: [
-          'FOTOGRAFIA', 'MENSAJE', 'PRUEBA', 'CAMARA',
+          // Sin PRUEBA: en un juzgado nadie declara "tengo una prueba" sin
+          // decir cuál. Solo evidencias concretas, que son las que un acta
+          // puede consignar.
+          'FOTOGRAFIA', 'MENSAJE', 'CERTIFICADO', 'COMPROBANTE',
+          'VIDEOLLAMADA', 'CAMARA',
           'WHATSAPP', 'VIDEOLLAMADA', 'COMPROBANTE', 'CERTIFICADO',
         ],
         leadGloss: kEvidenceMarker,
@@ -395,7 +399,8 @@ final availableContexts = <SemanticContext>[
         optional: true,
         maxPicks: 3,
         glossAllowlist: [
-          'MENSAJE', 'FOTOGRAFIA', 'PRUEBA', 'WHATSAPP',
+          'MENSAJE', 'FOTOGRAFIA', 'CERTIFICADO', 'COMPROBANTE',
+          'VIDEOLLAMADA', 'WHATSAPP',
           'VIDEOLLAMADA', 'CERTIFICADO', 'CAMARA',
         ],
         leadGloss: kEvidenceMarker,

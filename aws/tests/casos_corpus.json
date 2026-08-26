@@ -256,7 +256,7 @@
       "reglas": [
         "digitos_en_racha_se_agrupan"
       ],
-      "esperado_backend": "Quiero seguir mi expediente. Adicionalmente, hago referencia a mi NUREJ y 1024.",
+      "esperado_backend": "Quiero seguir mi expediente. Adicionalmente, hago referencia a mi NUREJ número 1024.",
       "lsb_icons": [
         "app_registration",
         "assignment",
@@ -402,7 +402,7 @@
         "digitos_en_racha_se_agrupan",
         "marcadores_encabezan"
       ],
-      "esperado_backend": "No entiendo. Necesito realizar una notificación. Adicionalmente, hago referencia a una audiencia, mi caso y 305.",
+      "esperado_backend": "No entiendo. Necesito realizar una notificación. Adicionalmente, hago referencia a una audiencia y mi caso número 305.",
       "lsb_icons": [
         "app_registration",
         "straighten",
@@ -576,7 +576,7 @@
         "digitos_en_racha_se_agrupan",
         "instituciones_penales"
       ],
-      "esperado_backend": "Necesito realizar una audiencia en el juzgado de instrucción penal. Adicionalmente, hago referencia a mi caso y 407.",
+      "esperado_backend": "Necesito realizar una audiencia en el juzgado de instrucción penal. Adicionalmente, hago referencia a mi caso número 407.",
       "lsb_icons": [
         "account_balance",
         "app_registration",

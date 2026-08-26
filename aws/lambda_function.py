@@ -244,7 +244,6 @@ GLOSS_LEXICON = {
     "PROBLEMA": {"rol": "ESTADO", "es": "por un problema"},
     "PRODUCTO": {"rol": "OBJETO", "es": "el producto"},
     "PROTEGER": {"rol": "VERBO", "es": "necesito protección"},
-    "PRUEBA": {"rol": "OBJETO", "es": "una prueba"},
     "PUEDE_REPETIR": {"rol": "DESCONOCIDO", "es": "¿puede repetir?"},
     "PUEDO": {"rol": "DESCONOCIDO", "es": "sí puedo"},
     "QUE": {"rol": "DESCONOCIDO", "es": "qué"},
@@ -344,7 +343,8 @@ _CARDINALES = {
 # Espejo de _inherentEvidence / _flightVerbs en el cliente.
 # Nadie roba una fotografía ni daña un certificado: se aportan para acreditar.
 _INHERENT_EVIDENCE = {
-    "FOTOGRAFIA", "PRUEBA", "MENSAJE", "COMPROBANTE", "CERTIFICADO", "RESPALDO",
+    "FOTOGRAFIA", "MENSAJE", "COMPROBANTE", "CERTIFICADO", "RESPALDO",
+    "VIDEOLLAMADA",
 }
 # La huida es lo que hizo el agresor DESPUÉS, no lo que me hizo. Como agresión
 # producía "un hombre me salió corriendo": falso y agramatical.
@@ -374,6 +374,10 @@ _ADMITE_DETALLE = {
     "MERCADO": "mercado", "PARADA": "parada",
     "AUTO": "placa", "MOTOCICLETA": "placa", "MICRO": "placa",
     "TAXI": "placa", "TRUFI": "placa", "BICICLETA": "placa",
+    # Un expediente sin su número no identifica nada. Se deletrea, igual que
+    # una placa.
+    "CASO": "numero", "CODIGO": "numero", "NUREJ": "numero",
+    "WEBID": "numero", "EXPEDIENTE": "numero",
 }
 
 _DIGITOS = set("0123456789")
@@ -564,8 +568,11 @@ def _con_detalle(gloss: str, lexema: str, detalles: dict) -> str:
     detalle = detalles.pop(gloss, None)
     if not detalle:
         return lexema
-    if _ADMITE_DETALLE.get(gloss) == "placa":
+    etiqueta = _ADMITE_DETALLE.get(gloss)
+    if etiqueta == "placa":
         return f"{lexema} con placa {detalle}"
+    if etiqueta == "numero":
+        return f"{lexema} número {detalle}"
     return f"{lexema} {detalle[:1].upper()}{detalle[1:].lower()}"
 
 
@@ -697,7 +704,7 @@ def analyze_glosses(cards: list) -> dict:
             }
             dest = mapping.get(rol, "desconocidos")
             registro = {"glosa": key, **entry}
-            if rol in ("LUGAR", "OBJETO"):
+            if rol in ("LUGAR", "OBJETO", "TRAMITE"):
                 registro["es"] = _con_detalle(key, registro["es"], detalles)
             if rol == "VERBO" and negar_siguiente_verbo:
                 registro["es"] = f'no {registro["es"]}'
