@@ -164,6 +164,18 @@ class LocalSentenceAssembler {
     return {unit, count};
   }
 
+  /// Glosas que son material probatorio en cualquier flujo.
+  ///
+  /// No dependen del marcador de zona porque su papel no depende de por dónde
+  /// se eligieron: una fotografía o un comprobante se aportan para acreditar
+  /// el hecho, nunca son lo sustraído ni lo dañado.
+  /// Verbos de huida: describen la salida del agresor, no la agresión.
+  static const _flightVerbs = {'CORRER'};
+
+  static const _inherentEvidence = {
+    'FOTOGRAFIA', 'PRUEBA', 'MENSAJE', 'COMPROBANTE', 'CERTIFICADO', 'RESPALDO',
+  };
+
   /// Glosas inherentemente representadas por la 1ª persona ("me", "mi"…),
   /// que no exigen aparición literal en el texto.
   static const _inherentImplicit = {'YO'};
@@ -185,6 +197,9 @@ class LocalSentenceAssembler {
         continue;
       }
       if (_inherentImplicit.contains(t)) continue;
+      // Un dígito huérfano se descartó a propósito en _classify; reclamarlo
+      // aquí lo devolvería por la puerta de atrás.
+      if (_esDigito(t)) continue;
       // Consumida por la cadena temporal: "hace dos semanas" representa a
       // SEMANA y a 2 sin que ninguno aparezca con su lexema literal.
       if (skip.contains(t)) continue;
@@ -304,6 +319,21 @@ class LocalSentenceAssembler {
     glosses = glosses
         .where((g) => !marcadores.contains(g.trim().toUpperCase()))
         .toList();
+    // Las mismas reglas que aplica el ensamblador: una racha de dígitos es un
+    // número deletreado, y un dígito huérfano —sin unidad de tiempo delante—
+    // se descarta a propósito. Sin esto el detector exigía representar algo
+    // que ambos motores tiran, y descartaba respuestas correctas.
+    final normalizadas = _joinSpelled(glosses.map(_normalize).toList());
+    final utiles = <String>[];
+    for (var i = 0; i < normalizadas.length; i++) {
+      final g = normalizadas[i];
+      if (_esDigito(g)) {
+        final previa = i > 0 ? normalizadas[i - 1] : null;
+        if (previa == null || !_timeUnits.containsKey(previa)) continue;
+      }
+      utiles.add(g);
+    }
+    glosses = utiles;
     final trimmed = backendText.trim();
     if (trimmed.isEmpty) return true;
     if (glosses.isEmpty) return false;
@@ -427,6 +457,17 @@ class LocalSentenceAssembler {
         continue;
       }
 
+      // Evidencia por naturaleza, haya o no marcador de zona. El marcador
+      // solo llega si la persona pasó por la zona de pruebas; eligiendo la
+      // misma tarjeta desde otra zona, una fotografía acababa como botín:
+      // "me robó mi motocicleta y una fotografía". Nadie roba una fotografía
+      // ni daña un certificado — se aportan para probar el hecho.
+      if (_inherentEvidence.contains(t)) {
+        final lex = _lexicon[t];
+        if (lex != null && !r.evidence.contains(lex.es)) r.evidence.add(lex.es);
+        continue;
+      }
+
       // Tras el marcador de zona, objetos y documentos cambian de papel: son
       // la evidencia que se aporta o el vehículo del siniestro, no lo que se
       // llevaron ni un servicio que se pide.
@@ -465,6 +506,13 @@ class LocalSentenceAssembler {
         continue;
       }
 
+      // Dígito huérfano: llegó sin unidad de tiempo delante, así que no es
+      // una cantidad, y no viene en racha, así que tampoco es un número
+      // deletreado. Es una selección que no significa nada por sí sola y se
+      // descarta: "Adicionalmente, hago referencia a 2" no dice nada y
+      // ensucia una declaración que puede acabar en un expediente.
+      if (_esDigito(t)) continue;
+
       final e = _lexicon[t];
       if (e == null) {
         // Glosa desconocida: la conservamos como objeto/detalle genérico
@@ -494,6 +542,14 @@ class LocalSentenceAssembler {
           (victimMode ? r.victimTraits : r.traits).add(e.es);
           break;
         case _Role.verboAgresion:
+          // Huida: es lo que hizo el agresor DESPUÉS, no lo que me hizo.
+          // Como agresión producía "un hombre me salió corriendo", que además
+          // de falso es agramatical —salir es intransitivo—. Se guarda para
+          // cerrar el relato: "…y salió corriendo".
+          if (_flightVerbs.contains(t)) {
+            r.flight ??= e.es;
+            break;
+          }
           // Dos agresiones en un mismo relato son dos hechos, no uno: la
           // segunda se guarda aparte en vez de perderse.
           if (r.aggression == null) {
@@ -561,11 +617,28 @@ class LocalSentenceAssembler {
           continue;
         }
       }
+      // Misma lógica para los dígitos: una racha es UN número deletreado —el
+      // NUREJ, un teléfono— y se junta ("1","2","3" → "123"). Un dígito
+      // aislado no se toca aquí: si sigue a una unidad de tiempo lo recoge la
+      // cadena temporal, y si no, es ruido que _classify descarta.
+      if (_esDigito(tokens[i])) {
+        var j = i;
+        while (j < tokens.length && _esDigito(tokens[j])) {
+          j++;
+        }
+        if (j - i >= 2) {
+          salida.add(tokens.sublist(i, j).join());
+          i = j;
+          continue;
+        }
+      }
       salida.add(tokens[i]);
       i++;
     }
     return salida;
   }
+
+  static bool _esDigito(String g) => g.length == 1 && _cardinales.containsKey(g);
 
   static bool _esLetra(String g) =>
       g.length == 1 && RegExp(r'^[A-ZÑ]$').hasMatch(g);
@@ -795,6 +868,13 @@ class LocalSentenceAssembler {
       if (r.place != null) {
         clause += ' ${r.place}';
         r.place = null;
+      }
+      // La huida cierra el relato del hecho, encadenada al mismo sujeto:
+      // "…me robó mi motocicleta en el mercado y salió corriendo".
+      final flight = r.flight;
+      if (flight != null) {
+        clause += ' y $flight';
+        r.flight = null;
       }
       if (r.time != null) {
         clause = '${_cap(r.time!)}, ${_decap(clause)}';
@@ -1239,6 +1319,13 @@ class LocalSentenceAssembler {
       sentences.add('Como prueba tengo ${_join(r.evidence)}.');
       r.evidence.clear();
     }
+    // Red de seguridad: si ninguna cláusula de agresor la absorbió, la huida
+    // sigue siendo parte del relato y no puede perderse.
+    final flight = r.flight;
+    if (flight != null) {
+      sentences.add('${_cap(flight)}.');
+      r.flight = null;
+    }
 
     // 7. Lugar / tiempo residuales.
     // Un plazo futuro no "ocurrió": se necesita. Sin esta rama, pedir un
@@ -1619,7 +1706,10 @@ class LocalSentenceAssembler {
     // ── Descripción (18) ──
     'CORRECTO': _Lex(_Role.rasgo, 'correcto'),
     'PELIGROSO': _Lex(_Role.rasgo, 'peligroso'),
-    'SEGURO': _Lex(_Role.rasgo, 'seguro'),
+    // Responde "¿estás en un lugar seguro?" (corpus §2.2 t.12), no
+    // describe a nadie. Como `rasgo` se pegaba al agresor: "un hombre
+    // seguro y delgado". Es un estado del declarante.
+    'SEGURO': _Lex(_Role.emocion, 'me encuentro en un lugar seguro'),
     'AMARILLO': _Lex(_Role.rasgo, 'de color amarillo'),
     'AZUL': _Lex(_Role.rasgo, 'de color azul'),
     'BLANCO': _Lex(_Role.rasgo, 'de color blanco'),
@@ -1807,6 +1897,9 @@ class _Roles {
   String? victimPlural;
   final List<String> victimTraits = [];
   String? aggression;
+
+  /// Huida del agresor ("salió corriendo"). Cierra el relato, no lo abre.
+  String? flight;
   String? action;
   String? weapon;
   String? place;
