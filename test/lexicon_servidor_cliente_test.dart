@@ -89,9 +89,21 @@ void main() {
         .map((m) => m.group(1)!)
         .toSet();
 
+    // Un rol puede tener rama propia antes del `mapping` —TESTIGO la tiene,
+    // porque su destino no es un cubo más sino una cláusula aparte—. Esas
+    // ramas también son dispatch: lo que la prueba persigue es el rol que no
+    // trata NADIE, no el que no pasa por la tabla.
+    final conRamaPropia = RegExp(r'entry\["rol"\] == "([A-Z_]+)"')
+        .allMatches(fuente)
+        .map((m) => m.group(1)!)
+        .toSet();
+
     // DESCONOCIDO es deliberado: cortesías e interrogativas no tienen cubo en
     // el backend y las recupera su regla de cobertura.
-    final huerfanos = usados.difference(reconocidos)..remove('DESCONOCIDO');
+    final huerfanos = usados
+        .difference(reconocidos)
+        .difference(conRamaPropia)
+      ..remove('DESCONOCIDO');
 
     expect(
       huerfanos,

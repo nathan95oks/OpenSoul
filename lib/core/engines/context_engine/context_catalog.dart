@@ -82,8 +82,12 @@ final preguntasContext = SemanticContext(
       emoji: '📋',
       semanticWeight: 0.8,
       optional: true,
+      // AVANCE y ESTADO responden "¿cómo puedo saber el avance del caso?" y
+      // DENUNCIAR, "¿dónde puedo presentar la denuncia?" (§6). Sin ellas,
+      // dos de las cinco preguntas del ciudadano no se podían formular.
       glossAllowlist: [
-        'TRAMITE', 'REQUISITO', 'CASO', 'EXPEDIENTE',
+        'TRAMITE', 'REQUISITO', 'CASO', 'EXPEDIENTE', 'AVANCE', 'ESTADO',
+        'DENUNCIAR',
         'CARNET', 'PASAPORTE', 'CERTIFICADO', 'CONSTANCIA', 'FORMULARIO',
       ],
     ),
@@ -97,7 +101,13 @@ final preguntasContext = SemanticContext(
       emoji: '🕐',
       semanticWeight: 0.7,
       optional: true,
-      glossAllowlist: ['AUDIENCIA', 'CITACION', 'NOTIFICACION', 'DIA', 'SEMANA', 'MES'],
+      // VOLVER es la pregunta que cierra toda atención en ventanilla (§6) y
+      // sin ella [CUANDO] a secas componía "¿Cuándo ocurrió?", que mira al
+      // pasado justo cuando se pregunta por una fecha por venir.
+      glossAllowlist: [
+        'AUDIENCIA', 'CITACION', 'NOTIFICACION', 'VOLVER',
+        'DIA', 'SEMANA', 'MES',
+      ],
       chainTriggers: ['DIA', 'SEMANA', 'MES'],
       chainZoneId: 'cantidad_pregunta',
     ),
@@ -132,7 +142,10 @@ final identificacionContext = SemanticContext(
     SemanticZone(
       id: 'identidad',
       label: 'Identidad',
-      hint: 'Cómo me llamo',
+      // El texto de la zona es lo que [ZoneInferenceEngine] busca: nombrar
+      // aquí el documento es lo que hace que "¿puede mostrar su documento?"
+      // abra esta zona y no otra.
+      hint: 'Mi nombre, mi apellido y mi documento',
       question: '¿Cuál es su nombre?',
       emoji: '🪪',
       semanticWeight: 0.95,
@@ -325,6 +338,60 @@ final availableContexts = <SemanticContext>[
         chainTriggers: ['MINUTO', 'HORA', 'DIA', 'SEMANA', 'MES'],
         chainZoneId: 'cantidad',
       ),
+      // §4 t.7: "¿Conoce a la persona involucrada?". Sin esta zona la
+      // pregunta no tenía respuesta posible y la persona sorda quedaba
+      // muda ante el dato que más pesa en una investigación.
+      SemanticZone(
+        id: 'conocimiento',
+        label: 'Conocimiento',
+        hint: 'Si conozco a la persona involucrada',
+        question: '¿Conoces a la persona?',
+        emoji: '🤝',
+        semanticWeight: 0.35,
+        optional: true,
+        glossAllowlist: ['CONOCER', 'DESCONOCER'],
+      ),
+      // §4 t.9: "¿Hay testigos?". Es una pregunta de sí o no, así que la
+      // zona ofrece las dos: sin NO, la ausencia de testigos —que también es
+      // un dato del acta— no se podía declarar.
+      SemanticZone(
+        id: 'testigos',
+        label: 'Testigos',
+        hint: 'Si alguien lo presenció',
+        question: '¿Hay testigos?',
+        emoji: '👀',
+        semanticWeight: 0.35,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['SI', 'NO', 'TESTIGO'],
+      ),
+      // §4 t.12: "¿Desea realizar una denuncia?". Es el consentimiento con
+      // el que arranca el expediente: la app no puede darlo por supuesto.
+      SemanticZone(
+        id: 'denuncia',
+        label: 'Denuncia',
+        hint: 'Si quiero denunciar',
+        question: '¿Deseas realizar la denuncia?',
+        emoji: '📝',
+        semanticWeight: 0.3,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['SI', 'NO', 'DENUNCIAR'],
+      ),
+      // §4 t.13: "¿Necesita apoyo legal?". Solo las tres figuras que el
+      // corpus penal reconoce como apoyo a la víctima; el resto de
+      // instituciones responde a "dónde acudir", que es otra pregunta.
+      SemanticZone(
+        id: 'apoyo_legal',
+        label: 'Apoyo legal',
+        hint: 'Si necesito abogado o intérprete',
+        question: '¿Necesitas apoyo legal?',
+        emoji: '⚖️',
+        semanticWeight: 0.3,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['ABOGADO', 'DEFENSA_PUBLICA', 'INTERPRETE'],
+      ),
       SemanticZone(
         id: 'cantidad',
         label: 'Cuántos',
@@ -507,6 +574,60 @@ final availableContexts = <SemanticContext>[
         chainTriggers: ['MINUTO', 'HORA', 'DIA', 'SEMANA', 'MES'],
         chainZoneId: 'cantidad',
       ),
+      // §4 t.7: "¿Conoce a la persona involucrada?". Sin esta zona la
+      // pregunta no tenía respuesta posible y la persona sorda quedaba
+      // muda ante el dato que más pesa en una investigación.
+      SemanticZone(
+        id: 'conocimiento',
+        label: 'Conocimiento',
+        hint: 'Si conozco a la persona involucrada',
+        question: '¿Conoces a la persona?',
+        emoji: '🤝',
+        semanticWeight: 0.35,
+        optional: true,
+        glossAllowlist: ['CONOCER', 'DESCONOCER'],
+      ),
+      // §4 t.9: "¿Hay testigos?". Es una pregunta de sí o no, así que la
+      // zona ofrece las dos: sin NO, la ausencia de testigos —que también es
+      // un dato del acta— no se podía declarar.
+      SemanticZone(
+        id: 'testigos',
+        label: 'Testigos',
+        hint: 'Si alguien lo presenció',
+        question: '¿Hay testigos?',
+        emoji: '👀',
+        semanticWeight: 0.35,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['SI', 'NO', 'TESTIGO'],
+      ),
+      // §4 t.12: "¿Desea realizar una denuncia?". Es el consentimiento con
+      // el que arranca el expediente: la app no puede darlo por supuesto.
+      SemanticZone(
+        id: 'denuncia',
+        label: 'Denuncia',
+        hint: 'Si quiero denunciar',
+        question: '¿Deseas realizar la denuncia?',
+        emoji: '📝',
+        semanticWeight: 0.3,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['SI', 'NO', 'DENUNCIAR'],
+      ),
+      // §4 t.13: "¿Necesita apoyo legal?". Solo las tres figuras que el
+      // corpus penal reconoce como apoyo a la víctima; el resto de
+      // instituciones responde a "dónde acudir", que es otra pregunta.
+      SemanticZone(
+        id: 'apoyo_legal',
+        label: 'Apoyo legal',
+        hint: 'Si necesito abogado o intérprete',
+        question: '¿Necesitas apoyo legal?',
+        emoji: '⚖️',
+        semanticWeight: 0.3,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['ABOGADO', 'DEFENSA_PUBLICA', 'INTERPRETE'],
+      ),
       SemanticZone(
         id: 'cantidad',
         label: 'Cuántos',
@@ -630,6 +751,34 @@ final availableContexts = <SemanticContext>[
         chainTriggers: ['MINUTO', 'HORA', 'DIA', 'SEMANA', 'MES'],
         chainZoneId: 'cantidad',
       ),
+      // §4 t.9: "¿Hay testigos?". Es una pregunta de sí o no, así que la
+      // zona ofrece las dos: sin NO, la ausencia de testigos —que también es
+      // un dato del acta— no se podía declarar.
+      SemanticZone(
+        id: 'testigos',
+        label: 'Testigos',
+        hint: 'Si alguien lo presenció',
+        question: '¿Hay testigos?',
+        emoji: '👀',
+        semanticWeight: 0.35,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['SI', 'NO', 'TESTIGO'],
+      ),
+      // §4 t.13: "¿Necesita apoyo legal?". Solo las tres figuras que el
+      // corpus penal reconoce como apoyo a la víctima; el resto de
+      // instituciones responde a "dónde acudir", que es otra pregunta.
+      SemanticZone(
+        id: 'apoyo_legal',
+        label: 'Apoyo legal',
+        hint: 'Si necesito abogado o intérprete',
+        question: '¿Necesitas apoyo legal?',
+        emoji: '⚖️',
+        semanticWeight: 0.3,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['ABOGADO', 'DEFENSA_PUBLICA', 'INTERPRETE'],
+      ),
       SemanticZone(
         id: 'cantidad',
         label: 'Cuántos',
@@ -746,6 +895,33 @@ final availableContexts = <SemanticContext>[
         ],
         chainTriggers: ['MINUTO', 'HORA', 'DIA', 'SEMANA', 'MES'],
         chainZoneId: 'cantidad',
+      ),
+      // §4 t.7: "¿Conoce a la persona involucrada?". Sin esta zona la
+      // pregunta no tenía respuesta posible y la persona sorda quedaba
+      // muda ante el dato que más pesa en una investigación.
+      SemanticZone(
+        id: 'conocimiento',
+        label: 'Conocimiento',
+        hint: 'Si conozco a la persona involucrada',
+        question: '¿Conoces a la persona?',
+        emoji: '🤝',
+        semanticWeight: 0.35,
+        optional: true,
+        glossAllowlist: ['CONOCER', 'DESCONOCER'],
+      ),
+      // §4 t.13: "¿Necesita apoyo legal?". Solo las tres figuras que el
+      // corpus penal reconoce como apoyo a la víctima; el resto de
+      // instituciones responde a "dónde acudir", que es otra pregunta.
+      SemanticZone(
+        id: 'apoyo_legal',
+        label: 'Apoyo legal',
+        hint: 'Si necesito abogado o intérprete',
+        question: '¿Necesitas apoyo legal?',
+        emoji: '⚖️',
+        semanticWeight: 0.3,
+        optional: true,
+        maxPicks: 2,
+        glossAllowlist: ['ABOGADO', 'DEFENSA_PUBLICA', 'INTERPRETE'],
       ),
       SemanticZone(
         id: 'cantidad',

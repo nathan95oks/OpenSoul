@@ -57,7 +57,16 @@ class ContextInferenceEngine {
     List<LsbCard> entries, {
     double minConfidence = 0.45,
   }) {
-    final contextIds = [for (final c in availableContexts) c.id];
+    // Fase 1 entra aquí aunque no esté en [availableContexts]: esa lista es
+    // la de contextos que NARRAN un hecho, y la identificación no narra. Pero
+    // sí se infiere —"¿cuál es su nombre?" es la primera pregunta de toda
+    // atención— y al quedar fuera, el diccionario ya etiquetaba NOMBRE, EDAD
+    // y CARNET con 'identificacion' y este motor tiraba la etiqueta: el dato
+    // estaba bien y nadie lo miraba.
+    final contextIds = [
+      for (final c in availableContexts) c.id,
+      identificacionContext.id,
+    ];
 
     // Los contextos con los que se etiquetan las tarjetas no siempre son
     // contextos de la UI: 'tramite_id' y 'perdida' son sub-dominios de
@@ -87,7 +96,7 @@ class ContextInferenceEngine {
     }
 
     final contextStems = <String, Set<String>>{
-      for (final c in availableContexts)
+      for (final c in [...availableContexts, identificacionContext])
         c.id: _stemAll('${c.name} ${c.description}'),
     };
 
@@ -118,6 +127,38 @@ class ContextInferenceEngine {
   }) {
     if (_contextIds.isEmpty) return null;
 
+    // ── Capa 1: reglas duras ────────────────────────────────────────────
+    //
+    // El modelo por frecuencia es bueno para lo que no se puede enumerar —el
+    // relato de un hecho—, pero las preguntas del funcionario SÍ se enumeran:
+    // el corpus §4 las lista, son trece y no cambian. Dejarlas a la
+    // estadística fue el error: "¿cómo te llamas?" no contiene ninguna glosa,
+    // así que el único punto que puntuaba era la palabra «como» contra el
+    // nombre del contexto «Declarar **como** testigo», y con esa única señal
+    // en el marcador la confianza salía 1.00. Una coincidencia de palabra
+    // vacía, con la máxima confianza posible, enrutando una identificación a
+    // una declaración de testigo.
+    final plano = _normalizeText(text);
+    if (plano.isNotEmpty) {
+      for (final rule in _hardRules) {
+        final marca = rule.matchIn(plano);
+        if (marca == null) continue;
+        // Regla de abstención: la pregunta se responde DENTRO del flujo en
+        // curso, no cambiando de flujo. Devolver null conserva el contexto
+        // activo (`ReplyPrompt.proposedContextId`) y deja que
+        // [ZoneInferenceEngine] abra la zona exacta. Y cuando no hay contexto
+        // activo —"¿qué ocurrió?" es la primera pregunta de la atención— lo
+        // que aparece es el menú raíz, que es justo lo que debe aparecer.
+        if (rule.contextId == null) return null;
+        return ContextSuggestion(
+          contextId: rule.contextId!,
+          confidence: 1.0,
+          evidence: [marca.toUpperCase()],
+        );
+      }
+    }
+
+    // ── Capa 2: modelo por frecuencia sobre el diccionario ──────────────
     final scores = <String, double>{};
     final evidence = <String, Map<String, double>>{};
 
@@ -174,8 +215,20 @@ class ContextInferenceEngine {
     final total = scores.values.reduce((a, b) => a + b);
     if (total <= 0) return null;
 
-    final ranked = scores.entries.toList()
+    // Una sugerencia debe apoyarse en al menos una glosa del diccionario.
+    // Coincidir con el NOMBRE o la DESCRIPCIÓN de un contexto desempata, pero
+    // no puede por sí solo proponer nada: son cuatro o cinco palabras sueltas
+    // de prosa, y bastaba acertar una para llevarse el 100% de una puntuación
+    // en la que no competía nadie más. Es el mismo defecto que la regla dura
+    // ataja por delante, cerrado aquí también para que ninguna frase futura
+    // vuelva a colarse por él.
+    if (evidence.isEmpty) return null;
+
+    final ranked = scores.entries
+        .where((e) => evidence.containsKey(e.key))
+        .toList()
       ..sort((a, b) => b.value.compareTo(a.value));
+    if (ranked.isEmpty) return null;
     final best = ranked.first;
     final confidence = best.value / total;
     if (confidence < minConfidence) return null;
@@ -203,6 +256,88 @@ class ContextInferenceEngine {
   static const double _contextNameWeight = 0.8;
 }
 
+// ── Reglas duras: las preguntas del funcionario (corpus §4) ─────────────
+//
+// Trece preguntas, enumerables y estables: son el guion de una recepción de
+// denuncia. Se comprueban ANTES del modelo por frecuencia porque en ellas no
+// hay nada que estimar —se sabe exactamente a dónde llevan— y porque son
+// justo las frases donde el modelo falla: están hechas de palabras vacías
+// («cómo», «cuál», «qué»), que es lo único que puede coincidir por azar.
+//
+// Una regla con [contextId] nulo **se abstiene**: la pregunta se responde
+// dentro del flujo en curso y quien abre la zona es [ZoneInferenceEngine].
+
+class _HardRule {
+  /// Frases que disparan la regla, ya normalizadas (sin tildes ni signos).
+  final List<String> markers;
+
+  /// Contexto al que enrutar, o `null` para abstenerse (ver arriba).
+  final String? contextId;
+
+  const _HardRule(this.markers, this.contextId);
+
+  /// Primera marca presente en [haystack], o `null`.
+  String? matchIn(String haystack) {
+    for (final m in markers) {
+      if (haystack.contains(m)) return m;
+    }
+    return null;
+  }
+}
+
+/// El orden importa: gana la primera que coincida, así que van de más
+/// específica a más general.
+const List<_HardRule> _hardRules = [
+  // ── Fase 1: identidad ─────────────────────────────────────────────────
+  // "¿Cuál es su nombre completo?" · "¿Cómo se llama?" · "¿Qué edad tiene?"
+  // · "¿Puede mostrar su documento?"
+  _HardRule([
+    'nombre completo', 'cual es su nombre', 'cual es tu nombre',
+    'como se llama', 'como te llamas', 'como se llaman',
+    'su nombre', 'tu nombre', 'digame su nombre', 'apellido',
+    'que edad', 'cuantos anos tiene', 'cuantos anos tienes', 'su edad',
+    'tu edad', 'edad tiene', 'edad tienes',
+    'su carnet', 'tu carnet', 'carnet de identidad', 'su cedula',
+    'documento de identidad', 'su documento', 'tu documento',
+    'mostrar su documento', 'identificarse', 'su identidad', 'identificarte',
+  ], 'identificacion'),
+
+  // ── Abstenciones: se contestan dentro del flujo en curso ──────────────
+  //
+  // Todas estaban desviando la conversación. "¿Hay testigos?" proponía
+  // «Declarar como testigo» —invitando a la víctima a declarar como si fuera
+  // ella quien lo presenció— y "¿está herido?" proponía «Consultas», que
+  // convierte una urgencia médica en una consulta administrativa.
+  _HardRule([
+    // "¿Qué ocurrió?" — el menú raíz: es la persona quien dice de qué viene.
+    'que ocurrio', 'que paso', 'que sucedio', 'que le paso', 'que te paso',
+    'que ha ocurrido', 'que le ocurrio', 'que te ocurrio',
+    // "¿Cuándo ocurrió el hecho?" · "¿Dónde ocurrió?"
+    'cuando ocurrio', 'cuando fue', 'cuando paso', 'en que momento',
+    'donde ocurrio', 'donde fue', 'donde paso', 'en que lugar',
+    // "¿Conoce a la persona involucrada?"
+    'conoce a la persona', 'conoces a la persona', 'la conoce', 'lo conoce',
+    'conoce al agresor', 'persona involucrada',
+    // "¿Puede describir a la persona?"
+    'describir a la persona', 'puede describir', 'como era la persona',
+    'como era el', 'que aspecto',
+    // "¿Hay testigos?"
+    'hay testigos', 'algun testigo', 'habia testigos', 'hubo testigos',
+    // "¿Tiene fotografías o documentos?"
+    'tiene fotografias', 'tienes fotografias', 'tiene pruebas',
+    'tienes pruebas', 'alguna prueba', 'tiene evidencia',
+    // "¿Está herido?" · "¿Necesita atención médica?"
+    'esta herido', 'estas herido', 'esta herida', 'atencion medica',
+    'necesita un medico', 'necesita atencion',
+    // "¿Desea realizar una denuncia?"
+    'desea realizar una denuncia', 'desea denunciar', 'quiere denunciar',
+    'presentar una denuncia', 'realizar la denuncia',
+    // "¿Necesita apoyo legal?"
+    'apoyo legal', 'asistencia legal', 'necesita abogado',
+    'necesita un abogado', 'defensa publica',
+  ], null),
+];
+
 // ── Normalización léxica ────────────────────────────────────────────────
 //
 // Un lematizador completo sería desproporcionado: basta con reducir las
@@ -225,6 +360,17 @@ String _removeAccents(String value) {
   return result;
 }
 
+/// Texto listo para buscar frases: sin tildes, sin signos y con los espacios
+/// colapsados, de modo que «¿Cómo te llamas?» contenga literalmente
+/// 'como te llamas'.
+String _normalizeText(String input) {
+  final sinTildes = _removeAccents(input.toLowerCase());
+  return sinTildes
+      .replaceAll(RegExp(r'[^a-z0-9 ]'), ' ')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+}
+
 String _stem(String word) {
   final normalized = _removeAccents(word.toLowerCase());
   for (final suffix in _suffixes) {
@@ -236,13 +382,41 @@ String _stem(String word) {
   return normalized;
 }
 
+/// Palabras de función: gramática, no contenido.
+///
+/// El filtro por longitud (>= 4) las dejaba pasar todas —«como», «cual»,
+/// «esta», «tiene»— y son precisamente las que forman una PREGUNTA. Por eso
+/// el motor fallaba justo con las preguntas del funcionario y acertaba con
+/// los relatos: «¿cómo te llamas?» solo tenía «como» que ofrecer, y «como»
+/// aparece en el nombre del contexto «Declarar como testigo».
+///
+/// Una palabra de esta lista no puede sumar por sí sola a ningún contexto.
+/// Ninguna es vocabulario del dominio: no hay glosa que las tenga por lexema.
+const Set<String> _stopwords = {
+  'como', 'cual', 'cuales', 'quien', 'quienes', 'donde', 'cuando', 'cuanto',
+  'cuanta', 'cuantos', 'cuantas', 'porque', 'para', 'pero', 'esta', 'este',
+  'esto', 'esos', 'esas', 'ese', 'eso', 'aqui', 'alli', 'sobre', 'desde',
+  'hasta', 'entre', 'ante', 'tras', 'segun', 'sino', 'cada', 'todo', 'toda',
+  'todos', 'todas', 'algo', 'alguno', 'alguna', 'algun', 'nada', 'nadie',
+  'otro', 'otra', 'otros', 'otras', 'mismo', 'misma', 'tanto', 'tanta',
+  'usted', 'ustedes', 'nosotros', 'ellos', 'ellas', 'suyo', 'suya',
+  'tiene', 'tienes', 'tengo', 'tenia', 'tener', 'hacer', 'hace', 'haces',
+  'puede', 'puedes', 'pueden', 'podria', 'quiere', 'quieres', 'quiero',
+  'debe', 'debes', 'debo', 'estan', 'estoy', 'estar', 'estas',
+  'seria', 'fueron', 'siendo', 'haber', 'habia', 'hubo', 'sera',
+  'favor', 'gracias', 'senor', 'senora', 'senorita', 'buenos', 'buenas',
+  'dias', 'tardes', 'noches', 'ahora', 'luego', 'entonces', 'tambien',
+  'solo', 'muy', 'mas', 'menos', 'bien', 'alla',
+};
+
 /// Raíces de todas las palabras de un texto, descartando las demasiado
-/// cortas para ser informativas (artículos, preposiciones, pronombres).
+/// cortas para ser informativas (artículos, preposiciones, pronombres) y las
+/// que son gramática pura ([_stopwords]).
 Set<String> _stemAll(String text) {
   final words = _removeAccents(text.toLowerCase()).split(RegExp(r'[^a-z0-9_]+'));
   return {
     for (final word in words)
-      if (word.length >= 4) _stem(word),
+      if (word.length >= 4 && !_stopwords.contains(word)) _stem(word),
   };
 }
 

@@ -102,12 +102,18 @@ class LocalSentenceAssembler {
       _ => _composeGeneric(contextId, roles, unidos),
     };
 
+    // Los testigos son su propia oración, después del relato: quién vio el
+    // hecho no es parte de lo que ocurrió. Se añade aquí, y no en cada
+    // composer, por el mismo motivo que los marcadores —son ocho composers y
+    // la regla es una—.
+    final conTestigos = _withWitnesses(composed, roles);
+
     // Las cortesías y respuestas encabezan, en su orden de selección: "Hola.
     // Sí. Quiero denunciar un robo." Un único punto de inserción para los
     // siete composers, en vez de repetir la regla en cada uno.
     final conMarcadores = roles.markers.isEmpty
-        ? composed
-        : '${roles.markers.map(_asSentence).join(' ')} $composed'.trim();
+        ? conTestigos
+        : '${roles.markers.map(_asSentence).join(' ')} $conTestigos'.trim();
 
     // Regla de cobertura semántica: ninguna glosa seleccionada puede perderse.
     return _ensureCoverage(conMarcadores, limpios, skip: consumidas);
@@ -628,6 +634,9 @@ class LocalSentenceAssembler {
     // Tras el marcador [kVictimMarker], los descriptores de persona pasan a
     // describir a la persona AGREDIDA (no al agresor). Flujo de testigo.
     var victimMode = false;
+    var afirmarSiguienteVerbo = false;
+    final hayInterrogativa =
+        tokens.any((t) => _lexicon[t]?.role == _Role.interrogativa);
     var negarSiguienteVerbo = false;
     var evidenceMode = false;
     var vehicleMode = false;
@@ -658,7 +667,11 @@ class LocalSentenceAssembler {
       // misma tarjeta desde otra zona, una fotografía acababa como botín:
       // "me robó mi motocicleta y una fotografía". Nadie roba una fotografía
       // ni daña un certificado — se aportan para probar el hecho.
-      if (_inherentEvidence.contains(t)) {
+      // Salvo que se esté construyendo una PREGUNTA: quien pregunta "¿qué
+      // documentos necesito?" no está aportando un certificado como prueba, y
+      // clasificarlo como evidencia lo sacaba de `documents` y la pregunta
+      // salía sin complemento ("¿Qué necesito?").
+      if (_inherentEvidence.contains(t) && !hayInterrogativa) {
         final lex = _lexicon[t];
         if (lex != null && !r.evidence.contains(lex.es)) r.evidence.add(lex.es);
         continue;
@@ -702,15 +715,24 @@ class LocalSentenceAssembler {
         continue;
       }
 
-      // Negación posicional. En LSB la negación es una seña aparte, no un
-      // prefijo del verbo: NO delante de un verbo lo niega ("NO ENTREGAR" →
-      // "no me entregaron"). Sin esto, el NO quedaba como marcador suelto
-      // —"No."— y el verbo se afirmaba, que es decir lo contrario.
-      if (t == 'NO' &&
-          i + 1 < tokens.length &&
-          _lexicon[tokens[i + 1]]?.role == _Role.verboAccion) {
-        negarSiguienteVerbo = true;
-        continue;
+      // Polaridad posicional. En LSB tanto la negación como la afirmación son
+      // señas aparte, no prefijos del verbo: NO delante de un verbo lo niega
+      // ("NO ENTREGAR" → "no me entregaron") y SÍ lo afirma. Sin esto, el NO o
+      // el SÍ quedaban como cortesía suelta —"No."— y el verbo se afirmaba
+      // solo, que en el primer caso es decir lo contrario.
+      //
+      // Alcanza también a TESTIGO porque "¿Hay testigos?" es una pregunta de
+      // sí o no y su respuesta no es un verbo, sino la persona misma.
+      if ((t == 'NO' || t == 'SI') && i + 1 < tokens.length) {
+        final siguiente = _lexicon[tokens[i + 1]]?.role;
+        if (siguiente == _Role.verboAccion || siguiente == _Role.testigo) {
+          if (t == 'NO') {
+            negarSiguienteVerbo = true;
+          } else {
+            afirmarSiguienteVerbo = true;
+          }
+          continue;
+        }
       }
 
       // Dígito huérfano: llegó sin unidad de tiempo delante, así que no es
@@ -757,8 +779,13 @@ class LocalSentenceAssembler {
           }
           break;
         case _Role.verboAccion:
-          final forma = negarSiguienteVerbo ? 'no ${e.es}' : e.es;
+          final forma = negarSiguienteVerbo
+              ? 'no ${e.es}'
+              : afirmarSiguienteVerbo
+                  ? 'sí ${e.es}'
+                  : e.es;
           negarSiguienteVerbo = false;
+          afirmarSiguienteVerbo = false;
           // Un segundo verbo de acción no se pierde: es otro hecho del
           // relato ("pagué" y además "no me entregaron").
           if (r.action == null) {
@@ -766,6 +793,13 @@ class LocalSentenceAssembler {
           } else if (!r.extraActions.contains(forma)) {
             r.extraActions.add(forma);
           }
+          break;
+        case _Role.testigo:
+          r.witnessesNegated = r.witnessesNegated || negarSiguienteVerbo;
+          r.witnessesAffirmed = r.witnessesAffirmed || afirmarSiguienteVerbo;
+          negarSiguienteVerbo = false;
+          afirmarSiguienteVerbo = false;
+          if (!r.witnesses.contains(e.es)) r.witnesses.add(e.es);
           break;
         case _Role.objeto:             r.objects.add(_conDetalle(t, e.es, r)); break;
         case _Role.documento:          r.documents.add(_conDetalle(t, e.es, r)); break;
@@ -898,6 +932,27 @@ class LocalSentenceAssembler {
   /// Cuando no hay complemento, la interrogativa vale por sí sola: "¿Dónde?"
   /// es una pregunta legítima en un mostrador, y forzar un objeto inventado
   /// sería peor que devolverla tal cual.
+  /// Cierra el relato con quién lo presenció.
+  ///
+  /// "¿Hay testigos?" se responde sí o no, así que la negativa tiene forma
+  /// propia: la ausencia de testigos es un dato del acta, no un silencio.
+  String _withWitnesses(String texto, _Roles r) {
+    if (r.witnesses.isEmpty) return texto;
+    final afirmacion = r.witnessesAffirmed ? 'Sí, hay' : 'Hay';
+    final clausula = r.witnessesNegated
+        ? 'No hay testigos'
+        : r.witnesses.length == 1
+            ? '$afirmacion ${r.witnesses.first}'
+            : '$afirmacion testigos';
+    // En una pregunta la cláusula no encaja: quien pregunta por un testigo no
+    // está declarando que lo haya.
+    if (r.question != null) return texto;
+    final base = texto.trim();
+    if (base.isEmpty) return '$clausula.';
+    final sinPunto = base.endsWith('.') ? base.substring(0, base.length - 1) : base;
+    return '$sinPunto. $clausula.';
+  }
+
   String _composeQuestion(_Roles r) {
     if (r.question == null) {
       return _composeInquiry(r);
@@ -914,17 +969,21 @@ class LocalSentenceAssembler {
       ...r.services,
       if (r.institution != null) r.institution!,
     ];
+    // La pregunta la formula la persona sorda y la escucha el funcionario:
+    // va en PRIMERA persona. En segunda —"¿Qué documento necesitas?"— la
+    // aplicación le preguntaba al funcionario por las necesidades DEL
+    // FUNCIONARIO, que es lo contrario de lo que quiso decir quien la usó.
     if (interrogativa == 'qué' || interrogativa == 'cuál') {
-      if (r.procedures.isNotEmpty) return '¿Qué trámite necesitas?';
+      if (r.procedures.isNotEmpty) return '¿Qué trámite necesito?';
       if (r.documents.isNotEmpty) {
         return _looksLikeSupportDocument(r.documents)
-            ? '¿Qué soporte necesitas?'
-            : '¿Qué documento necesitas?';
+            ? '¿Qué soporte necesito?'
+            : '¿Qué documentos necesito?';
       }
-      if (r.objects.isNotEmpty) return '¿Qué necesitas?';
-      if (r.services.isNotEmpty) return '¿Qué apoyo necesitas?';
+      if (r.objects.isNotEmpty) return '¿Qué necesito?';
+      if (r.services.isNotEmpty) return '¿Qué apoyo necesito?';
       if (r.institution != null) return '¿Qué institución?';
-      return '¿Qué necesitas?';
+      return '¿Qué necesito?';
     }
 
     if (interrogativa == 'dónde') {
@@ -940,10 +999,21 @@ class LocalSentenceAssembler {
             : r.place!;
         return '¿Dónde está $complemento?';
       }
+      // §6: "¿Dónde puedo presentar la denuncia?". Con un verbo elegido, la
+      // pregunta es por dónde HACER algo, no por dónde ocurrió: devolver
+      // "¿Dónde ocurrió?" perdía el verbo y cambiaba la pregunta entera.
+      final accion = _accionDePregunta(r);
+      if (accion != null) return '¿Dónde puedo $accion?';
       return '¿Dónde ocurrió?';
     }
 
     if (interrogativa == 'cuándo') {
+      // §6: "¿Cuándo debo volver?" — la pregunta que cierra toda atención.
+      final accion = _accionDePregunta(r);
+      if (accion != null) return '¿Cuándo debo $accion?';
+      // Una citación o una audiencia tienen fecha: se pregunta cuándo SON.
+      final citado = [...r.procedures, ...r.documents];
+      if (citado.isNotEmpty) return '¿Cuándo es ${_conArticuloDefinido(citado.first)}?';
       return '¿Cuándo ocurrió?';
     }
 
@@ -965,6 +1035,19 @@ class LocalSentenceAssembler {
     }
 
     if (interrogativa == 'cómo') {
+      // §6: "¿Cómo puedo saber el avance del caso?". Devolver "¿Cómo es?"
+      // descartaba el complemento y dejaba una pregunta que no pregunta nada.
+      final accion = _accionDePregunta(r);
+      if (accion != null) return '¿Cómo puedo $accion?';
+      // §6: "¿Cómo puedo saber el avance del caso?". Un expediente no se
+      // "sabe": se sabe su estado. AVANCE y ESTADO ya lo nombran en su propio
+      // lexema, así que anteponérselo daría "el estado de el avance de…".
+      final tema = [...r.procedures, ...r.documents];
+      if (tema.isNotEmpty) {
+        final x = tema.first;
+        final yaEsEstado = x.contains('avance') || x.contains('estado');
+        return '¿Cómo puedo saber ${yaEsEstado ? x : 'el estado de $x'}?';
+      }
       return '¿Cómo es?';
     }
 
@@ -977,6 +1060,33 @@ class LocalSentenceAssembler {
       return '¿${_capitalizar(interrogativa)}?';
     }
     return '¿${_capitalizar(interrogativa)} ${admitidos.first}?';
+  }
+
+  /// Modales con los que el lexicón redacta los verbos en una declaración.
+  /// En una pregunta sobran: "¿Dónde puedo quiero presentar una denuncia?".
+  static const _modalesDeclarativos = [
+    'quiero ', 'necesito ', 'debo ', 'puedo ', 'sí quiero ', 'no quiero ',
+  ];
+
+  /// Verbo elegido, en la forma que admite un modal interrogativo delante.
+  ///
+  /// Devuelve `null` si no se eligió ninguno, que es cuando la interrogativa
+  /// pregunta por una cosa y no por una acción.
+  String? _accionDePregunta(_Roles r) {
+    final verbo = r.action ?? (r.extraActions.isEmpty ? null : r.extraActions.first);
+    if (verbo == null) return null;
+    for (final modal in _modalesDeclarativos) {
+      if (verbo.startsWith(modal)) return verbo.substring(modal.length);
+    }
+    return verbo;
+  }
+
+  /// "una audiencia" → "la audiencia". Se pregunta por LA citación concreta
+  /// que le compete a quien pregunta, no por una cualquiera.
+  String _conArticuloDefinido(String lexema) {
+    if (lexema.startsWith('una ')) return 'la ${lexema.substring(4)}';
+    if (lexema.startsWith('un ')) return 'el ${lexema.substring(3)}';
+    return lexema;
   }
 
   /// Contexto de preguntas sin una interrogativa clara.
@@ -1862,7 +1972,7 @@ class LocalSentenceAssembler {
     'HOMBRE': _Lex(_Role.personaDesc, 'un hombre'),
     'LADRON': _Lex(_Role.personaDesc, 'un ladrón'),
     'MUJER': _Lex(_Role.personaDesc, 'una mujer'),
-    'TESTIGO': _Lex(_Role.personaDesc, 'un testigo'),
+    'TESTIGO': _Lex(_Role.testigo, 'un testigo'),
     'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
     'MILITAR': _Lex(_Role.personaDesc, 'un militar'),
     'SOLDADO': _Lex(_Role.personaDesc, 'un soldado'),
@@ -1966,7 +2076,19 @@ class LocalSentenceAssembler {
     'ACLARAR': _Lex(_Role.verboAccion, 'quiero aclarar'),
     'RECORDAR': _Lex(_Role.verboAccion, 'recuerdo'),
     'IMPRIMIR': _Lex(_Role.verboAccion, 'quiero imprimir'),
-    'CONOCER': _Lex(_Role.verboAccion, 'conozco'),
+    // §4: "¿Conoce a la persona involucrada?". El complemento va en el
+    // lexema porque la respuesta es a esa pregunta: "Conozco." a secas no
+    // dice a quién, y en un acta la diferencia es el caso entero.
+    'CONOCER': _Lex(_Role.verboAccion, 'conozco a esa persona'),
+    // Seña propia para la negativa. La regla posicional NO+verbo ya produce
+    // "no conozco a esa persona", pero el corpus recoge DESCONOCER como seña
+    // independiente: las dos rutas llegan al mismo texto.
+    'DESCONOCER': _Lex(_Role.verboAccion, 'no conozco a esa persona'),
+    // §4: "¿Desea realizar una denuncia?". No es QUEJAR: una queja
+    // administrativa y una denuncia penal abren expedientes distintos.
+    'DENUNCIAR': _Lex(_Role.verboAccion, 'quiero presentar una denuncia'),
+    // §6: "¿Cuándo debo volver?" — la última pregunta de toda atención.
+    'VOLVER': _Lex(_Role.verboAccion, 'debo volver'),
 
     // ── Hechos y urgencia (18) ──
     'ABUSAR': _Lex(_Role.verboAgresion, 'abusó sexualmente'),
@@ -2126,6 +2248,17 @@ class LocalSentenceAssembler {
 enum _Role {
   sujeto,
   personaDesc,
+
+  /// Persona que PRESENCIÓ el hecho.
+  ///
+  /// Tiene rol propio y no `personaDesc` porque un testigo nunca es el autor
+  /// del delito, y como descriptor de persona lo era: en una denuncia de robo
+  /// [TESTIGO] caía en `perpetrators` y el compositor redactaba "Un testigo me
+  /// asaltó", que acusa de un delito a quien solo lo vio. No hay flujo en el
+  /// que un testigo deba ocupar el sitio del agresor, así que la separación es
+  /// del léxico y no de la zona: ninguna pantalla puede volver a fundirlos.
+  testigo,
+
   rasgo,
   verboAgresion,
   verboAccion,
@@ -2227,6 +2360,16 @@ class _Roles {
   final List<String> procedures = [];
   final List<String> purposes = [];
   final List<String> unknown = [];
+
+  /// Personas que PRESENCIARON el hecho, y si la respuesta fue negativa.
+  ///
+  /// Responden "¿Hay testigos?", que es una pregunta de sí o no: por eso hace
+  /// falta guardar la negación aparte. Sin ella, [NO]+[TESTIGO] hoistaba el NO
+  /// como cortesía suelta y el acta recogía "No. Hay un testigo." — una
+  /// contradicción dentro de la misma declaración.
+  final List<String> witnesses = [];
+  bool witnessesNegated = false;
+  bool witnessesAffirmed = false;
 
   /// Cortesías y respuestas, en el orden en que se eligieron.
   final List<String> markers = [];

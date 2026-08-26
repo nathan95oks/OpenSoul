@@ -179,7 +179,10 @@ void main() {
         glosses: ['QUE', 'PAPEL'],
       );
       expect(s.trim().endsWith('?'), true, reason: '"$s"');
-      expect(has(s, 'qué soporte necesitas'), true, reason: '"$s"');
+      // Primera persona: la pregunta la formula la persona sorda y la
+      // escucha el funcionario. En segunda le preguntaba al funcionario por
+      // las necesidades del funcionario.
+      expect(has(s, 'qué soporte necesito'), true, reason: '"$s"');
     });
 
     test('pregunta por institución', () {
