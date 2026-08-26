@@ -363,6 +363,27 @@ _FLIGHT_VERBS = {"CORRER"}
 # número como "1 0 2 4" se partía en trozos y el primer dígito se perdía.
 _PREPOSICIONES = {"por", "en", "con", "a", "de"}
 
+# Oficios epicenos: el lexema viene en masculino y concuerda si la persona
+# además eligió MUJER. En una denuncia el género identifica a quien se busca.
+_FEMENINO = {
+    "un vecino": "una vecina",
+    "un militar": "una militar",
+    "un soldado": "una soldado",
+    "un testigo": "una testigo",
+    "un ladrón": "una ladrona",
+    "un doctor": "una doctora",
+    "un abogado": "una abogada",
+}
+
+# Glosas que admiten un nombre propio o una matrícula deletreada detrás.
+# "Me robaron en la plaza" no sirve: el oficial necesita QUÉ plaza.
+_ADMITE_DETALLE = {
+    "PLAZA": "plaza", "CALLE": "calle", "AVENIDA": "avenida",
+    "MERCADO": "mercado", "PARADA": "parada",
+    "AUTO": "placa", "MOTOCICLETA": "placa", "MICRO": "placa",
+    "TAXI": "placa", "TRUFI": "placa", "BICICLETA": "placa",
+}
+
 _DIGITOS = set("0123456789")
 
 # Cortesías y respuestas sueltas: encabezan, no son contenido del relato.
@@ -473,28 +494,118 @@ def _resolve_time(analysis: dict, context_type: str, cards: list = ()) -> None:
     })
 
 
-def _join_spelled_digits(cards: list) -> list:
-    """Une rachas de dígitos en un solo número. Espejo de `_joinSpelled`.
+def _es_letra(g: str) -> bool:
+    return len(g) == 1 and re.fullmatch(r"[A-ZÑ]", g) is not None
 
-    Una racha es UN número deletreado —el NUREJ, un teléfono— y debe
-    conservarse entero ("1","2","3" → "123"). Un dígito aislado no se toca:
-    si sigue a una unidad de tiempo lo recoge la cadena temporal, y si no, es
-    ruido que se descarta.
+
+def _join_spelled_digits(cards: list) -> list:
+    """Une rachas deletreadas: letras y dígitos. Espejo de `_joinSpelled`.
+
+    Una racha es UNA palabra o UN número deletreado —"C,U,C,H,I,L,L,O" es
+    "cuchillo"; "1,0,2,4" es un NUREJ— y debe conservarse entera. Un carácter
+    aislado no se toca: si es un dígito tras una unidad de tiempo lo recoge la
+    cadena temporal, y si no, es ruido que se descarta.
+
+    CAMBIO: antes solo unía dígitos. Las letras nunca se juntaban, así que la
+    dactilología del cliente y la del servidor no coincidían y un nombre propio
+    llegaba partido en letras sueltas.
     """
     salida, i = [], 0
     normalizadas = [str(c).upper().strip() for c in cards]
+
+    def racha(desde, pertenece):
+        j = desde
+        while j < len(normalizadas) and pertenece(normalizadas[j]):
+            j += 1
+        return j
+
     while i < len(normalizadas):
-        if normalizadas[i] in _DIGITOS:
-            j = i
-            while j < len(normalizadas) and normalizadas[j] in _DIGITOS:
-                j += 1
-            if j - i >= 2:
-                salida.append("".join(normalizadas[i:j]))
-                i = j
-                continue
-        salida.append(normalizadas[i])
+        for pertenece in (lambda g: g in _DIGITOS, _es_letra):
+            if pertenece(normalizadas[i]):
+                j = racha(i, pertenece)
+                if j - i >= 2:
+                    salida.append("".join(normalizadas[i:j]))
+                    i = j
+                    break
+        else:
+            salida.append(normalizadas[i])
+            i += 1
+            continue
+        if i < len(normalizadas) and salida and salida[-1] != normalizadas[i]:
+            continue
+    return salida
+
+
+def _extract_details(tokens: list, destino: dict) -> list:
+    """Separa las rachas deletreadas que califican a la glosa anterior.
+
+    Espejo de `_extractDetails` en el cliente. Una matrícula mezcla letras y
+    dígitos y `_join_spelled_digits` junta cada tipo por separado, así que hay
+    que reunir los tramos seguidos o la placa se parte en dos.
+    """
+    salida, i = [], 0
+    while i < len(tokens):
+        t = tokens[i]
+        anterior = salida[-1] if salida else None
+        es_racha = (len(t) > 1 and t not in GLOSS_LEXICON
+                    and re.fullmatch(r"[A-ZÑ0-9]+", t) is not None)
+        if (anterior in _ADMITE_DETALLE and anterior not in destino and es_racha):
+            partes = [t]
+            while i + 1 < len(tokens):
+                sig = tokens[i + 1]
+                if (len(sig) > 1 and sig not in GLOSS_LEXICON
+                        and re.fullmatch(r"[A-ZÑ0-9]+", sig)):
+                    partes.append(sig)
+                    i += 1
+                else:
+                    break
+            destino[anterior] = "".join(partes)
+            i += 1
+            continue
+        salida.append(t)
         i += 1
     return salida
+
+
+def _con_detalle(gloss: str, lexema: str, detalles: dict) -> str:
+    """Engancha el detalle: "en la plaza Murillo", "mi auto con placa 234ABC"."""
+    detalle = detalles.pop(gloss, None)
+    if not detalle:
+        return lexema
+    if _ADMITE_DETALLE.get(gloss) == "placa":
+        return f"{lexema} con placa {detalle}"
+    return f"{lexema} {detalle[:1].upper()}{detalle[1:].lower()}"
+
+
+def _resolve_gender(analysis: dict) -> set:
+    """Concuerda los oficios epicenos y absorbe la glosa de género.
+
+    VECINO + MUJER es "una vecina"; MILITAR + HOMBRE es "un militar", porque
+    el masculino ya era la forma por defecto. Devuelve las glosas consumidas.
+    """
+    consumidas = set()
+    personas = [d for d in analysis["descriptores"] if d.get("persona")]
+    if len(personas) < 2:
+        return consumidas
+    formas = [p["es"] for p in personas]
+    femenino = "una mujer" in formas
+    masculino = "un hombre" in formas
+    lleva_genero = any(f in _FEMENINO for f in formas
+                       if f not in ("una mujer", "un hombre"))
+    if not lleva_genero or not (femenino or masculino):
+        return consumidas
+
+    if femenino:
+        for p in personas:
+            p["es"] = _FEMENINO.get(p["es"], p["es"])
+        sobra, glosa = "una mujer", "MUJER"
+    else:
+        sobra, glosa = "un hombre", "HOMBRE"
+
+    analysis["descriptores"] = [d for d in analysis["descriptores"]
+                                if d["es"] != sobra]
+    consumidas.add(glosa)
+    return consumidas
 
 
 def analyze_glosses(cards: list) -> dict:
@@ -520,7 +631,9 @@ def analyze_glosses(cards: list) -> dict:
     # agredida (no al agresor). Mantiene la coherencia del relato de testigo.
     victim_mode = False
     negar_siguiente_verbo = False
-    normalizadas = _join_spelled_digits(cards)
+    detalles = {}
+    normalizadas = _extract_details(_join_spelled_digits(
+        [str(c).upper().strip() for c in cards]), detalles)
     for indice, card in enumerate(normalizadas):
         key = card.upper().strip()
 
@@ -592,6 +705,8 @@ def analyze_glosses(cards: list) -> dict:
             }
             dest = mapping.get(rol, "desconocidos")
             registro = {"glosa": key, **entry}
+            if rol in ("LUGAR", "OBJETO"):
+                registro["es"] = _con_detalle(key, registro["es"], detalles)
             if rol == "VERBO" and negar_siguiente_verbo:
                 registro["es"] = f'no {registro["es"]}'
                 negar_siguiente_verbo = False
@@ -691,6 +806,7 @@ def build_intermediate_representation(cards: list, analysis: dict, context_type:
     # contexto; y aquí, y no en el handler, porque es el único paso que
     # SIEMPRE precede a la generación: en el handler, cualquier otro punto de
     # entrada perdía el complemento temporal en silencio.
+    _resolve_gender(analysis)
     _resolve_time(analysis, context_type, cards)
 
     # CAMBIO: se reevalúa aquí porque `analyze_glosses` no conoce el contexto
@@ -1836,6 +1952,7 @@ def lambda_handler(event, context):
 
     # CAMBIO (paridad Dart): cierra la cadena temporal antes de generar. Debe
     # ir aquí y no en analyze_glosses porque la dirección depende del contexto.
+    _resolve_gender(analysis)
     _resolve_time(analysis, context_type, cards)
 
     intermediate = build_intermediate_representation(cards, analysis, context_type)

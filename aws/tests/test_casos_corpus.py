@@ -182,5 +182,51 @@ class LagunasCerradas(unittest.TestCase):
         self.assertIn("dentro de dos semanas", gestionar)
 
 
+class PrecisionDeDatos(unittest.TestCase):
+    """Un dato impreciso no sirve en una denuncia."""
+
+    def test_el_genero_concuerda_en_los_oficios(self):
+        # En una denuncia el género identifica a quien se busca: "un vecino" y
+        # "una vecina" no señalan a la misma persona.
+        self.assertIn("una vecina",
+                      frase({"glosas": ["VECINO", "MUJER", "ROBAR"],
+                             "contexto": "denuncia_robo"}).lower())
+
+    def test_el_orden_de_seleccion_no_importa(self):
+        uno = frase({"glosas": ["VECINO", "MUJER", "ROBAR"],
+                     "contexto": "denuncia_robo"}).lower()
+        otro = frase({"glosas": ["MUJER", "VECINO", "ROBAR"],
+                      "contexto": "denuncia_robo"}).lower()
+        self.assertIn("una vecina", uno)
+        self.assertIn("una vecina", otro)
+
+    def test_el_masculino_no_se_duplica(self):
+        # "un militar hombre" no lo dice nadie: el masculino ya es la forma
+        # por defecto del lexema.
+        texto = frase({"glosas": ["MILITAR", "HOMBRE", "ROBAR"],
+                       "contexto": "denuncia_robo"}).lower()
+        self.assertIn("un militar", texto)
+        self.assertNotIn("militar hombre", texto)
+
+    def test_un_lugar_admite_su_nombre_propio(self):
+        texto = frase({"glosas": ["ROBAR", "PLAZA", "M", "U", "R", "I", "L", "L", "O"],
+                       "contexto": "denuncia_robo"})
+        self.assertIn("en la plaza Murillo", texto)
+
+    def test_un_vehiculo_admite_su_placa(self):
+        # La placa mezcla letras y dígitos: si las rachas no se reúnen, se
+        # parte en dos y la mitad se pierde como ruido.
+        texto = frase({"glosas": ["DANAR", "AUTO", "2", "3", "4", "A", "B", "C"],
+                       "contexto": "denuncia_robo"})
+        self.assertIn("con placa 234ABC", texto)
+
+    def test_sin_detalle_el_lugar_sigue_valiendo(self):
+        # Deletrear es opcional: no todo el mundo recuerda el nombre.
+        texto = frase({"glosas": ["ROBAR", "PLAZA"],
+                       "contexto": "denuncia_robo"}).lower()
+        self.assertIn("en la plaza", texto)
+        self.assertNotIn("hago constar", texto)
+
+
 if __name__ == "__main__":
     unittest.main()

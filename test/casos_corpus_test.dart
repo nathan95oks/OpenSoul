@@ -202,6 +202,64 @@ void main() {
     });
   });
 
+  group('precisión de datos', () {
+    String componer(String ctx, List<String> glosas) => asm.assemble(
+          contextId: resolveAssemblerContext(ctx, glosas, (g) => catalogo[g]),
+          glosses: glosas,
+        );
+
+    test('el género concuerda en los oficios, en cualquier orden', () {
+      for (final g in [
+        ['VECINO', 'MUJER', 'ROBAR'],
+        ['MUJER', 'VECINO', 'ROBAR'],
+      ]) {
+        expect(componer('denuncia_robo', g).toLowerCase().contains('una vecina'),
+            true, reason: '$g');
+      }
+    });
+
+    test('el masculino no se duplica', () {
+      final f = componer('denuncia_robo', ['MILITAR', 'HOMBRE', 'ROBAR']).toLowerCase();
+      expect(f.contains('un militar'), true, reason: f);
+      expect(f.contains('militar hombre'), false, reason: f);
+    });
+
+    test('un lugar admite su nombre propio deletreado', () {
+      expect(
+        componer('denuncia_robo',
+            ['ROBAR', 'PLAZA', 'M', 'U', 'R', 'I', 'L', 'L', 'O']),
+        contains('en la plaza Murillo'),
+      );
+    });
+
+    test('un vehículo admite su placa alfanumérica', () {
+      expect(
+        componer('denuncia_robo', ['DANAR', 'AUTO', '2', '3', '4', 'A', 'B', 'C']),
+        contains('con placa 234ABC'),
+      );
+    });
+
+    test('el detalle es opcional y su ausencia no ensucia la frase', () {
+      final f = componer('denuncia_robo', ['ROBAR', 'PLAZA']).toLowerCase();
+      expect(f.contains('en la plaza'), true, reason: f);
+      expect(f.contains('hago constar'), false, reason: f);
+    });
+
+    test('LADRON ya no se ofrece como respuesta a quién', () {
+      for (final ctx in ['denuncia_robo', 'violencia']) {
+        final zona = contextById(ctx)!.zoneById('personas');
+        if (zona == null) continue;
+        expect(zona.glossAllowlist.contains('LADRON'), false,
+            reason: 'en $ctx el verbo ya dice que fue un ladrón');
+      }
+    });
+
+    test('la pregunta de Consultas dirige a la acción', () {
+      final zona = contextById('consulta')!.zoneById('necesidad');
+      expect(zona!.question, '¿Qué necesitas hacer?');
+    });
+  });
+
   test('los íconos declarados existen en el catálogo', () {
     final catalogo = jsonDecode(
       File('assets/dictionary/official_dictionary.json').readAsStringSync(),

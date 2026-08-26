@@ -170,7 +170,11 @@ final availableContexts = <SemanticContext>[
         maxPicks: 2,
         // IDENTIDAD y NOMBRE se refieren al declarante ("mi nombre"), no al
         // agresor: producían "mi nombre me robó".
-        glossAllowlist: ['HOMBRE', 'MUJER', 'LADRON', 'VECINO', 'MILITAR', 'SOLDADO'],
+        // Sin LADRON: en una denuncia de robo la glosa no aporta nada —el
+        // verbo ya lo dice— y ocupa el sitio de un dato que sí distingue.
+        // VECINO, MILITAR y SOLDADO concuerdan en género con HOMBRE o MUJER
+        // si la persona elige ambos (ver _personPhrase).
+        glossAllowlist: ['HOMBRE', 'MUJER', 'VECINO', 'MILITAR', 'SOLDADO'],
         relatedZones: ['apariencia', 'objetos'],
       ),
       // Fusiona las antiguas 'apariencia' y 'vestimenta'. La segunda se
@@ -624,7 +628,11 @@ final availableContexts = <SemanticContext>[
         emoji: '👤',
         semanticWeight: 0.7,
         maxPicks: 2,
-        glossAllowlist: ['HOMBRE', 'MUJER', 'LADRON', 'VECINO', 'MILITAR', 'SOLDADO'],
+        // Sin LADRON: en una denuncia de robo la glosa no aporta nada —el
+        // verbo ya lo dice— y ocupa el sitio de un dato que sí distingue.
+        // VECINO, MILITAR y SOLDADO concuerdan en género con HOMBRE o MUJER
+        // si la persona elige ambos (ver _personPhrase).
+        glossAllowlist: ['HOMBRE', 'MUJER', 'VECINO', 'MILITAR', 'SOLDADO'],
         relatedZones: ['victima', 'lugar'],
       ),
       // Sus descriptores se marcan con [kVictimMarker] para que el motor no
@@ -851,7 +859,7 @@ final availableContexts = <SemanticContext>[
         id: 'necesidad',
         label: 'Necesidad',
         hint: 'Qué necesito saber',
-        question: '¿Qué necesitas saber?',
+        question: '¿Qué necesitas hacer?',
         emoji: '💬',
         semanticWeight: 0.9,
         // Verbos de duda y necesidad. No existe EXPLICAR en el diccionario:
