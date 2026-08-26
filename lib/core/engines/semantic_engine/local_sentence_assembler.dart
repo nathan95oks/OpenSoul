@@ -65,7 +65,7 @@ class LocalSentenceAssembler {
     // hay glosa que la exprese (el diccionario no tiene PASADO ni FUTURO): la
     // aporta el flujo, que ya sabe si narra un hecho consumado o pide un plazo.
     roles.narrativeIsPast = _pastContexts.contains(contextId);
-    final consumidasPorTiempo = _resolveTime(roles, contextId);
+    final consumidasPorTiempo = _resolveTime(roles, contextId, unidos);
 
     // Una interrogativa manda sobre el contexto: si se eligió ¿DÓNDE?, lo que
     // la persona construye es una pregunta, y ninguno de los composers de
@@ -135,12 +135,42 @@ class LocalSentenceAssembler {
     'denuncia_robo', 'violencia', 'accidente', 'emergencia', 'otro', 'perdida',
   };
 
+  /// Verbos que miran a lo ya ocurrido. Mandan sobre la dirección del
+  /// contexto: consultar el estado de algo presentado "la semana pasada" es
+  /// pasado aunque el flujo de consulta apunte, por defecto, a un plazo.
+  static const _pastVerbs = {
+    'SEGUIMIENTO', 'COMPRENDER', 'ACLARAR', 'CONOCER', 'RECORDAR',
+    'OBSERVAR', 'RECONOCER', 'PERDER', 'PAGAR', 'ENTREGAR', 'NARRAR',
+    'CONFESAR', 'IDENTIFICAR',
+  };
+
+  /// Verbos de gestión por venir. Mandan sobre un contexto de pasado cuando
+  /// lo que se fija es un plazo y no una fecha del hecho.
+  static const _futureVerbs = {
+    'PRESENTAR', 'CORREGIR', 'PEDIR', 'GESTIONAR', 'RECOGER', 'COPIAR',
+    'IMPRIMIR', 'COORDINAR', 'SOLUCIONAR', 'TRATAR', 'EXIGIR',
+  };
+
   /// Cierra la cadena temporal y deja [_Roles.time] listo para los composers.
   ///
   /// Devuelve las glosas que consumió, para que la red de cobertura no las
   /// reclame: "hace dos semanas" ya representa a SEMANA y a 2, pero ninguna
   /// aparece con su lexema literal.
-  Set<String> _resolveTime(_Roles r, String contextId) {
+  /// `true` si el complemento temporal mira atrás.
+  ///
+  /// El verbo manda sobre el contexto: el contexto dice de qué trata el flujo,
+  /// pero el verbo dice hacia dónde mira ESTA frase. Sin él, "quiero seguir el
+  /// estado, la semana pasada" salía como "dentro de una semana" solo porque
+  /// el flujo de consulta apunta por defecto a un plazo.
+  bool _mirarAtras(_Roles r, String contextId, List<String> tokens) {
+    for (final t in tokens) {
+      if (_pastVerbs.contains(t)) return true;
+      if (_futureVerbs.contains(t)) return false;
+    }
+    return _pastContexts.contains(contextId);
+  }
+
+  Set<String> _resolveTime(_Roles r, String contextId, List<String> tokens) {
     final unit = r.timeUnit;
     if (unit == null) return const {};
     final spec = _timeUnits[unit]!;
@@ -158,7 +188,7 @@ class LocalSentenceAssembler {
         ? (spec.femenino ? 'una' : 'un')
         : _cardinales[count]!;
     final medida = count == '1' ? spec.singular : spec.plural;
-    final esPasado = _pastContexts.contains(contextId);
+    final esPasado = _mirarAtras(r, contextId, tokens);
     r.timeIsFuture = !esPasado;
     r.time = '${esPasado ? 'hace' : 'dentro de'} $cardinal $medida';
     return {unit, count};
@@ -433,6 +463,7 @@ class LocalSentenceAssembler {
     // Tras el marcador [kVictimMarker], los descriptores de persona pasan a
     // describir a la persona AGREDIDA (no al agresor). Flujo de testigo.
     var victimMode = false;
+    var negarSiguienteVerbo = false;
     var evidenceMode = false;
     var vehicleMode = false;
     for (var i = 0; i < tokens.length; i++) {
@@ -506,6 +537,17 @@ class LocalSentenceAssembler {
         continue;
       }
 
+      // Negación posicional. En LSB la negación es una seña aparte, no un
+      // prefijo del verbo: NO delante de un verbo lo niega ("NO ENTREGAR" →
+      // "no me entregaron"). Sin esto, el NO quedaba como marcador suelto
+      // —"No."— y el verbo se afirmaba, que es decir lo contrario.
+      if (t == 'NO' &&
+          i + 1 < tokens.length &&
+          _lexicon[tokens[i + 1]]?.role == _Role.verboAccion) {
+        negarSiguienteVerbo = true;
+        continue;
+      }
+
       // Dígito huérfano: llegó sin unidad de tiempo delante, así que no es
       // una cantidad, y no viene en racha, así que tampoco es un número
       // deletreado. Es una selección que no significa nada por sí sola y se
@@ -558,7 +600,17 @@ class LocalSentenceAssembler {
             r.extraAggressions.add(e.es);
           }
           break;
-        case _Role.verboAccion:        r.action ??= e.es; break;
+        case _Role.verboAccion:
+          final forma = negarSiguienteVerbo ? 'no ${e.es}' : e.es;
+          negarSiguienteVerbo = false;
+          // Un segundo verbo de acción no se pierde: es otro hecho del
+          // relato ("pagué" y además "no me entregaron").
+          if (r.action == null) {
+            r.action = forma;
+          } else if (!r.extraActions.contains(forma)) {
+            r.extraActions.add(forma);
+          }
+          break;
         case _Role.arma:               r.weapon ??= e.es; break;
         case _Role.objeto:             r.objects.add(e.es); break;
         case _Role.documento:          r.documents.add(e.es); break;
@@ -900,6 +952,43 @@ class LocalSentenceAssembler {
       r.perpetrators.clear();
       r.perpetratorPlural = null;
       r.traits.clear();
+    } else if (r.action != null &&
+        (r.objects.isNotEmpty || r.documents.isNotEmpty)) {
+      // Hay verbos de acción propios del relato (§2.4: "pagué", "no me
+      // entregaron"): los complementos son suyos, no de un hurto implícito.
+      // Sin esta rama salía "Me sustrajeron por WhatsApp y el producto",
+      // que además de falso califica el hecho como robo — justo lo que el
+      // corpus §8 prohíbe que haga la aplicación.
+      const preposiciones = {'por', 'en', 'con', 'a', 'de'};
+      final todos = [...r.objects, ...r.documents];
+      final canales =
+          todos.where((o) => preposiciones.contains(o.split(' ').first)).toList();
+      final nominales = todos.where((o) => !canales.contains(o)).toList();
+      r.objects.clear();
+      r.documents.clear();
+
+      // El canal acompaña a la primera acción ("pagué por WhatsApp"); lo
+      // nominal, a la última ("no me entregaron el producto").
+      final acciones = [r.action!, ...r.extraActions];
+      r.action = null;
+      r.extraActions.clear();
+      if (canales.isNotEmpty) {
+        acciones[0] = '${acciones[0]} ${_join(canales)}';
+      }
+      if (nominales.isNotEmpty) {
+        acciones[acciones.length - 1] =
+            '${acciones.last} ${_join(nominales)}';
+      }
+      var clause = _join(acciones);
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        r.time = null;
+      }
+      sentences.add('${_cap(clause)}.');
     } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
       final what = _join([...r.objects, ...r.documents]);
       var clause = 'Me sustrajeron $what';
@@ -1328,6 +1417,10 @@ class LocalSentenceAssembler {
       sentences.add('Además me ${_join(r.extraAggressions)}.');
       r.extraAggressions.clear();
     }
+    if (r.extraActions.isNotEmpty) {
+      sentences.add('${_cap(_join(r.extraActions))}.');
+      r.extraActions.clear();
+    }
     if (r.frequency != null) {
       sentences.add('${r.frequency}.');
       r.frequency = null;
@@ -1356,6 +1449,13 @@ class LocalSentenceAssembler {
     // semanas", que mezcla un pasado narrativo con un complemento de futuro.
     if (r.time != null && r.timeIsFuture) {
       sentences.add('Lo necesito ${r.time}.');
+      r.time = null;
+    }
+    // Un tiempo pasado sin lugar no es un destino: "Debo acudir hace una
+    // semana" mezcla una gestión por venir con una fecha que ya pasó. En una
+    // consulta de seguimiento la fecha sitúa lo consultado, y se dice así.
+    if (r.time != null && !r.timeIsFuture && r.place == null) {
+      sentences.add('Fue ${r.time}.');
       r.time = null;
     }
     if (r.place != null || r.time != null) {
@@ -1693,6 +1793,11 @@ class LocalSentenceAssembler {
     'NARRAR': _Lex(_Role.verboAccion, 'quiero narrar'),
     'OBSERVAR': _Lex(_Role.verboAccion, 'quiero observar'),
     'PEDIR': _Lex(_Role.verboAccion, 'quiero solicitar'),
+    // §2.4: el corpus necesita relatar un pago incumplido sin nombrar el
+    // delito —la app no califica jurídicamente (corpus §8)—. Los dos verbos
+    // son neutros y en 3ª persona se niegan con la glosa NO, como en LSB.
+    'PAGAR': _Lex(_Role.verboAccion, 'pagué'),
+    'ENTREGAR': _Lex(_Role.verboAccion, 'me entregaron'),
     'PERDER': _Lex(_Role.verboAccion, 'perdí'),
     'PRESENTAR': _Lex(_Role.verboAccion, 'quiero presentar'),
     'PROTEGER': _Lex(_Role.verboAccion, 'necesito protección'),
@@ -1951,6 +2056,10 @@ class _Roles {
 
   /// Huida del agresor ("salió corriendo"). Cierra el relato, no lo abre.
   String? flight;
+
+  /// Verbos de acción adicionales. Con `??=` el segundo se perdía: "pagué" y
+  /// "no me entregaron" son dos hechos del mismo relato, no uno.
+  final List<String> extraActions = [];
   String? action;
   String? weapon;
   String? place;

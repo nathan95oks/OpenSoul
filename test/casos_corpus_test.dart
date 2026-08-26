@@ -166,6 +166,42 @@ void main() {
     });
   });
 
+  group('lagunas cerradas', () {
+    String componer(String ctx, List<String> glosas) => asm.assemble(
+          contextId: resolveAssemblerContext(ctx, glosas, (g) => catalogo[g]),
+          glosses: glosas,
+        );
+
+    test('una estafa se relata sin nombrar el delito', () {
+      final f = componer('denuncia_robo',
+          ['PAGAR', 'WHATSAPP', 'NO', 'ENTREGAR', 'PRODUCTO']).toLowerCase();
+      expect(f.contains('pagué por whatsapp'), true, reason: f);
+      expect(f.contains('no me entregaron el producto'), true, reason: f);
+      for (final juicio in ['robó', 'sustrajeron', 'agredió']) {
+        expect(f.contains(juicio), false,
+            reason: 'la declaración no puede calificar el hecho: "$f"');
+      }
+    });
+
+    test('la negación es una glosa aparte, no un prefijo horneado', () {
+      final conNo = componer('denuncia_robo',
+          ['PAGAR', 'NO', 'ENTREGAR', 'PRODUCTO']).toLowerCase();
+      final sinNo = componer('denuncia_robo',
+          ['PAGAR', 'ENTREGAR', 'PRODUCTO']).toLowerCase();
+      expect(conNo.contains('no me entregaron'), true, reason: conNo);
+      expect(sinNo.contains('no me entregaron'), false, reason: sinNo);
+    });
+
+    test('el verbo manda sobre el contexto en la dirección temporal', () {
+      final revisar =
+          componer('consulta', ['SEGUIMIENTO', 'CASO', 'SEMANA', '2']).toLowerCase();
+      final gestionar =
+          componer('consulta', ['GESTIONAR', 'CASO', 'SEMANA', '2']).toLowerCase();
+      expect(revisar.contains('hace dos semanas'), true, reason: revisar);
+      expect(gestionar.contains('dentro de dos semanas'), true, reason: gestionar);
+    });
+  });
+
   test('los íconos declarados existen en el catálogo', () {
     final catalogo = jsonDecode(
       File('assets/dictionary/official_dictionary.json').readAsStringSync(),

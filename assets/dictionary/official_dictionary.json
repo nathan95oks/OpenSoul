@@ -7112,6 +7112,54 @@
    "animationFile": "",
    "corpusCategory": "6. Acciones del relato y del proceso",
    "source": "Corpus conversacional judicial 2026 — incorporación de auditoría semántica"
+  },
+  {
+   "id": "g299",
+   "gloss": "PAGAR",
+   "displayText": "PAGAR",
+   "iconUrl": "",
+   "categoryId": "Acciones",
+   "subcategoryId": "verboAccion",
+   "contexts": [
+    "denuncia_robo",
+    "otro",
+    "tramite",
+    "preguntas"
+   ],
+   "priority": 1,
+   "suggestedNextCardIds": [],
+   "isFrequent": true,
+   "isEmergency": false,
+   "semanticIcon": "assignment",
+   "dialect": "cochabamba",
+   "status": "official",
+   "animationFile": "",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "source": "Corpus conversacional judicial 2026 §2.4 — incorporación de auditoría"
+  },
+  {
+   "id": "g300",
+   "gloss": "ENTREGAR",
+   "displayText": "ENTREGAR",
+   "iconUrl": "",
+   "categoryId": "Acciones",
+   "subcategoryId": "verboAccion",
+   "contexts": [
+    "denuncia_robo",
+    "otro",
+    "tramite",
+    "preguntas"
+   ],
+   "priority": 1,
+   "suggestedNextCardIds": [],
+   "isFrequent": true,
+   "isEmergency": false,
+   "semanticIcon": "assignment",
+   "dialect": "cochabamba",
+   "status": "official",
+   "animationFile": "",
+   "corpusCategory": "6. Acciones del relato y del proceso",
+   "source": "Corpus conversacional judicial 2026 §2.4 — incorporación de auditoría"
   }
  ]
 }

@@ -143,6 +143,7 @@ GLOSS_LEXICON = {
     "ELLA": {"rol": "SUJETO", "es": "ella"},
     "ELLOS": {"rol": "SUJETO", "es": "ellos"},
     "ENFERMERA": {"rol": "SERVICIO", "es": "una enfermera"},
+    "ENTREGAR": {"rol": "VERBO", "es": "me entregaron"},
     "ESCRIBIR": {"rol": "VERBO", "es": "quiero escribir"},
     "ESTADO": {"rol": "DOCUMENTO", "es": "el estado del trámite"},
     "ESTOY_BIEN": {"rol": "DESCONOCIDO", "es": "estoy bien"},
@@ -226,6 +227,7 @@ GLOSS_LEXICON = {
     "OFICIAL": {"rol": "INSTITUCION", "es": "en el oficial"},
     "OFICINA": {"rol": "INSTITUCION", "es": "en la oficina"},
     "ORGANO_JUDICIAL": {"rol": "INSTITUCION", "es": "en el órgano judicial"},
+    "PAGAR": {"rol": "VERBO", "es": "pagué"},
     "PAPEL": {"rol": "DOCUMENTO", "es": "el papel"},
     "PARADA": {"rol": "LUGAR", "es": "en la parada"},
     "PARAR": {"rol": "VERBO", "es": "se detuvo", "agresor": "se detuvo"},
@@ -383,14 +385,38 @@ _PAST_CONTEXTS = {
     "denuncia_robo", "violencia", "accidente", "emergencia", "otro", "perdida",
 }
 
+# El verbo manda sobre el contexto: el contexto dice de qué trata el flujo,
+# el verbo hacia dónde mira ESTA frase. Sin esto, consultar el estado de algo
+# presentado "la semana pasada" salía como "dentro de una semana" solo porque
+# el flujo de consulta apunta por defecto a un plazo.
+_PAST_VERBS = {
+    "SEGUIMIENTO", "COMPRENDER", "ACLARAR", "CONOCER", "RECORDAR",
+    "OBSERVAR", "RECONOCER", "PERDER", "PAGAR", "ENTREGAR", "NARRAR",
+    "CONFESAR", "IDENTIFICAR",
+}
 
-def _time_direction_is_past(analysis: dict, context_type: str) -> bool:
+_FUTURE_VERBS = {
+    "PRESENTAR", "CORREGIR", "PEDIR", "GESTIONAR", "RECOGER", "COPIAR",
+    "IMPRIMIR", "COORDINAR", "SOLUCIONAR", "TRATAR", "EXIGIR",
+}
+
+
+def _time_direction_is_past(analysis: dict, context_type: str,
+                            cards: list = ()) -> bool:
     """Réplica de `resolveAssemblerContext` + `_pastContexts` del cliente.
 
     'tramite' es el único id de UI ambiguo: se reparte entre pérdida (pasado)
     y gestión (futuro) según lo que la persona haya elegido, exactamente con
     el mismo criterio que el cliente —un objeto o la glosa PERDER.
     """
+    # El verbo primero, en el orden en que la persona lo eligió.
+    for card in cards:
+        key = str(card).upper().strip()
+        if key in _PAST_VERBS:
+            return True
+        if key in _FUTURE_VERBS:
+            return False
+
     ctx = (context_type or "").strip().lower()
     if ctx in _PAST_CONTEXTS:
         return True
@@ -405,7 +431,7 @@ def _time_direction_is_past(analysis: dict, context_type: str) -> bool:
     return False
 
 
-def _resolve_time(analysis: dict, context_type: str) -> None:
+def _resolve_time(analysis: dict, context_type: str, cards: list = ()) -> None:
     """Funde unidad + cantidad en un único complemento temporal ya redactado.
 
     Deja `analysis["tiempos"]` con una sola entrada para que los generadores
@@ -433,7 +459,7 @@ def _resolve_time(analysis: dict, context_type: str) -> None:
         cardinal = _CARDINALES[cantidad]
         medida = spec["plural"]
 
-    es_pasado = _time_direction_is_past(analysis, context_type)
+    es_pasado = _time_direction_is_past(analysis, context_type, cards)
     direccion = "hace" if es_pasado else "dentro de"
 
     # Se antepone: es el complemento temporal principal del relato.
@@ -493,8 +519,20 @@ def analyze_glosses(cards: list) -> dict:
     # Tras el marcador VICTIMA, los descriptores describen a la persona
     # agredida (no al agresor). Mantiene la coherencia del relato de testigo.
     victim_mode = False
-    for card in _join_spelled_digits(cards):
+    negar_siguiente_verbo = False
+    normalizadas = _join_spelled_digits(cards)
+    for indice, card in enumerate(normalizadas):
         key = card.upper().strip()
+
+        # CAMBIO (paridad Dart): en LSB la negación es una seña aparte, no un
+        # prefijo. NO delante de un verbo lo niega ("NO ENTREGAR" → "no me
+        # entregaron"). Sin esto el NO quedaba suelto y el verbo se afirmaba,
+        # que es decir lo contrario de lo que la persona quiso decir.
+        if key == "NO" and indice + 1 < len(normalizadas):
+            siguiente = GLOSS_LEXICON.get(normalizadas[indice + 1].upper().strip())
+            if siguiente and siguiente["rol"] == "VERBO":
+                negar_siguiente_verbo = True
+                continue
         if key == "VICTIMA":
             victim_mode = True
             continue
@@ -553,7 +591,11 @@ def analyze_glosses(cards: list) -> dict:
                 "OBJETO": "objetos", "LUGAR": "lugares",
             }
             dest = mapping.get(rol, "desconocidos")
-            analysis[dest].append({"glosa": key, **entry})
+            registro = {"glosa": key, **entry}
+            if rol == "VERBO" and negar_siguiente_verbo:
+                registro["es"] = f'no {registro["es"]}'
+                negar_siguiente_verbo = False
+            analysis[dest].append(registro)
         elif key in _DIGITOS:
             # CAMBIO (paridad Dart): dígito huérfano —sin unidad de tiempo
             # delante— no significa nada por sí solo. Emitirlo producía
@@ -649,7 +691,7 @@ def build_intermediate_representation(cards: list, analysis: dict, context_type:
     # contexto; y aquí, y no en el handler, porque es el único paso que
     # SIEMPRE precede a la generación: en el handler, cualquier otro punto de
     # entrada perdía el complemento temporal en silencio.
-    _resolve_time(analysis, context_type)
+    _resolve_time(analysis, context_type, cards)
 
     # CAMBIO: se reevalúa aquí porque `analyze_glosses` no conoce el contexto
     # y la plantilla depende de él (ver _detect_event_type).
@@ -939,6 +981,43 @@ def _lugar_text(analysis):
     """
     return _join_es([l["es"] for l in analysis["lugares"]])
 
+def _compose_action_report(analysis, is_formal):
+    """Relato en 1ª persona a partir de los verbos que la persona eligió.
+
+    El canal ("por WhatsApp") acompaña a la primera acción y lo nominal a la
+    última: "Pagué por WhatsApp y no me entregaron el producto".
+    """
+    acciones = [v["es"] for v in analysis["verbos"]]
+    objetos = [o["es"] for o in analysis["objetos"] if not o.get("arma")]
+    objetos += [d["es"] for d in analysis["documentos"]]
+    analysis["objetos"] = []
+    analysis["documentos"] = []
+
+    canales = [o for o in objetos if o.split(" ")[0] in _PREPOSICIONES]
+    nominales = [o for o in objetos if o not in canales]
+    if canales:
+        acciones[0] = f'{acciones[0]} {_join_es(canales)}'
+    if nominales:
+        acciones[-1] = f'{acciones[-1]} {_join_es(nominales)}'
+
+    core = _join_es(acciones)
+    lugar = _lugar_text(analysis)
+    if lugar:
+        core += f" {lugar}"
+        analysis["lugares"] = []
+
+    tiempo = analysis["tiempos"][0]["es"] if analysis["tiempos"] else None
+    if tiempo:
+        core = f"{tiempo[0].upper()}{tiempo[1:]}, {core[0].lower()}{core[1:]}"
+        analysis["tiempos"] = []
+
+    partes = [f"{core[0].upper()}{core[1:]}."]
+    if analysis.get("evidencias"):
+        partes.append(f'Como prueba tengo {_join_es([e["es"] for e in analysis["evidencias"]])}.')
+        analysis["evidencias"] = []
+    return " ".join(partes)
+
+
 def _agresor_text(analysis):
     personas = [d for d in analysis["descriptores"] if d.get("persona")]
     rasgos = [d for d in analysis["descriptores"] if not d.get("persona")]
@@ -975,6 +1054,14 @@ def _agresor_verb(analysis, default):
 
 def _compose_incident(analysis, is_formal, robo):
     """Relato de incidente con agresor en 3ª persona (robo / violencia)."""
+    # CAMBIO (paridad Dart): si no hay verbo de agresión pero sí verbos de
+    # acción propios del relato (§2.4: "pagué", "no me entregaron"), el
+    # complemento es de ellos. Sin esta rama el compositor inventaba un
+    # agresor y un hurto —"Una persona me robó el producto"— que es
+    # justamente la calificación jurídica que el corpus §8 prohíbe.
+    if not any(v.get("agresor") for v in analysis["verbos"]) and analysis["verbos"]:
+        return _compose_action_report(analysis, is_formal)
+
     subj = _agresor_text(analysis)
     verb = _agresor_verb(analysis, "robó" if robo else "agredió")
     # Un sujeto en aposición ("mi pareja, una mujer") necesita la coma de
@@ -1749,7 +1836,7 @@ def lambda_handler(event, context):
 
     # CAMBIO (paridad Dart): cierra la cadena temporal antes de generar. Debe
     # ir aquí y no en analyze_glosses porque la dirección depende del contexto.
-    _resolve_time(analysis, context_type)
+    _resolve_time(analysis, context_type, cards)
 
     intermediate = build_intermediate_representation(cards, analysis, context_type)
 
