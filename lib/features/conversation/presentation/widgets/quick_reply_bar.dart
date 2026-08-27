@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:lsb_legal_app/app/theme.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 
-/// Respuestas de un toque a una instrucción del funcionario.
-///
-/// A una instrucción —"vaya a la ventanilla 4 con su certificado"— no se
-/// contesta con un cuestionario: se contesta que se entendió, o se pide lo
-/// único que suele faltar, que es dónde queda y que lo repitan. Abrir el flujo
-/// guiado aquí obligaba a recorrer preguntas que nadie hizo.
-///
-/// Las tres glosas existen en el diccionario: SI, DONDE y PUEDE_REPETIR.
 class QuickReplyBar extends StatelessWidget {
-  /// Se llama con las glosas de la respuesta elegida y su texto en español.
   final void Function(List<String> glosses, String text) onReply;
 
   const QuickReplyBar({super.key, required this.onReply});

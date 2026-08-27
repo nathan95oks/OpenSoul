@@ -1,4 +1,5 @@
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 class TranslateCardsUseCase {
   final TranslationRepository repository;

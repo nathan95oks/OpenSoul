@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
-import 'package:lsb_legal_app/core/generators/avatar_generator/animation_cache.dart';
-import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/data/datasources/animation_cache.dart';
+import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
 
 /// Regresión del path traversal en la caché de animaciones.
 ///

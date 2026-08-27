@@ -1,4 +1,4 @@
-import 'package:lsb_legal_app/core/generators/audio_generator/audio_output.dart';
+import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 
 /// Doble de prueba de la salida de audio: registra lo invocado, no reproduce.
 ///

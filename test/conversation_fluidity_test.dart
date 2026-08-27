@@ -7,7 +7,7 @@ import 'package:http/testing.dart';
 
 import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart';
 import 'package:lsb_legal_app/core/data/repositories/caching_audio_translation_repository.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
@@ -44,10 +44,6 @@ class _GatedSignRepository implements AudioTranslationRepository {
       animationUrls: const ['https://s3/ROBAR.glb'],
     );
   }
-
-  @override
-  Future<LsbTranslation> translateAudio(String audioPath) async =>
-      throw UnimplementedError();
 }
 
 class _FailingSignRepository implements AudioTranslationRepository {
@@ -55,10 +51,6 @@ class _FailingSignRepository implements AudioTranslationRepository {
   Future<LsbTranslation> translateText(String text, {String? situation}) async {
     throw TimeoutException('sin red');
   }
-
-  @override
-  Future<LsbTranslation> translateAudio(String audioPath) async =>
-      throw UnimplementedError();
 }
 
 class _CountingSignRepository implements AudioTranslationRepository {
@@ -73,10 +65,6 @@ class _CountingSignRepository implements AudioTranslationRepository {
       animationUrls: const ['https://s3/ROBAR.glb'],
     );
   }
-
-  @override
-  Future<LsbTranslation> translateAudio(String audioPath) async =>
-      throw UnimplementedError();
 }
 
 Future<ProviderContainer> _containerWith(AudioTranslationRepository sign) async {
@@ -255,8 +243,4 @@ class _EmptyThenFull implements AudioTranslationRepository {
     }
     return LsbTranslation(glosses: const ['HOLA'], animationUrl: '');
   }
-
-  @override
-  Future<LsbTranslation> translateAudio(String audioPath) async =>
-      throw UnimplementedError();
 }

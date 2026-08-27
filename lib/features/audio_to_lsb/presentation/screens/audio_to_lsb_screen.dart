@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:ui';
-import 'package:lsb_legal_app/app/theme.dart';
-import '../controllers/audio_translation_controller.dart';
-import 'package:lsb_legal_app/core/generators/avatar_generator/avatar_3d_viewer.dart';
-import '../widgets/text_input_widget.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
+import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
 
 class AudioToLsbScreen extends ConsumerWidget {
   const AudioToLsbScreen({super.key});
@@ -14,7 +14,6 @@ class AudioToLsbScreen extends ConsumerWidget {
     final state = ref.watch(audioTranslationControllerProvider);
     final controller = ref.read(audioTranslationControllerProvider.notifier);
 
-    // El módulo Audio/Texto → LSB usa el tema oscuro del design system.
     return Theme(
       data: AppTheme.darkTheme,
       child: Builder(builder: (context) {
@@ -58,7 +57,6 @@ class AudioToLsbScreen extends ConsumerWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Background Decor (Gradients)
           Positioned(
             top: -100,
             left: -50,
@@ -91,17 +89,15 @@ class AudioToLsbScreen extends ConsumerWidget {
               ),
             ),
           ),
-          
+
           SafeArea(
             child: Column(
               children: [
-                // 3D Avatar Area
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                     child: Container(
                       decoration: BoxDecoration(
-                        // Halo/glow azul sutil detrás del avatar para destacarlo.
                         gradient: RadialGradient(
                           colors: [
                             AppTheme.brandElectric.withValues(alpha: 0.12),
@@ -123,8 +119,8 @@ class AudioToLsbScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(30),
                         child: Avatar3DViewer(
                           isProcessing: state.status == AudioTranslationStatus.processing,
-                          glosses: state.status == AudioTranslationStatus.success 
-                            ? state.translationResult?.glosses 
+                          glosses: state.status == AudioTranslationStatus.success
+                            ? state.translationResult?.glosses
                             : null,
                           animationUrls: state.status == AudioTranslationStatus.success
                             ? state.translationResult?.animationUrls
@@ -134,8 +130,7 @@ class AudioToLsbScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                
-                // Status or Error Messages
+
                 if (state.status == AudioTranslationStatus.error)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
@@ -161,12 +156,10 @@ class AudioToLsbScreen extends ConsumerWidget {
                     ),
                   ),
 
-                // Input Area (Text & Audio)
                 Container(
                   padding: const EdgeInsets.only(left: 20, right: 20, bottom: 24, top: 12),
                   child: Column(
                     children: [
-                      // Text Input Field
                       TextInputWidget(
                         onSubmit: (text) {
                           controller.processText(text);
@@ -174,7 +167,6 @@ class AudioToLsbScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 16),
 
-                      // Recordatorio temporal de la frase ingresada
                       if (state.status == AudioTranslationStatus.success &&
                           state.recognizedText != null &&
                           state.recognizedText!.isNotEmpty)
@@ -214,14 +206,13 @@ class AudioToLsbScreen extends ConsumerWidget {
                           ),
                         ),
                       const SizedBox(height: 8),
-                      
-                      // Status Text
+
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
                         child: Text(
                           state.status == AudioTranslationStatus.recording
-                              ? (state.recognizedText?.isNotEmpty == true 
-                                  ? '"${state.recognizedText}"' 
+                              ? (state.recognizedText?.isNotEmpty == true
+                                  ? '"${state.recognizedText}"'
                                   : 'Escuchando tu voz...')
                               : state.status == AudioTranslationStatus.processing
                                 ? 'Traduciendo a LSB...'

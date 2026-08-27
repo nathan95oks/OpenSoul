@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/app/theme.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
-import '../providers/sign_images_provider.dart';
-import 'lsb_icons.dart';
-import 'sign_image.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/lsb_icons.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/sign_image.dart';
 
-/// Nodo semántico individual.
-///
-/// Sin seleccionar: fondo blanco, borde negro 2px, texto negro.
-/// Seleccionado / activo: fondo naranja, borde naranja, texto blanco.
-/// Inspirado en el GlossNode del reference design.
 class SemanticNode extends ConsumerStatefulWidget {
   final LsbCard card;
   final VoidCallback onTap;
@@ -84,9 +79,6 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
             horizontal: 16,
             vertical: conImagen ? 10 : 14,
           ),
-          // Con imagen la tarjeta se apila —la seña arriba, la palabra
-          // debajo—, porque es la seña lo que se reconoce primero. Sin ella
-          // se mantiene en fila, que ocupa menos y deja ver más opciones.
           child: conImagen
               ? Column(
                   mainAxisSize: MainAxisSize.min,
@@ -134,8 +126,6 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
       );
 }
 
-/// Nodo de respuesta ya seleccionada (muestra glosa, no card).
-/// Se usa en el árbol conceptual para las respuestas pasadas.
 class AnswerNode extends StatelessWidget {
   final String gloss;
   final VoidCallback? onTap;
@@ -169,7 +159,6 @@ class AnswerNode extends StatelessWidget {
   }
 }
 
-/// Nodo de pregunta (zona semántica).
 class QuestionNode extends StatelessWidget {
   final String question;
   final bool dimmed;

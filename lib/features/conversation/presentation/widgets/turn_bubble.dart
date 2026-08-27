@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:lsb_legal_app/app/theme.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 
-/// Burbuja de un turno de la conversación.
-///
-/// - Persona sorda (izquierda): texto de la declaración + acción de audio,
-///   para que la persona oyente escuche el mensaje.
-/// - Persona oyente (derecha): texto reconocido + acción de avatar, para
-///   que la persona sorda vea el mensaje en LSB.
 class TurnBubble extends StatelessWidget {
   final ConversationTurn turn;
   final VoidCallback onPlayAudio;
@@ -97,9 +91,6 @@ class TurnBubble extends StatelessWidget {
                   ),
                 ),
               ],
-              // Ambigüedades que el motor resolvió al interpretar la frase.
-              // Se muestran para que la decisión sea auditable por quien
-              // conversa, no un salto opaco entre español y LSB.
               if (turn.message.disambiguations.isNotEmpty) ...[
                 const SizedBox(height: 6),
                 Wrap(
@@ -144,9 +135,6 @@ class TurnBubble extends StatelessWidget {
                             label: 'Ver en avatar',
                             onTap: onShowAvatar,
                           )
-                        // El turno ya está dicho y se puede responder; lo que
-                        // falta son las señas. Se anuncia en la propia
-                        // burbuja para que se vea de quién se espera qué.
                         : (turn.pending
                             ? const _PendingSigns()
                             : const SizedBox.shrink())),
@@ -159,7 +147,6 @@ class TurnBubble extends StatelessWidget {
   }
 }
 
-/// Señas todavía en camino para un turno ya visible.
 class _PendingSigns extends StatelessWidget {
   const _PendingSigns();
 

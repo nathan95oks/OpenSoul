@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
-import 'package:lsb_legal_app/core/domain/ports/conversation_bridge.dart';
-import 'package:lsb_legal_app/core/engines/context_engine/zone_inference_engine.dart';
+import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
+import 'package:lsb_legal_app/core/domain/services/zone_inference_engine.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 

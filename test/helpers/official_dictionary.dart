@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:lsb_legal_app/core/dictionary/domain/dictionary_document.dart';
-import 'package:lsb_legal_app/core/dictionary/domain/lexicon_repository.dart';
+import 'package:lsb_legal_app/core/domain/entities/dictionary_document.dart';
+import 'package:lsb_legal_app/core/domain/repositories/lexicon_repository.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 
 /// Carga síncrona del diccionario oficial canónico para pruebas y auditorías.

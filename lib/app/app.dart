@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'router.dart';
-import 'theme.dart';
+import 'package:lsb_legal_app/app/app_router.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 
 class AppScope extends StatelessWidget {
   const AppScope({super.key});

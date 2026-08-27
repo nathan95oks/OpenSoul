@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 
 import 'helpers/official_dictionary.dart';

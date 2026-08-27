@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'qualifier_sheets.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/qualifier_sheets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/app/theme.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
-import '../providers/cards_provider.dart';
-import '../providers/semantic_zones_provider.dart';
-import '../providers/sentence_provider.dart';
-import 'adaptive_node_layout.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/adaptive_node_layout.dart';
 
-/// Panel de sugerencias progresivas — reemplaza CardGrid.
-///
-/// Muestra el catálogo disponible para la zona activa sin recortar
-/// artificialmente el listado. La vista sigue ordenada por relevancia,
-/// pero el usuario puede ver todas las opciones alcanzables en el panel.
 class SuggestedGlossPanel extends ConsumerWidget {
   const SuggestedGlossPanel({super.key});
 
@@ -61,12 +55,6 @@ class SuggestedGlossPanel extends ConsumerWidget {
     );
   }
 
-  /// Selecciona o deselecciona la glosa en la zona activa.
-  ///
-  /// NO avanza de pregunta (el cambio es explícito vía "Continuar") y NO
-  /// colapsa la lista expandida, para permitir elegir varias glosas seguidas.
-  /// Tras el toggle reconstruye la secuencia en orden narrativo y la sincroniza
-  /// con [sentenceProvider] (lo que alimenta la traducción).
   Future<void> _onPick(
           BuildContext context, WidgetRef ref, LsbCard card) =>
       elegirGlosa(context, ref, card);

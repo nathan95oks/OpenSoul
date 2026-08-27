@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
 import 'package:lsb_legal_app/core/data/repositories/translation_repository_impl.dart';
-import 'package:lsb_legal_app/core/engines/conversation_engine/conversation_engine.dart';
-import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/domain/services/conversation_engine.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 
@@ -209,10 +209,6 @@ String _pct(double value) => '${(value * 100).toStringAsFixed(1)}%';
 
 /// El banco solo evalúa la dirección LSB → texto; la contraria no se usa.
 class _UnusedSignRepository implements AudioTranslationRepository {
-  @override
-  Future<LsbTranslation> translateAudio(String audioPath) =>
-      throw UnimplementedError();
-
   @override
   Future<LsbTranslation> translateText(String text, {String? situation}) =>
       throw UnimplementedError();

@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/app/theme.dart';
-import '../providers/context_provider.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 
-/// Pantalla de selección de contexto — estilo reference design.
-/// Fondo blanco, botones con borde negro, hover naranja.
-///
-/// Cuando se llega aquí para responder a la persona oyente, la pantalla deja
-/// de ser una lista neutra: muestra la frase que se está respondiendo y
-/// propone el contexto inferido de ella, con la evidencia que lo justifica.
-/// La sugerencia se ofrece, no se impone — la persona sorda decide.
 class ContextSelectionWidget extends ConsumerStatefulWidget {
   const ContextSelectionWidget({super.key});
 
@@ -23,7 +16,6 @@ class ContextSelectionWidget extends ConsumerStatefulWidget {
 
 class _ContextSelectionWidgetState
     extends ConsumerState<ContextSelectionWidget> {
-  /// Familia desplegada. `null` mientras se muestran las cuatro entradas.
   ContextFamily? _abierta;
 
   @override
@@ -31,9 +23,6 @@ class _ContextSelectionWidgetState
     final pending = ref.watch(pendingReplyProvider);
     final suggestion = pending?.suggestion;
     final highlightedId = pending?.proposedContextId;
-
-    // Una familia con un solo contexto entra directo; con varios se despliega
-    // para preguntar de cuál se trata.
     final familia = _abierta;
     final desplegados = familia == null
         ? const <SemanticContext>[]
@@ -125,21 +114,9 @@ class _ContextSelectionWidgetState
   }
 }
 
-/// Entrada de primer nivel: la gestión que trae la persona.
-///
-/// Deliberadamente sin la urgencia ni la evidencia que muestra
-/// [_ContextButton]: aquí todavía no se ha dicho qué pasó, y teñir de rojo
-/// "Denuncias" antes de saberlo presiona la elección.
 class _FamilyButton extends StatelessWidget {
   final ContextFamily family;
   final VoidCallback onTap;
-
-  /// La familia que contiene el contexto inferido de la pregunta del oyente.
-  ///
-  /// Sin esto la inferencia era invisible justo donde más falta hace: «Mis
-  /// datos» agrupa un solo contexto, así que se entra directo y el botón
-  /// resaltado de dentro no llega a dibujarse nunca. Acertar el contexto y no
-  /// enseñarlo deja a la persona buscándolo a mano igual que antes.
   final bool highlighted;
 
   const _FamilyButton({
@@ -210,9 +187,6 @@ class _FamilyButton extends StatelessWidget {
   }
 }
 
-/// Frase de la persona oyente que se está respondiendo. Mantenerla a la vista
-/// evita que la persona sorda tenga que recordar la pregunta mientras navega
-/// el flujo de tarjetas.
 class _ReplyingToBanner extends StatelessWidget {
   final String text;
 
@@ -271,12 +245,7 @@ class _ReplyingToBanner extends StatelessWidget {
 
 class _ContextButton extends ConsumerStatefulWidget {
   final SemanticContext context;
-
-  /// Contexto propuesto para responder: se dibuja primero y resaltado.
   final bool highlighted;
-
-  /// Presente solo cuando la propuesta viene de analizar la frase del oyente
-  /// (y no de heredar el contexto ya declarado). Aporta la evidencia.
   final ContextSuggestion? suggestion;
 
   const _ContextButton({
@@ -294,10 +263,6 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
 
   static const _orange = AppTheme.brandPrimary;
 
-  /// Etiqueta del distintivo, o `null` si este contexto no está propuesto.
-  /// Se distingue una inferencia ("sugerido") de una herencia del contexto
-  /// que ya se declaró antes en la conversación: no son lo mismo y la
-  /// persona sorda merece saber cuál de las dos está viendo.
   String? get _badge {
     if (!widget.highlighted) return null;
     return widget.suggestion != null ? 'SUGERIDO' : 'CONTEXTO ACTUAL';
@@ -311,8 +276,6 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      // A11Y-01: el lector de pantalla anuncia cada contexto como un botón con
-      // su nombre y descripción (el emoji y la flecha son decorativos).
       child: Semantics(
         button: true,
         label: [
@@ -395,8 +358,6 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
                           color: AppTheme.lightTextSub,
                         ),
                       ),
-                      // Por qué se propone este contexto: la sugerencia debe
-                      // poder justificarse, no pedirse a ciegas.
                       if (evidence.isNotEmpty) ...[
                         const SizedBox(height: 4),
                         Text(

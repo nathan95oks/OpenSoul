@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 
 /// Pruebas semánticas del motor propio de armado oracional.
 ///

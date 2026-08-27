@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
-import 'package:lsb_legal_app/core/engines/conversation_engine/speech_act.dart';
+import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
 /// El ciclo de ventanilla: el funcionario pregunta o instruye, y la persona
 /// sorda necesita cosas distintas en cada caso.

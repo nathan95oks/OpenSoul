@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/app/theme.dart';
-import '../controllers/translation_controller.dart';
-import '../providers/context_provider.dart';
-import '../providers/semantic_zones_provider.dart';
-import 'card_grid.dart' show expandedAnswersProvider;
-import 'suggested_gloss_panel.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/card_grid.dart' show expandedAnswersProvider;
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/suggested_gloss_panel.dart';
 
-/// Canvas del árbol conceptual — flujo visual vertical de preguntas y respuestas.
-///
-/// Estructura por contexto activo:
-///   [CONTEXTO ROOT] (naranja, grande)
-///        ↓
-///   "Pregunta 1"  →  RESPUESTA1  (naranja, clickable para editar)
-///        ↓
-///   "Pregunta 2"  →  RESPUESTA2
-///        ↓
-///   "Pregunta actual" (dimmed)  →  [opciones sin seleccionar]
 class NodeFlowCanvas extends ConsumerWidget {
   const NodeFlowCanvas({super.key});
 
@@ -32,16 +22,9 @@ class NodeFlowCanvas extends ConsumerWidget {
         .toList();
     final activeZone = zonesState.activeZone;
 
-    // El historial ("Tu relato hasta ahora") solo se muestra una vez que el
-    // usuario ya tradujo al menos una vez: durante la construcción inicial la
-    // vista permanece estática (solo la pregunta actual), y tras traducir se
-    // habilita la edición de respuestas anteriores.
     final hasTranslated =
         ref.watch(translationControllerProvider).value != null;
 
-    // Progreso. Cuando el enunciado del oyente señaló preguntas concretas, se
-    // mide sobre esas: anunciar "Pregunta 1 de 9" cuando en realidad solo se
-    // preguntaron dos desanima sin motivo.
     final requested = zonesState.requestedZoneIds;
     final answeringRequest =
         requested.isNotEmpty && requested.contains(zonesState.activeZoneId);
@@ -55,7 +38,6 @@ class NodeFlowCanvas extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // ── Cabecera compacta: contexto (chip) + progreso ──────────
           Center(child: _ContextChip(emoji: ctx.emoji, label: ctx.name)),
           const SizedBox(height: 14),
           _ProgressBar(
@@ -65,10 +47,6 @@ class NodeFlowCanvas extends ConsumerWidget {
           ),
           const SizedBox(height: 22),
 
-          // ── Bloque ACTIVO (foco principal, arriba del todo) ────────
-          // Solo la pregunta y sus opciones. Los controles Volver/Continuar
-          // viven fijos en HomeScreen (GuidedNavBar) para que nunca queden
-          // fuera de pantalla.
           if (activeZone != null)
             _ActiveCard(
               question: activeZone.question.isNotEmpty
@@ -76,7 +54,6 @@ class NodeFlowCanvas extends ConsumerWidget {
                   : activeZone.hint,
             ),
 
-          // ── Relato construido (historial editable) — solo tras traducir ─
           if (hasTranslated && orderedVisited.isNotEmpty) ...[
             const SizedBox(height: 26),
             const _HistoryHeader(),
@@ -97,8 +74,6 @@ class NodeFlowCanvas extends ConsumerWidget {
   }
 }
 
-/// Chip discreto del contexto activo — sustituye al antiguo nodo raíz
-/// grande. Mantiene visible "dónde estoy" sin competir con la pregunta.
 class _ContextChip extends StatelessWidget {
   final String emoji;
   final String label;
@@ -139,13 +114,9 @@ class _ContextChip extends StatelessWidget {
   }
 }
 
-/// Barra de progreso horizontal naranja + etiqueta "Pregunta X de Y".
 class _ProgressBar extends StatelessWidget {
   final int reached;
   final int total;
-
-  /// "Pregunta" en el recorrido libre; "Respondiendo" cuando se contestan las
-  /// preguntas concretas que hizo la persona oyente.
   final String label;
 
   const _ProgressBar({
@@ -185,7 +156,6 @@ class _ProgressBar extends StatelessWidget {
   }
 }
 
-/// Encabezado de la sección de historial.
 class _HistoryHeader extends StatelessWidget {
   const _HistoryHeader();
 
@@ -214,9 +184,6 @@ class _HistoryHeader extends StatelessWidget {
   }
 }
 
-/// Fila compacta de pregunta respondida (historial). Sustituye al árbol
-/// vertical de flechas grandes: una sola línea por respuesta, en
-/// horizontal, tocable para volver a editar esa pregunta.
 class _CompactAnswerRow extends StatelessWidget {
   final String zoneId;
   final SemanticZonesState zonesState;
@@ -303,7 +270,6 @@ class _CompactAnswerRow extends StatelessWidget {
   }
 }
 
-/// Chip pequeño de respuesta dentro del historial compacto.
 class _MiniChip extends StatelessWidget {
   final String label;
   const _MiniChip({required this.label});
@@ -331,9 +297,6 @@ class _MiniChip extends StatelessWidget {
   }
 }
 
-/// Tarjeta focal de la pregunta activa: pregunta protagonista + opciones
-/// de glosas dentro de un bloque visual contenido. Es lo primero que ve el
-/// usuario. Los controles Volver/Continuar son fijos (GuidedNavBar).
 class _ActiveCard extends StatelessWidget {
   final String question;
 
@@ -366,10 +329,6 @@ class _ActiveCard extends StatelessWidget {
   }
 }
 
-/// Barra fija de navegación del flujo guiado (Volver / Continuar).
-///
-/// Vive fuera del área scrollable, justo encima del panel de traducir, para
-/// que los controles estén SIEMPRE visibles sin necesidad de desplazarse.
 class GuidedNavBar extends ConsumerWidget {
   const GuidedNavBar({super.key});
 
@@ -400,11 +359,6 @@ class GuidedNavBar extends ConsumerWidget {
   }
 }
 
-/// Pregunta activa — elemento PRINCIPAL de la pantalla.
-///
-/// A diferencia de las preguntas ya respondidas (pequeñas, en gris), la
-/// pregunta actual se muestra grande y en negro para que el foco visual
-/// esté en lo que el usuario debe responder ahora, no en el contexto.
 class _ActiveQuestion extends StatelessWidget {
   final String question;
   const _ActiveQuestion({required this.question});
@@ -425,10 +379,6 @@ class _ActiveQuestion extends StatelessWidget {
   }
 }
 
-/// Controles de navegación manual: "Volver" (atrás) y "Continuar".
-///
-/// Reemplazan al auto-avance: el usuario decide cuándo cambiar de pregunta,
-/// pudiendo seleccionar varias glosas o corregir antes de avanzar.
 class _NavControls extends StatelessWidget {
   final bool canGoBack;
   final bool hasNext;
@@ -450,7 +400,6 @@ class _NavControls extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
-          // Volver atrás
           Expanded(
             child: _NavButton(
               label: 'Volver',
@@ -461,7 +410,6 @@ class _NavControls extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          // Continuar / aviso de relato completo
           Expanded(
             flex: 2,
             child: hasNext

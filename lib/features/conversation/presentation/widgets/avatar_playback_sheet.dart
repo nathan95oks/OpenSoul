@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:lsb_legal_app/app/theme.dart';
-import 'package:lsb_legal_app/core/generators/avatar_generator/animation_url_resolver.dart';
-import 'package:lsb_legal_app/core/generators/avatar_generator/avatar_3d_viewer.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
 
-/// Hoja modal que reproduce en el avatar 3D las señas de un turno de la
-/// persona oyente. Reutiliza el visor de doble buffer del núcleo; no
-/// duplica lógica de reproducción.
 class AvatarPlaybackSheet extends StatelessWidget {
   final List<String> glosses;
   final List<String> animationUrls;
@@ -33,8 +30,6 @@ class AvatarPlaybackSheet extends StatelessWidget {
     );
   }
 
-  /// Glosas sin animación disponible (el avatar las deletrea). Son las
-  /// candidatas naturales a propuestas del diccionario evolutivo.
   List<String> get _missingGlosses => [
         for (var i = 0; i < animationUrls.length && i < glosses.length; i++)
           if (animationUrls[i]
@@ -108,9 +103,6 @@ class AvatarPlaybackSheet extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    // Informativo, no accionable: el diccionario judicial es
-                    // oficial y cerrado. Saber que una palabra se deletrea
-                    // sigue siendo útil; proponerla ya no procede.
                     for (final gloss in missing)
                       Chip(
                         label: Text(

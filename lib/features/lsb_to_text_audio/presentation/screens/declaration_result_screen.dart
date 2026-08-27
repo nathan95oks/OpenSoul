@@ -3,26 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:lsb_legal_app/app/theme.dart';
-import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
-import 'package:lsb_legal_app/core/session/flow_surface.dart';
-import '../controllers/translation_controller.dart';
-import '../providers/cards_flow_session.dart';
-import '../providers/context_provider.dart';
-import '../providers/sentence_provider.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
-/// Pantalla de resultado dedicada (CAMBIO #4).
-///
-/// Tras pulsar "Traducir" se navega aquí, de modo que la declaración
-/// generada es lo primero que se ve, sin tener que desplazarse por el
-/// flujo guiado. Reutiliza el `TranslationController`, los providers y el
-/// `AudioPlayer` existentes — no duplica la lógica de traducción ni de
-/// generación de audio.
-///
-///   - "Volver a editar": regresa al flujo guiado conservando TODAS las
-///     respuestas (simple `pop`; el estado vive en el ProviderScope raíz).
-///   - "Nueva declaración": limpia el estado y vuelve al inicio del flujo.
 class DeclarationResultScreen extends ConsumerWidget {
   const DeclarationResultScreen({super.key});
 
@@ -84,7 +73,6 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // ── Traducción (lo más importante, arriba) ───────────
                     Row(
                       children: [
                         const Expanded(
@@ -114,7 +102,6 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // ── Copiar la declaración al portapapeles ────────────
                     _FullWidthBtn(
                       label: 'Copiar al portapapeles',
                       icon: Icons.copy_outlined,
@@ -123,7 +110,6 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // ── Controles de audio + indicador ───────────────────
                     _AudioControls(
                       playback: playback,
                       hasRemoteAudio:
@@ -146,7 +132,6 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // ── Secuencia de glosas (referencia) ─────────────────
                     const _Label('Secuencia de glosas:'),
                     const SizedBox(height: 8),
                     Container(
@@ -190,11 +175,6 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 24),
 
-                    // ── Acciones principales ─────────────────────────────
-                    // Solo cuando el flujo está sirviendo a una conversación.
-                    // En la pestaña autónoma no hay hilo al que enviar nada, y
-                    // ofrecerlo metería una declaración suelta en un diálogo
-                    // del que esta persona ya se había salido.
                     if (servesConversation) ...[
                       _FullWidthBtn(
                         label: 'Enviar al chat',
@@ -224,10 +204,6 @@ class DeclarationResultScreen extends ConsumerWidget {
     );
   }
 
-  /// Incorpora la declaración como turno de la persona sorda en la
-  /// conversación y regresa a ella. El estado del flujo guiado se limpia
-  /// (misma secuencia que "Nueva declaración") para que el siguiente turno
-  /// empiece de cero.
   Future<void> _sendToConversation(
       BuildContext context, WidgetRef ref, TranslationResult result) async {
     ref.read(conversationBridgeProvider).submitDeclaration(
@@ -235,18 +211,11 @@ class DeclarationResultScreen extends ConsumerWidget {
           glosses: ref.read(sentenceProvider),
           contextId: ref.read(contextProvider)?.id,
         );
-    // La sesión se captura antes de navegar: tras el go() esta pantalla se
-    // desmonta y su ref deja de ser utilizable.
     final session = ref.read(cardsFlowSessionProvider);
-    // Navegar primero evita que esta pantalla se reconstruya vacía
-    // mientras se limpia el estado del flujo guiado.
     context.go('/home');
     await session.reset();
   }
 
-  /// Vuelve al flujo guiado conservando todas las respuestas. El estado
-  /// (frase, zonas, contexto) sigue vivo en el ProviderScope raíz; solo
-  /// detenemos el audio en curso.
   void _backToEdit(BuildContext context, WidgetRef ref) {
     ref.read(translationControllerProvider.notifier).pauseAudio();
     if (context.canPop()) {
@@ -256,9 +225,6 @@ class DeclarationResultScreen extends ConsumerWidget {
     }
   }
 
-  /// Copia la declaración generada al portapapeles del sistema. Prefiere el
-  /// texto refinado ([generatedText]); si estuviera vacío, recurre a la oración
-  /// base del motor local ([baseSentence]). Confirma con un SnackBar.
   Future<void> _copyToClipboard(
       BuildContext context, TranslationResult result) async {
     final text = result.generatedText.isNotEmpty
@@ -277,12 +243,7 @@ class DeclarationResultScreen extends ConsumerWidget {
       );
   }
 
-  /// Limpia todo el estado y regresa al inicio del flujo (misma categoría
-  /// de contexto). Reutiliza exactamente la misma secuencia de limpieza
-  /// que ya existía para "Nueva declaración".
   Future<void> _newDeclaration(BuildContext context, WidgetRef ref) async {
-    // Otro relato dentro del mismo trámite: el contexto situacional sigue
-    // siendo el mismo y volver a preguntarlo sería un paso de más.
     await ref.read(cardsFlowSessionProvider).reset(keepContext: true);
     if (!context.mounted) return;
     if (context.canPop()) {
@@ -293,9 +254,6 @@ class DeclarationResultScreen extends ConsumerWidget {
   }
 }
 
-/// Indica al usuario el origen de la declaración (RVP-01): si la oración fue
-/// refinada por la IA remota (Bedrock) o producida por el motor local —que
-/// actúa como fallback cuando el backend cae, degenera o no está disponible.
 class _OriginChip extends StatelessWidget {
   final bool bedrockUsed;
   const _OriginChip({required this.bedrockUsed});
@@ -356,8 +314,6 @@ class _Label extends StatelessWidget {
   }
 }
 
-/// Controles de reproducción: botón reproducir, botón pausar e indicador
-/// del estado de reproducción actual.
 class _AudioControls extends StatelessWidget {
   final AudioPlaybackState playback;
   final bool hasRemoteAudio;
@@ -389,7 +345,6 @@ class _AudioControls extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Indicador de reproducción actual
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
           decoration: BoxDecoration(
@@ -440,7 +395,6 @@ class _AudioControls extends StatelessWidget {
   }
 }
 
-/// Botón full-width reutilizable — mismo lenguaje visual que el resto.
 class _FullWidthBtn extends StatelessWidget {
   final String label;
   final IconData icon;
@@ -471,7 +425,6 @@ class _FullWidthBtn extends StatelessWidget {
 
     return SizedBox(
       height: 52,
-      // A11Y-01: cada acción se anuncia como botón con su etiqueta y estado.
       child: Semantics(
         button: true,
         enabled: enabled,

@@ -2,23 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
-import '../providers/semantic_zones_provider.dart';
-import '../providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
-import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
-import 'package:lsb_legal_app/app/theme.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 
-/// Hojas para precisar una glosa sin salir de la pregunta.
-///
-/// Las dos existen por el mismo motivo: llevar a la persona a otra pantalla
-/// completa para un dato de un toque rompe el hilo de lo que está contando.
-/// Aquí el detalle se pide encima, se resuelve y se vuelve.
-
-/// Cantidad de una unidad de tiempo: SEMANA → "2" → "hace dos semanas".
-///
-/// Sustituye a la zona de cantidad como pantalla propia. Solo 1-9: el 0 no es
-/// una cantidad ("hace cero semanas" no significa nada) aunque sí sea un
-/// dígito válido para deletrear un número de expediente.
 Future<String?> mostrarSelectorCantidad(
   BuildContext context, {
   required String unidad,
@@ -58,9 +47,6 @@ Future<String?> mostrarSelectorCantidad(
   );
 }
 
-/// Teclado dactilológico para el nombre propio de un lugar o la placa de un
-/// vehículo. Devuelve las letras y dígitos como glosas sueltas, que es como
-/// los espera el motor: `_joinSpelled` los reconstruye.
 Future<List<String>?> mostrarTecladoDactilologico(
   BuildContext context, {
   required String titulo,
@@ -82,9 +68,6 @@ Future<List<String>?> mostrarTecladoDactilologico(
 class _TecladoDactilologico extends StatefulWidget {
   final String titulo;
   final bool alfanumerico;
-
-  /// Sin letras: una edad o un número de carnet no se deletrean con el
-  /// abecedario, y ofrecerlo entero invita a equivocarse.
   final bool soloDigitos;
 
   const _TecladoDactilologico({
@@ -126,8 +109,6 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 10),
-            // Lo deletreado, siempre a la vista: sin esto no hay forma de
-            // saber si una letra entró o se perdió el toque.
             Container(
               constraints: const BoxConstraints(minHeight: 48),
               alignment: Alignment.center,
@@ -182,8 +163,6 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
                 Expanded(
                   flex: 2,
                   child: FilledButton(
-                    // Confirmar sin nada equivale a omitir el detalle: es una
-                    // salida válida, no todo el mundo recuerda el nombre.
                     onPressed: () =>
                         Navigator.of(context).pop(List<String>.from(_letras)),
                     child: Text(_letras.isEmpty ? 'Omitir' : 'Confirmar'),
@@ -206,8 +185,6 @@ class _Tecla extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // 48 es el mínimo táctil accesible; estas teclas se pulsan deprisa y en
-      // situaciones de tensión.
       width: 52,
       height: 52,
       child: OutlinedButton(
@@ -222,10 +199,6 @@ class _Tecla extends StatelessWidget {
   }
 }
 
-/// Detalle que pide una glosa, o `null` si no pide ninguno.
-///
-/// Se consulta al elegir la tarjeta: la interfaz decide con esto si abre una
-/// hoja o deja seguir.
 ({String titulo, bool alfanumerico, bool soloDigitos})? detalleQuePide(String gloss) {
   final etiqueta = LocalSentenceAssembler.etiquetaDeDetalle(gloss);
   if (etiqueta == null) return null;
@@ -240,14 +213,6 @@ class _Tecla extends StatelessWidget {
   };
 }
 
-
-/// Elige una glosa y, si necesita precisión, la pide antes de seguir.
-///
-/// Vive aquí y no en cada cuadrícula porque hay DOS superficies que añaden
-/// glosas —la rejilla de respuestas y el panel del flujo guiado— y tener la
-/// regla en una sola hizo que la otra no la aplicara: elegir SEMANA en el
-/// flujo guiado no abría nada y la unidad entraba suelta, que es justo la
-/// incoherencia que la cadena de tiempo venía a evitar.
 Future<void> elegirGlosa(
   BuildContext context,
   WidgetRef ref,
@@ -258,7 +223,7 @@ Future<void> elegirGlosa(
 
   notifier.toggleAnswer(card.gloss);
   ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
-  if (yaEstaba) return; // se deseleccionó: no hay nada que precisar
+  if (yaEstaba) return;
 
   final unidad = notifier.unidadTemporalDe(card.gloss);
   if (unidad != null) {

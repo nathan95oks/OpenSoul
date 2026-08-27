@@ -2,20 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import '../../../../app/theme.dart';
-import '../controllers/audio_translation_controller.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 
 class TextInputWidget extends ConsumerStatefulWidget {
   final Function(String) onSubmit;
 
-  /// Callback específico para texto proveniente del dictado por voz.
-  /// Si no se provee, se usa [onSubmit]. Permite al dueño del widget
-  /// distinguir el canal de entrada (voz vs. texto) sin duplicar el widget.
   final Function(String)? onSpeechSubmit;
 
-  /// Texto de ayuda del campo. El widget lo comparten el módulo de voz y el
-  /// chat, y cada uno pide algo distinto a quien escribe, así que la etiqueta
-  /// es del llamador y no del widget.
   final String hintText;
 
   const TextInputWidget({
@@ -81,9 +75,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           _isRecording = true;
           _controller.clear();
         });
-        
+
         ref.read(audioTranslationControllerProvider.notifier).setRecordingState();
-        
+
         await _speechToText.listen(
           onResult: (result) {
             _lastRecognizedWords = result.recognizedWords;
@@ -96,11 +90,6 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
             ref.read(audioTranslationControllerProvider.notifier)
                 .updateRecognizedText(result.recognizedWords);
           },
-          // `listen(localeId:)` quedó obsoleto en speech_to_text 7. Este
-          // objeto es equivalente al que construía internamente la ruta
-          // antigua: el resto de opciones conserva sus valores por defecto
-          // (partialResults true, onDevice false, ListenMode.confirmation),
-          // que son los mismos en ambos caminos.
           listenOptions: stt.SpeechListenOptions(localeId: 'es_ES'),
         );
       } else {
@@ -112,10 +101,6 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
     }
   }
 
-  /// Avisa al usuario de un fallo del dictado.
-  ///
-  /// La alternativa —registrarlo por consola— deja a quien usa la aplicación
-  /// esperando un micrófono que nunca se activó.
   void _warn(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
