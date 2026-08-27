@@ -7,6 +7,7 @@ import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart
 import 'package:lsb_legal_app/core/data/datasources/remote_lexicon_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
+import 'package:lsb_legal_app/core/data/repositories/animation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/audio_translation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/caching_audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/data/repositories/lexicon_repository_impl.dart';
@@ -14,6 +15,7 @@ import 'package:lsb_legal_app/core/data/repositories/suggestion_repository_impl.
 import 'package:lsb_legal_app/core/data/repositories/translation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/services/real_audio_output.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/repositories/animation_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/lexicon_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/suggestion_repository.dart';
@@ -51,6 +53,10 @@ final audioTranslationRepositoryProvider =
     ),
   );
 });
+
+final animationRepositoryProvider = Provider<AnimationRepository>(
+  (ref) => AnimationRepositoryImpl(),
+);
 
 final audioOutputProvider = Provider<AudioOutput>((ref) {
   final output = RealAudioOutput();
