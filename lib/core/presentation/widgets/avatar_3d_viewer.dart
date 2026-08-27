@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
-import 'package:path_provider/path_provider.dart';
 
-import 'package:lsb_legal_app/core/data/datasources/animation_cache.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
-class Avatar3DViewer extends StatefulWidget {
+class Avatar3DViewer extends ConsumerStatefulWidget {
   final bool isProcessing;
   final List<String>? glosses;
   final List<String>? animationUrls;
@@ -21,12 +22,12 @@ class Avatar3DViewer extends StatefulWidget {
   });
 
   @override
-  State<Avatar3DViewer> createState() => _Avatar3DViewerState();
+  ConsumerState<Avatar3DViewer> createState() => _Avatar3DViewerState();
 }
 
 const _s3Base = AnimationUrlResolver.defaultBaseUrl;
 
-class _Avatar3DViewerState extends State<Avatar3DViewer>
+class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   bool _isPlayingSequence = false;
@@ -43,7 +44,6 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
   AnimationController? _pulseController;
 
-  final AnimationCache _cache = AnimationCache();
 
   dynamic _controllerA;
   dynamic _controllerB;
@@ -133,23 +133,9 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
       return;
     }
 
-    List<String> localPaths = [];
-    final tempDir = await getTemporaryDirectory();
-
-    for (var urlStr in urlsToDownload) {
-      if (urlStr.startsWith(AnimationUrlResolver.placeholderScheme)) {
-        localPaths.add(urlStr);
-        continue;
-      }
-      final localPath = await _cache.localPathFor(urlStr, tempDir);
-      if (localPath != null) {
-        localPaths.add('file://$localPath');
-      } else if (_cache.isAllowed(urlStr)) {
-        localPaths.add(urlStr);
-      } else {
-        localPaths.add('${AnimationUrlResolver.placeholderScheme}$urlStr');
-      }
-    }
+    final localPaths = await ref
+        .read(animationRepositoryProvider)
+        .playableSources(urlsToDownload);
 
     if (mounted) {
       setState(() {
