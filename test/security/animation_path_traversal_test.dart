@@ -182,17 +182,20 @@ void main() {
   group('el resolutor rechaza nombres que no son nombres de archivo', () {
     const resolver = AnimationUrlResolver(baseUrl: bucket);
 
-    test('un animationFile con traversal cae al modelo Multi-Action', () {
-      // El nombre inadmisible se descarta igual que antes — lo que cambió
-      // con la arquitectura Multi-Action es a qué cae por defecto: ya no es
-      // un placeholder de texto por glosa, es el modelo 3D unificado. En
-      // ningún caso el payload del atacante llega a formar parte de la URL.
+    test('un animationFile con traversal nunca entra en la URL', () {
+      // La propiedad de seguridad no depende ya de sanear el nombre: con el
+      // modelo Multi-Action el `animationFile` no participa en construir la
+      // URL, solo decide entre el contenedor 3D y el placeholder. Ninguno de
+      // estos payloads termina en `.glb`, así que la glosa cae a su texto.
       for (final payload in traversalPayloads) {
         final urls =
             resolver.resolveAll(gloss: 'ROBAR', animationFile: payload);
-        expect(urls, ['${bucket}avatar_test.glb'],
-            reason: 'Un nombre inadmisible equivale a no tener animación '
-                'propia; el payload del atacante no debe aparecer en la URL.');
+        expect(urls, ['${AnimationUrlResolver.placeholderScheme}ROBAR'],
+            reason: 'El payload del atacante no debe aparecer en la URL.');
+        for (final url in urls) {
+          expect(url, isNot(contains('..')));
+          expect(url, isNot(contains('dictionary_cache')));
+        }
       }
     });
 
@@ -211,28 +214,20 @@ void main() {
     });
 
     test('los nombres legítimos siguen funcionando', () {
-      // Seña simple: la arquitectura Multi-Action apunta al modelo unificado
-      // en vez de a un .glb propio de la glosa.
+      // Todo `.glb` admisible apunta al mismo contenedor unificado: el nombre
+      // del archivo ya no viaja a la URL, así que no hay nada que sanear.
       expect(
         resolver.resolveAll(gloss: 'ABOGADO', animationFile: 'ABOGADO.glb'),
         ['${bucket}avatar_test.glb'],
       );
-      // Seña compuesta: varias animaciones para una sola glosa, cada una con
-      // su propio archivo — esto no pasa por el modelo unificado.
-      expect(
-        resolver.resolveAll(gloss: 'FISCAL', animationFile: 'F.glb+ABOGADO.glb'),
-        ['${bucket}F.glb', '${bucket}ABOGADO.glb'],
-      );
-      // Acentos y eñes se normalizan como siempre (fuera del atajo Multi-
-      // Action: NIÑO.glb == '$gloss.glb' cae al modelo unificado también).
       expect(
         resolver.resolveAll(gloss: 'NIÑO', animationFile: 'NIÑO.glb'),
         ['${bucket}avatar_test.glb'],
       );
-      // Un tramo inválido no arrastra al válido de la misma seña compuesta.
+      // Una glosa horneada en el modelo no necesita archivo declarado.
       expect(
-        resolver.resolveAll(gloss: 'FISCAL', animationFile: 'F.glb+../x.glb'),
-        ['${bucket}F.glb'],
+        resolver.resolveAll(gloss: 'HOLA'),
+        ['${bucket}avatar_test.glb'],
       );
     });
   });

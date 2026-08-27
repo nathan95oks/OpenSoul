@@ -5,53 +5,58 @@ import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
 
-/// Señas compuestas: las que no tienen un modelo propio y se ejecutan
-/// encadenando varios (FISCAL = letra F deletreada + el rol).
+/// Matriz de resolución del avatar Multi-Action.
 ///
-/// Es una función que llegó desde `main` y que la reorganización del núcleo
-/// estuvo a punto de perder en el merge. Queda fijada aquí: son **varias
-/// animaciones de una sola glosa**, y las dos listas —la semántica y la de
-/// reproducción— tienen cardinalidades distintas a propósito.
+/// Sustituye a las señas compuestas (`FISCAL = F.glb + ABOGADO.glb`): ya no
+/// hay un `.glb` por glosa que encadenar, sino un único contenedor 3D con las
+/// señas horneadas dentro. Lo que decide qué se reproduce son tres estados,
+/// en este orden:
+///   1. la glosa está horneada en el modelo → el contenedor unificado;
+///   2. es un término jurídico de [AnimationUrlResolver.wordsToSpell] → se
+///      deletrea letra por letra en dactilología;
+///   3. no hay animación → placeholder de texto.
+///
+/// La invariante que sobrevive al cambio de diseño: la lista semántica tiene
+/// **una entrada por glosa** y la de reproducción **una por animación**. Al
+/// deletrear, sus cardinalidades vuelven a diferir a propósito.
 void main() {
   const resolver = AnimationUrlResolver(baseUrl: 'https://s3/');
+  const modelo = 'https://s3/avatar_test.glb';
 
   group('AnimationUrlResolver', () {
-    test('una seña simple (archivo == glosa.glb) apunta al modelo Multi-Action', () {
-      // Arquitectura Multi-Action: un solo modelo 3D unificado en S3 con
-      // varias animaciones internas, no un .glb por glosa. Una seña sin
-      // secuencia compuesta apunta siempre al mismo contenedor.
+    test('una seña horneada en el modelo apunta al contenedor unificado', () {
+      expect(resolver.resolveAll(gloss: 'HOLA'), [modelo]);
+    });
+
+    test('una seña con archivo propio también cae al contenedor', () {
       expect(
         resolver.resolveAll(gloss: 'POLICIA', animationFile: 'POLICIA.glb'),
-        ['https://s3/avatar_test.glb'],
+        [modelo],
       );
     });
 
-    test('una seña compuesta produce la secuencia completa', () {
+    test('un término jurídico se deletrea letra por letra', () {
+      // DENUNCIA no tiene seña propia: se dactilología, una animación por
+      // letra, y por eso devuelve ocho URLs y no una.
       expect(
-        resolver.resolveAll(gloss: 'FISCAL', animationFile: 'F.glb+ABOGADO.glb'),
-        ['https://s3/F.glb', 'https://s3/ABOGADO.glb'],
+        resolver.resolveAll(gloss: 'DENUNCIA'),
+        List.filled('DENUNCIA'.length, modelo),
       );
     });
 
-    test('sin archivo también apunta al modelo Multi-Action', () {
+    test('una seña sin animación cae al placeholder de texto', () {
       expect(
         resolver.resolveAll(gloss: 'TESTIGO'),
-        ['https://s3/avatar_test.glb'],
+        ['${AnimationUrlResolver.placeholderScheme}TESTIGO'],
       );
     });
 
-    test('las tildes se limpian en cada componente', () {
-      expect(
-        resolver.resolveAll(gloss: 'MAÑANA', animationFile: 'MAÑANA.glb+Á.glb'),
-        ['https://s3/MANANA.glb', 'https://s3/A.glb'],
-      );
+    test('las tildes se normalizan antes de buscar en el catálogo', () {
+      expect(resolver.resolveAll(gloss: 'Á'), [modelo]);
     });
 
-    test('resolve() sigue devolviendo una sola URL', () {
-      expect(
-        resolver.resolve(gloss: 'FISCAL', animationFile: 'F.glb+ABOGADO.glb'),
-        'https://s3/F.glb',
-      );
+    test('resolve() devuelve la primera URL de la secuencia', () {
+      expect(resolver.resolve(gloss: 'DENUNCIA'), modelo);
     });
   });
 
@@ -61,31 +66,30 @@ void main() {
         (_) async => http.Response(jsonEncode(body), 200,
             headers: {'content-type': 'application/json; charset=utf-8'});
 
-    test('la glosa compuesta no se duplica en la lista semántica', () async {
+    test('el deletreo no infla la lista semántica', () async {
       final datasource = RemoteAudioDataSourceImpl(
         apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
         client: MockClient(respondingWith({
-          'glosses': ['FISCAL', 'LLAMAR'],
+          'glosses': ['DENUNCIA', 'LLAMAR'],
           'glossDetails': [
-            {'gloss': 'FISCAL', 'animationFile': 'F.glb+ABOGADO.glb'},
+            {'gloss': 'DENUNCIA', 'animationFile': 'DENUNCIA.glb'},
             {'gloss': 'LLAMAR', 'animationFile': 'LLAMA.glb'},
           ],
         })),
         animationResolver: resolver,
       );
 
-      final result = await datasource.translateText('El fiscal llama');
+      final result =
+          await datasource.translateText('Quiero hacer una denuncia');
 
-      // Semántica: una entrada por glosa — si FISCAL apareciera dos veces,
-      // la inferencia de contexto la contaría doble.
-      expect(result.glosses, ['FISCAL', 'LLAMAR']);
-      // Reproducción: tres animaciones, cada una con su etiqueta alineada.
-      expect(result.animationUrls, [
-        'https://s3/F.glb',
-        'https://s3/ABOGADO.glb',
-        'https://s3/LLAMA.glb',
-      ]);
-      expect(result.animationGlosses, ['FISCAL', 'FISCAL', 'LLAMAR']);
+      // Semántica: una entrada por glosa — si DENUNCIA se contara ocho veces,
+      // la inferencia de contexto la pesaría ocho veces.
+      expect(result.glosses, ['DENUNCIA', 'LLAMAR']);
+      // Reproducción: cada letra deletreada es su propia animación, rotulada
+      // con la letra que el avatar está haciendo en ese momento.
+      expect(result.animationGlosses,
+          ['D', 'E', 'N', 'U', 'N', 'C', 'I', 'A', 'LLAMAR']);
+      expect(result.animationUrls, hasLength(9));
       expect(result.animationGlosses, hasLength(result.animationUrls.length));
     });
 

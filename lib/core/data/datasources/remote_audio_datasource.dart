@@ -58,7 +58,12 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
               animationFile: detail['animationFile']?.toString(),
             );
             urls.addAll(resolved);
-            animationGlosses.addAll(List.filled(resolved.length, gloss));
+            if (AnimationUrlResolver.wordsToSpell.contains(gloss.toUpperCase().trim()) && gloss.trim().length > 1) {
+              final letters = gloss.toUpperCase().trim().split('').where((c) => AnimationUrlResolver.available3DGlosses.contains(c)).toList();
+              animationGlosses.addAll(letters.isNotEmpty ? letters : List.filled(resolved.length, gloss));
+            } else {
+              animationGlosses.addAll(List.filled(resolved.length, gloss));
+            }
           }
         } else {
           final glossList = (decodedResponse['glosses'] as List<dynamic>? ?? [])
@@ -68,7 +73,12 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           for (final gloss in glossList) {
             final resolved = animationResolver.resolveAll(gloss: gloss);
             urls.addAll(resolved);
-            animationGlosses.addAll(List.filled(resolved.length, gloss));
+            if (AnimationUrlResolver.wordsToSpell.contains(gloss) && gloss.length > 1) {
+              final letters = gloss.split('').where((c) => AnimationUrlResolver.available3DGlosses.contains(c)).toList();
+              animationGlosses.addAll(letters.isNotEmpty ? letters : List.filled(resolved.length, gloss));
+            } else {
+              animationGlosses.addAll(List.filled(resolved.length, gloss));
+            }
           }
         }
 

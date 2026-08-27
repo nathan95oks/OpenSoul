@@ -9,32 +9,55 @@ class AnimationUrlResolver {
 
   static const String compositeSeparator = '+';
 
+  static const Set<String> available3DGlosses = {
+    'HOLA', 'PERMISO', 'GRACIAS', 'SI', 'NO',
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ'
+  };
+
+  static const Set<String> wordsToSpell = {
+    'DENUNCIA', 'DENUNCIAR', 'DENUNCIANTE', 'DENUNCIADO', 'FISCALIA',
+    'JUZGADO', 'COMISARIA', 'QUERELLA', 'IMPUTACION', 'IMPUTADO',
+    'VICTIMA', 'SOSPECHOSO', 'DETENIDO', 'ACTA', 'CEDULA', 'CEDULA DE IDENTIDAD',
+    'FIRMA', 'FIRMAR', 'DECLARACION', 'DECLARAR', 'MINISTERIO PUBLICO',
+    'FELCC', 'FELCV'
+  };
+
   String resolve({required String gloss, String? animationFile}) =>
       resolveAll(gloss: gloss, animationFile: animationFile).first;
 
   List<String> resolveAll({required String gloss, String? animationFile}) {
-    if (animationFile == null || animationFile.isEmpty || animationFile == '$gloss.glb') {
-      return ['${baseUrl}avatar_test.glb'];
-    }
-    final urls = <String>[];
-    for (final part in animationFile.split(compositeSeparator)) {
-      final safe = _sanitizeFileName(part.trim());
-      if (safe == null || safe.isEmpty) continue;
-      urls.add('$baseUrl$safe');
-    }
-    return urls.isEmpty ? ['${baseUrl}avatar_test.glb'] : urls;
-  }
-
-  static final RegExp _allowedFileName = RegExp(r'^[A-Za-z0-9._-]+$');
-
-  String? _sanitizeFileName(String file) {
-    final normalized = file
+    final cleanGloss = gloss
+        .toUpperCase()
+        .trim()
         .replaceAll('Á', 'A')
         .replaceAll('É', 'E')
         .replaceAll('Í', 'I')
         .replaceAll('Ó', 'O')
-        .replaceAll('Ú', 'U')
-        .replaceAll('Ñ', 'N');
-    return _allowedFileName.hasMatch(normalized) ? normalized : null;
+        .replaceAll('Ú', 'U');
+
+    if (available3DGlosses.contains(cleanGloss)) {
+      return ['${baseUrl}avatar_test.glb'];
+    }
+
+    if (wordsToSpell.contains(cleanGloss) && cleanGloss.length > 1) {
+      final validLetters = cleanGloss
+          .split('')
+          .where((char) => available3DGlosses.contains(char))
+          .map((_) => '${baseUrl}avatar_test.glb')
+          .toList();
+      if (validLetters.isNotEmpty) {
+        return validLetters;
+      }
+    }
+
+    if (animationFile != null && animationFile.isNotEmpty) {
+      if (animationFile.endsWith('.glb')) {
+        return ['${baseUrl}avatar_test.glb'];
+      }
+    }
+
+    return ['$placeholderScheme$cleanGloss'];
   }
 }
