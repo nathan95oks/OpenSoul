@@ -1,12 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
-import 'package:lsb_legal_app/features/audio_to_lsb/domain/usecases/translate_text_usecase.dart';
-
-final translateTextUseCaseProvider = Provider((ref) {
-  return TranslateTextUseCase(ref.watch(audioTranslationRepositoryProvider));
-});
-
+import 'package:lsb_legal_app/features/audio_to_lsb/di/injection.dart';
 enum AudioTranslationStatus { idle, recording, processing, success, error }
 
 class AudioTranslationState {

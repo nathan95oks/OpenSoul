@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
-import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
 
 class AvatarPlaybackSheet extends StatelessWidget {
