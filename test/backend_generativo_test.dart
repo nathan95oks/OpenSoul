@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 
 /// Desde que el backend REDACTA en vez de pulir, su texto no coincide
 /// literalmente con el lexicón local. Estas pruebas fijan la frontera de

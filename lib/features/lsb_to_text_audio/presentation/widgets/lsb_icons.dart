@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Mapa compartido de nombre-de-ícono → IconData para glosas LSB.
-/// Centralizado para evitar duplicación entre SemanticNode y CardGrid.
 const Map<String, IconData> kLsbIconMap = {
   'person': Icons.person, 'child_care': Icons.child_care,
   'woman': Icons.woman, 'man': Icons.man, 'people': Icons.people,

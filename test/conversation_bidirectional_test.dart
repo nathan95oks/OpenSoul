@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
@@ -8,6 +8,7 @@ import 'package:lsb_legal_app/core/domain/repositories/translation_repository.da
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 
 import 'helpers/official_dictionary.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 /// Pruebas del ciclo conversacional completo (Fase 4).
 ///
@@ -39,10 +40,6 @@ class _SpySignRepository implements AudioTranslationRepository {
       disambiguations: disambiguations,
     );
   }
-
-  @override
-  Future<LsbTranslation> translateAudio(String audioPath) async =>
-      throw UnimplementedError();
 }
 
 /// Declaración remota fija: el sentido sordo→oyente ya está cubierto por

@@ -3,30 +3,22 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
-import 'package:lsb_legal_app/core/engines/conversation_engine/speech_act.dart';
+import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
-import 'package:lsb_legal_app/app/theme.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
-import '../providers/conversation_provider.dart';
-import '../widgets/avatar_playback_sheet.dart';
-import '../widgets/turn_bubble.dart';
-import '../widgets/quick_reply_bar.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/widgets/avatar_playback_sheet.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/widgets/turn_bubble.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/widgets/quick_reply_bar.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
-/// Pantalla central de OpenSoul: la conversación bidireccional.
-///
-/// Un solo dispositivo compartido entre ambas personas:
-///   - La persona oyente habla o escribe (abajo); su mensaje se muestra
-///     como turno con acceso al avatar LSB.
-///   - La persona sorda responde construyendo su mensaje con tarjetas
-///     (botón "Responder con tarjetas"); su declaración vuelve aquí como
-///     turno con texto y audio.
 class ConversationScreen extends ConsumerStatefulWidget {
   const ConversationScreen({super.key});
 
@@ -61,23 +53,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         await audio.playUrl(turn.outputs.audioUrl!);
         return;
       } catch (_) {
-        // cae a TTS local
       }
     }
     await audio.speak(turn.outputs.text);
   }
 
-  /// Abre el flujo de tarjetas para responder al turno del oyente.
-  ///
-  /// Cuando la conversación puede proponer un contexto, se entra **directo a
-  /// la primera pregunta**: en un diálogo real, obligar a confirmar una
-  /// pantalla intermedia entre cada turno hace la comunicación lenta. La
-  /// propuesta se anuncia dentro del flujo y se corrige con "Cambiar
-  /// contexto"; la flecha de volver regresa a la conversación en cualquier
-  /// momento. Sin propuesta, se elige contexto como siempre.
-  ///
-  /// Una declaración a medias (con glosas ya elegidas) nunca se toca: se
-  /// vuelve a ella tal como se dejó.
   void _openCardsFlow() {
     final conversation = ref.read(conversationProvider).conversation;
     final startingFresh =
@@ -90,24 +70,13 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       if (proposed != null) {
         notifier.setContext(proposed);
       } else {
-        // Sin nada que proponer, no se hereda el contexto de la respuesta
-        // anterior: se vuelve a preguntar.
         notifier.clearContext();
       }
-      // El recorrido de la respuesta anterior también se descarta: si no, su
-      // zona activa sobrevive y el flujo abre donde quedó la vez pasada en
-      // lugar de donde pregunta el enunciado nuevo.
-      //
-      // Tiene que ser `reset()` y no `invalidate`: al invalidar, Riverpod
-      // vuelve a ejecutar `build()` sobre el mismo Notifier, y `build()`
-      // preserva a propósito la zona activa —para no deshacer el árbol cada
-      // vez que se elige una glosa—, con lo que el estado viejo sobrevivía.
       ref.read(semanticZonesProvider.notifier).reset();
     }
     context.push('/lsb-to-audio');
   }
 
-  /// Turno del oyente que dio una instrucción y sigue sin contestar.
   ConversationTurn? _instruccionPendiente(ConversationState state) {
     final pendiente = state.conversation.pendingReply;
     if (pendiente == null) return null;
@@ -116,10 +85,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         : null;
   }
 
-  /// Contesta una instrucción con una glosa suelta, sin abrir el flujo.
-  ///
-  /// El audio sale por el altavoz hacia el funcionario, que es a quien va
-  /// dirigida la respuesta.
   Future<void> _enviarRespuestaRapida(
       List<String> glosses, String text) async {
     ref.read(conversationProvider.notifier).addDeafDeclaration(
@@ -156,9 +121,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(conversationProvider);
-    // Carga el diccionario en cuanto se abre la conversación: la inferencia
-    // de contexto se construye sobre él y debe estar lista para el primer
-    // turno, no para el segundo.
     ref.watch(lexiconEntriesProvider);
     ref.listen(conversationProvider, (prev, next) {
       if ((prev?.conversation.turns.length ?? 0) <
@@ -221,8 +183,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                             onPlayAudio: () => _playDeafTurn(turn),
                             onShowAvatar: () => AvatarPlaybackSheet.show(
                               context,
-                              // Las etiquetas del visor van por animación, no
-                              // por glosa: una seña compuesta ocupa varias.
                               glosses: turn.outputs.animationGlosses.isNotEmpty
                                   ? turn.outputs.animationGlosses
                                   : turn.message.glosses,
@@ -232,10 +192,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                         },
                       ),
               ),
-              // El progreso ya no se anuncia aquí abajo: el turno entra en el
-              // hilo al instante y es su propia burbuja la que dice que le
-              // faltan señas. Un aviso global además de ese sugeriría que la
-              // conversación está bloqueada, cuando ya se puede responder.
               if (state.error != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -245,10 +201,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                     color: AppTheme.errorDark,
                   ),
                 ),
-              // Una instrucción no se contesta con un cuestionario: se
-              // contesta que se entendió, o se pide lo único que suele
-              // faltar. Solo aparece mientras esa instrucción está sin
-              // responder.
               if (_instruccionPendiente(state) != null)
                 QuickReplyBar(onReply: _enviarRespuestaRapida),
               _InputArea(
@@ -268,8 +220,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   }
 }
 
-/// Zona de entrada compartida: la persona sorda entra por tarjetas; la
-/// oyente por voz o texto. El teléfono se pasa entre ambas.
 class _InputArea extends StatelessWidget {
   final void Function(String) onHearingText;
   final void Function(String) onHearingSpeech;

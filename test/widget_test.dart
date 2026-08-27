@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/app/main_navigation_screen.dart';
-import 'package:lsb_legal_app/app/splash_screen.dart';
+import 'package:lsb_legal_app/app/screens/main_navigation_screen.dart';
+import 'package:lsb_legal_app/app/screens/splash_screen.dart';
 import 'package:lsb_legal_app/app/app.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/screens/conversation_screen.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';

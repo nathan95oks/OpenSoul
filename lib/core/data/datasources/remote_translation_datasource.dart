@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:lsb_legal_app/core/data/datasources/endpoint_uri.dart';
-import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
-/// Contrato abstracto para el datasource remoto de traducción.
 abstract class RemoteTranslationDataSource {
   Future<TranslationResult> translateCards({
     required String context,
@@ -11,22 +10,10 @@ abstract class RemoteTranslationDataSource {
   });
 }
 
-/// Implementación HTTP que se comunica con API Gateway → Lambda.
-///
-/// Envía las tarjetas LSB seleccionadas y recibe la respuesta completa
-/// del sistema híbrido (motor propio + Bedrock + Polly + S3).
 class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
-  /// Endpoint del API Gateway. Se inyecta en compilación desde `.env` vía
-  /// `run.ps1` / `run.sh`, que traducen las entradas del archivo a
-  /// `--dart-define=LSB_API_URL=...`. Sin la variable el valor es `''` y
-  /// el POST fallará al parsear el URI — es la señal de "endpoint no
-  /// configurado", no un fallback silencioso a un endpoint publicado.
   static const String defaultApiGatewayUrl =
       String.fromEnvironment('LSB_API_URL');
 
-  /// Tope de espera de la llamada remota. Si el backend no responde a tiempo
-  /// (red lenta o caída), se lanza [TimeoutException] y el controlador cae al
-  /// motor local — nunca se queda colgado en `loading` (RDS-01).
   static const Duration requestTimeout = Duration(seconds: 12);
 
   final http.Client client;
@@ -63,7 +50,6 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
 
-      // Parsear glossSequence si existe
       List<Map<String, dynamic>>? glossSeq;
       if (data['glossSequence'] != null) {
         glossSeq = (data['glossSequence'] as List)
@@ -71,7 +57,6 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
             .toList();
       }
 
-      // Parsear intermediateRepresentation si existe
       Map<String, dynamic>? intermediateRepr;
       if (data['intermediateRepresentation'] != null) {
         intermediateRepr =

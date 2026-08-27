@@ -2,25 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:lsb_legal_app/app/theme.dart';
-import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
-import '../providers/sign_images_provider.dart';
-import '../providers/cards_flow_session.dart';
-import '../providers/sentence_provider.dart';
-import '../providers/semantic_zones_provider.dart';
-import '../controllers/translation_controller.dart';
-import '../providers/context_provider.dart';
-import '../providers/cards_provider.dart' show allCardsProvider;
-import '../widgets/context_selection_widget.dart';
-import '../widgets/node_flow_canvas.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart' show allCardsProvider;
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/context_selection_widget.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/node_flow_canvas.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
-/// Pantalla principal del módulo LSB → Texto → Audio.
-///
-/// Layout (fondo blanco, árbol conceptual vertical):
-///   AppBar  → "OpenSoul" + contexto activo
-///   Body    → SingleChildScrollView con NodeFlowCanvas (árbol pregunta→respuesta)
-///   Bottom  → Panel fijo: secuencia construida + botón TRADUCIR
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -29,11 +23,6 @@ class HomeScreen extends ConsumerWidget {
     final selectedWords = ref.watch(sentenceProvider);
     final translationState = ref.watch(translationControllerProvider);
     final contextState = ref.watch(contextProvider);
-
-    // Nota (RVP-01): no se observa AsyncError aquí porque el controlador
-    // nunca emite error — siempre degrada al motor local y entrega un
-    // resultado. El origen del texto (IA remota vs motor local) se comunica
-    // al usuario con un chip en la pantalla de resultado.
 
     return Scaffold(
       backgroundColor: AppTheme.lightBg,
@@ -77,8 +66,6 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(width: 10),
-          // Flexible: con la flecha de volver y las dos acciones, el título
-          // no cabía y desbordaba por 4 px (franja de depuración visible).
           const Flexible(
             child: Text(
               'OpenSoul',
@@ -94,9 +81,6 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       actions: [
-        // Mostrar u ocultar la imagen de la seña en cada tarjeta. Quien ya
-        // reconoce las señas lee más rápido una cuadrícula de palabras, y sin
-        // imagen caben más opciones en pantalla. La elección se recuerda.
         Builder(builder: (_) {
           final conImagen = ref.watch(signImagesEnabledProvider);
           return IconButton(
@@ -132,12 +116,7 @@ class HomeScreen extends ConsumerWidget {
     List<String> selectedWords,
     AsyncValue<TranslationResult?> translationState,
   ) {
-    // Frase del oyente que se está respondiendo: se mantiene a la vista
-    // durante todo el flujo guiado para no obligar a recordarla.
     final pending = ref.watch(pendingReplyProvider);
-    // Se entró directo a este contexto por inferencia, no porque nadie lo
-    // eligiera: hay que decirlo, o una suposición equivocada pasaría por
-    // decisión propia.
     final wasInferred = pending?.suggestion?.contextId == contextState?.id;
 
     return Column(
@@ -147,7 +126,6 @@ class HomeScreen extends ConsumerWidget {
             text: pending.question,
             inferredContextName: wasInferred ? contextState.name as String : null,
           ),
-        // Pregunta activa + opciones (scrollable solo si hay muchas opciones)
         Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -155,20 +133,14 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
         ),
-        // Controles fijos Volver/Continuar — siempre visibles, sin scroll.
         const GuidedNavBar(),
-        // Panel fijo inferior: secuencia + botón traducir
         _BottomPanel(
           glosses: selectedWords,
           isLoading: translationState.isLoading,
           onTranslate: selectedWords.isEmpty || translationState.isLoading
               ? null
               : () async {
-                  // Capturamos el router ANTES del await para no depender de
-                  // un BuildContext tras el gap asíncrono.
                   final router = GoRouter.of(context);
-                  // Para el contexto fusionado, resolvemos el sub-dominio más
-                  // fiel para el ensamblador (motor intacto) según las glosas.
                   final allCards = ref.read(allCardsProvider).value ?? const [];
                   String? categoryOf(String g) {
                     for (final c in allCards) {
@@ -177,9 +149,6 @@ class HomeScreen extends ConsumerWidget {
                     return null;
                   }
 
-                  // Secuencia con marcadores de rol (p. ej. agresor vs.
-                  // persona agredida en testigo). [sentenceProvider] sigue
-                  // puro para la UI; el marcador solo viaja a los motores.
                   final markedCards = ref
                       .read(semanticZonesProvider.notifier)
                       .orderedGlossesMarked();
@@ -194,14 +163,10 @@ class HomeScreen extends ConsumerWidget {
                   await ref
                       .read(translationControllerProvider.notifier)
                       .translateCards(
-                        // RVP-03: el backend recibe el contexto de UI real…
                         context: contextState.id,
                         cards: cardsForEngines,
-                        // …y el motor local el sub-dominio resuelto.
                         assemblerContext: assemblerContext,
                       );
-                  // Navega a la pantalla de resultado dedicada. El estado
-                  // del flujo permanece vivo para "Volver a editar".
                   router.push('/lsb-to-audio/result');
                 },
         ),
@@ -210,11 +175,6 @@ class HomeScreen extends ConsumerWidget {
   }
 }
 
-/// Franja superior con la frase del oyente que se está respondiendo.
-///
-/// Cuando el contexto se dedujo de esa frase, lo declara: la persona sorda
-/// entra directa a la primera pregunta —así se responde rápido— pero debe
-/// poder ver de un vistazo que el sistema supuso, y corregirlo.
 class _ReplyingToStrip extends StatelessWidget {
   final String text;
   final String? inferredContextName;
@@ -280,7 +240,6 @@ class _ReplyingToStrip extends StatelessWidget {
   }
 }
 
-/// Panel fijo inferior: secuencia de glosas + botón TRADUCIR.
 class _BottomPanel extends StatelessWidget {
   final List<String> glosses;
   final bool isLoading;
@@ -307,7 +266,6 @@ class _BottomPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Secuencia construida
           if (glosses.isNotEmpty) ...[
             const Text(
               'Secuencia construida:',
@@ -340,11 +298,9 @@ class _BottomPanel extends StatelessWidget {
             ),
             const SizedBox(height: 12),
           ],
-          // Botón TRADUCIR
           SizedBox(
             width: double.infinity,
             height: 56,
-            // A11Y-01: anuncia el botón principal como tal, con su estado.
             child: Semantics(
               button: true,
               enabled: enabled,

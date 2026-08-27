@@ -3,16 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:lsb_legal_app/app/theme.dart';
-import 'package:lsb_legal_app/core/generators/audio_generator/audio_output.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/home_screen.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 
 import 'helpers/official_dictionary.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 /// Prueba de widget del flujo completo (TST-04): seleccionar contexto + glosas,
 /// pulsar TRADUCIR y verificar la navegación a la pantalla de resultado con la

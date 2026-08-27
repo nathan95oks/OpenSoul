@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/engines/context_engine/context_catalog.dart';
+import 'package:lsb_legal_app/core/domain/services/context_catalog.dart';
 
 /// Ninguna pregunta guiada puede quedarse sin opciones.
 ///

@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
-import 'package:lsb_legal_app/core/domain/ports/conversation_bridge.dart';
-import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 /// Fronteras entre módulos.
 ///

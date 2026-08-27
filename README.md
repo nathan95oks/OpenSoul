@@ -156,7 +156,7 @@ conversation ──→ lsb_to_text_audio
 Donde el flujo de tarjetas necesita saber de una conversación en curso —qué
 pregunta se está respondiendo, dónde entregar la declaración terminada— la
 dependencia está invertida: el núcleo declara los puertos
-(`core/domain/ports/conversation_bridge.dart`) desactivados por defecto, y el
+(`core/domain/services/conversation_bridge.dart`) desactivados por defecto, y el
 módulo de conversación los implementa al componer la aplicación en `main.dart`.
 
 Con los puertos desactivados, el flujo de tarjetas funciona como una aplicación
@@ -187,24 +187,29 @@ Verificado en `test/module_isolation_test.dart`.
 
 ```
 lib/
-├── core/
-│   ├── domain/entities/     SemanticMessage, Conversation, LsbCard…
-│   ├── engines/
-│   │   ├── conversation_engine/   orquesta ambos sentidos
-│   │   ├── semantic_engine/       LocalSentenceAssembler (glosas → español)
-│   │   └── context_engine/        catálogo, navegación, inferencia de
-│   │                              contexto y de preguntas
-│   ├── generators/          audio (Polly/TTS) y avatar 3D
-│   ├── dictionary/          diccionario evolutivo offline-first
-│   ├── data/                datasources y repositorios remotos
-│   └── di/                  composition root compartido
-├── features/
-│   ├── conversation/
-│   ├── lsb_to_text_audio/
-│   ├── audio_to_lsb/
-│   └── dictionary_proposals/
-aws/                         funciones Lambda
-docs/architecture/           decisiones de diseño por fase
+├── main.dart                     punto de entrada y ProviderScope raíz
+├── app/                          shell de la aplicación (tema, rutas, sesión)
+│   └── screens/                  splash y navegación principal
+├── core/                         núcleo compartido, ordenado por capas
+│   ├── domain/                   capa de dominio (sin Flutter ni IO)
+│   │   ├── entities/             SemanticMessage, Conversation, LsbCard…
+│   │   ├── repositories/         contratos (translation, audio, lexicon)
+│   │   └── services/             motores: conversación, semántico, contexto,
+│   │                             navegación, inferencia y puertos invertidos
+│   ├── data/                     capa de datos
+│   │   ├── datasources/          HTTP, asset y caché en disco
+│   │   ├── models/               DTOs con (de)serialización
+│   │   ├── repositories/         implementaciones de los contratos
+│   │   └── services/             salida de audio real (Polly/TTS)
+│   ├── network/                  validación de endpoints inyectados
+│   ├── presentation/             visor 3D y estado de superficie compartidos
+│   └── di/                       composition root (injection.dart)
+└── features/                     cada feature con domain/data/presentation
+    ├── conversation/
+    ├── lsb_to_text_audio/
+    └── audio_to_lsb/
+aws/                              funciones Lambda
+docs/architecture/                decisiones de diseño por fase
 ```
 
 `SemanticMessage` es la representación única: toda entrada se normaliza a ella y

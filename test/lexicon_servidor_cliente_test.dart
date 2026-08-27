@@ -16,7 +16,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Map<String, String> leerCliente() {
     final fuente = File(
-      'lib/core/engines/semantic_engine/local_sentence_assembler.dart',
+      'lib/core/domain/services/local_sentence_assembler.dart',
     ).readAsStringSync();
     final patron =
         RegExp(r"'([A-ZÑ_0-9]+)':\s*_Lex\(_Role\.(\w+),\s*'((?:[^'\\]|\\')*)'\)");
@@ -116,7 +116,7 @@ void main() {
 
   test('el servidor recibe los flags persona y agresor para evitar duplicación de sujeto', () {
     final cliente = File(
-      'lib/core/engines/semantic_engine/local_sentence_assembler.dart',
+      'lib/core/domain/services/local_sentence_assembler.dart',
     ).readAsStringSync();
     
     final patronCliente =
