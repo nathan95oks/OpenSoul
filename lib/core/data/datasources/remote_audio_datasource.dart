@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
 import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
-import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
 abstract class RemoteAudioDataSource {
   Future<LsbTranslationModel> translateText(String text, {String? situation});

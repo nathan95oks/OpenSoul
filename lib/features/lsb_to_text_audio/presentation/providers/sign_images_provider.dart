@@ -1,12 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/sign_image_resolver.dart';
-
-final signImageResolverProvider = Provider<SignImageResolver>(
-  (ref) => const SignImageResolver(),
-);
-
 const _clavePreferencia = 'lsb.mostrarImagenesDeSenas';
 
 class SignImagesNotifier extends Notifier<bool> {

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart';
-import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
 /// Matriz de resolución del avatar Multi-Action.
 ///

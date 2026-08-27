@@ -10,11 +10,13 @@ import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasourc
 import 'package:lsb_legal_app/core/data/repositories/audio_translation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/caching_audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/data/repositories/lexicon_repository_impl.dart';
+import 'package:lsb_legal_app/core/data/repositories/suggestion_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/translation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/services/real_audio_output.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/lexicon_repository.dart';
+import 'package:lsb_legal_app/core/domain/repositories/suggestion_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
@@ -79,6 +81,10 @@ final pendingReplyProvider = Provider<ReplyPrompt?>((ref) => null);
 
 final suggestionDataSourceProvider = Provider<RemoteSuggestionDataSource>(
   (ref) => RemoteSuggestionDataSource(client: ref.watch(httpClientProvider)),
+);
+
+final suggestionRepositoryProvider = Provider<SuggestionRepository>(
+  (ref) => SuggestionRepositoryImpl(ref.watch(suggestionDataSourceProvider)),
 );
 
 final conversationBridgeProvider =
