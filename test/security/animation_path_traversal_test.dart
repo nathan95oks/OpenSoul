@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 import 'package:lsb_legal_app/core/data/datasources/animation_cache.dart';
-import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
 /// Regresión del path traversal en la caché de animaciones.
 ///

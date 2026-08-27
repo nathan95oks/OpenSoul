@@ -1,18 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'package:lsb_legal_app/core/domain/entities/generated_step.dart';
 import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
-
-class GeneratedStep {
-  final String question;
-  final List<String> options;
-
-  const GeneratedStep({required this.question, required this.options});
-
-  static const vacio = GeneratedStep(question: '', options: []);
-
-  bool get isEmpty => options.isEmpty;
-}
 
 class RemoteSuggestionDataSource {
   static const String _envUrl = String.fromEnvironment('LSB_API_URL');

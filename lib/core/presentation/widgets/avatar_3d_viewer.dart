@@ -4,7 +4,7 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:lsb_legal_app/core/data/datasources/animation_cache.dart';
-import 'package:lsb_legal_app/core/data/datasources/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
 class Avatar3DViewer extends StatefulWidget {
   final bool isProcessing;

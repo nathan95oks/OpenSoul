@@ -1,29 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/di/injection.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/repositories/cards_repository_impl.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/repositories/cards_repository.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_cards_by_category_usecase.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/usecases/get_categories_usecase.dart';
-import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
+import 'package:lsb_legal_app/core/domain/entities/generated_step.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
-
-final cardsRepositoryProvider = Provider<CardsRepository>((ref) {
-  return CardsRepositoryImpl(ref.watch(lexiconRepositoryProvider));
-});
-
-final getCategoriesUseCaseProvider = Provider<GetCategoriesUseCase>((ref) {
-  final repository = ref.watch(cardsRepositoryProvider);
-  return GetCategoriesUseCase(repository);
-});
-
-final getCardsByCategoryUseCaseProvider = Provider<GetCardsByCategoryUseCase>((ref) {
-  final repository = ref.watch(cardsRepositoryProvider);
-  return GetCardsByCategoryUseCase(repository);
-});
 
 const String kSuggestionsCategory = 'Sugerencias';
 
@@ -72,7 +55,7 @@ final generatedStepProvider = FutureProvider<GeneratedStep>((ref) async {
 
   final pendiente = ref.watch(pendingReplyProvider);
 
-  return ref.read(suggestionDataSourceProvider).suggest(
+  return ref.read(suggestNextStepUseCaseProvider)(
         contextId: context.id,
         selected: ref.watch(sentenceProvider),
         candidates: [for (final c in candidatas) c.gloss],

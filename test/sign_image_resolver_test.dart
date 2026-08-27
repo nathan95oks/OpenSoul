@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/data/datasources/sign_image_resolver.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_image_resolver.dart';
 
 /// El resolutor decide de dónde sale la imagen de una seña y, sobre todo,
 /// cuándo **no** hay imagen. Ese `null` es la red de seguridad de la tarjeta:

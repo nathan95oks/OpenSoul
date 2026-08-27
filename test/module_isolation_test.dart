@@ -8,7 +8,7 @@ import 'package:lsb_legal_app/core/domain/repositories/translation_repository.da
 import 'package:lsb_legal_app/app/surface_session.dart';
 import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_bindings.dart';
+import 'package:lsb_legal_app/features/conversation/di/conversation_bindings.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
