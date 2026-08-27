@@ -242,15 +242,30 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
 
     final activeGlosses = _testGlosses ?? widget.glosses;
     final currentGloss = (activeGlosses != null && _currentIndex < activeGlosses.length)
-        ? activeGlosses[_currentIndex]
+        ? activeGlosses[_currentIndex].toUpperCase().trim()
         : null;
 
     final controller = id == 'A' ? _controllerA : _controllerB;
     if (controller != null) {
-      final animJs = currentGloss != null ? "document.querySelector('model-viewer').animationName = '$currentGloss';" : "";
-      controller.runJavaScript(
-        "$animJs document.querySelector('model-viewer').currentTime = 0; document.querySelector('model-viewer').play();"
-      ).catchError((e) {
+      final animJs = currentGloss != null
+          ? """
+            const mv = document.querySelector('model-viewer');
+            if (mv) {
+              mv.pause();
+              mv.animationName = '$currentGloss';
+              mv.currentTime = 0;
+              mv.play({ repetitions: 1 });
+            }
+          """
+          : """
+            const mv = document.querySelector('model-viewer');
+            if (mv) {
+              mv.currentTime = 0;
+              mv.play({ repetitions: 1 });
+            }
+          """;
+
+      controller.runJavaScript(animJs).catchError((e) {
       });
     }
   }
@@ -449,59 +464,29 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
             ),
           ),
 
-        Positioned(
-          bottom: 10,
-          left: 0,
-          right: 0,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (_localUrls.length > 1)
-                GestureDetector(
-                  onTap: () => _advanceToNextAction(),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 7),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text('Siguiente',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600)),
-                        SizedBox(width: 4),
-                        Icon(Icons.skip_next_rounded,
-                            color: Colors.white, size: 16),
-                      ],
-                    ),
+        if (_localUrls.length > 1)
+          Positioned(
+            bottom: 12,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(_localUrls.length, (i) {
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  width: i == _currentIndex ? 18 : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(3),
+                    color: i == _currentIndex
+                        ? Colors.deepPurpleAccent
+                        : Colors.white24,
                   ),
-                ),
-              const SizedBox(height: 6),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_localUrls.length, (i) {
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: i == _currentIndex ? 20 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: i == _currentIndex
-                          ? Colors.deepPurpleAccent
-                          : Colors.white24,
-                    ),
-                  );
-                }),
-              ),
-            ],
+                );
+              }),
+            ),
           ),
-        ),
 
         Positioned(
           top: 14,
@@ -686,103 +671,7 @@ class _Avatar3DViewerState extends State<Avatar3DViewer>
                     fontSize: 12,
                   ),
                 ),
-                const SizedBox(height: 12),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              OutlinedButton.icon(
-                onPressed: () => _startSequence(
-                  overrideUrls: [
-                    '${_s3Base}YO.glb',
-                    '${_s3Base}POLICIA.glb',
-                    'placeholder://LLAMAR',
-                  ],
-                  overrideGlosses: ['YO', 'POLICIA', 'LLAMAR'],
-                ),
-                icon: const Icon(Icons.play_circle_outline,
-                    color: Colors.greenAccent, size: 18),
-                label: const Text(
-                  'Probar: YO + POLICÍA + LLAMAR',
-                  style: TextStyle(color: Colors.greenAccent, fontSize: 11),
-                ),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(
-                      color: Colors.greenAccent.withValues(alpha: 0.5)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                ),
-              ),
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: () => _startSequence(
-                  overrideUrls: [
-                    '${_s3Base}JUEZ.glb',
-                    'placeholder://FUEGO-LLAMA',
-                    'placeholder://VER',
-                  ],
-                  overrideGlosses: ['JUEZ', 'FUEGO-LLAMA', 'VER'],
-                ),
-                icon: const Icon(Icons.play_circle_outline,
-                    color: Colors.amberAccent, size: 18),
-                label: const Text(
-                  'Probar: JUEZ + FUEGO-LLAMA + VER (Placeholder)',
-                  style: TextStyle(color: Colors.amberAccent, fontSize: 11),
-                ),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(
-                      color: Colors.amberAccent.withValues(alpha: 0.5)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                ),
-              ),
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: () => _startSequence(
-                  overrideUrls: [
-                    '${_s3Base}avatar_test.glb',
-                  ],
-                  overrideGlosses: ['HOLA'],
-                ),
-                icon: const Icon(Icons.touch_app_rounded,
-                    color: Colors.lightGreenAccent, size: 18),
-                label: const Text(
-                  'Probar Seña: Solo HOLA',
-                  style: TextStyle(color: Colors.lightGreenAccent, fontSize: 11, fontWeight: FontWeight.bold),
-                ),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(
-                      color: Colors.lightGreenAccent.withValues(alpha: 0.7)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                ),
-              ),
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: () => _startSequence(
-                  overrideUrls: [
-                    '${_s3Base}avatar_test.glb',
-                    '${_s3Base}avatar_test.glb',
-                  ],
-                  overrideGlosses: ['HOLA', 'SI'],
-                ),
-                icon: const Icon(Icons.star_rounded,
-                    color: Colors.cyanAccent, size: 18),
-                label: const Text(
-                  'Probar Secuencia: HOLA + SI (Multi-Action)',
-                  style: TextStyle(color: Colors.cyanAccent, fontSize: 11, fontWeight: FontWeight.bold),
-                ),
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(
-                      color: Colors.cyanAccent.withValues(alpha: 0.7)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                ),
-              ),
-            ],
-          ),
-        ),
+                const SizedBox(height: 18),
               ],
             ),
           ),
