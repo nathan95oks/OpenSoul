@@ -124,7 +124,9 @@ class AudioToLsbScreen extends ConsumerWidget {
                         child: Avatar3DViewer(
                           isProcessing: state.status == AudioTranslationStatus.processing,
                           glosses: state.status == AudioTranslationStatus.success 
-                            ? state.translationResult?.glosses 
+                            ? (state.translationResult?.animationGlosses.isNotEmpty == true
+                                ? state.translationResult?.animationGlosses
+                                : state.translationResult?.glosses)
                             : null,
                           animationUrls: state.status == AudioTranslationStatus.success
                             ? state.translationResult?.animationUrls

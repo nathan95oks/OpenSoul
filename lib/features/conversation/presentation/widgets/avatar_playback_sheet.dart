@@ -10,17 +10,20 @@ import 'package:lsb_legal_app/core/generators/avatar_generator/avatar_3d_viewer.
 class AvatarPlaybackSheet extends StatelessWidget {
   final List<String> glosses;
   final List<String> animationUrls;
+  final List<String>? animationGlosses;
 
   const AvatarPlaybackSheet({
     super.key,
     required this.glosses,
     required this.animationUrls,
+    this.animationGlosses,
   });
 
   static Future<void> show(
     BuildContext context, {
     required List<String> glosses,
     required List<String> animationUrls,
+    List<String>? animationGlosses,
   }) {
     return showModalBottomSheet<void>(
       context: context,
@@ -29,6 +32,7 @@ class AvatarPlaybackSheet extends StatelessWidget {
       builder: (_) => AvatarPlaybackSheet(
         glosses: glosses,
         animationUrls: animationUrls,
+        animationGlosses: animationGlosses,
       ),
     );
   }
@@ -133,7 +137,7 @@ class AvatarPlaybackSheet extends StatelessWidget {
                     color: AppTheme.darkSurface,
                     child: Avatar3DViewer(
                       isProcessing: false,
-                      glosses: glosses,
+                      glosses: animationGlosses?.isNotEmpty == true ? animationGlosses : glosses,
                       animationUrls: animationUrls,
                     ),
                   ),
