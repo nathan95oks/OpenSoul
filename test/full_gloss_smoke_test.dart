@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/engines/semantic_engine/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 
 /// Una oración está bien terminada si acaba en punto o en interrogación.
 ///
@@ -15,7 +15,7 @@ void main() {
     final assembler = LocalSentenceAssembler();
     
     // Extraer glosas directamente del codigo fuente de assembler
-    final file = File('lib/core/engines/semantic_engine/local_sentence_assembler.dart');
+    final file = File('lib/core/domain/services/local_sentence_assembler.dart');
     final content = file.readAsStringSync();
     
     final regex = RegExp(r"'([A-Z0-Z_]+)':\s*_Lex\(");

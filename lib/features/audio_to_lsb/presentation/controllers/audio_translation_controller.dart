@@ -1,23 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
-import '../../domain/usecases/translate_audio_usecase.dart';
-import '../../domain/usecases/translate_text_usecase.dart';
-
-/// La cadena http → datasource → repositorio vive en el núcleo compartido
-/// (`core/di`), común a ambas direcciones de la conversación.
-export 'package:lsb_legal_app/core/di/core_providers.dart'
-    show remoteAudioDataSourceProvider, audioTranslationRepositoryProvider;
-
-final translateAudioUseCaseProvider = Provider((ref) {
-  return TranslateAudioUseCase(ref.watch(audioTranslationRepositoryProvider));
-});
+import 'package:lsb_legal_app/features/audio_to_lsb/domain/usecases/translate_text_usecase.dart';
 
 final translateTextUseCaseProvider = Provider((ref) {
   return TranslateTextUseCase(ref.watch(audioTranslationRepositoryProvider));
 });
 
-// State definitions
 enum AudioTranslationStatus { idle, recording, processing, success, error }
 
 class AudioTranslationState {
@@ -48,13 +37,11 @@ class AudioTranslationState {
   }
 }
 
-// Controller definition
 final audioTranslationControllerProvider = NotifierProvider<AudioTranslationController, AudioTranslationState>(() {
   return AudioTranslationController();
 });
 
 class AudioTranslationController extends Notifier<AudioTranslationState> {
-
   @override
   AudioTranslationState build() {
     return AudioTranslationState();

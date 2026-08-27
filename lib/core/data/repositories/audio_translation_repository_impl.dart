@@ -8,19 +8,6 @@ class AudioTranslationRepositoryImpl implements AudioTranslationRepository {
   AudioTranslationRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<LsbTranslation> translateAudio(String audioPath) async {
-    try {
-      final model = await remoteDataSource.translateAudio(audioPath);
-      // Depending on architecture, we might map model to entity here if they were different.
-      // Since LsbTranslationModel extends LsbTranslation, we can just return it.
-      return model;
-    } catch (e) {
-      // Handle exceptions (e.g. throw a mapped failure)
-      throw Exception('Failed to translate audio: $e');
-    }
-  }
-
-  @override
   Future<LsbTranslation> translateText(String text, {String? situation}) async {
     try {
       final model =

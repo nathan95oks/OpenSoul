@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/app/surface_session.dart';
-import 'package:lsb_legal_app/core/session/flow_surface.dart';
+import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_bindings.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
@@ -18,6 +18,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 
 import 'helpers/fake_audio_output.dart';
 import 'helpers/official_dictionary.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 /// Aislamiento entre la conversación y los módulos autónomos.
 ///
@@ -40,10 +41,6 @@ class _StubSignRepository implements AudioTranslationRepository {
       animationUrls: const ['https://s3/ROBAR.glb'],
     );
   }
-
-  @override
-  Future<LsbTranslation> translateAudio(String audioPath) async =>
-      throw UnimplementedError();
 }
 
 class _StubDeclarationRepository implements TranslationRepository {

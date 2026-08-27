@@ -1,43 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:lsb_legal_app/core/di/core_providers.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
-import 'package:lsb_legal_app/core/engines/context_engine/semantic_navigation_engine.dart';
-import 'package:lsb_legal_app/core/engines/context_engine/zone_inference_engine.dart';
-import 'context_provider.dart';
-import 'sentence_provider.dart';
+import 'package:lsb_legal_app/core/domain/services/semantic_navigation_engine.dart';
+import 'package:lsb_legal_app/core/domain/services/zone_inference_engine.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
-/// Estado reactivo de navegación semántica.
-///
-/// Sustituye por completo a `GuidedFlowState`: ya no hay índice secuencial.
-/// Cualquier zona puede activarse en cualquier momento; el motor decide
-/// cuáles son sugeridas / prioritarias según el contexto activo y las
-/// tarjetas que el usuario ya seleccionó.
 class SemanticZonesState {
-  /// Zona actualmente seleccionada (manualmente o por sugerencia inicial).
   final String? activeZoneId;
-
-  /// Zonas que el usuario ya activó al menos una vez.
   final Set<String> visitedZoneIds;
-
-  /// Orden de activación de zonas (preserva inserción) — necesario para
-  /// construir el árbol conceptual en el orden que el usuario navegó.
   final List<String> visitedZoneOrder;
-
-  /// Respuestas por zona: zoneId → lista de glosas seleccionadas.
-  /// Permite mostrar qué respondió el usuario en cada pregunta del árbol.
   final Map<String, List<String>> zoneAnswers;
-
-  /// Snapshot inmutable producido por el motor.
   final NavigationSnapshot snapshot;
-
-  /// Zonas por las que preguntó la persona oyente, en el orden en que las
-  /// preguntó. Vacía en uso autónomo o si la pregunta no señalaba ninguna.
-  ///
-  /// Guían el recorrido —el flujo abre en la primera y "Continuar" sigue por
-  /// ellas— pero no lo encierran: agotadas, el resto del árbol continúa
-  /// disponible por si la persona quiere añadir algo que no le preguntaron.
   final List<String> requestedZoneIds;
 
   const SemanticZonesState({
@@ -49,19 +25,14 @@ class SemanticZonesState {
     this.requestedZoneIds = const [],
   });
 
-  /// Zonas preguntadas que aún no se han visitado.
   List<String> get pendingRequestedZones => [
         for (final id in requestedZoneIds)
           if (!visitedZoneIds.contains(id)) id,
       ];
 
-  /// Cuántas glosas lleva seleccionadas el usuario en la zona activa.
-  /// Derivado de [zoneAnswers] — fuente única de verdad, sin contador
-  /// paralelo que pueda desincronizarse al editar/deseleccionar.
   int get picksInActiveZone =>
       activeZoneId == null ? 0 : (zoneAnswers[activeZoneId]?.length ?? 0);
 
-  /// Acceso conveniente a la zona activa como entidad.
   SemanticZone? get activeZone {
     if (activeZoneId == null) return null;
     for (final p in snapshot.orderedZones) {
@@ -70,13 +41,9 @@ class SemanticZonesState {
     return null;
   }
 
-  /// Glosas seleccionadas en la zona actualmente activa.
   List<String> get activeAnswers =>
       activeZoneId == null ? const [] : (zoneAnswers[activeZoneId] ?? const []);
 
-  /// `true` si existe una pregunta a la que avanzar con "Continuar":
-  /// bien una zona posterior ya navegada (cuando el usuario retrocedió),
-  /// bien una zona aún no visitada que el motor sugiere.
   bool get hasNextQuestion {
     final id = activeZoneId;
     if (id == null) return false;
@@ -89,15 +56,11 @@ class SemanticZonesState {
     return false;
   }
 
-  /// `true` si hay una pregunta anterior a la que volver.
   bool get canGoBack {
     final id = activeZoneId;
     return id != null && visitedZoneOrder.indexOf(id) > 0;
   }
 
-  /// `true` cuando ya no quedan más preguntas por delante. La traducción
-  /// siempre está disponible desde el panel inferior; esto solo sirve para
-  /// mostrar el indicador de "relato completo".
   bool get isFlowComplete {
     if (activeZone == null) return false;
     return !hasNextQuestion;
@@ -126,9 +89,6 @@ class SemanticZonesState {
 final _engineProvider =
     Provider<SemanticNavigationEngine>((_) => const SemanticNavigationEngine());
 
-/// Estado base — no depende de [allCardsProvider] (que es async) para evitar
-/// loops circulares. Los boosts por categoría se aplican en
-/// [dynamicCardsProvider]; aquí solo necesitamos las glosas seleccionadas.
 class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
   static const _emptyState = SemanticZonesState(
     activeZoneId: null,
@@ -149,15 +109,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
 
     if (ctx == null) return _emptyState;
 
-    // En el primer build de un Notifier, `state` aún no está inicializado
-    // y leerlo lanza LateError. Lo envolvemos para que el primer ingreso
-    // al módulo no rompa la pantalla con "provider in error state".
-    //
-    // IMPORTANTE: `build` se re-ejecuta cada vez que cambia `sentenceProvider`
-    // (al seleccionar/deseleccionar glosas). Por eso preservamos también
-    // `visitedZoneOrder` y `zoneAnswers`: de lo contrario el árbol conceptual
-    // y las respuestas se borrarían en cada selección y sería imposible
-    // editar respuestas anteriores.
     String? previousActiveId;
     Set<String> previousVisited = const {};
     List<String> previousOrder = const [];
@@ -168,12 +119,8 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       previousVisited = s.visitedZoneIds;
       previousOrder = s.visitedZoneOrder;
       previousAnswers = s.zoneAnswers;
-    } on Error {
-      // First build — state aún no existe. Continuamos con valores por defecto.
-    }
+    } on Error catch (_) {}
 
-    // Si la persona oyente preguntó algo concreto, el flujo abre por ahí en
-    // vez de por el principio del árbol: se responde lo que se preguntó.
     final pending = ref.watch(pendingReplyProvider);
     final requested = pending == null
         ? const <String>[]
@@ -204,9 +151,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     );
   }
 
-  /// Secuencia plana de glosas en orden narrativo (zona por zona, según
-  /// el orden en que el usuario navegó). Es lo que se envía al motor de
-  /// traducción a través de [sentenceProvider].
   List<String> orderedGlosses() {
     final out = <String>[];
     for (final zoneId in state.visitedZoneOrder) {
@@ -215,12 +159,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     return out;
   }
 
-  /// Igual que [orderedGlosses] pero inyecta el `leadGloss` de cada zona antes
-  /// de sus respuestas (cuando la zona lo declara y tiene respuestas). Es la
-  /// secuencia que se envía a los motores de traducción: el marcador permite
-  /// distinguir roles (p. ej. agresor vs. persona agredida en el flujo de
-  /// testigo) SIN contaminar [sentenceProvider], que sigue mostrando solo las
-  /// glosas reales del usuario en la UI.
   List<String> orderedGlossesMarked() {
     final ctx = ref.read(contextProvider);
     final out = <String>[];
@@ -234,16 +172,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     return out;
   }
 
-  /// Selecciona / deselecciona una glosa en la zona activa.
-  ///
-  /// - Si la glosa ya estaba elegida → se quita (deseleccionar).
-  /// - Si la zona admite una sola respuesta (`maxPicks == 1`) → la nueva
-  ///   glosa reemplaza a la anterior (comportamiento tipo radio).
-  /// - Si admite varias y aún no se llegó al tope → se añade.
-  /// - Si ya se alcanzó el tope → se ignora.
-  ///
-  /// NO avanza de pregunta: el cambio de pregunta es explícito vía
-  /// [goToNextZone] ("Continuar").
   void toggleAnswer(String gloss) {
     final zoneId = state.activeZoneId;
     if (zoneId == null) return;
@@ -260,7 +188,7 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     } else if (current.length < maxPicks) {
       current.add(gloss);
     } else {
-      return; // tope alcanzado
+      return;
     }
 
     state = state.copyWith(
@@ -268,15 +196,9 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     );
   }
 
-  /// `true` si [gloss] ya estaba elegida en la zona activa.
   bool activeAnswersOf(String gloss) =>
       (state.zoneAnswers[state.activeZoneId] ?? const <String>[]).contains(gloss);
 
-  /// Nombre en español de la unidad temporal, si [gloss] lo es y la zona
-  /// activa la declara encadenable. `null` en cualquier otro caso.
-  ///
-  /// Se consulta la zona y no solo la glosa: SEMANA abre la cantidad cuando
-  /// responde "¿cuándo?", no cuando aparece en otra pregunta.
   String? unidadTemporalDe(String gloss) {
     final zona = ref.read(contextProvider)?.zoneById(state.activeZoneId ?? '');
     if (zona == null || !zona.chainTriggers.contains(gloss)) return null;
@@ -287,11 +209,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     return nombres[gloss];
   }
 
-  /// Añade calificadores detrás de una glosa ya elegida, en la misma zona.
-  ///
-  /// No son respuestas nuevas —no cuentan para `maxPicks`— sino la precisión
-  /// de la anterior: las letras de "Murillo" detrás de PLAZA, el "2" detrás de
-  /// SEMANA. El motor los lee por posición, así que el orden es el contrato.
   void appendQualifiers(String gloss, List<String> qualifiers) {
     final zoneId = state.activeZoneId;
     if (zoneId == null || qualifiers.isEmpty) return;
@@ -300,8 +217,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     final at = current.lastIndexOf(gloss);
     if (at < 0) return;
 
-    // Se reemplaza el tramo posterior por si la persona rehace el detalle:
-    // deletrear dos veces no debe dejar el primer intento dentro.
     final hasta = current.length;
     current.removeRange(at + 1, hasta);
     current.insertAll(at + 1, qualifiers);
@@ -311,14 +226,12 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     );
   }
 
-  /// Activa una zona libremente — no hay orden obligatorio.
   void activateZone(String zoneId) {
     final ctx = ref.read(contextProvider);
     if (ctx == null) return;
     if (ctx.zoneById(zoneId) == null) return;
 
     final visited = {...state.visitedZoneIds, zoneId};
-    // Preservar orden de inserción para el árbol conceptual
     final order = [...state.visitedZoneOrder];
     if (!order.contains(zoneId)) order.add(zoneId);
 
@@ -343,25 +256,9 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     );
   }
 
-  /// Avanza a la siguiente pregunta de forma **explícita** (botón "Continuar").
-  ///
-  /// Reemplaza al antiguo auto-avance: el usuario decide cuándo cambiar de
-  /// pregunta, tras seleccionar todas las glosas que necesite.
-  ///
-  /// 1. Si el usuario había retrocedido, avanza a la zona posterior ya
-  ///    navegada (conserva el recorrido).
-  /// 2. Si está en la última zona navegada, salta a la siguiente zona no
-  ///    visitada según la prioridad del motor.
-  /// 3. Si no quedan zonas, no hace nada (`hasNextQuestion` será `false`).
   void goToNextZone() {
     final id = state.activeZoneId;
     if (id == null) return;
-
-    // La cantidad ya NO es una pantalla: se pide en una hoja superpuesta al
-    // elegir la unidad (ver `qualifier_sheets.dart`). Llevar a la persona a
-    // otra pregunta completa para un dato de un toque rompía el hilo de lo que
-    // estaba contando. `chainZoneId` sigue declarado porque es el que dice qué
-    // glosas abren esa hoja y qué zonas no se navegan.
 
     final order = state.visitedZoneOrder;
     final idx = order.indexOf(id);
@@ -369,8 +266,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       activateZone(order[idx + 1]);
       return;
     }
-    // Lo que preguntó la persona oyente va antes que la prioridad del motor:
-    // primero se contesta lo preguntado, después se puede añadir el resto.
     final requested = state.pendingRequestedZones;
     if (requested.isNotEmpty) {
       activateZone(requested.first);
@@ -380,15 +275,12 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     for (final p in state.snapshot.orderedZones) {
       if (p.zone.id == state.activeZoneId) continue;
       if (state.visitedZoneIds.contains(p.zone.id)) continue;
-      // Una zona de cadena solo se alcanza desde su disparador, nunca por el
-      // recorrido normal: preguntar "¿cuántos?" sin unidad no tiene respuesta.
       if (soloPorCadena.contains(p.zone.id)) continue;
       activateZone(p.zone.id);
       return;
     }
   }
 
-  /// Ids que son destino de cadena de alguna zona del contexto activo.
   Set<String> _chainOnlyZoneIds() {
     final context = ref.read(contextProvider);
     if (context == null) return const {};
@@ -398,8 +290,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     };
   }
 
-  /// Vuelve a la pregunta anterior del recorrido, conservando todas las
-  /// respuestas para que el usuario pueda corregirlas o deseleccionarlas.
   void goToPreviousZone() {
     final id = state.activeZoneId;
     if (id == null) return;
@@ -425,8 +315,6 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       );
       return;
     }
-    // Reiniciar no debe perder de vista lo que preguntó la persona oyente:
-    // tras cambiar de contexto se sigue respondiendo la misma pregunta.
     final pending = ref.read(pendingReplyProvider);
     final requested = pending == null
         ? const <String>[]

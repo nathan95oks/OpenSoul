@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lsb_legal_app/core/engines/conversation_engine/speech_act.dart';
+import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
 /// En ventanilla, "¿tiene su carnet?" y "traiga su carnet" hablan de lo mismo
 /// y piden cosas opuestas. Antes las dos abrían el mismo cuestionario.

@@ -1,28 +1,10 @@
-/// Estado de una entrada dentro del diccionario evolutivo.
-///
-/// - [official]: validada por la comunidad de validadores (portal web).
-/// - [community]: aportada por la comunidad, visible pero no oficial.
-/// - [pending]: propuesta en revisión; nunca se muestra en la app.
 enum DictionaryStatus { official, community, pending }
 
-/// Entrada del lexicón LSB (Lengua de Señas Boliviana).
-///
-/// Es la unidad del diccionario evolutivo: describe la glosa, su
-/// representación visual (ícono semántico y animación 3D del avatar),
-/// categoría y metadatos de navegación semántica. La fuente canónica es
-/// `assets/dictionary/official_dictionary.json` (misma estructura que la
-/// tabla DynamoDB del backend); esta clase es su forma tipada en la app.
 class LsbCard {
   final String id;
   final String gloss;
   final String displayText;
   final String iconUrl;
-
-  /// Fotogramas que componen la imagen de la seña.
-  ///
-  /// Una seña con movimiento no cabe en una fotografía: se documenta por
-  /// partes y sus archivos se nombran `GLOSA_1.png`, `GLOSA_2.png`… El valor
-  /// por defecto, 1, es la seña estática de un solo `GLOSA.png`.
   final int imageFrames;
   final String categoryId;
   final String subcategoryId;
@@ -31,19 +13,9 @@ class LsbCard {
   final List<String> suggestedNextCardIds;
   final bool isFrequent;
   final bool isEmergency;
-
-  /// Nombre del ícono semántico de Material Icons (ej: 'person', 'gavel').
   final String semanticIcon;
-
-  /// Dialecto LSB al que pertenece la glosa.
-  /// Por defecto 'cochabamba' (alcance del proyecto).
   final String dialect;
-
-  /// Procedencia de la entrada en el diccionario evolutivo.
   final DictionaryStatus status;
-
-  /// Archivo de animación 3D (.glb) del avatar para esta glosa, si existe.
-  /// Nulo cuando la seña aún no tiene animación (el avatar usa dactilología).
   final String? animationFile;
 
   LsbCard({

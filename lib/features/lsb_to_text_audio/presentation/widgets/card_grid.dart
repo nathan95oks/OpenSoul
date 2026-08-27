@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/app/theme.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
-import '../providers/cards_provider.dart';
-import '../providers/semantic_zones_provider.dart';
-import 'qualifier_sheets.dart';
-import 'sign_image.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/qualifier_sheets.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/sign_image.dart';
 
-/// Cuántas opciones de respuesta se muestran por pregunta en modo guiado.
 const int _kAnswersPerQuestion = 6;
 
-/// Provider local: si el usuario activó "ver todas las opciones",
-/// dejamos de truncar la lista a 6.
 class ExpandedAnswersNotifier extends Notifier<bool> {
   @override
   bool build() => false;
@@ -23,15 +20,6 @@ final expandedAnswersProvider = NotifierProvider<ExpandedAnswersNotifier, bool>(
   ExpandedAnswersNotifier.new,
 );
 
-/// Grid de respuestas guiadas a la pregunta activa.
-///
-/// Por defecto muestra hasta [_kAnswersPerQuestion] opciones (las más
-/// relevantes según el motor semántico). Al tocar una tarjeta:
-/// 1. La glosa se añade al relato.
-/// 2. El motor avanza automáticamente a la siguiente pregunta.
-///
-/// Si el usuario no encuentra su respuesta, puede pulsar "Ver más
-/// opciones" para expandir el catálogo completo de la categoría.
 class CardGrid extends ConsumerWidget {
   const CardGrid({super.key});
 
@@ -138,22 +126,11 @@ class CardGrid extends ConsumerWidget {
     );
   }
 
-  /// Selecciona/deselecciona la glosa en la zona activa, sin avanzar de
-  /// pregunta (el avance es explícito vía "Continuar"). Tras el toggle
-  /// reconstruye la secuencia en orden narrativo.
-  ///
-  /// Se almacena la GLOSA limpia (no el displayText), porque tanto el
-  /// backend (GLOSS_LEXICON) como el LocalSentenceAssembler indexan por
-  /// glosa.
   Future<void> _onAnswerPicked(
           BuildContext context, WidgetRef ref, LsbCard card) =>
       elegirGlosa(context, ref, card);
-
 }
 
-/// Pista visible en zonas que permiten emparejar dos cards
-/// (apariencia, vestimenta). Informa cuántos picks lleva el usuario en
-/// la zona actual sin entorpecer la selección.
 class _PairPickHint extends StatelessWidget {
   final int current;
   final int max;
@@ -199,10 +176,6 @@ class _PairPickHint extends StatelessWidget {
   }
 }
 
-/// Banner mostrado cuando el usuario terminó de responder todas las
-/// preguntas. Reemplaza el grid de cards para impedir agregar más
-/// glosas accidentalmente; invita a traducir o a editar respuestas
-/// anteriores tocando un chip de pregunta en la barra superior.
 class _FlowCompleteBanner extends StatelessWidget {
   const _FlowCompleteBanner();
 
@@ -251,13 +224,6 @@ class _FlowCompleteBanner extends StatelessWidget {
   }
 }
 
-/// Tarjeta de la cuadrícula de respuestas.
-///
-/// Es `Consumer` porque dibuja la imagen de la seña, y esa decisión depende de
-/// dos providers (el resolutor y la preferencia de mostrarlas). Antes era
-/// `StatelessWidget` y pintaba solo el ícono: `SignImage` existía pero se
-/// usaba únicamente en el flujo guiado, así que en esta cuadrícula NINGUNA
-/// seña se veía por más que estuviera subida a S3.
 @visibleForTesting
 class AnswerCardForTest extends _AnswerCard {
   const AnswerCardForTest({super.key, required super.card, required super.onTap});
@@ -273,8 +239,6 @@ class _AnswerCard extends ConsumerWidget {
     final isEmergency = card.isEmergency;
     final accent = isEmergency ? AppTheme.errorLight : AppTheme.brandPrimary;
 
-    // A11Y-01: el lector de pantalla anuncia la tarjeta como un botón con su
-    // significado; el ícono es decorativo y se excluye (excludeSemantics).
     return Semantics(
       button: true,
       label: isEmergency
