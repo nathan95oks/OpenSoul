@@ -13,12 +13,18 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   final List<String>? animationUrls;
   final Duration animationDuration;
 
+  /// Cuando es `false` el visor detiene la reproduccion y libera el WebView.
+  /// Lo usan las superficies que quedan vivas en segundo plano (IndexedStack)
+  /// para que el avatar no siga senando al cambiar de modulo.
+  final bool isActive;
+
   const Avatar3DViewer({
     super.key,
     required this.isProcessing,
     this.glosses,
     this.animationUrls,
     this.animationDuration = const Duration(milliseconds: 2500),
+    this.isActive = true,
   });
 
   @override
@@ -59,7 +65,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   void initState() {
     super.initState();
 
-    if (widget.animationUrls?.isNotEmpty ?? false) {
+    if (widget.isActive && (widget.animationUrls?.isNotEmpty ?? false)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _startSequence();
       });
@@ -69,6 +75,19 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   @override
   void didUpdateWidget(Avatar3DViewer oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.isActive && !widget.isActive) {
+      _stopPlayback();
+      return;
+    }
+
+    if (_testUrls == null && _hasNothingToPlay && _isBusy) {
+      _stopPlayback();
+      return;
+    }
+
+    if (!widget.isActive) return;
+
     final hasNewUrls = widget.animationUrls != oldWidget.animationUrls &&
         widget.animationUrls != null &&
         widget.animationUrls!.isNotEmpty;
@@ -78,6 +97,38 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
     if (hasNewUrls || hasNewGlosses) {
       _startSequence();
+    }
+  }
+
+  bool get _hasNothingToPlay =>
+      (widget.animationUrls?.isEmpty ?? true) && (widget.glosses?.isEmpty ?? true);
+
+  bool get _isBusy =>
+      _localUrls.isNotEmpty || _isPlayingSequence || _isDownloadingFiles;
+
+  /// Corta la secuencia en curso: pausa el `model-viewer`, cancela el timer de
+  /// los placeholders y devuelve el visor a reposo.
+  void _stopPlayback() {
+    _cancelPlaceholderTimer();
+    _pauseViewers();
+    _resetToIdle();
+  }
+
+  void _pauseViewers() {
+    const pauseJs = """
+      const mv = document.querySelector('model-viewer');
+      if (mv) {
+        mv.pause();
+        mv.currentTime = 0;
+      }
+    """;
+
+    for (final controller in [_controllerA, _controllerB]) {
+      if (controller == null) continue;
+      try {
+        controller.runJavaScript(pauseJs).catchError((e) {});
+      } catch (_) {
+      }
     }
   }
 
@@ -161,6 +212,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 
   void _handleJsMessage(String viewerId, String message) {
+    if (!widget.isActive) return;
     if (message == 'loaded') {
       _handleLoaded(viewerId);
     } else if (message == 'finished') {
@@ -286,6 +338,8 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   @override
   void dispose() {
+    _cancelPlaceholderTimer();
+    _pauseViewers();
     _pulseController?.dispose();
     super.dispose();
   }
@@ -295,6 +349,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     final subtitle = _isDownloadingFiles ? 'Guardando en caché local para fluidez' : 'Desambiguando contexto LSB';
 
     return Column(
+      key: const ValueKey('processing'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
@@ -399,6 +454,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     final isPlaceholder = currentUrl.startsWith('placeholder://');
 
     return Stack(
+      key: const ValueKey('playing'),
       children: [
         Positioned.fill(
           child: _buildModelViewerInstance('A', _localUrls.isNotEmpty ? _localUrls.first : _urlA),
@@ -522,6 +578,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   Widget _buildFinishedState() {
     return Column(
+      key: const ValueKey('finished'),
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
@@ -604,8 +661,44 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     );
   }
 
+  /// Estado que se muestra cuando el modulo quedo en segundo plano: sin
+  /// `ModelViewer`, para que ningun WebView siga animando fuera de pantalla.
+  Widget _buildPausedState() {
+    return Column(
+      key: const ValueKey('paused'),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.12),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.deepPurpleAccent.withValues(alpha: 0.35),
+            ),
+          ),
+          child: const Icon(
+            Icons.pause_rounded,
+            size: 34,
+            color: Colors.deepPurpleAccent,
+          ),
+        ),
+        const SizedBox(height: 14),
+        Text(
+          'Avatar en pausa',
+          style: TextStyle(
+            color: Colors.white.withValues(alpha: 0.8),
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildIdleState() {
     return Stack(
+      key: const ValueKey('idle'),
       children: [
         Positioned.fill(
           child: ModelViewer(
@@ -670,7 +763,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   Widget build(BuildContext context) {
     Widget bodyContent;
 
-    if (widget.isProcessing || _isDownloadingFiles) {
+    if (!widget.isActive) {
+      bodyContent = _buildPausedState();
+    } else if (widget.isProcessing || _isDownloadingFiles) {
       bodyContent = _buildProcessingState();
     } else if (_localUrls.isNotEmpty && _isPlayingSequence) {
       bodyContent = _buildDualModelViewer();

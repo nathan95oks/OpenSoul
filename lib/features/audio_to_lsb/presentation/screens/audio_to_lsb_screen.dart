@@ -7,7 +7,11 @@ import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
 
 class AudioToLsbScreen extends ConsumerWidget {
-  const AudioToLsbScreen({super.key});
+  /// `false` cuando la pantalla sigue montada pero el usuario esta en otro
+  /// modulo: detiene el avatar y el dictado en vez de dejarlos correr detras.
+  final bool isActive;
+
+  const AudioToLsbScreen({super.key, this.isActive = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -118,7 +122,9 @@ class AudioToLsbScreen extends ConsumerWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(30),
                         child: Avatar3DViewer(
-                          isProcessing: state.status == AudioTranslationStatus.processing,
+                          isActive: isActive,
+                          isProcessing: isActive &&
+                              state.status == AudioTranslationStatus.processing,
                           glosses: state.status == AudioTranslationStatus.success
                             ? (state.translationResult?.animationGlosses.isNotEmpty == true
                                 ? state.translationResult?.animationGlosses
@@ -163,6 +169,7 @@ class AudioToLsbScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       TextInputWidget(
+                        isActive: isActive,
                         onSubmit: (text) {
                           controller.processText(text);
                         },
