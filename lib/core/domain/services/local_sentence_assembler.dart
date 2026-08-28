@@ -1391,7 +1391,24 @@ class LocalSentenceAssembler {
     return '${clean.sublist(0, clean.length - 1).join(', ')} y ${clean.last}';
   }
 
-  String _normalize(String g) => g.trim().toUpperCase();
+  /// Forma canonica de una glosa para buscarla en [_lexicon].
+  ///
+  /// Se quitan las tildes pero se conserva la N con virgulilla: las claves del
+  /// lexico van sin acentuar, asi que una glosa acentuada llegada del
+  /// diccionario remoto no encontraba su entrada y caia al placeholder, pero
+  /// la N con virgulilla es una letra del alfabeto dactilologico y colapsarla
+  /// en N confundiria dos senas distintas.
+  String _normalize(String g) => _stripGlossAccents(g.trim().toUpperCase());
+
+  static String _stripGlossAccents(String input) {
+    const from = 'ÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛ';
+    const to = 'AAAAEEEEIIIIOOOOUUUU';
+    var out = input;
+    for (var i = 0; i < from.length; i++) {
+      out = out.replaceAll(from[i], to[i]);
+    }
+    return out;
+  }
 
   String _cap(String s) {
     if (s.isEmpty) return s;

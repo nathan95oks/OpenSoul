@@ -131,6 +131,10 @@ class GlosasDevueltasPorElModelo(unittest.TestCase):
         # es una glosa real, es ruido de deletreo huérfano — y por diseño
         # repair_coverage la descarta (ver clase RepairCoverage abajo). Este
         # caso solo valida el formato (guion, guion bajo, tilde, dígito).
+        #
+        # El dígito sale como su nombre en LSB: GLOSS_ALIASES lo canoniza
+        # ("5" -> "CINCO") porque el avatar tiene la seña CINCO y no tiene
+        # ninguna llamada "5", así que dejar el dígito lo dejaría sin animar.
         resultado = lambda_text_to_lsb.post_process_glosses(
             {
                 "glosses": [
@@ -144,7 +148,7 @@ class GlosasDevueltasPorElModelo(unittest.TestCase):
         )
         self.assertEqual(
             resultado["glosses"],
-            ["ANIMAL-LLAMA", "PARTIDA_NACIMIENTO", "NIÑO", "5"],
+            ["ANIMAL-LLAMA", "PARTIDA_NACIMIENTO", "NIÑO", "CINCO"],
         )
 
 
@@ -185,6 +189,70 @@ class RepairCoverage(unittest.TestCase):
         )
         self.assertIn("CUCHILLO", glosas)
         self.assertEqual(incidencias[-1]["accion"], "palabra_recuperada")
+
+    def test_termino_a_deletrear_conserva_el_deletreo_en_minuscula(self):
+        # "FELCC" no tiene seña y debe ir letra a letra. La protección del
+        # deletreo miraba solo si la palabra parecía nombre propio, así que
+        # escrita en minúscula se colapsaba a una glosa FELCC que el avatar
+        # no sabe representar. Quien declara no escribe en mayúsculas.
+        for frase in ("soy policia de la felcc", "Soy policia de la FELCC"):
+            with self.subTest(frase=frase):
+                glosas, incidencias = lambda_text_to_lsb.repair_coverage(
+                    ["YO", "POLICIA", "F", "E", "L", "C", "C"], frase
+                )
+                self.assertEqual(
+                    glosas, ["YO", "POLICIA", "F", "E", "L", "C", "C"]
+                )
+                self.assertEqual(incidencias, [])
+
+    def test_palabra_comun_sigue_colapsando_aunque_haya_terminos_a_deletrear(self):
+        # La excepción anterior no debe desactivar la regla que la motivó.
+        glosas, incidencias = lambda_text_to_lsb.repair_coverage(
+            ["C", "A", "R", "N", "E", "T"], "les mostré mi carnet"
+        )
+        self.assertEqual(glosas, ["CARNET"])
+        self.assertEqual(incidencias[0]["accion"], "deletreo_colapsado")
+
+
+class GlosasAcentuadas(unittest.TestCase):
+    """Una tilde no puede costar una palabra.
+
+    La lista blanca de formato no admite vocales acentuadas, y se aplicaba
+    antes de normalizar: el modelo devolvía MÉDICO o DECLARACIÓN y la glosa
+    se descartaba entera, sin incidencia y sin que nada lo dijera. En una app
+    de declaraciones perder "médico" cambia lo que se denuncia.
+    """
+
+    def test_una_glosa_acentuada_se_normaliza_en_vez_de_descartarse(self):
+        resultado = lambda_text_to_lsb.post_process_glosses(
+            {"glosses": ["YO", "MÉDICO", "NECESITAR"]}, "necesito un médico"
+        )
+        self.assertEqual(resultado["glosses"], ["YO", "MEDICO", "NECESITAR"])
+
+    def test_la_enie_no_es_un_acento_y_se_conserva(self):
+        # Ñ es una letra del alfabeto dactilológico: colapsarla en N
+        # confundiría dos señas distintas.
+        resultado = lambda_text_to_lsb.post_process_glosses(
+            {"glosses": ["NIÑO"]}, "había un niño"
+        )
+        self.assertEqual(resultado["glosses"], ["NIÑO"])
+
+    def test_los_alias_con_tilde_o_espacio_se_resuelven(self):
+        # Se validaba la forma antes de consultar el alias, así que ninguna
+        # de las variantes multipalabra de GLOSS_ALIASES llegaba a aplicarse.
+        casos = {
+            "SÍ": "SI",
+            "POR FAVOR": "POR_FAVOR",
+            "ÓRGANO JUDICIAL": "ORGANO_JUDICIAL",
+            "¿CÓMO ESTÁS?": "COMO_ESTAS",
+            "MÁS O MENOS": "MAS_O_MENOS",
+        }
+        for crudo, esperado in casos.items():
+            with self.subTest(gloss=crudo):
+                resultado = lambda_text_to_lsb.post_process_glosses(
+                    {"glosses": [crudo]}, "da igual"
+                )
+                self.assertEqual(resultado["glosses"], [esperado])
 
 
 # La clase PropuestasSinAutenticacion se retiró junto con el endpoint que

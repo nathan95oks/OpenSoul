@@ -37,11 +37,26 @@ void main() {
 
     test('un término jurídico se deletrea letra por letra', () {
       // DENUNCIA no tiene seña propia: se dactilología, una animación por
-      // letra, y por eso devuelve ocho URLs y no una.
-      expect(
-        resolver.resolveAll(gloss: 'DENUNCIA'),
-        List.filled('DENUNCIA'.length, modelo),
-      );
+      // letra, y por eso devuelve ocho URLs y no una. La 'I' no está horneada
+      // en el modelo y sale como placeholder — pero sale: descartarla
+      // deletrearía "DENUNCA".
+      expect(resolver.resolveAll(gloss: 'DENUNCIA'), [
+        modelo, // D
+        modelo, // E
+        modelo, // N
+        modelo, // U
+        modelo, // N
+        modelo, // C
+        '${AnimationUrlResolver.placeholderScheme}I',
+        modelo, // A
+      ]);
+    });
+
+    test('una letra sin animación no desaparece del deletreo', () {
+      final urls = resolver.resolveAll(gloss: 'FISCALIA');
+      expect(urls, hasLength('FISCALIA'.length));
+      expect(AnimationUrlResolver.spelledLetters('FISCALIA'),
+          ['F', 'I', 'S', 'C', 'A', 'L', 'I', 'A']);
     });
 
     test('una seña sin animación cae al placeholder de texto', () {
@@ -53,6 +68,13 @@ void main() {
 
     test('las tildes se normalizan antes de buscar en el catálogo', () {
       expect(resolver.resolveAll(gloss: 'Á'), [modelo]);
+    });
+
+    test('la Ñ no es un acento y no se colapsa en N', () {
+      // Ñ es una letra del alfabeto dactilológico con seña propia: si se
+      // normalizara como una tilde, dos letras distintas compartirían
+      // animación y el deletreo diría otra cosa.
+      expect(resolver.resolveAll(gloss: 'Ñ'), [modelo]);
     });
 
     test('resolve() devuelve la primera URL de la secuencia', () {
@@ -89,8 +111,46 @@ void main() {
       // con la letra que el avatar está haciendo en ese momento.
       expect(result.animationGlosses,
           ['D', 'E', 'N', 'U', 'N', 'C', 'I', 'A', 'LLAMAR']);
+      // Nueve animaciones para nueve etiquetas: si el deletreo descartara la
+      // 'I' que el modelo no trae, el avatar rotularía una letra y haría otra.
       expect(result.animationUrls, hasLength(9));
       expect(result.animationGlosses, hasLength(result.animationUrls.length));
+    });
+
+    test('una frase que empieza sin seña 3D conserva las animaciones que sí tiene',
+        () async {
+      // "soy policía de la FELCC": las dos primeras glosas no tienen seña y
+      // caen al placeholder, y solo el deletreo de FELCC es reproducible. El
+      // visor no puede decidir si hay avatar mirando la primera URL de la
+      // secuencia — mirándola, esta frase no mostraba avatar en ningún paso,
+      // ni siquiera en las letras.
+      final datasource = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
+        client: MockClient(respondingWith({
+          'glosses': ['YO', 'POLICIA', 'FELCC'],
+          'glossDetails': [
+            {'gloss': 'YO', 'animationFile': null},
+            {'gloss': 'POLICIA', 'animationFile': 'POLICIA.glb'},
+            {'gloss': 'FELCC', 'animationFile': null},
+          ],
+        })),
+        animationResolver: resolver,
+      );
+
+      final result = await datasource.translateText('soy policia de la felcc');
+
+      expect(result.animationGlosses,
+          ['YO', 'POLICIA', 'F', 'E', 'L', 'C', 'C']);
+      expect(result.animationGlosses, hasLength(result.animationUrls.length));
+      // La secuencia arranca por un placeholder...
+      expect(result.animationUrls.first,
+          startsWith(AnimationUrlResolver.placeholderScheme));
+      // ...y aun así tiene animaciones reales que hay que reproducir.
+      expect(
+        result.animationUrls.where(
+            (url) => !url.startsWith(AnimationUrlResolver.placeholderScheme)),
+        hasLength(6),
+      );
     });
 
     test('el contexto situacional viaja aparte del dominio', () async {
