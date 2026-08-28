@@ -474,6 +474,36 @@ def remove_accents(text: str) -> str:
         text = text.replace(accented_char, unaccented_char)
     return text
 
+def strip_gloss_accents(text: str) -> str:
+    """Quita tildes y diéresis de una glosa conservando la Ñ.
+
+    `remove_accents` colapsa Ñ en N, que sirve para comparar palabras sueltas
+    pero no para normalizar una glosa: la Ñ es una letra del alfabeto
+    dactilológico y distingue señas ('NIÑO' no es 'NINO').
+    """
+    for con, sin in (('Á', 'A'), ('É', 'E'), ('Í', 'I'), ('Ó', 'O'),
+                     ('Ú', 'U'), ('Ü', 'U')):
+        text = text.replace(con, sin)
+    return text
+
+
+# Los alias se consultan por su forma sin tildes: el modelo escribe tanto
+# "ÓRGANO JUDICIAL" como "ORGANO JUDICIAL", y mantener las dos variantes a mano
+# en la tabla deja fuera la que se olvide.
+_GLOSS_ALIASES_NORM = {
+    strip_gloss_accents(clave.upper()): valor
+    for clave, valor in GLOSS_ALIASES.items()
+}
+
+
+def canonical_gloss(gloss: str) -> str:
+    """Glosa en su forma canónica: sin tildes y con el alias ya resuelto."""
+    return _GLOSS_ALIASES_NORM.get(
+        strip_gloss_accents(gloss.upper().strip()),
+        strip_gloss_accents(gloss.upper().strip()),
+    )
+
+
 # Forma admisible de una glosa: mayúsculas, dígitos, guiones y guion bajo.
 # Cubre todo el diccionario canónico ('ANIMAL-LLAMA', 'PARTIDA_NACIMIENTO',
 # el alfabeto dactilológico y los números) y nada más. Lista blanca: enumerar
@@ -571,6 +601,12 @@ def repair_coverage(glosses: list, text: str) -> tuple:
     """
     palabras = recognize_input(text)
     propios = {_clave(w) for w in palabras if _es_nombre_propio(w, text)}
+    # TERMS_TO_SPELL se deletrea por norma, no por ortografía. La detección de
+    # nombre propio depende de la mayúscula inicial, así que "felcc" escrito en
+    # minúscula perdía su deletreo y volvía como FELCC, una seña que el avatar
+    # no tiene; "FELCC" sí lo conservaba. El deletreo de estos términos no
+    # depende de cómo los escriba quien declara.
+    deletreables = {_clave(t) for t in TERMS_TO_SPELL}
     incidencias = []
 
     resultado, huerfanas, i = [], [], 0
@@ -581,7 +617,8 @@ def repair_coverage(glosses: list, text: str) -> tuple:
                 j += 1
             racha = "".join(glosses[i:j])
             objetivo = next((w for w in palabras if _clave(w) == _clave(racha)), None)
-            if objetivo and _clave(objetivo) in propios:
+            if objetivo and (_clave(objetivo) in propios
+                             or _clave(objetivo) in deletreables):
                 resultado.extend(glosses[i:j])
             elif objetivo:
                 resultado.append(_clave(objetivo))
@@ -633,11 +670,15 @@ def post_process_glosses(bedrock_result: dict, text: str) -> dict:
     for gloss in raw_glosses:
         if not isinstance(gloss, str):
             continue
-        candidata = gloss.upper().strip()
+        # Normalizar y resolver el alias va antes de validar la forma. Al
+        # revés, una glosa acentuada ("MÉDICO", "DECLARACIÓN") no pasaba la
+        # lista blanca y la palabra desaparecía de la traducción sin dejar
+        # rastro, y ningún alias con espacio o tilde llegaba a aplicarse nunca.
+        candidata = canonical_gloss(gloss)
         if not _VALID_GLOSS.match(candidata):
             logger.warning("Glosa descartada por formato: %.60r", gloss)
             continue
-        limpias.append(GLOSS_ALIASES.get(candidata, candidata))
+        limpias.append(candidata)
 
     # Reconocimiento frente a generación: aquí se comprueba que la
     # representación no haya perdido ninguna palabra de lo que se dijo.
@@ -649,7 +690,7 @@ def post_process_glosses(bedrock_result: dict, text: str) -> dict:
     for gloss in raw_glosses:
         # Una palabra recuperada puede no tener forma de glosa (acentos, signos)
         # y no debe rotular una seña en pantalla si no la tiene.
-        gloss_upper = gloss.upper().strip()
+        gloss_upper = canonical_gloss(gloss)
         if not _VALID_GLOSS.match(gloss_upper):
             logger.warning("Glosa descartada por formato: %.60r", gloss)
             continue
