@@ -12,11 +12,16 @@ class TextInputWidget extends ConsumerStatefulWidget {
 
   final String hintText;
 
+  /// `false` cuando el modulo dejo de estar visible: se corta el dictado en
+  /// curso para que el microfono no siga escuchando en segundo plano.
+  final bool isActive;
+
   const TextInputWidget({
     super.key,
     required this.onSubmit,
     this.onSpeechSubmit,
     this.hintText = 'Ingresar texto',
+    this.isActive = true,
   });
 
   @override
@@ -40,10 +45,32 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
   }
 
   @override
+  void didUpdateWidget(TextInputWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isActive && !widget.isActive) {
+      _cancelRecording();
+    }
+  }
+
+  @override
   void dispose() {
+    if (_isRecording) _speechToText.cancel();
     _controller.dispose();
     _animationController.dispose();
     super.dispose();
+  }
+
+  /// Aborta el dictado sin traducir lo que se alcanzo a escuchar.
+  Future<void> _cancelRecording() async {
+    if (!_isRecording) return;
+    _isRecording = false;
+    _lastRecognizedWords = '';
+    _controller.clear();
+    try {
+      await _speechToText.cancel();
+    } catch (_) {
+    }
+    if (mounted) setState(() {});
   }
 
   Future<void> _toggleRecording() async {

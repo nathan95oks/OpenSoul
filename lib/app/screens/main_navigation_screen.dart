@@ -24,12 +24,6 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     FlowSurface.standaloneAvatar,
   ];
 
-  static const List<Widget> _screens = [
-    ConversationScreen(),
-    HomeScreen(),
-    AudioToLsbScreen(),
-  ];
-
   void _select(int index) {
     if (index == _currentIndex) return;
     setState(() => _currentIndex = index);
@@ -41,7 +35,13 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen> {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: [
+          const ConversationScreen(),
+          const HomeScreen(),
+          // El IndexedStack mantiene la pantalla montada: le avisamos cuando
+          // deja de estar visible para que el avatar deje de senar.
+          AudioToLsbScreen(isActive: _currentIndex == 2),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
