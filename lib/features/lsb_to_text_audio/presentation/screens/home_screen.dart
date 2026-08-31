@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/app/navigation_provider.dart';
+import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
@@ -47,9 +49,22 @@ class HomeScreen extends ConsumerWidget {
     dynamic contextState,
     List<String> selectedWords,
   ) {
+    // Dentro de una conversacion, armar la frase no puede ser un callejon sin
+    // salida: la persona oyente puede necesitar hablar en cualquier momento, y
+    // volver no debe costar descartar lo que se lleva armado.
+    final sirveConversacion = ref.watch(flowSurfaceProvider).isConversation;
+
     return AppBar(
       backgroundColor: AppTheme.lightBg,
       elevation: 0,
+      leading: sirveConversacion
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back, color: AppTheme.brandPrimary),
+              tooltip: 'Volver a la conversación',
+              onPressed: () =>
+                  ref.read(selectedTabProvider.notifier).select(AppTab.conversation),
+            )
+          : null,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
         child: Container(height: 1, color: AppTheme.lightBorder),
@@ -140,7 +155,6 @@ class HomeScreen extends ConsumerWidget {
           onTranslate: selectedWords.isEmpty || translationState.isLoading
               ? null
               : () async {
-                  final router = GoRouter.of(context);
                   final allCards = ref.read(allCardsProvider).value ?? const [];
                   String? categoryOf(String g) {
                     for (final c in allCards) {
@@ -167,7 +181,7 @@ class HomeScreen extends ConsumerWidget {
                         cards: cardsForEngines,
                         assemblerContext: assemblerContext,
                       );
-                  router.push('/lsb-to-audio/result');
+                  ref.read(resultVisibleProvider.notifier).show();
                 },
         ),
       ],

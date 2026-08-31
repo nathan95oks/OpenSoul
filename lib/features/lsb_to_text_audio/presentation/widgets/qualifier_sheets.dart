@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
@@ -81,19 +82,52 @@ class _TecladoDactilologico extends StatefulWidget {
 }
 
 class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
-  final _letras = <String>[];
+  final _controlador = TextEditingController();
 
-  static const _abecedario = [
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-  ];
+  /// Caracteres que el avatar sabe deletrear. Lo que se escriba fuera de aqui
+  /// no se puede signar, asi que no se deja entrar.
+  static final _permitidoTexto = RegExp(r'[A-Za-z0-9ÑñÁÉÍÓÚáéíóúÜü ]');
+  static final _permitidoLetras = RegExp(r'[A-Za-zÑñÁÉÍÓÚáéíóúÜü ]');
+  static final _permitidoDigitos = RegExp(r'[0-9]');
+
+  @override
+  void dispose() {
+    _controlador.dispose();
+    super.dispose();
+  }
+
+  RegExp get _permitido {
+    if (widget.soloDigitos) return _permitidoDigitos;
+    return widget.alfanumerico ? _permitidoTexto : _permitidoLetras;
+  }
+
+  /// Convierte lo escrito en la lista de letras que se deletrea.
+  ///
+  /// Cada caracter es una sena: los espacios no se signan y se descartan, y
+  /// las tildes se quitan porque el alfabeto dactilologico no las tiene —pero
+  /// la N con virgulilla si es una letra propia y se conserva.
+  static List<String> letrasDe(String texto) {
+    const con = 'ÁÉÍÓÚÜáéíóúü';
+    const sin = 'AEIOUUAEIOUU';
+    final buffer = StringBuffer();
+    for (final char in texto.toUpperCase().trim().split('')) {
+      final i = con.indexOf(char);
+      buffer.write(i >= 0 ? sin[i] : char);
+    }
+    return buffer
+        .toString()
+        .split('')
+        .where((c) => c.trim().isNotEmpty)
+        .toList();
+  }
+
+  void _confirmar() {
+    Navigator.of(context).pop(letrasDe(_controlador.text));
+  }
 
   @override
   Widget build(BuildContext context) {
-    const digitos = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    final teclas = widget.soloDigitos
-        ? digitos
-        : [..._abecedario, if (widget.alfanumerico) ...digitos];
+    final letras = letrasDe(_controlador.text);
 
     return SafeArea(
       child: Padding(
@@ -108,67 +142,66 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
             ),
-            const SizedBox(height: 10),
-            Container(
-              constraints: const BoxConstraints(minHeight: 48),
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppTheme.lightSurface,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppTheme.brandPrimary.withValues(alpha: 0.3)),
-              ),
-              child: Text(
-                _letras.isEmpty ? 'Deletrea aquí' : _letras.join(),
-                style: TextStyle(
-                  fontSize: 20,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w700,
-                  color: _letras.isEmpty
-                      ? AppTheme.lightText.withValues(alpha: 0.4)
-                      : AppTheme.lightText,
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Flexible(
-              child: SingleChildScrollView(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final t in teclas)
-                      _Tecla(
-                        etiqueta: t,
-                        onTap: () => setState(() => _letras.add(t)),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton.icon(
-                    onPressed: _letras.isEmpty
-                        ? null
-                        : () => setState(_letras.removeLast),
-                    icon: const Icon(Icons.backspace_outlined),
-                    label: const Text('Borrar'),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  flex: 2,
-                  child: FilledButton(
-                    onPressed: () =>
-                        Navigator.of(context).pop(List<String>.from(_letras)),
-                    child: Text(_letras.isEmpty ? 'Omitir' : 'Confirmar'),
-                  ),
-                ),
+            const SizedBox(height: 14),
+            TextField(
+              controller: _controlador,
+              // Se abre el teclado del telefono al aparecer la hoja: es el
+              // teclado que la persona ya sabe usar.
+              autofocus: true,
+              keyboardType: widget.soloDigitos
+                  ? TextInputType.number
+                  : TextInputType.text,
+              textCapitalization: TextCapitalization.characters,
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) => _confirmar(),
+              onChanged: (_) => setState(() {}),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(_permitido),
+                LengthLimitingTextInputFormatter(40),
               ],
+              style: const TextStyle(
+                fontSize: 22,
+                letterSpacing: 2,
+                fontWeight: FontWeight.w700,
+              ),
+              decoration: InputDecoration(
+                hintText: widget.soloDigitos ? 'Escribe el número' : 'Escribe aquí',
+                filled: true,
+                fillColor: AppTheme.lightSurface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                suffixIcon: _controlador.text.isEmpty
+                    ? null
+                    : IconButton(
+                        icon: const Icon(Icons.backspace_outlined),
+                        tooltip: 'Borrar',
+                        onPressed: () => setState(_controlador.clear),
+                      ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Se muestra como quedara deletreado, que es lo que el avatar hara
+            // seña a seña: sin esto no hay forma de saber que la frase se
+            // convierte en letras sueltas.
+            SizedBox(
+              height: 22,
+              child: letras.isEmpty
+                  ? null
+                  : Text(
+                      'Se deletreará: ${letras.join(' · ')}',
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppTheme.lightText.withValues(alpha: 0.6),
+                      ),
+                    ),
+            ),
+            const SizedBox(height: 12),
+            FilledButton(
+              onPressed: _confirmar,
+              child: Text(letras.isEmpty ? 'Omitir' : 'Confirmar'),
             ),
           ],
         ),

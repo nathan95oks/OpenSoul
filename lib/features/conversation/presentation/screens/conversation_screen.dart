@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
@@ -60,8 +60,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
 
   void _openCardsFlow() {
     final conversation = ref.read(conversationProvider).conversation;
-    final startingFresh =
-        conversation.pendingReply != null && ref.read(sentenceProvider).isEmpty;
+    // Abrir sin frase a medias es empezar de cero, haya pregunta pendiente o
+    // no. Antes se exigia una pregunta previa, asi que cuando la persona sorda
+    // abria la conversacion ella misma el contexto anterior no se limpiaba y
+    // entraba al flujo con las zonas de otra charla.
+    final startingFresh = ref.read(sentenceProvider).isEmpty;
 
     if (startingFresh) {
       final proposedId = conversation.suggestedReplyContextId;
@@ -74,7 +77,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       }
       ref.read(semanticZonesProvider.notifier).reset();
     }
-    context.push('/lsb-to-audio');
+    ref.read(selectedTabProvider.notifier).select(AppTab.cards);
   }
 
   ConversationTurn? _instruccionPendiente(ConversationState state) {

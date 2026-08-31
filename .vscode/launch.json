@@ -1,0 +1,38 @@
+{
+  // Sin --dart-define-from-file, el botón Run de VS Code lanza `flutter run`
+  // pelado: todos los String.fromEnvironment quedan vacíos y la app arranca
+  // con los endpoints en blanco. El síntoma es un StateError de
+  // requireAbsoluteUrl ("Revisa --dart-define=LSB_TEXT_API_URL") al traducir,
+  // y animaciones que caen al placeholder.
+  //
+  // Flutter lee .env directamente, así que estas configuraciones equivalen a
+  // ./run.sh y no hay que mantener la lista de variables por duplicado.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "OpenSoul (debug)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": ["--dart-define-from-file", ".env"]
+    },
+    {
+      // Para probar en un equipo con poca RAM: debug lleva el compilador JIT
+      // dentro y en dispositivos justos provoca ANR al arrancar.
+      "name": "OpenSoul (profile)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main.dart",
+      "args": ["--dart-define-from-file", ".env"]
+    },
+    {
+      "name": "OpenSoul (release)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.dart",
+      "args": ["--dart-define-from-file", ".env"]
+    }
+  ]
+}

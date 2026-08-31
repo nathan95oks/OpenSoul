@@ -16,6 +16,8 @@ import 'package:lsb_legal_app/core/data/repositories/translation_repository_impl
 import 'package:lsb_legal_app/core/data/services/real_audio_output.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/repositories/animation_repository.dart';
+import 'package:lsb_legal_app/core/domain/repositories/session_repository.dart';
+import 'package:lsb_legal_app/core/data/repositories/session_repository_impl.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/lexicon_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/suggestion_repository.dart';
@@ -53,6 +55,10 @@ final audioTranslationRepositoryProvider =
     ),
   );
 });
+
+final sessionRepositoryProvider = Provider<SessionRepository>(
+  (ref) => SessionRepositoryImpl(),
+);
 
 final animationRepositoryProvider = Provider<AnimationRepository>(
   (ref) => AnimationRepositoryImpl(),

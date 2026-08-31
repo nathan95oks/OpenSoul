@@ -4,13 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 
 class DeclarationResultScreen extends ConsumerWidget {
   const DeclarationResultScreen({super.key});
@@ -35,6 +38,7 @@ class DeclarationResultScreen extends ConsumerWidget {
           tooltip: 'Volver a editar',
           onPressed: () => _backToEdit(context, ref),
         ),
+
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(height: 1, color: AppTheme.lightBorder),
@@ -48,6 +52,18 @@ class DeclarationResultScreen extends ConsumerWidget {
             letterSpacing: -0.3,
           ),
         ),
+        actions: [
+          TextButton.icon(
+            onPressed: () => _cambiarContexto(context, ref),
+            icon: const Icon(Icons.swap_horiz_rounded, size: 20),
+            label: Text(
+              ref.watch(contextProvider)?.name ?? 'Contexto',
+              overflow: TextOverflow.ellipsis,
+            ),
+            style: TextButton.styleFrom(foregroundColor: _orange),
+          ),
+          const SizedBox(width: 4),
+        ],
       ),
       body: SafeArea(
         child: result == null || result.generatedText.isEmpty
@@ -183,6 +199,20 @@ class DeclarationResultScreen extends ConsumerWidget {
                         onTap: () => _sendToConversation(context, ref, result),
                       ),
                       const SizedBox(height: 10),
+                      _FullWidthBtn(
+                        label: 'Volver a la conversación',
+                        icon: Icons.arrow_back,
+                        filled: false,
+                        onTap: () {
+                          ref
+                              .read(translationControllerProvider.notifier)
+                              .pauseAudio();
+                          ref
+                              .read(selectedTabProvider.notifier)
+                              .select(AppTab.conversation);
+                        },
+                      ),
+                      const SizedBox(height: 10),
                     ],
                     _FullWidthBtn(
                       label: 'Volver a editar',
@@ -212,17 +242,84 @@ class DeclarationResultScreen extends ConsumerWidget {
           contextId: ref.read(contextProvider)?.id,
         );
     final session = ref.read(cardsFlowSessionProvider);
-    context.go('/home');
+    ref.read(selectedTabProvider.notifier).select(AppTab.conversation);
+    ref.read(resultVisibleProvider.notifier).hide();
     await session.reset();
+  }
+
+  /// Cambia el contexto sin salir de la declaración.
+  ///
+  /// Se confirma antes porque no es reversible: el contexto determina las
+  /// zonas y las tarjetas disponibles, así que lo respondido bajo el anterior
+  /// deja de tener sentido y el flujo arranca limpio.
+  Future<void> _cambiarContexto(BuildContext context, WidgetRef ref) async {
+    final actual = ref.read(contextProvider);
+
+    final elegido = await showModalBottomSheet<SemanticContext>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 4),
+              child: Text(
+                'Cambiar de contexto',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
+              child: Text(
+                'Se empezará una declaración nueva.',
+                style: TextStyle(fontSize: 13, color: AppTheme.lightTextSub),
+              ),
+            ),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final c in allSelectableContexts)
+                    ListTile(
+                      leading: Text(c.emoji,
+                          style: const TextStyle(fontSize: 22)),
+                      title: Text(c.name),
+                      subtitle: Text(
+                        c.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      selected: c.id == actual?.id,
+                      selectedTileColor:
+                          _orange.withValues(alpha: 0.08),
+                      trailing: c.id == actual?.id
+                          ? const Icon(Icons.check_rounded, color: _orange)
+                          : null,
+                      onTap: () => Navigator.of(sheetContext).pop(c),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (elegido == null || elegido.id == actual?.id) return;
+
+    ref.read(translationControllerProvider.notifier).pauseAudio();
+    await ref.read(cardsFlowSessionProvider).reset();
+    ref.read(contextProvider.notifier).setContext(elegido);
+    ref.read(resultVisibleProvider.notifier).hide();
   }
 
   void _backToEdit(BuildContext context, WidgetRef ref) {
     ref.read(translationControllerProvider.notifier).pauseAudio();
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go('/lsb-to-audio');
-    }
+    // El resultado es un paso de la pestana, no una ruta apilada: se vuelve
+    // ocultandolo, y el armado de la frase sigue intacto detras.
+    ref.read(resultVisibleProvider.notifier).hide();
   }
 
   Future<void> _copyToClipboard(
