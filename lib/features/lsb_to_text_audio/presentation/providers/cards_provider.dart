@@ -66,8 +66,14 @@ final generatedStepProvider = FutureProvider<GeneratedStep>((ref) async {
 final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final locales = await ref.watch(_localCandidatesProvider.future);
 
-  final generado = await ref.watch(generatedStepProvider.future);
-  if (generado.isEmpty) return locales;
+  // No se espera a la sugerencia remota. Las tarjetas locales ya permiten
+  // responder, y aguardar la llamada de IA —hasta 6 s de timeout— dejaba la
+  // pantalla girando aunque las opciones estuvieran listas desde el principio.
+  // Se observa el `AsyncValue` en vez de su futuro: mientras carga se muestran
+  // las locales, y cuando la sugerencia llega este provider se recalcula y las
+  // reordena.
+  final generado = ref.watch(generatedStepProvider).asData?.value;
+  if (generado == null || generado.isEmpty) return locales;
 
   final porGlosa = {for (final c in locales) c.gloss: c};
   final ordenadas = [

@@ -75,6 +75,11 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   dynamic _controllerA;
 
+  /// Fuente del unico modelo 3D, resuelta una vez. Todas las senas estan
+  /// horneadas dentro, asi que el visor no cambia de `src` en toda la sesion:
+  /// es lo que evita recargar y reparsear 8,5 MB en cada traduccion.
+  String? _modelSource;
+
   /// Vence el paso en curso si el visor no avisa: un placeholder no tiene
   /// `model-viewer` que emita 'finished', y una glosa que no exista dentro
   /// del .glb tampoco lo emite. Sin esto la secuencia se queda clavada.
@@ -88,11 +93,30 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   @override
   void initState() {
     super.initState();
+    _resolveModelSource();
 
     if (widget.isActive && (widget.animationUrls?.isNotEmpty ?? false)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _startSequence();
       });
+    }
+  }
+
+  /// Deja el modelo listo en local antes de que haga falta, para que la
+  /// primera traduccion no pague la descarga.
+  Future<void> _resolveModelSource() async {
+    const remoto = '${_s3Base}avatar_test.glb';
+    try {
+      final fuentes = await ref
+          .read(animationRepositoryProvider)
+          .playableSources(const [remoto]);
+      final local = fuentes.firstWhere(
+        (f) => !f.startsWith(AnimationUrlResolver.placeholderScheme),
+        orElse: () => remoto,
+      );
+      if (mounted) setState(() => _modelSource = local);
+    } catch (_) {
+      if (mounted) setState(() => _modelSource = remoto);
     }
   }
 
@@ -163,7 +187,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       _isPlayingSequence = false;
       _isDownloadingFiles = true;
 
-      _controllerA = null;
       _stepSettled = false;
 
       if (overrideUrls != null) {
@@ -188,7 +211,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       _isPlayingSequence = false;
       _isDownloadingFiles = false;
       _stepSettled = false;
-      _controllerA = null;
     });
   }
 
@@ -379,8 +401,10 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     final title = _isDownloadingFiles ? 'Descargando animaciones 3D...' : 'Analizando con IA...';
     final subtitle = _isDownloadingFiles ? 'Guardando en caché local para fluidez' : 'Desambiguando contexto LSB';
 
-    return Column(
+    return Container(
       key: const ValueKey('processing'),
+      color: const Color(0xFF1A1A2E).withValues(alpha: 0.92),
+      child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
@@ -412,30 +436,25 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           ),
         ),
       ],
+      ),
     );
   }
 
-  /// Indice del primer paso con animacion real, que es con el que nace el
-  /// visor. El resto de la secuencia la conduce [_playCurrentStep] por JS.
-  int get _firstPlayableIndex => _localUrls.indexWhere(
-        (url) => !url.startsWith(AnimationUrlResolver.placeholderScheme),
-      );
-
-  Widget _buildModelViewerInstance(String id, String? url) {
-    if (url == null ||
-        url.isEmpty ||
-        url.startsWith(AnimationUrlResolver.placeholderScheme)) {
-      return const SizedBox.shrink();
-    }
-
-    final currentGloss = _glossAt(_firstPlayableIndex);
+  /// El visor 3D, montado una sola vez y compartido por todos los estados.
+  ///
+  /// `autoPlay` va en falso a proposito: el avatar se queda en reposo hasta
+  /// que [_playCurrentStep] le pide una sena. Con autoPlay el visor arrancaba
+  /// reproduciendo por su cuenta la primera sena de la secuencia, que se veia
+  /// antes de tiempo y encima emitia avisos de fin que no eran de ningun paso.
+  Widget _buildPersistentViewer() {
+    final src = _modelSource;
+    if (src == null) return const SizedBox.shrink();
 
     return ModelViewer(
-      key: ValueKey('${id}_$url'),
-      src: url,
+      key: const ValueKey('avatar_viewer'),
+      src: src,
       alt: 'Avatar LSB',
-      animationName: currentGloss,
-      autoPlay: true,
+      autoPlay: false,
       autoRotate: false,
       cameraControls: false,
       disableZoom: true,
@@ -450,7 +469,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         JavascriptChannel(
           'ModelViewerChannel',
           onMessageReceived: (message) {
-            _handleJsMessage(id, message.message);
+            _handleJsMessage('A', message.message);
           },
         ),
       },
@@ -484,28 +503,14 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         : '';
 
     final currentUrl = _currentIndex < _localUrls.length ? _localUrls[_currentIndex] : '';
-    final isPlaceholder = currentUrl.startsWith('placeholder://');
+    final isPlaceholder =
+        currentUrl.startsWith(AnimationUrlResolver.placeholderScheme);
 
-    // El visor se monta con la primera URL *reproducible* de la secuencia, no
-    // con `_localUrls.first`: si la frase empieza por una palabra sin seña 3D
-    // ("SOY POLICIA DE LA FELCC" arranca con dos placeholders) la primera URL
-    // es un `placeholder://`, `_buildModelViewerInstance` devolvia un
-    // SizedBox y el avatar no llegaba a aparecer en ningun paso, ni siquiera
-    // en las letras del deletreo que si tienen animacion. Todas las senas
-    // comparten el mismo .glb y se seleccionan por `animationName`, asi que
-    // basta con una instancia estable debajo del overlay de placeholder.
-    final viewerUrl = _localUrls.firstWhere(
-      (url) => !url.startsWith('placeholder://'),
-      orElse: () => '',
-    );
-
+    // Solo los rotulos: el visor vive debajo, en [build], y no se desmonta al
+    // cambiar de estado.
     return Stack(
       key: const ValueKey('playing'),
       children: [
-        Positioned.fill(
-          child: _buildModelViewerInstance('A', viewerUrl),
-        ),
-
         if (isPlaceholder)
           Positioned.fill(
             child: Container(
@@ -623,8 +628,12 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 
   Widget _buildFinishedState() {
-    return Column(
+    return Container(
       key: const ValueKey('finished'),
+      // Velo sobre el avatar, que ahora sigue montado detras: sin el, el
+      // texto cae encima del modelo y no se lee.
+      color: const Color(0xFF1A1A2E).withValues(alpha: 0.92),
+      child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
@@ -704,6 +713,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           ],
         ),
       ],
+      ),
     );
   }
 
@@ -742,66 +752,48 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     );
   }
 
+  /// Reposo: solo el degradado y el rotulo. El avatar que se ve debajo es el
+  /// visor permanente de [build].
+  ///
+  /// Antes este estado montaba su *propio* ModelViewer apuntando a la URL de
+  /// S3 en vez de al archivo ya cacheado, asi que cada vuelta a reposo volvia
+  /// a bajar 8,5 MB por red.
   Widget _buildIdleState() {
-    return Stack(
+    return Container(
       key: const ValueKey('idle'),
-      children: [
-        Positioned.fill(
-          child: ModelViewer(
-            key: const ValueKey('idle_avatar_viewer'),
-            src: '${_s3Base}avatar_test.glb',
-            alt: 'Avatar LSB Reposo',
-            animationName: 'T-Pose',
-            autoPlay: false,
-            autoRotate: false,
-            cameraControls: false,
-            disableZoom: true,
-            backgroundColor: Colors.transparent,
-            cameraTarget: "0m 1.25m 0m",
-            cameraOrbit: "0deg 90deg 1.7m",
-            fieldOfView: "30deg",
-          ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.transparent,
+            const Color(0xFF1A1A2E).withValues(alpha: 0.85),
+          ],
         ),
-
-        Positioned.fill(
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  const Color(0xFF1A1A2E).withValues(alpha: 0.85),
-                ],
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const SizedBox(height: 8),
-                Text(
-                  'Avatar LSB Listo',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Habla o escribe para ver las señas',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 18),
-              ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            'Avatar LSB Listo',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.9),
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 4),
+          Text(
+            'Habla o escribe para ver las señas',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.6),
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 18),
+        ],
+      ),
     );
   }
 
@@ -840,11 +832,23 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 400),
-          switchInCurve: Curves.easeOut,
-          switchOutCurve: Curves.easeIn,
-          child: bodyContent,
+        child: Stack(
+          children: [
+            // El visor va al fondo y no se desmonta al cambiar de estado: los
+            // estados son capas por encima. Mientras el modulo esta en segundo
+            // plano se suelta del todo, que es lo que evita que el WebView
+            // siga vivo detras.
+            if (widget.isActive)
+              Positioned.fill(child: _buildPersistentViewer()),
+            Positioned.fill(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 400),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
+                child: bodyContent,
+              ),
+            ),
+          ],
         ),
       ),
     );

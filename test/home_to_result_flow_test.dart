@@ -10,6 +10,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/home_screen.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/lsb_flow_screen.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 
 import 'helpers/official_dictionary.dart';
@@ -62,13 +63,7 @@ void main() {
       routes: [
         GoRoute(
           path: '/lsb-to-audio',
-          builder: (_, _) => const HomeScreen(),
-          routes: [
-            GoRoute(
-              path: 'result',
-              builder: (_, _) => const DeclarationResultScreen(),
-            ),
-          ],
+          builder: (_, _) => const LsbFlowScreen(),
         ),
       ],
     );
@@ -100,8 +95,21 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    // El resultado y el armado conviven en el mismo IndexedStack, asi que
+    // estar montado no significa estar visible: lo que se ve lo decide el
+    // indice activo.
+    int pasoVisible() => tester
+        .widget<IndexedStack>(
+          find.descendant(
+            of: find.byType(LsbFlowScreen),
+            matching: find.byType(IndexedStack),
+          ),
+        )
+        .index!;
+
     // Estamos en Home con el botón de traducir disponible.
     expect(find.byType(HomeScreen), findsOneWidget);
+    expect(pasoVisible(), 0, reason: 'se empieza armando la frase');
     expect(find.text('TRADUCIR'), findsOneWidget);
     // A11Y-01: el botón principal se anuncia como tal a lectores de pantalla.
     expect(find.bySemanticsLabel('Traducir'), findsOneWidget);
@@ -111,6 +119,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(DeclarationResultScreen), findsOneWidget);
+    expect(pasoVisible(), 1,
+        reason: 'traducir deja visible la declaración, sin salir de la pestaña');
     expect(find.text(generated), findsOneWidget,
         reason: 'la declaración generada debe mostrarse en el resultado');
     // El chip de origen refleja que vino de la IA (bedrockUsed = true).

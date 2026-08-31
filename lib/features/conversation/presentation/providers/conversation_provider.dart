@@ -76,6 +76,13 @@ class ConversationNotifier extends Notifier<ConversationState> {
 
   void startNew() =>
       state = ConversationState(conversation: Conversation.start());
+
+  /// Repone una conversación recuperada del almacenamiento.
+  ///
+  /// Es distinto de [startNew]: no crea una charla, continúa la que quedó a
+  /// medias cuando el sistema cerró la aplicación.
+  void replaceConversation(Conversation conversation) =>
+      state = ConversationState(conversation: conversation);
 }
 
 final conversationProvider =
