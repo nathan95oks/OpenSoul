@@ -151,7 +151,7 @@ Sorda pulsa "Responder con tarjetas LSB"
   prioridad; nunca aprueba automáticamente).
 - La `confidence` de la sugerencia se calcula y se guarda, pero la UI todavía no
   la muestra; podría usarse para diferenciar una propuesta fuerte de una débil.
-- El caché de DynamoDB sigue desactivado en el lambda; la clave ya contempla la
+- El caché sigue desactivado en el lambda; la clave ya contempla la
   situación para cuando se active.
 - Sigue pendiente de la Fase 1: retirar las pestañas "Tarjetas LSB" y "Voz a LSB"
   cuando la conversación absorba ambos flujos por completo.

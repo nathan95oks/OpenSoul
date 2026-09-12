@@ -61,7 +61,7 @@ Los archivos se movieron con `git mv` (historial preservado). Los providers anti
 
 ## Deuda y siguientes fases
 
-- **Fase 2 — Backend unificado y diccionario:** un solo contrato API semántico; lexicón fuera del código (DynamoDB); `local_cards_datasource` (563 líneas Dart) y los léxicos duplicados de los lambdas se convierten en `LexiconRepository` (`core/dictionary`). Las entidades `LsbCard`/`SemanticContext` evolucionan a `LexiconEntry` con `status: official|community|pending`.
+- **Fase 2 — Backend unificado y diccionario:** un solo contrato API semántico; lexicón fuera del código; `local_cards_datasource` (563 líneas Dart) y los léxicos duplicados de los lambdas se convierten en `LexiconRepository` (`core/dictionary`). Las entidades `LsbCard`/`SemanticContext` evolucionan a `LexiconEntry` con `status: official|community|pending`.
 - **Fase 3 — Diccionario evolutivo:** propuestas Pending desde la app, repositorio Community.
 - **Fase 4 — Portal web de validación + IA asistente** (duplicados, sugerencias, prioridad; nunca aprueba automáticamente).
 - Pendiente menor: las pestañas "Tarjetas LSB" y "Voz a LSB" se retirarán cuando la conversación absorba ambos flujos por completo; `TextInputWidget` aún actualiza el controller legado durante el dictado (inofensivo, se limpiará al retirar la pantalla clásica).

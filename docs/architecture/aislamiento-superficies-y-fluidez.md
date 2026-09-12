@@ -102,7 +102,7 @@ del hilo por completo.
 Una toma de declaración repite las mismas preguntas constantemente. Decorador
 sobre el repositorio, con clave `(texto normalizado, situación)` — la misma que
 ya calcula `generate_cache_key` en `lambda_text_to_lsb.py`, cuya caché en
-DynamoDB sigue declarada como trabajo futuro. Las traducciones vacías no se
+Las traducciones vacías no se
 recuerdan: cachear un fallo del modelo lo congelaría toda la sesión.
 
 **Timeout en el datasource de señas.**
@@ -131,7 +131,7 @@ realidad ya se podía responder. Ahora lo dice la propia burbuja.
 ## Deuda declarada
 
 1. La caché es **por sesión y en memoria**: se pierde al cerrar la app. La
-   caché persistente sigue correspondiendo a DynamoDB en la Lambda.
+   caché persistente sigue correspondiendo a una base de datos en la Lambda.
 2. El aislamiento se consigue descartando estado en cada cruce de superficie.
    La alternativa —un `ProviderScope` anidado por pestaña— no encaja hoy porque
    las pantallas de resultado se abren como rutas de `GoRouter`, fuera del

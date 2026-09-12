@@ -7,7 +7,7 @@ import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 /// Carga síncrona del diccionario oficial canónico para pruebas y auditorías.
 ///
 /// Lee directamente `assets/dictionary/official_dictionary.json` (la misma
-/// fuente que empaqueta la app y que siembra DynamoDB), de modo que las
+/// fuente que empaqueta la app), de modo que las
 /// pruebas de cobertura auditan exactamente lo que ve el usuario.
 DictionaryDocument loadOfficialDictionaryDocument() =>
     DictionaryDocument.fromJsonString(
