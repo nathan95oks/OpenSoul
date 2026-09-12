@@ -8,7 +8,7 @@ Objetivo Específico 3:
 
 Flujo:
   1. Recibe JSON con `text` (frase en español) y `context` (legal/general)
-  2. Genera Hash MD5 de la frase para verificar caché (DynamoDB - futuro)
+  2. Genera Hash MD5 de la frase para verificar caché
   3. Construye Prompt de desambiguación semántica para Bedrock
   4. Invoca Amazon Bedrock (Claude 3 Haiku) para análisis PLN
   5. Parsea la respuesta: extrae arreglo de glosas LSB
@@ -41,11 +41,7 @@ BEDROCK_MODEL_ID = os.environ.get(
 APP_REGION = os.environ.get(
     "APP_REGION", os.environ.get("AWS_REGION", "us-east-1")
 )
-# Tabla del diccionario evolutivo (Fase 2). Si está definida, las glosas
-# disponibles para el avatar se leen de DynamoDB (nuevas señas aprobadas en
-# el portal quedan disponibles SIN redesplegar esta lambda). Vacía = solo
-# el set estático de fallback.
-DICTIONARY_TABLE = os.environ.get("DICTIONARY_TABLE", "")
+
 
 # Caché de resultados semánticos. Vacío = caché deshabilitada y la lambda
 # funciona exactamente igual que antes, invocando Bedrock en cada petición.
@@ -725,7 +721,7 @@ def generate_cache_key(text: str, situation: str = None) -> str:
 # el hash de la frase convierte esa repetición en una lectura de objeto, en
 # lugar de una inferencia facturada de varios segundos.
 #
-# Se usa S3 y no DynamoDB porque el bucket ya existe y el volumen de escritura
+# Se usa S3 porque el bucket ya existe y el volumen de escritura
 # del proyecto es moderado. La caché es *best effort*: si S3 no responde o el
 # rol carece de permisos se registra el aviso y se sigue traduciendo. Una
 # caché capaz de tumbar la traducción es peor que no tener caché.

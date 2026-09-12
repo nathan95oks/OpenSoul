@@ -6,7 +6,7 @@ entidades públicas bolivianas: denuncias policiales, defensoría, SEGIP,
 hospitales, alcaldía y fiscalía.
 
 Stack: Flutter + Riverpod + Clean Architecture + AWS (Lambda, API Gateway,
-Bedrock, Polly, DynamoDB, S3). El paquete Dart se llama `lsb_legal_app`.
+Bedrock, Polly, S3). El paquete Dart se llama `lsb_legal_app`.
 
 ---
 
@@ -221,8 +221,7 @@ toda salida se genera desde ella.
 |---|---|
 | `lambda_function.py` | Glosas LSB → declaración en español (motor de reglas + Bedrock) + audio con Polly |
 | `lambda_text_to_lsb.py` | Texto en español → glosas LSB con desambiguación semántica |
-| `lambda_dictionary.py` | Diccionario evolutivo sobre DynamoDB: consulta y propuestas |
-| `seed_dictionary.py` | Siembra la tabla desde el JSON canónico del repositorio |
+
 
 Detalles de despliegue en [`aws/README.md`](aws/README.md).
 

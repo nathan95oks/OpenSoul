@@ -27,7 +27,7 @@ Agregar una palabra exigía tocar tres archivos y redesplegar app + lambdas.
 (`version`, `dialect`, `categoryOrder`, `entries[153]`) generado desde el
 catálogo Dart original (migración única, fidelidad verificada por los tests
 de cobertura). El mismo contrato viaja por el asset, la caché, la API y la
-tabla DynamoDB.
+tabla remota.
 
 ### Entidad
 
@@ -54,7 +54,7 @@ sin endpoint configurado funciona 100 % local; sin red, la caché o el asset
 respaldan siempre. `CardsRepositoryImpl` quedó como fachada por categorías
 sobre `lexiconRepositoryProvider` (core/di); `LocalCardsDataSource` se eliminó.
 
-### Backend — tabla `OpenSoul-Dictionary` (DynamoDB, on-demand)
+### Backend — tabla `OpenSoul-Dictionary`
 
 | pk | sk | contenido |
 |---|---|---|
