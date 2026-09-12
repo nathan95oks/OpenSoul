@@ -3,6 +3,13 @@ import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart'
     show kVictimMarker, kEvidenceMarker, kVehicleMarker;
 
+/// Quita duplicados exactos conservando el primer orden de aparición.
+///
+/// Varias zonas del catálogo traían la misma glosa repetida dos veces
+/// (BILLETES, MICRO, PAREJA, AMIGO, NOMBRE, FISCALIA, PRESENTAR...), lo que
+/// hacía aparecer la misma tarjeta dos veces en la misma pregunta.
+List<String> _dedupe(List<String> glosses) => glosses.toSet().toList();
+
 /// Contexto para preguntas directas del ciudadano sordo (Sección 7 del Corpus Maestro).
 final preguntasContext = SemanticContext(
   id: 'preguntas',
@@ -100,7 +107,7 @@ final identificacionContext = SemanticContext(
   emoji: '🪪',
   description: 'Identificación, lengua y datos de contacto',
   entryZoneId: 'identidad',
-  zones: const [
+  zones: [
     SemanticZone(
       id: 'identidad',
       label: 'Identidad',
@@ -109,7 +116,7 @@ final identificacionContext = SemanticContext(
       emoji: '🪪',
       semanticWeight: 0.95,
       maxPicks: 3,
-      glossAllowlist: ['NOMBRE', 'NOMBRE', 'PAPEL', 'IDENTIDAD', 'SORDO', 'LEER', 'POCO', 'INTÉRPRETE'],
+      glossAllowlist: _dedupe(['NOMBRE', 'PAPEL', 'IDENTIDAD', 'SORDO', 'LEER', 'POCO', 'INTÉRPRETE']),
       relatedZones: ['contacto', 'edad'],
     ),
     SemanticZone(
@@ -155,86 +162,81 @@ final availableContexts = <SemanticContext>[
     name: 'Denunciar robo',
     icon: 'warning_amber',
     emoji: '🚨',
-    description: 'Robo de celular, dinero, documentos o bienes',
+    description: 'Robo, hurto o pérdida de celular, dinero, documentos o bienes',
     entryZoneId: 'hecho',
     baseUrgency: UrgencyLevel.medium,
-    zones: const [
+    // Auditoría 2026-09 (sección 12.1 del prompt de auditoría): se separan
+    // hecho, participantes y acciones posteriores; PERDER ya no puede
+    // derivar en una afirmación de robo, y APARIENCIA se fusiona con
+    // PERSONA (editar la misma entidad en vez de duplicar la descripción).
+    // 'objetos', 'persona' y 'lugar' usan el editor de entidades
+    // (denunciaRoboDraftProvider) en vez de una simple lista de glosas: cada
+    // objeto conserva su papel, cada persona sus propias prendas y colores,
+    // y el lugar conserva la relación espacial junto con su referencia.
+    zones: [
       SemanticZone(
         id: 'hecho',
         label: 'Hecho',
-        hint: 'Qué ocurrió',
-        question: '¿Qué delito ocurrió?',
+        hint: 'Qué le ocurrió',
+        question: '¿Qué le ocurrió?',
         emoji: '⚡',
         semanticWeight: 0.95,
-        glossAllowlist: ['ROBAR', 'LADRÓN', 'PERDER', 'ESCAPAR', 'DAÑAR', 'ENGAÑAR'],
+        glossAllowlist: _dedupe(['ROBAR', 'PERDER', 'ESCAPAR', 'DAÑAR', 'ENGAÑAR', 'NO_SABER']),
         contextTags: [EmotionalTag.amenaza],
         relatedZones: ['objetos', 'persona', 'lugar', 'tiempo'],
       ),
       SemanticZone(
         id: 'objetos',
-        label: 'Objetos robados',
-        hint: 'Qué objetos o documentos fueron sustraídos',
-        question: '¿Qué se llevaron o qué le robaron?',
+        label: 'Objetos involucrados',
+        hint: 'Qué objetos están involucrados y qué papel cumple cada uno',
+        question: '¿Qué objetos están involucrados?',
         emoji: '📱',
         semanticWeight: 0.9,
-        maxPicks: 3,
-        glossAllowlist: [
-          'CELULAR', 'BILLETES', 'BILLETES', 'MOCHILA', 'BOLSA',
-          'PAPEL', 'IDENTIDAD', 'FACTURA', 'CAJA', 'MICRO', 'MICRO', 'TRUFI',
-          'CHAMARRA', 'GORRA', 'LENTES',
-        ],
+        maxPicks: 8,
+        glossAllowlist: _dedupe([
+          'CELULAR', 'BILLETES', 'MOCHILA', 'BOLSA',
+          'PAPEL', 'IDENTIDAD', 'FACTURA', 'CAJA',
+          'CHAMARRA', 'GORRA', 'LENTES', 'MICRO', 'TRUFI',
+        ]),
         relatedZones: ['persona', 'lugar'],
       ),
       SemanticZone(
         id: 'persona',
-        label: 'Autor del hecho',
-        hint: 'Descripción física y vestimenta del sospechoso',
-        question: '¿Quién cometió el hecho o cómo era?',
+        label: 'Personas descritas',
+        hint: 'Quién estuvo involucrado y cómo era, con su ropa y color',
+        question: '¿Puede describir a la persona involucrada?',
         emoji: '👤',
         semanticWeight: 0.85,
-        maxPicks: 3,
-        glossAllowlist: [
+        optional: true,
+        maxPicks: 6,
+        glossAllowlist: _dedupe([
           'HOMBRE', 'MUJER', 'JOVEN', 'ADULTO', 'FLACO', 'GORDO',
           'ALTO', 'BAJO', 'MOCHILA', 'GORRA', 'POLERA', 'PANTALÓN',
-          'CHAMARRA', 'CABELLO', 'NEGRO', 'AZUL', 'ROJO',
-        ],
-        relatedZones: ['lugar', 'tiempo'],
+          'CHAMARRA', 'LENTES', 'CABELLO', 'NEGRO', 'AZUL', 'ROJO',
+        ]),
+        relatedZones: ['conocimiento', 'lugar', 'tiempo'],
       ),
       SemanticZone(
         id: 'conocimiento',
-        label: 'Conocimiento del autor',
-        hint: 'Si conoce a la persona involucrada',
-        question: '¿Conoce a la persona involucrada?',
+        label: 'Conocimiento de la persona',
+        hint: 'Si conoce a la persona involucrada y qué vínculo tiene',
+        question: '¿Conoce a esa persona?',
         emoji: '👥',
-        semanticWeight: 0.85,
+        semanticWeight: 0.8,
         optional: true,
-        glossAllowlist: ['CONOCER', 'SÍ', 'NO', 'AMIGO', 'PAREJA', 'PAREJA', 'AMIGO', 'VER'],
-      ),
-      SemanticZone(
-        id: 'apariencia',
-        label: 'Apariencia del autor',
-        hint: 'Rasgos físicos y vestimenta',
-        question: '¿Puede describir a la persona?',
-        emoji: '🔍',
-        semanticWeight: 0.85,
-        optional: true,
-        glossAllowlist: [
-          'HOMBRE', 'MUJER', 'JOVEN', 'ADULTO', 'FLACO', 'GORDO',
-          'ALTO', 'BAJO', 'MOCHILA', 'GORRA', 'POLERA', 'PANTALÓN',
-          'CHAMARRA', 'CABELLO', 'NEGRO', 'AZUL', 'ROJO',
-        ],
+        glossAllowlist: _dedupe(['SÍ', 'NO', 'NO_SABER', 'AMIGO', 'PAREJA', 'PARIENTE', 'HERMANO', 'VER']),
       ),
       SemanticZone(
         id: 'lugar',
         label: 'Lugar',
-        hint: 'Dónde ocurrió el hecho',
+        hint: 'Dónde ocurrió, con la referencia si hace falta',
         question: '¿Dónde ocurrió?',
         emoji: '📍',
         semanticWeight: 0.75,
         glossAllowlist: [
           'CALLE', 'AVENIDA', 'PLAZA', 'MERCADO', 'BARRIO',
           'TIENDA', 'CASA', 'COCHABAMBA', 'DENTRO', 'FUERA',
-          'CERCA', 'LEJOS', 'AL_LADO',
+          'CERCA', 'LEJOS', 'AL_LADO', 'MICRO', 'TRUFI',
         ],
         relatedZones: ['tiempo', 'evidencia'],
       ),
@@ -248,7 +250,7 @@ final availableContexts = <SemanticContext>[
         optional: true,
         glossAllowlist: [
           'AHORA', 'HOY', 'AYER', 'ANTEAYER', 'TARDE', 'TEMPRANO',
-          'HORA', 'MINUTO', 'DÍA', 'SEMANA', 'MES',
+          'HORA', 'MINUTO', 'DÍA', 'SEMANA', 'MES', 'NO_SABER',
         ],
         chainTriggers: ['HORA', 'MINUTO', 'DÍA', 'SEMANA', 'MES'],
         chainZoneId: 'cantidad',
@@ -256,59 +258,49 @@ final availableContexts = <SemanticContext>[
       SemanticZone(
         id: 'testigos',
         label: 'Testigos presenciales',
-        hint: 'Personas que vieron lo sucedido',
+        hint: 'Si hay testigos y cuántos',
         question: '¿Hay testigos?',
         emoji: '👁️',
         semanticWeight: 0.7,
         optional: true,
-        glossAllowlist: ['SÍ', 'NO', 'TESTIGO', 'TOTAL', 'VER', '1', '2', '3'],
-      ),
-      SemanticZone(
-        id: 'pruebas',
-        label: 'Fotografías y pruebas',
-        hint: 'Fotos, videos o facturas',
-        question: '¿Tiene fotografías o documentos?',
-        emoji: '📷',
-        semanticWeight: 0.65,
-        optional: true,
-        glossAllowlist: [
-          'FOTOS', 'VIDEO', 'FILMAR', 'FACTURA', 'CAJA', 'PAPEL', 'CELULAR', 'MOSTRAR', 'PUEDO',
-        ],
+        glossAllowlist: ['SÍ', 'NO', 'NO_SABER'],
+        chainTriggers: ['SÍ'],
+        chainZoneId: 'cantidad',
       ),
       SemanticZone(
         id: 'evidencia',
-        label: 'Testigos y pruebas',
-        hint: 'Testigos, grabaciones, fotos o factura',
-        question: '¿Tiene testigos o elementos de prueba?',
+        label: 'Evidencia disponible',
+        hint: 'Fotos, video, factura u otro elemento de prueba',
+        question: '¿Tiene fotos, video u otro elemento de prueba?',
         emoji: '📎',
         semanticWeight: 0.65,
         optional: true,
-        maxPicks: 3,
-        glossAllowlist: [
-          'TESTIGO', 'TOTAL', 'VER', 'FOTOS', 'VIDEO', 'FILMAR',
-          'FACTURA', 'CAJA', 'PAPEL', 'MOSTRAR', 'PUEDO',
-        ],
+        maxPicks: 6,
+        glossAllowlist: _dedupe([
+          'FOTOS', 'VIDEO', 'FILMAR', 'FACTURA', 'CAJA', 'PAPEL', 'MOSTRAR', 'PUEDO',
+        ]),
         leadGloss: kEvidenceMarker,
       ),
       SemanticZone(
         id: 'emergencia',
         label: 'Atención médica',
-        hint: 'Si está herido o requiere médico',
-        question: '¿Está herido? ¿Necesita atención médica?',
+        hint: 'Si está herido o necesita atención médica',
+        question: '¿Está herido o necesita atención médica?',
         emoji: '🏥',
         semanticWeight: 0.65,
         optional: true,
+        maxPicks: 2,
         glossAllowlist: ['HERIDA', 'DOLOR', 'HOSPITAL', 'DOCTOR', 'CERTIFICADO', 'AUXILIO', 'SÍ', 'NO'],
       ),
       SemanticZone(
         id: 'denuncia',
         label: 'Formalizar denuncia',
-        hint: 'Desea realizar la denuncia formal',
-        question: '¿Desea realizar una denuncia?',
+        hint: 'Si desea presentar la denuncia formal',
+        question: '¿Desea presentar una denuncia formal?',
         emoji: '⚖️',
         semanticWeight: 0.6,
         optional: true,
-        glossAllowlist: ['SÍ', 'NO', 'PRESENTAR', 'PRESENTAR', 'QUERER', 'AHORA'],
+        glossAllowlist: ['SÍ', 'NO', 'NO_SABER', 'AHORA'],
       ),
       SemanticZone(
         id: 'apoyo_legal',
@@ -354,7 +346,7 @@ final availableContexts = <SemanticContext>[
     description: 'Agresión física, maltrato, violencia intrafamiliar o amenazas',
     entryZoneId: 'hecho',
     baseUrgency: UrgencyLevel.high,
-    zones: const [
+    zones: [
       SemanticZone(
         id: 'hecho',
         label: 'Agresión o violencia',
@@ -378,10 +370,10 @@ final availableContexts = <SemanticContext>[
         emoji: '👤',
         semanticWeight: 0.9,
         maxPicks: 2,
-        glossAllowlist: [
-          'PAREJA', 'PAREJA', 'HOMBRE', 'MUJER', 'HERMANO',
-          'HERMANA', 'ESPOSA', 'PARIENTE', 'PARIENTE', 'JOVEN', 'ADULTO',
-        ],
+        glossAllowlist: _dedupe([
+          'PAREJA', 'HOMBRE', 'MUJER', 'HERMANO',
+          'HERMANA', 'ESPOSA', 'PARIENTE', 'JOVEN', 'ADULTO',
+        ]),
         relatedZones: ['salud_urgencia', 'emocion_riesgo'],
       ),
       SemanticZone(
@@ -466,7 +458,7 @@ final availableContexts = <SemanticContext>[
     description: 'Amenazas por celular, mensajes de texto o internet',
     entryZoneId: 'hecho',
     baseUrgency: UrgencyLevel.medium,
-    zones: const [
+    zones: [
       SemanticZone(
         id: 'hecho',
         label: 'Mensajes recibidos',
@@ -488,10 +480,10 @@ final availableContexts = <SemanticContext>[
         question: '¿Quién le envía los mensajes?',
         emoji: '👤',
         semanticWeight: 0.85,
-        glossAllowlist: [
-          'PAREJA', 'PAREJA', 'HOMBRE', 'MUJER', 'CONOCER',
+        glossAllowlist: _dedupe([
+          'PAREJA', 'HOMBRE', 'MUJER', 'CONOCER',
           'CELULAR',
-        ],
+        ]),
         relatedZones: ['evidencia'],
       ),
       SemanticZone(
@@ -532,7 +524,7 @@ final availableContexts = <SemanticContext>[
     description: 'Estafa, engaño económico o transferencias bancarias',
     entryZoneId: 'hecho',
     baseUrgency: UrgencyLevel.medium,
-    zones: const [
+    zones: [
       SemanticZone(
         id: 'hecho',
         label: 'Engaño o estafa',
@@ -540,9 +532,9 @@ final availableContexts = <SemanticContext>[
         question: '¿Cómo ocurrió el engaño con el dinero?',
         emoji: '⚡',
         semanticWeight: 0.95,
-        glossAllowlist: [
-          'ENGAÑAR', 'BILLETES', 'BILLETES', 'ENVIAR', 'DAR', 'PERDER',
-        ],
+        glossAllowlist: _dedupe([
+          'ENGAÑAR', 'BILLETES', 'ENVIAR', 'DAR', 'PERDER',
+        ]),
         relatedZones: ['medio_banco', 'persona', 'comprobante'],
       ),
       SemanticZone(
@@ -606,7 +598,7 @@ final availableContexts = <SemanticContext>[
     emoji: '📂',
     description: 'Estado del caso, citaciones, resoluciones o citas judiciales',
     entryZoneId: 'tramite',
-    zones: const [
+    zones: [
       SemanticZone(
         id: 'tramite',
         label: 'Estado y resoluciones',
@@ -640,11 +632,11 @@ final availableContexts = <SemanticContext>[
         question: '¿Con qué autoridad o institución debe coordinar?',
         emoji: '🏛️',
         semanticWeight: 0.9,
-        glossAllowlist: [
-          'POLICÍA', 'FISCALIA', 'FISCALIA', 'JUEZ', 'JUZGADO',
+        glossAllowlist: _dedupe([
+          'POLICÍA', 'FISCALIA', 'JUEZ', 'JUZGADO',
           'ÓRGANO_JUDICIAL', 'SEPDAVI', 'SEPDEP', 'ABOGADO',
           'GRATIS', 'INTÉRPRETE',
-        ],
+        ]),
         relatedZones: ['tiempo'],
       ),
       SemanticZone(

@@ -73,9 +73,13 @@ void main() {
       '¿Cuándo ocurrió el hecho?': 'tiempo',
       '¿Dónde ocurrió?': 'lugar',
       '¿Conoce a la persona involucrada?': 'conocimiento',
-      '¿Puede describir a la persona?': 'apariencia',
+      // Auditoría 2026-09: 'apariencia' se fusionó con 'persona' (describir
+      // extiende la misma entidad en vez de crear una lista suelta) y
+      // 'pruebas' con 'evidencia' (ver context_catalog.dart, sección 12.1
+      // del prompt de auditoría).
+      '¿Puede describir a la persona?': 'persona',
       '¿Hay testigos?': 'testigos',
-      '¿Tiene fotografías o documentos?': 'pruebas',
+      '¿Tiene fotografías o documentos?': 'evidencia',
       '¿Está herido?': 'emergencia',
       '¿Necesita atención médica?': 'emergencia',
       '¿Desea realizar una denuncia?': 'denuncia',

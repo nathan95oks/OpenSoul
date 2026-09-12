@@ -71,7 +71,7 @@ GLOSS_LEXICON = {
     "ALLA": {"rol": "LUGAR", "es": "allá"},
     "ALLI": {"rol": "LUGAR", "es": "allí"},
     "ALTO": {"rol": "DESCRIPTOR", "es": "alto"},
-    "AL_LADO": {"rol": "LUGAR", "es": "al lado"},
+    "AL_LADO": {"rol": "LUGAR", "es": "al lado"},  # admite detalle: "al lado de X"
     "AMBOS": {"rol": "SUJETO", "es": "ambos"},
     "AMENAZAR": {"rol": "VERBO", "es": "amenazó", "agresor": "amenazó"},
     "AMIGO": {"rol": "DESCRIPTOR", "es": "un amigo", "persona": True},
@@ -119,7 +119,10 @@ GLOSS_LEXICON = {
     "CARPETA": {"rol": "DOCUMENTO", "es": "la carpeta de documentos"},
     "CASA": {"rol": "LUGAR", "es": "en mi casa"},
     "CELULAR": {"rol": "OBJETO", "es": "mi celular"},
-    "CERCA": {"rol": "LUGAR", "es": "cerca del lugar"},
+    # Sin "del lugar": esa relación necesita su referencia (auditoría
+    # 2026-09, hallazgo ROBAR+CELULAR+CERCA); "del lugar" fabricaba una
+    # referencia vaga cuando no se preguntó cerca de qué.
+    "CERCA": {"rol": "LUGAR", "es": "cerca"},
     "CERTIFICADO": {"rol": "DOCUMENTO", "es": "un certificado"},
     "CHAMARRA": {"rol": "OBJETO", "es": "mi chamarra"},
     "COCHABAMBA": {"rol": "LUGAR", "es": "en Cochabamba"},
@@ -146,7 +149,7 @@ GLOSS_LEXICON = {
     "DECIDIR": {"rol": "VERBO", "es": "decidí"},
     "DEJAR": {"rol": "VERBO", "es": "dejé"},
     "DELGADO": {"rol": "DESCRIPTOR", "es": "delgado"},
-    "DENTRO": {"rol": "LUGAR", "es": "dentro del lugar"},
+    "DENTRO": {"rol": "LUGAR", "es": "dentro"},
     "DESCANSO": {"rol": "TIEMPO", "es": "en horario de descanso"},
     "DESPUES": {"rol": "TIEMPO", "es": "después"},
     "DEVOLVER": {"rol": "VERBO", "es": "quiero que devuelvan"},
@@ -185,7 +188,9 @@ GLOSS_LEXICON = {
     "EXPLICAR": {"rol": "VERBO", "es": "quiero explicar"},
     "F": {"rol": "VERBO", "es": "f"},
     "FACTURA": {"rol": "DOCUMENTO", "es": "la factura"},
-    "FALTA": {"rol": "VERBO", "es": "perdí", "agresor": "perdí"},
+    # Sin flag "agresor": perder algo no es una agresión de un tercero
+    # (auditoría 2026-09, hallazgo PERDER).
+    "FALTA": {"rol": "VERBO", "es": "perdí"},
     "FECHA": {"rol": "TIEMPO", "es": "en la fecha indicada"},
     "FELCC": {"rol": "INSTITUCION", "es": "en la FELCC"},
     "FELCV": {"rol": "INSTITUCION", "es": "en la FELCV"},
@@ -195,7 +200,7 @@ GLOSS_LEXICON = {
     "FOTOCOPIA": {"rol": "DOCUMENTO", "es": "una fotocopia"},
     "FOTOS": {"rol": "OBJETO", "es": "fotografías"},
     "FRACTURA": {"rol": "URGENCIA", "es": "una fractura"},
-    "FUERA": {"rol": "LUGAR", "es": "afuera del lugar"},
+    "FUERA": {"rol": "LUGAR", "es": "fuera"},
     "FUNCIONAR": {"rol": "VERBO", "es": "funciona"},
     "FUTURO": {"rol": "TIEMPO", "es": "en el futuro"},
     "G": {"rol": "VERBO", "es": "g"},
@@ -316,7 +321,7 @@ GLOSS_LEXICON = {
     "PEDIR": {"rol": "VERBO", "es": "solicito"},
     "PEGAR": {"rol": "VERBO", "es": "golpeó y pegó", "agresor": "golpeó y pegó"},
     "PELEAR": {"rol": "VERBO", "es": "inició una pelea", "agresor": "inició una pelea"},
-    "PERDER": {"rol": "VERBO", "es": "perdí", "agresor": "perdí"},
+    "PERDER": {"rol": "VERBO", "es": "perdí"},
     "PERMISO": {"rol": "DESCONOCIDO", "es": "con permiso"},
     "PLAZA": {"rol": "LUGAR", "es": "en la plaza"},
     "PLAZO": {"rol": "TRAMITE", "es": "el plazo"},
@@ -408,6 +413,26 @@ GLOSS_LEXICON = {
     "Ñ": {"rol": "VERBO", "es": "ñ"},
 }
 
+# GLOSS_LEXICON se generó con claves sin tilde, pero el diccionario canónico
+# del cliente (assets/dictionary/official_dictionary.json) usa la forma con
+# tilde: DÓNDE, CUÁNDO, POLICÍA, RESOLUCIÓN, DÍA, ÓRGANO_JUDICIAL... Sin
+# normalizar antes de buscar, cualquier glosa acentuada caía en
+# "desconocidos" aunque el lexicón sí la tuviera, con otra ortografía
+# (auditoría 2026-09). Espejo de `_stripGlossAccents` en
+# local_sentence_assembler.dart: la Ñ se conserva, solo se quitan tildes de
+# vocales.
+_ACCENT_TABLE = str.maketrans("ÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛ", "AAAAEEEEIIIIOOOOUUUU")
+
+
+def _lexicon_key(raw: str) -> str:
+    return str(raw).strip().upper().replace("-", "_").translate(_ACCENT_TABLE)
+
+
+def lexicon_lookup(raw: str):
+    """Busca una glosa en GLOSS_LEXICON tolerando tildes y guiones."""
+    return GLOSS_LEXICON.get(_lexicon_key(raw))
+
+
 # ===================================================================
 # COMPOSICIÓN DE TIEMPO — paridad 1:1 con LocalSentenceAssembler (Dart)
 # ===================================================================
@@ -485,6 +510,10 @@ _ADMITE_DETALLE = {
     "EDAD": "edad", "ANOS_EDAD": "edad",
     "NOMBRE": "nombre", "APELLIDO": "apellido",
     "CARNET": "carnet",
+    # Relaciones espaciales: "cerca/lejos/dentro/fuera/al lado" no significan
+    # nada sin su referencia (auditoría 2026-09).
+    "CERCA": "relacion", "LEJOS": "relacion", "DENTRO": "relacion",
+    "FUERA": "relacion", "AL_LADO": "relacion",
 }
 
 _DIGITOS = set("0123456789")
@@ -573,7 +602,7 @@ def _resolve_time(analysis: dict, context_type: str, cards: list = ()) -> None:
     # Unidad sin cantidad: la cadena quedó abierta y se resuelve con la forma
     # deíctica del propio lexema ("esta semana"), que sigue siendo válida.
     if not cantidad:
-        entry = GLOSS_LEXICON.get(unidad)
+        entry = lexicon_lookup(unidad)
         if entry and not analysis["tiempos"]:
             analysis["tiempos"].insert(0, {"glosa": unidad, **entry})
         return
@@ -689,6 +718,8 @@ def _con_detalle(gloss: str, lexema: str, detalles: dict) -> str:
         return f"mi nombre es {propio}"
     if etiqueta == "apellido":
         return f"mi apellido es {propio}"
+    if etiqueta == "relacion":
+        return f"{lexema} de {propio}"
     return f"{lexema} {propio}"
 
 
@@ -752,20 +783,35 @@ def analyze_glosses(cards: list) -> dict:
     # Tras el marcador VICTIMA, los descriptores describen a la persona
     # agredida (no al agresor). Mantiene la coherencia del relato de testigo.
     victim_mode = False
+    # Marcadores estructurales del cliente (kEvidenceMarker/kVehicleMarker):
+    # cambian el papel del objeto que sigue, nunca son palabras del relato.
+    # Sin reconocerlos, PRUEBA_MARCADOR caía en "desconocidos" y se filtraba
+    # como texto crudo ("hago referencia a prueba_marcador"), y el objeto que
+    # lo seguía se contaba como botín robado en vez de como prueba aportada
+    # (auditoría 2026-09).
+    evidence_mode = False
+    vehicle_mode = False
     negar_siguiente_verbo = False
     afirmar_siguiente_verbo = False
     detalles = {}
+    # Se normalizan tildes aquí, una sola vez, para que TODAS las
+    # comparaciones internas (unidades de tiempo, cardinales, marcadores,
+    # lexicón) trabajen sobre la misma forma canónica sin tilde — igual que
+    # hace el cliente en `_normalize`/`_stripGlossAccents`. Antes solo el
+    # lookup final al lexicón toleraba tildes; `_TIME_UNITS`, `_ADMITE_DETALLE`
+    # y los marcadores de frecuencia/evidencia seguían exigiendo la forma sin
+    # tilde y nunca coincidían con DÍA, SÍ, etc. (auditoría 2026-09).
     normalizadas = _extract_details(_join_spelled_digits(
-        [str(c).upper().strip() for c in cards]), detalles)
+        [_lexicon_key(c) for c in cards]), detalles)
     for indice, card in enumerate(normalizadas):
-        key = card.upper().strip()
+        key = _lexicon_key(card)
 
         # CAMBIO (paridad Dart): en LSB la negación es una seña aparte, no un
         # prefijo. NO delante de un verbo lo niega ("NO ENTREGAR" → "no me
         # entregaron"). Sin esto el NO quedaba suelto y el verbo se afirmaba,
         # que es decir lo contrario de lo que la persona quiso decir.
         if key in ("NO", "SI") and indice + 1 < len(normalizadas):
-            siguiente = GLOSS_LEXICON.get(normalizadas[indice + 1].upper().strip())
+            siguiente = lexicon_lookup(normalizadas[indice + 1])
             # Alcanza también a TESTIGO: "¿Hay testigos?" se responde sí o no
             # y su respuesta no es un verbo, sino la persona misma.
             if siguiente and siguiente["rol"] in ("VERBO", "TESTIGO"):
@@ -776,6 +822,12 @@ def analyze_glosses(cards: list) -> dict:
                 continue
         if key == "VICTIMA":
             victim_mode = True
+            continue
+        if key == "PRUEBA_MARCADOR":
+            evidence_mode = True
+            continue
+        if key == "VEHICULO_MARCADOR":
+            vehicle_mode = True
             continue
 
         # CAMBIO (paridad Dart): reincidencia antes que tiempo.
@@ -789,14 +841,14 @@ def analyze_glosses(cards: list) -> dict:
         # Sin esto una fotografía acababa como botín del robo o como lo dañado:
         # "me robó mi motocicleta y una fotografía".
         if key in _INHERENT_EVIDENCE:
-            entry = GLOSS_LEXICON.get(key)
+            entry = lexicon_lookup(key)
             if entry:
                 analysis.setdefault("evidencias", []).append({"glosa": key, **entry})
             continue
 
         # CAMBIO (paridad Dart): huida del agresor, no agresión contra mí.
         if key in _FLIGHT_VERBS:
-            entry = GLOSS_LEXICON.get(key)
+            entry = lexicon_lookup(key)
             if entry:
                 analysis["huida"] = entry["es"]
             continue
@@ -817,7 +869,7 @@ def analyze_glosses(cards: list) -> dict:
             analysis.setdefault("_tiempo_unidad", key)
             continue
 
-        entry = GLOSS_LEXICON.get(key)
+        entry = lexicon_lookup(key)
         if entry and entry["rol"] == "TESTIGO":
             analysis["testigos_negados"] = (
                 analysis["testigos_negados"] or negar_siguiente_verbo)
@@ -830,6 +882,14 @@ def analyze_glosses(cards: list) -> dict:
             continue
         if entry and entry["rol"] == "DESCRIPTOR" and victim_mode:
             analysis["victima_descriptores"].append({"glosa": key, **entry})
+            continue
+        # Un objeto tras PRUEBA_MARCADOR se aportó como prueba, no como
+        # botín: sin esto, una fotografía o factura mencionada para acreditar
+        # el hecho se contaba como algo robado (auditoría 2026-09).
+        if entry and entry["rol"] == "OBJETO" and evidence_mode:
+            registro = {"glosa": key, **entry}
+            registro["es"] = _con_detalle(key, registro["es"], detalles)
+            analysis.setdefault("evidencias", []).append(registro)
             continue
         if entry:
             rol = entry["rol"]
@@ -878,26 +938,45 @@ def _detect_event_type(analysis: dict, context_type: str = "") -> str:
     # resultado era "Solicito un doctor ahora mismo": un trámite, no una
     # urgencia vital, y el estado de salud desaparecía de la declaración.
     ctx = (context_type or "").strip().lower()
+    verbos = [v["glosa"] for v in analysis["verbos"]]
+    tramites = [t["glosa"] for t in analysis["tramites"]]
+    documentos = [d["glosa"] for d in analysis["documentos"]]
+
     if ctx in ("accidente", "emergencia"):
         return "EMERGENCIA"
-    # Misma regla para el relato de un hecho: el cliente enruta por contexto
-    # (`'denuncia_robo' || 'violencia' => _composeIncident`). Sin esto, una
-    # denuncia sin verbo de delito —una estafa, que el diccionario no puede
-    # nombrar— caía en la plantilla de ESTADO y salía "Por un problema.",
-    # perdiendo el dinero, el producto y el canal.
     # Fase 1 no narra un hecho: la declaración son los datos, que viajan como
     # marcadores y encabezan. Sin esta rama caía en la plantilla de solicitud
     # y salía "Necesito asistencia", que nadie pidió.
     if ctx == "identificacion":
         return "IDENTIFICACION"
-    if ctx == "denuncia_robo":
-        return "ROBO"
-    if ctx == "violencia":
-        return "AGRESION"
 
-    verbos = [v["glosa"] for v in analysis["verbos"]]
-    tramites = [t["glosa"] for t in analysis["tramites"]]
-    documentos = [d["glosa"] for d in analysis["documentos"]]
+    # PERDER manda sobre el contexto, incluso dentro del menú de robo: haber
+    # entrado a "Denunciar robo" para llegar hasta esta pregunta no prueba
+    # que haya ocurrido un robo. Antes, elegir Perder dentro de ese contexto
+    # se narraba igual como un asalto (auditoría 2026-09, hallazgo PERDER).
+    if any(v in ("PERDER", "FALTA") for v in verbos):
+        return "PERDIDA"
+
+    # Misma regla para el relato de un hecho: el cliente enruta por contexto
+    # (`'denuncia_robo' || 'violencia' => _composeIncident`). Sin esto, una
+    # denuncia sin verbo de delito —una estafa, que el diccionario no puede
+    # nombrar— caía en la plantilla de ESTADO y salía "Por un problema.",
+    # perdiendo el dinero, el producto y el canal.
+    #
+    # Pero un contexto por sí solo no es un hecho: responder solo "¿hay
+    # testigos? No" dentro de este menú no debe fabricar una afirmación de
+    # robo o agresión que esas dos glosas no contienen (auditoría 2026-09,
+    # hallazgo NO+TESTIGO). Se exige alguna señal real del hecho —un verbo,
+    # un objeto, un rasgo de la persona o un lugar— antes de forzar la
+    # plantilla del contexto.
+    hay_contenido_del_hecho = bool(
+        verbos or analysis.get("objetos") or analysis.get("descriptores")
+        or analysis.get("lugares") or documentos
+    )
+    if ctx == "denuncia_robo":
+        return "ROBO" if hay_contenido_del_hecho else "GENERAL"
+    if ctx == "violencia":
+        return "AGRESION" if hay_contenido_del_hecho else "GENERAL"
 
     # CAMBIO: estas dos ramas enumeraban glosas a mano y quedaron obsoletas
     # con la sustitución del corpus: de las 32 que nombraba esta función, 24 ya
@@ -927,8 +1006,7 @@ def _detect_event_type(analysis: dict, context_type: str = "") -> str:
         return "ENTREGA"
     if any(v in ["DENUNCIAR", "QUEJAR"] for v in verbos) or any(t in ["RECLAMO", "QUEJA", "DENUNCIA"] for t in tramites):
         return "RECLAMO"
-    if any(v in ["PERDER"] for v in verbos):
-        return "PERDIDA"
+    # PERDER/FALTA ya se resolvieron arriba, antes que cualquier ctx.
     if any(v in ["FIRMAR", "CORREGIR", "VERIFICAR"] for v in verbos):
         return "GESTION"
     if analysis["urgencias"] or any(v in ["EMERGENCIA"] for v in verbos):
@@ -1004,6 +1082,275 @@ def _is_formal(context_type: str, institution_type: str = "") -> bool:
     """True si la solicitud corresponde a una gestión formal/entidad pública."""
     return (institution_type.lower() in _FORMAL_INSTITUTIONS
             or context_type.lower() in _FORMAL_CONTEXTS)
+
+# ===========================================================================
+# GENERACIÓN ESTRUCTURADA — espejo de `assembleStructured` en
+# local_sentence_assembler.dart (auditoría 2026-09).
+#
+# A diferencia de `analyze_glosses`/`generate_base_sentence` (una lista plana
+# de glosas que este módulo debe reclasificar y adivinar cómo relacionar),
+# esta función recibe el `declaration` que ya viajó con las relaciones
+# explícitas desde el cliente: qué prenda y color son de qué persona, qué
+# papel cumple cada objeto, y de qué lugar es referencia una relación
+# espacial. Se limita a redactarlas. Solo se usa para `denuncia_robo` cuando
+# el cliente manda `contractVersion >= 2` y un `declaration`; los demás
+# contextos siguen la vía determinista anterior.
+_NEUTRAL_CLOTHING = {
+    "POLERA": "una polera", "PANTALON": "un pantalón",
+    "GORRA": "una gorra", "CHAMARRA": "una chamarra",
+    "LENTES": "lentes", "MOCHILA": "una mochila", "BOLSA": "una bolsa",
+}
+_FEMININE_CLOTHING = {"POLERA", "GORRA", "CHAMARRA", "BOLSA"}
+_PLURAL_CLOTHING = {"LENTES"}
+
+
+def _color_adj(concept: str, color: str) -> str:
+    concept_key = _lexicon_key(concept)
+    plural = concept_key in _PLURAL_CLOTHING
+    fem = concept_key in _FEMININE_CLOTHING
+    c = _lexicon_key(color)
+    if c == "ROJO":
+        return "rojos" if plural else ("roja" if fem else "rojo")
+    if c == "NEGRO":
+        return "negros" if plural else ("negra" if fem else "negro")
+    if c == "AZUL":
+        return "azules" if plural else "azul"
+    return str(color).lower().replace("_", " ")
+
+
+def _relation_word(relation: str) -> str:
+    return {
+        "CERCA": "cerca", "LEJOS": "lejos", "DENTRO": "dentro",
+        "FUERA": "fuera", "AL_LADO": "al lado",
+    }.get(_lexicon_key(relation), str(relation).lower())
+
+
+def _structured_person_phrase(person: dict) -> str:
+    gender = person.get("gender")
+    gender_lex = lexicon_lookup(gender) if gender else None
+    fem = bool(gender_lex) and gender_lex.get("es") == "una mujer"
+
+    def concordar(base: str) -> str:
+        return f"{base[:-1]}a" if fem and base.endswith("o") else base
+
+    traits = []
+    for campo in ("ageApprox", "build", "height"):
+        valor = person.get(campo)
+        if not valor:
+            continue
+        lex = lexicon_lookup(valor)
+        if lex:
+            traits.append(concordar(lex["es"]))
+
+    base = gender_lex["es"] if gender_lex else "una persona"
+    if traits:
+        base = f"{base} {_join_es(traits)}"
+
+    clothing = person.get("clothing") or []
+    if clothing:
+        prendas = []
+        for c in clothing:
+            concept = c.get("concept", "")
+            nombre = _NEUTRAL_CLOTHING.get(
+                _lexicon_key(concept), concept.lower().replace("_", " "))
+            if c.get("color") and c.get("colorState") == "confirmed":
+                nombre = f"{nombre} {_color_adj(concept, c['color'])}"
+            prendas.append(nombre)
+        base = f"{base} que llevaba {_join_es(prendas)}"
+    return base
+
+
+def _structured_object_self_phrase(obj: dict) -> str:
+    concept = obj.get("concept", "")
+    if _lexicon_key(concept) == "BILLETES" and obj.get("quantity"):
+        unidad = obj.get("unit") or "bolivianos"
+        return f"{obj['quantity']} {unidad} en billetes"
+    lex = lexicon_lookup(concept)
+    base = lex["es"] if lex else concept.lower().replace("_", " ")
+    if obj.get("detail"):
+        base = f"{base} ({obj['detail']})"
+    return base
+
+
+def _structured_object_neutral_phrase(obj: dict) -> str:
+    concept = obj.get("concept", "")
+    neutral = _NEUTRAL_CLOTHING.get(_lexicon_key(concept))
+    if neutral:
+        return neutral
+    lex = lexicon_lookup(concept)
+    base = lex["es"] if lex else concept.lower().replace("_", " ")
+    base = re.sub(r"^(mi|mis|la|el)\s+", "", base)
+    if base.startswith(("un ", "el ", "la ")):
+        return base
+    return f"un {base}"
+
+
+def _structured_location_clause(location: dict) -> str:
+    partes = []
+    main_concept = location.get("mainPlaceConcept")
+    if main_concept:
+        lex = lexicon_lookup(main_concept)
+        frase = lex["es"] if lex else main_concept.lower()
+        detalle = (location.get("mainPlaceDetail") or "").strip()
+        if detalle:
+            frase = f"{frase} {detalle}"
+        partes.append(frase)
+
+    relation = location.get("relation")
+    if relation and not location.get("pending"):
+        rel = _relation_word(relation)
+        referencia = None
+        if location.get("referenceType") == "home":
+            referencia = "mi casa"
+        elif (location.get("referenceLiteralText") or "").strip():
+            referencia = location["referenceLiteralText"].strip()
+        elif location.get("referenceConceptGloss"):
+            lex = lexicon_lookup(location["referenceConceptGloss"])
+            referencia = lex["es"] if lex else location["referenceConceptGloss"].lower()
+        if referencia:
+            partes.append(f"{rel} de {referencia}")
+
+    return f" {_join_es(partes)}" if partes else ""
+
+
+def _structured_time_clause(time_info: dict):
+    """Redacta el complemento temporal sin reutilizar `_resolve_time`: esa
+    función espera el diccionario `analysis` completo (con `tiempos`,
+    `verbos`, etc.) para mutarlo in place, y aquí solo hay un [TimeInfo] ya
+    resuelto. `denuncia_robo` narra siempre un hecho pasado."""
+    if time_info.get("unknown"):
+        return None
+    unit = time_info.get("elapsedUnit")
+    if unit:
+        spec = _TIME_UNITS.get(_lexicon_key(unit))
+        if spec:
+            count = time_info.get("elapsedCount")
+            if count:
+                count = str(count)
+                if count == "1":
+                    cardinal = "una" if spec["femenino"] else "un"
+                    medida = spec["singular"]
+                else:
+                    cardinal = _CARDINALES.get(count, count)
+                    medida = spec["plural"]
+                return f"hace {cardinal} {medida}"
+            entry = lexicon_lookup(unit)
+            if entry:
+                return entry["es"]
+    moment = time_info.get("dateOrMoment")
+    if moment:
+        lex = lexicon_lookup(moment)
+        if lex:
+            return lex["es"]
+    return None
+
+
+def generate_structured_sentence(declaration: dict) -> str:
+    """Genera la declaración de `denuncia_robo` a partir del `declaration`
+    estructurado. Cada oración solo afirma lo que el borrador contiene."""
+    sentences = []
+    location = declaration.get("location") or {}
+    time_info = declaration.get("time") or {}
+    loc_clause = _structured_location_clause(location)
+    time_clause = _structured_time_clause(time_info)
+    time_prefix = f"{time_clause[0].upper()}{time_clause[1:]}, " if time_clause else ""
+
+    objects = declaration.get("objects") or []
+    stolen = [o for o in objects if o.get("role") == "stolen"]
+    lost = [o for o in objects if o.get("role") == "lost"]
+    carried = [o for o in objects if o.get("role") == "carriedByOtherPerson"]
+
+    persons = declaration.get("persons") or []
+    suspects = [p for p in persons if p.get("role") == "suspect"]
+    subject_phrase = (
+        _join_es([_structured_person_phrase(p) for p in suspects])
+        if suspects else "una persona"
+    )
+
+    fact = declaration.get("fact") or {}
+    action = _lexicon_key(fact.get("action") or "")
+
+    if action == "ROBAR":
+        if stolen:
+            what = _join_es([_structured_object_self_phrase(o) for o in stolen])
+            clause = f"{subject_phrase} me robó {what}{loc_clause}."
+        else:
+            clause = f"{subject_phrase} me robó{loc_clause}."
+        sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
+    elif action == "PERDER":
+        # Perder nunca se redacta como una acción de otra persona.
+        objetos_perdidos = lost or stolen
+        if objetos_perdidos:
+            what = _join_es([_structured_object_self_phrase(o) for o in objetos_perdidos])
+            sentences.append(f"{time_prefix}Perdí {what}{loc_clause}.".strip())
+        else:
+            sentences.append(
+                f"{time_prefix}No sé con certeza qué ocurrió; puede que haya perdido algo{loc_clause}.".strip())
+    elif action == "ENGANAR":
+        sentences.append(f"{time_prefix}Me engañaron{loc_clause}.".strip())
+    elif action == "DANAR":
+        what = f" {_join_es([_structured_object_self_phrase(o) for o in stolen])}" if stolen else ""
+        clause = f"{subject_phrase} dañó{what}{loc_clause}."
+        sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
+    elif action == "ESCAPAR":
+        clause = f"{subject_phrase} escapó{loc_clause}."
+        sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
+    else:
+        # Sin hecho confirmado: no se afirma un robo ni ningún otro delito
+        # solo por haber entrado a este menú.
+        if loc_clause or time_clause:
+            sentences.append(f"{time_prefix}Ocurrió algo que quiero relatar{loc_clause}.".strip())
+
+    if carried:
+        what = _join_es([_structured_object_neutral_phrase(o) for o in carried])
+        quien = _structured_person_phrase(suspects[0]) if suspects else "La persona"
+        quien = f"{quien[0].upper()}{quien[1:]}"
+        sentences.append(f"{quien} llevaba {what}.")
+
+    witnesses = declaration.get("witnesses") or {}
+    existence = witnesses.get("existence")
+    if existence == "confirmed":
+        count = witnesses.get("count")
+        sentences.append(f"Hay {count} testigos." if count else "Hay testigos.")
+    elif existence == "negated":
+        sentences.append("No hay testigos.")
+    elif existence == "uncertain":
+        sentences.append("No sé si hay testigos.")
+
+    evidence = declaration.get("evidence") or []
+    items = [
+        (lexicon_lookup(e.get("concept", "")) or {}).get(
+            "es", str(e.get("concept", "")).lower().replace("_", " "))
+        for e in evidence if e.get("availability") != "negated"
+    ]
+    if items:
+        sentences.append(f"Cuento con {_join_es(items)} como prueba.")
+
+    if declaration.get("injured"):
+        sentences.append(
+            "Estoy herido y necesito atención médica."
+            if declaration.get("medicalHelpRequested") else "Estoy herido.")
+    elif declaration.get("medicalHelpRequested"):
+        sentences.append("Necesito atención médica.")
+
+    will_file = declaration.get("willFileComplaint")
+    if will_file == "confirmed":
+        sentences.append("Quiero presentar una denuncia formal.")
+    elif will_file == "negated":
+        sentences.append("Por ahora no quiero presentar una denuncia formal.")
+
+    if declaration.get("needsLegalSupport"):
+        sentences.append("Necesito apoyo legal.")
+
+    institution = declaration.get("receivingInstitution")
+    if institution:
+        lex = lexicon_lookup(institution)
+        destino = (lex["es"] if lex else institution.lower()).replace("en ", "", 1)
+        sentences.append(f"Deseo presentar esto ante {destino}.")
+
+    texto = " ".join(s for s in sentences if s.strip())
+    return texto or "Quiero comunicar lo siguiente, aunque todavía no completé los detalles."
+
 
 def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
                            institution_type: str = "") -> str:
@@ -1746,7 +2093,7 @@ def build_generation_prompt(cards: list, analysis: dict, base_sentence: str,
     significados = []
     for card in cards:
         key = str(card).upper().strip()
-        entry = GLOSS_LEXICON.get(key)
+        entry = lexicon_lookup(key)
         if entry:
             significados.append(f'- {key}: {entry["es"]}')
     hechos = "\n".join(significados) or "- (sin glosas reconocidas)"
@@ -1779,14 +2126,21 @@ REGLAS INNEGOCIABLES:
 Declaración:"""
 
 
-def _generation_is_safe(cards: list, generated: str, base: str) -> tuple:
-    """Cobertura y no-invención. Espejo de `isBackendDegenerate` del cliente.
+def _es_pregunta(texto: str) -> bool:
+    return "¿" in texto or texto.strip().endswith("?")
 
-    Devuelve (es_segura, motivo). Comprueba lo que se puede comprobar: que
-    cada seña elegida siga representada en el texto. Lo que no se puede
-    comprobar por texto —un hecho inventado plausible— se acota en el prompt y
-    se limita con el tope de longitud: un texto mucho más largo que los hechos
-    verificados está adornando.
+
+def _generation_is_safe(cards: list, generated: str, base: str) -> tuple:
+    """Cobertura, no-invención y preservación del acto comunicativo.
+    Espejo de `isBackendDegenerate` del cliente.
+
+    Devuelve (es_segura, motivo). Antes solo comprobaba que cada seña elegida
+    siguiera representada (una comprobación de una sola dirección): aceptaba
+    agregar una fecha, un lugar o un monto que nadie declaró, y aceptaba que
+    una afirmación se convirtiera en pregunta conservando las mismas palabras
+    relevantes (auditoría 2026-09). Ahora también rechaza contenido nuevo que
+    ninguna glosa aportó, y exige que el acto comunicativo (afirmar vs.
+    preguntar) se conserve.
     """
     if not generated or not generated.strip():
         return False, "vacío"
@@ -1796,7 +2150,7 @@ def _generation_is_safe(cards: list, generated: str, base: str) -> tuple:
     faltantes = []
     for card in cards:
         key = str(card).upper().strip()
-        entry = GLOSS_LEXICON.get(key)
+        entry = lexicon_lookup(key)
         if not entry:
             continue
         # Basta una palabra significativa del lexema, o su raíz: el modelo
@@ -1809,6 +2163,29 @@ def _generation_is_safe(cards: list, generated: str, base: str) -> tuple:
 
     if faltantes:
         return False, f"omite {', '.join(faltantes)}"
+
+    # No inventar: todo número que aparece en el texto generado debe
+    # aparecer también en los hechos verificados. Un monto, una fecha o una
+    # cantidad que solo está en el texto generado no salió de ninguna seña.
+    #
+    # NOTA: se probó además un chequeo léxico más amplio —rechazar cualquier
+    # palabra de contenido ausente de los hechos verificados y del
+    # significado de las señas— pero eso también rechazaba paráfrasis fieles
+    # ("resulté con una herida" para HERIDA) por usar palabras que ninguna
+    # glosa aporta literalmente. Se retiró: por ahora solo se verifica lo que
+    # se puede comprobar sin falsos positivos. Agregar una fecha o un lugar
+    # inventados que no sean números (el caso "ayer" + "una plaza" del
+    # hallazgo original) queda como limitación conocida — ver informe.
+    numeros_generados = set(re.findall(r"\d+", generated))
+    numeros_base = set(re.findall(r"\d+", base))
+    numeros_inventados = numeros_generados - numeros_base
+    if numeros_inventados:
+        return False, f"agrega números no declarados: {', '.join(sorted(numeros_inventados))}"
+
+    # El acto comunicativo no puede cambiar: una afirmación no se vuelve
+    # pregunta (ni al revés) conservando las mismas palabras relevantes.
+    if _es_pregunta(base) != _es_pregunta(generated):
+        return False, "cambia afirmación por pregunta (o al revés)"
 
     # Adorno: el doble de palabras que los hechos verificados es reescritura,
     # más que eso es literatura.
@@ -1847,7 +2224,9 @@ def generate_with_bedrock(cards: list, analysis: dict, base_sentence: str,
     texto = (texto or "").strip().strip('"').strip()
     seguro, motivo = _generation_is_safe(cards, texto, base_sentence)
     if not seguro:
-        logger.warning("Generación descartada (%s): %.200r", motivo, texto)
+        # Sin el texto descartado: puede contener el mismo contenido sensible
+        # que se está rechazando (auditoría 2026-09, hallazgo de logging).
+        logger.warning("Generación descartada (%s), %d caracteres", motivo, len(texto))
         return base_sentence, False
 
     return texto, True
@@ -2065,8 +2444,30 @@ def build_response(status_code: int, body: dict) -> dict:
     return {"statusCode": status_code, "headers": CORS_HEADERS,
             "body": json.dumps(body, ensure_ascii=False)}
 
-def generate_cache_key(context_type: str, cards: list) -> str:
-    normalized = f"{context_type.lower().strip()}|{'|'.join(c.upper().strip() for c in cards)}"
+def generate_cache_key(context_type: str, cards: list, institution_type: str = "",
+                        language: str = "", speech_act: str = "",
+                        declaration=None) -> str:
+    """Clave de caché. Todo lo que puede cambiar la salida debe estar aquí:
+    antes solo entraban `context`/`cards`, así que dos peticiones con las
+    mismas glosas pero distinto `institutionType`, `language`, acto
+    comunicativo o relaciones estructuradas compartían una respuesta cacheada
+    que no correspondía a ninguna de las dos (auditoría 2026-09). No se
+    incluye `replyToId` como tal —identifica el turno, no cambia la
+    redacción— pero si en el futuro el texto llega a citar la pregunta
+    respondida, debe agregarse aquí también.
+    """
+    declaration_part = (
+        json.dumps(declaration, sort_keys=True, ensure_ascii=False)
+        if declaration else ""
+    )
+    normalized = "|".join([
+        context_type.lower().strip(),
+        "|".join(c.upper().strip() for c in cards),
+        institution_type.lower().strip(),
+        language.lower().strip(),
+        speech_act.lower().strip(),
+        declaration_part,
+    ])
     return hashlib.md5(normalized.encode("utf-8")).hexdigest()
 
 # ---------------------------------------------------------------------------
@@ -2265,20 +2666,40 @@ def lambda_handler(event, context):
     context_type = body.get("context", "general").strip().lower()
     institution_type = (body.get("institutionType") or "").strip().lower()
     language = (body.get("language") or "es").strip()
-    cache_key = generate_cache_key(context_type, cards)
+    # Contrato v2 (auditoría 2026-09): representación estructurada, acto
+    # comunicativo y turno al que se responde. Un cliente v1 sigue
+    # funcionando: sin `declaration`, el pipeline determinista de siempre.
+    speech_act = (body.get("speechAct") or "").strip().lower()
+    reply_to_id = body.get("replyToId")
+    raw_declaration = body.get("declaration")
+    declaration = raw_declaration if isinstance(raw_declaration, dict) else None
+    contract_version = body.get("contractVersion") or 1
+    uses_structured = (
+        declaration is not None
+        and context_type == "denuncia_robo"
+        and contract_version >= 2
+    )
+
+    cache_key = generate_cache_key(
+        context_type, cards, institution_type, language, speech_act, declaration)
+    # No se registran las glosas ni el `declaration` completos: son el
+    # contenido de una declaración que puede llegar a un expediente y no
+    # debe quedar en texto plano en los registros de la Lambda (auditoría
+    # 2026-09, hallazgo de logging). Se registran solo metadatos.
     logger.info(
-        "Procesando — cards: %s, context: %s, institutionType: %s, language: %s, cache_key: %s",
-        cards, context_type, institution_type, language, cache_key,
+        "Procesando — context: %s, institutionType: %s, language: %s, "
+        "speechAct: %s, cards_count: %d, structured: %s, cache_key: %s",
+        context_type, institution_type, language, speech_act,
+        len(cards), uses_structured, cache_key,
     )
 
     cached = get_cached_response(cache_key)
     if cached is not None:
-        logger.info("Cache HIT — respuesta servida desde caché: %s", cache_key)
+        logger.info("Cache HIT — cache_key: %s", cache_key)
         return build_response(200, cached)
     logger.info("Cache MISS — procesando pipeline completo: %s", cache_key)
 
     analysis = analyze_glosses(cards)
-    logger.info("Análisis semántico: tipo_evento=%s", analysis["tipo_evento"])
 
     # CAMBIO (paridad Dart): cierra la cadena temporal antes de generar. Debe
     # ir aquí y no en analyze_glosses porque la dirección depende del contexto.
@@ -2287,8 +2708,15 @@ def lambda_handler(event, context):
 
     intermediate = build_intermediate_representation(cards, analysis, context_type)
 
-    base_sentence = generate_base_sentence(intermediate, analysis, context_type, institution_type)
-    logger.info("Oración base generada: %s", base_sentence)
+    if uses_structured:
+        # El cliente ya mandó las relaciones explícitas (persona↔prenda↔color,
+        # objeto↔papel, lugar↔referencia): redactarlas no requiere volver a
+        # adivinarlas desde una lista plana de glosas.
+        base_sentence = generate_structured_sentence(declaration)
+    else:
+        base_sentence = generate_base_sentence(intermediate, analysis, context_type, institution_type)
+    logger.info("Oración base generada (%d caracteres, estructurada=%s)",
+                len(base_sentence), uses_structured)
 
     # CAMBIO: el modelo REDACTA a partir de las glosas y de los hechos
     # verificados, en vez de pulir una frase ya hecha. La fluidez la pone el
@@ -2317,11 +2745,16 @@ def lambda_handler(event, context):
         logger.error("Error inesperado en S3: %s", str(e), exc_info=True)
         return build_response(500, {"error": "S3_ERROR", "message": "Error interno al guardar audio."})
 
-    logger.info("Completado — base: '%s' | final: '%s' | bedrock: %s", base_sentence, generated_text, bedrock_used)
+    # Se registran longitudes, no el contenido de la declaración (auditoría
+    # 2026-09, hallazgo de logging).
+    logger.info(
+        "Completado — base: %d caracteres | final: %d caracteres | bedrock: %s",
+        len(base_sentence), len(generated_text), bedrock_used,
+    )
 
     gloss_sequence = []
     for card in cards:
-        entry = GLOSS_LEXICON.get(card.upper())
+        entry = lexicon_lookup(card)
         gloss_sequence.append({
             "gloss": card.upper(),
             "videoKey": f"lsb-videos/{card.upper()}.mp4",

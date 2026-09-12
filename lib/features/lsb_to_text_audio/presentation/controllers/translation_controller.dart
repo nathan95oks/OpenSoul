@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
+import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 export 'package:lsb_legal_app/core/di/injection.dart'
@@ -80,10 +81,17 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     await replayAudio();
   }
 
+  /// Genera la declaración a partir de las glosas elegidas.
+  ///
+  /// No reproduce el audio automáticamente: la persona debe poder leer o
+  /// revisar el resultado antes de que algo se diga en su nombre ante la
+  /// institución. La reproducción queda a un toque explícito en
+  /// "Reproducir" (ver [replayAudio]).
   Future<void> translateCards({
     required String context,
     required List<String> cards,
     String? assemblerContext,
+    DeclarationDraft? declaration,
   }) async {
     state = const AsyncValue.loading();
 
@@ -92,20 +100,11 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
       contextId: context,
       glosses: cards,
       assemblerContextId: assemblerContext,
+      declaration: declaration,
     );
 
+    _setPlayback(AudioPlaybackState.idle);
     state = AsyncValue.data(result);
-
-    if (result.audioUrl != null && result.audioUrl!.isNotEmpty) {
-      try {
-        await _audio.playUrl(result.audioUrl!);
-        _setPlayback(AudioPlaybackState.playing);
-      } catch (_) {
-        await _speakLocally(result.generatedText);
-      }
-    } else {
-      await _speakLocally(result.generatedText);
-    }
   }
 }
 

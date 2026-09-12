@@ -470,7 +470,14 @@ def canonical_gloss(gloss: str) -> str:
 # Cubre todo el diccionario canónico ('ANIMAL-LLAMA', 'PARTIDA_NACIMIENTO',
 # el alfabeto dactilológico y los números) y nada más. Lista blanca: enumerar
 # lo válido no tiene los agujeros de codificación que tiene prohibir lo malo.
-_VALID_GLOSS = re.compile(r"^[A-ZÑ0-9][A-ZÑ0-9_-]{0,63}$")
+#
+# Incluye ÁÉÍÓÚÜ: `canonical_gloss` devuelve la forma canónica del alias, que
+# SÍ lleva tilde (DÓNDE, ÓRGANO_JUDICIAL, MÁS_O_MENOS, CÓMO...) porque así
+# está en el diccionario canónico (official_dictionary.json) y en
+# AVAILABLE_GLOSSES. Sin las vocales acentuadas aquí, esa misma forma
+# canónica que el alias acababa de producir quedaba rechazada por su propia
+# validación y se perdía (auditoría 2026-09, clase GlosasAcentuadas).
+_VALID_GLOSS = re.compile(r"^[A-ZÑÁÉÍÓÚÜ0-9][A-ZÑÁÉÍÓÚÜ0-9_-]{0,63}$")
 
 
 # ---------------------------------------------------------------------------

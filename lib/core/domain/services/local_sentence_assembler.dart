@@ -1,5 +1,7 @@
 import 'dart:math' as math;
 
+import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
+
 const String kVictimMarker = 'VICTIMA';
 const String kEvidenceMarker = 'PRUEBA_MARCADOR';
 const String kVehicleMarker = 'VEHICULO_MARCADOR';
@@ -60,6 +62,300 @@ class LocalSentenceAssembler {
         : '${roles.markers.map(_asSentence).join(' ')} $conTestigos'.trim();
 
     return _ensureCoverage(conMarcadores, limpios, skip: consumidas);
+  }
+
+  // ---------------------------------------------------------------------
+  // Generación a partir del modelo estructurado (auditoría 2026-09).
+  //
+  // A diferencia de `assemble`, que clasifica una lista plana de glosas por
+  // rol y adivina relaciones, este camino recibe relaciones ya explícitas
+  // (qué prenda es de qué persona, qué lugar es referencia de qué, qué
+  // objeto tiene qué papel) y solo tiene que redactarlas. No completa
+  // acciones por contexto ni atribuye un hecho que el borrador no declaró.
+  // ---------------------------------------------------------------------
+
+  static const _neutralClothing = {
+    'POLERA': 'una polera',
+    'PANTALÓN': 'un pantalón',
+    'PANTALON': 'un pantalón',
+    'GORRA': 'una gorra',
+    'CHAMARRA': 'una chamarra',
+    'LENTES': 'lentes',
+    'MOCHILA': 'una mochila',
+    'BOLSA': 'una bolsa',
+  };
+
+  static const _feminineClothing = {'POLERA', 'GORRA', 'CHAMARRA', 'BOLSA'};
+  static const _pluralClothing = {'LENTES'};
+
+  String _colorAdjFor(String concept, String colorGloss) {
+    final plural = _pluralClothing.contains(concept);
+    final fem = _feminineClothing.contains(concept);
+    switch (colorGloss.toUpperCase()) {
+      case 'ROJO':
+        return plural ? 'rojos' : (fem ? 'roja' : 'rojo');
+      case 'NEGRO':
+        return plural ? 'negros' : (fem ? 'negra' : 'negro');
+      case 'AZUL':
+        return plural ? 'azules' : 'azul';
+      default:
+        return colorGloss.toLowerCase().replaceAll('_', ' ');
+    }
+  }
+
+  String _relationWord(String relation) => switch (relation.toUpperCase()) {
+        'CERCA' => 'cerca',
+        'LEJOS' => 'lejos',
+        'DENTRO' => 'dentro',
+        'FUERA' => 'fuera',
+        'AL_LADO' => 'al lado',
+        _ => relation.toLowerCase(),
+      };
+
+  String _personPhraseStructured(PersonEntity p) {
+    final generoLex = p.gender == null ? null : _lexicon[_normalize(p.gender!)];
+    final fem = generoLex?.es == 'una mujer';
+    String concordar(String base) =>
+        fem && base.endsWith('o') ? '${base.substring(0, base.length - 1)}a' : base;
+
+    final traits = <String>[];
+    if (p.ageApprox != null) {
+      final lex = _lexicon[_normalize(p.ageApprox!)];
+      if (lex != null) traits.add(concordar(lex.es));
+    }
+    if (p.build != null) {
+      final lex = _lexicon[_normalize(p.build!)];
+      if (lex != null) traits.add(lex.es);
+    }
+    if (p.height != null) {
+      final lex = _lexicon[_normalize(p.height!)];
+      if (lex != null) traits.add(concordar(lex.es));
+    }
+
+    var base = generoLex?.es ?? 'una persona';
+    if (traits.isNotEmpty) base = '$base ${_join(traits)}';
+
+    if (p.clothing.isNotEmpty) {
+      final prendas = p.clothing.map((c) {
+        final nombre = _neutralClothing[c.concept.toUpperCase()] ??
+            c.concept.toLowerCase().replaceAll('_', ' ');
+        if (c.color != null && c.colorState == ConfirmationState.confirmed) {
+          return '$nombre ${_colorAdjFor(c.concept.toUpperCase(), c.color!)}';
+        }
+        return nombre;
+      }).toList();
+      base = '$base que llevaba ${_join(prendas)}';
+    }
+    return base;
+  }
+
+  String _objectSelfPhrase(ObjectInvolved o) {
+    if (o.concept.toUpperCase() == 'BILLETES' &&
+        o.quantity != null &&
+        o.quantity!.trim().isNotEmpty) {
+      final unidad = (o.unit == null || o.unit!.trim().isEmpty) ? 'bolivianos' : o.unit!;
+      return '${o.quantity} $unidad en billetes';
+    }
+    final lex = _lexicon[_normalize(o.concept)];
+    var base = lex?.es ?? o.concept.toLowerCase().replaceAll('_', ' ');
+    if (o.detail != null && o.detail!.trim().isNotEmpty) {
+      base = '$base (${o.detail!.trim()})';
+    }
+    return base;
+  }
+
+  String _objectNeutralPhrase(ObjectInvolved o) {
+    final neutral = _neutralClothing[o.concept.toUpperCase()];
+    if (neutral != null) return neutral;
+    final lex = _lexicon[_normalize(o.concept)];
+    var base = lex?.es ?? o.concept.toLowerCase().replaceAll('_', ' ');
+    base = base.replaceFirst(RegExp(r'^(mi|mis|la|el)\s+'), '');
+    return base.startsWith('un') || base.startsWith('el') || base.startsWith('la')
+        ? base
+        : 'un $base';
+  }
+
+  /// Complemento de lugar, exclusivamente con los datos que la persona
+  /// aportó. Si eligió una relación espacial (cerca, lejos, dentro, fuera,
+  /// al lado) pero no hay todavía una referencia, el complemento se omite
+  /// por completo en vez de inventar "un lugar" vago: [LocationInfo.pending]
+  /// existe justamente para que la interfaz pueda seguir pidiéndola sin que
+  /// el texto ya la dé por hecha.
+  String? _locationClause(LocationInfo loc) {
+    final partes = <String>[];
+    if (loc.mainPlaceConcept != null) {
+      final lex = _lexicon[_normalize(loc.mainPlaceConcept!)];
+      var frase = lex?.es ?? loc.mainPlaceConcept!.toLowerCase();
+      if (loc.mainPlaceDetail != null && loc.mainPlaceDetail!.trim().isNotEmpty) {
+        frase = '$frase ${loc.mainPlaceDetail!.trim()}';
+      }
+      partes.add(frase);
+    }
+    if (loc.relation != null && !loc.pending) {
+      final rel = _relationWord(loc.relation!);
+      String? referencia;
+      if (loc.referenceType == 'home') {
+        referencia = 'mi casa';
+      } else if (loc.referenceLiteralText != null &&
+          loc.referenceLiteralText!.trim().isNotEmpty) {
+        referencia = loc.referenceLiteralText!.trim();
+      } else if (loc.referenceConceptGloss != null) {
+        final lex = _lexicon[_normalize(loc.referenceConceptGloss!)];
+        referencia = lex?.es ?? loc.referenceConceptGloss!.toLowerCase();
+      }
+      if (referencia != null) partes.add('$rel de $referencia');
+    }
+    if (partes.isEmpty) return null;
+    return ' ${_join(partes)}';
+  }
+
+  String? _timeClause(TimeInfo t) {
+    if (t.unknown) return null; // se declara aparte, no se inventa una hora
+    if (t.elapsedUnit != null) {
+      final r = _Roles()
+        ..timeUnit = _normalize(t.elapsedUnit!)
+        ..timeCount = t.elapsedCount;
+      _resolveTime(r, 'denuncia_robo', const []);
+      if (r.time != null) return r.time;
+    }
+    if (t.dateOrMoment != null) {
+      final lex = _lexicon[_normalize(t.dateOrMoment!)];
+      if (lex != null) return lex.es;
+    }
+    return null;
+  }
+
+  /// Genera la declaración de `denuncia_robo` a partir del [DeclarationDraft]
+  /// estructurado, en vez de una lista plana de glosas. Cada oración solo
+  /// afirma lo que el borrador realmente contiene.
+  String assembleStructured(DeclarationDraft d) {
+    final sentences = <String>[];
+    final locClause = _locationClause(d.location) ?? '';
+    final timeClauseText = _timeClause(d.time);
+    final timePrefix = timeClauseText == null ? '' : '${_cap(timeClauseText)}, ';
+
+    final stolen = d.objects.where((o) => o.role == 'stolen').toList();
+    final lost = d.objects.where((o) => o.role == 'lost').toList();
+    final carried = d.objects.where((o) => o.role == 'carriedByOtherPerson').toList();
+
+    final suspects = d.persons.where((p) => p.role == 'suspect').toList();
+    final subjectPhrase = suspects.isEmpty
+        ? 'Una persona'
+        : _cap(_join(suspects.map(_personPhraseStructured).toList()));
+
+    switch (d.fact.action?.toUpperCase()) {
+      case 'ROBAR':
+        if (stolen.isNotEmpty) {
+          final what = _join(stolen.map(_objectSelfPhrase).toList());
+          sentences.add(
+            '$timePrefix${_decap(subjectPhrase)} me robó $what$locClause.'
+                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
+          );
+        } else {
+          sentences.add(
+            '$timePrefix${_decap(subjectPhrase)} me robó$locClause.'
+                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
+          );
+        }
+        break;
+      case 'PERDER':
+        // Perder nunca se redacta como una acción de otra persona: quien
+        // perdió el objeto es siempre quien declara.
+        final objetosPerdidos = lost.isNotEmpty ? lost : stolen;
+        if (objetosPerdidos.isNotEmpty) {
+          final what = _join(objetosPerdidos.map(_objectSelfPhrase).toList());
+          sentences.add('${_cap(timePrefix)}Perdí $what$locClause.'.trim());
+        } else {
+          sentences.add(
+              '${_cap(timePrefix)}No sé con certeza qué ocurrió; puede que haya perdido algo$locClause.'
+                  .trim());
+        }
+        break;
+      case 'ENGAÑAR':
+        sentences.add('${_cap(timePrefix)}Me engañaron$locClause.'.trim());
+        break;
+      case 'DAÑAR':
+        final what = stolen.isNotEmpty
+            ? ' ${_join(stolen.map(_objectSelfPhrase).toList())}'
+            : '';
+        sentences.add(
+            '${_cap(timePrefix)}${_decap(subjectPhrase)} dañó$what$locClause.'
+                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
+        break;
+      case 'ESCAPAR':
+        sentences.add(
+            '${_cap(timePrefix)}${_decap(subjectPhrase)} escapó$locClause.'
+                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
+        break;
+      default:
+        // Sin hecho confirmado: no se afirma un robo ni ningún otro delito
+        // solo por haber entrado a este menú.
+        if (locClause.isNotEmpty || timeClauseText != null) {
+          sentences.add('${_cap(timePrefix)}Ocurrió algo que quiero relatar$locClause.'.trim());
+        }
+    }
+
+    if (carried.isNotEmpty) {
+      final what = _join(carried.map(_objectNeutralPhrase).toList());
+      final quien = suspects.isEmpty ? 'La persona' : _cap(_personPhraseStructured(suspects.first));
+      sentences.add('$quien llevaba $what.');
+    }
+
+    if (d.witnesses.existence == ConfirmationState.confirmed) {
+      final count = d.witnesses.count;
+      sentences.add(count == null || count.trim().isEmpty
+          ? 'Hay testigos.'
+          : 'Hay $count testigos.');
+    } else if (d.witnesses.existence == ConfirmationState.negated) {
+      sentences.add('No hay testigos.');
+    } else if (d.witnesses.existence == ConfirmationState.uncertain) {
+      sentences.add('No sé si hay testigos.');
+    }
+
+    if (d.evidence.isNotEmpty) {
+      final items = d.evidence
+          .where((e) => e.availability != ConfirmationState.negated)
+          .map((e) => _lexicon[_normalize(e.concept)]?.es ??
+              e.concept.toLowerCase().replaceAll('_', ' '))
+          .toList();
+      if (items.isNotEmpty) {
+        sentences.add('Cuento con ${_join(items)} como prueba.');
+      }
+    }
+
+    if (d.injured) {
+      sentences.add(d.medicalHelpRequested
+          ? 'Estoy herido y necesito atención médica.'
+          : 'Estoy herido.');
+    } else if (d.medicalHelpRequested) {
+      sentences.add('Necesito atención médica.');
+    }
+
+    switch (d.willFileComplaint) {
+      case ConfirmationState.confirmed:
+        sentences.add('Quiero presentar una denuncia formal.');
+        break;
+      case ConfirmationState.negated:
+        sentences.add('Por ahora no quiero presentar una denuncia formal.');
+        break;
+      default:
+        break;
+    }
+
+    if (d.needsLegalSupport) {
+      sentences.add('Necesito apoyo legal.');
+    }
+
+    if (d.receivingInstitution != null) {
+      final lex = _lexicon[_normalize(d.receivingInstitution!)];
+      final destino = lex?.es ?? d.receivingInstitution!.toLowerCase();
+      sentences.add('Deseo presentar esto ante ${destino.replaceFirst('en ', '')}.');
+    }
+
+    final texto = sentences.where((s) => s.trim().isNotEmpty).join(' ');
+    return texto.isEmpty
+        ? 'Quiero comunicar lo siguiente, aunque todavía no completé los detalles.'
+        : texto;
   }
 
   /// Frases directas del Corpus Maestro Unificado LSB v4 (Sección 7 y 8)

@@ -7,6 +7,13 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/qualifier_sheets.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/sign_image.dart';
 
+// NOTA DE AUDITORÍA (2026-09): `CardGrid` no se instancia en ningún lugar de
+// `lib/`. El camino activo es HomeScreen → NodeFlowCanvas → SuggestedGlossPanel,
+// que muestra todas las opciones que entrega `dynamicCardsProvider` sin el
+// corte de 6 que aplica este widget. Se conserva sin instanciar por si algún
+// test o pantalla futura la reutiliza, pero no debe confundirse con el
+// componente realmente usado. El corte de opciones que sí afecta al flujo
+// activo vivía en `cards_provider.dart` (ya corregido).
 const int _kAnswersPerQuestion = 6;
 
 class ExpandedAnswersNotifier extends Notifier<bool> {

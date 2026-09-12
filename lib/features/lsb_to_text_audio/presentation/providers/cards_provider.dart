@@ -44,8 +44,6 @@ final allCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   return allCards;
 });
 
-const int _kMaxGuidedAnswers = 12;
-
 final generatedStepProvider = FutureProvider<GeneratedStep>((ref) async {
   final context = ref.watch(contextProvider);
   if (context == null) return GeneratedStep.vacio;
@@ -75,12 +73,20 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final generado = ref.watch(generatedStepProvider).asData?.value;
   if (generado == null || generado.isEmpty) return locales;
 
+  // La sugerencia remota solo reordena: nunca debe hacer desaparecer una
+  // opción válida que el catálogo local sí ofrecía. Antes, si la IA
+  // devolvía un subconjunto, ese subconjunto sustituía por completo a
+  // `locales` y el resto de respuestas correctas se volvían inalcanzables.
   final porGlosa = {for (final c in locales) c.gloss: c};
-  final ordenadas = [
+  final vistas = <String>{};
+  final reordenadas = <LsbCard>[
     for (final g in generado.options)
-      if (porGlosa.containsKey(g)) porGlosa[g]!,
+      if (porGlosa.containsKey(g) && vistas.add(g)) porGlosa[g]!,
   ];
-  return ordenadas.isEmpty ? locales : ordenadas;
+  for (final c in locales) {
+    if (vistas.add(c.gloss)) reordenadas.add(c);
+  }
+  return reordenadas;
 });
 
 final _localCandidatesProvider = FutureProvider<List<LsbCard>>((ref) async {
@@ -109,7 +115,7 @@ final _localCandidatesProvider = FutureProvider<List<LsbCard>>((ref) async {
     return [
       for (final g in activeZone.glossAllowlist)
         if (porGlosa.containsKey(g)) porGlosa[g]!,
-    ].take(_kMaxGuidedAnswers).toList();
+    ];
   }
 
   final zoneCategories = activeZone.cardCategories.toSet();
@@ -158,10 +164,6 @@ final _localCandidatesProvider = FutureProvider<List<LsbCard>>((ref) async {
   }).toList()
     ..sort(comparator);
 
-  if (specific.length >= _kMaxGuidedAnswers) {
-    return specific.take(_kMaxGuidedAnswers).toList();
-  }
-
   if (activeZone.strictContext) {
     return specific;
   }
@@ -176,10 +178,8 @@ final _localCandidatesProvider = FutureProvider<List<LsbCard>>((ref) async {
   final combined = [...specific, ...fillers];
 
   if (combined.isEmpty) {
-    return (allCards.where(matchesZone).toList()..sort(comparator))
-        .take(_kMaxGuidedAnswers)
-        .toList();
+    return allCards.where(matchesZone).toList()..sort(comparator);
   }
 
-  return combined.take(_kMaxGuidedAnswers).toList();
+  return combined;
 });

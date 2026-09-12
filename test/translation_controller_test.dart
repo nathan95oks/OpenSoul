@@ -12,6 +12,10 @@ import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 /// ahora, sin cobertura: merge baseSentence/generatedText, detección de
 /// degeneración, y fallback al motor local cuando el backend cae.
 ///
+/// `translateCards` NO debe reproducir audio por sí sola: la persona debe
+/// poder revisar el texto antes de que algo se diga en su nombre. Solo un
+/// toque explícito en "Reproducir" (`replayAudio`) dispara la reproducción.
+///
 /// El audio (Polly/TTS) se inyecta como [_FakeAudioOutput] para que el test se
 /// concentre en el estado (TranslationResult) sin tocar plugins nativos.
 
@@ -27,6 +31,9 @@ class _FakeRepository implements TranslationRepository {
   Future<TranslationResult> translateCards({
     required String context,
     required List<String> cards,
+    Map<String, dynamic>? declaration,
+    String? speechAct,
+    String? replyToId,
   }) async {
     if (_error != null) throw _error;
     return _result!;
@@ -101,7 +108,13 @@ void main() {
       expect(result.bedrockUsed, true);
       // baseSentence siempre proviene del motor local (fiel a las glosas).
       expect(result.baseSentence.toLowerCase(), contains('hombre'));
-      // Con audioUrl válido se reproduce el audio remoto (no TTS local).
+      // Generar la traducción NO reproduce nada todavía: la persona debe
+      // poder revisarla primero.
+      expect(audio.played, isEmpty);
+      expect(audio.spoken, isEmpty);
+
+      // Solo al pedir explícitamente "Reproducir" se usa el audio remoto.
+      await c.read(translationControllerProvider.notifier).replayAudio();
       expect(audio.played, ['https://s3.test/a.mp3']);
       expect(audio.spoken, isEmpty);
     });
@@ -157,7 +170,8 @@ void main() {
         audioUrl: null,
         bedrockUsed: true,
       ));
-      final c = _containerWith(repo);
+      final audio = _FakeAudioOutput();
+      final c = _containerWith(repo, audio: audio);
 
       final result = await _translate(c,
           context: 'tramite_id', cards: ['RENOVAR', 'CARNET', 'SEGIP']);
@@ -165,6 +179,12 @@ void main() {
       expect(result, isNotNull);
       expect(result!.generatedText, contains('SEGIP'));
       expect(result.audioUrl, isNull);
+      expect(audio.played, isEmpty);
+      expect(audio.spoken, isEmpty);
+
+      // Sin audioUrl remoto, "Reproducir" cae al TTS local con el texto vigente.
+      await c.read(translationControllerProvider.notifier).replayAudio();
+      expect(audio.spoken, [result.generatedText]);
     });
   });
 }
