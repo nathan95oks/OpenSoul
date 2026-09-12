@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/entity_editor_sheets.dart';
 
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
@@ -237,7 +239,10 @@ class _Tecla extends StatelessWidget {
   if (etiqueta == null) return null;
   return switch (etiqueta) {
     'placa' => (titulo: 'Deletrea la placa', alfanumerico: true, soloDigitos: false),
-    'numero' => (titulo: 'Escribe el número de tu caso', alfanumerico: true, soloDigitos: false),
+    // No se asume "número de caso": CELULAR puede pedirse como contacto,
+    // descripción del aparato u otro dato — quien pregunta decide qué
+    // significa ese número en su contexto (auditoría 2026-09).
+    'numero' => (titulo: 'Escribe el número', alfanumerico: true, soloDigitos: false),
     'edad' => (titulo: '¿Qué edad tienes?', alfanumerico: true, soloDigitos: true),
     'carnet' => (titulo: 'Escribe tu número de carnet', alfanumerico: true, soloDigitos: false),
     'nombre' => (titulo: 'Deletrea tu nombre', alfanumerico: false, soloDigitos: false),
@@ -246,14 +251,43 @@ class _Tecla extends StatelessWidget {
   };
 }
 
+/// Zonas de `denuncia_robo` cuyas respuestas son entidades con relaciones
+/// propias (persona↔prenda↔color, objeto↔papel, lugar↔referencia) y por eso
+/// se editan en `entity_editor_sheets.dart` en vez de la hoja genérica de
+/// calificadores.
+const _zonasDeEntidad = {'persona', 'objetos', 'lugar'};
+
 Future<void> elegirGlosa(
   BuildContext context,
   WidgetRef ref,
   LsbCard card,
 ) async {
-  final notifier = ref.read(semanticZonesProvider.notifier);
-  final yaEstaba = notifier.activeAnswersOf(card.gloss);
+  final zonesNotifier = ref.read(semanticZonesProvider.notifier);
+  final zoneId = ref.read(semanticZonesProvider).activeZoneId;
+  final contextId = ref.read(contextProvider)?.id;
 
+  if (contextId == 'denuncia_robo' && _zonasDeEntidad.contains(zoneId)) {
+    // Estas zonas no dependen de la lista plana de respuestas: la misma
+    // glosa (p. ej. MOCHILA o POLERA) puede elegirse varias veces para
+    // entidades distintas (dos personas, o un objeto robado y otro que
+    // llevaba otra persona), así que cada toque abre su propio editor en
+    // vez de alternar una selección única.
+    switch (zoneId) {
+      case 'persona':
+        await mostrarEditorPersona(context, ref, card);
+        break;
+      case 'objetos':
+        await mostrarEditorObjeto(context, ref, card);
+        break;
+      case 'lugar':
+        await mostrarEditorLugar(context, ref, card);
+        break;
+    }
+    return;
+  }
+
+  final notifier = zonesNotifier;
+  final yaEstaba = notifier.activeAnswersOf(card.gloss);
   notifier.toggleAnswer(card.gloss);
   ref.read(sentenceProvider.notifier).setWords(notifier.orderedGlosses());
   if (yaEstaba) return;

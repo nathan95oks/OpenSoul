@@ -1,4 +1,5 @@
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
+import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
@@ -24,16 +25,21 @@ class ConversationEngine {
     required String contextId,
     required List<String> glosses,
     String? assemblerContextId,
+    String? replyToId,
+    DeclarationDraft? declaration,
   }) async {
     final result = await generateDeclaration(
       contextId: contextId,
       glosses: glosses,
       assemblerContextId: assemblerContextId,
+      declaration: declaration,
     );
     return turnFromDeclaration(
       result: result,
       glosses: glosses,
       contextId: contextId,
+      replyToId: replyToId,
+      speechAct: declaration == null ? null : _speechActFrom(declaration.speechAct),
     );
   }
 
@@ -41,11 +47,14 @@ class ConversationEngine {
     required String contextId,
     required List<String> glosses,
     String? assemblerContextId,
+    DeclarationDraft? declaration,
   }) async {
-    final localSentence = assembler.assemble(
-      contextId: assemblerContextId ?? contextId,
-      glosses: glosses,
-    );
+    final localSentence = declaration != null
+        ? assembler.assembleStructured(declaration)
+        : assembler.assemble(
+            contextId: assemblerContextId ?? contextId,
+            glosses: glosses,
+          );
     final safeLocal =
         localSentence.isNotEmpty ? localSentence : glosses.join(' ');
 
@@ -54,6 +63,9 @@ class ConversationEngine {
       final remote = await declarationRepository.translateCards(
         context: contextId,
         cards: glosses,
+        declaration: declaration?.toJson(),
+        speechAct: declaration?.speechAct,
+        replyToId: declaration?.replyToId,
       );
       final degenerate = remote.coverageValidated
           ? remote.generatedText.trim().isEmpty
@@ -79,6 +91,11 @@ class ConversationEngine {
     }
     return result;
   }
+
+  SpeechAct _speechActFrom(String name) => SpeechAct.values.firstWhere(
+        (v) => v.name == name,
+        orElse: () => SpeechAct.statement,
+      );
 
   Future<ConversationTurn> composeHearingTurn({
     required String text,
@@ -154,11 +171,13 @@ class ConversationEngine {
     required List<String> glosses,
     String? contextId,
     String? replyToId,
+    SpeechAct? speechAct,
   }) {
     final message = SemanticMessage(
       id: _newId(),
       speaker: SpeakerRole.deaf,
       source: MessageSource.cards,
+      speechAct: speechAct ?? classifySpeechAct(result.generatedText),
       glosses: glosses,
       contextId: contextId,
       replyToId: replyToId,

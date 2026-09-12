@@ -13,6 +13,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart' show allCardsProvider;
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/context_selection_widget.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/node_flow_canvas.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
@@ -174,12 +175,16 @@ class HomeScreen extends ConsumerWidget {
                     cardsForEngines,
                     categoryOf,
                   );
+                  final declaracion = contextState.id == 'denuncia_robo'
+                      ? buildFullDeclarationDraft(ref)
+                      : null;
                   await ref
                       .read(translationControllerProvider.notifier)
                       .translateCards(
                         context: contextState.id,
                         cards: cardsForEngines,
                         assemblerContext: assemblerContext,
+                        declaration: declaracion,
                       );
                   ref.read(resultVisibleProvider.notifier).show();
                 },

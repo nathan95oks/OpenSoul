@@ -78,15 +78,17 @@ const Map<String, String> _interrogatives = {
   'quien': 'persona',
   'quienes': 'persona',
 
-  // Apariencia
-  'puede describir': 'apariencia',
-  'describir a la persona': 'apariencia',
-  'como era': 'apariencia',
-  'como eran': 'apariencia',
-  'que aspecto': 'apariencia',
-  'que ropa': 'apariencia',
-  'llevaba gorra': 'apariencia',
-  'llevaba mochila': 'apariencia',
+  // Apariencia (fusionada con la entidad "persona": auditoría 2026-09, ya
+  // no existe una zona 'apariencia' separada — describir extiende a la
+  // misma persona en vez de crear una entidad o una lista sueltas).
+  'puede describir': 'persona',
+  'describir a la persona': 'persona',
+  'como era': 'persona',
+  'como eran': 'persona',
+  'que aspecto': 'persona',
+  'que ropa': 'persona',
+  'llevaba gorra': 'persona',
+  'llevaba mochila': 'persona',
 
   // Objetos sustraídos
   'que se llevaron': 'objetos',
@@ -95,17 +97,18 @@ const Map<String, String> _interrogatives = {
   'robaron el celular': 'objetos',
   'falta dinero': 'objetos',
 
-  // Testigos y pruebas
+  // Testigos y evidencia (la zona 'pruebas' se fusionó con 'evidencia':
+  // auditoría 2026-09, ver context_catalog.dart)
   'hay testigos': 'testigos',
   'algun testigo': 'testigos',
   'testigo': 'testigos',
-  'fotografias o documentos': 'pruebas',
-  'fotografias': 'pruebas',
-  'fotos': 'pruebas',
-  'documentos': 'pruebas',
-  'pruebas': 'pruebas',
-  'video': 'pruebas',
-  'camaras': 'pruebas',
+  'fotografias o documentos': 'evidencia',
+  'fotografias': 'evidencia',
+  'fotos': 'evidencia',
+  'documentos': 'evidencia',
+  'pruebas': 'evidencia',
+  'video': 'evidencia',
+  'camaras': 'evidencia',
 
   // Emergencia y salud
   'esta herido': 'emergencia',

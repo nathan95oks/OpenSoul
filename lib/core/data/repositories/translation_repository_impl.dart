@@ -11,7 +11,16 @@ class TranslationRepositoryImpl implements TranslationRepository {
   Future<TranslationResult> translateCards({
     required String context,
     required List<String> cards,
+    Map<String, dynamic>? declaration,
+    String? speechAct,
+    String? replyToId,
   }) async {
-    return await remoteDataSource.translateCards(context: context, cards: cards);
+    return await remoteDataSource.translateCards(
+      context: context,
+      cards: cards,
+      declaration: declaration,
+      speechAct: speechAct,
+      replyToId: replyToId,
+    );
   }
 }

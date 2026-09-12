@@ -13,6 +13,13 @@ class SemanticZonesState {
   final Set<String> visitedZoneIds;
   final List<String> visitedZoneOrder;
   final Map<String, List<String>> zoneAnswers;
+
+  /// Calificadores (cantidad, deletreo, etc.) asociados a cada glosa
+  /// respondida, indexados por zona y luego por glosa. Se guardan aparte de
+  /// [zoneAnswers] para que agregar o corregir el detalle de una respuesta no
+  /// borre las demás respuestas ya confirmadas de la misma zona, y para que
+  /// esos detalles no consuman cupos de `maxPicks`.
+  final Map<String, Map<String, List<String>>> zoneQualifiers;
   final NavigationSnapshot snapshot;
   final List<String> requestedZoneIds;
 
@@ -22,6 +29,7 @@ class SemanticZonesState {
     required this.snapshot,
     this.visitedZoneOrder = const [],
     this.zoneAnswers = const {},
+    this.zoneQualifiers = const {},
     this.requestedZoneIds = const [],
   });
 
@@ -72,6 +80,7 @@ class SemanticZonesState {
     Set<String>? visitedZoneIds,
     List<String>? visitedZoneOrder,
     Map<String, List<String>>? zoneAnswers,
+    Map<String, Map<String, List<String>>>? zoneQualifiers,
     NavigationSnapshot? snapshot,
     List<String>? requestedZoneIds,
   }) {
@@ -80,6 +89,7 @@ class SemanticZonesState {
       visitedZoneIds: visitedZoneIds ?? this.visitedZoneIds,
       visitedZoneOrder: visitedZoneOrder ?? this.visitedZoneOrder,
       zoneAnswers: zoneAnswers ?? this.zoneAnswers,
+      zoneQualifiers: zoneQualifiers ?? this.zoneQualifiers,
       snapshot: snapshot ?? this.snapshot,
       requestedZoneIds: requestedZoneIds ?? this.requestedZoneIds,
     );
@@ -113,12 +123,14 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     Set<String> previousVisited = const {};
     List<String> previousOrder = const [];
     Map<String, List<String>> previousAnswers = const {};
+    Map<String, Map<String, List<String>>> previousQualifiers = const {};
     try {
       final s = state;
       previousActiveId = s.activeZoneId;
       previousVisited = s.visitedZoneIds;
       previousOrder = s.visitedZoneOrder;
       previousAnswers = s.zoneAnswers;
+      previousQualifiers = s.zoneQualifiers;
     } on Error catch (_) {}
 
     final pending = ref.watch(pendingReplyProvider);
@@ -146,15 +158,30 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       visitedZoneIds: visited,
       visitedZoneOrder: order,
       zoneAnswers: previousAnswers,
+      zoneQualifiers: previousQualifiers,
       snapshot: snapshot,
       requestedZoneIds: requested,
     );
   }
 
+  /// Respuestas de [zoneId] intercaladas con los calificadores propios de
+  /// cada glosa (p. ej. `PLAZA` seguido de las letras de su nombre escrito).
+  List<String> _answersWithQualifiers(String zoneId) {
+    final answers = state.zoneAnswers[zoneId] ?? const <String>[];
+    if (answers.isEmpty) return const [];
+    final qualifiers = state.zoneQualifiers[zoneId] ?? const {};
+    final out = <String>[];
+    for (final gloss in answers) {
+      out.add(gloss);
+      out.addAll(qualifiers[gloss] ?? const []);
+    }
+    return out;
+  }
+
   List<String> orderedGlosses() {
     final out = <String>[];
     for (final zoneId in state.visitedZoneOrder) {
-      out.addAll(state.zoneAnswers[zoneId] ?? const []);
+      out.addAll(_answersWithQualifiers(zoneId));
     }
     return out;
   }
@@ -163,7 +190,7 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     final ctx = ref.read(contextProvider);
     final out = <String>[];
     for (final zoneId in state.visitedZoneOrder) {
-      final answers = state.zoneAnswers[zoneId] ?? const [];
+      final answers = _answersWithQualifiers(zoneId);
       if (answers.isEmpty) continue;
       final lead = ctx?.zoneById(zoneId)?.leadGloss;
       if (lead != null) out.add(lead);
@@ -179,9 +206,12 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     final maxPicks = ctx?.zoneById(zoneId)?.maxPicks ?? 1;
 
     final current = [...(state.zoneAnswers[zoneId] ?? const <String>[])];
+    var removedGlosses = const <String>[];
     if (current.contains(gloss)) {
       current.remove(gloss);
+      removedGlosses = [gloss];
     } else if (maxPicks <= 1) {
+      removedGlosses = current;
       current
         ..clear()
         ..add(gloss);
@@ -191,8 +221,19 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       return;
     }
 
+    var qualifiers = state.zoneQualifiers;
+    if (removedGlosses.isNotEmpty) {
+      final zoneQualifiers = {...(qualifiers[zoneId] ?? const {})};
+      var changed = false;
+      for (final g in removedGlosses) {
+        if (zoneQualifiers.remove(g) != null) changed = true;
+      }
+      if (changed) qualifiers = {...qualifiers, zoneId: zoneQualifiers};
+    }
+
     state = state.copyWith(
       zoneAnswers: {...state.zoneAnswers, zoneId: current},
+      zoneQualifiers: qualifiers,
     );
   }
 
@@ -209,21 +250,34 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     return nombres[gloss];
   }
 
+  /// Asocia [qualifiers] (cantidad, deletreo, color, etc.) a la respuesta
+  /// [gloss] de la zona activa, sin tocar ninguna otra respuesta ni detalle
+  /// de la misma zona. Reemplaza los calificadores previos de esa glosa en
+  /// concreto, si los tenía (p. ej. corregir la cantidad ya elegida).
   void appendQualifiers(String gloss, List<String> qualifiers) {
     final zoneId = state.activeZoneId;
-    if (zoneId == null || qualifiers.isEmpty) return;
+    if (zoneId == null) return;
+    final current = state.zoneAnswers[zoneId] ?? const <String>[];
+    if (!current.contains(gloss)) return;
 
-    final current = [...(state.zoneAnswers[zoneId] ?? const <String>[])];
-    final at = current.lastIndexOf(gloss);
-    if (at < 0) return;
-
-    final hasta = current.length;
-    current.removeRange(at + 1, hasta);
-    current.insertAll(at + 1, qualifiers);
+    final zoneQualifiers = {...(state.zoneQualifiers[zoneId] ?? const {})};
+    if (qualifiers.isEmpty) {
+      zoneQualifiers.remove(gloss);
+    } else {
+      zoneQualifiers[gloss] = qualifiers;
+    }
 
     state = state.copyWith(
-      zoneAnswers: {...state.zoneAnswers, zoneId: current},
+      zoneQualifiers: {...state.zoneQualifiers, zoneId: zoneQualifiers},
     );
+  }
+
+  /// Calificadores actualmente guardados para [gloss] en la zona activa,
+  /// para poder mostrarlos u ofrecer corregirlos.
+  List<String> qualifiersOf(String gloss) {
+    final zoneId = state.activeZoneId;
+    if (zoneId == null) return const [];
+    return state.zoneQualifiers[zoneId]?[gloss] ?? const [];
   }
 
   void activateZone(String zoneId) {
@@ -251,6 +305,7 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       visitedZoneIds: visited,
       visitedZoneOrder: order,
       zoneAnswers: state.zoneAnswers,
+      zoneQualifiers: state.zoneQualifiers,
       snapshot: snapshot,
       requestedZoneIds: state.requestedZoneIds,
     );

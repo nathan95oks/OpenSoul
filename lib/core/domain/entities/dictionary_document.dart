@@ -15,8 +15,15 @@ class DictionaryDocument {
     required this.entries,
   });
 
+  /// Tarjetas listas para mostrarse en la interfaz.
+  ///
+  /// Excluye `pending` (propuestas sin aprobar) y `unknown` (un `status` del
+  /// JSON que esta versión no reconoce): un estado que no se pudo interpretar
+  /// no debe aprobarse automáticamente mostrándolo como si fuera oficial.
   List<LsbCard> get visibleEntries => entries
-      .where((e) => e.status != DictionaryStatus.pending)
+      .where((e) =>
+          e.status != DictionaryStatus.pending &&
+          e.status != DictionaryStatus.unknown)
       .toList(growable: false);
 
   factory DictionaryDocument.fromJson(Map<String, dynamic> json) {

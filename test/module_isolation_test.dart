@@ -48,6 +48,9 @@ class _StubDeclarationRepository implements TranslationRepository {
   Future<TranslationResult> translateCards({
     required String context,
     required List<String> cards,
+    Map<String, dynamic>? declaration,
+    String? speechAct,
+    String? replyToId,
   }) async =>
       TranslationResult(
         baseSentence: 'Me robaron el celular.',

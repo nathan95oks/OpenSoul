@@ -7,6 +7,9 @@ abstract class RemoteTranslationDataSource {
   Future<TranslationResult> translateCards({
     required String context,
     required List<String> cards,
+    Map<String, dynamic>? declaration,
+    String? speechAct,
+    String? replyToId,
   });
 }
 
@@ -24,10 +27,19 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     this.apiGatewayUrl = defaultApiGatewayUrl,
   });
 
+  /// Versión del contrato con el backend. La versión 2 añade la
+  /// representación estructurada (`declaration`), el acto comunicativo y el
+  /// turno al que se responde; el backend que no la reconozca puede seguir
+  /// usando `context`/`cards` como antes (compatibilidad hacia atrás).
+  static const int contractVersion = 2;
+
   @override
   Future<TranslationResult> translateCards({
     required String context,
     required List<String> cards,
+    Map<String, dynamic>? declaration,
+    String? speechAct,
+    String? replyToId,
   }) async {
     final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_API_URL');
 
@@ -43,6 +55,10 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
             'cards': cards,
             'language': 'es-BO',
             'institutionType': 'entidad_publica',
+            'contractVersion': contractVersion,
+            if (speechAct != null) 'speechAct': speechAct,
+            if (replyToId != null) 'replyToId': replyToId,
+            if (declaration != null) 'declaration': declaration,
           }),
         )
         .timeout(requestTimeout);
