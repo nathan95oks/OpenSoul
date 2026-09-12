@@ -21,10 +21,22 @@ class QuickReplyBar extends StatelessWidget {
       texto: '¿Dónde queda?',
     ),
     (
-      etiqueta: '¿Puede repetir?',
-      icono: Icons.replay,
-      glosas: ['PUEDE_REPETIR'],
-      texto: '¿Puede repetir, por favor?',
+      etiqueta: 'Más despacio',
+      icono: Icons.speed_outlined,
+      glosas: ['LENTO', 'EXPLICAR', 'POR_FAVOR'],
+      texto: 'Explíqueme despacio, por favor.',
+    ),
+    (
+      etiqueta: 'Ahora entiendo',
+      icono: Icons.lightbulb_outline,
+      glosas: ['AHORA', 'COMPRENDER'],
+      texto: 'Ahora sí entiendo.',
+    ),
+    (
+      etiqueta: 'Gracias',
+      icono: Icons.thumb_up_outlined,
+      glosas: ['AYUDAR', 'GRACIAS'],
+      texto: 'Muchas gracias por su ayuda.',
     ),
   ];
 

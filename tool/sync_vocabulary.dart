@@ -12,7 +12,7 @@ import 'dart:io';
 
 const _catalogo = 'assets/dictionary/official_dictionary.json';
 const _lambda = 'aws/lambda_text_to_lsb.py';
-const _ensamblador = 'lib/core/engines/semantic_engine/local_sentence_assembler.dart';
+const _ensamblador = 'lib/core/domain/services/local_sentence_assembler.dart';
 const _lambdaCards = 'aws/lambda_function.py';
 const _inicio = 'AVAILABLE_GLOSSES = {';
 const _fin = '}';
@@ -141,6 +141,7 @@ const _roles = {
   'sujeto': 'SUJETO',
   'personaDesc': 'DESCRIPTOR',
   'rasgo': 'DESCRIPTOR',
+  'descriptor': 'DESCRIPTOR',
   'verboAgresion': 'VERBO',
   // Rol propio, no DESCRIPTOR: como descriptor de persona el backend lo
   // metía en `descriptores` y `_agresor_text` lo tomaba por el autor del

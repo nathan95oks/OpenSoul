@@ -37,7 +37,7 @@ void main() {
     await abrir(tester);
 
     expect(find.bySemanticsLabel(RegExp('Denunciar robo')), findsNothing);
-    expect(find.bySemanticsLabel(RegExp('Declarar como testigo')), findsNothing);
+    expect(find.bySemanticsLabel(RegExp('Declaración y testimonio')), findsNothing);
   });
 
   testWidgets('Denuncias despliega sus contextos, ya etiquetados',
@@ -49,8 +49,9 @@ void main() {
     for (final ctx in [
       'Denunciar robo',
       'Denunciar violencia',
-      'Reportar accidente',
-      'Declarar como testigo',
+      'Amenazas digitales',
+      'Engaño con dinero',
+      'Declaración y testimonio',
     ]) {
       expect(find.bySemanticsLabel(RegExp(ctx)), findsOneWidget,
           reason: '$ctx debe estar disponible dentro de Denuncias');

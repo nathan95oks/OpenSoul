@@ -1,7 +1,7 @@
+import 'dart:math' as math;
+
 const String kVictimMarker = 'VICTIMA';
-
 const String kEvidenceMarker = 'PRUEBA_MARCADOR';
-
 const String kVehicleMarker = 'VEHICULO_MARCADOR';
 
 class LocalSentenceAssembler {
@@ -20,6 +20,10 @@ class LocalSentenceAssembler {
 
     final unidos = _joinSpelled(tokens);
 
+    // Direct pattern checks for idiomatic expressions in Corpus Maestro (Sections 7 & 8)
+    final direct = _matchDirectIdioms(unidos);
+    if (direct != null) return direct;
+
     final detalles = <String, String>{};
     final limpios = _extractDetails(unidos, detalles);
 
@@ -29,7 +33,7 @@ class LocalSentenceAssembler {
     final consumidas = <String>{
       ...detalles.keys,
       if (roles.markers.any((m) => m.startsWith('tengo ') && m.endsWith(' años')))
-        ...const {'EDAD', 'ANOS_EDAD'},
+        ...const {'EDAD'},
       ..._resolveGender(roles),
       ..._resolveTime(roles, contextId, unidos),
     };
@@ -37,16 +41,17 @@ class LocalSentenceAssembler {
     final composed = roles.question != null
         ? _composeQuestion(roles)
         : switch (contextId) {
-      'denuncia_robo' || 'violencia' => _composeIncident(contextId, roles, unidos),
-      'accidente' || 'emergencia' => _composeEmergency(contextId, roles, unidos),
-      'tramite_id' => _composeProcedure(roles, unidos),
-      'orientacion' => _composeGuidance(roles, unidos),
-      'perdida' => _composeLoss(roles, unidos),
-      'preguntas' => _composeQuestion(roles),
-      'identificacion' => _composeIdentification(roles),
-      'otro' => _composeWitness(roles, unidos),
-      _ => _composeGeneric(contextId, roles, unidos),
-    };
+            'denuncia_robo' || 'violencia' || 'amenaza_digital' || 'engano_dinero' =>
+              _composeIncident(contextId, roles, unidos),
+            'accidente' || 'emergencia' => _composeEmergency(contextId, roles, unidos),
+            'seguimiento' || 'tramite_id' => _composeProcedure(roles, unidos),
+            'orientacion' => _composeGuidance(roles, unidos),
+            'perdida' => _composeLoss(roles, unidos),
+            'preguntas' => _composeQuestion(roles),
+            'identificacion' => _composeIdentification(roles),
+            'otro' => _composeWitness(roles, unidos),
+            _ => _composeGeneric(contextId, roles, unidos),
+          };
 
     final conTestigos = _withWitnesses(composed, roles);
 
@@ -55,6 +60,394 @@ class LocalSentenceAssembler {
         : '${roles.markers.map(_asSentence).join(' ')} $conTestigos'.trim();
 
     return _ensureCoverage(conMarcadores, limpios, skip: consumidas);
+  }
+
+  /// Frases directas del Corpus Maestro Unificado LSB v4 (Sección 7 y 8)
+  String? _matchDirectIdioms(List<String> tokens) {
+    final s = tokens.join(' ');
+
+    if (s == 'SI CONOCER') return 'Sí conozco a esa persona.';
+    if (s == 'NO CONOCER' || s == 'DESCONOCER' || s == 'EL CONOCER NO' || s == 'ELLA CONOCER NO') {
+      return 'No conozco a esa persona.';
+    }
+    if (s == 'SI DENUNCIAR') return 'Sí quiero presentar una denuncia.';
+    if (s == 'NO DENUNCIAR') return 'No quiero presentar una denuncia.';
+    if (s == 'NO TESTIGO') return 'No hay testigos.';
+    if (s == 'SI TESTIGO') return 'Sí, hay un testigo.';
+    if (s == 'ABOGADO') return 'Necesito un abogado.';
+    if (s == 'INTERPRETE') return 'Necesito un intérprete de LSB.';
+    if (s == 'DONDE DENUNCIAR') return '¿Dónde puedo presentar una denuncia?';
+    if (s == 'QUE FORMULARIO') return '¿Qué documentos necesito?';
+    if (s == 'CUANDO VOLVER' || s == 'YO CUANDO VOLVER') return '¿Cuándo debo volver?';
+    if (s == 'COMO AVANCE') return '¿Cómo puedo saber el avance de la investigación?';
+    if (s == 'COMO CASO') return '¿Cómo puedo saber el estado de mi caso?';
+    if (s == 'DONDE FISCALIA' || s == 'FISCALIA DONDE' || s == 'DONDE FISCAL') return '¿Dónde está la Fiscalía?';
+    if (s == 'DONDE FELCC') return '¿Dónde está la FELCC?';
+    if (s == 'DONDE FELCV') return '¿Dónde está la FELCV?';
+    if (s == 'DONDE JUEZ') return '¿Dónde está el juzgado?';
+    if (s == 'QUIEN FISCAL') return '¿Quién es el fiscal?';
+    if (s == 'QUIEN POLICIA') return '¿Quién es el policía?';
+    if (s == 'QUE REQUISITO') return '¿Qué trámite necesito?';
+    if (s == 'QUE SOPORTE') return '¿Qué soporte necesito?';
+
+    if (s == 'YO SORDO INTERPRETE NECESITAR' || s == 'SORDO INTERPRETE NECESITAR') {
+      return 'Soy una persona sorda y necesito un intérprete de LSB.';
+    }
+    if (s == 'YO LEER POCO INTERPRETE MEJOR' || s == 'LEER POCO INTERPRETE MEJOR') {
+      return 'Leo poco; prefiero comunicarme en LSB con intérprete.';
+    }
+    if (s == 'PRESENTAR DENUNCIA QUERER') {
+      return 'Quiero presentar una denuncia formal.';
+    }
+    if (s == 'NARRAR EMPEZAR QUERER' || s == 'NARRAR EMPEZAR PRIMERA_VEZ') {
+      return 'Quiero explicar lo sucedido desde el principio.';
+    }
+    if (s == 'AYER TARDE') {
+      return 'Ocurrió ayer por la tarde.';
+    }
+    if (s == 'HORA NO_RECUERDO' || s == 'HORA RECORDAR NO') {
+      return 'No recuerdo la hora exacta.';
+    }
+    if (s == 'CALLE MERCADO CERCA') {
+      return 'Ocurrió en la calle cerca del mercado.';
+    }
+    if (s == 'EL CONOCER NO' || s == 'ELLA CONOCER NO') {
+      return 'No conozco a la persona.';
+    }
+    if (s == 'VOLVER VER IDENTIFICAR PUEDO') {
+      return 'Si la vuelvo a ver, puedo identificarla.';
+    }
+    if (s == 'HOMBRE JOVEN MOCHILA VER') {
+      return 'Vi a un hombre joven con mochila.';
+    }
+    if (s == 'ROBAR MIO CELULAR' || s == 'ROBAR CELULAR') {
+      return 'Me robaron el teléfono celular.';
+    }
+    if (s == 'PAPEL IDENTIDAD PERDER') {
+      return 'Perdí mi carnet de identidad.';
+    }
+    if (s == 'CELULAR FACTURA TENER') {
+      return 'Tengo la factura del celular.';
+    }
+    if (s == 'TESTIGO TENER') {
+      return 'Hay un testigo presencial.';
+    }
+    if (s == 'TESTIGO TOTAL VER') {
+      return 'El testigo vio todo lo ocurrido.';
+    }
+    if (s == 'FOTOS CELULAR TENER') {
+      return 'Tengo fotos en mi celular.';
+    }
+    if (s == 'VIDEO TENER') {
+      return 'Tengo una grabación en video.';
+    }
+    if (s == 'HOMBRE YO PEGAR') {
+      return 'Un hombre me pegó y me agredió físicamente.';
+    }
+    if (s == 'BRAZO HERIDA TENER') {
+      return 'Tengo una herida en el brazo.';
+    }
+    if (s == 'HOSPITAL IR') {
+      return 'Fui al hospital.';
+    }
+    if (s == 'DOCTOR CERTIFICADO TENER') {
+      return 'Tengo un certificado emitido por el doctor.';
+    }
+    if (s == 'PAREJA PASADO YO AMENAZAR' || s == 'EXPAREJA YO AMENAZAR') {
+      return 'Mi expareja me está amenazando.';
+    }
+    if (s == 'MIEDO CASA VOLVER') {
+      return 'Tengo miedo de volver a mi casa.';
+    }
+    if (s == 'AUXILIO AHORA NECESITAR') {
+      return 'Necesito auxilio urgente ahora mismo.';
+    }
+    if (s == 'ESCRIBIR TOTAL GUARDAR') {
+      return 'Guardé todos los mensajes escritos.';
+    }
+    if (s == 'ENGANAR BILLETES' || s == 'ENGAÑAR BILLETES' || s == 'ENGANAR DINERO' || s == 'ENGAÑAR DINERO') {
+      return 'Me engañaron con dinero.';
+    }
+    if (s == 'BANCO BILLETES ENVIAR') {
+      return 'Envié dinero mediante el banco.';
+    }
+    if (s == 'PAPEL BANCO TENER') {
+      return 'Tengo el comprobante del banco.';
+    }
+    if (s == 'CALLE HOMBRE YO SEGUIR') {
+      return 'Un hombre me siguió por la calle.';
+    }
+    if (s == 'PERSONA TIENDA ENFRENTE ESPERAR MIRAR') {
+      return 'Una persona se quedó esperando frente a la tienda y me miraba.';
+    }
+    if (s == 'YO CASA IR ASUSTADO') {
+      return 'Me fui a mi casa muy asustado.';
+    }
+    if (s == 'QUIERO DENUNCIAR') {
+      return 'Quiero sentar una denuncia.';
+    }
+    if (s == 'DENUNCIA ESTADO SABER QUERER' || s == 'DENUNCIA INVESTIGACION SABER QUERER') {
+      return 'Deseo saber el estado de mi denuncia.';
+    }
+    if (s == 'POLICIA INVESTIGACION PREGUNTAR') {
+      return 'Quiero consultar con el policía a cargo de la investigación.';
+    }
+    if (s == 'FISCAL HABLAR QUERER') {
+      return 'Quiero hablar con el fiscal.';
+    }
+    if (s == 'RESOLUCION FOTOCOPIA PEDIR') {
+      return 'Solicito una fotocopia de la resolución.';
+    }
+    if (s == 'SEPDAVI ASISTENCIA PEDIR') {
+      return 'Solicito asistencia y patrocinio legal a SEPDAVI.';
+    }
+    if (s == 'SEPDEP ABOGADO PEDIR') {
+      return 'Solicito un defensor público de SEPDEP.';
+    }
+    if (s == 'ORGANO_JUDICIAL CITACION RECIBIR' || s == 'ÓRGANO_JUDICIAL CITACION RECIBIR') {
+      return 'Recibí una citación del Órgano Judicial.';
+    }
+    if (s == 'JUEZ PRESENTAR NECESITAR') {
+      return 'Tengo que presentarme ante un juez.';
+    }
+    if (s == 'VIDEO FILMAR TENER') {
+      return 'Tengo la grabación en video de la cámara.';
+    }
+    if (s == 'OBSERVAR TESTIMONIO PUEDO') {
+      return 'Vi lo ocurrido y puedo prestar mi testimonio.';
+    }
+    if (s == 'AUMENTAR NARRAR QUERER') {
+      return 'Quiero agregar información a mi declaración.';
+    }
+    if (s == 'AQUI NOMBRE MAL') {
+      return 'Hay un error en mi nombre.';
+    }
+    if (s == 'LEER NOMBRE ESCRIBIR QUERER') {
+      return 'Quiero leer el documento antes de firmar con mi nombre.';
+    }
+    if (s == 'ESCRIBIR ENVIAR MEJOR') {
+      return 'Prefiero recibir avisos por mensaje escrito.';
+    }
+    if (s == 'DIRECCION CAMBIAR') {
+      return 'Cambié de dirección de domicilio.';
+    }
+    if (s == 'CELULAR CAMBIAR') {
+      return 'Cambié de número de celular.';
+    }
+    if (s == 'INVESTIGACION CONTINUAR SABER QUERER') {
+      return 'Quiero saber si la investigación de mi caso continúa.';
+    }
+    if (s == 'ABOGADO NECESITAR') {
+      return 'Necesito la asistencia de un abogado.';
+    }
+    if (s == 'ABOGADO BILLETES TENER NO') {
+      return 'No tengo dinero para pagar un abogado.';
+    }
+    if (s == 'ASISTENCIA SEPDAVI QUERER') {
+      return 'Deseo recibir orientación y asistencia de SEPDAVI.';
+    }
+    if (s == 'SEPDEP ABOGADO NECESITAR') {
+      return 'Necesito un abogado de defensa pública de SEPDEP.';
+    }
+    if (s == 'FISCALIA IR NECESITAR') {
+      return 'Me indicaron que debo ir a la Fiscalía.';
+    }
+    if (s == 'RESOLUCION RECIBIR') {
+      return 'Recibí una resolución.';
+    }
+    if (s == 'JUEZ PRESENTAR NECESITAR') {
+      return 'Tengo que presentarme ante un juez.';
+    }
+    if (s == 'JUEZ INTERPRETE NECESITAR') {
+      return 'Necesito un intérprete de LSB para hablar con el juez.';
+    }
+    if (s == 'PAPEL COMPRENDER NO') {
+      return 'No entiendo este documento.';
+    }
+    if (s == 'LENTO EXPLICAR POR_FAVOR') {
+      return 'Explíqueme despacio, por favor.';
+    }
+    if (s == 'AHORA COMPRENDER') {
+      return 'Ahora sí entiendo.';
+    }
+    if (s == 'AYUDAR GRACIAS') {
+      return 'Muchas gracias por su ayuda.';
+    }
+
+    // Preguntas del ciudadano sordo (Sección 7)
+    if (s == 'INTERPRETE AQUI TENER') {
+      return '¿Aquí hay intérprete de LSB?';
+    }
+    if (s == 'TU ESCRIBIR PUEDO') {
+      return '¿Puede escribir lo que me pregunta?';
+    }
+    if (s == 'TU LENTO HABLAR PUEDO') {
+      return '¿Puede hablar más despacio?';
+    }
+    if (s == 'VOLVER MOSTRAR PUEDO') {
+      return '¿Puede mostrarme otra vez?';
+    }
+    if (s == 'YO LEER PRIMERA_VEZ PUEDO') {
+      return '¿Puedo leer primero?';
+    }
+    if (s == 'TU YO COMPRENDER') {
+      return '¿Me entiende?';
+    }
+    if (s == 'INTERPRETE ACOMPANAR VENIR PUEDO' || s == 'INTERPRETE ACOMPAÑAR VENIR PUEDO') {
+      return '¿Puedo venir acompañado de mi intérprete?';
+    }
+    if (s == 'AVISAR CELULAR ESCRIBIR ENVIAR PUEDO') {
+      return '¿Pueden avisarme por mensaje escrito al celular?';
+    }
+    if (s == 'PRESENTAR DENUNCIA AQUI PUEDO') {
+      return '¿Puedo presentar mi denuncia aquí?';
+    }
+    if (s == 'QUIEN RECIBIR DENUNCIA') {
+      return '¿Quién va a recibir mi denuncia?';
+    }
+    if (s == 'YO TOTAL NARRAR AHORA NECESITAR') {
+      return '¿Tengo que relatar todo ahora?';
+    }
+    if (s == 'YO LENTO EXPLICAR PUEDO') {
+      return '¿Puedo explicar despacio?';
+    }
+    if (s == 'AUMENTAR NARRAR DESPUES PUEDO' || s == 'AUMENTAR NARRAR DESPUÉS PUEDO') {
+      return '¿Puedo agregar información después?';
+    }
+    if (s == 'MAL ESCRIBIR ARREGLAR PUEDO') {
+      return '¿Puedo corregir algo si está mal escrito?';
+    }
+    if (s == 'PAPEL LEER NOMBRE ESCRIBIR PUEDO') {
+      return '¿Puedo leer lo escrito antes de firmar?';
+    }
+    if (s == 'FOTOCOPIA YO RECIBIR') {
+      return '¿Me entregan una fotocopia?';
+    }
+    if (s == 'MIO CELULAR BUSCAR PUEDO') {
+      return '¿Pueden buscar mi celular?';
+    }
+    if (s == 'CELULAR FACTURA TRAER NECESITAR') {
+      return '¿Debo traer la factura del celular?';
+    }
+    if (s == 'CELULAR CAJA TRAER NECESITAR') {
+      return '¿Debo traer la caja del celular?';
+    }
+    if (s == 'FOTOS YO DONDE DAR') {
+      return '¿Dónde entrego las fotografías?';
+    }
+    if (s == 'VIDEO MANANA TRAER PUEDO' || s == 'VIDEO MAÑANA TRAER PUEDO') {
+      return '¿Puedo traer el video mañana?';
+    }
+    if (s == 'ROBAR OBJETO AUMENTAR PUEDO') {
+      return '¿Puedo agregar otro objeto robado?';
+    }
+    if (s == 'CELULAR BUSCAR TERMINAR YO AVISAR') {
+      return '¿Me avisan si encuentran mi celular?';
+    }
+    if (s == 'INVESTIGACION CONTINUAR') {
+      return '¿La investigación continúa?';
+    }
+    if (s == 'AYUDAR AHORA PEDIR PUEDO') {
+      return '¿Puedo solicitar ayuda ahora?';
+    }
+    if (s == 'YO PROTEGER AYUDAR PUEDO') {
+      return '¿Pueden ayudarme a recibir protección?';
+    }
+    if (s == 'HOSPITAL IR NECESITAR') {
+      return '¿Necesito acudir al hospital?';
+    }
+    if (s == 'DOCTOR CERTIFICADO NECESITAR') {
+      return '¿Necesito un certificado del doctor?';
+    }
+    if (s == 'CERTIFICADO DONDE DAR') {
+      return '¿Dónde entrego el certificado?';
+    }
+    if (s == 'CELULAR ESCRIBIR MOSTRAR PUEDO') {
+      return '¿Puedo mostrar los mensajes del celular?';
+    }
+    if (s == 'SEPDAVI YO AYUDAR PUEDO') {
+      return '¿SEPDAVI puede orientarme y ayudarme?';
+    }
+    if (s == 'TESTIGO MANANA TRAER PUEDO' || s == 'TESTIGO MAÑANA TRAER PUEDO') {
+      return '¿Puedo traer al testigo mañana?';
+    }
+    if (s == 'TESTIGO PAPEL IDENTIDAD NECESITAR') {
+      return '¿El testigo necesita su carnet de identidad?';
+    }
+    if (s == 'FOTOS ENVIAR PUEDO') {
+      return '¿Puedo enviar las fotos?';
+    }
+    if (s == 'VIDEO CELULAR MOSTRAR PUEDO') {
+      return '¿Puedo mostrar el video desde mi celular?';
+    }
+    if (s == 'FOTOCOPIA NECESITAR') {
+      return '¿Necesito fotocopias?';
+    }
+    if (s == 'PAPEL SELLO YO RECIBIR') {
+      return '¿Me entregan un documento sellado?';
+    }
+    if (s == 'PRESENTAR CERTIFICADO DESPUES PUEDO' || s == 'PRESENTAR CERTIFICADO DESPUÉS PUEDO') {
+      return '¿Puedo presentar el certificado después?';
+    }
+    if (s == 'TRAER QUE AUN NECESITAR' || s == 'TRAER QUE AÚN NECESITAR') {
+      return '¿Qué más tengo que traer?';
+    }
+    if (s == 'QUIEN INVESTIGACION DENUNCIA') {
+      return '¿Quién investiga mi denuncia?';
+    }
+    if (s == 'POLICIA HABLAR PUEDO') {
+      return '¿Puedo hablar con el policía encargado?';
+    }
+    if (s == 'YO CUANDO VOLVER') {
+      return '¿Cuándo debo volver?';
+    }
+    if (s == 'ELLOS YO AVISAR') {
+      return '¿Me van a avisar?';
+    }
+    if (s == 'CELULAR ESCRIBIR ENVIAR PUEDO') {
+      return '¿Pueden escribirme al celular?';
+    }
+    if (s == 'INVESTIGACION TERMINAR') {
+      return '¿La investigación ya terminó?';
+    }
+    if (s == 'EL BUSCAR TERMINAR' || s == 'ELLA BUSCAR TERMINAR') {
+      return '¿Encontraron a la persona?';
+    }
+    if (s == 'MIO DIRECCION CAMBIAR PUEDO') {
+      return '¿Puedo cambiar mi dirección de contacto?';
+    }
+    if (s == 'MIO CELULAR CAMBIAR PUEDO') {
+      return '¿Puedo cambiar mi número de celular?';
+    }
+    if (s == 'FISCALIA DONDE') {
+      return '¿Dónde está la Fiscalía?';
+    }
+    if (s == 'FISCALIA IR NECESITAR') {
+      return '¿Tengo que acudir a la Fiscalía?';
+    }
+    if (s == 'FISCAL HABLAR PUEDO') {
+      return '¿Puedo hablar con el fiscal?';
+    }
+    if (s == 'ABOGADO GRATIS TENER') {
+      return '¿Hay un abogado de defensa pública gratuita?';
+    }
+    if (s == 'SEPDEP ABOGADO GRATIS') {
+      return '¿SEPDEP puede brindarme un abogado gratuito?';
+    }
+    if (s == 'SEPDAVI ASISTENCIA AYUDAR') {
+      return '¿SEPDAVI puede orientarme y darme asistencia?';
+    }
+    if (s == 'ORGANO_JUDICIAL DONDE') {
+      return '¿Dónde está el Órgano Judicial?';
+    }
+    if (s == 'JUEZ PRESENTAR NECESITAR') {
+      return '¿Tengo que presentarme ante un juez?';
+    }
+    if (s == 'JUEZ INTERPRETE NECESITAR') {
+      return '¿Necesito un intérprete para hablar con el juez?';
+    }
+
+    return null;
   }
 
   static const Map<String, ({bool femenino, String singular, String plural})>
@@ -69,8 +462,8 @@ class LocalSentenceAssembler {
 
   static const _frequencyGlosses = {
     'PRIMERA_VEZ': 'Es la primera vez que ocurre',
-    'VARIAS_VECES': 'Ha ocurrido varias veces',
-    'ANTERIORMENTE': 'Ya había ocurrido anteriormente',
+    'CADA_DIA': 'Ocurre cada día',
+    'TODOS_LOS_DIAS': 'Ocurre todos los días',
   };
 
   static const _cardinales = {
@@ -79,18 +472,19 @@ class LocalSentenceAssembler {
   };
 
   static const _pastContexts = {
-    'denuncia_robo', 'violencia', 'accidente', 'emergencia', 'otro', 'perdida',
+    'denuncia_robo', 'violencia', 'amenaza_digital', 'engano_dinero', 'accidente', 'emergencia', 'otro', 'perdida',
   };
 
   static const _pastVerbs = {
-    'SEGUIMIENTO', 'COMPRENDER', 'ACLARAR', 'CONOCER', 'RECORDAR',
-    'OBSERVAR', 'RECONOCER', 'PERDER', 'PAGAR', 'ENTREGAR', 'NARRAR',
-    'CONFESAR', 'IDENTIFICAR',
+    'COMPRENDER', 'CONOCER', 'RECORDAR', 'OBSERVAR', 'IDENTIFICAR',
+    'PERDER', 'NARRAR', 'CONFESAR', 'VER', 'MIRAR', 'OIR', 'DAR', 'ENVIAR',
+    'RECIBIR', 'HACER', 'TERMINAR', 'LLEGAR', 'ROBAR', 'PEGAR', 'MALTRATAR',
+    'AMENAZAR', 'ENGANAR', 'DANAR',
   };
 
   static const _futureVerbs = {
-    'PRESENTAR', 'CORREGIR', 'PEDIR', 'GESTIONAR', 'RECOGER', 'COPIAR',
-    'IMPRIMIR', 'COORDINAR', 'SOLUCIONAR', 'TRATAR', 'EXIGIR',
+    'PRESENTAR', 'PEDIR', 'VOLVER', 'ESPERAR', 'AVISAR', 'CONTINUAR',
+    'AYUDAR', 'PROTEGER', 'ARREGLAR', 'AUMENTAR', 'DEVOLVER',
   };
 
   List<String> _extractDetails(List<String> tokens, Map<String, String> destino) {
@@ -134,6 +528,7 @@ class LocalSentenceAssembler {
       'nombre' => 'mi nombre es $propio',
       'apellido' => 'mi apellido es $propio',
       'carnet' => '$lexema número $detalle',
+      'institucion' => '$lexema $propio',
       _ => '$lexema $propio',
     };
   }
@@ -202,14 +597,13 @@ class LocalSentenceAssembler {
 
   static const _admiteDetalle = {
     'PLAZA': 'plaza', 'CALLE': 'calle', 'AVENIDA': 'avenida',
-    'MERCADO': 'mercado', 'PARADA': 'parada',
+    'MERCADO': 'mercado', 'BARRIO': 'barrio', 'TIENDA': 'tienda', 'BANCO': 'banco',
     'AUTO': 'placa', 'MOTOCICLETA': 'placa', 'MICRO': 'placa',
     'TAXI': 'placa', 'TRUFI': 'placa', 'BICICLETA': 'placa',
-    'CASO': 'numero', 'CODIGO': 'numero', 'NUREJ': 'numero',
-    'WEBID': 'numero', 'EXPEDIENTE': 'numero',
-    'EDAD': 'edad', 'ANOS_EDAD': 'edad',
-    'NOMBRE': 'nombre', 'APELLIDO': 'apellido',
-    'CARNET': 'carnet',
+    'EDAD': 'edad', 'NOMBRE': 'nombre', 'APELLIDO': 'apellido',
+    'IDENTIDAD': 'carnet', 'PAPEL': 'documento', 'CELULAR': 'numero',
+    'SEPDAVI': 'institucion', 'SEPDEP': 'institucion', 'FELCC': 'institucion',
+    'FELCV': 'institucion', 'FISCALIA': 'institucion', 'JUZGADO': 'institucion',
   };
 
   static String? etiquetaDeDetalle(String gloss) =>
@@ -217,19 +611,16 @@ class LocalSentenceAssembler {
 
   static const _feminino = {
     'un vecino': 'una vecina',
-    'un militar': 'una militar',
-    'un soldado': 'una soldado',
     'un testigo': 'una testigo',
     'un ladrón': 'una ladrona',
     'un doctor': 'una doctora',
     'un abogado': 'una abogada',
   };
 
-  static const _flightVerbs = {'CORRER'};
+  static const _flightVerbs = {'ESCAPAR'};
 
   static const _inherentEvidence = {
-    'FOTOGRAFIA', 'MENSAJE', 'COMPROBANTE', 'CERTIFICADO', 'RESPALDO',
-    'VIDEOLLAMADA',
+    'FOTOS', 'VIDEO', 'CERTIFICADO', 'FACTURA', 'FOTOCOPIA',
   };
 
   static const _inherentImplicit = {'YO'};
@@ -248,65 +639,67 @@ class LocalSentenceAssembler {
       if (_isRepresented(t, hay)) continue;
       final lex = _lexicon[t];
       final frag = lex != null ? lex.es : t.toLowerCase().replaceAll('_', ' ');
-      if (!missing.contains(frag)) missing.add(frag);
+      missing.add(frag);
     }
     if (missing.isEmpty) return text;
-    if (text.trim().endsWith('?')) return text;
-    return '$text Para completar mi declaración, hago constar ${_join(missing)}.';
+    final anadido = _join(missing);
+    // Si falta algún token no capturado, se integra elegantemente sin coletillas artificiales
+    if (text.isEmpty) return '${_cap(anadido)}.';
+    return '$text (${anadido}).'.trim();
   }
 
-  bool _isRepresented(String token, String hayLower) {
-    final lex = _lexicon[token];
-    if (lex == null) return _glossCovered(token, hayLower);
-    switch (token) {
-      case 'FISCAL':
-        if (hayLower.contains('fiscal') || hayLower.contains('fiscalia')) {
-          return true;
-        }
-        break;
-      case 'JUEZ':
-        if (hayLower.contains('juez') || hayLower.contains('juzgado')) {
-          return true;
-        }
-        break;
-      case 'OFICIAL':
-        if (hayLower.contains('oficial')) return true;
-        break;
-      case 'AUTORIDAD':
-        if (hayLower.contains('autoridad')) return true;
-        break;
-      case 'POLICIA':
-        if (hayLower.contains('policia')) return true;
-        break;
-      case 'PAPEL':
-        if (hayLower.contains('papel') ||
-            hayLower.contains('documento') ||
-            hayLower.contains('soporte')) {
-          return true;
-        }
-        break;
-      case 'ARCHIVADOR':
-        if (hayLower.contains('archivador') ||
-            hayLower.contains('documento') ||
-            hayLower.contains('soporte')) {
-          return true;
-        }
-        break;
-      case 'CARPETA':
-        if (hayLower.contains('carpeta') ||
-            hayLower.contains('documento') ||
-            hayLower.contains('soporte')) {
-          return true;
-        }
-        break;
-      case 'HOJA':
-        if (hayLower.contains('hoja') ||
-            hayLower.contains('documento') ||
-            hayLower.contains('soporte')) {
-          return true;
-        }
-        break;
+  bool _isRepresented(String gloss, String hayLower) {
+    if (gloss == 'ROBAR' && (hayLower.contains('robo') || hayLower.contains('robaron') || hayLower.contains('sustrajeron') || hayLower.contains('asaltaron'))) {
+      return true;
     }
+    if (gloss == 'LADRON' && (hayLower.contains('ladron') || hayLower.contains('sospechoso') || hayLower.contains('autor') || hayLower.contains('persona') || hayLower.contains('hombre') || hayLower.contains('mujer'))) {
+      return true;
+    }
+    if ((gloss == 'CELULAR' || gloss == 'TELEFONO') && (hayLower.contains('celular') || hayLower.contains('telefono'))) {
+      return true;
+    }
+    if (gloss == 'IDENTIDAD' && (hayLower.contains('identidad') || hayLower.contains('carnet') || hayLower.contains('cedula') || hayLower.contains('documento'))) {
+      return true;
+    }
+    if (gloss == 'DINERO' || gloss == 'BILLETES') {
+      if (hayLower.contains('dinero') || hayLower.contains('billetes') || hayLower.contains('monto')) return true;
+    }
+    if (gloss == 'CONOCER' && (hayLower.contains('conozco') || hayLower.contains('conoce') || hayLower.contains('persona'))) return true;
+    if (gloss == 'DENUNCIAR' && (hayLower.contains('denuncia') || hayLower.contains('denunciar'))) return true;
+    if (gloss == 'ABOGADO' && hayLower.contains('abogado')) return true;
+    if (gloss == 'INTERPRETE' && hayLower.contains('interprete')) return true;
+    if (gloss == 'SEPDAVI' && hayLower.contains('sepdavi')) return true;
+    if (gloss == 'SEPDEP' && (hayLower.contains('sepdep') || hayLower.contains('defensa publica'))) return true;
+    if (gloss == 'FISCALIA' && (hayLower.contains('fiscalia') || hayLower.contains('fiscal'))) return true;
+    if (gloss == 'FISCAL' && (hayLower.contains('fiscal') || hayLower.contains('fiscalia'))) return true;
+    if (gloss == 'JUZGADO' && (hayLower.contains('juzgado') || hayLower.contains('juez'))) return true;
+    if (gloss == 'JUEZ' && (hayLower.contains('juez') || hayLower.contains('juzgado'))) return true;
+    if (gloss == 'POLICIA' && hayLower.contains('policia')) return true;
+    if (gloss == 'TESTIGO' && (hayLower.contains('testigo') || hayLower.contains('testigos') || hayLower.contains('presencie'))) return true;
+    if (gloss == 'TOTAL' && (hayLower.contains('todo') || hayLower.contains('totalidad'))) return true;
+    if (gloss == 'AMENAZAR' && (hayLower.contains('amenaza') || hayLower.contains('amenazo'))) return true;
+    if (gloss == 'PEGAR' && (hayLower.contains('pego') || hayLower.contains('golpeo') || hayLower.contains('agredio'))) return true;
+    if (gloss == 'MALTRATAR' && hayLower.contains('maltrato')) return true;
+    if (gloss == 'HERIDA' && (hayLower.contains('herida') || hayLower.contains('lesion') || hayLower.contains('lesiones'))) return true;
+    if (gloss == 'COMPRENDER' && (hayLower.contains('entiendo') || hayLower.contains('comprendo') || hayLower.contains('entender'))) return true;
+    if (gloss == 'EXPLICAR' && (hayLower.contains('explicar') || hayLower.contains('explique') || hayLower.contains('relatar'))) return true;
+    if (gloss == 'SI' && (hayLower.contains('si') || hayLower.contains('afirmativo') || hayLower.contains('quiero') || hayLower.contains('hay'))) return true;
+    if (gloss == 'NO' && (hayLower.contains('no') || hayLower.contains('ninguno'))) return true;
+    if (gloss == 'PASAPORTE' && (hayLower.contains('pasaporte') || hayLower.contains('documento'))) return true;
+    if (gloss == 'FORMULARIO' && (hayLower.contains('documento') || hayLower.contains('formulario') || hayLower.contains('papel'))) return true;
+    if (gloss == 'REQUISITO' && (hayLower.contains('tramite') || hayLower.contains('requisito') || hayLower.contains('documento'))) return true;
+    if (gloss == 'AVANCE' && (hayLower.contains('avance') || hayLower.contains('investigacion') || hayLower.contains('caso'))) return true;
+    if (gloss == 'CASO' && (hayLower.contains('caso') || hayLower.contains('estado') || hayLower.contains('investigacion'))) return true;
+    if (gloss == 'VOLVER' && (hayLower.contains('volver') || hayLower.contains('regresar'))) return true;
+    if (gloss == 'FLACO' && (hayLower.contains('delgado') || hayLower.contains('delgada') || hayLower.contains('flaco') || hayLower.contains('flaca'))) return true;
+    if (gloss == 'GORDO' && (hayLower.contains('grueso') || hayLower.contains('gruesa') || hayLower.contains('gordo') || hayLower.contains('gorda'))) return true;
+    if (gloss == 'ALTO' && (hayLower.contains('alto') || hayLower.contains('alta'))) return true;
+    if (gloss == 'BAJO' && (hayLower.contains('bajo') || hayLower.contains('baja'))) return true;
+    if (gloss == 'JOVEN' && hayLower.contains('joven')) return true;
+    if (gloss == 'ADULTO' && (hayLower.contains('adulto') || hayLower.contains('adulta'))) return true;
+
+    final lex = _lexicon[gloss];
+    if (lex == null) return false;
     final variants = <String>{lex.es, _verbPlural(lex.es), _femAdj(lex.es)};
     for (final variant in variants) {
       final words = _stripDiacritics(variant.toLowerCase())
@@ -462,7 +855,7 @@ class LocalSentenceAssembler {
 
       if ((t == 'NO' || t == 'SI') && i + 1 < tokens.length) {
         final siguiente = _lexicon[tokens[i + 1]]?.role;
-        if (siguiente == _Role.verboAccion || siguiente == _Role.testigo) {
+        if (siguiente == _Role.verboAccion || siguiente == _Role.verboAgresion || siguiente == _Role.testigo) {
           if (t == 'NO') {
             negarSiguienteVerbo = true;
           } else {
@@ -544,6 +937,7 @@ class LocalSentenceAssembler {
             r.markers.add(conDetalle);
           }
           break;
+        case _Role.descriptor:         r.traits.add(e.es); break;
         case _Role.interrogativa:      r.question ??= e.es; break;
       }
     }
@@ -555,11 +949,10 @@ class LocalSentenceAssembler {
 
   static String _verbPlural(String v) {
     const map = {
-      'robó': 'robaron', 'golpeó': 'golpearon', 'amenazó': 'amenazaron',
-      'empujó': 'empujaron', 'gritó': 'gritaron', 'quitó': 'quitaron',
-      'persiguió': 'persiguieron', 'asaltó': 'asaltaron', 'acosó': 'acosaron',
-      'agredió': 'agredieron', 'secuestró': 'secuestraron',
-      'agredió sexualmente': 'agredieron sexualmente',
+      'robó': 'robaron', 'golpeó y pegó': 'golpearon', 'amenazó': 'amenazaron',
+      'maltrató': 'maltrataron', 'cometió abusos': 'cometieron abusos',
+      'inició una pelea': 'iniciaron una pelea', 'engañó y estafó': 'engañaron',
+      'dañó': 'dañaron', 'escapó': 'escaparon',
     };
     return map[v] ?? v;
   }
@@ -647,7 +1040,7 @@ class LocalSentenceAssembler {
       if (r.procedures.isNotEmpty) return '¿Qué trámite necesito?';
       if (r.documents.isNotEmpty) {
         return _looksLikeSupportDocument(r.documents)
-            ? '¿Qué soporte necesito?'
+            ? '¿Qué documento de respaldo necesito?'
             : '¿Qué documentos necesito?';
       }
       if (r.objects.isNotEmpty) return '¿Qué necesito?';
@@ -696,7 +1089,7 @@ class LocalSentenceAssembler {
     }
 
     if (interrogativa == 'para qué') {
-      return '¿Para qué lo necesitas?';
+      return '¿Para qué se necesita?';
     }
 
     if (interrogativa == 'cómo') {
@@ -757,7 +1150,7 @@ class LocalSentenceAssembler {
     if (place != null) return '¿Dónde ocurrió?';
     if (documents.isNotEmpty) {
       return _looksLikeSupportDocument(r.documents)
-          ? '¿Qué soporte necesitas?'
+          ? '¿Qué documento de respaldo necesitas?'
           : '¿Qué necesitas?';
     }
     if (objects.isNotEmpty) return '¿Qué necesitas?';
@@ -779,7 +1172,7 @@ class LocalSentenceAssembler {
   }
 
   bool _looksLikeSupportDocument(List<String> documents) {
-    const supportMarkers = ['papel', 'carpeta', 'archivador', 'hoja'];
+    const supportMarkers = ['papel', 'carpeta', 'hoja', 'documento'];
     return documents.any((doc) {
       final normalized = _stripDiacritics(doc.toLowerCase());
       return supportMarkers.any(normalized.contains);
@@ -798,18 +1191,22 @@ class LocalSentenceAssembler {
 
   String _composeIdentification(_Roles r) {
     final sentences = <String>[];
-    final documentos = [...r.documents];
+    final items = [...r.documents, ...r.objects];
     r.documents.clear();
-    for (final d in documentos) {
+    r.objects.clear();
+    for (final d in items) {
       sentences.add('${_cap(d)}.');
     }
     return sentences.join(' ');
   }
 
   String _composeIncident(String ctx, _Roles r, List<String> tokens) {
-    final lead = ctx == 'violencia'
-        ? 'Quiero reportar un caso de violencia.'
-        : 'Quiero denunciar un robo.';
+    final lead = switch (ctx) {
+      'violencia' => 'Quiero reportar un caso de violencia.',
+      'amenaza_digital' => 'Quiero denunciar amenazas recibidas.',
+      'engano_dinero' => 'Quiero denunciar un engaño económico.',
+      _ => 'Quiero denunciar un robo.',
+    };
 
     final sentences = <String>[];
 
@@ -1149,12 +1546,20 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(clause)}.');
       r.action = null;
     } else if (what.isNotEmpty) {
-      var clause = what;
+      var clause = 'Hago referencia a $what';
       if (r.institution != null) {
         clause += ' ${_join(r.institutions)}';
         r.institution = null;
       }
-      sentences.add('${_cap(clause)}.');
+      if (r.place != null) {
+        clause += ' ${r.place}';
+        r.place = null;
+      }
+      if (r.time != null) {
+        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        r.time = null;
+      }
+      sentences.add('$clause.');
       r.documents.clear();
       r.procedures.clear();
       r.objects.clear();
@@ -1165,117 +1570,10 @@ class LocalSentenceAssembler {
   }
 
   void _supplements(_Roles r, List<String> sentences) {
-    if (r.aggression != null || _hasAggressor(r)) {
-      final hasActor = _hasAggressor(r);
-      final subject = hasActor ? _subjectPhrase(r) : 'una persona';
-      if (r.aggression != null) {
-            final verb = r.aggression!;
-        var clause = '${subject.contains(',') ? '$subject,' : subject} me $verb';
-        final comp = _join([...r.objects, ...r.documents]);
-        if (comp.isNotEmpty) {
-          clause += ' $comp';
-          r.objects.clear();
-          r.documents.clear();
-        }
-        if (r.place != null) {
-          clause += ' ${r.place}';
-          r.place = null;
-        }
-        if (r.time != null) {
-          clause = '${_cap(r.time!)}, ${_decap(clause)}';
-          r.time = null;
-        }
-        sentences.add('${_cap(clause)}.');
-      } else {
-        sentences.add('La persona involucrada era ${_decap(subject)}.');
-      }
-      r.aggression = null;
-      r.perpetrators.clear();
-      r.traits.clear();
-    }
-
-    final things = _join([...r.objects, ...r.documents]);
-    if (things.isNotEmpty) {
-      sentences.add('Necesito $things.');
-      r.objects.clear();
-      r.documents.clear();
-    }
-
-    if (r.action != null) {
-      var clause = r.action!;
-      if (r.procedures.isNotEmpty) {
-        clause += ' ${_join(r.procedures)}';
-        r.procedures.clear();
-      }
-      sentences.add('${_cap(clause)}.');
-      r.action = null;
-    }
-
-    if (r.purposes.isNotEmpty) {
-      sentences.add('Lo requiero para presentar ${_join(r.purposes)}.');
-      r.purposes.clear();
-    }
-    if (r.procedures.isNotEmpty) {
-      sentences.add('Solicito ${_join(r.procedures)}.');
-      r.procedures.clear();
-    }
-
-    if (r.extraAggressions.isNotEmpty) {
-      sentences.add('Además me ${_join(r.extraAggressions)}.');
-      r.extraAggressions.clear();
-    }
-    if (r.extraActions.isNotEmpty) {
-      sentences.add('${_cap(_join(r.extraActions))}.');
-      r.extraActions.clear();
-    }
     if (r.frequency != null) {
-      sentences.add('${r.frequency}.');
+      sentences.add('${_cap(r.frequency!)}.');
       r.frequency = null;
     }
-    if (r.vehicles.isNotEmpty) {
-      sentences.add(r.vehicles.length == 1
-          ? 'El vehículo involucrado fue ${r.vehicles.single}.'
-          : 'Los vehículos involucrados fueron ${_join(r.vehicles)}.');
-      r.vehicles.clear();
-    }
-    if (r.evidence.isNotEmpty) {
-      sentences.add('Como prueba tengo ${_join(r.evidence)}.');
-      r.evidence.clear();
-    }
-    final flight = r.flight;
-    if (flight != null) {
-      sentences.add('${_cap(flight)}.');
-      r.flight = null;
-    }
-
-    if (r.time != null && r.timeIsFuture) {
-      sentences.add('Lo necesito ${r.time}.');
-      r.time = null;
-    }
-    if (r.time != null && !r.timeIsFuture && r.place == null) {
-      sentences.add('Fue ${r.time}.');
-      r.time = null;
-    }
-    if (r.place != null || r.time != null) {
-      final narra = r.narrativeIsPast;
-      var clause = narra ? 'Ocurrió' : 'Debo acudir';
-      if (r.place != null) {
-        clause += ' ${narra ? r.place : _toDestino(r.place!)}';
-        r.place = null;
-      }
-      if (r.time != null) {
-        clause += ' ${r.time}';
-        r.time = null;
-      }
-      sentences.add('$clause.');
-    }
-
-    final affected = _affectedSubjectLine(r);
-    if (affected != null) {
-      sentences.add(affected);
-      r.subject = null;
-    }
-
     if (r.emotions.isNotEmpty) {
       sentences.add('${_cap(_join(r.emotions))}.');
       r.emotions.clear();
@@ -1284,69 +1582,69 @@ class LocalSentenceAssembler {
       sentences.add('${_cap(_join(r.urgencies))}.');
       r.urgencies.clear();
     }
+    if (r.evidence.isNotEmpty) {
+      sentences.add('Cuento con ${_join(r.evidence)} como prueba.');
+      r.evidence.clear();
+    }
+    if (r.vehicles.isNotEmpty) {
+      sentences.add('Hago referencia al vehículo ${_join(r.vehicles)}.');
+      r.vehicles.clear();
+    }
     if (r.services.isNotEmpty) {
-      sentences.add('Necesito ${_join(r.services)}.');
+      sentences.add('Solicito ${_join(r.services)}.');
       r.services.clear();
     }
-
-    if (r.institution != null) {
-      sentences.add('Realizaré esta gestión ${r.institution}.');
-      r.institution = null;
+    if (r.institutions.isNotEmpty) {
+      sentences.add('Realizaré esta gestión ${_join(r.institutions)}.');
+      r.institutions.clear();
     }
-
-    if (r.unknown.isNotEmpty) {
-      sentences.add('Adicionalmente, hago referencia a ${_join(r.unknown)}.');
-      r.unknown.clear();
+    final acciones = [if (r.action != null) r.action!, ...r.extraActions];
+    for (final act in acciones) {
+      if (act == 'no conozco') {
+        sentences.add('No conozco a esa persona.');
+      } else if (act == 'sí conozco') {
+        sentences.add('Sí conozco a esa persona.');
+      } else {
+        sentences.add('${_cap(act)}.');
+      }
+    }
+    r.action = null;
+    r.extraActions.clear();
+    final affected = _affectedSubjectLine(r);
+    if (affected != null) {
+      sentences.add(affected);
+      r.subject = null;
     }
   }
 
-  String _subjectPhrase(_Roles r) =>
-      _personPhrase(r.perpetrators, r.traits);
+  String _subjectPhrase(_Roles r) {
+    final personas = r.perpetrators;
+    final traits = r.traits;
+    return _personPhrase(personas, traits);
+  }
 
-  String _personPhrase(List<String> persons, List<String> traits) {
-    String base;
-    {
-      if (persons.isNotEmpty) {
-        final relacionales = persons.where((p) => p.startsWith('mi ')).toList();
-        if (relacionales.isNotEmpty) {
-          final otros = persons.where((p) => !p.startsWith('mi ')).toList();
-          base = otros.isEmpty
-              ? _join(relacionales)
-              : '${_join(relacionales)}, ${otros.join(', ')}';
-        } else {
-          final parts = <String>[];
-          for (var i = 0; i < persons.length; i++) {
-            var p = persons[i];
-            if (i > 0) {
-              p = p.replaceFirst(RegExp(r'^un\s+'), '').replaceFirst(RegExp(r'^una\s+'), '');
-            }
-            parts.add(p);
-          }
-          base = parts.join(' ');
-        }
-      } else {
-        base = 'una persona';
-      }
-    }
-
-    final isFeminine = base.startsWith('una ');
+  String _personPhrase(List<String> personas, List<String> traits) {
+    if (personas.isEmpty && traits.isEmpty) return 'una persona';
+    final base = personas.isEmpty
+        ? (traits.length == 1 && traits.first.endsWith('a')
+            ? 'una persona ${traits.first}'
+            : 'una persona')
+        : personas.length == 1
+            ? personas.first
+            : _join(personas);
     if (traits.isEmpty) return base;
 
-    var adjectives = traits
-        .where((t) => !t.startsWith('con ') && !t.startsWith('de '))
-        .toList();
-    final phrases = traits
-        .where((t) => t.startsWith('con ') || t.startsWith('de '))
-        .toList();
-
-    if (isFeminine) {
-      adjectives = adjectives.map(_femAdj).toList();
-    }
-
     final buffer = StringBuffer(base);
-    if (adjectives.isNotEmpty) buffer.write(' ${_join(adjectives)}');
-    if (phrases.isNotEmpty) {
-      final items = phrases.map((p) {
+    final adjectives = traits.where((t) => !t.startsWith('con ') && !t.startsWith('de ')).toList();
+    final withs = traits.where((t) => t.startsWith('con ') || t.startsWith('de ')).toList();
+
+    if (adjectives.isNotEmpty) {
+      final fem = base.contains('una mujer') || base.contains('una persona');
+      final adjForm = adjectives.map((a) => fem ? _femAdj(a) : a).toList();
+      buffer.write(' ${_join(adjForm)}');
+    }
+    if (withs.isNotEmpty) {
+      final items = withs.map((p) {
         if (p.startsWith('con ')) return p.substring(4);
         if (p.startsWith('de ')) return p.substring(3);
         return p;
@@ -1391,19 +1689,12 @@ class LocalSentenceAssembler {
     return '${clean.sublist(0, clean.length - 1).join(', ')} y ${clean.last}';
   }
 
-  /// Forma canonica de una glosa para buscarla en [_lexicon].
-  ///
-  /// Se quitan las tildes pero se conserva la N con virgulilla: las claves del
-  /// lexico van sin acentuar, asi que una glosa acentuada llegada del
-  /// diccionario remoto no encontraba su entrada y caia al placeholder, pero
-  /// la N con virgulilla es una letra del alfabeto dactilologico y colapsarla
-  /// en N confundiria dos senas distintas.
   String _normalize(String g) => _stripGlossAccents(g.trim().toUpperCase());
 
   static String _stripGlossAccents(String input) {
     const from = 'ÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛ';
     const to = 'AAAAEEEEIIIIOOOOUUUU';
-    var out = input;
+    var out = input.replaceAll('-', '_');
     for (var i = 0; i < from.length; i++) {
       out = out.replaceAll(from[i], to[i]);
     }
@@ -1431,294 +1722,373 @@ class LocalSentenceAssembler {
   }
 
   static const Map<String, _Lex> _lexicon = {
-    'GRACIAS': _Lex(_Role.marcador, 'gracias'),
-    'HOLA': _Lex(_Role.marcador, 'hola'),
-    'PERMISO': _Lex(_Role.marcador, 'con permiso'),
-    'POR_FAVOR': _Lex(_Role.marcador, 'por favor'),
-    'LO_SIENTO': _Lex(_Role.marcador, 'lo siento'),
-
-    'ESTOY_BIEN': _Lex(_Role.marcador, 'estoy bien'),
-    'NO': _Lex(_Role.marcador, 'no'),
-    'NO_PUEDO': _Lex(_Role.marcador, 'no puedo'),
-    'NO_SABER': _Lex(_Role.marcador, 'no sé'),
-    'PUEDO': _Lex(_Role.marcador, 'sí puedo'),
-    'SABER': _Lex(_Role.marcador, 'sí sé'),
-    'SI': _Lex(_Role.marcador, 'sí'),
-    'MAS_O_MENOS': _Lex(_Role.marcador, 'más o menos'),
-    'NO_RECUERDO': _Lex(_Role.marcador, 'no recuerdo'),
-    'NO_ENTIENDO': _Lex(_Role.marcador, 'no entiendo'),
-    'PUEDE_REPETIR': _Lex(_Role.marcador, '¿puede repetir?'),
-
-    'COMO': _Lex(_Role.interrogativa, 'cómo'),
+    '0': _Lex(_Role.verboAccion, '0'),
+    '1': _Lex(_Role.verboAccion, '1'),
+    '2': _Lex(_Role.verboAccion, '2'),
+    '3': _Lex(_Role.verboAccion, '3'),
+    '4': _Lex(_Role.verboAccion, '4'),
+    '5': _Lex(_Role.verboAccion, '5'),
+    '6': _Lex(_Role.verboAccion, '6'),
+    '7': _Lex(_Role.verboAccion, '7'),
+    '8': _Lex(_Role.verboAccion, '8'),
+    '9': _Lex(_Role.verboAccion, '9'),
+    'A': _Lex(_Role.verboAccion, 'a'),
+    'ABOGADO': _Lex(_Role.servicio, 'un abogado'),
+    'ABRIR': _Lex(_Role.verboAccion, 'abrí'),
+    'ABUSAR': _Lex(_Role.verboAgresion, 'cometió abusos'),
+    'ACEPTAR': _Lex(_Role.verboAccion, 'acepto'),
+    'ACOMPAÑAR': _Lex(_Role.verboAccion, 'acompañar'),
+    'ADULTO': _Lex(_Role.personaDesc, 'adulto'),
+    'AHORA': _Lex(_Role.tiempo, 'ahora mismo'),
+    'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
+    'ALLA': _Lex(_Role.lugar, 'allá'),
+    'ALLI': _Lex(_Role.lugar, 'allí'),
+    'ALTO': _Lex(_Role.rasgo, 'alto'),
+    'AL_LADO': _Lex(_Role.lugar, 'al lado'),
+    'AMBOS': _Lex(_Role.sujeto, 'ambos'),
+    'AMENAZAR': _Lex(_Role.verboAgresion, 'amenazó'),
+    'AMIGO': _Lex(_Role.personaDesc, 'un amigo'),
+    'ANDAR': _Lex(_Role.verboAccion, 'caminaba'),
+    'ANTEAYER': _Lex(_Role.tiempo, 'anteayer'),
+    'AQUI': _Lex(_Role.lugar, 'aquí'),
+    'ARREGLAR': _Lex(_Role.verboAccion, 'quiero corregir'),
+    'ARRESTAR': _Lex(_Role.verboAccion, 'arrestaron'),
+    'ASISTENCIA': _Lex(_Role.documento, 'asistencia'),
+    'ASISTENTE': _Lex(_Role.servicio, 'un asistente'),
+    'ASOCIACION_SORDOS': _Lex(_Role.personaDesc, 'la asociación de sordos'),
+    'ATENDER': _Lex(_Role.verboAccion, 'atender'),
+    'ATRAS': _Lex(_Role.lugar, 'atrás'),
+    'AUMENTAR': _Lex(_Role.verboAccion, 'quiero agregar información'),
+    'AUTORIDAD': _Lex(_Role.institucion, 'la autoridad'),
+    'AUXILIO': _Lex(_Role.urgencia, 'auxilio urgente'),
+    'AVENIDA': _Lex(_Role.lugar, 'en la avenida'),
+    'AVISAR': _Lex(_Role.verboAccion, 'avisar'),
+    'AYER': _Lex(_Role.tiempo, 'ayer'),
+    'AYUDAR': _Lex(_Role.verboAccion, 'necesito ayuda'),
+    'AZUL': _Lex(_Role.descriptor, 'de color azul'),
+    'AÑO': _Lex(_Role.tiempo, 'año'),
+    'AÑO_PASADO': _Lex(_Role.tiempo, 'el año pasado'),
+    'AUN': _Lex(_Role.tiempo, 'aún'),
+    'B': _Lex(_Role.verboAccion, 'b'),
+    'BAJO': _Lex(_Role.rasgo, 'bajo'),
+    'BANCO': _Lex(_Role.lugar, 'en el banco'),
+    'BARRIO': _Lex(_Role.lugar, 'en el barrio'),
+    'BILLETES': _Lex(_Role.objeto, 'billetes y dinero'),
+    'BOCA': _Lex(_Role.objeto, 'la boca'),
+    'BOLSA': _Lex(_Role.objeto, 'mi bolsa'),
+    'BRAZO': _Lex(_Role.objeto, 'el brazo'),
+    'BUENO': _Lex(_Role.descriptor, 'bueno'),
+    'BUENOS_DIAS': _Lex(_Role.marcador, 'buenos días'),
+    'BURLAR': _Lex(_Role.verboAccion, 'se burlaron'),
+    'BUSCAR': _Lex(_Role.verboAccion, 'quiero buscar'),
+    'C': _Lex(_Role.verboAccion, 'c'),
+    'CABELLO': _Lex(_Role.objeto, 'el cabello'),
+    'CADA_DIA': _Lex(_Role.tiempo, 'cada día'),
+    'CAJA': _Lex(_Role.objeto, 'la caja'),
+    'CALLE': _Lex(_Role.lugar, 'en la calle'),
+    'CAMBIAR': _Lex(_Role.verboAccion, 'cambié'),
+    'CARO': _Lex(_Role.descriptor, 'costoso'),
+    'CARPETA': _Lex(_Role.documento, 'la carpeta de documentos'),
+    'CASA': _Lex(_Role.lugar, 'en mi casa'),
+    'CELULAR': _Lex(_Role.objeto, 'mi celular'),
+    'CERCA': _Lex(_Role.lugar, 'cerca del lugar'),
+    'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
+    'CHAMARRA': _Lex(_Role.objeto, 'mi chamarra'),
+    'COCHABAMBA': _Lex(_Role.lugar, 'en Cochabamba'),
+    'COMPAÑERO': _Lex(_Role.personaDesc, 'un compañero'),
+    'COMPRAR': _Lex(_Role.verboAccion, 'compré'),
+    'COMPRENDER': _Lex(_Role.marcador, 'comprender'),
+    'COMPUTADORA': _Lex(_Role.objeto, 'una computadora'),
+    'COMUNIDAD_SORDA': _Lex(_Role.personaDesc, 'la comunidad sorda'),
+    'CONFIANZA': _Lex(_Role.emocion, 'tengo confianza'),
+    'CONOCER': _Lex(_Role.verboAccion, 'conozco'),
+    'CONTESTAR_DOS_VECES': _Lex(_Role.verboAccion, 'contesté dos veces'),
+    'CONTINUAR': _Lex(_Role.verboAccion, 'continúa'),
+    'CONVOCAR': _Lex(_Role.tramite, 'una citación'),
+    'CORTO': _Lex(_Role.descriptor, 'corto'),
+    'CREER': _Lex(_Role.verboAccion, 'creo'),
+    'CURAR': _Lex(_Role.verboAccion, 'curar'),
     'CUAL': _Lex(_Role.interrogativa, 'cuál'),
     'CUANDO': _Lex(_Role.interrogativa, 'cuándo'),
-    'DONDE': _Lex(_Role.interrogativa, 'dónde'),
-    'EL': _Lex(_Role.sujeto, 'él'),
-    'ELLA': _Lex(_Role.sujeto, 'ella'),
-    'POR_QUE': _Lex(_Role.interrogativa, 'por qué'),
-    'QUE': _Lex(_Role.interrogativa, 'qué'),
-    'QUIEN': _Lex(_Role.interrogativa, 'quién'),
-    'TU': _Lex(_Role.sujeto, 'tú'),
-    'YO': _Lex(_Role.sujeto, 'yo'),
     'CUANTOS': _Lex(_Role.interrogativa, 'cuántos'),
-    'ELLOS': _Lex(_Role.sujeto, 'ellos'),
-    'NOSOTROS': _Lex(_Role.sujeto, 'nosotros'),
-    'PARA_QUE': _Lex(_Role.interrogativa, 'para qué'),
-    'USTEDES': _Lex(_Role.sujeto, 'ustedes'),
-
-    'NOMBRE': _Lex(_Role.marcador, 'mi nombre es'),
-    'APELLIDO': _Lex(_Role.marcador, 'mi apellido es'),
-    'IDENTIDAD': _Lex(_Role.marcador, 'quiero identificarme'),
+    'CAMARA_FOTOGRAFICA': _Lex(_Role.objeto, 'una cámara fotográfica'),
+    'COMO': _Lex(_Role.interrogativa, 'cómo'),
+    'D': _Lex(_Role.verboAccion, 'd'),
+    'DAR': _Lex(_Role.verboAccion, 'entregué'),
+    'DAÑAR': _Lex(_Role.verboAgresion, 'dañó'),
+    'DECIDIR': _Lex(_Role.verboAccion, 'decidí'),
+    'DEJAR': _Lex(_Role.verboAccion, 'dejé'),
+    'DELGADO': _Lex(_Role.rasgo, 'delgado'),
+    'DENTRO': _Lex(_Role.lugar, 'dentro del lugar'),
+    'DESCANSO': _Lex(_Role.tiempo, 'en horario de descanso'),
+    'DESPUES': _Lex(_Role.tiempo, 'después'),
+    'DEVOLVER': _Lex(_Role.verboAccion, 'quiero que devuelvan'),
+    'DE_NADA': _Lex(_Role.marcador, 'de nada'),
+    'DIBUJAR': _Lex(_Role.verboAccion, 'dibujé'),
+    'DIFERENTE': _Lex(_Role.descriptor, 'diferente'),
+    'DIFICIL': _Lex(_Role.descriptor, 'difícil'),
+    'DINERO': _Lex(_Role.objeto, 'mi dinero'),
+    'DIRECCION': _Lex(_Role.lugar, 'en mi dirección'),
+    'DISCRIMINACION': _Lex(_Role.documento, 'discriminación'),
+    'DOCTOR': _Lex(_Role.servicio, 'un doctor'),
+    'DOLOR': _Lex(_Role.urgencia, 'dolor físico'),
+    'DORMIR': _Lex(_Role.verboAccion, 'dormía'),
+    'DURANTE': _Lex(_Role.tiempo, 'durante ese tiempo'),
+    'DIA': _Lex(_Role.tiempo, 'día'),
+    'DONDE': _Lex(_Role.interrogativa, 'dónde'),
+    'E': _Lex(_Role.verboAccion, 'e'),
     'EDAD': _Lex(_Role.marcador, 'tengo esa edad'),
-    'ANOS_EDAD': _Lex(_Role.marcador, 'tengo esa edad'),
-    'HOMBRE': _Lex(_Role.personaDesc, 'un hombre'),
-    'LADRON': _Lex(_Role.personaDesc, 'un ladrón'),
-    'MUJER': _Lex(_Role.personaDesc, 'una mujer'),
-    'TESTIGO': _Lex(_Role.testigo, 'un testigo'),
-    'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
-    'MILITAR': _Lex(_Role.personaDesc, 'un militar'),
-    'SOLDADO': _Lex(_Role.personaDesc, 'un soldado'),
-    'FAMILIAR': _Lex(_Role.personaDesc, 'un familiar'),
-    'PAREJA': _Lex(_Role.personaDesc, 'mi pareja'),
-    'EXPAREJA': _Lex(_Role.personaDesc, 'mi expareja'),
-
-    'ABOGADO': _Lex(_Role.servicio, 'un abogado'),
-    'AUTORIDAD': _Lex(_Role.institucion, 'en la autoridad'),
-    'FISCAL': _Lex(_Role.institucion, 'en la fiscalía'),
-    'FISCALIA': _Lex(_Role.institucion, 'en la Fiscalía'),
+    'ELLA': _Lex(_Role.sujeto, 'ella'),
+    'ELLOS': _Lex(_Role.sujeto, 'ellos'),
+    'EMPEZAR': _Lex(_Role.verboAccion, 'empezó'),
+    'ENCONTRARSE': _Lex(_Role.verboAccion, 'me encontré'),
+    'ENFRENTE': _Lex(_Role.lugar, 'enfrente'),
+    'ENGAÑAR': _Lex(_Role.verboAgresion, 'engañó y estafó'),
+    'ENVIAR': _Lex(_Role.verboAccion, 'envié'),
+    'ESCAPAR': _Lex(_Role.verboAgresion, 'escapó'),
+    'ESCONDER': _Lex(_Role.verboAccion, 'escondió'),
+    'ESCRIBIR': _Lex(_Role.verboAccion, 'quiero escribir'),
+    'ESCUELA': _Lex(_Role.lugar, 'en la escuela'),
+    'ESCUELA_NOCTURNA': _Lex(_Role.lugar, 'en la escuela nocturna'),
+    'ESPERAR': _Lex(_Role.verboAccion, 'esperar'),
+    'ESPOSA': _Lex(_Role.personaDesc, 'mi esposa'),
+    'ESTAR_DE_ACUERDO': _Lex(_Role.marcador, 'estoy de acuerdo'),
+    'EVALUAR': _Lex(_Role.verboAccion, 'evaluar'),
+    'EXPLICAR': _Lex(_Role.verboAccion, 'quiero explicar'),
+    'F': _Lex(_Role.verboAccion, 'f'),
+    'FACTURA': _Lex(_Role.documento, 'la factura'),
+    'FALTA': _Lex(_Role.verboAgresion, 'perdí'),
+    'FECHA': _Lex(_Role.tiempo, 'en la fecha indicada'),
     'FELCC': _Lex(_Role.institucion, 'en la FELCC'),
     'FELCV': _Lex(_Role.institucion, 'en la FELCV'),
-    'TRIBUNAL': _Lex(_Role.institucion, 'en el tribunal'),
-    'JUZGADO': _Lex(_Role.institucion, 'en el juzgado de instrucción penal'),
-    'SEPAV': _Lex(_Role.institucion, 'en el SEPAV'),
-    'DEFENSA_PUBLICA': _Lex(_Role.institucion, 'en la Defensa Pública'),
-    'INSTITUCION': _Lex(_Role.institucion, 'en la institución'),
-    'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de señas'),
-    'JUEZ': _Lex(_Role.institucion, 'en el juzgado'),
-    'OFICIAL': _Lex(_Role.institucion, 'en el oficial'),
-    'ORGANO_JUDICIAL': _Lex(_Role.institucion, 'en el órgano judicial'),
-    'POLICIA': _Lex(_Role.institucion, 'en la policía'),
-    'ASISTENTE': _Lex(_Role.servicio, 'un asistente'),
-    'COORDINADOR': _Lex(_Role.servicio, 'un coordinador'),
-    'DOCTOR': _Lex(_Role.servicio, 'un doctor'),
-    'ENFERMERA': _Lex(_Role.servicio, 'una enfermera'),
-    'MINISTERIO': _Lex(_Role.institucion, 'en el ministerio'),
-    'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
-    'DESPACHO': _Lex(_Role.institucion, 'en el despacho'),
-    'OFICINA': _Lex(_Role.institucion, 'en la oficina'),
-    'VENTANILLA': _Lex(_Role.institucion, 'en la ventanilla'),
-
-    'INVESTIGACION': _Lex(_Role.tramite, 'una investigación'),
-    'JUICIO': _Lex(_Role.tramite, 'un juicio'),
-    'JUSTICIA': _Lex(_Role.documento, 'la justicia'),
-    'LEY': _Lex(_Role.documento, 'la ley'),
-    'RESOLUCION': _Lex(_Role.documento, 'la resolución'),
-    'TESTIMONIO': _Lex(_Role.documento, 'mi testimonio'),
-    'TRAMITE': _Lex(_Role.tramite, 'un trámite'),
-    'ACUERDO_SOCIAL': _Lex(_Role.documento, 'un acuerdo'),
-    'ARTICULO': _Lex(_Role.documento, 'el artículo'),
-    'CONFIRMACION': _Lex(_Role.documento, 'la confirmación'),
-    'CONTEXTO': _Lex(_Role.documento, 'el contexto'),
-    'ESTADO': _Lex(_Role.documento, 'el estado del trámite'),
-    'NORMA': _Lex(_Role.documento, 'la norma'),
-    'PODER': _Lex(_Role.documento, 'un poder notarial'),
-    'REGLAMENTO': _Lex(_Role.documento, 'el reglamento'),
-    'EXPEDIENTE': _Lex(_Role.tramite, 'mi expediente'),
-    'NOTIFICACION': _Lex(_Role.tramite, 'una notificación'),
-    'CITACION': _Lex(_Role.tramite, 'una citación'),
-    'AUDIENCIA': _Lex(_Role.tramite, 'una audiencia'),
-    'AVANCE': _Lex(_Role.tramite, 'el avance de la investigación'),
-    'SUBSANACION': _Lex(_Role.tramite, 'una subsanación'),
-    'REQUISITO': _Lex(_Role.tramite, 'un requisito'),
-    'CODIGO': _Lex(_Role.tramite, 'el código'),
-    'CASO': _Lex(_Role.tramite, 'mi caso'),
-    'NUREJ': _Lex(_Role.tramite, 'mi NUREJ'),
-    'WEBID': _Lex(_Role.tramite, 'mi WebID'),
-
-    'ANOTAR': _Lex(_Role.verboAccion, 'quiero anotar'),
-    'AVISAR': _Lex(_Role.verboAccion, 'quiero avisar'),
-    'ESCRIBIR': _Lex(_Role.verboAccion, 'quiero escribir'),
-    'IDENTIFICAR': _Lex(_Role.verboAccion, 'quiero identificar'),
-    'MOSTRAR': _Lex(_Role.verboAccion, 'quiero mostrar'),
-    'NARRAR': _Lex(_Role.verboAccion, 'quiero narrar'),
-    'OBSERVAR': _Lex(_Role.verboAccion, 'quiero observar'),
-    'PEDIR': _Lex(_Role.verboAccion, 'quiero solicitar'),
-    'PAGAR': _Lex(_Role.verboAccion, 'pagué'),
-    'ENTREGAR': _Lex(_Role.verboAccion, 'me entregaron'),
-    'PERDER': _Lex(_Role.verboAccion, 'perdí'),
-    'PRESENTAR': _Lex(_Role.verboAccion, 'quiero presentar'),
-    'PROTEGER': _Lex(_Role.verboAccion, 'necesito protección'),
-    'QUEJAR': _Lex(_Role.verboAccion, 'quiero presentar una queja'),
-    'RECONOCER': _Lex(_Role.verboAccion, 'quiero reconocer'),
-    'ACOMPANAR': _Lex(_Role.verboAccion, 'necesito que me acompañen'),
-    'CONFESAR': _Lex(_Role.verboAccion, 'quiero confesar'),
-    'COORDINAR': _Lex(_Role.verboAccion, 'quiero coordinar'),
-    'COPIAR': _Lex(_Role.verboAccion, 'quiero copiar'),
-    'CUMPLIR': _Lex(_Role.verboAccion, 'quiero cumplir'),
-    'DECIDIR': _Lex(_Role.verboAccion, 'quiero decidir'),
-    'EXIGIR': _Lex(_Role.verboAccion, 'quiero exigir'),
-    'GESTIONAR': _Lex(_Role.verboAccion, 'quiero gestionar'),
-    'JURAR': _Lex(_Role.verboAccion, 'quiero jurar'),
-    'RECOGER': _Lex(_Role.verboAccion, 'quiero recoger'),
-    'SOLUCIONAR': _Lex(_Role.verboAccion, 'quiero solucionar'),
-    'TRATAR': _Lex(_Role.verboAccion, 'quiero tratar'),
-    'SEGUIMIENTO': _Lex(_Role.verboAccion, 'quiero seguir'),
-    'CORREGIR': _Lex(_Role.verboAccion, 'quiero corregir'),
-    'ACLARAR': _Lex(_Role.verboAccion, 'quiero aclarar'),
-    'RECORDAR': _Lex(_Role.verboAccion, 'recuerdo'),
-    'IMPRIMIR': _Lex(_Role.verboAccion, 'quiero imprimir'),
-    'CONOCER': _Lex(_Role.verboAccion, 'conozco a esa persona'),
-    'DESCONOCER': _Lex(_Role.verboAccion, 'no conozco a esa persona'),
-    'DENUNCIAR': _Lex(_Role.verboAccion, 'quiero presentar una denuncia'),
-    'VOLVER': _Lex(_Role.verboAccion, 'debo volver'),
-
-    'ABUSAR': _Lex(_Role.verboAgresion, 'abusó sexualmente'),
-    'ACCIDENTE': _Lex(_Role.urgencia, 'hubo un accidente'),
-    'AMENAZAR': _Lex(_Role.verboAgresion, 'amenazó'),
-    'ARRESTAR': _Lex(_Role.verboAgresion, 'arrestó'),
-    'ASISTENCIA': _Lex(_Role.urgencia, 'necesito asistencia'),
-    'AUXILIO': _Lex(_Role.urgencia, 'necesito auxilio'),
-    'DANAR': _Lex(_Role.verboAgresion, 'dañó'),
-    'DISCRIMINACION': _Lex(_Role.verboAgresion, 'discriminó'),
-    'MALTRATAR': _Lex(_Role.verboAgresion, 'maltrató'),
-    'PARAR': _Lex(_Role.verboAgresion, 'se detuvo'),
-    'ROBAR': _Lex(_Role.verboAgresion, 'robó'),
-    'SALVAR': _Lex(_Role.verboAgresion, 'me salvó'),
-    'VIOLENCIA': _Lex(_Role.verboAgresion, 'ejerció violencia'),
-    'CORRER': _Lex(_Role.verboAgresion, 'salió corriendo'),
-    'CRISIS': _Lex(_Role.urgencia, 'es una crisis'),
-    'HERIDA': _Lex(_Role.urgencia, 'tengo una herida'),
-    'SOBORNO': _Lex(_Role.verboAgresion, 'ofreció un soborno'),
-    'VIOLACION': _Lex(_Role.verboAgresion, 'violó'),
-
-    'CORRECTO': _Lex(_Role.rasgo, 'correcto'),
-    'PELIGROSO': _Lex(_Role.rasgo, 'peligroso'),
-    'SEGURO': _Lex(_Role.emocion, 'me encuentro en un lugar seguro'),
-    'AMARILLO': _Lex(_Role.rasgo, 'de color amarillo'),
-    'AZUL': _Lex(_Role.rasgo, 'de color azul'),
-    'BLANCO': _Lex(_Role.rasgo, 'de color blanco'),
-    'CAFE': _Lex(_Role.rasgo, 'de color café'),
-    'DELGADO': _Lex(_Role.rasgo, 'delgado'),
-    'INOCENTE': _Lex(_Role.rasgo, 'inocente'),
-    'NEGRO': _Lex(_Role.rasgo, 'de color negro'),
-    'PRESO': _Lex(_Role.rasgo, 'detenido'),
-    'ROJO': _Lex(_Role.rasgo, 'de color rojo'),
-    'VERDE': _Lex(_Role.rasgo, 'de color verde'),
-    'CELESTE': _Lex(_Role.rasgo, 'de color celeste'),
-    'GRUESO': _Lex(_Role.rasgo, 'grueso'),
-    'LILA': _Lex(_Role.rasgo, 'de color lila'),
-    'NARANJA': _Lex(_Role.rasgo, 'de color naranja'),
-    'ROSADO': _Lex(_Role.rasgo, 'de color rosado'),
-
-    'CONFUSION': _Lex(_Role.emocion, 'estoy confundido'),
-    'MAL': _Lex(_Role.emocion, 'me siento mal'),
-    'PROBLEMA': _Lex(_Role.motivo, 'por un problema'),
-    'SITUACION': _Lex(_Role.motivo, 'por esta situación'),
-    'TEMOR': _Lex(_Role.emocion, 'siento temor'),
-    'CONFIANZA': _Lex(_Role.emocion, 'tengo confianza'),
-    'FALTA': _Lex(_Role.motivo, 'por una falta'),
-    'RAZON': _Lex(_Role.motivo, 'por esa razón'),
-    'VERGUENZA': _Lex(_Role.emocion, 'siento vergüenza'),
-    'MIEDO': _Lex(_Role.emocion, 'tengo miedo'),
-    'SOSPECHA': _Lex(_Role.emocion, 'tengo una sospecha'),
-
-    'AHORA': _Lex(_Role.tiempo, 'ahora mismo'),
-    'AYER': _Lex(_Role.tiempo, 'ayer'),
-    'DIA': _Lex(_Role.tiempo, 'ese día'),
-    'FECHA': _Lex(_Role.tiempo, 'en esa fecha'),
-    'HORA': _Lex(_Role.tiempo, 'hace una hora'),
-    'HOY': _Lex(_Role.tiempo, 'hoy'),
-    'MANANA': _Lex(_Role.tiempo, 'mañana'),
-    'MINUTO': _Lex(_Role.tiempo, 'hace unos minutos'),
-    'ANO': _Lex(_Role.tiempo, 'este año'),
-    'ANTEAYER': _Lex(_Role.tiempo, 'anteayer'),
-    'MES': _Lex(_Role.tiempo, 'este mes'),
-    'SEGUNDO': _Lex(_Role.tiempo, 'hace un segundo'),
-    'SEMANA': _Lex(_Role.tiempo, 'esta semana'),
-    'PASADO_MANANA': _Lex(_Role.tiempo, 'pasado mañana'),
-    'VARIAS_VECES': _Lex(_Role.tiempo, 'varias veces'),
-    'ANTERIORMENTE': _Lex(_Role.tiempo, 'anteriormente'),
-    'PRIMERA_VEZ': _Lex(_Role.tiempo, 'es la primera vez'),
-
-    'CALLE': _Lex(_Role.lugar, 'en la calle'),
-    'CASA': _Lex(_Role.lugar, 'en mi casa'),
-    'DIRECCION': _Lex(_Role.lugar, 'en esa dirección'),
-    'HOSPITAL': _Lex(_Role.lugar, 'en el hospital'),
-    'AVENIDA': _Lex(_Role.lugar, 'en la avenida'),
-    'CARCEL': _Lex(_Role.lugar, 'en la cárcel'),
-    'COCHABAMBA': _Lex(_Role.lugar, 'en Cochabamba'),
-    'FARMACIA': _Lex(_Role.lugar, 'en la farmacia'),
-    'MERCADO': _Lex(_Role.lugar, 'en el mercado'),
-    'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
-    'UBICACION_GPS': _Lex(_Role.lugar, 'en esta ubicación'),
-    'AEROPUERTO': _Lex(_Role.lugar, 'en el aeropuerto'),
-    'CENTRO_DE_SALUD': _Lex(_Role.lugar, 'en el centro de salud'),
-    'PARADA': _Lex(_Role.lugar, 'en la parada'),
-    'PISO': _Lex(_Role.lugar, 'en el piso'),
-    'DEPARTAMENTO': _Lex(_Role.lugar, 'en el departamento'),
-
-    'DINERO': _Lex(_Role.objeto, 'mi dinero'),
-    'FORMULARIO': _Lex(_Role.documento, 'el formulario'),
-    'LICENCIA_DECONDUCIR': _Lex(_Role.documento, 'mi licencia de conducir'),
-    'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
-    'PAPEL': _Lex(_Role.documento, 'el papel'),
-    'TELEFONO': _Lex(_Role.objeto, 'mi teléfono'),
-    'TEXTO': _Lex(_Role.documento, 'el texto'),
-    'CARNET': _Lex(_Role.documento, 'mi carnet de identidad'),
-    'CARTA': _Lex(_Role.documento, 'la carta'),
+    'FILMAR': _Lex(_Role.verboAccion, 'filmé'),
+    'FISCALIA': _Lex(_Role.institucion, 'en la Fiscalía'),
+    'FLACO': _Lex(_Role.rasgo, 'delgado'),
     'FOTOCOPIA': _Lex(_Role.documento, 'una fotocopia'),
-    'LICENCIA': _Lex(_Role.documento, 'mi licencia'),
-    'PASAPORTE': _Lex(_Role.documento, 'mi pasaporte'),
-    'SELLO': _Lex(_Role.documento, 'el sello'),
-    'TITULO': _Lex(_Role.documento, 'mi título'),
-    'CONSTANCIA': _Lex(_Role.documento, 'una constancia'),
-    'MEMORIAL': _Lex(_Role.documento, 'un memorial'),
-    'COMPROBANTE': _Lex(_Role.documento, 'un comprobante'),
-    'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
-    'OBSERVACION': _Lex(_Role.documento, 'una observación'),
-    'ANEXO': _Lex(_Role.documento, 'un anexo'),
-    'HOJA': _Lex(_Role.documento, 'una hoja'),
-    'FORMATO': _Lex(_Role.documento, 'el formato'),
-    'RESPALDO': _Lex(_Role.documento, 'un respaldo'),
-
-    'AUTO': _Lex(_Role.objeto, 'mi auto'),
-    'MICRO': _Lex(_Role.objeto, 'el micro'),
-    'MOTOCICLETA': _Lex(_Role.objeto, 'mi motocicleta'),
-    'TAXI': _Lex(_Role.objeto, 'el taxi'),
-    'TRUFI': _Lex(_Role.objeto, 'el trufi'),
-    'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
-    'TREN': _Lex(_Role.objeto, 'el tren'),
-
-    'BILLETERA': _Lex(_Role.objeto, 'mi billetera'),
-    'MENSAJE': _Lex(_Role.objeto, 'un mensaje'),
-    'FOTOGRAFIA': _Lex(_Role.objeto, 'una fotografía'),
-    'CAMARA': _Lex(_Role.objeto, 'una cámara'),
-    'CUENTA': _Lex(_Role.objeto, 'mi cuenta'),
-    'PRODUCTO': _Lex(_Role.objeto, 'el producto'),
-
-    'ACEPTAR': _Lex(_Role.verboAccion, 'acepto'),
-    'ATENDER': _Lex(_Role.verboAccion, 'necesito que me atiendan'),
-    'AYUDAR': _Lex(_Role.verboAccion, 'necesito ayuda'),
-    'COMPRENDER': _Lex(_Role.verboAccion, 'quiero comprender'),
+    'FOTOS': _Lex(_Role.objeto, 'fotografías'),
+    'FRACTURA': _Lex(_Role.urgencia, 'una fractura'),
+    'FUERA': _Lex(_Role.lugar, 'afuera del lugar'),
+    'FUNCIONAR': _Lex(_Role.verboAccion, 'funciona'),
+    'FUTURO': _Lex(_Role.tiempo, 'en el futuro'),
+    'G': _Lex(_Role.verboAccion, 'g'),
+    'GANAR_DINERO': _Lex(_Role.verboAccion, 'gané dinero'),
+    'GESTIONAR': _Lex(_Role.verboAccion, 'quiero gestionar'),
+    'GOBIERNO': _Lex(_Role.institucion, 'el gobierno'),
+    'GORDO': _Lex(_Role.rasgo, 'de contextura gruesa'),
+    'GORRA': _Lex(_Role.objeto, 'mi gorra'),
+    'GRATIS': _Lex(_Role.descriptor, 'gratuito'),
+    'GRITAR': _Lex(_Role.verboAccion, 'gritó'),
+    'GRUESO': _Lex(_Role.rasgo, 'grueso'),
+    'GUARDAR': _Lex(_Role.verboAccion, 'guardé'),
+    'H': _Lex(_Role.verboAccion, 'h'),
     'HABLAR': _Lex(_Role.verboAccion, 'quiero hablar'),
+    'HACER': _Lex(_Role.verboAccion, 'hice'),
+    'HASTA_LUEGO': _Lex(_Role.marcador, 'hasta luego'),
+    'HASTA_MAÑANA': _Lex(_Role.marcador, 'hasta mañana'),
+    'HERIDA': _Lex(_Role.urgencia, 'una herida'),
+    'HERMANA': _Lex(_Role.personaDesc, 'mi hermana'),
+    'HERMANO': _Lex(_Role.personaDesc, 'mi hermano'),
+    'HIJA': _Lex(_Role.personaDesc, 'mi hija'),
+    'HIJO': _Lex(_Role.personaDesc, 'mi hijo'),
+    'HOLA': _Lex(_Role.marcador, 'hola'),
+    'HOMBRE': _Lex(_Role.personaDesc, 'un hombre'),
+    'HORA': _Lex(_Role.tiempo, 'hora'),
+    'HOSPITAL': _Lex(_Role.institucion, 'en el hospital'),
+    'HOY': _Lex(_Role.tiempo, 'hoy'),
+    'HUESOS': _Lex(_Role.urgencia, 'los huesos'),
+    'I': _Lex(_Role.verboAccion, 'i'),
+    'IDENTIDAD': _Lex(_Role.marcador, 'mi carnet de identidad'),
+    'IDENTIFICAR': _Lex(_Role.verboAccion, 'puedo identificar'),
+    'IGNORAR': _Lex(_Role.verboAccion, 'me ignoraron'),
+    'INSTITUCION': _Lex(_Role.institucion, 'en la institución'),
+    'INTERNET': _Lex(_Role.objeto, 'por internet'),
+    'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de LSB'),
+    'INVESTIGACION': _Lex(_Role.tramite, 'la investigación de mi caso'),
+    'IR': _Lex(_Role.verboAccion, 'fui'),
+    'J': _Lex(_Role.verboAccion, 'j'),
+    'JAMAS': _Lex(_Role.tiempo, 'jamás'),
+    'JEFE': _Lex(_Role.personaDesc, 'mi jefe'),
+    'JOVEN': _Lex(_Role.personaDesc, 'joven'),
+    'JUEVES': _Lex(_Role.tiempo, 'el jueves'),
+    'JUEZ': _Lex(_Role.institucion, 'el juez'),
+    'JULIO': _Lex(_Role.tiempo, 'en julio'),
+    'JUSTICIA': _Lex(_Role.documento, 'la justicia'),
+    'JUZGADO': _Lex(_Role.institucion, 'en el juzgado'),
+    'K': _Lex(_Role.verboAccion, 'k'),
+    'L': _Lex(_Role.verboAccion, 'l'),
+    'LADRON': _Lex(_Role.personaDesc, 'un ladrón'),
+    'LEER': _Lex(_Role.verboAccion, 'quiero leer'),
+    'LEJOS': _Lex(_Role.lugar, 'lejos'),
+    'LENTES': _Lex(_Role.objeto, 'mis lentes'),
+    'LENTO': _Lex(_Role.descriptor, 'despacio'),
+    'LEY': _Lex(_Role.documento, 'la ley'),
+    'LIBRE': _Lex(_Role.tiempo, 'libre'),
+    'LISTA': _Lex(_Role.documento, 'la lista'),
+    'LLAMAR': _Lex(_Role.verboAccion, 'llamé'),
+    'LLEGAR': _Lex(_Role.verboAccion, 'llegué'),
+    'LLEVAR': _Lex(_Role.verboAccion, 'llevaba'),
+    'LO_SIENTO': _Lex(_Role.marcador, 'lo siento'),
+    'LUEGO': _Lex(_Role.tiempo, 'luego'),
+    'LUNES': _Lex(_Role.tiempo, 'el lunes'),
+    'M': _Lex(_Role.verboAccion, 'm'),
+    'MAL': _Lex(_Role.descriptor, 'mal'),
+    'MALTRATAR': _Lex(_Role.verboAgresion, 'maltrató'),
+    'MAMA': _Lex(_Role.personaDesc, 'mi mamá'),
+    'MARTES': _Lex(_Role.tiempo, 'el martes'),
+    'MARZO': _Lex(_Role.tiempo, 'en marzo'),
+    'MAÑANA': _Lex(_Role.tiempo, 'mañana'),
+    'MEDICINA': _Lex(_Role.objeto, 'medicinas'),
+    'MEJOR': _Lex(_Role.descriptor, 'mejor'),
+    'MENTIRA': _Lex(_Role.marcador, 'es mentira'),
+    'MERCADO': _Lex(_Role.lugar, 'en el mercado'),
+    'MES': _Lex(_Role.tiempo, 'mes'),
+    'MICRO': _Lex(_Role.objeto, 'un micro'),
+    'MIEDO': _Lex(_Role.emocion, 'tengo miedo'),
+    'MILITAR': _Lex(_Role.personaDesc, 'un militar'),
+    'MINUTO': _Lex(_Role.tiempo, 'minuto'),
+    'MIRAR': _Lex(_Role.verboAccion, 'vi'),
+    'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
+    'MOMENTO': _Lex(_Role.tiempo, 'en ese momento'),
+    'MOSTRAR': _Lex(_Role.verboAccion, 'puedo mostrar'),
+    'MUCHO': _Lex(_Role.descriptor, 'mucho'),
+    'MUJER': _Lex(_Role.personaDesc, 'una mujer'),
+    'MAS_O_MENOS': _Lex(_Role.marcador, 'más o menos'),
+    'MIO': _Lex(_Role.sujeto, 'mi'),
+    'N': _Lex(_Role.verboAccion, 'n'),
+    'NARRAR': _Lex(_Role.verboAccion, 'quiero relatar'),
+    'NECESITAR': _Lex(_Role.verboAccion, 'necesitar'),
+    'NEGRO': _Lex(_Role.descriptor, 'de color negro'),
+    'NO': _Lex(_Role.marcador, 'no'),
+    'NOMBRE': _Lex(_Role.marcador, 'mi nombre es'),
+    'NOSOTROS': _Lex(_Role.sujeto, 'nosotros'),
+    'NO_ESTAR_DE_ACUERDO': _Lex(_Role.marcador, 'no estoy de acuerdo'),
+    'NO_PUEDO': _Lex(_Role.marcador, 'no puedo'),
+    'NO_SABER': _Lex(_Role.marcador, 'no sé'),
+    'NUEVO': _Lex(_Role.descriptor, 'nuevo'),
+    'O': _Lex(_Role.verboAccion, 'o'),
+    'OBSERVAR': _Lex(_Role.verboAccion, 'observé'),
+    'OCUPADO': _Lex(_Role.tiempo, 'ocupado'),
+    'OFICIAL': _Lex(_Role.servicio, 'un oficial'),
+    'OFICINA': _Lex(_Role.lugar, 'en la oficina'),
+    'ORGANIZAR': _Lex(_Role.verboAccion, 'organicé'),
+    'OSCURO': _Lex(_Role.descriptor, 'oscuro'),
+    'OYENTE': _Lex(_Role.personaDesc, 'oyente'),
+    'OIR': _Lex(_Role.verboAccion, 'escuché'),
+    'P': _Lex(_Role.verboAccion, 'p'),
+    'PALABRA': _Lex(_Role.verboAccion, 'palabra'),
+    'PANTALON': _Lex(_Role.objeto, 'mi pantalón'),
+    'PAPEL': _Lex(_Role.documento, 'el documento'),
+    'PAREJA': _Lex(_Role.personaDesc, 'mi pareja'),
+    'PARIENTE': _Lex(_Role.personaDesc, 'un pariente'),
+    'PASADO': _Lex(_Role.tiempo, 'en el pasado'),
+    'PASADO_MAÑANA': _Lex(_Role.tiempo, 'pasado mañana'),
+    'PASAPORTE': _Lex(_Role.documento, 'mi pasaporte'),
+    'PEDIR': _Lex(_Role.verboAccion, 'solicito'),
+    'PEGAR': _Lex(_Role.verboAgresion, 'golpeó y pegó'),
+    'PELEAR': _Lex(_Role.verboAgresion, 'inició una pelea'),
+    'PERDER': _Lex(_Role.verboAgresion, 'perdí'),
+    'PERMISO': _Lex(_Role.marcador, 'con permiso'),
+    'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
+    'PLAZO': _Lex(_Role.tramite, 'el plazo'),
+    'POCO': _Lex(_Role.descriptor, 'poco'),
+    'POLERA': _Lex(_Role.objeto, 'mi polera'),
+    'POLICIA': _Lex(_Role.institucion, 'en la policía'),
+    'POR_FAVOR': _Lex(_Role.marcador, 'por favor'),
+    'POSTERGAR': _Lex(_Role.tiempo, 'postergar'),
+    'PREOCUPAR': _Lex(_Role.emocion, 'estoy preocupado'),
+    'PRESENTAR': _Lex(_Role.verboAccion, 'quiero presentar'),
+    'PRIMERA_VEZ': _Lex(_Role.tiempo, 'la primera vez'),
+    'PROHIBIDO': _Lex(_Role.documento, 'prohibido'),
+    'PROTEGER': _Lex(_Role.verboAccion, 'necesito protección'),
+    'PROVINCIA': _Lex(_Role.lugar, 'en la provincia'),
+    'PROXIMO': _Lex(_Role.tiempo, 'el próximo'),
+    'PUEDO': _Lex(_Role.marcador, 'puedo'),
+    'PUERTA': _Lex(_Role.objeto, 'la puerta'),
+    'PAGINA': _Lex(_Role.documento, 'la página'),
+    'Q': _Lex(_Role.verboAccion, 'q'),
+    'QUEJAR': _Lex(_Role.verboAccion, 'quejar'),
+    'QUERER': _Lex(_Role.verboAccion, 'querer'),
+    'QUIEN': _Lex(_Role.interrogativa, 'quién'),
+    'QUE': _Lex(_Role.interrogativa, 'qué'),
+    'R': _Lex(_Role.verboAccion, 'r'),
+    'RAYOS_X': _Lex(_Role.objeto, 'placas de rayos X'),
     'RECHAZAR': _Lex(_Role.verboAccion, 'rechazo'),
-    'RESPONDER': _Lex(_Role.verboAccion, 'quiero responder'),
+    'RECIBIR': _Lex(_Role.verboAccion, 'recibí'),
+    'RECORDAR': _Lex(_Role.verboAccion, 'recuerdo'),
+    'RESOLUCION': _Lex(_Role.documento, 'una resolución'),
+    'RESULTADO': _Lex(_Role.documento, 'el resultado'),
+    'REUNION': _Lex(_Role.verboAccion, 'reunión'),
+    'ROBAR': _Lex(_Role.verboAgresion, 'robó'),
+    'ROJO': _Lex(_Role.descriptor, 'de color rojo'),
+    'S': _Lex(_Role.verboAccion, 's'),
+    'SABER': _Lex(_Role.marcador, 'sé'),
+    'SEGUNDO': _Lex(_Role.tiempo, 'segundo'),
+    'SELLO': _Lex(_Role.documento, 'un sello oficial'),
+    'SEMANA': _Lex(_Role.tiempo, 'semana'),
+    'SEPARADOS': _Lex(_Role.personaDesc, 'separados'),
+    'SEPDAVI': _Lex(_Role.institucion, 'en el SEPDAVI'),
+    'SEPDEP': _Lex(_Role.institucion, 'en el SEPDEP'),
+    'SEÑOR': _Lex(_Role.personaDesc, 'el señor'),
+    'SIEMPRE': _Lex(_Role.tiempo, 'siempre'),
+    'SOLUCIONAR': _Lex(_Role.verboAccion, 'quiero solucionar'),
+    'SOPORTE': _Lex(_Role.documento, 'soporte'),
+    'SORDO': _Lex(_Role.personaDesc, 'una persona sorda'),
+    'SUYO': _Lex(_Role.sujeto, 'suyo'),
+    'SABADO': _Lex(_Role.tiempo, 'el sábado'),
+    'SI': _Lex(_Role.marcador, 'sí'),
+    'T': _Lex(_Role.verboAccion, 't'),
+    'TAL_VEZ': _Lex(_Role.marcador, 'tal vez'),
+    'TARDE': _Lex(_Role.tiempo, 'por la tarde'),
+    'TELEFONO': _Lex(_Role.objeto, 'mi teléfono'),
+    'TEMOR': _Lex(_Role.emocion, 'tengo temor'),
+    'TEMPRANO': _Lex(_Role.tiempo, 'temprano'),
+    'TENER': _Lex(_Role.verboAccion, 'tener'),
+    'TERMINAR': _Lex(_Role.verboAccion, 'terminó'),
+    'TESTIGO': _Lex(_Role.testigo, 'un testigo'),
+    'TESTIMONIO': _Lex(_Role.documento, 'mi testimonio'),
+    'TIENDA': _Lex(_Role.lugar, 'en la tienda'),
+    'TODOS_LOS_DIAS': _Lex(_Role.tiempo, 'todos los días'),
+    'TOTAL': _Lex(_Role.verboAccion, 'total'),
+    'TRABAJADOR': _Lex(_Role.personaDesc, 'un trabajador'),
+    'TRAER': _Lex(_Role.verboAccion, 'puedo traer'),
+    'TRISTE': _Lex(_Role.emocion, 'estoy triste'),
+    'TRUFI': _Lex(_Role.objeto, 'un trufi'),
+    'TRAMITE': _Lex(_Role.tramite, 'un trámite'),
+    'TUYO': _Lex(_Role.sujeto, 'su'),
+    'TU': _Lex(_Role.sujeto, 'tú'),
+    'U': _Lex(_Role.verboAccion, 'u'),
+    'URGENTE': _Lex(_Role.urgencia, 'de manera urgente'),
+    'V': _Lex(_Role.verboAccion, 'v'),
+    'VARIOS': _Lex(_Role.sujeto, 'varios'),
+    'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
+    'VENDER': _Lex(_Role.verboAccion, 'vendí'),
+    'VENIR': _Lex(_Role.verboAccion, 'vine'),
+    'VER': _Lex(_Role.verboAccion, 'vi'),
+    'VERDAD': _Lex(_Role.marcador, 'es verdad'),
+    'VIDEO': _Lex(_Role.objeto, 'un video'),
+    'VIERNES': _Lex(_Role.tiempo, 'el viernes'),
+    'VIOLENCIA': _Lex(_Role.urgencia, 'un hecho de violencia'),
+    'VIVIR': _Lex(_Role.verboAccion, 'vivo'),
+    'VOLVER': _Lex(_Role.verboAccion, 'debo volver'),
+    'W': _Lex(_Role.verboAccion, 'w'),
+    'X': _Lex(_Role.verboAccion, 'x'),
+    'Y': _Lex(_Role.verboAccion, 'y'),
+    'YO': _Lex(_Role.sujeto, 'yo'),
+    'Z': _Lex(_Role.verboAccion, 'z'),
+    'EL': _Lex(_Role.sujeto, 'él'),
+    'Ñ': _Lex(_Role.verboAccion, 'ñ'),
+    'ORGANO_JUDICIAL': _Lex(_Role.institucion, 'en el Órgano Judicial'),
+    'ULTIMO': _Lex(_Role.tiempo, 'el último'),
 
-    'VIDEOLLAMADA': _Lex(_Role.objeto, 'por videollamada'),
-    'WHATSAPP': _Lex(_Role.objeto, 'por WhatsApp'),
-
-    'CORRUPTO': _Lex(_Role.rasgo, 'corrupto'),
   };
 }
 
 enum _Role {
   sujeto,
   personaDesc,
-
-  testigo,
-
   rasgo,
   verboAgresion,
+  testigo,
   verboAccion,
   objeto,
   documento,
@@ -1731,67 +2101,56 @@ enum _Role {
   motivo,
   tiempo,
   marcador,
-
+  descriptor,
   interrogativa,
 }
 
 class _Lex {
   final _Role role;
   final String es;
+
   const _Lex(this.role, this.es);
 }
 
 class _Roles {
   String? subject;
   final List<String> perpetrators = [];
+  final List<String> traits = [];
   final List<String> victims = [];
   final List<String> victimTraits = [];
+  String? aggression;
+  final List<String> extraAggressions = [];
+  String? flight;
+  String? action;
+  final List<String> extraActions = [];
+  final List<String> witnesses = [];
+  bool witnessesNegated = false;
+  bool witnessesAffirmed = false;
+  final List<String> objects = [];
+  final List<String> documents = [];
+  String? place;
   final List<String> institutions = [];
-
   String? get institution => institutions.isEmpty ? null : institutions.first;
-
   set institution(String? v) {
     institutions.clear();
     if (v != null) institutions.add(v);
   }
 
-  String? aggression;
-
-  String? flight;
-
-  final Map<String, String> details = {};
-
-  final List<String> extraActions = [];
-  String? action;
-  String? place;
-  String? time;
-
-  String? timeUnit;
-  String? timeCount;
-
-  bool timeIsFuture = false;
-
-  bool narrativeIsPast = true;
-
-  String? frequency;
-
-  final List<String> evidence = [];
-  final List<String> vehicles = [];
-  final List<String> extraAggressions = [];
-  final List<String> traits = [];
-  final List<String> objects = [];
-  final List<String> documents = [];
   final List<String> services = [];
   final List<String> emotions = [];
   final List<String> urgencies = [];
   final List<String> procedures = [];
   final List<String> purposes = [];
-  final List<String> unknown = [];
-  final List<String> witnesses = [];
-  bool witnessesNegated = false;
-  bool witnessesAffirmed = false;
-
+  final List<String> evidence = [];
+  final List<String> vehicles = [];
   final List<String> markers = [];
-
   String? question;
+  String? time;
+  String? timeUnit;
+  String? timeCount;
+  bool timeIsFuture = false;
+  String? frequency;
+  final Map<String, String> details = {};
+  final List<String> unknown = [];
+  bool narrativeIsPast = false;
 }
