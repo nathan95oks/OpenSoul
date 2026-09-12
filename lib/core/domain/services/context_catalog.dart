@@ -1,7 +1,7 @@
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart'
-    show kVictimMarker, kEvidenceMarker, kVehicleMarker;
+    show kEvidenceMarker;
 
 /// Quita duplicados exactos conservando el primer orden de aparición.
 ///
@@ -727,46 +727,63 @@ String resolveAssemblerContext(
   List<String> glosses, [
   dynamic Function(String)? getCategory,
 ]) {
-  final upper = glosses.map((g) => g.toUpperCase()).toSet();
+  String unaccent(String s) => s
+      .toUpperCase()
+      .replaceAll('Á', 'A')
+      .replaceAll('É', 'E')
+      .replaceAll('Í', 'I')
+      .replaceAll('Ó', 'O')
+      .replaceAll('Ú', 'U');
+
+  final norm = glosses.map(unaccent).toSet();
   
   if (currentContextId == 'tramite') {
-    if (upper.contains('FALTA') || upper.contains('PERDER') || upper.contains('TELEFONO') || upper.contains('CARNET')) {
+    if (norm.contains('FALTA') || norm.contains('PERDER') || norm.contains('TELEFONO') || norm.contains('CARNET')) {
       return 'perdida';
     }
-    if (upper.contains('PASAPORTE') || upper.contains('INVESTIGACIÓN') || upper.contains('GESTIONAR') || upper.contains('FOTOCOPIA')) {
+    if (norm.contains('PASAPORTE') ||
+        norm.contains('INVESTIGACION') ||
+        norm.contains('GESTIONAR') ||
+        norm.contains('FOTOCOPIA') ||
+        norm.contains('LICENCIA_DECONDUCIR') ||
+        norm.contains('PODER') ||
+        norm.contains('TESTIMONIO')) {
       return 'tramite_id';
     }
-    if (upper.contains('INTÉRPRETE') || upper.contains('HABLAR') || upper.contains('ABOGADO') || upper.contains('INSTITUCIÓN')) {
+    if (norm.contains('INTERPRETE') ||
+        norm.contains('HABLAR') ||
+        norm.contains('ABOGADO') ||
+        norm.contains('INSTITUCION')) {
       return 'orientacion';
     }
-    return 'tramite';
+    return 'tramite_id';
   }
 
   if (currentContextId == 'consulta') {
     return 'orientacion';
   }
 
-  if (upper.contains('ROBAR') || upper.contains('LADRÓN') || upper.contains('QUITAR')) {
+  if (norm.contains('ROBAR') || norm.contains('LADRON') || norm.contains('QUITAR')) {
     return 'denuncia_robo';
   }
-  if (upper.contains('GOLPEAR') || upper.contains('INSULTAR') || upper.contains('AMENAZAR') || upper.contains('MIEDO')) {
+  if (norm.contains('GOLPEAR') || norm.contains('INSULTAR') || norm.contains('AMENAZAR') || norm.contains('MIEDO')) {
     return 'violencia';
   }
-  if (upper.contains('INTERNET') || upper.contains('MENTIRA') || upper.contains('FOTO') || upper.contains('NUMERO') || upper.contains('AVISAR')) {
-    if (upper.contains('BILLETES') || upper.contains('BANCO') || upper.contains('PAGAR')) {
+  if (norm.contains('INTERNET') || norm.contains('MENTIRA') || norm.contains('FOTO') || norm.contains('NUMERO') || norm.contains('AVISAR')) {
+    if (norm.contains('BILLETES') || norm.contains('BANCO') || norm.contains('PAGAR')) {
       return 'engano_dinero';
     }
     return 'amenaza_digital';
   }
-  if (upper.contains('SEGUIR') || upper.contains('MIRAR') || upper.contains('ESCONDER') || upper.contains('ESPERAR')) {
+  if (norm.contains('SEGUIR') || norm.contains('MIRAR') || norm.contains('ESCONDER') || norm.contains('ESPERAR')) {
     return 'seguimiento';
   }
-  if (upper.contains('NOMBRE') || upper.contains('IDENTIDAD') || upper.contains('PAPEL') || upper.contains('NOMBRE')) {
-    if (!upper.contains('ROBAR') && !upper.contains('GOLPEAR')) {
+  if (norm.contains('NOMBRE') || norm.contains('IDENTIDAD') || norm.contains('PAPEL')) {
+    if (!norm.contains('ROBAR') && !norm.contains('GOLPEAR')) {
       return 'identificacion';
     }
   }
-  if (upper.contains('DÓNDE') || upper.contains('QUIÉN') || upper.contains('QUÉ') || upper.contains('CUÁNDO') || upper.contains('CÓMO') || upper.contains('CUÁNTOS') || upper.contains('POR_QUÉ') || upper.contains('PARA_QUÉ')) {
+  if (norm.contains('DONDE') || norm.contains('QUIEN') || norm.contains('QUE') || norm.contains('CUANDO') || norm.contains('COMO') || norm.contains('CUANTOS') || norm.contains('POR_QUE') || norm.contains('PARA_QUE')) {
     return 'preguntas';
   }
   return currentContextId.isEmpty ? 'denuncia_robo' : currentContextId;

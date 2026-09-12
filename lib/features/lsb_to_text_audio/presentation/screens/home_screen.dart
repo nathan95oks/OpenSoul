@@ -7,39 +7,33 @@ import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart' show allCardsProvider;
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/context_selection_widget.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/guided_wizard_stepper.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/live_declaration_preview_panel.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/node_flow_canvas.dart';
-import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
+/// Pantalla Principal de Creación de Declaraciones y Denuncias en LSB.
+///
+/// Integra armónicamente:
+/// - AppBar accesible con selector de contexto y alternador de imágenes.
+/// - Barra de progreso visual por hitos (GuidedWizardStepper).
+/// - Lienzo interactivo (NodeFlowCanvas con Hero Question y Fichas de Entidad).
+/// - Panel persistente de previsualización formal en vivo (LiveDeclarationPreviewPanel).
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedWords = ref.watch(sentenceProvider);
-    final translationState = ref.watch(translationControllerProvider);
     final contextState = ref.watch(contextProvider);
 
     return Scaffold(
       backgroundColor: AppTheme.lightBg,
-      appBar: _buildAppBar(context, ref, contextState, selectedWords),
+      appBar: _buildAppBar(context, ref, contextState),
       body: SafeArea(
         child: contextState == null
             ? const ContextSelectionWidget()
-            : _buildFlow(
-                context,
-                ref,
-                contextState,
-                selectedWords,
-                translationState,
-              ),
+            : _buildUnifiedFlow(context, ref, contextState),
       ),
     );
   }
@@ -48,15 +42,11 @@ class HomeScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     dynamic contextState,
-    List<String> selectedWords,
   ) {
-    // Dentro de una conversacion, armar la frase no puede ser un callejon sin
-    // salida: la persona oyente puede necesitar hablar en cualquier momento, y
-    // volver no debe costar descartar lo que se lleva armado.
     final sirveConversacion = ref.watch(flowSurfaceProvider).isConversation;
 
     return AppBar(
-      backgroundColor: AppTheme.lightBg,
+      backgroundColor: AppTheme.lightSurface,
       elevation: 0,
       leading: sirveConversacion
           ? IconButton(
@@ -76,24 +66,67 @@ class HomeScreen extends ConsumerWidget {
             borderRadius: BorderRadius.circular(8),
             child: Image.asset(
               'assets/logo.png',
-              width: 32,
-              height: 32,
+              width: 30,
+              height: 30,
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 10),
-          const Flexible(
-            child: Text(
-              'OpenSoul',
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.brandPrimary,
-                letterSpacing: -0.3,
-              ),
+          const SizedBox(width: 8),
+          const Text(
+            'OpenSoul',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: AppTheme.brandPrimary,
+              letterSpacing: -0.3,
             ),
           ),
+          if (contextState != null) ...[
+            const SizedBox(width: 8),
+            Flexible(
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => ref.read(cardsFlowSessionProvider).reset(),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppTheme.brandPrimary.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: AppTheme.brandPrimary.withValues(alpha: 0.35),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        contextState.emoji as String,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      const SizedBox(width: 4),
+                      Flexible(
+                        child: Text(
+                          contextState.name as String,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.brandPrimary,
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 14,
+                        color: AppTheme.brandPrimary,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
       actions: [
@@ -103,34 +136,21 @@ class HomeScreen extends ConsumerWidget {
             icon: Icon(
               conImagen ? Icons.image : Icons.image_not_supported_outlined,
               color: AppTheme.brandPrimary,
+              size: 22,
             ),
             tooltip: conImagen ? 'Ocultar imágenes' : 'Mostrar imágenes',
             onPressed: () =>
                 ref.read(signImagesEnabledProvider.notifier).alternar(),
           );
         }),
-        if (contextState != null)
-          TextButton(
-            onPressed: () => ref.read(cardsFlowSessionProvider).reset(),
-            child: const Text(
-              'Cambiar contexto',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.brandPrimary,
-              ),
-            ),
-          ),
       ],
     );
   }
 
-  Widget _buildFlow(
+  Widget _buildUnifiedFlow(
     BuildContext context,
     WidgetRef ref,
     dynamic contextState,
-    List<String> selectedWords,
-    AsyncValue<TranslationResult?> translationState,
   ) {
     final pending = ref.watch(pendingReplyProvider);
     final wasInferred = pending?.suggestion?.contextId == contextState?.id;
@@ -142,53 +162,13 @@ class HomeScreen extends ConsumerWidget {
             text: pending.question,
             inferredContextName: wasInferred ? contextState.name as String : null,
           ),
-        Expanded(
+        const GuidedWizardStepper(),
+        const Expanded(
           child: SingleChildScrollView(
-            child: Column(
-              children: const [NodeFlowCanvas(), SizedBox(height: 8)],
-            ),
+            child: NodeFlowCanvas(),
           ),
         ),
-        const GuidedNavBar(),
-        _BottomPanel(
-          glosses: selectedWords,
-          isLoading: translationState.isLoading,
-          onTranslate: selectedWords.isEmpty || translationState.isLoading
-              ? null
-              : () async {
-                  final allCards = ref.read(allCardsProvider).value ?? const [];
-                  String? categoryOf(String g) {
-                    for (final c in allCards) {
-                      if (c.gloss == g) return c.categoryId;
-                    }
-                    return null;
-                  }
-
-                  final markedCards = ref
-                      .read(semanticZonesProvider.notifier)
-                      .orderedGlossesMarked();
-                  final cardsForEngines =
-                      markedCards.isEmpty ? selectedWords : markedCards;
-
-                  final assemblerContext = resolveAssemblerContext(
-                    contextState.id,
-                    cardsForEngines,
-                    categoryOf,
-                  );
-                  final declaracion = contextState.id == 'denuncia_robo'
-                      ? buildFullDeclarationDraft(ref)
-                      : null;
-                  await ref
-                      .read(translationControllerProvider.notifier)
-                      .translateCards(
-                        context: contextState.id,
-                        cards: cardsForEngines,
-                        assemblerContext: assemblerContext,
-                        declaration: declaracion,
-                      );
-                  ref.read(resultVisibleProvider.notifier).show();
-                },
-        ),
+        const LiveDeclarationPreviewPanel(),
       ],
     );
   }
@@ -212,152 +192,45 @@ class _ReplyingToStrip extends StatelessWidget {
       excludeSemantics: true,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-        color: AppTheme.brandPrimary.withValues(alpha: 0.07),
-        child: Column(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        color: AppTheme.brandPrimary.withValues(alpha: 0.08),
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(Icons.record_voice_over,
-                    size: 15, color: AppTheme.brandPrimary),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
+            const Icon(
+              Icons.record_voice_over,
+              size: 15,
+              color: AppTheme.brandPrimary,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                     '«$text»',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.3,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
                       color: AppTheme.lightText,
                     ),
                   ),
-                ),
-              ],
-            ),
-            if (inferred != null) ...[
-              const SizedBox(height: 4),
-              Padding(
-                padding: const EdgeInsets.only(left: 23),
-                child: Text(
-                  'Contexto sugerido: $inferred · cámbialo arriba si no corresponde',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.lightTextSub.withValues(alpha: 0.95),
-                  ),
-                ),
+                  if (inferred != null)
+                    Text(
+                      'Sugerido: $inferred',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.lightTextSub.withValues(alpha: 0.9),
+                      ),
+                    ),
+                ],
               ),
-            ],
+            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _BottomPanel extends StatelessWidget {
-  final List<String> glosses;
-  final bool isLoading;
-  final VoidCallback? onTranslate;
-
-  const _BottomPanel({
-    required this.glosses,
-    required this.isLoading,
-    required this.onTranslate,
-  });
-
-  static const _orange = AppTheme.brandPrimary;
-
-  @override
-  Widget build(BuildContext context) {
-    final enabled = onTranslate != null;
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppTheme.lightSurface,
-        border: Border(top: BorderSide(color: AppTheme.lightBorder, width: 1)),
-      ),
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (glosses.isNotEmpty) ...[
-            const Text(
-              'Secuencia construida:',
-              style: TextStyle(
-                fontSize: 12,
-                color: AppTheme.lightTextSub,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              glosses.map((g) => g.replaceAll('_', ' ')).join(' • '),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                color: AppTheme.lightText,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 12),
-          ] else ...[
-            const Text(
-              'Selecciona glosas para construir tu declaración.',
-              style: TextStyle(
-                fontSize: 13,
-                color: AppTheme.lightTextSub,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            const SizedBox(height: 12),
-          ],
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: Semantics(
-              button: true,
-              enabled: enabled,
-              label: isLoading ? 'Traduciendo' : 'Traducir',
-              excludeSemantics: true,
-              child: Material(
-                color: enabled ? _orange : AppTheme.lightBorder,
-                borderRadius: BorderRadius.circular(16),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: onTranslate,
-                  child: Center(
-                    child: isLoading
-                        ? const SizedBox(
-                            width: 22,
-                            height: 22,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2.5,
-                            ),
-                          )
-                        : Text(
-                            'TRADUCIR',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 2.0,
-                              color: enabled
-                                  ? Colors.white
-                                  : AppTheme.lightTextSub,
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

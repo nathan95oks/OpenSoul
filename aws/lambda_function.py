@@ -209,6 +209,7 @@ GLOSS_LEXICON = {
     "GOBIERNO": {"rol": "INSTITUCION", "es": "el gobierno"},
     "GORDO": {"rol": "DESCRIPTOR", "es": "de contextura gruesa"},
     "GORRA": {"rol": "OBJETO", "es": "mi gorra"},
+    "GRACIAS": {"rol": "DESCONOCIDO", "es": "muchas gracias"},
     "GRATIS": {"rol": "DESCRIPTOR", "es": "gratuito"},
     "GRITAR": {"rol": "VERBO", "es": "gritó"},
     "GRUESO": {"rol": "DESCRIPTOR", "es": "grueso"},
@@ -1096,11 +1097,12 @@ def _is_formal(context_type: str, institution_type: str = "") -> bool:
 # el cliente manda `contractVersion >= 2` y un `declaration`; los demás
 # contextos siguen la vía determinista anterior.
 _NEUTRAL_CLOTHING = {
-    "POLERA": "una polera", "PANTALON": "un pantalón",
+    "POLERA": "una polera", "PANTALON": "un pantalón", "PANTALÓN": "un pantalón",
     "GORRA": "una gorra", "CHAMARRA": "una chamarra",
     "LENTES": "lentes", "MOCHILA": "una mochila", "BOLSA": "una bolsa",
+    "CAJA": "una caja",
 }
-_FEMININE_CLOTHING = {"POLERA", "GORRA", "CHAMARRA", "BOLSA"}
+_FEMININE_CLOTHING = {"POLERA", "GORRA", "CHAMARRA", "BOLSA", "MOCHILA", "CAJA"}
 _PLURAL_CLOTHING = {"LENTES"}
 
 
@@ -1115,6 +1117,22 @@ def _color_adj(concept: str, color: str) -> str:
         return "negros" if plural else ("negra" if fem else "negro")
     if c == "AZUL":
         return "azules" if plural else "azul"
+    if c == "BLANCO":
+        return "blancos" if plural else ("blanca" if fem else "blanco")
+    if c == "VERDE":
+        return "verdes" if plural else "verde"
+    if c in ("CAFE", "CAFÉ"):
+        return "cafés" if plural else "café"
+    if c == "GRIS":
+        return "grises" if plural else "gris"
+    if c == "PLOMO":
+        return "plomos" if plural else ("ploma" if fem else "plomo")
+    if c == "AMARILLO":
+        return "amarillos" if plural else ("amarilla" if fem else "amarillo")
+    if c == "MORADO":
+        return "morados" if plural else ("morada" if fem else "morado")
+    if c == "NARANJA":
+        return "naranjas" if plural else "naranja"
     return str(color).lower().replace("_", " ")
 
 
@@ -1161,10 +1179,19 @@ def _structured_person_phrase(person: dict) -> str:
 
 
 def _structured_object_self_phrase(obj: dict) -> str:
+    if obj.get("docType"):
+        doc = obj["docType"].strip()
+        if doc.startswith(("Carnet", "Licencia", "Pasaporte")):
+            return f"mi {doc}"
+        return f"un {doc}"
     concept = obj.get("concept", "")
-    if _lexicon_key(concept) == "BILLETES" and obj.get("quantity"):
+    if _lexicon_key(concept) in ("BILLETES", "DINERO") and obj.get("quantity"):
         unidad = obj.get("unit") or "bolivianos"
         return f"{obj['quantity']} {unidad} en billetes"
+    if obj.get("contents"):
+        lex = lexicon_lookup(concept)
+        nombre = lex["es"] if lex else concept.lower().replace("_", " ")
+        return f"{nombre} que contenía {obj['contents'].strip()}"
     lex = lexicon_lookup(concept)
     base = lex["es"] if lex else concept.lower().replace("_", " ")
     if obj.get("detail"):
@@ -1214,10 +1241,6 @@ def _structured_location_clause(location: dict) -> str:
 
 
 def _structured_time_clause(time_info: dict):
-    """Redacta el complemento temporal sin reutilizar `_resolve_time`: esa
-    función espera el diccionario `analysis` completo (con `tiempos`,
-    `verbos`, etc.) para mutarlo in place, y aquí solo hay un [TimeInfo] ya
-    resuelto. `denuncia_robo` narra siempre un hecho pasado."""
     if time_info.get("unknown"):
         return None
     unit = time_info.get("elapsedUnit")
@@ -1246,9 +1269,10 @@ def _structured_time_clause(time_info: dict):
 
 
 def generate_structured_sentence(declaration: dict) -> str:
-    """Genera la declaración de `denuncia_robo` a partir del `declaration`
-    estructurado. Cada oración solo afirma lo que el borrador contiene."""
+    """Genera la declaración a partir del `declaration` estructurado
+    para todos los 8 contextos con gramática formal boliviana."""
     sentences = []
+    context_id = declaration.get("contextId", "denuncia_robo")
     location = declaration.get("location") or {}
     time_info = declaration.get("time") or {}
     loc_clause = _structured_location_clause(location)
@@ -1270,36 +1294,73 @@ def generate_structured_sentence(declaration: dict) -> str:
     fact = declaration.get("fact") or {}
     action = _lexicon_key(fact.get("action") or "")
 
-    if action == "ROBAR":
-        if stolen:
-            what = _join_es([_structured_object_self_phrase(o) for o in stolen])
-            clause = f"{subject_phrase} me robó {what}{loc_clause}."
+    if context_id == "violencia":
+        violence = declaration.get("violence") or {}
+        agg = violence.get("aggressionType") or action or "agresión física"
+        agg_text = str(agg).lower().replace("_", " ")
+        sentences.append(f"{time_prefix}El declarante denuncia haber sufrido {agg_text}{loc_clause}.".strip())
+    elif context_id == "amenaza_digital":
+        digital = declaration.get("digitalThreat") or {}
+        chan = digital.get("channel") or "medios digitales"
+        sentences.append(f"{time_prefix}El declarante refiere haber recibido amenazas a través de {chan}{loc_clause}.".strip())
+    elif context_id == "engano_dinero":
+        fraud = declaration.get("fraud") or {}
+        monto = f" por el monto de {fraud['amount']} {fraud.get('currency', 'bolivianos')}" if fraud.get("amount") else ""
+        medio = f" mediante {fraud['deliveryMethod']}" if fraud.get("deliveryMethod") else ""
+        sentences.append(f"{time_prefix}El declarante denuncia haber sido víctima de engaño económico{monto}{medio}{loc_clause}.".strip())
+    elif context_id == "seguimiento":
+        sentences.append(f"{time_prefix}El ciudadano consulta el estado de su trámite o investigación{loc_clause}.".strip())
+    elif context_id == "identificacion":
+        docs = [o["docType"] for o in objects if o.get("docType")]
+        if docs:
+            sentences.append(f"El declarante presenta su {_join_es(docs)}{loc_clause}.".strip())
         else:
-            clause = f"{subject_phrase} me robó{loc_clause}."
-        sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
-    elif action == "PERDER":
-        # Perder nunca se redacta como una acción de otra persona.
-        objetos_perdidos = lost or stolen
-        if objetos_perdidos:
-            what = _join_es([_structured_object_self_phrase(o) for o in objetos_perdidos])
-            sentences.append(f"{time_prefix}Perdí {what}{loc_clause}.".strip())
+            sentences.append(f"El declarante se identifica ante la autoridad competente{loc_clause}.".strip())
+    elif context_id == "preguntas":
+        sentences.append("¿Dónde debo realizar esta consulta o presentar el trámite?")
+    elif context_id == "otro":
+        inquiry = declaration.get("inquiry") or {}
+        if inquiry.get("isWitnessReport", True):
+            sentences.append(f"{time_prefix}El declarante se presenta en calidad de testigo presencial de los hechos{loc_clause}.".strip())
         else:
-            sentences.append(
-                f"{time_prefix}No sé con certeza qué ocurrió; puede que haya perdido algo{loc_clause}.".strip())
-    elif action == "ENGANAR":
-        sentences.append(f"{time_prefix}Me engañaron{loc_clause}.".strip())
-    elif action == "DANAR":
-        what = f" {_join_es([_structured_object_self_phrase(o) for o in stolen])}" if stolen else ""
-        clause = f"{subject_phrase} dañó{what}{loc_clause}."
-        sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
-    elif action == "ESCAPAR":
-        clause = f"{subject_phrase} escapó{loc_clause}."
-        sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
-    else:
-        # Sin hecho confirmado: no se afirma un robo ni ningún otro delito
-        # solo por haber entrado a este menú.
-        if loc_clause or time_clause:
-            sentences.append(f"{time_prefix}Ocurrió algo que quiero relatar{loc_clause}.".strip())
+            sentences.append(f"{time_prefix}El declarante realiza una manifestación voluntaria{loc_clause}.".strip())
+    else:  # denuncia_robo
+        if action == "ROBAR":
+            if stolen:
+                what = _join_es([_structured_object_self_phrase(o) for o in stolen])
+                clause = f"{subject_phrase} me robó {what}{loc_clause}."
+            else:
+                clause = f"{subject_phrase} me robó{loc_clause}."
+            sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
+        elif action == "PERDER":
+            objetos_perdidos = lost or stolen
+            if objetos_perdidos:
+                what = _join_es([_structured_object_self_phrase(o) for o in objetos_perdidos])
+                sentences.append(f"{time_prefix}Perdí {what}{loc_clause}.".strip())
+            else:
+                sentences.append(
+                    f"{time_prefix}No sé con certeza qué ocurrió; puede que haya perdido algo{loc_clause}.".strip())
+        elif action in ("ENGANAR", "ENGAÑAR"):
+            sentences.append(f"{time_prefix}Me engañaron{loc_clause}.".strip())
+        elif action in ("DANAR", "DAÑAR"):
+            what = f" {_join_es([_structured_object_self_phrase(o) for o in stolen])}" if stolen else ""
+            clause = f"{subject_phrase} dañó{what}{loc_clause}."
+            sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
+        elif action == "ESCAPAR":
+            actor_role = fact.get("actorRole")
+            actor_detail = fact.get("actorDetail")
+            if actor_role == "victim":
+                sentences.append(f"{time_prefix}El declarante logró escapar{loc_clause}.".strip())
+            elif actor_role == "thirdParty":
+                sentences.append(f"{time_prefix}Una tercera persona escapó del lugar{loc_clause}.".strip())
+            elif actor_detail:
+                sentences.append(f"{time_prefix}{actor_detail} escapó{loc_clause}.".strip())
+            else:
+                clause = f"{subject_phrase} escapó{loc_clause}."
+                sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
+        else:
+            if loc_clause or time_clause:
+                sentences.append(f"{time_prefix}Ocurrió algo que quiero relatar{loc_clause}.".strip())
 
     if carried:
         what = _join_es([_structured_object_neutral_phrase(o) for o in carried])
@@ -2079,6 +2140,253 @@ def _gen_general(ir, analysis, is_formal):
         all_es.append(item["es"])
 
     return " ".join(all_es).capitalize() if all_es else " ".join(ir["glosas_originales"]).capitalize()
+
+def uses_structured(body: dict) -> bool:
+    """Indica si la solicitud contiene una declaración estructurada v2."""
+    if not isinstance(body, dict):
+        return False
+    decl = body.get("declaration")
+    return isinstance(decl, dict) and bool(decl)
+
+
+def _cap(s: str) -> str:
+    if not s:
+        return ""
+    return s[0].upper() + s[1:]
+
+
+def _decap(s: str) -> str:
+    if not s:
+        return ""
+    return s[0].lower() + s[1:]
+
+
+def _join(items: list) -> str:
+    if not items:
+        return ""
+    if len(items) == 1:
+        return items[0]
+    if len(items) == 2:
+        return f"{items[0]}, {items[1]}"
+    return f"{', '.join(items[:-1])}, {items[-1]}"
+
+
+def _person_phrase_structured(p: dict) -> str:
+    genero = (p.get("gender") or p.get("genero") or "").strip().lower()
+    complexion = (p.get("build") or p.get("complexion") or "").strip().lower()
+    if complexion == "alto":
+        comp_text = "de contextura alta"
+    elif complexion:
+        comp_text = f"de contextura {complexion}"
+    else:
+        comp_text = ""
+
+    desc = f"{genero} {comp_text}".strip() if genero else (f"persona {comp_text}".strip() if comp_text else "persona")
+
+    clothes = p.get("clothing") or p.get("clothes") or p.get("ropa") or []
+    prendas = []
+    for c in clothes:
+        prenda = (c.get("concept") or c.get("prenda") or c.get("garment") or "").strip().lower()
+        color = (c.get("color") or "").strip().lower()
+        if prenda and color:
+            prendas.append(f"{prenda} {color}")
+        elif prenda:
+            prendas.append(prenda)
+
+    if prendas:
+        return f"{desc}, vestía {', '.join(prendas)}"
+    return desc
+
+
+def _object_self_phrase_py(o: dict) -> str:
+    det = o.get("detail") or o.get("detalles")
+    if det and str(det).strip():
+        return str(det).strip()
+    doc_type = o.get("doc_type") or o.get("docType")
+    if doc_type and str(doc_type).strip():
+        return str(doc_type).strip()
+    concept = (o.get("concept") or o.get("glosa") or "").strip().upper()
+    entry = lexicon_lookup(concept)
+    if entry:
+        return entry["es"].lower()
+    return concept.lower()
+
+
+def generate_structured_sentence(d: dict) -> str:
+    """Genera la declaración determinista formal a partir de un dict estructurado para los 8 contextos."""
+    if not isinstance(d, dict):
+        return "Quiero comunicar lo siguiente, aunque todavía no completé los detalles."
+
+    context_id = (d.get("context_id") or d.get("contextId") or "denuncia_robo").strip().lower()
+    sentences = []
+
+    loc_dict = d.get("location") or d.get("lugar") or {}
+    espacio = loc_dict.get("espacio") or loc_dict.get("main_place_concept") or loc_dict.get("mainPlaceConcept") or ""
+    zona = loc_dict.get("zona") or loc_dict.get("main_place_detail") or loc_dict.get("mainPlaceDetail") or ""
+    loc_part = ""
+    if espacio and zona:
+        loc_part = f"en {espacio.lower()} en zona {zona}"
+    elif espacio:
+        loc_part = f"en {espacio.lower()}"
+    elif zona:
+        loc_part = f"en zona {zona}"
+
+    time_val = d.get("time") or d.get("tiempo")
+    time_text = ""
+    if isinstance(time_val, str) and time_val.strip():
+        time_text = time_val.strip()
+    elif isinstance(time_val, dict):
+        time_text = (time_val.get("date_or_moment") or time_val.get("dateOrMoment") or "").lower()
+
+    objects = d.get("objects") or d.get("objetos") or []
+    stolen = [o for o in objects if (o.get("role") or o.get("rol")) in ("stolen", "robado")]
+    lost = [o for o in objects if (o.get("role") or o.get("rol")) in ("lost", "perdido", "documento")]
+
+    persons = d.get("persons") or d.get("personas") or []
+    suspects = [p for p in persons if (p.get("role") or p.get("rol")) in ("suspect", "sospechoso")]
+
+    fact = d.get("fact") or d.get("hecho") or {}
+    action = (fact.get("action") or fact.get("accion") or "").strip().upper()
+    tipo_hecho = (fact.get("tipo") or "").strip().lower()
+
+    if context_id == "violencia":
+        violence = d.get("violence") or d.get("violencia") or {}
+        sentences.append("Denuncio agresión física y violencia sufrida.")
+        if violence.get("agresor_relacion"):
+            sentences.append(f"La persona agresora es mi {violence['agresor_relacion']}.")
+        if violence.get("heridas"):
+            sentences.append(f"Presento lesiones: {violence['heridas']}.")
+        if violence.get("atencion_medica") or violence.get("medical_care_requested"):
+            sentences.append("He recibido o requiero atención médica de urgencia.")
+        if violence.get("certificado_forense"):
+            sentences.append("Cuento con certificado médico forense.")
+        if violence.get("frecuencia"):
+            sentences.append(f"Esta situación de agresión ocurre de manera {violence['frecuencia']}.")
+        if violence.get("solicita_medidas_proteccion") or violence.get("protection_requested"):
+            sentences.append("Solicito medidas de protección inmediata para salvaguardar mi integridad.")
+
+    elif context_id == "amenaza_digital":
+        threat = d.get("digital_threat") or d.get("digitalThreat") or d.get("amenaza_digital") or {}
+        sentences.append("Denuncio la recepción de mensajes hostiles y amenazas a través de medios digitales.")
+        if threat.get("medio") or threat.get("channel"):
+            sentences.append(f"Canal utilizado: {threat.get('medio') or threat.get('channel')}.")
+        if threat.get("remitente"):
+            sentences.append(f"Remitente: {threat['remitente']}.")
+        if threat.get("numero_telefono") or threat.get("phoneNumber"):
+            sentences.append(f"Número de contacto / remitente: {threat.get('numero_telefono') or threat.get('phoneNumber')}.")
+        if threat.get("has_saved_evidence") or threat.get("mensajes_guardados") or threat.get("capturas_pantalla"):
+            sentences.append("Dispongo de capturas de pantalla y mensajes guardados como evidencia.")
+
+    elif context_id == "engano_dinero":
+        fraud = d.get("fraud") or d.get("engano_dinero") or {}
+        tipo_engano = fraud.get("tipo_engano") or "engaño económico"
+        sentences.append(f"Denuncio un engaño económico / {tipo_engano}.")
+        if fraud.get("monto_aproximado") or fraud.get("amount"):
+            sentences.append(f"Monto involucrado: {fraud.get('monto_aproximado') or fraud.get('amount')}.")
+        if fraud.get("via_pago") or fraud.get("delivery_method"):
+            sentences.append(f"Medio de pago / transferencia: {fraud.get('via_pago') or fraud.get('delivery_method')}.")
+        if fraud.get("destinatario") or fraud.get("recipient_name"):
+            sentences.append(f"Beneficiario o destinatario del dinero: {fraud.get('destinatario') or fraud.get('recipient_name')}.")
+        if fraud.get("tiene_comprobante") or fraud.get("receipt_doc"):
+            sentences.append("Cuento con comprobantes bancarios y respaldo de la transacción.")
+
+    elif context_id == "seguimiento":
+        proc = d.get("procedure") or d.get("procedimiento") or {}
+        if proc.get("tipo_tramite"):
+            sentences.append(f"Solicito información sobre el trámite: {proc['tipo_tramite']}.")
+        else:
+            sentences.append("El ciudadano consulta el estado de su trámite o investigación.")
+        if proc.get("numero_caso") or proc.get("caseNumber"):
+            sentences.append(f"Número de caso / NUREJ / referencia: {proc.get('numero_caso') or proc.get('caseNumber')}.")
+        if proc.get("autoridad_destino") or proc.get("targetInstitution"):
+            sentences.append(f"Autoridad o despacho: {proc.get('autoridad_destino') or proc.get('targetInstitution')}.")
+        if proc.get("accion_solicitada") or proc.get("procedureType"):
+            sentences.append(f"Acción o consulta: {proc.get('accion_solicitada') or proc.get('procedureType')}.")
+        if proc.get("proxima_fecha"):
+            sentences.append(f"Fecha programada / retorno: {proc['proxima_fecha']}.")
+
+    elif context_id == "identificacion":
+        id_nom = d.get("identificacion_nombre") or d.get("nombre")
+        id_doc = d.get("identificacion_documento") or d.get("documento")
+        id_con = d.get("identificacion_contacto") or d.get("contacto")
+        id_aco = d.get("identificacion_acompanante") or d.get("acompanante")
+        sentences.append("Datos de identificación:")
+        if id_nom:
+            sentences.append(f"Nombre completo: {id_nom}.")
+        if id_doc:
+            sentences.append(f"Documento de identidad: {id_doc}.")
+        if id_con:
+            sentences.append(f"Teléfono / WhatsApp de contacto: {id_con}.")
+        if id_aco:
+            sentences.append(f"Acompañante: {id_aco}.")
+        if d.get("necesita_interprete") or d.get("needs_interpreter"):
+            sentences.append("Comunico que soy una persona sorda y requiero comunicación escrita o intérprete oficial de LSB.")
+
+    elif context_id == "preguntas":
+        inq = d.get("consulta") or d.get("inquiry") or {}
+        if inq.get("pregunta_principal"):
+            sentences.append(f"Consulta ciudadana: {inq['pregunta_principal']}")
+            if inq.get("lugar_consulta"):
+                sentences.append(f"Lugar o institución de referencia: {inq['lugar_consulta']}.")
+            if inq.get("autoridad_consulta"):
+                sentences.append(f"Funcionario / autoridad por quien se consulta: {inq['autoridad_consulta']}.")
+            if inq.get("tema_consulta"):
+                sentences.append(f"Materia o tema: {inq['tema_consulta']}.")
+            if inq.get("tiempo_espera"):
+                sentences.append(f"Tiempo estimado o plazo informado: {inq['tiempo_espera']}.")
+        else:
+            sentences.append("¿Dónde debo realizar esta consulta o presentar el trámite?")
+
+    elif context_id == "otro":
+        relato = fact.get("relato_libre") or fact.get("narrative")
+        if relato:
+            sentences.append(f"Declaración testimonial: {relato}")
+            if persons:
+                sentences.append("Personas observadas:")
+                for p in persons:
+                    sentences.append(_person_phrase_structured(p))
+        else:
+            sentences.append("El declarante se presenta en calidad de testigo presencial de los hechos.")
+        if d.get("necesita_interprete") or d.get("needs_interpreter"):
+            sentences.append("Solicito asistencia de un intérprete en Lengua de Señas Boliviana (LSB).")
+
+    else: # denuncia_robo / hurto / perdida
+        if action == "PERDER" or tipo_hecho == "perdida":
+            objs = lost if lost else stolen
+            what = _join([_object_self_phrase_py(o) for o in objs])
+            lugar_str = f" {loc_part}" if loc_part else ""
+            sentences.append(f"He extraviado o perdido: {what}. Ocurrió{lugar_str}.".strip() if lugar_str else f"He extraviado o perdido: {what}.")
+        else: # robo
+            what = _join([_object_self_phrase_py(o) for o in stolen])
+            if what:
+                sentences.append(f"Denuncio el robo de {what}.")
+            else:
+                sentences.append("Denuncio el robo de mis pertenencias.")
+
+            loc_time = []
+            if loc_part:
+                loc_time.append(loc_part)
+            if time_text:
+                loc_time.append(time_text)
+            if loc_time:
+                sentences.append(f"Ocurrió {', '.join(loc_time)}.")
+
+            escapar_actor = fact.get("escapar_actor") or fact.get("actor_role")
+            if escapar_actor in ("sospechoso", "suspect"):
+                sentences.append("El sospechoso se dio a la fuga.")
+
+            if suspects:
+                sentences.append("Autor / sospechoso:")
+                for p in suspects:
+                    sentences.append(_person_phrase_structured(p))
+
+            evid = d.get("evidence") or d.get("evidencia") or []
+            if evid:
+                sentences.append("Cuento con elementos de prueba o respaldo:")
+
+    texto = " ".join([s.strip() for s in sentences if s.strip()])
+    return texto if texto else "Quiero comunicar lo siguiente, aunque todavía no completé los detalles."
+
 
 def build_generation_prompt(cards: list, analysis: dict, base_sentence: str,
                             context_type: str, is_formal: bool) -> str:

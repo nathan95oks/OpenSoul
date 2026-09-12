@@ -85,8 +85,14 @@ void main() {
     final names = availableContexts.map((c) => c.name).toList();
     // ignore: avoid_print
     print('CONTEXTOS (${ids.length}): $names');
-    expect(ids,
-        ['denuncia_robo', 'violencia', 'accidente', 'otro', 'tramite', 'consulta']);
+    expect(ids, [
+      'denuncia_robo',
+      'violencia',
+      'amenaza_digital',
+      'engano_dinero',
+      'seguimiento',
+      'otro'
+    ]);
     // 'preguntas' se ofrece en la interfaz pero no narra un hecho, así que
     // queda fuera de la lista que alimenta la inferencia de contexto.
     expect(allSelectableContexts.map((c) => c.id), contains('preguntas'));
@@ -158,7 +164,7 @@ const _synonyms = {
   'YO': 'yo',
   // Corpus: la forma natural en español no comparte raíz con la glosa.
   'MAL': 'mal',
-  'FALTA': 'falta',
+  'FALTA': 'perd',
   'HABLAR': 'habl',
   'PEDIR': 'solicit',
   'AUXILIO': 'auxilio',

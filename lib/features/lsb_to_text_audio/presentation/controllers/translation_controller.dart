@@ -48,18 +48,24 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     state = const AsyncValue.data(null);
   }
 
-  Future<void> replayAudio() async {
+  Future<void> replayAudio({String? fallbackText}) async {
     final current = state.value;
-    if (current == null) return;
-    if (current.audioUrl != null && current.audioUrl!.isNotEmpty) {
-      try {
-        await _audio.playUrl(current.audioUrl!);
-        _setPlayback(AudioPlaybackState.playing);
+    if (current != null) {
+      if (current.audioUrl != null && current.audioUrl!.isNotEmpty) {
+        try {
+          await _audio.playUrl(current.audioUrl!);
+          _setPlayback(AudioPlaybackState.playing);
+          return;
+        } catch (_) {}
+      }
+      if (current.generatedText.isNotEmpty) {
+        await _speakLocally(current.generatedText);
         return;
-      } catch (_) {
       }
     }
-    await _speakLocally(current.generatedText);
+    if (fallbackText != null && fallbackText.trim().isNotEmpty) {
+      await _speakLocally(fallbackText);
+    }
   }
 
   Future<void> pauseAudio() async {
@@ -67,18 +73,18 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     _setPlayback(AudioPlaybackState.paused);
   }
 
-  Future<void> resumeAudio() async {
+  Future<void> resumeAudio({String? fallbackText}) async {
     final current = state.value;
-    if (current == null) return;
-    if (current.audioUrl != null && current.audioUrl!.isNotEmpty) {
-      try {
-        await _audio.resume();
-        _setPlayback(AudioPlaybackState.playing);
-        return;
-      } catch (_) {
+    if (current != null) {
+      if (current.audioUrl != null && current.audioUrl!.isNotEmpty) {
+        try {
+          await _audio.resume();
+          _setPlayback(AudioPlaybackState.playing);
+          return;
+        } catch (_) {}
       }
     }
-    await replayAudio();
+    await replayAudio(fallbackText: fallbackText);
   }
 
   /// Genera la declaración a partir de las glosas elegidas.
