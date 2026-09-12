@@ -1,4 +1,9 @@
-import 'dart:math' as math;
+import 'dart:io';
+
+void main() {
+  final lexiconContent = File('tool/generated_lexicon_block.dart').readAsStringSync();
+
+  final code = '''import 'dart:math' as math;
 
 const String kVictimMarker = 'VICTIMA';
 const String kEvidenceMarker = 'PRUEBA_MARCADOR';
@@ -57,7 +62,7 @@ class LocalSentenceAssembler {
 
     final conMarcadores = roles.markers.isEmpty
         ? conTestigos
-        : '${roles.markers.map(_asSentence).join(' ')} $conTestigos'.trim();
+        : '\${roles.markers.map(_asSentence).join(' ')} \$conTestigos'.trim();
 
     return _ensureCoverage(conMarcadores, limpios, skip: consumidas);
   }
@@ -65,30 +70,6 @@ class LocalSentenceAssembler {
   /// Frases directas del Corpus Maestro Unificado LSB v4 (Sección 7 y 8)
   String? _matchDirectIdioms(List<String> tokens) {
     final s = tokens.join(' ');
-
-    if (s == 'SI CONOCER') return 'Sí conozco a esa persona.';
-    if (s == 'NO CONOCER' || s == 'DESCONOCER' || s == 'EL CONOCER NO' || s == 'ELLA CONOCER NO') {
-      return 'No conozco a esa persona.';
-    }
-    if (s == 'SI DENUNCIAR') return 'Sí quiero presentar una denuncia.';
-    if (s == 'NO DENUNCIAR') return 'No quiero presentar una denuncia.';
-    if (s == 'NO TESTIGO') return 'No hay testigos.';
-    if (s == 'SI TESTIGO') return 'Sí, hay un testigo.';
-    if (s == 'ABOGADO') return 'Necesito un abogado.';
-    if (s == 'INTERPRETE') return 'Necesito un intérprete de LSB.';
-    if (s == 'DONDE DENUNCIAR') return '¿Dónde puedo presentar una denuncia?';
-    if (s == 'QUE FORMULARIO') return '¿Qué documentos necesito?';
-    if (s == 'CUANDO VOLVER' || s == 'YO CUANDO VOLVER') return '¿Cuándo debo volver?';
-    if (s == 'COMO AVANCE') return '¿Cómo puedo saber el avance de la investigación?';
-    if (s == 'COMO CASO') return '¿Cómo puedo saber el estado de mi caso?';
-    if (s == 'DONDE FISCALIA' || s == 'FISCALIA DONDE' || s == 'DONDE FISCAL') return '¿Dónde está la Fiscalía?';
-    if (s == 'DONDE FELCC') return '¿Dónde está la FELCC?';
-    if (s == 'DONDE FELCV') return '¿Dónde está la FELCV?';
-    if (s == 'DONDE JUEZ') return '¿Dónde está el juzgado?';
-    if (s == 'QUIEN FISCAL') return '¿Quién es el fiscal?';
-    if (s == 'QUIEN POLICIA') return '¿Quién es el policía?';
-    if (s == 'QUE REQUISITO') return '¿Qué trámite necesito?';
-    if (s == 'QUE SOPORTE') return '¿Qué soporte necesito?';
 
     if (s == 'YO SORDO INTERPRETE NECESITAR' || s == 'SORDO INTERPRETE NECESITAR') {
       return 'Soy una persona sorda y necesito un intérprete de LSB.';
@@ -174,41 +155,8 @@ class LocalSentenceAssembler {
     if (s == 'PAPEL BANCO TENER') {
       return 'Tengo el comprobante del banco.';
     }
-    if (s == 'CALLE HOMBRE YO SEGUIR') {
-      return 'Un hombre me siguió por la calle.';
-    }
-    if (s == 'PERSONA TIENDA ENFRENTE ESPERAR MIRAR') {
-      return 'Una persona se quedó esperando frente a la tienda y me miraba.';
-    }
-    if (s == 'YO CASA IR ASUSTADO') {
-      return 'Me fui a mi casa muy asustado.';
-    }
-    if (s == 'QUIERO DENUNCIAR') {
-      return 'Quiero sentar una denuncia.';
-    }
-    if (s == 'DENUNCIA ESTADO SABER QUERER' || s == 'DENUNCIA INVESTIGACION SABER QUERER') {
-      return 'Deseo saber el estado de mi denuncia.';
-    }
-    if (s == 'POLICIA INVESTIGACION PREGUNTAR') {
-      return 'Quiero consultar con el policía a cargo de la investigación.';
-    }
-    if (s == 'FISCAL HABLAR QUERER') {
-      return 'Quiero hablar con el fiscal.';
-    }
-    if (s == 'RESOLUCION FOTOCOPIA PEDIR') {
-      return 'Solicito una fotocopia de la resolución.';
-    }
-    if (s == 'SEPDAVI ASISTENCIA PEDIR') {
-      return 'Solicito asistencia y patrocinio legal a SEPDAVI.';
-    }
-    if (s == 'SEPDEP ABOGADO PEDIR') {
-      return 'Solicito un defensor público de SEPDEP.';
-    }
-    if (s == 'ORGANO_JUDICIAL CITACION RECIBIR' || s == 'ÓRGANO_JUDICIAL CITACION RECIBIR') {
-      return 'Recibí una citación del Órgano Judicial.';
-    }
-    if (s == 'JUEZ PRESENTAR NECESITAR') {
-      return 'Tengo que presentarme ante un juez.';
+    if (s == 'TIENDA PUERTA DANAR' || s == 'TIENDA PUERTA DAÑAR') {
+      return 'Dañaron la puerta de mi tienda.';
     }
     if (s == 'VIDEO FILMAR TENER') {
       return 'Tengo la grabación en video de la cámara.';
@@ -493,7 +441,7 @@ class LocalSentenceAssembler {
       final t = tokens[i];
       final anterior = salida.isEmpty ? null : salida.last;
       final esRacha = t.length > 1 && _lexicon[t] == null && !_esDigito(t) &&
-          RegExp(r'^[A-ZÑ0-9]+$').hasMatch(t);
+          RegExp(r'^[A-ZÑ0-9]+\$').hasMatch(t);
       if (anterior != null &&
           _admiteDetalle.containsKey(anterior) &&
           !destino.containsKey(anterior) &&
@@ -503,7 +451,7 @@ class LocalSentenceAssembler {
           final siguiente = tokens[i + 1];
           final continua = siguiente.length > 1 &&
               _lexicon[siguiente] == null &&
-              RegExp(r'^[A-ZÑ0-9]+$').hasMatch(siguiente);
+              RegExp(r'^[A-ZÑ0-9]+\$').hasMatch(siguiente);
           if (!continua) break;
           buffer.write(siguiente);
           i++;
@@ -522,14 +470,14 @@ class LocalSentenceAssembler {
     final etiqueta = _admiteDetalle[gloss];
     final propio = _capitalizarPropio(detalle);
     return switch (etiqueta) {
-      'placa' => '$lexema con placa $detalle',
-      'numero' => '$lexema número $detalle',
-      'edad' => 'tengo $detalle años',
-      'nombre' => 'mi nombre es $propio',
-      'apellido' => 'mi apellido es $propio',
-      'carnet' => '$lexema número $detalle',
-      'institucion' => '$lexema $propio',
-      _ => '$lexema $propio',
+      'placa' => '\$lexema con placa \$detalle',
+      'numero' => '\$lexema número \$detalle',
+      'edad' => 'tengo \$detalle años',
+      'nombre' => 'mi nombre es \$propio',
+      'apellido' => 'mi apellido es \$propio',
+      'carnet' => '\$lexema número \$detalle',
+      'institucion' => '\$lexema \$propio',
+      _ => '\$lexema \$propio',
     };
   }
 
@@ -591,7 +539,7 @@ class LocalSentenceAssembler {
     final medida = count == '1' ? spec.singular : spec.plural;
     final esPasado = _mirarAtras(r, contextId, tokens);
     r.timeIsFuture = !esPasado;
-    r.time = '${esPasado ? 'hace' : 'dentro de'} $cardinal $medida';
+    r.time = '\${esPasado ? 'hace' : 'dentro de'} \$cardinal \$medida';
     return {unit, count};
   }
 
@@ -642,40 +590,33 @@ class LocalSentenceAssembler {
       missing.add(frag);
     }
     if (missing.isEmpty) return text;
-    final anadido = _join(missing);
+    final añadido = _join(missing);
     // Si falta algún token no capturado, se integra elegantemente sin coletillas artificiales
-    if (text.isEmpty) return '${_cap(anadido)}.';
-    return '$text (${anadido}).'.trim();
+    if (text.isEmpty) return '\${_cap(añadido)}.';
+    return '\$text (\${añadido}).'.trim();
   }
 
   bool _isRepresented(String gloss, String hayLower) {
     if (gloss == 'ROBAR' && (hayLower.contains('robo') || hayLower.contains('robaron') || hayLower.contains('sustrajeron') || hayLower.contains('asaltaron'))) {
       return true;
     }
-    if (gloss == 'LADRON' && (hayLower.contains('ladron') || hayLower.contains('sospechoso') || hayLower.contains('autor') || hayLower.contains('persona') || hayLower.contains('hombre') || hayLower.contains('mujer'))) {
+    if (gloss == 'LADRON' && (hayLower.contains('ladron') || hayLower.contains('sospechoso') || hayLower.contains('autor'))) {
       return true;
     }
-    if ((gloss == 'CELULAR' || gloss == 'TELEFONO') && (hayLower.contains('celular') || hayLower.contains('telefono'))) {
+    if (gloss == 'CELULAR' && (hayLower.contains('celular') || hayLower.contains('telefono'))) {
       return true;
     }
-    if (gloss == 'IDENTIDAD' && (hayLower.contains('identidad') || hayLower.contains('carnet') || hayLower.contains('cedula') || hayLower.contains('documento'))) {
+    if (gloss == 'IDENTIDAD' && (hayLower.contains('identidad') || hayLower.contains('carnet') || hayLower.contains('cedula'))) {
       return true;
     }
     if (gloss == 'DINERO' || gloss == 'BILLETES') {
       if (hayLower.contains('dinero') || hayLower.contains('billetes') || hayLower.contains('monto')) return true;
     }
-    if (gloss == 'CONOCER' && (hayLower.contains('conozco') || hayLower.contains('conoce') || hayLower.contains('persona'))) return true;
-    if (gloss == 'DENUNCIAR' && (hayLower.contains('denuncia') || hayLower.contains('denunciar'))) return true;
-    if (gloss == 'ABOGADO' && hayLower.contains('abogado')) return true;
-    if (gloss == 'INTERPRETE' && hayLower.contains('interprete')) return true;
     if (gloss == 'SEPDAVI' && hayLower.contains('sepdavi')) return true;
     if (gloss == 'SEPDEP' && (hayLower.contains('sepdep') || hayLower.contains('defensa publica'))) return true;
-    if (gloss == 'FISCALIA' && (hayLower.contains('fiscalia') || hayLower.contains('fiscal'))) return true;
-    if (gloss == 'FISCAL' && (hayLower.contains('fiscal') || hayLower.contains('fiscalia'))) return true;
-    if (gloss == 'JUZGADO' && (hayLower.contains('juzgado') || hayLower.contains('juez'))) return true;
-    if (gloss == 'JUEZ' && (hayLower.contains('juez') || hayLower.contains('juzgado'))) return true;
-    if (gloss == 'POLICIA' && hayLower.contains('policia')) return true;
-    if (gloss == 'TESTIGO' && (hayLower.contains('testigo') || hayLower.contains('testigos') || hayLower.contains('presencie'))) return true;
+    if (gloss == 'FISCALIA' && hayLower.contains('fiscalia')) return true;
+    if (gloss == 'JUZGADO' && hayLower.contains('juzgado')) return true;
+    if (gloss == 'TESTIGO' && hayLower.contains('testigo')) return true;
     if (gloss == 'TOTAL' && (hayLower.contains('todo') || hayLower.contains('totalidad'))) return true;
     if (gloss == 'AMENAZAR' && (hayLower.contains('amenaza') || hayLower.contains('amenazo'))) return true;
     if (gloss == 'PEGAR' && (hayLower.contains('pego') || hayLower.contains('golpeo') || hayLower.contains('agredio'))) return true;
@@ -683,27 +624,13 @@ class LocalSentenceAssembler {
     if (gloss == 'HERIDA' && (hayLower.contains('herida') || hayLower.contains('lesion') || hayLower.contains('lesiones'))) return true;
     if (gloss == 'COMPRENDER' && (hayLower.contains('entiendo') || hayLower.contains('comprendo') || hayLower.contains('entender'))) return true;
     if (gloss == 'EXPLICAR' && (hayLower.contains('explicar') || hayLower.contains('explique') || hayLower.contains('relatar'))) return true;
-    if (gloss == 'SI' && (hayLower.contains('si') || hayLower.contains('afirmativo') || hayLower.contains('quiero') || hayLower.contains('hay'))) return true;
-    if (gloss == 'NO' && (hayLower.contains('no') || hayLower.contains('ninguno'))) return true;
-    if (gloss == 'PASAPORTE' && (hayLower.contains('pasaporte') || hayLower.contains('documento'))) return true;
-    if (gloss == 'FORMULARIO' && (hayLower.contains('documento') || hayLower.contains('formulario') || hayLower.contains('papel'))) return true;
-    if (gloss == 'REQUISITO' && (hayLower.contains('tramite') || hayLower.contains('requisito') || hayLower.contains('documento'))) return true;
-    if (gloss == 'AVANCE' && (hayLower.contains('avance') || hayLower.contains('investigacion') || hayLower.contains('caso'))) return true;
-    if (gloss == 'CASO' && (hayLower.contains('caso') || hayLower.contains('estado') || hayLower.contains('investigacion'))) return true;
-    if (gloss == 'VOLVER' && (hayLower.contains('volver') || hayLower.contains('regresar'))) return true;
-    if (gloss == 'FLACO' && (hayLower.contains('delgado') || hayLower.contains('delgada') || hayLower.contains('flaco') || hayLower.contains('flaca'))) return true;
-    if (gloss == 'GORDO' && (hayLower.contains('grueso') || hayLower.contains('gruesa') || hayLower.contains('gordo') || hayLower.contains('gorda'))) return true;
-    if (gloss == 'ALTO' && (hayLower.contains('alto') || hayLower.contains('alta'))) return true;
-    if (gloss == 'BAJO' && (hayLower.contains('bajo') || hayLower.contains('baja'))) return true;
-    if (gloss == 'JOVEN' && hayLower.contains('joven')) return true;
-    if (gloss == 'ADULTO' && (hayLower.contains('adulto') || hayLower.contains('adulta'))) return true;
 
     final lex = _lexicon[gloss];
     if (lex == null) return false;
     final variants = <String>{lex.es, _verbPlural(lex.es), _femAdj(lex.es)};
     for (final variant in variants) {
       final words = _stripDiacritics(variant.toLowerCase())
-          .split(RegExp(r'\s+'))
+          .split(RegExp(r'\\s+'))
           .where((w) => w.length >= 3)
           .toList();
       if (words.isEmpty) return true;
@@ -736,7 +663,7 @@ class LocalSentenceAssembler {
     if (glosses.isEmpty) return false;
 
     final words = trimmed
-        .split(RegExp(r'\s+'))
+        .split(RegExp(r'\\s+'))
         .where((w) => w.isNotEmpty)
         .toList();
     if (words.length < glosses.length) return true;
@@ -749,7 +676,7 @@ class LocalSentenceAssembler {
     };
     final textWords = trimmed
         .toLowerCase()
-        .split(RegExp(r'[\s.,;:!?]+'))
+        .split(RegExp(r'[\\s.,;:!?]+'))
         .where((w) => w.isNotEmpty)
         .toSet();
     final hasLinking = textWords.any(kLinking.contains);
@@ -768,8 +695,8 @@ class LocalSentenceAssembler {
 
     final cardinal = _cardinales[gloss];
     if (cardinal != null) {
-      if (RegExp('\\b$cardinal\\b').hasMatch(haystackLower)) return true;
-      if (gloss == '1' && RegExp(r'\buna?\b').hasMatch(haystackLower)) {
+      if (RegExp('\\\\b\$cardinal\\\\b').hasMatch(haystackLower)) return true;
+      if (gloss == '1' && RegExp(r'\\buna?\\b').hasMatch(haystackLower)) {
         return true;
       }
     }
@@ -784,7 +711,7 @@ class LocalSentenceAssembler {
     final lex = _lexicon[_normalize(gloss)];
     if (lex != null) {
       final words = _stripDiacritics(lex.es.toLowerCase())
-          .split(RegExp(r'\s+'))
+          .split(RegExp(r'\\s+'))
           .where((w) => w.length >= 4);
       for (final w in words) {
         if (haystackLower.contains(w)) return true;
@@ -897,9 +824,9 @@ class LocalSentenceAssembler {
           break;
         case _Role.verboAccion:
           final forma = negarSiguienteVerbo
-              ? 'no ${e.es}'
+              ? 'no \${e.es}'
               : afirmarSiguienteVerbo
-                  ? 'sí ${e.es}'
+                  ? 'sí \${e.es}'
                   : e.es;
           negarSiguienteVerbo = false;
           afirmarSiguienteVerbo = false;
@@ -996,7 +923,7 @@ class LocalSentenceAssembler {
   static bool _esDigito(String g) => _digitos.contains(g);
 
   static bool _esLetra(String g) =>
-      g.length == 1 && RegExp(r'^[A-ZÑ]$').hasMatch(g);
+      g.length == 1 && RegExp(r'^[A-ZÑ]\$').hasMatch(g);
 
   String _asSentence(String texto) {
     if (texto.isEmpty) return texto;
@@ -1006,7 +933,7 @@ class LocalSentenceAssembler {
         : texto.substring(0, i) +
             texto[i].toUpperCase() +
             texto.substring(i + 1);
-    return t.endsWith('.') || t.endsWith('?') || t.endsWith('!') ? t : '$t.';
+    return t.endsWith('.') || t.endsWith('?') || t.endsWith('!') ? t : '\$t.';
   }
 
   String _withWitnesses(String texto, _Roles r) {
@@ -1015,13 +942,13 @@ class LocalSentenceAssembler {
     final clausula = r.witnessesNegated
         ? 'No hay testigos'
         : r.witnesses.length == 1
-            ? '$afirmacion ${r.witnesses.first}'
-            : '$afirmacion testigos';
+            ? '\$afirmacion \${r.witnesses.first}'
+            : '\$afirmacion testigos';
     if (r.question != null) return texto;
     final base = texto.trim();
-    if (base.isEmpty) return '$clausula.';
+    if (base.isEmpty) return '\$clausula.';
     final sinPunto = base.endsWith('.') ? base.substring(0, base.length - 1) : base;
-    return '$sinPunto. $clausula.';
+    return '\$sinPunto. \$clausula.';
   }
 
   String _composeQuestion(_Roles r) {
@@ -1054,38 +981,38 @@ class LocalSentenceAssembler {
         final complemento = r.institution!.startsWith('en ')
             ? r.institution!.substring(3)
             : r.institution!;
-        return '¿Dónde está $complemento?';
+        return '¿Dónde está \$complemento?';
       }
       if (r.place != null) {
         final complemento = r.place!.startsWith('en ')
             ? r.place!.substring(3)
             : r.place!;
-        return '¿Dónde está $complemento?';
+        return '¿Dónde está \$complemento?';
       }
       final accion = _accionDePregunta(r);
-      if (accion != null) return '¿Dónde puedo $accion?';
+      if (accion != null) return '¿Dónde puedo \$accion?';
       return '¿Dónde ocurrió?';
     }
 
     if (interrogativa == 'cuándo') {
       final accion = _accionDePregunta(r);
-      if (accion != null) return '¿Cuándo debo $accion?';
+      if (accion != null) return '¿Cuándo debo \$accion?';
       final citado = [...r.procedures, ...r.documents];
-      if (citado.isNotEmpty) return '¿Cuándo es ${_conArticuloDefinido(citado.first)}?';
+      if (citado.isNotEmpty) return '¿Cuándo es \${_conArticuloDefinido(citado.first)}?';
       return '¿Cuándo ocurrió?';
     }
 
     if (interrogativa == 'quién' || interrogativa == 'cuántos') {
       if (personas.isEmpty) {
-        return '¿${_capitalizar(interrogativa)}?';
+        return '¿\${_capitalizar(interrogativa)}?';
       }
       if (r.institution != null) {
-        return '¿${_capitalizar(interrogativa)} es ${_whoLabelForInstitution(r.institution!)}?';
+        return '¿\${_capitalizar(interrogativa)} es \${_whoLabelForInstitution(r.institution!)}?';
       }
       final complemento = personas.first.startsWith('en ')
           ? personas.first.substring(3)
           : personas.first;
-      return '¿${_capitalizar(interrogativa)} es $complemento?';
+      return '¿\${_capitalizar(interrogativa)} es \$complemento?';
     }
 
     if (interrogativa == 'para qué') {
@@ -1094,12 +1021,12 @@ class LocalSentenceAssembler {
 
     if (interrogativa == 'cómo') {
       final accion = _accionDePregunta(r);
-      if (accion != null) return '¿Cómo puedo $accion?';
+      if (accion != null) return '¿Cómo puedo \$accion?';
       final tema = [...r.procedures, ...r.documents];
       if (tema.isNotEmpty) {
         final x = tema.first;
         final yaEsEstado = x.contains('avance') || x.contains('estado');
-        return '¿Cómo puedo saber ${yaEsEstado ? x : 'el estado de $x'}?';
+        return '¿Cómo puedo saber \${yaEsEstado ? x : 'el estado de \$x'}?';
       }
       return '¿Cómo es?';
     }
@@ -1110,9 +1037,9 @@ class LocalSentenceAssembler {
 
     final admitidos = [...r.procedures];
     if (admitidos.isEmpty) {
-      return '¿${_capitalizar(interrogativa)}?';
+      return '¿\${_capitalizar(interrogativa)}?';
     }
-    return '¿${_capitalizar(interrogativa)} ${admitidos.first}?';
+    return '¿\${_capitalizar(interrogativa)} \${admitidos.first}?';
   }
 
   static const _modalesDeclarativos = [
@@ -1129,14 +1056,14 @@ class LocalSentenceAssembler {
   }
 
   String _conArticuloDefinido(String lexema) {
-    if (lexema.startsWith('una ')) return 'la ${lexema.substring(4)}';
-    if (lexema.startsWith('un ')) return 'el ${lexema.substring(3)}';
+    if (lexema.startsWith('una ')) return 'la \${lexema.substring(4)}';
+    if (lexema.startsWith('un ')) return 'el \${lexema.substring(3)}';
     return lexema;
   }
 
   String _composeInquiry(_Roles r) {
-    final institution = r.institution?.replaceFirst(RegExp(r'^en\s+'), '');
-    final place = r.place?.replaceFirst(RegExp(r'^en\s+'), '');
+    final institution = r.institution?.replaceFirst(RegExp(r'^en\\s+'), '');
+    final place = r.place?.replaceFirst(RegExp(r'^en\\s+'), '');
     final documents = r.documents.isNotEmpty ? _join(r.documents) : '';
     final objects = r.objects.isNotEmpty ? _join(r.objects) : '';
     final procedures = r.procedures.isNotEmpty ? _join(r.procedures) : '';
@@ -1156,8 +1083,8 @@ class LocalSentenceAssembler {
     if (objects.isNotEmpty) return '¿Qué necesitas?';
     if (procedures.isNotEmpty) return '¿Qué trámite necesitas?';
     if (services.isNotEmpty) return '¿Qué apoyo necesitas?';
-    if (victim.isNotEmpty) return '¿Quién es $victim?';
-    if (person != 'una persona') return '¿Quién es $person?';
+    if (victim.isNotEmpty) return '¿Quién es \$victim?';
+    if (person != 'una persona') return '¿Quién es \$person?';
     return '¿Qué quieres preguntar?';
   }
 
@@ -1183,19 +1110,18 @@ class LocalSentenceAssembler {
       t.isEmpty ? t : t[0].toUpperCase() + t.substring(1);
 
   String _toDestino(String institucion) {
-    if (institucion.startsWith('en el ')) return 'al ${institucion.substring(6)}';
-    if (institucion.startsWith('en la ')) return 'a la ${institucion.substring(6)}';
-    if (institucion.startsWith('en ')) return 'a ${institucion.substring(3)}';
+    if (institucion.startsWith('en el ')) return 'al \${institucion.substring(6)}';
+    if (institucion.startsWith('en la ')) return 'a la \${institucion.substring(6)}';
+    if (institucion.startsWith('en ')) return 'a \${institucion.substring(3)}';
     return institucion;
   }
 
   String _composeIdentification(_Roles r) {
     final sentences = <String>[];
-    final items = [...r.documents, ...r.objects];
+    final documentos = [...r.documents];
     r.documents.clear();
-    r.objects.clear();
-    for (final d in items) {
-      sentences.add('${_cap(d)}.');
+    for (final d in documentos) {
+      sentences.add('\${_cap(d)}.');
     }
     return sentences.join(' ');
   }
@@ -1214,27 +1140,27 @@ class LocalSentenceAssembler {
       final subject = _subjectPhrase(r);
       final defaultVerb = ctx == 'violencia' ? 'agredió' : 'asaltó';
       final verb = r.aggression ?? defaultVerb;
-      var clause = '${subject.contains(',') ? '$subject,' : subject} me $verb';
+      var clause = '\${subject.contains(',') ? '\$subject,' : subject} me \$verb';
       final complement = _joinConCanales([...r.objects, ...r.documents]);
       if (complement.isNotEmpty) {
-        clause += ' $complement';
+        clause += ' \$complement';
         r.objects.clear();
         r.documents.clear();
       }
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       final flight = r.flight;
       if (flight != null) {
-        clause += ' y $flight';
+        clause += ' y \$flight';
         r.flight = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        clause = '\${_cap(r.time!)}, \${_decap(clause)}';
         r.time = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
       r.aggression = null;
       r.perpetrators.clear();
       r.traits.clear();
@@ -1252,34 +1178,34 @@ class LocalSentenceAssembler {
       r.action = null;
       r.extraActions.clear();
       if (canales.isNotEmpty) {
-        acciones[0] = '${acciones[0]} ${_join(canales)}';
+        acciones[0] = '\${acciones[0]} \${_join(canales)}';
       }
       if (nominales.isNotEmpty) {
         acciones[acciones.length - 1] =
-            '${acciones.last} ${_join(nominales)}';
+            '\${acciones.last} \${_join(nominales)}';
       }
       var clause = _join(acciones);
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        clause = '\${_cap(r.time!)}, \${_decap(clause)}';
         r.time = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
     } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
       final what = _join([...r.objects, ...r.documents]);
-      var clause = 'Me sustrajeron $what';
+      var clause = 'Me sustrajeron \$what';
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause += ' ${r.time}';
+        clause += ' \${r.time}';
         r.time = null;
       }
-      sentences.add('$clause.');
+      sentences.add('\$clause.');
       r.objects.clear();
       r.documents.clear();
     }
@@ -1298,34 +1224,34 @@ class LocalSentenceAssembler {
     if (r.emotions.isNotEmpty) {
       var clause = _join(r.emotions);
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        clause = '\${_cap(r.time!)}, \${_decap(clause)}';
         r.time = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
       r.emotions.clear();
     } else if (r.place != null || r.time != null) {
       var clause = 'Ocurrió';
       if (r.time != null) {
-        clause += ' ${r.time}';
+        clause += ' \${r.time}';
         r.time = null;
       }
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
-      sentences.add('$clause.');
+      sentences.add('\$clause.');
     }
 
     if (r.services.isNotEmpty) {
-      sentences.add('Necesito ${_join(r.services)}.');
+      sentences.add('Necesito \${_join(r.services)}.');
       r.services.clear();
     }
     if (r.urgencies.isNotEmpty) {
-      sentences.add('${_cap(_join(r.urgencies))}.');
+      sentences.add('\${_cap(_join(r.urgencies))}.');
       r.urgencies.clear();
     }
 
@@ -1339,22 +1265,22 @@ class LocalSentenceAssembler {
     final verb = r.action ?? 'necesito tramitar';
     final what = _join([...r.documents, ...r.procedures]);
     var clause = verb;
-    if (what.isNotEmpty) clause += ' $what';
+    if (what.isNotEmpty) clause += ' \$what';
     if (r.institution != null) {
-      clause += ' ${r.institution}';
+      clause += ' \${r.institution}';
       r.institution = null;
     }
-    sentences.add('${_cap(clause)}.');
+    sentences.add('\${_cap(clause)}.');
     r.action = null;
     r.documents.clear();
     r.procedures.clear();
 
     if (r.purposes.isNotEmpty) {
-      sentences.add('Lo necesito para presentar ${_join(r.purposes)}.');
+      sentences.add('Lo necesito para presentar \${_join(r.purposes)}.');
       r.purposes.clear();
     }
     if (r.subject != null && r.subject != 'yo') {
-      sentences.add('El trámite es para ${r.subject}.');
+      sentences.add('El trámite es para \${r.subject}.');
       r.subject = null;
     }
 
@@ -1370,34 +1296,34 @@ class LocalSentenceAssembler {
         const {'quiero solicitar', 'necesito ayuda'}.contains(r.action);
     if (r.services.isNotEmpty && verboPideServicio) {
       final verb = r.action != null ? _cap(r.action!) : 'Solicito';
-      var clause = '$verb ${_join(r.services)}';
+      var clause = '\$verb \${_join(r.services)}';
       if (r.institution != null) {
-        clause += ' ${_join(r.institutions)}';
+        clause += ' \${_join(r.institutions)}';
         r.institution = null;
       }
-      sentences.add('$clause.');
+      sentences.add('\$clause.');
       r.services.clear();
       r.action = null;
     } else if (r.action != null) {
       var clause = r.action!;
       final what = _join([...r.documents, ...r.procedures]);
       if (what.isNotEmpty) {
-        clause += ' $what';
+        clause += ' \$what';
         r.documents.clear();
         r.procedures.clear();
       }
       if (r.institution != null) {
-        clause += ' ${_join(r.institutions)}';
+        clause += ' \${_join(r.institutions)}';
         r.institution = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
       r.action = null;
     } else if (r.institution != null) {
-      sentences.add('Necesito acudir ${_toDestino(r.institution!)}.');
+      sentences.add('Necesito acudir \${_toDestino(r.institution!)}.');
       r.institution = null;
     }
     if (r.purposes.isNotEmpty) {
-      sentences.add('Deseo presentar ${_join(r.purposes)}.');
+      sentences.add('Deseo presentar \${_join(r.purposes)}.');
       r.purposes.clear();
     }
 
@@ -1413,29 +1339,29 @@ class LocalSentenceAssembler {
 
     final what = _join([...r.objects, ...r.documents]);
     if (what.isNotEmpty) {
-      var clause = 'Perdí $what';
+      var clause = 'Perdí \$what';
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause += ' ${r.time}';
+        clause += ' \${r.time}';
         r.time = null;
       }
-      sentences.add('$clause.');
+      sentences.add('\$clause.');
       r.objects.clear();
       r.documents.clear();
     } else if (r.time != null || r.place != null) {
       var clause = 'Ocurrió';
       if (r.time != null) {
-        clause += ' ${r.time}';
+        clause += ' \${r.time}';
         r.time = null;
       }
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
-      sentences.add('$clause.');
+      sentences.add('\$clause.');
     }
 
     _supplements(r, sentences);
@@ -1454,57 +1380,57 @@ class LocalSentenceAssembler {
 
     if (r.aggression != null) {
       final verb = r.aggression!;
-      var clause = 'presencié cómo $subject $verb';
+      var clause = 'presencié cómo \$subject \$verb';
       final complement = _joinConCanales([...r.objects, ...r.documents]);
       if (complement.isNotEmpty) {
-        clause += ' $complement';
+        clause += ' \$complement';
         r.objects.clear();
         r.documents.clear();
       }
       if (victim != null) {
-        clause += ' a $victim';
+        clause += ' a \$victim';
       } else if (complement.isEmpty) {
         clause += ' a otra persona';
       }
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, $clause';
+        clause = '\${_cap(r.time!)}, \$clause';
         r.time = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
       r.aggression = null;
       r.perpetrators.clear();
       r.traits.clear();
       _clearVictim(r);
     } else if (r.objects.isNotEmpty || r.documents.isNotEmpty) {
       final what = _join([...r.objects, ...r.documents]);
-      var clause = 'presencié un hecho relacionado con $what';
+      var clause = 'presencié un hecho relacionado con \$what';
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, $clause';
+        clause = '\${_cap(r.time!)}, \$clause';
         r.time = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
       r.objects.clear();
       r.documents.clear();
     } else if (hasActor || victim != null) {
-      var clause = hasActor ? 'observé a $subject' : 'observé a $victim';
-      if (hasActor && victim != null) clause += ' y a $victim';
+      var clause = hasActor ? 'observé a \$subject' : 'observé a \$victim';
+      if (hasActor && victim != null) clause += ' y a \$victim';
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, $clause';
+        clause = '\${_cap(r.time!)}, \$clause';
         r.time = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
       r.perpetrators.clear();
       r.traits.clear();
       _clearVictim(r);
@@ -1530,36 +1456,36 @@ class LocalSentenceAssembler {
     if (verb != null) {
       var clause = verb;
       if (what.isNotEmpty) {
-        clause += ' $what';
+        clause += ' \$what';
         r.documents.clear();
         r.procedures.clear();
         r.objects.clear();
       }
       if (r.institution != null) {
-        clause += ' ${_join(r.institutions)}';
+        clause += ' \${_join(r.institutions)}';
         r.institution = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        clause = '\${_cap(r.time!)}, \${_decap(clause)}';
         r.time = null;
       }
-      sentences.add('${_cap(clause)}.');
+      sentences.add('\${_cap(clause)}.');
       r.action = null;
     } else if (what.isNotEmpty) {
-      var clause = 'Hago referencia a $what';
+      var clause = 'Hago referencia a \$what';
       if (r.institution != null) {
-        clause += ' ${_join(r.institutions)}';
+        clause += ' \${_join(r.institutions)}';
         r.institution = null;
       }
       if (r.place != null) {
-        clause += ' ${r.place}';
+        clause += ' \${r.place}';
         r.place = null;
       }
       if (r.time != null) {
-        clause = '${_cap(r.time!)}, ${_decap(clause)}';
+        clause = '\${_cap(r.time!)}, \${_decap(clause)}';
         r.time = null;
       }
-      sentences.add('$clause.');
+      sentences.add('\$clause.');
       r.documents.clear();
       r.procedures.clear();
       r.objects.clear();
@@ -1571,45 +1497,33 @@ class LocalSentenceAssembler {
 
   void _supplements(_Roles r, List<String> sentences) {
     if (r.frequency != null) {
-      sentences.add('${_cap(r.frequency!)}.');
+      sentences.add('\${_cap(r.frequency!)}.');
       r.frequency = null;
     }
     if (r.emotions.isNotEmpty) {
-      sentences.add('${_cap(_join(r.emotions))}.');
+      sentences.add('\${_cap(_join(r.emotions))}.');
       r.emotions.clear();
     }
     if (r.urgencies.isNotEmpty) {
-      sentences.add('${_cap(_join(r.urgencies))}.');
+      sentences.add('\${_cap(_join(r.urgencies))}.');
       r.urgencies.clear();
     }
     if (r.evidence.isNotEmpty) {
-      sentences.add('Cuento con ${_join(r.evidence)} como prueba.');
+      sentences.add('Cuento con \${_join(r.evidence)} como prueba.');
       r.evidence.clear();
     }
     if (r.vehicles.isNotEmpty) {
-      sentences.add('Hago referencia al vehículo ${_join(r.vehicles)}.');
+      sentences.add('Hago referencia al vehículo \${_join(r.vehicles)}.');
       r.vehicles.clear();
     }
     if (r.services.isNotEmpty) {
-      sentences.add('Solicito ${_join(r.services)}.');
+      sentences.add('Solicito \${_join(r.services)}.');
       r.services.clear();
     }
     if (r.institutions.isNotEmpty) {
-      sentences.add('Realizaré esta gestión ${_join(r.institutions)}.');
+      sentences.add('Realizaré esta gestión \${_join(r.institutions)}.');
       r.institutions.clear();
     }
-    final acciones = [if (r.action != null) r.action!, ...r.extraActions];
-    for (final act in acciones) {
-      if (act == 'no conozco') {
-        sentences.add('No conozco a esa persona.');
-      } else if (act == 'sí conozco') {
-        sentences.add('Sí conozco a esa persona.');
-      } else {
-        sentences.add('${_cap(act)}.');
-      }
-    }
-    r.action = null;
-    r.extraActions.clear();
     final affected = _affectedSubjectLine(r);
     if (affected != null) {
       sentences.add(affected);
@@ -1627,7 +1541,7 @@ class LocalSentenceAssembler {
     if (personas.isEmpty && traits.isEmpty) return 'una persona';
     final base = personas.isEmpty
         ? (traits.length == 1 && traits.first.endsWith('a')
-            ? 'una persona ${traits.first}'
+            ? 'una persona \${traits.first}'
             : 'una persona')
         : personas.length == 1
             ? personas.first
@@ -1641,7 +1555,7 @@ class LocalSentenceAssembler {
     if (adjectives.isNotEmpty) {
       final fem = base.contains('una mujer') || base.contains('una persona');
       final adjForm = adjectives.map((a) => fem ? _femAdj(a) : a).toList();
-      buffer.write(' ${_join(adjForm)}');
+      buffer.write(' \${_join(adjForm)}');
     }
     if (withs.isNotEmpty) {
       final items = withs.map((p) {
@@ -1649,26 +1563,26 @@ class LocalSentenceAssembler {
         if (p.startsWith('de ')) return p.substring(3);
         return p;
       }).toList();
-      buffer.write(', con ${_join(items)}');
+      buffer.write(', con \${_join(items)}');
     }
     return buffer.toString();
   }
 
   static String _femAdj(String adj) {
     if (adj.startsWith('de piel') || adj.startsWith('de cabello')) return adj;
-    if (adj.endsWith('o')) return '${adj.substring(0, adj.length - 1)}a';
+    if (adj.endsWith('o')) return '\${adj.substring(0, adj.length - 1)}a';
     return adj;
   }
 
   String? _affectedSubjectLine(_Roles r) =>
       (r.subject == null || r.subject == 'yo')
           ? null
-          : 'El hecho también afectó a ${r.subject}.';
+          : 'El hecho también afectó a \${r.subject}.';
 
   String _stitch(String lead, List<String> sentences, List<String> tokens) {
     final body = sentences.where((s) => s.trim().isNotEmpty).toList();
     if (body.isEmpty) return lead;
-    return '$lead ${body.join(' ')}';
+    return '\$lead \${body.join(' ')}';
   }
 
   String _joinConCanales(List<String> items) {
@@ -1678,15 +1592,15 @@ class LocalSentenceAssembler {
     final canales = items.where(esCanal).toList();
     final texto = _join(nominales);
     if (canales.isEmpty) return texto;
-    return texto.isEmpty ? _join(canales) : '$texto ${_join(canales)}';
+    return texto.isEmpty ? _join(canales) : '\$texto \${_join(canales)}';
   }
 
   String _join(List<String> items) {
     final clean = items.where((s) => s.trim().isNotEmpty).toList();
     if (clean.isEmpty) return '';
     if (clean.length == 1) return clean.first;
-    if (clean.length == 2) return '${clean[0]} y ${clean[1]}';
-    return '${clean.sublist(0, clean.length - 1).join(', ')} y ${clean.last}';
+    if (clean.length == 2) return '\${clean[0]} y \${clean[1]}';
+    return '\${clean.sublist(0, clean.length - 1).join(', ')} y \${clean.last}';
   }
 
   String _normalize(String g) => _stripGlossAccents(g.trim().toUpperCase());
@@ -1722,364 +1636,7 @@ class LocalSentenceAssembler {
   }
 
   static const Map<String, _Lex> _lexicon = {
-    '0': _Lex(_Role.verboAccion, '0'),
-    '1': _Lex(_Role.verboAccion, '1'),
-    '2': _Lex(_Role.verboAccion, '2'),
-    '3': _Lex(_Role.verboAccion, '3'),
-    '4': _Lex(_Role.verboAccion, '4'),
-    '5': _Lex(_Role.verboAccion, '5'),
-    '6': _Lex(_Role.verboAccion, '6'),
-    '7': _Lex(_Role.verboAccion, '7'),
-    '8': _Lex(_Role.verboAccion, '8'),
-    '9': _Lex(_Role.verboAccion, '9'),
-    'A': _Lex(_Role.verboAccion, 'a'),
-    'ABOGADO': _Lex(_Role.servicio, 'un abogado'),
-    'ABRIR': _Lex(_Role.verboAccion, 'abrí'),
-    'ABUSAR': _Lex(_Role.verboAgresion, 'cometió abusos'),
-    'ACEPTAR': _Lex(_Role.verboAccion, 'acepto'),
-    'ACOMPAÑAR': _Lex(_Role.verboAccion, 'acompañar'),
-    'ADULTO': _Lex(_Role.personaDesc, 'adulto'),
-    'AHORA': _Lex(_Role.tiempo, 'ahora mismo'),
-    'ALCALDIA': _Lex(_Role.institucion, 'en la alcaldía'),
-    'ALLA': _Lex(_Role.lugar, 'allá'),
-    'ALLI': _Lex(_Role.lugar, 'allí'),
-    'ALTO': _Lex(_Role.rasgo, 'alto'),
-    'AL_LADO': _Lex(_Role.lugar, 'al lado'),
-    'AMBOS': _Lex(_Role.sujeto, 'ambos'),
-    'AMENAZAR': _Lex(_Role.verboAgresion, 'amenazó'),
-    'AMIGO': _Lex(_Role.personaDesc, 'un amigo'),
-    'ANDAR': _Lex(_Role.verboAccion, 'caminaba'),
-    'ANTEAYER': _Lex(_Role.tiempo, 'anteayer'),
-    'AQUI': _Lex(_Role.lugar, 'aquí'),
-    'ARREGLAR': _Lex(_Role.verboAccion, 'quiero corregir'),
-    'ARRESTAR': _Lex(_Role.verboAccion, 'arrestaron'),
-    'ASISTENCIA': _Lex(_Role.documento, 'asistencia'),
-    'ASISTENTE': _Lex(_Role.servicio, 'un asistente'),
-    'ASOCIACION_SORDOS': _Lex(_Role.personaDesc, 'la asociación de sordos'),
-    'ATENDER': _Lex(_Role.verboAccion, 'atender'),
-    'ATRAS': _Lex(_Role.lugar, 'atrás'),
-    'AUMENTAR': _Lex(_Role.verboAccion, 'quiero agregar información'),
-    'AUTORIDAD': _Lex(_Role.institucion, 'la autoridad'),
-    'AUXILIO': _Lex(_Role.urgencia, 'auxilio urgente'),
-    'AVENIDA': _Lex(_Role.lugar, 'en la avenida'),
-    'AVISAR': _Lex(_Role.verboAccion, 'avisar'),
-    'AYER': _Lex(_Role.tiempo, 'ayer'),
-    'AYUDAR': _Lex(_Role.verboAccion, 'necesito ayuda'),
-    'AZUL': _Lex(_Role.descriptor, 'de color azul'),
-    'AÑO': _Lex(_Role.tiempo, 'año'),
-    'AÑO_PASADO': _Lex(_Role.tiempo, 'el año pasado'),
-    'AUN': _Lex(_Role.tiempo, 'aún'),
-    'B': _Lex(_Role.verboAccion, 'b'),
-    'BAJO': _Lex(_Role.rasgo, 'bajo'),
-    'BANCO': _Lex(_Role.lugar, 'en el banco'),
-    'BARRIO': _Lex(_Role.lugar, 'en el barrio'),
-    'BILLETES': _Lex(_Role.objeto, 'billetes y dinero'),
-    'BOCA': _Lex(_Role.objeto, 'la boca'),
-    'BOLSA': _Lex(_Role.objeto, 'mi bolsa'),
-    'BRAZO': _Lex(_Role.objeto, 'el brazo'),
-    'BUENO': _Lex(_Role.descriptor, 'bueno'),
-    'BUENOS_DIAS': _Lex(_Role.marcador, 'buenos días'),
-    'BURLAR': _Lex(_Role.verboAccion, 'se burlaron'),
-    'BUSCAR': _Lex(_Role.verboAccion, 'quiero buscar'),
-    'C': _Lex(_Role.verboAccion, 'c'),
-    'CABELLO': _Lex(_Role.objeto, 'el cabello'),
-    'CADA_DIA': _Lex(_Role.tiempo, 'cada día'),
-    'CAJA': _Lex(_Role.objeto, 'la caja'),
-    'CALLE': _Lex(_Role.lugar, 'en la calle'),
-    'CAMBIAR': _Lex(_Role.verboAccion, 'cambié'),
-    'CARO': _Lex(_Role.descriptor, 'costoso'),
-    'CARPETA': _Lex(_Role.documento, 'la carpeta de documentos'),
-    'CASA': _Lex(_Role.lugar, 'en mi casa'),
-    'CELULAR': _Lex(_Role.objeto, 'mi celular'),
-    'CERCA': _Lex(_Role.lugar, 'cerca del lugar'),
-    'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
-    'CHAMARRA': _Lex(_Role.objeto, 'mi chamarra'),
-    'COCHABAMBA': _Lex(_Role.lugar, 'en Cochabamba'),
-    'COMPAÑERO': _Lex(_Role.personaDesc, 'un compañero'),
-    'COMPRAR': _Lex(_Role.verboAccion, 'compré'),
-    'COMPRENDER': _Lex(_Role.marcador, 'comprender'),
-    'COMPUTADORA': _Lex(_Role.objeto, 'una computadora'),
-    'COMUNIDAD_SORDA': _Lex(_Role.personaDesc, 'la comunidad sorda'),
-    'CONFIANZA': _Lex(_Role.emocion, 'tengo confianza'),
-    'CONOCER': _Lex(_Role.verboAccion, 'conozco'),
-    'CONTESTAR_DOS_VECES': _Lex(_Role.verboAccion, 'contesté dos veces'),
-    'CONTINUAR': _Lex(_Role.verboAccion, 'continúa'),
-    'CONVOCAR': _Lex(_Role.tramite, 'una citación'),
-    'CORTO': _Lex(_Role.descriptor, 'corto'),
-    'CREER': _Lex(_Role.verboAccion, 'creo'),
-    'CURAR': _Lex(_Role.verboAccion, 'curar'),
-    'CUAL': _Lex(_Role.interrogativa, 'cuál'),
-    'CUANDO': _Lex(_Role.interrogativa, 'cuándo'),
-    'CUANTOS': _Lex(_Role.interrogativa, 'cuántos'),
-    'CAMARA_FOTOGRAFICA': _Lex(_Role.objeto, 'una cámara fotográfica'),
-    'COMO': _Lex(_Role.interrogativa, 'cómo'),
-    'D': _Lex(_Role.verboAccion, 'd'),
-    'DAR': _Lex(_Role.verboAccion, 'entregué'),
-    'DAÑAR': _Lex(_Role.verboAgresion, 'dañó'),
-    'DECIDIR': _Lex(_Role.verboAccion, 'decidí'),
-    'DEJAR': _Lex(_Role.verboAccion, 'dejé'),
-    'DELGADO': _Lex(_Role.rasgo, 'delgado'),
-    'DENTRO': _Lex(_Role.lugar, 'dentro del lugar'),
-    'DESCANSO': _Lex(_Role.tiempo, 'en horario de descanso'),
-    'DESPUES': _Lex(_Role.tiempo, 'después'),
-    'DEVOLVER': _Lex(_Role.verboAccion, 'quiero que devuelvan'),
-    'DE_NADA': _Lex(_Role.marcador, 'de nada'),
-    'DIBUJAR': _Lex(_Role.verboAccion, 'dibujé'),
-    'DIFERENTE': _Lex(_Role.descriptor, 'diferente'),
-    'DIFICIL': _Lex(_Role.descriptor, 'difícil'),
-    'DINERO': _Lex(_Role.objeto, 'mi dinero'),
-    'DIRECCION': _Lex(_Role.lugar, 'en mi dirección'),
-    'DISCRIMINACION': _Lex(_Role.documento, 'discriminación'),
-    'DOCTOR': _Lex(_Role.servicio, 'un doctor'),
-    'DOLOR': _Lex(_Role.urgencia, 'dolor físico'),
-    'DORMIR': _Lex(_Role.verboAccion, 'dormía'),
-    'DURANTE': _Lex(_Role.tiempo, 'durante ese tiempo'),
-    'DIA': _Lex(_Role.tiempo, 'día'),
-    'DONDE': _Lex(_Role.interrogativa, 'dónde'),
-    'E': _Lex(_Role.verboAccion, 'e'),
-    'EDAD': _Lex(_Role.marcador, 'tengo esa edad'),
-    'ELLA': _Lex(_Role.sujeto, 'ella'),
-    'ELLOS': _Lex(_Role.sujeto, 'ellos'),
-    'EMPEZAR': _Lex(_Role.verboAccion, 'empezó'),
-    'ENCONTRARSE': _Lex(_Role.verboAccion, 'me encontré'),
-    'ENFRENTE': _Lex(_Role.lugar, 'enfrente'),
-    'ENGAÑAR': _Lex(_Role.verboAgresion, 'engañó y estafó'),
-    'ENVIAR': _Lex(_Role.verboAccion, 'envié'),
-    'ESCAPAR': _Lex(_Role.verboAgresion, 'escapó'),
-    'ESCONDER': _Lex(_Role.verboAccion, 'escondió'),
-    'ESCRIBIR': _Lex(_Role.verboAccion, 'quiero escribir'),
-    'ESCUELA': _Lex(_Role.lugar, 'en la escuela'),
-    'ESCUELA_NOCTURNA': _Lex(_Role.lugar, 'en la escuela nocturna'),
-    'ESPERAR': _Lex(_Role.verboAccion, 'esperar'),
-    'ESPOSA': _Lex(_Role.personaDesc, 'mi esposa'),
-    'ESTAR_DE_ACUERDO': _Lex(_Role.marcador, 'estoy de acuerdo'),
-    'EVALUAR': _Lex(_Role.verboAccion, 'evaluar'),
-    'EXPLICAR': _Lex(_Role.verboAccion, 'quiero explicar'),
-    'F': _Lex(_Role.verboAccion, 'f'),
-    'FACTURA': _Lex(_Role.documento, 'la factura'),
-    'FALTA': _Lex(_Role.verboAgresion, 'perdí'),
-    'FECHA': _Lex(_Role.tiempo, 'en la fecha indicada'),
-    'FELCC': _Lex(_Role.institucion, 'en la FELCC'),
-    'FELCV': _Lex(_Role.institucion, 'en la FELCV'),
-    'FILMAR': _Lex(_Role.verboAccion, 'filmé'),
-    'FISCALIA': _Lex(_Role.institucion, 'en la Fiscalía'),
-    'FLACO': _Lex(_Role.rasgo, 'delgado'),
-    'FOTOCOPIA': _Lex(_Role.documento, 'una fotocopia'),
-    'FOTOS': _Lex(_Role.objeto, 'fotografías'),
-    'FRACTURA': _Lex(_Role.urgencia, 'una fractura'),
-    'FUERA': _Lex(_Role.lugar, 'afuera del lugar'),
-    'FUNCIONAR': _Lex(_Role.verboAccion, 'funciona'),
-    'FUTURO': _Lex(_Role.tiempo, 'en el futuro'),
-    'G': _Lex(_Role.verboAccion, 'g'),
-    'GANAR_DINERO': _Lex(_Role.verboAccion, 'gané dinero'),
-    'GESTIONAR': _Lex(_Role.verboAccion, 'quiero gestionar'),
-    'GOBIERNO': _Lex(_Role.institucion, 'el gobierno'),
-    'GORDO': _Lex(_Role.rasgo, 'de contextura gruesa'),
-    'GORRA': _Lex(_Role.objeto, 'mi gorra'),
-    'GRATIS': _Lex(_Role.descriptor, 'gratuito'),
-    'GRITAR': _Lex(_Role.verboAccion, 'gritó'),
-    'GRUESO': _Lex(_Role.rasgo, 'grueso'),
-    'GUARDAR': _Lex(_Role.verboAccion, 'guardé'),
-    'H': _Lex(_Role.verboAccion, 'h'),
-    'HABLAR': _Lex(_Role.verboAccion, 'quiero hablar'),
-    'HACER': _Lex(_Role.verboAccion, 'hice'),
-    'HASTA_LUEGO': _Lex(_Role.marcador, 'hasta luego'),
-    'HASTA_MAÑANA': _Lex(_Role.marcador, 'hasta mañana'),
-    'HERIDA': _Lex(_Role.urgencia, 'una herida'),
-    'HERMANA': _Lex(_Role.personaDesc, 'mi hermana'),
-    'HERMANO': _Lex(_Role.personaDesc, 'mi hermano'),
-    'HIJA': _Lex(_Role.personaDesc, 'mi hija'),
-    'HIJO': _Lex(_Role.personaDesc, 'mi hijo'),
-    'HOLA': _Lex(_Role.marcador, 'hola'),
-    'HOMBRE': _Lex(_Role.personaDesc, 'un hombre'),
-    'HORA': _Lex(_Role.tiempo, 'hora'),
-    'HOSPITAL': _Lex(_Role.institucion, 'en el hospital'),
-    'HOY': _Lex(_Role.tiempo, 'hoy'),
-    'HUESOS': _Lex(_Role.urgencia, 'los huesos'),
-    'I': _Lex(_Role.verboAccion, 'i'),
-    'IDENTIDAD': _Lex(_Role.marcador, 'mi carnet de identidad'),
-    'IDENTIFICAR': _Lex(_Role.verboAccion, 'puedo identificar'),
-    'IGNORAR': _Lex(_Role.verboAccion, 'me ignoraron'),
-    'INSTITUCION': _Lex(_Role.institucion, 'en la institución'),
-    'INTERNET': _Lex(_Role.objeto, 'por internet'),
-    'INTERPRETE': _Lex(_Role.servicio, 'un intérprete de LSB'),
-    'INVESTIGACION': _Lex(_Role.tramite, 'la investigación de mi caso'),
-    'IR': _Lex(_Role.verboAccion, 'fui'),
-    'J': _Lex(_Role.verboAccion, 'j'),
-    'JAMAS': _Lex(_Role.tiempo, 'jamás'),
-    'JEFE': _Lex(_Role.personaDesc, 'mi jefe'),
-    'JOVEN': _Lex(_Role.personaDesc, 'joven'),
-    'JUEVES': _Lex(_Role.tiempo, 'el jueves'),
-    'JUEZ': _Lex(_Role.institucion, 'el juez'),
-    'JULIO': _Lex(_Role.tiempo, 'en julio'),
-    'JUSTICIA': _Lex(_Role.documento, 'la justicia'),
-    'JUZGADO': _Lex(_Role.institucion, 'en el juzgado'),
-    'K': _Lex(_Role.verboAccion, 'k'),
-    'L': _Lex(_Role.verboAccion, 'l'),
-    'LADRON': _Lex(_Role.personaDesc, 'un ladrón'),
-    'LEER': _Lex(_Role.verboAccion, 'quiero leer'),
-    'LEJOS': _Lex(_Role.lugar, 'lejos'),
-    'LENTES': _Lex(_Role.objeto, 'mis lentes'),
-    'LENTO': _Lex(_Role.descriptor, 'despacio'),
-    'LEY': _Lex(_Role.documento, 'la ley'),
-    'LIBRE': _Lex(_Role.tiempo, 'libre'),
-    'LISTA': _Lex(_Role.documento, 'la lista'),
-    'LLAMAR': _Lex(_Role.verboAccion, 'llamé'),
-    'LLEGAR': _Lex(_Role.verboAccion, 'llegué'),
-    'LLEVAR': _Lex(_Role.verboAccion, 'llevaba'),
-    'LO_SIENTO': _Lex(_Role.marcador, 'lo siento'),
-    'LUEGO': _Lex(_Role.tiempo, 'luego'),
-    'LUNES': _Lex(_Role.tiempo, 'el lunes'),
-    'M': _Lex(_Role.verboAccion, 'm'),
-    'MAL': _Lex(_Role.descriptor, 'mal'),
-    'MALTRATAR': _Lex(_Role.verboAgresion, 'maltrató'),
-    'MAMA': _Lex(_Role.personaDesc, 'mi mamá'),
-    'MARTES': _Lex(_Role.tiempo, 'el martes'),
-    'MARZO': _Lex(_Role.tiempo, 'en marzo'),
-    'MAÑANA': _Lex(_Role.tiempo, 'mañana'),
-    'MEDICINA': _Lex(_Role.objeto, 'medicinas'),
-    'MEJOR': _Lex(_Role.descriptor, 'mejor'),
-    'MENTIRA': _Lex(_Role.marcador, 'es mentira'),
-    'MERCADO': _Lex(_Role.lugar, 'en el mercado'),
-    'MES': _Lex(_Role.tiempo, 'mes'),
-    'MICRO': _Lex(_Role.objeto, 'un micro'),
-    'MIEDO': _Lex(_Role.emocion, 'tengo miedo'),
-    'MILITAR': _Lex(_Role.personaDesc, 'un militar'),
-    'MINUTO': _Lex(_Role.tiempo, 'minuto'),
-    'MIRAR': _Lex(_Role.verboAccion, 'vi'),
-    'MOCHILA': _Lex(_Role.objeto, 'mi mochila'),
-    'MOMENTO': _Lex(_Role.tiempo, 'en ese momento'),
-    'MOSTRAR': _Lex(_Role.verboAccion, 'puedo mostrar'),
-    'MUCHO': _Lex(_Role.descriptor, 'mucho'),
-    'MUJER': _Lex(_Role.personaDesc, 'una mujer'),
-    'MAS_O_MENOS': _Lex(_Role.marcador, 'más o menos'),
-    'MIO': _Lex(_Role.sujeto, 'mi'),
-    'N': _Lex(_Role.verboAccion, 'n'),
-    'NARRAR': _Lex(_Role.verboAccion, 'quiero relatar'),
-    'NECESITAR': _Lex(_Role.verboAccion, 'necesitar'),
-    'NEGRO': _Lex(_Role.descriptor, 'de color negro'),
-    'NO': _Lex(_Role.marcador, 'no'),
-    'NOMBRE': _Lex(_Role.marcador, 'mi nombre es'),
-    'NOSOTROS': _Lex(_Role.sujeto, 'nosotros'),
-    'NO_ESTAR_DE_ACUERDO': _Lex(_Role.marcador, 'no estoy de acuerdo'),
-    'NO_PUEDO': _Lex(_Role.marcador, 'no puedo'),
-    'NO_SABER': _Lex(_Role.marcador, 'no sé'),
-    'NUEVO': _Lex(_Role.descriptor, 'nuevo'),
-    'O': _Lex(_Role.verboAccion, 'o'),
-    'OBSERVAR': _Lex(_Role.verboAccion, 'observé'),
-    'OCUPADO': _Lex(_Role.tiempo, 'ocupado'),
-    'OFICIAL': _Lex(_Role.servicio, 'un oficial'),
-    'OFICINA': _Lex(_Role.lugar, 'en la oficina'),
-    'ORGANIZAR': _Lex(_Role.verboAccion, 'organicé'),
-    'OSCURO': _Lex(_Role.descriptor, 'oscuro'),
-    'OYENTE': _Lex(_Role.personaDesc, 'oyente'),
-    'OIR': _Lex(_Role.verboAccion, 'escuché'),
-    'P': _Lex(_Role.verboAccion, 'p'),
-    'PALABRA': _Lex(_Role.verboAccion, 'palabra'),
-    'PANTALON': _Lex(_Role.objeto, 'mi pantalón'),
-    'PAPEL': _Lex(_Role.documento, 'el documento'),
-    'PAREJA': _Lex(_Role.personaDesc, 'mi pareja'),
-    'PARIENTE': _Lex(_Role.personaDesc, 'un pariente'),
-    'PASADO': _Lex(_Role.tiempo, 'en el pasado'),
-    'PASADO_MAÑANA': _Lex(_Role.tiempo, 'pasado mañana'),
-    'PASAPORTE': _Lex(_Role.documento, 'mi pasaporte'),
-    'PEDIR': _Lex(_Role.verboAccion, 'solicito'),
-    'PEGAR': _Lex(_Role.verboAgresion, 'golpeó y pegó'),
-    'PELEAR': _Lex(_Role.verboAgresion, 'inició una pelea'),
-    'PERDER': _Lex(_Role.verboAgresion, 'perdí'),
-    'PERMISO': _Lex(_Role.marcador, 'con permiso'),
-    'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
-    'PLAZO': _Lex(_Role.tramite, 'el plazo'),
-    'POCO': _Lex(_Role.descriptor, 'poco'),
-    'POLERA': _Lex(_Role.objeto, 'mi polera'),
-    'POLICIA': _Lex(_Role.institucion, 'en la policía'),
-    'POR_FAVOR': _Lex(_Role.marcador, 'por favor'),
-    'POSTERGAR': _Lex(_Role.tiempo, 'postergar'),
-    'PREOCUPAR': _Lex(_Role.emocion, 'estoy preocupado'),
-    'PRESENTAR': _Lex(_Role.verboAccion, 'quiero presentar'),
-    'PRIMERA_VEZ': _Lex(_Role.tiempo, 'la primera vez'),
-    'PROHIBIDO': _Lex(_Role.documento, 'prohibido'),
-    'PROTEGER': _Lex(_Role.verboAccion, 'necesito protección'),
-    'PROVINCIA': _Lex(_Role.lugar, 'en la provincia'),
-    'PROXIMO': _Lex(_Role.tiempo, 'el próximo'),
-    'PUEDO': _Lex(_Role.marcador, 'puedo'),
-    'PUERTA': _Lex(_Role.objeto, 'la puerta'),
-    'PAGINA': _Lex(_Role.documento, 'la página'),
-    'Q': _Lex(_Role.verboAccion, 'q'),
-    'QUEJAR': _Lex(_Role.verboAccion, 'quejar'),
-    'QUERER': _Lex(_Role.verboAccion, 'querer'),
-    'QUIEN': _Lex(_Role.interrogativa, 'quién'),
-    'QUE': _Lex(_Role.interrogativa, 'qué'),
-    'R': _Lex(_Role.verboAccion, 'r'),
-    'RAYOS_X': _Lex(_Role.objeto, 'placas de rayos X'),
-    'RECHAZAR': _Lex(_Role.verboAccion, 'rechazo'),
-    'RECIBIR': _Lex(_Role.verboAccion, 'recibí'),
-    'RECORDAR': _Lex(_Role.verboAccion, 'recuerdo'),
-    'RESOLUCION': _Lex(_Role.documento, 'una resolución'),
-    'RESULTADO': _Lex(_Role.documento, 'el resultado'),
-    'REUNION': _Lex(_Role.verboAccion, 'reunión'),
-    'ROBAR': _Lex(_Role.verboAgresion, 'robó'),
-    'ROJO': _Lex(_Role.descriptor, 'de color rojo'),
-    'S': _Lex(_Role.verboAccion, 's'),
-    'SABER': _Lex(_Role.marcador, 'sé'),
-    'SEGUNDO': _Lex(_Role.tiempo, 'segundo'),
-    'SELLO': _Lex(_Role.documento, 'un sello oficial'),
-    'SEMANA': _Lex(_Role.tiempo, 'semana'),
-    'SEPARADOS': _Lex(_Role.personaDesc, 'separados'),
-    'SEPDAVI': _Lex(_Role.institucion, 'en el SEPDAVI'),
-    'SEPDEP': _Lex(_Role.institucion, 'en el SEPDEP'),
-    'SEÑOR': _Lex(_Role.personaDesc, 'el señor'),
-    'SIEMPRE': _Lex(_Role.tiempo, 'siempre'),
-    'SOLUCIONAR': _Lex(_Role.verboAccion, 'quiero solucionar'),
-    'SOPORTE': _Lex(_Role.documento, 'soporte'),
-    'SORDO': _Lex(_Role.personaDesc, 'una persona sorda'),
-    'SUYO': _Lex(_Role.sujeto, 'suyo'),
-    'SABADO': _Lex(_Role.tiempo, 'el sábado'),
-    'SI': _Lex(_Role.marcador, 'sí'),
-    'T': _Lex(_Role.verboAccion, 't'),
-    'TAL_VEZ': _Lex(_Role.marcador, 'tal vez'),
-    'TARDE': _Lex(_Role.tiempo, 'por la tarde'),
-    'TELEFONO': _Lex(_Role.objeto, 'mi teléfono'),
-    'TEMOR': _Lex(_Role.emocion, 'tengo temor'),
-    'TEMPRANO': _Lex(_Role.tiempo, 'temprano'),
-    'TENER': _Lex(_Role.verboAccion, 'tener'),
-    'TERMINAR': _Lex(_Role.verboAccion, 'terminó'),
-    'TESTIGO': _Lex(_Role.testigo, 'un testigo'),
-    'TESTIMONIO': _Lex(_Role.documento, 'mi testimonio'),
-    'TIENDA': _Lex(_Role.lugar, 'en la tienda'),
-    'TODOS_LOS_DIAS': _Lex(_Role.tiempo, 'todos los días'),
-    'TOTAL': _Lex(_Role.verboAccion, 'total'),
-    'TRABAJADOR': _Lex(_Role.personaDesc, 'un trabajador'),
-    'TRAER': _Lex(_Role.verboAccion, 'puedo traer'),
-    'TRISTE': _Lex(_Role.emocion, 'estoy triste'),
-    'TRUFI': _Lex(_Role.objeto, 'un trufi'),
-    'TRAMITE': _Lex(_Role.tramite, 'un trámite'),
-    'TUYO': _Lex(_Role.sujeto, 'su'),
-    'TU': _Lex(_Role.sujeto, 'tú'),
-    'U': _Lex(_Role.verboAccion, 'u'),
-    'URGENTE': _Lex(_Role.urgencia, 'de manera urgente'),
-    'V': _Lex(_Role.verboAccion, 'v'),
-    'VARIOS': _Lex(_Role.sujeto, 'varios'),
-    'VECINO': _Lex(_Role.personaDesc, 'un vecino'),
-    'VENDER': _Lex(_Role.verboAccion, 'vendí'),
-    'VENIR': _Lex(_Role.verboAccion, 'vine'),
-    'VER': _Lex(_Role.verboAccion, 'vi'),
-    'VERDAD': _Lex(_Role.marcador, 'es verdad'),
-    'VIDEO': _Lex(_Role.objeto, 'un video'),
-    'VIERNES': _Lex(_Role.tiempo, 'el viernes'),
-    'VIOLENCIA': _Lex(_Role.urgencia, 'un hecho de violencia'),
-    'VIVIR': _Lex(_Role.verboAccion, 'vivo'),
-    'VOLVER': _Lex(_Role.verboAccion, 'debo volver'),
-    'W': _Lex(_Role.verboAccion, 'w'),
-    'X': _Lex(_Role.verboAccion, 'x'),
-    'Y': _Lex(_Role.verboAccion, 'y'),
-    'YO': _Lex(_Role.sujeto, 'yo'),
-    'Z': _Lex(_Role.verboAccion, 'z'),
-    'EL': _Lex(_Role.sujeto, 'él'),
-    'Ñ': _Lex(_Role.verboAccion, 'ñ'),
-    'ORGANO_JUDICIAL': _Lex(_Role.institucion, 'en el Órgano Judicial'),
-    'ULTIMO': _Lex(_Role.tiempo, 'el último'),
-
+$lexiconContent
   };
 }
 
@@ -2153,4 +1710,9 @@ class _Roles {
   final Map<String, String> details = {};
   final List<String> unknown = [];
   bool narrativeIsPast = false;
+}
+''';
+
+  File('lib/core/domain/services/local_sentence_assembler.dart').writeAsStringSync(code);
+  print('Successfully wrote lib/core/domain/services/local_sentence_assembler.dart');
 }

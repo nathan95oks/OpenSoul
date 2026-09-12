@@ -80,73 +80,79 @@ CORS_HEADERS = {
 AVAILABLE_GLOSSES = {
     # GENERADO por tool/sync_vocabulary.dart — no editar a mano.
     # Fuente: assets/dictionary/official_dictionary.json
-    # --- Cortesía (5) ---
-    "GRACIAS", "HOLA", "LO_SIENTO", "PERMISO", "POR_FAVOR",
+    # --- Cortesía (7) ---
+    "DE_NADA", "GRACIAS", "HASTA_LUEGO", "HOLA", "LO_SIENTO", "PERMISO",
+    "POR_FAVOR",
     # --- Respuesta (11) ---
-    "ESTOY_BIEN", "MAS_O_MENOS", "NO", "NO_ENTIENDO", "NO_PUEDO", "NO_RECUERDO",
-    "NO_SABER", "PUEDE_REPETIR", "PUEDO", "SABER", "SI",
-    # --- Preguntas (16) ---
-    "COMO", "CUAL", "CUANDO", "CUANTOS", "DONDE", "EL",
-    "ELLA", "ELLOS", "NOSOTROS", "PARA_QUE", "POR_QUE", "QUE",
-    "QUIEN", "TU", "USTEDES", "YO",
-    # --- Identificación (15) ---
-    "ANOS_EDAD", "APELLIDO", "EDAD", "EXPAREJA", "FAMILIAR", "HOMBRE",
-    "IDENTIDAD", "LADRON", "MILITAR", "MUJER", "NOMBRE", "PAREJA",
-    "SOLDADO", "TESTIGO", "VECINO",
-    # --- Instituciones (25) ---
-    "ABOGADO", "ALCALDIA", "ASISTENTE", "AUTORIDAD", "COORDINADOR", "DEFENSA_PUBLICA",
-    "DESPACHO", "DOCTOR", "ENFERMERA", "FELCC", "FELCV", "FISCAL",
-    "FISCALIA", "INSTITUCION", "INTERPRETE", "JUEZ", "JUZGADO", "MINISTERIO",
-    "OFICIAL", "OFICINA", "ORGANO_JUDICIAL", "POLICIA", "SEPAV", "TRIBUNAL",
-    "VENTANILLA",
-    # --- Conceptos jurídicos (26) ---
-    "ACUERDO_SOCIAL", "ARTICULO", "AUDIENCIA", "AVANCE", "CASO", "CITACION",
-    "CODIGO", "CONFIRMACION", "CONTEXTO", "ESTADO", "EXPEDIENTE", "INVESTIGACION",
-    "JUICIO", "JUSTICIA", "LEY", "NORMA", "NOTIFICACION", "NUREJ",
-    "PODER", "REGLAMENTO", "REQUISITO", "RESOLUCION", "SUBSANACION", "TESTIMONIO",
-    "TRAMITE", "WEBID",
-    # --- Acciones (36) ---
-    "ACLARAR", "ACOMPANAR", "ANOTAR", "AVISAR", "CONFESAR", "CONOCER",
-    "COORDINAR", "COPIAR", "CORREGIR", "CUMPLIR", "DECIDIR", "DENUNCIAR",
-    "DESCONOCER", "ENTREGAR", "ESCRIBIR", "EXIGIR", "GESTIONAR", "IDENTIFICAR",
-    "IMPRIMIR", "JURAR", "MOSTRAR", "NARRAR", "OBSERVAR", "PAGAR",
-    "PEDIR", "PERDER", "PRESENTAR", "PROTEGER", "QUEJAR", "RECOGER",
-    "RECONOCER", "RECORDAR", "SEGUIMIENTO", "SOLUCIONAR", "TRATAR", "VOLVER",
-    # --- Hechos y urgencia (18) ---
-    "ABUSAR", "ACCIDENTE", "AMENAZAR", "ARRESTAR", "ASISTENCIA", "AUXILIO",
-    "CORRER", "CRISIS", "DANAR", "DISCRIMINACION", "HERIDA", "MALTRATAR",
-    "PARAR", "ROBAR", "SALVAR", "SOBORNO", "VIOLACION", "VIOLENCIA",
-    # --- Descripción (18) ---
-    "AMARILLO", "AZUL", "BLANCO", "CAFE", "CELESTE", "CORRECTO",
-    "DELGADO", "GRUESO", "INOCENTE", "LILA", "NARANJA", "NEGRO",
-    "PELIGROSO", "PRESO", "ROJO", "ROSADO", "SEGURO", "VERDE",
-    # --- Estado y emoción (11) ---
-    "CONFIANZA", "CONFUSION", "FALTA", "MAL", "MIEDO", "PROBLEMA",
-    "RAZON", "SITUACION", "SOSPECHA", "TEMOR", "VERGUENZA",
-    # --- Tiempo (17) ---
-    "AHORA", "ANO", "ANTEAYER", "ANTERIORMENTE", "AYER", "DIA",
-    "FECHA", "HORA", "HOY", "MANANA", "MES", "MINUTO",
-    "PASADO_MANANA", "PRIMERA_VEZ", "SEGUNDO", "SEMANA", "VARIAS_VECES",
-    # --- Lugares (16) ---
-    "AEROPUERTO", "AVENIDA", "CALLE", "CARCEL", "CASA", "CENTRO_DE_SALUD",
-    "COCHABAMBA", "DEPARTAMENTO", "DIRECCION", "FARMACIA", "HOSPITAL", "MERCADO",
-    "PARADA", "PISO", "PLAZA", "UBICACION_GPS",
-    # --- Documentos (20) ---
-    "ANEXO", "CARNET", "CARTA", "CERTIFICADO", "COMPROBANTE", "CONSTANCIA",
-    "FORMATO", "FORMULARIO", "FOTOCOPIA", "HOJA", "LICENCIA", "LICENCIA_DECONDUCIR",
-    "MEMORIAL", "OBSERVACION", "PAPEL", "PASAPORTE", "RESPALDO", "SELLO",
-    "TEXTO", "TITULO",
-    # --- Objetos (16) ---
-    "AUTO", "BICICLETA", "BILLETERA", "CAMARA", "CUENTA", "DINERO",
-    "FOTOGRAFIA", "MENSAJE", "MICRO", "MOCHILA", "MOTOCICLETA", "PRODUCTO",
-    "TAXI", "TELEFONO", "TREN", "TRUFI",
-    # --- Comunicación (7) ---
-    "ACEPTAR", "ATENDER", "AYUDAR", "COMPRENDER", "HABLAR", "RECHAZAR",
-    "RESPONDER",
-    # --- Comunicación digital (2) ---
-    "VIDEOLLAMADA", "WHATSAPP",
-    # --- Integridad (1) ---
-    "CORRUPTO",
+    "COMPRENDER", "ESTAR_DE_ACUERDO", "MENTIRA", "NO", "NO_ESTAR_DE_ACUERDO", "NO_PUEDO",
+    "NO_SABER", "PUEDO", "SABER", "TAL_VEZ", "VERDAD",
+    # --- Preguntas (8) ---
+    "AMBOS", "ELLA", "ELLOS", "NOSOTROS", "SUYO", "TUYO",
+    "VARIOS", "YO",
+    # --- Identificación (31) ---
+    "ADULTO", "ALTO", "AMIGO", "ASOCIACIÓN_SORDOS", "BAJO", "COMPAÑERO",
+    "COMUNIDAD_SORDA", "EDAD", "ESPOSA", "FLACO", "GORDO", "HERMANA",
+    "HERMANO", "HIJA", "HIJO", "HOMBRE", "IDENTIDAD", "JEFE",
+    "JOVEN", "LADRÓN", "MAMÁ", "MUJER", "NOMBRE", "OYENTE",
+    "PAREJA", "PARIENTE", "SEPARADOS", "SEÑOR", "SORDO", "TESTIGO",
+    "TRABAJADOR",
+    # --- Instituciones (19) ---
+    "ABOGADO", "ALCALDÍA", "ASISTENTE", "AUTORIDAD", "DOCTOR", "FELCC",
+    "FELCV", "FISCALIA", "GOBIERNO", "HOSPITAL", "INSTITUCIÓN", "INTÉRPRETE",
+    "JUEZ", "JUZGADO", "OFICIAL", "POLICÍA", "SEPDAVI", "SEPDEP",
+    "ÓRGANO_JUDICIAL",
+    # --- Conceptos jurídicos (12) ---
+    "ASISTENCIA", "CONVOCAR", "DISCRIMINACIÓN", "INVESTIGACIÓN", "JUSTICIA", "LEY",
+    "PLAZO", "PROHIBIDO", "RESOLUCIÓN", "RESULTADO", "TESTIMONIO", "TRÁMITE",
+    # --- Acciones (87) ---
+    "ABRIR", "ACEPTAR", "ACOMPAÑAR", "ANDAR", "ARREGLAR", "ARRESTAR",
+    "ATENDER", "AUMENTAR", "AVISAR", "AYUDAR", "BOCA", "BRAZO",
+    "BURLAR", "BUSCAR", "CABELLO", "CAMBIAR", "COMPRAR", "CONOCER",
+    "CONTESTAR_DOS_VECES", "CONTINUAR", "CREER", "CURAR", "CUÁL", "CUÁNDO",
+    "CUÁNTOS", "CÓMO", "DAR", "DECIDIR", "DEJAR", "DEVOLVER",
+    "DIBUJAR", "DORMIR", "DÓNDE", "EMPEZAR", "ENCONTRARSE", "ENVIAR",
+    "ESCONDER", "ESCRIBIR", "ESPERAR", "EVALUAR", "EXPLICAR", "FILMAR",
+    "FUNCIONAR", "GANAR_DINERO", "GRATIS", "GRITAR", "GUARDAR", "HABLAR",
+    "HACER", "IDENTIFICAR", "IGNORAR", "IR", "LEER", "LLAMAR",
+    "LLEGAR", "LLEVAR", "MIRAR", "MOSTRAR", "MÍO", "NARRAR",
+    "NECESITAR", "OBSERVAR", "ORGANIZAR", "OÍR", "PALABRA", "PEDIR",
+    "PRESENTAR", "PROTEGER", "QUEJAR", "QUERER", "QUIÉN", "QUÉ",
+    "RECHAZAR", "RECIBIR", "RECORDAR", "REUNIÓN", "TENER", "TERMINAR",
+    "TOTAL", "TRAER", "TÚ", "VENDER", "VENIR", "VER",
+    "VIVIR", "VOLVER", "ÉL",
+    # --- Hechos y urgencia (20) ---
+    "ABUSAR", "AMENAZAR", "AUXILIO", "BUENOS_DÍAS", "DAÑAR", "DOLOR",
+    "ENGAÑAR", "ESCAPAR", "FRACTURA", "HERIDA", "HUESOS", "MALTRATAR",
+    "MÁS_O_MENOS", "PEGAR", "PELEAR", "PERDER", "ROBAR", "SÍ",
+    "URGENTE", "VIOLENCIA",
+    # --- Descripción (15) ---
+    "AZUL", "BUENO", "CARO", "CORTO", "DIFERENTE", "DIFÍCIL",
+    "LENTO", "MAL", "MEJOR", "MUCHO", "NEGRO", "NUEVO",
+    "OSCURO", "POCO", "ROJO",
+    # --- Estado y emoción (4) ---
+    "CONFIANZA", "MIEDO", "PREOCUPAR", "TRISTE",
+    # --- Tiempo (43) ---
+    "AHORA", "ANTEAYER", "AYER", "AÑO", "AÑO_PASADO", "AÚN",
+    "CADA_DÍA", "DESCANSO", "DESPUÉS", "DURANTE", "DÍA", "FECHA",
+    "FUTURO", "HASTA_MAÑANA", "HORA", "HOY", "JAMÁS", "JUEVES",
+    "JULIO", "LIBRE", "LUEGO", "LUNES", "MARTES", "MARZO",
+    "MAÑANA", "MES", "MINUTO", "MOMENTO", "OCUPADO", "PASADO",
+    "PASADO_MAÑANA", "POSTERGAR", "PRIMERA_VEZ", "PRÓXIMO", "SEGUNDO", "SEMANA",
+    "SIEMPRE", "SÁBADO", "TARDE", "TEMPRANO", "TODOS_LOS_DÍAS", "VIERNES",
+    "ÚLTIMO",
+    # --- Lugares (24) ---
+    "ALLÁ", "ALLÍ", "AL_LADO", "AQUÍ", "ATRÁS", "AVENIDA",
+    "BANCO", "BARRIO", "CALLE", "CASA", "CERCA", "COCHABAMBA",
+    "DENTRO", "DIRECCIÓN", "ENFRENTE", "ESCUELA", "ESCUELA_NOCTURNA", "FUERA",
+    "LEJOS", "MERCADO", "OFICINA", "PLAZA", "PROVINCIA", "TIENDA",
+    # --- Documentos (8) ---
+    "CARPETA", "CERTIFICADO", "FACTURA", "FOTOCOPIA", "LISTA", "PAPEL",
+    "PÁGINA", "SELLO",
+    # --- Objetos (20) ---
+    "BILLETES", "BOLSA", "CAJA", "CELULAR", "CHAMARRA", "COMPUTADORA",
+    "CÁMARA_FOTOGRÁFICA", "FOTOS", "GORRA", "INTERNET", "LENTES", "MEDICINA",
+    "MICRO", "MOCHILA", "PANTALÓN", "POLERA", "PUERTA", "RAYOS_X",
+    "TRUFI", "VIDEO",
     # --- Abecedario (27) ---
     "A", "B", "C", "D", "E", "F",
     "G", "H", "I", "J", "K", "L",
@@ -159,65 +165,9 @@ AVAILABLE_GLOSSES = {
 }
 
 # ===================================================================
-# DICCIONARIO OFICIAL LSB (15 CATEGORÍAS — 210 GLOSAS VERIFICADAS)
+# DICCIONARIO OFICIAL LSB (SINCRONIZADO CON EL CORPUS MAESTRO V4 AUDITADO)
 # ===================================================================
-OFFICIAL_LSB_CORPUS = {
-    # 1. Comunicación básica y control del diálogo
-    "HOLA", "PERMISO", "GRACIAS", "POR_FAVOR", "PUEDO", "NO_PUEDO", "SI", "NO",
-    "LO_SIENTO", "HABLAR", "COMPRENDER", "ATENDER", "AYUDAR", "SABER", "NO_SABER",
-    "ACEPTAR", "RECHAZAR", "RESPONDER",
-    # 2. Preguntas y referencia personal
-    "QUIEN", "DONDE", "COMO", "POR_QUE", "QUE", "CUAL", "PARA_QUE", "CUANTOS", "CUANDO",
-    "YO", "TU", "EL", "ELLA", "NOSOTROS", "USTEDES", "ELLOS", "COMO_ESTAS",
-    # 3. Identificación y personas
-    "NOMBRE", "HOMBRE", "MUJER", "IDENTIDAD", "IDENTIFICAR", "VECINO", "LADRON",
-    "TESTIGO", "INOCENTE", "MILITAR", "SOLDADO",
-    # 4. Roles e instituciones
-    "ABOGADO", "POLICIA", "JUEZ", "FISCAL", "AUTORIDAD", "OFICIAL", "INTERPRETE",
-    "COORDINADOR", "ASISTENTE", "DOCTOR", "ENFERMERA", "INSTITUCION", "ORGANO_JUDICIAL",
-    "MINISTERIO", "GOBIERNO", "ALCALDIA",
-    # 5. Conceptos jurídicos y administrativos
-    "LEY", "REGLAMENTO", "JUICIO", "JUSTICIA", "INVESTIGACION", "TRAMITE",
-    "RESOLUCION", "NORMA", "ARTICULO", "TESTIMONIO", "ACUERDO_SOCIAL", "JURAR",
-    "DIGNIDAD", "ETICA", "FIRME", "CONFIRMACION", "ESTADO", "CONTEXTO",
-    # 6. Acciones del relato y del proceso
-    "PRESENTAR", "ANOTAR", "MOSTRAR", "NARRAR", "OBSERVAR", "RECONOCER", "DECIDIR",
-    "EXIGIR", "COORDINAR", "GESTIONAR", "TRATAR", "SOLUCIONAR", "PEDIR", "ESCRIBIR",
-    "COPIAR", "RECOGER", "ACOMPANAR", "AVISAR", "PROTEGER", "ADMINISTRAR", "CUMPLIR",
-    "QUEJAR", "CONFESAR",
-    # 7. Hechos, seguridad y urgencia
-    "AUXILIO", "ASISTENCIA", "PELIGROSO", "ARRESTAR", "ROBAR", "MALTRATAR", "VIOLENCIA",
-    "VIOLACION", "ABUSAR", "CORRER", "PARAR", "AMENAZAR", "DANAR", "ACCIDENTE",
-    "HERIDA", "PRESO", "CARCEL", "CRISIS", "SALVAR",
-    # 8. Tiempo y secuencia
-    "MES", "DIA", "SEMANA", "ANO", "AYER", "ANTEAYER", "HOY", "AHORA", "MANANA",
-    "PASADO_MANANA", "FECHA", "SEGUNDO", "MINUTO", "HORA",
-    # 9. Lugares y ubicación
-    "CASA", "CALLE", "DIRECCION", "AVENIDA", "PLAZA", "HOSPITAL", "FARMACIA",
-    "MERCADO", "AEROPUERTO", "COCHABAMBA", "UBICACION_GPS",
-    # 10. Documentos y objetos frecuentes
-    "FORMULARIO", "CARTA", "TEXTO", "TITULO", "LICENCIA", "LICENCIA_DE_CONDUCIR",
-    "PASAPORTE", "PAPEL", "TELEFONO", "MOCHILA", "ARCHIVADOR", "FOTOCOPIA",
-    "CARPETA", "SELLO", "DINERO",
-    # 11. Transporte
-    "AUTO", "MICRO", "TRUFI", "TAXI", "MOTOCICLETA", "TREN", "AVION", "BICICLETA",
-    # 12. Estado, emoción y comprensión
-    "TEMOR", "CONFUSION", "VERGUENZA", "CONFIANZA", "MAL", "ESTOY_BIEN",
-    "MAS_O_MENOS", "PROBLEMA", "SITUACION", "CORRECTO", "FALTA", "RAZON",
-    # 13. Descripción visual básica
-    "ROJO", "AMARILLO", "CAFE", "AZUL", "BLANCO", "VERDE", "ROSADO", "NEGRO",
-    "NARANJA", "CELESTE", "LILA", "DELGADO", "GRUESO",
-    # 14. Comunicación digital
-    "VIDEOLLAMADA", "WHATSAPP", "WIFI", "ZOOM",
-    # 15. Integridad, organización y garantías
-    "GARANTE", "AUTONOMIA", "CORRUPTO", "HONESTIDAD", "SOBORNO", "DISCRIMINACION",
-    "PODER", "COMPROMISO", "PERSONERIA_JURIDICA", "DECRETO_SUPREMO",
-    # Abecedario Dactilológico LSB (27)
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-    "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-    # Números LSB (10)
-    "CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ"
-}
+OFFICIAL_LSB_CORPUS = AVAILABLE_GLOSSES
 
 # ===================================================================
 # DICCIONARIO DE GLOSAS DISPONIBLES EN EL AVATAR 3D
@@ -230,36 +180,42 @@ AVAILABLE_3D_GLOSSES = {
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
     "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
     # 3. Números LSB (10 dígitos)
-    "CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ"
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
 }
 
 # Términos judiciales que requieren validación y deben deletrearse dactilológicamente
 TERMS_TO_SPELL = {
-    "DENUNCIA", "DENUNCIAR", "DENUNCIANTE", "DENUNCIADO", "FISCALIA", "FISCALÍA",
-    "JUZGADO", "COMISARIA", "COMISARÍA", "QUERELLA", "IMPUTACION", "IMPUTACIÓN",
-    "IMPUTADO", "VICTIMA", "VÍCTIMA", "SOSPECHOSO", "DETENIDO", "ACTA",
-    "CEDULA", "CÉDULA", "CEDULA_DE_IDENTIDAD", "FIRMA", "FIRMAR", "DECLARACION",
-    "DECLARACIÓN", "DECLARAR", "FELCC", "FELCV", "MINISTERIO_PUBLICO", "MINISTERIO PÚBLICO"
+    "ACTA", "CEDULA", "CÉDULA", "FIRMA", "FIRMAR", "DECLARACION",
+    "DECLARACIÓN", "DECLARAR", "MINISTERIO_PUBLICO", "MINISTERIO PÚBLICO"
 }
 
 # Variantes con las que el modelo nombra una misma seña
 GLOSS_ALIASES = {
     "POR FAVOR": "POR_FAVOR",
     "PORFAVOR": "POR_FAVOR",
-    "SÍ": "SI",
+    "SÍ": "SÍ",
+    "SI": "SÍ",
     "LO SIENTO": "LO_SIENTO",
     "NO PUEDO": "NO_PUEDO",
     "NO SABER": "NO_SABER",
-    "¿CÓMO ESTÁS?": "COMO_ESTAS",
-    "COMO ESTAS": "COMO_ESTAS",
-    "ÓRGANO JUDICIAL": "ORGANO_JUDICIAL",
-    "ORGANO JUDICIAL": "ORGANO_JUDICIAL",
-    "LICENCIA DE CONDUCIR": "LICENCIA_DE_CONDUCIR",
-    "UBICACIÓN GPS": "UBICACION_GPS",
+    "ÓRGANO JUDICIAL": "ÓRGANO_JUDICIAL",
+    "ORGANO JUDICIAL": "ÓRGANO_JUDICIAL",
     "ESTOY BIEN": "ESTOY_BIEN",
-    "MÁS O MENOS": "MAS_O_MENOS",
-    "0": "CERO", "1": "UNO", "2": "DOS", "3": "TRES", "4": "CUATRO",
-    "5": "CINCO", "6": "SEIS", "7": "SIETE", "8": "OCHO", "9": "NUEVE", "10": "DIEZ"
+    "MÁS O MENOS": "MÁS_O_MENOS",
+    "MAS O MENOS": "MÁS_O_MENOS",
+    "POLICIA": "POLICÍA",
+    "DONDE": "DÓNDE",
+    "CUANDO": "CUÁNDO",
+    "QUE": "QUÉ",
+    "QUIEN": "QUIÉN",
+    "CUAL": "CUÁL",
+    "COMO": "CÓMO",
+    "CUANTOS": "CUÁNTOS",
+    "TELEFONO": "CELULAR",
+    "BILLETERA": "BILLETES",
+    "FOTOGRAFIA": "FOTOS",
+    "CORRER": "ESCAPAR",
+    "DELGADO": "FLACO",
 }
 
 def resolve_animation_file(gloss: str, animations: dict, text: str):
@@ -288,26 +244,31 @@ def get_avatar_animations() -> dict:
 
 LEGAL_DISAMBIGUATION_RULES = """
 REGLAS DE DESAMBIGUACIÓN JURÍDICA Y POLISEMIA EN LSB:
-- "llama" (Verbo llamar / citar): Mapear a "LLAMAR". (Ej: "Yo llamo al policía" -> ["YO", "POLICIA", "LLAMAR"])
-- "llama" (Animal / Camélido): Mapear a "ANIMAL" o "LLAMA". (Ej: "La llama es mía" -> ["MIO", "LLAMA"])
-- "llama" (Fuego / Incendio): Mapear a "FUEGO". (Ej: "Miro la llama" -> ["FUEGO", "VER"])
+- "llama" / "llamar" (Verbo llamar / citar): Mapear a "LLAMAR". (Ej: "Yo llamo al policía" -> ["YO", "POLICÍA", "LLAMAR"])
 - "fiscal" (Autoridad judicial): Mapear a "FISCAL".
+- "fiscalía" (Institución del Ministerio Público): Mapear a "FISCALIA".
+- "policía" (Oficial o institución): Mapear a "POLICÍA".
+- "teléfono / celular / móvil": Mapear a "CELULAR".
+- "plata / dinero / efectivo": Mapear a "BILLETES".
+- "carnet / cédula": Mapear a "PAPEL" + "IDENTIDAD".
+- "fotos / fotografía": Mapear a "FOTOS".
+- "huir / escapar / correr": Mapear a "ESCAPAR".
 """
 
 SITUATION_LABELS = {
     "denuncia_robo": "denuncia de robo, hurto o asalto",
-    "violencia": "denuncia de violencia o agresión",
-    "accidente": "reporte de un accidente",
-    "orientacion": "consulta de orientación o trámite legal",
-    "tramite_id": "trámite de documentos de identidad",
-    "perdida": "pérdida o extravío de objetos o documentos",
-    "emergencia": "situación de emergencia",
-    "otro": "declaración general",
+    "violencia": "denuncia de violencia o agresión física/psicológica",
+    "amenaza_digital": "amenazas por mensajes, llamadas o internet",
+    "engano_dinero": "estafa, engaño económico o transferencias",
+    "seguimiento": "consulta de estado de caso o resoluciones judiciales",
+    "identificacion": "identificación del ciudadano y contacto",
+    "preguntas": "preguntas y consultas directas del ciudadano sordo",
+    "otro": "declaración general y testimonio",
 }
 
 def build_disambiguation_prompt(text: str, context: str = "legal", situation: str = None) -> str:
     """Construye el Prompt oficial con las reglas del Ministerio de Educación de Bolivia."""
-    gloss_list = ", ".join(sorted(OFFICIAL_LSB_CORPUS))
+    gloss_list = ", ".join(sorted(AVAILABLE_GLOSSES))
     safe_text = sanitize_prompt_text(text)
 
     situation_instruction = ""
@@ -315,7 +276,7 @@ def build_disambiguation_prompt(text: str, context: str = "legal", situation: st
         situation_instruction = f"SITUACIÓN CONVERSACIONAL: {SITUATION_LABELS[situation]}."
 
     prompt = f"""Eres el motor lingüístico oficial de traducción de Español a Lengua de Señas Boliviana (LSB),
-fundamentado en el Manual Práctico de Enseñanza de Educación Bilingüe del Ministerio de Educación del Estado Plurinacional de Bolivia.
+fundamentado en el Manual Práctico de Enseñanza de Educación Bilingüe del Ministerio de Educación del Estado Plurinacional de Bolivia y el Corpus Maestro Unificado LSB v4.
 
 {situation_instruction}
 
@@ -330,23 +291,28 @@ Tu misión es transformar la frase en español a un ARREGLO ORDENADO DE GLOSAS L
    - No uses verbos auxiliares de ser/estar para identidad (ej: 'Yo soy abogado' -> ['YO', 'ABOGADO']).
 
 3. MORFOLOGÍA NEUTRA:
-   - Sustantivos y adjetivos en forma neutra singular ('niñas bonitas' -> ['NINA', 'BONITO'], 'muchas' -> ['MUCHO']).
+   - Sustantivos y adjetivos en forma canónica ('niñas' -> ['HIJA'], 'muchos' -> ['MUCHO']).
 
-4. ESTRUCTURA Y SINTAXIS LSB:
-   - Orden canónico: [TIEMPO] + [SUJETO / OBJETO] + [ADJETIVO] + [VERBO] + [NEGACIÓN / PREGUNTA].
-   - Marcadores de tiempo al inicio: 'Ayer hablé' -> ['AYER', 'YO', 'HABLAR'].
-   - Partícula de negación al final: 'No puedo atender' -> ['ATENDER', 'PUEDO', 'NO'] o ['NO_PUEDO'].
-   - Preguntas al final: '¿Quién es él?' -> ['EL', 'QUIEN'].
+4. ESTRUCTURA Y SINTAXIS LSB (ORDEN MORFOSINTÁCTICO CANÓNICO):
+   - Estructura obligatoria: [TIEMPO] + [LUGAR] + [SUJETO / OBJETO] + [ADJETIVO] + [VERBO] + [NEGACIÓN / PREGUNTA].
+   - Marcadores de tiempo siempre al inicio: 'Ayer hablé con el fiscal' -> ['AYER', 'FISCALIA', 'FISCAL', 'HABLAR'].
+   - Marcadores de lugar van antes del sujeto u objeto: 'Me robaron el celular en la plaza' -> ['PLAZA', 'CELULAR', 'ROBAR'].
+   - Negación al final de la cláusula: 'No puedo atender hoy' -> ['HOY', 'ATENDER', 'NO_PUEDO'] o ['HOY', 'ATENDER', 'PUEDO', 'NO'].
+   - Preguntas e interrogativos al final: 
+     - '¿Dónde ocurrió el robo?' -> ['ROBAR', 'DÓNDE'].
+     - '¿Quién te agredió?' -> ['PEGAR', 'QUIÉN'].
+     - '¿Cuándo debo volver a la fiscalía?' -> ['FISCALIA', 'VOLVER', 'CUÁNDO'].
+     - '¿Cuántos días debo esperar?' -> ['DÍA', 'ESPERAR', 'CUÁNTOS'].
 
-5. NÚMEROS:
-   - Convierte números a su glosa textual: '1' -> 'UNO', '2' -> 'DOS', '5' -> 'CINCO', '10' -> 'DIEZ'.
+5. NÚMEROS Y DÍGITOS:
+   - Convierte números a dígitos/glosas del catálogo: '1' -> '1', '2' -> '2', '5' -> '5'.
 
 6. DELETREO DACTILOLÓGICO:
-   - Los nombres propios y términos sin seña formal (ej: 'FELCC', 'ACTA', 'DENUNCIA', 'JUZGADO') deben descomponerse en sus letras individuales: ['F', 'E', 'L', 'C', 'C'].
+   - Los nombres propios, siglas sin seña y términos no catalogados deben deletrearse letra por letra: ['S', 'E', 'G', 'I', 'P'].
 
 {LEGAL_DISAMBIGUATION_RULES}
 
-CATÁLOGO DE GLOSAS OFICIALES PERMITIDAS:
+CATÁLOGO DE GLOSAS OFICIALES PERMITIDAS (SOLO USAR ESTAS):
 [{gloss_list}]
 
 FORMATO DE RESPUESTA (JSON estricto):

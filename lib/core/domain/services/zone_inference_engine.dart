@@ -14,19 +14,27 @@ class ZoneInferenceEngine {
     for (final entry in _interrogatives.entries) {
       final at = haystack.indexOf(entry.key);
       if (at < 0) continue;
-      final previous = marks[entry.value];
-      if (previous == null || at < previous) marks[entry.value] = at;
+      final target = entry.value;
+      final previous = marks[target];
+      if (previous == null || at < previous) marks[target] = at;
     }
     if (marks.isEmpty) return const [];
 
     final hits = <String, int>{};
     for (final zone in context.zones) {
+      // 1. Direct zone ID match
+      if (marks.containsKey(zone.id)) {
+        hits[zone.id] = marks[zone.id]!;
+        continue;
+      }
+      // 2. Semantic text match
       final question = _normalize('${zone.question} ${zone.hint} ${zone.label}');
       for (final mark in marks.entries) {
-        if (!question.contains(mark.key)) continue;
-        final previous = hits[zone.id];
-        if (previous == null || mark.value < previous) {
-          hits[zone.id] = mark.value;
+        if (question.contains(mark.key)) {
+          final previous = hits[zone.id];
+          if (previous == null || mark.value < previous) {
+            hits[zone.id] = mark.value;
+          }
         }
       }
     }
@@ -49,104 +57,90 @@ class ZoneInferenceEngine {
 }
 
 const Map<String, String> _interrogatives = {
-  'a que hora': 'cuando',
-  'que hora': 'cuando',
-  'cuando': 'cuando',
-  'que dia': 'cuando',
-  'en que momento': 'cuando',
-  'donde': 'donde',
-  'en que lugar': 'donde',
-  'que lugar': 'donde',
-  'en que calle': 'donde',
-  'quien': 'quien',
-  'quienes': 'quien',
-  'como era': 'como era',
-  'como eran': 'como era',
-  'que aspecto': 'como era',
-  'que se llevaron': 'llevaron',
-  'que te llevaron': 'llevaron',
-  'que te robaron': 'llevaron',
-  'que le robaron': 'llevaron',
-  'que te quitaron': 'llevaron',
-  'que objetos': 'llevaron',
-  'arma': 'daño',
-  'cuchillo': 'daño',
-  'te amenazo': 'daño',
-  'te hizo daño': 'daño',
-  'como se llama': 'nombre',
-  'como te llamas': 'nombre',
-  'cual es su nombre': 'nombre',
-  'su nombre': 'nombre',
-  'tu nombre': 'nombre',
-  'nombre completo': 'nombre',
-  'apellido': 'nombre',
-  'que edad': 'edad',
-  'cuantos anos': 'edad',
-  'su edad': 'edad',
-  'tu edad': 'edad',
-  'edad tiene': 'edad',
-  'carnet': 'identidad',
-  'cedula': 'identidad',
-  'identifica': 'identidad',
-  'identidad': 'identidad',
-  'que documento': 'documento',
-  'documento': 'documento',
-  'que papeles': 'documento',
-  'documentacion': 'documento',
-  'numero de su caso': 'numero',
-  'numero de caso': 'numero',
-  'numero de tu caso': 'numero',
-  'codigo': 'numero',
-  'nurej': 'numero',
-  'su caso': 'caso',
-  'tu caso': 'caso',
-  'del caso': 'caso',
-  'webid': 'numero',
-  'que institucion': 'institucion',
-  'que oficina': 'institucion',
-  'ante quien': 'institucion',
-  'interprete': 'interprete',
-  'necesita apoyo': 'interprete',
-  'necesitas apoyo': 'interprete',
-  'que necesita hacer': 'necesitas hacer',
-  'que necesitas hacer': 'necesitas hacer',
-  'que tramite': 'tramite',
-  'para cuando': 'para cuando',
-  'conoce a la persona': 'conoces',
-  'conoces a la persona': 'conoces',
-  'la conoce': 'conoces',
-  'lo conoce': 'conoces',
-  'conoce al agresor': 'conoces',
-  'persona involucrada': 'conoces',
+  // Tiempo
+  'a que hora': 'tiempo',
+  'que hora': 'tiempo',
+  'cuando ocurrio': 'tiempo',
+  'cuando': 'tiempo',
+  'que dia': 'tiempo',
+  'en que momento': 'tiempo',
+
+  // Lugar
+  'donde ocurrio': 'lugar',
+  'donde': 'lugar',
+  'en que lugar': 'lugar',
+  'que lugar': 'lugar',
+  'en que calle': 'lugar',
+
+  // Conocimiento / Persona
+  'conoce a la persona': 'conocimiento',
+  'conoce': 'conocimiento',
+  'quien': 'persona',
+  'quienes': 'persona',
+
+  // Apariencia
+  'puede describir': 'apariencia',
+  'describir a la persona': 'apariencia',
+  'como era': 'apariencia',
+  'como eran': 'apariencia',
+  'que aspecto': 'apariencia',
+  'que ropa': 'apariencia',
+  'llevaba gorra': 'apariencia',
+  'llevaba mochila': 'apariencia',
+
+  // Objetos sustraídos
+  'que se llevaron': 'objetos',
+  'que le robaron': 'objetos',
+  'que le falta': 'objetos',
+  'robaron el celular': 'objetos',
+  'falta dinero': 'objetos',
+
+  // Testigos y pruebas
   'hay testigos': 'testigos',
   'algun testigo': 'testigos',
-  'habia testigos': 'testigos',
-  'hubo testigos': 'testigos',
-  'alguien vio': 'testigos',
-  'desea realizar una denuncia': 'denuncia',
-  'desea denunciar': 'denuncia',
-  'quiere denunciar': 'denuncia',
-  'realizar la denuncia': 'denuncia',
-  'apoyo legal': 'apoyo legal',
-  'asistencia legal': 'apoyo legal',
-  'necesita abogado': 'apoyo legal',
-  'necesita un abogado': 'apoyo legal',
-  'describir a la persona': 'como era',
-  'puede describir': 'como era',
-  'pruebas': 'pruebas',
+  'testigo': 'testigos',
+  'fotografias o documentos': 'pruebas',
   'fotografias': 'pruebas',
-  'fotografia': 'pruebas',
-  'evidencia': 'pruebas',
-  'atencion medica': 'ayuda',
-  'esta herida': 'ayuda',
-  'necesita un medico': 'ayuda',
-  'necesita atencion': 'ayuda',
-  'debo volver': 'cuando',
-  'tiene que volver': 'cuando',
-  'cuando vuelve': 'cuando',
-  'necesita ayuda': 'ayuda',
-  'necesitas ayuda': 'ayuda',
-  'ayuda urgente': 'ayuda',
-  'esta herido': 'ayuda',
-  'estas herido': 'ayuda',
+  'fotos': 'pruebas',
+  'documentos': 'pruebas',
+  'pruebas': 'pruebas',
+  'video': 'pruebas',
+  'camaras': 'pruebas',
+
+  // Emergencia y salud
+  'esta herido': 'emergencia',
+  'atencion medica': 'emergencia',
+  'necesita atencion medica': 'emergencia',
+  'asistencia medica': 'emergencia',
+  'al hospital': 'emergencia',
+  'herido': 'emergencia',
+
+  // Denuncia y apoyo legal
+  'desea realizar una denuncia': 'denuncia',
+  'realizar una denuncia': 'denuncia',
+  'denuncia': 'denuncia',
+  'apoyo legal': 'apoyo_legal',
+  'necesita apoyo legal': 'apoyo_legal',
+  'abogado': 'apoyo_legal',
+  'interprete': 'apoyo_legal',
+  'defensa publica': 'apoyo_legal',
+  'sepdep': 'apoyo_legal',
+  'sepdavi': 'apoyo_legal',
+
+  // Identificación
+  'como se llama': 'identidad',
+  'como te llamas': 'identidad',
+  'cual es su nombre': 'identidad',
+  'su nombre': 'identidad',
+  'tu nombre': 'identidad',
+  'nombre completo': 'identidad',
+  'nombre': 'identidad',
+  'apellido': 'identidad',
+  'mostrar su documento': 'identidad',
+  'carnet': 'identidad',
+  'cedula': 'identidad',
+  'documento': 'identidad',
+  'que edad': 'edad',
+  'cuantos anos': 'edad',
+  'edad': 'edad',
 };

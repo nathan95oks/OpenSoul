@@ -77,4 +77,13 @@ const Map<String, IconData> kLsbIconMap = {
   'mood_bad': Icons.mood_bad,
   'sentiment_dissatisfied': Icons.sentiment_dissatisfied,
   'nights_stay': Icons.nights_stay,
+  'phone_android': Icons.phone_android,
+  'check_circle': Icons.check_circle,
+  'photo_camera': Icons.photo_camera,
+  'place': Icons.place,
+  'videocam': Icons.videocam,
+  'psychology': Icons.psychology,
+  'fingerprint': Icons.fingerprint,
+  'tag': Icons.tag,
+  'pan_tool': Icons.pan_tool,
 };

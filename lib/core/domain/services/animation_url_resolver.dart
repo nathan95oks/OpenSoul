@@ -38,7 +38,7 @@ class AnimationUrlResolver {
     'JUZGADO', 'COMISARIA', 'QUERELLA', 'IMPUTACION', 'IMPUTADO',
     'VICTIMA', 'SOSPECHOSO', 'DETENIDO', 'ACTA', 'CEDULA', 'CEDULA DE IDENTIDAD',
     'FIRMA', 'FIRMAR', 'DECLARACION', 'DECLARAR', 'MINISTERIO PUBLICO',
-    'FELCC', 'FELCV'
+    'FELCC', 'FELCV', 'SEPDAVI', 'SEPDEP', 'AUDIENCIA'
   };
 
   /// Quita las tildes de una glosa conservando la N con virgulilla, que es una
