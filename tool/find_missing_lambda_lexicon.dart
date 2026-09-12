@@ -21,10 +21,18 @@ import 'dart:io';
 Set<String> _matchAll(String content, RegExp re) =>
     re.allMatches(content).map((m) => m.group(1)!).toSet();
 
+String _norm(String g) => g
+    .replaceAll('Á', 'A')
+    .replaceAll('É', 'E')
+    .replaceAll('Í', 'I')
+    .replaceAll('Ó', 'O')
+    .replaceAll('Ú', 'U')
+    .replaceAll('Ü', 'U');
+
 void main() {
   const dsPath = 'assets/dictionary/official_dictionary.json';
-  final asmPath =
-      'lib/core/engines/semantic_engine/local_sentence_assembler.dart';
+  const asmPath =
+      'lib/core/domain/services/local_sentence_assembler.dart';
   const lambdaPath = 'aws/lambda_function.py';
 
   final catalogJson =
@@ -32,20 +40,20 @@ void main() {
   final catalog = (catalogJson['entries'] as List)
       .cast<Map<String, dynamic>>()
       .where((e) => e['mechanism'] == null)
-      .map((e) => e['gloss'] as String)
+      .map((e) => _norm(e['gloss'] as String))
       .toSet();
   final assembler = _matchAll(
     File(asmPath).readAsStringSync(),
-    RegExp(r"'([A-Z0-9_Ñ]+)':\s*_Lex\("),
-  );
+    RegExp(r"'([A-Z0-9_ÑÁÉÍÓÚ]+)':\s*_Lex\("),
+  ).map(_norm).toSet();
 
   final lambdaSrc = File(lambdaPath).readAsStringSync();
   final start = lambdaSrc.indexOf('GLOSS_LEXICON = {');
   final end = lambdaSrc.indexOf('def analyze_glosses');
   final lambda = _matchAll(
     lambdaSrc.substring(start, end),
-    RegExp(r'"([A-Z0-9_Ñ]+)":\s*\{'),
-  );
+    RegExp(r'"([A-Z0-9_ÑÁÉÍÓÚ]+)":\s*\{'),
+  ).map(_norm).toSet();
 
   final missingAsm = catalog.difference(assembler).toList()..sort();
   final missingLambda = catalog.difference(lambda).toList()..sort();

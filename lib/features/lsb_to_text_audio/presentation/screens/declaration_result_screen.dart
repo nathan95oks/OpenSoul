@@ -6,19 +6,23 @@ import 'package:go_router/go_router.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
-import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
-import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/configured_entity_chips.dart';
 
 class DeclarationResultScreen extends ConsumerWidget {
   const DeclarationResultScreen({super.key});
 
   static const _orange = AppTheme.brandPrimary;
+  static const _assembler = LocalSentenceAssembler();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +31,17 @@ class DeclarationResultScreen extends ConsumerWidget {
     final glosses = ref.watch(sentenceProvider);
     final playback = ref.watch(audioPlaybackProvider);
     final servesConversation = ref.watch(flowSurfaceProvider).isConversation;
+    final draft = ref.watch(declarationDraftProvider);
+
+    // Si el backend aún no responde o estamos offline, ensamblamos de forma determinista
+    final liveDeterministicText = _assembler.assembleStructured(draft);
+    final displayText = (result != null && result.generatedText.isNotEmpty)
+        ? result.generatedText
+        : (liveDeterministicText.isNotEmpty
+            ? liveDeterministicText
+            : (result?.baseSentence ?? ''));
+
+    final hasContent = displayText.isNotEmpty || glosses.isNotEmpty;
 
     return Scaffold(
       backgroundColor: AppTheme.lightBg,
@@ -38,7 +53,6 @@ class DeclarationResultScreen extends ConsumerWidget {
           tooltip: 'Volver a editar',
           onPressed: () => _backToEdit(context, ref),
         ),
-
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(height: 1, color: AppTheme.lightBorder),
@@ -66,7 +80,7 @@ class DeclarationResultScreen extends ConsumerWidget {
         ],
       ),
       body: SafeArea(
-        child: result == null || result.generatedText.isEmpty
+        child: !hasContent
             ? _EmptyResult(onBack: () => _backToEdit(context, ref))
             : SingleChildScrollView(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
@@ -84,20 +98,25 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     const Text(
-                      'Tu declaración ha sido generada',
-                      style: TextStyle(fontSize: 14, color: AppTheme.lightTextSub),
+                      'Tu declaración formal ha sido consolidada',
+                      style:
+                          TextStyle(fontSize: 14, color: AppTheme.lightTextSub),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
 
                     Row(
                       children: [
                         const Expanded(
-                          child: _Label('Traducción para institución pública:'),
+                          child: _Label('Texto formal para autoridades:'),
                         ),
-                        _OriginChip(bedrockUsed: result.bedrockUsed),
+                        _OriginChip(
+                          bedrockUsed: result?.bedrockUsed ?? false,
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
+
+                    // Tarjeta Principal con la Declaración Formal Consolidada
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
@@ -105,9 +124,16 @@ class DeclarationResultScreen extends ConsumerWidget {
                         color: _orange,
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: _orange, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: _orange.withValues(alpha: 0.3),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: Text(
-                        result.generatedText,
+                        displayText,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -118,28 +144,29 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
 
+                    // Botón Copiar al Portapapeles
                     _FullWidthBtn(
                       label: 'Copiar al portapapeles',
                       icon: Icons.copy_outlined,
                       filled: false,
-                      onTap: () => _copyToClipboard(context, result),
+                      onTap: () => _copyTextToClipboard(context, displayText),
                     ),
                     const SizedBox(height: 16),
 
+                    // Reproductor de Audio TTS (Polly / Flutter TTS local)
                     _AudioControls(
                       playback: playback,
-                      hasRemoteAudio:
-                          result.audioUrl != null &&
-                          result.audioUrl!.isNotEmpty,
+                      hasRemoteAudio: result?.audioUrl != null &&
+                          result!.audioUrl!.isNotEmpty,
                       onPlay: () {
                         if (playback == AudioPlaybackState.paused) {
                           ref
                               .read(translationControllerProvider.notifier)
-                              .resumeAudio();
+                              .resumeAudio(fallbackText: displayText);
                         } else {
                           ref
                               .read(translationControllerProvider.notifier)
-                              .replayAudio();
+                              .replayAudio(fallbackText: displayText);
                         }
                       },
                       onPause: () => ref
@@ -148,28 +175,40 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    const _Label('Secuencia de glosas:'),
+                    // Fichas de Entidades Configuradas
+                    const _Label('Entidades configuradas (toca para editar):'),
                     const SizedBox(height: 8),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppTheme.lightSurface,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppTheme.lightBorder, width: 1.5),
-                        boxShadow: AppTheme.cardShadow,
-                      ),
-                      child: Text(
-                        glosses.map((g) => g.replaceAll('_', ' ')).join(' • '),
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.lightText,
-                          height: 1.4,
+                    const ConfiguredEntityChips(),
+                    const SizedBox(height: 16),
+
+                    // Secuencia de Glosas Seleccionadas
+                    if (glosses.isNotEmpty) ...[
+                      const _Label('Secuencia de glosas LSB:'),
+                      const SizedBox(height: 8),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppTheme.lightSurface,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              color: AppTheme.lightBorder, width: 1.5),
+                          boxShadow: AppTheme.cardShadow,
+                        ),
+                        child: Text(
+                          glosses
+                              .map((g) => g.replaceAll('_', ' '))
+                              .join(' • '),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.lightText,
+                            height: 1.4,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 14),
+                      const SizedBox(height: 14),
+                    ],
 
                     Container(
                       width: double.infinity,
@@ -180,8 +219,8 @@ class DeclarationResultScreen extends ConsumerWidget {
                         border: Border.all(color: AppTheme.lightBorder),
                       ),
                       child: const Text(
-                        'Esta traducción puede ser presentada en instituciones '
-                        'públicas para formalizar tu declaración.',
+                        'Esta declaración puede ser presentada ante la Policía (FELCC), '
+                        'Fiscalía u oficinas públicas para formalizar tu denuncia o trámite.',
                         style: TextStyle(
                           fontSize: 13,
                           color: AppTheme.lightTextSub,
@@ -192,13 +231,16 @@ class DeclarationResultScreen extends ConsumerWidget {
                     const SizedBox(height: 24),
 
                     if (servesConversation) ...[
-                      _FullWidthBtn(
-                        label: 'Enviar al chat',
-                        icon: Icons.forum_outlined,
-                        filled: true,
-                        onTap: () => _sendToConversation(context, ref, result),
-                      ),
-                      const SizedBox(height: 10),
+                      if (result != null) ...[
+                        _FullWidthBtn(
+                          label: 'Enviar al chat',
+                          icon: Icons.forum_outlined,
+                          filled: true,
+                          onTap: () =>
+                              _sendToConversation(context, ref, result),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                       _FullWidthBtn(
                         label: 'Volver a la conversación',
                         icon: Icons.arrow_back,
@@ -232,6 +274,20 @@ class DeclarationResultScreen extends ConsumerWidget {
               ),
       ),
     );
+  }
+
+  Future<void> _copyTextToClipboard(BuildContext context, String text) async {
+    await Clipboard.setData(ClipboardData(text: text));
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        const SnackBar(
+          content: Text('Declaración copiada al portapapeles'),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
   }
 
   Future<void> _sendToConversation(
@@ -320,24 +376,6 @@ class DeclarationResultScreen extends ConsumerWidget {
     // El resultado es un paso de la pestana, no una ruta apilada: se vuelve
     // ocultandolo, y el armado de la frase sigue intacto detras.
     ref.read(resultVisibleProvider.notifier).hide();
-  }
-
-  Future<void> _copyToClipboard(
-      BuildContext context, TranslationResult result) async {
-    final text = result.generatedText.isNotEmpty
-        ? result.generatedText
-        : result.baseSentence;
-    await Clipboard.setData(ClipboardData(text: text));
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        const SnackBar(
-          content: Text('Declaración copiada al portapapeles'),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
   }
 
   Future<void> _newDeclaration(BuildContext context, WidgetRef ref) async {

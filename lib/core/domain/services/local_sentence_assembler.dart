@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 
 const String kVictimMarker = 'VICTIMA';
@@ -83,14 +81,22 @@ class LocalSentenceAssembler {
     'LENTES': 'lentes',
     'MOCHILA': 'una mochila',
     'BOLSA': 'una bolsa',
+    'CAJA': 'una caja',
   };
 
-  static const _feminineClothing = {'POLERA', 'GORRA', 'CHAMARRA', 'BOLSA'};
+  static const _feminineClothing = {
+    'POLERA',
+    'GORRA',
+    'CHAMARRA',
+    'BOLSA',
+    'MOCHILA',
+    'CAJA',
+  };
   static const _pluralClothing = {'LENTES'};
 
   String _colorAdjFor(String concept, String colorGloss) {
-    final plural = _pluralClothing.contains(concept);
-    final fem = _feminineClothing.contains(concept);
+    final plural = _pluralClothing.contains(concept.toUpperCase());
+    final fem = _feminineClothing.contains(concept.toUpperCase());
     switch (colorGloss.toUpperCase()) {
       case 'ROJO':
         return plural ? 'rojos' : (fem ? 'roja' : 'rojo');
@@ -98,6 +104,23 @@ class LocalSentenceAssembler {
         return plural ? 'negros' : (fem ? 'negra' : 'negro');
       case 'AZUL':
         return plural ? 'azules' : 'azul';
+      case 'BLANCO':
+        return plural ? 'blancos' : (fem ? 'blanca' : 'blanco');
+      case 'VERDE':
+        return plural ? 'verdes' : 'verde';
+      case 'CAFE':
+      case 'CAFÉ':
+        return plural ? 'cafés' : 'café';
+      case 'GRIS':
+        return plural ? 'grises' : 'gris';
+      case 'PLOMO':
+        return plural ? 'plomos' : (fem ? 'ploma' : 'plomo');
+      case 'AMARILLO':
+        return plural ? 'amarillos' : (fem ? 'amarilla' : 'amarillo');
+      case 'MORADO':
+        return plural ? 'morados' : (fem ? 'morada' : 'morado');
+      case 'NARANJA':
+        return plural ? 'naranjas' : 'naranja';
       default:
         return colorGloss.toLowerCase().replaceAll('_', ' ');
     }
@@ -150,11 +173,26 @@ class LocalSentenceAssembler {
   }
 
   String _objectSelfPhrase(ObjectInvolved o) {
-    if (o.concept.toUpperCase() == 'BILLETES' &&
+    if (o.docType != null && o.docType!.trim().isNotEmpty) {
+      final doc = o.docType!.trim();
+      return doc.startsWith('Carnet') ||
+              doc.startsWith('Licencia') ||
+              doc.startsWith('Pasaporte') ||
+              doc.startsWith('Cédula') ||
+              doc.startsWith('Cedula')
+          ? 'mi $doc'
+          : 'un $doc';
+    }
+    if ((o.concept.toUpperCase() == 'BILLETES' || o.concept.toUpperCase() == 'DINERO') &&
         o.quantity != null &&
         o.quantity!.trim().isNotEmpty) {
       final unidad = (o.unit == null || o.unit!.trim().isEmpty) ? 'bolivianos' : o.unit!;
       return '${o.quantity} $unidad en billetes';
+    }
+    if (o.contents != null && o.contents!.trim().isNotEmpty) {
+      final lex = _lexicon[_normalize(o.concept)];
+      final nombre = lex?.es ?? o.concept.toLowerCase().replaceAll('_', ' ');
+      return '$nombre que contenía ${o.contents!.trim()}';
     }
     final lex = _lexicon[_normalize(o.concept)];
     var base = lex?.es ?? o.concept.toLowerCase().replaceAll('_', ' ');
@@ -175,17 +213,14 @@ class LocalSentenceAssembler {
         : 'un $base';
   }
 
-  /// Complemento de lugar, exclusivamente con los datos que la persona
-  /// aportó. Si eligió una relación espacial (cerca, lejos, dentro, fuera,
-  /// al lado) pero no hay todavía una referencia, el complemento se omite
-  /// por completo en vez de inventar "un lugar" vago: [LocationInfo.pending]
-  /// existe justamente para que la interfaz pueda seguir pidiéndola sin que
-  /// el texto ya la dé por hecha.
   String? _locationClause(LocationInfo loc) {
     final partes = <String>[];
     if (loc.mainPlaceConcept != null) {
       final lex = _lexicon[_normalize(loc.mainPlaceConcept!)];
       var frase = lex?.es ?? loc.mainPlaceConcept!.toLowerCase();
+      if (loc.isVehicleTransport && !frase.startsWith('en ')) {
+        frase = frase.startsWith('un ') ? 'en el ${frase.substring(3)}' : 'en $frase';
+      }
       if (loc.mainPlaceDetail != null && loc.mainPlaceDetail!.trim().isNotEmpty) {
         frase = '$frase ${loc.mainPlaceDetail!.trim()}';
       }
@@ -210,7 +245,7 @@ class LocalSentenceAssembler {
   }
 
   String? _timeClause(TimeInfo t) {
-    if (t.unknown) return null; // se declara aparte, no se inventa una hora
+    if (t.unknown) return null;
     if (t.elapsedUnit != null) {
       final r = _Roles()
         ..timeUnit = _normalize(t.elapsedUnit!)
@@ -225,9 +260,8 @@ class LocalSentenceAssembler {
     return null;
   }
 
-  /// Genera la declaración de `denuncia_robo` a partir del [DeclarationDraft]
-  /// estructurado, en vez de una lista plana de glosas. Cada oración solo
-  /// afirma lo que el borrador realmente contiene.
+  /// Genera la declaración a partir del [DeclarationDraft] estructurado
+  /// para todos los 8 contextos con gramática formal boliviana.
   String assembleStructured(DeclarationDraft d) {
     final sentences = <String>[];
     final locClause = _locationClause(d.location) ?? '';
@@ -243,55 +277,108 @@ class LocalSentenceAssembler {
         ? 'Una persona'
         : _cap(_join(suspects.map(_personPhraseStructured).toList()));
 
-    switch (d.fact.action?.toUpperCase()) {
-      case 'ROBAR':
-        if (stolen.isNotEmpty) {
-          final what = _join(stolen.map(_objectSelfPhrase).toList());
-          sentences.add(
-            '$timePrefix${_decap(subjectPhrase)} me robó $what$locClause.'
-                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
-          );
+    // Despacho por contexto y hecho
+    switch (d.contextId) {
+      case 'violencia':
+        final agg = d.violence?.aggressionType ?? d.fact.action ?? 'agresión física';
+        final aggText = agg.toLowerCase().replaceAll('_', ' ');
+        sentences.add('${_cap(timePrefix)}El declarante denuncia haber sufrido $aggText$locClause.'.trim());
+        break;
+
+      case 'amenaza_digital':
+        final chan = d.digitalThreat?.channel ?? 'medios digitales';
+        sentences.add('${_cap(timePrefix)}El declarante refiere haber recibido amenazas a través de $chan$locClause.'.trim());
+        break;
+
+      case 'engano_dinero':
+        final monto = d.fraud?.amount != null ? ' por el monto de ${d.fraud!.amount} ${d.fraud!.currency ?? "bolivianos"}' : '';
+        final medio = d.fraud?.deliveryMethod != null ? ' mediante ${d.fraud!.deliveryMethod}' : '';
+        sentences.add('${_cap(timePrefix)}El declarante denuncia haber sido víctima de engaño económico$monto$medio$locClause.'.trim());
+        break;
+
+      case 'seguimiento':
+        sentences.add('${_cap(timePrefix)}El ciudadano consulta el estado de su trámite o investigación$locClause.'.trim());
+        break;
+
+      case 'identificacion':
+        final docs = d.objects.where((o) => o.docType != null).map((o) => o.docType!).toList();
+        if (docs.isNotEmpty) {
+          sentences.add('El declarante presenta su ${_join(docs)}$locClause.'.trim());
         } else {
-          sentences.add(
-            '$timePrefix${_decap(subjectPhrase)} me robó$locClause.'
-                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
-          );
+          sentences.add('El declarante se identifica ante la autoridad competente$locClause.'.trim());
         }
         break;
-      case 'PERDER':
-        // Perder nunca se redacta como una acción de otra persona: quien
-        // perdió el objeto es siempre quien declara.
-        final objetosPerdidos = lost.isNotEmpty ? lost : stolen;
-        if (objetosPerdidos.isNotEmpty) {
-          final what = _join(objetosPerdidos.map(_objectSelfPhrase).toList());
-          sentences.add('${_cap(timePrefix)}Perdí $what$locClause.'.trim());
+
+      case 'preguntas':
+        sentences.add('¿Dónde debo realizar esta consulta o presentar el trámite?');
+        break;
+
+      case 'otro':
+        if (d.inquiry?.isWitnessReport ?? true) {
+          sentences.add('${_cap(timePrefix)}El declarante se presenta en calidad de testigo presencial de los hechos$locClause.'.trim());
         } else {
-          sentences.add(
-              '${_cap(timePrefix)}No sé con certeza qué ocurrió; puede que haya perdido algo$locClause.'
-                  .trim());
+          sentences.add('${_cap(timePrefix)}El declarante realiza una manifestación voluntaria$locClause.'.trim());
         }
         break;
-      case 'ENGAÑAR':
-        sentences.add('${_cap(timePrefix)}Me engañaron$locClause.'.trim());
-        break;
-      case 'DAÑAR':
-        final what = stolen.isNotEmpty
-            ? ' ${_join(stolen.map(_objectSelfPhrase).toList())}'
-            : '';
-        sentences.add(
-            '${_cap(timePrefix)}${_decap(subjectPhrase)} dañó$what$locClause.'
-                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
-        break;
-      case 'ESCAPAR':
-        sentences.add(
-            '${_cap(timePrefix)}${_decap(subjectPhrase)} escapó$locClause.'
-                .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
-        break;
-      default:
-        // Sin hecho confirmado: no se afirma un robo ni ningún otro delito
-        // solo por haber entrado a este menú.
-        if (locClause.isNotEmpty || timeClauseText != null) {
-          sentences.add('${_cap(timePrefix)}Ocurrió algo que quiero relatar$locClause.'.trim());
+
+      default: // denuncia_robo
+        switch (d.fact.action?.toUpperCase()) {
+          case 'ROBAR':
+            if (stolen.isNotEmpty) {
+              final what = _join(stolen.map(_objectSelfPhrase).toList());
+              sentences.add(
+                '$timePrefix${_decap(subjectPhrase)} me robó $what$locClause.'
+                    .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
+              );
+            } else {
+              sentences.add(
+                '$timePrefix${_decap(subjectPhrase)} me robó$locClause.'
+                    .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
+              );
+            }
+            break;
+          case 'PERDER':
+            final objetosPerdidos = lost.isNotEmpty ? lost : stolen;
+            if (objetosPerdidos.isNotEmpty) {
+              final what = _join(objetosPerdidos.map(_objectSelfPhrase).toList());
+              sentences.add('${_cap(timePrefix)}Perdí $what$locClause.'.trim());
+            } else {
+              sentences.add(
+                  '${_cap(timePrefix)}No sé con certeza qué ocurrió; puede que haya perdido algo$locClause.'
+                      .trim());
+            }
+            break;
+          case 'ENGAÑAR':
+            sentences.add('${_cap(timePrefix)}Me engañaron$locClause.'.trim());
+            break;
+          case 'DAÑAR':
+            final what = stolen.isNotEmpty
+                ? ' ${_join(stolen.map(_objectSelfPhrase).toList())}'
+                : '';
+            sentences.add(
+                '${_cap(timePrefix)}${_decap(subjectPhrase)} dañó$what$locClause.'
+                    .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
+            break;
+          case 'ESCAPAR':
+            if (d.fact.actorRole == 'victim') {
+              sentences.add(
+                  '${_cap(timePrefix)}El declarante logró escapar$locClause.'.trim());
+            } else if (d.fact.actorRole == 'thirdParty') {
+              sentences.add(
+                  '${_cap(timePrefix)}Una tercera persona escapó del lugar$locClause.'.trim());
+            } else if (d.fact.actorDetail != null && d.fact.actorDetail!.isNotEmpty) {
+              sentences.add(
+                  '${_cap(timePrefix)}${d.fact.actorDetail} escapó$locClause.'.trim());
+            } else {
+              sentences.add(
+                  '${_cap(timePrefix)}${_decap(subjectPhrase)} escapó$locClause.'
+                      .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
+            }
+            break;
+          default:
+            if (locClause.isNotEmpty || timeClauseText != null) {
+              sentences.add('${_cap(timePrefix)}Ocurrió algo que quiero relatar$locClause.'.trim());
+            }
         }
     }
 
@@ -941,7 +1028,7 @@ class LocalSentenceAssembler {
     final anadido = _join(missing);
     // Si falta algún token no capturado, se integra elegantemente sin coletillas artificiales
     if (text.isEmpty) return '${_cap(anadido)}.';
-    return '$text (${anadido}).'.trim();
+    return '$text ($anadido).'.trim();
   }
 
   bool _isRepresented(String gloss, String hayLower) {
@@ -2172,6 +2259,7 @@ class LocalSentenceAssembler {
     'GOBIERNO': _Lex(_Role.institucion, 'el gobierno'),
     'GORDO': _Lex(_Role.rasgo, 'de contextura gruesa'),
     'GORRA': _Lex(_Role.objeto, 'mi gorra'),
+    'GRACIAS': _Lex(_Role.marcador, 'muchas gracias'),
     'GRATIS': _Lex(_Role.descriptor, 'gratuito'),
     'GRITAR': _Lex(_Role.verboAccion, 'gritó'),
     'GRUESO': _Lex(_Role.rasgo, 'grueso'),

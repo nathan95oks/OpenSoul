@@ -56,8 +56,11 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
             'language': 'es-BO',
             'institutionType': 'entidad_publica',
             'contractVersion': contractVersion,
+            // ignore: use_null_aware_elements
             if (speechAct != null) 'speechAct': speechAct,
+            // ignore: use_null_aware_elements
             if (replyToId != null) 'replyToId': replyToId,
+            // ignore: use_null_aware_elements
             if (declaration != null) 'declaration': declaration,
           }),
         )

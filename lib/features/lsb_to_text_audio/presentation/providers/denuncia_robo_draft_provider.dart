@@ -1,34 +1,77 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 
-/// Estado estructurado propio de `denuncia_robo`: personas, objetos y lugar.
-///
-/// La navegación (qué pregunta está activa, avanzar/retroceder) sigue
-/// viviendo en `semanticZonesProvider`, que ya modela bien "una pregunta a la
-/// vez". Lo que ese provider NO puede modelar es que una zona contenga varias
-/// entidades independientes con sus propios atributos (dos personas, cada
-/// una con su propia ropa y color; dos objetos con papeles distintos aunque
-/// compartan concepto léxico). Por eso las zonas de entidades (persona,
-/// objetos, lugar) escriben aquí en vez de en la lista plana de glosas.
-class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
+/// Estado estructurado universal para declaraciones en todos los 8 contextos:
+/// personas, prendas con color aislado, objetos con papel/contenido, lugar con
+/// ancla espacial y detalles transversales (violencia, fraude, digital, trámites).
+class DeclarationDraftNotifier extends Notifier<DeclarationDraft> {
+  int _idCounter = 0;
+  String _uniqueId(String prefix) =>
+      '${prefix}_${DateTime.now().microsecondsSinceEpoch}_${++_idCounter}';
+
   @override
-  DeclarationDraft build() =>
-      const DeclarationDraft(contextId: 'denuncia_robo');
-
-  void reset() => state = const DeclarationDraft(contextId: 'denuncia_robo');
-
-  // ---- Hecho ----------------------------------------------------------
-
-  void setFactAction(String? action, {bool motiveConfirmed = true}) {
-    state = _copy(fact: FactInfo(action: action, motiveConfirmed: motiveConfirmed));
+  DeclarationDraft build() {
+    final ctx = ref.watch(contextProvider);
+    final contextId = ctx?.id ?? 'denuncia_robo';
+    return DeclarationDraft(contextId: contextId);
   }
 
-  // ---- Personas ---------------------------------------------------------
+  void reset([String? contextId]) {
+    final effectiveContext =
+        contextId ?? ref.read(contextProvider)?.id ?? 'denuncia_robo';
+    state = DeclarationDraft(contextId: effectiveContext);
+  }
+
+  void setSpeechAct(String speechAct) {
+    state = _copy(speechAct: speechAct);
+  }
+
+  // ---- Hecho y Desambiguación -------------------------------------------
+
+  void setFactAction(String? action, {bool motiveConfirmed = true}) {
+    state = _copy(
+      fact: state.fact.copyWith(
+        action: action,
+        motiveConfirmed: motiveConfirmed,
+      ),
+    );
+  }
+
+  void setFactActor({
+    String? action,
+    String? actorRole,
+    String? actorDetail,
+    String? lossType,
+    bool motiveConfirmed = true,
+  }) {
+    state = _copy(
+      fact: FactInfo(
+        action: action ?? state.fact.action,
+        motiveConfirmed: motiveConfirmed,
+        actorRole: actorRole ?? state.fact.actorRole,
+        actorDetail: actorDetail ?? state.fact.actorDetail,
+        lossType: lossType ?? state.fact.lossType,
+      ),
+    );
+  }
+
+  void setLossDisambiguation({required String lossType, String? note}) {
+    state = _copy(
+      fact: state.fact.copyWith(
+        action: lossType == 'loss' ? 'PERDER' : (state.fact.action ?? 'ROBAR'),
+        lossType: lossType,
+        actorDetail: note,
+      ),
+    );
+  }
+
+  // ---- Personas y Atributos Anidados (Máquina de Estados) ---------------
 
   String addPerson({required String role}) {
-    final id = 'p${state.persons.length + 1}_${DateTime.now().microsecondsSinceEpoch}';
+    final id = _uniqueId('p');
     final person = PersonEntity(id: id, role: role);
     state = _copy(persons: [...state.persons, person]);
     return id;
@@ -40,14 +83,7 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
       objects: [
         for (final o in state.objects)
           if (o.carriedByPersonId == personId)
-            ObjectInvolved(
-              id: o.id,
-              concept: o.concept,
-              role: o.role,
-              quantity: o.quantity,
-              unit: o.unit,
-              detail: o.detail,
-            )
+            o.copyWith(carriedByPersonId: null)
           else
             o,
       ],
@@ -56,6 +92,7 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
 
   void updatePerson(
     String personId, {
+    String? role,
     String? gender,
     String? ageApprox,
     String? build,
@@ -66,6 +103,7 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
       for (final p in state.persons)
         if (p.id == personId)
           p.copyWith(
+            role: role,
             gender: gender,
             ageApprox: ageApprox,
             build: build,
@@ -78,7 +116,7 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
   }
 
   String addClothing(String personId, String concept) {
-    final id = 'c_${DateTime.now().microsecondsSinceEpoch}_${state.persons.length}';
+    final id = _uniqueId('c');
     state = _copy(persons: [
       for (final p in state.persons)
         if (p.id == personId)
@@ -92,8 +130,35 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
     return id;
   }
 
-  void setClothingColor(String personId, String clothingId, String? color,
-      {ConfirmationState state1 = ConfirmationState.confirmed}) {
+  String addClothingWithColor(String personId, String concept, String? color) {
+    final id = _uniqueId('c');
+    state = _copy(persons: [
+      for (final p in state.persons)
+        if (p.id == personId)
+          p.copyWith(clothing: [
+            ...p.clothing,
+            ClothingItem(
+              id: id,
+              personId: personId,
+              concept: concept,
+              color: color,
+              colorState: color != null
+                  ? ConfirmationState.confirmed
+                  : ConfirmationState.pending,
+            ),
+          ])
+        else
+          p,
+    ]);
+    return id;
+  }
+
+  void setClothingColor(
+    String personId,
+    String clothingId,
+    String? color, {
+    ConfirmationState state1 = ConfirmationState.confirmed,
+  }) {
     state = _copy(persons: [
       for (final p in state.persons)
         if (p.id == personId)
@@ -121,7 +186,7 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
     ]);
   }
 
-  // ---- Objetos ------------------------------------------------------------
+  // ---- Objetos y Especificaciones Categoriales ---------------------------
 
   String addObject({
     required String concept,
@@ -130,8 +195,12 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
     String? quantity,
     String? unit,
     String? detail,
+    String? docType,
+    String? contents,
+    String? bank,
+    String? platform,
   }) {
-    final id = 'o_${DateTime.now().microsecondsSinceEpoch}_${state.objects.length}';
+    final id = _uniqueId('o');
     state = _copy(objects: [
       ...state.objects,
       ObjectInvolved(
@@ -142,6 +211,10 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
         quantity: quantity,
         unit: unit,
         detail: detail,
+        docType: docType,
+        contents: contents,
+        bank: bank,
+        platform: platform,
       ),
     ]);
     return id;
@@ -151,31 +224,47 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
     state = _copy(objects: state.objects.where((o) => o.id != id).toList());
   }
 
-  void setObjectDetail(String id, {String? quantity, String? unit, String? detail}) {
+  void setObjectDetail(
+    String id, {
+    String? quantity,
+    String? unit,
+    String? detail,
+    String? docType,
+    String? contents,
+    String? bank,
+    String? platform,
+    String? role,
+  }) {
     state = _copy(objects: [
       for (final o in state.objects)
         if (o.id == id)
-          ObjectInvolved(
-            id: o.id,
-            concept: o.concept,
-            role: o.role,
-            carriedByPersonId: o.carriedByPersonId,
-            quantity: quantity ?? o.quantity,
-            unit: unit ?? o.unit,
-            detail: detail ?? o.detail,
+          o.copyWith(
+            quantity: quantity,
+            unit: unit,
+            detail: detail,
+            docType: docType,
+            contents: contents,
+            bank: bank,
+            platform: platform,
+            role: role,
           )
         else
           o,
     ]);
   }
 
-  // ---- Lugar ----------------------------------------------------------
+  // ---- Lugar y Relaciones Espaciales -----------------------------------
 
-  void setMainPlace(String? concept, {String? detail}) {
+  void setMainPlace(
+    String? concept, {
+    String? detail,
+    bool isVehicleTransport = false,
+  }) {
     state = _copy(
       location: state.location.copyWith(
         mainPlaceConcept: concept,
         mainPlaceDetail: detail,
+        isVehicleTransport: isVehicleTransport,
       ),
     );
   }
@@ -186,6 +275,7 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
         mainPlaceConcept: state.location.mainPlaceConcept,
         mainPlaceDetail: state.location.mainPlaceDetail,
         relation: relation,
+        isVehicleTransport: state.location.isVehicleTransport,
       ),
     );
   }
@@ -194,6 +284,7 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
     String? referenceType,
     String? referenceLiteralText,
     String? referenceConceptGloss,
+    bool? isVehicleTransport,
   }) {
     state = _copy(
       location: LocationInfo(
@@ -203,6 +294,8 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
         referenceType: referenceType,
         referenceLiteralText: referenceLiteralText,
         referenceConceptGloss: referenceConceptGloss,
+        isVehicleTransport:
+            isVehicleTransport ?? state.location.isVehicleTransport,
       ),
     );
   }
@@ -213,22 +306,32 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
         mainPlaceConcept: state.location.mainPlaceConcept,
         mainPlaceDetail: state.location.mainPlaceDetail,
         relation: state.location.relation,
+        isVehicleTransport: state.location.isVehicleTransport,
       ),
     );
   }
 
-  // ---- Tiempo, testigos, evidencia, trámite --------------------------------
+  // ---- Tiempo, testigos, evidencia, trámite ----------------------------
 
   void setTime(TimeInfo time) => state = _copy(time: time);
 
-  void setWitnesses(WitnessInfo witnesses) => state = _copy(witnesses: witnesses);
+  void setWitnesses(WitnessInfo witnesses) =>
+      state = _copy(witnesses: witnesses);
 
-  String addEvidence(String concept,
-      {ConfirmationState availability = ConfirmationState.confirmed, bool offeredToShow = false}) {
-    final id = 'e_${DateTime.now().microsecondsSinceEpoch}_${state.evidence.length}';
+  String addEvidence(
+    String concept, {
+    ConfirmationState availability = ConfirmationState.confirmed,
+    bool offeredToShow = false,
+  }) {
+    final id = _uniqueId('e');
     state = _copy(evidence: [
       ...state.evidence,
-      EvidenceItem(id: id, concept: concept, availability: availability, offeredToShow: offeredToShow),
+      EvidenceItem(
+        id: id,
+        concept: concept,
+        availability: availability,
+        offeredToShow: offeredToShow,
+      ),
     ]);
     return id;
   }
@@ -238,12 +341,27 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
   }
 
   void setInjured(bool injured) => state = _copy(injured: injured);
-  void setMedicalHelpRequested(bool v) => state = _copy(medicalHelpRequested: v);
-  void setWillFileComplaint(ConfirmationState v) => state = _copy(willFileComplaint: v);
+  void setMedicalHelpRequested(bool v) =>
+      state = _copy(medicalHelpRequested: v);
+  void setWillFileComplaint(ConfirmationState v) =>
+      state = _copy(willFileComplaint: v);
   void setNeedsLegalSupport(bool v) => state = _copy(needsLegalSupport: v);
-  void setReceivingInstitution(String? v) => state = _copy(receivingInstitution: v);
+  void setReceivingInstitution(String? v) =>
+      state = _copy(receivingInstitution: v);
+
+  // ---- Extensiones transversales ---------------------------------------
+
+  void setViolenceDetails(ViolenceDetails v) => state = _copy(violence: v);
+  void setFraudDetails(FraudDetails f) => state = _copy(fraud: f);
+  void setDigitalThreatDetails(DigitalThreatDetails d) =>
+      state = _copy(digitalThreat: d);
+  void setProcedureDetails(ProcedureDetails p) => state = _copy(procedure: p);
+  void setInquiryDetails(InquiryDetails i) => state = _copy(inquiry: i);
 
   DeclarationDraft _copy({
+    String? contextId,
+    String? speechAct,
+    String? replyToId,
     FactInfo? fact,
     List<PersonEntity>? persons,
     List<ObjectInvolved>? objects,
@@ -256,11 +374,16 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
     ConfirmationState? willFileComplaint,
     bool? needsLegalSupport,
     String? receivingInstitution,
+    ViolenceDetails? violence,
+    FraudDetails? fraud,
+    DigitalThreatDetails? digitalThreat,
+    ProcedureDetails? procedure,
+    InquiryDetails? inquiry,
   }) =>
       DeclarationDraft(
-        contextId: state.contextId,
-        speechAct: state.speechAct,
-        replyToId: state.replyToId,
+        contextId: contextId ?? state.contextId,
+        speechAct: speechAct ?? state.speechAct,
+        replyToId: replyToId ?? state.replyToId,
         fact: fact ?? state.fact,
         persons: persons ?? state.persons,
         objects: objects ?? state.objects,
@@ -269,66 +392,77 @@ class DenunciaRoboDraftNotifier extends Notifier<DeclarationDraft> {
         witnesses: witnesses ?? state.witnesses,
         evidence: evidence ?? state.evidence,
         injured: injured ?? state.injured,
-        medicalHelpRequested: medicalHelpRequested ?? state.medicalHelpRequested,
+        medicalHelpRequested:
+            medicalHelpRequested ?? state.medicalHelpRequested,
         willFileComplaint: willFileComplaint ?? state.willFileComplaint,
         needsLegalSupport: needsLegalSupport ?? state.needsLegalSupport,
-        receivingInstitution: receivingInstitution ?? state.receivingInstitution,
+        receivingInstitution:
+            receivingInstitution ?? state.receivingInstitution,
+        violence: violence ?? state.violence,
+        fraud: fraud ?? state.fraud,
+        digitalThreat: digitalThreat ?? state.digitalThreat,
+        procedure: procedure ?? state.procedure,
+        inquiry: inquiry ?? state.inquiry,
       );
 }
 
-final denunciaRoboDraftProvider =
-    NotifierProvider<DenunciaRoboDraftNotifier, DeclarationDraft>(
-  DenunciaRoboDraftNotifier.new,
+final declarationDraftProvider =
+    NotifierProvider<DeclarationDraftNotifier, DeclarationDraft>(
+  DeclarationDraftNotifier.new,
 );
 
-const _unidadesTiempo = {'HORA', 'MINUTO', 'DÍA', 'SEMANA', 'MES'};
+/// Alias para compatibilidad con código existente.
+final denunciaRoboDraftProvider = declarationDraftProvider;
+
+const _unidadesTiempo = {'HORA', 'MINUTO', 'DÍA', 'DIA', 'SEMANA', 'MES'};
 
 /// Combina el borrador de entidades (persona, objetos, lugar) con las
-/// respuestas simples de las demás zonas de `denuncia_robo` (hecho, tiempo,
-/// testigos, evidencia, emergencia, denuncia, apoyo legal, institución) en
-/// un único [DeclarationDraft] listo para generar texto o enviarse al
-/// backend. Vive aquí, y no en el ensamblador, porque necesita leer dos
-/// providers de presentación a la vez.
+/// respuestas simples de las demás zonas en un único [DeclarationDraft]
+/// listo para generar texto determinista o enviarse al backend.
 DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
   final zonesState = ref.read(semanticZonesProvider);
-  final entityDraft = ref.read(denunciaRoboDraftProvider);
+  final entityDraft = ref.read(declarationDraftProvider);
+  final currentContextId =
+      ref.read(contextProvider)?.id ?? entityDraft.contextId;
 
-  List<String> answersOf(String zoneId) => zonesState.zoneAnswers[zoneId] ?? const [];
+  List<String> answersOf(String zoneId) =>
+      zonesState.zoneAnswers[zoneId] ?? const [];
   List<String>? qualifiersOf(String zoneId, String gloss) =>
       zonesState.zoneQualifiers[zoneId]?[gloss];
 
   final hechoAns = answersOf('hecho');
-  String? factAction;
+  String? factAction = entityDraft.fact.action;
   if (hechoAns.contains('NO_SABER')) {
     factAction = 'unknown';
-  } else if (hechoAns.isNotEmpty) {
+  } else if (hechoAns.isNotEmpty && factAction == null) {
     factAction = hechoAns.first;
   }
 
   final tiempoAns = answersOf('tiempo');
-  var time = const TimeInfo();
+  var time = entityDraft.time;
   if (tiempoAns.contains('NO_SABER')) {
     time = const TimeInfo(unknown: true);
-  } else {
-    final unit = tiempoAns.where(_unidadesTiempo.contains).cast<String?>().firstWhere(
-          (_) => true,
-          orElse: () => null,
-        );
+  } else if (tiempoAns.isNotEmpty) {
+    final unit = tiempoAns
+        .where((g) => _unidadesTiempo.contains(g.toUpperCase()))
+        .cast<String?>()
+        .firstWhere((_) => true, orElse: () => null);
     if (unit != null) {
       final cantidad = qualifiersOf('tiempo', unit);
       time = TimeInfo(
         elapsedUnit: unit,
-        elapsedCount: (cantidad != null && cantidad.isNotEmpty) ? cantidad.first : null,
+        elapsedCount:
+            (cantidad != null && cantidad.isNotEmpty) ? cantidad.first : null,
       );
-    } else if (tiempoAns.isNotEmpty) {
+    } else {
       time = TimeInfo(dateOrMoment: tiempoAns.first);
     }
   }
 
   final testigosAns = answersOf('testigos');
-  var witnesses = const WitnessInfo();
-  if (testigosAns.contains('SÍ')) {
-    final cantidad = qualifiersOf('testigos', 'SÍ');
+  var witnesses = entityDraft.witnesses;
+  if (testigosAns.contains('SÍ') || testigosAns.contains('SI')) {
+    final cantidad = qualifiersOf('testigos', 'SÍ') ?? qualifiersOf('testigos', 'SI');
     witnesses = WitnessInfo(
       existence: ConfirmationState.confirmed,
       count: (cantidad != null && cantidad.isNotEmpty) ? cantidad.first : null,
@@ -342,26 +476,33 @@ DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
   final evidenciaAns = answersOf('evidencia');
   const ofrecimiento = {'MOSTRAR', 'PUEDO'};
   final ofreceMostrar = evidenciaAns.any(ofrecimiento.contains);
-  final evidence = [
-    for (final g in evidenciaAns)
-      if (!ofrecimiento.contains(g))
+  final existingEvidence = [...entityDraft.evidence];
+  for (final g in evidenciaAns) {
+    if (!ofrecimiento.contains(g) &&
+        !existingEvidence.any((e) => e.concept == g)) {
+      existingEvidence.add(
         EvidenceItem(
           id: 'ev_$g',
           concept: g,
           availability: ConfirmationState.confirmed,
           offeredToShow: ofreceMostrar,
         ),
-  ];
+      );
+    }
+  }
 
   final emergenciaAns = answersOf('emergencia');
   const heridaGlosas = {'HERIDA', 'DOLOR'};
   const ayudaGlosas = {'HOSPITAL', 'DOCTOR', 'AUXILIO', 'CERTIFICADO'};
-  final injured = emergenciaAns.any(heridaGlosas.contains);
-  final medicalHelp = emergenciaAns.any(ayudaGlosas.contains);
+  final injured = entityDraft.injured || emergenciaAns.any(heridaGlosas.contains);
+  final medicalHelp = entityDraft.medicalHelpRequested ||
+      emergenciaAns.any(ayudaGlosas.contains);
 
   final denunciaAns = answersOf('denuncia');
-  var willFile = ConfirmationState.pending;
-  if (denunciaAns.contains('SÍ') || denunciaAns.contains('AHORA')) {
+  var willFile = entityDraft.willFileComplaint;
+  if (denunciaAns.contains('SÍ') ||
+      denunciaAns.contains('SI') ||
+      denunciaAns.contains('AHORA')) {
     willFile = ConfirmationState.confirmed;
   } else if (denunciaAns.contains('NO')) {
     willFile = ConfirmationState.negated;
@@ -370,18 +511,29 @@ DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
   }
 
   final apoyoAns = answersOf('apoyo_legal');
-  const apoyoPositivo = {'ABOGADO', 'INTÉRPRETE', 'SEPDAVI', 'SEPDEP', 'AYUDAR', 'SÍ'};
-  final needsLegal = apoyoAns.any(apoyoPositivo.contains) && !apoyoAns.contains('NO');
+  const apoyoPositivo = {
+    'ABOGADO',
+    'INTÉRPRETE',
+    'SEPDAVI',
+    'SEPDEP',
+    'AYUDAR',
+    'SÍ',
+    'SI',
+  };
+  final needsLegal = entityDraft.needsLegalSupport ||
+      (apoyoAns.any(apoyoPositivo.contains) && !apoyoAns.contains('NO'));
 
   final institucionAns = answersOf('institucion');
-  final institution = institucionAns.isEmpty ? null : institucionAns.first;
+  final institution = institucionAns.isNotEmpty
+      ? institucionAns.first
+      : entityDraft.receivingInstitution;
 
   final conocimientoAns = answersOf('conocimiento');
   var persons = entityDraft.persons;
   if (conocimientoAns.isNotEmpty && persons.isNotEmpty) {
     final last = persons.last;
     var idState = last.identityState;
-    if (conocimientoAns.contains('SÍ')) {
+    if (conocimientoAns.contains('SÍ') || conocimientoAns.contains('SI')) {
       idState = ConfirmationState.confirmed;
     } else if (conocimientoAns.contains('NO')) {
       idState = ConfirmationState.negated;
@@ -394,19 +546,62 @@ DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
     ];
   }
 
+  // Transversal details synthesis
+  ViolenceDetails? violence = entityDraft.violence;
+  if (currentContextId == 'violencia') {
+    final saludAns = answersOf('salud_urgencia');
+    final riesgoAns = answersOf('emocion_riesgo');
+    violence = ViolenceDetails(
+      aggressionType: hechoAns.isNotEmpty ? hechoAns.first : null,
+      physicalInjury: injured || saludAns.any(heridaGlosas.contains),
+      medicalCareRequested: medicalHelp || saludAns.any(ayudaGlosas.contains),
+      protectionRequested:
+          riesgoAns.contains('PROTEGER') || riesgoAns.contains('AUXILIO'),
+    );
+  }
+
+  FraudDetails? fraud = entityDraft.fraud;
+  if (currentContextId == 'engano_dinero') {
+    final medioAns = answersOf('medio_banco');
+    fraud = FraudDetails(
+      amount: fraud?.amount,
+      currency: fraud?.currency ?? 'bolivianos',
+      deliveryMethod: medioAns.isNotEmpty ? medioAns.first.toLowerCase() : null,
+      recipientName: fraud?.recipientName,
+      receiptDoc: fraud?.receiptDoc,
+    );
+  }
+
+  DigitalThreatDetails? digital = entityDraft.digitalThreat;
+  if (currentContextId == 'amenaza_digital') {
+    digital = DigitalThreatDetails(
+      channel: digital?.channel ?? (hechoAns.contains('CELULAR') ? 'WhatsApp' : 'Internet'),
+      messageType: digital?.messageType ?? 'texto',
+      hasSavedEvidence: existingEvidence.isNotEmpty ||
+          answersOf('evidencia').contains('GUARDAR'),
+    );
+  }
+
   return DeclarationDraft(
-    contextId: 'denuncia_robo',
-    fact: FactInfo(action: factAction),
+    contextId: currentContextId,
+    speechAct: entityDraft.speechAct,
+    replyToId: entityDraft.replyToId,
+    fact: entityDraft.fact.copyWith(action: factAction),
     persons: persons,
     objects: entityDraft.objects,
     location: entityDraft.location,
     time: time,
     witnesses: witnesses,
-    evidence: evidence,
+    evidence: existingEvidence,
     injured: injured,
     medicalHelpRequested: medicalHelp,
     willFileComplaint: willFile,
     needsLegalSupport: needsLegal,
     receivingInstitution: institution,
+    violence: violence,
+    fraud: fraud,
+    digitalThreat: digital,
+    procedure: entityDraft.procedure,
+    inquiry: entityDraft.inquiry,
   );
 }

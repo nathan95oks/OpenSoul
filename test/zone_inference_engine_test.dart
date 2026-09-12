@@ -28,8 +28,8 @@ void main() {
       expect(zonesOf('¿En qué lugar ocurrió?'), ['lugar']);
     });
 
-    test('la persona lleva a la zona de personas', () {
-      expect(zonesOf('¿Quién te robó?'), ['personas']);
+    test('la persona lleva a la zona de persona', () {
+      expect(zonesOf('¿Quién te robó?'), ['persona']);
     });
 
     test('lo sustraído lleva a la zona de objetos', () {
@@ -50,7 +50,7 @@ void main() {
     test('reconoce tres zonas', () {
       expect(
         zonesOf('¿Quién te robó, dónde y qué se llevaron?'),
-        ['personas', 'lugar', 'objetos'],
+        ['persona', 'lugar', 'objetos'],
       );
     });
   });
@@ -66,46 +66,37 @@ void main() {
     });
 
     test('solo devuelve zonas que existen en el contexto dado', () {
-      // 'tramite' no tiene zona de objetos sustraídos ni de arma.
-      final tramite = contextById('tramite')!;
-      final zones = zonesOf('¿Qué se llevaron y usó algún arma?', tramite);
+      // 'identificacion' no tiene zona de objetos sustraídos ni de testigos.
+      final idCtx = contextById('identificacion')!;
+      final zones = zonesOf('¿Qué se llevaron y usó algún arma?', idCtx);
       for (final id in zones) {
-        expect(tramite.zoneById(id), isNotNull);
+        expect(idCtx.zoneById(id), isNotNull);
       }
     });
   });
 
-  group('preguntas de ventanilla — consultas y trámites', () {
-    // El hueco real: hasta ahora el motor solo reconocía lugar y tiempo, así
-    // que "¿sabes qué documento debes llevar?" no abría nada y la persona
-    // tenía que buscar la pregunta a mano.
-    List<String> enTramite(String t) =>
-        engine.zonesFor(context: contextById('tramite')!, text: t);
-    List<String> enConsulta(String t) =>
-        engine.zonesFor(context: contextById('consulta')!, text: t);
+  group('preguntas de ventanilla — identificación y seguimiento', () {
+    List<String> enIdentificacion(String t) =>
+        engine.zonesFor(context: contextById('identificacion')!, text: t);
+    List<String> enSeguimiento(String t) =>
+        engine.zonesFor(context: contextById('seguimiento')!, text: t);
 
-    test('el funcionario pregunta por un documento', () {
-      expect(enTramite('¿Sabes qué documento debes llevar?'), ['documento']);
-      expect(enConsulta('¿Qué documentación necesita?'), contains('documento'));
+    test('el funcionario pregunta por un documento o nombre', () {
+      expect(enIdentificacion('¿Cuál es su nombre completo?'), ['identidad']);
+      expect(enIdentificacion('¿Tiene su cédula o documento de identidad?'), contains('identidad'));
     });
 
-    test('el funcionario pide el número de caso', () {
-      expect(enTramite('¿Tiene el número de su caso?'), contains('caso'));
-      expect(enConsulta('¿Me da su NUREJ?'), contains('identificador'));
+    test('el funcionario pregunta por la edad', () {
+      expect(enIdentificacion('¿Qué edad tiene?'), contains('edad'));
     });
 
-    test('el funcionario pregunta a dónde acudir', () {
-      expect(enTramite('¿Ante qué institución?'), contains('donde'));
-      expect(enConsulta('¿Ante qué institución?'), contains('donde'));
-    });
-
-    test('el funcionario ofrece apoyo', () {
-      expect(enTramite('¿Necesita un intérprete?'), contains('apoyo'));
+    test('el funcionario pregunta sobre apoyo legal en seguimiento', () {
+      expect(enSeguimiento('¿Necesita abogado o intérprete?'), contains('institucion_autoridad'));
     });
 
     test('una pregunta sin marcador sigue sin abrir nada', () {
       // Prudencia: mejor la zona de entrada que una adivinada.
-      expect(enTramite('Buenos días, tome asiento'), isEmpty);
+      expect(enIdentificacion('Buenos días, tome asiento'), isEmpty);
     });
   });
 
@@ -139,18 +130,18 @@ void main() {
       // El fallo que esto fija: tras responder una vez, la zona activa
       // sobrevivía y la siguiente pregunta abría donde quedó la anterior.
       final container = containerAsking('Que paso');
-      expect(container.read(semanticZonesProvider).activeZoneId, 'situacion');
+      expect(container.read(semanticZonesProvider).activeZoneId, 'hecho');
 
       container.read(semanticZonesProvider.notifier).reset();
 
       // `reset` recalcula desde la pregunta vigente del puerto.
-      expect(container.read(semanticZonesProvider).activeZoneId, 'situacion');
+      expect(container.read(semanticZonesProvider).activeZoneId, 'hecho');
     });
 
     test('reset respeta la zona preguntada', () {
       final container = containerAsking('Donde te robaron');
-      container.read(semanticZonesProvider.notifier).activateZone('personas');
-      expect(container.read(semanticZonesProvider).activeZoneId, 'personas');
+      container.read(semanticZonesProvider.notifier).activateZone('persona');
+      expect(container.read(semanticZonesProvider).activeZoneId, 'persona');
 
       container.read(semanticZonesProvider.notifier).reset();
 

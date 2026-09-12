@@ -25,12 +25,20 @@ class ZoneInferenceEngine {
       // 1. Direct zone ID match
       if (marks.containsKey(zone.id)) {
         hits[zone.id] = marks[zone.id]!;
-        continue;
       }
-      // 2. Semantic text match
-      final question = _normalize('${zone.question} ${zone.hint} ${zone.label}');
+    }
+
+    if (hits.isNotEmpty) {
+      final ordered = hits.entries.toList()
+        ..sort((a, b) => a.value.compareTo(b.value));
+      return [for (final e in ordered) e.key];
+    }
+
+    // 2. Fallback to gloss/question semantic matching for unmapped aliases
+    for (final zone in context.zones) {
+      final question = _normalize('${zone.question} ${zone.hint} ${zone.label} ${zone.glossAllowlist.join(" ")}');
       for (final mark in marks.entries) {
-        if (question.contains(mark.key)) {
+        if (question.contains(mark.key) || zone.glossAllowlist.contains(mark.key.toUpperCase())) {
           final previous = hits[zone.id];
           if (previous == null || mark.value < previous) {
             hits[zone.id] = mark.value;
@@ -78,9 +86,7 @@ const Map<String, String> _interrogatives = {
   'quien': 'persona',
   'quienes': 'persona',
 
-  // Apariencia (fusionada con la entidad "persona": auditoría 2026-09, ya
-  // no existe una zona 'apariencia' separada — describir extiende a la
-  // misma persona en vez de crear una entidad o una lista sueltas).
+  // Apariencia (fusionada con la entidad "persona")
   'puede describir': 'persona',
   'describir a la persona': 'persona',
   'como era': 'persona',
@@ -97,8 +103,7 @@ const Map<String, String> _interrogatives = {
   'robaron el celular': 'objetos',
   'falta dinero': 'objetos',
 
-  // Testigos y evidencia (la zona 'pruebas' se fusionó con 'evidencia':
-  // auditoría 2026-09, ver context_catalog.dart)
+  // Testigos y evidencia
   'hay testigos': 'testigos',
   'algun testigo': 'testigos',
   'testigo': 'testigos',
@@ -118,17 +123,20 @@ const Map<String, String> _interrogatives = {
   'al hospital': 'emergencia',
   'herido': 'emergencia',
 
-  // Denuncia y apoyo legal
+  // Denuncia y apoyo legal / autoridad institucional
   'desea realizar una denuncia': 'denuncia',
   'realizar una denuncia': 'denuncia',
   'denuncia': 'denuncia',
   'apoyo legal': 'apoyo_legal',
   'necesita apoyo legal': 'apoyo_legal',
-  'abogado': 'apoyo_legal',
-  'interprete': 'apoyo_legal',
-  'defensa publica': 'apoyo_legal',
-  'sepdep': 'apoyo_legal',
-  'sepdavi': 'apoyo_legal',
+  'abogado': 'institucion_autoridad',
+  'interprete': 'institucion_autoridad',
+  'defensa publica': 'institucion_autoridad',
+  'sepdep': 'institucion_autoridad',
+  'sepdavi': 'institucion_autoridad',
+  'fiscal': 'institucion_autoridad',
+  'juez': 'institucion_autoridad',
+  'policia': 'institucion_autoridad',
 
   // Identificación
   'como se llama': 'identidad',

@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/amount_input_sheet.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/disambiguation_modal.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/entity_editor_sheets.dart';
 
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
@@ -86,8 +87,7 @@ class _TecladoDactilologico extends StatefulWidget {
 class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
   final _controlador = TextEditingController();
 
-  /// Caracteres que el avatar sabe deletrear. Lo que se escriba fuera de aqui
-  /// no se puede signar, asi que no se deja entrar.
+  /// Caracteres que el avatar sabe deletrear.
   static final _permitidoTexto = RegExp(r'[A-Za-z0-9ÑñÁÉÍÓÚáéíóúÜü ]');
   static final _permitidoLetras = RegExp(r'[A-Za-zÑñÁÉÍÓÚáéíóúÜü ]');
   static final _permitidoDigitos = RegExp(r'[0-9]');
@@ -103,11 +103,6 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
     return widget.alfanumerico ? _permitidoTexto : _permitidoLetras;
   }
 
-  /// Convierte lo escrito en la lista de letras que se deletrea.
-  ///
-  /// Cada caracter es una sena: los espacios no se signan y se descartan, y
-  /// las tildes se quitan porque el alfabeto dactilologico no las tiene —pero
-  /// la N con virgulilla si es una letra propia y se conserva.
   static List<String> letrasDe(String texto) {
     const con = 'ÁÉÍÓÚÜáéíóúü';
     const sin = 'AEIOUUAEIOUU';
@@ -134,7 +129,7 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-          16, 0, 16, MediaQuery.of(context).viewInsets.bottom + 16),
+            16, 0, 16, MediaQuery.of(context).viewInsets.bottom + 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -147,8 +142,6 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
             const SizedBox(height: 14),
             TextField(
               controller: _controlador,
-              // Se abre el teclado del telefono al aparecer la hoja: es el
-              // teclado que la persona ya sabe usar.
               autofocus: true,
               keyboardType: widget.soloDigitos
                   ? TextInputType.number
@@ -183,9 +176,6 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
               ),
             ),
             const SizedBox(height: 10),
-            // Se muestra como quedara deletreado, que es lo que el avatar hara
-            // seña a seña: sin esto no hay forma de saber que la frase se
-            // convierte en letras sueltas.
             SizedBox(
               height: 22,
               child: letras.isEmpty
@@ -239,9 +229,6 @@ class _Tecla extends StatelessWidget {
   if (etiqueta == null) return null;
   return switch (etiqueta) {
     'placa' => (titulo: 'Deletrea la placa', alfanumerico: true, soloDigitos: false),
-    // No se asume "número de caso": CELULAR puede pedirse como contacto,
-    // descripción del aparato u otro dato — quien pregunta decide qué
-    // significa ese número en su contexto (auditoría 2026-09).
     'numero' => (titulo: 'Escribe el número', alfanumerico: true, soloDigitos: false),
     'edad' => (titulo: '¿Qué edad tienes?', alfanumerico: true, soloDigitos: true),
     'carnet' => (titulo: 'Escribe tu número de carnet', alfanumerico: true, soloDigitos: false),
@@ -251,10 +238,8 @@ class _Tecla extends StatelessWidget {
   };
 }
 
-/// Zonas de `denuncia_robo` cuyas respuestas son entidades con relaciones
-/// propias (persona↔prenda↔color, objeto↔papel, lugar↔referencia) y por eso
-/// se editan en `entity_editor_sheets.dart` en vez de la hoja genérica de
-/// calificadores.
+/// Zonas estructuradas cuyas respuestas son entidades con relaciones
+/// propias (persona↔prenda↔color, objeto↔papel, lugar↔referencia).
 const _zonasDeEntidad = {'persona', 'objetos', 'lugar'};
 
 Future<void> elegirGlosa(
@@ -262,16 +247,63 @@ Future<void> elegirGlosa(
   WidgetRef ref,
   LsbCard card,
 ) async {
+  final gloss = card.gloss.toUpperCase();
   final zonesNotifier = ref.read(semanticZonesProvider.notifier);
   final zoneId = ref.read(semanticZonesProvider).activeZoneId;
-  final contextId = ref.read(contextProvider)?.id;
 
-  if (contextId == 'denuncia_robo' && _zonasDeEntidad.contains(zoneId)) {
-    // Estas zonas no dependen de la lista plana de respuestas: la misma
-    // glosa (p. ej. MOCHILA o POLERA) puede elegirse varias veces para
-    // entidades distintas (dos personas, o un objeto robado y otro que
-    // llevaba otra persona), así que cada toque abre su propio editor en
-    // vez de alternar una selección única.
+  // 1. Desambiguación Obligatoria de Verbos y Hechos
+  if (gloss == 'ESCAPAR') {
+    await DisambiguationModal.desambiguarEscapar(context, ref);
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  if (gloss == 'PERDER') {
+    await DisambiguationModal.desambiguarPerderVsRobar(context, ref);
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  // 2. Desambiguación de Objetos y Lugares Específicos
+  if (gloss == 'PAPEL') {
+    await DisambiguationModal.desambiguarPapel(context, ref);
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  if (gloss == 'IDENTIDAD') {
+    await DisambiguationModal.desambiguarIdentidad(context, ref);
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  if (gloss == 'CAJA' || gloss == 'BOLSA') {
+    await DisambiguationModal.desambiguarCajaBolsa(context, ref, gloss);
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  if (gloss == 'MICRO' || gloss == 'TRUFI') {
+    await DisambiguationModal.desambiguarTransporteVehiculo(context, ref, gloss);
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  if (gloss == 'BILLETES' || gloss == 'DINERO') {
+    await mostrarEditorMontoDinero(context, ref);
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  // 3. Editores de Entidad (Personas / Objetos / Lugar)
+  if (_zonasDeEntidad.contains(zoneId)) {
     switch (zoneId) {
       case 'persona':
         await mostrarEditorPersona(context, ref, card);
@@ -283,6 +315,8 @@ Future<void> elegirGlosa(
         await mostrarEditorLugar(context, ref, card);
         break;
     }
+    zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
     return;
   }
 

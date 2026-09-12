@@ -5,38 +5,59 @@ import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/amount_input_sheet.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/disambiguation_modal.dart';
 
-/// Editores de entidades para `denuncia_robo` (auditoría 2026-09).
+/// Editores de entidades jerárquicas y desambiguación interactiva.
 ///
-/// A diferencia de `qualifier_sheets.dart` (una glosa, un detalle), estas
-/// hojas capturan relaciones: qué prenda y color son de qué persona, qué
-/// papel cumple cada objeto, y de qué lugar es referencia una relación
-/// espacial. Escriben en [denunciaRoboDraftProvider], no en la lista plana
-/// de glosas.
+/// Gestiona la captura estructurada de:
+/// - Personas con prendas y colores anidados (aislados por entidad y prenda).
+/// - Objetos con roles, subtipos y contenidos (PAPEL, IDENTIDAD, CAJA/BOLSA).
+/// - Lugares con anclas y relaciones espaciales (CERCA, LEJOS, DENTRO de transporte).
 
-const _placeConcepts = {'CALLE', 'AVENIDA', 'PLAZA', 'MERCADO', 'BARRIO', 'TIENDA', 'CASA', 'COCHABAMBA'};
+const _placeConcepts = {
+  'CALLE',
+  'AVENIDA',
+  'PLAZA',
+  'MERCADO',
+  'BARRIO',
+  'TIENDA',
+  'CASA',
+  'COCHABAMBA'
+};
 const _relationConcepts = {'CERCA', 'LEJOS', 'DENTRO', 'FUERA', 'AL_LADO'};
 const _vehicleConcepts = {'MICRO', 'TRUFI'};
-const _clothingConcepts = {'POLERA', 'PANTALÓN', 'PANTALON', 'GORRA', 'CHAMARRA', 'LENTES', 'MOCHILA'};
+const _clothingConcepts = {
+  'POLERA',
+  'PANTALÓN',
+  'PANTALON',
+  'GORRA',
+  'CHAMARRA',
+  'LENTES',
+  'MOCHILA'
+};
 const _genderConcepts = {'HOMBRE', 'MUJER'};
 const _ageConcepts = {'JOVEN', 'ADULTO'};
 const _buildConcepts = {'FLACO', 'GORDO'};
 const _heightConcepts = {'ALTO', 'BAJO'};
 
-/// Campo de texto libre que conserva exactamente lo escrito: espacios,
-/// tildes, números y signos de una dirección. A diferencia del teclado
-/// dactilológico (que deletrea letra por letra para el avatar), este texto
-/// no se traduce a señas: viaja como dato literal.
+/// Abre el teclado de texto libre accesible con preservación de tildes y mayúsculas.
 Future<String?> mostrarTecladoTextoLibre(
   BuildContext context, {
   required String titulo,
   String? valorInicial,
+  String? hint,
 }) {
   final controlador = TextEditingController(text: valorInicial ?? '');
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
+    backgroundColor: AppTheme.lightSurface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
     builder: (ctx) => SafeArea(
       child: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -45,25 +66,44 @@ Future<String?> mostrarTecladoTextoLibre(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(titulo,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+            Text(
+              titulo,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.lightText,
+              ),
+            ),
             const SizedBox(height: 14),
             TextField(
               controller: controlador,
               autofocus: true,
               textCapitalization: TextCapitalization.words,
               maxLength: 80,
-              decoration: const InputDecoration(
-                hintText: 'Escribe aquí (se conservan espacios y tildes)',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                hintText: hint ?? 'Escribe aquí (se conservan espacios y tildes)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                filled: true,
+                fillColor: AppTheme.lightBg,
               ),
               onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
             FilledButton(
               onPressed: () => Navigator.of(ctx).pop(controlador.text.trim()),
-              child: Text(controlador.text.trim().isEmpty ? 'Omitir' : 'Confirmar'),
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              child: Text(
+                controlador.text.trim().isEmpty ? 'Omitir' : 'Confirmar',
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         ),
@@ -80,25 +120,79 @@ Future<T?> _opciones<T>(
   return showModalBottomSheet<T>(
     context: context,
     showDragHandle: true,
+    isScrollControlled: true,
+    backgroundColor: AppTheme.lightSurface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
     builder: (ctx) => SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(titulo,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 14),
-            for (final (label, value) in opciones)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(ctx).pop(value),
-                  child: Text(label),
+            Text(
+              titulo,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.lightText,
+                letterSpacing: -0.2,
+              ),
+            ),
+            const SizedBox(height: 16),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(ctx).size.height * 0.55,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    for (final (label, value) in opciones)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Material(
+                          color: AppTheme.lightBg,
+                          borderRadius: BorderRadius.circular(16),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(16),
+                            onTap: () => Navigator.of(ctx).pop(value),
+                            child: Container(
+                              height: 56,
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: AppTheme.lightBorder, width: 1.2),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      label,
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppTheme.lightText,
+                                      ),
+                                    ),
+                                  ),
+                                  const Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 14,
+                                    color: AppTheme.brandPrimary,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
+            ),
           ],
         ),
       ),
@@ -106,13 +200,14 @@ Future<T?> _opciones<T>(
   );
 }
 
-// ---------------------------------------------------------------------
-// Lugar
-// ---------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// LUGAR & RELACIONES ESPACIALES
+// -----------------------------------------------------------------------------
 
-Future<void> mostrarEditorLugar(BuildContext context, WidgetRef ref, LsbCard card) async {
+Future<void> mostrarEditorLugar(
+    BuildContext context, WidgetRef ref, LsbCard card) async {
   final gloss = card.gloss.toUpperCase();
-  final notifier = ref.read(denunciaRoboDraftProvider.notifier);
+  final notifier = ref.read(declarationDraftProvider.notifier);
 
   if (_relationConcepts.contains(gloss)) {
     await _abrirRelacionEspacial(context, ref, gloss);
@@ -120,26 +215,37 @@ Future<void> mostrarEditorLugar(BuildContext context, WidgetRef ref, LsbCard car
   }
 
   if (_vehicleConcepts.contains(gloss)) {
-    notifier.setMainPlace(gloss);
+    await DisambiguationModal.desambiguarTransporteVehiculo(
+        context, ref, gloss);
     return;
   }
 
   if (_placeConcepts.contains(gloss)) {
     notifier.setMainPlace(gloss);
-    if (gloss == 'CASA' || gloss == 'COCHABAMBA') return;
+    if (gloss == 'CASA' || gloss == 'COCHABAMBA') {
+      AppToastManager.showSuccess(context, 'Lugar fijado: $gloss');
+      return;
+    }
     if (!context.mounted) return;
     final detalle = await mostrarTecladoTextoLibre(
       context,
       titulo: '¿Nombre o referencia de ese lugar? (opcional)',
+      hint: 'Ej: Mercado Calatayud, Calle San Martín',
     );
     if (detalle != null && detalle.isNotEmpty) {
       notifier.setMainPlace(gloss, detail: detalle);
+      if (context.mounted) {
+        AppToastManager.showSuccess(context, 'Lugar registrado: $detalle');
+      }
+    } else if (context.mounted) {
+      AppToastManager.showSuccess(context, 'Lugar registrado: $gloss');
     }
   }
 }
 
-Future<void> _abrirRelacionEspacial(BuildContext context, WidgetRef ref, String relation) async {
-  final notifier = ref.read(denunciaRoboDraftProvider.notifier);
+Future<void> _abrirRelacionEspacial(
+    BuildContext context, WidgetRef ref, String relation) async {
+  final notifier = ref.read(declarationDraftProvider.notifier);
   final relLabel = switch (relation) {
     'CERCA' => 'cerca',
     'LEJOS' => 'lejos',
@@ -150,7 +256,7 @@ Future<void> _abrirRelacionEspacial(BuildContext context, WidgetRef ref, String 
   };
   notifier.setLocationRelation(relation);
 
-  final draft = ref.read(denunciaRoboDraftProvider);
+  final draft = ref.read(declarationDraftProvider);
   final lugarPrevio = draft.location.mainPlaceConcept;
 
   final eleccion = await _opciones<String>(
@@ -158,8 +264,8 @@ Future<void> _abrirRelacionEspacial(BuildContext context, WidgetRef ref, String 
     titulo: '¿${relLabel[0].toUpperCase()}${relLabel.substring(1)} de qué lugar?',
     opciones: [
       ('Mi casa', 'home'),
-      if (lugarPrevio != null) ('El lugar ya indicado', 'previous'),
-      ('Otro lugar (escribir)', 'other'),
+      if (lugarPrevio != null) ('El lugar ya indicado ($lugarPrevio)', 'previous'),
+      ('Otro lugar / referencia (escribir)', 'other'),
       ('Todavía no lo sé — dejar pendiente', 'pending'),
     ],
   );
@@ -168,6 +274,9 @@ Future<void> _abrirRelacionEspacial(BuildContext context, WidgetRef ref, String 
 
   if (eleccion == 'home') {
     notifier.setLocationReference(referenceType: 'home');
+    if (context.mounted) {
+      AppToastManager.showSuccess(context, 'Referencia: $relLabel de mi casa');
+    }
     return;
   }
   if (eleccion == 'previous') {
@@ -175,126 +284,1073 @@ Future<void> _abrirRelacionEspacial(BuildContext context, WidgetRef ref, String 
       referenceType: 'knownPlace',
       referenceConceptGloss: lugarPrevio,
     );
+    if (context.mounted) {
+      AppToastManager.showSuccess(
+          context, 'Referencia: $relLabel de $lugarPrevio');
+    }
     return;
   }
   if (!context.mounted) return;
   final texto = await mostrarTecladoTextoLibre(
     context,
     titulo: '¿$relLabel de qué lugar? Escribe la referencia',
+    hint: 'Ej: Mercado Calatayud, Cancha, Hospital Viedma',
   );
   if (texto != null && texto.isNotEmpty) {
-    notifier.setLocationReference(referenceType: 'other', referenceLiteralText: texto);
+    notifier.setLocationReference(
+        referenceType: 'other', referenceLiteralText: texto);
+    if (context.mounted) {
+      AppToastManager.showSuccess(context, 'Referencia: $relLabel de $texto');
+    }
   }
 }
 
-// ---------------------------------------------------------------------
-// Objetos
-// ---------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// OBJETOS & CATEGORIZACIÓN CONDICIONAL
+// -----------------------------------------------------------------------------
 
-Future<void> mostrarEditorObjeto(BuildContext context, WidgetRef ref, LsbCard card) async {
+Future<void> mostrarEditorObjeto(
+    BuildContext context, WidgetRef ref, LsbCard card) async {
   final gloss = card.gloss.toUpperCase();
-  final notifier = ref.read(denunciaRoboDraftProvider.notifier);
-  final esVehiculo = _vehicleConcepts.contains(gloss);
+  final notifier = ref.read(declarationDraftProvider.notifier);
 
+  // 1. PAPEL
+  if (gloss == 'PAPEL') {
+    await DisambiguationModal.desambiguarPapel(context, ref);
+    return;
+  }
+
+  // 2. IDENTIDAD
+  if (gloss == 'IDENTIDAD') {
+    await DisambiguationModal.desambiguarIdentidad(context, ref);
+    return;
+  }
+
+  // 3. CAJA / BOLSA
+  if (gloss == 'CAJA' || gloss == 'BOLSA') {
+    await DisambiguationModal.desambiguarCajaBolsa(context, ref, gloss);
+    return;
+  }
+
+  // 4. MICRO / TRUFI
+  if (_vehicleConcepts.contains(gloss)) {
+    await DisambiguationModal.desambiguarTransporteVehiculo(
+        context, ref, gloss);
+    return;
+  }
+
+  // 5. BILLETES / DINERO
+  if (gloss == 'BILLETES' || gloss == 'DINERO') {
+    await mostrarEditorMontoDinero(context, ref);
+    return;
+  }
+
+  // 6. Otros objetos genéricos (CELULAR, MOCHILA, etc.)
   final rol = await _opciones<String>(
     context,
     titulo: '¿Qué pasó con ${card.displayText.toLowerCase()}?',
-    opciones: [
-      if (esVehiculo) ('Me lo robaron (vehículo sustraído)', 'stolen'),
-      if (!esVehiculo) ('Me lo robaron', 'stolen'),
-      if (!esVehiculo) ('Lo perdí', 'lost'),
-      if (!esVehiculo) ('Lo llevaba la otra persona', 'carriedByOtherPerson'),
+    opciones: const [
+      ('Me lo robaron', 'stolen'),
+      ('Lo perdí / extravié', 'lost'),
+      ('Lo llevaba la otra persona', 'carriedByOtherPerson'),
+      ('Es una evidencia que tengo', 'evidenceSupport'),
     ],
   );
   if (rol == null) return;
 
-  final id = notifier.addObject(concept: gloss, role: rol);
-
-  if (gloss == 'BILLETES' && rol != 'carriedByOtherPerson') {
-    if (!context.mounted) return;
-    final monto = await mostrarTecladoTextoLibre(
+  notifier.addObject(concept: gloss, role: rol);
+  if (context.mounted) {
+    AppToastManager.showSuccess(
       context,
-      titulo: '¿Cuánto dinero, si lo sabe? (opcional, solo números)',
+      '${card.displayText} agregado al relato',
     );
-    if (monto != null && monto.isNotEmpty && RegExp(r'^\d+$').hasMatch(monto)) {
-      notifier.setObjectDetail(id, quantity: monto, unit: 'bolivianos');
-    }
   }
 }
 
-// ---------------------------------------------------------------------
-// Persona
-// ---------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// WIZARD SECUENCIAL DE DESCRIPCIÓN DE PERSONA (PASOS JERÁRQUICOS 1 -> 2 -> 3 -> 4)
+// -----------------------------------------------------------------------------
 
-Future<void> mostrarEditorPersona(BuildContext context, WidgetRef ref, LsbCard card) async {
-  final gloss = card.gloss.toUpperCase();
-  final notifier = ref.read(denunciaRoboDraftProvider.notifier);
-  final draft = ref.read(denunciaRoboDraftProvider);
+/// Abre el Wizard Guiado Secuencial Estricto para describir a una persona.
+///
+/// Paso 1: Género / Identidad principal (Hombre, Mujer, Omitir) -> Avanza al Paso 2.
+/// Paso 2: Rango de Edad (Niño/a, Joven, Adulto/a, Anciano/a, Omitir) -> Avanza al Paso 3.
+/// Paso 3: Complexión y Estatura (Alto/a, Bajo/a, Delgado/a, Robusto/a, Omitir) -> Avanza al Paso 4.
+/// Paso 4: Vestimenta y Accesorios (Chamarra, Polera, Pantalón, Gorra, Lentes, Mochila) -> Abre selector de color específico.
+Future<void> mostrarEditorPersona(
+    BuildContext context, WidgetRef ref, LsbCard card) async {
+  await ejecutarWizardSecuencialPersona(
+    context,
+    ref,
+    initialConcept: card.gloss.toUpperCase(),
+  );
+}
 
-  final personId =
-      draft.persons.isEmpty ? notifier.addPerson(role: 'suspect') : draft.persons.last.id;
+Future<void> ejecutarWizardSecuencialPersona(
+  BuildContext context,
+  WidgetRef ref, {
+  String? personId,
+  int startStep = 1,
+  String role = 'suspect',
+  String? initialConcept,
+}) async {
+  await showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    backgroundColor: AppTheme.lightSurface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (ctx) => _PersonSequentialWizardSheet(
+      personId: personId,
+      startStep: startStep,
+      role: role,
+      initialConcept: initialConcept,
+    ),
+  );
+}
 
-  if (_genderConcepts.contains(gloss)) {
-    notifier.updatePerson(personId, gender: gloss);
-  } else if (_ageConcepts.contains(gloss)) {
-    notifier.updatePerson(personId, ageApprox: gloss);
-  } else if (_buildConcepts.contains(gloss)) {
-    notifier.updatePerson(personId, build: gloss);
-  } else if (_heightConcepts.contains(gloss)) {
-    notifier.updatePerson(personId, height: gloss);
-  } else if (_clothingConcepts.contains(gloss)) {
-    final clothingId = notifier.addClothing(personId, gloss);
-    if (!context.mounted) return;
-    await _elegirColorPrenda(context, ref, personId, clothingId);
+class _PersonSequentialWizardSheet extends ConsumerStatefulWidget {
+  final String? personId;
+  final int startStep;
+  final String role;
+  final String? initialConcept;
+
+  const _PersonSequentialWizardSheet({
+    this.personId,
+    this.startStep = 1,
+    this.role = 'suspect',
+    this.initialConcept,
+  });
+
+  @override
+  ConsumerState<_PersonSequentialWizardSheet> createState() =>
+      _PersonSequentialWizardSheetState();
+}
+
+class _PersonSequentialWizardSheetState
+    extends ConsumerState<_PersonSequentialWizardSheet> {
+  static const _orange = AppTheme.brandPrimary;
+  late String _personId;
+  int _currentStep = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentStep = widget.startStep;
+
+    final draft = ref.read(declarationDraftProvider);
+    final notifier = ref.read(declarationDraftProvider.notifier);
+
+    if (widget.personId != null) {
+      _personId = widget.personId!;
+    } else if (draft.persons.isNotEmpty && widget.initialConcept == null) {
+      _personId = draft.persons.last.id;
+    } else {
+      _personId = notifier.addPerson(role: widget.role);
+    }
+
+    if (widget.initialConcept != null) {
+      final gloss = widget.initialConcept!.toUpperCase();
+      if (_genderConcepts.contains(gloss)) {
+        notifier.updatePerson(_personId, gender: gloss);
+        _currentStep = 2;
+      } else if (_ageConcepts.contains(gloss)) {
+        notifier.updatePerson(_personId, ageApprox: gloss);
+        _currentStep = 3;
+      } else if (_buildConcepts.contains(gloss)) {
+        notifier.updatePerson(_personId, build: gloss);
+        _currentStep = 4;
+      } else if (_heightConcepts.contains(gloss)) {
+        notifier.updatePerson(_personId, height: gloss);
+        _currentStep = 4;
+      } else if (_clothingConcepts.contains(gloss)) {
+        _currentStep = 4;
+      }
+    }
+  }
+
+  void _irAlPaso(int paso) {
+    if (paso < 1 || paso > 4) return;
+    setState(() => _currentStep = paso);
+  }
+
+  void _seleccionarGenero(String? genero) {
+    final notifier = ref.read(declarationDraftProvider.notifier);
+    if (genero != null) {
+      notifier.updatePerson(_personId, gender: genero);
+      AppToastManager.showSuccess(context, 'Género: $genero');
+    }
+    _irAlPaso(2);
+  }
+
+  void _seleccionarEdad(String? edad) {
+    final notifier = ref.read(declarationDraftProvider.notifier);
+    if (edad != null) {
+      notifier.updatePerson(_personId, ageApprox: edad);
+      AppToastManager.showSuccess(context, 'Edad: $edad');
+    }
+    _irAlPaso(3);
+  }
+
+  void _seleccionarRasgoFisico({String? estatura, String? complexion}) {
+    final notifier = ref.read(declarationDraftProvider.notifier);
+    if (estatura != null) {
+      notifier.updatePerson(_personId, height: estatura);
+      AppToastManager.showSuccess(context, 'Estatura: $estatura');
+    }
+    if (complexion != null) {
+      notifier.updatePerson(_personId, build: complexion);
+      AppToastManager.showSuccess(context, 'Complexión: $complexion');
+    }
+    _irAlPaso(4);
+  }
+
+  Future<void> _agregarPrenda(String concept) async {
+    final notifier = ref.read(declarationDraftProvider.notifier);
+    final clothingId = notifier.addClothing(_personId, concept);
+    await _elegirColorPrenda(context, ref, _personId, clothingId, concept);
+    if (mounted) setState(() {});
+  }
+
+  void _finalizar() {
+    AppToastManager.showSuccess(
+        context, 'Descripción de la persona guardada correctamente');
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final draft = ref.watch(declarationDraftProvider);
+    final person = draft.persons.where((p) => p.id == _personId).firstOrNull ??
+        PersonEntity(id: _personId, role: widget.role);
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Barra de Pasos Secuenciales (1 ➔ 2 ➔ 3 ➔ 4)
+              _WizardStepIndicator(
+                currentStep: _currentStep,
+                onStepTap: (step) {
+                  if (step <= _currentStep) _irAlPaso(step);
+                },
+              ),
+
+              const SizedBox(height: 16),
+
+              // Contenido Dinámico por Paso
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: switch (_currentStep) {
+                  1 => _buildPaso1Genero(person),
+                  2 => _buildPaso2Edad(person),
+                  3 => _buildPaso3Rasgos(person),
+                  _ => _buildPaso4Vestimenta(person),
+                },
+              ),
+
+              const SizedBox(height: 16),
+
+              // Botones de Navegación del Wizard
+              Row(
+                children: [
+                  if (_currentStep > 1) ...[
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: OutlinedButton.icon(
+                          onPressed: () => _irAlPaso(_currentStep - 1),
+                          icon: const Icon(Icons.arrow_back_rounded, size: 18),
+                          label: const Text(
+                            'ANTERIOR',
+                            style: TextStyle(
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppTheme.lightTextSub,
+                            side: const BorderSide(color: AppTheme.lightBorder),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                  Expanded(
+                    flex: _currentStep == 4 ? 2 : 1,
+                    child: SizedBox(
+                      height: 52,
+                      child: ElevatedButton.icon(
+                        onPressed: _currentStep == 4
+                            ? _finalizar
+                            : () => _irAlPaso(_currentStep + 1),
+                        icon: Icon(
+                          _currentStep == 4
+                              ? Icons.check_circle_outline
+                              : Icons.arrow_forward_rounded,
+                          size: 20,
+                        ),
+                        label: Text(
+                          _currentStep == 4
+                              ? 'FINALIZAR DESCRIPCIÓN'
+                              : 'SIGUIENTE PASO',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.6,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: _orange,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ---- PASO 1: GÉNERO / IDENTIDAD PRINCIPAL ---------------------------------
+  Widget _buildPaso1Genero(PersonEntity person) {
+    return Column(
+      key: const ValueKey('paso1'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _StepHeader(
+          title: 'Paso 1: Género / Identidad',
+          subtitle: 'Selecciona la identidad principal de la persona',
+          icon: Icons.person_search_rounded,
+        ),
+        const SizedBox(height: 16),
+        _OptionTile(
+          icon: Icons.man_rounded,
+          label: 'Hombre',
+          isSelected: person.gender?.toUpperCase() == 'HOMBRE',
+          onTap: () => _seleccionarGenero('HOMBRE'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.woman_rounded,
+          label: 'Mujer',
+          isSelected: person.gender?.toUpperCase() == 'MUJER',
+          onTap: () => _seleccionarGenero('MUJER'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.help_outline_rounded,
+          label: 'No identificado / Omitir',
+          isSelected: person.gender == null,
+          isSecondary: true,
+          onTap: () => _seleccionarGenero(null),
+        ),
+      ],
+    );
+  }
+
+  // ---- PASO 2: RANGO DE EDAD -----------------------------------------------
+  Widget _buildPaso2Edad(PersonEntity person) {
+    return Column(
+      key: const ValueKey('paso2'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _StepHeader(
+          title: 'Paso 2: Rango de Edad',
+          subtitle: '¿Qué edad aproximada tenía la persona?',
+          icon: Icons.cake_outlined,
+        ),
+        const SizedBox(height: 16),
+        _OptionTile(
+          icon: Icons.child_care_rounded,
+          label: 'Niño / Niña',
+          isSelected: person.ageApprox?.toUpperCase() == 'NIÑO',
+          onTap: () => _seleccionarEdad('NIÑO'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.person_rounded,
+          label: 'Joven',
+          isSelected: person.ageApprox?.toUpperCase() == 'JOVEN',
+          onTap: () => _seleccionarEdad('JOVEN'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.person_2_rounded,
+          label: 'Adulto / Adulta',
+          isSelected: person.ageApprox?.toUpperCase() == 'ADULTO',
+          onTap: () => _seleccionarEdad('ADULTO'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.elderly_rounded,
+          label: 'Anciano / Anciana (Adulto mayor)',
+          isSelected: person.ageApprox?.toUpperCase() == 'ANCIANO',
+          onTap: () => _seleccionarEdad('ANCIANO'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.help_outline_rounded,
+          label: 'No recuerdo / Omitir edad',
+          isSelected: person.ageApprox == null,
+          isSecondary: true,
+          onTap: () => _seleccionarEdad(null),
+        ),
+      ],
+    );
+  }
+
+  // ---- PASO 3: COMPLEXIÓN Y ESTATURA ---------------------------------------
+  Widget _buildPaso3Rasgos(PersonEntity person) {
+    return Column(
+      key: const ValueKey('paso3'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _StepHeader(
+          title: 'Paso 3: Complexión y Estatura',
+          subtitle: '¿Cómo era físicamente?',
+          icon: Icons.accessibility_new_rounded,
+        ),
+        const SizedBox(height: 16),
+        _OptionTile(
+          icon: Icons.height_rounded,
+          label: 'Alto / Alta',
+          isSelected: person.height?.toUpperCase() == 'ALTO',
+          onTap: () => _seleccionarRasgoFisico(estatura: 'ALTO'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.vertical_align_bottom_rounded,
+          label: 'Bajo / Baja',
+          isSelected: person.height?.toUpperCase() == 'BAJO',
+          onTap: () => _seleccionarRasgoFisico(estatura: 'BAJO'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.accessibility_rounded,
+          label: 'Delgado / Delgada (Flaco/a)',
+          isSelected: person.build?.toUpperCase() == 'FLACO',
+          onTap: () => _seleccionarRasgoFisico(complexion: 'FLACO'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.accessibility_new_rounded,
+          label: 'Robusto / Gordo / Robusta',
+          isSelected: person.build?.toUpperCase() == 'GORDO',
+          onTap: () => _seleccionarRasgoFisico(complexion: 'GORDO'),
+        ),
+        const SizedBox(height: 10),
+        _OptionTile(
+          icon: Icons.help_outline_rounded,
+          label: 'Omitir rasgos físicos',
+          isSecondary: true,
+          onTap: () => _seleccionarRasgoFisico(),
+        ),
+      ],
+    );
+  }
+
+  // ---- PASO 4: VESTIMENTA Y ACCESORIOS CON SELECTOR DE COLOR INMEDIATO -----
+  Widget _buildPaso4Vestimenta(PersonEntity person) {
+    final notifier = ref.read(declarationDraftProvider.notifier);
+
+    const prendasDisponibles = [
+      ('Chamarra', 'CHAMARRA', Icons.dry_cleaning_rounded),
+      ('Polera', 'POLERA', Icons.checkroom_rounded),
+      ('Pantalón', 'PANTALÓN', Icons.accessibility_rounded),
+      ('Gorra', 'GORRA', Icons.sports_baseball_rounded),
+      ('Lentes', 'LENTES', Icons.visibility_rounded),
+      ('Mochila', 'MOCHILA', Icons.backpack_rounded),
+    ];
+
+    return Column(
+      key: const ValueKey('paso4'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const _StepHeader(
+          title: 'Paso 4: Vestimenta y Accesorios',
+          subtitle:
+              'Elige las prendas y define su color visual específico',
+          icon: Icons.checkroom_rounded,
+        ),
+        const SizedBox(height: 14),
+
+        // Grilla de Prendas Seleccionables
+        GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 2.2,
+          children: [
+            for (final (nombre, concept, icon) in prendasDisponibles)
+              Material(
+                color: AppTheme.lightBg,
+                borderRadius: BorderRadius.circular(16),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () => _agregarPrenda(concept),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: AppTheme.lightBorder,
+                        width: 1.2,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: _orange.withValues(alpha: 0.12),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(icon, color: _orange, size: 18),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            nombre,
+                            style: const TextStyle(
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.w700,
+                              color: AppTheme.lightText,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.add_circle_outline,
+                            size: 18, color: _orange),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+
+        const SizedBox(height: 16),
+
+        // Lista de Prendas Agregadas
+        if (person.clothing.isNotEmpty) ...[
+          const Text(
+            'PRENDAS REGISTRADAS:',
+            style: TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.8,
+              color: AppTheme.lightTextSub,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final c in person.clothing)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: _orange.withValues(alpha: 0.10),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: _orange.withValues(alpha: 0.4),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${c.concept.toLowerCase()}${c.color != null ? " (${c.color})" : ""}',
+                        style: const TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w700,
+                          color: _orange,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      InkWell(
+                        onTap: () {
+                          notifier.removeClothing(_personId, c.id);
+                          setState(() {});
+                        },
+                        child: const Icon(Icons.close, size: 15, color: _orange),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ] else ...[
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppTheme.lightBg,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppTheme.lightBorder),
+            ),
+            child: const Text(
+              'Toca una prenda para agregarla y asignarle su color.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontStyle: FontStyle.italic,
+                color: AppTheme.lightTextSub,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _StepHeader extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+
+  const _StepHeader({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+  });
+
+  static const _orange = AppTheme.brandPrimary;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: _orange.withValues(alpha: 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: _orange, size: 22),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.lightText,
+                letterSpacing: -0.2,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(
+          subtitle,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 12.5,
+            color: AppTheme.lightTextSub,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _WizardStepIndicator extends StatelessWidget {
+  final int currentStep;
+  final ValueChanged<int> onStepTap;
+
+  const _WizardStepIndicator({
+    required this.currentStep,
+    required this.onStepTap,
+  });
+
+  static const _orange = AppTheme.brandPrimary;
+
+  @override
+  Widget build(BuildContext context) {
+    const pasos = [
+      (1, 'Género'),
+      (2, 'Edad'),
+      (3, 'Rasgos'),
+      (4, 'Ropa'),
+    ];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var i = 0; i < pasos.length; i++) ...[
+          InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => onStepTap(pasos[i].$1),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: pasos[i].$1 == currentStep
+                    ? _orange
+                    : (pasos[i].$1 < currentStep
+                        ? _orange.withValues(alpha: 0.15)
+                        : AppTheme.lightBg),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: pasos[i].$1 <= currentStep
+                      ? _orange
+                      : AppTheme.lightBorder,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (pasos[i].$1 < currentStep)
+                    const Icon(Icons.check, size: 12, color: _orange)
+                  else
+                    Text(
+                      '${pasos[i].$1}.',
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w800,
+                        color: pasos[i].$1 == currentStep
+                            ? Colors.white
+                            : AppTheme.lightTextSub,
+                      ),
+                    ),
+                  const SizedBox(width: 4),
+                  Text(
+                    pasos[i].$2,
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                      color: pasos[i].$1 == currentStep
+                          ? Colors.white
+                          : (pasos[i].$1 < currentStep
+                              ? _orange
+                              : AppTheme.lightTextSub),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (i < pasos.length - 1)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 9,
+                color: pasos[i].$1 < currentStep ? _orange : AppTheme.lightBorder,
+              ),
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+class _OptionTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final bool isSecondary;
+  final VoidCallback onTap;
+
+  const _OptionTile({
+    required this.icon,
+    required this.label,
+    this.isSelected = false,
+    this.isSecondary = false,
+    required this.onTap,
+  });
+
+  static const _orange = AppTheme.brandPrimary;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: isSelected
+          ? _orange.withValues(alpha: 0.10)
+          : (isSecondary ? AppTheme.lightSurface : AppTheme.lightBg),
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Container(
+          height: 56,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isSelected
+                  ? _orange
+                  : (isSecondary ? AppTheme.lightBorder : AppTheme.lightBorder),
+              width: isSelected ? 2 : 1.2,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 22,
+                color: isSelected
+                    ? _orange
+                    : (isSecondary ? AppTheme.lightTextSub : AppTheme.lightText),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
+                    color: isSelected
+                        ? _orange
+                        : (isSecondary ? AppTheme.lightTextSub : AppTheme.lightText),
+                  ),
+                ),
+              ),
+              Icon(
+                isSelected ? Icons.check_circle : Icons.arrow_forward_ios_rounded,
+                size: isSelected ? 20 : 14,
+                color: isSelected ? _orange : AppTheme.lightTextSub,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
 Future<void> _elegirColorPrenda(
-    BuildContext context, WidgetRef ref, String personId, String clothingId) async {
-  final notifier = ref.read(denunciaRoboDraftProvider.notifier);
-  final eleccion = await _opciones<String>(
-    context,
-    titulo: '¿De qué color?',
-    opciones: const [
-      ('Rojo', 'ROJO'),
-      ('Negro', 'NEGRO'),
-      ('Azul', 'AZUL'),
-      ('Otro color (escribir)', 'OTHER'),
-      ('No lo sé / no lo recuerdo', 'UNKNOWN'),
-    ],
-  );
-  if (eleccion == null) return;
+  BuildContext context,
+  WidgetRef ref,
+  String personId,
+  String clothingId,
+  String clothingConcept,
+) async {
+  final notifier = ref.read(declarationDraftProvider.notifier);
 
+  const colores = [
+    ('Negro', 'NEGRO', Color(0xFF0F172A)),
+    ('Azul', 'AZUL', Color(0xFF2563EB)),
+    ('Rojo', 'ROJO', Color(0xFFDC2626)),
+    ('Blanco', 'BLANCO', Color(0xFFF8FAFC)),
+    ('Verde', 'VERDE', Color(0xFF16A34A)),
+    ('Café / Marrón', 'CAFÉ', Color(0xFF78350F)),
+    ('Gris / Plomo', 'GRIS', Color(0xFF64748B)),
+    ('Amarillo', 'AMARILLO', Color(0xFFEAB308)),
+    ('Naranja', 'NARANJA', Color(0xFFEA580C)),
+    ('Morado / Violeta', 'MORADO', Color(0xFF9333EA)),
+  ];
+
+  final eleccion = await showModalBottomSheet<String>(
+    context: context,
+    showDragHandle: true,
+    isScrollControlled: true,
+    backgroundColor: AppTheme.lightSurface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (ctx) => SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              '¿De qué color era la ${clothingConcept.toLowerCase()}?',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.lightText,
+                letterSpacing: -0.2,
+              ),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Selecciona el color visual para una descripción formal exacta',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.5,
+                color: AppTheme.lightTextSub,
+              ),
+            ),
+            const SizedBox(height: 18),
+            Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              alignment: WrapAlignment.center,
+              children: [
+                for (final (label, value, color) in colores)
+                  Material(
+                    color: AppTheme.lightBg,
+                    borderRadius: BorderRadius.circular(16),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => Navigator.of(ctx).pop(value),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              color: AppTheme.lightBorder, width: 1.2),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              width: 22,
+                              height: 22,
+                              decoration: BoxDecoration(
+                                color: color,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: color == const Color(0xFFF8FAFC)
+                                      ? Colors.grey.shade400
+                                      : Colors.transparent,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              label,
+                              style: const TextStyle(
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w700,
+                                color: AppTheme.lightText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.of(ctx).pop('UNKNOWN'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      side: const BorderSide(color: AppTheme.lightBorder),
+                    ),
+                    child: const Text(
+                      'No recuerdo / Omitir',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.lightTextSub,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.of(ctx).pop('OTHER'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      side: const BorderSide(color: AppTheme.brandPrimary),
+                    ),
+                    child: const Text(
+                      'Escribir otro…',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.brandPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
+  if (eleccion == null) return;
   if (eleccion == 'UNKNOWN') {
     notifier.setClothingColor(personId, clothingId, null,
         state1: ConfirmationState.uncertain);
+    if (context.mounted) {
+      AppToastManager.showInfo(
+          context, 'Prenda ${clothingConcept.toLowerCase()} registrada sin color');
+    }
     return;
   }
   if (eleccion == 'OTHER') {
     if (!context.mounted) return;
-    final texto = await mostrarTecladoTextoLibre(context, titulo: 'Escribe el color');
+    final texto = await mostrarTecladoTextoLibre(
+      context,
+      titulo: 'Escribe el color de la ${clothingConcept.toLowerCase()}',
+      hint: 'Ej: Mostaza, Celeste, Beige',
+    );
     if (texto != null && texto.isNotEmpty) {
       notifier.setClothingColor(personId, clothingId, texto);
+      if (context.mounted) {
+        AppToastManager.showSuccess(
+            context, 'Color $texto asignado a $clothingConcept');
+      }
     }
     return;
   }
+
   notifier.setClothingColor(personId, clothingId, eleccion);
+  if (context.mounted) {
+    AppToastManager.showSuccess(
+        context, 'Color $eleccion asignado a $clothingConcept');
+  }
 }
 
-/// Permite agregar explícitamente una nueva persona sin reutilizar la
-/// última (p. ej. al describir a un segundo sospechoso o testigo).
+/// Permite agregar explícitamente una nueva persona sin reutilizar la última.
 void agregarOtraPersona(WidgetRef ref) {
-  ref.read(denunciaRoboDraftProvider.notifier).addPerson(role: 'suspect');
+  ref.read(declarationDraftProvider.notifier).addPerson(role: 'suspect');
 }
 
-/// Resumen compacto de las personas ya descritas, para revisarlas o quitar
-/// una sin afectar a las demás.
+/// Resumen visual interactivo de las personas ya descritas.
 class PersonasDescritasResumen extends ConsumerWidget {
   const PersonasDescritasResumen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final draft = ref.watch(denunciaRoboDraftProvider);
+    final draft = ref.watch(declarationDraftProvider);
     if (draft.persons.isEmpty) return const SizedBox.shrink();
 
     return Padding(
@@ -302,51 +1358,265 @@ class PersonasDescritasResumen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (final p in draft.persons)
-            Container(
-              margin: const EdgeInsets.only(bottom: 8),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppTheme.lightSurface,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppTheme.lightBorder),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'PERSONAS DESCRITAS',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.lightTextSub,
+                  letterSpacing: 0.8,
+                ),
               ),
-              child: Row(
-                children: [
-                  Expanded(
+              TextButton.icon(
+                onPressed: () {
+                  agregarOtraPersona(ref);
+                  AppToastManager.showInfo(context, 'Nueva persona agregada');
+                },
+                icon: const Icon(Icons.person_add_alt_1, size: 15),
+                label: const Text('Otra persona',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          for (var i = 0; i < draft.persons.length; i++)
+            _PersonaCard(
+              index: i + 1,
+              person: draft.persons[i],
+              onDelete: () => ref
+                  .read(declarationDraftProvider.notifier)
+                  .removePerson(draft.persons[i].id),
+              onAddClothing: () async {
+                final eleccion = await _opciones<String>(
+                  context,
+                  titulo: '¿Qué prenda o accesorio llevaba?',
+                  opciones: const [
+                    ('Chamarra', 'CHAMARRA'),
+                    ('Polera', 'POLERA'),
+                    ('Pantalón', 'PANTALÓN'),
+                    ('Gorra', 'GORRA'),
+                    ('Lentes', 'LENTES'),
+                    ('Mochila', 'MOCHILA'),
+                  ],
+                );
+                if (eleccion != null && context.mounted) {
+                  final cid = ref
+                      .read(declarationDraftProvider.notifier)
+                      .addClothing(draft.persons[i].id, eleccion);
+                  await _elegirColorPrenda(
+                      context, ref, draft.persons[i].id, cid, eleccion);
+                }
+              },
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PersonaCard extends StatelessWidget {
+  final int index;
+  final PersonEntity person;
+  final VoidCallback onDelete;
+  final VoidCallback onAddClothing;
+
+  const _PersonaCard({
+    required this.index,
+    required this.person,
+    required this.onDelete,
+    required this.onAddClothing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final traits = <String>[
+      if (person.gender != null) person.gender!,
+      if (person.ageApprox != null) person.ageApprox!,
+      if (person.build != null) person.build!,
+      if (person.height != null) person.height!,
+    ];
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppTheme.lightSurface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppTheme.lightBorder, width: 1.2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: AppTheme.brandPrimary.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'Persona $index (${person.role == "suspect" ? "Sospechoso" : person.role})',
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w800,
+                    color: AppTheme.brandPrimary,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.delete_outline, size: 18),
+                color: AppTheme.errorLight,
+                tooltip: 'Quitar persona',
+                onPressed: onDelete,
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            traits.isEmpty
+                ? 'Rasgos físicos pendientes'
+                : 'Rasgos: ${traits.join(" · ")}',
+            style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600),
+          ),
+          if (person.clothing.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final c in person.clothing)
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppTheme.lightBg,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: AppTheme.lightBorder),
+                    ),
                     child: Text(
-                      _resumenPersona(p),
-                      style: const TextStyle(fontSize: 12.5),
+                      '${c.concept}: ${c.color ?? "sin color"}',
+                      style: const TextStyle(
+                          fontSize: 11.5, fontWeight: FontWeight.w700),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close, size: 16),
-                    tooltip: 'Quitar esta persona',
-                    onPressed: () =>
-                        ref.read(denunciaRoboDraftProvider.notifier).removePerson(p.id),
-                  ),
-                ],
-              ),
+              ],
             ),
+          ],
+          const SizedBox(height: 6),
           TextButton.icon(
-            onPressed: () => agregarOtraPersona(ref),
-            icon: const Icon(Icons.person_add_alt, size: 16),
-            label: const Text('Agregar otra persona'),
+            onPressed: onAddClothing,
+            icon: const Icon(Icons.add, size: 14),
+            label: const Text('Agregar prenda / color',
+                style: TextStyle(fontSize: 11.5)),
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: const Size(0, 24),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
           ),
         ],
       ),
     );
   }
+}
 
-  String _resumenPersona(PersonEntity p) {
-    final partes = <String>[
-      if (p.gender != null) p.gender!,
-      if (p.ageApprox != null) p.ageApprox!,
-      if (p.build != null) p.build!,
-      if (p.height != null) p.height!,
-      for (final c in p.clothing)
-        '${c.concept}${c.color != null ? " ${c.color}" : ""}',
-    ];
-    return partes.isEmpty ? 'Persona sin describir todavía' : partes.join(' · ');
+// -----------------------------------------------------------------------------
+// REAPERTURA DE ENTIDADES DESDE FICHAS VISUALES (CHIPS)
+// -----------------------------------------------------------------------------
+
+Future<void> reabrirEditorLugar(BuildContext context, WidgetRef ref) async {
+  final draft = ref.read(declarationDraftProvider);
+  final notifier = ref.read(declarationDraftProvider.notifier);
+
+  final eleccion = await _opciones<String>(
+    context,
+    titulo: '¿Qué deseas modificar del lugar?',
+    opciones: [
+      if (draft.location.relation != null)
+        ('Modificar la referencia espacial (${draft.location.relation})', 'relation'),
+      ('Escribir o cambiar el nombre/detalle del lugar', 'detail'),
+      ('Restablecer lugar', 'clear'),
+    ],
+  );
+
+  if (eleccion == 'relation' && draft.location.relation != null) {
+    if (context.mounted) {
+      await _abrirRelacionEspacial(context, ref, draft.location.relation!);
+    }
+  } else if (eleccion == 'detail') {
+    if (!context.mounted) return;
+    final detalle = await mostrarTecladoTextoLibre(
+      context,
+      titulo: 'Nombre o referencia del lugar',
+      hint: 'Ej: Mercado Calatayud, Calle San Martín',
+    );
+    if (detalle != null && detalle.isNotEmpty) {
+      notifier.setMainPlace(draft.location.mainPlaceConcept ?? 'LUGAR', detail: detalle);
+      if (context.mounted) {
+        AppToastManager.showSuccess(context, 'Lugar actualizado: $detalle');
+      }
+    }
+  } else if (eleccion == 'clear') {
+    notifier.clearLocationReference();
+    if (context.mounted) {
+      AppToastManager.showInfo(context, 'Referencia de lugar restablecida');
+    }
+  }
+}
+
+Future<void> reabrirEditorPersona(
+    BuildContext context, WidgetRef ref, String personId) async {
+  await ejecutarWizardSecuencialPersona(context, ref, personId: personId);
+}
+
+Future<void> reabrirEditorObjeto(
+    BuildContext context, WidgetRef ref, String objectId) async {
+  final draft = ref.read(declarationDraftProvider);
+  final notifier = ref.read(declarationDraftProvider.notifier);
+  final o = draft.objects.firstWhere(
+    (e) => e.id == objectId,
+    orElse: () => ObjectInvolved(id: objectId, concept: 'OBJETO', role: 'stolen'),
+  );
+
+  final gloss = o.concept.toUpperCase();
+  if (gloss == 'BILLETES' || gloss == 'DINERO') {
+    await mostrarEditorMontoDinero(context, ref,
+        existingObjectId: objectId, initialRole: o.role);
+    return;
+  }
+  if (gloss == 'PAPEL') {
+    await DisambiguationModal.desambiguarPapel(context, ref);
+    return;
+  }
+  if (gloss == 'IDENTIDAD') {
+    await DisambiguationModal.desambiguarIdentidad(context, ref);
+    return;
+  }
+  if (gloss == 'CAJA' || gloss == 'BOLSA') {
+    await DisambiguationModal.desambiguarCajaBolsa(context, ref, gloss);
+    return;
+  }
+  if (_vehicleConcepts.contains(gloss)) {
+    await DisambiguationModal.desambiguarTransporteVehiculo(context, ref, gloss);
+    return;
+  }
+
+  final rol = await _opciones<String>(
+    context,
+    titulo: 'Modificar objeto: ${o.concept}',
+    opciones: const [
+      ('Marcar como Robado / Sustraído', 'stolen'),
+      ('Marcar como Extraviado / Perdido', 'lost'),
+      ('Marcar como Evidencia / Prueba', 'evidenceSupport'),
+    ],
+  );
+  if (rol != null && context.mounted) {
+    notifier.setObjectDetail(objectId, role: rol);
+    AppToastManager.showSuccess(context, 'Objeto actualizado');
   }
 }
