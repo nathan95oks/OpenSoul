@@ -327,7 +327,7 @@ Future<void> mostrarEditorObjeto(
   }
 
   // 3. CAJA / BOLSA
-  if (gloss == 'CAJA' || gloss == 'BOLSA') {
+  if (gloss == 'CAJA' || gloss == 'BOLSA' || gloss == 'MOCHILA') {
     await DisambiguationModal.desambiguarCajaBolsa(context, ref, gloss);
     return;
   }
@@ -1597,7 +1597,7 @@ Future<void> reabrirEditorObjeto(
     await DisambiguationModal.desambiguarIdentidad(context, ref);
     return;
   }
-  if (gloss == 'CAJA' || gloss == 'BOLSA') {
+  if (gloss == 'CAJA' || gloss == 'BOLSA' || gloss == 'MOCHILA') {
     await DisambiguationModal.desambiguarCajaBolsa(context, ref, gloss);
     return;
   }

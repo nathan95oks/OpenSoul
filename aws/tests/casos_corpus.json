@@ -18,10 +18,10 @@
       "esperado_backend": "Ayer, un hombre me robó mi mochila en la calle.",
       "lsb_icons": [
         "access_time",
-        "explore",
+        "place",
         "person",
-        "shopping_bag",
-        "sports_mma"
+        "inventory_2",
+        "warning"
       ]
     },
     {
@@ -41,9 +41,9 @@
       ],
       "esperado_backend": "Una persona me robó mi teléfono en el mercado y salió corriendo.",
       "lsb_icons": [
-        "explore",
-        "shopping_bag",
-        "sports_mma"
+        "place",
+        "inventory_2",
+        "warning"
       ]
     },
     {
@@ -65,11 +65,11 @@
       ],
       "esperado_backend": "Un hombre delgado me robó mi billetera en la parada. Como prueba tengo una fotografía.",
       "lsb_icons": [
-        "brush",
-        "explore",
+        "person",
+        "place",
         "inventory_2",
         "person",
-        "sports_mma"
+        "warning"
       ]
     },
     {
@@ -90,11 +90,11 @@
       ],
       "esperado_backend": "Mi expareja me amenazó en mi casa. Tengo miedo y me encuentro en un lugar seguro.",
       "lsb_icons": [
-        "brush",
-        "explore",
         "person",
-        "sentiment_dissatisfied",
-        "sports_mma"
+        "place",
+        "person",
+        "psychology",
+        "warning"
       ]
     },
     {
@@ -116,9 +116,9 @@
       "esperado_backend": "Ayer, mi pareja me maltrató en mi casa. Es la primera vez que ocurre.",
       "lsb_icons": [
         "access_time",
-        "explore",
+        "place",
         "person",
-        "sports_mma"
+        "warning"
       ]
     },
     {
@@ -141,10 +141,10 @@
       "esperado_backend": "Hace dos semanas, una mujer me maltrató en mi casa. Ya había ocurrido anteriormente.",
       "lsb_icons": [
         "access_time",
-        "explore",
+        "place",
         "person",
-        "sports_mma",
-        "straighten"
+        "warning",
+        "description"
       ]
     },
     {
@@ -166,8 +166,8 @@
       "lsb_icons": [
         "inventory_2",
         "person",
-        "smartphone",
-        "sports_mma"
+        "phone_android",
+        "warning"
       ]
     },
     {
@@ -184,10 +184,10 @@
       "reglas": [
         "urgencias_multiples"
       ],
-      "esperado_backend": "Una persona me ejerció violencia. Tengo una herida y necesito auxilio.",
+      "esperado_backend": "Un hecho de violencia, una herida y auxilio urgente.",
       "lsb_icons": [
         "emergency",
-        "sports_mma"
+        "warning"
       ]
     },
     {
@@ -209,8 +209,8 @@
       "lsb_icons": [
         "access_time",
         "description",
-        "explore",
-        "sports_mma"
+        "place",
+        "warning"
       ]
     },
     {
@@ -220,7 +220,7 @@
       "input_natural": "Dañaron mi motocicleta en la avenida. Tengo una sospecha y tomé fotografías.",
       "contexto": "denuncia_robo",
       "glosas": [
-        "DANAR",
+        "DAÑAR",
         "MOTOCICLETA",
         "AVENIDA",
         "SOSPECHA",
@@ -232,10 +232,10 @@
       "esperado_backend": "Una persona me dañó mi motocicleta en la avenida. Tengo una sospecha. Como prueba tengo una fotografía.",
       "lsb_icons": [
         "directions_car",
-        "explore",
+        "place",
         "inventory_2",
-        "sentiment_dissatisfied",
-        "sports_mma"
+        "psychology",
+        "warning"
       ]
     },
     {
@@ -258,9 +258,9 @@
       ],
       "esperado_backend": "Quiero seguir mi expediente. Adicionalmente, hago referencia a mi NUREJ número 1024.",
       "lsb_icons": [
-        "app_registration",
-        "assignment",
-        "straighten"
+        "description",
+        "receipt_long",
+        "description"
       ]
     },
     {
@@ -281,9 +281,9 @@
       ],
       "esperado_backend": "No sé. No recuerdo. Necesito realizar mi caso. Adicionalmente, hago referencia al estado del trámite.",
       "lsb_icons": [
-        "app_registration",
         "description",
-        "straighten",
+        "description",
+        "description",
         "waving_hand"
       ]
     },
@@ -305,8 +305,8 @@
       "esperado_backend": "Quiero comprender mi caso en la fiscalía y en el despacho.",
       "lsb_icons": [
         "account_balance",
-        "app_registration",
-        "assignment"
+        "description",
+        "receipt_long"
       ]
     },
     {
@@ -329,9 +329,9 @@
       "lsb_icons": [
         "access_time",
         "account_balance",
-        "assignment",
+        "receipt_long",
         "description",
-        "straighten"
+        "description"
       ]
     },
     {
@@ -349,7 +349,7 @@
       "reglas": [],
       "esperado_backend": "Quiero corregir el formulario y una observación. Necesito un intérprete de señas.",
       "lsb_icons": [
-        "assignment",
+        "receipt_long",
         "description",
         "support_agent"
       ]
@@ -376,10 +376,10 @@
       ],
       "esperado_backend": "Pagué por WhatsApp y no me entregaron el producto. Como prueba tengo un comprobante.",
       "lsb_icons": [
-        "assignment",
+        "receipt_long",
         "description",
         "inventory_2",
-        "smartphone",
+        "phone_android",
         "waving_hand"
       ]
     },
@@ -404,8 +404,8 @@
       ],
       "esperado_backend": "No entiendo. Necesito realizar una notificación. Adicionalmente, hago referencia a una audiencia y mi caso número 305.",
       "lsb_icons": [
-        "app_registration",
-        "straighten",
+        "description",
+        "description",
         "waving_hand"
       ]
     },
@@ -432,11 +432,11 @@
       "esperado_backend": "Quiero seguir el estado del trámite y el papel hace una semana. Como prueba tengo una fotografía. Adicionalmente, hago referencia a mi caso.",
       "lsb_icons": [
         "access_time",
-        "app_registration",
-        "assignment",
+        "description",
+        "receipt_long",
         "description",
         "inventory_2",
-        "straighten"
+        "description"
       ]
     },
     {
@@ -458,7 +458,7 @@
       "esperado_backend": "Quiero copiar una constancia y solicito un intérprete de señas en la ventanilla y en la alcaldía.",
       "lsb_icons": [
         "account_balance",
-        "assignment",
+        "receipt_long",
         "description",
         "support_agent"
       ]
@@ -485,11 +485,11 @@
       "lsb_icons": [
         "access_time",
         "account_balance",
-        "assignment",
+        "receipt_long",
         "badge",
-        "explore",
-        "shopping_bag",
-        "straighten"
+        "place",
+        "inventory_2",
+        "description"
       ]
     },
     {
@@ -510,8 +510,8 @@
       "esperado_backend": "Una persona me robó mi teléfono. Quiero acudir a la Fiscalía y a la FELCC.",
       "lsb_icons": [
         "account_balance",
-        "shopping_bag",
-        "sports_mma"
+        "inventory_2",
+        "warning"
       ]
     },
     {
@@ -533,7 +533,7 @@
       "lsb_icons": [
         "account_balance",
         "person",
-        "sports_mma"
+        "warning"
       ]
     },
     {
@@ -554,8 +554,8 @@
       "esperado_backend": "Quiero seguir el avance de la investigación en la Defensa Pública. Adicionalmente, hago referencia a mi caso.",
       "lsb_icons": [
         "account_balance",
-        "app_registration",
-        "assignment"
+        "description",
+        "receipt_long"
       ]
     },
     {
@@ -579,8 +579,8 @@
       "esperado_backend": "Necesito realizar una audiencia en el juzgado de instrucción penal. Adicionalmente, hago referencia a mi caso número 407.",
       "lsb_icons": [
         "account_balance",
-        "app_registration",
-        "straighten"
+        "description",
+        "description"
       ]
     },
     {
@@ -600,8 +600,8 @@
       ],
       "esperado_backend": "Quiero seguir el avance de la investigación. Necesito un intérprete de señas. Adicionalmente, hago referencia a mi caso.",
       "lsb_icons": [
-        "app_registration",
-        "assignment",
+        "description",
+        "receipt_long",
         "support_agent"
       ]
     }

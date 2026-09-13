@@ -124,7 +124,10 @@ const _synonyms = {
   'MAÑANA': 'mañana',
   'PEGAR': 'golpe',
   'PAPEL': 'documento',
-  'PEDIR': 'solicitar',
+  // El lexicón lo redacta en primera persona presente ("solicito"), no en
+  // infinitivo: comparar contra "solicitar" nunca calzaba y PEDIR se
+  // contaba como perdido aunque el texto sí lo dijera.
+  'PEDIR': 'solicit',
   'DINERO': 'dinero',
 };
 

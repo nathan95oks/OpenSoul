@@ -110,16 +110,33 @@ void main() {
         )
         .index!;
 
-    // Estamos en Home con el botón de traducir disponible.
+    // Estamos en Home con el botón de acción disponible.
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(pasoVisible(), 0, reason: 'se empieza armando la frase');
-    expect(find.text('TRADUCIR'), findsOneWidget);
-    // A11Y-01: el botón principal se anuncia como tal a lectores de pantalla.
-    expect(find.bySemanticsLabel('Traducir'), findsOneWidget);
 
-    // Pulsar TRADUCIR dispara la traducción y navega al resultado.
-    await tester.tap(find.text('TRADUCIR'));
-    await tester.pumpAndSettle();
+    // El panel en vivo fusiona "avanzar de pregunta" y "traducir" en un
+    // único botón progresivo: dice "CONTINUAR" mientras queden preguntas y
+    // "EMITIR DECLARACIÓN" en la última (auditoría 2026-09; el botón
+    // dedicado "TRADUCIR" de una sola pantalla ya no existe). Se pulsa hasta
+    // llegar al resultado, sin asumir cuántas preguntas tiene el contexto.
+    var llego = false;
+    for (var intento = 0; intento < 30 && !llego; intento++) {
+      final emitir = find.text('EMITIR DECLARACIÓN');
+      final continuar = find.text('CONTINUAR');
+      if (tester.any(emitir)) {
+        expect(find.bySemanticsLabel('Emitir declaración'), findsOneWidget);
+        await tester.tap(emitir);
+      } else if (tester.any(continuar)) {
+        await tester.tap(continuar);
+      } else {
+        break;
+      }
+      await tester.pumpAndSettle();
+      llego = tester.any(find.byType(DeclarationResultScreen)) &&
+          pasoVisible() == 1;
+    }
+    expect(llego, true,
+        reason: 'no se llegó a la pantalla de resultado tras avanzar el flujo');
 
     expect(find.byType(DeclarationResultScreen), findsOneWidget);
     expect(pasoVisible(), 1,

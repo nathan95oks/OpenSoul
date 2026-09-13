@@ -76,7 +76,13 @@ class AnimationCache {
   static bool _isInside(Directory directory, File file) {
     final base = _normalize(directory.path);
     final target = _normalize(file.path);
-    return target.startsWith(base.endsWith('/') ? base : '$base/');
+    // `_normalize` pasa por `toFilePath()`, que en Windows separa con `\`, no
+    // con `/`: anteponer siempre `/` aquí hacía que el prefijo nunca calzara
+    // con el archivo (que sí llevaba `\`) y todo intento de caché se
+    // rechazaba como "fuera del directorio", cayendo a servir la URL remota
+    // sin cachear nunca.
+    final separator = Platform.pathSeparator;
+    return target.startsWith(base.endsWith(separator) ? base : '$base$separator');
   }
 
   static String _normalize(String path) =>

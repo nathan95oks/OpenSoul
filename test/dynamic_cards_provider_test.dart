@@ -39,14 +39,14 @@ void main() {
     test('la zona de entrada ofrece su lista blanca, en su orden', () async {
       final c = makeContainer();
       c.read(contextProvider.notifier).setContext(_ctx('denuncia_robo'));
-      // Forzar el build del estado de zonas (zona de entrada = "situacion").
+      // Forzar el build del estado de zonas (zona de entrada = "hecho").
       c.read(semanticZonesProvider);
 
       final cards = await c.read(dynamicCardsProvider.future);
 
       expect(cards, isNotEmpty);
       final zona =
-          _ctx('denuncia_robo').zones.firstWhere((z) => z.id == 'situacion');
+          _ctx('denuncia_robo').zones.firstWhere((z) => z.id == 'hecho');
       // La lista blanca manda: ni una tarjeta fuera de ella.
       expect(
         cards.every((x) => zona.glossAllowlist.contains(x.gloss)),
@@ -68,14 +68,14 @@ void main() {
       c.read(semanticZonesProvider);
       // "¿Quién te robó?" — antes esta zona filtraba por subcategorías que ya
       // no existían (Género, Edad, Relación, Cantidad) y salía VACÍA.
-      c.read(semanticZonesProvider.notifier).activateZone('personas');
+      c.read(semanticZonesProvider.notifier).activateZone('persona');
 
       final cards = await c.read(dynamicCardsProvider.future);
 
       expect(cards, isNotEmpty,
           reason: 'la pregunta se mostraba sin ninguna opción');
       final zona =
-          _ctx('denuncia_robo').zones.firstWhere((z) => z.id == 'personas');
+          _ctx('denuncia_robo').zones.firstWhere((z) => z.id == 'persona');
       for (final card in cards) {
         expect(zona.glossAllowlist.contains(card.gloss), true,
             reason: 'no admite relleno: ${card.gloss}');
@@ -143,116 +143,13 @@ void main() {
           'preguntas');
     });
 
-    test('la zona de institución no mezcla servicios como abogado', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('tramite'));
-      c.read(semanticZonesProvider);
-      c.read(semanticZonesProvider.notifier).activateZone('donde');
-
-      final cards = await c.read(dynamicCardsProvider.future);
-
-      expect(cards.isNotEmpty, true);
-      expect(cards.any((x) => x.gloss == 'ABOGADO'), false,
-          reason: 'ABOGADO debe vivir en apoyo, no en institución');
-      // Dominio penal: las dependencias que reciben una denuncia. POLICIA y
-      // ALCALDIA salen —genérica la una, municipal la otra— y entran las
-      // unidades reales del ámbito judicial boliviano.
-      expect(cards.any((x) => x.gloss == 'FISCALIA'), true,
-          reason: 'el Ministerio Público recibe la denuncia');
-      expect(cards.any((x) => x.gloss == 'FELCC'), true,
-          reason: 'la FELCC es la unidad policial que investiga');
-      expect(cards.any((x) => x.gloss == 'ALCALDIA'), false,
-          reason: 'una alcaldía no recibe una denuncia penal');
-    });
-
-    test('la zona de apoyo sí ofrece abogado e intérprete', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('tramite'));
-      c.read(semanticZonesProvider);
-      c.read(semanticZonesProvider.notifier).activateZone('apoyo');
-
-      final cards = await c.read(dynamicCardsProvider.future);
-
-      expect(cards.any((x) => x.gloss == 'ABOGADO'), true,
-          reason: 'apoyo legal debe incluir abogado');
-      expect(cards.any((x) => x.gloss == 'INTERPRETE'), true,
-          reason: 'apoyo de accesibilidad debe incluir intérprete');
-    });
-
-    test('trámite separa gestión, documento y caso', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('tramite'));
-      c.read(semanticZonesProvider);
-
-      c.read(semanticZonesProvider.notifier).activateZone('accion');
-      final accion = await c.read(dynamicCardsProvider.future);
-      expect(accion.any((x) => x.gloss == 'REQUISITO'), false,
-          reason: 'accion solo debe mostrar gestiones reales');
-      expect(accion.any((x) => x.gloss == 'PRESENTAR'), true);
-      expect(accion.any((x) => x.gloss == 'CONFESAR'), false,
-          reason: 'confesar es un acto declarativo, no un trámite');
-
-      c.read(semanticZonesProvider.notifier).activateZone('caso');
-      final caso = await c.read(dynamicCardsProvider.future);
-      expect(caso.any((x) => x.gloss == 'EXPEDIENTE'), true);
-      expect(caso.any((x) => x.gloss == 'LEY'), false,
-          reason: 'una ley se consulta, no se tramita');
-    });
-
-    test('el documento de trámite excluye soporte y correspondencia', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('tramite'));
-      c.read(semanticZonesProvider);
-
-      c.read(semanticZonesProvider.notifier).activateZone('documento');
-      final docs = await c.read(dynamicCardsProvider.future);
-      expect(docs.any((x) => x.gloss == 'CONSTANCIA'), true);
-      expect(docs.any((x) => x.gloss == 'CARNET'), true,
-          reason: 'la cédula es el documento más pedido en ventanilla');
-      expect(docs.any((x) => x.gloss == 'PAPEL'), false,
-          reason: 'el soporte físico no es un documento oficial');
-      expect(docs.any((x) => x.gloss == 'TEXTO'), false,
-          reason: 'un texto no es un documento gubernamental');
-      expect(docs.any((x) => x.gloss == 'CARTA'), false,
-          reason: 'la correspondencia privada no se tramita');
-    });
-
-    test('"¿Para quién es el trámite?" ofrece YO', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('tramite'));
-      c.read(semanticZonesProvider);
-      c.read(semanticZonesProvider.notifier).activateZone('quien');
-
-      final cards = await c.read(dynamicCardsProvider.future);
-      expect(cards.any((x) => x.gloss == 'YO'), true,
-          reason: 'la respuesta más frecuente quedaba fuera por su categoría');
-      expect(cards.length > 1, true,
-          reason: 'antes esta zona devolvía una sola tarjeta');
-    });
-
-    test('la pérdida vuelve a ser alcanzable', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('tramite'));
-      c.read(semanticZonesProvider);
-      c.read(semanticZonesProvider.notifier).activateZone('perdida');
-
-      final cards = await c.read(dynamicCardsProvider.future);
-      expect(cards.any((x) => x.gloss == 'PERDER'), true,
-          reason: 'la glosa que enruta a _composeLoss debe poder elegirse');
-      expect(cards.any((x) => x.gloss == 'CARNET'), true);
-    });
-
-    test('consulta pregunta por el número de caso y admite no saberlo', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('consulta'));
-      c.read(semanticZonesProvider);
-      c.read(semanticZonesProvider.notifier).activateZone('identificador');
-
-      final cards = await c.read(dynamicCardsProvider.future);
-      expect(cards.any((x) => x.gloss == 'NUREJ'), true);
-      expect(cards.any((x) => x.gloss == 'NO_SABER'), true,
-          reason: 'el corpus §3.1 permite "No tengo el código conmigo"');
-    });
+    // Las pruebas de zonas de 'tramite'/'consulta' (institución, apoyo,
+    // acción/documento/caso, "¿para quién es el trámite?", pérdida,
+    // identificador de consulta) usaban `_ctx('tramite')`/`_ctx('consulta')`:
+    // esos ids de UI ya no están en `allSelectableContexts` (auditoría
+    // 2026-09, sección 12.7), así que `_ctx` no encuentra nada y lanza antes
+    // de llegar a ejercitar la zona. Se retiran con el mismo criterio que
+    // las pruebas equivalentes en test_casos_corpus.py.
 
     test('la entrada de preguntas no ofrece pronombres', () async {
       final c = makeContainer();
@@ -268,10 +165,14 @@ void main() {
                 'r.question queda null y el compositor devuelve una '
                 'declaración en vez de una pregunta');
       }
-      expect(cards.every((x) => x.subcategoryId == 'interrogativa'), true);
+      // subcategoryId es un código de módulo del corpus ("M1"), no una
+      // etiqueta semántica: lo que de verdad acota esta zona es su propia
+      // lista blanca, ya comprobada arriba con cada pronombre.
+      final zona = _ctx('preguntas').zones.firstWhere((z) => z.id == 'interrogativa');
+      expect(cards.every((x) => zona.glossAllowlist.contains(x.gloss)), true);
     });
 
-    test('violencia y accidente no mezclan estado con urgencias', () async {
+    test('violencia no mezcla estado con urgencias', () async {
       final c = makeContainer();
       c.read(contextProvider.notifier).setContext(_ctx('violencia'));
       c.read(semanticZonesProvider);
@@ -282,31 +183,11 @@ void main() {
           reason: 'emocion no debe ofrecer urgencias');
       expect(violenceEmotion.any((x) => x.gloss == 'ASISTENCIA'), false,
           reason: 'emocion no debe ofrecer urgencias');
-
-      c.read(contextProvider.notifier).setContext(_ctx('accidente'));
-      c.read(semanticZonesProvider.notifier).reset();
-      c.read(semanticZonesProvider.notifier).activateZone('estado');
-      final accidentState = await c.read(dynamicCardsProvider.future);
-      expect(accidentState.any((x) => x.gloss == 'AUXILIO'), false,
-          reason: 'estado no debe ofrecer urgencias');
-      expect(accidentState.any((x) => x.gloss == 'ASISTENCIA'), false,
-          reason: 'estado no debe ofrecer urgencias');
     });
 
-    test('salud expone hospital y centro de salud', () async {
-      final c = makeContainer();
-      c.read(contextProvider.notifier).setContext(_ctx('accidente'));
-      c.read(semanticZonesProvider);
-      c.read(semanticZonesProvider.notifier).activateZone('salud');
-
-      final cards = await c.read(dynamicCardsProvider.future);
-
-      expect(cards.any((x) => x.gloss == 'HOSPITAL'), true,
-          reason: 'la zona de salud debe incluir hospital');
-      expect(cards.any((x) => x.gloss == 'CENTRO_DE_SALUD'), true,
-          reason: 'la zona de salud debe incluir centro de salud');
-      expect(cards.every((x) => x.categoryId == 'Lugares'), true);
-    });
+    // La mitad de "violencia y accidente no mezclan estado con urgencias" y
+    // "salud expone hospital y centro de salud" usaban `_ctx('accidente')`,
+    // otro id retirado del catálogo; mismo criterio.
 
     test('preguntas ramifica por interrogativa en vez de una zona de 74', () async {
       final c = makeContainer();
@@ -335,7 +216,7 @@ void main() {
       // QUE / CUAL → documentos y trámites.
       c.read(semanticZonesProvider.notifier).activateZone('tema_pregunta');
       final temas = await c.read(dynamicCardsProvider.future);
-      expect(temas.any((x) => x.gloss == 'TRAMITE'), true);
+      expect(temas.any((x) => x.gloss == 'TRÁMITE'), true);
       expect(temas.any((x) => x.categoryId == 'Lugares'), false,
           reason: 'los lugares tienen su propia ramificación');
     });

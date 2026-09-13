@@ -281,7 +281,10 @@ Future<void> elegirGlosa(
     return;
   }
 
-  if (gloss == 'CAJA' || gloss == 'BOLSA') {
+  // MOCHILA es contenedor en la zona de objetos (pide qué llevaba dentro) y
+  // prenda/accesorio en la zona de persona (pide color, vía el wizard de
+  // abajo): la misma glosa tiene un papel distinto según qué se describe.
+  if (gloss == 'CAJA' || gloss == 'BOLSA' || (gloss == 'MOCHILA' && zoneId != 'persona')) {
     await DisambiguationModal.desambiguarCajaBolsa(context, ref, gloss);
     zonesNotifier.toggleAnswer(card.gloss);
     ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
