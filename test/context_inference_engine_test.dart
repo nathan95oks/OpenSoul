@@ -29,19 +29,12 @@ void main() {
       expect(suggestion?.contextId, 'violencia');
     });
 
-    test('los trámites resuelven al contexto de trámite', () {
-      final suggestion = engine.infer(glosses: ['PASAPORTE', 'GESTIONAR']);
-
-      expect(suggestion?.contextId, 'tramite');
-    });
-
-    test('una consulta de estado no se confunde con un trámite', () {
-      final suggestion = engine.infer(glosses: ['ESTADO', 'SEGUIMIENTO']);
-
-      expect(suggestion?.contextId, 'consulta',
-          reason: 'desde la escisión, consultar el estado de un caso y '
-              'presentar documentación son flujos distintos');
-    });
+    // Las dos pruebas que esperaban 'tramite'/'consulta' como sugerencia
+    // enrutaban a contextos retirados de `allSelectableContexts` (auditoría
+    // 2026-09, sección 12.7): `ContextInferenceEngine.fromLexicon` construye
+    // su lista de candidatos desde `availableContexts`, que ya no los
+    // incluye, así que el motor no puede proponerlos aunque las glosas
+    // apunten claramente a un trámite o una consulta.
 
     test('las glosas presentes en todos los contextos no sugieren nada', () {
       // HOMBRE y MUJER aparecen en todos los contextos: su peso es cero y no
@@ -57,11 +50,8 @@ void main() {
       expect(suggestion?.contextId, 'denuncia_robo');
     });
 
-    test('reconoce una gestión de trámite', () {
-      final suggestion = engine.infer(text: 'Necesito gestionar mi pasaporte');
-
-      expect(suggestion?.contextId, 'tramite');
-    });
+    // "reconoce una gestión de trámite" esperaba 'tramite', otro contexto
+    // retirado; mismo criterio que arriba.
 
     test('la evidencia mostrada son glosas, nunca raices internas', () {
       // Las raices lexicas ('rob') puntuan pero no se enseñan: no significan
@@ -102,7 +92,6 @@ void main() {
       for (final frase in const [
         'Le robaron su teléfono',
         'Un hombre la maltrató',
-        'Necesito gestionar mi pasaporte',
       ]) {
         final suggestion = engine.infer(text: frase);
         expect(suggestion, isNotNull, reason: frase);

@@ -32,8 +32,11 @@ class LocalSentenceAssembler {
     roles.narrativeIsPast = _pastContexts.contains(contextId);
     final consumidas = <String>{
       ...detalles.keys,
+      // ANOS_EDAD es la misma pregunta que EDAD ("¿qué edad tiene?" / "¿cuántos
+      // años tiene?"): cuando ya se afirmó la edad, la glosa sobrante no debe
+      // volver a aparecer, ni siquiera en la red de seguridad "(...)".
       if (roles.markers.any((m) => m.startsWith('tengo ') && m.endsWith(' años')))
-        ...const {'EDAD'},
+        ...const {'EDAD', 'ANOS_EDAD'},
       ..._resolveGender(roles),
       ..._resolveTime(roles, contextId, unidos),
     };
@@ -843,6 +846,15 @@ class LocalSentenceAssembler {
     'ANO':    (femenino: false, singular: 'año',    plural: 'años'),
   };
 
+  // Unidad sin cantidad ("SEMANA" sola, sin dígito detrás): la cadena queda
+  // abierta y el lexema base ("semana") sale sin artículo ni deixis ("Semana,
+  // una persona me robó."). Se resuelve con la forma deíctica de esa unidad,
+  // que sigue siendo fiel a lo que la persona señaló sin inventar una fecha.
+  static const _deicticTimeForm = {
+    'MINUTO': 'este minuto', 'HORA': 'esta hora', 'DIA': 'hoy',
+    'SEMANA': 'esta semana', 'MES': 'este mes', 'ANO': 'este año',
+  };
+
   static const _frequencyGlosses = {
     'PRIMERA_VEZ': 'Es la primera vez que ocurre',
     'CADA_DIA': 'Ocurre cada día',
@@ -964,7 +976,7 @@ class LocalSentenceAssembler {
     final count = r.timeCount;
 
     if (count == null) {
-      r.time ??= _lexicon[unit]!.es;
+      r.time ??= _deicticTimeForm[unit] ?? _lexicon[unit]!.es;
       return {unit};
     }
 
@@ -983,8 +995,8 @@ class LocalSentenceAssembler {
     'MERCADO': 'mercado', 'BARRIO': 'barrio', 'TIENDA': 'tienda', 'BANCO': 'banco',
     'AUTO': 'placa', 'MOTOCICLETA': 'placa', 'MICRO': 'placa',
     'TAXI': 'placa', 'TRUFI': 'placa', 'BICICLETA': 'placa',
-    'EDAD': 'edad', 'NOMBRE': 'nombre', 'APELLIDO': 'apellido',
-    'IDENTIDAD': 'carnet', 'PAPEL': 'documento', 'CELULAR': 'numero',
+    'EDAD': 'edad', 'ANOS_EDAD': 'edad', 'NOMBRE': 'nombre', 'APELLIDO': 'apellido',
+    'IDENTIDAD': 'carnet', 'CARNET': 'carnet', 'PAPEL': 'documento', 'CELULAR': 'numero',
     'SEPDAVI': 'institucion', 'SEPDEP': 'institucion', 'FELCC': 'institucion',
     'FELCV': 'institucion', 'FISCALIA': 'institucion', 'JUZGADO': 'institucion',
   };
@@ -1000,10 +1012,20 @@ class LocalSentenceAssembler {
     'un abogado': 'una abogada',
   };
 
-  static const _flightVerbs = {'ESCAPAR'};
+  static const _flightVerbs = {'ESCAPAR', 'CORRER'};
 
   static const _inherentEvidence = {
     'FOTOS', 'VIDEO', 'CERTIFICADO', 'FACTURA', 'FOTOCOPIA',
+    // Alias de FOTOS usado en el corpus (auditoría 2026-09): una fotografía
+    // se aporta como prueba, nunca como botín.
+    'FOTOGRAFIA',
+    // MENSAJE/COMPROBANTE/RESPALDO/VIDEOLLAMADA ya estaban en el conjunto
+    // equivalente del backend (`_INHERENT_EVIDENCE` en aws/lambda_function.py)
+    // pero nunca se agregaron al lexicón de ninguno de los dos lados: sin
+    // entrada, la glosa no tenía frase y en el servidor el `continue` de la
+    // rama de evidencia la descartaba en silencio (auditoría 2026-09,
+    // hallazgo CP-007/CP-016: "como prueba tengo un mensaje" desaparecía).
+    'MENSAJE', 'COMPROBANTE', 'RESPALDO', 'VIDEOLLAMADA',
   };
 
   static const _inherentImplicit = {'YO'};
@@ -1301,7 +1323,14 @@ class LocalSentenceAssembler {
           break;
         case _Role.objeto:             r.objects.add(_conDetalle(t, e.es, r)); break;
         case _Role.documento:          r.documents.add(_conDetalle(t, e.es, r)); break;
-        case _Role.lugar:              r.place ??= _conDetalle(t, e.es, r); break;
+        case _Role.lugar:
+          final lugarTxt = _conDetalle(t, e.es, r);
+          // Dos glosas de lugar en la misma respuesta describen el mismo
+          // sitio desde dos ángulos ("en mi casa" + "un lugar seguro"), no
+          // dos lugares distintos: se concatenan en vez de que la segunda
+          // se pierda por el `??=` (auditoría 2026-09, hallazgo SEGURO).
+          r.place = r.place == null ? lugarTxt : '${r.place}, $lugarTxt';
+          break;
         case _Role.institucion:
           if (!r.institutions.contains(e.es)) r.institutions.add(e.es);
           break;
@@ -1584,12 +1613,20 @@ class LocalSentenceAssembler {
   }
 
   String _composeIncident(String ctx, _Roles r, List<String> tokens) {
-    final lead = switch (ctx) {
-      'violencia' => 'Quiero reportar un caso de violencia.',
-      'amenaza_digital' => 'Quiero denunciar amenazas recibidas.',
-      'engano_dinero' => 'Quiero denunciar un engaño económico.',
-      _ => 'Quiero denunciar un robo.',
-    };
+    // Elegir el menú "Denunciar robo"/"Denunciar violencia" no prueba que
+    // haya ocurrido un robo o una agresión: si no hay agresor ni verbo de
+    // agresión (p. ej. la persona solo respondió PERDER, o solo contestó
+    // sobre testigos), el encabezado no debe afirmarlo (auditoría 2026-09,
+    // hallazgos PERDER y NO+TESTIGO).
+    final hayAgresion = r.aggression != null || _hasAggressor(r);
+    final lead = !hayAgresion
+        ? 'Quiero comunicar lo siguiente.'
+        : switch (ctx) {
+            'violencia' => 'Quiero reportar un caso de violencia.',
+            'amenaza_digital' => 'Quiero denunciar amenazas recibidas.',
+            'engano_dinero' => 'Quiero denunciar un engaño económico.',
+            _ => 'Quiero denunciar un robo.',
+          };
 
     final sentences = <String>[];
 
@@ -2174,7 +2211,10 @@ class LocalSentenceAssembler {
     'CARPETA': _Lex(_Role.documento, 'la carpeta de documentos'),
     'CASA': _Lex(_Role.lugar, 'en mi casa'),
     'CELULAR': _Lex(_Role.objeto, 'mi celular'),
-    'CERCA': _Lex(_Role.lugar, 'cerca del lugar'),
+    // Sin "del lugar": esa relación necesita su referencia real (auditoría
+    // 2026-09); un valor fijo fabricaba una referencia vaga cuando no se
+    // preguntó cerca de qué.
+    'CERCA': _Lex(_Role.lugar, 'cerca'),
     'CERTIFICADO': _Lex(_Role.documento, 'un certificado'),
     'CHAMARRA': _Lex(_Role.objeto, 'mi chamarra'),
     'COCHABAMBA': _Lex(_Role.lugar, 'en Cochabamba'),
@@ -2184,7 +2224,10 @@ class LocalSentenceAssembler {
     'COMPUTADORA': _Lex(_Role.objeto, 'una computadora'),
     'COMUNIDAD_SORDA': _Lex(_Role.personaDesc, 'la comunidad sorda'),
     'CONFIANZA': _Lex(_Role.emocion, 'tengo confianza'),
-    'CONOCER': _Lex(_Role.verboAccion, 'conozco'),
+    // "Conozco" solo no dice a quién: el corpus penal judicial §4 pregunta
+    // "¿conoce a la persona?" y la respuesta debe nombrar el complemento,
+    // sí o no ("Sí/No conozco a esa persona"), no quedar en un verbo suelto.
+    'CONOCER': _Lex(_Role.verboAccion, 'conozco a esa persona'),
     'CONTESTAR_DOS_VECES': _Lex(_Role.verboAccion, 'contesté dos veces'),
     'CONTINUAR': _Lex(_Role.verboAccion, 'continúa'),
     'CONVOCAR': _Lex(_Role.tramite, 'una citación'),
@@ -2202,7 +2245,7 @@ class LocalSentenceAssembler {
     'DECIDIR': _Lex(_Role.verboAccion, 'decidí'),
     'DEJAR': _Lex(_Role.verboAccion, 'dejé'),
     'DELGADO': _Lex(_Role.rasgo, 'delgado'),
-    'DENTRO': _Lex(_Role.lugar, 'dentro del lugar'),
+    'DENTRO': _Lex(_Role.lugar, 'dentro'),
     'DESCANSO': _Lex(_Role.tiempo, 'en horario de descanso'),
     'DESPUES': _Lex(_Role.tiempo, 'después'),
     'DEVOLVER': _Lex(_Role.verboAccion, 'quiero que devuelvan'),
@@ -2240,7 +2283,10 @@ class LocalSentenceAssembler {
     'EXPLICAR': _Lex(_Role.verboAccion, 'quiero explicar'),
     'F': _Lex(_Role.verboAccion, 'f'),
     'FACTURA': _Lex(_Role.documento, 'la factura'),
-    'FALTA': _Lex(_Role.verboAgresion, 'perdí'),
+    // verboAccion, no verboAgresion: perder algo no es una agresión de un
+    // tercero. Con verboAgresion, "FALTA CELULAR" se redactaba "una persona
+    // me perdí mi celular" (auditoría 2026-09, hallazgo PERDER).
+    'FALTA': _Lex(_Role.verboAccion, 'perdí'),
     'FECHA': _Lex(_Role.tiempo, 'en la fecha indicada'),
     'FELCC': _Lex(_Role.institucion, 'en la FELCC'),
     'FELCV': _Lex(_Role.institucion, 'en la FELCV'),
@@ -2250,7 +2296,7 @@ class LocalSentenceAssembler {
     'FOTOCOPIA': _Lex(_Role.documento, 'una fotocopia'),
     'FOTOS': _Lex(_Role.objeto, 'fotografías'),
     'FRACTURA': _Lex(_Role.urgencia, 'una fractura'),
-    'FUERA': _Lex(_Role.lugar, 'afuera del lugar'),
+    'FUERA': _Lex(_Role.lugar, 'fuera'),
     'FUNCIONAR': _Lex(_Role.verboAccion, 'funciona'),
     'FUTURO': _Lex(_Role.tiempo, 'en el futuro'),
     'G': _Lex(_Role.verboAccion, 'g'),
@@ -2370,7 +2416,9 @@ class LocalSentenceAssembler {
     'PEDIR': _Lex(_Role.verboAccion, 'solicito'),
     'PEGAR': _Lex(_Role.verboAgresion, 'golpeó y pegó'),
     'PELEAR': _Lex(_Role.verboAgresion, 'inició una pelea'),
-    'PERDER': _Lex(_Role.verboAgresion, 'perdí'),
+    // verboAccion, no verboAgresion (auditoría 2026-09, hallazgo PERDER): ver
+    // la nota en 'FALTA', misma causa.
+    'PERDER': _Lex(_Role.verboAccion, 'perdí'),
     'PERMISO': _Lex(_Role.marcador, 'con permiso'),
     'PLAZA': _Lex(_Role.lugar, 'en la plaza'),
     'PLAZO': _Lex(_Role.tramite, 'el plazo'),
@@ -2464,6 +2512,101 @@ class LocalSentenceAssembler {
     'ORGANO_JUDICIAL': _Lex(_Role.institucion, 'en el Órgano Judicial'),
     'ULTIMO': _Lex(_Role.tiempo, 'el último'),
 
+    // Vocabulario del corpus ausente del lexicón (auditoría 2026-09): estas
+    // glosas se usan en aws/tests/casos_corpus.json pero nunca se agregaron
+    // aquí, así que caían en la red de seguridad genérica en vez de
+    // redactarse con su propio sentido. Se agregan en paridad con
+    // GLOSS_LEXICON en aws/lambda_function.py.
+    'AUDIENCIA': _Lex(_Role.tramite, 'una audiencia'),
+    'CENTRO_DE_SALUD': _Lex(_Role.lugar, 'en el centro de salud'),
+    'CONSTANCIA': _Lex(_Role.documento, 'una constancia'),
+    'COPIAR': _Lex(_Role.verboAccion, 'copié'),
+    'DEFENSA_PUBLICA': _Lex(_Role.institucion, 'en la Defensa Pública'),
+    'ESTADO': _Lex(_Role.tramite, 'el estado'),
+    'EXPAREJA': _Lex(_Role.personaDesc, 'mi expareja'),
+    'EXPEDIENTE': _Lex(_Role.documento, 'el expediente'),
+    'FORMULARIO': _Lex(_Role.documento, 'un formulario'),
+    'FOTOGRAFIA': _Lex(_Role.objeto, 'una fotografía'),
+    'MEMORIAL': _Lex(_Role.documento, 'un memorial'),
+    'NOTIFICACION': _Lex(_Role.documento, 'la notificación'),
+    'NO_ENTIENDO': _Lex(_Role.marcador, 'no entiendo'),
+    'NO_RECUERDO': _Lex(_Role.marcador, 'no recuerdo'),
+    'NUREJ': _Lex(_Role.documento, 'el NUREJ'),
+    'OBSERVACION': _Lex(_Role.documento, 'una observación'),
+    // "Un lugar seguro" no es dónde ocurrió el hecho: es la seguridad ACTUAL
+    // de quien declara. Como _Role.lugar se fundía con el lugar del hecho
+    // ("en mi casa y un lugar seguro"); como estado emocional se une a MIEDO
+    // en su propia cláusula ("Tengo miedo y me encuentro en un lugar
+    // seguro"), igual que el resto de _Role.emocion (auditoría 2026-09,
+    // hallazgo CP-004).
+    'SEGURO': _Lex(_Role.emocion, 'me encuentro en un lugar seguro'),
+    // Sus hermanas de estado emocional (CONFIANZA, MIEDO, TEMOR...) son
+    // _Role.emocion con una cláusula completa en primera persona; SOSPECHA
+    // había quedado como _Role.motivo con una locución suelta ("por
+    // sospecha"), que en denuncia_robo/violencia ningún compositor consume
+    // y termina cayendo a la red de seguridad como "(por sospecha)" en vez
+    // de una oración propia (auditoría 2026-09, hallazgo CP-010).
+    'SOSPECHA': _Lex(_Role.emocion, 'tengo una sospecha'),
+    'VENTANILLA': _Lex(_Role.lugar, 'en la ventanilla'),
+    // Ya trae la preposición: `_joinConCanales` la reconoce como canal (por
+    // WhatsApp), igual que ENGANAR+WHATSAPP.
+    'WHATSAPP': _Lex(_Role.objeto, 'por WhatsApp'),
+
+    // Narrativa de estafa sin verbo de agresión ("pagué y no me entregaron
+    // el producto"): PAGAR/ENTREGAR/PRODUCTO faltaban por completo, así que
+    // caían en la red de seguridad genérica ("Me sustrajeron...") y
+    // calificaban el hecho como robo aunque la persona nunca lo dijo
+    // (auditoría 2026-09, hallazgo "lagunas cerradas"). ENTREGAR se redacta
+    // en la voz que recibe ("me entregaron") porque así compone con NO
+    // ("no me entregaron") sin hornear la negación en el lexema.
+    'PAGAR': _Lex(_Role.verboAccion, 'pagué'),
+    'ENTREGAR': _Lex(_Role.verboAccion, 'me entregaron'),
+    'PRODUCTO': _Lex(_Role.objeto, 'el producto'),
+
+    // CORRER faltaba del lexicón: al no reconocerse, `_extractDetails` la
+    // confundía con un nombre propio deletreado y la fundía en el lugar
+    // ("en el mercado correr") en vez de cerrar el relato como huida
+    // (auditoría 2026-09, hallazgo CP-002). Se trata igual que ESCAPAR.
+    'CORRER': _Lex(_Role.verboAgresion, 'salió corriendo'),
+    'BILLETERA': _Lex(_Role.objeto, 'mi billetera'),
+    'PARADA': _Lex(_Role.lugar, 'en la parada'),
+
+    // AUTO/MOTOCICLETA/TAXI/BICICLETA estaban en `_admiteDetalle` (admiten
+    // placa) pero nunca se agregaron al lexicón: sin entrada, `_classify`
+    // las trataba como token desconocido, y como su placa ya había quedado
+    // registrada en `detalles` (por `_extractDetails`), `_ensureCoverage`
+    // las daba por "consumidas" y ni siquiera aparecían en la red de
+    // seguridad "(...)" — el vehículo y su placa desaparecían del todo de
+    // la declaración (auditoría 2026-09, hallazgo "placa alfanumérica").
+    // AUTO/MOTOCICLETA/BICICLETA son vehículos propios (blanco de ROBAR o
+    // DAÑAR, como CELULAR o MOCHILA), así que llevan posesivo igual que el
+    // resto de bienes personales; TAXI/MICRO/TRUFI en cambio son transporte
+    // público, no del declarante, y mantienen el artículo indefinido.
+    'AUTO': _Lex(_Role.objeto, 'mi auto'),
+    'MOTOCICLETA': _Lex(_Role.objeto, 'mi motocicleta'),
+    'TAXI': _Lex(_Role.objeto, 'un taxi'),
+    'BICICLETA': _Lex(_Role.objeto, 'mi bicicleta'),
+    'MENSAJE': _Lex(_Role.objeto, 'un mensaje'),
+    'COMPROBANTE': _Lex(_Role.objeto, 'un comprobante'),
+    'RESPALDO': _Lex(_Role.objeto, 'un respaldo'),
+    'VIDEOLLAMADA': _Lex(_Role.objeto, 'una videollamada'),
+
+    // DESCONOCER es una seña propia para "no conocer" (no NO + CONOCER): su
+    // lexema ya trae la negación horneada porque no hay una glosa NO previa
+    // de la que derivarla. DENUNCIAR faltaba del todo — "¿desea denunciar?"
+    // del corpus penal judicial §4 se perdía entera (corpus §4, auditoría
+    // 2026-09).
+    'DESCONOCER': _Lex(_Role.verboAccion, 'no conozco a esa persona'),
+    'DENUNCIAR': _Lex(_Role.verboAccion, 'quiero presentar una denuncia'),
+
+    // APELLIDO/CARNET/ANOS_EDAD estaban en `_admiteDetalle` (admiten
+    // deletreo/dígitos) pero no en el lexicón: sin entrada, `_extractDetails`
+    // no las distinguía de una racha de letras y las fundía en el detalle de
+    // la glosa anterior ("Mi nombre es Juanapellidoperez.", Fase 1 de
+    // identificación, auditoría 2026-09).
+    'APELLIDO': _Lex(_Role.marcador, 'mi apellido es'),
+    'CARNET': _Lex(_Role.marcador, 'mi carnet de identidad'),
+    'ANOS_EDAD': _Lex(_Role.marcador, 'tengo esa edad'),
   };
 }
 

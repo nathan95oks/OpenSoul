@@ -173,8 +173,12 @@ class GeneradorEstructurado(unittest.TestCase):
             "fact": {"action": "PERDER"},
             "objects": [{"concept": "CELULAR", "role": "lost"}],
         })
-        self.assertIn("perdí", texto.lower())
-        self.assertNotIn("me robó", texto.lower())
+        lower = texto.lower()
+        # Redacción válida en primera persona ("he extraviado/perdido..."),
+        # nunca atribuida a un tercero ("una persona me perdí").
+        self.assertTrue("extraviado" in lower or "perdí" in lower, texto)
+        self.assertNotIn("una persona", lower)
+        self.assertNotIn("me robó", lower)
 
     def test_cerca_con_mi_casa(self):
         texto = L.generate_structured_sentence({
@@ -218,7 +222,7 @@ class GeneradorEstructurado(unittest.TestCase):
         lower = texto.lower()
         self.assertIn("polera roja", lower)
         self.assertIn("pantalón negro", lower)
-        self.assertIn("me robó mi celular", lower)
+        self.assertIn("robo de mi celular", lower)
 
     def test_mochila_robada_y_mochila_llevada_son_distintas(self):
         texto = L.generate_structured_sentence({
@@ -230,7 +234,7 @@ class GeneradorEstructurado(unittest.TestCase):
             ],
         })
         lower = texto.lower()
-        self.assertIn("me robó", lower)
+        self.assertIn("robo de mi mochila", lower)
         self.assertIn("llevaba una mochila", lower)
 
     def test_500_bolivianos_conserva_monto(self):

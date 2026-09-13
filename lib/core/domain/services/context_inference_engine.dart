@@ -44,8 +44,15 @@ class ContextInferenceEngine {
 
     final glossContexts = <String, Set<String>>{};
     for (final entry in entries) {
+      // 'otro' es la etiqueta de "también sirve como comodín genérico": casi
+      // toda glosa la lleva, así que invertirla sin filtrar hace que
+      // `sourceToUi['otro']` contenga los 7 contextos y cualquier glosa con
+      // esa etiqueta —incluida ROBAR— quede "presente en todos", con peso
+      // cero por `_weightOf` y sin poder sugerir nada. La señal real para
+      // inferencia es la etiqueta específica, no la genérica.
       final uiContexts = <String>{
-        for (final source in entry.contexts) ...?sourceToUi[source],
+        for (final source in entry.contexts.where((s) => s != 'otro'))
+          ...?sourceToUi[source],
       };
       if (uiContexts.isEmpty) continue;
       glossContexts

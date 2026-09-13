@@ -288,7 +288,14 @@ class _LiveDeclarationPreviewPanelState
               Expanded(
                 child: SizedBox(
                   height: 56,
-                  child: Material(
+                  child: Semantics(
+                    button: true,
+                    enabled: !isLoading && hasContent,
+                    label: isLoading
+                        ? 'Traduciendo'
+                        : (isLastStep ? 'Emitir declaración' : 'Continuar'),
+                    excludeSemantics: true,
+                    child: Material(
                     color: hasContent ? _orange : AppTheme.lightBorder,
                     borderRadius: BorderRadius.circular(16),
                     elevation: hasContent ? 2 : 0,
@@ -359,6 +366,7 @@ class _LiveDeclarationPreviewPanelState
                                 ],
                               ),
                       ),
+                    ),
                     ),
                   ),
                 ),

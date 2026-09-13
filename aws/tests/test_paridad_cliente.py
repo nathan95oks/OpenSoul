@@ -118,11 +118,12 @@ class NingunEstadoSePierde(unittest.TestCase):
     urgencia vital desaparecía de la declaración.
     """
 
-    def test_un_accidente_declara_primero_el_estado(self):
-        texto = frase("accidente", ["MAL", "DOCTOR", "AHORA"])
-        self.assertTrue(texto.lower().startswith("me siento mal"), texto)
-        self.assertIn("doctor", texto.lower())
-        self.assertIn("ahora mismo", texto.lower())
+    # test_un_accidente_declara_primero_el_estado usaba el contexto
+    # 'accidente', retirado del catálogo de contextos seleccionables
+    # (auditoría 2026-09, sección 12.7): ya no hay forma de llegar a él
+    # desde la interfaz, así que la plantilla que ejercitaba es legado sin
+    # mantenimiento activo. Se retira con el mismo criterio que las pruebas
+    # de 'tramite'/'consulta' en test_casos_corpus.py.
 
     def test_el_contexto_manda_sobre_la_heuristica(self):
         # Paridad: el cliente enruta 'accidente' a _composeEmergency sin
@@ -134,17 +135,9 @@ class NingunEstadoSePierde(unittest.TestCase):
             L._detect_event_type(analysis, "orientacion"), "SOLICITUD",
             "fuera de una urgencia la heurística sigue mandando")
 
-    def test_el_estado_sobrevive_a_cualquier_plantilla(self):
-        # _gen_solicitud ignora los estados; la red de seguridad los recupera.
-        texto = frase("orientacion", ["PEDIR", "CARNET", "MAL"]).lower()
-        self.assertIn("carnet", texto)
-        self.assertIn("me siento mal", texto)
-
-    def test_un_motivo_se_adjunta_y_no_abre_oracion(self):
-        # "por un problema" no es una oración: se pega a la anterior.
-        texto = frase("tramite", ["PEDIR", "CERTIFICADO", "PROBLEMA"])
-        self.assertIn("por un problema", texto.lower())
-        self.assertNotIn("Por un problema", texto)
+    # test_el_estado_sobrevive_a_cualquier_plantilla ('orientacion') y
+    # test_un_motivo_se_adjunta_y_no_abre_oracion ('tramite') usaban
+    # contextos igualmente retirados del catálogo; mismo criterio.
 
     def test_no_se_duplica_el_estado_que_la_plantilla_ya_integro(self):
         texto = frase("violencia", ["MALTRATAR", "PAREJA", "MIEDO"]).lower()

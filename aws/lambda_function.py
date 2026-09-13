@@ -71,12 +71,14 @@ GLOSS_LEXICON = {
     "ALLA": {"rol": "LUGAR", "es": "allá"},
     "ALLI": {"rol": "LUGAR", "es": "allí"},
     "ALTO": {"rol": "DESCRIPTOR", "es": "alto"},
-    "AL_LADO": {"rol": "LUGAR", "es": "al lado"},  # admite detalle: "al lado de X"
+    "AL_LADO": {"rol": "LUGAR", "es": "al lado"},
     "AMBOS": {"rol": "SUJETO", "es": "ambos"},
     "AMENAZAR": {"rol": "VERBO", "es": "amenazó", "agresor": "amenazó"},
     "AMIGO": {"rol": "DESCRIPTOR", "es": "un amigo", "persona": True},
     "ANDAR": {"rol": "VERBO", "es": "caminaba"},
+    "ANOS_EDAD": {"rol": "DESCONOCIDO", "es": "tengo esa edad"},
     "ANTEAYER": {"rol": "TIEMPO", "es": "anteayer"},
+    "APELLIDO": {"rol": "DESCONOCIDO", "es": "mi apellido es"},
     "AQUI": {"rol": "LUGAR", "es": "aquí"},
     "ARREGLAR": {"rol": "VERBO", "es": "quiero corregir"},
     "ARRESTAR": {"rol": "VERBO", "es": "arrestaron"},
@@ -85,8 +87,10 @@ GLOSS_LEXICON = {
     "ASOCIACION_SORDOS": {"rol": "DESCRIPTOR", "es": "la asociación de sordos", "persona": True},
     "ATENDER": {"rol": "VERBO", "es": "atender"},
     "ATRAS": {"rol": "LUGAR", "es": "atrás"},
+    "AUDIENCIA": {"rol": "TRAMITE", "es": "una audiencia"},
     "AUMENTAR": {"rol": "VERBO", "es": "quiero agregar información"},
     "AUN": {"rol": "TIEMPO", "es": "aún"},
+    "AUTO": {"rol": "OBJETO", "es": "mi auto"},
     "AUTORIDAD": {"rol": "INSTITUCION", "es": "la autoridad"},
     "AUXILIO": {"rol": "URGENCIA", "es": "auxilio urgente"},
     "AVENIDA": {"rol": "LUGAR", "es": "en la avenida"},
@@ -100,6 +104,8 @@ GLOSS_LEXICON = {
     "BAJO": {"rol": "DESCRIPTOR", "es": "bajo"},
     "BANCO": {"rol": "LUGAR", "es": "en el banco"},
     "BARRIO": {"rol": "LUGAR", "es": "en el barrio"},
+    "BICICLETA": {"rol": "OBJETO", "es": "mi bicicleta"},
+    "BILLETERA": {"rol": "OBJETO", "es": "mi billetera"},
     "BILLETES": {"rol": "OBJETO", "es": "billetes y dinero"},
     "BOCA": {"rol": "OBJETO", "es": "la boca"},
     "BOLSA": {"rol": "OBJETO", "es": "mi bolsa"},
@@ -115,13 +121,12 @@ GLOSS_LEXICON = {
     "CALLE": {"rol": "LUGAR", "es": "en la calle"},
     "CAMARA_FOTOGRAFICA": {"rol": "OBJETO", "es": "una cámara fotográfica"},
     "CAMBIAR": {"rol": "VERBO", "es": "cambié"},
+    "CARNET": {"rol": "DESCONOCIDO", "es": "mi carnet de identidad"},
     "CARO": {"rol": "DESCRIPTOR", "es": "costoso"},
     "CARPETA": {"rol": "DOCUMENTO", "es": "la carpeta de documentos"},
     "CASA": {"rol": "LUGAR", "es": "en mi casa"},
     "CELULAR": {"rol": "OBJETO", "es": "mi celular"},
-    # Sin "del lugar": esa relación necesita su referencia (auditoría
-    # 2026-09, hallazgo ROBAR+CELULAR+CERCA); "del lugar" fabricaba una
-    # referencia vaga cuando no se preguntó cerca de qué.
+    "CENTRO_DE_SALUD": {"rol": "LUGAR", "es": "en el centro de salud"},
     "CERCA": {"rol": "LUGAR", "es": "cerca"},
     "CERTIFICADO": {"rol": "DOCUMENTO", "es": "un certificado"},
     "CHAMARRA": {"rol": "OBJETO", "es": "mi chamarra"},
@@ -130,13 +135,17 @@ GLOSS_LEXICON = {
     "COMPAÑERO": {"rol": "DESCRIPTOR", "es": "un compañero", "persona": True},
     "COMPRAR": {"rol": "VERBO", "es": "compré"},
     "COMPRENDER": {"rol": "DESCONOCIDO", "es": "comprender"},
+    "COMPROBANTE": {"rol": "OBJETO", "es": "un comprobante"},
     "COMPUTADORA": {"rol": "OBJETO", "es": "una computadora"},
     "COMUNIDAD_SORDA": {"rol": "DESCRIPTOR", "es": "la comunidad sorda", "persona": True},
     "CONFIANZA": {"rol": "ESTADO", "es": "tengo confianza"},
-    "CONOCER": {"rol": "VERBO", "es": "conozco"},
+    "CONOCER": {"rol": "VERBO", "es": "conozco a esa persona"},
+    "CONSTANCIA": {"rol": "DOCUMENTO", "es": "una constancia"},
     "CONTESTAR_DOS_VECES": {"rol": "VERBO", "es": "contesté dos veces"},
     "CONTINUAR": {"rol": "VERBO", "es": "continúa"},
     "CONVOCAR": {"rol": "TRAMITE", "es": "una citación"},
+    "COPIAR": {"rol": "VERBO", "es": "copié"},
+    "CORRER": {"rol": "VERBO", "es": "salió corriendo", "agresor": "salió corriendo"},
     "CORTO": {"rol": "DESCRIPTOR", "es": "corto"},
     "CREER": {"rol": "VERBO", "es": "creo"},
     "CUAL": {"rol": "DESCONOCIDO", "es": "cuál"},
@@ -147,10 +156,13 @@ GLOSS_LEXICON = {
     "DAR": {"rol": "VERBO", "es": "entregué"},
     "DAÑAR": {"rol": "VERBO", "es": "dañó", "agresor": "dañó"},
     "DECIDIR": {"rol": "VERBO", "es": "decidí"},
+    "DEFENSA_PUBLICA": {"rol": "INSTITUCION", "es": "en la Defensa Pública"},
     "DEJAR": {"rol": "VERBO", "es": "dejé"},
     "DELGADO": {"rol": "DESCRIPTOR", "es": "delgado"},
     "DENTRO": {"rol": "LUGAR", "es": "dentro"},
+    "DENUNCIAR": {"rol": "VERBO", "es": "quiero presentar una denuncia"},
     "DESCANSO": {"rol": "TIEMPO", "es": "en horario de descanso"},
+    "DESCONOCER": {"rol": "VERBO", "es": "no conozco a esa persona"},
     "DESPUES": {"rol": "TIEMPO", "es": "después"},
     "DEVOLVER": {"rol": "VERBO", "es": "quiero que devuelvan"},
     "DE_NADA": {"rol": "DESCONOCIDO", "es": "de nada"},
@@ -175,6 +187,7 @@ GLOSS_LEXICON = {
     "ENCONTRARSE": {"rol": "VERBO", "es": "me encontré"},
     "ENFRENTE": {"rol": "LUGAR", "es": "enfrente"},
     "ENGAÑAR": {"rol": "VERBO", "es": "engañó y estafó", "agresor": "engañó y estafó"},
+    "ENTREGAR": {"rol": "VERBO", "es": "me entregaron"},
     "ENVIAR": {"rol": "VERBO", "es": "envié"},
     "ESCAPAR": {"rol": "VERBO", "es": "escapó", "agresor": "escapó"},
     "ESCONDER": {"rol": "VERBO", "es": "escondió"},
@@ -183,13 +196,14 @@ GLOSS_LEXICON = {
     "ESCUELA_NOCTURNA": {"rol": "LUGAR", "es": "en la escuela nocturna"},
     "ESPERAR": {"rol": "VERBO", "es": "esperar"},
     "ESPOSA": {"rol": "DESCRIPTOR", "es": "mi esposa", "persona": True},
+    "ESTADO": {"rol": "TRAMITE", "es": "el estado"},
     "ESTAR_DE_ACUERDO": {"rol": "DESCONOCIDO", "es": "estoy de acuerdo"},
     "EVALUAR": {"rol": "VERBO", "es": "evaluar"},
+    "EXPAREJA": {"rol": "DESCRIPTOR", "es": "mi expareja", "persona": True},
+    "EXPEDIENTE": {"rol": "DOCUMENTO", "es": "el expediente"},
     "EXPLICAR": {"rol": "VERBO", "es": "quiero explicar"},
     "F": {"rol": "VERBO", "es": "f"},
     "FACTURA": {"rol": "DOCUMENTO", "es": "la factura"},
-    # Sin flag "agresor": perder algo no es una agresión de un tercero
-    # (auditoría 2026-09, hallazgo PERDER).
     "FALTA": {"rol": "VERBO", "es": "perdí"},
     "FECHA": {"rol": "TIEMPO", "es": "en la fecha indicada"},
     "FELCC": {"rol": "INSTITUCION", "es": "en la FELCC"},
@@ -197,7 +211,9 @@ GLOSS_LEXICON = {
     "FILMAR": {"rol": "VERBO", "es": "filmé"},
     "FISCALIA": {"rol": "INSTITUCION", "es": "en la Fiscalía"},
     "FLACO": {"rol": "DESCRIPTOR", "es": "delgado"},
+    "FORMULARIO": {"rol": "DOCUMENTO", "es": "un formulario"},
     "FOTOCOPIA": {"rol": "DOCUMENTO", "es": "una fotocopia"},
+    "FOTOGRAFIA": {"rol": "OBJETO", "es": "una fotografía"},
     "FOTOS": {"rol": "OBJETO", "es": "fotografías"},
     "FRACTURA": {"rol": "URGENCIA", "es": "una fractura"},
     "FUERA": {"rol": "LUGAR", "es": "fuera"},
@@ -274,6 +290,8 @@ GLOSS_LEXICON = {
     "MAÑANA": {"rol": "TIEMPO", "es": "mañana"},
     "MEDICINA": {"rol": "OBJETO", "es": "medicinas"},
     "MEJOR": {"rol": "DESCRIPTOR", "es": "mejor"},
+    "MEMORIAL": {"rol": "DOCUMENTO", "es": "un memorial"},
+    "MENSAJE": {"rol": "OBJETO", "es": "un mensaje"},
     "MENTIRA": {"rol": "DESCONOCIDO", "es": "es mentira"},
     "MERCADO": {"rol": "LUGAR", "es": "en el mercado"},
     "MES": {"rol": "TIEMPO", "es": "mes"},
@@ -286,6 +304,7 @@ GLOSS_LEXICON = {
     "MOCHILA": {"rol": "OBJETO", "es": "mi mochila"},
     "MOMENTO": {"rol": "TIEMPO", "es": "en ese momento"},
     "MOSTRAR": {"rol": "VERBO", "es": "puedo mostrar"},
+    "MOTOCICLETA": {"rol": "OBJETO", "es": "mi motocicleta"},
     "MUCHO": {"rol": "DESCRIPTOR", "es": "mucho"},
     "MUJER": {"rol": "DESCRIPTOR", "es": "una mujer", "persona": True},
     "N": {"rol": "VERBO", "es": "n"},
@@ -295,11 +314,16 @@ GLOSS_LEXICON = {
     "NO": {"rol": "DESCONOCIDO", "es": "no"},
     "NOMBRE": {"rol": "DESCONOCIDO", "es": "mi nombre es"},
     "NOSOTROS": {"rol": "SUJETO", "es": "nosotros"},
+    "NOTIFICACION": {"rol": "DOCUMENTO", "es": "la notificación"},
+    "NO_ENTIENDO": {"rol": "DESCONOCIDO", "es": "no entiendo"},
     "NO_ESTAR_DE_ACUERDO": {"rol": "DESCONOCIDO", "es": "no estoy de acuerdo"},
     "NO_PUEDO": {"rol": "DESCONOCIDO", "es": "no puedo"},
+    "NO_RECUERDO": {"rol": "DESCONOCIDO", "es": "no recuerdo"},
     "NO_SABER": {"rol": "DESCONOCIDO", "es": "no sé"},
     "NUEVO": {"rol": "DESCRIPTOR", "es": "nuevo"},
+    "NUREJ": {"rol": "DOCUMENTO", "es": "el NUREJ"},
     "O": {"rol": "VERBO", "es": "o"},
+    "OBSERVACION": {"rol": "DOCUMENTO", "es": "una observación"},
     "OBSERVAR": {"rol": "VERBO", "es": "observé"},
     "OCUPADO": {"rol": "TIEMPO", "es": "ocupado"},
     "OFICIAL": {"rol": "SERVICIO", "es": "un oficial"},
@@ -310,10 +334,12 @@ GLOSS_LEXICON = {
     "OSCURO": {"rol": "DESCRIPTOR", "es": "oscuro"},
     "OYENTE": {"rol": "DESCRIPTOR", "es": "oyente", "persona": True},
     "P": {"rol": "VERBO", "es": "p"},
+    "PAGAR": {"rol": "VERBO", "es": "pagué"},
     "PAGINA": {"rol": "DOCUMENTO", "es": "la página"},
     "PALABRA": {"rol": "VERBO", "es": "palabra"},
     "PANTALON": {"rol": "OBJETO", "es": "mi pantalón"},
     "PAPEL": {"rol": "DOCUMENTO", "es": "el documento"},
+    "PARADA": {"rol": "LUGAR", "es": "en la parada"},
     "PAREJA": {"rol": "DESCRIPTOR", "es": "mi pareja", "persona": True},
     "PARIENTE": {"rol": "DESCRIPTOR", "es": "un pariente", "persona": True},
     "PASADO": {"rol": "TIEMPO", "es": "en el pasado"},
@@ -334,6 +360,7 @@ GLOSS_LEXICON = {
     "PREOCUPAR": {"rol": "ESTADO", "es": "estoy preocupado"},
     "PRESENTAR": {"rol": "VERBO", "es": "quiero presentar"},
     "PRIMERA_VEZ": {"rol": "TIEMPO", "es": "la primera vez"},
+    "PRODUCTO": {"rol": "OBJETO", "es": "el producto"},
     "PROHIBIDO": {"rol": "DOCUMENTO", "es": "prohibido"},
     "PROTEGER": {"rol": "VERBO", "es": "necesito protección"},
     "PROVINCIA": {"rol": "LUGAR", "es": "en la provincia"},
@@ -351,6 +378,7 @@ GLOSS_LEXICON = {
     "RECIBIR": {"rol": "VERBO", "es": "recibí"},
     "RECORDAR": {"rol": "VERBO", "es": "recuerdo"},
     "RESOLUCION": {"rol": "DOCUMENTO", "es": "una resolución"},
+    "RESPALDO": {"rol": "OBJETO", "es": "un respaldo"},
     "RESULTADO": {"rol": "DOCUMENTO", "es": "el resultado"},
     "REUNION": {"rol": "VERBO", "es": "reunión"},
     "ROBAR": {"rol": "VERBO", "es": "robó", "agresor": "robó"},
@@ -359,6 +387,7 @@ GLOSS_LEXICON = {
     "SABADO": {"rol": "TIEMPO", "es": "el sábado"},
     "SABER": {"rol": "DESCONOCIDO", "es": "sé"},
     "SEGUNDO": {"rol": "TIEMPO", "es": "segundo"},
+    "SEGURO": {"rol": "ESTADO", "es": "me encuentro en un lugar seguro"},
     "SELLO": {"rol": "DOCUMENTO", "es": "un sello oficial"},
     "SEMANA": {"rol": "TIEMPO", "es": "semana"},
     "SEPARADOS": {"rol": "DESCRIPTOR", "es": "separados", "persona": True},
@@ -370,10 +399,12 @@ GLOSS_LEXICON = {
     "SOLUCIONAR": {"rol": "VERBO", "es": "quiero solucionar"},
     "SOPORTE": {"rol": "DOCUMENTO", "es": "soporte"},
     "SORDO": {"rol": "DESCRIPTOR", "es": "una persona sorda", "persona": True},
+    "SOSPECHA": {"rol": "ESTADO", "es": "tengo una sospecha"},
     "SUYO": {"rol": "SUJETO", "es": "suyo"},
     "T": {"rol": "VERBO", "es": "t"},
     "TAL_VEZ": {"rol": "DESCONOCIDO", "es": "tal vez"},
     "TARDE": {"rol": "TIEMPO", "es": "por la tarde"},
+    "TAXI": {"rol": "OBJETO", "es": "un taxi"},
     "TELEFONO": {"rol": "OBJETO", "es": "mi teléfono"},
     "TEMOR": {"rol": "ESTADO", "es": "tengo temor"},
     "TEMPRANO": {"rol": "TIEMPO", "es": "temprano"},
@@ -399,14 +430,17 @@ GLOSS_LEXICON = {
     "VECINO": {"rol": "DESCRIPTOR", "es": "un vecino", "persona": True},
     "VENDER": {"rol": "VERBO", "es": "vendí"},
     "VENIR": {"rol": "VERBO", "es": "vine"},
+    "VENTANILLA": {"rol": "LUGAR", "es": "en la ventanilla"},
     "VER": {"rol": "VERBO", "es": "vi"},
     "VERDAD": {"rol": "DESCONOCIDO", "es": "es verdad"},
     "VIDEO": {"rol": "OBJETO", "es": "un video"},
+    "VIDEOLLAMADA": {"rol": "OBJETO", "es": "una videollamada"},
     "VIERNES": {"rol": "TIEMPO", "es": "el viernes"},
     "VIOLENCIA": {"rol": "URGENCIA", "es": "un hecho de violencia"},
     "VIVIR": {"rol": "VERBO", "es": "vivo"},
     "VOLVER": {"rol": "VERBO", "es": "debo volver"},
     "W": {"rol": "VERBO", "es": "w"},
+    "WHATSAPP": {"rol": "OBJETO", "es": "por WhatsApp"},
     "X": {"rol": "VERBO", "es": "x"},
     "Y": {"rol": "VERBO", "es": "y"},
     "YO": {"rol": "SUJETO", "es": "yo"},
@@ -457,6 +491,14 @@ _TIME_UNITS = {
     "SEMANA": {"femenino": True,  "singular": "semana", "plural": "semanas"},
     "MES":    {"femenino": False, "singular": "mes",    "plural": "meses"},
     "ANO":    {"femenino": False, "singular": "año",    "plural": "años"},
+}
+
+# Espejo de _deicticTimeForm en el cliente: unidad sin cantidad detrás resuelta
+# con su forma deíctica, no el lexema base sin artículo ("Semana, una persona
+# me robó.").
+_DEICTIC_TIME_FORM = {
+    "MINUTO": "este minuto", "HORA": "esta hora", "DIA": "hoy",
+    "SEMANA": "esta semana", "MES": "este mes", "ANO": "este año",
 }
 
 _CARDINALES = {
@@ -605,7 +647,8 @@ def _resolve_time(analysis: dict, context_type: str, cards: list = ()) -> None:
     if not cantidad:
         entry = lexicon_lookup(unidad)
         if entry and not analysis["tiempos"]:
-            analysis["tiempos"].insert(0, {"glosa": unidad, **entry})
+            deictico = _DEICTIC_TIME_FORM.get(unidad, entry["es"])
+            analysis["tiempos"].insert(0, {**entry, "glosa": unidad, "es": deictico})
         return
 
     if cantidad == "1":
@@ -870,6 +913,15 @@ def analyze_glosses(cards: list) -> dict:
             analysis.setdefault("_tiempo_unidad", key)
             continue
 
+        # CAMBIO (paridad Dart): dígito huérfano —sin unidad de tiempo
+        # delante— no significa nada por sí solo. Como los dígitos SÍ tienen
+        # entrada en GLOSS_LEXICON (rol VERBO, para deletrear placas y
+        # NUREJ), este descarte debe ir ANTES del despacho por rol: si no,
+        # `if entry:` siempre gana primero y el "2" huérfano se cuela como
+        # un verbo más, saliendo como una oración propia ("...urgente. 2.").
+        if key in _DIGITOS:
+            continue
+
         entry = lexicon_lookup(key)
         if entry and entry["rol"] == "TESTIGO":
             analysis["testigos_negados"] = (
@@ -916,12 +968,6 @@ def analyze_glosses(cards: list) -> dict:
                 negar_siguiente_verbo = False
                 afirmar_siguiente_verbo = False
             analysis[dest].append(registro)
-        elif key in _DIGITOS:
-            # CAMBIO (paridad Dart): dígito huérfano —sin unidad de tiempo
-            # delante— no significa nada por sí solo. Emitirlo producía
-            # "Adicionalmente, hago referencia a 2" en una declaración que
-            # puede acabar en un expediente.
-            continue
         else:
             analysis["desconocidos"].append({"glosa": key, "rol": "DESCONOCIDO", "es": key.lower()})
 
@@ -1142,275 +1188,6 @@ def _relation_word(relation: str) -> str:
         "FUERA": "fuera", "AL_LADO": "al lado",
     }.get(_lexicon_key(relation), str(relation).lower())
 
-
-def _structured_person_phrase(person: dict) -> str:
-    gender = person.get("gender")
-    gender_lex = lexicon_lookup(gender) if gender else None
-    fem = bool(gender_lex) and gender_lex.get("es") == "una mujer"
-
-    def concordar(base: str) -> str:
-        return f"{base[:-1]}a" if fem and base.endswith("o") else base
-
-    traits = []
-    for campo in ("ageApprox", "build", "height"):
-        valor = person.get(campo)
-        if not valor:
-            continue
-        lex = lexicon_lookup(valor)
-        if lex:
-            traits.append(concordar(lex["es"]))
-
-    base = gender_lex["es"] if gender_lex else "una persona"
-    if traits:
-        base = f"{base} {_join_es(traits)}"
-
-    clothing = person.get("clothing") or []
-    if clothing:
-        prendas = []
-        for c in clothing:
-            concept = c.get("concept", "")
-            nombre = _NEUTRAL_CLOTHING.get(
-                _lexicon_key(concept), concept.lower().replace("_", " "))
-            if c.get("color") and c.get("colorState") == "confirmed":
-                nombre = f"{nombre} {_color_adj(concept, c['color'])}"
-            prendas.append(nombre)
-        base = f"{base} que llevaba {_join_es(prendas)}"
-    return base
-
-
-def _structured_object_self_phrase(obj: dict) -> str:
-    if obj.get("docType"):
-        doc = obj["docType"].strip()
-        if doc.startswith(("Carnet", "Licencia", "Pasaporte")):
-            return f"mi {doc}"
-        return f"un {doc}"
-    concept = obj.get("concept", "")
-    if _lexicon_key(concept) in ("BILLETES", "DINERO") and obj.get("quantity"):
-        unidad = obj.get("unit") or "bolivianos"
-        return f"{obj['quantity']} {unidad} en billetes"
-    if obj.get("contents"):
-        lex = lexicon_lookup(concept)
-        nombre = lex["es"] if lex else concept.lower().replace("_", " ")
-        return f"{nombre} que contenía {obj['contents'].strip()}"
-    lex = lexicon_lookup(concept)
-    base = lex["es"] if lex else concept.lower().replace("_", " ")
-    if obj.get("detail"):
-        base = f"{base} ({obj['detail']})"
-    return base
-
-
-def _structured_object_neutral_phrase(obj: dict) -> str:
-    concept = obj.get("concept", "")
-    neutral = _NEUTRAL_CLOTHING.get(_lexicon_key(concept))
-    if neutral:
-        return neutral
-    lex = lexicon_lookup(concept)
-    base = lex["es"] if lex else concept.lower().replace("_", " ")
-    base = re.sub(r"^(mi|mis|la|el)\s+", "", base)
-    if base.startswith(("un ", "el ", "la ")):
-        return base
-    return f"un {base}"
-
-
-def _structured_location_clause(location: dict) -> str:
-    partes = []
-    main_concept = location.get("mainPlaceConcept")
-    if main_concept:
-        lex = lexicon_lookup(main_concept)
-        frase = lex["es"] if lex else main_concept.lower()
-        detalle = (location.get("mainPlaceDetail") or "").strip()
-        if detalle:
-            frase = f"{frase} {detalle}"
-        partes.append(frase)
-
-    relation = location.get("relation")
-    if relation and not location.get("pending"):
-        rel = _relation_word(relation)
-        referencia = None
-        if location.get("referenceType") == "home":
-            referencia = "mi casa"
-        elif (location.get("referenceLiteralText") or "").strip():
-            referencia = location["referenceLiteralText"].strip()
-        elif location.get("referenceConceptGloss"):
-            lex = lexicon_lookup(location["referenceConceptGloss"])
-            referencia = lex["es"] if lex else location["referenceConceptGloss"].lower()
-        if referencia:
-            partes.append(f"{rel} de {referencia}")
-
-    return f" {_join_es(partes)}" if partes else ""
-
-
-def _structured_time_clause(time_info: dict):
-    if time_info.get("unknown"):
-        return None
-    unit = time_info.get("elapsedUnit")
-    if unit:
-        spec = _TIME_UNITS.get(_lexicon_key(unit))
-        if spec:
-            count = time_info.get("elapsedCount")
-            if count:
-                count = str(count)
-                if count == "1":
-                    cardinal = "una" if spec["femenino"] else "un"
-                    medida = spec["singular"]
-                else:
-                    cardinal = _CARDINALES.get(count, count)
-                    medida = spec["plural"]
-                return f"hace {cardinal} {medida}"
-            entry = lexicon_lookup(unit)
-            if entry:
-                return entry["es"]
-    moment = time_info.get("dateOrMoment")
-    if moment:
-        lex = lexicon_lookup(moment)
-        if lex:
-            return lex["es"]
-    return None
-
-
-def generate_structured_sentence(declaration: dict) -> str:
-    """Genera la declaración a partir del `declaration` estructurado
-    para todos los 8 contextos con gramática formal boliviana."""
-    sentences = []
-    context_id = declaration.get("contextId", "denuncia_robo")
-    location = declaration.get("location") or {}
-    time_info = declaration.get("time") or {}
-    loc_clause = _structured_location_clause(location)
-    time_clause = _structured_time_clause(time_info)
-    time_prefix = f"{time_clause[0].upper()}{time_clause[1:]}, " if time_clause else ""
-
-    objects = declaration.get("objects") or []
-    stolen = [o for o in objects if o.get("role") == "stolen"]
-    lost = [o for o in objects if o.get("role") == "lost"]
-    carried = [o for o in objects if o.get("role") == "carriedByOtherPerson"]
-
-    persons = declaration.get("persons") or []
-    suspects = [p for p in persons if p.get("role") == "suspect"]
-    subject_phrase = (
-        _join_es([_structured_person_phrase(p) for p in suspects])
-        if suspects else "una persona"
-    )
-
-    fact = declaration.get("fact") or {}
-    action = _lexicon_key(fact.get("action") or "")
-
-    if context_id == "violencia":
-        violence = declaration.get("violence") or {}
-        agg = violence.get("aggressionType") or action or "agresión física"
-        agg_text = str(agg).lower().replace("_", " ")
-        sentences.append(f"{time_prefix}El declarante denuncia haber sufrido {agg_text}{loc_clause}.".strip())
-    elif context_id == "amenaza_digital":
-        digital = declaration.get("digitalThreat") or {}
-        chan = digital.get("channel") or "medios digitales"
-        sentences.append(f"{time_prefix}El declarante refiere haber recibido amenazas a través de {chan}{loc_clause}.".strip())
-    elif context_id == "engano_dinero":
-        fraud = declaration.get("fraud") or {}
-        monto = f" por el monto de {fraud['amount']} {fraud.get('currency', 'bolivianos')}" if fraud.get("amount") else ""
-        medio = f" mediante {fraud['deliveryMethod']}" if fraud.get("deliveryMethod") else ""
-        sentences.append(f"{time_prefix}El declarante denuncia haber sido víctima de engaño económico{monto}{medio}{loc_clause}.".strip())
-    elif context_id == "seguimiento":
-        sentences.append(f"{time_prefix}El ciudadano consulta el estado de su trámite o investigación{loc_clause}.".strip())
-    elif context_id == "identificacion":
-        docs = [o["docType"] for o in objects if o.get("docType")]
-        if docs:
-            sentences.append(f"El declarante presenta su {_join_es(docs)}{loc_clause}.".strip())
-        else:
-            sentences.append(f"El declarante se identifica ante la autoridad competente{loc_clause}.".strip())
-    elif context_id == "preguntas":
-        sentences.append("¿Dónde debo realizar esta consulta o presentar el trámite?")
-    elif context_id == "otro":
-        inquiry = declaration.get("inquiry") or {}
-        if inquiry.get("isWitnessReport", True):
-            sentences.append(f"{time_prefix}El declarante se presenta en calidad de testigo presencial de los hechos{loc_clause}.".strip())
-        else:
-            sentences.append(f"{time_prefix}El declarante realiza una manifestación voluntaria{loc_clause}.".strip())
-    else:  # denuncia_robo
-        if action == "ROBAR":
-            if stolen:
-                what = _join_es([_structured_object_self_phrase(o) for o in stolen])
-                clause = f"{subject_phrase} me robó {what}{loc_clause}."
-            else:
-                clause = f"{subject_phrase} me robó{loc_clause}."
-            sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
-        elif action == "PERDER":
-            objetos_perdidos = lost or stolen
-            if objetos_perdidos:
-                what = _join_es([_structured_object_self_phrase(o) for o in objetos_perdidos])
-                sentences.append(f"{time_prefix}Perdí {what}{loc_clause}.".strip())
-            else:
-                sentences.append(
-                    f"{time_prefix}No sé con certeza qué ocurrió; puede que haya perdido algo{loc_clause}.".strip())
-        elif action in ("ENGANAR", "ENGAÑAR"):
-            sentences.append(f"{time_prefix}Me engañaron{loc_clause}.".strip())
-        elif action in ("DANAR", "DAÑAR"):
-            what = f" {_join_es([_structured_object_self_phrase(o) for o in stolen])}" if stolen else ""
-            clause = f"{subject_phrase} dañó{what}{loc_clause}."
-            sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
-        elif action == "ESCAPAR":
-            actor_role = fact.get("actorRole")
-            actor_detail = fact.get("actorDetail")
-            if actor_role == "victim":
-                sentences.append(f"{time_prefix}El declarante logró escapar{loc_clause}.".strip())
-            elif actor_role == "thirdParty":
-                sentences.append(f"{time_prefix}Una tercera persona escapó del lugar{loc_clause}.".strip())
-            elif actor_detail:
-                sentences.append(f"{time_prefix}{actor_detail} escapó{loc_clause}.".strip())
-            else:
-                clause = f"{subject_phrase} escapó{loc_clause}."
-                sentences.append(f"{time_prefix}{clause[0].upper()}{clause[1:]}")
-        else:
-            if loc_clause or time_clause:
-                sentences.append(f"{time_prefix}Ocurrió algo que quiero relatar{loc_clause}.".strip())
-
-    if carried:
-        what = _join_es([_structured_object_neutral_phrase(o) for o in carried])
-        quien = _structured_person_phrase(suspects[0]) if suspects else "La persona"
-        quien = f"{quien[0].upper()}{quien[1:]}"
-        sentences.append(f"{quien} llevaba {what}.")
-
-    witnesses = declaration.get("witnesses") or {}
-    existence = witnesses.get("existence")
-    if existence == "confirmed":
-        count = witnesses.get("count")
-        sentences.append(f"Hay {count} testigos." if count else "Hay testigos.")
-    elif existence == "negated":
-        sentences.append("No hay testigos.")
-    elif existence == "uncertain":
-        sentences.append("No sé si hay testigos.")
-
-    evidence = declaration.get("evidence") or []
-    items = [
-        (lexicon_lookup(e.get("concept", "")) or {}).get(
-            "es", str(e.get("concept", "")).lower().replace("_", " "))
-        for e in evidence if e.get("availability") != "negated"
-    ]
-    if items:
-        sentences.append(f"Cuento con {_join_es(items)} como prueba.")
-
-    if declaration.get("injured"):
-        sentences.append(
-            "Estoy herido y necesito atención médica."
-            if declaration.get("medicalHelpRequested") else "Estoy herido.")
-    elif declaration.get("medicalHelpRequested"):
-        sentences.append("Necesito atención médica.")
-
-    will_file = declaration.get("willFileComplaint")
-    if will_file == "confirmed":
-        sentences.append("Quiero presentar una denuncia formal.")
-    elif will_file == "negated":
-        sentences.append("Por ahora no quiero presentar una denuncia formal.")
-
-    if declaration.get("needsLegalSupport"):
-        sentences.append("Necesito apoyo legal.")
-
-    institution = declaration.get("receivingInstitution")
-    if institution:
-        lex = lexicon_lookup(institution)
-        destino = (lex["es"] if lex else institution.lower()).replace("en ", "", 1)
-        sentences.append(f"Deseo presentar esto ante {destino}.")
-
-    texto = " ".join(s for s in sentences if s.strip())
-    return texto or "Quiero comunicar lo siguiente, aunque todavía no completé los detalles."
 
 
 def generate_base_sentence(ir: dict, analysis: dict, context_type: str,
@@ -2126,11 +1903,26 @@ def _gen_general(ir, analysis, is_formal):
     if tp:
         parts.append(tp)
 
+    # CAMBIO (paridad Dart): las urgencias (HERIDA, AUXILIO, VIOLENCIA…) no
+    # entraban en ninguna categoría de este generador ni de su respaldo
+    # "all_es", así que una respuesta que solo las contenía (sin verbo,
+    # documento, trámite o servicio) caía al último respaldo —los glosas
+    # crudas en mayúscula, unidas y con .capitalize()— y salía "Violencia
+    # herida auxilio.": exactamente lo que la persona no quiso comunicar.
+    # Se redactan como cláusula propia, igual que `r.urgencies` en el
+    # cliente (`_join(r.urgencies)`), en vez de perderse o salir en crudo.
+    urgencias = [u["es"] for u in analysis.get("urgencias", [])]
+
     if parts:
         sentence = parts[0].capitalize()
         if len(parts) > 1:
             sentence += " " + " ".join(parts[1:])
+        if urgencias:
+            sentence = sentence.rstrip(".") + ". " + _cap(_join_es(urgencias))
         return sentence
+
+    if urgencias:
+        return _cap(_join_es(urgencias))
 
     all_es = []
     for cat in ["sujetos", "verbos", "documentos", "tramites", "tiempos", "instituciones", "servicios"]:
@@ -2186,8 +1978,21 @@ def _person_phrase_structured(p: dict) -> str:
     clothes = p.get("clothing") or p.get("clothes") or p.get("ropa") or []
     prendas = []
     for c in clothes:
-        prenda = (c.get("concept") or c.get("prenda") or c.get("garment") or "").strip().lower()
-        color = (c.get("color") or "").strip().lower()
+        prenda_concept = (c.get("concept") or c.get("prenda") or c.get("garment") or "").strip()
+        # Nombre de la prenda con su tilde correcta ("pantalón", no
+        # "pantalon"): se toma del lexicón/mapa neutro en vez del texto
+        # crudo que mandó el cliente, que puede no llevar tilde.
+        neutral_form = _NEUTRAL_CLOTHING.get(_lexicon_key(prenda_concept))
+        if neutral_form:
+            prenda = re.sub(r"^(un|una|el|la)\s+", "", neutral_form)
+        else:
+            prenda = prenda_concept.lower()
+        color_state = c.get("colorState") or c.get("color_state") or "confirmed"
+        color = (c.get("color") or "").strip().lower() if color_state == "confirmed" else ""
+        # Concordancia de género con la prenda (auditoría 2026-09): "polera
+        # roja", no "polera rojo" — cada prenda concuerda con SU color, sin
+        # afectar a las demás.
+        color = _color_adj(prenda_concept, color.upper()) if color else color
         if prenda and color:
             prendas.append(f"{prenda} {color}")
         elif prenda:
@@ -2199,17 +2004,39 @@ def _person_phrase_structured(p: dict) -> str:
 
 
 def _object_self_phrase_py(o: dict) -> str:
+    concept = (o.get("concept") or o.get("glosa") or "").strip().upper()
+    # El monto de BILLETES es el hecho, no un detalle secundario: sin esto
+    # "500 bolivianos" desaparecía de una denuncia de estafa o robo de
+    # dinero (auditoría 2026-09).
+    cantidad = o.get("quantity") or o.get("cantidad")
+    if _lexicon_key(concept) == "BILLETES" and cantidad:
+        unidad = o.get("unit") or o.get("unidad") or "bolivianos"
+        return f"{cantidad} {unidad} en billetes"
     det = o.get("detail") or o.get("detalles")
     if det and str(det).strip():
         return str(det).strip()
     doc_type = o.get("doc_type") or o.get("docType")
     if doc_type and str(doc_type).strip():
         return str(doc_type).strip()
-    concept = (o.get("concept") or o.get("glosa") or "").strip().upper()
     entry = lexicon_lookup(concept)
     if entry:
         return entry["es"].lower()
     return concept.lower()
+
+
+def _object_neutral_phrase_py(o: dict) -> str:
+    """Frase neutra (sin posesivo) para un objeto que llevaba OTRA persona,
+    no el declarante: "una mochila", no "mi mochila" (auditoría 2026-09)."""
+    concept = (o.get("concept") or o.get("glosa") or "").strip().upper()
+    neutral = _NEUTRAL_CLOTHING.get(_lexicon_key(concept))
+    if neutral:
+        return neutral
+    entry = lexicon_lookup(concept)
+    base = entry["es"].lower() if entry else concept.lower()
+    base = re.sub(r"^(mi|mis|la|el)\s+", "", base)
+    if base.startswith(("un ", "el ", "la ", "una ")):
+        return base
+    return f"un {base}"
 
 
 def generate_structured_sentence(d: dict) -> str:
@@ -2231,6 +2058,33 @@ def generate_structured_sentence(d: dict) -> str:
     elif zona:
         loc_part = f"en zona {zona}"
 
+    # Relación espacial (CERCA/LEJOS/DENTRO/FUERA/AL_LADO) con su referencia
+    # real. Sin esto, esta ruta ignoraba por completo la ubicación con
+    # referencia que el wizard captura (auditoría 2026-09, hallazgo CERCA):
+    # la relación llegaba en el `declaration` pero nunca se leía aquí.
+    relation = loc_dict.get("relation") or loc_dict.get("relacion")
+    pending_loc = bool(loc_dict.get("pending"))
+    if relation and not pending_loc:
+        rel_word = _relation_word(relation)
+        referencia = None
+        ref_type = loc_dict.get("referenceType") or loc_dict.get("reference_type")
+        if ref_type == "home":
+            referencia = "mi casa"
+        else:
+            ref_literal = (loc_dict.get("referenceLiteralText")
+                           or loc_dict.get("reference_literal_text") or "").strip()
+            if ref_literal:
+                referencia = ref_literal
+            else:
+                ref_concept = (loc_dict.get("referenceConceptGloss")
+                               or loc_dict.get("reference_concept_gloss"))
+                if ref_concept:
+                    entry = lexicon_lookup(ref_concept)
+                    referencia = entry["es"] if entry else str(ref_concept).lower()
+        if referencia:
+            rel_part = f"{rel_word} de {referencia}"
+            loc_part = f"{loc_part} {rel_part}".strip() if loc_part else rel_part
+
     time_val = d.get("time") or d.get("tiempo")
     time_text = ""
     if isinstance(time_val, str) and time_val.strip():
@@ -2241,9 +2095,18 @@ def generate_structured_sentence(d: dict) -> str:
     objects = d.get("objects") or d.get("objetos") or []
     stolen = [o for o in objects if (o.get("role") or o.get("rol")) in ("stolen", "robado")]
     lost = [o for o in objects if (o.get("role") or o.get("rol")) in ("lost", "perdido", "documento")]
+    # Un objeto que llevaba OTRA persona (no el declarante) no es botín
+    # propio: mezclarlo con `stolen` le atribuía al declarante algo que solo
+    # describía a un tercero (auditoría 2026-09, hallazgo mochila robada vs.
+    # mochila llevada).
+    carried = [o for o in objects
+               if (o.get("role") or o.get("rol")) in ("carriedByOtherPerson", "carried_by_other_person")]
 
     persons = d.get("persons") or d.get("personas") or []
     suspects = [p for p in persons if (p.get("role") or p.get("rol")) in ("suspect", "sospechoso")]
+
+    witnesses_dict = d.get("witnesses") or d.get("testigos") or {}
+    witness_existence = witnesses_dict.get("existence") or witnesses_dict.get("existencia")
 
     fact = d.get("fact") or d.get("hecho") or {}
     action = (fact.get("action") or fact.get("accion") or "").strip().upper()
@@ -2380,9 +2243,24 @@ def generate_structured_sentence(d: dict) -> str:
                 for p in suspects:
                     sentences.append(_person_phrase_structured(p))
 
+            if carried:
+                what_carried = _join([_object_neutral_phrase_py(o) for o in carried])
+                quien = _person_phrase_structured(suspects[0]) if suspects else "la persona"
+                sentences.append(f"{quien[0].upper()}{quien[1:]} llevaba {what_carried}.")
+
             evid = d.get("evidence") or d.get("evidencia") or []
             if evid:
                 sentences.append("Cuento con elementos de prueba o respaldo:")
+
+        # Testigos: estado propio, sin equiparar la ausencia de respuesta a
+        # que no los hay (auditoría 2026-09, hallazgo NO+TESTIGO / "no sabe").
+        if witness_existence in ("confirmed", "confirmado"):
+            count = witnesses_dict.get("count") or witnesses_dict.get("cantidad")
+            sentences.append(f"Hay {count} testigos." if count else "Hay testigos.")
+        elif witness_existence in ("negated", "negado"):
+            sentences.append("No hay testigos.")
+        elif witness_existence in ("uncertain", "incierto"):
+            sentences.append("No sé si hay testigos.")
 
     texto = " ".join([s.strip() for s in sentences if s.strip()])
     return texto if texto else "Quiero comunicar lo siguiente, aunque todavía no completé los detalles."

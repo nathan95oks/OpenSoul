@@ -95,10 +95,14 @@ void main() {
     test('una respuesta lenta supera el timeout y lanza TimeoutException',
         () async {
       final client = MockClient((req) async {
-        // Más que requestTimeout configurado en el datasource.
+        // Más que requestTimeout configurado en el datasource. El margen es
+        // generoso (no solo +1s) porque en una corrida con toda la batería
+        // de pruebas en paralelo el reloj real se retrasa por contención de
+        // CPU, y un margen ajustado hacía la prueba intermitente sin que el
+        // datasource tuviera ningún defecto real.
         await Future<void>.delayed(
           RemoteTranslationDataSourceImpl.requestTimeout +
-              const Duration(seconds: 1),
+              const Duration(seconds: 5),
         );
         return http.Response('{}', 200);
       });

@@ -182,31 +182,54 @@ AVAILABLE_3D_GLOSSES = {
 # Términos judiciales que requieren validación y deben deletrearse dactilológicamente
 TERMS_TO_SPELL = {
     "ACTA", "CEDULA", "CÉDULA", "FIRMA", "FIRMAR", "DECLARACION",
-    "DECLARACIÓN", "DECLARAR", "MINISTERIO_PUBLICO", "MINISTERIO PÚBLICO"
+    "DECLARACIÓN", "DECLARAR", "MINISTERIO_PUBLICO", "MINISTERIO PÚBLICO",
+    # Siglas institucionales sin seña propia: se deletrean siempre, escritas
+    # como las escriba quien declara ("felcc" en minúscula no es menos FELCC
+    # que "FELCC"). Sin esto, `_es_nombre_propio` solo protegía la mayúscula
+    # inicial y una sigla en minúscula colapsaba en una glosa que el avatar
+    # no puede representar (auditoría 2026-09).
+    "FELCC", "FELCV", "SEPDAVI", "SEPDEP", "NUREJ",
 }
 
 # Variantes con las que el modelo nombra una misma seña
 GLOSS_ALIASES = {
     "POR FAVOR": "POR_FAVOR",
     "PORFAVOR": "POR_FAVOR",
-    "SÍ": "SÍ",
-    "SI": "SÍ",
     "LO SIENTO": "LO_SIENTO",
     "NO PUEDO": "NO_PUEDO",
     "NO SABER": "NO_SABER",
-    "ÓRGANO JUDICIAL": "ÓRGANO_JUDICIAL",
-    "ORGANO JUDICIAL": "ÓRGANO_JUDICIAL",
+    # Sin guion bajo, "ÓRGANO JUDICIAL"/"MÁS O MENOS" no pasarían _VALID_GLOSS
+    # (no admite espacios): el alias tiene que existir. Pero el destino va
+    # SIN tilde: es el mismo criterio que "SÍ"/"POLICIA" más abajo — el
+    # lexicón de composición (GLOSS_LEXICON en lambda_function.py) y el
+    # catálogo de señas 3D (AVAILABLE_3D_GLOSSES) usan la clave sin tilde
+    # para estos mismos conceptos, y una glosa acentuada que no calza con
+    # ninguna de las dos caía sin representar en ningún lado.
+    "ÓRGANO JUDICIAL": "ORGANO_JUDICIAL",
+    "ORGANO JUDICIAL": "ORGANO_JUDICIAL",
     "ESTOY BIEN": "ESTOY_BIEN",
-    "MÁS O MENOS": "MÁS_O_MENOS",
-    "MAS O MENOS": "MÁS_O_MENOS",
-    "POLICIA": "POLICÍA",
-    "DONDE": "DÓNDE",
-    "CUANDO": "CUÁNDO",
-    "QUE": "QUÉ",
-    "QUIEN": "QUIÉN",
-    "CUAL": "CUÁL",
-    "COMO": "CÓMO",
-    "CUANTOS": "CUÁNTOS",
+    "MÁS O MENOS": "MAS_O_MENOS",
+    "MAS O MENOS": "MAS_O_MENOS",
+    # Saludo de cortesía como frase fija: sin este alias "¿CÓMO ESTÁS?" no
+    # calzaba con ningún alias de una sola palabra y el signo de interrogación
+    # lo rechazaba por formato — la frase entera desaparecía.
+    "¿COMO ESTAS?": "COMO_ESTAS",
+    "COMO ESTAS": "COMO_ESTAS",
+    # SÍ/POLICIA/DONDE/CUANDO/QUE/QUIEN/CUAL/COMO/CUANTOS ya NO tienen alias
+    # a una forma acentuada aparte (auditoría 2026-09, clase GlosasAcentuadas):
+    # `canonical_gloss` sin alias cae a `strip_gloss_accents`, que por sí solo
+    # ya produce la forma sin tilde correcta ("SI", "POLICIA"...). El alias
+    # que había aquí antes sustituía ese resultado bueno por uno acentuado
+    # ("SÍ", "POLICÍA"...) que no existe como clave ni en GLOSS_LEXICON ni en
+    # AVAILABLE_3D_GLOSSES, así que la seña de sí/no o la palabra nunca se
+    # reconocían en ningún lado.
+    #
+    # Los dígitos sueltos sí necesitan un alias explícito: el avatar tiene la
+    # seña de cada número por su nombre en LSB (CINCO), no un signo aparte
+    # para el carácter "5", así que dejar el dígito tal cual lo dejaba sin
+    # animar.
+    "0": "CERO", "1": "UNO", "2": "DOS", "3": "TRES", "4": "CUATRO",
+    "5": "CINCO", "6": "SEIS", "7": "SIETE", "8": "OCHO", "9": "NUEVE",
     "TELEFONO": "CELULAR",
     "BILLETERA": "BILLETES",
     "FOTOGRAFIA": "FOTOS",
@@ -471,12 +494,12 @@ def canonical_gloss(gloss: str) -> str:
 # el alfabeto dactilológico y los números) y nada más. Lista blanca: enumerar
 # lo válido no tiene los agujeros de codificación que tiene prohibir lo malo.
 #
-# Incluye ÁÉÍÓÚÜ: `canonical_gloss` devuelve la forma canónica del alias, que
-# SÍ lleva tilde (DÓNDE, ÓRGANO_JUDICIAL, MÁS_O_MENOS, CÓMO...) porque así
-# está en el diccionario canónico (official_dictionary.json) y en
-# AVAILABLE_GLOSSES. Sin las vocales acentuadas aquí, esa misma forma
-# canónica que el alias acababa de producir quedaba rechazada por su propia
-# validación y se perdía (auditoría 2026-09, clase GlosasAcentuadas).
+# Incluye ÁÉÍÓÚÜ: aunque los alias ya no producen vocales acentuadas (ver
+# GLOSS_ALIASES), una glosa que llega acentuada y no tiene alias —"MÉDICO",
+# "DECLARACIÓN"— debe poder pasar este filtro para que `strip_gloss_accents`
+# la normalice después; sin las vocales acentuadas aquí se rechazaba antes de
+# llegar a normalizarse y la palabra desaparecía sin dejar rastro (auditoría
+# 2026-09, clase GlosasAcentuadas).
 _VALID_GLOSS = re.compile(r"^[A-ZÑÁÉÍÓÚÜ0-9][A-ZÑÁÉÍÓÚÜ0-9_-]{0,63}$")
 
 

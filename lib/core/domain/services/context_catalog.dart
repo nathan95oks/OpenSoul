@@ -116,7 +116,7 @@ final identificacionContext = SemanticContext(
       emoji: '🪪',
       semanticWeight: 0.95,
       maxPicks: 3,
-      glossAllowlist: _dedupe(['NOMBRE', 'PAPEL', 'IDENTIDAD', 'SORDO', 'LEER', 'POCO', 'INTÉRPRETE']),
+      glossAllowlist: _dedupe(['NOMBRE', 'APELLIDO', 'PAPEL', 'IDENTIDAD', 'CARNET', 'SORDO', 'LEER', 'POCO', 'INTÉRPRETE']),
       relatedZones: ['contacto', 'edad'],
     ),
     SemanticZone(
@@ -149,7 +149,7 @@ final identificacionContext = SemanticContext(
       emoji: '🎂',
       semanticWeight: 0.6,
       optional: true,
-      glossAllowlist: ['EDAD', 'JOVEN', 'ADULTO'],
+      glossAllowlist: ['EDAD', 'ANOS_EDAD', 'JOVEN', 'ADULTO'],
     ),
   ],
 );
@@ -778,12 +778,18 @@ String resolveAssemblerContext(
   if (norm.contains('SEGUIR') || norm.contains('MIRAR') || norm.contains('ESCONDER') || norm.contains('ESPERAR')) {
     return 'seguimiento';
   }
-  if (norm.contains('NOMBRE') || norm.contains('IDENTIDAD') || norm.contains('PAPEL')) {
+  final esPregunta = norm.contains('DONDE') || norm.contains('QUIEN') || norm.contains('QUE') || norm.contains('CUANDO') || norm.contains('COMO') || norm.contains('CUANTOS') || norm.contains('POR_QUE') || norm.contains('PARA_QUE');
+  // "¿Qué es este papel?" es una pregunta sobre un documento, no el
+  // formulario de datos de Fase 1: una interrogativa presente manda sobre
+  // el atajo de identificación, igual que el resto de este enrutador ya deja
+  // que la glosa más específica decida por encima del contexto de entrada.
+  if (!esPregunta &&
+      (norm.contains('NOMBRE') || norm.contains('IDENTIDAD') || norm.contains('PAPEL'))) {
     if (!norm.contains('ROBAR') && !norm.contains('GOLPEAR')) {
       return 'identificacion';
     }
   }
-  if (norm.contains('DONDE') || norm.contains('QUIEN') || norm.contains('QUE') || norm.contains('CUANDO') || norm.contains('COMO') || norm.contains('CUANTOS') || norm.contains('POR_QUE') || norm.contains('PARA_QUE')) {
+  if (esPregunta) {
     return 'preguntas';
   }
   return currentContextId.isEmpty ? 'denuncia_robo' : currentContextId;
