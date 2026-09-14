@@ -243,8 +243,11 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
   String? unidadTemporalDe(String gloss) {
     final zona = ref.read(contextProvider)?.zoneById(state.activeZoneId ?? '');
     if (zona == null || !zona.chainTriggers.contains(gloss)) return null;
+    // La glosa real del catálogo es "DÍA" (con tilde); la clave sin tilde
+    // nunca calzaba y tocar esa tarjeta no abría ningún selector de
+    // cantidad, sin aviso alguno (auditoría 2026-09).
     const nombres = {
-      'MINUTO': 'minutos', 'HORA': 'horas', 'DIA': 'días',
+      'MINUTO': 'minutos', 'HORA': 'horas', 'DÍA': 'días', 'DIA': 'días',
       'SEMANA': 'semanas', 'MES': 'meses', 'ANO': 'años',
     };
     return nombres[gloss];

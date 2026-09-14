@@ -58,54 +58,62 @@ Future<String?> mostrarTecladoTextoLibre(
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
-    builder: (ctx) => SafeArea(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-            20, 4, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              titulo,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.lightText,
-              ),
-            ),
-            const SizedBox(height: 14),
-            TextField(
-              controller: controlador,
-              autofocus: true,
-              textCapitalization: TextCapitalization.words,
-              maxLength: 80,
-              decoration: InputDecoration(
-                hintText: hint ?? 'Escribe aquí (se conservan espacios y tildes)',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                filled: true,
-                fillColor: AppTheme.lightBg,
-              ),
-              onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
-            ),
-            const SizedBox(height: 10),
-            FilledButton(
-              onPressed: () => Navigator.of(ctx).pop(controlador.text.trim()),
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
+    builder: (ctx) => StatefulBuilder(
+      // El botón necesita su propio rebuild al teclear: sin el
+      // StatefulBuilder, `controlador.text` cambiaba pero el botón —
+      // calculado una sola vez al construirse la hoja— se quedaba diciendo
+      // "Omitir" para siempre, aunque ya hubiera un nombre escrito listo
+      // para confirmar.
+      builder: (ctx, setModalState) => SafeArea(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+              20, 4, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                titulo,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: AppTheme.lightText,
                 ),
               ),
-              child: Text(
-                controlador.text.trim().isEmpty ? 'Omitir' : 'Confirmar',
-                style: const TextStyle(fontWeight: FontWeight.w700),
+              const SizedBox(height: 14),
+              TextField(
+                controller: controlador,
+                autofocus: true,
+                textCapitalization: TextCapitalization.words,
+                maxLength: 80,
+                decoration: InputDecoration(
+                  hintText: hint ?? 'Escribe aquí (se conservan espacios y tildes)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.lightBg,
+                ),
+                onChanged: (_) => setModalState(() {}),
+                onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              FilledButton(
+                onPressed: () => Navigator.of(ctx).pop(controlador.text.trim()),
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: Text(
+                  controlador.text.trim().isEmpty ? 'Omitir' : 'Continuar',
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ),
@@ -434,6 +442,11 @@ class _PersonSequentialWizardSheetState
   static const _orange = AppTheme.brandPrimary;
   late String _personId;
   int _currentStep = 1;
+  // Al elegir una vez alto/bajo o flaco/gordo se oculta el otro extremo del
+  // mismo grupo; volver a tocar la opción elegida reabre el par para poder
+  // cambiarla, sin necesitar un estado "sin elegir" en el borrador.
+  bool _editarEstatura = false;
+  bool _editarComplexion = false;
 
   @override
   void initState() {
@@ -441,34 +454,59 @@ class _PersonSequentialWizardSheetState
     _currentStep = widget.startStep;
 
     final draft = ref.read(declarationDraftProvider);
-    final notifier = ref.read(declarationDraftProvider.notifier);
+    final esPersonaNueva =
+        widget.personId == null && !(draft.persons.isNotEmpty && widget.initialConcept == null);
 
     if (widget.personId != null) {
       _personId = widget.personId!;
     } else if (draft.persons.isNotEmpty && widget.initialConcept == null) {
       _personId = draft.persons.last.id;
     } else {
-      _personId = notifier.addPerson(role: widget.role);
+      // No se puede mutar el provider aquí sin conocer antes el id: se
+      // genera localmente (solo lectura, sin tocar el estado) y la
+      // creación real en el draft se hace en el primer frame ya montado.
+      // `build()` ya sabe mostrar una PersonEntity local con este id
+      // mientras tanto (ver más abajo).
+      _personId = 'p_${DateTime.now().microsecondsSinceEpoch}_${identityHashCode(this)}';
     }
 
+    String? genero, edad, complexion, estatura;
     if (widget.initialConcept != null) {
       final gloss = widget.initialConcept!.toUpperCase();
       if (_genderConcepts.contains(gloss)) {
-        notifier.updatePerson(_personId, gender: gloss);
+        genero = gloss;
         _currentStep = 2;
       } else if (_ageConcepts.contains(gloss)) {
-        notifier.updatePerson(_personId, ageApprox: gloss);
+        edad = gloss;
         _currentStep = 3;
       } else if (_buildConcepts.contains(gloss)) {
-        notifier.updatePerson(_personId, build: gloss);
+        complexion = gloss;
         _currentStep = 4;
       } else if (_heightConcepts.contains(gloss)) {
-        notifier.updatePerson(_personId, height: gloss);
+        estatura = gloss;
         _currentStep = 4;
       } else if (_clothingConcepts.contains(gloss)) {
         _currentStep = 4;
       }
     }
+
+    // Mutar `declarationDraftProvider` en pleno `initState` puede coincidir
+    // con el montaje de esta hoja modal mientras otros widgets que también
+    // lo observan (ConfiguredEntityChips, LiveDeclarationPreviewPanel,
+    // GuidedWizardStepper) siguen en su propio paso de construcción, lo que
+    // dispara "Tried to modify a provider while the widget tree was
+    // building". Se difiere la escritura al primer frame ya renderizado.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final notifier = ref.read(declarationDraftProvider.notifier);
+      if (esPersonaNueva) {
+        notifier.addPerson(role: widget.role, id: _personId);
+      }
+      if (genero != null) notifier.updatePerson(_personId, gender: genero);
+      if (edad != null) notifier.updatePerson(_personId, ageApprox: edad);
+      if (complexion != null) notifier.updatePerson(_personId, build: complexion);
+      if (estatura != null) notifier.updatePerson(_personId, height: estatura);
+    });
   }
 
   void _irAlPaso(int paso) {
@@ -504,7 +542,13 @@ class _PersonSequentialWizardSheetState
       notifier.updatePerson(_personId, build: complexion);
       AppToastManager.showSuccess(context, 'Complexión: $complexion');
     }
-    _irAlPaso(4);
+    // Estatura y complexión son ejes independientes (alguien puede ser alto
+    // Y flaco a la vez): elegir uno ya no avanza de paso solo, para que se
+    // pueda completar el otro eje antes de seguir con "SIGUIENTE PASO".
+    setState(() {
+      if (estatura != null) _editarEstatura = false;
+      if (complexion != null) _editarComplexion = false;
+    });
   }
 
   Future<void> _agregarPrenda(String concept) async {
@@ -527,14 +571,20 @@ class _PersonSequentialWizardSheetState
         PersonEntity(id: _personId, role: widget.role);
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-        child: SingleChildScrollView(
+      child: ConstrainedBox(
+        // Sin este tope, la hoja crecía con el contenido del paso (por
+        // ejemplo varias prendas agregadas) y los botones de navegación —
+        // incluido "FINALIZAR DESCRIPCIÓN" — terminaban fuera de la pantalla,
+        // alcanzables solo si se sabía que había que seguir desplazándose.
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.88),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Barra de Pasos Secuenciales (1 ➔ 2 ➔ 3 ➔ 4)
+              // Barra de Pasos Secuenciales (1 ➔ 2 ➔ 3 ➔ 4) — fija.
               _WizardStepIndicator(
                 currentStep: _currentStep,
                 onStepTap: (step) {
@@ -544,20 +594,25 @@ class _PersonSequentialWizardSheetState
 
               const SizedBox(height: 16),
 
-              // Contenido Dinámico por Paso
-              AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
-                child: switch (_currentStep) {
-                  1 => _buildPaso1Genero(person),
-                  2 => _buildPaso2Edad(person),
-                  3 => _buildPaso3Rasgos(person),
-                  _ => _buildPaso4Vestimenta(person),
-                },
+              // Único tramo que se desplaza: el contenido propio del paso
+              // activo. Los botones de abajo quedan siempre visibles.
+              Flexible(
+                child: SingleChildScrollView(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    child: switch (_currentStep) {
+                      1 => _buildPaso1Genero(person),
+                      2 => _buildPaso2Edad(person),
+                      3 => _buildPaso3Rasgos(person),
+                      _ => _buildPaso4Vestimenta(person),
+                    },
+                  ),
+                ),
               ),
 
               const SizedBox(height: 16),
 
-              // Botones de Navegación del Wizard
+              // Botones de Navegación del Wizard (fijos)
               Row(
                 children: [
                   if (_currentStep > 1) ...[
@@ -721,51 +776,81 @@ class _PersonSequentialWizardSheetState
 
   // ---- PASO 3: COMPLEXIÓN Y ESTATURA ---------------------------------------
   Widget _buildPaso3Rasgos(PersonEntity person) {
+    final estatura = person.height?.toUpperCase();
+    final complexion = person.build?.toUpperCase();
+
     return Column(
       key: const ValueKey('paso3'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const _StepHeader(
           title: 'Paso 3: Complexión y Estatura',
-          subtitle: '¿Cómo era físicamente?',
+          subtitle: 'Opcional: puedes elegir una estatura y una complexión',
           icon: Icons.accessibility_new_rounded,
         ),
-        const SizedBox(height: 16),
-        _OptionTile(
-          icon: Icons.height_rounded,
-          label: 'Alto / Alta',
-          isSelected: person.height?.toUpperCase() == 'ALTO',
-          onTap: () => _seleccionarRasgoFisico(estatura: 'ALTO'),
+        const SizedBox(height: 18),
+        const _GroupLabel('ESTATURA'),
+        const SizedBox(height: 8),
+        _buildParExclusivo(
+          valorActual: estatura,
+          mostrarAmbas: _editarEstatura,
+          onReabrir: () => setState(() => _editarEstatura = true),
+          opciones: const [
+            ('ALTO', 'Alto / Alta', Icons.height_rounded),
+            ('BAJO', 'Bajo / Baja', Icons.vertical_align_bottom_rounded),
+          ],
+          onSeleccionar: (v) => _seleccionarRasgoFisico(estatura: v),
         ),
-        const SizedBox(height: 10),
-        _OptionTile(
-          icon: Icons.vertical_align_bottom_rounded,
-          label: 'Bajo / Baja',
-          isSelected: person.height?.toUpperCase() == 'BAJO',
-          onTap: () => _seleccionarRasgoFisico(estatura: 'BAJO'),
-        ),
-        const SizedBox(height: 10),
-        _OptionTile(
-          icon: Icons.accessibility_rounded,
-          label: 'Delgado / Delgada (Flaco/a)',
-          isSelected: person.build?.toUpperCase() == 'FLACO',
-          onTap: () => _seleccionarRasgoFisico(complexion: 'FLACO'),
-        ),
-        const SizedBox(height: 10),
-        _OptionTile(
-          icon: Icons.accessibility_new_rounded,
-          label: 'Robusto / Gordo / Robusta',
-          isSelected: person.build?.toUpperCase() == 'GORDO',
-          onTap: () => _seleccionarRasgoFisico(complexion: 'GORDO'),
-        ),
-        const SizedBox(height: 10),
-        _OptionTile(
-          icon: Icons.help_outline_rounded,
-          label: 'Omitir rasgos físicos',
-          isSecondary: true,
-          onTap: () => _seleccionarRasgoFisico(),
+        const SizedBox(height: 18),
+        const _GroupLabel('COMPLEXIÓN'),
+        const SizedBox(height: 8),
+        _buildParExclusivo(
+          valorActual: complexion,
+          mostrarAmbas: _editarComplexion,
+          onReabrir: () => setState(() => _editarComplexion = true),
+          opciones: const [
+            ('FLACO', 'Delgado / Delgada', Icons.accessibility_rounded),
+            ('GORDO', 'Robusto / Robusta', Icons.accessibility_new_rounded),
+          ],
+          onSeleccionar: (v) => _seleccionarRasgoFisico(complexion: v),
         ),
       ],
+    );
+  }
+
+  /// Un par de opciones mutuamente excluyentes ("Alto"/"Bajo",
+  /// "Flaco"/"Gordo"): mientras no haya elección, o mientras se esté
+  /// reabriendo para cambiarla, se muestran ambas; en cuanto se elige una,
+  /// la otra desaparece y solo queda la elegida (tocarla de nuevo la reabre).
+  Widget _buildParExclusivo({
+    required String? valorActual,
+    required bool mostrarAmbas,
+    required VoidCallback onReabrir,
+    required List<(String, String, IconData)> opciones,
+    required ValueChanged<String> onSeleccionar,
+  }) {
+    if (valorActual == null || mostrarAmbas) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final (valor, etiqueta, icono) in opciones) ...[
+            _OptionTile(
+              icon: icono,
+              label: etiqueta,
+              isSelected: valorActual == valor,
+              onTap: () => onSeleccionar(valor),
+            ),
+            if (opciones.last.$1 != valor) const SizedBox(height: 10),
+          ],
+        ],
+      );
+    }
+    final elegido = opciones.firstWhere((o) => o.$1 == valorActual);
+    return _OptionTile(
+      icon: elegido.$3,
+      label: '${elegido.$2}  ·  toca para cambiar',
+      isSelected: true,
+      onTap: onReabrir,
     );
   }
 
@@ -923,6 +1008,24 @@ class _PersonSequentialWizardSheetState
           ),
         ],
       ],
+    );
+  }
+}
+
+class _GroupLabel extends StatelessWidget {
+  final String label;
+  const _GroupLabel(this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: const TextStyle(
+        fontSize: 11.5,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 0.8,
+        color: AppTheme.lightTextSub,
+      ),
     );
   }
 }

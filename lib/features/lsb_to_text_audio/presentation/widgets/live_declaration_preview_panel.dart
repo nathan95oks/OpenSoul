@@ -36,13 +36,25 @@ class _LiveDeclarationPreviewPanelState
 
   @override
   Widget build(BuildContext context) {
-    final draft = ref.watch(declarationDraftProvider);
     final selectedWords = ref.watch(sentenceProvider);
     final zonesState = ref.watch(semanticZonesProvider);
     final translationState = ref.watch(translationControllerProvider);
     final contextState = ref.watch(contextProvider);
+    // Este `watch` no se usa por su valor (se vuelve a leer dentro de
+    // buildFullDeclarationDraft), sino para que el panel se reconstruya
+    // cuando cambien persona/objeto/lugar/hecho editados directamente.
+    ref.watch(declarationDraftProvider);
 
-    // 1. Generación determinista formal en tiempo real
+    // 1. Generación determinista formal en tiempo real. Usa el borrador
+    // FUSIONADO (entidades + respuestas simples de zona), igual que al
+    // emitir: leer solo `declarationDraftProvider` aquí dejaba fuera el
+    // hecho elegido en la zona "hecho" (ROBAR/DAÑAR/ENGAÑAR no llaman a
+    // ningún setter del draft, solo PERDER/ESCAPAR lo hacen vía su modal de
+    // desambiguación), y sin `fact.action` el compositor nunca entraba a la
+    // rama que redacta el hecho ni la que arma la frase con los rasgos de
+    // la persona ya descritos — ambos parecían "saltarse" en la vista previa
+    // aunque si llegaban completos a la declaración final.
+    final draft = buildFullDeclarationDraft(ref);
     final liveText = _assembler.assembleStructured(draft);
     final hasContent = selectedWords.isNotEmpty ||
         !draft.location.isEmpty ||

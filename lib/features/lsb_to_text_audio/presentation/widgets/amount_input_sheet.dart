@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
@@ -7,7 +8,9 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/ap
 /// Modal Bottom Sheet accesible para captura de montos de dinero sustraídos o involucrados.
 ///
 /// Ofrece:
-/// - Teclado numérico táctil grande para digitar la cifra.
+/// - Campo de texto con el teclado numérico nativo del teléfono (la persona
+///   ya sabe usarlo; un teclado propio dibujado en pantalla es una barrera
+///   de accesibilidad más, no menos).
 /// - Botones de montos rápidos predefinidos (50, 100, 200, 500, 1000, 2000 Bs.).
 /// - Selector de moneda: Bolivianos (Bs.) o Dólares ($).
 /// - Botón principal accesible de 56dp para confirmar.
@@ -77,27 +80,6 @@ class _AmountInputSheetContentState
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  void _agregarDigito(String digito) {
-    if (_controller.text.length >= 8) return;
-    setState(() {
-      _controller.text = '${_controller.text}$digito';
-    });
-  }
-
-  void _borrarDigito() {
-    if (_controller.text.isEmpty) return;
-    setState(() {
-      _controller.text =
-          _controller.text.substring(0, _controller.text.length - 1);
-    });
-  }
-
-  void _limpiar() {
-    setState(() {
-      _controller.text = '';
-    });
   }
 
   void _fijarMonto(int monto) {
@@ -225,46 +207,58 @@ class _AmountInputSheetContentState
 
               const SizedBox(height: 14),
 
-              // Visor Numérico Principal Grande
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                decoration: BoxDecoration(
-                  color: AppTheme.lightBg,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: montoActual.isNotEmpty
-                        ? _orange
-                        : AppTheme.lightBorder,
-                    width: 2,
-                  ),
+              // Campo numérico con el teclado nativo del teléfono: se abre
+              // solo al mostrarse la hoja (autofocus) y filtra a solo
+              // dígitos, igual que el teclado táctil que reemplaza.
+              TextField(
+                controller: _controller,
+                autofocus: true,
+                keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(8),
+                ],
+                textAlign: TextAlign.center,
+                onChanged: (_) => setState(() {}),
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.5,
+                  color: AppTheme.lightText,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      montoActual.isEmpty ? '0' : montoActual,
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                        color: montoActual.isEmpty
-                            ? AppTheme.lightTextSub.withValues(alpha: 0.5)
-                            : AppTheme.lightText,
-                      ),
+                decoration: InputDecoration(
+                  hintText: '0',
+                  hintStyle: TextStyle(
+                    color: AppTheme.lightTextSub.withValues(alpha: 0.5),
+                  ),
+                  suffixText: displayMoneda,
+                  suffixStyle: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    color: _orange,
+                  ),
+                  filled: true,
+                  fillColor: AppTheme.lightBg,
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(
+                        color: AppTheme.lightBorder, width: 2),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(
+                      color: montoActual.isNotEmpty
+                          ? _orange
+                          : AppTheme.lightBorder,
+                      width: 2,
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      displayMoneda,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w800,
-                        color: _orange,
-                      ),
-                    ),
-                  ],
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(color: _orange, width: 2),
+                  ),
                 ),
               ),
 
@@ -309,15 +303,6 @@ class _AmountInputSheetContentState
                     ],
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 14),
-
-              // Teclado Numérico Táctil Accesible
-              _TecladoNumerico(
-                onDigito: _agregarDigito,
-                onBorrar: _borrarDigito,
-                onLimpiar: _limpiar,
               ),
 
               const SizedBox(height: 16),
@@ -416,81 +401,3 @@ class _MonedaChip extends StatelessWidget {
   }
 }
 
-class _TecladoNumerico extends StatelessWidget {
-  final ValueChanged<String> onDigito;
-  final VoidCallback onBorrar;
-  final VoidCallback onLimpiar;
-
-  const _TecladoNumerico({
-    required this.onDigito,
-    required this.onBorrar,
-    required this.onLimpiar,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        for (final fila in [
-          ['1', '2', '3'],
-          ['4', '5', '6'],
-          ['7', '8', '9'],
-          ['C', '0', '⌫'],
-        ]) ...[
-          Row(
-            children: [
-              for (final tecla in fila) ...[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.5),
-                    child: Material(
-                      color: AppTheme.lightSurface,
-                      borderRadius: BorderRadius.circular(14),
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(14),
-                        onTap: () {
-                          if (tecla == '⌫') {
-                            onBorrar();
-                          } else if (tecla == 'C') {
-                            onLimpiar();
-                          } else {
-                            onDigito(tecla);
-                          }
-                        },
-                        child: Container(
-                          height: 48,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: tecla == 'C' || tecla == '⌫'
-                                  ? AppTheme.brandPrimary.withValues(alpha: 0.3)
-                                  : AppTheme.lightBorder,
-                            ),
-                          ),
-                          child: tecla == '⌫'
-                              ? const Icon(Icons.backspace_outlined,
-                                  size: 20, color: AppTheme.brandPrimary)
-                              : Text(
-                                  tecla,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w800,
-                                    color: tecla == 'C'
-                                        ? AppTheme.brandPrimary
-                                        : AppTheme.lightText,
-                                  ),
-                                ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ],
-      ],
-    );
-  }
-}

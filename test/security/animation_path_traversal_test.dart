@@ -124,8 +124,13 @@ void main() {
       expect(victim.listSync(), isEmpty,
           reason: 'La escritura no puede alcanzar directorios hermanos.');
       // Lo que sí se escribió vive dentro de la caché y tiene nombre de hash.
+      // `split('/')` no basta en Windows, que separa con `\`; sin admitir
+      // ambos, el nombre de archivo real quedaba con el "cache\" del padre
+      // pegado delante y la aserción fallaba aunque el archivo sí viviera
+      // donde debía.
       for (final entity in cacheDir.listSync()) {
-        expect(entity.path.split('/').last, matches(RegExp(r'^[0-9a-f]{64}\.glb$')));
+        expect(entity.path.split(RegExp(r'[\\/]')).last,
+            matches(RegExp(r'^[0-9a-f]{64}\.glb$')));
       }
     });
   });
