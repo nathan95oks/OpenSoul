@@ -980,9 +980,14 @@ class LocalSentenceAssembler {
       return {unit};
     }
 
+    // _cardinales solo deletrea 1-9 ("un", "dos"...): un modal de cantidad
+    // ahora admite cualquier cifra (auditoría 2026-09, "hace 15 días"), y
+    // 10 en adelante se escribe en dígitos, que es como se dice de todos
+    // modos en español — el `!` aquí reventaba con cualquier número de dos
+    // cifras.
     final cardinal = count == '1'
         ? (spec.femenino ? 'una' : 'un')
-        : _cardinales[count]!;
+        : (_cardinales[count] ?? count);
     final medida = count == '1' ? spec.singular : spec.plural;
     final esPasado = _mirarAtras(r, contextId, tokens);
     r.timeIsFuture = !esPasado;

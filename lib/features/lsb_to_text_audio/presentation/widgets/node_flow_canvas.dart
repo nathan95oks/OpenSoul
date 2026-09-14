@@ -26,33 +26,46 @@ class NodeFlowCanvas extends ConsumerWidget {
     final maxPicks = activeZone?.maxPicks ?? 1;
     final picksInZone = zonesState.picksInActiveZone;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // 1. Tarjeta Hero de Pregunta Activa (Diseño Compacto y Limpio)
-          if (activeZone != null)
-            _HeroQuestionCard(
-              emoji: activeZone.emoji,
-              question: activeZone.question.isNotEmpty
-                  ? activeZone.question
-                  : activeZone.hint,
-              hint: activeZone.hint,
-              isOptional: activeZone.optional,
-              maxPicks: maxPicks,
-              currentPicks: picksInZone,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Cabecera fija: pregunta activa + fichas de lo ya configurado. No
+        // va dentro del scroll de la grilla para que, al desplazarse por
+        // muchas tarjetas, lo ya elegido no desaparezca de la vista.
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (activeZone != null)
+                _HeroQuestionCard(
+                  emoji: activeZone.emoji,
+                  question: activeZone.question.isNotEmpty
+                      ? activeZone.question
+                      : activeZone.hint,
+                  hint: activeZone.hint,
+                  isOptional: activeZone.optional,
+                  maxPicks: maxPicks,
+                  currentPicks: picksInZone,
+                ),
+              const SizedBox(height: 12),
+              const ConfiguredEntityChips(),
+            ],
+          ),
+        ),
+
+        // Única parte que se desplaza: la grilla de tarjetas de la pregunta
+        // activa.
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: const SuggestedGlossPanel(),
             ),
-
-          const SizedBox(height: 12),
-
-          // 2. Fichas de Entidades Configuradas
-          const ConfiguredEntityChips(),
-
-          // 3. Grilla Adaptativa de Señas LSB
-          const SuggestedGlossPanel(),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }

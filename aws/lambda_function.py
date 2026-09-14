@@ -655,7 +655,11 @@ def _resolve_time(analysis: dict, context_type: str, cards: list = ()) -> None:
         cardinal = "una" if spec["femenino"] else "un"
         medida = spec["singular"]
     else:
-        cardinal = _CARDINALES[cantidad]
+        # _CARDINALES solo deletrea 1-9; un modal de cantidad en el cliente
+        # ahora admite cualquier cifra ("hace 15 días"), y de dos cifras en
+        # adelante se escribe en dígitos, tal como se diría de todos modos —
+        # el acceso directo aquí lanzaba KeyError con cualquier número así.
+        cardinal = _CARDINALES.get(cantidad, cantidad)
         medida = spec["plural"]
 
     es_pasado = _time_direction_is_past(analysis, context_type, cards)

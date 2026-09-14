@@ -80,12 +80,15 @@ void main() {
 
   group('el contexto y su inferencia', () {
     test('existe la familia de Fase 1 con sus dos zonas', () {
+      // APELLIDO/CARNET/ANOS_EDAD no son tarjetas del catálogo oficial (solo
+      // el compositor las reconoce por seña, ver el resto de este archivo):
+      // el catálogo de tarjetas solo puede nombrar glosas reales.
       final ctx = contextById('identificacion');
       expect(ctx, isNotNull);
       expect(ctx!.zoneById('identidad')!.glossAllowlist,
-          containsAll(['NOMBRE', 'APELLIDO', 'CARNET', 'IDENTIDAD']));
+          containsAll(['NOMBRE', 'IDENTIDAD']));
       expect(ctx.zoneById('edad')!.glossAllowlist,
-          containsAll(['EDAD', 'ANOS_EDAD']));
+          containsAll(['EDAD']));
     });
 
     test('la pregunta del funcionario abre la zona correcta', () {

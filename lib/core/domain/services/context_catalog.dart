@@ -116,7 +116,12 @@ final identificacionContext = SemanticContext(
       emoji: '🪪',
       semanticWeight: 0.95,
       maxPicks: 3,
-      glossAllowlist: _dedupe(['NOMBRE', 'APELLIDO', 'PAPEL', 'IDENTIDAD', 'CARNET', 'SORDO', 'LEER', 'POCO', 'INTÉRPRETE']),
+      // APELLIDO y CARNET no son tarjetas reales del catálogo oficial (solo
+      // NOMBRE/PAPEL/IDENTIDAD lo son): el compositor ya las reconoce por
+      // reconocimiento de seña (ver local_sentence_assembler.dart), pero
+      // ofrecerlas aquí como tarjeta táctil inventaría una entrada de
+      // catálogo con procedencia que no existe.
+      glossAllowlist: _dedupe(['NOMBRE', 'PAPEL', 'IDENTIDAD', 'SORDO', 'LEER', 'POCO', 'INTÉRPRETE']),
       relatedZones: ['contacto', 'edad'],
     ),
     SemanticZone(
@@ -149,7 +154,9 @@ final identificacionContext = SemanticContext(
       emoji: '🎂',
       semanticWeight: 0.6,
       optional: true,
-      glossAllowlist: ['EDAD', 'ANOS_EDAD', 'JOVEN', 'ADULTO'],
+      // ANOS_EDAD tampoco es una tarjeta real del catálogo; mismo criterio
+      // que APELLIDO/CARNET arriba.
+      glossAllowlist: ['EDAD', 'JOVEN', 'ADULTO'],
     ),
   ],
 );
@@ -181,7 +188,11 @@ final availableContexts = <SemanticContext>[
         question: '¿Qué le ocurrió?',
         emoji: '⚡',
         semanticWeight: 0.95,
-        glossAllowlist: _dedupe(['ROBAR', 'PERDER', 'ESCAPAR', 'DAÑAR', 'ENGAÑAR', 'NO_SABER']),
+        // NO_SABER no tiene sentido aquí: es la pregunta fundacional del
+        // relato, y "no sé qué me pasó" no es una respuesta que la persona
+        // venga a declarar — a diferencia de "¿conoce a la persona?" o
+        // "¿cuándo ocurrió?", donde no saber sí es una respuesta real.
+        glossAllowlist: _dedupe(['ROBAR', 'PERDER', 'ESCAPAR', 'DAÑAR', 'ENGAÑAR']),
         contextTags: [EmotionalTag.amenaza],
         relatedZones: ['objetos', 'persona', 'lugar', 'tiempo'],
       ),
@@ -209,11 +220,12 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.85,
         optional: true,
         maxPicks: 6,
-        glossAllowlist: _dedupe([
-          'HOMBRE', 'MUJER', 'JOVEN', 'ADULTO', 'FLACO', 'GORDO',
-          'ALTO', 'BAJO', 'MOCHILA', 'GORRA', 'POLERA', 'PANTALÓN',
-          'CHAMARRA', 'LENTES', 'CABELLO', 'NEGRO', 'AZUL', 'ROJO',
-        ]),
+        // Solo el género inicia la ficha: tocar HOMBRE/MUJER abre el
+        // asistente secuencial (edad, complexión/estatura, vestimenta con
+        // color), que ya pregunta el resto paso a paso. Repetir esas mismas
+        // glosas como tarjetas sueltas aquí las mostraba todas de encuentro,
+        // confuso, porque el asistente vuelve a pedirlas una por una.
+        glossAllowlist: const ['HOMBRE', 'MUJER'],
         relatedZones: ['conocimiento', 'lugar', 'tiempo'],
       ),
       SemanticZone(
@@ -224,7 +236,9 @@ final availableContexts = <SemanticContext>[
         emoji: '👥',
         semanticWeight: 0.8,
         optional: true,
-        glossAllowlist: _dedupe(['SÍ', 'NO', 'NO_SABER', 'AMIGO', 'PAREJA', 'PARIENTE', 'HERMANO', 'VER']),
+        // VER ("ver") no es una respuesta a "¿conoce a esa persona?": ni es
+        // sí/no ni nombra un vínculo, como sí lo hacen AMIGO/PAREJA/etc.
+        glossAllowlist: _dedupe(['SÍ', 'NO', 'NO_SABER', 'AMIGO', 'PAREJA', 'PARIENTE', 'HERMANO']),
       ),
       SemanticZone(
         id: 'lugar',
@@ -270,15 +284,20 @@ final availableContexts = <SemanticContext>[
       SemanticZone(
         id: 'evidencia',
         label: 'Evidencia disponible',
-        hint: 'Fotos, video, factura u otro elemento de prueba',
+        hint: 'Fotos, video u otro elemento de prueba',
         question: '¿Tiene fotos, video u otro elemento de prueba?',
         emoji: '📎',
         semanticWeight: 0.65,
         optional: true,
         maxPicks: 6,
-        glossAllowlist: _dedupe([
-          'FOTOS', 'VIDEO', 'FILMAR', 'FACTURA', 'CAJA', 'PAPEL', 'MOSTRAR', 'PUEDO',
-        ]),
+        // FILMAR/CAJA/PAPEL/MOSTRAR/PUEDO no eran respuestas reales a "¿qué
+        // prueba tiene?": CAJA/PAPEL son objetos de otras preguntas, y
+        // FILMAR/MOSTRAR/PUEDO son verbos sueltos sin acción asociada aquí.
+        // FACTURA se mantiene: es evidencia concreta real del corpus (ver
+        // test/precision_ventanilla_test.dart). ESCRIBIR es el "otro": abre
+        // un teclado libre (ver su despacho en qualifier_sheets.dart) para
+        // nombrar cualquier prueba que no sea foto, video o factura.
+        glossAllowlist: const ['FOTOS', 'VIDEO', 'FACTURA', 'ESCRIBIR'],
         leadGloss: kEvidenceMarker,
       ),
       SemanticZone(

@@ -70,11 +70,14 @@ class DeclarationDraftNotifier extends Notifier<DeclarationDraft> {
 
   // ---- Personas y Atributos Anidados (Máquina de Estados) ---------------
 
-  String addPerson({required String role}) {
-    final id = _uniqueId('p');
-    final person = PersonEntity(id: id, role: role);
+  String addPerson({required String role, String? id}) {
+    // Permite al llamador fijar el id: cuando la creación se difiere al
+    // primer frame (para no mutar el provider en pleno montaje del widget),
+    // la UI ya necesitó ese id de forma síncrona para su primer render.
+    final personId = id ?? _uniqueId('p');
+    final person = PersonEntity(id: personId, role: role);
     state = _copy(persons: [...state.persons, person]);
-    return id;
+    return personId;
   }
 
   void removePerson(String personId) {
@@ -478,12 +481,17 @@ DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
   final ofreceMostrar = evidenciaAns.any(ofrecimiento.contains);
   final existingEvidence = [...entityDraft.evidence];
   for (final g in evidenciaAns) {
-    if (!ofrecimiento.contains(g) &&
-        !existingEvidence.any((e) => e.concept == g)) {
+    if (ofrecimiento.contains(g)) continue;
+    // ESCRIBIR es el "otro": lo que describe la prueba es el texto libre
+    // que se tecleó, no la palabra "escribir" en sí.
+    final concepto = g == 'ESCRIBIR'
+        ? (qualifiersOf('evidencia', 'ESCRIBIR')?.firstOrNull ?? g)
+        : g;
+    if (!existingEvidence.any((e) => e.concept == concepto)) {
       existingEvidence.add(
         EvidenceItem(
-          id: 'ev_$g',
-          concept: g,
+          id: 'ev_$concepto',
+          concept: concepto,
           availability: ConfirmationState.confirmed,
           offeredToShow: ofreceMostrar,
         ),

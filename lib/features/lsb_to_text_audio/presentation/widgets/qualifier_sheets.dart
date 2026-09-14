@@ -12,41 +12,114 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/en
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 
+/// Cuánto tiempo hace (o falta): teclado numérico nativo en vez de una
+/// grilla fija de 1 a 9 — así admite cualquier cifra ("hace 15 días", "hace
+/// 45 minutos"), no solo un dígito.
 Future<String?> mostrarSelectorCantidad(
   BuildContext context, {
   required String unidad,
 }) {
+  final controlador = TextEditingController();
+  const acento = AppTheme.brandPrimary;
   return showModalBottomSheet<String>(
     context: context,
+    isScrollControlled: true,
     showDragHandle: true,
-    builder: (context) => SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              '¿Cuántos/as $unidad?',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 10,
-              runSpacing: 10,
+    backgroundColor: AppTheme.lightSurface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (ctx) => StatefulBuilder(
+      builder: (ctx, setModalState) {
+        final n = controlador.text.trim();
+        final preview = n.isEmpty ? null : 'Hace $n $unidad';
+
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+                20, 4, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                for (var n = 1; n <= 9; n++)
-                  _Tecla(
-                    etiqueta: '$n',
-                    onTap: () => Navigator.of(context).pop('$n'),
+                Text(
+                  '¿Cuántos/as $unidad?',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 14),
+                TextField(
+                  controller: controlador,
+                  autofocus: true,
+                  textAlign: TextAlign.center,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(3),
+                  ],
+                  onChanged: (_) => setModalState(() {}),
+                  onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
                   ),
+                  decoration: InputDecoration(
+                    hintText: '0',
+                    suffixText: unidad,
+                    filled: true,
+                    fillColor: AppTheme.lightBg,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Atajos para las cifras más frecuentes; no reemplazan al
+                // teclado, solo ahorran el tecleo en el caso común.
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final valor in const [1, 2, 3, 5, 10, 15, 30])
+                      _Tecla(
+                        etiqueta: '$valor',
+                        onTap: () => setModalState(
+                            () => controlador.text = '$valor'),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                if (preview != null) ...[
+                  Text(
+                    preview,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: acento,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+                FilledButton(
+                  onPressed: n.isEmpty
+                      ? null
+                      : () => Navigator.of(ctx).pop(n),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: const Text('Confirmar',
+                      style: TextStyle(fontWeight: FontWeight.w700)),
+                ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     ),
   );
 }
@@ -277,6 +350,23 @@ Future<void> elegirGlosa(
   if (gloss == 'IDENTIDAD') {
     await DisambiguationModal.desambiguarIdentidad(context, ref);
     zonesNotifier.toggleAnswer(card.gloss);
+    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    return;
+  }
+
+  // ESCRIBIR es el "otro / escribe qué es" de una pregunta de opción
+  // múltiple (evidencia, etc.): sin este despacho quedaba como una glosa
+  // más sin abrir nada, así que lo que se quería nombrar libremente nunca
+  // se registraba.
+  if (gloss == 'ESCRIBIR') {
+    final texto = await mostrarTecladoTextoLibre(
+      context,
+      titulo: '¿Qué otro elemento tienes?',
+      hint: 'Ej: un recibo, una nota, un audio guardado',
+    );
+    if (texto == null || texto.isEmpty) return;
+    zonesNotifier.toggleAnswer(card.gloss);
+    zonesNotifier.appendQualifiers(card.gloss, [texto]);
     ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
     return;
   }

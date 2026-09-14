@@ -163,11 +163,12 @@ class HomeScreen extends ConsumerWidget {
             inferredContextName: wasInferred ? contextState.name as String : null,
           ),
         const GuidedWizardStepper(),
-        const Expanded(
-          child: SingleChildScrollView(
-            child: NodeFlowCanvas(),
-          ),
-        ),
+        // NodeFlowCanvas ya gestiona su propio scroll interno (solo en la
+        // grilla de tarjetas): envolverlo aquí en otro SingleChildScrollView
+        // hacía que la pregunta activa y las fichas ya configuradas se
+        // desplazaran junto con la grilla y se perdieran de vista al
+        // desplazarse por muchas opciones.
+        const Expanded(child: NodeFlowCanvas()),
         const LiveDeclarationPreviewPanel(),
       ],
     );
