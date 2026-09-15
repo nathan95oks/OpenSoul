@@ -231,8 +231,34 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
       if (changed) qualifiers = {...qualifiers, zoneId: zoneQualifiers};
     }
 
+    final order = state.visitedZoneOrder;
+    final idx = order.indexOf(zoneId);
+    List<String> newOrder = order;
+    Set<String> newVisited = state.visitedZoneIds;
+    Map<String, List<String>> newAnswers = {...state.zoneAnswers, zoneId: current};
+
+    // Solo la familia de preguntas interrogativas (dónde/quién/qué/cuándo)
+    // reenruta qué zona sigue según la respuesta: ahí sí tiene sentido
+    // invalidar las zonas ya respondidas más adelante si se cambia de
+    // pregunta. Aplicar esto a cualquier zona (p. ej. "evidencia" u "hecho"
+    // en una denuncia) borraba respuestas ya dadas en zonas sin ninguna
+    // relación solo por haber sido visitadas después en el recorrido.
+    final esFamiliaInterrogativa =
+        ctx?.id == 'preguntas' || zoneId == 'interrogativa';
+
+    if (esFamiliaInterrogativa && idx >= 0 && idx < order.length - 1) {
+      final abandoned = order.sublist(idx + 1);
+      newOrder = order.sublist(0, idx + 1);
+      newVisited = state.visitedZoneIds.difference(abandoned.toSet()).union({zoneId});
+      for (final abandonedZone in abandoned) {
+        newAnswers.remove(abandonedZone);
+      }
+    }
+
     state = state.copyWith(
-      zoneAnswers: {...state.zoneAnswers, zoneId: current},
+      visitedZoneOrder: newOrder,
+      visitedZoneIds: newVisited,
+      zoneAnswers: newAnswers,
       zoneQualifiers: qualifiers,
     );
   }
@@ -318,22 +344,33 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     final id = state.activeZoneId;
     if (id == null) return;
 
-    final order = state.visitedZoneOrder;
-    final idx = order.indexOf(id);
-    if (idx >= 0 && idx < order.length - 1) {
-      activateZone(order[idx + 1]);
-      return;
-    }
     final requested = state.pendingRequestedZones;
     if (requested.isNotEmpty) {
       activateZone(requested.first);
       return;
     }
+
     final soloPorCadena = _chainOnlyZoneIds();
-    for (final p in state.snapshot.orderedZones) {
-      if (p.zone.id == state.activeZoneId) continue;
+    final candidatos = state.snapshot.orderedZones
+        .where((p) =>
+            p.zone.id != id &&
+            !soloPorCadena.contains(p.zone.id))
+        .toList();
+
+    final order = state.visitedZoneOrder;
+    final idx = order.indexOf(id);
+
+    final topCandidate = candidatos.firstOrNull?.zone.id;
+    if (idx >= 0 && idx < order.length - 1) {
+      final nextInOrder = order[idx + 1];
+      if (topCandidate == null || topCandidate == nextInOrder || state.visitedZoneIds.contains(topCandidate)) {
+        activateZone(nextInOrder);
+        return;
+      }
+    }
+
+    for (final p in candidatos) {
       if (state.visitedZoneIds.contains(p.zone.id)) continue;
-      if (soloPorCadena.contains(p.zone.id)) continue;
       activateZone(p.zone.id);
       return;
     }

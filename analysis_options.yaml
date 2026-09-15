@@ -9,6 +9,16 @@
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  # tool/ son scripts de un solo uso (generar o auditar el diccionario,
+  # empalmar el léxico, etc.), no código de la app ni de las Lambdas: se
+  # ejecutan a mano desde la terminal y se descartan. Exigirles el mismo
+  # estándar de lint que a lib/ y test/ solo generaba ruido que nadie
+  # revisaba, hasta el punto de tapar con cientos de infos acumulados un
+  # archivo realmente roto (tool/generated_lexicon_block.dart, ver .gitignore).
+  exclude:
+    - tool/**
+
 linter:
   # The lint rules applied to this project can be customized in the
   # section below to disable rules from the `package:flutter_lints/flutter.yaml`

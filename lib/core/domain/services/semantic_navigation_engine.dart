@@ -79,6 +79,7 @@ class SemanticNavigationEngine {
         activeTags: activeTags,
         activeZoneId: activeZoneId,
         visitedZoneIds: visitedZoneIds,
+        selectedGlosses: selectedGlosses,
         selectedCards: selectedCards,
       );
       scored.add(ZonePriority(
@@ -167,9 +168,38 @@ class SemanticNavigationEngine {
     required Set<String> activeTags,
     required String? activeZoneId,
     required Set<String> visitedZoneIds,
+    required List<String> selectedGlosses,
     required List<LsbCard> selectedCards,
   }) {
     var score = zone.semanticWeight;
+
+    // Enrutamiento semántico directo para preguntas interrogativas
+    if (context.id == 'preguntas' || activeZoneId == 'interrogativa') {
+      final normGlosses = selectedGlosses
+          .map((g) => g
+              .toUpperCase()
+              .replaceAll('Á', 'A')
+              .replaceAll('É', 'E')
+              .replaceAll('Í', 'I')
+              .replaceAll('Ó', 'O')
+              .replaceAll('Ú', 'U'))
+          .toSet();
+
+      if (normGlosses.contains('DONDE') && zone.id == 'lugar_pregunta') {
+        score += 2.0;
+      } else if (normGlosses.contains('QUIEN') && zone.id == 'persona_pregunta') {
+        score += 2.0;
+      } else if ((normGlosses.contains('QUE') ||
+              normGlosses.contains('CUAL') ||
+              normGlosses.contains('COMO')) &&
+          zone.id == 'tema_pregunta') {
+        score += 2.0;
+      } else if (normGlosses.contains('CUANDO') && zone.id == 'tiempo_pregunta') {
+        score += 2.0;
+      } else if (normGlosses.contains('CUANTOS') && zone.id == 'cantidad_pregunta') {
+        score += 2.0;
+      }
+    }
 
     final tagOverlap = zone.contextTags.where(activeTags.contains).length;
     score += tagOverlap * 0.35;

@@ -5,6 +5,7 @@ import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
 import 'helpers/official_dictionary.dart';
 
@@ -219,6 +220,35 @@ void main() {
       expect(temas.any((x) => x.gloss == 'TRÁMITE'), true);
       expect(temas.any((x) => x.categoryId == 'Lugares'), false,
           reason: 'los lugares tienen su propia ramificación');
+    });
+
+    test('al cambiar de DONDE a QUIEN tras retroceder, la siguiente zona cambia a persona_pregunta', () {
+      final c = makeContainer();
+      c.read(contextProvider.notifier).setContext(_ctx('preguntas'));
+      final notifier = c.read(semanticZonesProvider.notifier);
+
+      expect(c.read(semanticZonesProvider).activeZoneId, 'interrogativa');
+
+      // 1. Elegir DONDE y avanzar
+      notifier.toggleAnswer('DÓNDE');
+      c.read(sentenceProvider.notifier).setWords(['DÓNDE']);
+      notifier.goToNextZone();
+      expect(c.read(semanticZonesProvider).activeZoneId, 'lugar_pregunta');
+      expect(c.read(semanticZonesProvider).activeZone?.question, contains('Dónde'));
+
+      // 2. Retroceder a interrogativa
+      notifier.goToPreviousZone();
+      expect(c.read(semanticZonesProvider).activeZoneId, 'interrogativa');
+
+      // 3. Deseleccionar DONDE y seleccionar QUIÉN
+      notifier.toggleAnswer('DÓNDE');
+      notifier.toggleAnswer('QUIÉN');
+      c.read(sentenceProvider.notifier).setWords(['QUIÉN']);
+
+      // 4. Avanzar: debe ir a persona_pregunta, no quedarse en lugar_pregunta
+      notifier.goToNextZone();
+      expect(c.read(semanticZonesProvider).activeZoneId, 'persona_pregunta');
+      expect(c.read(semanticZonesProvider).activeZone?.question, contains('hablar'));
     });
 
     test('los contextos directos no se reenrutan', () {
