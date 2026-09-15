@@ -66,3 +66,19 @@ node_modules/
 
 # Ruta al Flutter SDK local, generada por `flutter build`.
 android/local.properties
+
+# Fragmento intermedio que genera tool/generate_lexicon_block.dart para que
+# tool/assemble_local_sentence_assembler.dart lo empalme: no es Dart válido
+# por sí solo (es solo el cuerpo de un mapa) y `flutter analyze` lo analiza
+# igual que cualquier otro .dart, rompiendo el CI si queda versionado.
+/tool/generated_lexicon_block.dart
+
+# Exportaciones puntuales de tool/generate_csv.py y tool/generate_excel_csv.py
+# para revisar el catálogo de glosas en una hoja de cálculo: se regeneran a
+# demanda y no las usa la app (no están en pubspec.yaml), así que no hace
+# falta versionarlas.
+/glosas_opensoul.csv
+/glosas_analisis_excel.csv
+/docs/glosas_opensoul.csv
+/docs/glosas_analisis_excel.csv
+/assets/dictionary/glosas_opensoul.csv
