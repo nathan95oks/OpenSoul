@@ -130,25 +130,34 @@ class GlosasDevueltasPorElModelo(unittest.TestCase):
         # Sin letra suelta: una "A" sin nada en el texto que la explique no
         # es una glosa real, es ruido de deletreo huérfano — y por diseño
         # repair_coverage la descarta (ver clase RepairCoverage abajo). Este
-        # caso solo valida el formato (guion, guion bajo, tilde, dígito).
-        #
-        # El dígito sale como su nombre en LSB: GLOSS_ALIASES lo canoniza
-        # ("5" -> "CINCO") porque el avatar tiene la seña CINCO y no tiene
-        # ninguna llamada "5", así que dejar el dígito lo dejaría sin animar.
+        # caso solo valida el formato (guion bajo, tilde) de glosas que SÍ
+        # están en AVAILABLE_GLOSSES.
         resultado = lambda_text_to_lsb.post_process_glosses(
-            {
-                "glosses": [
-                    "ANIMAL-LLAMA",
-                    "PARTIDA_NACIMIENTO",
-                    "NIÑO",
-                    "5",
-                ]
-            },
+            {"glosses": ["AÑO_PASADO", "SEÑOR", "PÁGINA"]},
             text="da igual",
         )
         self.assertEqual(
+            resultado["glosses"], ["AÑO_PASADO", "SEÑOR", "PAGINA"],
+        )
+
+    def test_una_glosa_ficticia_bien_formada_no_sobrevive_como_seña(self):
+        # Auditoría 2026-09, ficha D: antes de validar pertenencia al
+        # catálogo, una cadena inventada pero con forma válida (mayúsculas,
+        # guiones) pasaba igual que una glosa real y quedaba etiquetada
+        # `available: false, fallback: dactilología` de la PALABRA ENTERA —
+        # como si "no tener animación" y "no ser una seña documentada" fueran
+        # el mismo problema. Ahora se deletrea letra por letra, sin fingir
+        # que "ANIMAL-LLAMA" es una unidad léxica válida.
+        resultado = lambda_text_to_lsb.post_process_glosses(
+            {"glosses": ["ANIMAL-LLAMA"]}, text="da igual",
+        )
+        self.assertEqual(
             resultado["glosses"],
-            ["ANIMAL-LLAMA", "PARTIDA_NACIMIENTO", "NIÑO", "CINCO"],
+            ["A", "N", "I", "M", "A", "L", "L", "L", "A", "M", "A"],
+        )
+        self.assertTrue(
+            any(i["accion"] == "concepto_sin_catalogo"
+                for i in resultado["fidelityFixes"])
         )
 
 
@@ -224,27 +233,30 @@ class GlosasAcentuadas(unittest.TestCase):
     """
 
     def test_una_glosa_acentuada_se_normaliza_en_vez_de_descartarse(self):
+        # PÁGINA es del catálogo real (Documentos); se comprueba que la tilde
+        # no le cueste la palabra ni la pertenencia al catálogo.
         resultado = lambda_text_to_lsb.post_process_glosses(
-            {"glosses": ["YO", "MÉDICO", "NECESITAR"]}, "necesito un médico"
+            {"glosses": ["YO", "PÁGINA", "NECESITAR"]}, "necesito una página"
         )
-        self.assertEqual(resultado["glosses"], ["YO", "MEDICO", "NECESITAR"])
+        self.assertEqual(resultado["glosses"], ["YO", "PAGINA", "NECESITAR"])
 
     def test_la_enie_no_es_un_acento_y_se_conserva(self):
         # Ñ es una letra del alfabeto dactilológico: colapsarla en N
-        # confundiría dos señas distintas.
+        # confundiría dos señas distintas. SEÑOR es del catálogo real
+        # (Identificación).
         resultado = lambda_text_to_lsb.post_process_glosses(
-            {"glosses": ["NIÑO"]}, "había un niño"
+            {"glosses": ["SEÑOR"]}, "había un señor"
         )
-        self.assertEqual(resultado["glosses"], ["NIÑO"])
+        self.assertEqual(resultado["glosses"], ["SEÑOR"])
 
     def test_los_alias_con_tilde_o_espacio_se_resuelven(self):
         # Se validaba la forma antes de consultar el alias, así que ninguna
         # de las variantes multipalabra de GLOSS_ALIASES llegaba a aplicarse.
+        # Todos estos alias apuntan a una glosa que SÍ está en el catálogo.
         casos = {
             "SÍ": "SI",
             "POR FAVOR": "POR_FAVOR",
             "ÓRGANO JUDICIAL": "ORGANO_JUDICIAL",
-            "¿CÓMO ESTÁS?": "COMO_ESTAS",
             "MÁS O MENOS": "MAS_O_MENOS",
         }
         for crudo, esperado in casos.items():
@@ -253,6 +265,22 @@ class GlosasAcentuadas(unittest.TestCase):
                     {"glosses": [crudo]}, "da igual"
                 )
                 self.assertEqual(resultado["glosses"], [esperado])
+
+    def test_alias_sin_respaldo_en_el_catalogo_se_deletrea(self):
+        # "¿CÓMO ESTÁS?" -> "COMO_ESTAS" es un alias de GLOSS_ALIASES, pero
+        # "COMO_ESTAS" nunca se agregó a AVAILABLE_GLOSSES ni al diccionario
+        # oficial (assets/dictionary/official_dictionary.json no lo tiene):
+        # es un alias a una seña que no existe. Antes de la ficha D esto
+        # pasaba como si fuera una traducción válida; ahora se deletrea, y
+        # queda documentado como pendiente (ver
+        # docs/Catalogo_Acepciones_Audio_a_LSB.md) en vez de fingirse resuelto.
+        resultado = lambda_text_to_lsb.post_process_glosses(
+            {"glosses": ["¿CÓMO ESTÁS?"]}, "da igual",
+        )
+        self.assertEqual(
+            resultado["glosses"],
+            list("COMOESTAS"),
+        )
 
 
 # La clase PropuestasSinAutenticacion se retiró junto con el endpoint que

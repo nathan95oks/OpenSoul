@@ -31,7 +31,7 @@ class _SpySignRepository implements AudioTranslationRepository {
   });
 
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) async {
+  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) async {
     receivedSituations.add(situation);
     return LsbTranslation(
       glosses: glossesByText[text] ?? const [],

@@ -168,12 +168,22 @@ OFFICIAL_LSB_CORPUS = AVAILABLE_GLOSSES
 # ===================================================================
 # DICCIONARIO DE GLOSAS DISPONIBLES EN EL AVATAR 3D
 # ===================================================================
-# Catálogo oficial de las 41 señas horneadas en 3D en avatar_test.glb
+# Catálogo oficial de las señas horneadas en 3D en avatar_test.glb.
+#
+# La I y la K del abecedario NO están: el modelo 3D del avatar no las trae
+# (ver el mismo hueco documentado en el cliente,
+# lib/core/domain/services/animation_url_resolver.dart, `available3DGlosses`).
+# Antes este set sí las incluía, así que el servidor afirmaba
+# `available: true` para una animación que el cliente nunca podía mostrar —
+# la discrepancia la resolvía el cliente por su cuenta, en silencio, en vez de
+# que el servidor reportara la disponibilidad real (auditoría 2026-09, ficha
+# E). Mientras no se hornee la I/K, se deletrean como el resto de letras sin
+# animación 3D.
 AVAILABLE_3D_GLOSSES = {
     # 1. Comunicación básica y control del diálogo (5)
     "HOLA", "PERMISO", "GRACIAS", "SI", "NO",
-    # 2. Abecedario Dactilológico LSB (27 letras)
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    # 2. Abecedario Dactilológico LSB (25 de 27 letras — sin I, sin K)
+    "A", "B", "C", "D", "E", "F", "G", "H", "J", "L", "M",
     "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
     # 3. Números LSB (10 dígitos)
     "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
@@ -224,17 +234,27 @@ GLOSS_ALIASES = {
     # AVAILABLE_3D_GLOSSES, así que la seña de sí/no o la palabra nunca se
     # reconocían en ningún lado.
     #
-    # Los dígitos sueltos sí necesitan un alias explícito: el avatar tiene la
-    # seña de cada número por su nombre en LSB (CINCO), no un signo aparte
-    # para el carácter "5", así que dejar el dígito tal cual lo dejaba sin
-    # animar.
-    "0": "CERO", "1": "UNO", "2": "DOS", "3": "TRES", "4": "CUATRO",
-    "5": "CINCO", "6": "SEIS", "7": "SIETE", "8": "OCHO", "9": "NUEVE",
+    # NO se alían los dígitos a su nombre en LSB ("5" -> "CINCO"): ese alias
+    # existió antes bajo la premisa de que el avatar anima el número por su
+    # nombre, pero ni el diccionario oficial (official_dictionary.json guarda
+    # el dígito "5", no la palabra "CINCO") ni AVAILABLE_3D_GLOSSES (que solo
+    # tiene los caracteres "0"-"9") respaldan esa premisa. El efecto real del
+    # alias era, sin que nada lo dijera, dejar CUALQUIER cifra sin animación:
+    # "CINCO" no está en ninguno de los dos catálogos, así que
+    # `resolve_animation_file` la marcaba `available: false` siempre — cuando
+    # el dígito "5" tal cual SÍ tenía animación. Quitar el alias devuelve la
+    # cifra a su forma documentada y con seña real (auditoría 2026-09, ficha
+    # D/animaciones).
     "TELEFONO": "CELULAR",
-    "BILLETERA": "BILLETES",
     "FOTOGRAFIA": "FOTOS",
-    "CORRER": "ESCAPAR",
     "DELGADO": "FLACO",
+    # BILLETERA -> BILLETES y CORRER -> ESCAPAR NO son alias: son equivalencias
+    # de significado que la app no puede afirmar (una billetera no es dinero;
+    # correr no implica huir). Como el catálogo tampoco tiene una seña propia
+    # para "billetera" ni para "correr" (sin implicar fuga), forzar el alias
+    # cambiaba el hecho declarado en vez de señalar el recurso faltante. Se
+    # deletrean en su lugar (ver `post_process_glosses`), que preserva el
+    # significado en vez de sustituirlo (auditoría 2026-09, ficha B).
 }
 
 def resolve_animation_file(gloss: str, animations: dict, text: str):
@@ -263,15 +283,33 @@ def get_avatar_animations() -> dict:
 
 LEGAL_DISAMBIGUATION_RULES = """
 REGLAS DE DESAMBIGUACIÓN JURÍDICA Y POLISEMIA EN LSB:
-- "llama" / "llamar" (Verbo llamar / citar): Mapear a "LLAMAR". (Ej: "Yo llamo al policía" -> ["YO", "POLICÍA", "LLAMAR"])
-- "fiscal" (Autoridad judicial): Mapear a "FISCAL".
-- "fiscalía" (Institución del Ministerio Público): Mapear a "FISCALIA".
+- "llamar"/"llamo"/"llamé" como VERBO (llamar por teléfono, citar a alguien):
+  Mapear a "LLAMAR". (Ej: "Yo llamo al policía" -> ["YO", "POLICÍA", "LLAMAR"])
+- "llama" como SUSTANTIVO (el animal, "la llama del campo"): NO tiene seña
+  propia en el catálogo. NO la mapees a "LLAMAR" — eso convertiría un animal
+  en una acción de llamar, que la frase no dice. Déjala fuera de "glosses"
+  para que se deletree.
+- "fiscal" (funcionario del Ministerio Público): NO existe una seña
+  documentada para esta persona — la única entrada "FISCAL" del corpus (M3)
+  es un falso amigo: corresponde al sentido escolar de "fiscal/público" y el
+  propio corpus PROHÍBE reutilizarla para el funcionario judicial
+  (docs/Corpus_Maestro_Unificado_LSB_v4_Auditado.md, filas 71/78). NO mapees
+  "fiscal" a "FISCAL". Déjalo fuera de "glosses" para que se deletree.
+- "fiscalía" (la institución): Mapear a "FISCALIA" (el catálogo la marca ella
+  misma como dactilológica, no como una seña propia — se deletreará igual).
 - "policía" (Oficial o institución): Mapear a "POLICÍA".
 - "teléfono / celular / móvil": Mapear a "CELULAR".
 - "plata / dinero / efectivo": Mapear a "BILLETES".
 - "carnet / cédula": Mapear a "PAPEL" + "IDENTIDAD".
 - "fotos / fotografía": Mapear a "FOTOS".
-- "huir / escapar / correr": Mapear a "ESCAPAR".
+- "huir / escapar": Mapear a "ESCAPAR".
+- "correr" (desplazarse corriendo, SIN implicar huida ni delito): NO tiene
+  seña propia en el catálogo. NO lo mapees a "ESCAPAR" ni a ningún otro verbo
+  de fuga — eso afirmaría un hecho que la frase no dice. Déjalo fuera de
+  "glosses" y repórtalo en "disambiguation" con "meaning": "sin_sena".
+- "billetera" (objeto que guarda dinero, NO es el dinero en sí): NO tiene seña
+  propia en el catálogo. NO lo mapees a "BILLETES" — eso afirmaría que se
+  trata de dinero. Repórtalo igual que "correr".
 """
 
 SITUATION_LABELS = {
@@ -310,11 +348,23 @@ Tu misión es transformar la frase en español a un ARREGLO ORDENADO DE GLOSAS L
    - No uses verbos auxiliares de ser/estar para identidad (ej: 'Yo soy abogado' -> ['YO', 'ABOGADO']).
 
 3. MORFOLOGÍA NEUTRA:
-   - Sustantivos y adjetivos en forma canónica ('niñas' -> ['HIJA'], 'muchos' -> ['MUCHO']).
+   - Sustantivos y adjetivos en forma canónica: singular/plural y género se
+     neutralizan a la forma del catálogo ('trabajadores' -> ['TRABAJADOR'],
+     'muchos' -> ['MUCHO']). Esto es solo forma gramatical: NUNCA cambies el
+     concepto ni añadas una relación (parentesco, edad, cantidad) que la
+     palabra original no afirma. 'niñas' es una edad, no una relación
+     familiar: si no hay evidencia de que sean hijas de alguien, NO uses
+     "HIJA" — dilo con un descriptor de edad o repórtalo como concepto sin
+     seña si no hay uno adecuado en el catálogo.
 
 4. ESTRUCTURA Y SINTAXIS LSB (ORDEN MORFOSINTÁCTICO CANÓNICO):
    - Estructura obligatoria: [TIEMPO] + [LUGAR] + [SUJETO / OBJETO] + [ADJETIVO] + [VERBO] + [NEGACIÓN / PREGUNTA].
-   - Marcadores de tiempo siempre al inicio: 'Ayer hablé con el fiscal' -> ['AYER', 'FISCALIA', 'FISCAL', 'HABLAR'].
+   - Marcadores de tiempo siempre al inicio: 'Ayer llegué a la fiscalía' ->
+     ['AYER', 'FISCALIA', 'LLEGAR']. NUNCA agregues "FISCALIA" (la
+     institución) si la frase solo menciona a la persona ("el fiscal"), ni
+     "FISCAL" para esa persona (ver la regla de "fiscal" más abajo): son
+     conceptos distintos y agregar uno que la frase no dijo es información
+     añadida, no traducción.
    - Marcadores de lugar van antes del sujeto u objeto: 'Me robaron el celular en la plaza' -> ['PLAZA', 'CELULAR', 'ROBAR'].
    - Negación al final de la cláusula: 'No puedo atender hoy' -> ['HOY', 'ATENDER', 'NO_PUEDO'] o ['HOY', 'ATENDER', 'PUEDO', 'NO'].
    - Preguntas e interrogativos al final: 
@@ -516,12 +566,20 @@ _PALABRA = re.compile(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{2,}")
 
 # Palabras que la LSB no signa y que por tanto pueden desaparecer sin que se
 # pierda contenido. Se excluyen del control de cobertura para no reinyectarlas.
+#
+# NO, SIN, O y NI NO están aquí a propósito (auditoría 2026-09, ficha C): son
+# negación y alternancia con carga semántica propia y seña propia en el
+# catálogo (NO, SIN no tiene seña pero SÍ cambia el hecho declarado — se deja
+# como palabra reconocida para que su pérdida se detecte en vez de tratarse
+# como una partícula vacía). Tratarlas como partículas vacías significaba que
+# "no presente el documento" y "presente el documento" pasaban el control de
+# cobertura igual de bien aunque el resultado hubiera perdido la negación.
 _PALABRAS_FUNCION = frozenset("""
 EL LA LOS LAS UN UNA UNOS UNAS AL DEL LO
-DE EN POR PARA CON SIN SOBRE ENTRE HASTA DESDE HACIA TRAS ANTE BAJO
-Y O U NI QUE QUE SE ME TE NOS LES LE SU MIS TUS SUS
+DE EN POR PARA CON SOBRE ENTRE HASTA DESDE HACIA TRAS ANTE BAJO
+U QUE QUE SE ME TE NOS LES LE SU MIS TUS SUS
 ES SON ERA ERAN FUE FUERON SER ESTAR ESTA ESTAN HAY HABER HA HAN
-MUY MAS TAN YA PERO SI NO
+MUY MAS TAN YA PERO SI
 """.split())
 
 
@@ -530,9 +588,24 @@ def recognize_input(text: str) -> list:
 
     No normaliza más allá de separar palabras: es el registro de lo dicho, y
     cualquier arreglo posterior se compara contra esto.
+
+    "SI" es la única entrada de _PALABRAS_FUNCION que cambia de significado
+    con la tilde: "si" (condición) no tiene seña propia y se descarta, pero
+    "sí" (afirmación) tiene su propia glosa (SÍ) y es contenido. Filtrar por
+    la forma sin tilde perdía la afirmación igual que la condición; aquí se
+    mira la palabra tal como se escribió, antes de quitarle la tilde, para no
+    confundir una con otra (ver docs/Catalogo_Acepciones_Audio_a_LSB.md).
+    Escrito sin tilde ("si" queriendo decir "sí"), sigue sin poder
+    distinguirse sin ver la cláusula completa: limitación conocida.
     """
-    return [w for w in _PALABRA.findall(text)
-            if remove_accents(w.upper()) not in _PALABRAS_FUNCION]
+    resultado = []
+    for w in _PALABRA.findall(text):
+        if w.upper() == "SÍ":
+            resultado.append(w)
+            continue
+        if remove_accents(w.upper()) not in _PALABRAS_FUNCION:
+            resultado.append(w)
+    return resultado
 
 
 def _clave(palabra: str) -> str:
@@ -540,17 +613,31 @@ def _clave(palabra: str) -> str:
 
 
 def _es_nombre_propio(palabra: str, text: str) -> bool:
-    """Mayúscula inicial en posición que no es principio de frase.
+    """Mayúscula inicial en alguna posición que no es principio de frase.
 
     Es la señal disponible sin diccionario de nombres. Se usa solo para
     *proteger* deletreos legítimos ("Isaac" -> I,S,A,A,C), nunca para crearlos.
+
+    Antes solo miraba la PRIMERA aparición de la palabra en el texto: en
+    "Ana vino. Ana declaró que..." la primera "Ana" abre oración y la función
+    devolvía False para las dos, aunque la segunda aparición sí prueba que es
+    un nombre. Ahora basta con que UNA aparición no esté al principio de una
+    oración. Si el nombre solo aparece una vez y justo al principio ("Ana
+    vino", sin nada más), sigue sin poder distinguirse de una palabra común
+    capitalizada por ir primera: esa ambigüedad requiere un diccionario de
+    nombres o el propio corpus, no una heurística de posición (ver
+    docs/Catalogo_Acepciones_Audio_a_LSB.md).
     """
     if not palabra[:1].isupper():
         return False
-    pos = text.find(palabra)
-    if pos <= 0:
-        return False
-    return text[:pos].strip()[-1:] not in ("", ".", "?", "!")
+    pos = 0
+    while True:
+        pos = text.find(palabra, pos)
+        if pos == -1:
+            return False
+        if text[:pos].strip()[-1:] not in ("", ".", "?", "!"):
+            return True
+        pos += 1
 
 
 def _cubre(gloss: str, palabra: str) -> bool:
@@ -645,13 +732,176 @@ def repair_coverage(glosses: list, text: str) -> tuple:
     return resultado, incidencias
 
 
-def post_process_glosses(bedrock_result: dict, text: str) -> dict:
+# ---------------------------------------------------------------------------
+# Pertenencia real al catálogo (auditoría 2026-09, ficha D)
+# ---------------------------------------------------------------------------
+# `_VALID_GLOSS` solo comprueba FORMA (mayúsculas, dígitos, guiones): una
+# glosa inventada mientras tenga esa forma la pasaba igual que una real. Este
+# conjunto es la pertenencia real, normalizada igual que `canonical_gloss`
+# (sin tildes) para no rechazar por acento una glosa legítima ("CÓMO" del
+# catálogo frente al "COMO" que produce `canonical_gloss`).
+_AVAILABLE_GLOSSES_NORM = {strip_gloss_accents(g) for g in AVAILABLE_GLOSSES}
+
+
+def _spell_out(word: str) -> list:
+    """[word] deletreada letra por letra, preservando la Ñ.
+
+    A diferencia de `_clave` (que usa `remove_accents` y por tanto convierte
+    Ñ en N para comparar), aquí cada letra es una glosa dactilológica en sí
+    misma: la Ñ deletreada tiene que seguir siendo Ñ.
+    """
+    return [c for c in strip_gloss_accents(word.upper()) if c.isalpha()]
+
+
+def enforce_catalog_membership(glosses: list) -> tuple:
+    """Ninguna glosa que no esté en el catálogo sale como si fuera una seña real.
+
+    Antes, `post_process_glosses` solo comprobaba FORMA: una glosa bien escrita
+    pero inventada ("ROBOXYZ", o un alias retirado como "BILLETERA" tras la
+    ficha B) se marcaba `available: false` y se ofrecía en dactilología de la
+    palabra entera de todos modos, como si "no tener animación" y "no ser una
+    seña documentada" fueran el mismo problema. Aquí se separan: lo que no
+    está en el catálogo se deletrea letra por letra (con su propia glosa por
+    letra, todas sí catalogadas) y se dice explícitamente que ese concepto no
+    tiene seña, en vez de dejarlo pasar con apariencia de traducción válida.
+    """
+    resultado, incidencias = [], []
+    for gloss in glosses:
+        clave = strip_gloss_accents(gloss.upper())
+        if clave in _AVAILABLE_GLOSSES_NORM or len(clave) <= 1:
+            resultado.append(gloss)
+            continue
+        resultado.extend(_spell_out(gloss))
+        incidencias.append({
+            "palabra": gloss,
+            "accion": "concepto_sin_catalogo",
+            "detalle": "No es una glosa documentada; se deletreó en vez de "
+                       "inventar o forzar una seña parecida.",
+        })
+    return resultado, incidencias
+
+
+# ---------------------------------------------------------------------------
+# Desambiguación pendiente para términos polisémicos documentados
+# (auditoría 2026-09, ficha "AUTO" — sección 5 del encargo)
+# ---------------------------------------------------------------------------
+# Reglas deterministas y locales, no otra llamada al modelo: para el conjunto
+# reducido de términos aquí listados, la resolución de acepción se hace (o se
+# pregunta) sin depender de que Bedrock la acierte, y sin poder ser anulada
+# por lo que Bedrock haya devuelto. Ampliar esta tabla es la vía para cubrir
+# más términos (BANCO, MÓVIL, EFECTIVO quedan pendientes — ver
+# docs/Catalogo_Acepciones_Audio_a_LSB.md): cada uno necesita revisar primero
+# si el catálogo tiene una seña distinta por acepción, que hoy no es el caso.
+_AMBIGUOUS_TERMS = {
+    "AUTO": {
+        "question": '"auto" puede ser un vehículo o un documento judicial '
+                     "(resolución). ¿Cuál de los dos se quiso decir?",
+        "options": [
+            {"id": "vehiculo", "label": "Vehículo"},
+            {"id": "resolucion", "label": "Documento judicial (resolución)"},
+        ],
+        "context_signals": {
+            "resolucion": {"JUEZ", "JUZGADO", "EMITIO", "EMITIR", "EMITIDO",
+                           "RESOLUCION", "EXPEDIENTE", "SENTENCIA", "DICTO",
+                           "DICTAR", "DICTAMINO"},
+            "vehiculo": {"ESTACIONADO", "ESTACIONAR", "MANEJAR", "CONDUCIR",
+                         "PLACA", "CHOFER", "CHOCO", "CHOCAR", "VOLANTE",
+                         "GASOLINA", "ESTACIONO"},
+        },
+        # Seña resultante por acepción, o None si el catálogo no tiene una
+        # seña propia para esa acepción (se deletrea en vez de fabricarla).
+        "resolved_gloss": {"resolucion": "RESOLUCIÓN", "vehiculo": None},
+    },
+}
+
+
+def resolve_ambiguous_terms(text: str, resolved_senses: dict = None) -> tuple:
+    """Decide o pregunta el sentido de los términos de `_AMBIGUOUS_TERMS`.
+
+    Devuelve (glosas_forzadas, ambigüedades_pendientes):
+      - glosas_forzadas: {término: glosa_o_None} para los términos presentes
+        en el texto cuyo sentido ya se pudo fijar (por `resolved_senses` o por
+        una señal de contexto de un solo lado).
+      - ambigüedades_pendientes: lista de preguntas para los términos
+        presentes en el texto sin evidencia suficiente para elegir.
+    """
+    resolved_senses = resolved_senses or {}
+    texto_norm = remove_accents(text.upper())
+    señales = {remove_accents(w.upper()) for w in _PALABRA.findall(text)}
+
+    forzadas, pendientes = {}, []
+    for termino, spec in _AMBIGUOUS_TERMS.items():
+        if not re.search(rf"\b{termino}\b", texto_norm):
+            continue
+
+        elegido = resolved_senses.get(termino) or resolved_senses.get(termino.lower())
+        if elegido in spec["resolved_gloss"]:
+            forzadas[termino] = spec["resolved_gloss"][elegido]
+            continue
+
+        lados = {lado for lado, palabras_lado in spec["context_signals"].items()
+                  if palabras_lado & señales}
+        if len(lados) == 1:
+            forzadas[termino] = spec["resolved_gloss"][next(iter(lados))]
+        else:
+            pendientes.append({
+                "term": termino,
+                "question": spec["question"],
+                "options": spec["options"],
+                "resolved": False,
+            })
+
+    return forzadas, pendientes
+
+
+# ---------------------------------------------------------------------------
+# Pérdidas verificables de negación y cifras (auditoría 2026-09, ficha F)
+# ---------------------------------------------------------------------------
+# Dos comprobaciones deterministas y demostrables sobre la salida, igual que
+# `repair_coverage`: no son un analizador semántico y no deciden si el resto
+# de la traducción es fiel. Antes NO, SIN, O y NI eran palabras función (no se
+# comprobaba su pérdida) y las cifras nunca entraban en `recognize_input`
+# (su regex no incluye dígitos), así que ninguna de las dos pérdidas se podía
+# detectar nunca, sin importar qué tan mal tradujera el modelo.
+_NEGACION_GLOSAS = {"NO", "NO_PUEDO", "NO_SABER", "NO_ESTAR_DE_ACUERDO", "PROHIBIDO"}
+_NEGACION_PALABRAS = {"NO", "SIN", "NI"}
+_DIGITO_A_GLOSA = {
+    "0": "CERO", "1": "UNO", "2": "DOS", "3": "TRES", "4": "CUATRO",
+    "5": "CINCO", "6": "SEIS", "7": "SIETE", "8": "OCHO", "9": "NUEVE",
+}
+
+
+def detect_fidelity_losses(glosses: list, text: str) -> list:
+    """Incidencias cuando el texto tenía negación o cifras que la salida no."""
+    incidencias = []
+    claves_salida = {_clave(g) for g in glosses}
+
+    palabras_texto = {remove_accents(w.upper()) for w in _PALABRA.findall(text)}
+    if palabras_texto & _NEGACION_PALABRAS and not (claves_salida & _NEGACION_GLOSAS):
+        incidencias.append({
+            "accion": "negacion_perdida",
+            "detalle": "El texto tiene una negación (no/sin/ni) que ninguna "
+                       "glosa de la traducción representa.",
+        })
+
+    for digito in sorted(set(re.findall(r"\d", text))):
+        glosa_num = _DIGITO_A_GLOSA[digito]
+        if _clave(glosa_num) not in claves_salida and digito not in claves_salida:
+            incidencias.append({
+                "accion": "cifra_perdida",
+                "detalle": f"El texto tiene la cifra '{digito}' que no "
+                           "aparece en la traducción.",
+            })
+    return incidencias
+
+
+def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict = None) -> dict:
     """
     Valida las glosas retornadas por Bedrock contra el diccionario
     del avatar y marca cuáles requieren dactilología.
     """
     raw_glosses = bedrock_result.get("glosses", [])
-    disambiguation = bedrock_result.get("disambiguation", [])
+    disambiguation = list(bedrock_result.get("disambiguation", []))
 
     animations = get_avatar_animations()
 
@@ -672,9 +922,40 @@ def post_process_glosses(bedrock_result: dict, text: str) -> dict:
             continue
         limpias.append(candidata)
 
+    # Términos polisémicos documentados: la decisión (o la pregunta) manda
+    # sobre lo que haya dicho Bedrock, no al revés.
+    forzadas, pendientes = resolve_ambiguous_terms(text, resolved_senses)
+    for termino, glosa_forzada in forzadas.items():
+        glosa_norm = _clave(glosa_forzada) if glosa_forzada else None
+        limpias = [g for g in limpias if _clave(g) != termino
+                   and (glosa_norm is None or _clave(g) != glosa_norm)]
+        # Si el catálogo no tiene seña para esta acepción (glosa_forzada es
+        # None), se conserva el término tal cual para que se deletree más
+        # abajo (`enforce_catalog_membership`) en vez de desaparecer: la
+        # persona dijo "auto" y ese hecho no se pierde solo porque el avatar
+        # no tenga la seña de vehículo.
+        limpias.append(glosa_forzada or termino)
+    for item in pendientes:
+        termino = item["term"]
+        # Ningún sentido se afirma mientras esté pendiente: se retira el
+        # término tal cual y cualquier glosa que el modelo haya derivado de él
+        # para alguna de sus acepciones documentadas.
+        glosas_en_juego = {_clave(g) for g in
+                           _AMBIGUOUS_TERMS[termino]["resolved_gloss"].values() if g}
+        limpias = [g for g in limpias
+                   if _clave(g) != termino and _clave(g) not in glosas_en_juego]
+        disambiguation.append(item)
+
     # Reconocimiento frente a generación: aquí se comprueba que la
     # representación no haya perdido ninguna palabra de lo que se dijo.
     raw_glosses, incidencias = repair_coverage(limpias, text)
+
+    # Ninguna glosa que salga de aquí puede ser una invención: lo que no está
+    # documentado se deletrea en vez de presentarse como una seña real.
+    raw_glosses, incidencias_catalogo = enforce_catalog_membership(raw_glosses)
+    incidencias += incidencias_catalogo
+
+    incidencias += detect_fidelity_losses(raw_glosses, text)
     if incidencias:
         logger.info("Fidelidad corregida: %s", incidencias)
 
@@ -697,10 +978,26 @@ def post_process_glosses(bedrock_result: dict, text: str) -> dict:
             "animationFile": animation_file,
         })
 
+    # Dos estados distintos a propósito (sección 7 del encargo): un significado
+    # pendiente de aclarar (`semanticStatus`) es un problema diferente de una
+    # representación LSB incompleta (`representationStatus`). Resolver uno no
+    # resuelve el otro, así que no comparten un solo campo de "éxito".
+    semantic_status = "needs_clarification" if pendientes else "resolved"
+    perdida_no_recuperable = any(
+        inc.get("accion") in ("negacion_perdida", "cifra_perdida") for inc in incidencias
+    )
+    representation_status = (
+        "partial" if any(not g["available"] for g in processed) or perdida_no_recuperable
+        else "complete"
+    )
+
     return {
         "glosses": [g["gloss"] for g in processed],
         "glossDetails": processed,
         "disambiguation": disambiguation,
+        "pendingClarifications": pendientes,
+        "semanticStatus": semantic_status,
+        "representationStatus": representation_status,
         # Reconocimiento: qué se dijo, separado de cómo se representa.
         "inputWords": recognize_input(text),
         "fidelityFixes": incidencias,
@@ -723,19 +1020,24 @@ def build_response(status_code: int, body: dict) -> dict:
     }
 
 
-def generate_cache_key(text: str, situation: str = None) -> str:
+def generate_cache_key(text: str, situation: str = None, resolved_senses: dict = None) -> str:
     """
     Genera un hash MD5 determinista de la frase normalizada.
 
-    La situación forma parte de la clave porque forma parte del resultado:
-    la misma frase traducida bajo 'denuncia_robo' y bajo 'violencia' puede
-    producir glosas distintas, y servir una por la otra desde el caché sería
-    devolver la traducción de otra conversación.
+    La situación y el sentido elegido para un término ambiguo forman parte de
+    la clave porque forman parte del resultado: la misma frase traducida bajo
+    'denuncia_robo' y bajo 'violencia', o con "auto" resuelto como vehículo o
+    como resolución, puede producir glosas distintas — servir una por la otra
+    desde el caché sería devolver la traducción de otra conversación o de otro
+    significado ya elegido por otra persona.
     """
     normalized = text.lower().strip()
     normalized = re.sub(r'\s+', ' ', normalized)
     if situation:
         normalized = f"{normalized}|{situation}"
+    if resolved_senses:
+        senses_key = ",".join(f"{k}={v}" for k, v in sorted(resolved_senses.items()))
+        normalized = f"{normalized}|senses:{senses_key}"
     # El modelo forma parte de la clave: cambiar BEDROCK_MODEL_ID cambia la
     # traducción, y servir la del modelo anterior sería devolver el resultado
     # de un sistema que ya no está en producción.
@@ -827,10 +1129,13 @@ def lambda_handler(event, context):
     Punto de entrada de la función Lambda.
     Recibe una petición HTTP POST con:
       { "text": "frase en español", "context": "legal",
-        "situation": "denuncia_robo" }   # situation es opcional
+        "situation": "denuncia_robo",     # opcional
+        "resolvedSenses": {"AUTO": "vehiculo"} }  # opcional, ver
+                                                    # `pendingClarifications`
     Retorna:
       { "glosses": [...], "glossDetails": [...], "disambiguation": [...],
-        "situation": "denuncia_robo" }
+        "pendingClarifications": [...], "semanticStatus": "resolved",
+        "representationStatus": "complete", "situation": "denuncia_robo" }
     """
 
     # 0. Manejar preflight CORS
@@ -872,7 +1177,19 @@ def lambda_handler(event, context):
     if situation and situation not in SITUATION_LABELS:
         logger.warning("Situación desconocida ignorada: %s", situation)
         situation = None
-    cache_key = generate_cache_key(text, situation)
+
+    # Sentido ya elegido por la persona para un término ambiguo de una
+    # solicitud anterior (p. ej. {"AUTO": "vehiculo"}), tras responder la
+    # pregunta de `pendingClarifications`. Se valida su forma: no es un campo
+    # libre que pueda inyectar una glosa arbitraria.
+    resolved_senses_raw = body.get("resolvedSenses")
+    resolved_senses = {}
+    if isinstance(resolved_senses_raw, dict):
+        for k, v in resolved_senses_raw.items():
+            if isinstance(k, str) and isinstance(v, str) and len(k) <= 32 and len(v) <= 32:
+                resolved_senses[k.strip().upper()] = v.strip().lower()
+
+    cache_key = generate_cache_key(text, situation, resolved_senses)
 
     logger.info(
         "Texto recibido: '%s' | Contexto: %s | Situación: %s | Hash: %s",
@@ -907,7 +1224,7 @@ def lambda_handler(event, context):
         })
 
     # 6. Post-procesar las glosas
-    result = post_process_glosses(bedrock_result, text)
+    result = post_process_glosses(bedrock_result, text, resolved_senses)
 
     # 7. Guardar en caché para que la próxima vez sea una lectura
 
