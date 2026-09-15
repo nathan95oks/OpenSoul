@@ -139,6 +139,60 @@ class AudioToLsbScreen extends ConsumerWidget {
                   ),
                 ),
 
+                if (state.status == AudioTranslationStatus.needsClarification)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppTheme.brandElectric.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppTheme.brandElectric.withValues(alpha: 0.5)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'ANTES DE TRADUCIR, UNA PRECISIÓN:',
+                            style: TextStyle(
+                              color: AppTheme.brandLight,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          for (final pendiente in state.pendingClarifications) ...[
+                            Text(
+                              pendiente.question,
+                              style: const TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: [
+                                for (final opcion in pendiente.options)
+                                  OutlinedButton(
+                                    onPressed: () => controller.resolveClarification(
+                                      pendiente.term,
+                                      opcion.id,
+                                    ),
+                                    child: Text(opcion.label),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                          TextButton(
+                            onPressed: controller.cancelClarification,
+                            child: const Text('Prefiero reformular la frase'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
                 if (state.status == AudioTranslationStatus.error)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),

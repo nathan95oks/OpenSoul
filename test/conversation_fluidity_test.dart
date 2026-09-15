@@ -35,7 +35,7 @@ class _GatedSignRepository implements AudioTranslationRepository {
   void release() => _gate.complete();
 
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) async {
+  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) async {
     calls++;
     await _gate.future;
     return LsbTranslation(
@@ -48,7 +48,7 @@ class _GatedSignRepository implements AudioTranslationRepository {
 
 class _FailingSignRepository implements AudioTranslationRepository {
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) async {
+  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) async {
     throw TimeoutException('sin red');
   }
 }
@@ -57,7 +57,7 @@ class _CountingSignRepository implements AudioTranslationRepository {
   final List<String> received = [];
 
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) async {
+  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) async {
     received.add('$text|${situation ?? ''}');
     return LsbTranslation(
       glosses: const ['ROBAR'],
@@ -235,7 +235,7 @@ class _EmptyThenFull implements AudioTranslationRepository {
   _EmptyThenFull(this.onCall);
 
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) async {
+  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) async {
     onCall();
     if (!_served) {
       _served = true;

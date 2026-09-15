@@ -34,7 +34,7 @@ import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 /// nadie.
 class _StubSignRepository implements AudioTranslationRepository {
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) async {
+  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) async {
     return LsbTranslation(
       glosses: const ['TU', 'CELULAR', 'ROBAR'],
       animationUrl: '',

@@ -8,10 +8,17 @@ class AudioTranslationRepositoryImpl implements AudioTranslationRepository {
   AudioTranslationRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) async {
+  Future<LsbTranslation> translateText(
+    String text, {
+    String? situation,
+    Map<String, String>? resolvedSenses,
+  }) async {
     try {
-      final model =
-          await remoteDataSource.translateText(text, situation: situation);
+      final model = await remoteDataSource.translateText(
+        text,
+        situation: situation,
+        resolvedSenses: resolvedSenses,
+      );
       return model;
     } catch (e) {
       throw Exception('Failed to translate text: $e');

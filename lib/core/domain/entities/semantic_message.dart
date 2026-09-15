@@ -20,6 +20,65 @@ class SemanticDisambiguation {
       );
 }
 
+/// Una opción concreta que la persona puede elegir para resolver
+/// [PendingClarification.term] (p. ej. "Vehículo" para el término "AUTO").
+class ClarificationOption {
+  final String id;
+  final String label;
+
+  const ClarificationOption({required this.id, required this.label});
+
+  factory ClarificationOption.fromJson(Map<String, dynamic> json) =>
+      ClarificationOption(
+        id: (json['id'] ?? '').toString(),
+        label: (json['label'] ?? '').toString(),
+      );
+}
+
+/// Una decisión de significado pendiente que la persona emisora tiene que
+/// resolver antes de que la traducción se dé por completa (sección 4/5 del
+/// encargo "Audio/Texto -> LSB"): a diferencia de [SemanticDisambiguation]
+/// (una explicación posterior de lo que ya se decidió), esto es una pregunta
+/// sin responder todavía, con sus alternativas.
+class PendingClarification {
+  final String term;
+  final String question;
+  final List<ClarificationOption> options;
+
+  const PendingClarification({
+    required this.term,
+    required this.question,
+    required this.options,
+  });
+
+  factory PendingClarification.fromJson(Map<String, dynamic> json) =>
+      PendingClarification(
+        term: (json['term'] ?? '').toString(),
+        question: (json['question'] ?? '').toString(),
+        options: [
+          for (final o in (json['options'] as List? ?? const []))
+            ClarificationOption.fromJson(Map<String, dynamic>.from(o as Map)),
+        ],
+      );
+}
+
+/// Estado del SIGNIFICADO, separado del estado de la REPRESENTACIÓN en LSB
+/// (sección 7 del encargo): tener uno resuelto no resuelve el otro.
+enum SemanticStatus { resolved, needsClarification }
+
+/// Estado de la REPRESENTACIÓN en LSB del significado ya resuelto: puede
+/// haber quedado incompleta (dactilología, glosa sin animación) aunque el
+/// significado esté clarísimo.
+enum RepresentationStatus { complete, partial }
+
+SemanticStatus semanticStatusFromJson(String? raw) =>
+    raw == 'needs_clarification'
+        ? SemanticStatus.needsClarification
+        : SemanticStatus.resolved;
+
+RepresentationStatus representationStatusFromJson(String? raw) =>
+    raw == 'partial' ? RepresentationStatus.partial : RepresentationStatus.complete;
+
 enum SpeakerRole { deaf, hearing }
 
 enum MessageSource { cards, speech, text }

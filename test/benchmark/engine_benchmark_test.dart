@@ -210,6 +210,6 @@ String _pct(double value) => '${(value * 100).toStringAsFixed(1)}%';
 /// El banco solo evalúa la dirección LSB → texto; la contraria no se usa.
 class _UnusedSignRepository implements AudioTranslationRepository {
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation}) =>
+  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) =>
       throw UnimplementedError();
 }

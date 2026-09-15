@@ -5,7 +5,11 @@ import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
 abstract class RemoteAudioDataSource {
-  Future<LsbTranslationModel> translateText(String text, {String? situation});
+  Future<LsbTranslationModel> translateText(
+    String text, {
+    String? situation,
+    Map<String, String>? resolvedSenses,
+  });
 }
 
 class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
@@ -25,8 +29,11 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
   });
 
   @override
-  Future<LsbTranslationModel> translateText(String text,
-      {String? situation}) async {
+  Future<LsbTranslationModel> translateText(
+    String text, {
+    String? situation,
+    Map<String, String>? resolvedSenses,
+  }) async {
     final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_TEXT_API_URL');
 
     try {
@@ -39,6 +46,8 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
               'context': 'legal',
               if (situation != null && situation.isNotEmpty)
                 'situation': situation,
+              if (resolvedSenses != null && resolvedSenses.isNotEmpty)
+                'resolvedSenses': resolvedSenses,
             }),
           )
           .timeout(requestTimeout);
@@ -111,6 +120,9 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           'animationUrls': finalUrls,
           'animationGlosses': effectiveGlosses,
           'disambiguation': decodedResponse['disambiguation'],
+          'pendingClarifications': decodedResponse['pendingClarifications'],
+          'semanticStatus': decodedResponse['semanticStatus'],
+          'representationStatus': decodedResponse['representationStatus'],
         });
       } else {
         throw Exception('AWS API Error: ${response.statusCode} - ${response.body}');

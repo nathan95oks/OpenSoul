@@ -6,7 +6,15 @@ class TranslateTextUseCase {
 
   TranslateTextUseCase(this.repository);
 
-  Future<LsbTranslation> execute(String text) async {
-    return await repository.translateText(text);
+  Future<LsbTranslation> execute(
+    String text, {
+    String? situation,
+    Map<String, String>? resolvedSenses,
+  }) async {
+    return await repository.translateText(
+      text,
+      situation: situation,
+      resolvedSenses: resolvedSenses,
+    );
   }
 }

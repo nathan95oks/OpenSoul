@@ -81,6 +81,33 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
     }
   }
 
+  /// Locale a usar con `speech_to_text`. Se resuelve contra lo que el
+  /// dispositivo realmente ofrece (`_speechToText.locales()`): antes estaba
+  /// fijo en 'es_ES' sin comprobar si existía, y un 'es_BO' disponible en el
+  /// dispositivo nunca se usaba porque nada lo pedía.
+  Future<String?> _resolveLocaleId() async {
+    try {
+      final locales = await _speechToText.locales();
+      String? porPrefijo(String prefijo) {
+        for (final l in locales) {
+          if (l.localeId.toLowerCase().startsWith(prefijo)) return l.localeId;
+        }
+        return null;
+      }
+
+      final systemLocale = await _speechToText.systemLocale();
+      return porPrefijo('es_bo') ??
+          porPrefijo('es_es') ??
+          porPrefijo('es') ??
+          systemLocale?.localeId;
+    } catch (_) {
+      // Sin lista de locales disponible, se deja que el motor use su
+      // predeterminado en vez de fijar uno que puede no existir en este
+      // dispositivo.
+      return null;
+    }
+  }
+
   Future<void> _startRecording() async {
     try {
       FocusScope.of(context).unfocus();
@@ -93,7 +120,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           }
         },
         onError: (error) {
-          if (_isRecording) _stopRecording();
+          if (_isRecording) _stopRecording(porError: true);
         },
       );
 
@@ -104,6 +131,8 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
         });
 
         ref.read(audioTranslationControllerProvider.notifier).setRecordingState();
+
+        final localeId = await _resolveLocaleId();
 
         await _speechToText.listen(
           onResult: (result) {
@@ -117,7 +146,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
             ref.read(audioTranslationControllerProvider.notifier)
                 .updateRecognizedText(result.recognizedWords);
           },
-          listenOptions: stt.SpeechListenOptions(localeId: 'es_ES'),
+          listenOptions: localeId == null
+              ? null
+              : stt.SpeechListenOptions(localeId: localeId),
         );
       } else {
         _warn('Reconocimiento de voz no disponible');
@@ -137,32 +168,49 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
 
   String _lastRecognizedWords = '';
 
-  Future<void> _stopRecording() async {
+  /// Detiene el dictado SIN enviar la traducción. Antes, terminar de grabar
+  /// —por el botón, porque el motor decidió que ya terminó ("done"/
+  /// "notListening"), o por un error de reconocimiento— confirmaba y enviaba
+  /// el texto reconocido directamente, sin darle a la persona oportunidad de
+  /// revisarlo o corregirlo; un error de reconocimiento podía así enviar una
+  /// transcripción incorrecta como si fuera lo que se dijo (sección 10 del
+  /// encargo "Audio/Texto -> LSB"). Ahora el texto reconocido queda en el
+  /// campo, editable, y hace falta el botón de enviar para traducirlo — igual
+  /// que si se hubiera escrito a mano.
+  Future<void> _stopRecording({bool porError = false}) async {
     if (!_isRecording) return;
     try {
       await _speechToText.stop();
+    } catch (_) {
+      // Aunque falle al detener el motor, el estado local de grabación debe
+      // reflejar que ya no se está escuchando.
+    }
+
+    final text = _controller.text.trim().isNotEmpty
+        ? _controller.text.trim()
+        : _lastRecognizedWords.trim();
+
+    if (mounted) {
       setState(() {
         _isRecording = false;
+        _controller.text = text;
+        _controller.selection = TextSelection.fromPosition(
+          TextPosition(offset: _controller.text.length),
+        );
       });
-
-      final text = _controller.text.trim().isNotEmpty
-          ? _controller.text.trim()
-          : _lastRecognizedWords.trim();
-
-      _controller.clear();
-      _lastRecognizedWords = '';
-
-      if (text.isEmpty) {
-        ref
-            .read(audioTranslationControllerProvider.notifier)
-            .processAudioAsText('');
-      } else {
-        (widget.onSpeechSubmit ?? widget.onSubmit)(text);
-      }
-    } catch (_) {
-      if (mounted) setState(() => _isRecording = false);
-      _warn('No se pudo completar el dictado. Intenta de nuevo.');
     }
+    _lastRecognizedWords = '';
+
+    if (text.isEmpty) {
+      ref.read(audioTranslationControllerProvider.notifier).processAudioAsText('');
+      if (porError) {
+        _warn('No se reconoció nada. Puedes intentar de nuevo o escribir el mensaje.');
+      }
+    } else if (porError) {
+      _warn('Revisa el texto reconocido antes de enviarlo: puede tener errores.');
+    }
+    // Sin error y con texto: se deja tal cual en el campo para que la
+    // persona lo revise y confirme con el botón de enviar.
   }
 
   void _submit() {
