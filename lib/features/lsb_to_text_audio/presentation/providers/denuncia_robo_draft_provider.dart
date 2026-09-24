@@ -31,12 +31,9 @@ class DeclarationDraftNotifier extends Notifier<DeclarationDraft> {
 
   // ---- Hecho y Desambiguación -------------------------------------------
 
-  /// Numero maximo de hechos por relato.
-  ///
-  /// Dos, porque es lo que la pregunta "¿Que ocurrio?" admite hoy. No es un
-  /// `maxPicks` de la zona: subir aquel dejaria elegir dos glosas pero
-  /// seguiria guardando una sola accion.
-  static const int maxFacts = 2;
+  /// Acciones que admite un relato. La misma constante que usa la zona
+  /// «hecho» del catálogo, para que no puedan separarse.
+  static const int maxFacts = DeclarationDraftLimits.maxFacts;
 
   /// Anade o quita el hecho de [action], sin tocar los demas.
   ///

@@ -78,7 +78,7 @@ class ConversationHandoff {
       ref.read(semanticZonesProvider.notifier).reset();
     }
 
-    ref.read(selectedTabProvider.notifier).select(AppTab.cards);
+    ref.read(selectedTabProvider.notifier).select(AppTabId.cards);
   }
 
   /// Devuelve el control al oyente: vuelve al chat, donde la pantalla pone el
@@ -87,7 +87,7 @@ class ConversationHandoff {
   /// El lanzamiento no se toca: si la persona sorda vuelve a las tarjetas sin
   /// que el oyente haya escrito nada, sigue siendo el mismo encargo.
   void handBackToHearing() =>
-      ref.read(selectedTabProvider.notifier).select(AppTab.conversation);
+      ref.read(selectedTabProvider.notifier).select(AppTabId.conversation);
 }
 
 final conversationHandoffProvider =

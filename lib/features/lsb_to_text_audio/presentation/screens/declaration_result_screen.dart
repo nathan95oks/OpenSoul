@@ -256,7 +256,7 @@ class DeclarationResultScreen extends ConsumerWidget {
                               .pauseAudio();
                           ref
                               .read(selectedTabProvider.notifier)
-                              .select(AppTab.conversation);
+                              .select(AppTabId.conversation);
                         },
                       ),
                       const SizedBox(height: 10),
@@ -329,7 +329,7 @@ class DeclarationResultScreen extends ConsumerWidget {
     }
 
     final session = ref.read(cardsFlowSessionProvider);
-    ref.read(selectedTabProvider.notifier).select(AppTab.conversation);
+    ref.read(selectedTabProvider.notifier).select(AppTabId.conversation);
     ref.read(resultVisibleProvider.notifier).hide();
     await session.reset();
   }

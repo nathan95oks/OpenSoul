@@ -54,7 +54,7 @@ class HomeScreen extends ConsumerWidget {
               icon: const Icon(Icons.arrow_back, color: AppTheme.brandPrimary),
               tooltip: 'Volver a la conversación',
               onPressed: () =>
-                  ref.read(selectedTabProvider.notifier).select(AppTab.conversation),
+                  ref.read(selectedTabProvider.notifier).select(AppTabId.conversation),
             )
           : null,
       bottom: PreferredSize(
