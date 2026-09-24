@@ -105,7 +105,7 @@ void main() {
       await c.read(surfaceSessionProvider).enter(FlowSurface.standaloneCards);
 
       expect(c.read(cardsFlowLaunchProvider).purpose,
-          CardsFlowPurpose.standaloneDeclaration);
+          CardsFlowPurpose.standaloneIntervention);
       expect(c.read(pendingReplyProvider), isNull,
           reason: 'En A no se responde a nadie: la pregunta del chat no '
               'puede encabezar esta pantalla.');

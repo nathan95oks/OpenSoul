@@ -4,6 +4,7 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/entities/generated_step.dart';
+import 'package:lsb_legal_app/core/domain/services/candidate_engine.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
@@ -72,29 +73,28 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   // reordena.
   final generado = ref.watch(generatedStepProvider).asData?.value;
 
-  // Orden de prioridad, de más fiable a menos:
-  //   1. el nodo del corpus que corresponde a lo que dijo el oyente,
-  //   2. la reordenación que propone Bedrock,
-  //   3. el orden del catálogo por zona.
-  // Las tres son reordenaciones: ninguna hace desaparecer una opción válida
-  // que el catálogo local sí ofrecía. Antes, si la IA devolvía un
-  // subconjunto, ese subconjunto sustituía por completo a `locales` y el
-  // resto de respuestas correctas se volvían inalcanzables.
-  final delCorpus = ref.watch(dialogueMatchProvider)?.node.offerableGlosses ??
-      const <String>[];
-  final delModelo = generado?.options ?? const <String>[];
-  if (delCorpus.isEmpty && delModelo.isEmpty) return locales;
+  // El orden lo decide el motor de candidatos, que aplica la regla del
+  // negocio: el nodo del corpus manda, la sugerencia del modelo ordena
+  // dentro de lo ya alcanzable, y el perfil institucional y la necesidad son
+  // señales de prioridad que nunca eliminan una respuesta correcta.
+  final nodo = ref.watch(dialogueMatchProvider)?.node;
+  final perfil = ref.watch(activeProfileProvider);
+  final necesidad = ref.watch(activeNeedProvider);
+  final yaRespondidas = ref
+          .watch(semanticZonesProvider)
+          .activeAnswers
+          .toSet();
 
-  final porGlosa = {for (final c in locales) c.gloss: c};
-  final vistas = <String>{};
-  final reordenadas = <LsbCard>[
-    for (final g in [...delCorpus, ...delModelo])
-      if (porGlosa.containsKey(g) && vistas.add(g)) porGlosa[g]!,
-  ];
-  for (final c in locales) {
-    if (vistas.add(c.gloss)) reordenadas.add(c);
-  }
-  return reordenadas;
+  final ordenadas = const CandidateEngine().rank(
+    available: locales,
+    node: nodo,
+    profile: perfil,
+    need: necesidad,
+    alreadyAnswered: yaRespondidas,
+    remoteSuggestion: generado?.options ?? const [],
+  );
+
+  return [for (final c in ordenadas) c.card];
 });
 
 final _localCandidatesProvider = FutureProvider<List<LsbCard>>((ref) async {

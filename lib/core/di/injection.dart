@@ -8,6 +8,7 @@ import 'package:lsb_legal_app/core/data/datasources/remote_lexicon_datasource.da
 import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/dialogue_graph_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/business_catalog_datasource.dart';
 import 'package:lsb_legal_app/core/data/repositories/animation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/audio_translation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/caching_audio_translation_repository.dart';
@@ -27,9 +28,13 @@ import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_engine.dart';
+import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
+export 'package:lsb_legal_app/core/presentation/session/active_need_provider.dart'
+    show activeNeedProvider, ActiveNeedNotifier;
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart';
 
 final httpClientProvider = Provider<http.Client>((ref) {
   final client = http.Client();
@@ -96,6 +101,31 @@ final pendingReplyProvider = Provider<ReplyPrompt?>((ref) => null);
 
 final dialogueGraphDataSourceProvider = Provider<DialogueGraphDataSource>(
   (ref) => DialogueGraphDataSource(),
+);
+
+final businessCatalogDataSourceProvider = Provider<BusinessCatalogDataSource>(
+  (ref) => BusinessCatalogDataSource(),
+);
+
+/// Perfiles institucionales y necesidades, cargados una sola vez.
+///
+/// Se sirve vacío mientras carga y ante un asset ilegible: sin perfiles se
+/// trabaja como atención general, que es un uso válido y no un error.
+final businessCatalogProvider = FutureProvider<BusinessCatalog>(
+  (ref) => ref.watch(businessCatalogDataSourceProvider).load(),
+);
+
+/// El perfil de la institución que atiende ahora mismo.
+final activeProfileProvider = Provider<InstitutionProfile>((ref) {
+  final catalogo = ref.watch(businessCatalogProvider).asData?.value;
+  if (catalogo == null) return InstitutionProfile.unknown;
+  return catalogo.profileById(ref.watch(activeProfileIdProvider));
+});
+
+/// Id del perfil activo. Lo fija el modo ventanilla; en personal es opcional
+/// y puede quedarse en `null` sin que eso bloquee nada.
+final activeProfileIdProvider = Provider<String?>(
+  (ref) => ref.watch(usageSessionProvider).institutionProfileId,
 );
 
 /// El banco de nodos conversacionales, cargado una sola vez.

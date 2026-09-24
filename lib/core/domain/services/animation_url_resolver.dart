@@ -22,15 +22,36 @@ class AnimationUrlResolver {
     'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ'
   };
 
+  /// Los numerales se hornearon con su nombre en letras, pero el catalogo los
+  /// ofrece como digitos.
+  ///
+  /// `official_dictionary.json` trae las entradas '0'..'9' y
+  /// [available3DGlosses] declara CERO..DIEZ, asi que la comparacion directa
+  /// nunca casaba. Como ademas esas entradas tienen `animationFile` no vacio,
+  /// tampoco caian por la rama del marcador de posicion: se devolvia la URL
+  /// real y se le pedia al visor una animacion llamada '0', que el modelo no
+  /// tiene. El backend ya hacia esta traduccion
+  /// (`lambda_text_to_lsb.py`, `_DIGITO_A_GLOSA`); faltaba en el cliente.
+  static const Map<String, String> digitToNumeral = {
+    '0': 'CERO', '1': 'UNO', '2': 'DOS', '3': 'TRES', '4': 'CUATRO',
+    '5': 'CINCO', '6': 'SEIS', '7': 'SIETE', '8': 'OCHO', '9': 'NUEVE',
+  };
+
   /// Glosas cuyo nombre de animacion dentro del .glb no coincide con la glosa.
   static const Map<String, String> animationNameOverrides = {
     'Ñ': 'ENE',
   };
 
+  /// Forma canonica de la glosa para buscarla entre las animaciones.
+  static String canonicalFor(String gloss) {
+    final clean = stripAccents(gloss.toUpperCase().trim());
+    return digitToNumeral[clean] ?? clean;
+  }
+
   /// Nombre con el que hay que pedirle la sena al `model-viewer`.
   static String animationNameFor(String gloss) {
-    final clean = stripAccents(gloss.toUpperCase().trim());
-    return animationNameOverrides[clean] ?? clean;
+    final canonical = canonicalFor(gloss);
+    return animationNameOverrides[canonical] ?? canonical;
   }
 
   static const Set<String> wordsToSpell = {
@@ -66,7 +87,9 @@ class AnimationUrlResolver {
       resolveAll(gloss: gloss, animationFile: animationFile).first;
 
   List<String> resolveAll({required String gloss, String? animationFile}) {
-    final cleanGloss = stripAccents(gloss.toUpperCase().trim());
+    // Se compara por la forma canonica: los digitos del catalogo tienen que
+    // encontrar la animacion que se horneo con su nombre en letras.
+    final cleanGloss = canonicalFor(gloss);
 
     if (available3DGlosses.contains(cleanGloss)) {
       return ['${baseUrl}avatar_test.glb'];
