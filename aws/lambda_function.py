@@ -2514,7 +2514,103 @@ def _es_pregunta(texto: str) -> bool:
     return "¿" in texto or texto.strip().endswith("?")
 
 
-def _generation_is_safe(cards: list, generated: str, base: str) -> tuple:
+# Marcas de quién huyó, por papel. Si el relato dice que escapó el
+# sospechoso, el texto refinado no puede decir que escapó el declarante: son
+# dos relatos distintos con las mismas palabras.
+_ESCAPE_MARKERS = {
+    "suspect": ("sospechoso se dio a la fuga", "persona se dio a la fuga",
+                "se dio a la fuga", "el ladron escapo", "el escapo"),
+    "victim": ("logre escapar", "pude escapar", "el declarante logro escapar",
+               "yo escape"),
+    "thirdParty": ("otra persona se dio a la fuga",
+                   "una tercera persona escapo", "un tercero escapo"),
+}
+
+# Cómo se reconoce que el texto AFIRMA cada acción.
+_ACTION_ASSERTIONS = {
+    "ROBAR": ("robo", "robaron", "me robo", "sustrajo", "sustraccion"),
+    "PERDER": ("perdi", "extravie", "he extraviado", "perdido"),
+    "GOLPEAR": ("agredio", "me agredio", "golpeo", "agresion"),
+    "AMENAZAR": ("amenazo", "amenaza"),
+    "ENGAÑAR": ("engano", "me engano", "estafa"),
+    "DAÑAR": ("dano", "danos"),
+    "ESCAPAR": ("escapo", "escape", "fuga", "huida"),
+}
+
+# Marcas de duda. Si el relato declaraba incertidumbre, el texto tiene que
+# conservarla: "creo que" no es lo mismo que afirmarlo.
+_UNCERTAINTY_MARKERS = ("no estoy seguro", "creo que", "no recuerdo",
+                        "no se si", "posiblemente", "quiza")
+
+_NEGATION_MARKERS = ("no es cierto", "no ", "ningun", "nadie", "nada")
+
+
+def _asserts_action(plano: str, accion: str) -> bool:
+    """Si [plano] afirma la acción [accion]."""
+    for marca in _ACTION_ASSERTIONS.get(accion.upper(), ()):
+        if marca in plano:
+            return True
+    return False
+
+
+def relations_are_preserved(facts: list, generated: str) -> tuple:
+    """Comprueba que el refinamiento conserve las RELACIONES, no las palabras.
+
+    Encontrar las mismas palabras no demuestra nada: «me robaron y yo escapé»
+    y «me robaron y el ladrón escapó» comparten todas, y no dicen lo mismo.
+    Aquí se comprueba quién hizo qué, qué se negó y qué quedó en duda.
+
+    Devuelve (conserva, motivo).
+    """
+    if not facts:
+        return True, ""
+
+    plano = _normalizar(generated)
+
+    # 1. Ningún hecho negado puede aparecer afirmado.
+    for f in facts:
+        if not f.get("negated"):
+            continue
+        if _asserts_action(plano, f["action"]):
+            hay_negacion = any(m in plano for m in _NEGATION_MARKERS)
+            if not hay_negacion:
+                return False, (
+                    f"afirma {f['action']}, que se habia declarado negado")
+
+    # 2. La incertidumbre no se convierte en afirmación.
+    for f in facts:
+        if f.get("certainty") not in ("uncertain", "unknown"):
+            continue
+        if _asserts_action(plano, f["action"]) and not any(
+                m in plano for m in _UNCERTAINTY_MARKERS):
+            return False, (
+                f"afirma {f['action']}, que se habia declarado con duda")
+
+    # 3. Quién escapó se conserva.
+    for f in facts:
+        if f["action"] != "ESCAPAR" or f.get("negated"):
+            continue
+        rol = f.get("actorRole", "unknown")
+        if rol == "unknown":
+            continue
+        propias = _ESCAPE_MARKERS.get(rol, ())
+        ajenas = [m for otro, marcas in _ESCAPE_MARKERS.items()
+                  if otro != rol for m in marcas]
+        dice_lo_suyo = any(m in plano for m in propias)
+        dice_lo_ajeno = any(m in plano for m in ajenas)
+        if dice_lo_ajeno and not dice_lo_suyo:
+            return False, "cambia quien escapo"
+
+    # 4. No se afirma una sustraccion que nadie declaro.
+    acciones = {f["action"] for f in facts if not f.get("negated")}
+    if not (acciones & ROBBERY_ACTIONS) and _asserts_action(plano, "ROBAR"):
+        return False, "introduce un robo que nadie declaro"
+
+    return True, ""
+
+
+def _generation_is_safe(cards: list, generated: str, base: str,
+                        facts: list = ()) -> tuple:
     """Cobertura, no-invención y preservación del acto comunicativo.
     Espejo de `isBackendDegenerate` del cliente.
 
@@ -2576,11 +2672,19 @@ def _generation_is_safe(cards: list, generated: str, base: str) -> tuple:
     if len(generated.split()) > max(24, len(base.split()) * 2):
         return False, "demasiado largo frente a los hechos"
 
+    # Y lo que las palabras no dicen: quién hizo qué, qué se negó y qué quedó
+    # en duda. Un texto puede contener todas las señas y haber cambiado de
+    # protagonista.
+    conserva, motivo = relations_are_preserved(list(facts), generated)
+    if not conserva:
+        return False, motivo
+
     return True, ""
 
 
 def generate_with_bedrock(cards: list, analysis: dict, base_sentence: str,
-                          context_type: str, institution_type: str = "") -> tuple:
+                          context_type: str, institution_type: str = "",
+                          facts: list = ()) -> tuple:
     """Redacción final con Bedrock, anclada y validada.
 
     Devuelve (texto, validado). Ante cualquier duda —Bedrock apagado, error de
@@ -2606,7 +2710,7 @@ def generate_with_bedrock(cards: list, analysis: dict, base_sentence: str,
         return base_sentence, False
 
     texto = (texto or "").strip().strip('"').strip()
-    seguro, motivo = _generation_is_safe(cards, texto, base_sentence)
+    seguro, motivo = _generation_is_safe(cards, texto, base_sentence, facts)
     if not seguro:
         # Sin el texto descartado: puede contener el mismo contenido sensible
         # que se está rechazando (auditoría 2026-09, hallazgo de logging).
@@ -2828,9 +2932,23 @@ def build_response(status_code: int, body: dict) -> dict:
     return {"statusCode": status_code, "headers": CORS_HEADERS,
             "body": json.dumps(body, ensure_ascii=False)}
 
+# Versión del generador determinista.
+#
+# Entra en la clave de caché porque una respuesta guardada con un generador
+# anterior puede estar MAL. La versión 2 corrige que ESCAPAR se redactara como
+# un robo, que `actorRole` no se leyera y que el `declaration` se descartara
+# fuera de `denuncia_robo`: todo lo cacheado con la 1 puede contener esos
+# errores, y servirlo tras desplegar la corrección es dejar el fallo vivo en
+# los casos más frecuentes, que son justo los que están en caché.
+#
+# Subir este número al cambiar el generador invalida lo anterior sin tener que
+# vaciar el bucket a mano.
+GENERATOR_VERSION = 2
+
+
 def generate_cache_key(context_type: str, cards: list, institution_type: str = "",
                         language: str = "", speech_act: str = "",
-                        declaration=None) -> str:
+                        declaration=None, contract_version=None) -> str:
     """Clave de caché. Todo lo que puede cambiar la salida debe estar aquí:
     antes solo entraban `context`/`cards`, así que dos peticiones con las
     mismas glosas pero distinto `institutionType`, `language`, acto
@@ -2845,6 +2963,8 @@ def generate_cache_key(context_type: str, cards: list, institution_type: str = "
         if declaration else ""
     )
     normalized = "|".join([
+        f"g{GENERATOR_VERSION}",
+        f"c{contract_version or 1}",
         context_type.lower().strip(),
         "|".join(c.upper().strip() for c in cards),
         institution_type.lower().strip(),
@@ -3148,7 +3268,8 @@ def lambda_handler(event, context):
     )
 
     cache_key = generate_cache_key(
-        context_type, cards, institution_type, language, speech_act, declaration)
+        context_type, cards, institution_type, language, speech_act,
+        declaration, contract_version)
     # No se registran las glosas ni el `declaration` completos: son el
     # contenido de una declaración que puede llegar a un expediente y no
     # debe quedar en texto plano en los registros de la Lambda (auditoría
@@ -3189,8 +3310,13 @@ def lambda_handler(event, context):
     # verificados, en vez de pulir una frase ya hecha. La fluidez la pone el
     # modelo; la fidelidad, el ensamblador determinista, que sigue siendo
     # quien garantiza que ninguna seña se pierda.
+    # Los hechos normalizados viajan al validador: sin ellos solo se puede
+    # comprobar que estén las mismas palabras, y eso no distingue "me robaron
+    # y yo escapé" de "me robaron y el ladrón escapó".
+    hechos = normalize_facts(declaration) if declaration else []
     generated_text, generation_validated = generate_with_bedrock(
-        cards, analysis, base_sentence, context_type, institution_type)
+        cards, analysis, base_sentence, context_type, institution_type,
+        facts=hechos)
 
     bedrock_used = generated_text != base_sentence
 
