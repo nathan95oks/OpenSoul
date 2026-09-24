@@ -116,27 +116,44 @@ void main() {
       };
     });
 
-    test('objeto / PERDER → perdida', () {
-      expect(resolveAssemblerContext('tramite', ['PERDER', 'CARNET'], catOf),
-          'perdida');
-      expect(resolveAssemblerContext('tramite', ['TELEFONO', 'CALLE'], catOf),
-          'perdida');
+    // El reparto ya no cuelga de un contexto 'tramite' que el catálogo nunca
+    // ofreció: lo decide la necesidad elegida, que sí existe.
+    String porNecesidad(String need, List<String> gl) =>
+        routeToAssembler(glosses: gl, needId: need).contextId;
+
+    test('trámites con objeto perdido → perdida', () {
+      expect(porNecesidad('tramites', ['PERDER', 'CARNET']), 'perdida');
+      expect(porNecesidad('tramites', ['FALTA', 'TELEFONO']), 'perdida');
     });
 
-    test('documento / trámite → tramite_id', () {
-      expect(resolveAssemblerContext('tramite', ['PASAPORTE'], catOf), 'tramite_id');
-      expect(
-          resolveAssemblerContext('tramite', ['INVESTIGACION', 'FISCAL'], catOf),
+    test('trámites con documento → tramite_id', () {
+      expect(porNecesidad('tramites', ['PASAPORTE']), 'tramite_id');
+      expect(porNecesidad('tramites', ['GESTIONAR', 'FOTOCOPIA']),
           'tramite_id');
     });
 
-    test('consulta usa el compositor de orientación', () {
-      expect(
-          resolveAssemblerContext('consulta', ['INTERPRETE', 'INSTITUCION'], catOf),
+    test('consultas usa el compositor de orientación', () {
+      expect(porNecesidad('consultas', ['INTERPRETE', 'INSTITUCION']),
           'orientacion');
-      expect(resolveAssemblerContext('consulta', ['NO_SABER', 'CASO'], catOf),
-          'orientacion',
+      expect(porNecesidad('consultas', ['NO_SABER', 'CASO']), 'orientacion',
           reason: 'una consulta nunca se reenruta a trámite ni a pérdida');
+    });
+
+    test('lo desconocido NO acaba en denuncia de robo', () {
+      final ruta = routeToAssembler(
+          currentContextId: 'algo_que_no_existe', glosses: ['PAPEL_RARO']);
+      expect(ruta.contextId, isNot('denuncia_robo'),
+          reason: 'Aproximar a una denuncia es acusar por omisión.');
+      expect(ruta.isSupported, isFalse);
+      expect(ruta.reason, isNotEmpty);
+    });
+
+    test('una intención sin cobertura se declara, no se aproxima', () {
+      final ruta = routeToAssembler(
+          needId: 'tramites', intentId: 'DDRR_FOLIO_ACTUALIZADO');
+      expect(ruta.isSupported, isFalse);
+      expect(ruta.missingVocabulary, contains('FOLIO'));
+      expect(ruta.contextId, isNot('denuncia_robo'));
     });
 
     test('preguntas se conserva como contexto propio', () {

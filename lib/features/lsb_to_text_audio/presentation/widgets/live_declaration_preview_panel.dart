@@ -13,6 +13,9 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/card_grid.dart'
     show expandedAnswersProvider;
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/presentation/session/active_need_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/needs_screen.dart';
 
 /// Panel Prominente de Previsualización en Tiempo Real ("Coherencia Visible").
 ///
@@ -449,8 +452,46 @@ class _LiveDeclarationPreviewPanelState
     final cardsForEngines =
         markedCards.isEmpty ? selectedWords : markedCards;
 
+    // El destino lo decide el enrutador, con la necesidad y la intención
+    // activas. Antes esta línea caía a 'denuncia_robo' cuando no había
+    // contexto: un trámite acababa redactado como denuncia de robo.
+    final launch = ref.read(cardsFlowLaunchProvider);
+
+    // El acto comunicativo se decide por ESTA intervención, no por la
+    // necesidad elegida hace cinco pantallas: dentro de Consultas también se
+    // declara y se responde.
+    final acto = NeedsScreen.actForIntervention(
+      purpose: launch.purpose,
+      need: ref.read(activeNeedProvider),
+      glosses: cardsForEngines,
+    );
+    ref.read(declarationDraftProvider.notifier).setSpeechAct(acto.wireName);
+
+    final ruta = routeToAssembler(
+      currentContextId: contextState?.id ?? '',
+      glosses: cardsForEngines,
+      needId: ref.read(activeNeedProvider)?.id,
+      intentId: launch.intentId,
+    );
+    final assemblerContext = ruta.contextId;
+
+    // Se arma DESPUÉS de fijar el acto, para que el borrador que viaja lleve
+    // el acto de esta intervención y no el de la anterior.
     final declaracion = buildFullDeclarationDraft(ref);
-    final assemblerContext = contextState?.id ?? 'denuncia_robo';
+
+    if (!ruta.isSupported && context.mounted) {
+      // No se aproxima ni se calla: se dice qué falta y se sigue con lo que
+      // sí se puede comunicar.
+      AppToastManager.showInfo(
+        context,
+        ruta.missingVocabulary.isEmpty
+            ? 'Este caso todavía no tiene un recorrido propio. Se redactará '
+                'de forma general.'
+            : 'Falta vocabulario para esto: '
+                '${ruta.missingVocabulary.join(", ")}. Se redactará solo lo '
+                'que sí se puede comunicar.',
+      );
+    }
 
     // Mostrar inmediatamente la pantalla de resultado con el borrador determinista
     ref.read(resultVisibleProvider.notifier).show();

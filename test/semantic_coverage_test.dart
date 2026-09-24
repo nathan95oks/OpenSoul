@@ -106,10 +106,12 @@ void main() {
       return null;
     }
 
-    // 3) Enrutado interno de 'tramite': reparte entre los tres compositores
-    //    del antiguo contexto fusionado según lo que la persona eligió.
+    // 3) Enrutado de trámites: reparte entre los tres compositores según lo
+    //    que la persona eligió. Antes colgaba de un contexto 'tramite' que el
+    //    catálogo nunca ha ofrecido, así que esos compositores eran
+    //    inalcanzables desde la interfaz; ahora los alcanza la necesidad.
     String route(List<String> gl) =>
-        resolveAssemblerContext('tramite', gl, catOf);
+        routeToAssembler(glosses: gl, needId: 'tramites').contextId;
     expect(route(['FALTA', 'TELEFONO']), 'perdida');
     expect(route(['TELEFONO', 'CALLE']), 'perdida'); // objeto → pérdida
     expect(route(['PASAPORTE']), 'tramite_id');
@@ -120,7 +122,8 @@ void main() {
     expect(route(['PERDER', 'CARNET']), 'perdida',
         reason: 'la pérdida ya no depende solo de que aparezca un objeto');
     // Consultas usa siempre el compositor de orientación, sin repartos.
-    expect(resolveAssemblerContext('consulta', ['ESTADO'], catOf), 'orientacion');
+    expect(routeToAssembler(glosses: ['ESTADO'], needId: 'consultas').contextId,
+        'orientacion');
     // Los contextos directos no se reenrutan.
     expect(resolveAssemblerContext('denuncia_robo', ['ROBAR'], catOf),
         'denuncia_robo');
