@@ -182,7 +182,7 @@ void main() {
   });
 
   group('las tarjetas renderizadas respetan el campo', () {
-    Future<List<String>> _visibles(WidgetTester tester, WidgetRef ref,
+    Future<List<String>> visibles(WidgetTester tester, WidgetRef ref,
         String contextId, String zoneId) async {
       ref.read(contextProvider.notifier).setContext(contextById(contextId)!);
       await tester.pump();
@@ -215,7 +215,7 @@ void main() {
         ),
       ));
 
-      final textos = await _visibles(tester, ref, 'denuncia_robo', 'lugar');
+      final textos = await visibles(tester, ref, 'denuncia_robo', 'lugar');
 
       expect(textos, isNot(contains('MOCHILA')),
           reason: 'Un objeto no responde «¿dónde ocurrió?».');
@@ -241,7 +241,7 @@ void main() {
         ),
       ));
 
-      final textos = await _visibles(tester, ref, 'denuncia_robo', 'tiempo');
+      final textos = await visibles(tester, ref, 'denuncia_robo', 'tiempo');
 
       expect(textos, isNot(contains('CALLE')));
       expect(textos, isNot(contains('MOCHILA')));
