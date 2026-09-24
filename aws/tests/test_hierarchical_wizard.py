@@ -21,9 +21,12 @@ import lambda_function as L  # noqa: E402
 
 class HierarchicalWizardStructuredTests(unittest.TestCase):
     def test_uses_structured_detector(self):
-        self.assertTrue(L.uses_structured({"declaration": {"context_id": "denuncia_robo"}}))
-        self.assertFalse(L.uses_structured({"cards": ["CELULAR"]}))
-        self.assertFalse(L.uses_structured({}))
+        # Se renombro a has_structured_declaration: el nombre anterior
+        # coincidia con la variable local del handler y quedaba ensombrecido.
+        self.assertTrue(
+            L.has_structured_declaration({"declaration": {"context_id": "denuncia_robo"}}))
+        self.assertFalse(L.has_structured_declaration({"cards": ["CELULAR"]}))
+        self.assertFalse(L.has_structured_declaration({}))
 
     def test_context_denuncia_robo_theft(self):
         decl = {

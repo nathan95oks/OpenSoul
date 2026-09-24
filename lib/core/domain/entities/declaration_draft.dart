@@ -445,56 +445,156 @@ class EvidenceItem {
       );
 }
 
-/// Hecho principal desambiguado.
-class FactInfo {
-  final String? action; // ROBAR, PERDER, ESCAPAR, DAÑAR, ENGAÑAR, AGREDIR, AMENAZAR, null, 'unknown'
-  final bool motiveConfirmed;
+/// Papel de quien protagoniza un hecho.
+///
+/// Conjunto cerrado: era texto libre y nada impedía escribir un valor que
+/// ningún lado supiera leer, así que la frase perdía a quién atribuía la
+/// acción sin que nada lo avisara.
+enum ActorRole {
+  suspect,
+  victim,
+  thirdParty,
+  unknown;
 
-  /// 'suspect' (el agresor/sospechoso), 'victim' (la víctima/yo), 'thirdParty' (un tercero), 'unknown'.
-  final String? actorRole;
+  static ActorRole parse(String? raw) {
+    if (raw == null) return ActorRole.unknown;
+    final clave = raw.trim().toLowerCase().replaceAll(' ', '_');
+    return switch (clave) {
+      'suspect' || 'sospechoso' || 'agresor' || 'ladron' => ActorRole.suspect,
+      'victim' || 'victima' || 'yo' || 'declarante' => ActorRole.victim,
+      'thirdparty' || 'third_party' || 'tercero' ||
+      'otra_persona' => ActorRole.thirdParty,
+      _ => ActorRole.unknown,
+    };
+  }
+}
+
+/// Cuánto respalda la persona lo que acaba de declarar.
+///
+/// No saber no es negar, y negar no es callar. Aplanar los tres estados en un
+/// booleano convertía «no me acuerdo» en «no».
+enum Certainty {
+  confirmed,
+  uncertain,
+  unknown;
+
+  static Certainty parse(String? raw) => switch (raw?.trim().toLowerCase()) {
+        'uncertain' || 'incierto' => Certainty.uncertain,
+        'unknown' || 'desconocido' => Certainty.unknown,
+        _ => Certainty.confirmed,
+      };
+}
+
+/// Un hecho del relato, con su propio protagonista.
+///
+/// Antes el relato tenía un único `FactInfo.action`, así que elegir ROBAR y
+/// después ESCAPAR perdía el primero: la segunda selección lo sobrescribía.
+/// Peor aún, la huida viajaba como propiedad del robo (`escapar_actor`), de
+/// modo que no se podía distinguir «me robaron y yo escapé» de «me robaron y
+/// el ladrón escapó». Cada hecho lleva ahora su protagonista.
+class Fact {
+  /// Estable dentro del borrador, para poder editar o quitar uno solo.
+  final String id;
+
+  /// ROBAR, PERDER, ESCAPAR, DAÑAR, ENGAÑAR, AGREDIR, AMENAZAR…
+  final String action;
+
+  final ActorRole actorRole;
   final String? actorDetail;
 
-  /// 'theft' | 'loss' | 'unknown'
+  /// Objetos de este hecho concreto, por id de entidad del borrador.
+  final List<String> objectEntityIds;
+
+  final bool negated;
+  final Certainty certainty;
+
+  /// 'theft' | 'loss' | 'unknown'. Solo tiene sentido en hechos de sustracción.
   final String? lossType;
 
-  const FactInfo({
-    this.action,
-    this.motiveConfirmed = true,
-    this.actorRole,
+  const Fact({
+    required this.id,
+    required this.action,
+    this.actorRole = ActorRole.unknown,
     this.actorDetail,
+    this.objectEntityIds = const [],
+    this.negated = false,
+    this.certainty = Certainty.confirmed,
     this.lossType,
   });
 
-  FactInfo copyWith({
+  Fact copyWith({
     String? action,
-    bool? motiveConfirmed,
-    String? actorRole,
+    ActorRole? actorRole,
     String? actorDetail,
+    List<String>? objectEntityIds,
+    bool? negated,
+    Certainty? certainty,
     String? lossType,
   }) =>
-      FactInfo(
+      Fact(
+        id: id,
         action: action ?? this.action,
-        motiveConfirmed: motiveConfirmed ?? this.motiveConfirmed,
         actorRole: actorRole ?? this.actorRole,
         actorDetail: actorDetail ?? this.actorDetail,
+        objectEntityIds: objectEntityIds ?? this.objectEntityIds,
+        negated: negated ?? this.negated,
+        certainty: certainty ?? this.certainty,
         lossType: lossType ?? this.lossType,
       );
 
   Map<String, dynamic> toJson() => {
-        if (action != null) 'action': action,
-        'motiveConfirmed': motiveConfirmed,
-        if (actorRole != null) 'actorRole': actorRole,
+        'id': id,
+        'action': action,
+        'actorRole': actorRole.name,
         if (actorDetail != null) 'actorDetail': actorDetail,
+        if (objectEntityIds.isNotEmpty) 'objectEntityIds': objectEntityIds,
+        'negated': negated,
+        'certainty': certainty.name,
         if (lossType != null) 'lossType': lossType,
       };
 
-  factory FactInfo.fromJson(Map<String, dynamic> json) => FactInfo(
-        action: json['action'] as String?,
-        motiveConfirmed: json['motiveConfirmed'] as bool? ?? true,
-        actorRole: json['actorRole'] as String?,
+  factory Fact.fromJson(Map<String, dynamic> json) => Fact(
+        id: (json['id'] ?? 'f1').toString(),
+        action: (json['action'] ?? '').toString(),
+        actorRole: ActorRole.parse(json['actorRole'] as String?),
         actorDetail: json['actorDetail'] as String?,
+        objectEntityIds: [
+          for (final o in (json['objectEntityIds'] as List? ?? const []))
+            o.toString(),
+        ],
+        negated: json['negated'] as bool? ?? false,
+        certainty: Certainty.parse(json['certainty'] as String?),
         lossType: json['lossType'] as String?,
       );
+
+  /// Lee el objeto `fact` del contrato anterior, donde la huida viajaba como
+  /// propiedad del hecho principal. Devuelve la lista que ese objeto
+  /// significaba de verdad: uno o dos hechos.
+  static List<Fact> fromLegacyJson(Map<String, dynamic> json) {
+    final action = json['action'] as String?;
+    if (action == null || action.isEmpty) return const [];
+
+    final principal = Fact(
+      id: 'f1',
+      action: action,
+      actorRole: ActorRole.parse(json['actorRole'] as String?),
+      actorDetail: json['actorDetail'] as String?,
+      lossType: json['lossType'] as String?,
+    );
+
+    final escapar = json['escapar_actor'] ?? json['escaparActor'];
+    if (escapar == null || action.toUpperCase() == 'ESCAPAR') {
+      return [principal];
+    }
+    return [
+      principal,
+      Fact(
+        id: 'f1-escape',
+        action: 'ESCAPAR',
+        actorRole: ActorRole.parse(escapar.toString()),
+      ),
+    ];
+  }
 }
 
 /// Detalles específicos para Denuncia de Violencia.
@@ -642,7 +742,11 @@ class DeclarationDraft {
   final String speechAct; // 'statement' | 'question' | 'instruction' | 'reply'
   final String? replyToId;
 
-  final FactInfo fact;
+  /// Los hechos del relato, hasta dos en «¿Qué ocurrió?».
+  ///
+  /// El orden es el de selección, **no** el temporal ni el causal: nada
+  /// autoriza a redactar «primero X y luego Y» porque se tocaran en ese orden.
+  final List<Fact> facts;
   final List<PersonEntity> persons;
   final List<ObjectInvolved> objects;
   final LocationInfo location;
@@ -667,7 +771,7 @@ class DeclarationDraft {
     required this.contextId,
     this.speechAct = 'statement',
     this.replyToId,
-    this.fact = const FactInfo(),
+    this.facts = const [],
     this.persons = const [],
     this.objects = const [],
     this.location = const LocationInfo(),
@@ -686,11 +790,28 @@ class DeclarationDraft {
     this.inquiry,
   });
 
+  /// El hecho que encabeza el relato, si hay alguno.
+  ///
+  /// Muchos sitios solo necesitan saber «qué ocurrió» en una palabra. Lo que
+  /// ninguno puede hacer es escribir a través de esto: la lista es la dueña.
+  Fact? get primaryFact => facts.isEmpty ? null : facts.first;
+
+  /// Si el relato afirma alguna de [actions] sin negarla.
+  bool hasAction(Set<String> actions) => facts.any(
+      (f) => !f.negated && actions.contains(f.action.toUpperCase()));
+
+  Fact? factWithAction(String action) {
+    for (final f in facts) {
+      if (f.action.toUpperCase() == action.toUpperCase()) return f;
+    }
+    return null;
+  }
+
   DeclarationDraft copyWith({
     String? contextId,
     String? speechAct,
     String? replyToId,
-    FactInfo? fact,
+    List<Fact>? facts,
     List<PersonEntity>? persons,
     List<ObjectInvolved>? objects,
     LocationInfo? location,
@@ -712,7 +833,7 @@ class DeclarationDraft {
         contextId: contextId ?? this.contextId,
         speechAct: speechAct ?? this.speechAct,
         replyToId: replyToId ?? this.replyToId,
-        fact: fact ?? this.fact,
+        facts: facts ?? this.facts,
         persons: persons ?? this.persons,
         objects: objects ?? this.objects,
         location: location ?? this.location,
@@ -735,7 +856,7 @@ class DeclarationDraft {
         'contextId': contextId,
         'speechAct': speechAct,
         if (replyToId != null) 'replyToId': replyToId,
-        'fact': fact.toJson(),
+        'facts': [for (final f in facts) f.toJson()],
         'persons': [for (final p in persons) p.toJson()],
         'objects': [for (final o in objects) o.toJson()],
         'location': location.toJson(),
@@ -760,9 +881,18 @@ class DeclarationDraft {
         contextId: json['contextId'] as String? ?? 'denuncia_robo',
         speechAct: json['speechAct'] as String? ?? 'statement',
         replyToId: json['replyToId'] as String?,
-        fact: json['fact'] != null
-            ? FactInfo.fromJson(json['fact'] as Map<String, dynamic>)
-            : const FactInfo(),
+        // Compatibilidad: un borrador guardado con el contrato anterior trae
+        // `fact` como objeto único, con la huida dentro. Se lee como la lista
+        // que siempre significó.
+        facts: json['facts'] is List
+            ? [
+                for (final f in (json['facts'] as List))
+                  Fact.fromJson(Map<String, dynamic>.from(f as Map)),
+              ]
+            : (json['fact'] is Map
+                ? Fact.fromLegacyJson(
+                    Map<String, dynamic>.from(json['fact'] as Map))
+                : const <Fact>[]),
         persons: (json['persons'] as List<dynamic>?)
                 ?.map((p) => PersonEntity.fromJson(p as Map<String, dynamic>))
                 .toList() ??

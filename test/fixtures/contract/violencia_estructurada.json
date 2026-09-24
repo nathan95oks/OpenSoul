@@ -1,0 +1,47 @@
+{
+ "context": "violencia",
+ "cards": [
+  "GOLPEAR"
+ ],
+ "language": "es-BO",
+ "institutionType": "entidad_publica",
+ "contractVersion": 2,
+ "speechAct": "statement",
+ "declaration": {
+  "contextId": "violencia",
+  "speechAct": "statement",
+  "facts": [
+   {
+    "id": "f1",
+    "action": "GOLPEAR",
+    "actorRole": "suspect",
+    "negated": false,
+    "certainty": "confirmed"
+   }
+  ],
+  "persons": [],
+  "objects": [],
+  "location": {
+   "isVehicleTransport": false,
+   "pending": false
+  },
+  "time": {
+   "unknown": false
+  },
+  "witnesses": {
+   "existence": "pending",
+   "willIdentify": false
+  },
+  "evidence": [],
+  "injured": false,
+  "medicalHelpRequested": false,
+  "willFileComplaint": "pending",
+  "needsLegalSupport": false,
+  "violence": {
+   "aggressionType": "física",
+   "physicalInjury": false,
+   "medicalCareRequested": true,
+   "protectionRequested": false
+  }
+ }
+}

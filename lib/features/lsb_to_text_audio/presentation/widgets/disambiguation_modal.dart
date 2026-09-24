@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
+import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 
 /// Modal interactivo de desambiguación semántica para verbos y conceptos polisémicos o vagos.
 /// Garantiza precisión antes de asentar un dato en el borrador de declaración.
@@ -27,9 +28,16 @@ class DisambiguationModal {
       ],
     );
 
+    // Cancelar conserva el estado anterior: el hecho ESCAPAR sigue en el
+    // relato con su protagonista sin resolver, y la redaccion dira que hubo
+    // una huida sin precisar de quien. Nunca se la atribuye a nadie por
+    // defecto ni se borra el hecho que la persona ya eligio.
     if (eleccion == null) return;
 
     final notifier = ref.read(declarationDraftProvider.notifier);
+    final escapar = ref.read(declarationDraftProvider).factWithAction('ESCAPAR');
+    if (escapar == null) return;
+
     if (eleccion.$1 == 'other') {
       if (!context.mounted) return;
       final detalle = await _mostrarCampoTexto(
@@ -39,8 +47,8 @@ class DisambiguationModal {
       );
       if (detalle != null && detalle.isNotEmpty) {
         notifier.setFactActor(
-          action: 'ESCAPAR',
-          actorRole: 'other',
+          factId: escapar.id,
+          actorRole: ActorRole.unknown,
           actorDetail: detalle,
         );
         if (context.mounted) {
@@ -49,8 +57,8 @@ class DisambiguationModal {
       }
     } else {
       notifier.setFactActor(
-        action: 'ESCAPAR',
-        actorRole: eleccion.$1,
+        factId: escapar.id,
+        actorRole: ActorRole.parse(eleccion.$1),
         actorDetail: eleccion.$2,
       );
       if (context.mounted) {

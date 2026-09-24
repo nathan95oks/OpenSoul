@@ -13,7 +13,7 @@ void main() {
   test('PERDER nunca atribuye la pérdida a otra persona ni conjuga mal', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'PERDER'),
+      facts: [Fact(id: 'f1', action: 'PERDER')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'lost'),
       ],
@@ -27,7 +27,7 @@ void main() {
   test('CERCA + Mi casa produce la referencia esperada', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
       ],
@@ -40,7 +40,7 @@ void main() {
   test('FUERA + Otro lugar conserva el texto literal con mayúsculas y espacios', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
       ],
@@ -57,7 +57,7 @@ void main() {
   test('CERCA sin referencia (pendiente) no inventa un lugar vago', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
       ],
@@ -71,7 +71,7 @@ void main() {
   test('DENTRO + micro (tarjeta) no lo convierte en objeto robado', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
       ],
@@ -90,7 +90,7 @@ void main() {
   test('Un micro como vehículo robado sí es un objeto sustraído', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'MICRO', role: 'stolen'),
       ],
@@ -102,7 +102,7 @@ void main() {
   test('Polera roja y pantalón negro: cada color pertenece a su prenda', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       persons: [
         PersonEntity(
           id: 'p1',
@@ -140,7 +140,7 @@ void main() {
   test('Segunda persona con polera azul mantiene los atributos separados', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       persons: [
         PersonEntity(
           id: 'p1',
@@ -182,7 +182,7 @@ void main() {
   test('Mochila robada y mochila que llevaba otra persona son entidades distintas', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       persons: const [
         PersonEntity(id: 'p1', role: 'suspect', gender: 'HOMBRE'),
       ],
@@ -204,7 +204,7 @@ void main() {
   test('No conoce a la persona y sí hay testigos: ambas polaridades sin mezclarse', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
       ],
@@ -217,7 +217,7 @@ void main() {
   test('No sabe si hay testigos no redacta que no hay', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
       ],
@@ -232,7 +232,7 @@ void main() {
   test('500 bolivianos en billetes conserva monto y unidad', () {
     final draft = DeclarationDraft(
       contextId: 'denuncia_robo',
-      fact: const FactInfo(action: 'ROBAR'),
+      facts: [Fact(id: 'f1', action: 'ROBAR')],
       objects: const [
         ObjectInvolved(
             id: 'o1', concept: 'BILLETES', role: 'stolen', quantity: '500', unit: 'bolivianos'),

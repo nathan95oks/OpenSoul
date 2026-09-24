@@ -36,7 +36,7 @@ void main() {
     final casos = <String, DeclarationDraft>{
       'denuncia_robo': DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: const FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         persons: const [
           PersonEntity(id: 'p1', role: 'suspect', gender: 'HOMBRE', clothing: [
             ClothingItem(
@@ -58,7 +58,7 @@ void main() {
       ),
       'violencia': const DeclarationDraft(
         contextId: 'violencia',
-        fact: FactInfo(action: 'AGREDIR'),
+        facts: [Fact(id: 'f1', action: 'AGREDIR')],
         violence: ViolenceDetails(aggressionType: 'AGRESION_FISICA', physicalInjury: true),
       ),
       'amenaza_digital': const DeclarationDraft(
@@ -117,7 +117,7 @@ void main() {
 
     test('BILLETES exige monto y moneda antes de incorporarse', () {
       final notifier = container.read(declarationDraftProvider.notifier);
-      notifier.setFactAction('ROBAR');
+      notifier.setSingleFactAction('ROBAR');
       final id = notifier.addObject(concept: 'BILLETES', role: 'stolen');
       // Sin monto: el objeto existe pero no debe imprimirse como cifra
       // inventada en el texto.
@@ -179,18 +179,20 @@ void main() {
 
     test('ESCAPAR exige quién escapó: agresor, víctima o un tercero', () {
       final notifier = container.read(declarationDraftProvider.notifier);
-      notifier.setFactAction('ESCAPAR');
-      notifier.setFactActor(actorRole: 'suspect');
+      notifier.setSingleFactAction('ESCAPAR');
+      final escapar =
+          container.read(declarationDraftProvider).factWithAction('ESCAPAR')!;
+      notifier.setFactActor(
+          factId: escapar.id, actorRole: ActorRole.suspect);
       final draft = container.read(declarationDraftProvider);
-      expect(draft.fact.actorRole, isNotNull);
-      expect(draft.fact.actorRole, isNot('unknown'));
+      expect(draft.factWithAction('ESCAPAR')!.actorRole, ActorRole.suspect);
     });
 
     test('PERDER exige aclarar motivo: extravío, posible delito o desconoce', () {
       final notifier = container.read(declarationDraftProvider.notifier);
       notifier.setLossDisambiguation(lossType: 'loss', note: 'extravío propio');
       final draft = container.read(declarationDraftProvider);
-      expect(draft.fact.lossType, isNotNull);
+      expect(draft.primaryFact!.lossType, isNotNull);
     });
   });
 

@@ -1937,8 +1937,13 @@ def _gen_general(ir, analysis, is_formal):
 
     return " ".join(all_es).capitalize() if all_es else " ".join(ir["glosas_originales"]).capitalize()
 
-def uses_structured(body: dict) -> bool:
-    """Indica si la solicitud contiene una declaración estructurada v2."""
+def has_structured_declaration(body: dict) -> bool:
+    """Indica si la solicitud trae una declaración estructurada.
+
+    Se llamaba `uses_structured`, igual que la variable local del handler, así
+    que quedaba ensombrecida y nunca se ejecutaba: la decisión estaba escrita
+    dos veces y solo valía una. Ahora hay un único sitio donde se decide.
+    """
     if not isinstance(body, dict):
         return False
     decl = body.get("declaration")
@@ -2043,6 +2048,168 @@ def _object_neutral_phrase_py(o: dict) -> str:
     return f"un {base}"
 
 
+# Papeles del protagonista de un hecho. Conjunto cerrado: un valor fuera de
+# aquí no se interpreta a ojo, se degrada a 'unknown' y se registra. Antes era
+# texto libre, así que un 'sospechozo' mal escrito pasaba sin que nada lo
+# notara y la frase perdía a quién atribuía la acción.
+ACTOR_ROLES = {"suspect", "victim", "thirdParty", "unknown"}
+
+# Alias aceptados durante la migración del contrato v2 al v3. El cliente Dart
+# emitía `actorRole` y este archivo solo leía `actor_role`, así que el campo
+# viajaba en cada petición y nunca se leía: "El sospechoso se dio a la fuga"
+# no podía aparecer jamás. Se aceptan las dos formas y las traducciones al
+# castellano que ya circulaban.
+_ACTOR_ROLE_ALIASES = {
+    "suspect": "suspect", "sospechoso": "suspect", "agresor": "suspect",
+    "ladron": "suspect", "ladrón": "suspect",
+    "victim": "victim", "victima": "victim", "víctima": "victim",
+    "yo": "victim", "declarante": "victim",
+    "thirdparty": "thirdParty", "third_party": "thirdParty",
+    "tercero": "thirdParty", "otra_persona": "thirdParty",
+    "unknown": "unknown", "desconocido": "unknown", "": "unknown",
+}
+
+
+def normalize_actor_role(raw) -> str:
+    """Papel del protagonista, siempre dentro de [ACTOR_ROLES]."""
+    if raw is None:
+        return "unknown"
+    clave = str(raw).strip().lower().replace(" ", "_")
+    rol = _ACTOR_ROLE_ALIASES.get(clave)
+    if rol is None:
+        logger.info("actorRole desconocido, se degrada a 'unknown'")
+        return "unknown"
+    return rol
+
+
+def normalize_facts(d: dict) -> list:
+    """Los hechos del relato, en una lista, vengan en v2 o en v3.
+
+    v3 manda `declaration.facts`, una lista con un hecho por acción. v2 manda
+    `declaration.fact`, un único objeto. Se normalizan a la misma forma para
+    que el generador no tenga dos caminos y para que un borrador guardado con
+    el contrato anterior siga redactándose igual.
+    """
+    if not isinstance(d, dict):
+        return []
+
+    crudos = d.get("facts") or d.get("hechos")
+    if not isinstance(crudos, list):
+        uno = d.get("fact") or d.get("hecho")
+        crudos = [uno] if isinstance(uno, dict) and uno else []
+
+    salida = []
+    for i, f in enumerate(crudos):
+        if not isinstance(f, dict):
+            continue
+        accion = (f.get("action") or f.get("accion") or "").strip().upper()
+        if not accion:
+            continue
+        # `actorRole` (cliente Dart) y `actor_role` (contrato antiguo) son el
+        # mismo dato escrito de dos maneras; el cliente enviaba el primero y
+        # este archivo solo leía el segundo.
+        rol = normalize_actor_role(f.get("actorRole") or f.get("actor_role"))
+        salida.append({
+            "id": str(f.get("id") or f"f{i + 1}"),
+            "action": accion,
+            "actorRole": rol,
+            "actorDetail": f.get("actorDetail") or f.get("actor_detail") or "",
+            "objectIds": [str(o) for o in (f.get("objectEntityIds")
+                                           or f.get("object_entity_ids") or [])],
+            "negated": bool(f.get("negated")),
+            "certainty": (f.get("certainty") or "confirmed").strip().lower(),
+            "lossType": f.get("lossType") or f.get("loss_type") or "",
+        })
+
+        # Compatibilidad v2: la huida viajaba como propiedad del hecho
+        # principal (`escapar_actor`), no como hecho propio. Se convierte en
+        # un segundo hecho, que es lo que siempre fue, para que un borrador
+        # guardado con el contrato anterior siga redactándose igual.
+        escapar = f.get("escapar_actor") or f.get("escaparActor")
+        if escapar and accion != "ESCAPAR":
+            salida.append({
+                "id": f"{salida[-1]['id']}-escape",
+                "action": "ESCAPAR",
+                "actorRole": normalize_actor_role(escapar),
+                "actorDetail": "",
+                "objectIds": [],
+                "negated": False,
+                "certainty": "confirmed",
+                "lossType": "",
+            })
+    return salida
+
+
+# Acciones que sí describen una sustracción. Que el relato no sea una pérdida
+# NO lo convierte en un robo: ESCAPAR sola describe una huida, y redactar
+# "Denuncio el robo de mis pertenencias" a partir de ella pone en boca del
+# declarante una acusación que no hizo.
+ROBBERY_ACTIONS = {"ROBAR", "QUITAR", "ARREBATAR", "HURTAR"}
+LOSS_ACTIONS = {"PERDER", "OLVIDAR"}
+
+
+# Cómo se relata cada acción cuando no hay robo ni pérdida que encabece el
+# relato. El sujeto sale del papel del protagonista, así que la misma acción
+# no dice lo mismo según quién la hizo.
+_FACT_PHRASES = {
+    "ESCAPAR": {"victim": "Logré escapar",
+                "suspect": "La persona se dio a la fuga",
+                "thirdParty": "Otra persona se dio a la fuga",
+                "unknown": "Hubo una huida"},
+    "DAÑAR": {"victim": "Sufrí daños",
+              "suspect": "La persona causó daños",
+              "thirdParty": "Otra persona causó daños",
+              "unknown": "Se causaron daños"},
+    "ENGAÑAR": {"victim": "Fui engañado",
+                "suspect": "La persona me engañó",
+                "thirdParty": "Otra persona engañó",
+                "unknown": "Hubo un engaño"},
+    "AMENAZAR": {"victim": "Fui amenazado",
+                 "suspect": "La persona me amenazó",
+                 "thirdParty": "Otra persona amenazó",
+                 "unknown": "Hubo amenazas"},
+    "GOLPEAR": {"victim": "Fui agredido",
+                "suspect": "La persona me agredió",
+                "thirdParty": "Otra persona agredió",
+                "unknown": "Hubo una agresión"},
+}
+
+
+def _describe_other_facts(facts: list) -> str:
+    """Relato de hechos que no son ni robo ni pérdida.
+
+    Devuelve cadena vacía si ninguno tiene una redacción conocida: es
+    preferible no decir nada a inventar de qué se trataba.
+    """
+    partes = []
+    for f in facts:
+        plantilla = _FACT_PHRASES.get(f["action"])
+        if not plantilla:
+            continue
+        frase = plantilla.get(f["actorRole"], plantilla["unknown"])
+        if f["negated"]:
+            frase = f"No es cierto que {frase[0].lower()}{frase[1:]}"
+        elif f["certainty"] in ("uncertain", "incierto"):
+            frase = f"No estoy seguro, pero creo que {frase[0].lower()}{frase[1:]}"
+        partes.append(frase)
+    if not partes:
+        return ""
+    return _join(partes) + "."
+
+
+def _describe_escape(facts: list) -> str:
+    """Quién escapó, según el protagonista del hecho ESCAPAR."""
+    for f in facts:
+        if f["action"] != "ESCAPAR" or f["negated"]:
+            continue
+        return {
+            "suspect": "El sospechoso se dio a la fuga.",
+            "victim": "Logré escapar.",
+            "thirdParty": "Otra persona se dio a la fuga.",
+        }.get(f["actorRole"], "Hubo una huida, sin precisar de quién.")
+    return ""
+
+
 def generate_structured_sentence(d: dict) -> str:
     """Genera la declaración determinista formal a partir de un dict estructurado para los 8 contextos."""
     if not isinstance(d, dict):
@@ -2115,6 +2282,12 @@ def generate_structured_sentence(d: dict) -> str:
     fact = d.get("fact") or d.get("hecho") or {}
     action = (fact.get("action") or fact.get("accion") or "").strip().upper()
     tipo_hecho = (fact.get("tipo") or "").strip().lower()
+
+    # Colección de hechos (contrato v3). Un relato puede llevar dos acciones
+    # con protagonistas distintos —«me robaron y yo escapé» no es lo mismo que
+    # «me robaron y el ladrón escapó»— y el campo único `fact.action` no podía
+    # representarlo: la segunda selección pisaba la primera.
+    facts = normalize_facts(d)
 
     if context_id == "violencia":
         violence = d.get("violence") or d.get("violencia") or {}
@@ -2218,17 +2391,36 @@ def generate_structured_sentence(d: dict) -> str:
             sentences.append("Solicito asistencia de un intérprete en Lengua de Señas Boliviana (LSB).")
 
     else: # denuncia_robo / hurto / perdida
-        if action == "PERDER" or tipo_hecho == "perdida":
+        acciones = {f["action"] for f in facts if not f["negated"]}
+        es_perdida = (bool(acciones & LOSS_ACTIONS)
+                      or action in LOSS_ACTIONS
+                      or tipo_hecho == "perdida")
+        # El robo se afirma solo si alguien lo dijo. Antes esta rama era el
+        # `else` de la pérdida, así que cualquier otra acción —ESCAPAR, DAÑAR,
+        # o ninguna— acababa redactando "Denuncio el robo de mis pertenencias".
+        es_robo = (bool(acciones & ROBBERY_ACTIONS)
+                   or action in ROBBERY_ACTIONS
+                   or tipo_hecho in ("robo", "hurto"))
+
+        if es_perdida and not es_robo:
             objs = lost if lost else stolen
             what = _join([_object_self_phrase_py(o) for o in objs])
             lugar_str = f" {loc_part}" if loc_part else ""
             sentences.append(f"He extraviado o perdido: {what}. Ocurrió{lugar_str}.".strip() if lugar_str else f"He extraviado o perdido: {what}.")
-        else: # robo
-            what = _join([_object_self_phrase_py(o) for o in stolen])
-            if what:
-                sentences.append(f"Denuncio el robo de {what}.")
+        else:
+            if es_robo:
+                what = _join([_object_self_phrase_py(o) for o in stolen])
+                if what:
+                    sentences.append(f"Denuncio el robo de {what}.")
+                else:
+                    sentences.append("Denuncio el robo de mis pertenencias.")
             else:
-                sentences.append("Denuncio el robo de mis pertenencias.")
+                # Hay hechos, pero ninguno es un robo ni una pérdida. Se
+                # relatan por lo que son, sin ascenderlos a denuncia de robo.
+                relato = _describe_other_facts(facts)
+                sentences.append(relato if relato else
+                                 "Quiero comunicar lo siguiente, aunque "
+                                 "todavía no completé los detalles.")
 
             loc_time = []
             if loc_part:
@@ -2238,9 +2430,11 @@ def generate_structured_sentence(d: dict) -> str:
             if loc_time:
                 sentences.append(f"Ocurrió {', '.join(loc_time)}.")
 
-            escapar_actor = fact.get("escapar_actor") or fact.get("actor_role")
-            if escapar_actor in ("sospechoso", "suspect"):
-                sentences.append("El sospechoso se dio a la fuga.")
+            # Quién escapó sale del protagonista del propio hecho ESCAPAR,
+            # no de un campo suelto del relato.
+            fuga = _describe_escape(facts)
+            if fuga:
+                sentences.append(fuga)
 
             if suspects:
                 sentences.append("Autor / sospechoso:")
@@ -2864,10 +3058,15 @@ def lambda_handler(event, context):
     raw_declaration = body.get("declaration")
     declaration = raw_declaration if isinstance(raw_declaration, dict) else None
     contract_version = body.get("contractVersion") or 1
+    # Una declaración estructurada vale en cualquier contexto. La condición
+    # anterior exigía `context_type == "denuncia_robo"`, así que en violencia,
+    # amenaza_digital, engaño y seguimiento el cliente enviaba las relaciones
+    # explícitas —persona↔prenda, objeto↔papel, lugar↔referencia— y el backend
+    # las descartaba en silencio, volviendo a adivinarlas desde la lista plana
+    # de glosas. Si un contexto no sabe redactarla, el generador cae a su
+    # camino determinista, pero eso se decide dentro y queda registrado.
     uses_structured = (
-        declaration is not None
-        and context_type == "denuncia_robo"
-        and contract_version >= 2
+        has_structured_declaration(body) and contract_version >= 2
     )
 
     cache_key = generate_cache_key(

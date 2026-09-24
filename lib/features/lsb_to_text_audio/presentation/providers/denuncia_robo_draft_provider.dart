@@ -31,42 +31,118 @@ class DeclarationDraftNotifier extends Notifier<DeclarationDraft> {
 
   // ---- Hecho y Desambiguación -------------------------------------------
 
-  void setFactAction(String? action, {bool motiveConfirmed = true}) {
-    state = _copy(
-      fact: state.fact.copyWith(
-        action: action,
-        motiveConfirmed: motiveConfirmed,
-      ),
-    );
+  /// Numero maximo de hechos por relato.
+  ///
+  /// Dos, porque es lo que la pregunta "¿Que ocurrio?" admite hoy. No es un
+  /// `maxPicks` de la zona: subir aquel dejaria elegir dos glosas pero
+  /// seguiria guardando una sola accion.
+  static const int maxFacts = 2;
+
+  /// Anade o quita el hecho de [action], sin tocar los demas.
+  ///
+  /// Volver a tocar la misma tarjeta lo quita, y quitar un hecho deja intacto
+  /// el otro con su protagonista y sus detalles.
+  void toggleFactAction(String action) {
+    final clave = action.toUpperCase();
+    final actuales = [...state.facts];
+    final indice = actuales.indexWhere((f) => f.action.toUpperCase() == clave);
+
+    if (indice >= 0) {
+      actuales.removeAt(indice);
+    } else {
+      if (actuales.length >= maxFacts) return;
+      actuales.add(Fact(id: _newFactId(clave), action: clave));
+    }
+    state = _copy(facts: actuales);
   }
 
+  /// Deja el relato con un unico hecho [action], descartando los demas.
+  ///
+  /// Es lo que hace elegir una accion cuando la pregunta solo admite una.
+  void setSingleFactAction(String? action) {
+    if (action == null || action.isEmpty) {
+      state = _copy(facts: const []);
+      return;
+    }
+    final clave = action.toUpperCase();
+    final existente = state.factWithAction(clave);
+    state = _copy(facts: [
+      existente ?? Fact(id: _newFactId(clave), action: clave),
+    ]);
+  }
+
+  /// Protagonista y detalle de UN hecho concreto.
+  ///
+  /// Sin el id no se podia distinguir "me robaron y yo escape" de "me robaron
+  /// y el ladron escapo": el papel se guardaba una sola vez para todo el
+  /// relato.
   void setFactActor({
-    String? action,
-    String? actorRole,
+    required String factId,
+    ActorRole? actorRole,
     String? actorDetail,
     String? lossType,
-    bool motiveConfirmed = true,
+    bool? negated,
+    Certainty? certainty,
   }) {
-    state = _copy(
-      fact: FactInfo(
-        action: action ?? state.fact.action,
-        motiveConfirmed: motiveConfirmed,
-        actorRole: actorRole ?? state.fact.actorRole,
-        actorDetail: actorDetail ?? state.fact.actorDetail,
-        lossType: lossType ?? state.fact.lossType,
-      ),
-    );
+    final actuales = [
+      for (final f in state.facts)
+        if (f.id == factId)
+          f.copyWith(
+            actorRole: actorRole,
+            actorDetail: actorDetail,
+            lossType: lossType,
+            negated: negated,
+            certainty: certainty,
+          )
+        else
+          f,
+    ];
+    state = _copy(facts: actuales);
   }
 
-  void setLossDisambiguation({required String lossType, String? note}) {
-    state = _copy(
-      fact: state.fact.copyWith(
-        action: lossType == 'loss' ? 'PERDER' : (state.fact.action ?? 'ROBAR'),
-        lossType: lossType,
-        actorDetail: note,
-      ),
-    );
+  void removeFact(String factId) {
+    state = _copy(facts: [
+      for (final f in state.facts)
+        if (f.id != factId) f,
+    ]);
   }
+
+  /// Resuelve si lo ocurrido fue robo o perdida.
+  ///
+  /// Toca el hecho de sustraccion; si no hay ninguno, lo crea. No convierte
+  /// en robo un relato que solo dijo ESCAPAR.
+  void setLossDisambiguation({required String lossType, String? note}) {
+    final accion = lossType == 'loss' ? 'PERDER' : 'ROBAR';
+    final sustraccion = state.factWithAction('PERDER') ??
+        state.factWithAction('ROBAR');
+
+    if (sustraccion == null) {
+      final actuales = [...state.facts];
+      if (actuales.length >= maxFacts) actuales.removeAt(0);
+      actuales.insert(
+        0,
+        Fact(
+          id: _newFactId(accion),
+          action: accion,
+          lossType: lossType,
+          actorDetail: note,
+        ),
+      );
+      state = _copy(facts: actuales);
+      return;
+    }
+
+    state = _copy(facts: [
+      for (final f in state.facts)
+        if (f.id == sustraccion.id)
+          f.copyWith(action: accion, lossType: lossType, actorDetail: note)
+        else
+          f,
+    ]);
+  }
+
+  String _newFactId(String action) =>
+      'f_${action.toLowerCase()}_${DateTime.now().microsecondsSinceEpoch}';
 
   // ---- Personas y Atributos Anidados (Máquina de Estados) ---------------
 
@@ -365,7 +441,7 @@ class DeclarationDraftNotifier extends Notifier<DeclarationDraft> {
     String? contextId,
     String? speechAct,
     String? replyToId,
-    FactInfo? fact,
+    List<Fact>? facts,
     List<PersonEntity>? persons,
     List<ObjectInvolved>? objects,
     LocationInfo? location,
@@ -387,7 +463,7 @@ class DeclarationDraftNotifier extends Notifier<DeclarationDraft> {
         contextId: contextId ?? state.contextId,
         speechAct: speechAct ?? state.speechAct,
         replyToId: replyToId ?? state.replyToId,
-        fact: fact ?? state.fact,
+        facts: facts ?? state.facts,
         persons: persons ?? state.persons,
         objects: objects ?? state.objects,
         location: location ?? state.location,
@@ -434,11 +510,31 @@ DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
       zonesState.zoneQualifiers[zoneId]?[gloss];
 
   final hechoAns = answersOf('hecho');
-  String? factAction = entityDraft.fact.action;
+  // Los hechos que ya tienen protagonista o detalle mandan: reconstruirlos
+  // desde las glosas perderia lo que la persona aclaro despues. Las glosas de
+  // la zona solo anaden los que aun no estan.
+  final facts = <Fact>[...entityDraft.facts];
   if (hechoAns.contains('NO_SABER')) {
-    factAction = 'unknown';
-  } else if (hechoAns.isNotEmpty && factAction == null) {
-    factAction = hechoAns.first;
+    if (facts.isEmpty) {
+      facts.add(const Fact(
+        id: 'f_unknown',
+        action: 'unknown',
+        certainty: Certainty.unknown,
+      ));
+    }
+  } else {
+    for (final gloss in hechoAns) {
+      if (facts.length >= DeclarationDraftNotifier.maxFacts) break;
+      final clave = gloss.toUpperCase();
+      if (facts.any((f) => f.action.toUpperCase() == clave)) continue;
+      facts.add(Fact(id: 'f_${clave.toLowerCase()}', action: clave));
+    }
+    // Un hecho que ya no esta seleccionado deja de contarse, pero solo si la
+    // zona llego a responderse: una zona vacia no borra lo ya declarado.
+    if (hechoAns.isNotEmpty) {
+      final elegidas = hechoAns.map((g) => g.toUpperCase()).toSet();
+      facts.retainWhere((f) => elegidas.contains(f.action.toUpperCase()));
+    }
   }
 
   final tiempoAns = answersOf('tiempo');
@@ -594,7 +690,7 @@ DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
     contextId: currentContextId,
     speechAct: entityDraft.speechAct,
     replyToId: entityDraft.replyToId,
-    fact: entityDraft.fact.copyWith(action: factAction),
+    facts: facts,
     persons: persons,
     objects: entityDraft.objects,
     location: entityDraft.location,

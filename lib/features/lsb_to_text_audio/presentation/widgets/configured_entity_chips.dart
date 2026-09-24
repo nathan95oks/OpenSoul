@@ -87,24 +87,25 @@ class ConfiguredEntityChips extends ConsumerWidget {
       );
     }
 
-    // 4. Ficha de Hecho / Escape
-    if (draft.fact.action != null) {
-      final desc = _describirHecho(draft.fact);
+    // 4. Una ficha por hecho. Dos acciones son dos fichas: quitar una no
+    // toca la otra, porque cada `onDelete` lleva el id de su propio hecho.
+    for (final f in draft.facts) {
       chips.add(
         _EntityChip(
+          key: ValueKey('hecho_${f.id}'),
           icon: Icons.bolt,
-          label: desc,
-          color: AppTheme.brandPrimary, // Naranja
+          label: _describirHecho(f),
+          color: AppTheme.brandPrimary,
           onTap: () async {
-            if (draft.fact.action == 'ESCAPAR') {
+            if (f.action == 'ESCAPAR') {
               await DisambiguationModal.desambiguarEscapar(context, ref);
-            } else if (draft.fact.action == 'PERDER') {
+            } else if (f.action == 'PERDER' || f.action == 'ROBAR') {
               await DisambiguationModal.desambiguarPerderVsRobar(context, ref);
             }
           },
           onDelete: () {
-            ref.read(declarationDraftProvider.notifier).setFactAction(null);
-            AppToastManager.showInfo(context, 'Acción restablecida');
+            ref.read(declarationDraftProvider.notifier).removeFact(f.id);
+            AppToastManager.showInfo(context, 'Se quitó: ${f.action}');
           },
         ),
       );
@@ -222,17 +223,23 @@ class ConfiguredEntityChips extends ConsumerWidget {
     return partes.isEmpty ? 'Lugar registrado' : partes.join(' · ');
   }
 
-  static String _describirHecho(FactInfo fact) {
-    final accion = fact.action ?? 'Hecho';
-    if (fact.action == 'ESCAPAR' && fact.actorRole != null) {
-      final actor = fact.actorRole == 'suspect'
-          ? 'Sospechoso'
-          : (fact.actorRole == 'victim' ? 'Víctima' : 'Tercero');
-      return 'Escapó: $actor';
+  static String _describirHecho(Fact fact) {
+    if (fact.action == 'ESCAPAR') {
+      // Se dice quién escapó solo cuando está resuelto. Sin resolver no se
+      // atribuye a nadie: la ficha invita a aclararlo.
+      return switch (fact.actorRole) {
+        ActorRole.suspect => 'Escapó: sospechoso',
+        ActorRole.victim => 'Escapó: yo',
+        ActorRole.thirdParty => 'Escapó: un tercero',
+        ActorRole.unknown => fact.actorDetail != null &&
+                fact.actorDetail!.isNotEmpty
+            ? 'Escapó: ${fact.actorDetail}'
+            : 'Escapó: falta aclarar quién',
+      };
     }
     if (fact.lossType == 'loss') return 'Extravío de pertenencias';
     if (fact.lossType == 'theft') return 'Denuncia de robo / sustracción';
-    return accion;
+    return fact.action;
   }
 
   static Future<void> _reabrirEditorPersona(
@@ -258,6 +265,7 @@ class _EntityChip extends StatelessWidget {
   final VoidCallback? onDelete;
 
   const _EntityChip({
+    super.key,
     required this.icon,
     required this.label,
     required this.color,

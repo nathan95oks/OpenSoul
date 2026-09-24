@@ -138,6 +138,72 @@ class LocalSentenceAssembler {
         _ => relation.toLowerCase(),
       };
 
+  /// Redaccion de UN hecho, con su propio protagonista.
+  ///
+  /// Devuelve `null` cuando la accion no tiene redaccion conocida: callar es
+  /// preferible a inventar de que se trataba.
+  ///
+  /// La negacion y la incertidumbre se conservan tal cual las marco la
+  /// persona. "No me acuerdo" no es "no", y ninguno de los dos es un hecho
+  /// afirmado.
+  String? _factSentence(
+    Fact f, {
+    required List<ObjectInvolved> stolen,
+    required List<ObjectInvolved> lost,
+    required String subjectPhrase,
+    required String timePrefix,
+    required String locClause,
+  }) {
+    String cap(String t) => t.replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase());
+
+    String? nucleo;
+    switch (f.action.toUpperCase()) {
+      case 'ROBAR':
+        final what = stolen.isEmpty
+            ? ''
+            : ' ${_join(stolen.map(_objectSelfPhrase).toList())}';
+        nucleo = '${_decap(subjectPhrase)} me robó$what';
+        break;
+      case 'PERDER':
+        final objetos = lost.isNotEmpty ? lost : stolen;
+        nucleo = objetos.isEmpty
+            ? 'no sé con certeza qué ocurrió; puede que haya perdido algo'
+            : 'perdí ${_join(objetos.map(_objectSelfPhrase).toList())}';
+        break;
+      case 'ENGAÑAR':
+        nucleo = 'me engañaron';
+        break;
+      case 'DAÑAR':
+        final what = stolen.isEmpty
+            ? ''
+            : ' ${_join(stolen.map(_objectSelfPhrase).toList())}';
+        nucleo = '${_decap(subjectPhrase)} dañó$what';
+        break;
+      case 'ESCAPAR':
+        nucleo = switch (f.actorRole) {
+          ActorRole.victim => 'el declarante logró escapar',
+          ActorRole.thirdParty => 'una tercera persona escapó del lugar',
+          ActorRole.suspect => '${_decap(subjectPhrase)} escapó',
+          ActorRole.unknown => (f.actorDetail != null && f.actorDetail!.isNotEmpty)
+              ? '${f.actorDetail} escapó'
+              : 'hubo una huida, sin precisar de quién',
+        };
+        break;
+      default:
+        return null;
+    }
+
+    if (f.negated) {
+      nucleo = 'no es cierto que $nucleo';
+    } else if (f.certainty == Certainty.uncertain) {
+      nucleo = 'no estoy seguro, pero creo que $nucleo';
+    } else if (f.certainty == Certainty.unknown) {
+      nucleo = 'no sé si $nucleo';
+    }
+
+    return cap('$timePrefix$nucleo$locClause.'.trim());
+  }
+
   String _personPhraseStructured(PersonEntity p) {
     final generoLex = p.gender == null ? null : _lexicon[_normalize(p.gender!)];
     final fem = generoLex?.es == 'una mujer';
@@ -283,7 +349,9 @@ class LocalSentenceAssembler {
     // Despacho por contexto y hecho
     switch (d.contextId) {
       case 'violencia':
-        final agg = d.violence?.aggressionType ?? d.fact.action ?? 'agresión física';
+        final agg = d.violence?.aggressionType ??
+            d.primaryFact?.action ??
+            'agresión física';
         final aggText = agg.toLowerCase().replaceAll('_', ' ');
         sentences.add('${_cap(timePrefix)}El declarante denuncia haber sufrido $aggText$locClause.'.trim());
         break;
@@ -325,63 +393,41 @@ class LocalSentenceAssembler {
         break;
 
       default: // denuncia_robo
-        switch (d.fact.action?.toUpperCase()) {
-          case 'ROBAR':
-            if (stolen.isNotEmpty) {
-              final what = _join(stolen.map(_objectSelfPhrase).toList());
-              sentences.add(
-                '$timePrefix${_decap(subjectPhrase)} me robó $what$locClause.'
-                    .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
-              );
-            } else {
-              sentences.add(
-                '$timePrefix${_decap(subjectPhrase)} me robó$locClause.'
-                    .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()),
-              );
+        // Un relato puede llevar dos hechos. Cada uno se redacta con SU
+        // protagonista: antes se despachaba sobre una sola accion, asi que
+        // elegir ROBAR y despues ESCAPAR perdia el robo, y la huida se
+        // atribuia a quien dijera un campo suelto del relato.
+        //
+        // El orden es el de seleccion, no el temporal: no se encadenan con
+        // "primero" ni "luego".
+        if (d.facts.isEmpty) {
+          if (locClause.isNotEmpty || timeClauseText != null) {
+            sentences.add('${_cap(timePrefix)}Ocurrió algo que quiero relatar$locClause.'.trim());
+          }
+        } else {
+          var primero = true;
+          for (final f in d.facts) {
+            // El complemento de lugar y tiempo encabeza el relato una sola
+            // vez: repetirlo en cada hecho sugiere dos sucesos separados.
+            final prefijo = primero ? timePrefix : '';
+            final lugar = primero ? locClause : '';
+            final frase = _factSentence(
+              f,
+              stolen: stolen,
+              lost: lost,
+              subjectPhrase: subjectPhrase,
+              timePrefix: prefijo,
+              locClause: lugar,
+            );
+            if (frase != null) {
+              sentences.add(frase);
+              primero = false;
             }
-            break;
-          case 'PERDER':
-            final objetosPerdidos = lost.isNotEmpty ? lost : stolen;
-            if (objetosPerdidos.isNotEmpty) {
-              final what = _join(objetosPerdidos.map(_objectSelfPhrase).toList());
-              sentences.add('${_cap(timePrefix)}Perdí $what$locClause.'.trim());
-            } else {
-              sentences.add(
-                  '${_cap(timePrefix)}No sé con certeza qué ocurrió; puede que haya perdido algo$locClause.'
-                      .trim());
-            }
-            break;
-          case 'ENGAÑAR':
-            sentences.add('${_cap(timePrefix)}Me engañaron$locClause.'.trim());
-            break;
-          case 'DAÑAR':
-            final what = stolen.isNotEmpty
-                ? ' ${_join(stolen.map(_objectSelfPhrase).toList())}'
-                : '';
-            sentences.add(
-                '${_cap(timePrefix)}${_decap(subjectPhrase)} dañó$what$locClause.'
-                    .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
-            break;
-          case 'ESCAPAR':
-            if (d.fact.actorRole == 'victim') {
-              sentences.add(
-                  '${_cap(timePrefix)}El declarante logró escapar$locClause.'.trim());
-            } else if (d.fact.actorRole == 'thirdParty') {
-              sentences.add(
-                  '${_cap(timePrefix)}Una tercera persona escapó del lugar$locClause.'.trim());
-            } else if (d.fact.actorDetail != null && d.fact.actorDetail!.isNotEmpty) {
-              sentences.add(
-                  '${_cap(timePrefix)}${d.fact.actorDetail} escapó$locClause.'.trim());
-            } else {
-              sentences.add(
-                  '${_cap(timePrefix)}${_decap(subjectPhrase)} escapó$locClause.'
-                      .replaceFirstMapped(RegExp('^.'), (m) => m[0]!.toUpperCase()));
-            }
-            break;
-          default:
-            if (locClause.isNotEmpty || timeClauseText != null) {
-              sentences.add('${_cap(timePrefix)}Ocurrió algo que quiero relatar$locClause.'.trim());
-            }
+          }
+          if (sentences.isEmpty &&
+              (locClause.isNotEmpty || timeClauseText != null)) {
+            sentences.add('${_cap(timePrefix)}Ocurrió algo que quiero relatar$locClause.'.trim());
+          }
         }
     }
 
