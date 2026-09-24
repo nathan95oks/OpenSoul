@@ -1,7 +1,7 @@
 # Lógica de negocio: modos de uso, necesidades e instituciones
 
-Fase de **organización**, no de implementación. Nada de lo que hay aquí está
-en el código de producción. Lo generado se regenera; lo escrito a mano son las
+Especificación de negocio y estado de su implementación. Lo generado se
+regenera con las herramientas de abajo; lo escrito a mano son las
 configuraciones y las reglas.
 
 ## Documentos
@@ -16,6 +16,7 @@ configuraciones y las reglas.
 | `04_Contratos_Datos.md` | Contratos propuestos y reglas C1–C18 | escrito |
 | `05_Plan_Implementacion.md` | Bloques 0–9 por archivo y dependencia | escrito |
 | `06_Matriz_Aceptacion.md` | Los 15 casos de aceptación | generado |
+| `07_Estado_Implementacion.md` | Qué bloque está hecho, parcial o pendiente | escrito |
 
 ## Datos procesables
 
@@ -33,15 +34,25 @@ python tool/build_vocabulary_matrix.py     # 01, vocabulario.json/.csv
 python tool/build_intent_bank.py           # 03, banco_intenciones.json
 python tool/build_business_docs.py         # 02, 06
 python tool/validate_business_config.py    # valida y escribe la cobertura
+python tool/build_business_assets.py       # asset que empaqueta la app
 ```
+
+`build_business_assets.py` no escribe nada si el validador falla: publicar una
+configuración que el repositorio contradice es peor que no publicarla.
 
 `validate_business_config.py` devuelve 1 si alguna configuración no cuadra con
 el repositorio: intención inexistente, brecha falsa, ámbito que el catálogo no
 ofrece, duplicados o referencias rotas en la matriz de aceptación.
 
-## Lo que esta fase **no** hace
+## Estado
 
-- No reestructura código de producción.
-- No ejecuta pruebas de interfaz: no existe el código que probarían.
-- No demuestra cobertura lingüística de ningún servicio institucional.
-- No valida ninguna composición con señantes ni con intérpretes.
+La fase de organización terminó y la implementación está en marcha. El estado
+real de cada bloque, con lo hecho y lo pendiente, está en
+`07_Estado_Implementacion.md`.
+
+Lo que esta documentación **no** demuestra, en ninguna de sus versiones:
+
+- Cobertura lingüística de ningún servicio institucional.
+- Validación de ninguna composición con señantes ni con intérpretes.
+- Comportamiento de los servicios desplegados (Bedrock, Polly, S3) ni del
+  avatar 3D, cuyo modelo no forma parte del repositorio.
