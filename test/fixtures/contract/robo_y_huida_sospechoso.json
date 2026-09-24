@@ -1,0 +1,56 @@
+{
+ "context": "denuncia_robo",
+ "cards": [
+  "ROBAR",
+  "ESCAPAR",
+  "CELULAR"
+ ],
+ "language": "es-BO",
+ "institutionType": "entidad_publica",
+ "contractVersion": 2,
+ "speechAct": "statement",
+ "declaration": {
+  "contextId": "denuncia_robo",
+  "speechAct": "statement",
+  "facts": [
+   {
+    "id": "f1",
+    "action": "ROBAR",
+    "actorRole": "suspect",
+    "negated": false,
+    "certainty": "confirmed"
+   },
+   {
+    "id": "f2",
+    "action": "ESCAPAR",
+    "actorRole": "suspect",
+    "negated": false,
+    "certainty": "confirmed"
+   }
+  ],
+  "persons": [],
+  "objects": [
+   {
+    "id": "o1",
+    "concept": "CELULAR",
+    "role": "stolen"
+   }
+  ],
+  "location": {
+   "isVehicleTransport": false,
+   "pending": false
+  },
+  "time": {
+   "unknown": false
+  },
+  "witnesses": {
+   "existence": "pending",
+   "willIdentify": false
+  },
+  "evidence": [],
+  "injured": false,
+  "medicalHelpRequested": false,
+  "willFileComplaint": "pending",
+  "needsLegalSupport": false
+ }
+}

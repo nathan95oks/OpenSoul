@@ -45,24 +45,38 @@ class ConversationHandoff {
     );
   }
 
-  /// Abre el módulo de tarjetas con [launch] y deja el flujo limpio.
+  /// Abre el módulo de tarjetas con [launch].
+  ///
+  /// Reabrir el **mismo** encargo continúa donde se dejó: no se toca el
+  /// borrador, ni el contexto, ni las zonas. Antes se limpiaba siempre, así
+  /// que volver al chat a releer la pregunta y pulsar otra vez «Responder»
+  /// borraba en silencio lo que ya se había armado —justo lo que la pantalla
+  /// había prometido conservar al no preguntar nada.
+  ///
+  /// Cambiar de encargo sí reinicia el flujo. La confirmación de descartar la
+  /// pide quien llama, porque es una decisión de la persona, no del servicio.
   ///
   /// El contexto propuesto solo se aplica en B y C; en A no se propone
   /// ninguno, porque ahí lo elige la persona sin que el chat opine.
   void openCards(CardsFlowLaunch launch) {
+    final anterior = ref.read(cardsFlowLaunchProvider);
+    final mismoEncargo = anterior.sameErrand(launch);
+
     ref.read(cardsFlowLaunchProvider.notifier).start(launch);
 
-    final proposedId = launch.proposedContextId;
-    final proposed = proposedId == null ? null : contextById(proposedId);
-    final contexts = ref.read(contextProvider.notifier);
-    if (proposed != null) {
-      contexts.setContext(proposed);
-    } else {
-      contexts.clearContext();
-    }
+    if (!mismoEncargo) {
+      final proposedId = launch.proposedContextId;
+      final proposed = proposedId == null ? null : contextById(proposedId);
+      final contexts = ref.read(contextProvider.notifier);
+      if (proposed != null) {
+        contexts.setContext(proposed);
+      } else {
+        contexts.clearContext();
+      }
 
-    ref.read(sentenceProvider.notifier).clearSentence();
-    ref.read(semanticZonesProvider.notifier).reset();
+      ref.read(sentenceProvider.notifier).clearSentence();
+      ref.read(semanticZonesProvider.notifier).reset();
+    }
 
     ref.read(selectedTabProvider.notifier).select(AppTab.cards);
   }

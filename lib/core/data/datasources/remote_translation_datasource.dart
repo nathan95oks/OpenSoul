@@ -33,6 +33,34 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
   /// usando `context`/`cards` como antes (compatibilidad hacia atrás).
   static const int contractVersion = 2;
 
+  /// El cuerpo exacto que viaja al backend.
+  ///
+  /// Vive aparte del envío para que las pruebas puedan capturarlo y pasarlo
+  /// por el handler Python de verdad. Probar el backend con un JSON escrito a
+  /// mano no demuestra nada sobre lo que el cliente manda: los dos fallos de
+  /// nombres (`actorRole` frente a `actor_role`) y de puerta por contexto
+  /// sobrevivieron precisamente porque cada lado se probaba con su formato.
+  static Map<String, dynamic> buildRequestBody({
+    required String context,
+    required List<String> cards,
+    Map<String, dynamic>? declaration,
+    String? speechAct,
+    String? replyToId,
+  }) =>
+      {
+        'context': context,
+        'cards': cards,
+        'language': 'es-BO',
+        'institutionType': 'entidad_publica',
+        'contractVersion': contractVersion,
+        // ignore: use_null_aware_elements
+        if (speechAct != null) 'speechAct': speechAct,
+        // ignore: use_null_aware_elements
+        if (replyToId != null) 'replyToId': replyToId,
+        // ignore: use_null_aware_elements
+        if (declaration != null) 'declaration': declaration,
+      };
+
   @override
   Future<TranslationResult> translateCards({
     required String context,
@@ -50,19 +78,13 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
-          body: jsonEncode({
-            'context': context,
-            'cards': cards,
-            'language': 'es-BO',
-            'institutionType': 'entidad_publica',
-            'contractVersion': contractVersion,
-            // ignore: use_null_aware_elements
-            if (speechAct != null) 'speechAct': speechAct,
-            // ignore: use_null_aware_elements
-            if (replyToId != null) 'replyToId': replyToId,
-            // ignore: use_null_aware_elements
-            if (declaration != null) 'declaration': declaration,
-          }),
+          body: jsonEncode(buildRequestBody(
+            context: context,
+            cards: cards,
+            declaration: declaration,
+            speechAct: speechAct,
+            replyToId: replyToId,
+          )),
         )
         .timeout(requestTimeout);
 

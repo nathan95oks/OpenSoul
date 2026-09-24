@@ -60,7 +60,7 @@ class _LiveDeclarationPreviewPanelState
         !draft.location.isEmpty ||
         draft.persons.isNotEmpty ||
         draft.objects.isNotEmpty ||
-        draft.fact.action != null;
+        draft.facts.isNotEmpty;
 
     final isLastStep = !zonesState.hasNextQuestion;
     final isLoading = translationState.isLoading;
@@ -400,7 +400,15 @@ class _LiveDeclarationPreviewPanelState
             lossType: 'unknown', note: 'No sabe con certeza');
         break;
       case 'conocimiento':
-        notifier.setFactActor(actorRole: 'unknown');
+        // No conocer a quien lo hizo afecta al hecho que se esta relatando,
+        // no a todos: se marca el primero, que es el que encabeza el relato.
+        final hecho = ref.read(declarationDraftProvider).primaryFact;
+        if (hecho != null) {
+          notifier.setFactActor(
+            factId: hecho.id,
+            actorRole: ActorRole.unknown,
+          );
+        }
         break;
       case 'testigos':
         notifier.setWitnesses(

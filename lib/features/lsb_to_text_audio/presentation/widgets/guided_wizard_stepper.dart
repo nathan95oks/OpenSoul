@@ -37,7 +37,7 @@ class GuidedWizardStepper extends ConsumerWidget {
     final hasContent = draft.persons.isNotEmpty ||
         draft.objects.isNotEmpty ||
         !draft.location.isEmpty ||
-        draft.fact.action != null;
+        draft.facts.isNotEmpty;
 
     return Container(
       decoration: const BoxDecoration(

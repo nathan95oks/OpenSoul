@@ -17,13 +17,41 @@ import types
 
 
 
+class _FakeBody:
+    """Cuerpo de respuesta de Polly: solo necesita saber leerse."""
+
+    def __init__(self, data=b"\x00audio-falso"):
+        self._data = data
+
+    def read(self):
+        return self._data
+
+
+def _fake_client(service=None, *a, **k):
+    """Cliente falso con lo justo para recorrer el handler entero.
+
+    Sin `synthesize_speech` el handler devolvía POLLY_ERROR y las pruebas que
+    recorren la ruta completa no podían llegar a comprobar el texto. Un doble
+    que solo cubre media ruta deja fuera justo lo que hay que verificar.
+    """
+    cliente = types.SimpleNamespace()
+    cliente.synthesize_speech = lambda *args, **kwargs: {
+        "AudioStream": _FakeBody(),
+    }
+    cliente.put_object = lambda *args, **kwargs: {}
+    cliente.generate_presigned_url = lambda *args, **kwargs: (
+        "https://s3.example/audio-falso.mp3")
+    cliente.head_object = lambda *args, **kwargs: {}
+    return cliente
+
+
 def install():
     """Instala el doble. Idempotente: llamarlo dos veces no cambia nada."""
     if "boto3" in sys.modules:
         return
 
     boto3 = types.ModuleType("boto3")
-    boto3.client = lambda *a, **k: types.SimpleNamespace()
+    boto3.client = _fake_client
     boto3.resource = lambda *a, **k: types.SimpleNamespace()
 
     exceptions = types.ModuleType("botocore.exceptions")

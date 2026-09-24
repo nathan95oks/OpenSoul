@@ -1,0 +1,27 @@
+{
+ "context": "denuncia_robo",
+ "cards": [
+  "ROBAR",
+  "CELULAR"
+ ],
+ "language": "es-BO",
+ "institutionType": "entidad_publica",
+ "contractVersion": 2,
+ "speechAct": "statement",
+ "declaration": {
+  "contextId": "denuncia_robo",
+  "speechAct": "statement",
+  "fact": {
+   "action": "ROBAR",
+   "motiveConfirmed": true,
+   "escapar_actor": "sospechoso"
+  },
+  "objects": [
+   {
+    "id": "o1",
+    "concept": "CELULAR",
+    "role": "stolen"
+   }
+  ]
+ }
+}

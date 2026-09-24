@@ -1,0 +1,41 @@
+{
+ "context": "denuncia_robo",
+ "cards": [
+  "ESCAPAR"
+ ],
+ "language": "es-BO",
+ "institutionType": "entidad_publica",
+ "contractVersion": 2,
+ "speechAct": "statement",
+ "declaration": {
+  "contextId": "denuncia_robo",
+  "speechAct": "statement",
+  "facts": [
+   {
+    "id": "f1",
+    "action": "ESCAPAR",
+    "actorRole": "victim",
+    "negated": false,
+    "certainty": "confirmed"
+   }
+  ],
+  "persons": [],
+  "objects": [],
+  "location": {
+   "isVehicleTransport": false,
+   "pending": false
+  },
+  "time": {
+   "unknown": false
+  },
+  "witnesses": {
+   "existence": "pending",
+   "willIdentify": false
+  },
+  "evidence": [],
+  "injured": false,
+  "medicalHelpRequested": false,
+  "willFileComplaint": "pending",
+  "needsLegalSupport": false
+ }
+}

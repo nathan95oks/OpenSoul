@@ -77,7 +77,7 @@ void main() {
     test('PERDER generates a loss declaration without false theft accusation', () {
       final draft = const DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: FactInfo(action: 'PERDER', lossType: 'loss'),
+        facts: [Fact(id: 'f1', action: 'PERDER', lossType: 'loss')],
         objects: [
           ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'lost'),
           ObjectInvolved(id: 'o2', concept: 'IDENTIDAD', role: 'lost', docType: 'Cédula de Identidad'),
@@ -95,7 +95,7 @@ void main() {
     test('ESCAPAR disambiguation captures fleeing actor properly in robbery', () {
       final draft = const DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: FactInfo(action: 'ESCAPAR', actorRole: 'suspect'),
+        facts: [Fact(id: 'f1', action: 'ESCAPAR', actorRole: ActorRole.suspect)],
         persons: [
           PersonEntity(
             id: 'p1',
@@ -115,7 +115,7 @@ void main() {
       // Scene of crime / transport
       final draftScene = const DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         objects: [ObjectInvolved(id: 'o1', concept: 'MOCHILA', role: 'stolen')],
         location: LocationInfo(mainPlaceConcept: 'MICRO', mainPlaceDetail: 'Línea 3B', isVehicleTransport: true),
       );
@@ -127,7 +127,7 @@ void main() {
       // Stolen vehicle / object
       final draftStolen = const DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         objects: [ObjectInvolved(id: 'o1', concept: 'MICRO', role: 'stolen', detail: 'Línea 3B')],
       );
 
@@ -138,7 +138,7 @@ void main() {
     test('CAJA / BOLSA as evidence vs stolen object', () {
       final draftEvidence = const DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         objects: [
           ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
         ],
@@ -157,7 +157,7 @@ void main() {
     test('1. Context: denuncia_robo', () {
       final draft = const DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         objects: [
           ObjectInvolved(id: 'o1', concept: 'CELULAR', role: 'stolen'),
           ObjectInvolved(id: 'o2', concept: 'BILLETES', role: 'stolen'),
@@ -300,7 +300,7 @@ void main() {
       // Check deterministic sentence assembly for 500 Bs.
       final draftBs = DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: const FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         objects: state.objects,
       );
       final sentenceBs = assembler.assembleStructured(draftBs);
@@ -320,7 +320,7 @@ void main() {
 
       final draftUsd = DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: const FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         objects: state.objects,
       );
       final sentenceUsd = assembler.assembleStructured(draftUsd);
@@ -364,7 +364,7 @@ void main() {
       // Assembled text matches complete sequential description
       final draft = DeclarationDraft(
         contextId: 'denuncia_robo',
-        fact: const FactInfo(action: 'ROBAR'),
+        facts: [Fact(id: 'f1', action: 'ROBAR')],
         persons: state.persons,
       );
       final text = assembler.assembleStructured(draft);
