@@ -2932,6 +2932,15 @@ def build_response(status_code: int, body: dict) -> dict:
     return {"statusCode": status_code, "headers": CORS_HEADERS,
             "body": json.dumps(body, ensure_ascii=False)}
 
+# Versión del contrato que habla este backend.
+#
+# Viaja en cada respuesta para que el cliente sepa si puede enviar una
+# colección de hechos. Sin este anuncio, un cliente v3 contra una Lambda
+# anterior recibe 200 y pierde el segundo hecho sin que nada lo diga: la
+# petición se acepta y el significado se va por el camino.
+BACKEND_CONTRACT_VERSION = 3
+
+
 # Versión del generador determinista.
 #
 # Entra en la clave de caché porque una respuesta guardada con un generador
@@ -3356,6 +3365,10 @@ def lambda_handler(event, context):
         })
 
     response_payload = {
+        # El cliente lo lee para saber si puede enviar una colección de
+        # hechos o si debe avisar de que se perderían.
+        "contractVersion": BACKEND_CONTRACT_VERSION,
+        "generatorVersion": GENERATOR_VERSION,
         "baseSentence": base_sentence,
         "generatedText": generated_text,
         "intermediateRepresentation": intermediate,

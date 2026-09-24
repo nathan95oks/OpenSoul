@@ -82,3 +82,7 @@ android/local.properties
 /docs/glosas_opensoul.csv
 /docs/glosas_analisis_excel.csv
 /assets/dictionary/glosas_opensoul.csv
+
+# Paquete de despliegue generado por aws/deploy/build_package.py
+/aws/deploy/lambda_function.zip
+/aws/deploy/.version-previa

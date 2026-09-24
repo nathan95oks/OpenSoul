@@ -16,6 +16,8 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/ca
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/presentation/session/active_need_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/needs_screen.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/backend_capability.dart';
 
 /// Panel Prominente de Previsualización en Tiempo Real ("Coherencia Visible").
 ///
@@ -478,6 +480,22 @@ class _LiveDeclarationPreviewPanelState
     // Se arma DESPUÉS de fijar el acto, para que el borrador que viaja lleve
     // el acto de esta intervención y no el de la anterior.
     final declaracion = buildFullDeclarationDraft(ref);
+
+    // Compuerta de capacidad. Un backend anterior acepta la petición, responde
+    // 200 y redacta habiendo perdido el segundo hecho: no devolver error no es
+    // compatibilidad. Se avisa antes de enviar, y nunca se reduce en silencio
+    // a un solo hecho.
+    final perdidos = BackendCompatibility.wouldLose(
+      declaracion,
+      RemoteTranslationDataSourceImpl.lastKnownCapability,
+    );
+    if (perdidos.isNotEmpty && context.mounted) {
+      AppToastManager.showInfo(
+        context,
+        'El servidor todavía no conserva dos acciones. Se enviará el mensaje '
+        'y se redactará localmente para no perder «${perdidos.join(", ")}».',
+      );
+    }
 
     if (!ruta.isSupported && context.mounted) {
       // No se aproxima ni se calla: se dice qué falta y se sigue con lo que

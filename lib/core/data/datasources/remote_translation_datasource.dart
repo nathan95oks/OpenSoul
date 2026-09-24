@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/core/data/datasources/backend_capability.dart';
 
 abstract class RemoteTranslationDataSource {
   Future<TranslationResult> translateCards({
@@ -34,6 +35,12 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
   /// turno al que se responde; el backend que no la reconozca puede seguir
   /// usando `context`/`cards` como antes (compatibilidad hacia atrás).
   static const int contractVersion = 3;
+
+  /// Lo que se supo del servidor en la última respuesta.
+  ///
+  /// Estático a propósito: la compuerta tiene que poder consultarse antes de
+  /// enviar, desde la pantalla, sin haber hecho ya la petición.
+  static BackendCapability lastKnownCapability = BackendCapability.unknown;
 
   /// El cuerpo exacto que viaja al backend.
   ///
@@ -96,6 +103,11 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
+
+      // Se recuerda qué sabe conservar el servidor. Un backend anterior
+      // acepta la petición y pierde el segundo hecho sin decir nada, así que
+      // «no devolvió error» no basta para darlo por compatible.
+      lastKnownCapability = BackendCompatibility.fromResponse(data);
 
       List<Map<String, dynamic>>? glossSeq;
       if (data['glossSequence'] != null) {
