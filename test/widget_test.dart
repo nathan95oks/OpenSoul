@@ -1,6 +1,12 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lsb_legal_app/app/screens/main_navigation_screen.dart';
+import 'package:lsb_legal_app/app/screens/mode_selection_screen.dart';
 import 'package:lsb_legal_app/app/screens/splash_screen.dart';
 import 'package:lsb_legal_app/app/app.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/screens/conversation_screen.dart';
@@ -14,21 +20,87 @@ void main() {
   // pumpWidget revienta con una aserción ajena a lo que esta prueba verifica.
   WebViewPlatform.instance = FakeWebViewPlatform();
 
-  testWidgets('App load smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  // `appRouter` es global y conserva la ruta entre pruebas del mismo
+  // archivo: solo la primera arranca en el splash.
+  Future<void> arrancar(WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: AppScope()));
-
-    // Verify that the SplashScreen is rendered.
-    expect(find.byType(SplashScreen), findsOneWidget);
-
-    // Advance time by 3 seconds to let the splash screen Timer fire and navigate
+    // Se deja correr el temporizador del splash y se asienta la carga de la
+    // configuración del dispositivo, que es asíncrona.
     await tester.pump(const Duration(seconds: 3));
-    await tester.pump();
+    // `pumpAndSettle` no sirve aquí: el campo de voz y el visor del avatar
+    // tienen animaciones que se repiten, así que nunca queda todo quieto.
+    for (var i = 0; i < 6; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+  }
 
-    // Tras el splash se aterriza en la navegación principal, cuya pestaña
-    // por defecto es la Conversación — el centro de la app unificada.
-    // (IndexedStack es lazy: las demás pestañas se construyen al visitarlas.)
+  testWidgets('sin modo elegido, la app pide elegirlo', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+
+    await tester.pumpWidget(const ProviderScope(child: AppScope()));
+    expect(find.byType(SplashScreen), findsOneWidget,
+        reason: 'La app arranca en el splash.');
+    await tester.pump(const Duration(seconds: 3));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ModeSelectionScreen), findsOneWidget);
+    expect(find.byType(MainNavigationScreen), findsNothing,
+        reason: 'No se monta la navegación antes de decidir la sesión.');
+    expect(find.byType(ConversationScreen), findsNothing,
+        reason: 'Ninguna conversación puede verse antes de elegir el modo.');
+  });
+
+  testWidgets('con modo ya elegido, se entra directo a la navegación',
+      (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'device_config_v1': jsonEncode({
+        'schemaVersion': 1,
+        'mode': 'personal',
+        'lastTabId': 'conversation',
+      }),
+    });
+
+    await arrancar(tester);
+
+    expect(find.byType(ModeSelectionScreen), findsNothing);
     expect(find.byType(MainNavigationScreen), findsOneWidget);
+    // La pestaña por defecto es la Conversación, en el centro de la barra.
+    // (IndexedStack es lazy: las demás se construyen al visitarlas.)
     expect(find.byType(ConversationScreen), findsOneWidget);
+  });
+
+  testWidgets('elegir uso personal lleva a la navegación', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+
+    await arrancar(tester);
+    expect(find.byType(ModeSelectionScreen), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('modo_personal')));
+    for (var i = 0; i < 6; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(find.byType(MainNavigationScreen), findsOneWidget);
+  });
+
+  testWidgets('la barra inferior tiene Conversación en el centro',
+      (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'device_config_v1': jsonEncode({'schemaVersion': 1, 'mode': 'personal'}),
+    });
+
+    await arrancar(tester);
+
+    expect(find.text('Tarjetas LSB'), findsOneWidget);
+    expect(find.text('Conversación'), findsOneWidget);
+    expect(find.text('Voz a LSB'), findsOneWidget);
+
+    // Posición real en pantalla, no el orden del enum.
+    final x = <String, double>{
+      for (final etiqueta in ['Tarjetas LSB', 'Conversación', 'Voz a LSB'])
+        etiqueta: tester.getCenter(find.text(etiqueta)).dx,
+    };
+    expect(x['Tarjetas LSB']!, lessThan(x['Conversación']!));
+    expect(x['Conversación']!, lessThan(x['Voz a LSB']!));
   });
 }
