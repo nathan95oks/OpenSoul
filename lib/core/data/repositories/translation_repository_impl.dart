@@ -14,8 +14,10 @@ class TranslationRepositoryImpl implements TranslationRepository {
     Map<String, dynamic>? declaration,
     String? speechAct,
     String? replyToId,
+    BusinessSignals? business,
   }) async {
     return await remoteDataSource.translateCards(
+      business: business,
       context: context,
       cards: cards,
       declaration: declaration,

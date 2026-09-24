@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
@@ -89,6 +90,14 @@ class ConversationHandoff {
       ref.read(sentenceProvider.notifier).clearSentence();
       ref.read(semanticZonesProvider.notifier).reset();
     }
+
+    // El acto comunicativo llega al borrador, que es quien lo manda al
+    // backend. `setSpeechAct` existía y no lo llamaba nadie, así que todo
+    // salía como afirmación: una consulta se redactaba «Declaro…» aunque
+    // fuera una pregunta.
+    ref
+        .read(declarationDraftProvider.notifier)
+        .setSpeechAct(launch.intendedAct.wireName);
 
     ref.read(selectedTabProvider.notifier).select(AppTabId.cards);
   }
