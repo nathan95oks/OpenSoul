@@ -445,6 +445,17 @@ class EvidenceItem {
       );
 }
 
+/// Límites del borrador, en un solo sitio.
+///
+/// `maxFacts` lo consultan la zona «hecho» del catálogo y el proveedor del
+/// borrador. Tenerlo repetido dejaba elegir dos tarjetas mientras el modelo
+/// seguía guardando una sola acción, que es exactamente el fallo que se
+/// intentaba corregir.
+abstract final class DeclarationDraftLimits {
+  /// Acciones que admite un relato en «¿Qué ocurrió?».
+  static const int maxFacts = 2;
+}
+
 /// Papel de quien protagoniza un hecho.
 ///
 /// Conjunto cerrado: era texto libre y nada impedía escribir un valor que

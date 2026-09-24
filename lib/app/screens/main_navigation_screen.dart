@@ -20,7 +20,7 @@ class MainNavigationScreen extends ConsumerStatefulWidget {
 
 class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
     with WidgetsBindingObserver {
-  int get _currentIndex => ref.watch(selectedTabProvider).index;
+  AppTabId get _currentTab => ref.watch(selectedTabProvider);
 
   @override
   void initState() {
@@ -48,8 +48,8 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   Future<void> _restaurarSesion() async {
     final tab = await ref.read(sessionRestorerProvider).restore();
     if (!mounted || tab == null) return;
-    ref.read(selectedTabProvider.notifier).selectIndex(tab);
-    ref.read(flowSurfaceProvider.notifier).set(_surfaces[tab]);
+    ref.read(selectedTabProvider.notifier).select(tab);
+    ref.read(flowSurfaceProvider.notifier).set(_surfaceOf(tab));
     // Una sesión restaurada no reanuda una respuesta a medias: el turno al
     // que apuntaba pudo cambiar mientras la aplicación estaba cerrada, y
     // enlazar a ciegas es colgar la respuesta de la pregunta equivocada. Se
@@ -59,49 +59,63 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
         .start(const CardsFlowLaunch.standalone());
   }
 
-  static const List<FlowSurface> _surfaces = [
-    FlowSurface.conversation,
-    FlowSurface.standaloneCards,
-    FlowSurface.standaloneAvatar,
-  ];
+  static FlowSurface _surfaceOf(AppTabId tab) => switch (tab) {
+        AppTabId.conversation => FlowSurface.conversation,
+        AppTabId.cards => FlowSurface.standaloneCards,
+        AppTabId.avatar => FlowSurface.standaloneAvatar,
+      };
 
-  void _select(int index) {
-    if (index == _currentIndex) return;
-    ref.read(selectedTabProvider.notifier).selectIndex(index);
-    ref.read(surfaceSessionProvider).enter(_surfaces[index]);
-    ref.read(sessionRestorerProvider).recordTab(index);
+  void _select(int visualIndex) {
+    final tab = kTabOrder[visualIndex];
+    if (tab == _currentTab) return;
+    ref.read(selectedTabProvider.notifier).select(tab);
+    ref.read(surfaceSessionProvider).enter(_surfaceOf(tab));
+    ref.read(sessionRestorerProvider).recordTab(tab);
   }
+
+  /// Contenido de cada pestaña, en el mismo orden visual que la barra.
+  ///
+  /// El `IndexedStack` se indexa por posición visual y no por `AppTabId.index`:
+  /// así reordenar la barra es cambiar [kTabOrder] y nada más.
+  List<Widget> _screensInVisualOrder(AppTabId current) => [
+        for (final tab in kTabOrder)
+          switch (tab) {
+            AppTabId.cards => const LsbFlowScreen(),
+            AppTabId.conversation => const ConversationScreen(),
+            // El IndexedStack mantiene la pantalla montada: le avisamos cuando
+            // deja de estar visible para que el avatar deje de senar.
+            AppTabId.avatar =>
+              AudioToLsbScreen(isActive: current == AppTabId.avatar),
+          },
+      ];
+
+  static const Map<AppTabId, BottomNavigationBarItem> _items = {
+    AppTabId.cards: BottomNavigationBarItem(
+      icon: Icon(Icons.sign_language),
+      label: 'Tarjetas LSB',
+    ),
+    AppTabId.conversation: BottomNavigationBarItem(
+      icon: Icon(Icons.forum),
+      label: 'Conversación',
+    ),
+    AppTabId.avatar: BottomNavigationBarItem(
+      icon: Icon(Icons.mic),
+      label: 'Voz a LSB',
+    ),
+  };
 
   @override
   Widget build(BuildContext context) {
+    final current = _currentTab;
     return Scaffold(
       body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          const ConversationScreen(),
-          const LsbFlowScreen(),
-          // El IndexedStack mantiene la pantalla montada: le avisamos cuando
-          // deja de estar visible para que el avatar deje de senar.
-          AudioToLsbScreen(isActive: _currentIndex == 2),
-        ],
+        index: visualIndexOf(current),
+        children: _screensInVisualOrder(current),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: visualIndexOf(current),
         onTap: _select,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.forum),
-            label: 'Chat',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.sign_language),
-            label: 'Tarjetas LSB',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.mic),
-            label: 'Voz a LSB',
-          ),
-        ],
+        items: [for (final tab in kTabOrder) _items[tab]!],
       ),
     );
   }

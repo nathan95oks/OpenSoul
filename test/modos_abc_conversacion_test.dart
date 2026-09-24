@@ -138,7 +138,7 @@ void main() {
       handoff.openCards(launch);
       expect(c.read(pendingReplyProvider), isNull,
           reason: 'No hay pregunta entrante que desambiguar: nadie preguntó.');
-      expect(c.read(selectedTabProvider), AppTab.cards);
+      expect(c.read(selectedTabProvider), AppTabId.cards);
     });
 
     test('el turno de apertura queda sin enlace y es el primero', () {
@@ -279,7 +279,7 @@ void main() {
       for (final pregunta in preguntas) {
         // El oyente recupera el turno y escribe.
         handoff.handBackToHearing();
-        expect(c.read(selectedTabProvider), AppTab.conversation);
+        expect(c.read(selectedTabProvider), AppTabId.conversation);
         await notifier.sendHearingMessage(pregunta);
 
         // C: la persona sorda responde a ese turno.

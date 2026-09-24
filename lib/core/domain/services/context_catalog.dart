@@ -1,3 +1,5 @@
+import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart'
+    show DeclarationDraftLimits;
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart'
@@ -195,6 +197,12 @@ final availableContexts = <SemanticContext>[
         // venga a declarar — a diferencia de "¿conoce a la persona?" o
         // "¿cuándo ocurrió?", donde no saber sí es una respuesta real.
         glossAllowlist: _dedupe(['ROBAR', 'PERDER', 'ESCAPAR', 'DAÑAR', 'ENGAÑAR']),
+        // Un relato puede llevar dos acciones: «me robaron y escapó». Subir
+        // esto es condición necesaria, no suficiente: lo que de verdad lo
+        // permite es que el borrador guarde una colección de hechos, cada uno
+        // con su protagonista. Con `maxPicks` solo, se podían tocar dos
+        // tarjetas y seguía guardándose una sola acción.
+        maxPicks: DeclarationDraftLimits.maxFacts,
         contextTags: [EmotionalTag.amenaza],
         relatedZones: ['objetos', 'persona', 'lugar', 'tiempo'],
       ),
