@@ -214,15 +214,18 @@ class DesambiguacionAuto(unittest.TestCase):
 
 
 class DisponibilidadDeAnimacion(unittest.TestCase):
-    """Ficha E: la I y la K no están horneadas en el avatar 3D; el servidor
-    ya no afirma lo contrario."""
+    """Verifica disponibilidad 3D según el catálogo de 146 señas verdes maestras."""
 
-    def test_i_y_k_no_estan_disponibles_en_3d(self):
-        self.assertNotIn("I", m.AVAILABLE_3D_GLOSSES)
-        self.assertNotIn("K", m.AVAILABLE_3D_GLOSSES)
+    def test_i_y_k_estan_disponibles_en_3d_segun_corpus_verde(self):
+        self.assertIn("I", m.AVAILABLE_3D_GLOSSES)
+        self.assertIn("K", m.AVAILABLE_3D_GLOSSES)
+
+    def test_palabras_no_verdes_no_estan_en_3d(self):
+        # PRESENTAR y BILLETERA son válidas pero no están en verde (sin animación 3D horneada)
+        self.assertNotIn("PRESENTAR", m._AVAILABLE_3D_GLOSSES_NORM)
+        self.assertNotIn("BILLETERA", m._AVAILABLE_3D_GLOSSES_NORM)
 
     def test_i_y_k_siguen_siendo_letras_validas_del_catalogo(self):
-        # Sin animación 3D, pero siguen siendo glosas reales (se deletrean).
         self.assertIn("I", m.AVAILABLE_GLOSSES)
         self.assertIn("K", m.AVAILABLE_GLOSSES)
 

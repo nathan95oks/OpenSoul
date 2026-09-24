@@ -153,6 +153,41 @@ void main() {
       );
     });
 
+    test('animationSequence del servidor manda: seña si hay clip, deletreo si no',
+        () async {
+      // El servidor leyó el .glb de S3: HOLA tiene clip, ABOGADO no y se
+      // deletrea; la G no tiene clip y va como placeholder sin perderse.
+      Map<String, dynamic> paso(String g, {bool clip = true}) => {
+            'gloss': g,
+            'animationFile': clip ? 'avatar_test.glb' : null,
+          };
+      final datasource = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
+        client: MockClient(respondingWith({
+          'glosses': ['HOLA', 'ABOGADO'],
+          'glossDetails': [
+            {'gloss': 'HOLA', 'available': true},
+            {'gloss': 'ABOGADO', 'available': false},
+          ],
+          'animationSequence': [
+            paso('HOLA'),
+            paso('A'), paso('B'), paso('O'), paso('G', clip: false),
+            paso('A'), paso('D', clip: false), paso('O'),
+          ],
+        })),
+        animationResolver: resolver,
+      );
+
+      final result = await datasource.translateText('hola abogado');
+
+      expect(result.glosses, ['HOLA', 'ABOGADO']);
+      expect(result.animationGlosses,
+          ['HOLA', 'A', 'B', 'O', 'G', 'A', 'D', 'O']);
+      expect(result.animationUrls, hasLength(8));
+      expect(result.animationUrls[4], '${AnimationUrlResolver.placeholderScheme}G');
+      expect(result.animationUrls[0], endsWith('avatar_test.glb'));
+    });
+
     test('el contexto situacional viaja aparte del dominio', () async {
       late Map<String, dynamic> sent;
       final datasource = RemoteAudioDataSourceImpl(

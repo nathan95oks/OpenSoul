@@ -20,6 +20,15 @@ Funciones Lambda del proyecto. Solo `lambda_function.py` pertenece al módulo
 | `APP_REGION` | `us-east-1` | Región AWS. |
 | `ENABLE_BEDROCK` | `true` | Desactiva el refinamiento si `false` (devuelve la oración base). |
 
+## Variables de entorno de animación (`lambda_text_to_lsb.py`)
+
+| Variable | Default | Uso |
+|----------|---------|-----|
+| `ANIMATIONS_BUCKET` | *(vacío)* | Bucket con el `.glb` del avatar. Si está vacío se usa la lista estática `AVAILABLE_3D_GLOSSES`. El rol necesita `s3:GetObject` sobre `ANIMATIONS_KEY`. |
+| `ANIMATIONS_KEY` | `avatar_test.glb` | Clave del `.glb`. Sus clips deciden qué glosa se muestra como seña; el resto se deletrea. |
+| `ANIMATIONS_TTL_SECONDS` | `300` | Cada cuánto se vuelve a leer la lista de clips. |
+| `CACHE_VERSION` | `v2` | Subida a `v2` al añadir `animationSequence` a la respuesta. |
+
 ## Caché (AWS-02)
 
 La respuesta completa se cachea en S3 bajo `lsb-to-text-audio/cache/<cache_key>.json`

@@ -22,6 +22,8 @@ import os
 import hashlib
 import logging
 import re
+import struct
+import time
 
 import boto3
 from botocore.exceptions import ClientError
@@ -50,7 +52,19 @@ CACHE_PREFIX = os.environ.get("APP_PREFIX", "text-to-lsb")
 # Se versiona la clave para poder invalidar toda la caché de golpe cuando
 # cambien las reglas del prompt: el texto de entrada sería el mismo, pero la
 # traducción esperada ya no.
-CACHE_VERSION = os.environ.get("CACHE_VERSION", "v1")
+CACHE_VERSION = os.environ.get("CACHE_VERSION", "v2")
+
+# Animaciones del avatar. Todas las señas son clips dentro de UN solo .glb en
+# S3, y el visor elige el clip por nombre. La lista de clips del propio archivo
+# es la única fuente fiable de qué seña existe: una lista escrita a mano se
+# desincroniza en cuanto se sube un .glb nuevo, y una glosa marcada como
+# disponible sin clip real deja al avatar sin mostrar nada.
+# Vacío = no se lee S3 y se usa AVAILABLE_3D_GLOSSES como antes.
+ANIMATIONS_BUCKET = os.environ.get("ANIMATIONS_BUCKET", "")
+ANIMATIONS_KEY = os.environ.get("ANIMATIONS_KEY", "avatar_test.glb")
+# Cada cuánto se vuelve a leer la lista de clips, para que una seña recién
+# subida aparezca sin redesplegar la lambda.
+ANIMATIONS_TTL_SECONDS = int(os.environ.get("ANIMATIONS_TTL_SECONDS", "300"))
 
 # ---------------------------------------------------------------------------
 # Clientes AWS
@@ -73,18 +87,21 @@ CORS_HEADERS = {
 # Si la IA genera una glosa que NO está aquí, el sistema usará
 # dactilología (deletreo) como fallback.
 # ===================================================================
+# DICCIONARIO DE GLOSAS DISPONIBLES EN EL AVATAR 3D
+# Si la IA genera una glosa que NO está aquí, el sistema usará
+# dactilología (deletreo) como fallback.
+# ===================================================================
 AVAILABLE_GLOSSES = {
-    # GENERADO por tool/sync_vocabulary.dart — no editar a mano.
-    # Fuente: assets/dictionary/official_dictionary.json
+    # Fuente: assets/dictionary/official_dictionary.json y Corpus Maestro LSB v4
     # --- Cortesía (7) ---
     "DE_NADA", "GRACIAS", "HASTA_LUEGO", "HOLA", "LO_SIENTO", "PERMISO",
     "POR_FAVOR",
-    # --- Respuesta (11) ---
-    "COMPRENDER", "ESTAR_DE_ACUERDO", "MENTIRA", "NO", "NO_ESTAR_DE_ACUERDO", "NO_PUEDO",
+    # --- Respuesta (12) ---
+    "COMPRENDER", "CONTESTAR", "ESTAR_DE_ACUERDO", "MENTIRA", "NO", "NO_ESTAR_DE_ACUERDO", "NO_PUEDO",
     "NO_SABER", "PUEDO", "SABER", "TAL_VEZ", "VERDAD",
-    # --- Preguntas (8) ---
-    "AMBOS", "ELLA", "ELLOS", "NOSOTROS", "SUYO", "TUYO",
-    "VARIOS", "YO",
+    # --- Preguntas y Pronombres (13) ---
+    "AMBOS", "COMO_ESTAS", "CÓMO_ESTÁS", "ELLA", "ELLOS", "NOSOTROS", "PARA_QUE", "PARA_QUÉ",
+    "POR_QUE", "POR_QUÉ", "SUYO", "TUYO", "USTEDES", "VARIOS", "YO",
     # --- Identificación (31) ---
     "ADULTO", "ALTO", "AMIGO", "ASOCIACIÓN_SORDOS", "BAJO", "COMPAÑERO",
     "COMUNIDAD_SORDA", "EDAD", "ESPOSA", "FLACO", "GORDO", "HERMANA",
@@ -100,7 +117,7 @@ AVAILABLE_GLOSSES = {
     # --- Conceptos jurídicos (12) ---
     "ASISTENCIA", "CONVOCAR", "DISCRIMINACIÓN", "INVESTIGACIÓN", "JUSTICIA", "LEY",
     "PLAZO", "PROHIBIDO", "RESOLUCIÓN", "RESULTADO", "TESTIMONIO", "TRÁMITE",
-    # --- Acciones (87) ---
+    # --- Acciones (88) ---
     "ABRIR", "ACEPTAR", "ACOMPAÑAR", "ANDAR", "ARREGLAR", "ARRESTAR",
     "ATENDER", "AUMENTAR", "AVISAR", "AYUDAR", "BOCA", "BRAZO",
     "BURLAR", "BUSCAR", "CABELLO", "CAMBIAR", "COMPRAR", "CONOCER",
@@ -155,9 +172,10 @@ AVAILABLE_GLOSSES = {
     "M", "N", "O", "P", "Q", "R",
     "S", "T", "U", "V", "W", "X",
     "Y", "Z", "Ñ",
-    # --- Números (10) ---
+    # --- Números (11) ---
     "0", "1", "2", "3", "4", "5",
-    "6", "7", "8", "9",
+    "6", "7", "8", "9", "10",
+    "CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ",
 }
 
 # ===================================================================
@@ -166,38 +184,89 @@ AVAILABLE_GLOSSES = {
 OFFICIAL_LSB_CORPUS = AVAILABLE_GLOSSES
 
 # ===================================================================
-# DICCIONARIO DE GLOSAS DISPONIBLES EN EL AVATAR 3D
+# DICCIONARIO DE GLOSAS CON ANIMACIÓN 3D DISPONIBLE (146 SEÑAS VERDES)
 # ===================================================================
-# Catálogo oficial de las señas horneadas en 3D en avatar_test.glb.
-#
-# La I y la K del abecedario NO están: el modelo 3D del avatar no las trae
-# (ver el mismo hueco documentado en el cliente,
-# lib/core/domain/services/animation_url_resolver.dart, `available3DGlosses`).
-# Antes este set sí las incluía, así que el servidor afirmaba
-# `available: true` para una animación que el cliente nunca podía mostrar —
-# la discrepancia la resolvía el cliente por su cuenta, en silencio, en vez de
-# que el servidor reportara la disponibilidad real (auditoría 2026-09, ficha
-# E). Mientras no se hornee la I/K, se deletrean como el resto de letras sin
-# animación 3D.
+# Catálogo oficial de las 146 señas validadas con animación 3D
+# (filas VERDES de la hoja de cálculo maestra).
+# Es solo el RESPALDO: con ANIMATIONS_BUCKET configurado, lo que decide si una
+# seña se muestra es la lista de clips del .glb en S3 (ver get_baked_clips).
+# Todas las demás señas (amarillas, naranjas, blancas o no catalogadas)
+# NO tienen animación horneada aún y se deletrean dactilológicamente.
 AVAILABLE_3D_GLOSSES = {
-    # 1. Comunicación básica y control del diálogo (5)
-    "HOLA", "PERMISO", "GRACIAS", "SI", "NO",
-    # 2. Abecedario Dactilológico LSB (25 de 27 letras — sin I, sin K)
-    "A", "B", "C", "D", "E", "F", "G", "H", "J", "L", "M",
-    "N", "Ñ", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-    # 3. Números LSB (10 dígitos)
-    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+    # 1. Comunicación básica, control del diálogo y cortesía (5)
+    "HOLA", "PERMISO", "GRACIAS", "POR_FAVOR", "LO_SIENTO",
+    # 2. Respuestas y confirmación (7)
+    "SI", "SÍ", "NO", "PUEDO", "NO_PUEDO", "SABER", "NO_SABER", "COMPRENDER",
+    "CONTESTAR", "CONTESTAR_DOS_VECES",
+    # 3. Pronombres y referencia personal (7)
+    "YO", "TU", "TÚ", "EL", "ÉL", "ELLA", "NOSOTROS", "USTEDES", "ELLOS", "COMO_ESTAS", "CÓMO_ESTÁS",
+    # 4. Preguntas e interrogativos (9)
+    "QUIEN", "QUIÉN", "DONDE", "DÓNDE", "COMO", "CÓMO", "POR_QUE", "POR_QUÉ",
+    "QUE", "QUÉ", "CUAL", "CUÁL", "PARA_QUE", "PARA_QUÉ", "CUANTOS", "CUÁNTOS",
+    "CUANDO", "CUÁNDO",
+    # 5. Abecedario Dactilológico LSB (27 letras completas)
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+    "N", "Ñ", "ENIE", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+    # 6. Números LSB (dígitos y numerales 0 - 10)
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    "CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ",
+    # 7. Identificación y personas (6)
+    "NOMBRE", "HOMBRE", "MUJER", "IDENTIDAD", "TESTIGO", "SORDO",
+    # 8. Instituciones y servicios (6)
+    "ABOGADO", "INTERPRETE", "INTÉRPRETE", "JUEZ", "AUTORIDAD", "POLICIA", "POLICÍA", "HOSPITAL",
+    # 9. Conceptos jurídicos y trámites (6)
+    "ASISTENCIA", "INVESTIGACION", "INVESTIGACIÓN", "JUSTICIA", "RESOLUCION", "RESOLUCIÓN",
+    "TESTIMONIO", "TRAMITE", "TRÁMITE",
+    # 10. Acciones y verbos (28)
+    "ACEPTAR", "ACOMPAÑAR", "ACOMPANAR", "ATENDER", "AYUDAR", "BUSCAR", "DAR",
+    "ENVIAR", "ESCRIBIR", "ESPERAR", "EXPLICAR", "GUARDAR", "HABLAR", "LEER",
+    "MOSTRAR", "NECESITAR", "OBSERVAR", "PROTEGER", "QUEJAR", "QUERER", "RECHAZAR",
+    "RECIBIR", "RECORDAR", "ROBAR", "TRAER", "VENIR", "VER", "VOLVER",
+    # 11. Hechos, urgencia y agresiones (7)
+    "AMENAZAR", "DAÑAR", "DANAR", "ENGAÑAR", "ENGANAR", "HERIDA", "PEGAR",
+    # 12. Descripción, estado y emoción (2)
+    "LENTO", "MIEDO",
+    # 13. Tiempo (9)
+    "AHORA", "AYER", "AUN", "AÚN", "FECHA", "HORA", "HOY", "MAÑANA", "MANANA", "SEMANA", "TARDE",
+    # 14. Lugares (8)
+    "ALLI", "ALLÍ", "AQUI", "AQUÍ", "AVENIDA", "CALLE", "CASA", "CERCA", "DENTRO", "OFICINA",
+    # 15. Documentos (5)
+    "CARPETA", "CERTIFICADO", "FACTURA", "FOTOCOPIA", "PAPEL",
+    # 16. Objetos (4)
+    "BILLETES", "CELULAR", "FOTOS", "VIDEO",
+}
+
+# ---------------------------------------------------------------------------
+# Normalización ortográfica
+# ---------------------------------------------------------------------------
+
+def remove_accents(text: str) -> str:
+    accents = {
+        'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
+        'Ü': 'U', 'Ñ': 'N'
+    }
+    for accented_char, unaccented_char in accents.items():
+        text = text.replace(accented_char, unaccented_char)
+    return text
+
+def strip_gloss_accents(text: str) -> str:
+    """Quita tildes y diéresis de una glosa conservando la Ñ."""
+    for con, sin in (('Á', 'A'), ('É', 'E'), ('Í', 'I'), ('Ó', 'O'),
+                     ('Ú', 'U'), ('Ü', 'U')):
+        text = text.replace(con, sin)
+    return text
+
+
+# Normalización interna del catálogo 3D
+_AVAILABLE_3D_GLOSSES_NORM = {
+    strip_gloss_accents(g.upper().strip().replace(' ', '_'))
+    for g in AVAILABLE_3D_GLOSSES
 }
 
 # Términos judiciales que requieren validación y deben deletrearse dactilológicamente
 TERMS_TO_SPELL = {
     "ACTA", "CEDULA", "CÉDULA", "FIRMA", "FIRMAR", "DECLARACION",
     "DECLARACIÓN", "DECLARAR", "MINISTERIO_PUBLICO", "MINISTERIO PÚBLICO",
-    # Siglas institucionales sin seña propia: se deletrean siempre, escritas
-    # como las escriba quien declara ("felcc" en minúscula no es menos FELCC
-    # que "FELCC"). Sin esto, `_es_nombre_propio` solo protegía la mayúscula
-    # inicial y una sigla en minúscula colapsaba en una glosa que el avatar
-    # no puede representar (auditoría 2026-09).
     "FELCC", "FELCV", "SEPDAVI", "SEPDEP", "NUREJ",
 }
 
@@ -208,73 +277,161 @@ GLOSS_ALIASES = {
     "LO SIENTO": "LO_SIENTO",
     "NO PUEDO": "NO_PUEDO",
     "NO SABER": "NO_SABER",
-    # Sin guion bajo, "ÓRGANO JUDICIAL"/"MÁS O MENOS" no pasarían _VALID_GLOSS
-    # (no admite espacios): el alias tiene que existir. Pero el destino va
-    # SIN tilde: es el mismo criterio que "SÍ"/"POLICIA" más abajo — el
-    # lexicón de composición (GLOSS_LEXICON en lambda_function.py) y el
-    # catálogo de señas 3D (AVAILABLE_3D_GLOSSES) usan la clave sin tilde
-    # para estos mismos conceptos, y una glosa acentuada que no calza con
-    # ninguna de las dos caía sin representar en ningún lado.
     "ÓRGANO JUDICIAL": "ORGANO_JUDICIAL",
     "ORGANO JUDICIAL": "ORGANO_JUDICIAL",
     "ESTOY BIEN": "ESTOY_BIEN",
     "MÁS O MENOS": "MAS_O_MENOS",
     "MAS O MENOS": "MAS_O_MENOS",
-    # Saludo de cortesía como frase fija: sin este alias "¿CÓMO ESTÁS?" no
-    # calzaba con ningún alias de una sola palabra y el signo de interrogación
-    # lo rechazaba por formato — la frase entera desaparecía.
     "¿COMO ESTAS?": "COMO_ESTAS",
     "COMO ESTAS": "COMO_ESTAS",
-    # SÍ/POLICIA/DONDE/CUANDO/QUE/QUIEN/CUAL/COMO/CUANTOS ya NO tienen alias
-    # a una forma acentuada aparte (auditoría 2026-09, clase GlosasAcentuadas):
-    # `canonical_gloss` sin alias cae a `strip_gloss_accents`, que por sí solo
-    # ya produce la forma sin tilde correcta ("SI", "POLICIA"...). El alias
-    # que había aquí antes sustituía ese resultado bueno por uno acentuado
-    # ("SÍ", "POLICÍA"...) que no existe como clave ni en GLOSS_LEXICON ni en
-    # AVAILABLE_3D_GLOSSES, así que la seña de sí/no o la palabra nunca se
-    # reconocían en ningún lado.
-    #
-    # NO se alían los dígitos a su nombre en LSB ("5" -> "CINCO"): ese alias
-    # existió antes bajo la premisa de que el avatar anima el número por su
-    # nombre, pero ni el diccionario oficial (official_dictionary.json guarda
-    # el dígito "5", no la palabra "CINCO") ni AVAILABLE_3D_GLOSSES (que solo
-    # tiene los caracteres "0"-"9") respaldan esa premisa. El efecto real del
-    # alias era, sin que nada lo dijera, dejar CUALQUIER cifra sin animación:
-    # "CINCO" no está en ninguno de los dos catálogos, así que
-    # `resolve_animation_file` la marcaba `available: false` siempre — cuando
-    # el dígito "5" tal cual SÍ tenía animación. Quitar el alias devuelve la
-    # cifra a su forma documentada y con seña real (auditoría 2026-09, ficha
-    # D/animaciones).
+    "¿CÓMO ESTÁS?": "COMO_ESTAS",
+    "CÓMO ESTÁS": "COMO_ESTAS",
+    "¿POR QUE?": "POR_QUE",
+    "POR QUE": "POR_QUE",
+    "¿POR QUÉ?": "POR_QUE",
+    "POR QUÉ": "POR_QUE",
+    "PORQUE": "POR_QUE",
+    "¿PARA QUE?": "PARA_QUE",
+    "PARA QUE": "PARA_QUE",
+    "¿PARA QUÉ?": "PARA_QUE",
+    "PARA QUÉ": "PARA_QUE",
+    "CONTESTAR": "CONTESTAR",
     "TELEFONO": "CELULAR",
     "FOTOGRAFIA": "FOTOS",
     "DELGADO": "FLACO",
-    # BILLETERA -> BILLETES y CORRER -> ESCAPAR NO son alias: son equivalencias
-    # de significado que la app no puede afirmar (una billetera no es dinero;
-    # correr no implica huir). Como el catálogo tampoco tiene una seña propia
-    # para "billetera" ni para "correr" (sin implicar fuga), forzar el alias
-    # cambiaba el hecho declarado en vez de señalar el recurso faltante. Se
-    # deletrean en su lugar (ver `post_process_glosses`), que preserva el
-    # significado en vez de sustituirlo (auditoría 2026-09, ficha B).
 }
 
-def resolve_animation_file(gloss: str, animations: dict, text: str):
-    """Archivo de animación para [gloss] (avatar_test.glb para 3D, None para placeholder)."""
-    clean_gloss = gloss.upper().strip()
-    if clean_gloss in AVAILABLE_3D_GLOSSES:
-        return "avatar_test.glb"
-    return animations.get(clean_gloss)
+# ---------------------------------------------------------------------------
+# Clips horneados en el .glb del avatar
+# ---------------------------------------------------------------------------
+# Los numerales se hornearon con su nombre en letras (el catálogo los ofrece
+# como dígitos) y la Ñ como "ENE". Mismo reparto que
+# `AnimationUrlResolver.canonicalFor` / `animationNameOverrides` en el cliente.
+_NUMERAL_CLIPS = {
+    "0": "CERO", "1": "UNO", "2": "DOS", "3": "TRES", "4": "CUATRO",
+    "5": "CINCO", "6": "SEIS", "7": "SIETE", "8": "OCHO", "9": "NUEVE",
+    "10": "DIEZ",
+}
+_CLIP_ALIASES = {"ENE": "Ñ", "ENIE": "Ñ"}
 
-_avatar_animations_cache = None
 
-def get_avatar_animations() -> dict:
-    """Mapa glosa -> animationFile disponible para el avatar 3D."""
-    global _avatar_animations_cache
-    if _avatar_animations_cache is not None:
-        return _avatar_animations_cache
+def _clip_key(gloss: str) -> str:
+    """Forma con la que se compara una glosa contra los clips del .glb."""
+    clave = strip_gloss_accents(gloss.upper().strip().replace(' ', '_'))
+    return _NUMERAL_CLIPS.get(clave, clave)
 
-    animations = {g: "avatar_test.glb" for g in AVAILABLE_3D_GLOSSES}
-    _avatar_animations_cache = animations
-    return animations
+
+def _clips_by_key(names) -> dict:
+    """{clave de glosa: nombre real del clip} para una lista de clips."""
+    mapa = {}
+    for name in names:
+        clave = _clip_key(name)
+        mapa[_CLIP_ALIASES.get(clave, clave)] = name
+    return mapa
+
+
+_GLB_JSON_CHUNK = 0x4E4F534A  # "JSON" en little-endian
+_GLB_MAX_JSON_BYTES = 16 * 1024 * 1024
+
+
+def read_glb_clip_names(bucket: str, key: str) -> list:
+    """Nombres de las animaciones de un .glb en S3, sin descargarlo entero.
+
+    Un GLB empieza por una cabecera de 12 bytes y un primer chunk JSON con la
+    descripción de la escena, animaciones incluidas; la geometría y los
+    keyframes van después, en el chunk binario, y son casi todo el peso. Con
+    dos lecturas por rango se obtiene la lista de clips sin bajar ese binario.
+    """
+    head = s3.get_object(Bucket=bucket, Key=key, Range="bytes=0-19")["Body"].read()
+    if len(head) < 20:
+        raise ValueError("archivo demasiado corto para ser un GLB")
+    magic, _version, _total = struct.unpack_from("<4sII", head, 0)
+    chunk_len, chunk_type = struct.unpack_from("<II", head, 12)
+    if magic != b"glTF" or chunk_type != _GLB_JSON_CHUNK:
+        raise ValueError("no es un GLB válido")
+    if not 0 < chunk_len <= _GLB_MAX_JSON_BYTES:
+        raise ValueError(f"chunk JSON de tamaño inesperado: {chunk_len}")
+
+    body = s3.get_object(
+        Bucket=bucket, Key=key, Range=f"bytes=20-{20 + chunk_len - 1}",
+    )["Body"].read()
+    gltf = json.loads(body)
+    return [a["name"] for a in gltf.get("animations", [])
+            if isinstance(a, dict) and isinstance(a.get("name"), str)]
+
+
+_STATIC_CLIPS = _clips_by_key(AVAILABLE_3D_GLOSSES)
+_clips_cache = {"clips": None, "expires": 0.0}
+
+
+def get_baked_clips() -> dict:
+    """{clave de glosa: nombre del clip} de las señas que el avatar sí tiene.
+
+    Con ANIMATIONS_BUCKET configurado se lee del propio .glb en S3 y se
+    guarda ANIMATIONS_TTL_SECONDS en memoria del contenedor. Si S3 falla se
+    usa la lista estática durante un minuto y se reintenta: una lectura
+    fallida no debe dejar al avatar mudo, pero tampoco congelar la lista vieja.
+    """
+    if not ANIMATIONS_BUCKET:
+        return _STATIC_CLIPS
+
+    ahora = time.time()
+    if _clips_cache["clips"] is not None and ahora < _clips_cache["expires"]:
+        return _clips_cache["clips"]
+
+    try:
+        clips = _clips_by_key(read_glb_clip_names(ANIMATIONS_BUCKET, ANIMATIONS_KEY))
+        ttl = ANIMATIONS_TTL_SECONDS
+        logger.info("Clips leídos de s3://%s/%s: %d",
+                    ANIMATIONS_BUCKET, ANIMATIONS_KEY, len(clips))
+    except Exception as e:  # noqa: BLE001 — cualquier fallo cae al estático
+        logger.warning("No se pudo leer la lista de clips del GLB (%s) — "
+                       "se usa la lista estática", e)
+        clips, ttl = _STATIC_CLIPS, 60
+
+    _clips_cache["clips"] = clips
+    _clips_cache["expires"] = ahora + ttl
+    return clips
+
+
+def plan_gloss_animation(gloss: str, clips: dict) -> tuple:
+    """(detalle, pasos) para reproducir [gloss] en el avatar.
+
+    Si la glosa tiene clip propio se muestra la seña. Si no, se deletrea letra
+    por letra; cada letra usa su clip si existe y, si tampoco lo tiene, queda
+    como placeholder (animationFile None) para que la palabra no pierda letras.
+    """
+    clip = clips.get(_clip_key(gloss))
+    if clip:
+        paso = {"gloss": gloss, "animationFile": ANIMATIONS_KEY,
+                "animationName": clip, "sourceGloss": gloss}
+        return {
+            "gloss": gloss,
+            "available": True,
+            "fallback": None,
+            "animationFile": ANIMATIONS_KEY,
+            "animationName": clip,
+            "spelledLetters": None,
+        }, [paso]
+
+    letras = _spell_out(gloss)
+    pasos = []
+    for letra in letras:
+        clip_letra = clips.get(_clip_key(letra))
+        pasos.append({
+            "gloss": letra,
+            "animationFile": ANIMATIONS_KEY if clip_letra else None,
+            "animationName": clip_letra,
+            "sourceGloss": gloss,
+        })
+    return {
+        "gloss": gloss,
+        "available": False,
+        "fallback": "dactilología",
+        "animationFile": None,
+        "animationName": None,
+        "spelledLetters": letras,
+    }, pasos
 
 
 # ===================================================================
@@ -499,27 +656,6 @@ def parse_bedrock_json(raw_text: str) -> dict:
 # ===================================================================
 # MÓDULO 3: POST-PROCESAMIENTO DE GLOSAS
 # ===================================================================
-
-def remove_accents(text: str) -> str:
-    accents = {
-        'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
-        'Ü': 'U', 'Ñ': 'N'
-    }
-    for accented_char, unaccented_char in accents.items():
-        text = text.replace(accented_char, unaccented_char)
-    return text
-
-def strip_gloss_accents(text: str) -> str:
-    """Quita tildes y diéresis de una glosa conservando la Ñ.
-
-    `remove_accents` colapsa Ñ en N, que sirve para comparar palabras sueltas
-    pero no para normalizar una glosa: la Ñ es una letra del alfabeto
-    dactilológico y distingue señas ('NIÑO' no es 'NINO').
-    """
-    for con, sin in (('Á', 'A'), ('É', 'E'), ('Í', 'I'), ('Ó', 'O'),
-                     ('Ú', 'U'), ('Ü', 'U')):
-        text = text.replace(con, sin)
-    return text
 
 
 # Los alias se consultan por su forma sin tildes: el modelo escribe tanto
@@ -748,9 +884,11 @@ def _spell_out(word: str) -> list:
 
     A diferencia de `_clave` (que usa `remove_accents` y por tanto convierte
     Ñ en N para comparar), aquí cada letra es una glosa dactilológica en sí
-    misma: la Ñ deletreada tiene que seguir siendo Ñ.
+    misma: la Ñ deletreada tiene que seguir siendo Ñ. Los dígitos también se
+    conservan: una cifra de varios dígitos ("25") se muestra dígito a dígito
+    en vez de desaparecer.
     """
-    return [c for c in strip_gloss_accents(word.upper()) if c.isalpha()]
+    return [c for c in strip_gloss_accents(word.upper()) if c.isalnum()]
 
 
 def enforce_catalog_membership(glosses: list) -> tuple:
@@ -903,8 +1041,6 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
     raw_glosses = bedrock_result.get("glosses", [])
     disambiguation = list(bedrock_result.get("disambiguation", []))
 
-    animations = get_avatar_animations()
-
     # Saneado de forma: lo que devuelve el modelo es tan poco confiable como lo
     # que entró. Se filtra antes de comprobar cobertura, para que la reparación
     # trabaje sobre glosas ya bien formadas.
@@ -959,7 +1095,7 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
     if incidencias:
         logger.info("Fidelidad corregida: %s", incidencias)
 
-    processed = []
+    glosas_finales = []
     for gloss in raw_glosses:
         # Una palabra recuperada puede no tener forma de glosa (acentos, signos)
         # y no debe rotular una seña en pantalla si no la tiene.
@@ -967,43 +1103,56 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
         if not _VALID_GLOSS.match(gloss_upper):
             logger.warning("Glosa descartada por formato: %.60r", gloss)
             continue
-
-        animation_file = resolve_animation_file(gloss_upper, animations, text)
-        is_available = animation_file is not None
-
-        processed.append({
-            "gloss": gloss_upper,
-            "available": is_available,
-            "fallback": "dactilología" if not is_available else None,
-            "animationFile": animation_file,
-        })
+        glosas_finales.append(gloss_upper)
 
     # Dos estados distintos a propósito (sección 7 del encargo): un significado
     # pendiente de aclarar (`semanticStatus`) es un problema diferente de una
     # representación LSB incompleta (`representationStatus`). Resolver uno no
     # resuelve el otro, así que no comparten un solo campo de "éxito".
-    semantic_status = "needs_clarification" if pendientes else "resolved"
-    perdida_no_recuperable = any(
-        inc.get("accion") in ("negacion_perdida", "cifra_perdida") for inc in incidencias
-    )
-    representation_status = (
-        "partial" if any(not g["available"] for g in processed) or perdida_no_recuperable
-        else "complete"
-    )
-
-    return {
-        "glosses": [g["gloss"] for g in processed],
-        "glossDetails": processed,
+    return attach_animation_plan({
+        "glosses": glosas_finales,
         "disambiguation": disambiguation,
         "pendingClarifications": pendientes,
-        "semanticStatus": semantic_status,
-        "representationStatus": representation_status,
+        "semanticStatus": "needs_clarification" if pendientes else "resolved",
         # Reconocimiento: qué se dijo, separado de cómo se representa.
         "inputWords": recognize_input(text),
         "fidelityFixes": incidencias,
-        "totalGlosses": len(processed),
-        "availableInAvatar": sum(1 for g in processed if g["available"]),
-        "requiresDactylology": sum(1 for g in processed if not g["available"]),
+    })
+
+
+def attach_animation_plan(result: dict) -> dict:
+    """Añade a [result] cómo se reproduce cada glosa en el avatar.
+
+    Va separado de la traducción porque cambia con otro ritmo: la traducción
+    de una frase es estable y se cachea, pero qué señas tiene el avatar cambia
+    cada vez que se sube un .glb nuevo. Por eso se recalcula también al servir
+    desde caché — si no, una seña recién horneada seguiría deletreándose.
+
+    `animationSequence` es la lista plana de pasos que el cliente reproduce en
+    orden: una seña con clip es un paso; una palabra sin clip se expande en un
+    paso por letra.
+    """
+    clips = get_baked_clips()
+    detalles, secuencia = [], []
+    for gloss in result.get("glosses", []):
+        detalle, pasos = plan_gloss_animation(gloss, clips)
+        detalles.append(detalle)
+        secuencia.extend(pasos)
+
+    perdida_no_recuperable = any(
+        inc.get("accion") in ("negacion_perdida", "cifra_perdida")
+        for inc in result.get("fidelityFixes", [])
+    )
+    incompleta = any(not d["available"] for d in detalles) or perdida_no_recuperable
+
+    return {
+        **result,
+        "glossDetails": detalles,
+        "animationSequence": secuencia,
+        "representationStatus": "partial" if incompleta else "complete",
+        "totalGlosses": len(detalles),
+        "availableInAvatar": sum(1 for d in detalles if d["available"]),
+        "requiresDactylology": sum(1 for d in detalles if not d["available"]),
     }
 
 
@@ -1200,7 +1349,9 @@ def lambda_handler(event, context):
     cached = check_cache(cache_key)
     if cached:
         logger.info("Cache HIT — respuesta servida desde caché: %s", cache_key)
-        return build_response(200, {**cached, "cacheHit": True})
+        # La traducción sale de la caché, pero qué señas tiene el avatar se
+        # comprueba ahora: el .glb puede haber cambiado desde que se guardó.
+        return build_response(200, {**attach_animation_plan(cached), "cacheHit": True})
 
     # 4. Construir el Prompt de desambiguación semántica
     prompt = build_disambiguation_prompt(text, context_type, situation)
