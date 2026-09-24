@@ -16,12 +16,18 @@ class TextInputWidget extends ConsumerStatefulWidget {
   /// curso para que el microfono no siga escuchando en segundo plano.
   final bool isActive;
 
+  /// Permite que otra parte de la pantalla devuelva el turno al oyente
+  /// poniendo el cursor aqui. Solo enfoca: el dictado sigue necesitando que
+  /// el oyente pulse el microfono.
+  final FocusNode? focusNode;
+
   const TextInputWidget({
     super.key,
     required this.onSubmit,
     this.onSpeechSubmit,
     this.hintText = 'Ingresar texto',
     this.isActive = true,
+    this.focusNode,
   });
 
   @override
@@ -246,6 +252,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           Expanded(
             child: TextField(
               controller: _controller,
+              focusNode: widget.focusNode,
               enabled: !_isRecording,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(

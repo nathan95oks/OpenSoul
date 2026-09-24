@@ -85,6 +85,15 @@ class Conversation {
     return last.message.speaker == SpeakerRole.hearing ? last : null;
   }
 
+  ConversationTurn? turnById(String id) {
+    for (final turn in turns) {
+      if (turn.message.id == id) return turn;
+    }
+    return null;
+  }
+
+  bool hasTurn(String id) => turnById(id) != null;
+
   String? get suggestedReplyContextId =>
       pendingReply?.message.contextSuggestion?.contextId ?? activeContextId;
 
@@ -94,8 +103,17 @@ class Conversation {
         startedAt: startedAt,
       );
 
+  /// Sustituye el turno con el mismo id, normalmente para completar uno que
+  /// se mostró mientras viajaba la traducción.
+  ///
+  /// Solo sustituye a un turno del mismo hablante: si dos turnos llegaran a
+  /// compartir id, el daño se queda en no actualizar en vez de borrar la
+  /// intervención de la otra persona. El id único es lo que lo evita de
+  /// verdad ([ConversationEngine]); esto es la red por debajo.
   Conversation replaceTurn(ConversationTurn turn) {
-    final index = turns.indexWhere((t) => t.message.id == turn.message.id);
+    final index = turns.indexWhere((t) =>
+        t.message.id == turn.message.id &&
+        t.message.speaker == turn.message.speaker);
     if (index < 0) return this;
     return Conversation(
       id: id,

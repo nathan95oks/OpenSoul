@@ -195,5 +195,17 @@ class ConversationEngine {
     );
   }
 
-  static String _newId() => DateTime.now().microsecondsSinceEpoch.toString();
+  /// Contador que rompe los empates del reloj.
+  ///
+  /// El identificador era solo `microsecondsSinceEpoch`, y dos turnos creados
+  /// dentro del mismo microsegundo —responder y que el oyente escriba acto
+  /// seguido, o un dispositivo rápido— recibían el mismo. `replaceTurn` busca
+  /// por id, así que al completarse la traducción del turno del oyente
+  /// reemplazaba al turno homónimo anterior: una declaración ya registrada de
+  /// la persona sorda desaparecía del chat sin dejar rastro, y las respuestas
+  /// posteriores se enlazaban a un turno que ya no era el suyo.
+  static int _sequence = 0;
+
+  static String _newId() =>
+      '${DateTime.now().microsecondsSinceEpoch}-${_sequence++}';
 }

@@ -4,6 +4,7 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
 
 class ConversationState {
   final Conversation conversation;
@@ -60,18 +61,40 @@ class ConversationNotifier extends Notifier<ConversationState> {
     }
   }
 
-  void addDeafDeclaration({
+  /// Añade el turno de la persona sorda enlazado a [replyToId].
+  ///
+  /// El enlace llega desde fuera —lo congela el lanzamiento del módulo de
+  /// tarjetas— en vez de calcularse aquí mirando el último turno. Calcularlo
+  /// al enviar hacía que una respuesta escrita durante la edición se colgara
+  /// de la pregunta equivocada, y que un turno de apertura de la persona sorda
+  /// se enlazara a lo que hubiera quedado de la charla anterior.
+  ///
+  /// Si [replyToId] ya no existe en el chat (historial reiniciado, sesión
+  /// restaurada, otro chat) no se inventa un enlace ni se envía a ciegas:
+  /// se devuelve [SubmitOutcome.staleReply] y quien llama decide.
+  SubmitOutcome addDeafDeclaration({
     required TranslationResult result,
     required List<String> glosses,
     String? contextId,
+    String? replyToId,
+    String? conversationId,
   }) {
+    final conversation = state.conversation;
+    if (conversationId != null && conversationId != conversation.id) {
+      return SubmitOutcome.staleReply;
+    }
+    if (replyToId != null && !conversation.hasTurn(replyToId)) {
+      return SubmitOutcome.staleReply;
+    }
+
     final turn = ref.read(conversationEngineProvider).turnFromDeclaration(
           result: result,
           glosses: glosses,
           contextId: contextId,
-          replyToId: state.conversation.pendingReply?.message.id,
+          replyToId: replyToId,
         );
-    state = ConversationState(conversation: state.conversation.addTurn(turn));
+    state = ConversationState(conversation: conversation.addTurn(turn));
+    return SubmitOutcome.sent;
   }
 
   void startNew() =>

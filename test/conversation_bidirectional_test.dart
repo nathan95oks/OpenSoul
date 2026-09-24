@@ -141,11 +141,14 @@ void main() {
         .message
         .id;
 
+    // El enlace lo aporta quien abrió el módulo de tarjetas (modo C), que es
+    // quien sabe qué pregunta tenía delante la persona sorda.
     notifier.addDeafDeclaration(
       result: await _StubDeclarationRepository()
           .translateCards(context: 'denuncia_robo', cards: const []),
       glosses: const ['ROBAR'],
       contextId: 'denuncia_robo',
+      replyToId: hearingId,
     );
 
     final turns = container.read(conversationProvider).conversation.turns;
