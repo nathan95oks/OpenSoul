@@ -7,6 +7,8 @@ import 'package:lsb_legal_app/core/domain/repositories/translation_repository.da
 import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/backend_capability.dart';
 
 class ConversationEngine {
   final LocalSentenceAssembler assembler;
@@ -71,12 +73,24 @@ class ConversationEngine {
         replyToId: declaration?.replyToId,
         business: business,
       );
-      final degenerate = remote.coverageValidated
-          ? remote.generatedText.trim().isEmpty
-          : assembler.isBackendDegenerate(
-              backendText: remote.generatedText,
-              glosses: glosses,
-            );
+      // Un backend que no conserva la colección de hechos devuelve una frase
+      // plausible a la que le falta la mitad de lo declarado. No hay forma de
+      // detectarlo mirando el texto —suena bien—, así que se decide por la
+      // capacidad anunciada: si no puede conservarlos, manda la redacción
+      // local, que sí los tiene todos.
+      final pierdeHechos = declaration != null &&
+          !BackendCompatibility.canSendWithoutLoss(
+            declaration,
+            RemoteTranslationDataSourceImpl.lastKnownCapability,
+          );
+
+      final degenerate = pierdeHechos ||
+          (remote.coverageValidated
+              ? remote.generatedText.trim().isEmpty
+              : assembler.isBackendDegenerate(
+                  backendText: remote.generatedText,
+                  glosses: glosses,
+                ));
       result = TranslationResult(
         baseSentence: safeLocal,
         generatedText: degenerate ? safeLocal : remote.generatedText,

@@ -265,5 +265,51 @@ class ElPerfilNoEsContenido(unittest.TestCase):
                          "La institución no puede alterar el contenido.")
 
 
+class ClienteV2YV3ContraElBackendNuevo(unittest.TestCase):
+    """Las dos combinaciones que van a existir durante el despliegue."""
+
+    def test_el_backend_anuncia_su_contrato(self):
+        datos = invocar(cargar("robo_y_huida_sospechoso"))
+        self.assertEqual(datos.get("contractVersion"),
+                         L.BACKEND_CONTRACT_VERSION)
+        self.assertEqual(datos.get("generatorVersion"), L.GENERATOR_VERSION)
+
+    def test_cliente_v3_con_backend_nuevo_conserva_los_dos_hechos(self):
+        datos = invocar(cargar("robo_y_huida_sospechoso"))
+        texto = datos.get("baseSentence") or ""
+        self.assertIn("Denuncio el robo", texto)
+        self.assertIn("El sospechoso se dio a la fuga.", texto, texto)
+
+    def test_cliente_v2_con_backend_nuevo_sigue_funcionando(self):
+        # El borrador antiguo: un solo `fact` con la huida dentro.
+        body = cargar("borrador_antiguo_tal_cual")
+        body["contractVersion"] = 2
+        body.pop("usageMode", None)
+        body.pop("need", None)
+
+        datos = invocar(body)
+        self.assertNotIn("error", datos, datos)
+        texto = datos.get("baseSentence") or ""
+        self.assertIn("Denuncio el robo", texto)
+        self.assertIn("El sospechoso se dio a la fuga.", texto,
+                      "El backend nuevo tiene que seguir leyendo el formato "
+                      "anterior, o un cliente sin actualizar pierde la huida.")
+
+    def test_las_dos_versiones_no_comparten_cache(self):
+        v2 = cargar("borrador_antiguo_tal_cual")
+        v2["contractVersion"] = 2
+        v3 = cargar("robo_y_huida_sospechoso")
+
+        clave_v2 = L.generate_cache_key(
+            v2["context"], v2["cards"], v2.get("institutionType", ""),
+            v2.get("language", ""), v2.get("speechAct", ""),
+            v2.get("declaration"), 2)
+        clave_v3 = L.generate_cache_key(
+            v3["context"], v3["cards"], v3.get("institutionType", ""),
+            v3.get("language", ""), v3.get("speechAct", ""),
+            v3.get("declaration"), 3)
+        self.assertNotEqual(clave_v2, clave_v3)
+
+
 if __name__ == "__main__":
     unittest.main()
