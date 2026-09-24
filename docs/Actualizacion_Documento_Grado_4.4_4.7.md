@@ -58,7 +58,10 @@ explícitamente en lugar de simular una traducción.
 Se distingue entre disponibilidad léxica y disponibilidad de animación, porque
 una entrada presente en el catálogo no implica que exista un recurso
 ejecutable. La verificación se realizó sobre el resolutor efectivo
-(`AnimationUrlResolver`) y no sobre el campo de datos `animationFile`.
+(`AnimationUrlResolver`) y no sobre el campo de datos `animationFile`. Se trata
+de una lectura del código: el archivo del modelo tridimensional no forma parte
+del repositorio, de modo que estas cifras describen lo que el sistema declara
+que puede pedir, no una inspección de las animaciones existentes.
 
 **Tabla — Recursos léxicos y de animación verificados**
 
@@ -67,7 +70,7 @@ ejecutable. La verificación se realizó sobre el resolutor efectivo
 | Apéndice 12 del corpus maestro | 303 | Glosas documentadas con trazabilidad M1–M4 y Diccionario 2024 |
 | Catálogo de la aplicación | 346 | Entradas elegibles como tarjeta, incluidos mecanismos de deletreo y numeración |
 | Léxico del servicio `audio → LSB` | 346 | Paridad exacta entre cliente y backend |
-| Animaciones horneadas en el modelo | 41 | 5 señas léxicas, 25 letras dactilológicas y 11 numerales |
+| Identificadores declarados disponibles por el resolutor | 41 | 5 señas léxicas, 25 letras dactilológicas y 11 numerales. Procede de la constante `available3DGlosses`; el modelo `.glb` no forma parte del repositorio y no fue inspeccionado. |
 
 *Fuente: elaboración propia, 2026.*
 

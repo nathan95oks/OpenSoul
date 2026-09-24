@@ -83,7 +83,7 @@ los archivos que la app empaqueta.
 | `aws/lambda_text_to_lsb.py` → `AVAILABLE_GLOSSES` | **346** | Paridad exacta con el catálogo del cliente. |
 | Léxico del ensamblador Dart | **397** claves | Incluye variantes y alias de redacción; no es un catálogo de señas. |
 | `animationFile` no vacío en el catálogo | **37** | **No demuestra nada.** Es un campo de datos, no un recurso comprobado. |
-| Animaciones realmente horneadas en `avatar_test.glb` | **41** | Lo que el avatar sabe ejecutar: **5 señas léxicas** (HOLA, PERMISO, GRACIAS, SÍ, NO), 25 letras y 11 números. |
+| Identificadores que el resolutor declara disponibles (`available3DGlosses`) | **41** | **5 señas léxicas** (HOLA, PERMISO, GRACIAS, SÍ, NO), 25 letras y 11 numerales. No hay ningún `.glb` en el repositorio: esta cifra sale de una constante del código, no de inspeccionar el modelo. |
 
 **Lo que no se puede decir**, y que este trabajo corrige en el texto académico:
 
@@ -242,7 +242,7 @@ Honestamente, y sin presentarlo como terminado:
    ÓRGANO-JUDICIAL + OFICINA para JUZGADO) **siguen sin validar**.
 2. **Los cinco conceptos genéricos** (OBJETO, TEXTO, COLOR, DELETREAR)
    necesitan una decisión de producto sobre el conjunto concreto a ofrecer.
-3. **Cobertura del avatar.** Con 5 señas léxicas horneadas, la dirección
+3. **Cobertura del avatar.** Con 5 señas léxicas declaradas disponibles, la dirección
    español → LSB es hoy mayoritariamente dactilología y marcadores de
    posición. Ninguna cifra de este repositorio debe presentarse como
    «animaciones disponibles» sin esa aclaración.

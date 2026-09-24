@@ -1,0 +1,5949 @@
+{
+ "version": 1,
+ "intenciones": [
+  {
+   "intencion": "ACOMPAÑANTE",
+   "nodos": [
+    "n-s6-acceso_comunicativ-12"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Vino solo o acompañado?"
+    ],
+    "palabrasClave": [
+     "acompañado",
+     "solo",
+     "vino"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TÚ",
+    "VENIR"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "AGRESION",
+   "nodos": [
+    "n-s6-agresion_violenci-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Alguien le pegó o maltrató?"
+    ],
+    "palabrasClave": [
+     "alguien",
+     "maltrató",
+     "pegó"
+    ]
+   },
+   "tarjetasValidas": [
+    "MALTRATAR",
+    "NO",
+    "NO_SABER",
+    "PEGAR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "dna",
+    "policia",
+    "slim"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "ALTURA",
+   "nodos": [
+    "n-s6-descripcion_de_per-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Era alto o bajo?"
+    ],
+    "palabrasClave": [
+     "alto",
+     "bajo"
+    ]
+   },
+   "tarjetasValidas": [
+    "ALTO",
+    "BAJO",
+    "CUÁL",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "AMENAZA",
+   "nodos": [
+    "n-s6-agresion_violenci-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Recibió amenazas?"
+    ],
+    "palabrasClave": [
+     "amenazas",
+     "recibió"
+    ]
+   },
+   "tarjetasValidas": [
+    "AMENAZAR",
+    "NO",
+    "NO_SABER",
+    "RECIBIR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "slim"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "AMENAZA_CELULAR",
+   "nodos": [
+    "n-s6-amenazas_mensajes-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Las amenazas llegaron por celular?"
+    ],
+    "palabrasClave": [
+     "amenazas",
+     "celular",
+     "llegaron"
+    ]
+   },
+   "tarjetasValidas": [
+    "AMENAZAR",
+    "CELULAR",
+    "ENVIAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CAPTURAS"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "AMPLIACION_RELATO",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-12"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "free_text",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Quiere agregar algo que no le pregunté?"
+    ],
+    "palabrasClave": [
+     "agregar",
+     "algo",
+     "pregunté",
+     "quiere"
+    ]
+   },
+   "tarjetasValidas": [
+    "AUMENTAR",
+    "NARRAR",
+    "NO",
+    "NO_SABER",
+    "QUERER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "HORA_HECHO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO",
+    "VESTIMENTA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "ASISTENCIA_MEDICA",
+   "nodos": [
+    "n-s6-agresion_violenci-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita asistencia médica?"
+    ],
+    "palabrasClave": [
+     "asistencia",
+     "médica",
+     "necesita"
+    ]
+   },
+   "tarjetasValidas": [
+    "ASISTENCIA",
+    "DOCTOR",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "sepdavi"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "ATENCION_HOSPITAL",
+   "nodos": [
+    "n-s6-agresion_violenci-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Fue al hospital?"
+    ],
+    "palabrasClave": [
+     "hospital"
+    ]
+   },
+   "tarjetasValidas": [
+    "HOSPITAL",
+    "IR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "AUXILIO_INMEDIATO",
+   "nodos": [
+    "n-s6-agresion_violenci-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita auxilio ahora?"
+    ],
+    "palabrasClave": [
+     "ahora",
+     "auxilio",
+     "necesita"
+    ]
+   },
+   "tarjetasValidas": [
+    "AHORA",
+    "AUXILIO",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "policia"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "AVISO_ESCRITO",
+   "nodos": [
+    "n-s6-seguimiento_prelim-10"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Prefiere que le avisemos por escrito?"
+    ],
+    "palabrasClave": [
+     "avisemos",
+     "escrito",
+     "prefiere"
+    ]
+   },
+   "tarjetasValidas": [
+    "AVISAR",
+    "ENVIAR",
+    "ESCRIBIR",
+    "MEJOR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "BANCO",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Lo hizo mediante un banco?"
+    ],
+    "palabrasClave": [
+     "banco",
+     "hizo",
+     "mediante"
+    ]
+   },
+   "tarjetasValidas": [
+    "BANCO",
+    "BILLETES",
+    "ENVIAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "COMPROBANTE",
+    "CONTACTO_PERSONA",
+    "DINERO_ENTREGADO",
+    "MONTO",
+    "NOMBRE_PERSONA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CABELLO",
+   "nodos": [
+    "n-s6-descripcion_de_per-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Qué color de cabello recuerda?"
+    ],
+    "palabrasClave": [
+     "cabello",
+     "color",
+     "recuerda"
+    ]
+   },
+   "tarjetasValidas": [
+    "CABELLO",
+    "CUÁL",
+    "NO_SABER"
+   ],
+   "conceptosPendientes": {
+    "COLOR": "ni en el catálogo, ni en el corpus, ni deletreable"
+   },
+   "aclaraciones": [
+    "Conceptos sin cobertura en esta intención: COLOR."
+   ],
+   "transicionesAIntenciones": [
+    "AMPLIACION_RELATO",
+    "HORA_HECHO",
+    "OBJETO_PERSONA",
+    "POSICION_LUGAR",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ORDENADO",
+    "ROBO_CELULAR",
+    "ROBO_OBJETO",
+    "SIN_INTENCION",
+    "TIEMPO_APROX"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CANAL_ESCRITO",
+   "nodos": [
+    "n-s6-acceso_comunicativ-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Prefiere que le escriba en papel?"
+    ],
+    "palabrasClave": [
+     "escriba",
+     "papel",
+     "prefiere"
+    ]
+   },
+   "tarjetasValidas": [
+    "ESCRIBIR",
+    "MEJOR",
+    "NO",
+    "NO_SABER",
+    "PAPEL",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CANTIDAD_NUMEROS",
+   "nodos": [
+    "n-s6-amenazas_mensajes-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Son uno o varios números?"
+    ],
+    "palabrasClave": [
+     "números",
+     "varios"
+    ]
+   },
+   "tarjetasValidas": [
+    "CELULAR",
+    "CUÁNTOS",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMENAZA_CELULAR",
+    "CAPTURAS",
+    "MOSTRAR_CELULAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CAPTURAS",
+   "nodos": [
+    "n-s6-amenazas_mensajes-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene fotos de la pantalla?"
+    ],
+    "palabrasClave": [
+     "fotos",
+     "pantalla",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "CELULAR",
+    "FOTOS",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "AMENAZA_CELULAR",
+    "MOSTRAR_CELULAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CERTIFICADO",
+   "nodos": [
+    "n-s6-testigos_fotos_v-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene un certificado?"
+    ],
+    "palabrasClave": [
+     "certificado",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "CERTIFICADO",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD",
+    "TESTIGO_EXISTE",
+    "TESTIGO_TRAER",
+    "TESTIGO_VIO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CERTIFICADO_MEDICO",
+   "nodos": [
+    "n-s6-agresion_violenci-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene certificado del doctor?"
+    ],
+    "palabrasClave": [
+     "certificado",
+     "doctor",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "CERTIFICADO",
+    "DOCTOR",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CITACION",
+   "nodos": [
+    "n-s6-seguimiento_prelim-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Recibió un papel de convocatoria?"
+    ],
+    "palabrasClave": [
+     "convocatoria",
+     "papel",
+     "recibió"
+    ]
+   },
+   "tarjetasValidas": [
+    "CONVOCAR",
+    "NO",
+    "NO_SABER",
+    "PAPEL",
+    "RECIBIR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "fiscalia",
+    "ventanilla_juzgados"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "COMPRENSION",
+   "nodos": [
+    "n-s6-acceso_comunicativ-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Comprende lo que le estoy explicando?"
+    ],
+    "palabrasClave": [
+     "comprende",
+     "estoy",
+     "explicando"
+    ]
+   },
+   "tarjetasValidas": [
+    "COMPRENDER",
+    "EXPLICAR",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TÚ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "COMPROBANTE",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene factura o papel del banco?"
+    ],
+    "palabrasClave": [
+     "banco",
+     "factura",
+     "papel",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "BANCO",
+    "FACTURA",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CONTACTO_PERSONA",
+    "DINERO_ENTREGADO",
+    "MONTO",
+    "NOMBRE_PERSONA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONFIRMAR_ACCESO",
+   "nodos": [
+    "n-s6-acceso_comunicativ-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Usted es una persona sorda?"
+    ],
+    "palabrasClave": [
+     "persona",
+     "sorda"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "SORDO",
+    "SÍ",
+    "TÚ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONFORMIDAD",
+   "nodos": [
+    "n-s6-interaccion_con_fi-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Está de acuerdo con lo escrito?"
+    ],
+    "palabrasClave": [
+     "acuerdo",
+     "escrito"
+    ]
+   },
+   "tarjetasValidas": [
+    "ESCRIBIR",
+    "ESTAR_DE_ACUERDO",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONOCIMIENTO_PERSONA",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-09"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Conoce a la persona involucrada?"
+    ],
+    "palabrasClave": [
+     "conoce",
+     "involucrada",
+     "persona"
+    ]
+   },
+   "tarjetasValidas": [
+    "CONOCER",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TÚ",
+    "ÉL"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SIN_INTENCION",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONSERVAR_CHAT",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Conserva toda la conversación?"
+    ],
+    "palabrasClave": [
+     "conserva",
+     "conversación",
+     "toda"
+    ]
+   },
+   "tarjetasValidas": [
+    "ESCRIBIR",
+    "GUARDAR",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TOTAL"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "COMPROBANTE",
+    "CONTACTO_PERSONA",
+    "DINERO_ENTREGADO",
+    "MONTO",
+    "NOMBRE_PERSONA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONSULTA_ESTADO",
+   "nodos": [
+    "n-s6-seguimiento_prelim-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Vino a consultar el estado de su caso?"
+    ],
+    "palabrasClave": [
+     "caso",
+     "consultar",
+     "estado",
+     "vino"
+    ]
+   },
+   "tarjetasValidas": [
+    "BUSCAR",
+    "INVESTIGACIÓN",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "VENIR"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "derechos_reales",
+    "fiscalia",
+    "gamc",
+    "policia"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONTACTO_INTERNET",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Se comunicaron por internet?"
+    ],
+    "palabrasClave": [
+     "comunicaron",
+     "internet"
+    ]
+   },
+   "tarjetasValidas": [
+    "ESCRIBIR",
+    "INTERNET",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "COMPROBANTE",
+    "CONTACTO_PERSONA",
+    "DINERO_ENTREGADO",
+    "MONTO",
+    "NOMBRE_PERSONA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONTACTO_PERSONA",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene su número de celular?"
+    ],
+    "palabrasClave": [
+     "celular",
+     "número",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "CELULAR",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER",
+    "ÉL"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "COMPROBANTE",
+    "MONTO",
+    "NOMBRE_PERSONA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONTEXTURA",
+   "nodos": [
+    "n-s6-descripcion_de_per-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Era delgado o de contextura gruesa?"
+    ],
+    "palabrasClave": [
+     "contextura",
+     "delgado",
+     "gruesa"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁL",
+    "FLACO",
+    "GORDO",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "CONTINUIDAD_MENSAJES",
+   "nodos": [
+    "n-s6-amenazas_mensajes-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Sigue recibiendo mensajes?"
+    ],
+    "palabrasClave": [
+     "mensajes",
+     "recibiendo",
+     "sigue"
+    ]
+   },
+   "tarjetasValidas": [
+    "AÚN",
+    "ESCRIBIR",
+    "NO",
+    "NO_SABER",
+    "RECIBIR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMENAZA_CELULAR",
+    "CAPTURAS",
+    "MOSTRAR_CELULAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "DERIVACION_FISCALIA",
+   "nodos": [
+    "n-s6-interaccion_con_fi-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "institution",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Le indicaron ir a la Fiscalía?"
+    ],
+    "palabrasClave": [
+     "fiscalía",
+     "indicaron"
+    ]
+   },
+   "tarjetasValidas": [
+    "IR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "fiscalia"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "DERIVACION_SEPDAVI",
+   "nodos": [
+    "n-s6-agresion_violenci-10"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "institution",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Desea orientación para recibir asistencia de SEPDAVI?"
+    ],
+    "palabrasClave": [
+     "asistencia",
+     "desea",
+     "orientación",
+     "recibir",
+     "sepdavi"
+    ]
+   },
+   "tarjetasValidas": [
+    "ASISTENCIA",
+    "NO",
+    "NO_SABER",
+    "QUERER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "sepdavi"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "DINERO_ENTREGADO",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Entregó o envió dinero?"
+    ],
+    "palabrasClave": [
+     "dinero",
+     "entregó",
+     "envió"
+    ]
+   },
+   "tarjetasValidas": [
+    "BILLETES",
+    "DAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "COMPROBANTE",
+    "MONTO",
+    "NOMBRE_PERSONA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "EDAD_APROX",
+   "nodos": [
+    "n-s6-descripcion_de_per-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Era joven o adulto?"
+    ],
+    "palabrasClave": [
+     "adulto",
+     "joven"
+    ]
+   },
+   "tarjetasValidas": [
+    "ADULTO",
+    "CUÁL",
+    "JOVEN",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "ESCAPE",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿El ladrón escapó?"
+    ],
+    "palabrasClave": [
+     "escapó",
+     "ladrón"
+    ]
+   },
+   "tarjetasValidas": [
+    "ESCAPAR",
+    "LADRÓN",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "FALTA_DINERO",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Le falta dinero?"
+    ],
+    "palabrasClave": [
+     "dinero",
+     "falta"
+    ]
+   },
+   "tarjetasValidas": [
+    "BILLETES",
+    "NO",
+    "NO_SABER",
+    "PERDER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "FALTA_IDENTIDAD",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Le falta su carnet de identidad?"
+    ],
+    "palabrasClave": [
+     "carnet",
+     "falta",
+     "identidad"
+    ]
+   },
+   "tarjetasValidas": [
+    "IDENTIDAD",
+    "NO",
+    "NO_SABER",
+    "PAPEL",
+    "PERDER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "FECHA_DENUNCIA",
+   "nodos": [
+    "n-s6-seguimiento_prelim-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "time"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Cuándo presentó la denuncia?"
+    ],
+    "palabrasClave": [
+     "cuándo",
+     "denuncia",
+     "presentó"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁNDO",
+    "NO_SABER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "FISCALIA",
+   "nodos": [
+    "n-s6-seguimiento_prelim-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "institution",
+    "place",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita saber dónde está la Fiscalía?"
+    ],
+    "palabrasClave": [
+     "dónde",
+     "fiscalía",
+     "necesita",
+     "saber"
+    ]
+   },
+   "tarjetasValidas": [
+    "DÓNDE",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "FECHA_DENUNCIA",
+    "LECTURA_ANTES_FIRMA",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "FOTOS",
+   "nodos": [
+    "n-s6-testigos_fotos_v-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene fotografías?"
+    ],
+    "palabrasClave": [
+     "fotografías",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "FOTOS",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD",
+    "TESTIGO_EXISTE",
+    "TESTIGO_TRAER",
+    "TESTIGO_VIO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "GORRA",
+   "nodos": [
+    "n-s6-descripcion_de_per-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Llevaba gorra?"
+    ],
+    "palabrasClave": [
+     "gorra",
+     "llevaba"
+    ]
+   },
+   "tarjetasValidas": [
+    "GORRA",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "GUARDAR_MENSAJES",
+   "nodos": [
+    "n-s6-amenazas_mensajes-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Guardó los mensajes?"
+    ],
+    "palabrasClave": [
+     "guardó",
+     "mensajes"
+    ]
+   },
+   "tarjetasValidas": [
+    "ESCRIBIR",
+    "GUARDAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMENAZA_CELULAR",
+    "CAPTURAS",
+    "MOSTRAR_CELULAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "HABLAR_ABOGADO",
+   "nodos": [
+    "n-s6-seguimiento_prelim-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita hablar con un abogado?"
+    ],
+    "palabrasClave": [
+     "abogado",
+     "hablar",
+     "necesita"
+    ]
+   },
+   "tarjetasValidas": [
+    "ABOGADO",
+    "HABLAR",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "sepdep"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "HABLAR_FISCAL",
+   "nodos": [
+    "n-s6-interaccion_con_fi-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "institution",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita hablar con el fiscal?"
+    ],
+    "palabrasClave": [
+     "fiscal",
+     "hablar",
+     "necesita"
+    ]
+   },
+   "tarjetasValidas": [
+    "HABLAR",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "fiscalia"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "HABLAR_POLICIA",
+   "nodos": [
+    "n-s6-seguimiento_prelim-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "institution",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Quiere hablar con el policía encargado?"
+    ],
+    "palabrasClave": [
+     "encargado",
+     "hablar",
+     "policía",
+     "quiere"
+    ]
+   },
+   "tarjetasValidas": [
+    "HABLAR",
+    "NO",
+    "NO_SABER",
+    "POLICÍA",
+    "QUERER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "HERIDA",
+   "nodos": [
+    "n-s6-agresion_violenci-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Está herido?"
+    ],
+    "palabrasClave": [
+     "herido"
+    ]
+   },
+   "tarjetasValidas": [
+    "HERIDA",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "HORA_HECHO",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity",
+    "time"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿A qué hora aproximadamente?"
+    ],
+    "palabrasClave": [
+     "aproximadamente",
+     "hora"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁNTOS",
+    "HORA",
+    "MÁS_O_MENOS",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "IDENTIFICACION_DELETREO",
+   "nodos": [
+    "n-s6-acceso_comunicativ-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Puede deletrear su apellido?"
+    ],
+    "palabrasClave": [
+     "apellido",
+     "deletrear"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NOMBRE",
+    "NO_SABER",
+    "PUEDO",
+    "SÍ"
+   ],
+   "conceptosPendientes": {
+    "DELETREAR": "ni en el catálogo, ni en el corpus, ni deletreable"
+   },
+   "aclaraciones": [
+    "Conceptos sin cobertura en esta intención: DELETREAR."
+   ],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "IDENTIFICACION_DOCUMENTO",
+   "nodos": [
+    "n-s6-acceso_comunicativ-09"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene su carnet de identidad?"
+    ],
+    "palabrasClave": [
+     "carnet",
+     "identidad",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "IDENTIDAD",
+    "NO",
+    "NO_SABER",
+    "PAPEL",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "derechos_reales",
+    "notaria"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "IDENTIFICACION_NOMBRE",
+   "nodos": [
+    "n-s6-acceso_comunicativ-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "free_text"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Cuál es su nombre completo?"
+    ],
+    "palabrasClave": [
+     "completo",
+     "cuál",
+     "nombre"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁL",
+    "NOMBRE",
+    "NO_SABER",
+    "TUYO"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CANAL_ESCRITO",
+    "COMPRENSION",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_DELETREO",
+    "IDENTIFICACION_DOCUMENTO",
+    "LECTURA",
+    "NECESIDAD_INTERPRETE",
+    "PREFERENCIA_AVISO",
+    "REPARACION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "derechos_reales",
+    "sin_institucion"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "INTENCION_DENUNCIA",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Desea presentar una denuncia?"
+    ],
+    "palabrasClave": [
+     "denuncia",
+     "desea",
+     "presentar"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "PRESENTAR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "policia"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "INTERPRETE_REUNION",
+   "nodos": [
+    "n-s6-interaccion_con_fi-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita intérprete para esa reunión?"
+    ],
+    "palabrasClave": [
+     "intérprete",
+     "necesita",
+     "reunión"
+    ]
+   },
+   "tarjetasValidas": [
+    "INTÉRPRETE",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "REUNIÓN",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "fiscalia",
+    "sepdep"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "JUEZ",
+   "nodos": [
+    "n-s6-interaccion_con_fi-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Debe presentarse ante un juez?"
+    ],
+    "palabrasClave": [
+     "ante",
+     "debe",
+     "juez",
+     "presentarse"
+    ]
+   },
+   "tarjetasValidas": [
+    "JUEZ",
+    "NO",
+    "NO_SABER",
+    "PRESENTAR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "ventanilla_juzgados"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "LECTURA",
+   "nodos": [
+    "n-s6-acceso_comunicativ-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Puede leer este texto?"
+    ],
+    "palabrasClave": [
+     "leer",
+     "texto"
+    ]
+   },
+   "tarjetasValidas": [
+    "LEER",
+    "NO",
+    "NO_SABER",
+    "PUEDO",
+    "SÍ",
+    "TÚ"
+   ],
+   "conceptosPendientes": {
+    "TEXTO": "ni en el catálogo, ni en el corpus, ni deletreable"
+   },
+   "aclaraciones": [
+    "Conceptos sin cobertura en esta intención: TEXTO."
+   ],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "LECTURA_ANTES_FIRMA",
+   "nodos": [
+    "n-s6-interaccion_con_fi-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity",
+    "time"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Quiere leer el papel antes de escribir su nombre?"
+    ],
+    "palabrasClave": [
+     "antes",
+     "escribir",
+     "leer",
+     "nombre",
+     "papel",
+     "quiere"
+    ]
+   },
+   "tarjetasValidas": [
+    "ESCRIBIR",
+    "LEER",
+    "NO",
+    "NOMBRE",
+    "NO_SABER",
+    "PAPEL",
+    "QUERER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "ventanilla_juzgados"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "LENTES",
+   "nodos": [
+    "n-s6-descripcion_de_per-09"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Usaba lentes?"
+    ],
+    "palabrasClave": [
+     "lentes",
+     "usaba"
+    ]
+   },
+   "tarjetasValidas": [
+    "LENTES",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "LUGAR_HECHO",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "place"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Dónde ocurrió?"
+    ],
+    "palabrasClave": [
+     "dónde",
+     "ocurrió"
+    ]
+   },
+   "tarjetasValidas": [
+    "DÓNDE",
+    "NO_SABER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMPLIACION_RELATO",
+    "CONOCIMIENTO_PERSONA",
+    "HORA_HECHO",
+    "OBJETO_PERSONA",
+    "PRESENCIA_OTROS",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "MENSAJE_INTERNET",
+   "nodos": [
+    "n-s6-amenazas_mensajes-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Le escribieron por internet?"
+    ],
+    "palabrasClave": [
+     "escribieron",
+     "internet"
+    ]
+   },
+   "tarjetasValidas": [
+    "ENVIAR",
+    "ESCRIBIR",
+    "INTERNET",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMENAZA_CELULAR",
+    "CAPTURAS",
+    "MOSTRAR_CELULAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "MONTO",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "amount",
+    "object"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Cuánto dinero entregó?"
+    ],
+    "palabrasClave": [
+     "cuánto",
+     "dinero",
+     "entregó"
+    ]
+   },
+   "tarjetasValidas": [
+    "BILLETES",
+    "CUÁNTOS",
+    "NO_SABER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "BANCO",
+    "COMPROBANTE",
+    "CONSERVAR_CHAT",
+    "CONTACTO_INTERNET",
+    "CONTACTO_PERSONA",
+    "DINERO_ENTREGADO",
+    "NOMBRE_PERSONA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "MOSTRAR",
+   "nodos": [
+    "n-s6-testigos_fotos_v-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Puede mostrarlo ahora?"
+    ],
+    "palabrasClave": [
+     "ahora",
+     "mostrarlo"
+    ]
+   },
+   "tarjetasValidas": [
+    "AHORA",
+    "MOSTRAR",
+    "NO",
+    "NO_SABER",
+    "PUEDO",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD",
+    "TESTIGO_EXISTE",
+    "TESTIGO_TRAER",
+    "TESTIGO_VIO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "MOSTRAR_CELULAR",
+   "nodos": [
+    "n-s6-amenazas_mensajes-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Puede mostrar el celular ahora?"
+    ],
+    "palabrasClave": [
+     "ahora",
+     "celular",
+     "mostrar"
+    ]
+   },
+   "tarjetasValidas": [
+    "AHORA",
+    "CELULAR",
+    "MOSTRAR",
+    "NO",
+    "NO_SABER",
+    "PUEDO",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CAPTURAS"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "NECESIDAD_INTERPRETE",
+   "nodos": [
+    "n-s6-acceso_comunicativ-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita un intérprete de LSB?"
+    ],
+    "palabrasClave": [
+     "intérprete",
+     "necesita"
+    ]
+   },
+   "tarjetasValidas": [
+    "INTÉRPRETE",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "sin_institucion"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "NOMBRE_PERSONA",
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "engano_dinero"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Conoce el nombre de la persona?"
+    ],
+    "palabrasClave": [
+     "conoce",
+     "nombre",
+     "persona"
+    ]
+   },
+   "tarjetasValidas": [
+    "CONOCER",
+    "NO",
+    "NOMBRE",
+    "NO_SABER",
+    "SÍ",
+    "ÉL"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "COMPROBANTE",
+    "CONTACTO_PERSONA",
+    "DINERO_ENTREGADO",
+    "MONTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "NUMERO_ORIGEN",
+   "nodos": [
+    "n-s6-amenazas_mensajes-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "amenaza_digital"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Conoce el número desde el que le escribieron?"
+    ],
+    "palabrasClave": [
+     "conoce",
+     "desde",
+     "escribieron",
+     "número"
+    ]
+   },
+   "tarjetasValidas": [
+    "CELULAR",
+    "CONOCER",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMENAZA_CELULAR",
+    "CAPTURAS",
+    "MOSTRAR_CELULAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "NUMERO_REFERENCIA",
+   "nodos": [
+    "n-s6-seguimiento_prelim-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene el número de referencia?"
+    ],
+    "palabrasClave": [
+     "número",
+     "referencia",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "policia"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "OBJETO_PERSONA",
+   "nodos": [
+    "n-s6-descripcion_de_per-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Llevaba mochila o bolsa?"
+    ],
+    "palabrasClave": [
+     "bolsa",
+     "llevaba",
+     "mochila"
+    ]
+   },
+   "tarjetasValidas": [
+    "BOLSA",
+    "CUÁL",
+    "MOCHILA",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "OBJETO_ROBADO",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Qué le robaron?"
+    ],
+    "palabrasClave": [
+     "robaron"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO_SABER",
+    "QUÉ",
+    "ROBAR"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMPLIACION_RELATO",
+    "CONOCIMIENTO_PERSONA",
+    "HORA_HECHO",
+    "POSICION_LUGAR",
+    "PRESENCIA_OTROS",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "ORGANO_JUDICIAL",
+   "nodos": [
+    "n-s6-interaccion_con_fi-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "place",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Sabe dónde está el Órgano Judicial?"
+    ],
+    "palabrasClave": [
+     "dónde",
+     "judicial",
+     "sabe",
+     "órgano"
+    ]
+   },
+   "tarjetasValidas": [
+    "DÓNDE",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "ÓRGANO_JUDICIAL"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "ventanilla_juzgados"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "POSICION_LUGAR",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "place",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Ocurrió dentro o fuera del lugar?"
+    ],
+    "palabrasClave": [
+     "dentro",
+     "fuera",
+     "lugar",
+     "ocurrió"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁL",
+    "DENTRO",
+    "FUERA",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "PREFERENCIA_AVISO",
+   "nodos": [
+    "n-s6-acceso_comunicativ-11"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Prefiere recibir avisos por mensaje escrito?"
+    ],
+    "palabrasClave": [
+     "avisos",
+     "escrito",
+     "mensaje",
+     "prefiere",
+     "recibir"
+    ]
+   },
+   "tarjetasValidas": [
+    "AVISAR",
+    "ENVIAR",
+    "ESCRIBIR",
+    "MEJOR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "PRESENCIA_OTROS",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-11"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Había otras personas presentes?"
+    ],
+    "palabrasClave": [
+     "había",
+     "otras",
+     "personas",
+     "presentes"
+    ]
+   },
+   "tarjetasValidas": [
+    "ALLÍ",
+    "HOMBRE",
+    "MUJER",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SIN_INTENCION",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "PRESENTAR_ELEMENTOS",
+   "nodos": [
+    "n-s6-testigos_fotos_v-10"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Desea presentar estos elementos?"
+    ],
+    "palabrasClave": [
+     "desea",
+     "elementos",
+     "estos",
+     "presentar"
+    ]
+   },
+   "tarjetasValidas": [
+    "FOTOS",
+    "NO",
+    "NO_SABER",
+    "PRESENTAR",
+    "QUERER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD",
+    "TESTIGO_EXISTE",
+    "TESTIGO_TRAER",
+    "TESTIGO_VIO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "PROPIEDAD_CELULAR",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-08"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene la factura o la caja del celular?"
+    ],
+    "palabrasClave": [
+     "caja",
+     "celular",
+     "factura",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "CAJA",
+    "CELULAR",
+    "FACTURA",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "CONOCIMIENTO_PERSONA",
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "POSICION_LUGAR",
+    "PRESENCIA_OTROS",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "TIEMPO_APROX"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "PROTECCION_OTROS",
+   "nodos": [
+    "n-s6-agresion_violenci-09"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Hay niños u otras personas que necesiten protección?"
+    ],
+    "palabrasClave": [
+     "necesiten",
+     "niños",
+     "otras",
+     "personas",
+     "protección"
+    ]
+   },
+   "tarjetasValidas": [
+    "HIJO",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "PROTEGER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "dna",
+    "sepdavi",
+    "slim"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RASGO_DISTINTIVO",
+   "nodos": [
+    "n-s6-descripcion_de_per-10"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Recuerda alguna característica particular?"
+    ],
+    "palabrasClave": [
+     "alguna",
+     "característica",
+     "particular",
+     "recuerda"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "QUÉ",
+    "RECORDAR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RECIBIR_RESOLUCION",
+   "nodos": [
+    "n-s6-interaccion_con_fi-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Recibió una resolución?"
+    ],
+    "palabrasClave": [
+     "recibió",
+     "resolución"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "RECIBIR",
+    "RESOLUCIÓN",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "ventanilla_juzgados"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RECONOCIMIENTO",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-10"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Puede identificarla si la vuelve a ver?"
+    ],
+    "palabrasClave": [
+     "identificarla",
+     "vuelve"
+    ]
+   },
+   "tarjetasValidas": [
+    "IDENTIFICAR",
+    "NO",
+    "NO_SABER",
+    "PUEDO",
+    "SÍ",
+    "VER",
+    "VOLVER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RELATO_ABIERTO",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "free_text"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Qué ocurrió?"
+    ],
+    "palabrasClave": [
+     "ocurrió"
+    ]
+   },
+   "tarjetasValidas": [
+    "NARRAR",
+    "NO_SABER",
+    "QUÉ",
+    "TÚ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CONOCIMIENTO_PERSONA",
+    "HORA_HECHO",
+    "OBJETO_PERSONA",
+    "POSICION_LUGAR",
+    "PRESENCIA_OTROS",
+    "PROPIEDAD_CELULAR",
+    "ROBO_OBJETO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "policia",
+    "sin_institucion"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RELATO_ORDENADO",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "free_text",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Puede contarme lo sucedido desde el inicio?"
+    ],
+    "palabrasClave": [
+     "contarme",
+     "desde",
+     "inicio",
+     "sucedido"
+    ]
+   },
+   "tarjetasValidas": [
+    "EMPEZAR",
+    "NARRAR",
+    "NO",
+    "NO_SABER",
+    "PRIMERA_VEZ",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "HORA_HECHO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO",
+    "VESTIMENTA"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "REPARACION",
+   "nodos": [
+    "n-s6-acceso_comunicativ-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Quiere que lo explique otra vez y más despacio?"
+    ],
+    "palabrasClave": [
+     "despacio",
+     "explique",
+     "otra",
+     "quiere"
+    ]
+   },
+   "tarjetasValidas": [
+    "EXPLICAR",
+    "LENTO",
+    "NO",
+    "NO_SABER",
+    "QUERER",
+    "SÍ",
+    "VOLVER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE",
+    "VALIDAR_CONTACTO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RESOLUCION",
+   "nodos": [
+    "n-s6-testigos_fotos_v-09"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene una resolución o papel previo?"
+    ],
+    "palabrasClave": [
+     "papel",
+     "previo",
+     "resolución",
+     "tiene"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "RESOLUCIÓN",
+    "SÍ",
+    "TENER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD",
+    "TESTIGO_EXISTE",
+    "TESTIGO_TRAER",
+    "TESTIGO_VIO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RETORNO",
+   "nodos": [
+    "n-s6-seguimiento_prelim-09"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene que volver otro día?"
+    ],
+    "palabrasClave": [
+     "otro",
+     "tiene",
+     "volver"
+    ]
+   },
+   "tarjetasValidas": [
+    "DÍA",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "VOLVER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "RIESGO_RETORNO",
+   "nodos": [
+    "n-s6-agresion_violenci-07"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "violencia"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene miedo de volver a su casa?"
+    ],
+    "palabrasClave": [
+     "casa",
+     "miedo",
+     "tiene",
+     "volver"
+    ]
+   },
+   "tarjetasValidas": [
+    "CASA",
+    "MIEDO",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "VOLVER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO_MEDICO",
+    "DERIVACION_SEPDAVI",
+    "PROTECCION_OTROS",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "ROBO_CELULAR",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Le robaron el celular?"
+    ],
+    "palabrasClave": [
+     "celular",
+     "robaron"
+    ]
+   },
+   "tarjetasValidas": [
+    "CELULAR",
+    "NO",
+    "NO_SABER",
+    "ROBAR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "policia"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "ROBO_OBJETO",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Le robaron algún objeto?"
+    ],
+    "palabrasClave": [
+     "algún",
+     "objeto",
+     "robaron"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "ROBAR",
+    "SÍ"
+   ],
+   "conceptosPendientes": {
+    "OBJETO": "ni en el catálogo, ni en el corpus, ni deletreable"
+   },
+   "aclaraciones": [
+    "Conceptos sin cobertura en esta intención: OBJETO.",
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "SEPDEP",
+   "nodos": [
+    "n-s6-seguimiento_prelim-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "seguimiento"
+   ],
+   "necesidades": [
+    "consultas",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Necesita defensa pública gratuita?"
+    ],
+    "palabrasClave": [
+     "defensa",
+     "gratuita",
+     "necesita",
+     "pública"
+    ]
+   },
+   "tarjetasValidas": [
+    "ABOGADO",
+    "GRATIS",
+    "NECESITAR",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "DERIVACION_FISCALIA",
+    "FECHA_DENUNCIA",
+    "FISCALIA",
+    "HABLAR_FISCAL",
+    "HABLAR_POLICIA",
+    "LECTURA_ANTES_FIRMA",
+    "ORGANO_JUDICIAL",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [
+    "sepdep"
+   ],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "SEXO_DESCRIPCION",
+   "nodos": [
+    "n-s6-descripcion_de_per-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Era un hombre o una mujer?"
+    ],
+    "palabrasClave": [
+     "hombre",
+     "mujer"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁL",
+    "HOMBRE",
+    "MUJER",
+    "NO",
+    "NO_SABER",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SIN_INTENCION",
+    "TIEMPO_APROX",
+    "TIEMPO_HECHO",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "SIN_INTENCION",
+   "nodos": [
+    "n-s7-acceso_y_comunicac-01",
+    "n-s7-acceso_y_comunicac-02",
+    "n-s7-acceso_y_comunicac-03",
+    "n-s7-acceso_y_comunicac-04",
+    "n-s7-acceso_y_comunicac-05",
+    "n-s7-acceso_y_comunicac-06",
+    "n-s7-acceso_y_comunicac-07",
+    "n-s7-acceso_y_comunicac-08",
+    "n-s7-denuncia_y_relato-01",
+    "n-s7-denuncia_y_relato-02",
+    "n-s7-denuncia_y_relato-03",
+    "n-s7-denuncia_y_relato-04",
+    "n-s7-denuncia_y_relato-05",
+    "n-s7-denuncia_y_relato-06",
+    "n-s7-denuncia_y_relato-07",
+    "n-s7-denuncia_y_relato-08",
+    "n-s7-robo_y_objetos-01",
+    "n-s7-robo_y_objetos-02",
+    "n-s7-robo_y_objetos-03",
+    "n-s7-robo_y_objetos-04",
+    "n-s7-robo_y_objetos-05",
+    "n-s7-robo_y_objetos-06",
+    "n-s7-robo_y_objetos-07",
+    "n-s7-robo_y_objetos-08",
+    "n-s7-violencia_amenaza-01",
+    "n-s7-violencia_amenaza-02",
+    "n-s7-violencia_amenaza-03",
+    "n-s7-violencia_amenaza-04",
+    "n-s7-violencia_amenaza-05",
+    "n-s7-violencia_amenaza-06",
+    "n-s7-violencia_amenaza-07",
+    "n-s7-violencia_amenaza-08",
+    "n-s7-testigos_y_evidenc-01",
+    "n-s7-testigos_y_evidenc-02",
+    "n-s7-testigos_y_evidenc-03",
+    "n-s7-testigos_y_evidenc-04",
+    "n-s7-testigos_y_evidenc-05",
+    "n-s7-testigos_y_evidenc-06",
+    "n-s7-testigos_y_evidenc-07",
+    "n-s7-testigos_y_evidenc-08",
+    "n-s7-consulta_y_seguimi-01",
+    "n-s7-consulta_y_seguimi-02",
+    "n-s7-consulta_y_seguimi-03",
+    "n-s7-consulta_y_seguimi-04",
+    "n-s7-consulta_y_seguimi-05",
+    "n-s7-consulta_y_seguimi-06",
+    "n-s7-consulta_y_seguimi-07",
+    "n-s7-consulta_y_seguimi-08",
+    "n-s7-consulta_y_seguimi-09",
+    "n-s7-consulta_y_seguimi-10",
+    "n-s7-fiscalia_asistenc-01",
+    "n-s7-fiscalia_asistenc-02",
+    "n-s7-fiscalia_asistenc-03",
+    "n-s7-fiscalia_asistenc-04",
+    "n-s7-fiscalia_asistenc-05",
+    "n-s7-fiscalia_asistenc-06",
+    "n-s7-fiscalia_asistenc-07",
+    "n-s7-fiscalia_asistenc-08",
+    "n-s7-fiscalia_asistenc-09",
+    "n-s7-fiscalia_asistenc-10",
+    "n-s8-declaraciones_y_re-01",
+    "n-s8-declaraciones_y_re-02",
+    "n-s8-declaraciones_y_re-03",
+    "n-s8-declaraciones_y_re-04",
+    "n-s8-declaraciones_y_re-05",
+    "n-s8-declaraciones_y_re-06",
+    "n-s8-declaraciones_y_re-07",
+    "n-s8-declaraciones_y_re-08",
+    "n-s8-declaraciones_y_re-09",
+    "n-s8-declaraciones_y_re-10",
+    "n-s8-declaraciones_y_re-11",
+    "n-s8-declaraciones_y_re-12",
+    "n-s8-declaraciones_y_re-13",
+    "n-s8-declaraciones_y_re-14",
+    "n-s8-declaraciones_y_re-15",
+    "n-s8-declaraciones_y_re-16",
+    "n-s8-declaraciones_y_re-17",
+    "n-s8-declaraciones_y_re-18",
+    "n-s8-declaraciones_y_re-19",
+    "n-s8-declaraciones_y_re-20",
+    "n-s8-declaraciones_y_re-21",
+    "n-s8-declaraciones_y_re-22",
+    "n-s8-declaraciones_y_re-23",
+    "n-s8-declaraciones_y_re-24",
+    "n-s8-declaraciones_y_re-25",
+    "n-s8-declaraciones_y_re-26",
+    "n-s8-declaraciones_y_re-27",
+    "n-s8-declaraciones_y_re-28",
+    "n-s8-declaraciones_y_re-29",
+    "n-s8-declaraciones_y_re-30",
+    "n-s8-declaraciones_y_re-31",
+    "n-s8-declaraciones_y_re-32",
+    "n-s8-declaraciones_y_re-33",
+    "n-s8-declaraciones_y_re-34",
+    "n-s8-declaraciones_y_re-35",
+    "n-s8-declaraciones_y_re-36",
+    "n-s8-declaraciones_y_re-37",
+    "n-s8-declaraciones_y_re-38",
+    "n-s8-declaraciones_y_re-39",
+    "n-s8-declaraciones_y_re-40",
+    "n-s8-declaraciones_y_re-41",
+    "n-s8-declaraciones_y_re-42",
+    "n-s8-declaraciones_y_re-43",
+    "n-s8-declaraciones_y_re-44",
+    "n-s8-declaraciones_y_re-45",
+    "n-s8-declaraciones_y_re-46",
+    "n-s8-declaraciones_y_re-47",
+    "n-s8-declaraciones_y_re-48",
+    "n-s8-declaraciones_y_re-49",
+    "n-s8-declaraciones_y_re-50",
+    "n-s8-declaraciones_y_re-51"
+   ],
+   "secciones": [
+    7,
+    8
+   ],
+   "ambitos": [
+    "denuncia_robo",
+    "identificacion",
+    "otro",
+    "seguimiento",
+    "violencia"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "independiente",
+    "inicio_conversacion",
+    "respuesta"
+   ],
+   "actos": [
+    "question",
+    "statement"
+   ],
+   "camposRequeridos": [
+    "amount",
+    "evidence",
+    "free_text",
+    "institution",
+    "object",
+    "person",
+    "place",
+    "polarity",
+    "time"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Aquí hay intérprete de LSB?",
+     "¿Puede escribir lo que me pregunta?",
+     "¿Puede hablar más despacio?",
+     "¿Puede mostrarme otra vez?",
+     "¿Puedo leer primero?",
+     "¿Me entiende?"
+    ],
+    "palabrasClave": [
+     "abogado",
+     "agregar",
+     "ahora",
+     "algo",
+     "amenaza",
+     "amenazarme",
+     "ante",
+     "antes",
+     "aquí",
+     "asistencia",
+     "auxilio",
+     "avisan",
+     "avisar",
+     "avisarme",
+     "ayer",
+     "ayuda"
+    ]
+   },
+   "tarjetasValidas": [
+    "ABOGADO",
+    "ACOMPAÑAR",
+    "AHORA",
+    "AMENAZAR",
+    "AQUÍ",
+    "ARREGLAR",
+    "ASISTENCIA",
+    "AUMENTAR",
+    "AUXILIO",
+    "AVISAR",
+    "AYER",
+    "AYUDAR",
+    "AÚN",
+    "BANCO",
+    "BILLETES",
+    "BRAZO",
+    "BUSCAR",
+    "CAJA",
+    "CALLE",
+    "CAMBIAR",
+    "CASA",
+    "CELULAR",
+    "CERCA",
+    "CERTIFICADO",
+    "COMPRENDER",
+    "CONOCER",
+    "CONTINUAR",
+    "CUÁNDO",
+    "CUÁNTOS",
+    "DAR",
+    "DAÑAR",
+    "DESPUÉS",
+    "DIRECCIÓN",
+    "DOCTOR",
+    "DÓNDE",
+    "ELLOS",
+    "EMPEZAR",
+    "ENGAÑAR",
+    "ENVIAR",
+    "ESCRIBIR",
+    "ESPERAR",
+    "EXPLICAR",
+    "FACTURA",
+    "FILMAR",
+    "FOTOCOPIA",
+    "FOTOS",
+    "GRACIAS",
+    "GRATIS",
+    "GUARDAR",
+    "HABLAR",
+    "HACER",
+    "HERIDA",
+    "HOMBRE",
+    "HORA",
+    "HOSPITAL",
+    "IDENTIDAD",
+    "IDENTIFICAR",
+    "INTÉRPRETE",
+    "INVESTIGACIÓN",
+    "IR",
+    "JOVEN",
+    "JUEZ",
+    "LEER",
+    "LENTO",
+    "MAL",
+    "MAÑANA",
+    "MEJOR",
+    "MERCADO",
+    "MIEDO",
+    "MOCHILA",
+    "MOSTRAR",
+    "MÍO",
+    "NARRAR",
+    "NECESITAR",
+    "NO",
+    "NOMBRE",
+    "NO_SABER",
+    "OBSERVAR",
+    "PAPEL",
+    "PAREJA",
+    "PASADO",
+    "PEDIR",
+    "PEGAR",
+    "PERDER",
+    "POCO",
+    "POLICÍA",
+    "POR_FAVOR",
+    "PRESENTAR",
+    "PRIMERA_VEZ",
+    "PROTEGER",
+    "PUEDO",
+    "PUERTA",
+    "QUERER",
+    "QUIÉN",
+    "QUÉ",
+    "RECIBIR",
+    "RECORDAR",
+    "RESOLUCIÓN",
+    "ROBAR",
+    "SABER",
+    "SELLO",
+    "SORDO",
+    "SÍ",
+    "TARDE",
+    "TENER",
+    "TERMINAR",
+    "TESTIGO",
+    "TESTIMONIO",
+    "TIENDA",
+    "TOTAL",
+    "TRAER",
+    "TÚ",
+    "VENIR",
+    "VER",
+    "VIDEO",
+    "VOLVER",
+    "YO",
+    "ÉL",
+    "ÓRGANO_JUDICIAL"
+   ],
+   "conceptosPendientes": {
+    "OBJETO": "ni en el catálogo, ni en el corpus, ni deletreable"
+   },
+   "aclaraciones": [
+    "La misma intención aparece como pregunta y como declaración: confirmar el acto antes de redactar.",
+    "Conceptos sin cobertura en esta intención: OBJETO.",
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "AGRESION",
+    "AMENAZA",
+    "AMPLIACION_RELATO",
+    "ASISTENCIA_MEDICA",
+    "ATENCION_HOSPITAL",
+    "AUXILIO_INMEDIATO",
+    "CABELLO",
+    "CERTIFICADO",
+    "CERTIFICADO_MEDICO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "TESTIGOS_ROBO",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-10"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Hay testigos del robo?"
+    ],
+    "palabrasClave": [
+     "robo",
+     "testigos"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER",
+    "TESTIGO"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "AMPLIACION_RELATO",
+    "HORA_HECHO",
+    "LUGAR_HECHO",
+    "OBJETO_PERSONA",
+    "OBJETO_ROBADO",
+    "POSICION_LUGAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "ROBO_OBJETO",
+    "SIN_INTENCION"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "TESTIGO_CANTIDAD",
+   "nodos": [
+    "n-s6-testigos_fotos_v-02"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "amount",
+    "evidence",
+    "person"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Cuántos testigos hay?"
+    ],
+    "palabrasClave": [
+     "cuántos",
+     "testigos"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁNTOS",
+    "NO_SABER",
+    "TESTIGO"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CERTIFICADO",
+    "FOTOS",
+    "MOSTRAR",
+    "PRESENTAR_ELEMENTOS",
+    "RESOLUCION",
+    "SIN_INTENCION",
+    "TESTIGO_EXISTE",
+    "TESTIGO_TRAER",
+    "TESTIGO_VIO",
+    "VIDEO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "TESTIGO_EXISTE",
+   "nodos": [
+    "n-s6-testigos_fotos_v-01"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Hay algún testigo?"
+    ],
+    "palabrasClave": [
+     "algún",
+     "testigo"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER",
+    "TESTIGO"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "TESTIGO_TRAER",
+   "nodos": [
+    "n-s6-testigos_fotos_v-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Puede traer al testigo?"
+    ],
+    "palabrasClave": [
+     "testigo",
+     "traer"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "PUEDO",
+    "SÍ",
+    "TESTIGO",
+    "TRAER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "TESTIGO_VIO",
+   "nodos": [
+    "n-s6-testigos_fotos_v-03"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "person",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿El testigo vio todo?"
+    ],
+    "palabrasClave": [
+     "testigo",
+     "todo"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TESTIGO",
+    "TOTAL",
+    "VER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "TIEMPO_APROX",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-05"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity",
+    "time"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Fue hoy, ayer o antes?"
+    ],
+    "palabrasClave": [
+     "antes",
+     "ayer"
+    ]
+   },
+   "tarjetasValidas": [
+    "AYER",
+    "HOY",
+    "NO",
+    "NO_SABER",
+    "PASADO",
+    "SÍ"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "TIEMPO_HECHO",
+   "nodos": [
+    "n-s6-inicio_de_denuncia-04"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "time"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Cuándo ocurrió?"
+    ],
+    "palabrasClave": [
+     "cuándo",
+     "ocurrió"
+    ]
+   },
+   "tarjetasValidas": [
+    "CUÁNDO",
+    "FECHA",
+    "HORA",
+    "NO_SABER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMPLIACION_RELATO",
+    "CONOCIMIENTO_PERSONA",
+    "OBJETO_PERSONA",
+    "POSICION_LUGAR",
+    "PRESENCIA_OTROS",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "VALIDAR_CONTACTO",
+   "nodos": [
+    "n-s6-acceso_comunicativ-10"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "identificacion"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "object",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Este número de celular es suyo?"
+    ],
+    "palabrasClave": [
+     "celular",
+     "número",
+     "suyo"
+    ]
+   },
+   "tarjetasValidas": [
+    "CELULAR",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TUYO",
+    "VERDAD"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "ACOMPAÑANTE",
+    "CONFIRMAR_ACCESO",
+    "IDENTIFICACION_NOMBRE"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "VER_LADRON",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Vio al ladrón?"
+    ],
+    "palabrasClave": [
+     "ladrón"
+    ]
+   },
+   "tarjetasValidas": [
+    "LADRÓN",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "VER"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "OBJETO_PERSONA",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TESTIGOS_ROBO",
+    "VESTIMENTA",
+    "VIDEO_LUGAR"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "VESTIMENTA",
+   "nodos": [
+    "n-s6-descripcion_de_per-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "person"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Qué ropa llevaba?"
+    ],
+    "palabrasClave": [
+     "llevaba",
+     "ropa"
+    ]
+   },
+   "tarjetasValidas": [
+    "CHAMARRA",
+    "CUÁL",
+    "NO_SABER",
+    "PANTALÓN",
+    "POLERA"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [],
+   "transicionesAIntenciones": [
+    "AMPLIACION_RELATO",
+    "HORA_HECHO",
+    "OBJETO_PERSONA",
+    "POSICION_LUGAR",
+    "PROPIEDAD_CELULAR",
+    "RELATO_ORDENADO",
+    "ROBO_CELULAR",
+    "ROBO_OBJETO",
+    "SIN_INTENCION",
+    "TIEMPO_APROX"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "VIDEO",
+   "nodos": [
+    "n-s6-testigos_fotos_v-06"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "otro"
+   ],
+   "necesidades": [
+    "consultas",
+    "denuncias",
+    "tramites"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Tiene video?"
+    ],
+    "palabrasClave": [
+     "tiene",
+     "video"
+    ]
+   },
+   "tarjetasValidas": [
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER",
+    "VIDEO"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "SIN_INTENCION",
+    "TESTIGO_CANTIDAD",
+    "TESTIGO_EXISTE",
+    "TESTIGO_TRAER",
+    "TESTIGO_VIO"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  },
+  {
+   "intencion": "VIDEO_LUGAR",
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-09"
+   ],
+   "secciones": [
+    6
+   ],
+   "ambitos": [
+    "denuncia_robo"
+   ],
+   "necesidades": [
+    "denuncias"
+   ],
+   "propositos": [
+    "respuesta"
+   ],
+   "actos": [
+    "question"
+   ],
+   "camposRequeridos": [
+    "evidence",
+    "place",
+    "polarity"
+   ],
+   "condicionEntrada": {
+    "enunciados": [
+     "¿Hay cámaras o video del lugar?"
+    ],
+    "palabrasClave": [
+     "cámaras",
+     "lugar",
+     "video"
+    ]
+   },
+   "tarjetasValidas": [
+    "FILMAR",
+    "NO",
+    "NO_SABER",
+    "SÍ",
+    "TENER",
+    "VIDEO"
+   ],
+   "conceptosPendientes": {},
+   "aclaraciones": [
+    "Admite respuesta cerrada y detalle: el detalle solo se pide si la persona lo elige, no por omisión."
+   ],
+   "transicionesAIntenciones": [
+    "CABELLO",
+    "CONOCIMIENTO_PERSONA",
+    "HORA_HECHO",
+    "OBJETO_PERSONA",
+    "PRESENCIA_OTROS",
+    "RELATO_ABIERTO",
+    "RELATO_ORDENADO",
+    "SEXO_DESCRIPCION",
+    "SIN_INTENCION",
+    "TIEMPO_APROX"
+   ],
+   "condicionFinalizacion": "Todos los campos requeridos tienen valor, o la persona elige finalizar. Un campo sin responder no equivale a una negación.",
+   "perfilesQueLaPriorizan": [],
+   "representacionDeLaPregunta": "sujeta a la cobertura de sus propios conceptos; tener nodo NO implica que el enunciado tenga señas"
+  }
+ ]
+}

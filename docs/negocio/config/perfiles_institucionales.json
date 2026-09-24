@@ -1,0 +1,196 @@
+{
+ "version": 1,
+ "estado": "propuesta",
+ "nota": "Configuración propuesta para la fase de organización de la lógica de negocio. Ninguna entrada de este archivo está implementada ni conectada al código de producción. Las denominaciones marcadas 'por_verificar' deben contrastarse con la fuente oficial antes de mostrarse en la interfaz. Incluir un perfil NO demuestra cobertura lingüística de sus servicios.",
+ "necesidades": [
+  {
+   "id": "denuncias",
+   "etiqueta": "Denuncias",
+   "descripcion": "Comunicar un hecho sufrido o presenciado.",
+   "puntoDePartida": "lo que ocurrió"
+  },
+  {
+   "id": "tramites",
+   "etiqueta": "Trámites y documentos",
+   "descripcion": "Comunicar algo sobre una gestión o un documento.",
+   "puntoDePartida": "la gestión o el documento"
+  },
+  {
+   "id": "consultas",
+   "etiqueta": "Consultas y asistencia",
+   "descripcion": "Preguntar o pedir orientación y apoyo.",
+   "puntoDePartida": "lo que necesita saber"
+  }
+ ],
+ "perfiles": [
+  {
+   "id": "sin_institucion",
+   "nombre": "Sin institución / atención general",
+   "fuenteDenominacion": "interna",
+   "tipoServicio": "general",
+   "necesidadesPrioritarias": ["denuncias", "tramites", "consultas"],
+   "ambitosIniciales": ["otro", "identificacion", "preguntas"],
+   "reglaOrganizacion": "La necesidad la elige la persona. La falta de institución nunca bloquea la comunicación.",
+   "intencionesPropuestas": [
+    {"id": "RELATO_ABIERTO", "origen": "grafo", "necesidad": "denuncias"},
+    {"id": "NECESIDAD_INTERPRETE", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "IDENTIFICACION_NOMBRE", "origen": "grafo", "necesidad": "tramites"}
+   ]
+  },
+  {
+   "id": "policia",
+   "nombre": "Policía Boliviana",
+   "unidades": [
+    {"id": "felcc", "nombre": "FELCC", "denominacion": "por_verificar"},
+    {"id": "felcv", "nombre": "FELCV", "denominacion": "por_verificar"},
+    {"id": "epi", "nombre": "Punto EPI", "denominacion": "por_verificar"}
+   ],
+   "fuenteDenominacion": "por_verificar",
+   "tipoServicio": "recepcion_de_hechos",
+   "necesidadesPrioritarias": ["denuncias", "consultas", "tramites"],
+   "ambitosIniciales": ["denuncia_robo", "violencia", "seguimiento"],
+   "reglaOrganizacion": "Distinguir institución, unidad y punto de atención cuando sea relevante. La prioridad de denuncias NO prohíbe consultar por un documento: una consulta sobre un papel en Policía no debe anteponer ROBAR por el nombre de la institución.",
+   "intencionesPropuestas": [
+    {"id": "INTENCION_DENUNCIA", "origen": "grafo", "necesidad": "denuncias"},
+    {"id": "RELATO_ABIERTO", "origen": "grafo", "necesidad": "denuncias"},
+    {"id": "ROBO_CELULAR", "origen": "grafo", "necesidad": "denuncias"},
+    {"id": "AGRESION", "origen": "grafo", "necesidad": "denuncias"},
+    {"id": "AUXILIO_INMEDIATO", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "CONSULTA_ESTADO", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "NUMERO_REFERENCIA", "origen": "grafo", "necesidad": "tramites"}
+   ]
+  },
+  {
+   "id": "derechos_reales",
+   "nombre": "Derechos Reales",
+   "fuenteDenominacion": "portal oficial de trámites, consultado el 2026-09-24 (referencia aportada en el encargo)",
+   "tipoServicio": "registral",
+   "necesidadesPrioritarias": ["tramites", "consultas"],
+   "ambitosIniciales": ["identificacion", "seguimiento", "otro"],
+   "reglaOrganizacion": "Separar cada intención. No asumir que toda persona pide un folio. El portal distingue servicios distintos: folio actualizado y certificados de propiedad o de no propiedad; no unirlos en un trámite inventado.",
+   "intencionesPropuestas": [
+    {"id": "IDENTIFICACION_NOMBRE", "origen": "grafo", "necesidad": "tramites"},
+    {"id": "IDENTIFICACION_DOCUMENTO", "origen": "grafo", "necesidad": "tramites"},
+    {"id": "CONSULTA_ESTADO", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "DDRR_FOLIO_ACTUALIZADO", "origen": "propuesta_sin_cobertura", "necesidad": "tramites", "brechaLexica": ["FOLIO", "PROPIEDAD"]},
+    {"id": "DDRR_CERTIFICADO_PROPIEDAD", "origen": "propuesta_sin_cobertura", "necesidad": "tramites", "brechaLexica": ["PROPIEDAD"]},
+    {"id": "DDRR_CERTIFICADO_NO_PROPIEDAD", "origen": "propuesta_sin_cobertura", "necesidad": "tramites", "brechaLexica": ["PROPIEDAD"]}
+   ]
+  },
+  {
+   "id": "fiscalia",
+   "nombre": "Fiscalía",
+   "fuenteDenominacion": "por_verificar",
+   "tipoServicio": "atencion_preliminar",
+   "necesidadesPrioritarias": ["consultas", "denuncias"],
+   "ambitosIniciales": ["seguimiento", "denuncia_robo"],
+   "reglaOrganizacion": "No deducir el papel procesal de la persona ni el tipo de caso. La interfaz comunica una solicitud; no promete elegibilidad ni resultado.",
+   "intencionesPropuestas": [
+    {"id": "HABLAR_FISCAL", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "DERIVACION_FISCALIA", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "CONSULTA_ESTADO", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "CITACION", "origen": "grafo", "necesidad": "tramites"},
+    {"id": "INTERPRETE_REUNION", "origen": "grafo", "necesidad": "consultas"}
+   ]
+  },
+  {
+   "id": "sepdep",
+   "nombre": "SEPDEP",
+   "denominacionLarga": "Servicio Plurinacional de Defensa Pública",
+   "fuenteDenominacion": "corpus §4 + referencia oficial aportada en el encargo, consultada el 2026-09-24",
+   "tipoServicio": "defensa_publica_penal",
+   "necesidadesPrioritarias": ["consultas"],
+   "ambitosIniciales": ["seguimiento"],
+   "reglaOrganizacion": "Su misión es defensa penal. NO es equivalente universal de asistencia a víctimas: perfil distinto de SEPDAVI. La interfaz puede comunicar una solicitud de asistencia; no promete asignación de abogado.",
+   "intencionesPropuestas": [
+    {"id": "SEPDEP", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "HABLAR_ABOGADO", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "INTERPRETE_REUNION", "origen": "grafo", "necesidad": "consultas"}
+   ]
+  },
+  {
+   "id": "sepdavi",
+   "nombre": "SEPDAVI",
+   "denominacionLarga": "Servicio Plurinacional de Asistencia a la Víctima",
+   "fuenteDenominacion": "corpus §4 + referencia oficial aportada en el encargo, consultada el 2026-09-24",
+   "tipoServicio": "asistencia_victima",
+   "necesidadesPrioritarias": ["consultas", "denuncias"],
+   "ambitosIniciales": ["seguimiento", "violencia"],
+   "reglaOrganizacion": "Escribir SEPDAVI, nunca SEPDAV. Perfil distinto de SEPDEP: no intercambiar destinatarios ni funciones.",
+   "intencionesPropuestas": [
+    {"id": "DERIVACION_SEPDAVI", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "ASISTENCIA_MEDICA", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "PROTECCION_OTROS", "origen": "grafo", "necesidad": "denuncias"}
+   ]
+  },
+  {
+   "id": "slim",
+   "nombre": "SLIM",
+   "fuenteDenominacion": "por_verificar",
+   "tipoServicio": "asistencia_municipal",
+   "necesidadesPrioritarias": ["consultas", "denuncias"],
+   "ambitosIniciales": ["violencia", "seguimiento"],
+   "reglaOrganizacion": "Perfil diferenciado de DNA. No intercambiar sus destinatarios ni funciones.",
+   "intencionesPropuestas": [
+    {"id": "AGRESION", "origen": "grafo", "necesidad": "denuncias"},
+    {"id": "AMENAZA", "origen": "grafo", "necesidad": "denuncias"},
+    {"id": "PROTECCION_OTROS", "origen": "grafo", "necesidad": "consultas"}
+   ]
+  },
+  {
+   "id": "dna",
+   "nombre": "DNA",
+   "fuenteDenominacion": "por_verificar",
+   "tipoServicio": "asistencia_municipal",
+   "necesidadesPrioritarias": ["consultas", "denuncias"],
+   "ambitosIniciales": ["violencia", "seguimiento"],
+   "reglaOrganizacion": "Perfil diferenciado de SLIM. No intercambiar sus destinatarios ni funciones.",
+   "intencionesPropuestas": [
+    {"id": "PROTECCION_OTROS", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "AGRESION", "origen": "grafo", "necesidad": "denuncias"}
+   ]
+  },
+  {
+   "id": "notaria",
+   "nombre": "Notaría",
+   "fuenteDenominacion": "por_verificar",
+   "tipoServicio": "gestion_documental",
+   "necesidadesPrioritarias": ["tramites", "consultas"],
+   "ambitosIniciales": ["identificacion", "otro"],
+   "reglaOrganizacion": "No inferir firma, consentimiento, titularidad ni poder otorgado a partir de una selección de tarjetas.",
+   "intencionesPropuestas": [
+    {"id": "IDENTIFICACION_DOCUMENTO", "origen": "grafo", "necesidad": "tramites"},
+    {"id": "NOTARIA_GESTION_DOCUMENTAL", "origen": "propuesta_sin_cobertura", "necesidad": "tramites", "brechaLexica": ["DOCUMENTO", "ESCRITURA", "REGISTRAR"]}
+   ]
+  },
+  {
+   "id": "gamc",
+   "nombre": "GAMC / plataforma municipal",
+   "fuenteDenominacion": "por_verificar",
+   "tipoServicio": "plataforma_municipal",
+   "necesidadesPrioritarias": ["consultas", "tramites"],
+   "ambitosIniciales": ["seguimiento", "otro"],
+   "reglaOrganizacion": "Cada servicio municipal tiene su intención propia. No modelar toda la Alcaldía como un solo trámite.",
+   "intencionesPropuestas": [
+    {"id": "CONSULTA_ESTADO", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "GAMC_GESTION_MUNICIPAL", "origen": "propuesta_sin_cobertura", "necesidad": "tramites", "brechaLexica": ["PAGAR", "REGISTRAR", "RENOVAR"]}
+   ]
+  },
+  {
+   "id": "ventanilla_juzgados",
+   "nombre": "Ventanilla de juzgados",
+   "fuenteDenominacion": "por_verificar",
+   "tipoServicio": "gestion_ante_despacho",
+   "necesidadesPrioritarias": ["consultas", "tramites"],
+   "ambitosIniciales": ["seguimiento"],
+   "reglaOrganizacion": "Orientación no es decisión judicial. La interfaz no anticipa resoluciones ni plazos.",
+   "intencionesPropuestas": [
+    {"id": "ORGANO_JUDICIAL", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "JUEZ", "origen": "grafo", "necesidad": "consultas"},
+    {"id": "RECIBIR_RESOLUCION", "origen": "grafo", "necesidad": "tramites"},
+    {"id": "CITACION", "origen": "grafo", "necesidad": "tramites"},
+    {"id": "LECTURA_ANTES_FIRMA", "origen": "grafo", "necesidad": "tramites"}
+   ]
+  }
+ ]
+}
