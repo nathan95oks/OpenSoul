@@ -46,6 +46,7 @@ class _DeclRepo implements TranslationRepository {
     Map<String, dynamic>? declaration,
     String? speechAct,
     String? replyToId,
+    BusinessSignals? business,
   }) async =>
       TranslationResult(baseSentence: '...', generatedText: '...');
 }

@@ -52,6 +52,7 @@ class _StubDeclarationRepository implements TranslationRepository {
     Map<String, dynamic>? declaration,
     String? speechAct,
     String? replyToId,
+    BusinessSignals? business,
   }) async =>
       TranslationResult(
         baseSentence: 'Me robaron el celular.',

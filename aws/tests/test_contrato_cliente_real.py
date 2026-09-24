@@ -181,5 +181,89 @@ class BorradoresAntiguos(unittest.TestCase):
             self.assertNotIn("error", datos, f"{nombre}: {datos}")
 
 
+class ValidacionDelContratoV3(unittest.TestCase):
+    """Los conjuntos cerrados se validan en el backend, no solo en la interfaz."""
+
+    def _con(self, **campos):
+        body = cargar("robo_y_huida_sospechoso")
+        body.update(campos)
+        return invocar(body)
+
+    def test_el_cliente_declara_la_version_3(self):
+        self.assertEqual(cargar("robo_y_huida_sospechoso")["contractVersion"], 3)
+
+    def test_un_modo_de_uso_desconocido_es_400(self):
+        datos = self._con(usageMode="kiosko")
+        self.assertEqual(datos.get("error"), "VALIDATION_ERROR", datos)
+
+    def test_una_necesidad_desconocida_es_400(self):
+        datos = self._con(need="reclamaciones")
+        self.assertEqual(datos.get("error"), "VALIDATION_ERROR", datos)
+
+    def test_un_acto_comunicativo_desconocido_es_400(self):
+        datos = self._con(speechAct="denuncia")
+        self.assertEqual(datos.get("error"), "VALIDATION_ERROR", datos)
+
+    def test_los_valores_validos_pasan(self):
+        datos = self._con(usageMode="counter", need="denuncias",
+                          speechAct="statement",
+                          institutionProfileId="policia")
+        self.assertNotIn("error", datos, datos)
+
+    def test_ausencia_de_senales_sigue_siendo_valida(self):
+        # Un cliente v2 no manda nada de esto y tiene que seguir funcionando.
+        body = cargar("borrador_antiguo_tal_cual")
+        body["contractVersion"] = 2
+        self.assertNotIn("error", invocar(body))
+
+    def test_un_papel_invalido_en_un_hecho_es_400(self):
+        body = cargar("robo_y_huida_sospechoso")
+        body["declaration"]["facts"][1]["actorRole"] = "sospechozo"
+        datos = invocar(body)
+        self.assertEqual(datos.get("error"), "VALIDATION_ERROR", datos)
+
+    def test_una_certeza_invalida_es_400(self):
+        body = cargar("robo_y_huida_sospechoso")
+        body["declaration"]["facts"][0]["certainty"] = "quiza"
+        datos = invocar(body)
+        self.assertEqual(datos.get("error"), "VALIDATION_ERROR", datos)
+
+    def test_mas_de_dos_hechos_es_400(self):
+        body = cargar("robo_y_huida_sospechoso")
+        body["declaration"]["facts"].append(
+            {"id": "f3", "action": "DAÑAR", "actorRole": "suspect"})
+        datos = invocar(body)
+        self.assertEqual(datos.get("error"), "VALIDATION_ERROR", datos)
+
+    def test_un_identificador_desmesurado_es_400(self):
+        datos = self._con(institutionProfileId="x" * 200)
+        self.assertEqual(datos.get("error"), "VALIDATION_ERROR", datos)
+
+
+class ElPerfilNoEsContenido(unittest.TestCase):
+    """La institución ordena; no se escribe dentro de la declaración."""
+
+    def test_el_nombre_del_perfil_no_aparece_en_el_texto(self):
+        body = cargar("robo_y_huida_sospechoso")
+        body["institutionProfileId"] = "derechos_reales"
+        body["need"] = "tramites"
+        datos = invocar(body)
+        texto = (datos.get("generatedText") or datos.get("baseSentence") or "")
+
+        for palabra in ("derechos_reales", "Derechos Reales", "tramites"):
+            self.assertNotIn(palabra, texto,
+                             f"El perfil se coló en la declaración: {texto!r}")
+
+    def test_el_perfil_no_cambia_lo_que_se_declaro(self):
+        sin_perfil = invocar(cargar("robo_y_huida_sospechoso"))
+        con_perfil = cargar("robo_y_huida_sospechoso")
+        con_perfil["institutionProfileId"] = "derechos_reales"
+        con_perfil = invocar(con_perfil)
+
+        self.assertEqual(sin_perfil.get("baseSentence"),
+                         con_perfil.get("baseSentence"),
+                         "La institución no puede alterar el contenido.")
+
+
 if __name__ == "__main__":
     unittest.main()

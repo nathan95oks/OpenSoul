@@ -27,12 +27,14 @@ class ConversationEngine {
     String? assemblerContextId,
     String? replyToId,
     DeclarationDraft? declaration,
+    BusinessSignals? business,
   }) async {
     final result = await generateDeclaration(
       contextId: contextId,
       glosses: glosses,
       assemblerContextId: assemblerContextId,
       declaration: declaration,
+      business: business,
     );
     return turnFromDeclaration(
       result: result,
@@ -48,6 +50,7 @@ class ConversationEngine {
     required List<String> glosses,
     String? assemblerContextId,
     DeclarationDraft? declaration,
+    BusinessSignals? business,
   }) async {
     final localSentence = declaration != null
         ? assembler.assembleStructured(declaration)
@@ -66,6 +69,7 @@ class ConversationEngine {
         declaration: declaration?.toJson(),
         speechAct: declaration?.speechAct,
         replyToId: declaration?.replyToId,
+        business: business,
       );
       final degenerate = remote.coverageValidated
           ? remote.generatedText.trim().isEmpty

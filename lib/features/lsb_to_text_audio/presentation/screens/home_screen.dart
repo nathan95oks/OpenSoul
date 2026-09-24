@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/app/navigation_provider.dart';
-import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/needs_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
@@ -26,16 +30,45 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contextState = ref.watch(contextProvider);
+    final launch = ref.watch(cardsFlowLaunchProvider);
+    final necesidad = ref.watch(activeNeedProvider);
+
+    // En modo personal y sin necesidad elegida, el recorrido empieza por lo
+    // que la persona quiere lograr, no por el contexto semántico. El contexto
+    // es vocabulario interno; la necesidad es lo que ella viene a hacer.
+    final empiezaPorNecesidad = ref.watch(usageSessionProvider).isPersonal &&
+        launch.purpose == CardsFlowPurpose.standaloneIntervention &&
+        necesidad == null &&
+        contextState == null;
 
     return Scaffold(
       backgroundColor: AppTheme.lightBg,
       appBar: _buildAppBar(context, ref, contextState),
-      body: SafeArea(
-        child: contextState == null
-            ? const ContextSelectionWidget()
-            : _buildUnifiedFlow(context, ref, contextState),
-      ),
+      body: empiezaPorNecesidad
+          ? NeedsScreen(onSelected: (need) => _elegirNecesidad(ref, need))
+          : SafeArea(
+              child: contextState == null
+                  ? const ContextSelectionWidget()
+                  : _buildUnifiedFlow(context, ref, contextState),
+            ),
     );
+  }
+
+  /// Fija la necesidad y el acto comunicativo que le corresponde.
+  ///
+  /// Consultas produce una pregunta: el propósito sigue siendo independiente,
+  /// pero el acto no es una declaración. Son dimensiones distintas y aquí se
+  /// nota.
+  void _elegirNecesidad(WidgetRef ref, NeedId need) {
+    ref.read(activeNeedProvider.notifier).select(need);
+    final act = NeedsScreen.actFor(need);
+    ref.read(cardsFlowLaunchProvider.notifier).start(
+          ref.read(cardsFlowLaunchProvider).withBusiness(
+                need: need,
+                intendedAct: act,
+              ),
+        );
+    ref.read(declarationDraftProvider.notifier).setSpeechAct(act.wireName);
   }
 
   PreferredSizeWidget _buildAppBar(

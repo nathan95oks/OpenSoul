@@ -4,6 +4,9 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 
 export 'package:lsb_legal_app/core/di/injection.dart'
     show audioOutputProvider;
@@ -93,6 +96,23 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
   /// revisar el resultado antes de que algo se diga en su nombre ante la
   /// institución. La reproducción queda a un toque explícito en
   /// "Reproducir" (ver [replayAudio]).
+  /// Las señales de negocio del momento.
+  ///
+  /// Van al backend para desambiguar y ordenar. **No son contenido**: el
+  /// generador no puede escribir el nombre de la institución dentro de la
+  /// declaración de nadie porque venga aquí.
+  BusinessSignals _businessSignals() {
+    final sesion = ref.read(usageSessionProvider);
+    final launch = ref.read(cardsFlowLaunchProvider);
+    return BusinessSignals(
+      usageMode: sesion.mode?.name,
+      institutionProfileId: sesion.institutionProfileId,
+      need: ref.read(activeNeedProvider)?.id,
+      intentId: launch.intentId,
+      conversationId: launch.conversationId,
+    );
+  }
+
   Future<void> translateCards({
     required String context,
     required List<String> cards,
@@ -107,6 +127,7 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
       glosses: cards,
       assemblerContextId: assemblerContext,
       declaration: declaration,
+      business: _businessSignals(),
     );
 
     _setPlayback(AudioPlaybackState.idle);

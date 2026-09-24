@@ -2871,6 +2871,80 @@ MAX_CARD_LENGTH = 64
 MAX_CONTEXT_LENGTH = 64
 
 
+# Conjuntos cerrados del contrato v3. Un valor fuera de aquí es un error del
+# cliente, no un campo que se ignora en silencio: la configuración de interfaz
+# no sustituye la validación del backend.
+USAGE_MODES = {"personal", "counter"}
+NEEDS = {"denuncias", "tramites", "consultas"}
+SPEECH_ACTS = {"statement", "question", "request", "reply", "instruction"}
+CERTAINTIES = {"confirmed", "uncertain", "unknown"}
+
+MAX_ID_LENGTH = 64
+
+
+def _validate_enum(body: dict, campo: str, permitidos: set) -> str:
+    valor = body.get(campo)
+    if valor is None:
+        return ""
+    if not isinstance(valor, str):
+        return f"El campo '{campo}' debe ser una cadena."
+    if valor not in permitidos:
+        return (f"Valor no reconocido en '{campo}'. "
+                f"Admitidos: {', '.join(sorted(permitidos))}.")
+    return ""
+
+
+def validate_business_signals(body: dict) -> tuple:
+    """Comprueba las señales de negocio del contrato v3.
+
+    Se validan aunque no cambien el texto: un `need` mal escrito significa que
+    el cliente y el backend han dejado de entenderse, y descubrirlo en una
+    ventanilla es tarde.
+    """
+    for campo, permitidos in (("usageMode", USAGE_MODES),
+                              ("need", NEEDS),
+                              ("speechAct", SPEECH_ACTS)):
+        error = _validate_enum(body, campo, permitidos)
+        if error:
+            return False, error
+
+    for campo in ("institutionProfileId", "intentId", "conversationId"):
+        valor = body.get(campo)
+        if valor is None:
+            continue
+        if not isinstance(valor, str):
+            return False, f"El campo '{campo}' debe ser una cadena."
+        if len(valor) > MAX_ID_LENGTH:
+            return False, f"El campo '{campo}' es demasiado largo."
+
+    version = body.get("messageVersion")
+    if version is not None and (not isinstance(version, int) or version < 1):
+        return False, "El campo 'messageVersion' debe ser un entero positivo."
+
+    declaration = body.get("declaration")
+    if isinstance(declaration, dict):
+        hechos = declaration.get("facts")
+        if hechos is not None:
+            if not isinstance(hechos, list):
+                return False, "El campo 'facts' debe ser una lista."
+            if len(hechos) > 2:
+                return False, "Un relato admite como mucho dos hechos."
+            for i, f in enumerate(hechos):
+                if not isinstance(f, dict):
+                    return False, f"El hecho en posición {i} no es válido."
+                rol = f.get("actorRole") or f.get("actor_role")
+                if rol is not None and str(rol) not in ACTOR_ROLES:
+                    return False, (
+                        f"El papel '{rol}' del hecho en posición {i} no es "
+                        f"válido. Admitidos: {', '.join(sorted(ACTOR_ROLES))}.")
+                certeza = f.get("certainty")
+                if certeza is not None and str(certeza) not in CERTAINTIES:
+                    return False, (
+                        f"La certeza '{certeza}' del hecho en posición {i} no "
+                        "es válida.")
+    return True, None
+
+
 def validate_request(body: dict) -> tuple:
     if not isinstance(body, dict):
         return False, "El cuerpo de la solicitud debe ser un objeto JSON válido."
@@ -3043,6 +3117,10 @@ def lambda_handler(event, context):
         return suggest_options(body)
 
     is_valid, err = validate_request(body)
+    if not is_valid:
+        return build_response(400, {"error": "VALIDATION_ERROR", "message": err})
+
+    is_valid, err = validate_business_signals(body)
     if not is_valid:
         return build_response(400, {"error": "VALIDATION_ERROR", "message": err})
 

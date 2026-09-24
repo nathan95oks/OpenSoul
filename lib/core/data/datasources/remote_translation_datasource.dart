@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 
 abstract class RemoteTranslationDataSource {
   Future<TranslationResult> translateCards({
@@ -10,6 +11,7 @@ abstract class RemoteTranslationDataSource {
     Map<String, dynamic>? declaration,
     String? speechAct,
     String? replyToId,
+    BusinessSignals? business,
   });
 }
 
@@ -31,7 +33,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
   /// representación estructurada (`declaration`), el acto comunicativo y el
   /// turno al que se responde; el backend que no la reconozca puede seguir
   /// usando `context`/`cards` como antes (compatibilidad hacia atrás).
-  static const int contractVersion = 2;
+  static const int contractVersion = 3;
 
   /// El cuerpo exacto que viaja al backend.
   ///
@@ -46,6 +48,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     Map<String, dynamic>? declaration,
     String? speechAct,
     String? replyToId,
+    BusinessSignals? business,
   }) =>
       {
         'context': context,
@@ -53,6 +56,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
         'language': 'es-BO',
         'institutionType': 'entidad_publica',
         'contractVersion': contractVersion,
+        ...?business?.toJson(),
         // ignore: use_null_aware_elements
         if (speechAct != null) 'speechAct': speechAct,
         // ignore: use_null_aware_elements
@@ -68,6 +72,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     Map<String, dynamic>? declaration,
     String? speechAct,
     String? replyToId,
+    BusinessSignals? business,
   }) async {
     final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_API_URL');
 
@@ -84,6 +89,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
             declaration: declaration,
             speechAct: speechAct,
             replyToId: replyToId,
+            business: business,
           )),
         )
         .timeout(requestTimeout);

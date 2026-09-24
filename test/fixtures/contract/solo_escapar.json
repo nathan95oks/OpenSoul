@@ -5,7 +5,7 @@
  ],
  "language": "es-BO",
  "institutionType": "entidad_publica",
- "contractVersion": 2,
+ "contractVersion": 3,
  "speechAct": "statement",
  "declaration": {
   "contextId": "denuncia_robo",
