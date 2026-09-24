@@ -267,19 +267,15 @@ class GlosasAcentuadas(unittest.TestCase):
                 self.assertEqual(resultado["glosses"], [esperado])
 
     def test_alias_sin_respaldo_en_el_catalogo_se_deletrea(self):
-        # "¿CÓMO ESTÁS?" -> "COMO_ESTAS" es un alias de GLOSS_ALIASES, pero
-        # "COMO_ESTAS" nunca se agregó a AVAILABLE_GLOSSES ni al diccionario
-        # oficial (assets/dictionary/official_dictionary.json no lo tiene):
-        # es un alias a una seña que no existe. Antes de la ficha D esto
-        # pasaba como si fuera una traducción válida; ahora se deletrea, y
-        # queda documentado como pendiente (ver
-        # docs/Catalogo_Acepciones_Audio_a_LSB.md) en vez de fingirse resuelto.
+        # "ESTOY BIEN" -> "ESTOY_BIEN" es un alias de GLOSS_ALIASES, pero
+        # "ESTOY_BIEN" no está en AVAILABLE_GLOSSES: es un alias a una seña
+        # no catalogada. Se deletrea en vez de fingirse resuelto.
         resultado = lambda_text_to_lsb.post_process_glosses(
-            {"glosses": ["¿CÓMO ESTÁS?"]}, "da igual",
+            {"glosses": ["ESTOY BIEN"]}, "da igual",
         )
         self.assertEqual(
             resultado["glosses"],
-            list("COMOESTAS"),
+            list("ESTOYBIEN"),
         )
 
 

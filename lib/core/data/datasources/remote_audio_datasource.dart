@@ -56,10 +56,26 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
         final decodedResponse = jsonDecode(response.body);
 
         final glossDetails = decodedResponse['glossDetails'] as List<dynamic>? ?? [];
+        final sequence = decodedResponse['animationSequence'] as List<dynamic>? ?? [];
         final urls = <String>[];
         final animationGlosses = <String>[];
 
-        if (glossDetails.isNotEmpty) {
+        if (sequence.isNotEmpty) {
+          // El servidor lee los clips del propio .glb en S3 y ya decidio, por
+          // glosa, si hay sena o si se deletrea (una letra sin clip viene sin
+          // animationFile y va como placeholder). La URL no se toma de la
+          // respuesta: siempre es el .glb de [baseUrl].
+          for (final step in sequence) {
+            final gloss = (step['gloss'] ?? '').toString();
+            if (gloss.isEmpty) continue;
+            final hasClip = (step['animationFile']?.toString() ?? '').isNotEmpty;
+            urls.add(hasClip
+                ? '${animationResolver.baseUrl}avatar_test.glb'
+                : '${AnimationUrlResolver.placeholderScheme}'
+                    '${AnimationUrlResolver.canonicalFor(gloss)}');
+            animationGlosses.add(gloss);
+          }
+        } else if (glossDetails.isNotEmpty) {
           for (final detail in glossDetails) {
             final gloss = (detail['gloss'] ?? '').toString();
             final resolved = animationResolver.resolveAll(
