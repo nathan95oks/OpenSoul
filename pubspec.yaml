@@ -81,6 +81,7 @@ flutter:
     - assets/logo.png
     - assets/dictionary/official_dictionary.json
     - assets/dialogue/dialogue_graph.json
+    - assets/business/institution_profiles.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

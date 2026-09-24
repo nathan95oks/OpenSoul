@@ -169,7 +169,7 @@ class DialogueNode {
   });
 
   static const _modeNames = {
-    'A': CardsFlowPurpose.standaloneDeclaration,
+    'A': CardsFlowPurpose.standaloneIntervention,
     'B': CardsFlowPurpose.conversationInitiative,
     'C': CardsFlowPurpose.conversationReply,
   };

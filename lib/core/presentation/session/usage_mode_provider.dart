@@ -52,6 +52,10 @@ class UsageSessionNotifier extends Notifier<UsageSession> {
 
   Future<void> _cargar() async {
     final config = await ref.read(sessionRepositoryProvider).loadConfig();
+    // La lectura del disco es asíncrona y el provider puede haberse
+    // desechado mientras tanto —al cerrar un `ProviderContainer`, o al
+    // reconstruirse—. Escribir el estado entonces revienta.
+    if (!ref.mounted) return;
     state = UsageSession(
       mode: config.mode,
       institutionProfileId: config.institutionProfileId,
@@ -83,6 +87,7 @@ class UsageSessionNotifier extends Notifier<UsageSession> {
     if (anterior != null && anterior != mode) {
       await repo.clearContent();
     }
+    if (!ref.mounted) return;
   }
 
   Future<void> setInstitution(String? profileId) async {

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
+import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
@@ -28,10 +29,19 @@ class ConversationHandoff {
     final conversation = _conversation;
     final pending = conversation.pendingReply;
 
+    // El perfil de la institución y la necesidad activa acompañan al
+    // encargo para ordenar las opciones. Son señales de prioridad, nunca
+    // contenido: el generador no puede escribir el nombre de la institución
+    // en la declaración porque venga aquí.
+    final perfil = ref.read(activeProfileIdProvider);
+    final necesidad = ref.read(activeNeedProvider);
+
     if (pending == null) {
       return CardsFlowLaunch.initiative(
         conversationId: conversation.id,
         activeContextId: conversation.activeContextId,
+        need: necesidad,
+        institutionProfileId: perfil,
       );
     }
 
@@ -42,6 +52,8 @@ class ConversationHandoff {
       hearingSpeechAct: pending.message.speechAct,
       suggestion: pending.message.contextSuggestion,
       activeContextId: conversation.activeContextId,
+      need: necesidad,
+      institutionProfileId: perfil,
     );
   }
 

@@ -1,0 +1,458 @@
+{
+ "version": 1,
+ "necesidades": [
+  {
+   "id": "denuncias",
+   "etiqueta": "Denuncias",
+   "descripcion": "Comunicar un hecho sufrido o presenciado.",
+   "puntoDePartida": "lo que ocurrió"
+  },
+  {
+   "id": "tramites",
+   "etiqueta": "Trámites y documentos",
+   "descripcion": "Comunicar algo sobre una gestión o un documento.",
+   "puntoDePartida": "la gestión o el documento"
+  },
+  {
+   "id": "consultas",
+   "etiqueta": "Consultas y asistencia",
+   "descripcion": "Preguntar o pedir orientación y apoyo.",
+   "puntoDePartida": "lo que necesita saber"
+  }
+ ],
+ "perfiles": [
+  {
+   "id": "sin_institucion",
+   "nombre": "Sin institución / atención general",
+   "tipoServicio": "general",
+   "necesidadesPrioritarias": [
+    "denuncias",
+    "tramites",
+    "consultas"
+   ],
+   "ambitosIniciales": [
+    "otro",
+    "identificacion",
+    "preguntas"
+   ],
+   "intenciones": [
+    {
+     "id": "RELATO_ABIERTO",
+     "necesidad": "denuncias"
+    },
+    {
+     "id": "NECESIDAD_INTERPRETE",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "IDENTIFICACION_NOMBRE",
+     "necesidad": "tramites"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 3,
+    "sinCobertura": 0
+   }
+  },
+  {
+   "id": "policia",
+   "nombre": "Policía Boliviana",
+   "tipoServicio": "recepcion_de_hechos",
+   "necesidadesPrioritarias": [
+    "denuncias",
+    "consultas",
+    "tramites"
+   ],
+   "ambitosIniciales": [
+    "denuncia_robo",
+    "violencia",
+    "seguimiento"
+   ],
+   "intenciones": [
+    {
+     "id": "INTENCION_DENUNCIA",
+     "necesidad": "denuncias"
+    },
+    {
+     "id": "RELATO_ABIERTO",
+     "necesidad": "denuncias"
+    },
+    {
+     "id": "ROBO_CELULAR",
+     "necesidad": "denuncias"
+    },
+    {
+     "id": "AGRESION",
+     "necesidad": "denuncias"
+    },
+    {
+     "id": "AUXILIO_INMEDIATO",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "CONSULTA_ESTADO",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "NUMERO_REFERENCIA",
+     "necesidad": "tramites"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [
+    {
+     "id": "felcc",
+     "nombre": "FELCC"
+    },
+    {
+     "id": "felcv",
+     "nombre": "FELCV"
+    },
+    {
+     "id": "epi",
+     "nombre": "Punto EPI"
+    }
+   ],
+   "cobertura": {
+    "conCobertura": 7,
+    "sinCobertura": 0
+   }
+  },
+  {
+   "id": "derechos_reales",
+   "nombre": "Derechos Reales",
+   "tipoServicio": "registral",
+   "necesidadesPrioritarias": [
+    "tramites",
+    "consultas"
+   ],
+   "ambitosIniciales": [
+    "identificacion",
+    "seguimiento",
+    "otro"
+   ],
+   "intenciones": [
+    {
+     "id": "IDENTIFICACION_NOMBRE",
+     "necesidad": "tramites"
+    },
+    {
+     "id": "IDENTIFICACION_DOCUMENTO",
+     "necesidad": "tramites"
+    },
+    {
+     "id": "CONSULTA_ESTADO",
+     "necesidad": "consultas"
+    }
+   ],
+   "intencionesSinCobertura": [
+    {
+     "id": "DDRR_FOLIO_ACTUALIZADO",
+     "necesidad": "tramites",
+     "brechaLexica": [
+      "FOLIO",
+      "PROPIEDAD"
+     ]
+    },
+    {
+     "id": "DDRR_CERTIFICADO_PROPIEDAD",
+     "necesidad": "tramites",
+     "brechaLexica": [
+      "PROPIEDAD"
+     ]
+    },
+    {
+     "id": "DDRR_CERTIFICADO_NO_PROPIEDAD",
+     "necesidad": "tramites",
+     "brechaLexica": [
+      "PROPIEDAD"
+     ]
+    }
+   ],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 3,
+    "sinCobertura": 3
+   }
+  },
+  {
+   "id": "fiscalia",
+   "nombre": "Fiscalía",
+   "tipoServicio": "atencion_preliminar",
+   "necesidadesPrioritarias": [
+    "consultas",
+    "denuncias"
+   ],
+   "ambitosIniciales": [
+    "seguimiento",
+    "denuncia_robo"
+   ],
+   "intenciones": [
+    {
+     "id": "HABLAR_FISCAL",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "DERIVACION_FISCALIA",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "CONSULTA_ESTADO",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "CITACION",
+     "necesidad": "tramites"
+    },
+    {
+     "id": "INTERPRETE_REUNION",
+     "necesidad": "consultas"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 5,
+    "sinCobertura": 0
+   }
+  },
+  {
+   "id": "sepdep",
+   "nombre": "SEPDEP",
+   "tipoServicio": "defensa_publica_penal",
+   "necesidadesPrioritarias": [
+    "consultas"
+   ],
+   "ambitosIniciales": [
+    "seguimiento"
+   ],
+   "intenciones": [
+    {
+     "id": "SEPDEP",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "HABLAR_ABOGADO",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "INTERPRETE_REUNION",
+     "necesidad": "consultas"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 3,
+    "sinCobertura": 0
+   }
+  },
+  {
+   "id": "sepdavi",
+   "nombre": "SEPDAVI",
+   "tipoServicio": "asistencia_victima",
+   "necesidadesPrioritarias": [
+    "consultas",
+    "denuncias"
+   ],
+   "ambitosIniciales": [
+    "seguimiento",
+    "violencia"
+   ],
+   "intenciones": [
+    {
+     "id": "DERIVACION_SEPDAVI",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "ASISTENCIA_MEDICA",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "PROTECCION_OTROS",
+     "necesidad": "denuncias"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 3,
+    "sinCobertura": 0
+   }
+  },
+  {
+   "id": "slim",
+   "nombre": "SLIM",
+   "tipoServicio": "asistencia_municipal",
+   "necesidadesPrioritarias": [
+    "consultas",
+    "denuncias"
+   ],
+   "ambitosIniciales": [
+    "violencia",
+    "seguimiento"
+   ],
+   "intenciones": [
+    {
+     "id": "AGRESION",
+     "necesidad": "denuncias"
+    },
+    {
+     "id": "AMENAZA",
+     "necesidad": "denuncias"
+    },
+    {
+     "id": "PROTECCION_OTROS",
+     "necesidad": "consultas"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 3,
+    "sinCobertura": 0
+   }
+  },
+  {
+   "id": "dna",
+   "nombre": "DNA",
+   "tipoServicio": "asistencia_municipal",
+   "necesidadesPrioritarias": [
+    "consultas",
+    "denuncias"
+   ],
+   "ambitosIniciales": [
+    "violencia",
+    "seguimiento"
+   ],
+   "intenciones": [
+    {
+     "id": "PROTECCION_OTROS",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "AGRESION",
+     "necesidad": "denuncias"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 2,
+    "sinCobertura": 0
+   }
+  },
+  {
+   "id": "notaria",
+   "nombre": "Notaría",
+   "tipoServicio": "gestion_documental",
+   "necesidadesPrioritarias": [
+    "tramites",
+    "consultas"
+   ],
+   "ambitosIniciales": [
+    "identificacion",
+    "otro"
+   ],
+   "intenciones": [
+    {
+     "id": "IDENTIFICACION_DOCUMENTO",
+     "necesidad": "tramites"
+    }
+   ],
+   "intencionesSinCobertura": [
+    {
+     "id": "NOTARIA_GESTION_DOCUMENTAL",
+     "necesidad": "tramites",
+     "brechaLexica": [
+      "DOCUMENTO",
+      "ESCRITURA",
+      "REGISTRAR"
+     ]
+    }
+   ],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 1,
+    "sinCobertura": 1
+   }
+  },
+  {
+   "id": "gamc",
+   "nombre": "GAMC / plataforma municipal",
+   "tipoServicio": "plataforma_municipal",
+   "necesidadesPrioritarias": [
+    "consultas",
+    "tramites"
+   ],
+   "ambitosIniciales": [
+    "seguimiento",
+    "otro"
+   ],
+   "intenciones": [
+    {
+     "id": "CONSULTA_ESTADO",
+     "necesidad": "consultas"
+    }
+   ],
+   "intencionesSinCobertura": [
+    {
+     "id": "GAMC_GESTION_MUNICIPAL",
+     "necesidad": "tramites",
+     "brechaLexica": [
+      "PAGAR",
+      "REGISTRAR",
+      "RENOVAR"
+     ]
+    }
+   ],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 1,
+    "sinCobertura": 1
+   }
+  },
+  {
+   "id": "ventanilla_juzgados",
+   "nombre": "Ventanilla de juzgados",
+   "tipoServicio": "gestion_ante_despacho",
+   "necesidadesPrioritarias": [
+    "consultas",
+    "tramites"
+   ],
+   "ambitosIniciales": [
+    "seguimiento"
+   ],
+   "intenciones": [
+    {
+     "id": "ORGANO_JUDICIAL",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "JUEZ",
+     "necesidad": "consultas"
+    },
+    {
+     "id": "RECIBIR_RESOLUCION",
+     "necesidad": "tramites"
+    },
+    {
+     "id": "CITACION",
+     "necesidad": "tramites"
+    },
+    {
+     "id": "LECTURA_ANTES_FIRMA",
+     "necesidad": "tramites"
+    }
+   ],
+   "intencionesSinCobertura": [],
+   "unidades": [],
+   "cobertura": {
+    "conCobertura": 5,
+    "sinCobertura": 0
+   }
+  }
+ ]
+}
