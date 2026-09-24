@@ -61,7 +61,7 @@ class HomeScreen extends ConsumerWidget {
   /// nota.
   void _elegirNecesidad(WidgetRef ref, NeedId need) {
     ref.read(activeNeedProvider.notifier).select(need);
-    final act = NeedsScreen.actFor(need);
+    final act = NeedsScreen.initialActFor(need);
     ref.read(cardsFlowLaunchProvider.notifier).start(
           ref.read(cardsFlowLaunchProvider).withBusiness(
                 need: need,

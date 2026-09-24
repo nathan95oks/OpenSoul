@@ -752,12 +752,129 @@ SemanticContext? contextById(String id) {
   return null;
 }
 
-/// Resuelve el contexto final del ensamblador según el contexto actual y las glosas seleccionadas
-String resolveAssemblerContext(
-  String currentContextId,
-  List<String> glosses, [
-  dynamic Function(String)? getCategory,
-]) {
+/// Cómo quedó el enrutamiento hacia un contexto del ensamblador.
+enum RouteStatus {
+  /// El contexto existe y el ensamblador sabe redactarlo.
+  supported,
+
+  /// Se entiende qué se quiere hacer, pero no hay recorrido ni vocabulario
+  /// para sostenerlo. No es un error: es una función que todavía no está.
+  unsupported,
+}
+
+/// El resultado de enrutar, con su motivo.
+///
+/// Devolver una simple cadena obligaba a inventar un destino para todo. El
+/// enrutador anterior mandaba a `denuncia_robo` cualquier caso que no
+/// reconociera —incluidos los trámites— y convertía en denuncia de robo algo
+/// que nadie había declarado.
+class AssemblerRoute {
+  final String contextId;
+  final RouteStatus status;
+  final String reason;
+
+  /// Conceptos que harían falta y el catálogo no tiene. Se declaran para
+  /// poder decirlo en pantalla en vez de simular cobertura.
+  final List<String> missingVocabulary;
+
+  const AssemblerRoute({
+    required this.contextId,
+    this.status = RouteStatus.supported,
+    this.reason = '',
+    this.missingVocabulary = const [],
+  });
+
+  bool get isSupported => status == RouteStatus.supported;
+}
+
+/// Los contextos que el ensamblador sabe redactar. Enrutar fuera de esta
+/// lista produce una frase genérica, no la del contexto que se pidió.
+const Set<String> assemblerContexts = {
+  // Los ocho seleccionables en la interfaz.
+  'denuncia_robo',
+  'violencia',
+  'amenaza_digital',
+  'engano_dinero',
+  'seguimiento',
+  'identificacion',
+  'preguntas',
+  'otro',
+  // Compositores internos que no son contextos de interfaz. Existen y están
+  // probados desde hace tiempo; lo que faltaba era una vía para alcanzarlos.
+  'perdida',
+  'tramite_id',
+  'orientacion',
+};
+
+/// Necesidad de negocio → contexto del ensamblador que la sirve.
+///
+/// Sustituye a las ramas `tramite` y `consulta`, que comparaban contra
+/// identificadores de contexto que el catálogo **nunca ha ofrecido**
+/// (`allSelectableContexts` no tiene ninguno con esos ids), de modo que sus
+/// compositores —`_composeLoss`, `_composeProcedure`, `_composeGuidance`—
+/// eran inalcanzables desde la interfaz aunque estuvieran escritos y
+/// probados. Ahora los alcanza la necesidad elegida, que sí existe.
+const Map<String, String> contextForNeed = {
+  'denuncias': 'denuncia_robo',
+  'tramites': 'tramite_id',
+  'consultas': 'orientacion',
+};
+
+/// Dentro de «trámites», qué compositor corresponde.
+///
+/// Tres cosas distintas que no se redactan igual: perder un documento relata
+/// un extravío, gestionarlo relata una gestión, y pedir un intérprete o un
+/// abogado es pedir orientación. El reparto es el que ya existía; lo que
+/// cambia es que ahora cuelga de la necesidad y no de un contexto que el
+/// catálogo nunca ha ofrecido.
+String _procedureContextFor(Set<String> norm) {
+  const perdida = {'FALTA', 'PERDER', 'TELEFONO', 'CARNET'};
+  if (norm.any(perdida.contains)) return 'perdida';
+
+  const gestion = {
+    'PASAPORTE', 'INVESTIGACION', 'GESTIONAR', 'FOTOCOPIA',
+    'LICENCIA_DECONDUCIR', 'PODER', 'TESTIMONIO',
+  };
+  if (norm.any(gestion.contains)) return 'tramite_id';
+
+  const orientacion = {'INTERPRETE', 'HABLAR', 'ABOGADO', 'INSTITUCION'};
+  if (norm.any(orientacion.contains)) return 'orientacion';
+
+  return 'tramite_id';
+}
+
+/// Intenciones cuyo recorrido no existe todavía, con lo que les falta.
+///
+/// Salen de los perfiles declarados sin cobertura en
+/// `docs/negocio/config/perfiles_institucionales.json`. Se listan aquí para
+/// que el enrutador pueda decir «esto todavía no» en vez de aproximar.
+const Map<String, List<String>> unsupportedIntents = {
+  'DDRR_FOLIO_ACTUALIZADO': ['FOLIO', 'PROPIEDAD'],
+  'DDRR_CERTIFICADO_PROPIEDAD': ['PROPIEDAD'],
+  'DDRR_CERTIFICADO_NO_PROPIEDAD': ['PROPIEDAD'],
+  'NOTARIA_GESTION_DOCUMENTAL': ['DOCUMENTO', 'ESCRITURA', 'REGISTRAR'],
+  'GAMC_GESTION_MUNICIPAL': ['PAGAR', 'REGISTRAR', 'RENOVAR'],
+};
+
+/// Enruta hacia el contexto que el ensamblador sabe redactar.
+///
+/// Orden de decisión, de más explícito a menos:
+///
+///   1. una intención declarada sin cobertura corta aquí,
+///   2. las glosas elegidas, que son lo que la persona dijo de verdad,
+///   3. la necesidad elegida,
+///   4. el contexto activo, si es uno de los soportados.
+///
+/// Si nada de eso resuelve, **no se inventa un destino**: se devuelve `otro`,
+/// que es el contexto general, marcado como no soportado y con su motivo.
+/// Mandar lo desconocido a denuncia de robo era poner una acusación en boca
+/// de quien no la hizo.
+AssemblerRoute routeToAssembler({
+  String currentContextId = '',
+  List<String> glosses = const [],
+  String? needId,
+  String? intentId,
+}) {
   String unaccent(String s) => s
       .toUpperCase()
       .replaceAll('Á', 'A')
@@ -767,64 +884,130 @@ String resolveAssemblerContext(
       .replaceAll('Ú', 'U');
 
   final norm = glosses.map(unaccent).toSet();
-  
-  if (currentContextId == 'tramite') {
-    if (norm.contains('FALTA') || norm.contains('PERDER') || norm.contains('TELEFONO') || norm.contains('CARNET')) {
-      return 'perdida';
-    }
-    if (norm.contains('PASAPORTE') ||
-        norm.contains('INVESTIGACION') ||
-        norm.contains('GESTIONAR') ||
-        norm.contains('FOTOCOPIA') ||
-        norm.contains('LICENCIA_DECONDUCIR') ||
-        norm.contains('PODER') ||
-        norm.contains('TESTIMONIO')) {
-      return 'tramite_id';
-    }
-    if (norm.contains('INTERPRETE') ||
-        norm.contains('HABLAR') ||
-        norm.contains('ABOGADO') ||
-        norm.contains('INSTITUCION')) {
-      return 'orientacion';
-    }
-    return 'tramite_id';
+
+  // 1. Intención sin cobertura: se dice, no se aproxima.
+  final falta = intentId == null ? null : unsupportedIntents[intentId];
+  if (falta != null) {
+    return AssemblerRoute(
+      contextId: 'otro',
+      status: RouteStatus.unsupported,
+      reason: 'La intención $intentId no tiene recorrido todavía.',
+      missingVocabulary: falta,
+    );
   }
 
-  if (currentContextId == 'consulta') {
-    return 'orientacion';
+  // 2. Lo que la persona eligió manda sobre lo que se supuso de ella.
+  if (norm.contains('ROBAR') ||
+      norm.contains('LADRON') ||
+      norm.contains('QUITAR')) {
+    return const AssemblerRoute(
+        contextId: 'denuncia_robo', reason: 'acción de sustracción elegida');
+  }
+  if (norm.contains('GOLPEAR') ||
+      norm.contains('INSULTAR') ||
+      norm.contains('AMENAZAR') ||
+      norm.contains('MIEDO')) {
+    return const AssemblerRoute(
+        contextId: 'violencia', reason: 'acción o estado de agresión');
+  }
+  if (norm.contains('INTERNET') ||
+      norm.contains('MENTIRA') ||
+      norm.contains('FOTO') ||
+      norm.contains('NUMERO') ||
+      norm.contains('AVISAR')) {
+    if (norm.contains('BILLETES') ||
+        norm.contains('BANCO') ||
+        norm.contains('PAGAR')) {
+      return const AssemblerRoute(
+          contextId: 'engano_dinero', reason: 'medio digital y dinero');
+    }
+    return const AssemblerRoute(
+        contextId: 'amenaza_digital', reason: 'medio digital');
+  }
+  if (norm.contains('SEGUIR') ||
+      norm.contains('MIRAR') ||
+      norm.contains('ESCONDER') ||
+      norm.contains('ESPERAR')) {
+    return const AssemblerRoute(
+        contextId: 'seguimiento', reason: 'acción de seguimiento');
   }
 
-  if (norm.contains('ROBAR') || norm.contains('LADRON') || norm.contains('QUITAR')) {
-    return 'denuncia_robo';
-  }
-  if (norm.contains('GOLPEAR') || norm.contains('INSULTAR') || norm.contains('AMENAZAR') || norm.contains('MIEDO')) {
-    return 'violencia';
-  }
-  if (norm.contains('INTERNET') || norm.contains('MENTIRA') || norm.contains('FOTO') || norm.contains('NUMERO') || norm.contains('AVISAR')) {
-    if (norm.contains('BILLETES') || norm.contains('BANCO') || norm.contains('PAGAR')) {
-      return 'engano_dinero';
-    }
-    return 'amenaza_digital';
-  }
-  if (norm.contains('SEGUIR') || norm.contains('MIRAR') || norm.contains('ESCONDER') || norm.contains('ESPERAR')) {
-    return 'seguimiento';
-  }
-  final esPregunta = norm.contains('DONDE') || norm.contains('QUIEN') || norm.contains('QUE') || norm.contains('CUANDO') || norm.contains('COMO') || norm.contains('CUANTOS') || norm.contains('POR_QUE') || norm.contains('PARA_QUE');
+  final esPregunta = norm.contains('DONDE') ||
+      norm.contains('QUIEN') ||
+      norm.contains('QUE') ||
+      norm.contains('CUANDO') ||
+      norm.contains('COMO') ||
+      norm.contains('CUANTOS') ||
+      norm.contains('POR_QUE') ||
+      norm.contains('PARA_QUE');
+
   // "¿Qué es este papel?" es una pregunta sobre un documento, no el
   // formulario de datos de Fase 1: una interrogativa presente manda sobre
   // el atajo de identificación, igual que el resto de este enrutador ya deja
   // que la glosa más específica decida por encima del contexto de entrada.
   if (!esPregunta &&
-      (norm.contains('NOMBRE') || norm.contains('IDENTIDAD') || norm.contains('PAPEL'))) {
+      (norm.contains('NOMBRE') ||
+          norm.contains('IDENTIDAD') ||
+          norm.contains('PAPEL'))) {
     if (!norm.contains('ROBAR') && !norm.contains('GOLPEAR')) {
-      return 'identificacion';
+      return const AssemblerRoute(
+          contextId: 'identificacion', reason: 'datos de identificación');
     }
   }
   if (esPregunta) {
-    return 'preguntas';
+    return const AssemblerRoute(
+        contextId: 'preguntas', reason: 'interrogativa explícita');
   }
-  return currentContextId.isEmpty ? 'denuncia_robo' : currentContextId;
+
+  // 3. La necesidad elegida, cuando las glosas no bastan.
+  if (needId == 'tramites') {
+    return AssemblerRoute(
+      contextId: _procedureContextFor(norm),
+      reason: 'necesidad elegida: tramites',
+    );
+  }
+  final porNecesidad = needId == null ? null : contextForNeed[needId];
+  if (porNecesidad != null) {
+    return AssemblerRoute(
+      contextId: porNecesidad,
+      reason: 'necesidad elegida: $needId',
+    );
+  }
+
+  // 4. El contexto activo, si el ensamblador lo conoce.
+  if (assemblerContexts.contains(currentContextId)) {
+    return AssemblerRoute(
+        contextId: currentContextId, reason: 'contexto activo');
+  }
+
+  // Nada resolvió. No se aproxima a una denuncia.
+  return AssemblerRoute(
+    contextId: 'otro',
+    status: RouteStatus.unsupported,
+    reason: currentContextId.isEmpty
+        ? 'no hay contexto ni glosas que permitan decidir'
+        : 'el contexto $currentContextId no lo redacta el ensamblador',
+  );
 }
+
+/// Contexto del ensamblador, en la forma de cadena que espera el generador.
+///
+/// Conserva la firma anterior para quien solo necesita el destino. Quien deba
+/// distinguir «no soportado» tiene que usar [routeToAssembler] y mirar el
+/// estado.
+String resolveAssemblerContext(
+  String currentContextId,
+  List<String> glosses, [
+  dynamic Function(String)? getCategory,
+  String? needId,
+  String? intentId,
+]) =>
+    routeToAssembler(
+      currentContextId: currentContextId,
+      glosses: glosses,
+      needId: needId,
+      intentId: intentId,
+    ).contextId;
 
 /// Mapeo de identificadores de contexto para la UI y el motor de selección.
 Set<String> cardSourceContexts(String uiContextId) {

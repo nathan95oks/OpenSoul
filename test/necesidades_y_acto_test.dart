@@ -30,11 +30,12 @@ ProviderContainer _app() {
 
 void main() {
   group('cada necesidad produce su acto comunicativo', () {
-    test('Consultas pregunta; Denuncias y Trámites declaran', () {
-      expect(NeedsScreen.actFor(NeedId.inquiries), CommunicativeAct.question);
-      expect(NeedsScreen.actFor(NeedId.complaints),
+    test('Consultas parte de una pregunta; Denuncias y Trámites, de una '
+        'declaración', () {
+      expect(NeedsScreen.initialActFor(NeedId.inquiries), CommunicativeAct.question);
+      expect(NeedsScreen.initialActFor(NeedId.complaints),
           CommunicativeAct.statement);
-      expect(NeedsScreen.actFor(NeedId.procedures),
+      expect(NeedsScreen.initialActFor(NeedId.procedures),
           CommunicativeAct.statement);
     });
 
@@ -73,7 +74,7 @@ void main() {
       final notifier = c.read(declarationDraftProvider.notifier);
 
       notifier.setSpeechAct(
-          NeedsScreen.actFor(NeedId.inquiries).wireName);
+          NeedsScreen.initialActFor(NeedId.inquiries).wireName);
 
       expect(c.read(declarationDraftProvider).speechAct, 'question');
     });
@@ -82,7 +83,7 @@ void main() {
       final c = _app();
       c
           .read(declarationDraftProvider.notifier)
-          .setSpeechAct(NeedsScreen.actFor(NeedId.complaints).wireName);
+          .setSpeechAct(NeedsScreen.initialActFor(NeedId.complaints).wireName);
 
       expect(c.read(declarationDraftProvider).speechAct, 'statement');
     });
@@ -166,6 +167,74 @@ void main() {
       expect(find.textContaining('hecho sufrido'), findsOneWidget);
       expect(find.textContaining('una gestión o un documento'), findsOneWidget);
       expect(find.textContaining('orientación'), findsOneWidget);
+    });
+  });
+
+  group('el acto se decide por intervención, no por la necesidad', () {
+    test('responder es responder, aunque la necesidad sea Consultas', () {
+      expect(
+        NeedsScreen.actForIntervention(
+          purpose: CardsFlowPurpose.conversationReply,
+          need: NeedId.inquiries,
+          glosses: const ['DONDE'],
+        ),
+        CommunicativeAct.answer,
+      );
+    });
+
+    test('dentro de Consultas también se declara', () {
+      // «Sí, ya traje el papel» es una declaración dentro de una consulta.
+      expect(
+        NeedsScreen.actForIntervention(
+          purpose: CardsFlowPurpose.standaloneIntervention,
+          need: NeedId.inquiries,
+          glosses: const ['PAPEL', 'TRAER'],
+        ),
+        CommunicativeAct.statement,
+        reason: 'Elegir Consultas no convierte toda intervención en pregunta.',
+      );
+    });
+
+    test('una interrogativa explícita hace pregunta cualquier intervención',
+        () {
+      expect(
+        NeedsScreen.actForIntervention(
+          purpose: CardsFlowPurpose.standaloneIntervention,
+          need: NeedId.complaints,
+          glosses: const ['DONDE', 'PAPEL'],
+        ),
+        CommunicativeAct.question,
+      );
+    });
+
+    test('pedir algo es una solicitud, no una afirmación', () {
+      expect(
+        NeedsScreen.actForIntervention(
+          purpose: CardsFlowPurpose.conversationInitiative,
+          need: NeedId.procedures,
+          glosses: const ['PEDIR', 'INTERPRETE'],
+        ),
+        CommunicativeAct.request,
+      );
+    });
+
+    test('sin glosas manda el punto de partida de la necesidad', () {
+      expect(
+        NeedsScreen.actForIntervention(
+          purpose: CardsFlowPurpose.standaloneIntervention,
+          need: NeedId.inquiries,
+        ),
+        CommunicativeAct.question,
+      );
+    });
+
+    test('sin necesidad ni glosas, se declara', () {
+      expect(
+        NeedsScreen.actForIntervention(
+          purpose: CardsFlowPurpose.standaloneIntervention,
+        ),
+        CommunicativeAct.statement,
+      );
     });
   });
 }
