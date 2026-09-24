@@ -75,8 +75,13 @@ class CardGrid extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              // El número de columnas sale del ancho disponible, no del modo
+              // de uso: los dos modos funcionan en teléfono y en tablet, y
+              // dos columnas en una tablet dejan tarjetas enormes con media
+              // pantalla vacía. Se fija un ancho máximo por tarjeta y la
+              // cuadrícula decide cuántas caben.
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 220,
                 childAspectRatio: 1.4,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
