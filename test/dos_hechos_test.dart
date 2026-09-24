@@ -351,4 +351,147 @@ void main() {
       expect(revivido.facts.last.actorRole, ActorRole.victim);
     });
   });
+
+  group('negación y certeza no se convierten en afirmación', () {
+    test('un hecho negado se redacta como negado', () {
+      final texto = _assembler.assembleStructured(const DeclarationDraft(
+        contextId: 'denuncia_robo',
+        facts: [
+          Fact(id: 'f1', action: 'ROBAR', actorRole: ActorRole.suspect,
+              negated: true),
+        ],
+      ));
+      expect(texto.toLowerCase(), contains('no es cierto'));
+    });
+
+    test('un hecho incierto conserva la duda', () {
+      final texto = _assembler.assembleStructured(const DeclarationDraft(
+        contextId: 'denuncia_robo',
+        facts: [
+          Fact(id: 'f1', action: 'ROBAR', actorRole: ActorRole.suspect,
+              certainty: Certainty.uncertain),
+        ],
+      ));
+      expect(texto.toLowerCase(), contains('no estoy seguro'));
+    });
+
+    test('desconocer no es negar', () {
+      final desconoce = _assembler.assembleStructured(const DeclarationDraft(
+        contextId: 'denuncia_robo',
+        facts: [
+          Fact(id: 'f1', action: 'ROBAR', certainty: Certainty.unknown),
+        ],
+      ));
+      final niega = _assembler.assembleStructured(const DeclarationDraft(
+        contextId: 'denuncia_robo',
+        facts: [Fact(id: 'f1', action: 'ROBAR', negated: true)],
+      ));
+      expect(desconoce, isNot(niega));
+    });
+
+    test('negar un hecho no toca al otro', () {
+      final c = _container();
+      final n = c.read(declarationDraftProvider.notifier);
+      n.toggleFactAction('ROBAR');
+      n.toggleFactAction('ESCAPAR');
+      final robar = c.read(declarationDraftProvider).factWithAction('ROBAR')!;
+      n.setFactActor(factId: robar.id, negated: true);
+
+      final draft = c.read(declarationDraftProvider);
+      expect(draft.factWithAction('ROBAR')!.negated, isTrue);
+      expect(draft.factWithAction('ESCAPAR')!.negated, isFalse);
+    });
+  });
+
+  group('el orden de selección no inventa una secuencia', () {
+    test('ni "primero" ni "luego" aparecen por el orden', () {
+      final texto = _assembler.assembleStructured(const DeclarationDraft(
+        contextId: 'denuncia_robo',
+        facts: [
+          Fact(id: 'f1', action: 'ROBAR', actorRole: ActorRole.suspect),
+          Fact(id: 'f2', action: 'ESCAPAR', actorRole: ActorRole.suspect),
+        ],
+      ));
+      for (final palabra in ['primero', 'luego', 'después', 'entonces']) {
+        expect(texto.toLowerCase(), isNot(contains(palabra)), reason: palabra);
+      }
+    });
+
+    test('los dos órdenes conservan los mismos hechos', () {
+      String texto(List<Fact> facts) => _assembler
+          .assembleStructured(DeclarationDraft(
+              contextId: 'denuncia_robo', facts: facts));
+
+      const robar = Fact(id: 'f1', action: 'ROBAR',
+          actorRole: ActorRole.suspect);
+      const escapar = Fact(id: 'f2', action: 'ESCAPAR',
+          actorRole: ActorRole.victim);
+
+      final a = texto([robar, escapar]).toLowerCase();
+      final b = texto([escapar, robar]).toLowerCase();
+
+      for (final t in [a, b]) {
+        expect(t, contains('rob'));
+        expect(t, contains('escapar'));
+      }
+    });
+  });
+
+  group('quitar ROBAR se lleva su contenido, no el de ESCAPAR', () {
+    test('el objeto robado deja de afirmarse y la huida se conserva', () {
+      final c = _container();
+      final n = c.read(declarationDraftProvider.notifier);
+      n.toggleFactAction('ROBAR');
+      n.toggleFactAction('ESCAPAR');
+      final escapar =
+          c.read(declarationDraftProvider).factWithAction('ESCAPAR')!;
+      n.setFactActor(factId: escapar.id, actorRole: ActorRole.victim);
+      final robar = c.read(declarationDraftProvider).factWithAction('ROBAR')!;
+
+      n.removeFact(robar.id);
+
+      final texto = _assembler
+          .assembleStructured(c.read(declarationDraftProvider))
+          .toLowerCase();
+      expect(texto, isNot(contains('denuncio el robo')));
+      expect(texto, contains('escapar'));
+    });
+  });
+
+  group('el borrador sobrevive a guardarse y restaurarse', () {
+    test('ida y vuelta conserva actor, negación y certeza de cada hecho', () {
+      const original = DeclarationDraft(
+        contextId: 'denuncia_robo',
+        facts: [
+          Fact(id: 'f1', action: 'ROBAR', actorRole: ActorRole.suspect,
+              negated: true),
+          Fact(id: 'f2', action: 'ESCAPAR', actorRole: ActorRole.victim,
+              certainty: Certainty.uncertain),
+        ],
+      );
+
+      final revivido = DeclarationDraft.fromJson(original.toJson());
+
+      expect(revivido.facts, hasLength(2));
+      expect(revivido.factWithAction('ROBAR')!.negated, isTrue);
+      expect(revivido.factWithAction('ROBAR')!.actorRole, ActorRole.suspect);
+      expect(revivido.factWithAction('ESCAPAR')!.certainty,
+          Certainty.uncertain);
+      expect(revivido.factWithAction('ESCAPAR')!.actorRole, ActorRole.victim);
+    });
+
+    test('el texto restaurado dice lo mismo que el original', () {
+      const original = DeclarationDraft(
+        contextId: 'denuncia_robo',
+        facts: [
+          Fact(id: 'f1', action: 'ROBAR', actorRole: ActorRole.suspect),
+          Fact(id: 'f2', action: 'ESCAPAR', actorRole: ActorRole.victim),
+        ],
+      );
+      final revivido = DeclarationDraft.fromJson(original.toJson());
+
+      expect(_assembler.assembleStructured(revivido),
+          _assembler.assembleStructured(original));
+    });
+  });
 }
