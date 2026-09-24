@@ -1,182 +1,203 @@
 # Estado de la implementación por bloque
 
-Fecha: 2026-09-24. Lo que sigue describe lo que **está en el repositorio y
-verificado**, y lo que no. Ningún bloque se declara hecho por haberse
-empezado.
+Fecha: 2026-09-24. Describe lo que **está en el repositorio y verificado**.
+Ningún bloque se declara terminado mientras su interfaz permita eludir sus
+reglas.
 
-Comandos ejecutados para todas las cifras de este documento:
+## Comandos ejecutados y resultados
 
 ```
 flutter analyze                             → No issues found!
-flutter test                                → 542 tests, 1 omitido (preexistente)
-python -m unittest discover -s aws/tests    → 193 tests, OK
+flutter test                                → 617 aprobadas, 1 omitida, 0 fallidas
+python -m unittest discover -s aws/tests    → 220 aprobadas, 0 fallidas
 python tool/validate_business_config.py     → 0 errores
 python tool/build_dialogue_graph.py --check → grafo al día con el corpus
+python aws/deploy/smoke_check.py            → 8/8 (contra handler local)
+python aws/deploy/build_package.py          → paquete construido
 ```
 
+La única prueba omitida es preexistente y ajena a este trabajo.
 Línea base al empezar esta fase: 452 Dart, 162 Python.
+
+**Ninguna de estas cifras verifica servicios desplegados.** Ver §«Lo que solo
+se ha revisado en código».
+
+---
+
+## Corrección a un informe anterior
+
+Dije que `perdida`, `tramite_id` y `orientacion` eran destinos que el
+ensamblador no conoce y que por eso acababan en denuncia de robo. **Es falso.**
+Son compositores reales y probados
+(`local_sentence_assembler.dart:51-53`: `_composeLoss`, `_composeProcedure`,
+`_composeGuidance`).
+
+Lo cierto es otra cosa, y es peor de lo que parecía: **eran inalcanzables**.
+Solo se llegaba a ellos comparando `currentContextId` contra `'tramite'` o
+`'consulta'`, y `allSelectableContexts` no ofrece ningún contexto con esos
+ids. Tres compositores escritos y mantenidos que la aplicación nunca podía
+usar. Ahora los alcanza la necesidad elegida.
 
 ---
 
 ## Bloque 0 — Correcciones vivas · **hecho**
 
-| # | Hallazgo | Corrección | Prueba |
-|---|---|---|---|
-| 0.1 | Borrador borrado al reabrir el mismo encargo | `openCards` no limpia cuando `sameErrand` | `modos_abc_conversacion_test.dart` |
-| 0.2 | `ESCAPAR` redactaba un robo | El robo se afirma solo si hay acción de sustracción | `test_contrato_cliente_real.py::EscaparNoEsRobo` |
-| 0.3 | `actorRole` enviado, `actor_role` leído | `normalize_facts` acepta ambos; el cliente manda camelCase | `test_contrato_cliente_real.py::NombresDelContrato` |
-| 0.4 | `declaration` descartado fuera de `denuncia_robo` | Sin puerta por contexto; `uses_structured` renombrado y ya no ensombrecido | `test_contrato_cliente_real.py::EstructuradoFueraDeDenunciaRobo` |
-| 0.5 | Numerales: catálogo `'0'` vs resolutor `CERO` | `canonicalFor` traduce, como el backend | `numerales_avatar_test.dart` |
+| # | Hallazgo | Prueba |
+|---|---|---|
+| 0.1 | Borrador borrado al reabrir el mismo encargo | `recorridos_completos_test.dart` |
+| 0.2 | `ESCAPAR` redactaba un robo | `test_contrato_cliente_real.py` |
+| 0.3 | `actorRole` enviado, `actor_role` leído | `test_contrato_cliente_real.py` |
+| 0.4 | `declaration` descartado fuera de `denuncia_robo` | `test_contrato_cliente_real.py` |
+| 0.5 | Numerales: catálogo `'0'` vs resolutor `CERO` | `numerales_avatar_test.dart` |
 
-**0.5 con matiz.** Lo comprobable en código está hecho y probado: el cliente
-pide el nombre que el propio sistema declara, y los mapas de cliente y backend
-coinciden. **Lo que no se ha comprobado** es que el modelo contenga esas
-animaciones: el `.glb` no está en el repositorio. Una prueba vigila que si
-algún día se añade, haya que revisar las afirmaciones de cobertura. La
-reproducción real en el avatar **queda pendiente de dispositivo**.
+**0.5 sigue con matiz.** Lo comprobable en código está hecho. Lo que **no** se
+ha comprobado es que el modelo contenga esas animaciones: el `.glb` no está en
+el repositorio. Una constante con nombres de animación no demuestra que el
+archivo las tenga. **Pendiente de dispositivo.**
 
 ---
 
-## Bloque 1 — Navegación · **hecho**
+## Bloques 1, 2, 3, 4, 6, 7 — **hechos**
 
-Barra: Tarjetas LSB · Conversación · Voz a LSB, con Conversación al centro,
-comprobado por posición real en pantalla.
+Navegación con identificadores estables y migración de índices; modos personal
+y ventanilla con persistencia separada; necesidad, intención y acto
+comunicativo en el lanzamiento; datos de negocio empaquetados desde una fuente
+única; colección de hechos con protagonista propio; contrato v3 validado.
 
-`AppTabId` persiste una cadena, no un índice. El orden de declaración del enum
-es **distinto** del visual a propósito: si coincidieran, un uso accidental de
-`.index` funcionaría por casualidad. `fromLegacyIndex` traduce lo guardado con
-el esquema anterior.
-
----
-
-## Bloque 2 — Sesión y modos · **hecho**
-
-Selector al entrar, con dos opciones grandes. `AppShell` no monta la
-navegación mientras no haya modo, así que no puede verse una conversación
-anterior antes de decidir la sesión.
-
-Dos claves de almacenamiento: `device_config_v1` y `session_content_v1`.
-«Finalizar atención» borra lo del ciudadano y conserva el perfil institucional.
-Una sesión en ventanilla no se repone al reabrir.
+Detalle en los mensajes de commit.
 
 ---
 
-## Bloque 3 — Necesidad, intención y acto · **hecho**
+## Bloque 5 — Candidatos · **hecho**
 
-`standaloneDeclaration` → `standaloneIntervention`, con `CommunicativeAct`
-aparte. Consultas produce una pregunta.
+Era el que quedaba a medias. El filtro cubría solo polaridad, así que el
+buscador y las categorías podían insertar cualquier tarjeta en cualquier
+pregunta.
 
-`setSpeechAct` existía y **nadie lo llamaba**: todo salía como afirmación. Ya
-lo fija el lanzamiento.
+`SemanticFunction` expone la tabla que el ensamblador ya usaba para redactar
+(397 entradas). Una sola clasificación para ofrecer y para escribir: con dos,
+antes o después discrepan y se ofrece algo que la frase no sabe colocar.
 
----
+El filtro se aplica en **todas** las vías: cuadrícula inicial, categorías,
+sugerencias del modelo y zona activa cuando no hay turno del oyente.
 
-## Bloque 4 — Datos de negocio en la app · **hecho**
+Tres salvedades, para no esconder respuestas correctas:
 
-`tool/build_business_assets.py` genera `assets/business/institution_profiles.json`
-y no escribe si el validador falla. Fuente única en `docs/negocio/config/`.
+1. Una glosa que el ensamblador no clasifica **no se filtra**.
+2. Las respuestas de desconocimiento nunca se filtran.
+3. **La lista blanca curada de la zona gana al filtro.** JUEZ responde
+   «¿quién?» y «escribir otro» cabe en evidencia; ambas se detectaron como
+   regresión al implementar.
 
-Las intenciones sin cobertura viajan hasta la interfaz **para poder decirlo**.
-
----
-
-## Bloque 5 — Candidatos · **hecho en el motor, parcial en la interfaz**
-
-`CandidateEngine` aplica el orden lógico y garantiza las dos reglas duras: una
-opción no se vuelve válida porque el modelo la sugiera, y una respuesta
-correcta no se elimina por ser poco frecuente en esa institución.
-
-**Pendiente:** el filtro por campo solo cubre hoy la polaridad. Las demás
-ranuras (persona, objeto, lugar…) todavía no restringen qué tipo de tarjeta
-cabe, así que cambiar de categoría o usar el buscador aún puede ofrecer algo
-poco pertinente. No introduce nada incompatible con el sí/no, que era el caso
-más dañino, pero el resto está a medias.
-
-**Pendiente:** eliminar las ramas muertas `'tramite'` y `'consulta'` de
-`resolveAssemblerContext`, o construir esos contextos de verdad.
-
----
-
-## Bloque 6 — Colección de hechos · **hecho**
-
-`FactInfo.action` único → `List<Fact>`, cada hecho con su id, `ActorRole`
-tipado, negación y certeza. Se distingue «me robaron y yo escapé» de «me
-robaron y el ladrón escapó», hasta el texto y el audio. Quitar un hecho no
-toca el otro. Cancelar la aclaración conserva el estado anterior sin atribuir
-la huida a nadie. Los borradores antiguos se leen como los hechos que
-significaban.
-
-No se resolvió subiendo `maxPicks`: el límite vive en
-`DeclarationDraftLimits.maxFacts`, que usan a la vez el catálogo y el modelo.
-
----
-
-## Bloque 7 — Contrato v3 · **hecho en código, no desplegado**
-
-`BusinessSignals` transporta modo, perfil, necesidad, intención, conversación
-y versión del mensaje. El backend valida los conjuntos cerrados y devuelve 400
-ante un valor desconocido. Un cliente v2 sigue pasando.
-
-Hay prueba de que el perfil **no es contenido**: su nombre no aparece en el
-texto y cambiar de institución no altera lo declarado.
+El diccionario completo sigue consultable: filtrar una respuesta no es quitar
+la palabra del catálogo, y hay prueba de que las 346 entradas siguen ahí.
 
 ---
 
 ## Bloque 8 — Presentación · **parcial**
 
-La cuadrícula de tarjetas pasa a ancho adaptable (`maxCrossAxisExtent`), así
-que en tablet aparecen más columnas en vez de dos tarjetas enormes. El
-selector de modo y la pantalla de necesidades usan texto **e** icono, no color.
-
-**Pendiente:** medir accesibilidad y latencia en dispositivos modestos, y
-probar el avatar en las dos orientaciones.
+Cuadrícula de ancho adaptable; texto e icono, no color. **Pendiente:** medir
+accesibilidad, aumento de texto, orientación, teclado y latencia en teléfono y
+tablet. Ver §«Lo que solo se ha revisado en código».
 
 ---
 
-## Bloque 9 — Documentación · **parcial**
+## Enrutamiento — **hecho**
 
-Este documento y los commits. **Pendiente:** actualizar los apartados 1.3, 1.4
-y 1.5 de `informe_final.md` con la ampliación a trámites registrales,
-notariales y municipales.
+`routeToAssembler` decide de más explícito a menos: intención sin cobertura,
+glosas elegidas, necesidad, contexto activo.
+
+**Lo desconocido ya no acaba en denuncia de robo.** Devuelve `otro` marcado
+como no soportado, con su motivo y el vocabulario que falta; la pantalla lo
+dice y deja continuar con lo que sí se puede comunicar. Aproximar a una
+denuncia era acusar por omisión.
+
+El acto comunicativo se recalcula **por intervención**: elegir Consultas no
+convierte toda intervención en pregunta.
 
 ---
 
-## Lo que hace falta desplegar
+## Fidelidad tras Bedrock — **hecho**
 
-| Componente | Estado | Qué hace falta |
+`_generation_is_safe` solo comprobaba palabras. Encontrar las mismas no
+demuestra nada: «me robaron y yo escapé» y «me robaron y el ladrón escapó»
+comparten todas. `relations_are_preserved` comprueba quién hizo qué, qué se
+negó y qué quedó en duda, con los hechos normalizados del cliente.
+
+Cuando falla, se conserva la oración determinista, y el audio se sintetiza con
+el texto **finalmente aceptado**.
+
+**Caché:** distinguía actor, negación y certeza (van dentro de `declaration`),
+pero **no** la versión del generador. Una respuesta guardada por el generador
+con el fallo de ESCAPAR se habría seguido sirviendo tras desplegar la
+corrección, justo en los casos más frecuentes. `GENERATOR_VERSION` y
+`contractVersion` entran ahora en la clave.
+
+---
+
+## Qué significan las cifras
+
+Ninguna de estas prueba atención completa de ningún servicio.
+
+| Cifra | Qué es | Qué **no** es |
 |---|---|---|
-| `aws/lambda_function.py` | Cambiado, **sin desplegar** | Redespliegue. Sin él, el backend en producción sigue convirtiendo ESCAPAR en robo, ignorando `actorRole` y descartando el `declaration` fuera de `denuncia_robo`. |
-| `aws/lambda_text_to_lsb.py` | Sin cambios | Nada. |
-| Cliente Flutter | Cambiado | Compilación y distribución habituales. |
+| 11 perfiles | Propuestos por mí, con su regla de organización | No son convenios ni acuerdos con esas instituciones |
+| 36 de 41 intenciones | Intenciones de perfil que tienen nodos en el grafo | No es que sus trámites estén cubiertos |
+| 99 intenciones | Las distintas que producen los 209 ejemplos del corpus | No es un límite de mensajes ni cobertura de servicios |
+| 303 señas | Glosas del corpus §12 en el catálogo | 43 entradas más son mecanismos, no señas |
+| 150 con uso | Señas que algún recorrido ofrece | Las otras 153 siguen en el diccionario, consultables |
+| 41 identificadores de avatar | Constante del resolutor | **No** es una inspección del modelo 3D |
 
-**El orden importa:** el cliente ya envía `contractVersion: 3` con los campos
-nuevos. La Lambda desplegada los ignorará —no rompe, porque los campos
-desconocidos no se validan en la versión antigua— pero **las correcciones del
-bloque 0 no estarán activas hasta que se redespliegue**.
+Las 5 intenciones sin cobertura (Derechos Reales ×3, Notaría, GAMC) llegan
+hasta la interfaz **para decirlo**, con su brecha léxica nombrada.
 
 ---
 
-## Verificaciones que exigen servicios desplegados
+## Despliegue
 
-No se han hecho y no se pueden hacer desde aquí:
+`aws/deploy/` está **preparado y sin ejecutar**, esperando aprobación.
+
+**Orden obligatorio: backend primero.** Un cliente v3 contra la Lambda actual
+recibe 200 y pierde el segundo hecho y el protagonista de cada uno. No
+devolver error no es compatibilidad.
+
+Mientras esa combinación exista, `BackendCompatibility` la cubre: lee
+`contractVersion` de la respuesta, avisa de qué se perdería y usa la redacción
+local. **Nunca reduce dos hechos a uno en silencio.** Es una red, no una
+solución.
+
+Paquete: 45 KB, sin dependencias nuevas.
+SHA-256 `170a93fffb7b36cf519613cabb27a970d6ee74207df8d23f4de5b5f374abf23b`
+
+---
+
+## Lo que solo se ha revisado en código
+
+No se presenta como medido nada de esto:
 
 1. **Bedrock real.** Todas las pruebas usan el doble de boto3. El
    comportamiento del modelo ante los prompts nuevos no está medido.
-2. **Polly real.** El audio se prueba con un doble que devuelve bytes falsos.
-   Que el texto y el audio correspondan a la misma versión está comprobado en
-   el cliente; que Polly pronuncie bien la frase con dos hechos, no.
-3. **S3 y caché.** La caché semántica se ejerce contra un doble.
-4. **El avatar 3D.** El `.glb` no está en el repositorio. Los numerales, la
+   *Procedimiento:* `python aws/deploy/smoke_check.py --endpoint <URL>` contra
+   una versión publicada con Bedrock habilitado.
+2. **Polly real.** Devuelve bytes falsos localmente. Que el audio corresponda
+   al texto aceptado está probado; que Polly pronuncie bien una frase con dos
+   hechos, no.
+3. **Caché en S3.** Se ejerce contra un doble. La separación por versión está
+   probada en la clave, no en el bucket.
+4. **El avatar 3D.** El `.glb` no está en el repositorio. Numerales,
    dactilología y las cinco señas léxicas necesitan comprobación en
-   dispositivo.
-5. **Latencia extremo a extremo** en un teléfono modesto con red real.
+   dispositivo. *Procedimiento:* abrir el visor y reproducir las glosas de
+   `available3DGlosses`, anotando cuáles emiten `finished`.
+5. **Teléfono y tablet.** Aumento de texto, orientación, controles táctiles,
+   manos y rostro visibles, teclado y latencia: **no medidos**.
+6. **Latencia extremo a extremo** con red real.
 
 ---
 
 ## Límite que no cambia
 
-Nada de este trabajo valida lingüísticamente ninguna composición. Las
-entradas resueltas por dactilología y las composiciones provisionales de la
-sección 4 del corpus **siguen sin validar** con señantes de Cochabamba ni con
-intérpretes. La verificación hecha es de cobertura léxica, integridad de datos
-y comportamiento del sistema.
+Nada de este trabajo valida lingüísticamente ninguna composición. Las entradas
+resueltas por dactilología y las composiciones provisionales de la sección 4
+del corpus **siguen sin validar** con señantes de Cochabamba ni con
+intérpretes. Lo verificado es cobertura léxica, integridad de datos y
+comportamiento del sistema.

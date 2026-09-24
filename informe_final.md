@@ -286,6 +286,10 @@ Desarrollar una aplicación móvil basada en un sistema inteligente de análisis
 
 - Se ejecutarán pruebas funcionales con escenarios simulados en entornos judiciales, validando la coherencia semántica entre las glosas seleccionadas y el texto generado. 
 
+- La aplicación ofrecerá dos modos de uso, elegidos por la persona al entrar: uso personal, desde el dispositivo de la propia persona sorda, y atención en ventanilla, sobre un dispositivo compartido que pasa de una persona a la siguiente. Ambos modos conservan la comunicación bidireccional y el mismo significado de las glosas; cambian el inicio, la organización de las preguntas y la gestión de la sesión. 
+
+- El sistema incorporará perfiles institucionales propuestos que ordenan las prioridades de una atención. Su alcance se amplía más allá de la etapa preliminar judicial penal, incorporando puntos de atención registrales, notariales y municipales. Esta ampliación es de organización de la interfaz: **incluir un perfil no demuestra cobertura lingüística de los servicios de esa institución**, y las intenciones que carecen de vocabulario se declaran explícitamente como no disponibles en lugar de aproximarse con señas de significado distinto. 
+
 ### **1.5. Límites** 
 
 - El corpus estará restringido al dialecto LSB de la región de Cochabamba, sin garantizar compatibilidad con variaciones lingüísticas de otros departamentos. 
@@ -296,7 +300,15 @@ Desarrollar una aplicación móvil basada en un sistema inteligente de análisis
 
 - El proyecto se limitará al desarrollo del software móvil, excluyendo la provisión de dispositivos. 
 
-- Las pruebas se realizarán en entornos académicos simulados, excluyendo validación oficial en trámites o procesos reales vinculantes. 
+- Las pruebas se realizarán en entornos académicos simulados, excluyendo validación oficial en trámites o procesos reales vinculantes.
+
+- La ampliación a puntos de atención registrales, notariales y municipales alcanza únicamente la organización de la interfaz. De las cuarenta y una intenciones propuestas en los perfiles institucionales, treinta y seis disponen de nodos en el banco conversacional; las cinco restantes —correspondientes a Derechos Reales, Notaría y la plataforma municipal— carecen del vocabulario necesario y el sistema lo comunica explícitamente. No se incorporan señas nuevas para cubrir esas ausencias. 
+
+- El número de intenciones del banco conversacional y el número de entradas del catálogo describen la organización disponible, no la cobertura de los servicios institucionales ni la naturalidad lingüística de las secuencias resultantes. 
+
+- La disponibilidad de animaciones del avatar se declara a partir de constantes del código y no de una inspección del modelo tridimensional, que no forma parte del repositorio. 
+
+- Ninguna composición ni secuencia de glosas empleada ha sido validada con señantes de Lengua de Señas Boliviana de Cochabamba ni con intérpretes acreditados. Dicha validación es requisito previo a afirmar que una composición resulta lingüísticamente adecuada. 
 
 ### **1.6. Justificación** 
 
