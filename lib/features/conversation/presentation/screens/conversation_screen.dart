@@ -9,6 +9,8 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart';
+import 'package:lsb_legal_app/features/counter/domain/counter_session.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
@@ -143,6 +145,36 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     await ref.read(audioOutputProvider).speak(text);
   }
 
+  /// Cierra la atención del ciudadano actual.
+  ///
+  /// Se confirma porque no es reversible: se borra todo lo que dijo. Lo que
+  /// no se toca es el perfil de la institución, que es del dispositivo.
+  Future<void> _confirmEndAttention() async {
+    final confirmado = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Finalizar atención'),
+        content: const Text(
+            'Se borrarán los mensajes, borradores y resultados de esta '
+            'atención. La configuración de la institución se conserva. '
+            '¿Continuar?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Finalizar'),
+          ),
+        ],
+      ),
+    );
+    if (confirmado == true) {
+      await ref.read(counterSessionProvider).endAttention();
+    }
+  }
+
   Future<void> _confirmNewConversation() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -207,7 +239,17 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
             ],
           ),
           actions: [
-            if (!state.conversation.isEmpty)
+            // En ventanilla el dispositivo pasa de una persona a la
+            // siguiente: cerrar la atención es la acción principal, y borra
+            // lo del ciudadano conservando la configuración institucional.
+            if (ref.watch(usageSessionProvider).isCounter)
+              TextButton.icon(
+                key: const Key('finalizar_atencion'),
+                icon: const Icon(Icons.logout, size: 18),
+                label: const Text('Finalizar atención'),
+                onPressed: _confirmEndAttention,
+              )
+            else if (!state.conversation.isEmpty)
               IconButton(
                 icon: const Icon(Icons.restart_alt),
                 tooltip: 'Nuevo chat',
