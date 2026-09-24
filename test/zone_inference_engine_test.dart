@@ -103,8 +103,11 @@ void main() {
   group('el flujo guiado abre donde se preguntó', () {
     ProviderContainer containerAsking(String question) {
       final container = ProviderContainer(overrides: [
-        pendingReplyProvider
-            .overrideWithValue(ReplyPrompt(question: question)),
+        pendingReplyProvider.overrideWithValue(ReplyPrompt(
+          turnId: 't-oyente',
+          conversationId: 'c-1',
+          question: question,
+        )),
       ]);
       addTearDown(container.dispose);
       container.read(contextProvider.notifier).setContext(robo);

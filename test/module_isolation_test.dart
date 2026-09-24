@@ -10,6 +10,7 @@ import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 import 'package:lsb_legal_app/features/conversation/di/conversation_bindings.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_handoff.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
@@ -77,11 +78,16 @@ ProviderContainer _appContainer() {
 
 /// Deja la conversación con una pregunta del oyente sin responder y una
 /// respuesta a medio construir — el estado más contaminante posible.
+/// El oyente pregunta y la persona sorda abre las tarjetas para responderle:
+/// el modo C, con su turno congelado, tal como lo hace el botón del chat.
 Future<void> _conversationInProgress(ProviderContainer c) async {
   await c.read(lexiconEntriesProvider.future);
   await c
       .read(conversationProvider.notifier)
       .sendHearingMessage('¿Le robaron su celular?');
+  c.read(conversationHandoffProvider).openCards(
+        c.read(conversationHandoffProvider).nextDeafLaunch(),
+      );
   c.read(contextProvider.notifier).setContext(contextById('denuncia_robo')!);
   c.read(sentenceProvider.notifier).setWords(['CELULAR', 'ROBAR']);
 }
@@ -190,7 +196,8 @@ void main() {
   });
 
   group('volver a la conversación la reanuda donde estaba', () {
-    test('la pregunta pendiente vuelve a guiar el flujo de tarjetas', () async {
+    test('el chat conserva la pregunta, pero responder se vuelve a pedir',
+        () async {
       final container = _appContainer();
       await _conversationInProgress(container);
 
@@ -202,6 +209,20 @@ void main() {
       await container
           .read(surfaceSessionProvider)
           .enter(FlowSurface.conversation);
+
+      // Volver a la pestaña del chat no rearma sola la respuesta: salir al
+      // módulo autónomo descartó el borrador, y reanudar en silencio dejaría
+      // a la persona sorda escribiendo bajo una pregunta que ya no tiene
+      // delante. El chat sí conserva el turno pendiente.
+      expect(container.read(pendingReplyProvider), isNull);
+      expect(
+        container.read(conversationProvider).conversation.pendingReply,
+        isNotNull,
+      );
+
+      // Al pulsar "Responder con tarjetas LSB" vuelve la pregunta exacta.
+      final handoff = container.read(conversationHandoffProvider);
+      handoff.openCards(handoff.nextDeafLaunch());
 
       final pending = container.read(pendingReplyProvider);
       expect(pending, isNotNull);

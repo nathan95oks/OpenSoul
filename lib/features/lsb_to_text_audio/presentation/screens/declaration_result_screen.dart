@@ -9,7 +9,8 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
-import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
+import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
@@ -30,7 +31,11 @@ class DeclarationResultScreen extends ConsumerWidget {
     final result = translationState.value;
     final glosses = ref.watch(sentenceProvider);
     final playback = ref.watch(audioPlaybackProvider);
-    final servesConversation = ref.watch(flowSurfaceProvider).isConversation;
+    // Que la declaración sirva a una conversación es propiedad del
+    // lanzamiento, no de la pestaña ni de la superficie: en modo A no se
+    // ofrece enviarla al chat aunque haya un chat abierto detrás.
+    final servesConversation =
+        ref.watch(cardsFlowLaunchProvider).purpose.servesConversation;
     final draft = ref.watch(declarationDraftProvider);
 
     // Si el backend aún no responde o estamos offline, ensamblamos de forma determinista
@@ -292,11 +297,37 @@ class DeclarationResultScreen extends ConsumerWidget {
 
   Future<void> _sendToConversation(
       BuildContext context, WidgetRef ref, TranslationResult result) async {
-    ref.read(conversationBridgeProvider).submitDeclaration(
+    final launch = ref.read(cardsFlowLaunchProvider);
+
+    // El enlace es el que se congeló al abrir, no el último turno de ahora:
+    // si entró otro mensaje mientras se armaba la respuesta, esta sigue
+    // colgando de la pregunta que la persona sorda tenía delante.
+    final outcome = ref.read(conversationBridgeProvider).submitDeclaration(
           result: result,
           glosses: ref.read(sentenceProvider),
           contextId: ref.read(contextProvider)?.id,
+          replyToId: launch.hearingTurnId,
+          conversationId: launch.conversationId,
         );
+
+    if (outcome == SubmitOutcome.staleReply) {
+      if (!context.mounted) return;
+      // No se envía a ciegas ni se reengancha a otra pregunta: se dice qué
+      // pasó y la declaración queda intacta para copiarla o rehacerla.
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text(
+                'El mensaje al que respondías ya no está en el chat. '
+                'Tu declaración no se envió: vuelve al chat y responde de nuevo.'),
+            duration: Duration(seconds: 5),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      return;
+    }
+
     final session = ref.read(cardsFlowSessionProvider);
     ref.read(selectedTabProvider.notifier).select(AppTab.conversation);
     ref.read(resultVisibleProvider.notifier).hide();

@@ -71,16 +71,24 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   // las locales, y cuando la sugerencia llega este provider se recalcula y las
   // reordena.
   final generado = ref.watch(generatedStepProvider).asData?.value;
-  if (generado == null || generado.isEmpty) return locales;
 
-  // La sugerencia remota solo reordena: nunca debe hacer desaparecer una
-  // opción válida que el catálogo local sí ofrecía. Antes, si la IA
-  // devolvía un subconjunto, ese subconjunto sustituía por completo a
-  // `locales` y el resto de respuestas correctas se volvían inalcanzables.
+  // Orden de prioridad, de más fiable a menos:
+  //   1. el nodo del corpus que corresponde a lo que dijo el oyente,
+  //   2. la reordenación que propone Bedrock,
+  //   3. el orden del catálogo por zona.
+  // Las tres son reordenaciones: ninguna hace desaparecer una opción válida
+  // que el catálogo local sí ofrecía. Antes, si la IA devolvía un
+  // subconjunto, ese subconjunto sustituía por completo a `locales` y el
+  // resto de respuestas correctas se volvían inalcanzables.
+  final delCorpus = ref.watch(dialogueMatchProvider)?.node.offerableGlosses ??
+      const <String>[];
+  final delModelo = generado?.options ?? const <String>[];
+  if (delCorpus.isEmpty && delModelo.isEmpty) return locales;
+
   final porGlosa = {for (final c in locales) c.gloss: c};
   final vistas = <String>{};
   final reordenadas = <LsbCard>[
-    for (final g in generado.options)
+    for (final g in [...delCorpus, ...delModelo])
       if (porGlosa.containsKey(g) && vistas.add(g)) porGlosa[g]!,
   ];
   for (final c in locales) {

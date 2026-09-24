@@ -7,6 +7,7 @@ import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart
 import 'package:lsb_legal_app/core/data/datasources/remote_lexicon_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/dialogue_graph_datasource.dart';
 import 'package:lsb_legal_app/core/data/repositories/animation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/audio_translation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/caching_audio_translation_repository.dart';
@@ -26,7 +27,9 @@ import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_engine.dart';
+import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 
 final httpClientProvider = Provider<http.Client>((ref) {
   final client = http.Client();
@@ -90,6 +93,39 @@ final contextInferenceEngineProvider = Provider<ContextInferenceEngine>((ref) {
 });
 
 final pendingReplyProvider = Provider<ReplyPrompt?>((ref) => null);
+
+final dialogueGraphDataSourceProvider = Provider<DialogueGraphDataSource>(
+  (ref) => DialogueGraphDataSource(),
+);
+
+/// El banco de nodos conversacionales, cargado una sola vez.
+///
+/// Se sirve vacío mientras carga y ante un asset ilegible: la navegación por
+/// zonas del catálogo es la base, y el grafo es lo que la afina cuando hay
+/// una intervención concreta a la que responder.
+final dialogueGraphProvider = FutureProvider<DialogueGraph>(
+  (ref) => ref.watch(dialogueGraphDataSourceProvider).load(),
+);
+
+/// El nodo que corresponde al turno que se está respondiendo, si alguno.
+///
+/// `null` significa que el español libre del oyente no encaja con seguridad
+/// en ningún nodo. No es un fallo: es la señal de que hay que ofrecer
+/// intenciones candidatas o dejar seguir con las tarjetas del contexto, en
+/// vez de fingir que había una respuesta preparada.
+final dialogueMatchProvider = Provider<DialogueMatch?>((ref) {
+  final prompt = ref.watch(pendingReplyProvider);
+  if (prompt == null || prompt.question.trim().isEmpty) return null;
+
+  final graph = ref.watch(dialogueGraphProvider).asData?.value;
+  if (graph == null || graph.isEmpty) return null;
+
+  return graph.match(
+    prompt.question,
+    mode: CardsFlowPurpose.conversationReply,
+    scope: prompt.proposedContextId,
+  );
+});
 
 final suggestionDataSourceProvider = Provider<RemoteSuggestionDataSource>(
   (ref) => RemoteSuggestionDataSource(client: ref.watch(httpClientProvider)),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/screens/conversation_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/lsb_flow_screen.dart';
@@ -49,6 +50,13 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
     if (!mounted || tab == null) return;
     ref.read(selectedTabProvider.notifier).selectIndex(tab);
     ref.read(flowSurfaceProvider.notifier).set(_surfaces[tab]);
+    // Una sesión restaurada no reanuda una respuesta a medias: el turno al
+    // que apuntaba pudo cambiar mientras la aplicación estaba cerrada, y
+    // enlazar a ciegas es colgar la respuesta de la pregunta equivocada. Se
+    // vuelve al modo A, y responder se pide otra vez desde el chat.
+    ref
+        .read(cardsFlowLaunchProvider.notifier)
+        .start(const CardsFlowLaunch.standalone());
   }
 
   static const List<FlowSurface> _surfaces = [

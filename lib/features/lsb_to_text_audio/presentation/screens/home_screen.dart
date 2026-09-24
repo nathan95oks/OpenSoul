@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/app/navigation_provider.dart';
-import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
@@ -43,7 +43,8 @@ class HomeScreen extends ConsumerWidget {
     WidgetRef ref,
     dynamic contextState,
   ) {
-    final sirveConversacion = ref.watch(flowSurfaceProvider).isConversation;
+    final sirveConversacion =
+        ref.watch(cardsFlowLaunchProvider).purpose.servesConversation;
 
     return AppBar(
       backgroundColor: AppTheme.lightSurface,
@@ -152,16 +153,25 @@ class HomeScreen extends ConsumerWidget {
     WidgetRef ref,
     dynamic contextState,
   ) {
+    final launch = ref.watch(cardsFlowLaunchProvider);
     final pending = ref.watch(pendingReplyProvider);
     final wasInferred = pending?.suggestion?.contextId == contextState?.id;
 
     return Column(
       children: [
+        // Modo C: la frase del oyente encabeza la pantalla, entera y literal.
+        // Las preguntas guía del flujo van debajo, como subpreguntas: nunca
+        // sustituyen este encabezado ni lo parafrasean.
         if (pending != null)
           _ReplyingToStrip(
             text: pending.question,
             inferredContextName: wasInferred ? contextState.name as String : null,
           ),
+        // Modo B: se dice que está abriendo ella el turno, para que no parezca
+        // que responde a algo que nadie preguntó.
+        if (pending == null &&
+            launch.purpose == CardsFlowPurpose.conversationInitiative)
+          const _InitiativeStrip(),
         const GuidedWizardStepper(),
         // NodeFlowCanvas ya gestiona su propio scroll interno (solo en la
         // grilla de tarjetas): envolverlo aquí en otro SingleChildScrollView
@@ -171,6 +181,42 @@ class HomeScreen extends ConsumerWidget {
         const Expanded(child: NodeFlowCanvas()),
         const LiveDeclarationPreviewPanel(),
       ],
+    );
+  }
+}
+
+/// Modo B: la persona sorda abre el turno.
+class _InitiativeStrip extends StatelessWidget {
+  const _InitiativeStrip();
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: 'Estás empezando el mensaje. Nadie te ha preguntado nada '
+          'todavía: elige qué quieres decir o preguntar.',
+      excludeSemantics: true,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        color: AppTheme.brandPrimary.withValues(alpha: 0.08),
+        child: Row(
+          children: [
+            const Icon(Icons.campaign_outlined,
+                size: 15, color: AppTheme.brandPrimary),
+            const SizedBox(width: 8),
+            const Expanded(
+              child: Text(
+                'Empiezas tú: elige qué quieres decir o preguntar',
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.lightText,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -208,13 +254,14 @@ class _ReplyingToStrip extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Sin recortes: es la frase a la que se responde, y
+                  // cortarla cambia lo que la persona cree estar contestando.
                   Text(
                     '«$text»',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
+                      height: 1.3,
                       color: AppTheme.lightText,
                     ),
                   ),

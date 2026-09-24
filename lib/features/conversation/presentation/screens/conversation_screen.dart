@@ -5,15 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
-import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_handoff.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/avatar_playback_sheet.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/turn_bubble.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/quick_reply_bar.dart';
@@ -28,10 +27,12 @@ class ConversationScreen extends ConsumerStatefulWidget {
 
 class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   final ScrollController _scroll = ScrollController();
+  final FocusNode _hearingFocus = FocusNode();
 
   @override
   void dispose() {
     _scroll.dispose();
+    _hearingFocus.dispose();
     super.dispose();
   }
 
@@ -58,26 +59,71 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     await audio.speak(turn.outputs.text);
   }
 
-  void _openCardsFlow() {
-    final conversation = ref.read(conversationProvider).conversation;
-    // Abrir sin frase a medias es empezar de cero, haya pregunta pendiente o
-    // no. Antes se exigia una pregunta previa, asi que cuando la persona sorda
-    // abria la conversacion ella misma el contexto anterior no se limpiaba y
-    // entraba al flujo con las zonas de otra charla.
-    final startingFresh = ref.read(sentenceProvider).isEmpty;
+  /// Abre el módulo de tarjetas en modo respuesta (C) o iniciativa (B).
+  ///
+  /// El modo lo decide si hay un turno del oyente esperando respuesta, y se
+  /// congela en el lanzamiento junto con el id y el texto exacto de ese turno.
+  /// Antes esto era un único camino que miraba el estado vivo del chat, y
+  /// abrir para empezar uno mismo se anunciaba —y se comportaba— como
+  /// responder a lo último que quedara de la charla anterior.
+  Future<void> _openCardsFlow() async {
+    final handoff = ref.read(conversationHandoffProvider);
+    final launch = handoff.nextDeafLaunch();
 
-    if (startingFresh) {
-      final proposedId = conversation.suggestedReplyContextId;
-      final proposed = proposedId == null ? null : contextById(proposedId);
-      final notifier = ref.read(contextProvider.notifier);
-      if (proposed != null) {
-        notifier.setContext(proposed);
-      } else {
-        notifier.clearContext();
-      }
-      ref.read(semanticZonesProvider.notifier).reset();
-    }
-    ref.read(selectedTabProvider.notifier).select(AppTab.cards);
+    if (!await _confirmDiscardDraft(launch)) return;
+    if (!mounted) return;
+
+    handoff.openCards(launch);
+  }
+
+  /// Un borrador a medias no se pierde en silencio al cambiar de encargo.
+  ///
+  /// Solo se pregunta cuando el encargo cambia de verdad: volver a la misma
+  /// respuesta que se estaba armando no toca nada.
+  Future<bool> _confirmDiscardDraft(CardsFlowLaunch next) async {
+    final current = ref.read(cardsFlowLaunchProvider);
+    final hasDraft = ref.read(sentenceProvider).isNotEmpty;
+    if (!hasDraft || current.sameErrand(next)) return true;
+
+    final discard = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Tienes un mensaje a medias'),
+        content: const Text(
+            'Si continúas se descartará lo que estabas armando. ¿Continuar?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Seguir con lo que tenía'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Descartar y continuar'),
+          ),
+        ],
+      ),
+    );
+    return discard == true;
+  }
+
+  /// Devuelve el turno al oyente. Enfoca su campo de texto y nada más: el
+  /// micrófono solo se enciende si él lo pulsa.
+  void _handBackToHearing() {
+    ref.read(conversationHandoffProvider).handBackToHearing();
+    _hearingFocus.requestFocus();
+  }
+
+  /// Qué se le ofrece a la persona sorda: empezar ella (B) o responder (C).
+  CardsFlowPurpose _deafCardsMode(ConversationState state) =>
+      state.conversation.pendingReply == null
+          ? CardsFlowPurpose.conversationInitiative
+          : CardsFlowPurpose.conversationReply;
+
+  /// El botón de devolver el turno aparece justo cuando le toca al oyente:
+  /// después de que la persona sorda dejara su turno en el chat.
+  bool _showHandBack(ConversationState state) {
+    final last = state.conversation.lastTurn;
+    return last != null && last.message.speaker == SpeakerRole.deaf;
   }
 
   ConversationTurn? _instruccionPendiente(ConversationState state) {
@@ -214,6 +260,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                     .read(conversationProvider.notifier)
                     .sendHearingMessage(text, source: MessageSource.speech),
                 onDeafCards: _openCardsFlow,
+                onHandBackToHearing: _handBackToHearing,
+                deafCardsMode: _deafCardsMode(state),
+                showHandBack: _showHandBack(state),
+                hearingFocus: _hearingFocus,
               ),
             ],
           ),
@@ -227,12 +277,27 @@ class _InputArea extends StatelessWidget {
   final void Function(String) onHearingText;
   final void Function(String) onHearingSpeech;
   final VoidCallback onDeafCards;
+  final VoidCallback onHandBackToHearing;
+  final CardsFlowPurpose deafCardsMode;
+  final bool showHandBack;
+  final FocusNode hearingFocus;
 
   const _InputArea({
     required this.onHearingText,
     required this.onHearingSpeech,
     required this.onDeafCards,
+    required this.onHandBackToHearing,
+    required this.deafCardsMode,
+    required this.showHandBack,
+    required this.hearingFocus,
   });
+
+  /// El botón dice lo que va a pasar. «Responder» cuando hay algo a lo que
+  /// responder; «Iniciar» cuando la persona sorda abre el turno ella misma.
+  String get _deafCardsLabel =>
+      deafCardsMode == CardsFlowPurpose.conversationReply
+          ? 'Responder con tarjetas LSB'
+          : 'Iniciar con tarjetas LSB';
 
   @override
   Widget build(BuildContext context) {
@@ -241,15 +306,37 @@ class _InputArea extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (showHandBack) ...[
+            SizedBox(
+              width: double.infinity,
+              height: 46,
+              child: FilledButton.icon(
+                key: const Key('continuar_como_oyente'),
+                onPressed: onHandBackToHearing,
+                icon: const Icon(Icons.record_voice_over, size: 18),
+                label: const Text(
+                  'Continuar como persona oyente',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(23),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
           SizedBox(
             width: double.infinity,
             height: 46,
             child: OutlinedButton.icon(
+              key: const Key('tarjetas_lsb'),
               onPressed: onDeafCards,
               icon: const Icon(Icons.sign_language, size: 18),
-              label: const Text(
-                'Responder con tarjetas LSB',
-                style: TextStyle(fontWeight: FontWeight.w700),
+              label: Text(
+                _deafCardsLabel,
+                style: const TextStyle(fontWeight: FontWeight.w700),
               ),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppTheme.brandLight,
@@ -264,6 +351,7 @@ class _InputArea extends StatelessWidget {
           TextInputWidget(
             onSubmit: onHearingText,
             onSpeechSubmit: onHearingSpeech,
+            focusNode: hearingFocus,
           ),
         ],
       ),
