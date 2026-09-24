@@ -1,0 +1,325 @@
+{
+ "version": 1,
+ "estado": "propuesta",
+ "nota": "Casos de aceptación de la lógica de negocio. El campo 'comprobacion' separa lo que ya se puede verificar sobre las configuraciones de esta fase ('configuracion') de lo que exigirá una prueba de interfaz cuando se implemente ('interfaz_pendiente'). Ningún caso marcado 'interfaz_pendiente' debe presentarse como aprobado.",
+ "casos": [
+  {
+   "id": "AC-01",
+   "titulo": "Entrada con selector de modo y Conversación al centro",
+   "entrada": "Primera apertura de la aplicación, sin sesión previa.",
+   "modo": null,
+   "institucion": null,
+   "necesidad": null,
+   "esperado": [
+    "Se muestra el selector con dos opciones: uso personal y atención en ventanilla.",
+    "No se muestra ninguna conversación antes de decidir la sesión.",
+    "Tras elegir, la barra inferior presenta Tarjetas LSB · Conversación · Texto/voz a LSB, con Conversación en la posición central.",
+    "El modo activo queda visible y hay un control para cambiarlo."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Decidir el modo por el tamaño de pantalla.",
+     "Abrir automáticamente la conversación anterior.",
+     "Exigir cuenta, autenticación institucional o geolocalización."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-02",
+   "titulo": "Modo personal sin institución, mensaje inicial de la persona sorda",
+   "entrada": "Modo personal; elige Denuncias; no elige institución.",
+   "modo": "personal",
+   "institucion": "sin_institucion",
+   "necesidad": "denuncias",
+   "intencion": "RELATO_ABIERTO",
+   "esperado": [
+    "El recorrido parte de lo sucedido, no de la institución.",
+    "«No sé / aún no elegí» está disponible y no bloquea nada.",
+    "Al pulsar «Iniciar conversación con este mensaje», el contenido confirmado se conserva y se convierte en turno propio con replyToId nulo.",
+    "El mensaje no se reconstruye desde cero ni se envía dos veces."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Enlazar el turno con una pregunta de un chat guardado.",
+     "Exigir institución para narrar un hecho."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-03",
+   "titulo": "Pregunta propia desde Consultas en propósito independiente",
+   "entrada": "Modo personal; elige Consultas; quiere preguntar dónde consultar su trámite.",
+   "modo": "personal",
+   "institucion": "sin_institucion",
+   "necesidad": "consultas",
+   "intencion": "CONSULTA_ESTADO",
+   "esperado": [
+    "El acto comunicativo resultante es pregunta, no declaración.",
+    "El texto se redacta como pregunta y el audio la reproduce como tal.",
+    "El propósito sigue siendo independiente: no hay turno oyente al que responder."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Forzar la salida a una afirmación por llamarse el propósito 'standaloneDeclaration'.",
+     "Redactar «Denuncio…» a partir de una consulta."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-04",
+   "titulo": "Ventanilla DDRR con pregunta de identificación",
+   "entrada": "Modo ventanilla, perfil Derechos Reales. El funcionario escribe «¿Cuál es su nombre?».",
+   "modo": "ventanilla",
+   "institucion": "derechos_reales",
+   "necesidad": "tramites",
+   "intencion": "IDENTIFICACION_NOMBRE",
+   "esperado": [
+    "Se reconoce identificación, no un trámite registral.",
+    "Las opciones ofrecidas corresponden al campo nombre, incluida la dactilología.",
+    "El encabezado conserva la frase exacta del funcionario."
+   ],
+   "prohibido": {
+    "glosas": ["TRÁMITE", "CERTIFICADO", "SELLO"],
+    "comportamientos": [
+     "Anteponer opciones registrales porque el perfil sea DDRR.",
+     "Ofrecer FOLIO, que no existe en el catálogo, como si estuviera cubierto."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-05",
+   "titulo": "Ventanilla con inicio por la persona sorda",
+   "entrada": "Modo ventanilla, perfil Policía. Nadie ha hablado. La persona sorda abre con tarjetas.",
+   "modo": "ventanilla",
+   "institucion": "policia",
+   "necesidad": "denuncias",
+   "esperado": [
+    "El propósito es inicio en conversación; replyToId nulo.",
+    "El perfil institucional ordena las prioridades, sin inventar una pregunta del funcionario.",
+    "Tras enviar, aparece «Continuar como persona oyente»."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Mostrar un encabezado «Respondiendo a…» sin turno oyente.",
+     "Poner el nombre de la institución en boca de la persona sorda como contenido declarado."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-06",
+   "titulo": "Ventanilla con inicio por el oyente",
+   "entrada": "Modo ventanilla, perfil Policía. El funcionario dicta «¿Qué le ocurrió?».",
+   "modo": "ventanilla",
+   "institucion": "policia",
+   "necesidad": "denuncias",
+   "intencion": "RELATO_ABIERTO",
+   "esperado": [
+    "Se conserva la transcripción original íntegra.",
+    "«Responder con tarjetas» abre una respuesta dirigida a ese turno, con su ID.",
+    "Las opciones corresponden a un relato abierto, no a un sí/no."
+   ],
+   "prohibido": {
+    "glosas": ["SÍ", "NO"],
+    "comportamientos": [
+     "Convertir una pregunta abierta en pregunta cerrada."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-07",
+   "titulo": "Mención de otra institución sin cambio del perfil activo",
+   "entrada": "Modo ventanilla, perfil Derechos Reales. La persona sorda dice «Traje un documento del juzgado».",
+   "modo": "ventanilla",
+   "institucion": "derechos_reales",
+   "necesidad": "tramites",
+   "esperado": [
+    "JUZGADO se registra como institución mencionada.",
+    "El perfil de la atención sigue siendo Derechos Reales.",
+    "Si el sistema cree que hay conflicto, propone una aclaración breve; no cambia solo."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Cambiar el perfil activo por una mención incidental."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-08",
+   "titulo": "Consulta sobre un documento en Policía",
+   "entrada": "Modo ventanilla, perfil Policía. La persona sorda pregunta por un papel que le pidieron.",
+   "modo": "ventanilla",
+   "institucion": "policia",
+   "necesidad": "consultas",
+   "esperado": [
+    "Las opciones corresponden a una consulta documental.",
+    "La necesidad puede cambiarse sin salir de la atención."
+   ],
+   "prohibido": {
+    "glosas": ["ROBAR"],
+    "comportamientos": [
+     "Priorizar ROBAR por el nombre de la institución."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-09",
+   "titulo": "Pregunta con alternativas, abierta, negativa e intención no reconocida",
+   "entrada": "Cuatro enunciados del oyente: alternativa («¿Viene a solicitar un folio o a presentar un requisito?»), abierta («¿Dónde ocurrió?»), negativa («No trajo el documento») e irreconocible («El parqueo cierra a medianoche»).",
+   "modo": "ventanilla",
+   "institucion": "derechos_reales",
+   "necesidad": "consultas",
+   "esperado": [
+    "La alternativa ofrece elegir entre intenciones, no un sí/no.",
+    "La abierta no ofrece polaridad.",
+    "La negativa no se convierte en afirmación.",
+    "La irreconocible no empareja ningún nodo: se proponen intenciones candidatas y se conserva el texto original.",
+    "En la alternativa se declara la ausencia de cobertura del concepto folio."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Emparejar la frase irreconocible con el nodo más parecido.",
+     "Presentar el concepto folio como cubierto."
+    ]
+   },
+   "comprobacion": "configuracion"
+  },
+  {
+   "id": "AC-10",
+   "titulo": "Término ausente del corpus nunca aparece como seña oficial",
+   "entrada": "Recorridos que necesitan FOLIO, BILLETERA, ARMA, NOCHE, PAGAR, CÉDULA, ESCRITURA, PROPIEDAD, DOCUMENTO, JUICIO, ENTREGAR, REGISTRAR, CORREGIR o RENOVAR.",
+   "modo": null,
+   "institucion": null,
+   "necesidad": null,
+   "esperado": [
+    "Ninguno aparece como tarjeta con seña.",
+    "Se declara qué parte del mensaje sí puede comunicarse hoy.",
+    "Si el término literal es imprescindible, se usa dactilología declarada como tal."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Sustituir BILLETERA por BILLETES.",
+     "Sustituir PAGAR por una tarjeta de dinero.",
+     "Sustituir FOLIO REAL por PAPEL.",
+     "Deducir «mi derecho propietario» de una selección genérica de certificado.",
+     "Introducir la palabra ausente como «opción especial» sin declarar su tipo."
+    ]
+   },
+   "comprobacion": "configuracion"
+  },
+  {
+   "id": "AC-11",
+   "titulo": "ROBAR + ESCAPAR con protagonistas distintos, edición y cancelación",
+   "entrada": "En «¿Qué ocurrió?» se eligen dos acciones: ROBAR y ESCAPAR, con protagonistas distintos.",
+   "modo": "ventanilla",
+   "institucion": "policia",
+   "necesidad": "denuncias",
+   "intencion": "RELATO_ABIERTO",
+   "esperado": [
+    "Se conservan los dos hechos, cada uno con su protagonista.",
+    "Se aclara quién escapó.",
+    "Quitar o editar un hecho no borra el otro.",
+    "Cancelar la aclaración no registra una acción incompleta.",
+    "Usar una sola acción sigue siendo válido."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Sobrescribir la primera acción con la segunda.",
+     "Inventar una secuencia temporal o causal a partir del orden de selección.",
+     "Redactar una denuncia de robo cuando solo se seleccionó ESCAPAR."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-12",
+   "titulo": "Reanudación del mismo borrador, cambio de modo y turno nuevo",
+   "entrada": "Se abre una respuesta, se arma medio mensaje, se vuelve al chat y se reabre el mismo encargo; después llega un turno nuevo durante la edición.",
+   "modo": "ventanilla",
+   "institucion": "policia",
+   "necesidad": "denuncias",
+   "esperado": [
+    "Reabrir el MISMO encargo conserva el borrador.",
+    "Cambiar de encargo pide confirmación explícita antes de descartarlo.",
+    "La respuesta enviada se enlaza al turno que se tenía delante, no al que llegó después.",
+    "Cambiar de modo de uso no arrastra el borrador a la otra sesión."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Perder el borrador en silencio al reabrir el mismo encargo.",
+     "Asociar la respuesta a otro turno."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-13",
+   "titulo": "Fin de atención seguido de otro ciudadano",
+   "entrada": "Modo ventanilla. Se pulsa «Finalizar atención» y entra la siguiente persona.",
+   "modo": "ventanilla",
+   "institucion": "derechos_reales",
+   "necesidad": null,
+   "esperado": [
+    "Mensajes, borradores, aclaraciones y resultados reproducibles de la atención anterior quedan eliminados.",
+    "La configuración institucional se conserva.",
+    "La nueva atención empieza limpia."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Mostrar contenido del ciudadano anterior.",
+     "Heredar el historial personal del propietario del dispositivo.",
+     "Restaurar automáticamente la conversación anterior al reabrir la app."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-14",
+   "titulo": "Migración de pestañas persistidas y persistencia separada",
+   "entrada": "Sesión guardada con el esquema anterior (tabIndex 0 = conversación, 1 = tarjetas, 2 = avatar) y el orden visual nuevo.",
+   "modo": null,
+   "institucion": null,
+   "necesidad": null,
+   "esperado": [
+    "La sesión antigua restaura la pestaña correcta según el identificador estable, no según la posición.",
+    "La configuración institucional y el contenido del ciudadano se guardan en claves distintas.",
+    "Una sesión ilegible no impide abrir la aplicación."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Restaurar la pestaña por índice posicional tras reordenar la barra.",
+     "Guardar configuración y contenido en la misma clave."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  },
+  {
+   "id": "AC-15",
+   "titulo": "Igualdad de significado entre vista previa, texto, audio y representación semántica",
+   "entrada": "Un mismo mensaje confirmado en modo personal y en modo ventanilla.",
+   "modo": null,
+   "institucion": null,
+   "necesidad": null,
+   "esperado": [
+    "Vista previa, texto enviado, audio y representación intermedia corresponden a la misma versión confirmada.",
+    "La acción, el protagonista, la negación y la intención se conservan en ambos modos.",
+    "La reproducción y la revisión siguen siendo explícitas."
+   ],
+   "prohibido": {
+    "comportamientos": [
+     "Reproducir audio automáticamente al cambiar de modo.",
+     "Activar el micrófono al cambiar de modo.",
+     "Convertir toda frase en un acta o en tercera persona por estar en ventanilla."
+    ]
+   },
+   "comprobacion": "interfaz_pendiente"
+  }
+ ]
+}
