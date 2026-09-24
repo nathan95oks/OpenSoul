@@ -1,6 +1,7 @@
 import 'package:lsb_legal_app/core/domain/entities/dialogue_node.dart';
 import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 
 /// Qué campo se está respondiendo.
 ///
@@ -79,7 +80,25 @@ class CandidateEngine {
     NeedId? need,
     Set<String> alreadyAnswered = const {},
     List<String> remoteSuggestion = const [],
+
+    /// Campos que pide la zona activa. Se usan cuando no hay nodo —el modo A,
+    /// o cuando el español libre del oyente no encaja con ninguno—, para que
+    /// el buscador y las categorías tampoco puedan meter algo que la
+    /// pregunta no admite.
+    Set<String> zoneFields = const {},
+
+    /// Glosas que la zona lista explícitamente para esta pregunta.
+    ///
+    /// Una lista curada a mano gana a cualquier clasificación inferida: si
+    /// alguien decidió que JUEZ responde «¿quién…?» o que «escribir otro»
+    /// cabe en evidencia, el filtro no está para desdecirlo.
+    Set<String> zoneAllowlist = const {},
   }) {
+    // El nodo es más preciso porque sale del enunciado real; la zona es el
+    // respaldo cuando no lo hay.
+    final campos = node != null && node.slots.isNotEmpty
+        ? node.slots.toSet()
+        : zoneFields;
     final delCorpus = <String, int>{};
     if (node != null) {
       final ofrecibles = node.offerableGlosses;
@@ -103,8 +122,13 @@ class CandidateEngine {
       // Ya elegida: no se repite como si fuera una opción nueva.
       if (alreadyAnswered.contains(gloss)) continue;
 
-      // Incompatible con el campo: fuera, venga de donde venga.
-      if (node != null && !_fitsField(node, gloss)) continue;
+      // Incompatible con el campo: fuera, venga de donde venga. Salvo que la
+      // zona la liste a mano, que es una decisión tomada a propósito.
+      if (!zoneAllowlist.contains(gloss) &&
+          campos.isNotEmpty &&
+          !fitsField(campos, gloss)) {
+        continue;
+      }
 
       // El orden de entrada ya viene curado: la lista blanca de la zona lo
       // fija a mano y el resto sale del catálogo ordenado por frecuencia y
@@ -154,27 +178,68 @@ class CandidateEngine {
     return salida;
   }
 
-  /// Si [gloss] puede responder alguno de los campos del nodo.
+  /// Si [gloss] puede responder alguno de los campos que pide [node].
   ///
-  /// Sin nodo no se filtra nada: es preferible ofrecer de más a esconder una
-  /// respuesta correcta porque el sistema no supo clasificarla.
-  bool _fitsField(DialogueNode node, String gloss) {
-    if (alwaysAvailable.contains(gloss)) return true;
+  /// Pertenecer al corpus es necesario pero no basta: PLAZA es una glosa
+  /// perfectamente documentada y no responde «¿quién escapó?». La pertinencia
+  /// la decide el campo que se está completando.
+  ///
+  /// Tres salvedades deliberadas, para no esconder respuestas correctas:
+  ///
+  ///   - Una glosa que el ensamblador no clasifica **no se filtra**: si el
+  ///     sistema no sabe qué es, quien decide es la persona, no el filtro.
+  ///   - Las respuestas de desconocimiento nunca se filtran.
+  ///   - Un nodo sin campos reconocibles no filtra nada.
+  static bool fitsField(Set<String> slots, String gloss) {
+    final clave = gloss.trim().toUpperCase();
+    if (alwaysAvailable.contains(clave)) return true;
 
     final campos = {
-      for (final s in node.slots)
+      for (final s in slots)
         if (AnswerField.bySlot(s) != null) AnswerField.bySlot(s)!,
     };
     if (campos.isEmpty) return true;
 
     // La polaridad solo cabe si de verdad se preguntó algo cerrado. Ofrecer
     // SÍ/NO ante «¿dónde ocurrió?» es poner una respuesta que nadie pidió.
-    if (polarityGlosses.contains(gloss.toUpperCase())) {
+    if (polarityGlosses.contains(clave)) {
       return campos.contains(AnswerField.polarity);
     }
 
-    return true;
+    // Una pregunta cerrada admite además el detalle que la matiza: «¿le
+    // robaron el celular?» puede responderse «sí» o directamente «celular».
+    // Por eso la polaridad no excluye al resto.
+    final soloPolaridad = campos.length == 1 &&
+        campos.contains(AnswerField.polarity);
+    if (soloPolaridad) return true;
+
+    // Texto libre: la pregunta no acota qué tipo de respuesta cabe.
+    if (campos.contains(AnswerField.freeText)) return true;
+
+    final funcion = LocalSentenceAssembler.functionOf(gloss);
+    if (funcion == null) return true;
+
+    // Un marcador (cantidad, negación) acompaña a otra respuesta en vez de
+    // ocupar un campo: no se filtra aquí, lo decide el editor de detalles.
+    if (funcion.fields.isEmpty) return true;
+
+    final nombresDeCampo = {
+      for (final c in campos) _fieldName(c),
+    };
+    return funcion.fields.any(nombresDeCampo.contains);
   }
+
+  static String _fieldName(AnswerField f) => switch (f) {
+        AnswerField.polarity => 'polarity',
+        AnswerField.person => 'person',
+        AnswerField.object => 'object',
+        AnswerField.place => 'place',
+        AnswerField.time => 'time',
+        AnswerField.amount => 'amount',
+        AnswerField.institution => 'institution',
+        AnswerField.evidence => 'evidence',
+        AnswerField.freeText => 'free_text',
+      };
 
   bool _servesNeed(InstitutionProfile profile, NeedId need) =>
       profile.priorityNeeds.contains(need);

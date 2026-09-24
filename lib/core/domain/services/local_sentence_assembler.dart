@@ -1,4 +1,5 @@
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_function.dart';
 
 const String kVictimMarker = 'VICTIMA';
 const String kEvidenceMarker = 'PRUEBA_MARCADOR';
@@ -2659,6 +2660,39 @@ class LocalSentenceAssembler {
     'CARNET': _Lex(_Role.marcador, 'mi carnet de identidad'),
     'ANOS_EDAD': _Lex(_Role.marcador, 'tengo esa edad'),
   };
+
+  /// Papel semántico de [gloss], o `null` si el ensamblador no la conoce.
+  ///
+  /// Se expone para que la selección de respuestas use exactamente la misma
+  /// tabla con la que se redacta. Tener dos clasificaciones —una para ofrecer
+  /// tarjetas y otra para escribir la frase— garantiza que antes o después
+  /// discrepen, y entonces se ofrece algo que la frase no sabe colocar.
+  static SemanticFunction? functionOf(String gloss) {
+    final lex = _lexicon[_stripGlossAccents(gloss.trim().toUpperCase())];
+    if (lex == null) return null;
+    return switch (lex.role) {
+      _Role.sujeto || _Role.personaDesc || _Role.testigo =>
+        SemanticFunction.participant,
+      _Role.rasgo || _Role.descriptor => SemanticFunction.trait,
+      _Role.verboAccion || _Role.verboAgresion => SemanticFunction.action,
+      _Role.objeto => SemanticFunction.object,
+      _Role.documento => SemanticFunction.document,
+      _Role.lugar => SemanticFunction.place,
+      _Role.institucion => SemanticFunction.institution,
+      _Role.servicio || _Role.tramite => SemanticFunction.service,
+      _Role.emocion || _Role.urgencia => SemanticFunction.state,
+      _Role.motivo => SemanticFunction.reason,
+      _Role.tiempo => SemanticFunction.time,
+      _Role.marcador => SemanticFunction.marker,
+      _Role.interrogativa => SemanticFunction.interrogative,
+    };
+  }
+
+  /// Cuántas glosas conoce la tabla. Sirve para auditarla desde las pruebas.
+  static int get lexiconSize => _lexicon.length;
+
+  /// Las glosas que el ensamblador sabe colocar en una frase.
+  static Iterable<String> get knownGlosses => _lexicon.keys;
 }
 
 enum _Role {

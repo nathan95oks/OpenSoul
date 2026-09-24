@@ -75,14 +75,26 @@ void main() {
   group('el corpus manda sobre el modelo', () {
     test('lo que responde la pregunta va primero', () {
       final n = nodo('¿Le robaron el celular?');
-      final entrada = ['TESTIGO', 'CELULAR', 'SÍ', 'ROBAR'].map(_card).toList();
+      final entrada = ['CELULAR', 'SÍ', 'ROBAR'].map(_card).toList();
 
       final salida = _engine.rank(available: entrada, node: n);
       final glosas = salida.map((c) => c.card.gloss).toList();
 
-      expect(glosas.indexOf('SÍ'), lessThan(glosas.indexOf('TESTIGO')),
-          reason: 'TESTIGO no responde «¿le robaron el celular?».');
+      expect(glosas.first, anyOf('SÍ', 'CELULAR', 'ROBAR'));
       expect(salida.first.reason, contains('corpus'));
+    });
+
+    test('lo que no responde la pregunta ni siquiera se ofrece', () {
+      final n = nodo('¿Le robaron el celular?');
+      final entrada = ['TESTIGO', 'CELULAR', 'SÍ'].map(_card).toList();
+
+      final salida = _engine.rank(available: entrada, node: n);
+
+      expect(salida.map((c) => c.card.gloss), isNot(contains('TESTIGO')),
+          reason: 'TESTIGO es un participante: no responde qué le robaron. '
+              'Bajarlo de posición no basta, porque el buscador y las '
+              'categorías lo traerían igual.');
+      expect(salida.map((c) => c.card.gloss), containsAll(['CELULAR', 'SÍ']));
     });
 
     test('una glosa sugerida por el modelo que no está disponible no entra',
@@ -158,17 +170,20 @@ void main() {
     test('una respuesta correcta poco frecuente en ese perfil sigue estando',
         () {
       final policia = catalog.profileById('policia');
-      final n = nodo('¿Le robaron el celular?');
+      // Pregunta documental: el campo admite evidencia, así que CERTIFICADO
+      // y FACTURA son respuestas legítimas aunque el perfil sea Policía.
+      final n = nodo('¿Tiene fotos de la pantalla?');
 
       final salida = _engine.rank(
-        available: ['CELULAR', 'CERTIFICADO', 'TRÁMITE'].map(_card).toList(),
+        available: ['FOTOS', 'CERTIFICADO', 'FACTURA'].map(_card).toList(),
         node: n,
         profile: policia,
       );
 
       expect(salida.map((c) => c.card.gloss),
-          containsAll(['CERTIFICADO', 'TRÁMITE']),
-          reason: 'Consultar por un documento en la Policía es legítimo.');
+          containsAll(['CERTIFICADO', 'FACTURA']),
+          reason: 'Consultar por un documento en la Policía es legítimo: el '
+              'perfil ordena, no prohíbe.');
     });
 
     test('el perfil sube las intenciones que prioriza, sin quitar nada', () {
