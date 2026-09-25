@@ -180,59 +180,7 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // Fichas de Entidades Configuradas
-                    const _Label('Entidades configuradas (toca para editar):'),
-                    const SizedBox(height: 8),
-                    const ConfiguredEntityChips(),
-                    const SizedBox(height: 16),
 
-                    // Secuencia de Glosas Seleccionadas
-                    if (glosses.isNotEmpty) ...[
-                      const _Label('Secuencia de glosas LSB:'),
-                      const SizedBox(height: 8),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: AppTheme.lightSurface,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                              color: AppTheme.lightBorder, width: 1.5),
-                          boxShadow: AppTheme.cardShadow,
-                        ),
-                        child: Text(
-                          glosses
-                              .map((g) => g.replaceAll('_', ' '))
-                              .join(' • '),
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            color: AppTheme.lightText,
-                            height: 1.4,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                    ],
-
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: AppTheme.lightSubtle,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppTheme.lightBorder),
-                      ),
-                      child: const Text(
-                        'Esta declaración puede ser presentada ante la Policía (FELCC), '
-                        'Fiscalía u oficinas públicas para formalizar tu denuncia o trámite.',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: AppTheme.lightTextSub,
-                          height: 1.5,
-                        ),
-                      ),
-                    ),
                     const SizedBox(height: 24),
 
                     if (servesConversation) ...[

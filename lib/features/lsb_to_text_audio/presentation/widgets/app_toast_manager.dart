@@ -47,14 +47,8 @@ class AppToastManager {
   }
 
   static void showSuccess(BuildContext context, String message) {
-    show(
-      context,
-      message: message,
-      icon: Icons.check_circle,
-      iconColor: AppTheme.successLight,
-      backgroundColor: AppTheme.lightSurface,
-      textColor: AppTheme.lightText,
-    );
+    // Intencionalmente no muestra toast verde superior: la confirmación
+    // visual se da directamente en la glosa seleccionada en color morado.
   }
 
   static void showInfo(BuildContext context, String message) {

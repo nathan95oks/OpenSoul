@@ -90,7 +90,7 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
     node: nodo,
     profile: perfil,
     need: necesidad,
-    alreadyAnswered: yaRespondidas,
+    alreadyAnswered: const {},
     remoteSuggestion: generado?.options ?? const [],
     // La zona activa acota el campo también cuando no hay turno del oyente:
     // es lo que impide que cambiar de categoría o buscar meta una tarjeta

@@ -61,38 +61,7 @@ class AudioToLsbScreen extends ConsumerWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Positioned(
-            top: -100,
-            left: -50,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: -50,
-            right: -50,
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-          ),
+
 
           SafeArea(
             child: Column(
@@ -270,27 +239,7 @@ class AudioToLsbScreen extends ConsumerWidget {
                         ),
                       const SizedBox(height: 8),
 
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 300),
-                        child: Text(
-                          state.status == AudioTranslationStatus.recording
-                              ? (state.recognizedText?.isNotEmpty == true
-                                  ? '"${state.recognizedText}"'
-                                  : 'Escuchando tu voz...')
-                              : state.status == AudioTranslationStatus.processing
-                                ? 'Traduciendo a LSB...'
-                                : 'Presiona el micrófono para dictar',
-                          key: ValueKey<String>('${state.status}_${state.recognizedText}'),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: state.status == AudioTranslationStatus.recording
-                                ? AppTheme.errorDark
-                                : AppTheme.darkTextSub,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
+
                     ],
                   ),
                 ),

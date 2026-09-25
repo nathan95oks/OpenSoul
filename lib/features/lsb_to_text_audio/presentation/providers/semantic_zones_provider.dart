@@ -203,22 +203,14 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     final zoneId = state.activeZoneId;
     if (zoneId == null) return;
     final ctx = ref.read(contextProvider);
-    final maxPicks = ctx?.zoneById(zoneId)?.maxPicks ?? 1;
 
     final current = [...(state.zoneAnswers[zoneId] ?? const <String>[])];
     var removedGlosses = const <String>[];
     if (current.contains(gloss)) {
       current.remove(gloss);
       removedGlosses = [gloss];
-    } else if (maxPicks <= 1) {
-      removedGlosses = current;
-      current
-        ..clear()
-        ..add(gloss);
-    } else if (current.length < maxPicks) {
-      current.add(gloss);
     } else {
-      return;
+      current.add(gloss);
     }
 
     var qualifiers = state.zoneQualifiers;

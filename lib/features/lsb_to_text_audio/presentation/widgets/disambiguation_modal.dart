@@ -313,11 +313,11 @@ class DisambiguationModal {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: AppTheme.brandPrimary.withValues(alpha: 0.12),
+                      color: const Color(0xFF7C3AED).withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(icono,
-                        color: AppTheme.brandPrimary, size: 22),
+                        color: const Color(0xFF7C3AED), size: 22),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -376,8 +376,8 @@ class DisambiguationModal {
                                 ),
                               ),
                             ),
-                            const Icon(Icons.arrow_forward_ios,
-                                size: 14, color: AppTheme.lightTextSub),
+                            const Icon(Icons.arrow_forward_ios_rounded,
+                                size: 14, color: Color(0xFF7C3AED)),
                           ],
                         ),
                       ),

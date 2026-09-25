@@ -495,9 +495,9 @@ const _unidadesTiempo = {'HORA', 'MINUTO', 'DÍA', 'DIA', 'SEMANA', 'MES'};
 /// Combina el borrador de entidades (persona, objetos, lugar) con las
 /// respuestas simples de las demás zonas en un único [DeclarationDraft]
 /// listo para generar texto determinista o enviarse al backend.
-DeclarationDraft buildFullDeclarationDraft(WidgetRef ref) {
-  final zonesState = ref.read(semanticZonesProvider);
-  final entityDraft = ref.read(declarationDraftProvider);
+DeclarationDraft buildFullDeclarationDraft(dynamic ref) {
+  final SemanticZonesState zonesState = ref.read(semanticZonesProvider);
+  final DeclarationDraft entityDraft = ref.read(declarationDraftProvider);
   final currentContextId =
       ref.read(contextProvider)?.id ?? entityDraft.contextId;
 

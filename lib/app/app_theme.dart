@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  static const Color brandPrimary  = Color(0xFF2563EB);
-  static const Color brandElectric = Color(0xFF3B82F6);
-  static const Color brandLight    = Color(0xFF60A5FA);
-  static const Color brandDeep     = Color(0xFF1D4ED8);
+  static const Color brandPrimary  = Color(0xFF1A1A2E);
+  static const Color brandElectric = Color(0xFF16213E);
+  static const Color brandLight    = Color(0xFF0F3460);
+  static const Color brandDeep     = Color(0xFF000B29);
 
   static const Color darkBg        = Color(0xFF0A0E1A);
   static const Color darkSurface   = Color(0xFF121A2E);
@@ -15,13 +15,13 @@ class AppTheme {
   static const Color darkText      = Color(0xFFF1F5F9);
   static const Color darkTextSub   = Color(0xFF94A3B8);
 
-  static const Color lightBg       = Color(0xFFF5F8FF);
-  static const Color lightSurface  = Color(0xFFFFFFFF);
-  static const Color lightSubtle   = Color(0xFFEAF1FF);
-  static const Color lightBorder   = Color(0xFFD6E2F5);
-  static const Color lightText     = Color(0xFF0F172A);
-  static const Color lightTextSub  = Color(0xFF475569);
-  static const Color accentSoft    = Color(0xFFDBEAFE);
+  static const Color lightBg       = Color(0xFF0A0E1A);
+  static const Color lightSurface  = Color(0xFF121A2E);
+  static const Color lightSubtle   = Color(0xFF1B2640);
+  static const Color lightBorder   = Color(0xFF2A3656);
+  static const Color lightText     = Color(0xFFF1F5F9);
+  static const Color lightTextSub  = Color(0xFF94A3B8);
+  static const Color accentSoft    = Color(0xFF1B2640);
 
   static const Color successLight = Color(0xFF10B981);
   static const Color successDark  = Color(0xFF34D399);
@@ -53,72 +53,7 @@ class AppTheme {
         labelLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: primary),
       );
 
-  static ThemeData get lightTheme {
-    final textTheme = _textTheme(lightText, lightTextSub);
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      scaffoldBackgroundColor: lightBg,
-      primaryColor: brandPrimary,
-      fontFamily: _fontFamily,
-      textTheme: textTheme,
-      colorScheme: const ColorScheme.light(
-        primary: brandPrimary,
-        onPrimary: Colors.white,
-        secondary: brandElectric,
-        onSecondary: Colors.white,
-        surface: lightSurface,
-        onSurface: lightText,
-        surfaceContainerHighest: lightSubtle,
-        outline: lightBorder,
-        error: errorLight,
-      ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: lightBg,
-        elevation: 0,
-        centerTitle: false,
-        foregroundColor: lightText,
-        titleTextStyle: textTheme.titleLarge,
-        shape: const Border(bottom: BorderSide(color: lightBorder, width: 1)),
-      ),
-      cardTheme: CardThemeData(
-        color: lightSurface,
-        elevation: 0,
-        shadowColor: brandPrimary.withValues(alpha: 0.08),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radiusCard),
-          side: const BorderSide(color: lightBorder),
-        ),
-      ),
-      chipTheme: ChipThemeData(
-        backgroundColor: lightSurface,
-        selectedColor: accentSoft,
-        labelStyle: const TextStyle(fontWeight: FontWeight.w600, color: lightText),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radiusButton),
-          side: const BorderSide(color: lightBorder),
-        ),
-        side: const BorderSide(color: lightBorder),
-      ),
-      elevatedButtonTheme: _elevatedButton(),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: brandPrimary,
-          minimumSize: const Size(0, 48),
-          side: const BorderSide(color: brandPrimary, width: 1.5),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusButton)),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(foregroundColor: lightTextSub),
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: brandPrimary,
-        foregroundColor: Colors.white,
-      ),
-    );
-  }
+  static ThemeData get lightTheme => darkTheme;
 
   static ThemeData get darkTheme {
     final textTheme = _textTheme(darkText, darkTextSub);

@@ -29,17 +29,10 @@ class SuggestedGlossPanel extends ConsumerWidget {
 
         final visible = cards;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (maxPicks > 1)
-              _PairHint(current: picksInZone, max: maxPicks),
-            AdaptiveNodeLayout(
-              cards: visible,
-              selectedGlosses: selectedGlosses,
-              onCardTap: (card) => _onPick(context, ref, card),
-            ),
-          ],
+        return AdaptiveNodeLayout(
+          cards: visible,
+          selectedGlosses: selectedGlosses,
+          onCardTap: (card) => _onPick(context, ref, card),
         );
       },
       loading: () => const Padding(
