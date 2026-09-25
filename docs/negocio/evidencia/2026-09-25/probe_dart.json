@@ -1,0 +1,466 @@
+{
+ "P01_modal_visible": true,
+ "P01_facts": [
+  "ROBAR:unknown",
+  "ESCAPAR:unknown"
+ ],
+ "P01_texto": "Una persona me robó. Hubo una huida, sin precisar de quién.",
+ "P02_entity_facts": [
+  "ROBAR:theft"
+ ],
+ "P02_facts_finales": [
+  "PERDER:null"
+ ],
+ "P02_texto": "No sé con certeza qué ocurrió; puede que haya perdido algo.",
+ "P03_modal": true,
+ "P03_respuestas_zona": [
+  "PAPEL"
+ ],
+ "P03_objetos": 0,
+ "P03_evidencia_en_borrador": [],
+ "P03_texto": "El declarante denuncia haber sido víctima de engaño económico.",
+ "P04_hoja_monto": true,
+ "P04_montos_rapidos_visibles": true,
+ "P04_facts": [
+  "BILLETES"
+ ],
+ "P04_objetos": [
+  "BILLETES:stolen:150:bolivianos"
+ ],
+ "P04_fraud_amount": null,
+ "P04_texto": "El declarante denuncia haber sido víctima de engaño económico.",
+ "P05_banco_abre_deletreo": true,
+ "P05_medio": "banco",
+ "P05_respuestas_medio": [
+  "BANCO",
+  "BILLETES"
+ ],
+ "P05_texto": "El declarante denuncia haber sido víctima de engaño económico mediante banco.",
+ "P06_respuestas": [
+  "SÍ",
+  "NO"
+ ],
+ "P06_willFile": "confirmed",
+ "P06_hecho_respuestas": [
+  "ROBAR",
+  "DAÑAR",
+  "ENGAÑAR"
+ ],
+ "P06_hecho_facts": [
+  "ROBAR",
+  "DAÑAR"
+ ],
+ "P07_abre_teclado_numero": true,
+ "P07_persona_celular_abre_asistente": true,
+ "P07_omitir_preseleccionado": true,
+ "P07_facts": [
+  "CELULAR"
+ ],
+ "P07_personas": [
+  "suspect:null"
+ ],
+ "P07_canal": "WhatsApp",
+ "P07_evidencia": [
+  "TOTAL",
+  "AHORA"
+ ],
+ "P07_texto": "El declarante refiere haber recibido amenazas a través de WhatsApp. Cuento con total y ahora mismo como prueba.",
+ "P08_abre_asistente_persona": true,
+ "P08_hay_campo_nombre": false,
+ "P08_personas": [
+  "suspect:null"
+ ],
+ "P08_respuestas": [
+  "NOMBRE"
+ ],
+ "P09_titulo": true,
+ "P09_glosas_enviadas": [
+  "NOMBRE",
+  "J",
+  "U",
+  "A",
+  "N",
+  "EDAD",
+  "2",
+  "4"
+ ],
+ "P09_texto_estructurado": "El declarante se identifica ante la autoridad competente.",
+ "P10_glosas": [
+  "CUÁNDO",
+  "VOLVER"
+ ],
+ "P10_texto_estructurado": "¿Dónde debo realizar esta consulta o presentar el trámite?",
+ "P10_texto_por_glosas": "¿Cuándo debo volver?",
+ "P11_zonas_inferidas": [
+  "objetos"
+ ],
+ "P11_zona_tiene_SI": false,
+ "P11_texto": "Quiero comunicar lo siguiente, aunque todavía no completé los detalles.",
+ "P12_respuestas": [
+  "HOMBRE"
+ ],
+ "P12_personas": 1,
+ "P13_amenaza_digital_hecho": {
+  "mostradas_hoy": "todas (7)",
+  "retiradas_si_no_hubiera_lista_blanca": []
+ },
+ "P13_amenaza_digital_persona": {
+  "mostradas_hoy": "todas (5)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "CONOCER",
+   "CELULAR"
+  ]
+ },
+ "P13_amenaza_digital_evidencia": {
+  "mostradas_hoy": "todas (9)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "ESCRIBIR",
+   "TOTAL",
+   "GUARDAR",
+   "MOSTRAR",
+   "AHORA"
+  ]
+ },
+ "P13_amenaza_digital_institucion": {
+  "mostradas_hoy": "todas (6)",
+  "retiradas_si_no_hubiera_lista_blanca": []
+ },
+ "P13_engano_dinero_hecho": {
+  "mostradas_hoy": "todas (5)",
+  "retiradas_si_no_hubiera_lista_blanca": []
+ },
+ "P13_engano_dinero_medio_banco": {
+  "mostradas_hoy": "todas (5)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "BANCO",
+   "ESCRIBIR"
+  ]
+ },
+ "P13_engano_dinero_persona": {
+  "mostradas_hoy": "todas (5)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "CELULAR",
+   "CONOCER"
+  ]
+ },
+ "P13_engano_dinero_comprobante": {
+  "mostradas_hoy": "todas (8)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "BANCO",
+   "ESCRIBIR",
+   "TOTAL",
+   "GUARDAR",
+   "MOSTRAR"
+  ]
+ },
+ "P13_engano_dinero_institucion": {
+  "mostradas_hoy": "todas (5)",
+  "retiradas_si_no_hubiera_lista_blanca": []
+ },
+ "P13_otro_relato": {
+  "mostradas_hoy": "todas (10)",
+  "retiradas_si_no_hubiera_lista_blanca": []
+ },
+ "P13_otro_persona": {
+  "mostradas_hoy": "todas (6)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "CONOCER"
+  ]
+ },
+ "P13_otro_acceso": {
+  "mostradas_hoy": "todas (9)",
+  "retiradas_si_no_hubiera_lista_blanca": []
+ },
+ "P13_identificacion_identidad": {
+  "mostradas_hoy": "todas (7)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "PAPEL",
+   "LEER",
+   "INTÉRPRETE"
+  ]
+ },
+ "P13_identificacion_contacto": {
+  "mostradas_hoy": "todas (7)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "ESCRIBIR",
+   "ENVIAR",
+   "AVISAR",
+   "MEJOR",
+   "DIRECCIÓN",
+   "CAMBIAR"
+  ]
+ },
+ "P13_identificacion_acompanante": {
+  "mostradas_hoy": "todas (9)",
+  "retiradas_si_no_hubiera_lista_blanca": [
+   "ACOMPAÑAR",
+   "INTÉRPRETE",
+   "1"
+  ]
+ },
+ "P13_identificacion_edad": {
+  "mostradas_hoy": "todas (3)",
+  "retiradas_si_no_hubiera_lista_blanca": []
+ },
+ "P13_nodo": "n-s6-robo_hurto_y_obje-03 slots=[polarity, object] opciones=[SÍ, NO, ROBAR, CELULAR, NO_SABER]",
+ "P13_orden_sin_perfil": [
+  "CELULAR",
+  "BILLETES",
+  "MOCHILA",
+  "BOLSA",
+  "PAPEL",
+  "IDENTIDAD",
+  "FACTURA",
+  "CAJA",
+  "CHAMARRA",
+  "GORRA",
+  "LENTES",
+  "MICRO",
+  "TRUFI"
+ ],
+ "P13_orden_policia": [
+  "CELULAR",
+  "BILLETES",
+  "MOCHILA",
+  "BOLSA",
+  "PAPEL",
+  "IDENTIDAD",
+  "FACTURA",
+  "CAJA",
+  "CHAMARRA",
+  "GORRA",
+  "LENTES",
+  "MICRO",
+  "TRUFI"
+ ],
+ "P13_mismo_orden": true,
+ "P13_diferencia_puntos": [
+  "30.000"
+ ],
+ "P14_violencia_amenazar": "El declarante denuncia haber sufrido amenazar.",
+ "P14_otro_aumentar": "El declarante se presenta en calidad de testigo presencial de los hechos.",
+ "P14_engano_abogado": "El declarante denuncia haber sido víctima de engaño económico mediante escribir. Deseo presentar esto ante un abogado.",
+ "P14_seguimiento": "El ciudadano consulta el estado de su trámite o investigación.",
+ "P14_evidencia_total_ahora": "El declarante refiere haber recibido amenazas a través de WhatsApp. Cuento con total y ahora mismo como prueba.",
+ "P15 denuncia_robo | ¿Le robaron el celular?": [
+  "objetos"
+ ],
+ "P15 denuncia_robo | ¿Dónde ocurrió?": [
+  "lugar"
+ ],
+ "P15 denuncia_robo | ¿Tiene una factura?": [],
+ "P15 denuncia_robo | ¿Qué edad aproximada tenía?": [],
+ "P15 denuncia_robo | ¿Conoce a la persona involucrada?": [
+  "conocimiento"
+ ],
+ "P15 denuncia_robo | ¿Hay testigos?": [
+  "testigos"
+ ],
+ "P15 denuncia_robo | ¿Desea presentar una denuncia?": [
+  "denuncia"
+ ],
+ "P15 denuncia_robo | ¿Cómo se llama?": [
+  "objetos"
+ ],
+ "P15 amenaza_digital | ¿Quién le envía los mensajes?": [
+  "persona"
+ ],
+ "P15 amenaza_digital | ¿Guardó los mensajes?": [],
+ "P15 amenaza_digital | ¿Tiene fotos de la pantalla?": [
+  "evidencia"
+ ],
+ "P15 amenaza_digital | ¿Conoce el número desde el que le escribieron?": [],
+ "P15 engano_dinero | ¿Cómo entregó el dinero?": [],
+ "P15 engano_dinero | ¿Cuánto dinero entregó?": [],
+ "P15 engano_dinero | ¿Conoce el nombre de la persona?": [],
+ "P15 identificacion | ¿Cómo se llama?": [
+  "identidad"
+ ],
+ "P15 identificacion | ¿Qué documento presenta?": [
+  "identidad"
+ ],
+ "P15 identificacion | ¿Qué edad tiene?": [
+  "edad"
+ ],
+ "P15 seguimiento | ¿Qué quiere consultar?": [],
+ "P15 seguimiento | ¿Tiene que volver otro día?": [],
+ "P17_denuncia_robo_sin_respuesta": {
+  "orden": [
+   "hecho",
+   "objetos",
+   "persona",
+   "lugar",
+   "tiempo",
+   "conocimiento",
+   "testigos",
+   "evidencia",
+   "emergencia",
+   "denuncia",
+   "apoyo_legal",
+   "institucion"
+  ],
+  "nunca_se_visitan": [
+   "cantidad"
+  ]
+ },
+ "P17_denuncia_robo_con_ROBAR": {
+  "orden": [
+   "hecho",
+   "objetos",
+   "persona",
+   "lugar",
+   "tiempo",
+   "conocimiento",
+   "testigos",
+   "evidencia",
+   "emergencia",
+   "denuncia",
+   "apoyo_legal",
+   "institucion"
+  ],
+  "nunca_se_visitan": [
+   "cantidad"
+  ]
+ },
+ "P17_violencia_sin_respuesta": {
+  "orden": [
+   "hecho",
+   "persona",
+   "salud_urgencia",
+   "emocion_riesgo",
+   "institucion",
+   "tiempo",
+   "evidencia"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_violencia_con_PEGAR": {
+  "orden": [
+   "hecho",
+   "salud_urgencia",
+   "emocion_riesgo",
+   "persona",
+   "institucion",
+   "tiempo",
+   "evidencia"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_amenaza_digital_sin_respuesta": {
+  "orden": [
+   "hecho",
+   "evidencia",
+   "persona",
+   "institucion"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_amenaza_digital_con_AMENAZAR": {
+  "orden": [
+   "hecho",
+   "evidencia",
+   "persona",
+   "institucion"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_engano_dinero_sin_respuesta": {
+  "orden": [
+   "hecho",
+   "medio_banco",
+   "comprobante",
+   "persona",
+   "institucion"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_engano_dinero_con_ENGAÑAR": {
+  "orden": [
+   "hecho",
+   "medio_banco",
+   "comprobante",
+   "persona",
+   "institucion"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_seguimiento_sin_respuesta": {
+  "orden": [
+   "tramite",
+   "institucion_autoridad",
+   "accion",
+   "tiempo"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_seguimiento_con_INVESTIGACIÓN": {
+  "orden": [
+   "tramite",
+   "institucion_autoridad",
+   "accion",
+   "tiempo"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_otro_sin_respuesta": {
+  "orden": [
+   "relato",
+   "persona",
+   "acceso"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_otro_con_OBSERVAR": {
+  "orden": [
+   "relato",
+   "persona",
+   "acceso"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_identificacion_sin_respuesta": {
+  "orden": [
+   "identidad",
+   "contacto",
+   "acompanante",
+   "edad"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_identificacion_con_NOMBRE": {
+  "orden": [
+   "identidad",
+   "contacto",
+   "acompanante",
+   "edad"
+  ],
+  "nunca_se_visitan": []
+ },
+ "P17_preguntas_sin_respuesta": {
+  "orden": [
+   "interrogativa",
+   "lugar_pregunta",
+   "persona_pregunta",
+   "tema_pregunta",
+   "tiempo_pregunta"
+  ],
+  "nunca_se_visitan": [
+   "cantidad_pregunta"
+  ]
+ },
+ "P17_preguntas_con_DÓNDE": {
+  "orden": [
+   "interrogativa",
+   "lugar_pregunta",
+   "persona_pregunta",
+   "tema_pregunta",
+   "tiempo_pregunta"
+  ],
+  "nunca_se_visitan": [
+   "cantidad_pregunta"
+  ]
+ },
+ "P16_objetos_tras_nuevo_encargo": [
+  "CELULAR"
+ ]
+}

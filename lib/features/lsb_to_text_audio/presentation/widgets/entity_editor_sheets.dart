@@ -439,7 +439,6 @@ class _PersonSequentialWizardSheet extends ConsumerStatefulWidget {
 
 class _PersonSequentialWizardSheetState
     extends ConsumerState<_PersonSequentialWizardSheet> {
-  static const _orange = AppTheme.brandPrimary;
   late String _personId;
   int _currentStep = 1;
   // Al elegir una vez alto/bajo o flaco/gordo se oculta el otro extremo del

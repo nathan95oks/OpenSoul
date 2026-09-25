@@ -47,6 +47,7 @@ class _LiveDeclarationPreviewPanelState
         draft.persons.isNotEmpty ||
         draft.objects.isNotEmpty ||
         draft.facts.isNotEmpty;
+    final previewText = const LocalSentenceAssembler().assembleStructured(draft);
 
     final isLastStep = !zonesState.hasNextQuestion;
     final isLoading = translationState.isLoading;
@@ -67,8 +68,29 @@ class _LiveDeclarationPreviewPanelState
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
       child: SafeArea(
         top: false,
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (previewText.isNotEmpty) ...[
+              Semantics(
+                label: 'Vista previa de la frase: $previewText',
+                child: Text(
+                  previewText,
+                  key: const ValueKey('live-declaration-preview'),
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: AppTheme.lightText,
+                    fontSize: 14,
+                    height: 1.35,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+            Row(children: [
             if (zonesState.canGoBack) ...[
               Expanded(
                 child: SizedBox(
@@ -218,6 +240,7 @@ class _LiveDeclarationPreviewPanelState
                 ),
               ),
             ),
+            ]),
           ],
         ),
       ),

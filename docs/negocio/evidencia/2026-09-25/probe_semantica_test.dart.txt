@@ -1,0 +1,396 @@
+// Sonda de auditoría (evidencia, no es una prueba del proyecto).
+// Para ejecutarla: copiar a un .dart y `flutter test <ruta>` desde la raíz del repo.
+// Ejercita el código real
+// de producción con toques simulados y registra lo que se observa. No
+// "espera" nada: cada caso imprime el resultado para citarlo como evidencia.
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
+import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
+import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/services/candidate_engine.dart';
+import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/core/domain/services/zone_inference_engine.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/qualifier_sheets.dart';
+
+const _asm = LocalSentenceAssembler();
+final _log = <String, Object?>{};
+
+LsbCard _card(String g) => LsbCard(
+      id: g,
+      gloss: g,
+      displayText: g,
+      iconUrl: '',
+      categoryId: 'x',
+      subcategoryId: 'x',
+      contexts: const [],
+      priority: 1,
+      suggestedNextCardIds: const [],
+      isFrequent: true,
+      isEmergency: false,
+    );
+
+Future<WidgetRef> _app(WidgetTester tester, String ctxId) async {
+  late WidgetRef ref;
+  late BuildContext bc;
+  await tester.pumpWidget(ProviderScope(
+    child: MaterialApp(
+      home: Consumer(builder: (context, r, _) {
+        ref = r;
+        bc = context;
+        return const Scaffold(body: SizedBox());
+      }),
+    ),
+  ));
+  ref.read(contextProvider.notifier).setContext(contextById(ctxId)!);
+  await tester.pump();
+  _ctx = bc;
+  return ref;
+}
+
+late BuildContext _ctx;
+
+Future<void> _tap(WidgetTester tester, WidgetRef ref, String gloss) async {
+  // No se espera: el modal queda abierto y el test decide qué pulsar.
+  // ignore: unawaited_futures
+  elegirGlosa(_ctx, ref, _card(gloss));
+  await tester.pumpAndSettle();
+}
+
+Future<void> _drain(WidgetTester tester) async {
+  await tester.pump(const Duration(seconds: 5));
+  await tester.pumpAndSettle();
+}
+
+String _text(WidgetRef ref) => _asm.assembleStructured(buildFullDeclarationDraft(ref));
+
+void main() {
+  tearDownAll(() {
+    File('docs/negocio/evidencia/2026-09-25/probe_dart.json')
+        .writeAsStringSync(const JsonEncoder.withIndent(' ').convert(_log));
+  });
+
+  testWidgets('P01 ROBAR + ESCAPAR eligiendo «Yo logré escapar»', (tester) async {
+    final ref = await _app(tester, 'denuncia_robo');
+    await _tap(tester, ref, 'ROBAR');
+    await _tap(tester, ref, 'ESCAPAR');
+    final opcion = find.text('La víctima / Yo logré escapar');
+    _log['P01_modal_visible'] = opcion.evaluate().isNotEmpty;
+    await tester.tap(opcion);
+    await _drain(tester);
+    final d = buildFullDeclarationDraft(ref);
+    _log['P01_facts'] = [for (final f in d.facts) '${f.action}:${f.actorRole.name}'];
+    _log['P01_texto'] = _text(ref);
+  });
+
+  testWidgets('P02 PERDER eligiendo «Sospecho de robo»', (tester) async {
+    final ref = await _app(tester, 'denuncia_robo');
+    await _tap(tester, ref, 'PERDER');
+    await tester.tap(find.text('Sospecho de robo o sustracción'));
+    await _drain(tester);
+    final d = buildFullDeclarationDraft(ref);
+    _log['P02_entity_facts'] = [for (final f in ref.read(declarationDraftProvider).facts) '${f.action}:${f.lossType}'];
+    _log['P02_facts_finales'] = [for (final f in d.facts) '${f.action}:${f.lossType}'];
+    _log['P02_texto'] = _text(ref);
+  });
+
+  testWidgets('P03 PAPEL en comprobante y cancelar la hoja', (tester) async {
+    final ref = await _app(tester, 'engano_dinero');
+    ref.read(semanticZonesProvider.notifier).activateZone('comprobante');
+    await tester.pump();
+    await _tap(tester, ref, 'PAPEL');
+    _log['P03_modal'] = find.text('¿Qué tipo de papel o documento es?').evaluate().isNotEmpty;
+    await tester.tapAt(const Offset(10, 10)); // toque fuera de la hoja = cancelar
+    await _drain(tester);
+    _log['P03_respuestas_zona'] = ref.read(semanticZonesProvider).zoneAnswers['comprobante'];
+    _log['P03_objetos'] = ref.read(declarationDraftProvider).objects.length;
+    _log['P03_evidencia_en_borrador'] = buildFullDeclarationDraft(ref).evidence.map((e) => e.concept).toList();
+    _log['P03_texto'] = _text(ref);
+  });
+
+  testWidgets('P04 engaño: BILLETES en «hecho», 150 Bs', (tester) async {
+    final ref = await _app(tester, 'engano_dinero');
+    await _tap(tester, ref, 'BILLETES');
+    _log['P04_hoja_monto'] = find.text('¿Cuánto dinero fue?').evaluate().isNotEmpty;
+    _log['P04_montos_rapidos_visibles'] = find.text('50 Bs.').evaluate().isNotEmpty;
+    await tester.enterText(find.byType(TextField), '150');
+    await tester.pump();
+    await tester.tap(find.textContaining('CONFIRMAR'));
+    await _drain(tester);
+    final d = buildFullDeclarationDraft(ref);
+    _log['P04_facts'] = d.facts.map((f) => f.action).toList();
+    _log['P04_objetos'] = [for (final o in d.objects) '${o.concept}:${o.role}:${o.quantity}:${o.unit}'];
+    _log['P04_fraud_amount'] = d.fraud?.amount;
+    _log['P04_texto'] = _text(ref);
+  });
+
+  testWidgets('P05 engaño: ENVIAR + BANCO + monto (recorrido E)', (tester) async {
+    final ref = await _app(tester, 'engano_dinero');
+    await _tap(tester, ref, 'ENVIAR');
+    await _drain(tester);
+    ref.read(semanticZonesProvider.notifier).activateZone('medio_banco');
+    await tester.pump();
+    await _tap(tester, ref, 'BANCO');
+    _log['P05_banco_abre_deletreo'] = find.textContaining('Deletrea el nombre de la banco').evaluate().isNotEmpty;
+    await tester.tap(find.text('Omitir'));
+    await _drain(tester);
+    await _tap(tester, ref, 'BILLETES');
+    await tester.enterText(find.byType(TextField), '150');
+    await tester.pump();
+    await tester.tap(find.textContaining('CONFIRMAR'));
+    await _drain(tester);
+    final d = buildFullDeclarationDraft(ref);
+    _log['P05_medio'] = d.fraud?.deliveryMethod;
+    _log['P05_respuestas_medio'] = ref.read(semanticZonesProvider).zoneAnswers['medio_banco'];
+    _log['P05_texto'] = _text(ref);
+  });
+
+  testWidgets('P06 maxPicks: SÍ y NO a la vez en «¿Desea presentar…?»', (tester) async {
+    final ref = await _app(tester, 'denuncia_robo');
+    ref.read(semanticZonesProvider.notifier).activateZone('denuncia');
+    await tester.pump();
+    await _tap(tester, ref, 'SÍ');
+    await _tap(tester, ref, 'NO');
+    await _drain(tester);
+    _log['P06_respuestas'] = ref.read(semanticZonesProvider).zoneAnswers['denuncia'];
+    _log['P06_willFile'] = buildFullDeclarationDraft(ref).willFileComplaint.name;
+    ref.read(semanticZonesProvider.notifier).activateZone('hecho');
+    await tester.pump();
+    for (final g in ['ROBAR', 'DAÑAR', 'ENGAÑAR']) {
+      await _tap(tester, ref, g);
+    }
+    await _drain(tester);
+    _log['P06_hecho_respuestas'] = ref.read(semanticZonesProvider).zoneAnswers['hecho'];
+    _log['P06_hecho_facts'] = buildFullDeclarationDraft(ref).facts.map((f) => f.action).toList();
+  });
+
+  testWidgets('P07 amenazas: CELULAR en «¿Qué tipo de mensajes…?»', (tester) async {
+    final ref = await _app(tester, 'amenaza_digital');
+    await _tap(tester, ref, 'CELULAR');
+    _log['P07_abre_teclado_numero'] = find.text('Escribe el número').evaluate().isNotEmpty;
+    await tester.tap(find.text('Omitir'));
+    await _drain(tester);
+    ref.read(semanticZonesProvider.notifier).activateZone('persona');
+    await tester.pump();
+    await _tap(tester, ref, 'CELULAR');
+    _log['P07_persona_celular_abre_asistente'] = find.text('Paso 1: Género / Identidad').evaluate().isNotEmpty;
+    _log['P07_omitir_preseleccionado'] = find.text('No identificado / Omitir').evaluate().isNotEmpty;
+    Navigator.of(tester.element(find.text('Paso 1: Género / Identidad'))).pop();
+    await _drain(tester);
+    ref.read(semanticZonesProvider.notifier).activateZone('evidencia');
+    await tester.pump();
+    for (final g in ['TOTAL', 'AHORA']) {
+      await _tap(tester, ref, g);
+    }
+    await _drain(tester);
+    final d = buildFullDeclarationDraft(ref);
+    _log['P07_facts'] = d.facts.map((f) => f.action).toList();
+    _log['P07_personas'] = [for (final p in d.persons) '${p.role}:${p.gender}'];
+    _log['P07_canal'] = d.digitalThreat?.channel;
+    _log['P07_evidencia'] = d.evidence.map((e) => e.concept).toList();
+    _log['P07_texto'] = _text(ref);
+  });
+
+  testWidgets('P08 engaño: NOMBRE en «¿Conoce el nombre o número…?»', (tester) async {
+    final ref = await _app(tester, 'engano_dinero');
+    ref.read(semanticZonesProvider.notifier).activateZone('persona');
+    await tester.pump();
+    await _tap(tester, ref, 'NOMBRE');
+    _log['P08_abre_asistente_persona'] = find.text('Paso 1: Género / Identidad').evaluate().isNotEmpty;
+    _log['P08_hay_campo_nombre'] = find.byType(TextField).evaluate().isNotEmpty;
+    Navigator.of(tester.element(find.text('Paso 1: Género / Identidad'))).pop();
+    await _drain(tester);
+    final d = buildFullDeclarationDraft(ref);
+    _log['P08_personas'] = [for (final p in d.persons) '${p.role}:${p.gender}'];
+    _log['P08_respuestas'] = ref.read(semanticZonesProvider).zoneAnswers['persona'];
+  });
+
+  testWidgets('P09 Mis datos: NOMBRE deletreado y EDAD 24', (tester) async {
+    final ref = await _app(tester, 'identificacion');
+    await _tap(tester, ref, 'NOMBRE');
+    _log['P09_titulo'] = find.text('Deletrea tu nombre').evaluate().isNotEmpty;
+    await tester.enterText(find.byType(TextField), 'Juan');
+    await tester.pump();
+    await tester.tap(find.text('Confirmar'));
+    await _drain(tester);
+    ref.read(semanticZonesProvider.notifier).activateZone('edad');
+    await tester.pump();
+    await _tap(tester, ref, 'EDAD');
+    await tester.enterText(find.byType(TextField), '24');
+    await tester.pump();
+    await tester.tap(find.text('Confirmar'));
+    await _drain(tester);
+    _log['P09_glosas_enviadas'] = ref.read(semanticZonesProvider.notifier).orderedGlosses();
+    _log['P09_texto_estructurado'] = _text(ref);
+  });
+
+  testWidgets('P10 Preguntas: CUÁNDO + VOLVER', (tester) async {
+    final ref = await _app(tester, 'preguntas');
+    await _tap(tester, ref, 'CUÁNDO');
+    await _drain(tester);
+    ref.read(semanticZonesProvider.notifier).activateZone('tiempo_pregunta');
+    await tester.pump();
+    await _tap(tester, ref, 'VOLVER');
+    await _drain(tester);
+    _log['P10_glosas'] = ref.read(semanticZonesProvider.notifier).orderedGlosses();
+    _log['P10_texto_estructurado'] = _text(ref);
+    _log['P10_texto_por_glosas'] = _asm.assemble(contextId: 'preguntas', glosses: const ['CUÁNDO', 'VOLVER']);
+  });
+
+  testWidgets('P11 Respuesta a «¿Le robaron el celular?»: CELULAR → Me lo robaron', (tester) async {
+    final ref = await _app(tester, 'denuncia_robo');
+    final zonas = const ZoneInferenceEngine()
+        .zonesFor(context: contextById('denuncia_robo')!, text: '¿Le robaron el celular?');
+    _log['P11_zonas_inferidas'] = zonas;
+    ref.read(semanticZonesProvider.notifier).activateZone(zonas.first);
+    await tester.pump();
+    _log['P11_zona_tiene_SI'] = contextById('denuncia_robo')!.zoneById(zonas.first)!.glossAllowlist.contains('SÍ');
+    await _tap(tester, ref, 'CELULAR');
+    await tester.tap(find.text('Me lo robaron'));
+    await _drain(tester);
+    _log['P11_texto'] = _text(ref);
+  });
+
+  testWidgets('P12 Cancelar hoja de persona en robo', (tester) async {
+    final ref = await _app(tester, 'denuncia_robo');
+    ref.read(semanticZonesProvider.notifier).activateZone('persona');
+    await tester.pump();
+    await _tap(tester, ref, 'HOMBRE');
+    await tester.tapAt(const Offset(10, 10));
+    await _drain(tester);
+    _log['P12_respuestas'] = ref.read(semanticZonesProvider).zoneAnswers['persona'];
+    _log['P12_personas'] = ref.read(declarationDraftProvider).persons.length;
+  });
+
+  test('P13 CandidateEngine en las pantallas observadas', () {
+    List<String> r(List<String> allow, Set<String> fields, {bool conLista = true, InstitutionProfile? p, dynamic node}) =>
+        const CandidateEngine()
+            .rank(
+              available: [for (final g in allow) _card(g)],
+              node: node,
+              profile: p ?? InstitutionProfile.unknown,
+              need: NeedId.complaints,
+              zoneFields: fields,
+              zoneAllowlist: conLista ? allow.toSet() : const {},
+            )
+            .map((c) => c.card.gloss)
+            .toList();
+    for (final ctx in ['amenaza_digital', 'engano_dinero', 'otro', 'identificacion']) {
+      for (final z in contextById(ctx)!.zones) {
+        final allow = z.glossAllowlist;
+        final con = r(allow, z.answerFields.toSet());
+        final sin = r(allow, z.answerFields.toSet(), conLista: false);
+        _log['P13_${ctx}_${z.id}'] = {
+          'mostradas_hoy': con.length == allow.length ? 'todas (${allow.length})' : con,
+          'retiradas_si_no_hubiera_lista_blanca': allow.where((g) => !sin.contains(g)).toList(),
+        };
+      }
+    }
+    final graph = DialogueGraph.fromJsonString(
+        File('assets/dialogue/dialogue_graph.json').readAsStringSync());
+    final nodo = graph.match('¿Le robaron el celular?', mode: CardsFlowPurpose.conversationReply)!.node;
+    final perfilPolicia = InstitutionProfile.fromJson(
+        (jsonDecode(File('assets/business/institution_profiles.json').readAsStringSync())['perfiles'] as List)
+            .cast<Map<String, dynamic>>()
+            .firstWhere((p) => p['id'] == 'policia'));
+    final allow = contextById('denuncia_robo')!.zoneById('objetos')!.glossAllowlist;
+    final cards = [for (final g in allow) _card(g)];
+    List<double> puntos(InstitutionProfile p) => const CandidateEngine()
+        .rank(available: cards, node: nodo, profile: p, need: NeedId.complaints, zoneAllowlist: allow.toSet())
+        .map((c) => c.score)
+        .toList();
+    List<String> orden(InstitutionProfile p) => const CandidateEngine()
+        .rank(available: cards, node: nodo, profile: p, need: NeedId.complaints, zoneAllowlist: allow.toSet())
+        .map((c) => c.card.gloss)
+        .toList();
+    _log['P13_nodo'] = '${nodo.id} slots=${nodo.slots} opciones=${nodo.offerableGlosses}';
+    _log['P13_orden_sin_perfil'] = orden(InstitutionProfile.unknown);
+    _log['P13_orden_policia'] = orden(perfilPolicia);
+    _log['P13_mismo_orden'] = orden(InstitutionProfile.unknown).join() == orden(perfilPolicia).join();
+    final a = puntos(InstitutionProfile.unknown), b = puntos(perfilPolicia);
+    _log['P13_diferencia_puntos'] = {for (var i = 0; i < a.length; i++) (b[i] - a[i]).toStringAsFixed(3)}.toList();
+  });
+
+  test('P14 Estructura redactada por contexto', () {
+    DeclarationDraft d(String ctx, {List<Fact> facts = const [], List<ObjectInvolved> objs = const [], String? inst,
+            ViolenceDetails? v, FraudDetails? f, DigitalThreatDetails? dt, List<EvidenceItem> ev = const []}) =>
+        DeclarationDraft(contextId: ctx, facts: facts, objects: objs, receivingInstitution: inst,
+            violence: v, fraud: f, digitalThreat: dt, evidence: ev);
+    _log['P14_violencia_amenazar'] = _asm.assembleStructured(d('violencia',
+        facts: const [Fact(id: 'f', action: 'AMENAZAR')], v: const ViolenceDetails(aggressionType: 'AMENAZAR')));
+    _log['P14_otro_aumentar'] = _asm.assembleStructured(d('otro', facts: const [Fact(id: 'f', action: 'AUMENTAR')]));
+    _log['P14_engano_abogado'] = _asm.assembleStructured(d('engano_dinero',
+        facts: const [Fact(id: 'f', action: 'ENGAÑAR')], inst: 'ABOGADO', f: const FraudDetails(deliveryMethod: 'escribir')));
+    _log['P14_seguimiento'] = _asm.assembleStructured(d('seguimiento'));
+    _log['P14_evidencia_total_ahora'] = _asm.assembleStructured(d('amenaza_digital',
+        dt: const DigitalThreatDetails(channel: 'WhatsApp'),
+        ev: const [EvidenceItem(id: '1', concept: 'TOTAL', availability: ConfirmationState.confirmed),
+          EvidenceItem(id: '2', concept: 'AHORA', availability: ConfirmationState.confirmed)]));
+  });
+
+  test('P15 Zona inferida para preguntas del funcionario', () {
+    final casos = {
+      'denuncia_robo': ['¿Le robaron el celular?', '¿Dónde ocurrió?', '¿Tiene una factura?', '¿Qué edad aproximada tenía?',
+        '¿Conoce a la persona involucrada?', '¿Hay testigos?', '¿Desea presentar una denuncia?', '¿Cómo se llama?'],
+      'amenaza_digital': ['¿Quién le envía los mensajes?', '¿Guardó los mensajes?', '¿Tiene fotos de la pantalla?',
+        '¿Conoce el número desde el que le escribieron?'],
+      'engano_dinero': ['¿Cómo entregó el dinero?', '¿Cuánto dinero entregó?', '¿Conoce el nombre de la persona?'],
+      'identificacion': ['¿Cómo se llama?', '¿Qué documento presenta?', '¿Qué edad tiene?'],
+      'seguimiento': ['¿Qué quiere consultar?', '¿Tiene que volver otro día?'],
+    };
+    casos.forEach((ctx, qs) {
+      for (final q in qs) {
+        _log['P15 $ctx | $q'] = const ZoneInferenceEngine().zonesFor(context: contextById(ctx)!, text: q);
+      }
+    });
+  });
+
+  test('P17 Orden real de preguntas (CONTINUAR sucesivo) por contexto', () {
+    for (final ctx in allSelectableContexts) {
+      for (final conPrimera in [false, true]) {
+        final c = ProviderContainer();
+        c.read(contextProvider.notifier).setContext(ctx);
+        final z = c.read(semanticZonesProvider.notifier);
+        if (conPrimera) {
+          final primera = ctx.zoneById(ctx.entryZoneId)!.glossAllowlist.first;
+          z.toggleAnswer(primera);
+          c.read(sentenceProvider.notifier).setWords(z.orderedGlosses());
+        }
+        final orden = <String>[c.read(semanticZonesProvider).activeZoneId!];
+        for (var i = 0; i < 20; i++) {
+          z.goToNextZone();
+          final id = c.read(semanticZonesProvider).activeZoneId!;
+          if (id == orden.last) break;
+          orden.add(id);
+        }
+        final nunca = [for (final zz in ctx.zones) if (!orden.contains(zz.id)) zz.id];
+        _log['P17_${ctx.id}_${conPrimera ? 'con_' + ctx.zoneById(ctx.entryZoneId)!.glossAllowlist.first : 'sin_respuesta'}'] =
+            {'orden': orden, 'nunca_se_visitan': nunca};
+        c.dispose();
+      }
+    }
+  });
+
+  test('P16 Mismo contexto en un encargo nuevo conserva el borrador de entidades', () {
+    final c = ProviderContainer();
+    addTearDown(c.dispose);
+    final robo = contextById('denuncia_robo')!;
+    c.read(contextProvider.notifier).setContext(robo);
+    c.read(declarationDraftProvider.notifier).addObject(concept: 'CELULAR', role: 'stolen');
+    // openCards() con el mismo contexto propuesto: setContext(mismo) + reset de zonas/frase.
+    c.read(contextProvider.notifier).setContext(robo);
+    c.read(semanticZonesProvider.notifier).reset();
+    _log['P16_objetos_tras_nuevo_encargo'] = c.read(declarationDraftProvider).objects.map((o) => o.concept).toList();
+  });
+}

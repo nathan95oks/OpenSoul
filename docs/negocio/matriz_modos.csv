@@ -1,0 +1,14 @@
+﻿aspecto;antes;ahora;evidencia;justificacion
+Entrada al módulo de tarjetas;;;"home_screen.dart:37-50; context_selection_widget.dart:66";Diferencia justificada: en personal no hay interlocutor que haya fijado el tema.
+Filtrado de contextos por necesidad;;;context_selection_widget.dart:66-80;Evita elegir dos veces lo mismo.
+Perfil institucional;;;"candidate_engine.dart:157-164; sonda P13; institution_profile.dart:111";R27: el perfil ordena, no prohíbe.
+Banco de preguntas;;;context_catalog.dart;Misma intención y mismo dato → misma pregunta.
+Quién inicia el turno;;;"cards_flow_launch.dart; conversation_handoff.dart:29-59";Diferencia justificada.
+Pregunta a la que se responde (C);;;conversation_bindings.dart:39-55;Hoy «¿Cómo entregó el dinero?» cae en la pregunta de entrada ajena (sonda P15).
+Glosas del enunciado del funcionario;;;tool/build_dialogue_graph.py:152-230;Una glosa interrogativa no responde nada.
+Datos ya respondidos;;;"cards_provider.dart:93; sonda P16";"No preguntar dos veces; no arrastrar sin decirlo."
+Pregunta de institución destino;;;context_catalog.dart:344-355, 607-618;R5 y la institución ya está presente.
+Acto comunicativo de la salida;;;needs_screen.dart:48-79;Diferencia justificada.
+Persona gramatical de la frase;;;local_sentence_assembler.dart:351-395;R32: ventanilla no autoriza a convertir la frase en acta.
+Envío de la intervención;;;declaration_result_screen.dart:186-210;R19.
+Fin de sesión / dispositivo compartido;;;counter_session.dart:24-48;Datos personales de terceros en dispositivo compartido.

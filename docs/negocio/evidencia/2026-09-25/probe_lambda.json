@@ -1,0 +1,391 @@
+{
+ "A_robo_escapar_victima": "Denuncio el robo de mi celular. Logré escapar.",
+ "B_respuesta_celular_sin_hecho": "Quiero comunicar lo siguiente, aunque todavía no completé los detalles.",
+ "E_engano_monto_banco": "Denuncio un engaño económico / engaño económico.",
+ "E2_engano_hecho_billetes": "Denuncio un engaño económico / engaño económico.",
+ "C_amenaza_celular": "Denuncio la recepción de mensajes hostiles y amenazas a través de medios digitales. Canal utilizado: WhatsApp.",
+ "H_identificacion_nombre": "Datos de identificación:",
+ "G_preguntas_cuando_volver": "¿Dónde debo realizar esta consulta o presentar el trámite?",
+ "violencia_amenazar": "Denuncio agresión física y violencia sufrida.",
+ "otro_aumentar": "El declarante se presenta en calidad de testigo presencial de los hechos.",
+ "seguimiento_volver": "El ciudadano consulta el estado de su trámite o investigación.",
+ "engano_institucion_abogado": "Denuncio un engaño económico / engaño económico.",
+ "_casos": {
+  "A_robo_escapar_victima": {
+   "contextId": "denuncia_robo",
+   "speechAct": "statement",
+   "facts": [
+    {
+     "id": "f1",
+     "action": "ROBAR",
+     "actorRole": "unknown",
+     "negated": false,
+     "certainty": "confirmed"
+    },
+    {
+     "id": "f2",
+     "action": "ESCAPAR",
+     "actorRole": "victim",
+     "negated": false,
+     "certainty": "confirmed"
+    }
+   ],
+   "persons": [],
+   "objects": [
+    {
+     "id": "o1",
+     "concept": "CELULAR",
+     "role": "stolen"
+    }
+   ],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false
+  },
+  "B_respuesta_celular_sin_hecho": {
+   "contextId": "denuncia_robo",
+   "speechAct": "reply",
+   "facts": [],
+   "persons": [],
+   "objects": [
+    {
+     "id": "o1",
+     "concept": "CELULAR",
+     "role": "stolen"
+    }
+   ],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false
+  },
+  "E_engano_monto_banco": {
+   "contextId": "engano_dinero",
+   "speechAct": "statement",
+   "facts": [
+    {
+     "id": "f1",
+     "action": "ENVIAR",
+     "actorRole": "unknown",
+     "negated": false,
+     "certainty": "confirmed"
+    }
+   ],
+   "persons": [],
+   "objects": [
+    {
+     "id": "o1",
+     "concept": "BILLETES",
+     "role": "stolen",
+     "quantity": "150",
+     "unit": "bolivianos"
+    }
+   ],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false,
+   "fraud": {
+    "currency": "bolivianos",
+    "deliveryMethod": "banco"
+   }
+  },
+  "E2_engano_hecho_billetes": {
+   "contextId": "engano_dinero",
+   "speechAct": "statement",
+   "facts": [
+    {
+     "id": "f1",
+     "action": "BILLETES",
+     "actorRole": "unknown",
+     "negated": false,
+     "certainty": "confirmed"
+    }
+   ],
+   "persons": [],
+   "objects": [],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false,
+   "fraud": {
+    "currency": "bolivianos",
+    "deliveryMethod": "celular"
+   }
+  },
+  "C_amenaza_celular": {
+   "contextId": "amenaza_digital",
+   "speechAct": "statement",
+   "facts": [
+    {
+     "id": "f1",
+     "action": "CELULAR",
+     "actorRole": "unknown",
+     "negated": false,
+     "certainty": "confirmed"
+    }
+   ],
+   "persons": [],
+   "objects": [],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [
+    {
+     "id": "ev_TOTAL",
+     "concept": "TOTAL",
+     "availability": "confirmed",
+     "offeredToShow": false
+    },
+    {
+     "id": "ev_AHORA",
+     "concept": "AHORA",
+     "availability": "confirmed",
+     "offeredToShow": false
+    }
+   ],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false,
+   "digitalThreat": {
+    "channel": "WhatsApp",
+    "messageType": "texto",
+    "hasSavedEvidence": true
+   }
+  },
+  "H_identificacion_nombre": {
+   "contextId": "identificacion",
+   "speechAct": "statement",
+   "facts": [],
+   "persons": [],
+   "objects": [
+    {
+     "id": "o1",
+     "concept": "PAPEL",
+     "role": "evidenceSupport",
+     "docType": "Carnet de Identidad (C.I.)"
+    }
+   ],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false
+  },
+  "G_preguntas_cuando_volver": {
+   "contextId": "preguntas",
+   "speechAct": "question",
+   "facts": [],
+   "persons": [],
+   "objects": [],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false
+  },
+  "violencia_amenazar": {
+   "contextId": "violencia",
+   "speechAct": "statement",
+   "facts": [
+    {
+     "id": "f1",
+     "action": "AMENAZAR",
+     "actorRole": "unknown",
+     "negated": false,
+     "certainty": "confirmed"
+    }
+   ],
+   "persons": [],
+   "objects": [],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false,
+   "violence": {
+    "aggressionType": "AMENAZAR",
+    "physicalInjury": false,
+    "medicalCareRequested": false,
+    "protectionRequested": false
+   }
+  },
+  "otro_aumentar": {
+   "contextId": "otro",
+   "speechAct": "statement",
+   "facts": [
+    {
+     "id": "f1",
+     "action": "AUMENTAR",
+     "actorRole": "unknown",
+     "negated": false,
+     "certainty": "confirmed"
+    }
+   ],
+   "persons": [],
+   "objects": [],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false
+  },
+  "seguimiento_volver": {
+   "contextId": "seguimiento",
+   "speechAct": "statement",
+   "facts": [],
+   "persons": [],
+   "objects": [],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false
+  },
+  "engano_institucion_abogado": {
+   "contextId": "engano_dinero",
+   "speechAct": "statement",
+   "facts": [
+    {
+     "id": "f1",
+     "action": "ENGAÑAR",
+     "actorRole": "unknown",
+     "negated": false,
+     "certainty": "confirmed"
+    }
+   ],
+   "persons": [],
+   "objects": [],
+   "location": {
+    "isVehicleTransport": false,
+    "pending": false
+   },
+   "time": {
+    "unknown": false
+   },
+   "witnesses": {
+    "existence": "pending",
+    "willIdentify": false
+   },
+   "evidence": [],
+   "injured": false,
+   "medicalHelpRequested": false,
+   "willFileComplaint": "pending",
+   "needsLegalSupport": false,
+   "receivingInstitution": "ABOGADO"
+  }
+ }
+}

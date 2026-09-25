@@ -1,0 +1,1613 @@
+{
+ "version": 1,
+ "nota": "Clase semántica por acepción de cada glosa que usa el banco de preguntas. Una glosa solo puede responder un campo si alguna de sus acepciones lo declara. La procesa tool/build_question_matrix.py y la usa CandidateEngine.",
+ "campos": {
+  "polaridad": "sí / no / no sé",
+  "persona": "quién (actor, vínculo, identidad descrita)",
+  "rasgo": "descripción física",
+  "edad": "edad (número o rango elegido)",
+  "prenda": "ropa o accesorio de una persona",
+  "objeto": "cosa",
+  "hecho": "acción o suceso",
+  "lugar": "lugar o relación espacial",
+  "tiempo": "momento o unidad",
+  "frecuencia": "con qué frecuencia",
+  "documento": "tipo de documento",
+  "evidencia": "prueba o respaldo",
+  "medio": "canal o forma de entrega",
+  "cantidad": "número",
+  "institucion": "institución",
+  "servicio": "servicio o funcionario",
+  "consulta": "tema o acción de una consulta",
+  "estado": "estado, emoción o pedido de ayuda",
+  "parte_cuerpo": "parte del cuerpo",
+  "interrogativa": "formula una pregunta propia",
+  "compania": "con quién vino",
+  "modificador": "matiza otra glosa; nunca responde sola",
+  "nombre": "nombre escrito (sin glosa)",
+  "telefono": "número escrito (sin glosa)",
+  "detalle": "texto escrito (sin glosa)"
+ },
+ "glosas": {
+  "1": [
+   {
+    "campo": "cantidad",
+    "sentido": "uno",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "compania",
+    "sentido": "NÚM(1): vine solo/a",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ABOGADO": [
+   {
+    "campo": "servicio",
+    "sentido": "servicio o funcionario",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "persona",
+    "sentido": "persona con ese papel",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ABUSAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ACOMPAÑAR": [
+   {
+    "campo": "compania",
+    "sentido": "vino con alguien",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ADULTO": [
+   {
+    "campo": "edad",
+    "sentido": "rango de edad elegido expresamente",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "rasgo",
+    "sentido": "descripción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AHORA": [
+   {
+    "campo": "tiempo",
+    "sentido": "ahora",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ALCALDÍA": [
+   {
+    "campo": "institucion",
+    "sentido": "alcaldía",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ALLÍ": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ALTO": [
+   {
+    "campo": "rasgo",
+    "sentido": "descripción física",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AL_LADO": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AMENAZAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AMIGO": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ANTEAYER": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AQUÍ": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ARREGLAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ASISTENCIA": [
+   {
+    "campo": "servicio",
+    "sentido": "asistencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ASISTENTE": [
+   {
+    "campo": "servicio",
+    "sentido": "servicio o funcionario",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "persona",
+    "sentido": "persona con ese papel",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AUMENTAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AUTORIDAD": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AUXILIO": [
+   {
+    "campo": "estado",
+    "sentido": "pedido de ayuda urgente",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AVENIDA": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AVISAR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AYER": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AYUDAR": [
+   {
+    "campo": "hecho",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "AÑO": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "AÚN": [
+   {
+    "campo": "tiempo",
+    "sentido": "todavía",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "BAJO": [
+   {
+    "campo": "rasgo",
+    "sentido": "descripción física",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "BANCO": [
+   {
+    "campo": "medio",
+    "sentido": "vía por la que se envía dinero",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "lugar",
+    "sentido": "el banco como sitio",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "modificador",
+    "sentido": "con PAPEL: comprobante del banco",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "BARRIO": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "BILLETES": [
+   {
+    "campo": "objeto",
+    "sentido": "dinero en efectivo",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "modificador",
+    "sentido": "con DAR: entrega en efectivo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "BOLSA": [
+   {
+    "campo": "objeto",
+    "sentido": "bolsa",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "prenda",
+    "sentido": "bolsa que llevaba una persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "BRAZO": [
+   {
+    "campo": "parte_cuerpo",
+    "sentido": "parte del cuerpo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "BUSCAR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CABELLO": [
+   {
+    "campo": "rasgo",
+    "sentido": "cabello",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CADA_DÍA": [
+   {
+    "campo": "frecuencia",
+    "sentido": "frecuencia",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "tiempo",
+    "sentido": "momento",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CALLE": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CAMBIAR": [
+   {
+    "campo": "hecho",
+    "sentido": "cambiar",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CARPETA": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "documento",
+    "sentido": "documento",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CASA": [
+   {
+    "campo": "lugar",
+    "sentido": "mi casa",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "bien dañado",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CELULAR": [
+   {
+    "campo": "objeto",
+    "sentido": "el teléfono como cosa (robado, perdido, dañado)",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "medio",
+    "sentido": "canal por el que llegan mensajes o se envía dinero",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CERCA": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CERTIFICADO": [
+   {
+    "campo": "documento",
+    "sentido": "certificado",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "evidencia",
+    "sentido": "certificado como respaldo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CHAMARRA": [
+   {
+    "campo": "prenda",
+    "sentido": "prenda o accesorio que llevaba una persona",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "objeto propio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "COCHABAMBA": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "COMPRENDER": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CONOCER": [
+   {
+    "campo": "persona",
+    "sentido": "una persona conocida (tarjeta rotulada CONOCIDO)",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "hecho",
+    "sentido": "conocer a alguien",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CONTINUAR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CONVOCAR": [
+   {
+    "campo": "documento",
+    "sentido": "con PAPEL: citación",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "consulta",
+    "sentido": "convocatoria",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CUÁL": [
+   {
+    "campo": "interrogativa",
+    "sentido": "formula una pregunta propia; nunca responde un dato",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CUÁNDO": [
+   {
+    "campo": "interrogativa",
+    "sentido": "formula una pregunta propia; nunca responde un dato",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CUÁNTOS": [
+   {
+    "campo": "interrogativa",
+    "sentido": "formula una pregunta propia; nunca responde un dato",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "CÓMO": [
+   {
+    "campo": "interrogativa",
+    "sentido": "formula una pregunta propia; nunca responde un dato",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "DAR": [
+   {
+    "campo": "hecho",
+    "sentido": "entregar",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "medio",
+    "sentido": "con BILLETES: entrega en mano",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "DAÑAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "DENTRO": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "DIRECCIÓN": [
+   {
+    "campo": "lugar",
+    "sentido": "domicilio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "DOCTOR": [
+   {
+    "campo": "servicio",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "DOLOR": [
+   {
+    "campo": "estado",
+    "sentido": "salud",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "DÍA": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "DÓNDE": [
+   {
+    "campo": "interrogativa",
+    "sentido": "formula una pregunta propia; nunca responde un dato",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "EDAD": [
+   {
+    "campo": "modificador",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "ELLA": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "EMPEZAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ENGAÑAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ENVIAR": [
+   {
+    "campo": "hecho",
+    "sentido": "enviar",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "modificador",
+    "sentido": "acompaña al medio de envío",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ESCAPAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ESCRIBIR": [
+   {
+    "campo": "hecho",
+    "sentido": "escribir",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "modificador",
+    "sentido": "mensajes escritos",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ESPERAR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ESPOSA": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ESTAR_DE_ACUERDO": [
+   {
+    "campo": "polaridad",
+    "sentido": "conformidad expresa",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "EXPLICAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FACTURA": [
+   {
+    "campo": "documento",
+    "sentido": "factura",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "evidencia",
+    "sentido": "factura como respaldo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FECHA": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FELCC": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FELCV": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FILMAR": [
+   {
+    "campo": "hecho",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "FISCALIA": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FLACO": [
+   {
+    "campo": "rasgo",
+    "sentido": "descripción física",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FOTOCOPIA": [
+   {
+    "campo": "documento",
+    "sentido": "fotocopia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FOTOS": [
+   {
+    "campo": "evidencia",
+    "sentido": "fotografías o capturas",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "fotos como cosa",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FRACTURA": [
+   {
+    "campo": "estado",
+    "sentido": "salud",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "FUERA": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "GORDO": [
+   {
+    "campo": "rasgo",
+    "sentido": "descripción física",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "GORRA": [
+   {
+    "campo": "prenda",
+    "sentido": "prenda o accesorio que llevaba una persona",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "objeto propio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "GRATIS": [
+   {
+    "campo": "modificador",
+    "sentido": "gratuito",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "GRITAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "GUARDAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HABLAR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HERIDA": [
+   {
+    "campo": "estado",
+    "sentido": "salud",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HERMANA": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HERMANO": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HIJA": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HIJO": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HOMBRE": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HORA": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HOSPITAL": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "HOY": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "IDENTIDAD": [
+   {
+    "campo": "documento",
+    "sentido": "con PAPEL: carnet de identidad",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "IDENTIFICAR": [
+   {
+    "campo": "hecho",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "INTERNET": [
+   {
+    "campo": "medio",
+    "sentido": "canal digital",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "INTÉRPRETE": [
+   {
+    "campo": "servicio",
+    "sentido": "servicio o funcionario",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "persona",
+    "sentido": "persona con ese papel",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "INVESTIGACIÓN": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "IR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "JOVEN": [
+   {
+    "campo": "edad",
+    "sentido": "rango de edad elegido expresamente",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "rasgo",
+    "sentido": "descripción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "JUEZ": [
+   {
+    "campo": "servicio",
+    "sentido": "servicio o funcionario",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "persona",
+    "sentido": "persona con ese papel",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "JUSTICIA": [
+   {
+    "campo": "documento",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "JUZGADO": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "LADRÓN": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "LEER": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "LEJOS": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "LENTES": [
+   {
+    "campo": "prenda",
+    "sentido": "prenda o accesorio que llevaba una persona",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "objeto propio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "LENTO": [
+   {
+    "campo": "modificador",
+    "sentido": "despacio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "LEY": [
+   {
+    "campo": "documento",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "MALTRATAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MAMÁ": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MAÑANA": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MEJOR": [
+   {
+    "campo": "modificador",
+    "sentido": "preferencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MERCADO": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MES": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MICRO": [
+   {
+    "campo": "lugar",
+    "sentido": "transporte donde ocurrió",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "vehículo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MIEDO": [
+   {
+    "campo": "estado",
+    "sentido": "emoción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MINUTO": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MOCHILA": [
+   {
+    "campo": "prenda",
+    "sentido": "prenda o accesorio que llevaba una persona",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "objeto propio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MOSTRAR": [
+   {
+    "campo": "hecho",
+    "sentido": "mostrar",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MUJER": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "MÁS_O_MENOS": [
+   {
+    "campo": "modificador",
+    "sentido": "aproximado",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "NARRAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "NECESITAR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "NEGRO": [
+   {
+    "campo": "modificador",
+    "sentido": "color",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "NO": [
+   {
+    "campo": "polaridad",
+    "sentido": "negación",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "NOMBRE": [
+   {
+    "campo": "modificador",
+    "sentido": "formula la pregunta por el nombre; el nombre se escribe",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "NO_SABER": [
+   {
+    "campo": "polaridad",
+    "sentido": "desconocimiento",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "OBSERVAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "OFICIAL": [
+   {
+    "campo": "servicio",
+    "sentido": "servicio o funcionario",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "persona",
+    "sentido": "persona con ese papel",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "OFICINA": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PANTALÓN": [
+   {
+    "campo": "prenda",
+    "sentido": "prenda o accesorio que llevaba una persona",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "objeto propio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PAPEL": [
+   {
+    "campo": "documento",
+    "sentido": "un papel o documento sin tipo precisado",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PAREJA": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PARIENTE": [
+   {
+    "campo": "persona",
+    "sentido": "vínculo con la persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PASADO": [
+   {
+    "campo": "tiempo",
+    "sentido": "antes",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "modificador",
+    "sentido": "con PAREJA: expareja",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PEDIR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PEGAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PELEAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PERDER": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PLAZA": [
+   {
+    "campo": "lugar",
+    "sentido": "lugar o relación espacial",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PLAZO": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "POCO": [
+   {
+    "campo": "modificador",
+    "sentido": "poco",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "POLERA": [
+   {
+    "campo": "prenda",
+    "sentido": "prenda o accesorio que llevaba una persona",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "objeto propio",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "POLICÍA": [
+   {
+    "campo": "institucion",
+    "sentido": "Policía",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "persona",
+    "sentido": "el policía encargado",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "POR_FAVOR": [
+   {
+    "campo": "modificador",
+    "sentido": "cortesía",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PRESENTAR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PRIMERA_VEZ": [
+   {
+    "campo": "frecuencia",
+    "sentido": "primera vez",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "tiempo",
+    "sentido": "primera vez",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PROTEGER": [
+   {
+    "campo": "estado",
+    "sentido": "pedido de protección",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PRÓXIMO": [
+   {
+    "campo": "tiempo",
+    "sentido": "próximo",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "modificador",
+    "sentido": "con SEMANA/MES",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PUEDO": [
+   {
+    "campo": "modificador",
+    "sentido": "poder (formula la pregunta)",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "PUERTA": [
+   {
+    "campo": "objeto",
+    "sentido": "bien dañado",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "QUERER": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "QUIÉN": [
+   {
+    "campo": "interrogativa",
+    "sentido": "formula una pregunta propia; nunca responde un dato",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "QUÉ": [
+   {
+    "campo": "interrogativa",
+    "sentido": "formula una pregunta propia; nunca responde un dato",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "RECIBIR": [
+   {
+    "campo": "hecho",
+    "sentido": "recibir",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "consulta",
+    "sentido": "recibir un documento",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "RECORDAR": [
+   {
+    "campo": "hecho",
+    "sentido": "recordar",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "polaridad",
+    "sentido": "con NO: no recuerdo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "RESOLUCIÓN": [
+   {
+    "campo": "documento",
+    "sentido": "resolución",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "RESULTADO": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "REUNIÓN": [
+   {
+    "campo": "hecho",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "ROBAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SABER": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SELLO": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "documento",
+    "sentido": "documento",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SEMANA": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SEPDAVI": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SEPDEP": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SIEMPRE": [
+   {
+    "campo": "frecuencia",
+    "sentido": "frecuencia",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "tiempo",
+    "sentido": "momento",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SORDO": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "SÍ": [
+   {
+    "campo": "polaridad",
+    "sentido": "afirmación",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TARDE": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TEMPRANO": [
+   {
+    "campo": "tiempo",
+    "sentido": "momento o unidad de tiempo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TENER": [
+   {
+    "campo": "modificador",
+    "sentido": "formula preguntas de posesión («¿tiene…?»); no responde",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TESTIGO": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TESTIMONIO": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TIENDA": [
+   {
+    "campo": "lugar",
+    "sentido": "tienda",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "bien dañado",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TODOS_LOS_DÍAS": [
+   {
+    "campo": "frecuencia",
+    "sentido": "frecuencia",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "tiempo",
+    "sentido": "momento",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TOTAL": [
+   {
+    "campo": "modificador",
+    "sentido": "todos / todo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TRAER": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TRUFI": [
+   {
+    "campo": "lugar",
+    "sentido": "transporte donde ocurrió",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "objeto",
+    "sentido": "vehículo",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TRÁMITE": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TUYO": [
+   {
+    "campo": "modificador",
+    "sentido": "formula la pregunta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "TÚ": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "VENIR": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "VER": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "VERDAD": [
+   {
+    "campo": "modificador",
+    "sentido": "según el rol del ensamblador",
+    "origen": "rol del ensamblador"
+   }
+  ],
+  "VIDEO": [
+   {
+    "campo": "evidencia",
+    "sentido": "grabación",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "VIOLENCIA": [
+   {
+    "campo": "hecho",
+    "sentido": "sufrir violencia",
+    "origen": "revisión fase 2"
+   },
+   {
+    "campo": "estado",
+    "sentido": "situación de violencia",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "VOLVER": [
+   {
+    "campo": "consulta",
+    "sentido": "objeto o acción de una consulta",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "YO": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ÉL": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión fase 2"
+   }
+  ],
+  "ÓRGANO_JUDICIAL": [
+   {
+    "campo": "institucion",
+    "sentido": "institución o dependencia",
+    "origen": "revisión fase 2"
+   }
+  ]
+ }
+}

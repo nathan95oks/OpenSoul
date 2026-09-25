@@ -43,8 +43,8 @@ void main() {
     });
 
     test('el cliente declara el contrato que habla', () {
-      expect(BackendCompatibility.clientContractVersion, 3);
-      expect(RemoteTranslationDataSourceImpl.contractVersion, 3);
+      expect(BackendCompatibility.clientContractVersion, 4);
+      expect(RemoteTranslationDataSourceImpl.contractVersion, 4);
     });
   });
 

@@ -21,6 +21,8 @@ import hashlib
 import logging
 import re
 
+from guided_composer import compose as compose_guided
+
 import boto3
 from botocore.exceptions import ClientError
 
@@ -2938,7 +2940,7 @@ def build_response(status_code: int, body: dict) -> dict:
 # colección de hechos. Sin este anuncio, un cliente v3 contra una Lambda
 # anterior recibe 200 y pierde el segundo hecho sin que nada lo diga: la
 # petición se acepta y el significado se va por el camino.
-BACKEND_CONTRACT_VERSION = 3
+BACKEND_CONTRACT_VERSION = 4
 
 
 # Versión del generador determinista.
@@ -2952,12 +2954,12 @@ BACKEND_CONTRACT_VERSION = 3
 #
 # Subir este número al cambiar el generador invalida lo anterior sin tener que
 # vaciar el bucket a mano.
-GENERATOR_VERSION = 2
+GENERATOR_VERSION = 3
 
 
 def generate_cache_key(context_type: str, cards: list, institution_type: str = "",
                         language: str = "", speech_act: str = "",
-                        declaration=None, contract_version=None) -> str:
+                        declaration=None, contract_version=None, guided=None) -> str:
     """Clave de caché. Todo lo que puede cambiar la salida debe estar aquí:
     antes solo entraban `context`/`cards`, así que dos peticiones con las
     mismas glosas pero distinto `institutionType`, `language`, acto
@@ -2980,6 +2982,7 @@ def generate_cache_key(context_type: str, cards: list, institution_type: str = "
         language.lower().strip(),
         speech_act.lower().strip(),
         declaration_part,
+        json.dumps(guided, sort_keys=True, ensure_ascii=False) if guided else "",
     ])
     return hashlib.md5(normalized.encode("utf-8")).hexdigest()
 
@@ -3264,6 +3267,8 @@ def lambda_handler(event, context):
     reply_to_id = body.get("replyToId")
     raw_declaration = body.get("declaration")
     declaration = raw_declaration if isinstance(raw_declaration, dict) else None
+    raw_guided = body.get("guided")
+    guided = raw_guided if isinstance(raw_guided, dict) else None
     contract_version = body.get("contractVersion") or 1
     # Una declaración estructurada vale en cualquier contexto. La condición
     # anterior exigía `context_type == "denuncia_robo"`, así que en violencia,
@@ -3278,7 +3283,7 @@ def lambda_handler(event, context):
 
     cache_key = generate_cache_key(
         context_type, cards, institution_type, language, speech_act,
-        declaration, contract_version)
+        declaration, contract_version, guided)
     # No se registran las glosas ni el `declaration` completos: son el
     # contenido de una declaración que puede llegar a un expediente y no
     # debe quedar en texto plano en los registros de la Lambda (auditoría
@@ -3305,7 +3310,13 @@ def lambda_handler(event, context):
 
     intermediate = build_intermediate_representation(cards, analysis, context_type)
 
-    if uses_structured:
+    if guided:
+        # Contrato v4: el banco compartido ya contiene la redacción exacta de
+        # cada respuesta tipada. No se vuelve a inferir desde tarjetas ni se
+        # manda a Bedrock, porque hacerlo podría cambiar negación, actor o un
+        # literal escrito por la persona.
+        base_sentence = compose_guided(guided)
+    elif uses_structured:
         # El cliente ya mandó las relaciones explícitas (persona↔prenda↔color,
         # objeto↔papel, lugar↔referencia): redactarlas no requiere volver a
         # adivinarlas desde una lista plana de glosas.
@@ -3323,9 +3334,12 @@ def lambda_handler(event, context):
     # comprobar que estén las mismas palabras, y eso no distingue "me robaron
     # y yo escapé" de "me robaron y el ladrón escapó".
     hechos = normalize_facts(declaration) if declaration else []
-    generated_text, generation_validated = generate_with_bedrock(
-        cards, analysis, base_sentence, context_type, institution_type,
-        facts=hechos)
+    if guided:
+        generated_text, generation_validated = base_sentence, True
+    else:
+        generated_text, generation_validated = generate_with_bedrock(
+            cards, analysis, base_sentence, context_type, institution_type,
+            facts=hechos)
 
     bedrock_used = generated_text != base_sentence
 

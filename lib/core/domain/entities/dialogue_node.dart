@@ -64,11 +64,13 @@ class DialogueOption {
           _ => OptionKind.card,
         },
         coverage: OptionCoverage.parse(json['coverage'] as String?),
-        avatar: switch (json['avatar']) {
-          'baked' => AvatarSupport.baked,
-          'spelled' => AvatarSupport.spelled,
-          _ => AvatarSupport.placeholder,
-        },
+      avatar: switch (json['avatar']) {
+        'baked' => AvatarSupport.baked,
+        'spelled' => AvatarSupport.spelled,
+        _ => json['kind'] == 'spelling'
+            ? AvatarSupport.spelled
+            : AvatarSupport.placeholder,
+      },
         reason: (json['reason'] ?? '').toString(),
         corpusSource: json['corpusSource'] as String?,
         alternatives: [
@@ -143,7 +145,9 @@ class DialogueNode {
   final String guideText;
   final List<String> slots;
   final List<String> markers;
+  final List<String> formulationGlosses;
   final List<DialogueOption> options;
+  final List<DialogueOption> literals;
   final List<DialogueOption> pendingOptions;
   final OptionCoverage coverage;
   final List<DialogueTransition> transitions;
@@ -163,6 +167,8 @@ class DialogueNode {
     required this.options,
     this.guideText = '',
     this.markers = const [],
+    this.formulationGlosses = const [],
+    this.literals = const [],
     this.pendingOptions = const [],
     this.coverage = OptionCoverage.unsupported,
     this.transitions = const [],
@@ -199,8 +205,16 @@ class DialogueNode {
       markers: [
         for (final m in (json['markers'] as List? ?? const [])) m.toString(),
       ],
+      formulationGlosses: [
+        for (final g in (json['formulationGlosses'] as List? ?? const []))
+          g.toString(),
+      ],
       options: [
         for (final o in (json['options'] as List? ?? const []))
+          DialogueOption.fromJson(Map<String, dynamic>.from(o as Map)),
+      ],
+      literals: [
+        for (final o in (json['literals'] as List? ?? const []))
           DialogueOption.fromJson(Map<String, dynamic>.from(o as Map)),
       ],
       pendingOptions: [
