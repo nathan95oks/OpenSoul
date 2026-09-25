@@ -27,8 +27,6 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
   late final AnimationController _ctrl;
   late final Animation<double> _scale;
 
-  static const _orange = AppTheme.brandPrimary;
-
   @override
   void initState() {
     super.initState();

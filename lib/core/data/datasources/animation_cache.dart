@@ -39,6 +39,13 @@ class AnimationCache {
     return true;
   }
 
+  Future<bool> isCached(String url, Directory directory) async {
+    if (!isAllowed(url)) return false;
+    final file = File('${directory.path}/${fileNameFor(url)}');
+    if (!_isInside(directory, file)) return false;
+    return file.exists();
+  }
+
   Future<String?> localPathFor(String url, Directory directory) async {
     if (!isAllowed(url)) {
       onRejected?.call(url, 'origen no permitido');

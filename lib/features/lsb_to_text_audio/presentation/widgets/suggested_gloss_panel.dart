@@ -17,8 +17,6 @@ class SuggestedGlossPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cardsAsync = ref.watch(dynamicCardsProvider);
     final zonesState = ref.watch(semanticZonesProvider);
-    final maxPicks = zonesState.activeZone?.maxPicks ?? 1;
-    final picksInZone = zonesState.picksInActiveZone;
     final selectedGlosses = zonesState.activeAnswers.toSet();
 
     return cardsAsync.when(
@@ -38,18 +36,14 @@ class SuggestedGlossPanel extends ConsumerWidget {
       loading: () => const Padding(
         padding: EdgeInsets.all(32),
         child: Center(
-          child: CircularProgressIndicator(
-            color: _orange,
-            strokeWidth: 1.5,
-          ),
+          child: CircularProgressIndicator(color: _orange, strokeWidth: 1.5),
         ),
       ),
       error: (e, s) => const _ErrorState(),
     );
   }
 
-  Future<void> _onPick(
-          BuildContext context, WidgetRef ref, LsbCard card) =>
+  Future<void> _onPick(BuildContext context, WidgetRef ref, LsbCard card) =>
       elegirGlosa(context, ref, card);
 }
 
@@ -82,35 +76,7 @@ class _ErrorState extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Text(
         'Error al cargar opciones.',
-        style: TextStyle(
-          color: AppTheme.lightTextSub,
-          fontSize: 13,
-        ),
-      ),
-    );
-  }
-}
-
-class _PairHint extends StatelessWidget {
-  final int current;
-  final int max;
-  const _PairHint({required this.current, required this.max});
-
-  @override
-  Widget build(BuildContext context) {
-    final label = current == 0
-        ? 'Puedes elegir hasta $max tarjetas para describir mejor'
-        : 'Elegidas $current de $max — toca otra para añadir o vuelve a tocar para quitar';
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 11,
-          color: AppTheme.lightTextSub,
-          fontStyle: FontStyle.italic,
-        ),
+        style: TextStyle(color: AppTheme.lightTextSub, fontSize: 13),
       ),
     );
   }

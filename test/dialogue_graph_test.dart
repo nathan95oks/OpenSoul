@@ -127,7 +127,7 @@ void main() {
 
     test('la dactilología se marca como tal y no como seña directa', () {
       final deletreadas = graph.nodes
-          .expand((n) => n.options)
+          .expand((n) => n.literals)
           .where((o) => o.kind == OptionKind.spelling);
       expect(deletreadas, isNotEmpty);
       for (final o in deletreadas) {
@@ -160,7 +160,9 @@ void main() {
       final node = matched('¿Le robaron el celular?');
       expect(node, isNotNull);
       expect(node!.provenance.spanish, contains('robaron'));
-      expect(node.offerableGlosses, contains('CELULAR'));
+      expect(node.formulationGlosses, contains('CELULAR'));
+      expect(node.offerableGlosses, containsAll(['SÍ', 'NO', 'NO_SABER']));
+      expect(node.offerableGlosses, isNot(contains('CELULAR')));
     });
 
     test('frases distintas con la misma intención llegan a opciones útiles',
@@ -169,7 +171,8 @@ void main() {
       // otra cosa que signifique lo mismo.
       final node = matched('¿Le robaron su teléfono celular esta mañana?');
       expect(node, isNotNull);
-      expect(node!.offerableGlosses, contains('CELULAR'));
+      expect(node!.formulationGlosses, contains('CELULAR'));
+      expect(node.offerableGlosses, containsAll(['SÍ', 'NO', 'NO_SABER']));
     });
 
     test('una pregunta cerrada ofrece sí y no, y una abierta no', () {
@@ -185,8 +188,9 @@ void main() {
     test('preguntar por fotos no propone testigos como respuesta principal',
         () {
       final node = matched('¿Tiene fotos de la pantalla?')!;
-      expect(node.offerableGlosses, contains('FOTOS'));
-      expect(node.offerableGlosses.first, anyOf('SÍ', 'NO', 'FOTOS'));
+      expect(node.formulationGlosses, contains('FOTOS'));
+      expect(node.offerableGlosses, containsAll(['SÍ', 'NO', 'NO_SABER']));
+      expect(node.offerableGlosses, isNot(contains('FOTOS')));
       expect(node.offerableGlosses.take(3), isNot(contains('TESTIGO')));
     });
 

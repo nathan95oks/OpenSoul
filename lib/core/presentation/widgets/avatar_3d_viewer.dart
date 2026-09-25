@@ -52,7 +52,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   bool _isPlayingSequence = false;
-  bool _isDownloadingFiles = false;
 
   List<String>? _testUrls;
   List<String>? _testGlosses;
@@ -160,7 +159,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       (widget.animationUrls?.isEmpty ?? true) && (widget.glosses?.isEmpty ?? true);
 
   bool get _isBusy =>
-      _localUrls.isNotEmpty || _isPlayingSequence || _isDownloadingFiles;
+      _localUrls.isNotEmpty || _isPlayingSequence;
 
   /// Corta la secuencia en curso: pausa el `model-viewer`, cancela el timer de
   /// los placeholders y devuelve el visor a reposo.
@@ -195,8 +194,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     setState(() {
       _currentIndex = 0;
       _isPlayingSequence = false;
-      _isDownloadingFiles = true;
-
       _stepSettled = false;
 
       if (overrideUrls != null) {
@@ -220,7 +217,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       _testGlosses = null;
       _currentIndex = 0;
       _isPlayingSequence = false;
-      _isDownloadingFiles = false;
       _stepSettled = false;
     });
   }
@@ -228,7 +224,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   Future<void> _downloadAndStartSequence() async {
     final urlsToDownload = _testUrls ?? widget.animationUrls;
     if (urlsToDownload == null || urlsToDownload.isEmpty) {
-      if (mounted) setState(() => _isDownloadingFiles = false);
       return;
     }
 
@@ -239,7 +234,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (mounted) {
       setState(() {
         _localUrls = localPaths;
-        _isDownloadingFiles = false;
         _isPlayingSequence = true;
       });
 
@@ -420,8 +414,8 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 
   Widget _buildProcessingState() {
-    final title = _isDownloadingFiles ? 'Descargando animaciones 3D...' : 'Analizando con IA...';
-    final subtitle = _isDownloadingFiles ? 'Guardando en caché local para fluidez' : 'Desambiguando contexto LSB';
+    const title = 'Analizando con IA...';
+    const subtitle = 'Desambiguando contexto LSB';
 
     return Container(
       key: const ValueKey('processing'),
@@ -649,9 +643,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     );
   }
 
-  Widget _buildFinishedState() {
-    return const SizedBox.shrink();
-  }
 
   /// Estado que se muestra cuando el modulo quedo en segundo plano: sin
   /// `ModelViewer`, para que ningun WebView siga animando fuera de pantalla.
@@ -705,7 +696,7 @@ Widget _buildIdleState() {
 
     if (!widget.isActive) {
       bodyContent = _buildPausedState();
-    } else if (widget.isProcessing || _isDownloadingFiles) {
+    } else if (widget.isProcessing) {
       bodyContent = _buildProcessingState();
     } else if (_localUrls.isNotEmpty) {
       bodyContent = _buildDualModelViewer();

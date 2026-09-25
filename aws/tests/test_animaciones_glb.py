@@ -60,7 +60,7 @@ class _FakeS3:
 
 class _ConGlb(unittest.TestCase):
     CLIPS = ["HOLA", "GRACIAS", "NO", "A", "B", "C", "E", "O", "R", "S", "ENE",
-             "CERO", "UNO", "DOS", "CINCO"]
+             "CERO", "UNO", "DOS", "CINCO", "PRIMERA_VEZ", "ACOMPANAR"]
 
     def setUp(self):
         self._s3, self._bucket = m.s3, m.ANIMATIONS_BUCKET
@@ -143,6 +143,23 @@ class SenaODeletreo(_ConGlb):
         _, pasos = m.plan_gloss_animation("25", m.get_baked_clips())
         self.assertEqual([p["gloss"] for p in pasos], ["2", "5"])
         self.assertEqual([p["animationName"] for p in pasos], ["DOS", "CINCO"])
+
+    def test_primera_vez_con_clip_en_s3(self):
+        plan, pasos = m.plan_gloss_animation("PRIMERA_VEZ", m.get_baked_clips())
+        self.assertTrue(plan["available"])
+        self.assertEqual(plan["animationName"], "PRIMERA_VEZ")
+        self.assertEqual(pasos[0]["animationName"], "PRIMERA_VEZ")
+
+    def test_acompaniar_encuentra_clip_con_n_en_s3(self):
+        plan, pasos = m.plan_gloss_animation("ACOMPAÑAR", m.get_baked_clips())
+        self.assertTrue(plan["available"])
+        self.assertEqual(plan["animationName"], "ACOMPANAR")
+        self.assertEqual(pasos[0]["animationName"], "ACOMPANAR")
+
+    def test_fusion_primera_vez_en_post_process(self):
+        r = m.post_process_glosses({"glosses": ["PRIMERA", "VEZ"]}, "primera vez")
+        self.assertIn("PRIMERA_VEZ", r["glosses"])
+        self.assertEqual(r["representationStatus"], "complete")
 
 
 class FallosYCache(_ConGlb):

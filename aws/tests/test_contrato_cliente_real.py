@@ -189,8 +189,8 @@ class ValidacionDelContratoV3(unittest.TestCase):
         body.update(campos)
         return invocar(body)
 
-    def test_el_cliente_declara_la_version_3(self):
-        self.assertEqual(cargar("robo_y_huida_sospechoso")["contractVersion"], 3)
+    def test_el_cliente_declara_la_version_4(self):
+        self.assertEqual(cargar("robo_y_huida_sospechoso")["contractVersion"], 4)
 
     def test_un_modo_de_uso_desconocido_es_400(self):
         datos = self._con(usageMode="kiosko")

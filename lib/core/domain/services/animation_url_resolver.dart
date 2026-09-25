@@ -19,7 +19,8 @@ class AnimationUrlResolver {
     'HOLA', 'PERMISO', 'GRACIAS', 'SI', 'NO',
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'L', 'M',
     'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ'
+    'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ',
+    'PRIMERA_VEZ',
   };
 
   /// Los numerales se hornearon con su nombre en letras, pero el catalogo los
@@ -44,14 +45,24 @@ class AnimationUrlResolver {
 
   /// Forma canonica de la glosa para buscarla entre las animaciones.
   static String canonicalFor(String gloss) {
-    final clean = stripAccents(gloss.toUpperCase().trim());
+    final clean = stripAccents(gloss.toUpperCase().trim()).replaceAll(' ', '_');
     return digitToNumeral[clean] ?? clean;
   }
 
   /// Nombre con el que hay que pedirle la sena al `model-viewer`.
+  ///
+  /// En S3 los clips están en mayúsculas con barra baja (ej: PRIMERA_VEZ)
+  /// y las palabras que llevan Ñ usan N (ej: ACOMPANAR), mientras que
+  /// la letra suelta Ñ se mapea a ENE.
   static String animationNameFor(String gloss) {
     final canonical = canonicalFor(gloss);
-    return animationNameOverrides[canonical] ?? canonical;
+    if (animationNameOverrides.containsKey(canonical)) {
+      return animationNameOverrides[canonical]!;
+    }
+    if (canonical.length > 1 && canonical.contains('Ñ')) {
+      return canonical.replaceAll('Ñ', 'N');
+    }
+    return canonical;
   }
 
   static const Set<String> wordsToSpell = {

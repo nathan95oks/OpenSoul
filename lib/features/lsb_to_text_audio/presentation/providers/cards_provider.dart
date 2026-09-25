@@ -80,11 +80,6 @@ final dynamicCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final nodo = ref.watch(dialogueMatchProvider)?.node;
   final perfil = ref.watch(activeProfileProvider);
   final necesidad = ref.watch(activeNeedProvider);
-  final yaRespondidas = ref
-          .watch(semanticZonesProvider)
-          .activeAnswers
-          .toSet();
-
   final ordenadas = const CandidateEngine().rank(
     available: locales,
     node: nodo,

@@ -138,7 +138,8 @@ void main() {
     test('una pregunta cerrada admite además el detalle que la matiza', () {
       // «¿Le robaron el celular?» puede responderse «sí» o «celular».
       expect(CandidateEngine.fitsField({'polarity'}, 'SÍ'), isTrue);
-      expect(CandidateEngine.fitsField({'polarity'}, 'CELULAR'), isTrue);
+      expect(CandidateEngine.fitsField({'polarity'}, 'CELULAR'), isFalse,
+          reason: 'el detalle solo cabe si la pregunta concreta lo menciona');
     });
 
     test('la polaridad no cabe donde no se preguntó algo cerrado', () {

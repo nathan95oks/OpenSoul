@@ -88,8 +88,6 @@ class _HeroQuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final showHint = hint.isNotEmpty && hint.toLowerCase() != question.toLowerCase();
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(

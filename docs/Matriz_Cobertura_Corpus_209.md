@@ -208,54 +208,54 @@ Las intervenciones que no quedan cubiertas del todo, con el motivo exacto. Ningu
 
 | # | Frase en español | Intención | Modos | Ámbito | Estado | Nodo |
 |---|---|---|---|---|---|---|
-| 1 | Soy sordo y necesito intérprete. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-01` |
-| 2 | Leo poco; prefiero LSB. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-02` |
-| 3 | Quiero presentar una denuncia. | `SIN_INTENCION` | A/B/C | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-03` |
-| 4 | Quiero explicar lo que pasó desde el principio. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-04` |
-| 5 | Ayer por la tarde ocurrió. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-05` |
-| 6 | No recuerdo la hora exacta. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-06` |
-| 7 | Ocurrió en la calle cerca del mercado. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-07` |
-| 8 | No conozco a la persona. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-08` |
-| 9 | Si la vuelvo a ver, puedo identificarla. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-09` |
-| 10 | Vi a un hombre joven con mochila. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-10` |
-| 11 | Me robaron el celular. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-11` |
-| 12 | También perdí mi carnet. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-12` |
-| 13 | Tengo la factura del celular. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-13` |
-| 14 | Hay un testigo. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-14` |
-| 15 | El testigo vio todo. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-15` |
-| 16 | Tengo fotos en mi celular. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-16` |
-| 17 | Tengo un video. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-17` |
-| 18 | Un hombre me pegó. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-18` |
-| 19 | Tengo una herida en el brazo. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-19` |
-| 20 | Fui al hospital. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-20` |
-| 21 | Tengo certificado del doctor. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-21` |
-| 22 | Mi expareja me amenaza. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-22` |
-| 23 | Tengo miedo de volver a mi casa. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-23` |
-| 24 | Necesito auxilio ahora. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-24` |
-| 25 | Guardé todos los mensajes. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-25` |
-| 26 | Tengo fotos de la pantalla. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-26` |
-| 27 | Me engañaron con dinero. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-27` |
-| 28 | Envié dinero por el banco. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-28` |
-| 29 | Tengo el papel del banco. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-29` |
-| 30 | Dañaron la puerta de mi tienda. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-30` |
-| 31 | Tengo el video de la cámara. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-31` |
-| 32 | Vi lo ocurrido y puedo dar testimonio. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-32` |
-| 33 | Quiero agregar información. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-33` |
-| 34 | Aquí hay un error en mi nombre. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-34` |
-| 35 | Quiero leer antes de escribir mi nombre. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-35` |
-| 36 | Prefiero recibir mensajes escritos. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-36` |
-| 37 | Cambié de dirección. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-37` |
-| 38 | Cambié de número de celular. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-38` |
-| 39 | Quiero saber si la investigación continúa. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-39` |
-| 40 | Necesito un abogado. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-40` |
-| 41 | No tengo dinero para un abogado. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-41` |
-| 42 | Quiero asistencia de SEPDAVI. | `SIN_INTENCION` | A/B/C | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-42` |
-| 43 | Necesito defensa pública. | `SIN_INTENCION` | A/B/C | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-43` |
-| 44 | Me dijeron que debo ir a la Fiscalía. | `SIN_INTENCION` | A/B/C | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-44` |
-| 45 | Recibí una resolución. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-45` |
-| 46 | Tengo que presentarme ante un juez. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-46` |
-| 47 | Necesito intérprete para hablar con el juez. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-47` |
-| 48 | No entiendo este papel. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-48` |
-| 49 | Explíqueme despacio, por favor. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-49` |
-| 50 | Ahora sí entiendo. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-50` |
-| 51 | Gracias por su ayuda. | `SIN_INTENCION` | A/B/C | `otro` | cubierta | `n-s8-declaraciones_y_re-51` |
+| 1 | Soy sordo y necesito intérprete. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-01` |
+| 2 | Leo poco; prefiero LSB. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-02` |
+| 3 | Quiero presentar una denuncia. | `SIN_INTENCION` | A/B | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-03` |
+| 4 | Quiero explicar lo que pasó desde el principio. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-04` |
+| 5 | Ayer por la tarde ocurrió. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-05` |
+| 6 | No recuerdo la hora exacta. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-06` |
+| 7 | Ocurrió en la calle cerca del mercado. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-07` |
+| 8 | No conozco a la persona. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-08` |
+| 9 | Si la vuelvo a ver, puedo identificarla. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-09` |
+| 10 | Vi a un hombre joven con mochila. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-10` |
+| 11 | Me robaron el celular. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-11` |
+| 12 | También perdí mi carnet. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-12` |
+| 13 | Tengo la factura del celular. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-13` |
+| 14 | Hay un testigo. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-14` |
+| 15 | El testigo vio todo. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-15` |
+| 16 | Tengo fotos en mi celular. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-16` |
+| 17 | Tengo un video. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-17` |
+| 18 | Un hombre me pegó. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-18` |
+| 19 | Tengo una herida en el brazo. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-19` |
+| 20 | Fui al hospital. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-20` |
+| 21 | Tengo certificado del doctor. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-21` |
+| 22 | Mi expareja me amenaza. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-22` |
+| 23 | Tengo miedo de volver a mi casa. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-23` |
+| 24 | Necesito auxilio ahora. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-24` |
+| 25 | Guardé todos los mensajes. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-25` |
+| 26 | Tengo fotos de la pantalla. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-26` |
+| 27 | Me engañaron con dinero. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-27` |
+| 28 | Envié dinero por el banco. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-28` |
+| 29 | Tengo el papel del banco. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-29` |
+| 30 | Dañaron la puerta de mi tienda. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-30` |
+| 31 | Tengo el video de la cámara. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-31` |
+| 32 | Vi lo ocurrido y puedo dar testimonio. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-32` |
+| 33 | Quiero agregar información. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-33` |
+| 34 | Aquí hay un error en mi nombre. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-34` |
+| 35 | Quiero leer antes de escribir mi nombre. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-35` |
+| 36 | Prefiero recibir mensajes escritos. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-36` |
+| 37 | Cambié de dirección. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-37` |
+| 38 | Cambié de número de celular. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-38` |
+| 39 | Quiero saber si la investigación continúa. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-39` |
+| 40 | Necesito un abogado. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-40` |
+| 41 | No tengo dinero para un abogado. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-41` |
+| 42 | Quiero asistencia de SEPDAVI. | `SIN_INTENCION` | A/B | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-42` |
+| 43 | Necesito defensa pública. | `SIN_INTENCION` | A/B | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-43` |
+| 44 | Me dijeron que debo ir a la Fiscalía. | `SIN_INTENCION` | A/B | `otro` | cubierta con dactilología | `n-s8-declaraciones_y_re-44` |
+| 45 | Recibí una resolución. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-45` |
+| 46 | Tengo que presentarme ante un juez. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-46` |
+| 47 | Necesito intérprete para hablar con el juez. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-47` |
+| 48 | No entiendo este papel. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-48` |
+| 49 | Explíqueme despacio, por favor. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-49` |
+| 50 | Ahora sí entiendo. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-50` |
+| 51 | Gracias por su ayuda. | `SIN_INTENCION` | A/B | `otro` | cubierta | `n-s8-declaraciones_y_re-51` |

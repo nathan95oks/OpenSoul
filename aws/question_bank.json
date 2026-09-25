@@ -1,0 +1,10116 @@
+{
+ "acepciones": {
+  "1": [
+   "cantidad",
+   "compania"
+  ],
+  "ABOGADO": [
+   "persona",
+   "servicio"
+  ],
+  "ABUSAR": [
+   "hecho"
+  ],
+  "ACOMPAÑAR": [
+   "compania"
+  ],
+  "ADULTO": [
+   "edad",
+   "rasgo"
+  ],
+  "AHORA": [
+   "tiempo"
+  ],
+  "ALCALDÍA": [
+   "institucion"
+  ],
+  "ALLÍ": [
+   "lugar"
+  ],
+  "ALTO": [
+   "rasgo"
+  ],
+  "AL_LADO": [
+   "lugar"
+  ],
+  "AMENAZAR": [
+   "hecho"
+  ],
+  "AMIGO": [
+   "persona"
+  ],
+  "ANTEAYER": [
+   "tiempo"
+  ],
+  "AQUÍ": [
+   "lugar"
+  ],
+  "ARREGLAR": [
+   "hecho"
+  ],
+  "ASISTENCIA": [
+   "servicio"
+  ],
+  "ASISTENTE": [
+   "persona",
+   "servicio"
+  ],
+  "AUMENTAR": [
+   "hecho"
+  ],
+  "AUTORIDAD": [
+   "institucion"
+  ],
+  "AUXILIO": [
+   "estado"
+  ],
+  "AVENIDA": [
+   "lugar"
+  ],
+  "AVISAR": [
+   "consulta"
+  ],
+  "AYER": [
+   "tiempo"
+  ],
+  "AYUDAR": [
+   "hecho"
+  ],
+  "AÑO": [
+   "tiempo"
+  ],
+  "AÚN": [
+   "tiempo"
+  ],
+  "BAJO": [
+   "rasgo"
+  ],
+  "BANCO": [
+   "lugar",
+   "medio",
+   "modificador"
+  ],
+  "BARRIO": [
+   "lugar"
+  ],
+  "BILLETES": [
+   "modificador",
+   "objeto"
+  ],
+  "BOLSA": [
+   "objeto",
+   "prenda"
+  ],
+  "BRAZO": [
+   "parte_cuerpo"
+  ],
+  "BUSCAR": [
+   "consulta"
+  ],
+  "CABELLO": [
+   "rasgo"
+  ],
+  "CADA_DÍA": [
+   "frecuencia",
+   "tiempo"
+  ],
+  "CALLE": [
+   "lugar"
+  ],
+  "CAMBIAR": [
+   "hecho"
+  ],
+  "CARPETA": [
+   "consulta",
+   "documento"
+  ],
+  "CASA": [
+   "lugar",
+   "objeto"
+  ],
+  "CELULAR": [
+   "medio",
+   "objeto"
+  ],
+  "CERCA": [
+   "lugar"
+  ],
+  "CERTIFICADO": [
+   "documento",
+   "evidencia"
+  ],
+  "CHAMARRA": [
+   "objeto",
+   "prenda"
+  ],
+  "COCHABAMBA": [
+   "lugar"
+  ],
+  "COMPRENDER": [
+   "consulta"
+  ],
+  "CONOCER": [
+   "hecho",
+   "persona"
+  ],
+  "CONTINUAR": [
+   "consulta"
+  ],
+  "CONVOCAR": [
+   "consulta",
+   "documento"
+  ],
+  "CUÁL": [
+   "interrogativa"
+  ],
+  "CUÁNDO": [
+   "interrogativa"
+  ],
+  "CUÁNTOS": [
+   "interrogativa"
+  ],
+  "CÓMO": [
+   "interrogativa"
+  ],
+  "DAR": [
+   "hecho",
+   "medio"
+  ],
+  "DAÑAR": [
+   "hecho"
+  ],
+  "DENTRO": [
+   "lugar"
+  ],
+  "DIRECCIÓN": [
+   "lugar"
+  ],
+  "DOCTOR": [
+   "servicio"
+  ],
+  "DOLOR": [
+   "estado"
+  ],
+  "DÍA": [
+   "tiempo"
+  ],
+  "DÓNDE": [
+   "interrogativa"
+  ],
+  "EDAD": [
+   "modificador"
+  ],
+  "ELLA": [
+   "persona"
+  ],
+  "EMPEZAR": [
+   "hecho"
+  ],
+  "ENGAÑAR": [
+   "hecho"
+  ],
+  "ENVIAR": [
+   "hecho",
+   "modificador"
+  ],
+  "ESCAPAR": [
+   "hecho"
+  ],
+  "ESCRIBIR": [
+   "hecho",
+   "modificador"
+  ],
+  "ESPERAR": [
+   "consulta"
+  ],
+  "ESPOSA": [
+   "persona"
+  ],
+  "ESTAR_DE_ACUERDO": [
+   "polaridad"
+  ],
+  "EXPLICAR": [
+   "hecho"
+  ],
+  "FACTURA": [
+   "documento",
+   "evidencia"
+  ],
+  "FECHA": [
+   "tiempo"
+  ],
+  "FELCC": [
+   "institucion"
+  ],
+  "FELCV": [
+   "institucion"
+  ],
+  "FILMAR": [
+   "hecho"
+  ],
+  "FISCALIA": [
+   "institucion"
+  ],
+  "FLACO": [
+   "rasgo"
+  ],
+  "FOTOCOPIA": [
+   "documento"
+  ],
+  "FOTOS": [
+   "evidencia",
+   "objeto"
+  ],
+  "FRACTURA": [
+   "estado"
+  ],
+  "FUERA": [
+   "lugar"
+  ],
+  "GORDO": [
+   "rasgo"
+  ],
+  "GORRA": [
+   "objeto",
+   "prenda"
+  ],
+  "GRATIS": [
+   "modificador"
+  ],
+  "GRITAR": [
+   "hecho"
+  ],
+  "GUARDAR": [
+   "hecho"
+  ],
+  "HABLAR": [
+   "consulta"
+  ],
+  "HERIDA": [
+   "estado"
+  ],
+  "HERMANA": [
+   "persona"
+  ],
+  "HERMANO": [
+   "persona"
+  ],
+  "HIJA": [
+   "persona"
+  ],
+  "HIJO": [
+   "persona"
+  ],
+  "HOMBRE": [
+   "persona"
+  ],
+  "HORA": [
+   "tiempo"
+  ],
+  "HOSPITAL": [
+   "institucion"
+  ],
+  "HOY": [
+   "tiempo"
+  ],
+  "IDENTIDAD": [
+   "documento"
+  ],
+  "IDENTIFICAR": [
+   "hecho"
+  ],
+  "INTERNET": [
+   "medio"
+  ],
+  "INTÉRPRETE": [
+   "persona",
+   "servicio"
+  ],
+  "INVESTIGACIÓN": [
+   "consulta"
+  ],
+  "IR": [
+   "consulta"
+  ],
+  "JOVEN": [
+   "edad",
+   "rasgo"
+  ],
+  "JUEZ": [
+   "persona",
+   "servicio"
+  ],
+  "JUSTICIA": [
+   "documento"
+  ],
+  "JUZGADO": [
+   "institucion"
+  ],
+  "LADRÓN": [
+   "persona"
+  ],
+  "LEER": [
+   "consulta"
+  ],
+  "LEJOS": [
+   "lugar"
+  ],
+  "LENTES": [
+   "objeto",
+   "prenda"
+  ],
+  "LENTO": [
+   "modificador"
+  ],
+  "LEY": [
+   "documento"
+  ],
+  "MALTRATAR": [
+   "hecho"
+  ],
+  "MAMÁ": [
+   "persona"
+  ],
+  "MAÑANA": [
+   "tiempo"
+  ],
+  "MEJOR": [
+   "modificador"
+  ],
+  "MERCADO": [
+   "lugar"
+  ],
+  "MES": [
+   "tiempo"
+  ],
+  "MICRO": [
+   "lugar",
+   "objeto"
+  ],
+  "MIEDO": [
+   "estado"
+  ],
+  "MINUTO": [
+   "tiempo"
+  ],
+  "MOCHILA": [
+   "objeto",
+   "prenda"
+  ],
+  "MOSTRAR": [
+   "hecho"
+  ],
+  "MUJER": [
+   "persona"
+  ],
+  "MÁS_O_MENOS": [
+   "modificador"
+  ],
+  "NARRAR": [
+   "hecho"
+  ],
+  "NECESITAR": [
+   "consulta"
+  ],
+  "NEGRO": [
+   "modificador"
+  ],
+  "NO": [
+   "polaridad"
+  ],
+  "NOMBRE": [
+   "modificador"
+  ],
+  "NO_SABER": [
+   "polaridad"
+  ],
+  "OBSERVAR": [
+   "hecho"
+  ],
+  "OFICIAL": [
+   "persona",
+   "servicio"
+  ],
+  "OFICINA": [
+   "institucion"
+  ],
+  "PANTALÓN": [
+   "objeto",
+   "prenda"
+  ],
+  "PAPEL": [
+   "documento"
+  ],
+  "PAREJA": [
+   "persona"
+  ],
+  "PARIENTE": [
+   "persona"
+  ],
+  "PASADO": [
+   "modificador",
+   "tiempo"
+  ],
+  "PEDIR": [
+   "consulta"
+  ],
+  "PEGAR": [
+   "hecho"
+  ],
+  "PELEAR": [
+   "hecho"
+  ],
+  "PERDER": [
+   "hecho"
+  ],
+  "PLAZA": [
+   "lugar"
+  ],
+  "PLAZO": [
+   "consulta"
+  ],
+  "POCO": [
+   "modificador"
+  ],
+  "POLERA": [
+   "objeto",
+   "prenda"
+  ],
+  "POLICÍA": [
+   "institucion",
+   "persona"
+  ],
+  "POR_FAVOR": [
+   "modificador"
+  ],
+  "PRESENTAR": [
+   "consulta"
+  ],
+  "PRIMERA_VEZ": [
+   "frecuencia",
+   "tiempo"
+  ],
+  "PROTEGER": [
+   "estado"
+  ],
+  "PRÓXIMO": [
+   "modificador",
+   "tiempo"
+  ],
+  "PUEDO": [
+   "modificador"
+  ],
+  "PUERTA": [
+   "objeto"
+  ],
+  "QUERER": [
+   "consulta"
+  ],
+  "QUIÉN": [
+   "interrogativa"
+  ],
+  "QUÉ": [
+   "interrogativa"
+  ],
+  "RECIBIR": [
+   "consulta",
+   "hecho"
+  ],
+  "RECORDAR": [
+   "hecho",
+   "polaridad"
+  ],
+  "RESOLUCIÓN": [
+   "documento"
+  ],
+  "RESULTADO": [
+   "consulta"
+  ],
+  "REUNIÓN": [
+   "hecho"
+  ],
+  "ROBAR": [
+   "hecho"
+  ],
+  "SABER": [
+   "consulta"
+  ],
+  "SELLO": [
+   "consulta",
+   "documento"
+  ],
+  "SEMANA": [
+   "tiempo"
+  ],
+  "SEPDAVI": [
+   "institucion"
+  ],
+  "SEPDEP": [
+   "institucion"
+  ],
+  "SIEMPRE": [
+   "frecuencia",
+   "tiempo"
+  ],
+  "SORDO": [
+   "persona"
+  ],
+  "SÍ": [
+   "polaridad"
+  ],
+  "TARDE": [
+   "tiempo"
+  ],
+  "TEMPRANO": [
+   "tiempo"
+  ],
+  "TENER": [
+   "modificador"
+  ],
+  "TESTIGO": [
+   "persona"
+  ],
+  "TESTIMONIO": [
+   "consulta"
+  ],
+  "TIENDA": [
+   "lugar",
+   "objeto"
+  ],
+  "TODOS_LOS_DÍAS": [
+   "frecuencia",
+   "tiempo"
+  ],
+  "TOTAL": [
+   "modificador"
+  ],
+  "TRAER": [
+   "consulta"
+  ],
+  "TRUFI": [
+   "lugar",
+   "objeto"
+  ],
+  "TRÁMITE": [
+   "consulta"
+  ],
+  "TUYO": [
+   "modificador"
+  ],
+  "TÚ": [
+   "persona"
+  ],
+  "VENIR": [
+   "consulta"
+  ],
+  "VER": [
+   "hecho"
+  ],
+  "VERDAD": [
+   "modificador"
+  ],
+  "VIDEO": [
+   "evidencia"
+  ],
+  "VIOLENCIA": [
+   "estado",
+   "hecho"
+  ],
+  "VOLVER": [
+   "consulta"
+  ],
+  "YO": [
+   "persona"
+  ],
+  "ÉL": [
+   "persona"
+  ],
+  "ÓRGANO_JUDICIAL": [
+   "institucion"
+  ]
+ },
+ "mencionables": [
+  {
+   "frase": "el celular",
+   "glosas": [
+    "CELULAR"
+   ],
+   "patron": "celular|telefono|teléfono"
+  },
+  {
+   "frase": "la mochila",
+   "glosas": [
+    "MOCHILA"
+   ],
+   "patron": "mochila"
+  },
+  {
+   "frase": "la bolsa",
+   "glosas": [
+    "BOLSA"
+   ],
+   "patron": "bolsa|bolso|cartera"
+  },
+  {
+   "frase": "dinero",
+   "glosas": [
+    "BILLETES"
+   ],
+   "patron": "dinero|plata|billetes"
+  },
+  {
+   "frase": "el carnet de identidad",
+   "glosas": [
+    "PAPEL",
+    "IDENTIDAD"
+   ],
+   "patron": "carnet|cedula|cédula"
+  },
+  {
+   "frase": "la chamarra",
+   "glosas": [
+    "CHAMARRA"
+   ],
+   "patron": "chamarra|chaqueta"
+  },
+  {
+   "frase": "la gorra",
+   "glosas": [
+    "GORRA"
+   ],
+   "patron": "gorra"
+  },
+  {
+   "frase": "los lentes",
+   "glosas": [
+    "LENTES"
+   ],
+   "patron": "lentes|anteojos"
+  }
+ ],
+ "preguntas": [
+  {
+   "acto": "intervencion",
+   "campo": "accion",
+   "campos": [
+    "interrogativa",
+    "consulta"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "intervencion_propia",
+   "entidad": "PreguntaPropia",
+   "formulacion": "¿Qué quiere saber cuándo?",
+   "id": "I.PREG.CUANDO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Cuándo vuelvo",
+     "frase": "¿Cuándo debo volver?",
+     "glosas": [
+      "CUÁNDO",
+      "VOLVER"
+     ],
+     "glosasPropias": true,
+     "id": "volver"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Cuándo me avisan",
+     "frase": "¿Cuándo me van a avisar?",
+     "glosas": [
+      "CUÁNDO",
+      "AVISAR"
+     ],
+     "glosasPropias": true,
+     "id": "avisar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Cuánto tiempo espero",
+     "frase": "¿Cuánto tiempo debo esperar?",
+     "glosas": [
+      "ESPERAR",
+      "CUÁNTOS"
+     ],
+     "glosasPropias": true,
+     "id": "esperar"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "intervencion",
+   "campo": "cantidad",
+   "campos": [
+    "consulta"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "intervencion_propia",
+   "entidad": "PreguntaPropia",
+   "formulacion": "¿Qué quiere saber cuánto?",
+   "id": "I.PREG.CUANTO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Cuántos días espero",
+     "frase": "¿Cuántos días debo esperar?",
+     "glosas": [
+      "ESPERAR",
+      "DÍA",
+      "CUÁNTOS"
+     ],
+     "id": "dias"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Cuántas horas espero",
+     "frase": "¿Cuántas horas debo esperar?",
+     "glosas": [
+      "ESPERAR",
+      "HORA",
+      "CUÁNTOS"
+     ],
+     "id": "horas"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "intervencion",
+   "campo": "lugar",
+   "campos": [
+    "institucion"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "intervencion_propia",
+   "entidad": "PreguntaPropia",
+   "formulacion": "¿Dónde queda…?",
+   "id": "I.PREG.DONDE_QUEDA",
+   "modo": "frase",
+   "noOfrecer": [
+    "AQUÍ"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "La Fiscalía",
+     "frase": "¿Dónde está la Fiscalía?",
+     "glosas": [
+      "FISCALIA",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "fiscalia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "La FELCC",
+     "frase": "¿Dónde está la FELCC?",
+     "glosas": [
+      "FELCC",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "felcc"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "La FELCV",
+     "frase": "¿Dónde está la FELCV?",
+     "glosas": [
+      "FELCV",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "felcv"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "El juzgado",
+     "frase": "¿Dónde está el juzgado?",
+     "glosas": [
+      "JUZGADO",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "juzgado"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "El Órgano Judicial",
+     "frase": "¿Dónde está el Órgano Judicial?",
+     "glosas": [
+      "ÓRGANO_JUDICIAL",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "organo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "SEPDAVI",
+     "frase": "¿Dónde está SEPDAVI?",
+     "glosas": [
+      "SEPDAVI",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "sepdavi"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "SEPDEP",
+     "frase": "¿Dónde está SEPDEP?",
+     "glosas": [
+      "SEPDEP",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "sepdep"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "La Policía",
+     "frase": "¿Dónde está la Policía?",
+     "glosas": [
+      "POLICÍA",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "policia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "La oficina",
+     "frase": "¿Dónde está la oficina?",
+     "glosas": [
+      "OFICINA",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "oficina"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "intervencion",
+   "campo": "tipo",
+   "campos": [
+    "interrogativa"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "intervencion_propia",
+   "entidad": "PreguntaPropia",
+   "formulacion": "¿Qué quieres preguntar?",
+   "id": "I.PREG.ELEGIR",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Dónde…?",
+     "frase": "",
+     "glosas": [
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "donde"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Con quién puedo hablar?",
+     "frase": "",
+     "glosas": [
+      "QUIÉN"
+     ],
+     "glosasPropias": true,
+     "id": "hablar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Cuándo…?",
+     "frase": "",
+     "glosas": [
+      "CUÁNDO"
+     ],
+     "glosasPropias": true,
+     "id": "cuando"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Cuánto tiempo…?",
+     "frase": "",
+     "glosas": [
+      "CUÁNTOS"
+     ],
+     "glosasPropias": true,
+     "id": "cuanto"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Otra pregunta",
+     "frase": "",
+     "glosas": [
+      "QUÉ"
+     ],
+     "glosasPropias": true,
+     "id": "tema"
+    }
+   ],
+   "reglas": [
+    "Las interrogativas son formulación PROPIA (modo A/B): válidas aquí; nunca se ofrecen como respuesta a una pregunta del funcionario (modo C).",
+    "Tras elegir la interrogativa solo se muestra el paso compatible con ella (no lugar+persona+tema+tiempo en serie)."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "intervencion",
+   "campo": "persona",
+   "campos": [
+    "servicio",
+    "persona",
+    "institucion"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "intervencion_propia",
+   "entidad": "PreguntaPropia",
+   "formulacion": "¿Con quién quiere hablar?",
+   "id": "I.PREG.HABLAR_CON",
+   "modo": "frase",
+   "noOfrecer": [
+    "DOCTOR",
+    "TESTIGO"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Con el juez",
+     "frase": "¿Puedo hablar con el juez?",
+     "glosas": [
+      "JUEZ"
+     ],
+     "id": "juez"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Con un abogado",
+     "frase": "¿Puedo hablar con un abogado?",
+     "glosas": [
+      "ABOGADO"
+     ],
+     "id": "abogado"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Con un intérprete",
+     "frase": "¿Aquí hay intérprete de LSB?",
+     "glosas": [
+      "INTÉRPRETE"
+     ],
+     "id": "interprete"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Con el policía encargado",
+     "frase": "¿Puedo hablar con el policía encargado?",
+     "glosas": [
+      "POLICÍA",
+      "HABLAR",
+      "PUEDO"
+     ],
+     "id": "policia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Con un oficial",
+     "frase": "¿Puedo hablar con un oficial?",
+     "glosas": [
+      "OFICIAL"
+     ],
+     "id": "oficial"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Con la autoridad",
+     "frase": "¿Puedo hablar con la autoridad?",
+     "glosas": [
+      "AUTORIDAD"
+     ],
+     "id": "autoridad"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Con el asistente",
+     "frase": "¿Puedo hablar con el asistente?",
+     "glosas": [
+      "ASISTENTE"
+     ],
+     "id": "asistente"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "intervencion",
+   "campo": "tema",
+   "campos": [
+    "documento",
+    "consulta",
+    "objeto",
+    "evidencia"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "intervencion_propia",
+   "entidad": "PreguntaPropia",
+   "formulacion": "¿Sobre qué quiere preguntar?",
+   "id": "I.PREG.SOBRE_TEMA",
+   "modo": "frase",
+   "noOfrecer": [
+    "JUSTICIA",
+    "LEY"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Debo traer la factura?",
+     "frase": "¿Debo traer la factura del celular?",
+     "glosas": [
+      "FACTURA",
+      "TRAER",
+      "NECESITAR"
+     ],
+     "id": "traer_factura"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Necesito fotocopias?",
+     "frase": "¿Necesito fotocopias?",
+     "glosas": [
+      "FOTOCOPIA",
+      "NECESITAR"
+     ],
+     "id": "fotocopia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Necesito un certificado?",
+     "frase": "¿Necesito un certificado?",
+     "glosas": [
+      "CERTIFICADO",
+      "NECESITAR"
+     ],
+     "id": "certificado"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Pueden buscar mi celular?",
+     "frase": "¿Pueden buscar mi celular?",
+     "glosas": [
+      "CELULAR",
+      "BUSCAR",
+      "PUEDO"
+     ],
+     "id": "buscar_celular"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Dónde entrego las fotos?",
+     "frase": "¿Dónde entrego las fotografías?",
+     "glosas": [
+      "FOTOS",
+      "DÓNDE",
+      "DAR"
+     ],
+     "glosasPropias": true,
+     "id": "fotos"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Puedo traer el video mañana?",
+     "frase": "¿Puedo traer el video mañana?",
+     "glosas": [
+      "VIDEO",
+      "MAÑANA",
+      "TRAER",
+      "PUEDO"
+     ],
+     "id": "video"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿Me entregan un documento sellado?",
+     "frase": "¿Me entregan un documento sellado?",
+     "glosas": [
+      "PAPEL",
+      "SELLO",
+      "RECIBIR"
+     ],
+     "id": "sello"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "¿La investigación continúa?",
+     "frase": "¿La investigación continúa?",
+     "glosas": [
+      "INVESTIGACIÓN",
+      "CONTINUAR"
+     ],
+     "id": "investigacion"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "comprension",
+   "campos": [
+    "polaridad",
+    "consulta",
+    "modificador"
+   ],
+   "control": "alternativa",
+   "dominio": "acceso",
+   "entidad": "Conversacion",
+   "formulacion": "¿Comprende lo que le estoy explicando?",
+   "id": "Q.ACC.COMPRENSION",
+   "modo": "frase",
+   "noOfrecer": [
+    "TÚ"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, comprendo",
+     "frase": "Sí, comprendo.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "No comprendo",
+     "frase": "No comprendo.",
+     "glosas": [
+      "NO",
+      "COMPRENDER"
+     ],
+     "id": "no"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Explíqueme despacio",
+     "frase": "No comprendo. Explíqueme despacio, por favor.",
+     "glosas": [
+      "LENTO",
+      "EXPLICAR",
+      "POR_FAVOR"
+     ],
+     "id": "despacio"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "canal_preferido",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "acceso",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Prefiere que le escriba en papel?",
+   "id": "Q.ACC.ESCRITO",
+   "modo": "frase",
+   "noOfrecer": [
+    "ESCRIBIR",
+    "MEJOR",
+    "PAPEL"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, prefiero que me escriba.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No quiero que me escriba en papel.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé qué prefiero.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "interprete",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "acceso",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita un intérprete de LSB?",
+   "id": "Q.ACC.INTERPRETE",
+   "modo": "frase",
+   "noOfrecer": [
+    "NECESITAR"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-02"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito un intérprete de LSB.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No necesito intérprete.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si necesito intérprete.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "lectura",
+   "campos": [
+    "polaridad",
+    "consulta"
+   ],
+   "control": "alternativa",
+   "dominio": "acceso",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Puede leer este texto?",
+   "id": "Q.ACC.LECTURA",
+   "modo": "frase",
+   "noOfrecer": [
+    "PUEDO",
+    "TÚ"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, puedo leerlo",
+     "frase": "Sí, puedo leerlo.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Leo poco",
+     "frase": "Leo poco.",
+     "glosas": [
+      "LEER",
+      "POCO"
+     ],
+     "id": "poco"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "No puedo leerlo",
+     "frase": "No puedo leerlo.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "reparacion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "acceso",
+   "entidad": "Conversacion",
+   "formulacion": "¿Quiere que lo explique otra vez y más despacio?",
+   "id": "Q.ACC.REPARACION",
+   "modo": "frase",
+   "noOfrecer": [
+    "EXPLICAR",
+    "LENTO",
+    "QUERER",
+    "VOLVER"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, explíquelo otra vez más despacio, por favor.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No hace falta, entendí.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "condicion_comunicativa",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "acceso",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Usted es una persona sorda?",
+   "id": "Q.ACC.SORDO",
+   "modo": "frase",
+   "noOfrecer": [
+    "SORDO",
+    "TÚ"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, soy una persona sorda.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No soy una persona sorda.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "tipo",
+   "campos": [
+    "servicio",
+    "institucion"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "apoyo",
+   "entidad": "Solicitud",
+   "formulacion": "¿Qué apoyo necesita?",
+   "id": "Q.APO.TIPO",
+   "modo": "frase",
+   "noOfrecer": [
+    "AYUDAR",
+    "INTÉRPRETE",
+    "SEPDEP"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un abogado",
+     "frase": "Necesito un abogado.",
+     "glosas": [
+      "ABOGADO"
+     ],
+     "id": "abogado"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un abogado gratuito",
+     "frase": "Necesito un abogado gratuito.",
+     "glosas": [
+      "ABOGADO",
+      "GRATIS"
+     ],
+     "id": "abogado_gratis"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Asistencia a la víctima (SEPDAVI)",
+     "frase": "Quiero asistencia de SEPDAVI.",
+     "glosas": [
+      "ASISTENCIA",
+      "SEPDAVI"
+     ],
+     "id": "sepdavi"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "FELCV",
+     "frase": "Quiero acudir a la FELCV.",
+     "glosas": [
+      "FELCV"
+     ],
+     "id": "felcv"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé qué apoyo necesito.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "objetos",
+   "campos": [
+    "objeto",
+    "lugar"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "robo",
+   "entidad": "Hecho[DAÑAR].objetos",
+   "formulacion": "¿Qué dañaron?",
+   "id": "Q.DAN.QUE",
+   "maximo": 3,
+   "modo": "fragmento",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una puerta",
+     "frase": "la puerta",
+     "glosas": [
+      "PUERTA"
+     ],
+     "id": "puerta"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Celular",
+     "frase": "el celular",
+     "glosas": [
+      "CELULAR"
+     ],
+     "id": "celular"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi casa",
+     "frase": "mi casa",
+     "glosas": [
+      "CASA"
+     ],
+     "id": "casa"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi tienda",
+     "frase": "mi tienda",
+     "glosas": [
+      "TIENDA"
+     ],
+     "id": "tienda"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra cosa (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "algo mío",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "institucion_destino",
+   "campos": [
+    "institucion"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "denuncia",
+   "entidad": "Intencion",
+   "formulacion": "¿Ante qué institución quiere presentarla?",
+   "id": "Q.DEN.AUTORIDAD",
+   "modo": "frase",
+   "noOfrecer": [
+    "ABOGADO",
+    "INTÉRPRETE",
+    "SEPDAVI"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Policía",
+     "frase": "Quiero presentarla ante la Policía.",
+     "glosas": [
+      "POLICÍA"
+     ],
+     "id": "policia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "FELCC",
+     "frase": "Quiero presentarla ante la FELCC.",
+     "glosas": [
+      "FELCC"
+     ],
+     "id": "felcc"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "FELCV",
+     "frase": "Quiero presentarla ante la FELCV.",
+     "glosas": [
+      "FELCV"
+     ],
+     "id": "felcv"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Fiscalía",
+     "frase": "Quiero presentarla ante la Fiscalía.",
+     "glosas": [
+      "FISCALIA"
+     ],
+     "id": "fiscalia"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé ante qué institución presentarla.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "presentar_denuncia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "denuncia",
+   "entidad": "Intencion",
+   "formulacion": "¿Desea presentar una denuncia?",
+   "id": "Q.DEN.INTENCION",
+   "modo": "frase",
+   "noOfrecer": [
+    "ABOGADO",
+    "FELCC",
+    "FISCALIA",
+    "POLICÍA",
+    "PRESENTAR",
+    "SEPDAVI"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, quiero presentar una denuncia.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "Por ahora no quiero presentar una denuncia.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "Todavía no sé si quiero presentar una denuncia.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "Responder «Sí» expresa una voluntad; nunca afirma que la denuncia fue presentada ni registrada."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "canal",
+   "campos": [
+    "medio"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "mensajes",
+   "entidad": "Mensajes",
+   "formulacion": "¿Por dónde le llegaron los mensajes?",
+   "id": "Q.DIG.CANAL",
+   "maximo": 2,
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Por celular",
+     "frase": "por celular",
+     "glosas": [
+      "CELULAR"
+     ],
+     "id": "celular"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Por internet",
+     "frase": "por internet",
+     "glosas": [
+      "INTERNET"
+     ],
+     "id": "internet"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra aplicación (escribir)",
+     "frase": "por «{texto}»",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé por dónde llegaron los mensajes.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "plantilla": "Me llegaron mensajes {items}.",
+   "reglas": [
+    "Nunca se deduce WhatsApp, SMS ni «texto» a partir de CELULAR."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "cantidad_numeros",
+   "campos": [
+    "cantidad"
+   ],
+   "control": "alternativa",
+   "dominio": "mensajes",
+   "entidad": "Mensajes",
+   "formulacion": "¿Son uno o varios números?",
+   "id": "Q.DIG.CANT_NUMEROS",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR",
+    "CUÁNTOS"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un solo número",
+     "frase": "Es un solo número.",
+     "glosas": [
+      "1"
+     ],
+     "id": "uno"
+    },
+    {
+     "editor": "entero",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "Varios números",
+     "frase": "Son {n} números.",
+     "fraseSinValor": "Son varios números.",
+     "glosas": [],
+     "id": "varios",
+     "rango": [
+      2,
+      50
+     ]
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé cuántos números son.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "mensajes",
+   "entidad": "Evidencia[capturas]",
+   "formulacion": "¿Tiene fotos de la pantalla?",
+   "id": "Q.DIG.CAPTURAS",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR",
+    "FOTOS",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo fotos de la pantalla.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo fotos de la pantalla.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo fotos de la pantalla.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "Independiente de Q.DIG.GUARDO: pueden ser verdaderas ambas, una o ninguna."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "contenido",
+   "campos": [
+    "hecho"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "mensajes",
+   "entidad": "Mensajes",
+   "formulacion": "¿Qué decían los mensajes?",
+   "id": "Q.DIG.CONTENIDO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Me amenazaban",
+     "frase": "Recibí mensajes con amenazas.",
+     "glosas": [
+      "AMENAZAR"
+     ],
+     "id": "amenazas"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra cosa (escribir un resumen)",
+     "frase": "Recibí mensajes que decían: «{texto}».",
+     "glosas": [],
+     "id": "otro"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "continuidad",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "mensajes",
+   "entidad": "Mensajes",
+   "formulacion": "¿Sigue recibiendo mensajes?",
+   "id": "Q.DIG.CONTINUA",
+   "modo": "frase",
+   "noOfrecer": [
+    "AÚN",
+    "ESCRIBIR",
+    "RECIBIR"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, sigo recibiendo mensajes.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "Ya no recibo mensajes.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "conservados",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "mensajes",
+   "entidad": "Evidencia[mensajes]",
+   "formulacion": "¿Guardó los mensajes?",
+   "id": "Q.DIG.GUARDO",
+   "modo": "frase",
+   "noOfrecer": [
+    "ESCRIBIR",
+    "GUARDAR"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, guardé los mensajes.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No guardé los mensajes.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si se guardaron.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, todos",
+     "frase": "Sí, guardé todos los mensajes.",
+     "glosas": [
+      "SÍ",
+      "TOTAL"
+     ],
+     "id": "todos"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "mostrar_ahora",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "mensajes",
+   "entidad": "Evidencia",
+   "formulacion": "¿Puede mostrar el celular ahora?",
+   "id": "Q.DIG.MOSTRAR",
+   "modo": "frase",
+   "noOfrecer": [
+    "AHORA",
+    "CELULAR",
+    "MOSTRAR",
+    "PUEDO"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, puedo mostrar el celular ahora.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No puedo mostrarlo ahora.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "telefono",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "mensajes",
+   "entidad": "Persona[remitente]",
+   "formulacion": "¿Conoce el número desde el que le escribieron?",
+   "id": "Q.DIG.NUMERO_CONOCE",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR",
+    "CONOCER"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-03"
+   ],
+   "opciones": [
+    {
+     "editor": "telefono",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, el número es {telefono}.",
+     "fraseSinValor": "Sí, conozco el número.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No conozco el número.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro del número.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "canal=celular",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "mensajes",
+   "entidad": "Mensajes",
+   "formulacion": "¿Las amenazas llegaron por celular?",
+   "id": "Q.DIG.POR_CELULAR",
+   "modo": "frase",
+   "noOfrecer": [
+    "AMENAZAR",
+    "CELULAR",
+    "ENVIAR"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, llegaron por celular.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No llegaron por celular.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "canal=internet",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "mensajes",
+   "entidad": "Mensajes",
+   "formulacion": "¿Le escribieron por internet?",
+   "id": "Q.DIG.POR_INTERNET",
+   "modo": "frase",
+   "noOfrecer": [
+    "ENVIAR",
+    "ESCRIBIR",
+    "INTERNET"
+   ],
+   "nodos": [
+    "n-s6-amenazas_mensajes-02"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, me escribieron por internet.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No me escribieron por internet.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "identidad",
+   "campos": [
+    "persona"
+   ],
+   "control": "persona_identidad",
+   "dominio": "mensajes",
+   "entidad": "Persona[remitente]",
+   "formulacion": "¿Quién le envió los mensajes?",
+   "id": "Q.DIG.REMITENTE",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sé quién es",
+     "frase": "Sé quién me envía los mensajes.",
+     "glosas": [
+      "CONOCER"
+     ],
+     "id": "conoce"
+    },
+    {
+     "editor": "telefono",
+     "estado": "afirmado",
+     "etiqueta": "Solo conozco el número",
+     "frase": "No conozco su nombre; el número que aparece es {telefono}.",
+     "glosas": [],
+     "id": "solo_numero"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un hombre (no sé quién)",
+     "frase": "Me los envía un hombre; no sé quién es.",
+     "glosas": [
+      "HOMBRE"
+     ],
+     "id": "hombre"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una mujer (no sé quién)",
+     "frase": "Me los envía una mujer; no sé quién es.",
+     "glosas": [
+      "MUJER"
+     ],
+     "id": "mujer"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé quién me envía los mensajes.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "CELULAR no responde «¿quién?».",
+    "«Solo conozco el número» abre el teclado de teléfono, no el asistente de descripción."
+   ],
+   "variantes": [
+    "¿Quién le envía los mensajes?"
+   ]
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "conservada",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "dinero",
+   "entidad": "Evidencia[conversacion]",
+   "formulacion": "¿Conserva toda la conversación?",
+   "id": "Q.DIN.CHAT",
+   "modo": "frase",
+   "noOfrecer": [
+    "ESCRIBIR",
+    "GUARDAR",
+    "TOTAL"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, conservo toda la conversación.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No conservo la conversación.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si la conservo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "dinero",
+   "entidad": "Evidencia[comprobante]",
+   "formulacion": "¿Tiene algún comprobante?",
+   "id": "Q.DIN.COMPROBANTE",
+   "modo": "frase",
+   "noOfrecer": [
+    "BANCO",
+    "ESCRIBIR",
+    "GUARDAR",
+    "MOSTRAR",
+    "PAPEL",
+    "PUEDO",
+    "TENER",
+    "TOTAL"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo {Q.DIN.COMPROBANTE_TIPO|un comprobante}.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo comprobante.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo comprobante.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": [
+    "¿Tiene factura o papel del banco?",
+    "¿Tiene el papel del banco o factura?",
+    "¿Conserva el comprobante bancario?"
+   ]
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "tipo",
+   "campos": [
+    "documento",
+    "evidencia"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "dinero",
+   "entidad": "Evidencia[comprobante]",
+   "formulacion": "¿Qué comprobante tiene?",
+   "id": "Q.DIN.COMPROBANTE_TIPO",
+   "maximo": 3,
+   "modo": "fragmento",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Comprobante del banco",
+     "frase": "el comprobante del banco",
+     "glosas": [
+      "PAPEL",
+      "BANCO"
+     ],
+     "id": "banco"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Factura",
+     "frase": "una factura",
+     "glosas": [
+      "FACTURA"
+     ],
+     "id": "factura"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Capturas en mi celular",
+     "frase": "capturas en mi celular",
+     "glosas": [
+      "FOTOS",
+      "CELULAR"
+     ],
+     "id": "capturas"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un papel (no sé cómo se llama)",
+     "frase": "{Q.DOC.ACLARAR|un papel}",
+     "glosas": [
+      "PAPEL"
+     ],
+     "id": "papel"
+    }
+   ],
+   "reglas": [
+    "Plantilla: «Tengo {comprobantes}.»",
+    "PAPEL solo aparece como «no sé cómo se llama»; en Q.DOC.ACLARAR no se repiten comprobante del banco ni factura."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "engano",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "dinero",
+   "entidad": "Hecho[ENGAÑAR]",
+   "formulacion": "¿Quiere decir que lo engañaron?",
+   "id": "Q.DIN.ENGANO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, me engañaron",
+     "frase": "Me engañaron con dinero.",
+     "glosas": [
+      "SÍ",
+      "ENGAÑAR"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "Prefiero no decirlo así",
+     "frase": "",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "«Me engañaron» solo aparece si se elige aquí; no se deduce de BILLETES ni de ENVIAR."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "existencia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "dinero",
+   "entidad": "Transaccion",
+   "formulacion": "¿Entregó o envió dinero?",
+   "id": "Q.DIN.ENTREGO",
+   "modo": "frase",
+   "noOfrecer": [
+    "BILLETES",
+    "DAR"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, entregué dinero.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No entregué ni envié dinero.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "Si después se elige «Por un banco», la frase se funde: «Envié Bs 150 mediante un banco.»"
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "contacto_internet",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "dinero",
+   "entidad": "Transaccion",
+   "formulacion": "¿Se comunicaron por internet?",
+   "id": "Q.DIN.INTERNET",
+   "modo": "frase",
+   "noOfrecer": [
+    "ESCRIBIR",
+    "INTERNET"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, nos comunicamos por internet.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No nos comunicamos por internet.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "mecanismo",
+   "campos": [
+    "medio"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "dinero",
+   "entidad": "Transaccion",
+   "formulacion": "¿Cómo entregó el dinero?",
+   "id": "Q.DIN.MECANISMO",
+   "modo": "frase",
+   "noOfrecer": [
+    "ENGAÑAR",
+    "ESCRIBIR",
+    "PERDER"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "En mano, en efectivo",
+     "frase": "Entregué {Q.DIN.MONTO|dinero} en mano.",
+     "glosas": [
+      "DAR",
+      "BILLETES"
+     ],
+     "id": "mano"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Por un banco",
+     "frase": "Envié {Q.DIN.MONTO|dinero} mediante un banco.",
+     "glosas": [
+      "BANCO",
+      "ENVIAR"
+     ],
+     "id": "banco"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Por internet",
+     "frase": "Envié {Q.DIN.MONTO|dinero} por internet.",
+     "glosas": [
+      "INTERNET",
+      "ENVIAR"
+     ],
+     "id": "internet"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Desde el celular",
+     "frase": "Envié {Q.DIN.MONTO|dinero} desde el celular.",
+     "glosas": [
+      "CELULAR",
+      "ENVIAR"
+     ],
+     "id": "celular"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra forma (escribir)",
+     "frase": "Entregué {Q.DIN.MONTO|dinero} de esta forma: «{texto}».",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No entregué dinero",
+     "frase": "No entregué ni envié dinero.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "ninguno",
+     "salida": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo cómo entregué el dinero.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "ENGAÑAR no es un mecanismo.",
+    "«Desde el celular» no se redacta como «transferencia».",
+    "Nada de esto afirma «me estafaron»: solo Q.DIN.ENGANO lo dice, si se elige."
+   ],
+   "variantes": [
+    "¿Cómo ocurrió el engaño con el dinero?"
+   ]
+  },
+  {
+   "acto": "pregunta_cantidad",
+   "campo": "monto",
+   "campos": [
+    "cantidad"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "dinero",
+   "entidad": "Transaccion",
+   "formulacion": "¿Cuánto dinero fue?",
+   "fraseSuelta": "Fueron {frag}.",
+   "id": "Q.DIN.MONTO",
+   "modo": "fragmento",
+   "noOfrecer": [
+    "BILLETES",
+    "CUÁNTOS"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-02"
+   ],
+   "opciones": [
+    {
+     "editor": "monto",
+     "estado": "afirmado",
+     "etiqueta": "Escribir el monto",
+     "frase": "{moneda} {monto}",
+     "glosas": [],
+     "id": "monto"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "dinero",
+     "fraseExtra": "No recuerdo el monto exacto.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Un solo campo numérico + moneda Bs/USD; sin importes rápidos."
+   ],
+   "variantes": [
+    "¿Cuánto dinero entregó?"
+   ]
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "mecanismo=banco",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "dinero",
+   "entidad": "Transaccion",
+   "formulacion": "¿Lo hizo mediante un banco?",
+   "id": "Q.DIN.POR_BANCO",
+   "modo": "frase",
+   "noOfrecer": [
+    "BANCO",
+    "BILLETES",
+    "ENVIAR"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, lo envié mediante un banco.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No fue mediante un banco.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "identidad",
+   "campos": [
+    "persona"
+   ],
+   "control": "persona_identidad",
+   "dominio": "dinero",
+   "entidad": "Persona[receptor]",
+   "formulacion": "¿Quién recibió el dinero?",
+   "id": "Q.DIN.RECEPTOR",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR",
+    "CONOCER",
+    "NOMBRE"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "editor": "texto_nombre",
+     "estado": "afirmado",
+     "etiqueta": "Sé su nombre",
+     "frase": "Recibió el dinero {nombre}.",
+     "glosas": [],
+     "id": "nombre"
+    },
+    {
+     "editor": "telefono",
+     "estado": "afirmado",
+     "etiqueta": "Solo tengo su número",
+     "frase": "No conozco su nombre; tengo su número: {telefono}.",
+     "glosas": [],
+     "id": "solo_numero"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un hombre (no sé quién)",
+     "frase": "Lo recibió un hombre que no conozco.",
+     "glosas": [
+      "HOMBRE"
+     ],
+     "id": "hombre"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una mujer (no sé quién)",
+     "frase": "Lo recibió una mujer que no conozco.",
+     "glosas": [
+      "MUJER"
+     ],
+     "id": "mujer"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé quién recibió el dinero.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Nombre y número son editores directos; ninguna rama abre el asistente de género/edad/ropa."
+   ],
+   "variantes": [
+    "¿Conoce el nombre o número de la persona?"
+   ]
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "nombre_literal",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "dinero",
+   "entidad": "Persona[receptor]",
+   "formulacion": "¿Conoce el nombre de la persona?",
+   "id": "Q.DIN.RECEPTOR_NOMBRE",
+   "modo": "frase",
+   "noOfrecer": [
+    "CONOCER",
+    "NOMBRE",
+    "ÉL"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-05"
+   ],
+   "opciones": [
+    {
+     "editor": "texto_nombre",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, se llama {nombre}.",
+     "fraseSinValor": "Sí, conozco su nombre.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No conozco su nombre.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro de su nombre.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "El nombre del receptor nunca va a la ficha de identificación del ciudadano."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "telefono_literal",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "dinero",
+   "entidad": "Persona[receptor]",
+   "formulacion": "¿Tiene su número de celular?",
+   "id": "Q.DIN.RECEPTOR_NUMERO",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR",
+    "TENER",
+    "ÉL"
+   ],
+   "nodos": [
+    "n-s6-engaño_dinero_y_t-06"
+   ],
+   "opciones": [
+    {
+     "editor": "telefono",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, su número es {telefono}.",
+     "fraseSinValor": "Sí, tengo su número.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo su número.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro de tenerlo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "tipo",
+   "campos": [
+    "documento",
+    "evidencia"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "documento",
+   "entidad": "Documento",
+   "formulacion": "¿Qué papel es?",
+   "id": "Q.DOC.ACLARAR",
+   "modo": "fragmento",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Carnet de identidad",
+     "frase": "mi carnet de identidad",
+     "glosas": [
+      "PAPEL",
+      "IDENTIDAD"
+     ],
+     "id": "carnet"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Comprobante del banco",
+     "frase": "el comprobante del banco",
+     "glosas": [
+      "PAPEL",
+      "BANCO"
+     ],
+     "id": "comprobante_banco"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Citación",
+     "frase": "una citación",
+     "glosas": [
+      "PAPEL",
+      "CONVOCAR"
+     ],
+     "id": "citacion"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Resolución",
+     "frase": "una resolución",
+     "glosas": [
+      "RESOLUCIÓN"
+     ],
+     "id": "resolucion"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Certificado",
+     "frase": "un certificado",
+     "glosas": [
+      "CERTIFICADO"
+     ],
+     "id": "certificado"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Fotocopia",
+     "frase": "una fotocopia",
+     "glosas": [
+      "FOTOCOPIA"
+     ],
+     "id": "fotocopia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Factura",
+     "frase": "una factura",
+     "glosas": [
+      "FACTURA"
+     ],
+     "id": "factura"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otro (escribir cómo se llama)",
+     "frase": "un documento: «{texto}»",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "un papel que no sé qué documento es",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Solo se abre desde «Un papel (no sé cómo se llama)».",
+    "Oculta las opciones que ya estaban en la pregunta anterior (paso `ocultar`)."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia[caja]",
+   "formulacion": "¿Tiene la caja del celular?",
+   "id": "Q.EVI.CAJA",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo la caja del celular.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo la caja del celular.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo la caja.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "existencia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia[video_lugar]",
+   "formulacion": "¿Hay cámaras o video del lugar?",
+   "id": "Q.EVI.CAMARAS",
+   "modo": "frase",
+   "noOfrecer": [
+    "FILMAR",
+    "TENER",
+    "VIDEO"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-09"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, hay video del lugar.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No hay cámaras en ese lugar.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si hay cámaras.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia[certificado]",
+   "formulacion": "¿Tiene un certificado?",
+   "id": "Q.EVI.CERTIFICADO",
+   "modo": "frase",
+   "noOfrecer": [
+    "CERTIFICADO",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo un certificado.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo certificado.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo un certificado.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia[factura]",
+   "formulacion": "¿Tiene la factura?",
+   "id": "Q.EVI.FACTURA",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo la factura.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo la factura.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo la factura.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "«No» solo niega la factura; no niega otras pruebas no consultadas."
+   ],
+   "variantes": [
+    "¿Tiene una factura?",
+    "¿Tiene la factura del celular?"
+   ]
+  },
+  {
+   "acto": "pregunta_polar_compuesta",
+   "campo": "division",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "derivacion",
+   "dominio": "evidencia",
+   "entidad": "Evidencia",
+   "formulacion": "¿Tiene la factura o la caja del celular?",
+   "id": "Q.EVI.FACTURA_O_CAJA",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-08"
+   ],
+   "opciones": [],
+   "pasosRespuesta": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.EVI.FACTURA"
+    },
+    {
+     "obligatoria": true,
+     "pregunta": "Q.EVI.CAJA"
+    }
+   ],
+   "reglas": [
+    "Pregunta compuesta del corpus: se presenta como dos respuestas independientes en la misma pantalla."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia[fotos]",
+   "formulacion": "¿Tiene fotografías?",
+   "id": "Q.EVI.FOTOS",
+   "modo": "frase",
+   "noOfrecer": [
+    "FOTOS",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo fotos.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo fotos.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo fotos.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "mostrar_ahora",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia",
+   "formulacion": "¿Puede mostrarlo ahora?",
+   "id": "Q.EVI.MOSTRAR_AHORA",
+   "modo": "frase",
+   "noOfrecer": [
+    "AHORA",
+    "MOSTRAR",
+    "PUEDO"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, puedo mostrarlo ahora.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No puedo mostrarlo ahora.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si puedo mostrarlo ahora.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "presentar_elementos",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Intencion",
+   "formulacion": "¿Desea presentar estos elementos?",
+   "id": "Q.EVI.PRESENTAR",
+   "modo": "frase",
+   "noOfrecer": [
+    "FOTOS",
+    "PRESENTAR",
+    "QUERER"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-10"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, quiero presentar estos elementos.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "Por ahora no quiero presentarlos.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "Todavía no lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "Expresa voluntad; no afirma que se entregaron."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "inventario",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia",
+   "formulacion": "¿Tiene fotos, video u otra cosa que pueda mostrar?",
+   "id": "Q.EVI.QUE_TIENE",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo {Q.EVI.TIPOS|algo que puedo mostrar}.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo fotos, video ni otra cosa para mostrar.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo algo para mostrar.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "«No» niega exactamente las categorías nombradas en la pregunta, no otras."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia[documento_previo]",
+   "formulacion": "¿Tiene una resolución o papel previo?",
+   "id": "Q.EVI.RESOLUCION_PREVIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "RESOLUCIÓN",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-09"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo un documento anterior.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo ningún documento anterior.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo un documento anterior.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "tipos",
+   "campos": [
+    "evidencia",
+    "documento"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "evidencia",
+   "entidad": "Evidencia",
+   "formulacion": "¿Qué tiene?",
+   "id": "Q.EVI.TIPOS",
+   "maximo": 4,
+   "modo": "fragmento",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Fotos",
+     "frase": "fotos",
+     "glosas": [
+      "FOTOS"
+     ],
+     "id": "fotos"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Video",
+     "frase": "un video",
+     "glosas": [
+      "VIDEO"
+     ],
+     "id": "video"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Certificado",
+     "frase": "un certificado",
+     "glosas": [
+      "CERTIFICADO"
+     ],
+     "id": "certificado"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra cosa (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    }
+   ],
+   "reglas": [
+    "Plantilla: «Tengo {elementos}.» Nunca «como prueba» salvo que la persona lo elija."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "presente",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia",
+   "formulacion": "¿La tiene aquí con usted?",
+   "id": "Q.EVI.TRAE_COPIA",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "La tengo aquí.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No la tengo aquí.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si la traje.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "evidencia",
+   "entidad": "Evidencia[video]",
+   "formulacion": "¿Tiene video?",
+   "id": "Q.EVI.VIDEO",
+   "modo": "frase",
+   "noOfrecer": [
+    "TENER",
+    "VIDEO"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo un video.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo video.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo video.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "objetos",
+   "campos": [
+    "objeto",
+    "documento",
+    "prenda"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "robo",
+   "entidad": "Hecho[PERDER].objetos",
+   "formulacion": "¿Qué le falta?",
+   "id": "Q.FALTA.QUE",
+   "maximo": 4,
+   "modo": "fragmento",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Celular",
+     "frase": "el celular",
+     "glosas": [
+      "CELULAR"
+     ],
+     "id": "celular"
+    },
+    {
+     "editor": "monto",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "Dinero",
+     "frase": "{moneda} {monto}",
+     "fraseSinValor": "dinero",
+     "glosas": [
+      "BILLETES"
+     ],
+     "id": "dinero"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mochila",
+     "frase": "la mochila",
+     "glosas": [
+      "MOCHILA"
+     ],
+     "id": "mochila"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Bolsa",
+     "frase": "la bolsa",
+     "glosas": [
+      "BOLSA"
+     ],
+     "id": "bolsa"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Chamarra",
+     "frase": "la chamarra",
+     "glosas": [
+      "CHAMARRA"
+     ],
+     "id": "chamarra"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Gorra",
+     "frase": "la gorra",
+     "glosas": [
+      "GORRA"
+     ],
+     "id": "gorra"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Lentes",
+     "frase": "los lentes",
+     "glosas": [
+      "LENTES"
+     ],
+     "id": "lentes"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Carnet de identidad",
+     "frase": "mi carnet de identidad",
+     "glosas": [
+      "PAPEL",
+      "IDENTIDAD"
+     ],
+     "id": "carnet"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un papel (no sé cómo se llama)",
+     "frase": "{Q.DOC.ACLARAR|un papel}",
+     "glosas": [
+      "PAPEL"
+     ],
+     "id": "papel"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otro objeto (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "algo que no sé precisar",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "ampliacion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "relato",
+   "entidad": "Conversacion",
+   "formulacion": "¿Quiere agregar algo que no le pregunté?",
+   "id": "Q.HEC.AMPLIAR",
+   "modo": "frase",
+   "noOfrecer": [
+    "AUMENTAR",
+    "NARRAR",
+    "QUERER"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-12"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, quiero agregar información.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No, eso es todo.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "actor",
+   "campos": [
+    "persona"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "relato",
+   "entidad": "Hecho[ESCAPAR]",
+   "formulacion": "¿Quién escapó?",
+   "id": "Q.HEC.ESCAPE_ACTOR",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "actor": "victim",
+     "estado": "afirmado",
+     "etiqueta": "Yo logré escapar",
+     "frase": "Logré escapar.",
+     "glosas": [
+      "YO",
+      "ESCAPAR"
+     ],
+     "id": "yo"
+    },
+    {
+     "actor": "suspect",
+     "cuando": [
+      {
+       "opciones": [
+        "robar"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "estado": "afirmado",
+     "etiqueta": "La persona que me robó",
+     "frase": "La persona que me robó escapó.",
+     "glosas": [
+      "LADRÓN",
+      "ESCAPAR"
+     ],
+     "id": "autor"
+    },
+    {
+     "actor": "thirdParty",
+     "estado": "afirmado",
+     "etiqueta": "Otra persona",
+     "frase": "Otra persona escapó.",
+     "glosas": [
+      "ÉL",
+      "ESCAPAR"
+     ],
+     "id": "otra"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "Alguien escapó, pero no sé quién.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "No se atribuye la huida por descarte: sin respuesta, la frase no se emite."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "tipo_sustraccion",
+   "campos": [
+    "hecho"
+   ],
+   "control": "alternativa",
+   "dominio": "relato",
+   "entidad": "Hecho[PERDER]",
+   "formulacion": "¿Lo perdió usted o cree que se lo quitaron?",
+   "id": "Q.HEC.PERDIDA_TIPO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "accion": "PERDER",
+     "estado": "afirmado",
+     "etiqueta": "Lo perdí",
+     "frase": "Perdí {Q.FALTA.QUE|algo}.",
+     "glosas": [
+      "PERDER"
+     ],
+     "id": "perdi",
+     "tipoPerdida": "loss"
+    },
+    {
+     "accion": "ROBAR",
+     "certeza": "uncertain",
+     "estado": "afirmado",
+     "etiqueta": "Creo que me lo robaron",
+     "frase": "Me falta {Q.FALTA.QUE|algo}; creo que fue un robo, pero no estoy seguro.",
+     "glosas": [
+      "ROBAR"
+     ],
+     "id": "robo_creo",
+     "tipoPerdida": "theft"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "Me falta {Q.FALTA.QUE|algo} y no sé si fue una pérdida o un robo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "«No sé» nunca crea un hecho de robo afirmado."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "accion",
+   "campos": [
+    "hecho"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "relato",
+   "entidad": "Hecho",
+   "formulacion": "¿Qué ocurrió?",
+   "id": "Q.HEC.QUE_OCURRIO",
+   "maximo": 2,
+   "modo": "frase",
+   "noOfrecer": [
+    "ARREGLAR",
+    "AUMENTAR",
+    "EMPEZAR",
+    "ENGAÑAR",
+    "EXPLICAR",
+    "NARRAR",
+    "QUÉ",
+    "TOTAL",
+    "TÚ"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-02"
+   ],
+   "opciones": [
+    {
+     "accion": "ROBAR",
+     "autor": "me robó",
+     "estado": "afirmado",
+     "etiqueta": "Me robaron",
+     "frase": "Me robaron {Q.ROB.QUE|algo}.",
+     "glosas": [
+      "ROBAR"
+     ],
+     "id": "robar"
+    },
+    {
+     "accion": "PERDER",
+     "estado": "afirmado",
+     "etiqueta": "Me falta algo (lo perdí o no sé)",
+     "frase": "",
+     "glosas": [
+      "PERDER"
+     ],
+     "id": "perder"
+    },
+    {
+     "accion": "DAÑAR",
+     "autor": "causó el daño",
+     "estado": "afirmado",
+     "etiqueta": "Dañaron algo mío",
+     "frase": "Dañaron {Q.DAN.QUE|algo mío}.",
+     "glosas": [
+      "DAÑAR"
+     ],
+     "id": "danar"
+    },
+    {
+     "accion": "ESCAPAR",
+     "estado": "afirmado",
+     "etiqueta": "Alguien escapó",
+     "frase": "",
+     "glosas": [
+      "ESCAPAR"
+     ],
+     "id": "escapar"
+    }
+   ],
+   "reglas": [
+    "Hasta dos hechos. El orden de pulsación no es orden temporal: la frase sigue el orden del banco.",
+    "PERDER y ESCAPAR no redactan nada por sí mismos: exigen su aclaración (Q.HEC.PERDIDA_TIPO, Q.HEC.ESCAPE_ACTOR)."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "invitacion_relato",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "relato",
+   "entidad": "Conversacion",
+   "formulacion": "¿Puede contarme lo sucedido desde el inicio?",
+   "id": "Q.HEC.RELATO_ORDENADO",
+   "modo": "frase",
+   "noOfrecer": [
+    "EMPEZAR",
+    "NARRAR",
+    "PRIMERA_VEZ"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí. Quiero explicar lo sucedido desde el principio.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "Ahora no puedo contarlo.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "acompanante",
+   "campos": [
+    "compania"
+   ],
+   "control": "alternativa",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Vino solo o acompañado?",
+   "id": "Q.ID.ACOMPANANTE",
+   "modo": "frase",
+   "noOfrecer": [
+    "TÚ",
+    "VENIR"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-12"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Vine solo/a",
+     "frase": "Vine sin acompañante.",
+     "glosas": [
+      "1"
+     ],
+     "id": "solo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Vine con alguien",
+     "frase": "Vine con {Q.ID.ACOMPANANTE_QUIEN|otra persona}.",
+     "glosas": [
+      "ACOMPAÑAR"
+     ],
+     "id": "acompanado"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "acompanante_vinculo",
+   "campos": [
+    "persona",
+    "servicio"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Quién le acompaña?",
+   "id": "Q.ID.ACOMPANANTE_QUIEN",
+   "modo": "fragmento",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Intérprete",
+     "frase": "un intérprete",
+     "glosas": [
+      "INTÉRPRETE"
+     ],
+     "id": "interprete"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi mamá",
+     "frase": "mi mamá",
+     "glosas": [
+      "MAMÁ"
+     ],
+     "id": "mama"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hermano",
+     "frase": "mi hermano",
+     "glosas": [
+      "HERMANO"
+     ],
+     "id": "hermano"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hermana",
+     "frase": "mi hermana",
+     "glosas": [
+      "HERMANA"
+     ],
+     "id": "hermana"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hijo",
+     "frase": "mi hijo",
+     "glosas": [
+      "HIJO"
+     ],
+     "id": "hijo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hija",
+     "frase": "mi hija",
+     "glosas": [
+      "HIJA"
+     ],
+     "id": "hija"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un amigo",
+     "frase": "un amigo",
+     "glosas": [
+      "AMIGO"
+     ],
+     "id": "amigo"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra persona (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "apellido_literal",
+   "campos": [
+    "nombre"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Puede deletrear su apellido?",
+   "id": "Q.ID.APELLIDO",
+   "modo": "frase",
+   "noOfrecer": [
+    "NOMBRE",
+    "PUEDO"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-08"
+   ],
+   "opciones": [
+    {
+     "editor": "texto_nombre",
+     "estado": "afirmado",
+     "etiqueta": "Escribir mi apellido",
+     "frase": "Mi apellido es {nombre}.",
+     "glosas": [],
+     "id": "apellido"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "preferencia_aviso",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Prefiere recibir avisos por mensaje escrito?",
+   "id": "Q.ID.AVISO",
+   "modo": "frase",
+   "noOfrecer": [
+    "AVISAR",
+    "ENVIAR",
+    "ESCRIBIR",
+    "MEJOR"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-11",
+    "n-s6-seguimiento_prelim-10"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, prefiero recibir avisos por mensaje escrito.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No quiero recibir avisos por mensaje escrito.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé qué prefiero.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "documento_numero",
+   "campos": [
+    "documento"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Cuál es el número de su documento?",
+   "id": "Q.ID.DOC_NUMERO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "editor": "documento_numero",
+     "estado": "afirmado",
+     "etiqueta": "Escribir el número",
+     "frase": "El número de mi documento es {numero}.",
+     "glosas": [],
+     "id": "numero"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "documento_disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Tiene su carnet de identidad?",
+   "id": "Q.ID.DOC_TIENE",
+   "modo": "frase",
+   "noOfrecer": [
+    "IDENTIDAD",
+    "PAPEL",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-09"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo mi carnet de identidad.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo mi carnet de identidad.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si lo tengo conmigo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "documento_tipo",
+   "campos": [
+    "documento"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Qué documento presenta?",
+   "id": "Q.ID.DOC_TIPO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Carnet de identidad",
+     "frase": "Presento mi carnet de identidad.",
+     "glosas": [
+      "PAPEL",
+      "IDENTIDAD"
+     ],
+     "id": "carnet"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Pasaporte",
+     "frase": "Presento mi pasaporte.",
+     "glosas": [],
+     "id": "pasaporte",
+     "literal": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Licencia de conducir",
+     "frase": "Presento mi licencia de conducir.",
+     "glosas": [],
+     "id": "licencia",
+     "literal": true
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otro documento (escribir)",
+     "frase": "Presento este documento: «{texto}».",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No tengo un documento",
+     "frase": "No tengo un documento conmigo.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "ninguno",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "edad_numero",
+   "campos": [
+    "edad"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Qué edad tiene?",
+   "id": "Q.ID.EDAD_PROPIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "ADULTO",
+    "EDAD",
+    "JOVEN"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "editor": "edad",
+     "estado": "afirmado",
+     "etiqueta": "Escribir mi edad",
+     "frase": "Tengo {n} años.",
+     "glosas": [],
+     "id": "edad",
+     "rango": [
+      0,
+      120
+     ],
+     "sinAproximado": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "nombre_literal",
+   "campos": [
+    "nombre"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Cuál es su nombre completo?",
+   "id": "Q.ID.NOMBRE",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL",
+    "NOMBRE",
+    "TUYO"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-07"
+   ],
+   "opciones": [
+    {
+     "editor": "texto_nombre",
+     "estado": "afirmado",
+     "etiqueta": "Escribir mi nombre",
+     "frase": "Me llamo {nombre}.",
+     "glosas": [],
+     "id": "nombre"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "telefono_literal",
+   "campos": [
+    "telefono"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Cuál es su número de celular?",
+   "id": "Q.ID.TELEFONO_PROPIO",
+   "modo": "frase",
+   "noOfrecer": [
+    "AVISAR",
+    "ENVIAR",
+    "MEJOR"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "editor": "telefono",
+     "estado": "afirmado",
+     "etiqueta": "Escribir mi número",
+     "frase": "Mi número de celular es {telefono}.",
+     "glosas": [],
+     "id": "telefono"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "telefono_confirmacion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "identificacion",
+   "entidad": "Ciudadano",
+   "formulacion": "¿Este número de celular es suyo?",
+   "id": "Q.ID.TELEFONO_VALIDA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR",
+    "TUYO",
+    "VERDAD"
+   ],
+   "nodos": [
+    "n-s6-acceso_comunicativ-10"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, ese número es mío.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No, ese número no es mío.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro de que sea mi número.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "interior_exterior",
+   "campos": [
+    "lugar"
+   ],
+   "control": "alternativa",
+   "dominio": "lugar",
+   "entidad": "Lugar",
+   "formulacion": "¿Ocurrió dentro o fuera del lugar?",
+   "id": "Q.LUG.DENTRO_FUERA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Dentro",
+     "frase": "Ocurrió dentro.",
+     "glosas": [
+      "DENTRO"
+     ],
+     "id": "dentro"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Fuera",
+     "frase": "Ocurrió fuera.",
+     "glosas": [
+      "FUERA"
+     ],
+     "id": "fuera"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si fue dentro o fuera.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "lugar",
+   "campos": [
+    "lugar"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "lugar",
+   "entidad": "Lugar",
+   "formulacion": "¿Dónde ocurrió?",
+   "id": "Q.LUG.DONDE",
+   "modo": "frase",
+   "noOfrecer": [
+    "DÓNDE"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-07"
+   ],
+   "opciones": [
+    {
+     "editor": "lugar_literal",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "En la calle",
+     "frase": "Ocurrió en la calle{?nombre}.",
+     "fraseSinValor": "Ocurrió en la calle.",
+     "glosas": [
+      "CALLE"
+     ],
+     "id": "calle"
+    },
+    {
+     "editor": "lugar_literal",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "En una avenida",
+     "frase": "Ocurrió en la avenida{?nombre}.",
+     "fraseSinValor": "Ocurrió en la avenida.",
+     "glosas": [
+      "AVENIDA"
+     ],
+     "id": "avenida"
+    },
+    {
+     "editor": "lugar_literal",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "En una plaza",
+     "frase": "Ocurrió en la plaza{?nombre}.",
+     "fraseSinValor": "Ocurrió en la plaza.",
+     "glosas": [
+      "PLAZA"
+     ],
+     "id": "plaza"
+    },
+    {
+     "editor": "lugar_literal",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "En un mercado",
+     "frase": "Ocurrió en el mercado{?nombre}.",
+     "fraseSinValor": "Ocurrió en el mercado.",
+     "glosas": [
+      "MERCADO"
+     ],
+     "id": "mercado"
+    },
+    {
+     "editor": "lugar_literal",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "En un barrio",
+     "frase": "Ocurrió en el barrio{?nombre}.",
+     "fraseSinValor": "Ocurrió en el barrio.",
+     "glosas": [
+      "BARRIO"
+     ],
+     "id": "barrio"
+    },
+    {
+     "editor": "lugar_literal",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "En una tienda",
+     "frase": "Ocurrió en una tienda{?nombre}.",
+     "fraseSinValor": "Ocurrió en una tienda.",
+     "glosas": [
+      "TIENDA"
+     ],
+     "id": "tienda"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "En mi casa",
+     "frase": "Ocurrió en mi casa.",
+     "glosas": [
+      "CASA"
+     ],
+     "id": "casa"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Dentro de un micro",
+     "frase": "Ocurrió dentro de un micro.",
+     "glosas": [
+      "MICRO"
+     ],
+     "id": "micro"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Dentro de un trufi",
+     "frase": "Ocurrió dentro de un trufi.",
+     "glosas": [
+      "TRUFI"
+     ],
+     "id": "trufi"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otro lugar (escribir)",
+     "frase": "Ocurrió en «{texto}».",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé exactamente dónde ocurrió.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "referencia",
+   "campos": [
+    "lugar"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "lugar",
+   "entidad": "Lugar",
+   "formulacion": "¿Fue cerca de algún lugar que conozca?",
+   "id": "Q.LUG.RELACION",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "editor": "referencia",
+     "estado": "afirmado",
+     "etiqueta": "Cerca de…",
+     "frase": "Fue cerca de este lugar: «{referencia}».",
+     "glosas": [
+      "CERCA"
+     ],
+     "id": "cerca"
+    },
+    {
+     "editor": "referencia",
+     "estado": "afirmado",
+     "etiqueta": "Al lado de…",
+     "frase": "Fue al lado de este lugar: «{referencia}».",
+     "glosas": [
+      "AL_LADO"
+     ],
+     "id": "al_lado"
+    },
+    {
+     "editor": "referencia",
+     "estado": "afirmado",
+     "etiqueta": "Lejos de…",
+     "frase": "Fue lejos de este lugar: «{referencia}».",
+     "glosas": [
+      "LEJOS"
+     ],
+     "id": "lejos"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "sepdavi",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "apoyo",
+   "entidad": "Solicitud",
+   "formulacion": "¿Desea orientación para recibir asistencia de SEPDAVI?",
+   "id": "Q.ORI.SEPDAVI",
+   "modo": "frase",
+   "noOfrecer": [
+    "ASISTENCIA",
+    "QUERER"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-10"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, quiero orientación de SEPDAVI.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "Por ahora no.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé todavía.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "conocida",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "persona",
+   "entidad": "Persona[autor]",
+   "formulacion": "¿Conoce a la persona involucrada?",
+   "id": "Q.PER.CONOCE",
+   "modo": "frase",
+   "noOfrecer": [
+    "CONOCER",
+    "TÚ",
+    "ÉL"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-09"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, conozco a esa persona.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No conozco a esa persona.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si la conozco.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "cabello_color",
+   "campos": [
+    "rasgo"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Qué color de cabello recuerda?",
+   "id": "Q.PER.DESC.CABELLO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [
+    "n-s6-descripcion_de_per-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Negro",
+     "frase": "Tenía el cabello negro.",
+     "glosas": [
+      "CABELLO",
+      "NEGRO"
+     ],
+     "id": "negro"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otro color (escribir)",
+     "frase": "Tenía el cabello «{texto}».",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo el color de su cabello.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "contextura",
+   "campos": [
+    "rasgo"
+   ],
+   "control": "alternativa",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Era delgado o de contextura gruesa?",
+   "id": "Q.PER.DESC.CONTEXTURA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Delgada",
+     "frase": "Era una persona delgada.",
+     "glosas": [
+      "FLACO"
+     ],
+     "id": "flaco"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "De contextura gruesa",
+     "frase": "Era una persona de contextura gruesa.",
+     "glosas": [
+      "GORDO"
+     ],
+     "id": "gordo"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No recuerdo su contextura.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "edad",
+   "campos": [
+    "edad"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Qué edad aproximada tenía?",
+   "id": "Q.PER.DESC.EDAD",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL",
+    "EDAD"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-02"
+   ],
+   "opciones": [
+    {
+     "editor": "edad",
+     "estado": "afirmado",
+     "etiqueta": "Escribir la edad",
+     "frase": "Tenía {aprox}{n} años.",
+     "glosas": [],
+     "id": "numero",
+     "rango": [
+      1,
+      110
+     ]
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Era joven",
+     "frase": "Era una persona joven.",
+     "glosas": [
+      "JOVEN"
+     ],
+     "id": "joven"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Era adulta",
+     "frase": "Era una persona adulta.",
+     "glosas": [
+      "ADULTO"
+     ],
+     "id": "adulto"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo su edad.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Una cifra nunca se convierte en «joven»/«adulto».",
+    "«aproximadamente» solo si se marcó."
+   ],
+   "variantes": [
+    "¿Era joven o adulto?"
+   ]
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "estatura",
+   "campos": [
+    "rasgo"
+   ],
+   "control": "alternativa",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Era alto o bajo?",
+   "id": "Q.PER.DESC.ESTATURA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Alta",
+     "frase": "Era una persona alta.",
+     "glosas": [
+      "ALTO"
+     ],
+     "id": "alto"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Baja",
+     "frase": "Era una persona baja.",
+     "glosas": [
+      "BAJO"
+     ],
+     "id": "bajo"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No recuerdo su estatura.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "gorra",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Llevaba gorra?",
+   "id": "Q.PER.DESC.GORRA",
+   "modo": "frase",
+   "noOfrecer": [
+    "GORRA",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, llevaba gorra.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No llevaba gorra.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No recuerdo si llevaba gorra.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "lentes",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Usaba lentes?",
+   "id": "Q.PER.DESC.LENTES",
+   "modo": "frase",
+   "noOfrecer": [
+    "LENTES",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-09"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, usaba lentes.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No usaba lentes.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No recuerdo si usaba lentes.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "bulto",
+   "campos": [
+    "prenda",
+    "polaridad"
+   ],
+   "control": "alternativa",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Llevaba mochila o bolsa?",
+   "id": "Q.PER.DESC.MOCHILA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una mochila",
+     "frase": "Llevaba una mochila.",
+     "glosas": [
+      "MOCHILA"
+     ],
+     "id": "mochila"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una bolsa",
+     "frase": "Llevaba una bolsa.",
+     "glosas": [
+      "BOLSA"
+     ],
+     "id": "bolsa"
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "Ninguna",
+     "frase": "No llevaba mochila ni bolsa.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "ninguna"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No recuerdo si llevaba mochila o bolsa.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "rasgo",
+   "campos": [
+    "detalle"
+   ],
+   "control": "texto_detalle",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Recuerda alguna característica particular?",
+   "id": "Q.PER.DESC.RASGO",
+   "modo": "frase",
+   "noOfrecer": [
+    "QUÉ",
+    "RECORDAR"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-10"
+   ],
+   "opciones": [
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Escribir la característica",
+     "frase": "Recuerdo esto de esa persona: «{texto}».",
+     "glosas": [],
+     "id": "texto"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo ninguna característica particular.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "No forzar «tatuaje» ni otra seña inexistente (corpus §6)."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "ropa",
+   "campos": [
+    "prenda"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Qué ropa llevaba?",
+   "id": "Q.PER.DESC.ROPA",
+   "maximo": 4,
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Polera",
+     "frase": "una polera",
+     "glosas": [
+      "POLERA"
+     ],
+     "id": "polera"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Pantalón",
+     "frase": "un pantalón",
+     "glosas": [
+      "PANTALÓN"
+     ],
+     "id": "pantalon"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Chamarra",
+     "frase": "una chamarra",
+     "glosas": [
+      "CHAMARRA"
+     ],
+     "id": "chamarra"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Gorra",
+     "frase": "una gorra",
+     "glosas": [
+      "GORRA"
+     ],
+     "id": "gorra"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mochila",
+     "frase": "una mochila",
+     "glosas": [
+      "MOCHILA"
+     ],
+     "id": "mochila"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra prenda o color (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo su ropa.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "plantilla": "Llevaba {items}.",
+   "reglas": [
+    "Plantilla: «Llevaba {prendas}.»",
+    "Color: NEGRO, AZUL, ROJO tienen glosa; los demás colores solo como texto literal declarado."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "sexo",
+   "campos": [
+    "persona"
+   ],
+   "control": "alternativa",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Era un hombre o una mujer?",
+   "id": "Q.PER.DESC.SEXO",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL"
+   ],
+   "nodos": [
+    "n-s6-descripcion_de_per-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un hombre",
+     "frase": "Era un hombre.",
+     "glosas": [
+      "HOMBRE"
+     ],
+     "id": "hombre"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una mujer",
+     "frase": "Era una mujer.",
+     "glosas": [
+      "MUJER"
+     ],
+     "id": "mujer"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si era hombre o mujer.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "control_descripcion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿Quiere describir a la persona?",
+   "id": "Q.PER.DESCRIBIR",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "Solo abre las preguntas de descripción; no añade frase."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "nombre_literal",
+   "campos": [
+    "nombre"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "persona",
+   "entidad": "Persona",
+   "formulacion": "¿Sabe cómo se llama esa persona?",
+   "id": "Q.PER.NOMBRE_TERCERO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "editor": "texto_nombre",
+     "estado": "afirmado",
+     "etiqueta": "Escribir su nombre",
+     "frase": "Se llama {nombre}.",
+     "glosas": [],
+     "id": "nombre"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé cómo se llama.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Es el nombre de un tercero: nunca se guarda en Ciudadano.nombre ni en la ficha de identificación."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "identidad",
+   "campos": [
+    "persona"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "testigos",
+   "entidad": "Persona",
+   "formulacion": "¿A quién vio?",
+   "id": "Q.PER.OBSERVADA",
+   "modo": "frase",
+   "noOfrecer": [
+    "ADULTO",
+    "CONOCER",
+    "JOVEN"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un hombre",
+     "frase": "Vi a un hombre.",
+     "glosas": [
+      "HOMBRE"
+     ],
+     "id": "hombre"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una mujer",
+     "frase": "Vi a una mujer.",
+     "glosas": [
+      "MUJER"
+     ],
+     "id": "mujer"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robo"
+       ],
+       "pregunta": "Q.TES.QUE_VIO"
+      }
+     ],
+     "estado": "afirmado",
+     "etiqueta": "A la persona que robó",
+     "frase": "Vi a la persona que robó.",
+     "glosas": [
+      "LADRÓN"
+     ],
+     "id": "ladron"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No vi bien a la persona.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "presencia_otros",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "persona",
+   "entidad": "Testigos",
+   "formulacion": "¿Había otras personas presentes?",
+   "id": "Q.PER.OTROS_PRESENTES",
+   "modo": "frase",
+   "noOfrecer": [
+    "ALLÍ",
+    "HOMBRE",
+    "MUJER",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-11"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, había otras personas.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No había otras personas.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si había otras personas.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "reconocible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "persona",
+   "entidad": "Persona[autor]",
+   "formulacion": "¿Puede identificarla si la vuelve a ver?",
+   "id": "Q.PER.RECONOCE",
+   "modo": "frase",
+   "noOfrecer": [
+    "IDENTIFICAR",
+    "PUEDO",
+    "VER",
+    "VOLVER"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-10"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, si la vuelvo a ver puedo identificarla.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No podría identificarla.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si podría identificarla.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "vinculo",
+   "campos": [
+    "persona"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "persona",
+   "entidad": "Persona",
+   "formulacion": "¿Qué relación tiene con esa persona?",
+   "id": "Q.PER.VINCULO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi pareja",
+     "frase": "Es mi pareja.",
+     "glosas": [
+      "PAREJA"
+     ],
+     "id": "pareja"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi expareja",
+     "frase": "Es mi expareja.",
+     "glosas": [
+      "PAREJA",
+      "PASADO"
+     ],
+     "id": "expareja"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi esposa",
+     "frase": "Es mi esposa.",
+     "glosas": [
+      "ESPOSA"
+     ],
+     "id": "esposa"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hermano",
+     "frase": "Es mi hermano.",
+     "glosas": [
+      "HERMANO"
+     ],
+     "id": "hermano"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hermana",
+     "frase": "Es mi hermana.",
+     "glosas": [
+      "HERMANA"
+     ],
+     "id": "hermana"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un pariente",
+     "frase": "Es un pariente.",
+     "glosas": [
+      "PARIENTE"
+     ],
+     "id": "pariente"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un amigo",
+     "frase": "Es un amigo.",
+     "glosas": [
+      "AMIGO"
+     ],
+     "id": "amigo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un conocido",
+     "frase": "Es un conocido.",
+     "glosas": [
+      "CONOCER"
+     ],
+     "id": "conocido"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra relación (escribir)",
+     "frase": "Es {texto}.",
+     "glosas": [],
+     "id": "otro"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "existencia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "riesgo",
+   "entidad": "Hecho[AMENAZAR]",
+   "formulacion": "¿Recibió amenazas?",
+   "id": "Q.RIE.AMENAZAS",
+   "modo": "frase",
+   "noOfrecer": [
+    "AMENAZAR",
+    "RECIBIR"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, recibí amenazas.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No recibí amenazas.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "auxilio_inmediato",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "riesgo",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita auxilio ahora?",
+   "id": "Q.RIE.AUXILIO",
+   "modo": "frase",
+   "noOfrecer": [
+    "AHORA",
+    "AUXILIO",
+    "NECESITAR"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito auxilio ahora.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No necesito auxilio ahora.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "La tarjeta AUXILIO debe estar siempre accesible como salida urgente, sin recorrer el formulario."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "miedo_retorno",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "riesgo",
+   "entidad": "Riesgo",
+   "formulacion": "¿Tiene miedo de volver a su casa?",
+   "id": "Q.RIE.MIEDO_CASA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CASA",
+    "MIEDO",
+    "VOLVER"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo miedo de volver a mi casa.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo miedo de volver a mi casa.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "proteccion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "riesgo",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita protección?",
+   "id": "Q.RIE.PIDE_PROTECCION",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito protección.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No necesito protección.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "proteccion_terceros",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "riesgo",
+   "entidad": "Riesgo",
+   "formulacion": "¿Hay niños u otras personas que necesiten protección?",
+   "id": "Q.RIE.PROTECCION_OTROS",
+   "modo": "frase",
+   "noOfrecer": [
+    "NECESITAR",
+    "PROTEGER"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-09"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, hay otras personas que necesitan protección.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No hay otras personas en riesgo.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "terceros",
+   "campos": [
+    "persona"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "riesgo",
+   "entidad": "Riesgo",
+   "formulacion": "¿Quiénes necesitan protección?",
+   "id": "Q.RIE.QUIENES",
+   "maximo": 3,
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hijo",
+     "frase": "mi hijo",
+     "glosas": [
+      "HIJO"
+     ],
+     "id": "hijo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hija",
+     "frase": "mi hija",
+     "glosas": [
+      "HIJA"
+     ],
+     "id": "hija"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra persona (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    }
+   ],
+   "plantilla": "Estas personas necesitan protección: {items}.",
+   "reglas": [
+    "Plantilla: «{terceros} necesita(n) protección.»",
+    "NIÑO no está en el catálogo."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "existencia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "robo",
+   "entidad": "Hecho[ROBAR]",
+   "formulacion": "¿Le robaron algún objeto?",
+   "id": "Q.ROB.ALGO",
+   "modo": "frase",
+   "noOfrecer": [
+    "ROBAR"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, me robaron algo.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No me robaron nada.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si me robaron algo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "Si se responde después Q.ROB.QUE, la frase se funde: «Sí, me robaron el celular.»"
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "confirmacion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "robo",
+   "entidad": "Hecho[ROBAR]+Objeto",
+   "formulacion": "¿Le robaron {mencionado}?",
+   "id": "Q.ROB.CONFIRMA_OBJETO",
+   "modo": "frase",
+   "noOfrecer": [
+    "CELULAR",
+    "ROBAR"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, me robaron {mencionado}.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No me robaron {mencionado}.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si me robaron {mencionado}.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Me robaron otra cosa",
+     "frase": "No me robaron {mencionado}; me robaron {Q.ROB.QUE|otra cosa}.",
+     "glosas": [],
+     "id": "otra_cosa"
+    }
+   ],
+   "pasosRespuesta": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.ROB.CONFIRMA_OBJETO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "otra_cosa"
+       ],
+       "pregunta": "Q.ROB.CONFIRMA_OBJETO"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "Q.ROB.QUE"
+    }
+   ],
+   "reglas": [
+    "El objeto se toma del texto exacto del funcionario y se confirma; no se vuelve a elegir.",
+    "«No» nunca genera «me robaron»."
+   ],
+   "requiereMencion": true,
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "falta",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "robo",
+   "entidad": "Objeto[carnet]",
+   "formulacion": "¿Le falta su carnet de identidad?",
+   "id": "Q.ROB.FALTA_CARNET",
+   "modo": "frase",
+   "noOfrecer": [
+    "IDENTIDAD",
+    "PAPEL",
+    "PERDER"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, me falta mi carnet de identidad.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No me falta mi carnet.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si me falta mi carnet.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "«Falta» no dice si se perdió o se lo robaron: no se redacta ninguno de los dos."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "falta",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "robo",
+   "entidad": "Objeto[dinero]",
+   "formulacion": "¿Le falta dinero?",
+   "id": "Q.ROB.FALTA_DINERO",
+   "modo": "frase",
+   "noOfrecer": [
+    "BILLETES",
+    "PERDER"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, me falta dinero.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No me falta dinero.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si me falta dinero.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "actor=suspect",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "robo",
+   "entidad": "Hecho[ESCAPAR]",
+   "formulacion": "¿El ladrón escapó?",
+   "id": "Q.ROB.LADRON_ESCAPO",
+   "modo": "frase",
+   "noOfrecer": [
+    "ESCAPAR",
+    "LADRÓN"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, la persona que me robó escapó.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No, no escapó.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si escapó.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "reglas": [
+    "«Sí» crea el hecho ESCAPAR con actor = autor; no toca otros hechos."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "objetos",
+   "campos": [
+    "objeto",
+    "documento",
+    "prenda"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "robo",
+   "entidad": "Hecho[ROBAR].objetos",
+   "formulacion": "¿Qué le robaron?",
+   "id": "Q.ROB.QUE",
+   "maximo": 4,
+   "modo": "fragmento",
+   "noOfrecer": [
+    "FACTURA",
+    "QUÉ",
+    "ROBAR"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-02"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Celular",
+     "frase": "el celular",
+     "glosas": [
+      "CELULAR"
+     ],
+     "id": "celular"
+    },
+    {
+     "editor": "monto",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "Dinero",
+     "frase": "{moneda} {monto}",
+     "fraseSinValor": "dinero",
+     "glosas": [
+      "BILLETES"
+     ],
+     "id": "dinero"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mochila",
+     "frase": "la mochila",
+     "glosas": [
+      "MOCHILA"
+     ],
+     "id": "mochila"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Bolsa",
+     "frase": "la bolsa",
+     "glosas": [
+      "BOLSA"
+     ],
+     "id": "bolsa"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Chamarra",
+     "frase": "la chamarra",
+     "glosas": [
+      "CHAMARRA"
+     ],
+     "id": "chamarra"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Gorra",
+     "frase": "la gorra",
+     "glosas": [
+      "GORRA"
+     ],
+     "id": "gorra"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Lentes",
+     "frase": "los lentes",
+     "glosas": [
+      "LENTES"
+     ],
+     "id": "lentes"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Carnet de identidad",
+     "frase": "mi carnet de identidad",
+     "glosas": [
+      "PAPEL",
+      "IDENTIDAD"
+     ],
+     "id": "carnet"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un papel (no sé cómo se llama)",
+     "frase": "{Q.DOC.ACLARAR|un papel}",
+     "glosas": [
+      "PAPEL"
+     ],
+     "id": "papel"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otro objeto (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "algo que no sé precisar",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Plantilla: «Me robaron {objetos}.» (o «Perdí…», «Dañaron…» según el hecho).",
+    "El papel del objeto lo fija el hecho; no se vuelve a preguntar «¿Qué pasó con…?» salvo ambigüedad."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "visto",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "robo",
+   "entidad": "Persona[autor]",
+   "formulacion": "¿Vio al ladrón?",
+   "id": "Q.ROB.VIO_LADRON",
+   "modo": "frase",
+   "noOfrecer": [
+    "LADRÓN",
+    "VER"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, vi a la persona que me robó.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No vi a la persona que me robó.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro de haberla visto.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "atencion_medica",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "salud",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita asistencia médica?",
+   "id": "Q.SAL.ASISTENCIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "ASISTENCIA",
+    "DOCTOR",
+    "NECESITAR"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito atención médica.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No necesito atención médica.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si necesito atención médica.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponible",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "salud",
+   "entidad": "Evidencia[certificado_medico]",
+   "formulacion": "¿Tiene certificado del doctor?",
+   "id": "Q.SAL.CERTIFICADO",
+   "modo": "frase",
+   "noOfrecer": [
+    "CERTIFICADO",
+    "DOCTOR",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo certificado del doctor.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo certificado del doctor.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo el certificado.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "herido",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "salud",
+   "entidad": "Salud",
+   "formulacion": "¿Está herido?",
+   "id": "Q.SAL.HERIDO",
+   "modo": "frase",
+   "noOfrecer": [
+    "HERIDA",
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-02"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, estoy herido.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No estoy herido.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro de estar herido.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "atendido",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "salud",
+   "entidad": "Salud",
+   "formulacion": "¿Fue al hospital?",
+   "id": "Q.SAL.HOSPITAL",
+   "modo": "frase",
+   "noOfrecer": [
+    "HOSPITAL",
+    "IR"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, fui al hospital.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No fui al hospital.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo recuerdo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "parte_cuerpo",
+   "campos": [
+    "parte_cuerpo"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "salud",
+   "entidad": "Salud",
+   "formulacion": "¿Dónde tiene la herida?",
+   "id": "Q.SAL.PARTE",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "En el brazo",
+     "frase": "Tengo una herida en el brazo.",
+     "glosas": [
+      "BRAZO"
+     ],
+     "id": "brazo"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra parte (escribir)",
+     "frase": "Tengo una herida en {texto}.",
+     "glosas": [],
+     "id": "otro"
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "institucion_mencionada",
+   "campos": [
+    "institucion"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "consulta",
+   "entidad": "Consulta",
+   "formulacion": "¿Con qué institución es su trámite?",
+   "id": "Q.SEG.AUTORIDAD",
+   "modo": "frase",
+   "noOfrecer": [
+    "ABOGADO",
+    "INTÉRPRETE"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Policía",
+     "frase": "Mi trámite es con la Policía.",
+     "glosas": [
+      "POLICÍA"
+     ],
+     "id": "policia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "FELCC",
+     "frase": "Mi trámite es con la FELCC.",
+     "glosas": [
+      "FELCC"
+     ],
+     "id": "felcc"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "FELCV",
+     "frase": "Mi trámite es con la FELCV.",
+     "glosas": [
+      "FELCV"
+     ],
+     "id": "felcv"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Fiscalía",
+     "frase": "Mi trámite es con la Fiscalía.",
+     "glosas": [
+      "FISCALIA"
+     ],
+     "id": "fiscalia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Juzgado",
+     "frase": "Mi trámite es con el juzgado.",
+     "glosas": [
+      "JUZGADO"
+     ],
+     "id": "juzgado"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Órgano Judicial",
+     "frase": "Mi trámite es con el Órgano Judicial.",
+     "glosas": [
+      "ÓRGANO_JUDICIAL"
+     ],
+     "id": "organo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "SEPDAVI",
+     "frase": "Mi trámite es con SEPDAVI.",
+     "glosas": [
+      "SEPDAVI"
+     ],
+     "id": "sepdavi"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "SEPDEP",
+     "frase": "Mi trámite es con SEPDEP.",
+     "glosas": [
+      "SEPDEP"
+     ],
+     "id": "sepdep"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé con qué institución es mi trámite.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "citacion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Recibió un papel de convocatoria?",
+   "id": "Q.SEG.CITACION",
+   "modo": "frase",
+   "noOfrecer": [
+    "CONVOCAR",
+    "PAPEL",
+    "RECIBIR"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, recibí una citación.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No recibí ninguna citación.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si es una citación.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "conformidad",
+   "campos": [
+    "polaridad",
+    "consulta"
+   ],
+   "control": "alternativa",
+   "dominio": "seguimiento",
+   "entidad": "Conversacion",
+   "formulacion": "¿Está de acuerdo con lo escrito?",
+   "id": "Q.SEG.CONFORMIDAD",
+   "modo": "frase",
+   "noOfrecer": [
+    "ESCRIBIR"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-08"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, estoy de acuerdo",
+     "frase": "Sí, estoy de acuerdo con lo escrito.",
+     "glosas": [
+      "ESTAR_DE_ACUERDO"
+     ],
+     "id": "si"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "No estoy de acuerdo",
+     "frase": "No estoy de acuerdo con lo escrito.",
+     "glosas": [
+      "NO",
+      "ESTAR_DE_ACUERDO"
+     ],
+     "id": "no"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Quiero leerlo otra vez",
+     "frase": "Quiero leerlo otra vez.",
+     "glosas": [
+      "LEER"
+     ],
+     "id": "leer"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "No lo entiendo",
+     "frase": "No entiendo lo escrito.",
+     "glosas": [
+      "NO",
+      "COMPRENDER"
+     ],
+     "id": "no_entiendo"
+    }
+   ],
+   "reglas": [
+    "Nunca preseleccionada ni automática; la app comunica la respuesta, no firma ni certifica conformidad."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "defensa_publica",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita defensa pública gratuita?",
+   "id": "Q.SEG.DEFENSA_PUBLICA",
+   "modo": "frase",
+   "noOfrecer": [
+    "ABOGADO",
+    "GRATIS",
+    "NECESITAR"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito defensa pública gratuita.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No la necesito.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "derivacion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Le indicaron ir a la Fiscalía?",
+   "id": "Q.SEG.DERIVACION_FISCALIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "IR"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-02"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, me indicaron que debo ir a la Fiscalía.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No me indicaron eso.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "ubicacion_fiscalia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Necesita saber dónde está la Fiscalía?",
+   "id": "Q.SEG.DONDE_FISCALIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "DÓNDE"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito saber dónde está la Fiscalía.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No, ya sé dónde está.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "motivo=estado",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Vino a consultar el estado de su caso?",
+   "id": "Q.SEG.ESTADO_CASO",
+   "modo": "frase",
+   "noOfrecer": [
+    "BUSCAR",
+    "INVESTIGACIÓN",
+    "VENIR"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, vine a consultar el estado de mi caso.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No, vine por otra cosa.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "fecha_denuncia",
+   "campos": [
+    "tiempo"
+   ],
+   "control": "tiempo",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Cuándo presentó la denuncia?",
+   "id": "Q.SEG.FECHA_DENUNCIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁNDO"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-03"
+   ],
+   "opciones": [
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … días",
+     "frase": "La presenté hace {n} días.",
+     "glosas": [
+      "DÍA"
+     ],
+     "id": "hace_d"
+    },
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … semanas",
+     "frase": "La presenté hace {n} semanas.",
+     "glosas": [
+      "SEMANA"
+     ],
+     "id": "hace_s"
+    },
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … meses",
+     "frase": "La presenté hace {n} meses.",
+     "glosas": [
+      "MES"
+     ],
+     "id": "hace_m"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Ayer",
+     "frase": "La presenté ayer.",
+     "glosas": [
+      "AYER"
+     ],
+     "id": "ayer"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo cuándo la presenté.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "fecha_programada",
+   "campos": [
+    "tiempo"
+   ],
+   "control": "tiempo",
+   "dominio": "consulta",
+   "entidad": "Consulta",
+   "formulacion": "¿Para cuándo le dieron fecha?",
+   "id": "Q.SEG.FECHA_PROGRAMADA",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Hoy",
+     "frase": "Me dieron fecha para hoy.",
+     "glosas": [
+      "HOY"
+     ],
+     "id": "hoy"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mañana",
+     "frase": "Me dieron fecha para mañana.",
+     "glosas": [
+      "MAÑANA"
+     ],
+     "id": "manana"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "La próxima semana",
+     "frase": "Me dieron fecha para la próxima semana.",
+     "glosas": [
+      "PRÓXIMO",
+      "SEMANA"
+     ],
+     "id": "proxima_semana"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Escribir la fecha",
+     "frase": "Me dieron fecha para el {texto}.",
+     "glosas": [
+      "FECHA"
+     ],
+     "id": "fecha"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé para cuándo es.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "hablar_abogado",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita hablar con un abogado?",
+   "id": "Q.SEG.HABLAR_ABOGADO",
+   "modo": "frase",
+   "noOfrecer": [
+    "ABOGADO",
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito hablar con un abogado.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No necesito hablar con un abogado.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "hablar_fiscal",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita hablar con el fiscal?",
+   "id": "Q.SEG.HABLAR_FISCAL",
+   "modo": "frase",
+   "noOfrecer": [
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito hablar con el fiscal.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No necesito hablar con el fiscal.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "hablar_policia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Solicitud",
+   "formulacion": "¿Quiere hablar con el policía encargado?",
+   "id": "Q.SEG.HABLAR_POLICIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "HABLAR",
+    "POLICÍA",
+    "QUERER"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, quiero hablar con el policía encargado.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No hace falta.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "interprete_reunion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Solicitud",
+   "formulacion": "¿Necesita intérprete para esa reunión?",
+   "id": "Q.SEG.INTERPRETE_REUNION",
+   "modo": "frase",
+   "noOfrecer": [
+    "INTÉRPRETE",
+    "NECESITAR",
+    "REUNIÓN"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-06"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, necesito intérprete para esa reunión.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No necesito intérprete para esa reunión.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "presentarse_juez",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Debe presentarse ante un juez?",
+   "id": "Q.SEG.JUEZ",
+   "modo": "frase",
+   "noOfrecer": [
+    "JUEZ",
+    "PRESENTAR"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo que presentarme ante un juez.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo que presentarme ante un juez.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo que presentarme.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "lectura_previa",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Solicitud",
+   "formulacion": "¿Quiere leer el papel antes de escribir su nombre?",
+   "id": "Q.SEG.LEER_ANTES_FIRMAR",
+   "modo": "frase",
+   "noOfrecer": [
+    "ESCRIBIR",
+    "LEER",
+    "NOMBRE",
+    "PAPEL",
+    "QUERER"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-07"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, quiero leer el papel antes de escribir mi nombre.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No hace falta.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "motivo",
+   "campos": [
+    "consulta",
+    "documento"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "consulta",
+   "entidad": "Consulta",
+   "formulacion": "¿Qué quiere consultar?",
+   "id": "Q.SEG.MOTIVO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "El estado de mi caso",
+     "frase": "Quiero saber cómo va la investigación de mi caso.",
+     "glosas": [
+      "INVESTIGACIÓN",
+      "SABER",
+      "QUERER"
+     ],
+     "id": "estado"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Si la investigación continúa",
+     "frase": "Quiero saber si la investigación continúa.",
+     "glosas": [
+      "INVESTIGACIÓN",
+      "CONTINUAR",
+      "SABER"
+     ],
+     "id": "continua"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Cuándo debo volver",
+     "frase": "Quiero saber cuándo debo volver.",
+     "glosas": [
+      "CUÁNDO",
+      "VOLVER"
+     ],
+     "glosasPropias": true,
+     "id": "volver"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Cuánto debo esperar",
+     "frase": "Quiero saber cuánto tiempo debo esperar.",
+     "glosas": [
+      "ESPERAR",
+      "CUÁNTOS"
+     ],
+     "id": "esperar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una citación que recibí",
+     "frase": "Recibí una citación y quiero consultar sobre ella.",
+     "glosas": [
+      "PAPEL",
+      "CONVOCAR",
+      "RECIBIR"
+     ],
+     "id": "citacion"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una resolución que recibí",
+     "frase": "Recibí una resolución y quiero consultar sobre ella.",
+     "glosas": [
+      "RESOLUCIÓN",
+      "RECIBIR"
+     ],
+     "id": "resolucion"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Pedir una fotocopia",
+     "frase": "Quiero pedir una fotocopia.",
+     "glosas": [
+      "FOTOCOPIA",
+      "PEDIR"
+     ],
+     "id": "fotocopia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Hablar con alguien",
+     "frase": "",
+     "glosas": [
+      "HABLAR"
+     ],
+     "id": "hablar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Dónde queda una oficina",
+     "frase": "",
+     "glosas": [
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "donde"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra consulta (escribir)",
+     "frase": "Quiero consultar esto: «{texto}».",
+     "glosas": [],
+     "id": "otro",
+     "sinSena": true
+    }
+   ],
+   "reglas": [
+    "Cada opción produce una frase ya validada por el corpus §7/§8; no se compone con piezas sueltas.",
+    "En ventanilla con perfil conocido no se pregunta la institución; en personal sin institución, la frase no la nombra."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "referencia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Tiene el número de referencia?",
+   "id": "Q.SEG.NUM_REFERENCIA",
+   "modo": "frase",
+   "noOfrecer": [
+    "TENER"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-02"
+   ],
+   "opciones": [
+    {
+     "editor": "documento_numero",
+     "editorOpcional": true,
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, el número de referencia es {numero}.",
+     "fraseSinValor": "Sí, tengo el número de referencia.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo el número de referencia.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si lo tengo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "ubicacion_organo",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar2",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Sabe dónde está el Órgano Judicial?",
+   "id": "Q.SEG.ORGANO_JUDICIAL",
+   "modo": "frase",
+   "noOfrecer": [
+    "DÓNDE",
+    "ÓRGANO_JUDICIAL"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, sé dónde está.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No sé dónde está el Órgano Judicial.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "resolucion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Recibió una resolución?",
+   "id": "Q.SEG.RESOLUCION",
+   "modo": "frase",
+   "noOfrecer": [
+    "RECIBIR",
+    "RESOLUCIÓN"
+   ],
+   "nodos": [
+    "n-s6-interaccion_con_fi-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, recibí una resolución.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No recibí ninguna resolución.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si es una resolución.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "retorno",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "seguimiento",
+   "entidad": "Consulta",
+   "formulacion": "¿Tiene que volver otro día?",
+   "id": "Q.SEG.RETORNO",
+   "modo": "frase",
+   "noOfrecer": [
+    "DÍA",
+    "NECESITAR",
+    "VOLVER"
+   ],
+   "nodos": [
+    "n-s6-seguimiento_prelim-09"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, tengo que volver otro día.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No tengo que volver.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si tengo que volver.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_cantidad",
+   "campo": "cantidad",
+   "campos": [
+    "cantidad"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "testigos",
+   "entidad": "Testigos",
+   "formulacion": "¿Cuántos testigos hay?",
+   "fraseSuelta": "Hay {frag}.",
+   "id": "Q.TES.CANTIDAD",
+   "modo": "fragmento",
+   "noOfrecer": [
+    "CUÁNTOS",
+    "TESTIGO"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-02"
+   ],
+   "opciones": [
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Escribir cuántos",
+     "frase": "{n} testigos",
+     "fraseSingular": "un testigo",
+     "glosas": [],
+     "id": "n",
+     "rango": [
+      1,
+      99
+     ]
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "testigos, pero no sé cuántos",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "existencia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "testigos",
+   "entidad": "Testigos",
+   "formulacion": "¿Hay testigos?",
+   "id": "Q.TES.EXISTE",
+   "modo": "frase",
+   "noOfrecer": [
+    "TENER",
+    "TESTIGO"
+   ],
+   "nodos": [
+    "n-s6-robo_hurto_y_obje-10",
+    "n-s6-testigos_fotos_v-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, hay {Q.TES.CANTIDAD|testigos}.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No hay testigos.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si hay testigos.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "testimonio",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "testigos",
+   "entidad": "Intencion",
+   "formulacion": "¿Puede dar testimonio de lo que vio?",
+   "id": "Q.TES.PUEDE_TESTIMONIO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, puedo dar testimonio de lo que vi.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No puedo dar testimonio.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si puedo dar testimonio.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "accion_observada",
+   "campos": [
+    "hecho"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "testigos",
+   "entidad": "Hecho(perspectiva=testigo)",
+   "formulacion": "¿Qué vio o qué quiere declarar?",
+   "id": "Q.TES.QUE_VIO",
+   "modo": "frase",
+   "noOfrecer": [
+    "EMPEZAR",
+    "EXPLICAR",
+    "NARRAR",
+    "TOTAL"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Vi un robo",
+     "frase": "Vi un robo.",
+     "glosas": [
+      "VER",
+      "ROBAR"
+     ],
+     "id": "robo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Vi una agresión",
+     "frase": "Vi que golpearon a una persona.",
+     "glosas": [
+      "VER",
+      "PEGAR"
+     ],
+     "id": "agresion"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Vi que alguien escapó",
+     "frase": "Vi que alguien escapó.",
+     "glosas": [
+      "VER",
+      "ESCAPAR"
+     ],
+     "id": "escape"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Vi que dañaron algo",
+     "frase": "Vi que dañaron algo.",
+     "glosas": [
+      "VER",
+      "DAÑAR"
+     ],
+     "id": "dano"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra cosa que vi (escribir)",
+     "frase": "Vi esto: «{texto}».",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Quiero agregar información a lo que dije",
+     "frase": "Quiero agregar información a lo que dije.",
+     "glosas": [
+      "AUMENTAR",
+      "NARRAR",
+      "QUERER"
+     ],
+     "id": "agregar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Quiero corregir algo de lo que dije",
+     "frase": "Quiero corregir algo de lo que dije.",
+     "glosas": [
+      "ARREGLAR"
+     ],
+     "id": "corregir"
+    }
+   ],
+   "reglas": [
+    "Cada opción introduce un contenido que se puede redactar; NARRAR, EXPLICAR, EMPEZAR y TOTAL no se ofrecen solos."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "disponibilidad",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "testigos",
+   "entidad": "Testigos",
+   "formulacion": "¿Puede traer al testigo?",
+   "id": "Q.TES.TRAER",
+   "modo": "frase",
+   "noOfrecer": [
+    "PUEDO",
+    "TESTIGO",
+    "TRAER"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, puedo traer al testigo.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No puedo traer al testigo.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si puedo traerlo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "alcance",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "testigos",
+   "entidad": "Testigos",
+   "formulacion": "¿El testigo vio todo?",
+   "id": "Q.TES.VIO_TODO",
+   "modo": "frase",
+   "noOfrecer": [
+    "TESTIGO",
+    "TOTAL",
+    "VER"
+   ],
+   "nodos": [
+    "n-s6-testigos_fotos_v-03"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, el testigo vio todo.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No, el testigo no vio todo.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé si el testigo vio todo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "momento",
+   "campos": [
+    "tiempo"
+   ],
+   "control": "alternativa",
+   "dominio": "tiempo",
+   "entidad": "Tiempo",
+   "formulacion": "¿Fue hoy, ayer o antes?",
+   "id": "Q.TIE.APROX",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-05"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Hoy",
+     "frase": "Fue hoy.",
+     "glosas": [
+      "HOY"
+     ],
+     "id": "hoy"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Ayer",
+     "frase": "Fue ayer.",
+     "glosas": [
+      "AYER"
+     ],
+     "id": "ayer"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Antes",
+     "frase": "Fue antes de ayer o hace más tiempo.",
+     "glosas": [
+      "PASADO"
+     ],
+     "id": "antes"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo cuándo fue.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "momento",
+   "campos": [
+    "tiempo"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "tiempo",
+   "entidad": "Tiempo",
+   "formulacion": "¿Cuándo ocurrió?",
+   "id": "Q.TIE.CUANDO",
+   "maximo": 2,
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁNDO",
+    "FECHA"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-04"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Ahora mismo",
+     "frase": "hace un momento",
+     "glosas": [
+      "AHORA"
+     ],
+     "grupo": "momento",
+     "id": "ahora"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Hoy",
+     "frase": "hoy",
+     "glosas": [
+      "HOY"
+     ],
+     "grupo": "momento",
+     "id": "hoy"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Ayer",
+     "frase": "ayer",
+     "glosas": [
+      "AYER"
+     ],
+     "grupo": "momento",
+     "id": "ayer"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Anteayer",
+     "frase": "anteayer",
+     "glosas": [
+      "ANTEAYER"
+     ],
+     "grupo": "momento",
+     "id": "anteayer"
+    },
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … minutos",
+     "frase": "hace {n} minutos",
+     "glosas": [
+      "MINUTO"
+     ],
+     "grupo": "momento",
+     "id": "hace_min",
+     "rango": [
+      1,
+      59
+     ]
+    },
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … horas",
+     "frase": "hace {n} horas",
+     "fraseSingular": "hace una hora",
+     "glosas": [
+      "HORA"
+     ],
+     "grupo": "momento",
+     "id": "hace_h",
+     "rango": [
+      1,
+      23
+     ]
+    },
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … días",
+     "frase": "hace {n} días",
+     "fraseSingular": "hace un día",
+     "glosas": [
+      "DÍA"
+     ],
+     "grupo": "momento",
+     "id": "hace_d",
+     "rango": [
+      1,
+      60
+     ]
+    },
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … semanas",
+     "frase": "hace {n} semanas",
+     "fraseSingular": "hace una semana",
+     "glosas": [
+      "SEMANA"
+     ],
+     "grupo": "momento",
+     "id": "hace_s",
+     "rango": [
+      1,
+      52
+     ]
+    },
+    {
+     "editor": "entero",
+     "estado": "afirmado",
+     "etiqueta": "Hace … meses",
+     "frase": "hace {n} meses",
+     "fraseSingular": "hace un mes",
+     "glosas": [
+      "MES"
+     ],
+     "grupo": "momento",
+     "id": "hace_m",
+     "rango": [
+      1,
+      24
+     ]
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Por la tarde",
+     "frase": "por la tarde",
+     "glosas": [
+      "TARDE"
+     ],
+     "grupo": "parte_dia",
+     "id": "tarde"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Temprano",
+     "frase": "temprano",
+     "glosas": [
+      "TEMPRANO"
+     ],
+     "grupo": "parte_dia",
+     "id": "temprano"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo cuándo ocurrió.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "plantilla": "Ocurrió {items}.",
+   "unir": "espacio",
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "hora",
+   "campos": [
+    "tiempo"
+   ],
+   "control": "hora",
+   "dominio": "tiempo",
+   "entidad": "Tiempo",
+   "formulacion": "¿A qué hora aproximadamente?",
+   "id": "Q.TIE.HORA",
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁNTOS",
+    "HORA",
+    "MÁS_O_MENOS"
+   ],
+   "nodos": [
+    "n-s6-inicio_de_denuncia-06"
+   ],
+   "opciones": [
+    {
+     "editor": "hora",
+     "estado": "afirmado",
+     "etiqueta": "Escribir la hora",
+     "frase": "Fue aproximadamente a las {hora}.",
+     "glosas": [],
+     "id": "hora"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Por la tarde",
+     "frase": "Fue por la tarde.",
+     "glosas": [
+      "TARDE"
+     ],
+     "id": "tarde"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Temprano",
+     "frase": "Fue temprano.",
+     "glosas": [
+      "TEMPRANO"
+     ],
+     "id": "temprano"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo la hora exacta.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "agresion",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "violencia",
+   "entidad": "Hecho",
+   "formulacion": "¿Alguien le pegó o maltrató?",
+   "id": "Q.VIO.AGRESION",
+   "modo": "frase",
+   "noOfrecer": [
+    "MALTRATAR",
+    "PEGAR"
+   ],
+   "nodos": [
+    "n-s6-agresion_violenci-01"
+   ],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, me agredieron.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No, nadie me pegó ni me maltrató.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No estoy seguro.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "identidad",
+   "campos": [
+    "persona"
+   ],
+   "control": "persona_identidad",
+   "dominio": "violencia",
+   "entidad": "Persona[autor]",
+   "formulacion": "¿Quién le agredió?",
+   "id": "Q.VIO.AGRESOR",
+   "modo": "frase",
+   "noOfrecer": [
+    "ADULTO",
+    "CELULAR",
+    "JOVEN"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Alguien que conozco",
+     "frase": "Fue alguien que conozco.",
+     "glosas": [
+      "CONOCER"
+     ],
+     "id": "conoce"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un hombre que no conozco",
+     "frase": "Fue un hombre que no conozco.",
+     "glosas": [
+      "HOMBRE"
+     ],
+     "id": "hombre"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una mujer que no conozco",
+     "frase": "Fue una mujer que no conozco.",
+     "glosas": [
+      "MUJER"
+     ],
+     "id": "mujer"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé quién fue.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "asistencia",
+   "campos": [
+    "polaridad"
+   ],
+   "control": "polar3",
+   "dominio": "apoyo",
+   "entidad": "Solicitud",
+   "formulacion": "¿Desea asistencia especializada?",
+   "id": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+   "modo": "frase",
+   "noOfrecer": [
+    "ASISTENCIA",
+    "SEPDEP"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí, quiero asistencia.",
+     "glosas": [
+      "SÍ"
+     ],
+     "id": "si",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "Por ahora no quiero asistencia.",
+     "glosas": [
+      "NO"
+     ],
+     "id": "no",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "Todavía no lo sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "polar": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_alternativa",
+   "campo": "frecuencia",
+   "campos": [
+    "frecuencia"
+   ],
+   "control": "alternativa",
+   "dominio": "violencia",
+   "entidad": "Hecho",
+   "formulacion": "¿Es la primera vez o pasa seguido?",
+   "id": "Q.VIO.FRECUENCIA",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Es la primera vez",
+     "frase": "Es la primera vez.",
+     "glosas": [
+      "PRIMERA_VEZ"
+     ],
+     "id": "primera"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Pasa siempre",
+     "frase": "Pasa siempre.",
+     "glosas": [
+      "SIEMPRE"
+     ],
+     "id": "siempre"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Pasa cada día",
+     "frase": "Pasa todos los días.",
+     "glosas": [
+      "CADA_DÍA"
+     ],
+     "id": "cada_dia"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé decirlo.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "accion",
+   "campos": [
+    "hecho"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "violencia",
+   "entidad": "Hecho",
+   "formulacion": "¿Qué le hicieron?",
+   "id": "Q.VIO.TIPO",
+   "maximo": 2,
+   "modo": "frase",
+   "noOfrecer": [
+    "PELEAR"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Me pegaron",
+     "frase": "Me pegaron.",
+     "glosas": [
+      "PEGAR"
+     ],
+     "id": "pegar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Me maltrataron",
+     "frase": "Me maltrataron.",
+     "glosas": [
+      "MALTRATAR"
+     ],
+     "id": "maltratar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Me amenazaron",
+     "frase": "Me amenazaron.",
+     "glosas": [
+      "AMENAZAR"
+     ],
+     "id": "amenazar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Me gritaron",
+     "frase": "Me gritaron.",
+     "glosas": [
+      "GRITAR"
+     ],
+     "id": "gritar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Abusaron de mí",
+     "frase": "Abusaron de mí.",
+     "glosas": [
+      "ABUSAR"
+     ],
+     "id": "abusar"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sufrí violencia",
+     "frase": "Sufrí violencia.",
+     "glosas": [
+      "VIOLENCIA"
+     ],
+     "id": "violencia"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Dañaron mis cosas",
+     "frase": "Dañaron mis cosas.",
+     "glosas": [
+      "DAÑAR"
+     ],
+     "id": "danar"
+    }
+   ],
+   "variantes": []
+  }
+ ],
+ "recorridos": {
+  "amenaza_digital": {
+   "nombre": "Amenazas por mensajes",
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.DIG.CONTENIDO"
+    },
+    {
+     "pregunta": "Q.DIG.CANAL"
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "conoce"
+       ],
+       "pregunta": "Q.DIG.REMITENTE"
+      }
+     ],
+     "pregunta": "Q.PER.VINCULO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "conoce"
+       ],
+       "pregunta": "Q.DIG.REMITENTE"
+      }
+     ],
+     "pregunta": "Q.PER.NOMBRE_TERCERO"
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA"
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO"
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS"
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.DEN.INTENCION"
+      },
+      {
+       "perfil": false
+      }
+     ],
+     "pregunta": "Q.DEN.AUTORIDAD"
+    }
+   ]
+  },
+  "denuncia_robo": {
+   "nombre": "Robo, pérdida o daño",
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.HEC.QUE_OCURRIO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robar"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "pregunta": "Q.ROB.QUE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "papel"
+       ],
+       "pregunta": "Q.ROB.QUE"
+      }
+     ],
+     "obligatoria": true,
+     "ocultar": [
+      "carnet"
+     ],
+     "padre": "Q.ROB.QUE",
+     "pregunta": "Q.DOC.ACLARAR"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "perder"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "pregunta": "Q.FALTA.QUE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "perder"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "Q.HEC.PERDIDA_TIPO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "danar"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "pregunta": "Q.DAN.QUE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "escapar"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "Q.HEC.ESCAPE_ACTOR"
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO"
+    },
+    {
+     "pregunta": "Q.LUG.DONDE"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "afirmado"
+       ],
+       "pregunta": "Q.LUG.DONDE"
+      }
+     ],
+     "pregunta": "Q.LUG.RELACION"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robar",
+        "danar"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "pregunta": "Q.PER.CONOCE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.PER.CONOCE"
+      }
+     ],
+     "pregunta": "Q.PER.VINCULO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.PER.CONOCE"
+      }
+     ],
+     "pregunta": "Q.PER.NOMBRE_TERCERO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robar",
+        "danar"
+       ],
+       "pregunta": "Q.HEC.QUE_OCURRIO"
+      }
+     ],
+     "pregunta": "Q.PER.DESCRIBIR"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.PER.DESCRIBIR"
+      }
+     ],
+     "pregunta": "Q.PER.DESC.SEXO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.PER.DESCRIBIR"
+      }
+     ],
+     "pregunta": "Q.PER.DESC.EDAD"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.PER.DESCRIBIR"
+      }
+     ],
+     "pregunta": "Q.PER.DESC.ESTATURA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.PER.DESCRIBIR"
+      }
+     ],
+     "pregunta": "Q.PER.DESC.CONTEXTURA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.PER.DESCRIBIR"
+      }
+     ],
+     "pregunta": "Q.PER.DESC.ROPA"
+    },
+    {
+     "pregunta": "Q.TES.EXISTE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.TES.EXISTE"
+      }
+     ],
+     "pregunta": "Q.TES.CANTIDAD"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "celular"
+       ],
+       "pregunta": "Q.ROB.QUE"
+      }
+     ],
+     "formulacion": "¿Tiene la factura del celular?",
+     "pregunta": "Q.EVI.FACTURA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.EVI.FACTURA"
+      }
+     ],
+     "pregunta": "Q.EVI.TRAE_COPIA"
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.EVI.QUE_TIENE"
+      }
+     ],
+     "pregunta": "Q.EVI.TIPOS"
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.DEN.INTENCION"
+      },
+      {
+       "perfil": false
+      }
+     ],
+     "pregunta": "Q.DEN.AUTORIDAD"
+    }
+   ]
+  },
+  "engano_dinero": {
+   "nombre": "Engaño con dinero",
+   "ordenRedaccion": [
+    "Q.DIN.ENGANO",
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ],
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.DIN.MECANISMO"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "afirmado",
+        "desconocido"
+       ],
+       "pregunta": "Q.DIN.MECANISMO"
+      }
+     ],
+     "pregunta": "Q.DIN.MONTO"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "afirmado",
+        "desconocido"
+       ],
+       "pregunta": "Q.DIN.MECANISMO"
+      }
+     ],
+     "pregunta": "Q.DIN.RECEPTOR"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "afirmado",
+        "desconocido"
+       ],
+       "pregunta": "Q.DIN.MECANISMO"
+      }
+     ],
+     "pregunta": "Q.DIN.COMPROBANTE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.DIN.COMPROBANTE"
+      }
+     ],
+     "pregunta": "Q.DIN.COMPROBANTE_TIPO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "papel"
+       ],
+       "pregunta": "Q.DIN.COMPROBANTE_TIPO"
+      }
+     ],
+     "obligatoria": true,
+     "ocultar": [
+      "comprobante_banco",
+      "factura"
+     ],
+     "padre": "Q.DIN.COMPROBANTE_TIPO",
+     "pregunta": "Q.DOC.ACLARAR"
+    },
+    {
+     "pregunta": "Q.DIN.CHAT"
+    },
+    {
+     "pregunta": "Q.DIN.ENGANO"
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.DEN.INTENCION"
+      },
+      {
+       "perfil": false
+      }
+     ],
+     "pregunta": "Q.DEN.AUTORIDAD"
+    }
+   ]
+  },
+  "identificacion": {
+   "nombre": "Mis datos",
+   "pasos": [
+    {
+     "pregunta": "Q.ID.NOMBRE"
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "afirmado"
+       ],
+       "pregunta": "Q.ID.DOC_TIPO"
+      }
+     ],
+     "pregunta": "Q.ID.DOC_NUMERO"
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO"
+    },
+    {
+     "pregunta": "Q.ID.AVISO"
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "acompanado"
+       ],
+       "pregunta": "Q.ID.ACOMPANANTE"
+      }
+     ],
+     "pregunta": "Q.ID.ACOMPANANTE_QUIEN"
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA"
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE"
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA"
+    }
+   ]
+  },
+  "otro": {
+   "nombre": "Declaración de testigo",
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.TES.QUE_VIO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robo",
+        "agresion",
+        "escape",
+        "dano",
+        "otro"
+       ],
+       "pregunta": "Q.TES.QUE_VIO"
+      }
+     ],
+     "pregunta": "Q.PER.OBSERVADA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robo",
+        "agresion",
+        "escape",
+        "dano",
+        "otro"
+       ],
+       "pregunta": "Q.TES.QUE_VIO"
+      }
+     ],
+     "pregunta": "Q.TIE.CUANDO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robo",
+        "agresion",
+        "escape",
+        "dano",
+        "otro"
+       ],
+       "pregunta": "Q.TES.QUE_VIO"
+      }
+     ],
+     "pregunta": "Q.LUG.DONDE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "robo",
+        "agresion",
+        "escape",
+        "dano",
+        "otro"
+       ],
+       "pregunta": "Q.TES.QUE_VIO"
+      }
+     ],
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO"
+    }
+   ]
+  },
+  "preguntas": {
+   "nombre": "Preguntas",
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "I.PREG.ELEGIR"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "donde"
+       ],
+       "pregunta": "I.PREG.ELEGIR"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "I.PREG.DONDE_QUEDA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "hablar"
+       ],
+       "pregunta": "I.PREG.ELEGIR"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "I.PREG.HABLAR_CON"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "cuando"
+       ],
+       "pregunta": "I.PREG.ELEGIR"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "I.PREG.CUANDO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "cuanto"
+       ],
+       "pregunta": "I.PREG.ELEGIR"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "I.PREG.CUANTO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "tema"
+       ],
+       "pregunta": "I.PREG.ELEGIR"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "I.PREG.SOBRE_TEMA"
+    }
+   ]
+  },
+  "seguimiento": {
+   "nombre": "Consultar trámite",
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.SEG.MOTIVO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "hablar"
+       ],
+       "pregunta": "Q.SEG.MOTIVO"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "I.PREG.HABLAR_CON"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "donde"
+       ],
+       "pregunta": "Q.SEG.MOTIVO"
+      }
+     ],
+     "obligatoria": true,
+     "pregunta": "I.PREG.DONDE_QUEDA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "citacion"
+       ],
+       "pregunta": "Q.SEG.MOTIVO"
+      }
+     ],
+     "pregunta": "Q.SEG.FECHA_PROGRAMADA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "estado",
+        "continua",
+        "citacion",
+        "resolucion"
+       ],
+       "pregunta": "Q.SEG.MOTIVO"
+      }
+     ],
+     "pregunta": "Q.SEG.NUM_REFERENCIA"
+    },
+    {
+     "cuando": [
+      {
+       "perfil": false
+      }
+     ],
+     "pregunta": "Q.SEG.AUTORIDAD"
+    }
+   ]
+  },
+  "violencia": {
+   "nombre": "Violencia o agresión",
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.VIO.TIPO"
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO"
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "conoce"
+       ],
+       "pregunta": "Q.VIO.AGRESOR"
+      }
+     ],
+     "pregunta": "Q.PER.VINCULO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "conoce"
+       ],
+       "pregunta": "Q.VIO.AGRESOR"
+      }
+     ],
+     "pregunta": "Q.PER.NOMBRE_TERCERO"
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO"
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA"
+    },
+    {
+     "pregunta": "Q.LUG.DONDE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "pegar",
+        "maltratar",
+        "abusar",
+        "violencia"
+       ],
+       "pregunta": "Q.VIO.TIPO"
+      }
+     ],
+     "pregunta": "Q.SAL.HERIDO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.SAL.HERIDO"
+      }
+     ],
+     "pregunta": "Q.SAL.PARTE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.SAL.HERIDO"
+      }
+     ],
+     "pregunta": "Q.SAL.ASISTENCIA"
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA"
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION"
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.RIE.PROTECCION_OTROS"
+      }
+     ],
+     "pregunta": "Q.RIE.QUIENES"
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.EVI.QUE_TIENE"
+      }
+     ],
+     "pregunta": "Q.EVI.TIPOS"
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA"
+      }
+     ],
+     "pregunta": "Q.APO.TIPO"
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.DEN.INTENCION"
+      },
+      {
+       "perfil": false
+      }
+     ],
+     "pregunta": "Q.DEN.AUTORIDAD"
+    }
+   ]
+  }
+ },
+ "version": 2
+}

@@ -39,4 +39,23 @@ class AnimationRepositoryImpl implements AnimationRepository {
     }
     return sources;
   }
+
+  @override
+  Future<bool> isCached(String url) async {
+    final directory = await temporaryDirectory();
+    return cache.isCached(url, directory);
+  }
+
+  @override
+  Future<void> precacheDefaultModel() async {
+    final base = AnimationUrlResolver.defaultBaseUrl;
+    if (base.isEmpty) return;
+    final modelUrl = '${base}avatar_test.glb';
+    try {
+      final directory = await temporaryDirectory();
+      await cache.localPathFor(modelUrl, directory);
+    } catch (_) {
+      // Ignorar si no hay conexión al arrancar; se reintentará en demanda
+    }
+  }
 }

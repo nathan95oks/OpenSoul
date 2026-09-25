@@ -26,7 +26,7 @@ class BackendCompatibility {
   const BackendCompatibility._();
 
   /// Contrato que habla este cliente.
-  static const int clientContractVersion = 3;
+  static const int clientContractVersion = 4;
 
   /// Lee la capacidad de la respuesta del servidor.
   ///

@@ -25,7 +25,15 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import corpus_dialogue as C  # noqa: E402
 
-GRAPH_VERSION = 1
+GRAPH_VERSION = 2
+
+# El banco semántico de preguntas es la fuente de las RESPUESTAS. El corpus da
+# el enunciado y su vocabulario; el banco dice qué se puede contestar a cada
+# pregunta del funcionario, con qué dato y con qué frase. Mezclar las dos cosas
+# —usar las glosas que formulan la pregunta como tarjetas de respuesta— es lo
+# que ofrecía DÓNDE ante «¿Dónde ocurrió?» o TOTAL ante «¿Conserva toda la
+# conversación?».
+BANK_PATH = os.path.join(C.ROOT, "docs", "negocio", "config", "banco_preguntas.json")
 
 GRAPH_OUT = os.path.join(C.ROOT, "assets", "dialogue", "dialogue_graph.json")
 MATRIX_OUT = os.path.join(C.ROOT, "docs", "Matriz_Cobertura_Corpus_209.md")
@@ -94,10 +102,21 @@ OPEN_QUESTION_WORDS = (
 
 
 def is_polar_question(entry: C.CorpusEntry) -> bool:
+    """Si la pregunta se contesta con sí/no.
+
+    Una disyuntiva («¿Era un hombre o una mujer?», «¿Vino solo o acompañado?»,
+    «¿Fue hoy, ayer o antes?») no empieza por interrogativa y tampoco es de
+    sí/no: se contesta eligiendo una alternativa. Tratarla como cerrada ponía
+    SÍ/NO delante de HOMBRE/MUJER.
+    """
     if entry.speech_act != "question":
         return False
     text = entry.spanish.strip().lstrip("¿").lower()
-    return not text.startswith(OPEN_QUESTION_WORDS)
+    if text.startswith(OPEN_QUESTION_WORDS) or text.startswith(("a qué", "en qué", "de qué", "con qué")):
+        return False
+    if re.search(r"(o|u)", text):
+        return False
+    return True
 
 
 def slots_for(entry: C.CorpusEntry) -> list:
@@ -111,6 +130,26 @@ def slots_for(entry: C.CorpusEntry) -> list:
         if re.search(pattern, text):
             slots.append(name)
     return slots or ["free_text"]
+
+
+# Campos del banco → ranuras que lee el cliente.
+CAMPO_A_RANURA = {
+    "polaridad": "polarity", "persona": "person", "rasgo": "person", "edad": "person", "prenda": "person",
+    "nombre": "person", "telefono": "object", "objeto": "object", "documento": "evidence", "evidencia": "evidence",
+    "lugar": "place", "tiempo": "time", "frecuencia": "time", "cantidad": "amount", "medio": "object",
+    "institucion": "institution", "servicio": "institution", "hecho": "free_text", "consulta": "free_text",
+    "estado": "free_text", "parte_cuerpo": "free_text", "interrogativa": "free_text", "compania": "person",
+    "modificador": "free_text", "detalle": "free_text",
+}
+
+
+def slots_for_bank(pregunta: dict) -> list:
+    ranuras = []
+    for campo in pregunta.get("campos", []):
+        r = CAMPO_A_RANURA.get(campo)
+        if r and r not in ranuras:
+            ranuras.append(r)
+    return ranuras or ["free_text"]
 
 
 def scope_for(entry: C.CorpusEntry) -> str:
@@ -186,6 +225,15 @@ def build_graph():
     nodes, matrix = [], []
     by_intent = {}
 
+    with open(BANK_PATH, encoding="utf-8") as f:
+        banco = json.load(f)
+    bank_by_node = {}
+    for q in banco["preguntas"]:
+        for n in q.get("nodos", []):
+            if n in bank_by_node:
+                raise SystemExit(f"nodo {n} asignado a dos preguntas del banco")
+            bank_by_node[n] = q
+
     for entry in entries:
         resolutions = resolver.resolve_cell(entry.concepts_raw)
         status = C.entry_status(resolutions)
@@ -195,42 +243,62 @@ def build_graph():
         markers = resolver.markers_in(entry.concepts_raw)
 
         # En qué modos puede activarse este nodo.
-        #   S6: lo dice el oyente  -> activa el modo C de la persona sorda.
-        #   S7: lo pregunta ella   -> modo B, y también A (declaración suelta).
-        #   S8: declara o responde -> A, B y C según el contexto del turno.
-        if entry.section == 6:
-            modes = ["C"]
-        elif entry.section == 7:
-            modes = ["A", "B"]
-        else:
-            modes = ["A", "B", "C"]
+        #   S6: lo dice el oyente  -> la persona sorda le RESPONDE (modo C).
+        #   S7: lo pregunta ella   -> formulación propia (A, B).
+        #   S8: declara ella       -> formulación propia (A, B).
+        # Solo los enunciados del oyente se emparejan con un turno oyente: una
+        # declaración de la persona sorda no es algo a lo que ella responda.
+        modes = ["C"] if entry.section == 6 else ["A", "B"]
 
-        options = list(reachable)
-        # El sí/no solo se ofrece si de verdad se preguntó algo cerrado: una
-        # afirmación o una instrucción del oyente no se convierte en pregunta.
-        if entry.speech_act == "question" and "polarity" in slots:
-            # Al revés, para que al insertar por delante quede SÍ antes que NO.
-            for g in reversed(polars):
-                if all(o.get("gloss") != g for o in options):
-                    options.insert(0, {
-                        "concept": g, "gloss": g, "kind": "card",
-                        "coverage": C.DIRECT_SIGN,
-                        "avatar": "baked" if C.norm(g) in resolver.baked
-                                  else "placeholder",
-                        "reason": "respuesta de polaridad a una pregunta cerrada",
-                    })
-        # Salida segura: no saber o no recordar es una respuesta, no un hueco.
-        for g in escapes:
-            if all(o.get("gloss") != g for o in options):
+        nid = node_id(entry)
+        pregunta = bank_by_node.get(nid)
+
+        # Vocabulario del ENUNCIADO: las glosas con que se formula la
+        # intervención. Sirven para reconocerla y para el avatar; nunca son
+        # tarjetas de respuesta.
+        formulacion = [o["gloss"] for o in reachable if o.get("kind") == "card"]
+        # Valores literales y mecanismos: números, deletreos y conceptos
+        # pendientes. No son señas nuevas.
+        literales = [
+            {"concept": o["concept"], "kind": o["kind"], "coverage": o["coverage"]}
+            for o in reachable if o.get("kind") in ("number", "spelling")
+        ]
+
+        respuestas, controles = [], []
+        if pregunta is not None:
+            for op in pregunta.get("opciones", []):
+                item = {
+                    "id": op["id"],
+                    "label": op.get("etiqueta", op["id"]),
+                    "glosses": op.get("glosas", []),
+                    "state": op.get("estado", "afirmado"),
+                }
+                if op.get("editor"):
+                    item["editor"] = op["editor"]
+                if op.get("salida"):
+                    controles.append({**item, "kind": "exit"})
+                else:
+                    respuestas.append(item)
+            controles.append({"id": "omitir", "label": "Omitir", "glosses": [],
+                              "state": "omitido", "kind": "skip"})
+
+        # `options` conserva el formato que lee el cliente: SOLO respuestas
+        # válidas del banco (y sus salidas), nunca el vocabulario del enunciado.
+        options = []
+        for item in respuestas + [c for c in controles if c["kind"] == "exit"]:
+            for g in item["glosses"][:1]:
                 options.append({
                     "concept": g, "gloss": g, "kind": "card",
                     "coverage": C.DIRECT_SIGN,
-                    "avatar": "placeholder",
-                    "reason": "salida segura ante lo que no se sabe",
+                    "avatar": "baked" if C.norm(g) in resolver.baked else "placeholder",
+                    "reason": ("respuesta del banco " + pregunta["id"] + " / " + item["id"]),
+                    "answerId": item["id"],
                 })
 
+        if pregunta is not None:
+            slots = slots_for_bank(pregunta)
         node = {
-            "id": node_id(entry),
+            "id": nid,
             "version": GRAPH_VERSION,
             "provenance": {
                 "section": entry.section,
@@ -252,6 +320,12 @@ def build_graph():
             "guideText": entry.spanish if entry.section == 6 else "",
             "slots": slots,
             "markers": markers,
+            "bankQuestion": pregunta["id"] if pregunta else None,
+            "formulationGlosses": formulacion,
+            "answerOptions": respuestas,
+            "answerParts": [p["pregunta"] for p in (pregunta or {}).get("pasosRespuesta", [])],
+            "controls": controles,
+            "literals": literales,
             "options": options,
             "pendingOptions": pending,
             "coverage": status,

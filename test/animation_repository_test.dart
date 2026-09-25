@@ -95,4 +95,20 @@ void main() {
     expect(sources[2],
         startsWith(AnimationUrlResolver.placeholderScheme));
   });
+
+  test('isCached reporta correctamente si el archivo ya está descargado', () async {
+    final repo = repositoryWith(cacheThatServes('modelo'));
+    const modeloUrl = '${bucket}avatar_test.glb';
+
+    expect(await repo.isCached(modeloUrl), isFalse);
+
+    await repo.playableSources([modeloUrl]);
+
+    expect(await repo.isCached(modeloUrl), isTrue);
+  });
+
+  test('precacheDefaultModel no arroja excepciones si no hay URL configurada', () async {
+    final repo = repositoryWith(cacheThatServes('modelo'));
+    await expectLater(repo.precacheDefaultModel(), completes);
+  });
 }

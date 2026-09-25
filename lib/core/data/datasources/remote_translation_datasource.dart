@@ -34,7 +34,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
   /// representación estructurada (`declaration`), el acto comunicativo y el
   /// turno al que se responde; el backend que no la reconozca puede seguir
   /// usando `context`/`cards` como antes (compatibilidad hacia atrás).
-  static const int contractVersion = 3;
+  static const int contractVersion = 4;
 
   /// Lo que se supo del servidor en la última respuesta.
   ///
@@ -56,6 +56,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   }) =>
       {
         'context': context,
@@ -70,6 +71,10 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
         if (replyToId != null) 'replyToId': replyToId,
         // ignore: use_null_aware_elements
         if (declaration != null) 'declaration': declaration,
+        // Contrato v4. Las respuestas tipadas son contenido autoritativo: el
+        // backend las redacta con el mismo banco que el cliente.
+        // ignore: use_null_aware_elements
+        if (guided != null) 'guided': guided,
       };
 
   @override

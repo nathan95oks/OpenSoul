@@ -126,7 +126,8 @@ class CandidateEngine {
       // zona la liste a mano, que es una decisión tomada a propósito.
       if (!zoneAllowlist.contains(gloss) &&
           campos.isNotEmpty &&
-          !fitsField(campos, gloss)) {
+          !fitsField(campos, gloss) &&
+          !_isExplicitPolarDetail(node, gloss)) {
         continue;
       }
 
@@ -152,6 +153,10 @@ class CandidateEngine {
         // subirla: decir que no se sabe es una respuesta válida, no la que se
         // espera. El corpus ya la coloca al final de cada nodo.
         reason = 'salida segura ante lo que no se sabe';
+        // Aun si el corpus la enumera, la incertidumbre es la salida final,
+        // no la primera sugerencia. Antes heredaba +1000 del corpus y podía
+        // desplazar la respuesta concreta.
+        score = -1000 + i * 0.001;
       }
 
       // El perfil y la necesidad son señales de ORDEN. Suman poco a
@@ -211,7 +216,7 @@ class CandidateEngine {
     // Por eso la polaridad no excluye al resto.
     final soloPolaridad = campos.length == 1 &&
         campos.contains(AnswerField.polarity);
-    if (soloPolaridad) return true;
+    if (soloPolaridad) return false;
 
     // Texto libre: la pregunta no acota qué tipo de respuesta cabe.
     if (campos.contains(AnswerField.freeText)) return true;
@@ -240,6 +245,31 @@ class CandidateEngine {
         AnswerField.evidence => 'evidence',
         AnswerField.freeText => 'free_text',
       };
+
+  static bool _isExplicitPolarDetail(DialogueNode? node, String gloss) {
+    if (node == null || node.slots.length != 1 || node.slots.single != 'polarity') {
+      return false;
+    }
+    final key = gloss.trim().toUpperCase();
+    if (polarityGlosses.contains(key) || alwaysAvailable.contains(key)) {
+      return true;
+    }
+    // Una pregunta polar puede confirmar la entidad mencionada (p. ej.
+    // CELULAR en «¿Le robaron el celular?»), pero no cualquier participante,
+    // verbo o lugar. `conceptsRaw` viene de la fuente del corpus.
+    final mentioned = node.provenance.conceptsRaw
+        .split(RegExp(r'\s*[·|,+]\s*'))
+        .map((value) => value.trim().toUpperCase())
+        .toSet();
+    if (mentioned.contains(key)) return true;
+    final candidateFunction = LocalSentenceAssembler.functionOf(key);
+    if (candidateFunction == null) return false;
+    final mentionedFields = <String>{
+      for (final concept in mentioned)
+        ...?LocalSentenceAssembler.functionOf(concept)?.fields,
+    };
+    return candidateFunction.fields.any(mentionedFields.contains);
+  }
 
   bool _servesNeed(InstitutionProfile profile, NeedId need) =>
       profile.priorityNeeds.contains(need);

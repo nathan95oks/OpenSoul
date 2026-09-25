@@ -92,16 +92,17 @@ CORS_HEADERS = {
 # dactilología (deletreo) como fallback.
 # ===================================================================
 AVAILABLE_GLOSSES = {
-    # Fuente: assets/dictionary/official_dictionary.json y Corpus Maestro LSB v4
+    # GENERADO por tool/sync_vocabulary.dart — no editar a mano.
+    # Fuente: assets/dictionary/official_dictionary.json
     # --- Cortesía (7) ---
     "DE_NADA", "GRACIAS", "HASTA_LUEGO", "HOLA", "LO_SIENTO", "PERMISO",
     "POR_FAVOR",
-    # --- Respuesta (12) ---
-    "COMPRENDER", "CONTESTAR", "ESTAR_DE_ACUERDO", "MENTIRA", "NO", "NO_ESTAR_DE_ACUERDO", "NO_PUEDO",
+    # --- Respuesta (11) ---
+    "COMPRENDER", "ESTAR_DE_ACUERDO", "MENTIRA", "NO", "NO_ESTAR_DE_ACUERDO", "NO_PUEDO",
     "NO_SABER", "PUEDO", "SABER", "TAL_VEZ", "VERDAD",
-    # --- Preguntas y Pronombres (13) ---
-    "AMBOS", "COMO_ESTAS", "CÓMO_ESTÁS", "ELLA", "ELLOS", "NOSOTROS", "PARA_QUE", "PARA_QUÉ",
-    "POR_QUE", "POR_QUÉ", "SUYO", "TUYO", "USTEDES", "VARIOS", "YO",
+    # --- Preguntas (8) ---
+    "AMBOS", "ELLA", "ELLOS", "NOSOTROS", "SUYO", "TUYO",
+    "VARIOS", "YO",
     # --- Identificación (31) ---
     "ADULTO", "ALTO", "AMIGO", "ASOCIACIÓN_SORDOS", "BAJO", "COMPAÑERO",
     "COMUNIDAD_SORDA", "EDAD", "ESPOSA", "FLACO", "GORDO", "HERMANA",
@@ -117,7 +118,7 @@ AVAILABLE_GLOSSES = {
     # --- Conceptos jurídicos (12) ---
     "ASISTENCIA", "CONVOCAR", "DISCRIMINACIÓN", "INVESTIGACIÓN", "JUSTICIA", "LEY",
     "PLAZO", "PROHIBIDO", "RESOLUCIÓN", "RESULTADO", "TESTIMONIO", "TRÁMITE",
-    # --- Acciones (88) ---
+    # --- Acciones (87) ---
     "ABRIR", "ACEPTAR", "ACOMPAÑAR", "ANDAR", "ARREGLAR", "ARRESTAR",
     "ATENDER", "AUMENTAR", "AVISAR", "AYUDAR", "BOCA", "BRAZO",
     "BURLAR", "BUSCAR", "CABELLO", "CAMBIAR", "COMPRAR", "CONOCER",
@@ -172,10 +173,9 @@ AVAILABLE_GLOSSES = {
     "M", "N", "O", "P", "Q", "R",
     "S", "T", "U", "V", "W", "X",
     "Y", "Z", "Ñ",
-    # --- Números (11) ---
+    # --- Números (10) ---
     "0", "1", "2", "3", "4", "5",
-    "6", "7", "8", "9", "10",
-    "CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ",
+    "6", "7", "8", "9",
 }
 
 # ===================================================================
@@ -226,8 +226,8 @@ AVAILABLE_3D_GLOSSES = {
     "AMENAZAR", "DAÑAR", "DANAR", "ENGAÑAR", "ENGANAR", "HERIDA", "PEGAR",
     # 12. Descripción, estado y emoción (2)
     "LENTO", "MIEDO",
-    # 13. Tiempo (9)
-    "AHORA", "AYER", "AUN", "AÚN", "FECHA", "HORA", "HOY", "MAÑANA", "MANANA", "SEMANA", "TARDE",
+    # 13. Tiempo (10)
+    "AHORA", "AYER", "AUN", "AÚN", "FECHA", "HORA", "HOY", "MAÑANA", "MANANA", "PRIMERA_VEZ", "SEMANA", "TARDE",
     # 14. Lugares (8)
     "ALLI", "ALLÍ", "AQUI", "AQUÍ", "AVENIDA", "CALLE", "CASA", "CERCA", "DENTRO", "OFICINA",
     # 15. Documentos (5)
@@ -272,6 +272,8 @@ TERMS_TO_SPELL = {
 
 # Variantes con las que el modelo nombra una misma seña
 GLOSS_ALIASES = {
+    "PRIMERA VEZ": "PRIMERA_VEZ",
+    "PRIMERA_VEZ": "PRIMERA_VEZ",
     "POR FAVOR": "POR_FAVOR",
     "PORFAVOR": "POR_FAVOR",
     "LO SIENTO": "LO_SIENTO",
@@ -316,8 +318,15 @@ _CLIP_ALIASES = {"ENE": "Ñ", "ENIE": "Ñ"}
 
 
 def _clip_key(gloss: str) -> str:
-    """Forma con la que se compara una glosa contra los clips del .glb."""
+    """Forma con la que se compara una glosa contra los clips del .glb.
+
+    En S3 las animaciones están en mayúsculas con barra baja ('PRIMERA_VEZ')
+    y si tienen la letra Ñ en palabras están como N (ej: ACOMPANAR, MANANA),
+    mientras que la letra suelta 'Ñ' se resuelve a 'ENE'.
+    """
     clave = strip_gloss_accents(gloss.upper().strip().replace(' ', '_'))
+    if len(clave) > 1 and 'Ñ' in clave:
+        clave = clave.replace('Ñ', 'N')
     return _NUMERAL_CLIPS.get(clave, clave)
 
 
@@ -327,6 +336,10 @@ def _clips_by_key(names) -> dict:
     for name in names:
         clave = _clip_key(name)
         mapa[_CLIP_ALIASES.get(clave, clave)] = name
+        mapa[clave] = name
+        # Si el clip viene con N (ej: ACOMPANAR), registrar también su alias con Ñ
+        if len(clave) > 1 and 'N' in clave:
+            mapa[clave.replace('N', 'Ñ')] = name
     return mapa
 
 
@@ -467,6 +480,7 @@ REGLAS DE DESAMBIGUACIÓN JURÍDICA Y POLISEMIA EN LSB:
 - "billetera" (objeto que guarda dinero, NO es el dinero en sí): NO tiene seña
   propia en el catálogo. NO lo mapees a "BILLETES" — eso afirmaría que se
   trata de dinero. Repórtalo igual que "correr".
+- "primera vez": Mapear a "PRIMERA_VEZ" (es la seña oficial de tiempo/reincidencia en el catálogo).
 """
 
 SITUATION_LABELS = {
@@ -1057,6 +1071,26 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
             logger.warning("Glosa descartada por formato: %.60r", gloss)
             continue
         limpias.append(candidata)
+
+    # Fusión inteligente de bigramas conocidos (ej: "PRIMERA" + "VEZ" -> "PRIMERA_VEZ")
+    fused = []
+    idx = 0
+    while idx < len(limpias):
+        if (
+            idx + 1 < len(limpias)
+            and limpias[idx] == "PRIMERA"
+            and limpias[idx + 1] == "VEZ"
+        ):
+            fused.append("PRIMERA_VEZ")
+            idx += 2
+        else:
+            fused.append(limpias[idx])
+            idx += 1
+    limpias = fused
+
+    # Reconocimiento rápido: si la frase incluye "primera vez" y no se incluyó, agregarla al inicio (tiempo)
+    if re.search(r'\bprimera\s+vez\b', text, re.IGNORECASE) and "PRIMERA_VEZ" not in limpias:
+        limpias.insert(0, "PRIMERA_VEZ")
 
     # Términos polisémicos documentados: la decisión (o la pregunta) manda
     # sobre lo que haya dicho Bedrock, no al revés.
