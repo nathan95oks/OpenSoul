@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:lsb_legal_app/app/app_theme.dart';
@@ -225,9 +226,12 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
       return;
     }
     if (_controller.text.trim().isNotEmpty) {
-      widget.onSubmit(_controller.text.trim());
+      final text = _controller.text.trim();
       _controller.clear();
       FocusScope.of(context).unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      widget.onSubmit(text);
     }
   }
 
@@ -235,14 +239,14 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1F1F1F).withValues(alpha: 0.8),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white12),
+        border: Border.all(color: Colors.black12, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.2),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 10,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -254,10 +258,10 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
               controller: _controller,
               focusNode: widget.focusNode,
               enabled: !_isRecording,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.black87, fontSize: 16),
               decoration: InputDecoration(
                 hintText: widget.hintText,
-                hintStyle: const TextStyle(color: Colors.white54),
+                hintStyle: const TextStyle(color: Colors.black45),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
@@ -286,8 +290,8 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                 child: IconButton(
                   icon: Icon(
                     _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-                    color:
-                        _isRecording ? AppTheme.errorDark : AppTheme.brandLight,
+                    color: _isRecording ? AppTheme.errorDark : const Color(0xFF1E1E2F),
+                    size: 24,
                   ),
                   onPressed: _toggleRecording,
                   tooltip: _isRecording ? 'Detener grabación' : 'Grabar voz',
@@ -297,7 +301,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           ),
           const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.send_rounded, color: AppTheme.brandLight),
+            icon: const Icon(Icons.send_rounded, color: Color(0xFF6C5CE7), size: 24),
             onPressed: _submit,
             tooltip: 'Enviar mensaje',
           ),
