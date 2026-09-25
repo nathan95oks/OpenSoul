@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
@@ -58,11 +59,15 @@ class AudioToLsbScreen extends ConsumerWidget {
         elevation: 0,
       ),
       extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-
-
-          SafeArea(
+      body: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Stack(
+          children: [
+            SafeArea(
             child: Column(
               children: [
                 Expanded(
@@ -193,6 +198,8 @@ class AudioToLsbScreen extends ConsumerWidget {
                       TextInputWidget(
                         isActive: isActive,
                         onSubmit: (text) {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          SystemChannels.textInput.invokeMethod('TextInput.hide');
                           controller.processText(text);
                         },
                       ),
@@ -247,6 +254,7 @@ class AudioToLsbScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

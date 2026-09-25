@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
@@ -272,13 +273,17 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                           return TurnBubble(
                             turn: turn,
                             onPlayAudio: () => _playDeafTurn(turn),
-                            onShowAvatar: () => AvatarPlaybackSheet.show(
-                              context,
-                              glosses: turn.outputs.animationGlosses.isNotEmpty
-                                  ? turn.outputs.animationGlosses
-                                  : turn.message.glosses,
-                              animationUrls: turn.outputs.animationUrls,
-                            ),
+                            onShowAvatar: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              SystemChannels.textInput.invokeMethod('TextInput.hide');
+                              AvatarPlaybackSheet.show(
+                                context,
+                                glosses: turn.outputs.animationGlosses.isNotEmpty
+                                    ? turn.outputs.animationGlosses
+                                    : turn.message.glosses,
+                                animationUrls: turn.outputs.animationUrls,
+                              );
+                            },
                           );
                         },
                       ),

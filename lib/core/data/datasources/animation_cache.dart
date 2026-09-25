@@ -17,8 +17,8 @@ class AnimationCache {
   AnimationCache({
     http.Client? client,
     Set<String>? allowedHosts,
-    this.maxBytes = 12 * 1024 * 1024,
-    this.timeout = const Duration(seconds: 20),
+    this.maxBytes = 50 * 1024 * 1024,
+    this.timeout = const Duration(seconds: 60),
     this.onRejected,
   })  : client = client ?? http.Client(),
         allowedHosts = allowedHosts ?? defaultAllowedHosts();

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,7 +43,7 @@ const _s3Base = AnimationUrlResolver.defaultBaseUrl;
 /// solo un segundo de margen y en un equipo cargado habrian cortado senas
 /// buenas. El reloj es una red de seguridad, no un temporizador: conviene que
 /// tarde de mas antes que quitarle tiempo a una sena que se esta viendo bien.
-const _stepWatchdog = Duration(seconds: 10);
+const _stepWatchdog = Duration(seconds: 4);
 
 /// Suelo por debajo del cual un aviso de fin no es creible. Protege del caso
 /// en que el visor arranca una sena ya terminada y avisa en el acto.
@@ -358,13 +359,29 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           window.__lsbStep = $token;
           $seleccion
           if (mv.updateComplete) { await mv.updateComplete; }
+
+          let dur = mv.duration;
+          if (!dur || dur <= 0) {
+            if (window.ModelViewerChannel) {
+              window.ModelViewerChannel.postMessage('finished:' + $token);
+            }
+            return;
+          }
+
           mv.currentTime = 0;
           mv.play({ repetitions: 1 });
+
           if (window.ModelViewerChannel) {
             window.ModelViewerChannel.postMessage(
-              'diag:' + $token + ':' + mv.animationName + ':' + mv.duration
+              'diag:' + $token + ':' + mv.animationName + ':' + dur
             );
           }
+
+          setTimeout(() => {
+            if (window.__lsbStep === $token && window.ModelViewerChannel) {
+              window.ModelViewerChannel.postMessage('finished:' + $token);
+            }
+          }, Math.round(dur * 1000) + 60);
         })();
       ''').catchError((e) {});
     } catch (_) {
@@ -620,21 +637,17 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
-              Text(
-                '${_currentIndex + 1} / ${_localUrls.length}',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.6),
-                  fontSize: 12,
-                ),
-              ),
               const Spacer(),
               IconButton(
                 icon: const Icon(Icons.replay_rounded, color: Colors.white),
                 tooltip: 'Repetir secuencia',
                 constraints: const BoxConstraints(),
                 padding: EdgeInsets.zero,
-                onPressed: () => _startSequence(),
+                onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  _startSequence();
+                },
               ),
             ],
           ),

@@ -22,20 +22,28 @@ class AnimationRepositoryImpl implements AnimationRepository {
 
     final directory = await temporaryDirectory();
     final sources = <String>[];
+    final resolvedMap = <String, String>{};
 
     for (final url in animationUrls) {
       if (url.startsWith(AnimationUrlResolver.placeholderScheme)) {
         sources.add(url);
         continue;
       }
-      final localPath = await cache.localPathFor(url, directory);
-      if (localPath != null) {
-        sources.add('file://$localPath');
-      } else if (cache.isAllowed(url)) {
-        sources.add(url);
-      } else {
-        sources.add('${AnimationUrlResolver.placeholderScheme}$url');
+      if (resolvedMap.containsKey(url)) {
+        sources.add(resolvedMap[url]!);
+        continue;
       }
+      final localPath = await cache.localPathFor(url, directory);
+      String resolved;
+      if (localPath != null) {
+        resolved = 'file://$localPath';
+      } else if (cache.isAllowed(url)) {
+        resolved = url;
+      } else {
+        resolved = '${AnimationUrlResolver.placeholderScheme}$url';
+      }
+      resolvedMap[url] = resolved;
+      sources.add(resolved);
     }
     return sources;
   }
