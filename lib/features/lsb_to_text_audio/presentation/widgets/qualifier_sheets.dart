@@ -20,7 +20,7 @@ Future<String?> mostrarSelectorCantidad(
   required String unidad,
 }) {
   final controlador = TextEditingController();
-  const acento = AppTheme.brandPrimary;
+  const acento = Color(0xFF7C3AED);
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,

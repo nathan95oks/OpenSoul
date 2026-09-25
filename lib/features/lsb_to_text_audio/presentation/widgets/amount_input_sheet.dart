@@ -52,7 +52,8 @@ class _AmountInputSheetContent extends ConsumerStatefulWidget {
 
 class _AmountInputSheetContentState
     extends ConsumerState<_AmountInputSheetContent> {
-  static const _orange = AppTheme.brandPrimary;
+  static const _purple = Color(0xFF7C3AED);
+  static const _purpleDark = Color(0xFF660066);
   final _controller = TextEditingController();
   String _moneda = 'bolivianos'; // 'bolivianos' o 'dólares'
   String _rol = 'stolen'; // 'stolen', 'lost', 'transferred'
@@ -157,11 +158,11 @@ class _AmountInputSheetContentState
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: _orange.withValues(alpha: 0.12),
+                      color: _purple.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.payments_outlined,
-                        color: _orange, size: 24),
+                        color: _purple, size: 24),
                   ),
                   const SizedBox(width: 10),
                   const Text(
@@ -235,7 +236,7 @@ class _AmountInputSheetContentState
                   suffixStyle: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
-                    color: _orange,
+                    color: _purpleDark,
                   ),
                   filled: true,
                   fillColor: AppTheme.lightBg,
@@ -250,14 +251,14 @@ class _AmountInputSheetContentState
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(
                       color: montoActual.isNotEmpty
-                          ? _orange
+                          ? _purple
                           : AppTheme.lightBorder,
                       width: 2,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: _orange, width: 2),
+                    borderSide: const BorderSide(color: _purple, width: 2),
                   ),
                 ),
               ),
@@ -279,13 +280,13 @@ class _AmountInputSheetContentState
                           margin: const EdgeInsets.only(right: 8),
                           decoration: BoxDecoration(
                             color: montoActual == m.toString()
-                                ? _orange.withValues(alpha: 0.15)
+                                ? _purple.withValues(alpha: 0.15)
                                 : AppTheme.lightBg,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: montoActual == m.toString()
-                                  ? _orange
-                                  : AppTheme.lightBorder,
+                                    ? _purple
+                                    : AppTheme.lightBorder,
                             ),
                           ),
                           child: Text(
@@ -294,7 +295,7 @@ class _AmountInputSheetContentState
                               fontSize: 12.5,
                               fontWeight: FontWeight.w700,
                               color: montoActual == m.toString()
-                                  ? _orange
+                                  ? _purpleDark
                                   : AppTheme.lightText,
                             ),
                           ),
@@ -324,7 +325,7 @@ class _AmountInputSheetContentState
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _orange,
+                    backgroundColor: _purpleDark,
                     foregroundColor: Colors.white,
                     disabledBackgroundColor: AppTheme.lightBorder,
                     disabledForegroundColor: AppTheme.lightTextSub,
@@ -370,8 +371,6 @@ class _MonedaChip extends StatelessWidget {
     required this.onTap,
   });
 
-  static const _orange = AppTheme.brandPrimary;
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -381,12 +380,28 @@ class _MonedaChip extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? _orange : AppTheme.lightBg,
+          gradient: isSelected
+              ? const LinearGradient(
+                  colors: [Color(0xFF7C3AED), Color(0xFF660066)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : null,
+          color: isSelected ? null : AppTheme.lightBg,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isSelected ? _orange : AppTheme.lightBorder,
-            width: 1.5,
+            color: isSelected ? const Color(0xFFC084FC) : AppTheme.lightBorder,
+            width: isSelected ? 1.8 : 1.2,
           ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF7C3AED).withValues(alpha: 0.35),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
         ),
         child: Text(
           label,

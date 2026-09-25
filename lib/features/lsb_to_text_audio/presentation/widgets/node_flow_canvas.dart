@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/configured_entity_chips.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/suggested_gloss_panel.dart';
 
 /// Lienzo Central del Flujo Guiado.
@@ -48,8 +47,6 @@ class NodeFlowCanvas extends ConsumerWidget {
                   maxPicks: maxPicks,
                   currentPicks: picksInZone,
                 ),
-              const SizedBox(height: 12),
-              const ConfiguredEntityChips(),
             ],
           ),
         ),
@@ -110,62 +107,26 @@ class _HeroQuestionCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: _orange.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: Text(emoji, style: const TextStyle(fontSize: 18)),
-          ),
-          const SizedBox(width: 10),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   question,
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 15.5,
+                    fontSize: 19,
                     fontWeight: FontWeight.w800,
                     height: 1.2,
                     color: AppTheme.lightText,
                     letterSpacing: -0.2,
                   ),
                 ),
-                if (showHint) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    hint,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: AppTheme.lightTextSub,
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
-          if (maxPicks > 1)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: _orange.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                '$currentPicks / $maxPicks',
-                style: const TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w800,
-                  color: _orange,
-                ),
-              ),
-            ),
+
         ],
       ),
     );

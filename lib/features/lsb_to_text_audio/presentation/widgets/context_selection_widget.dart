@@ -84,7 +84,7 @@ class _ContextSelectionWidgetState
                 icon: const Icon(Icons.arrow_back, size: 18),
                 label: const Text('Volver'),
                 style: TextButton.styleFrom(
-                    foregroundColor: AppTheme.lightTextSub),
+                    foregroundColor:Colors.white),
               ),
               const SizedBox(height: 8),
               ...desplegados.map(
@@ -96,16 +96,6 @@ class _ContextSelectionWidgetState
                 ),
               ),
             ],
-            const SizedBox(height: 32),
-            Center(
-              child: Text(
-                'Diseñado para ser accesible y fácil de usar',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: AppTheme.lightTextSub.withValues(alpha: 0.8),
-                ),
-              ),
-            ),
             const SizedBox(height: 16),
           ],
         ),

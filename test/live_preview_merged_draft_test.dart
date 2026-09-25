@@ -12,20 +12,17 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/lsb_flow_screen.dart';
 
+import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+
 import 'helpers/official_dictionary.dart';
 
-/// Regresión: la vista previa en vivo (`LiveDeclarationPreviewPanel`) leía
-/// solo `declarationDraftProvider`, el borrador de ENTIDADES (persona,
-/// objeto, lugar) editado directamente por sus wizards. Pero la zona
-/// "hecho" (ROBAR/DAÑAR/ENGAÑAR — a diferencia de PERDER/ESCAPAR, que sí
-/// pasan por un modal de desambiguación que llama a `setFactAction`) solo
-/// queda registrada como respuesta simple de zona, y únicamente
-/// `buildFullDeclarationDraft` la fusiona en `fact.action`. Sin esa fusión,
-/// el compositor nunca entraba a la rama que redacta el hecho —ni a la que
-/// arma la frase con los rasgos de la persona ya descrita—, así que la
-/// vista previa mostraba el texto de respaldo genérico o saltaba los
-/// rasgos de la persona, aunque la declaración final (que sí fusiona)
-/// los incluyera.
+/// Regresión: la integración del borrador leía solo `declarationDraftProvider`,
+/// el borrador de ENTIDADES (persona, objeto, lugar) editado directamente por
+/// sus wizards. Pero la zona "hecho" (ROBAR/DAÑAR/ENGAÑAR — a diferencia de
+/// PERDER/ESCAPAR, que sí pasan por un modal de desambiguación que llama a
+/// `setFactAction`) solo queda registrada como respuesta simple de zona, y
+/// únicamente `buildFullDeclarationDraft` la fusiona en `fact.action`.
 void main() {
   Future<ProviderContainer> montar(WidgetTester tester) async {
     final router = GoRouter(
@@ -68,19 +65,20 @@ void main() {
     await tester.tap(find.text('ENGAÑAR'));
     await tester.pumpAndSettle();
 
+    final draft = buildFullDeclarationDraft(container);
+    final texto = const LocalSentenceAssembler().assembleStructured(draft);
     expect(
-      find.textContaining(
-          'aunque todavía no completé los detalles'),
-      findsNothing,
+      texto.contains('aunque todavía no completé los detalles'),
+      isFalse,
       reason: 'ENGAÑAR sí describe el hecho: no debe caer al texto de respaldo',
     );
-    expect(find.textContaining('engañaron'), findsWidgets);
+    expect(texto.contains('engañaron'), isTrue);
 
     await tester.pump(const Duration(seconds: 4));
   });
 
   testWidgets(
-      'los rasgos de la persona descrita aparecen en la vista previa al elegir ROBAR',
+      'los rasgos de la persona descrita aparecen en la declaración al elegir ROBAR',
       (tester) async {
     final container = await montar(tester);
 
@@ -110,13 +108,14 @@ void main() {
     await tester.pumpAndSettle();
     await tocar(find.text('ROBAR'));
 
+    final draft = buildFullDeclarationDraft(container);
+    final texto = const LocalSentenceAssembler().assembleStructured(draft);
     expect(
-      find.textContaining(
-          'aunque todavía no completé los detalles'),
-      findsNothing,
+      texto.contains('aunque todavía no completé los detalles'),
+      isFalse,
     );
     // "un hombre adulto alto" — los rasgos elegidos no deben saltarse.
-    expect(find.textContaining('alto'), findsWidgets,
+    expect(texto.contains('alto'), isTrue,
         reason: 'la estatura elegida para la persona debe verse en la declaración');
 
     await tester.pump(const Duration(seconds: 4));

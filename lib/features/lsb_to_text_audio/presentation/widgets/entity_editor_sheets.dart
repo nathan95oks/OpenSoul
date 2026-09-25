@@ -189,7 +189,7 @@ Future<T?> _opciones<T>(
                                   const Icon(
                                     Icons.arrow_forward_ios_rounded,
                                     size: 14,
-                                    color: AppTheme.brandPrimary,
+                                    color: Color(0xFF7C3AED),
                                   ),
                                 ],
                               ),
@@ -667,7 +667,7 @@ class _PersonSequentialWizardSheetState
                           ),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _orange,
+                          backgroundColor: const Color(0xFF660066),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -909,10 +909,10 @@ class _PersonSequentialWizardSheetState
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: _orange.withValues(alpha: 0.12),
+                            color: const Color(0xFF7C3AED).withValues(alpha: 0.12),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(icon, color: _orange, size: 18),
+                          child: Icon(icon, color: const Color(0xFF7C3AED), size: 18),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -926,7 +926,7 @@ class _PersonSequentialWizardSheetState
                           ),
                         ),
                         const Icon(Icons.add_circle_outline,
-                            size: 18, color: _orange),
+                            size: 18, color: Color(0xFF7C3AED)),
                       ],
                     ),
                   ),
@@ -958,10 +958,10 @@ class _PersonSequentialWizardSheetState
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _orange.withValues(alpha: 0.10),
+                    color: const Color(0xFF660066).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: _orange.withValues(alpha: 0.4),
+                      color: const Color(0xFFC084FC).withValues(alpha: 0.5),
                     ),
                   ),
                   child: Row(
@@ -972,7 +972,7 @@ class _PersonSequentialWizardSheetState
                         style: const TextStyle(
                           fontSize: 12.5,
                           fontWeight: FontWeight.w700,
-                          color: _orange,
+                          color: Color(0xFF660066),
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -981,7 +981,7 @@ class _PersonSequentialWizardSheetState
                           notifier.removeClothing(_personId, c.id);
                           setState(() {});
                         },
-                        child: const Icon(Icons.close, size: 15, color: _orange),
+                        child: const Icon(Icons.close, size: 15, color: Color(0xFF660066)),
                       ),
                     ],
                   ),
@@ -1041,7 +1041,7 @@ class _StepHeader extends StatelessWidget {
     required this.icon,
   });
 
-  static const _orange = AppTheme.brandPrimary;
+  static const _purple = Color(0xFF7C3AED);
 
   @override
   Widget build(BuildContext context) {
@@ -1053,10 +1053,10 @@ class _StepHeader extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: _orange.withValues(alpha: 0.12),
+                color: _purple.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: _orange, size: 22),
+              child: Icon(icon, color: _purple, size: 22),
             ),
             const SizedBox(width: 10),
             Text(
@@ -1093,7 +1093,8 @@ class _WizardStepIndicator extends StatelessWidget {
     required this.onStepTap,
   });
 
-  static const _orange = AppTheme.brandPrimary;
+  static const _purple = Color(0xFF7C3AED);
+  static const _purpleDark = Color(0xFF660066);
 
   @override
   Widget build(BuildContext context) {
@@ -1111,26 +1112,46 @@ class _WizardStepIndicator extends StatelessWidget {
           InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: () => onStepTap(pasos[i].$1),
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
+                gradient: pasos[i].$1 == currentStep
+                    ? const LinearGradient(
+                        colors: [_purple, _purpleDark],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
                 color: pasos[i].$1 == currentStep
-                    ? _orange
+                    ? null
                     : (pasos[i].$1 < currentStep
-                        ? _orange.withValues(alpha: 0.15)
+                        ? _purple.withValues(alpha: 0.15)
                         : AppTheme.lightBg),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: pasos[i].$1 <= currentStep
-                      ? _orange
-                      : AppTheme.lightBorder,
+                  color: pasos[i].$1 == currentStep
+                      ? const Color(0xFFC084FC)
+                      : (pasos[i].$1 < currentStep
+                          ? _purple
+                          : AppTheme.lightBorder),
+                  width: pasos[i].$1 == currentStep ? 1.5 : 1.0,
                 ),
+                boxShadow: pasos[i].$1 == currentStep
+                    ? [
+                        BoxShadow(
+                          color: _purple.withValues(alpha: 0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
+                    : null,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (pasos[i].$1 < currentStep)
-                    const Icon(Icons.check, size: 12, color: _orange)
+                    const Icon(Icons.check, size: 12, color: _purple)
                   else
                     Text(
                       '${pasos[i].$1}.',
@@ -1151,7 +1172,7 @@ class _WizardStepIndicator extends StatelessWidget {
                       color: pasos[i].$1 == currentStep
                           ? Colors.white
                           : (pasos[i].$1 < currentStep
-                              ? _orange
+                              ? _purple
                               : AppTheme.lightTextSub),
                     ),
                   ),
@@ -1165,7 +1186,7 @@ class _WizardStepIndicator extends StatelessWidget {
               child: Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 9,
-                color: pasos[i].$1 < currentStep ? _orange : AppTheme.lightBorder,
+                color: pasos[i].$1 < currentStep ? _purple : AppTheme.lightBorder,
               ),
             ),
         ],
@@ -1189,29 +1210,44 @@ class _OptionTile extends StatelessWidget {
     required this.onTap,
   });
 
-  static const _orange = AppTheme.brandPrimary;
-
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: isSelected
-          ? _orange.withValues(alpha: 0.10)
-          : (isSecondary ? AppTheme.lightSurface : AppTheme.lightBg),
-      borderRadius: BorderRadius.circular(16),
+      color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
           height: 56,
           padding: const EdgeInsets.symmetric(horizontal: 18),
           decoration: BoxDecoration(
+            gradient: isSelected
+                ? const LinearGradient(
+                    colors: [Color(0xFF7C3AED), Color(0xFF660066)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : null,
+            color: isSelected
+                ? null
+                : (isSecondary ? AppTheme.lightSurface : AppTheme.lightBg),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: isSelected
-                  ? _orange
-                  : (isSecondary ? AppTheme.lightBorder : AppTheme.lightBorder),
-              width: isSelected ? 2 : 1.2,
+                  ? const Color(0xFFC084FC)
+                  : AppTheme.lightBorder,
+              width: isSelected ? 2.2 : 1.2,
             ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF7C3AED).withValues(alpha: 0.40),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]
+                : null,
           ),
           child: Row(
             children: [
@@ -1219,8 +1255,8 @@ class _OptionTile extends StatelessWidget {
                 icon,
                 size: 22,
                 color: isSelected
-                    ? _orange
-                    : (isSecondary ? AppTheme.lightTextSub : AppTheme.lightText),
+                    ? Colors.white
+                    : (isSecondary ? AppTheme.lightTextSub : const Color(0xFF7C3AED)),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -1230,15 +1266,15 @@ class _OptionTile extends StatelessWidget {
                     fontSize: 15,
                     fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
                     color: isSelected
-                        ? _orange
+                        ? Colors.white
                         : (isSecondary ? AppTheme.lightTextSub : AppTheme.lightText),
                   ),
                 ),
               ),
               Icon(
-                isSelected ? Icons.check_circle : Icons.arrow_forward_ios_rounded,
-                size: isSelected ? 20 : 14,
-                color: isSelected ? _orange : AppTheme.lightTextSub,
+                isSelected ? Icons.check_circle_rounded : Icons.arrow_forward_ios_rounded,
+                size: isSelected ? 22 : 14,
+                color: isSelected ? const Color(0xFFC084FC) : AppTheme.lightTextSub,
               ),
             ],
           ),
@@ -1388,14 +1424,14 @@ Future<void> _elegirColorPrenda(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12)),
-                      side: const BorderSide(color: AppTheme.brandPrimary),
+                      side: const BorderSide(color: Color(0xFF7C3AED)),
                     ),
                     child: const Text(
                       'Escribir otro…',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
-                        color: AppTheme.brandPrimary,
+                        color: Color(0xFF7C3AED),
                       ),
                     ),
                   ),
@@ -1558,7 +1594,7 @@ class _PersonaCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: AppTheme.brandPrimary.withValues(alpha: 0.12),
+                  color: const Color(0xFF7C3AED).withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -1566,7 +1602,7 @@ class _PersonaCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 11.5,
                     fontWeight: FontWeight.w800,
-                    color: AppTheme.brandPrimary,
+                    color: Color(0xFF7C3AED),
                   ),
                 ),
               ),

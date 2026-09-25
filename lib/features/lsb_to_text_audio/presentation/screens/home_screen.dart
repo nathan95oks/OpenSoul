@@ -13,7 +13,6 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/context_selection_widget.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/guided_wizard_stepper.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/live_declaration_preview_panel.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/node_flow_canvas.dart';
 
@@ -84,7 +83,7 @@ class HomeScreen extends ConsumerWidget {
       elevation: 0,
       leading: sirveConversacion
           ? IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppTheme.brandPrimary),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
               tooltip: 'Volver a la conversación',
               onPressed: () =>
                   ref.read(selectedTabProvider.notifier).select(AppTabId.conversation),
@@ -111,7 +110,7 @@ class HomeScreen extends ConsumerWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppTheme.brandPrimary,
+              color: Colors.white,
               letterSpacing: -0.3,
             ),
           ),
@@ -146,14 +145,14 @@ class HomeScreen extends ConsumerWidget {
                           style: const TextStyle(
                             fontSize: 11.5,
                             fontWeight: FontWeight.w700,
-                            color: AppTheme.brandPrimary,
+                            color: Colors.white70,
                           ),
                         ),
                       ),
                       const Icon(
                         Icons.keyboard_arrow_down,
                         size: 14,
-                        color: AppTheme.brandPrimary,
+                        color: Colors.white70,
                       ),
                     ],
                   ),
@@ -169,7 +168,7 @@ class HomeScreen extends ConsumerWidget {
           return IconButton(
             icon: Icon(
               conImagen ? Icons.image : Icons.image_not_supported_outlined,
-              color: AppTheme.brandPrimary,
+              color: Colors.white,
               size: 22,
             ),
             tooltip: conImagen ? 'Ocultar imágenes' : 'Mostrar imágenes',
@@ -192,25 +191,14 @@ class HomeScreen extends ConsumerWidget {
 
     return Column(
       children: [
-        // Modo C: la frase del oyente encabeza la pantalla, entera y literal.
-        // Las preguntas guía del flujo van debajo, como subpreguntas: nunca
-        // sustituyen este encabezado ni lo parafrasean.
         if (pending != null)
           _ReplyingToStrip(
             text: pending.question,
             inferredContextName: wasInferred ? contextState.name as String : null,
           ),
-        // Modo B: se dice que está abriendo ella el turno, para que no parezca
-        // que responde a algo que nadie preguntó.
         if (pending == null &&
             launch.purpose == CardsFlowPurpose.conversationInitiative)
           const _InitiativeStrip(),
-        const GuidedWizardStepper(),
-        // NodeFlowCanvas ya gestiona su propio scroll interno (solo en la
-        // grilla de tarjetas): envolverlo aquí en otro SingleChildScrollView
-        // hacía que la pregunta activa y las fichas ya configuradas se
-        // desplazaran junto con la grilla y se perdieran de vista al
-        // desplazarse por muchas opciones.
         const Expanded(child: NodeFlowCanvas()),
         const LiveDeclarationPreviewPanel(),
       ],
@@ -280,7 +268,7 @@ class _ReplyingToStrip extends StatelessWidget {
             const Icon(
               Icons.record_voice_over,
               size: 15,
-              color: AppTheme.brandPrimary,
+              color: Colors.white70,
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -295,7 +283,7 @@ class _ReplyingToStrip extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       height: 1.3,
-                      color: AppTheme.lightText,
+                      color: Colors.white,
                     ),
                   ),
                   if (inferred != null)

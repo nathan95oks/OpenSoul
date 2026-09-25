@@ -85,9 +85,17 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// del .glb tampoco lo emite. Sin esto la secuencia se queda clavada.
   Timer? _placeholderTimer;
 
+  /// Timer de espera (1.5s) antes de reiniciar la secuencia en bucle continuo.
+  Timer? _loopTimer;
+
   void _cancelPlaceholderTimer() {
     _placeholderTimer?.cancel();
     _placeholderTimer = null;
+  }
+
+  void _cancelLoopTimer() {
+    _loopTimer?.cancel();
+    _loopTimer = null;
   }
 
   @override
@@ -158,6 +166,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// los placeholders y devuelve el visor a reposo.
   void _stopPlayback() {
     _cancelPlaceholderTimer();
+    _cancelLoopTimer();
     _pauseViewers();
     _resetToIdle();
   }
@@ -182,6 +191,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   void _startSequence({List<String>? overrideUrls, List<String>? overrideGlosses}) {
     if (!mounted) return;
     _cancelPlaceholderTimer();
+    _cancelLoopTimer();
     setState(() {
       _currentIndex = 0;
       _isPlayingSequence = false;
@@ -203,6 +213,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   void _resetToIdle() {
     if (!mounted) return;
     _cancelPlaceholderTimer();
+    _cancelLoopTimer();
     setState(() {
       _localUrls = [];
       _testUrls = null;
@@ -371,6 +382,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (!mounted || _stepSettled) return;
     _stepSettled = true;
     _cancelPlaceholderTimer();
+    _cancelLoopTimer();
 
     if (!kReleaseMode) {
       final ms = _stepStartedAt == null
@@ -381,7 +393,16 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     }
 
     if (_currentIndex >= _localUrls.length - 1) {
-      setState(() => _isPlayingSequence = false);
+      // Fin de la secuencia completa: en vez de detenerse o mostrar pantalla de fin,
+      // espera 1.5 segundos en reposo y reinicia la secuencia automáticamente en bucle continuo.
+      _loopTimer = Timer(const Duration(milliseconds: 1500), () {
+        if (!mounted || !widget.isActive || _localUrls.isEmpty) return;
+        setState(() {
+          _currentIndex = 0;
+          _isPlayingSequence = true;
+        });
+        _playCurrentStep();
+      });
       return;
     }
 
@@ -392,6 +413,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   @override
   void dispose() {
     _cancelPlaceholderTimer();
+    _cancelLoopTimer();
     _pauseViewers();
     _pulseController?.dispose();
     super.dispose();
@@ -628,93 +650,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 
   Widget _buildFinishedState() {
-    return Container(
-      key: const ValueKey('finished'),
-      // Velo sobre el avatar, que ahora sigue montado detras: sin el, el
-      // texto cae encima del modelo y no se lee.
-      color: const Color(0xFF1A1A2E).withValues(alpha: 0.92),
-      child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.deepPurpleAccent.withValues(alpha: 0.15),
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.deepPurpleAccent.withValues(alpha: 0.4),
-              width: 2,
-            ),
-          ),
-          child: const Icon(
-            Icons.check_circle_outline_rounded,
-            size: 50,
-            color: Colors.deepPurpleAccent,
-          ),
-        ),
-        const SizedBox(height: 16),
-        const Text(
-          'Señas reproducidas',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 6,
-          runSpacing: 6,
-          children: ((_testGlosses ?? widget.glosses) ?? []).map((g) {
-            return Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(12),
-                border:
-                    Border.all(color: Colors.white.withValues(alpha: 0.15)),
-              ),
-              child: Text(
-                g,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton.icon(
-              onPressed: _resetToIdle,
-              icon: const Icon(Icons.refresh_rounded,
-                  color: Colors.white54, size: 20),
-              label: const Text(
-                'Refrescar',
-                style: TextStyle(color: Colors.white54),
-              ),
-            ),
-            const SizedBox(width: 4),
-            TextButton.icon(
-              onPressed: () => _startSequence(),
-              icon: const Icon(Icons.replay_rounded,
-                  color: Colors.deepPurpleAccent),
-              label: const Text(
-                'Reproducir',
-                style: TextStyle(color: Colors.deepPurpleAccent),
-              ),
-            ),
-          ],
-        ),
-      ],
-      ),
-    );
+    return const SizedBox.shrink();
   }
 
   /// Estado que se muestra cuando el modulo quedo en segundo plano: sin
@@ -758,44 +694,10 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// Antes este estado montaba su *propio* ModelViewer apuntando a la URL de
   /// S3 en vez de al archivo ya cacheado, asi que cada vuelta a reposo volvia
   /// a bajar 8,5 MB por red.
-  Widget _buildIdleState() {
-    return Container(
-      key: const ValueKey('idle'),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            const Color(0xFF1A1A2E).withValues(alpha: 0.85),
-          ],
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            'Avatar LSB Listo',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Habla o escribe para ver las señas',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.6),
-              fontSize: 12,
-            ),
-          ),
-          const SizedBox(height: 18),
-        ],
-      ),
-    );
-  }
+Widget _buildIdleState() {
+  return const SizedBox.shrink();
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -805,10 +707,8 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       bodyContent = _buildPausedState();
     } else if (widget.isProcessing || _isDownloadingFiles) {
       bodyContent = _buildProcessingState();
-    } else if (_localUrls.isNotEmpty && _isPlayingSequence) {
+    } else if (_localUrls.isNotEmpty) {
       bodyContent = _buildDualModelViewer();
-    } else if (_localUrls.isNotEmpty && !_isPlayingSequence) {
-      bodyContent = _buildFinishedState();
     } else {
       bodyContent = _buildIdleState();
     }

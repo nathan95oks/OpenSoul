@@ -65,58 +65,102 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           decoration: BoxDecoration(
-            color: selected ? _orange : AppTheme.lightSurface,
-            borderRadius: BorderRadius.circular(12),
+            gradient: selected
+                ? const LinearGradient(
+                    colors: [Color(0xFF7C3AED), Color(0xFF660066)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : null,
+            color: selected ? null : AppTheme.lightSurface,
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: selected ? _orange : AppTheme.lightBorder,
-              width: selected ? 2 : 1.5,
+              color: selected
+                  ? const Color(0xFFC084FC)
+                  : AppTheme.lightBorder,
+              width: selected ? 2.2 : 1.5,
             ),
             boxShadow: selected
-                ? [BoxShadow(color: _orange.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF7C3AED).withValues(alpha: 0.45),
+                      blurRadius: 12,
+                      offset: const Offset(0, 3),
+                    ),
+                  ]
                 : AppTheme.cardShadow,
           ),
           padding: EdgeInsets.symmetric(
             horizontal: 16,
             vertical: conImagen ? 10 : 14,
           ),
-          child: conImagen
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SignImage(
-                      gloss: widget.card.gloss,
-                      semanticIcon: widget.card.semanticIcon,
-                      frames: widget.card.imageFrames,
-                      size: 56,
-                      color: colorContenido,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              conImagen
+                  ? Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SignImage(
+                            gloss: widget.card.gloss,
+                            semanticIcon: widget.card.semanticIcon,
+                            frames: widget.card.imageFrames,
+                            size: 56,
+                            color: colorContenido,
+                          ),
+                          const SizedBox(height: 8),
+                          _etiqueta(colorContenido, TextAlign.center, selected),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      children: [
+                        Icon(
+                          selected
+                              ? Icons.check_circle_rounded
+                              : (kLsbIconMap[widget.card.semanticIcon] ??
+                                  Icons.circle_outlined),
+                          size: 20,
+                          color: colorContenido,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _etiqueta(
+                              colorContenido, TextAlign.start, selected),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    _etiqueta(colorContenido, TextAlign.center),
-                  ],
-                )
-              : Row(
-                  children: [
-                    Icon(
-                      kLsbIconMap[widget.card.semanticIcon] ??
-                          Icons.circle_outlined,
-                      size: 20,
-                      color: colorContenido,
+              if (selected && conImagen)
+                Positioned(
+                  top: -4,
+                  right: -4,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFC084FC),
+                      shape: BoxShape.circle,
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(child: _etiqueta(colorContenido, TextAlign.start)),
-                  ],
+                    child: const Icon(
+                      Icons.check,
+                      size: 13,
+                      color: Color(0xFF3B0764),
+                    ),
+                  ),
                 ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _etiqueta(Color color, TextAlign alineacion) => Text(
+  Widget _etiqueta(Color color, TextAlign alineacion, bool selected) => Text(
         widget.card.displayText.replaceAll('_', ' '),
         textAlign: alineacion,
         style: TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w600,
+          fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
           color: color,
           letterSpacing: 0.2,
           height: 1.2,
