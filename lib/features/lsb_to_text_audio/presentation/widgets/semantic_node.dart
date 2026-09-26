@@ -63,6 +63,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
         scale: _scale,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
+          constraints: BoxConstraints(minHeight: conImagen ? 86 : 60),
           decoration: BoxDecoration(
             gradient: selected
                 ? const LinearGradient(
@@ -75,21 +76,21 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: selected ? const Color(0xFFC084FC) : AppTheme.lightBorder,
-              width: selected ? 2.2 : 1.5,
+              width: selected ? 2 : 1.2,
             ),
             boxShadow: selected
                 ? [
                     BoxShadow(
-                      color: const Color(0xFF7C3AED).withValues(alpha: 0.45),
-                      blurRadius: 12,
-                      offset: const Offset(0, 3),
+                      color: const Color(0xFF7C3AED).withValues(alpha: 0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
                     ),
                   ]
                 : AppTheme.cardShadow,
           ),
           padding: EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: conImagen ? 8 : 14,
+            horizontal: 12,
+            vertical: conImagen ? 8 : 11,
           ),
           child: Stack(
             clipBehavior: Clip.none,
@@ -103,10 +104,10 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                             gloss: widget.card.gloss,
                             semanticIcon: widget.card.semanticIcon,
                             frames: widget.card.imageFrames,
-                            size: 44,
+                            size: 36,
                             color: colorContenido,
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 5),
                           _etiqueta(colorContenido, TextAlign.center, selected),
                         ],
                       ),
@@ -118,10 +119,10 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                               ? Icons.check_circle_rounded
                               : (kLsbIconMap[widget.card.semanticIcon] ??
                                     Icons.circle_outlined),
-                          size: 20,
+                          size: 22,
                           color: colorContenido,
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 9),
                         Expanded(
                           child: _etiqueta(
                             colorContenido,
@@ -158,15 +159,14 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
   Widget _etiqueta(Color color, TextAlign alineacion, bool selected) => Text(
     widget.card.displayText.replaceAll('_', ' '),
     textAlign: alineacion,
+    softWrap: true,
     style: TextStyle(
-      fontSize: 14,
-      fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+      fontSize: 15,
+      fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
       color: color,
-      letterSpacing: 0.2,
+      letterSpacing: 0.25,
       height: 1.2,
     ),
-    maxLines: 2,
-    overflow: TextOverflow.ellipsis,
   );
 }
 

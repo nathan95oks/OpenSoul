@@ -129,14 +129,21 @@ class ConversationNotifier extends Notifier<ConversationState> {
     required List<String> glosses,
     String? contextId,
     String? replyToId,
+    String? expectedReplyText,
     String? conversationId,
   }) {
     final conversation = state.conversation;
     if (conversationId != null && conversationId != conversation.id) {
       return SubmitOutcome.staleReply;
     }
-    if (replyToId != null && !conversation.hasTurn(replyToId)) {
-      return SubmitOutcome.staleReply;
+    if (replyToId != null) {
+      final original = conversation.turnById(replyToId);
+      if (original == null ||
+          original.message.speaker != SpeakerRole.hearing ||
+          (expectedReplyText != null &&
+              original.message.text != expectedReplyText)) {
+        return SubmitOutcome.staleReply;
+      }
     }
 
     final turn = ref

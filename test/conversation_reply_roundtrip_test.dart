@@ -14,6 +14,7 @@ import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
@@ -70,6 +71,9 @@ class _SignRepo implements AudioTranslationRepository {
 /// Backend de declaraciones sin cobertura certificada: vale la redacción
 /// local del banco, como en producción sin Bedrock.
 class _DeclarationRepo implements TranslationRepository {
+  _DeclarationRepo({this.response});
+
+  final TranslationResult? response;
   int calls = 0;
 
   @override
@@ -83,7 +87,7 @@ class _DeclarationRepo implements TranslationRepository {
     Map<String, dynamic>? guided,
   }) async {
     calls++;
-    return TranslationResult(baseSentence: '', generatedText: '');
+    return response ?? TranslationResult(baseSentence: '', generatedText: '');
   }
 }
 
@@ -110,10 +114,16 @@ void main() {
 
   late _SignRepo signRepo;
   late _DeclarationRepo declarationRepo;
+  late FakeAudioOutput audioOutput;
 
-  ProviderContainer app({bool backend = true, GraphRouteModel? model}) {
+  ProviderContainer app({
+    bool backend = true,
+    GraphRouteModel? model,
+    TranslationResult? declarationResponse,
+  }) {
     signRepo = _SignRepo(sendsSemanticTurn: backend);
-    declarationRepo = _DeclarationRepo();
+    declarationRepo = _DeclarationRepo(response: declarationResponse);
+    audioOutput = FakeAudioOutput();
     final graph = DialogueGraph.fromJsonString(
       File('assets/dialogue/dialogue_graph.json').readAsStringSync(),
     );
@@ -122,7 +132,7 @@ void main() {
         lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
         audioTranslationRepositoryProvider.overrideWithValue(signRepo),
         translationRepositoryProvider.overrideWithValue(declarationRepo),
-        audioOutputProvider.overrideWithValue(FakeAudioOutput()),
+        audioOutputProvider.overrideWithValue(audioOutput),
         dialogueGraphProvider.overrideWith((ref) async => graph),
         graphRouteModelProvider.overrideWithValue(model),
         ...conversationOverrides(),
@@ -386,6 +396,184 @@ void main() {
       expect(c.read(conversationProvider).conversation.turns, isEmpty);
       expect(c.read(resultVisibleProvider), isTrue);
     });
+
+    test(
+      'K/L/M. SÍ, NO y NO SÉ conservan polaridad y vuelven al mismo turno',
+      () async {
+        const cases = [
+          (
+            option: 'si',
+            state: GuidedAnswerState.affirmed,
+            text: 'Sí, hay testigos.',
+          ),
+          (
+            option: 'no',
+            state: GuidedAnswerState.denied,
+            text: 'No hay testigos.',
+          ),
+          (
+            option: 'no_sabe',
+            state: GuidedAnswerState.unknown,
+            text: 'No sé si hay testigos.',
+          ),
+        ];
+
+        for (final caso in cases) {
+          final c = app();
+          final pregunta = await oyente(c, '¿Hay testigos del robo?');
+          final conversationId = c.read(conversationProvider).conversation.id;
+          expect(pregunta.route!.targetQuestionIds, ['Q.TES.EXISTE']);
+
+          responder(c);
+          final selected = c
+              .read(guidedFlowProvider.notifier)
+              .select('Q.TES.EXISTE', caso.option);
+          expect(selected.accepted, isTrue, reason: caso.option);
+          expect(
+            selected.session.answerOf('Q.TES.EXISTE')!.state,
+            caso.state,
+            reason: caso.option,
+          );
+
+          final outcome = await emitir(c);
+          expect(
+            outcome.status,
+            GuidedEmissionStatus.returnedToConversation,
+            reason: caso.option,
+          );
+          vueltaAlMismoTurno(c, pregunta, conversationId: conversationId);
+          expect(
+            c.read(conversationProvider).conversation.lastTurn!.outputs.text,
+            caso.text,
+            reason: caso.option,
+          );
+          expect(audioOutput.played, isEmpty, reason: 'Sin autoplay remoto.');
+          expect(audioOutput.spoken, isEmpty, reason: 'Sin autoplay local.');
+        }
+      },
+    );
+
+    test(
+      '13. una respuesta múltiple conserva las mismas reglas del módulo',
+      () async {
+        final c = app();
+        final pregunta = await oyente(c, '¿Cuándo ocurrió?');
+        responder(c);
+
+        final flow = c.read(guidedFlowProvider.notifier);
+        expect(flow.select('Q.TIE.CUANDO', 'hoy').accepted, isTrue);
+        expect(flow.select('Q.TIE.CUANDO', 'tarde').accepted, isTrue);
+        expect(flow.intervention!.answers.single.optionIds, ['hoy', 'tarde']);
+
+        await emitir(c);
+        final respuesta = c.read(conversationProvider).conversation.lastTurn!;
+        expect(respuesta.message.replyToId, pregunta.message.id);
+        expect(respuesta.outputs.text, 'Ocurrió hoy por la tarde.');
+      },
+    );
+
+    test(
+      '14. el audio validado queda en el reply y no se reproduce solo',
+      () async {
+        final c = app(
+          declarationResponse: TranslationResult(
+            baseSentence: 'Ocurrió en la calle.',
+            generatedText: 'Ocurrió en la calle.',
+            audioUrl: 'https://audio.example/reply.mp3',
+            coverageValidated: true,
+          ),
+        );
+        final pregunta = await oyente(c, '¿Dónde ocurrió?');
+        responder(c);
+        c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
+
+        await emitir(c);
+
+        final respuesta = c.read(conversationProvider).conversation.lastTurn!;
+        expect(respuesta.message.replyToId, pregunta.message.id);
+        expect(respuesta.outputs.text, 'Ocurrió en la calle.');
+        expect(respuesta.outputs.audioUrl, 'https://audio.example/reply.mp3');
+        expect(audioOutput.played, isEmpty);
+        expect(audioOutput.spoken, isEmpty);
+      },
+    );
+
+    test(
+      'N. si el turno conserva el id pero cambia, no se inserta a ciegas',
+      () async {
+        final c = app();
+        final original = await oyente(c, '¿Dónde ocurrió?');
+        responder(c);
+        c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
+
+        final conversation = c.read(conversationProvider).conversation;
+        final reemplazo = ConversationTurn(
+          message: SemanticMessage(
+            id: original.message.id,
+            speaker: SpeakerRole.hearing,
+            source: MessageSource.text,
+            speechAct: original.message.speechAct,
+            glosses: const ['CUÁNDO'],
+            text: '¿Cuándo ocurrió?',
+            createdAt: original.message.createdAt,
+          ),
+          outputs: const GeneratedOutputs(text: '¿Cuándo ocurrió?'),
+        );
+        c
+            .read(conversationProvider.notifier)
+            .replaceConversation(
+              Conversation(
+                id: conversation.id,
+                turns: [reemplazo],
+                startedAt: conversation.startedAt,
+              ),
+            );
+
+        final outcome = await emitir(c);
+
+        expect(outcome.status, GuidedEmissionStatus.staleConversation);
+        final turns = c.read(conversationProvider).conversation.turns;
+        expect(turns, hasLength(1));
+        expect(turns.single.message.text, '¿Cuándo ocurrió?');
+        expect(
+          turns.where((t) => t.message.speaker == SpeakerRole.deaf),
+          isEmpty,
+        );
+      },
+    );
+
+    test(
+      'O. cancelar antes de emitir conserva chat y borrador sin responder',
+      () async {
+        final c = app();
+        final pregunta = await oyente(c, '¿Dónde ocurrió?');
+        final conversationId = c.read(conversationProvider).conversation.id;
+        responder(c);
+        c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
+
+        c.read(conversationHandoffProvider).handBackToHearing();
+
+        var conversation = c.read(conversationProvider).conversation;
+        expect(c.read(selectedTabProvider), AppTabId.conversation);
+        expect(conversation.id, conversationId);
+        expect(conversation.turns, hasLength(1));
+        expect(conversation.pendingReply!.message.id, pregunta.message.id);
+        expect(conversation.activeContextId, isNull);
+
+        responder(c);
+        expect(
+          c
+              .read(guidedFlowProvider)
+              .session!
+              .answerOf('Q.LUG.DONDE')!
+              .optionIds,
+          ['calle'],
+          reason: 'Reabrir el mismo encargo conserva el borrador.',
+        );
+        conversation = c.read(conversationProvider).conversation;
+        expect(conversation.turns, hasLength(1));
+      },
+    );
 
     test(
       '14. si entra otro turno, la respuesta va al que se tenía delante',

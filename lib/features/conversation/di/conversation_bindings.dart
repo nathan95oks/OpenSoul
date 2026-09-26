@@ -19,39 +19,43 @@ class _ConversationBridge implements ConversationBridge {
     required List<String> glosses,
     String? contextId,
     String? replyToId,
+    String? expectedReplyText,
     String? conversationId,
   }) {
-    return ref.read(conversationProvider.notifier).addDeafDeclaration(
+    return ref
+        .read(conversationProvider.notifier)
+        .addDeafDeclaration(
           result: result,
           glosses: glosses,
           contextId: contextId,
           replyToId: replyToId,
+          expectedReplyText: expectedReplyText,
           conversationId: conversationId,
         );
   }
 }
 
 List<Override> conversationOverrides() => [
-      // La pregunta a la que se responde sale del lanzamiento, no del último
-      // turno del chat. Así el modo A no hereda la charla guardada, el modo B
-      // no finge responder a nadie, y en el modo C la frase y el turno quedan
-      // fijos aunque entre otro mensaje mientras se está respondiendo.
-      pendingReplyProvider.overrideWith((ref) {
-        final launch = ref.watch(cardsFlowLaunchProvider);
-        if (!launch.purpose.linksToHearingTurn) return null;
+  // La pregunta a la que se responde sale del lanzamiento, no del último
+  // turno del chat. Así el modo A no hereda la charla guardada, el modo B
+  // no finge responder a nadie, y en el modo C la frase y el turno quedan
+  // fijos aunque entre otro mensaje mientras se está respondiendo.
+  pendingReplyProvider.overrideWith((ref) {
+    final launch = ref.watch(cardsFlowLaunchProvider);
+    if (!launch.purpose.linksToHearingTurn) return null;
 
-        final turnId = launch.hearingTurnId;
-        final conversationId = launch.conversationId;
-        if (turnId == null || conversationId == null) return null;
+    final turnId = launch.hearingTurnId;
+    final conversationId = launch.conversationId;
+    if (turnId == null || conversationId == null) return null;
 
-        return ReplyPrompt(
-          turnId: turnId,
-          conversationId: conversationId,
-          question: launch.hearingText ?? '',
-          speechAct: launch.hearingSpeechAct,
-          suggestion: launch.suggestion,
-          activeContextId: launch.activeContextId,
-        );
-      }),
-      conversationBridgeProvider.overrideWith((ref) => _ConversationBridge(ref)),
-    ];
+    return ReplyPrompt(
+      turnId: turnId,
+      conversationId: conversationId,
+      question: launch.hearingText ?? '',
+      speechAct: launch.hearingSpeechAct,
+      suggestion: launch.suggestion,
+      activeContextId: launch.activeContextId,
+    );
+  }),
+  conversationBridgeProvider.overrideWith((ref) => _ConversationBridge(ref)),
+];

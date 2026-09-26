@@ -313,6 +313,9 @@ void main() {
   testWidgets('la cabecera permanece visible, respeta SafeArea y no se mueve', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(390, 560);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     await montar(tester);
     await tocar(tester, find.text('ROBAR'));
     await tocar(tester, find.byKey(const Key('siguiente_pregunta')));

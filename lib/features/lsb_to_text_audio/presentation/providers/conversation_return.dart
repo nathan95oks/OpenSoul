@@ -38,6 +38,7 @@ class ConversationReturn {
     final reply = ConversationReplyResult(
       conversationId: launch.conversationId,
       replyToTurnId: launch.hearingTurnId,
+      replyToTurnText: launch.hearingText,
       contextId: intervention?.journeyId ?? ref.read(contextProvider)?.id,
       intervention: intervention,
       glosses: ref.read(sentenceProvider),
