@@ -110,6 +110,10 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           animationGlosses.add(singleGloss);
         }
 
+        // Colapsar compuestos multipalabra (ej: "COMO" + deletreo "ESTAS" -> "COMO_ESTAS")
+        // protegiendo contra respuestas fragmentadas o desactualizadas del backend.
+        _collapseCompoundAnimations(animationGlosses, urls, text);
+
         final effectiveGlosses = animationGlosses.isNotEmpty
             ? animationGlosses
             : (decodedResponse['glosses'] as List<dynamic>? ?? [])
@@ -125,10 +129,11 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           }
         }
 
-        final semanticGlosses = (decodedResponse['glosses'] as List<dynamic>?)
+        final rawSemantic = (decodedResponse['glosses'] as List<dynamic>?)
                 ?.map((e) => e.toString().toUpperCase().trim())
                 .toList() ??
             effectiveGlosses;
+        final semanticGlosses = _collapseSemanticCompounds(rawSemantic, text);
 
         return LsbTranslationModel.fromJson({
           'glosses': semanticGlosses,
@@ -145,6 +150,159 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
       }
     } catch (e) {
       throw Exception('Network or Server error: $e');
+    }
+  }
+
+  static final RegExp _punct = RegExp(r'[^\w\s]', unicode: true);
+
+  static List<String> _textWords(String text) {
+    final clean = AnimationUrlResolver.stripAccents(text.toUpperCase())
+        .replaceAll(_punct, ' ');
+    return clean.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+  }
+
+  static const List<(String, String, List<String>)> _compounds = [
+    ('COMO ESTAS', 'COMO_ESTAS', ['COMO', 'ESTAS', 'ESTA', 'ESTAR', 'BIEN', 'TU', 'YO']),
+    ('COMO ESTA', 'COMO_ESTAS', ['COMO', 'ESTAS', 'ESTA', 'ESTAR', 'BIEN', 'TU', 'YO']),
+    ('POR FAVOR', 'POR_FAVOR', ['POR', 'FAVOR']),
+    ('LO SIENTO', 'LO_SIENTO', ['LO', 'SIENTO', 'SENTIR']),
+    ('NO PUEDO', 'NO_PUEDO', ['NO', 'PUEDO', 'PUEDE', 'PODER']),
+    ('NO SE', 'NO_SABER', ['NO', 'SE', 'SABER', 'SABE']),
+    ('NO SABER', 'NO_SABER', ['NO', 'SE', 'SABER', 'SABE']),
+    ('PARA QUE', 'PARA_QUE', ['PARA', 'QUE']),
+    ('POR QUE', 'POR_QUE', ['POR', 'QUE', 'PORQUE']),
+    ('PRIMERA VEZ', 'PRIMERA_VEZ', ['PRIMERA', 'PRIMERO', 'VEZ']),
+  ];
+
+  static List<String> _collapseSemanticCompounds(
+    List<String> glosses,
+    String text,
+  ) {
+    final words = _textWords(text);
+    final joined = words.join(' ');
+    var result = List<String>.from(glosses);
+
+    for (final (phrase, target, constituents) in _compounds) {
+      if (!joined.contains(phrase)) continue;
+      if (result.contains(target)) {
+        result = result
+            .where((g) =>
+                !constituents.contains(AnimationUrlResolver.canonicalFor(g)) ||
+                g == target)
+            .toList();
+        continue;
+      }
+      final firstIdx = result.indexWhere((g) =>
+          constituents.contains(AnimationUrlResolver.canonicalFor(g)));
+      if (firstIdx != -1) {
+        result[firstIdx] = target;
+        result = [
+          for (int i = 0; i < result.length; i++)
+            if (i == firstIdx ||
+                !constituents
+                    .contains(AnimationUrlResolver.canonicalFor(result[i])))
+              result[i],
+        ];
+      }
+    }
+    return result;
+  }
+
+  void _collapseCompoundAnimations(
+    List<String> animationGlosses,
+    List<String> urls,
+    String text,
+  ) {
+    final words = _textWords(text);
+    final joined = words.join(' ');
+    final modelUrl = '${animationResolver.baseUrl}avatar_test.glb';
+
+    for (final (phrase, target, constituents) in _compounds) {
+      if (!joined.contains(phrase)) continue;
+
+      final targetIdx = animationGlosses.indexOf(target);
+      if (targetIdx != -1) {
+        final toRemove = <int>[];
+        for (int i = 0; i < animationGlosses.length; i++) {
+          if (i == targetIdx) continue;
+          final g = AnimationUrlResolver.canonicalFor(animationGlosses[i]);
+          if (constituents.contains(g)) {
+            toRemove.add(i);
+          }
+        }
+        for (final idx in toRemove.reversed) {
+          animationGlosses.removeAt(idx);
+          if (idx < urls.length) urls.removeAt(idx);
+        }
+        continue;
+      }
+
+      final constituentSet = constituents.toSet();
+      int? firstOccurrence;
+      final indicesToRemove = <int>[];
+
+      int i = 0;
+      while (i < animationGlosses.length) {
+        final g = AnimationUrlResolver.canonicalFor(animationGlosses[i]);
+        if (constituentSet.contains(g)) {
+          if (firstOccurrence == null) {
+            firstOccurrence = i;
+          } else {
+            indicesToRemove.add(i);
+          }
+          i++;
+          continue;
+        }
+
+        bool matchedSpelling = false;
+        final candidates = constituents.where((c) => c.length > 1).toList()
+          ..sort((a, b) => b.length.compareTo(a.length));
+        for (final c in candidates) {
+          if (i + c.length <= animationGlosses.length) {
+            final letters = c.split('');
+            bool allMatch = true;
+            for (int k = 0; k < letters.length; k++) {
+              if (AnimationUrlResolver.canonicalFor(animationGlosses[i + k]) !=
+                  letters[k]) {
+                allMatch = false;
+                break;
+              }
+            }
+            if (allMatch) {
+              if (firstOccurrence == null) {
+                firstOccurrence = i;
+                for (int k = 1; k < letters.length; k++) {
+                  indicesToRemove.add(i + k);
+                }
+              } else {
+                for (int k = 0; k < letters.length; k++) {
+                  indicesToRemove.add(i + k);
+                }
+              }
+              i += letters.length;
+              matchedSpelling = true;
+              break;
+            }
+          }
+        }
+
+        if (!matchedSpelling) {
+          i++;
+        }
+      }
+
+      if (firstOccurrence != null) {
+        animationGlosses[firstOccurrence] = target;
+        if (firstOccurrence < urls.length) {
+          urls[firstOccurrence] = modelUrl;
+        } else {
+          urls.add(modelUrl);
+        }
+        for (final idx in indicesToRemove.reversed) {
+          animationGlosses.removeAt(idx);
+          if (idx < urls.length) urls.removeAt(idx);
+        }
+      }
     }
   }
 }

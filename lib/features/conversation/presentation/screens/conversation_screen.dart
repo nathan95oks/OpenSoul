@@ -146,6 +146,32 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     await ref.read(audioOutputProvider).speak(text);
   }
 
+  Future<void> _handleHearingSend(
+    String text, {
+    MessageSource source = MessageSource.text,
+  }) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    await ref
+        .read(conversationProvider.notifier)
+        .sendHearingMessage(text, source: source);
+    if (!mounted) return;
+    final lastTurn = ref.read(conversationProvider).conversation.lastTurn;
+    if (lastTurn != null && lastTurn.message.speaker != SpeakerRole.deaf) {
+      final glosses = lastTurn.outputs.animationGlosses.isNotEmpty
+          ? lastTurn.outputs.animationGlosses
+          : lastTurn.message.glosses;
+      if (glosses.isNotEmpty || lastTurn.outputs.animationUrls.isNotEmpty) {
+        AvatarPlaybackSheet.show(
+          context,
+          glosses: glosses,
+          animationUrls: lastTurn.outputs.animationUrls,
+          animationGlosses: lastTurn.outputs.animationGlosses,
+        );
+      }
+    }
+  }
+
   /// Cierra la atención del ciudadano actual.
   ///
   /// Se confirma porque no es reversible: se borra todo lo que dijo. Lo que
@@ -282,6 +308,8 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                                     ? turn.outputs.animationGlosses
                                     : turn.message.glosses,
                                 animationUrls: turn.outputs.animationUrls,
+                                animationGlosses: turn.outputs.animationGlosses,
+                                autoDismissOnFinish: false,
                               );
                             },
                           );
@@ -300,12 +328,9 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
               if (_instruccionPendiente(state) != null)
                 QuickReplyBar(onReply: _enviarRespuestaRapida),
               _InputArea(
-                onHearingText: (text) => ref
-                    .read(conversationProvider.notifier)
-                    .sendHearingMessage(text),
-                onHearingSpeech: (text) => ref
-                    .read(conversationProvider.notifier)
-                    .sendHearingMessage(text, source: MessageSource.speech),
+                onHearingText: _handleHearingSend,
+                onHearingSpeech: (text) =>
+                    _handleHearingSend(text, source: MessageSource.speech),
                 onDeafCards: _openCardsFlow,
                 onHandBackToHearing: _handBackToHearing,
                 deafCardsMode: _deafCardsMode(state),
@@ -380,14 +405,17 @@ class _InputArea extends StatelessWidget {
             child: OutlinedButton.icon(
               key: const Key('tarjetas_lsb'),
               onPressed: onDeafCards,
-              icon: const Icon(Icons.sign_language, size: 18),
+              icon: const Icon(Icons.sign_language, size: 18, color: Colors.white),
               label: Text(
                 _deafCardsLabel,
-                style: const TextStyle(fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
               ),
               style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.brandLight,
-                side: const BorderSide(color: AppTheme.darkBorder),
+                foregroundColor: Colors.white,
+                side: const BorderSide(color: Colors.white38),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(23),
                 ),

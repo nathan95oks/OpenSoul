@@ -205,6 +205,67 @@ void main() {
       expect(sent['context'], 'legal');
       expect(sent['situation'], 'denuncia_robo');
     });
+
+    test('colapsa señas compuestas fragmentadas del backend en una sola seña 3D', () async {
+      // Simula que el backend devolvió "COMO" y deletreo "E-S-T-A-S" para "como estas policia"
+      Map<String, dynamic> paso(String g) => {
+            'gloss': g,
+            'animationFile': 'avatar_test.glb',
+          };
+      final datasource = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
+        client: MockClient((_) async => http.Response(
+              jsonEncode({
+                'glosses': ['COMO', 'ESTAS', 'POLICIA'],
+                'animationSequence': [
+                  paso('COMO'),
+                  paso('E'), paso('S'), paso('T'), paso('A'), paso('S'),
+                  paso('POLICIA'),
+                ],
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            )),
+        animationResolver: resolver,
+      );
+
+      final result = await datasource.translateText('como estas policia');
+
+      expect(result.animationGlosses, ['COMO_ESTAS', 'POLICIA']);
+      expect(result.animationUrls, [modelo, modelo]);
+      expect(result.glosses, ['COMO_ESTAS', 'POLICIA']);
+    });
+
+    test('colapsa paráfrasis de Bedrock (ESTAR-BIEN-TU-YO) para "hola cómo estás" con tildes', () async {
+      Map<String, dynamic> paso(String g) => {
+            'gloss': g,
+            'animationFile': 'avatar_test.glb',
+          };
+      final datasource = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
+        client: MockClient((_) async => http.Response(
+              jsonEncode({
+                'glosses': ['HOLA', 'ESTAR', 'BIEN', 'TU', 'YO'],
+                'animationSequence': [
+                  paso('HOLA'),
+                  paso('E'), paso('S'), paso('T'), paso('A'), paso('R'),
+                  paso('B'), paso('I'), paso('E'), paso('N'),
+                  paso('TU'),
+                  paso('YO'),
+                ],
+              }),
+              200,
+              headers: {'content-type': 'application/json'},
+            )),
+        animationResolver: resolver,
+      );
+
+      final result = await datasource.translateText('hola cómo estás');
+
+      expect(result.animationGlosses, ['HOLA', 'COMO_ESTAS']);
+      expect(result.animationUrls, [modelo, modelo]);
+      expect(result.glosses, ['HOLA', 'COMO_ESTAS']);
+    });
   });
 }
 

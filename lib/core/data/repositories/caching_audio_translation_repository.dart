@@ -5,7 +5,7 @@ import 'package:lsb_legal_app/core/domain/repositories/audio_translation_reposit
 /// dos traducciones (p. ej. si se agrega un nuevo dato del que depende el
 /// resultado) para que las entradas antiguas, con clave más corta, dejen de
 /// coincidir en vez de servirse por error para una combinación distinta.
-const _cacheKeyVersion = 'v2';
+const _cacheKeyVersion = 'v3';
 
 class CachingAudioTranslationRepository implements AudioTranslationRepository {
   final AudioTranslationRepository inner;
