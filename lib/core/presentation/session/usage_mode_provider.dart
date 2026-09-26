@@ -5,10 +5,10 @@ import 'package:lsb_legal_app/core/domain/entities/session_snapshot.dart';
 
 /// Cómo se está usando la aplicación ahora mismo.
 ///
-/// Es una decisión de la persona, no algo que se infiera: ni del tamaño de la
-/// pantalla, ni de una discapacidad supuesta del propietario, ni de quién
-/// hablara primero. Se pregunta al entrar y se puede cambiar desde un control
-/// visible.
+/// No se infiere: ni del tamaño de la pantalla, ni de una discapacidad
+/// supuesta del propietario, ni de quién hablara primero. Ya no se pregunta al
+/// entrar: sin modo guardado se usa el personal, que es el uso que existía
+/// antes de que hubiera modos.
 class UsageSession {
   final UsageMode? mode;
   final String? institutionProfileId;
@@ -23,7 +23,6 @@ class UsageSession {
     this.loading = true,
   });
 
-  bool get needsSelection => !loading && mode == null;
   bool get isCounter => mode == UsageMode.counter;
   bool get isPersonal => mode == UsageMode.personal;
 
@@ -57,7 +56,7 @@ class UsageSessionNotifier extends Notifier<UsageSession> {
     // reconstruirse—. Escribir el estado entonces revienta.
     if (!ref.mounted) return;
     state = UsageSession(
-      mode: config.mode,
+      mode: config.mode ?? UsageMode.personal,
       institutionProfileId: config.institutionProfileId,
       loading: false,
     );
@@ -102,13 +101,6 @@ class UsageSessionNotifier extends Notifier<UsageSession> {
       clearInstitution: profileId == null,
     ));
   }
-
-  /// Vuelve al selector sin borrar nada todavía.
-  ///
-  /// Lo que se dijo sigue guardado: si la persona vuelve al mismo modo, se
-  /// reanuda. Solo se descarta al elegir un modo distinto, en [choose].
-  void reopenSelection() =>
-      state = state.copyWith(clearMode: true, loading: false);
 }
 
 final usageSessionProvider =

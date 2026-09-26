@@ -27,6 +27,7 @@ class _StubDeclaracion implements TranslationRepository {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   }) async =>
       TranslationResult(
         baseSentence: 'Quiero hacer una denuncia.',

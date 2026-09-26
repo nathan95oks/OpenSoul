@@ -257,6 +257,12 @@ def build_graph():
         # intervención. Sirven para reconocerla y para el avatar; nunca son
         # tarjetas de respuesta.
         formulacion = [o["gloss"] for o in reachable if o.get("kind") == "card"]
+        # En las preguntas del banco manda su formulación LSB canónica
+        # (`gramaticaLsb.secuencia`): la misma que ve la app y recibe la
+        # Lambda. Así el grafo no puede quedarse con otra secuencia.
+        canonica = ((pregunta or {}).get("gramaticaLsb") or {}).get("secuencia")
+        if canonica:
+            formulacion = list(canonica)
         # Valores literales y mecanismos: números, deletreos y conceptos
         # pendientes. No son señas nuevas.
         literales = [

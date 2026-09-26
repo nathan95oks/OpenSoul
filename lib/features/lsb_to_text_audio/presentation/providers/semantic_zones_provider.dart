@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
 import 'package:lsb_legal_app/core/domain/services/semantic_navigation_engine.dart';
 import 'package:lsb_legal_app/core/domain/services/zone_inference_engine.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
 class SemanticZonesState {
@@ -386,7 +387,13 @@ class SemanticZonesNotifier extends Notifier<SemanticZonesState> {
     activateZone(order[idx - 1]);
   }
 
+  /// Reinicia el flujo de preguntas del módulo.
+  ///
+  /// La semántica vive en el flujo guiado ([guidedFlowProvider]); quien
+  /// llama aquí (p. ej. la conversación al abrir un encargo nuevo) espera
+  /// que el armado empiece limpio, así que se reinicia también.
   void reset() {
+    ref.read(guidedFlowProvider.notifier).reset();
     final ctx = ref.read(contextProvider);
     final engine = ref.read(_engineProvider);
     if (ctx == null) {

@@ -53,6 +53,7 @@ class _DeclarationRepo implements TranslationRepository {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   }) async =>
       TranslationResult(
         baseSentence: cards.join(' '),

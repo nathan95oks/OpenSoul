@@ -59,7 +59,7 @@ class HierarchicalWizardStructuredTests(unittest.TestCase):
         self.assertIn("Autor / sospechoso:", res)
         self.assertIn("hombre de contextura alta", res)
         self.assertIn("vestía chamarra negra, pantalón azul", res)
-        self.assertIn("Cuento con elementos de prueba o respaldo:", res)
+        self.assertIn("Cuento con elementos de prueba o respaldo: fotografías, la factura.", res)
 
     def test_context_denuncia_robo_loss_perder(self):
         decl = {
@@ -116,7 +116,10 @@ class HierarchicalWizardStructuredTests(unittest.TestCase):
         self.assertIn("Canal utilizado: WhatsApp.", res)
         self.assertIn("Remitente: número desconocido.", res)
         self.assertIn("Número de contacto / remitente: 71727374.", res)
-        self.assertIn("Dispongo de capturas de pantalla y mensajes guardados como evidencia.", res)
+        # Guardar los mensajes y tener capturas son hechos distintos; aquí
+        # se declararon los dos, y cada uno se redacta por separado.
+        self.assertIn("Guardé los mensajes.", res)
+        self.assertIn("Tengo capturas de pantalla de los mensajes.", res)
 
     def test_context_engano_dinero(self):
         decl = {
@@ -135,7 +138,9 @@ class HierarchicalWizardStructuredTests(unittest.TestCase):
         self.assertIn("Monto involucrado: 2000 Bs.", res)
         self.assertIn("Medio de pago / transferencia: transferencia bancaria QR.", res)
         self.assertIn("Beneficiario o destinatario del dinero: María López.", res)
-        self.assertIn("Cuento con comprobantes bancarios y respaldo de la transacción.", res)
+        # «Bancario» no se declaró: el comprobante no se califica.
+        self.assertIn("Cuento con un comprobante de la transacción.", res)
+        self.assertNotIn("bancarios", res)
 
     def test_context_seguimiento(self):
         decl = {
@@ -192,7 +197,9 @@ class HierarchicalWizardStructuredTests(unittest.TestCase):
         self.assertIn("Datos de identificación:", res)
         self.assertIn("Nombre completo: Raúl Gutiérrez.", res)
         self.assertIn("Documento de identidad: 5123456 LP.", res)
-        self.assertIn("Teléfono / WhatsApp de contacto: 68012345.", res)
+        # Nadie dijo WhatsApp: el número es solo un teléfono de contacto.
+        self.assertIn("Teléfono de contacto: 68012345.", res)
+        self.assertNotIn("WhatsApp", res)
         self.assertIn("Acompañante: madre.", res)
         self.assertIn("Comunico que soy una persona sorda y requiero comunicación escrita o intérprete oficial de LSB.", res)
 

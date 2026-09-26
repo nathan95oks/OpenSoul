@@ -664,9 +664,10 @@ DeclarationDraft buildFullDeclarationDraft(dynamic ref) {
   FraudDetails? fraud = entityDraft.fraud;
   if (currentContextId == 'engano_dinero') {
     final medioAns = answersOf('medio_banco');
+    // La moneda no se supone: si nadie la eligió, no hay moneda.
     fraud = FraudDetails(
       amount: fraud?.amount,
-      currency: fraud?.currency ?? 'bolivianos',
+      currency: fraud?.currency,
       deliveryMethod: medioAns.isNotEmpty ? medioAns.first.toLowerCase() : null,
       recipientName: fraud?.recipientName,
       receiptDoc: fraud?.receiptDoc,
@@ -675,9 +676,14 @@ DeclarationDraft buildFullDeclarationDraft(dynamic ref) {
 
   DigitalThreatDetails? digital = entityDraft.digitalThreat;
   if (currentContextId == 'amenaza_digital') {
+    // CELULAR dice «por celular», no «por WhatsApp»: la aplicación ni el
+    // tipo de mensaje se deducen.
     digital = DigitalThreatDetails(
-      channel: digital?.channel ?? (hechoAns.contains('CELULAR') ? 'WhatsApp' : 'Internet'),
-      messageType: digital?.messageType ?? 'texto',
+      channel: digital?.channel ??
+          (hechoAns.contains('CELULAR')
+              ? 'celular'
+              : (hechoAns.contains('INTERNET') ? 'internet' : null)),
+      messageType: digital?.messageType,
       hasSavedEvidence: existingEvidence.isNotEmpty ||
           answersOf('evidencia').contains('GUARDAR'),
     );

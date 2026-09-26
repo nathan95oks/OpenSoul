@@ -8,13 +8,12 @@ import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
-import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
@@ -22,7 +21,6 @@ class DeclarationResultScreen extends ConsumerWidget {
   const DeclarationResultScreen({super.key});
 
   static const _orange = AppTheme.brandPrimary;
-  static const _assembler = LocalSentenceAssembler();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,15 +33,12 @@ class DeclarationResultScreen extends ConsumerWidget {
     // ofrece enviarla al chat aunque haya un chat abierto detrás.
     final servesConversation =
         ref.watch(cardsFlowLaunchProvider).purpose.servesConversation;
-    final draft = ref.watch(declarationDraftProvider);
-
-    // Si el backend aún no responde o estamos offline, ensamblamos de forma determinista
-    final liveDeterministicText = _assembler.assembleStructured(draft);
+    // Mientras el backend responde se muestra la misma redacción del banco
+    // que ya se veía en la vista previa: nunca otra frase.
+    final guidedText = ref.watch(guidedPreviewProvider);
     final displayText = (result != null && result.generatedText.isNotEmpty)
         ? result.generatedText
-        : (liveDeterministicText.isNotEmpty
-            ? liveDeterministicText
-            : (result?.baseSentence ?? ''));
+        : (guidedText.isNotEmpty ? guidedText : (result?.baseSentence ?? ''));
 
     final hasContent = displayText.isNotEmpty || glosses.isNotEmpty;
 
