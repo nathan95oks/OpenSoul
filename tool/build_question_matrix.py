@@ -25,6 +25,7 @@ Genera (no editar a mano):
     docs/negocio/matriz_modos.csv                      personal / ventanilla
     docs/negocio/11_Matriz_Preguntas.md                resumen revisable
     docs/negocio/12_Brechas_Lexicas_Animacion.md
+    docs/negocio/13_Auditoria_Gramatica_LSB.md · matriz_gramatica_lsb.csv
 
 Devuelve 1 y no escribe nada si el banco contradice al repositorio: glosa de
 respuesta inexistente o sin acepción para el campo que se pregunta, pregunta de
@@ -48,6 +49,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "aws"))
 
 import guided_composer as GC  # noqa: E402
+import corpus_dialogue as CD  # noqa: E402
 
 NEG = os.path.join(ROOT, "docs", "negocio")
 P_BANCO = os.path.join(NEG, "config", "banco_preguntas.json")
@@ -65,6 +67,8 @@ OUT_NODOS = os.path.join(NEG, "matriz_nodos_grafo.csv")
 OUT_MODOS = os.path.join(NEG, "matriz_modos.csv")
 OUT_MD = os.path.join(NEG, "11_Matriz_Preguntas.md")
 OUT_BRECHAS = os.path.join(NEG, "12_Brechas_Lexicas_Animacion.md")
+OUT_GRAMATICA_MD = os.path.join(NEG, "13_Auditoria_Gramatica_LSB.md")
+OUT_GRAMATICA_CSV = os.path.join(NEG, "matriz_gramatica_lsb.csv")
 
 CONTROLES = {"polar2", "polar3", "alternativa", "seleccion_unica", "seleccion_multiple",
              "persona_identidad", "texto_nombre", "telefono", "entero", "monto", "tiempo", "hora",
@@ -307,6 +311,8 @@ def validar(banco, acep, catalogo, grafo, contextos):
         if qid not in alcanzables:
             errores.append(f"{qid}: pregunta inalcanzable (ni recorrido, ni nodo, ni referencia)")
 
+    validar_gramatica(banco, grafo, errores)
+
     # Autoprueba de redacción: cada opción, con valores de ejemplo, en los dos propósitos
     comp = GC.Composer(banco_ejecucion(banco, acep))
     ejemplo = {"nombre": "María Quispe", "apellido": "Quispe", "telefono": "71234567", "n": "3",
@@ -332,6 +338,220 @@ def validar(banco, acep, catalogo, grafo, contextos):
                     if texto and v not in texto and k != "moneda" and not o.get("fraseSingular"):
                         errores.append(f"{q['id']}/{o['id']}: el valor {k}={v} no aparece en «{texto}»")
     return errores, avisos
+
+
+# --------------------------------------------------------------------------
+# Gramática LSB de las formulaciones
+# --------------------------------------------------------------------------
+#
+# `glosa válida ≠ oración LSB validada`. Que todas las glosas de una pregunta
+# existan en el corpus v4 no dice nada de su orden: el propio corpus advierte
+# (§6) que la columna «Conceptos LSB objetivo» «no pretende fijar por sí sola
+# la sintaxis natural definitiva de la LSB», y (§10) que no se asuma un orden
+# OSV fijo. Aquí no se corrige gramática: se registra qué evidencia hay y se
+# impide que un estado sea más optimista que esa evidencia.
+#
+#   GRAMMAR_VALIDATED    secuencia completa validada por una persona
+#                        competente; exige `validacion` con la secuencia exacta.
+#   GRAMMAR_PROVISIONAL  hay secuencia en el corpus y todas sus piezas tienen
+#                        representación en v4; el orden no está validado.
+#   GRAMMAR_PENDING      no hay secuencia LSB en ninguna fuente del repositorio.
+#   LEXICAL_GAP          la formulación necesita un concepto sin
+#                        representación suficiente en v4.
+
+ESTADOS_GRAMATICA = ("GRAMMAR_VALIDATED", "GRAMMAR_PROVISIONAL", "GRAMMAR_PENDING", "LEXICAL_GAP")
+_INTERROGATIVAS = {"QUE", "QUIEN", "DONDE", "CUANDO", "CUAL", "COMO", "CUANTOS", "POR_QUE", "PARA_QUE"}
+_PRONOMBRES = {"TU", "YO", "EL", "ELLA", "USTED", "TUYO", "MIO", "SUYO", "NOSOTROS"}
+_POSESIVOS = {"TUYO", "MIO", "SUYO"}
+_TIEMPO = {"AYER", "HOY", "MANANA", "AHORA", "ANTES", "DESPUES", "PASADO", "PROXIMO", "SIEMPRE", "TARDE",
+           "TEMPRANO", "ANTEAYER", "AUN", "PRIMERA_VEZ", "CADA_DIA", "DIA", "SEMANA", "MES", "HORA", "FECHA"}
+_POLARES = {"polar2", "polar3"}
+
+
+def _indicio_calco(frase, tokens):
+    """Indicio, no veredicto: tres o más glosas en el mismo orden que sus
+    palabras en la frase española."""
+    palabras = re.findall(r"[a-zñ]+", CD.strip_accents(frase).lower())
+    posiciones = []
+    for t in tokens:
+        raiz = CD.strip_accents(t.strip("¿?[]").replace("_", " ")).lower()[:4]
+        i = next((j for j, w in enumerate(palabras) if len(raiz) >= 3 and w.startswith(raiz)), None)
+        if i is not None:
+            posiciones.append(i)
+    return (len(posiciones) >= 3 and posiciones == sorted(posiciones)
+            and len(set(posiciones)) == len(posiciones))
+
+
+def _tokens_corpus(celda):
+    celda = celda.replace("→", "·")
+    for marca in CD.MARKERS:
+        celda = celda.replace(marca, " ")
+    return [t.strip() for t in re.split(r"[·+]", celda) if t.strip()]
+
+
+def analizar_gramatica(banco, grafo, resolver=None):
+    """Evidencia gramatical de cada pregunta, derivada de corpus + grafo.
+
+    Nunca devuelve GRAMMAR_VALIDATED: eso solo puede declararlo una persona.
+    """
+    resolver = resolver or CD.ConceptResolver()
+    nodos = {n["id"]: n for n in grafo["nodes"]}
+    catalogo = set(resolver.app.keys())
+    out = {}
+    for q in banco["preguntas"]:
+        secuencias, huecos, validar, problemas, propuestas = [], [], [], [], []
+        for nid in q.get("nodos", []):
+            n = nodos.get(nid)
+            if n is None:
+                continue
+            p = n["provenance"]
+            tokens = _tokens_corpus(p["conceptsRaw"])
+            res = resolver.resolve_cell(p["conceptsRaw"])
+            secuencias.append({
+                "nodo": nid, "frase": p["spanish"], "corpus": p["conceptsRaw"], "tokens": tokens,
+                "nota": p["note"], "marcadores": n.get("markers", []),
+                "formulationGlosses": n.get("formulationGlosses", []),
+            })
+            for t, r in zip(tokens, res):
+                clave = CD.norm(t.strip("[]"))
+                if r.status == CD.UNSUPPORTED:
+                    huecos.append(f"{t}: no está en el corpus v4")
+                elif t.startswith("[") or (r.status == CD.NEEDS_VALIDATION and clave in resolver.pending):
+                    huecos.append(f"{t}: concepto sin seña directa según el corpus (§4)")
+                elif r.status == CD.DACTYLOLOGY and clave not in catalogo and not t.lower().startswith("d("):
+                    huecos.append(f"{t}: solo deletreo, sin representación validada")
+            # Piezas del corpus que el grafo no guardó en la secuencia.
+            en_grafo = set(n.get("formulationGlosses", []))
+            for t in tokens:
+                m = re.match(r"^d\((.+)\)$", t, re.IGNORECASE)
+                if m:
+                    sigla = CD.norm(m.group(1))
+                    entrada = resolver.app.get(sigla)
+                    if entrada and entrada["gloss"] not in en_grafo:
+                        propuestas.append(
+                            f"restituir {entrada['gloss']} (del corpus {t}) en su posición; "
+                            "pendiente de aprobación")
+                    elif not entrada:
+                        problemas.append(f"{t} se guarda como deletreo literal, fuera de la secuencia")
+            if CD.norm(p["spanish"]).strip("_") != CD.norm(q["formulacion"]).strip("_"):
+                validar.append(f"confirmar que la secuencia de «{p['spanish']}» sirve para la "
+                               f"formulación del banco «{q['formulacion']}»")
+        if len({tuple(x["tokens"]) for x in secuencias}) > 1:
+            problemas.append("dos filas del corpus con secuencias distintas para la misma pregunta")
+
+        if secuencias:
+            principal = secuencias[0]
+            tk = [t.replace("¿", "").replace("?", "").strip() for t in principal["tokens"]]
+            claves = [CD.norm(t) for t in tk]
+            validar.append(f"confirmar el orden {' · '.join(principal['tokens'])} como formulación "
+                           "natural de la pregunta (el corpus §6 no fija la sintaxis)")
+            wh = [t for t, k in zip(tk, claves) if k in _INTERROGATIVAS]
+            if wh:
+                pos = ["final" if claves.index(CD.norm(w)) == len(tk) - 1
+                       else ("inicial" if claves.index(CD.norm(w)) == 0 else "intermedia") for w in wh]
+                validar.append(f"confirmar la posición {'/'.join(pos)} de "
+                               f"{', '.join('¿' + w + '?' for w in wh)} en esta construcción")
+                no_manuales = "desconocidos: ¿requiere marcador no manual de pregunta QU-?"
+            elif q["control"] in _POLARES:
+                validar.append("confirmar si la pregunta sí/no requiere marcador no manual: "
+                               "la secuencia no distingue pregunta de afirmación")
+                no_manuales = "requeridos y no modelados: la secuencia no marca la pregunta"
+            elif q["control"] == "alternativa":
+                validar.append("confirmar cómo se marca la pregunta disyuntiva («… o …»): la "
+                               "secuencia no marca ni la disyunción ni la pregunta")
+                no_manuales = "requeridos y no modelados: la secuencia no marca la pregunta"
+            elif q["control"] == "derivacion":
+                validar.append("pregunta compuesta (el banco la divide en dos): confirmar si la "
+                               "secuencia expresa «o» y no «y»")
+                no_manuales = "desconocidos"
+            else:
+                no_manuales = "desconocidos"
+            pron = [t for t, k in zip(tk, claves) if k in _PRONOMBRES]
+            if pron:
+                validar.append(f"confirmar si {', '.join(pron)} explícito es necesario "
+                               "o se expresa por dirección/mirada")
+            if any(k in _POSESIVOS for k in claves):
+                validar.append("confirmar la construcción posesiva (orden poseedor/poseído)")
+            tiempo = [t for t, k in zip(tk, claves) if k in _TIEMPO]
+            if tiempo:
+                validar.append(f"confirmar la posición de la expresión temporal {', '.join(tiempo)}")
+            if "NO" in claves or "negation" in principal["marcadores"]:
+                validar.append("confirmar la posición de la negación (NO / marca /neg/)")
+            if "condition" in principal["marcadores"]:
+                validar.append("confirmar la marca condicional /cond/")
+            dact = [t for t in tk if t.lower().startswith("d(")]
+            if dact:
+                validar.append(f"confirmar la integración de {', '.join(dact)} en la secuencia")
+            alternativas = [t for t in tk if "/" in t]
+            if alternativas:
+                validar.append(f"elegir una de las alternativas {', '.join(alternativas)}")
+            if "composici" in principal["nota"].lower():
+                validar.append(f"confirmar la composición como unidad ({principal['nota']})")
+            if _indicio_calco(principal["frase"], principal["tokens"]):
+                problemas.append("indicio (no veredicto) de calco: las glosas siguen el orden de las "
+                                 "palabras del español")
+        else:
+            no_manuales = "desconocidos"
+            formulacion = [k for k, v in (q.get("noOfrecer") or {}).items()
+                           if str(v).lower().startswith("formulaci")]
+            problemas.append("sin secuencia LSB en ninguna fuente del repositorio; la formulación "
+                             "solo existe en español"
+                             + (f" (el banco solo declara el conjunto sin orden {formulacion})"
+                                if formulacion else ""))
+            validar.append("proponer la secuencia completa con una persona señante: "
+                           "no hay fuente en el repositorio")
+
+        for h in huecos:
+            concepto = h.split(":")[0]
+            validar.append(f"confirmar cómo expresar {concepto} sin una seña fuera del corpus v4 "
+                           "(no se añade al corpus)")
+        if huecos:
+            maximo = "LEXICAL_GAP"
+        elif secuencias:
+            maximo = "GRAMMAR_PROVISIONAL"
+        else:
+            maximo = "GRAMMAR_PENDING"
+        glosas_form = [g for x in secuencias for g in x["formulationGlosses"]]
+        out[q["id"]] = {
+            "secuencias": secuencias, "huecos": huecos, "validar": validar, "problemas": problemas,
+            "propuestas": propuestas, "noManuales": no_manuales, "estadoMaximo": maximo,
+            "todasEnV4": all(g in catalogo or CD.norm(g) in catalogo for g in glosas_form),
+        }
+    return out
+
+
+def validar_gramatica(banco, grafo, errores, resolver=None):
+    """Ningún estado puede ser más optimista que la evidencia."""
+    analisis = analizar_gramatica(banco, grafo, resolver)
+    for q in banco["preguntas"]:
+        qid = q["id"]
+        a = analisis[qid]
+        g = q.get("gramaticaLsb")
+        if not isinstance(g, dict) or g.get("estado") not in ESTADOS_GRAMATICA:
+            errores.append(f"{qid}: falta gramaticaLsb.estado ({', '.join(ESTADOS_GRAMATICA)})")
+            continue
+        estado = g["estado"]
+        if not a["todasEnV4"]:
+            errores.append(f"{qid}: la formulación usa glosas fuera del corpus v4")
+        if a["huecos"] and estado != "LEXICAL_GAP":
+            errores.append(f"{qid}: la formulación necesita {a['huecos']}; el estado debe ser LEXICAL_GAP")
+        if estado in ("GRAMMAR_PROVISIONAL", "GRAMMAR_VALIDATED") and not a["secuencias"]:
+            errores.append(f"{qid}: {estado} sin secuencia LSB en el corpus")
+        if "validacion" in g and estado != "GRAMMAR_VALIDATED":
+            errores.append(f"{qid}: hay un registro de validación pero el estado es {estado}")
+        if estado == "GRAMMAR_VALIDATED":
+            v = g.get("validacion")
+            actual = a["secuencias"][0]["tokens"] if a["secuencias"] else None
+            if not isinstance(v, dict) or not all(str(v.get(k) or "").strip()
+                                                  for k in ("validador", "fecha", "evidencia")):
+                errores.append(f"{qid}: GRAMMAR_VALIDATED exige validacion.validador, .fecha y .evidencia "
+                               "(nunca se promueve automáticamente)")
+            elif not re.match(r"^\d{4}-\d{2}-\d{2}$", str(v["fecha"])):
+                errores.append(f"{qid}: validacion.fecha debe ser AAAA-MM-DD")
+            elif v.get("secuencia") != actual:
+                errores.append(f"{qid}: la validación es de otra secuencia ({v.get('secuencia')}); "
+                               f"la actual es {actual}")
+    return analisis
 
 
 def validar_condicion(cond, Q, donde, errores):
@@ -400,6 +620,60 @@ def md(s):
     return str(s).replace("|", "\\|").replace("\n", " ")
 
 
+def render_gramatica(banco, grafo):
+    """Matriz de auditoría gramatical: una fila por pregunta del banco."""
+    analisis = analizar_gramatica(banco, grafo)
+    filas = []
+    for q in banco["preguntas"]:
+        a = analisis[q["id"]]
+        g = q["gramaticaLsb"]
+        filas.append({
+            "questionId": q["id"],
+            "espanol": q["formulacion"],
+            "formulationGlosses": [x for s in a["secuencias"] for x in s["formulationGlosses"]],
+            "secuenciaCorpus": " || ".join(s["corpus"] for s in a["secuencias"]),
+            "todasEnCorpusV4": "sí" if a["todasEnV4"] else "no",
+            "estadoGramatica": g["estado"],
+            "evidencia": " || ".join(f"corpus §6 «{s['frase']}» (nota: {s['nota']})"
+                                     for s in a["secuencias"]) or "ninguna",
+            "problema": a["huecos"] + a["problemas"],
+            "propuesta": a["propuestas"] or ["ninguna: no hay evidencia para cambiar la secuencia"],
+            "noManuales": a["noManuales"],
+            "requiereValidacionHumana": a["validar"],
+            "validadoPor": (g.get("validacion") or {}).get("validador", ""),
+        })
+    columnas = ["questionId", "espanol", "formulationGlosses", "secuenciaCorpus", "todasEnCorpusV4",
+                "estadoGramatica", "evidencia", "problema", "propuesta", "noManuales",
+                "requiereValidacionHumana", "validadoPor"]
+    csv_out = csv_texto(filas, columnas)
+
+    cuenta = Counter(f["estadoGramatica"] for f in filas)
+    L = ["# Auditoría gramatical LSB de las formulaciones del banco", "",
+         "> Generado por `tool/build_question_matrix.py` desde `docs/negocio/config/banco_preguntas.json`,",
+         "> `assets/dialogue/dialogue_graph.json` y el Corpus Maestro Unificado LSB v4. No editar a mano.", "",
+         "**Glosa válida ≠ oración LSB validada.** El corpus v4 advierte (§6) que la columna «Conceptos LSB "
+         "objetivo» no fija la sintaxis natural definitiva, y (§10) que no se asuma un orden OSV fijo; la "
+         "validación de sintaxis corresponde a personas sordas señantes e intérpretes (§3.1, nivel D). Esta "
+         "matriz registra la evidencia; no corrige gramática.", "",
+         "| Estado | Preguntas |", "|---|---|"]
+    for e in ESTADOS_GRAMATICA:
+        L.append(f"| `{e}` | {cuenta.get(e, 0)} |")
+    L += ["", f"Total: **{len(filas)}** preguntas.", "",
+          "`noManuales`: el modelo de datos es una secuencia lineal de glosas; no representa expresión "
+          "facial, cejas, mirada ni postura. Donde la pregunta los necesita se indica, sin inventar tokens.", "",
+          "| questionId | español | formulationGlosses | secuencia corpus | en v4 | estado | evidencia | "
+          "problema | propuesta | no manuales | requiere validación humana |",
+          "|---|---|---|---|---|---|---|---|---|---|---|"]
+    for f in filas:
+        L.append("| " + " | ".join(md(x) for x in [
+            f["questionId"], f["espanol"], " · ".join(f["formulationGlosses"]) or "—",
+            f["secuenciaCorpus"] or "—", f["todasEnCorpusV4"], f["estadoGramatica"], f["evidencia"],
+            "; ".join(f["problema"]) or "—", "; ".join(f["propuesta"]), f["noManuales"],
+            "; ".join(f["requiereValidacionHumana"]) or "—",
+        ]) + " |")
+    return "\n".join(L) + "\n", csv_out
+
+
 def generar(banco, acep, catalogo, grafo, horneadas):
     ejecucion = banco_ejecucion(banco, acep)
     en_rec = {}
@@ -412,6 +686,7 @@ def generar(banco, acep, catalogo, grafo, horneadas):
     salida = OrderedDict()
     salida[OUT_DART] = render_dart(ejecucion)
     salida[OUT_AWS] = json.dumps(ejecucion, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
+    salida[OUT_GRAMATICA_MD], salida[OUT_GRAMATICA_CSV] = render_gramatica(banco, grafo)
 
     preguntas_json, filas = [], []
     for q in banco["preguntas"]:
