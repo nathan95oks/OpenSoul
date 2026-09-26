@@ -79,7 +79,7 @@ POLARES = {"SÍ", "NO", "NO_SABER"}
 CAMPOS_OPCION = ("id", "etiqueta", "glosas", "estado", "salida", "polar", "editor", "editorOpcional",
                  "frase", "fraseSinValor", "fraseSingular", "fraseExtra", "rango", "grupo", "cuando",
                  "literal", "glosasPropias", "sinSena", "sinAproximado", "autor", "accion", "actor",
-                 "tipoPerdida", "certeza")
+                 "tipoPerdida", "certeza", "soloControl")
 CAMPOS_PREGUNTA = ("id", "dominio", "formulacion", "acto", "entidad", "campo", "control", "modo",
                    "campos", "maximo", "plantilla", "unir", "fraseSuelta", "requiereMencion",
                    "pasosRespuesta", "variantes", "nodos", "reglas")
@@ -216,14 +216,20 @@ def validar(banco, acep, catalogo, grafo, contextos):
             for cond in p.get("cuando", []):
                 validar_condicion(cond, Q, f"{qid}.pasosRespuesta", errores)
         for g in (q.get("noOfrecer") or {}):
+            # Una glosa que formula la pregunta también se muestra en LSB:
+            # tiene que existir en el corpus v4 igual que una respuesta.
             if g not in catalogo:
-                avisos.append(f"{qid}: noOfrecer cita {g}, que no es tarjeta")
+                errores.append(f"{qid}: noOfrecer cita {g}, que no está en el catálogo (corpus v4)")
             if any(g in o.get("glosas", [])[:1] for o in q.get("opciones", []) if not o.get("salida")):
                 errores.append(f"{qid}: {g} está en noOfrecer y a la vez es respuesta")
 
     for qid, q in Q.items():
         if q.get("modo") == "fragmento" and qid not in referenciadas:
             errores.append(f"{qid}: fragmento que ninguna plantilla usa")
+        # Sin frase suelta, la respuesta a un fragmento que nadie cita (el
+        # oyente pregunta directamente «¿Qué le robaron?») se perdería.
+        if q.get("modo") == "fragmento" and "{frag}" not in (q.get("fraseSuelta") or ""):
+            errores.append(f"{qid}: fragmento sin fraseSuelta con {{frag}}")
 
     # Recorridos
     recorridos = banco["recorridos"]
@@ -254,6 +260,22 @@ def validar(banco, acep, catalogo, grafo, contextos):
                 errores.append(f"{cid}: ordenRedaccion no incluye {sorted(faltan)}")
         if not r["pasos"][0].get("obligatoria") and cid != "identificacion":
             avisos.append(f"{cid}: la primera pregunta no es obligatoria")
+        # Una opción que no redacta nada solo es válida si abre, en este
+        # recorrido, una pregunta obligatoria que sí lo hace (PERDER →
+        # «¿Lo perdió o se lo quitaron?»), o si el banco la declara de control.
+        for paso in r["pasos"]:
+            p = paso["pregunta"]
+            for o in Q.get(p, {}).get("opciones", []):
+                if GC._writes_something(o) or o.get("soloControl"):
+                    continue
+                abre = any(
+                    otro.get("obligatoria") and any(
+                        c.get("pregunta") == p and o["id"] in c.get("opciones", [])
+                        for c in otro.get("cuando", []))
+                    for otro in r["pasos"])
+                if not abre:
+                    errores.append(
+                        f"{cid}/{p}/{o['id']}: no redacta nada ni abre una pregunta obligatoria")
 
     # Nodos del funcionario
     nodos = {n["id"]: n for n in grafo["nodes"]}
@@ -297,9 +319,18 @@ def validar(banco, acep, catalogo, grafo, contextos):
                 respuesta = {"pregunta": q["id"], "estado": o.get("estado", "afirmado"),
                              "opciones": [o["id"]], "valores": valores,
                              "mencion": {"frase": "el celular"}}
-                texto = comp.compose({"proposito": proposito, "pasos": [q["id"]], "respuestas": [respuesta]})
+                texto, representadas = comp.compose_traced(
+                    {"proposito": proposito, "pasos": [q["id"]], "respuestas": [respuesta]})
                 if "{" in texto or "}" in texto:
                     errores.append(f"{q['id']}/{o['id']}: hueco sin llenar en «{texto}»")
+                # Cobertura: una respuesta que redacta algo tiene que aparecer
+                # en la frase aunque sea la única respondida.
+                if GC._writes_something(o) and f"{q['id']}#{o['id']}" not in representadas:
+                    errores.append(f"{q['id']}/{o['id']}: respuesta confirmada que no aparece en la frase")
+                # Los valores escritos se conservan literalmente.
+                for k, v in valores[o["id"]].items():
+                    if texto and v not in texto and k != "moneda" and not o.get("fraseSingular"):
+                        errores.append(f"{q['id']}/{o['id']}: el valor {k}={v} no aparece en «{texto}»")
     return errores, avisos
 
 

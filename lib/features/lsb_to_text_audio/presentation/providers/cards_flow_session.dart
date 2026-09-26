@@ -5,6 +5,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/ca
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
@@ -18,6 +19,7 @@ class CardsFlowSession {
     if (!keepContext) ref.read(contextProvider.notifier).clearContext();
     ref.read(sentenceProvider.notifier).clearSentence();
     ref.read(semanticZonesProvider.notifier).reset();
+    ref.read(guidedFlowProvider.notifier).reset();
     // El borrador de entidades (personas, objetos, lugar) es propio de cada
     // caso: si no se limpia, una respuesta tardía podría insertarse en el
     // caso nuevo tras cambiar de contexto.

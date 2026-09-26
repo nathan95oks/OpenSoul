@@ -10,11 +10,17 @@ class AdaptiveNodeLayout extends ConsumerWidget {
 
   final Set<String> selectedGlosses;
 
+  /// Selección por identificador de tarjeta. Cuando se da, manda sobre
+  /// [selectedGlosses]: dos opciones pueden compartir glosa («Cuándo vuelvo»
+  /// y «Cuándo me avisan» empiezan por CUÁNDO) y no por eso son la misma.
+  final Set<String>? selectedIds;
+
   const AdaptiveNodeLayout({
     super.key,
     required this.cards,
     required this.onCardTap,
     this.selectedGlosses = const {},
+    this.selectedIds,
   });
 
   @override
@@ -41,7 +47,8 @@ class AdaptiveNodeLayout extends ConsumerWidget {
       itemCount: cards.length,
       itemBuilder: (_, i) => SemanticNode(
         card: cards[i],
-        isSelected: selectedGlosses.contains(cards[i].gloss),
+        isSelected: selectedIds?.contains(cards[i].id) ??
+            selectedGlosses.contains(cards[i].gloss),
         onTap: () => onCardTap(cards[i]),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
 import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
@@ -111,6 +112,28 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
       intentId: launch.intentId,
       conversationId: launch.conversationId,
     );
+  }
+
+  /// Genera la declaración de una intervención guiada.
+  ///
+  /// [localText] es la redacción del banco que ya se ve en la vista previa;
+  /// el resultado nunca es otra frase.
+  Future<void> translateGuided({
+    required GuidedIntervention intervention,
+    required String localText,
+    required List<String> glosses,
+    String? speechAct,
+  }) async {
+    state = const AsyncValue.loading();
+    final result = await ref.read(conversationEngineProvider).generateGuided(
+          intervention: intervention,
+          localText: localText,
+          glosses: glosses,
+          speechAct: speechAct,
+          business: _businessSignals(),
+        );
+    _setPlayback(AudioPlaybackState.idle);
+    state = AsyncValue.data(result);
   }
 
   Future<void> translateCards({

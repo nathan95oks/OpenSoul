@@ -2182,7 +2182,8 @@
      ],
      "estado": "negado",
      "frase": "",
-     "polar": true
+     "polar": true,
+     "soloControl": "La persona prefiere no calificarlo como engaño: no afirma ni niega un hecho."
     }
    ],
    "pasosRespuesta": [],
@@ -5830,7 +5831,8 @@
      ],
      "estado": "afirmado",
      "frase": "",
-     "polar": true
+     "polar": true,
+     "soloControl": "Solo abre las preguntas de descripción."
     },
     {
      "id": "no",
@@ -5840,7 +5842,8 @@
      ],
      "estado": "negado",
      "frase": "",
-     "polar": true
+     "polar": true,
+     "soloControl": "Solo cierra las preguntas de descripción."
     }
    ],
    "pasosRespuesta": [],

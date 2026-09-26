@@ -1,5 +1,6 @@
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
@@ -109,6 +110,56 @@ class ConversationEngine {
     }
     return result;
   }
+
+  /// Declaración de una intervención guiada (contrato v4).
+  ///
+  /// El texto definitivo es **siempre** [localText], la redacción
+  /// determinista del banco, la misma de la vista previa. El servidor redacta
+  /// la misma intervención con el mismo banco; su respuesta solo se usa si es
+  /// idéntica, y entonces aporta el audio de Polly de ese mismo texto. Si
+  /// difiere —banco desplegado distinto, refinamiento, error—, no se puede
+  /// demostrar que conserve todos los hechos y negaciones: se descarta y el
+  /// audio se sintetiza en el dispositivo con el texto local. Ninguna IA
+  /// tiene autoridad sobre los hechos.
+  Future<TranslationResult> generateGuided({
+    required GuidedIntervention intervention,
+    required String localText,
+    required List<String> glosses,
+    String? speechAct,
+    BusinessSignals? business,
+  }) async {
+    final local = TranslationResult(
+      baseSentence: localText,
+      generatedText: localText,
+    );
+    if (localText.trim().isEmpty) return local;
+    try {
+      final remote = await declarationRepository.translateCards(
+        context: intervention.journeyId,
+        cards: glosses,
+        speechAct: speechAct,
+        replyToId: intervention.hearingTurnId,
+        business: business,
+        guided: intervention.toJson(),
+      );
+      if (_normalizeText(remote.generatedText) != _normalizeText(localText)) {
+        return local;
+      }
+      return TranslationResult(
+        baseSentence: localText,
+        generatedText: localText,
+        audioUrl: remote.audioUrl,
+        cacheHit: remote.cacheHit,
+        coverageValidated: true,
+        glossSequence: remote.glossSequence,
+      );
+    } catch (_) {
+      return local;
+    }
+  }
+
+  static String _normalizeText(String text) =>
+      text.replaceAll(RegExp(r'\s+'), ' ').trim();
 
   SpeechAct _speechActFrom(String name) => SpeechAct.values.firstWhere(
         (v) => v.name == name,

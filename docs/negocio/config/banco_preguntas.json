@@ -1001,6 +1001,7 @@
    "control": "seleccion_multiple",
    "maximo": 3,
    "modo": "fragmento",
+   "fraseSuelta": "Dañaron {frag}.",
    "campos": [
     "objeto",
     "lugar"
@@ -1968,6 +1969,7 @@
     "PAPEL solo aparece como «no sé cómo se llama»; en Q.DOC.ACLARAR no se repiten comprobante del banco ni factura."
    ],
    "modo": "fragmento",
+   "fraseSuelta": "Tengo {frag}.",
    "opciones": [
     {
      "id": "banco",
@@ -2048,7 +2050,8 @@
      ],
      "estado": "negado",
      "frase": "",
-     "polar": true
+     "polar": true,
+     "soloControl": "La persona prefiere no calificarlo como engaño: no afirma ni niega un hecho."
     }
    ],
    "reglas": [
@@ -2607,6 +2610,7 @@
     "Oculta las opciones que ya estaban en la pregunta anterior (paso `ocultar`)."
    ],
    "modo": "fragmento",
+   "fraseSuelta": "El papel es {frag}.",
    "opciones": [
     {
      "id": "carnet",
@@ -3247,6 +3251,7 @@
     "Plantilla: «Tengo {elementos}.» Nunca «como prueba» salvo que la persona lo elija."
    ],
    "modo": "fragmento",
+   "fraseSuelta": "Tengo {frag}.",
    "opciones": [
     {
      "id": "fotos",
@@ -3403,6 +3408,7 @@
    "control": "seleccion_multiple",
    "maximo": 4,
    "modo": "fragmento",
+   "fraseSuelta": "Me falta {frag}.",
    "campos": [
     "objeto",
     "documento",
@@ -3898,6 +3904,7 @@
    "campo": "acompanante_vinculo",
    "control": "seleccion_unica",
    "modo": "fragmento",
+   "fraseSuelta": "Vine con {frag}.",
    "opciones": [
     {
      "id": "interprete",
@@ -5346,7 +5353,8 @@
      ],
      "estado": "afirmado",
      "frase": "",
-     "polar": true
+     "polar": true,
+     "soloControl": "Solo abre las preguntas de descripción."
     },
     {
      "id": "no",
@@ -5356,7 +5364,8 @@
      ],
      "estado": "negado",
      "frase": "",
-     "polar": true
+     "polar": true,
+     "soloControl": "Solo cierra las preguntas de descripción."
     }
    ],
    "reglas": [
@@ -6361,6 +6370,7 @@
     "n-s6-robo_hurto_y_obje-02"
    ],
    "modo": "fragmento",
+   "fraseSuelta": "Me robaron {frag}.",
    "opciones": [
     {
      "id": "celular",

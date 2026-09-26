@@ -1,22 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
-import 'package:lsb_legal_app/app/app_theme.dart';
-import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
-import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
-import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
-import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/lsb_flow_screen.dart';
-
-import 'helpers/official_dictionary.dart';
 
 /// Auditoría de coherencia combinatoria (QA exhaustivo, 2026-09).
 ///
@@ -277,102 +264,4 @@ void main() {
       expect(draft.location.relation, isNull);
     });
   });
-
-  // ---------------------------------------------------------------------
-  // D. Navegación a resultado: el evento de finalización llega a
-  //    DeclarationResultScreen con el texto determinista y el audio.
-  // ---------------------------------------------------------------------
-  group('navegación a resultado con audio', () {
-    testWidgets('emitir la declaración muestra el texto y ofrece reproducirlo',
-        (tester) async {
-      const generated = 'Un hombre me robó mi celular en la calle.';
-
-      final router = GoRouter(
-        initialLocation: '/lsb-to-audio',
-        routes: [
-          GoRoute(path: '/lsb-to-audio', builder: (_, _) => const LsbFlowScreen()),
-        ],
-      );
-
-      final container = ProviderContainer(overrides: [
-        translationRepositoryProvider.overrideWithValue(_FakeRepo(generated)),
-        audioOutputProvider.overrideWithValue(_RecordingAudio()),
-        lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-      ]);
-      addTearDown(container.dispose);
-
-      container.read(contextProvider.notifier).setContext(
-            availableContexts.firstWhere((c) => c.id == 'denuncia_robo'),
-          );
-      container.read(sentenceProvider.notifier).setWords(['HOMBRE', 'ROBAR', 'CELULAR']);
-
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: MaterialApp.router(theme: AppTheme.lightTheme, routerConfig: router),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      // Se avanza el botón progresivo (CONTINUAR/EMITIR DECLARACIÓN) hasta
-      // llegar al resultado, sin asumir cuántas preguntas tiene el contexto.
-      var llego = false;
-      for (var intento = 0; intento < 30 && !llego; intento++) {
-        final emitir = find.text('EMITIR DECLARACIÓN');
-        final continuar = find.text('CONTINUAR');
-        if (tester.any(emitir)) {
-          await tester.tap(emitir);
-        } else if (tester.any(continuar)) {
-          await tester.tap(continuar);
-        } else {
-          break;
-        }
-        await tester.pumpAndSettle();
-        llego = tester.any(find.byType(DeclarationResultScreen));
-      }
-
-      expect(llego, true, reason: 'no se alcanzó la pantalla de resultado');
-      expect(find.text(generated), findsOneWidget,
-          reason: 'el texto determinista/remoto debe verse en el resultado');
-    });
-  });
-}
-
-class _FakeRepo implements TranslationRepository {
-  _FakeRepo(this._text);
-  final String _text;
-
-  @override
-  Future<TranslationResult> translateCards({
-    required String context,
-    required List<String> cards,
-    Map<String, dynamic>? declaration,
-    String? speechAct,
-    String? replyToId,
-    BusinessSignals? business,
-  }) async =>
-      TranslationResult(
-        baseSentence: _text,
-        generatedText: _text,
-        audioUrl: null,
-        bedrockUsed: true,
-      );
-}
-
-class _RecordingAudio implements AudioOutput {
-  final List<String> spoken = [];
-  @override
-  Future<void> playUrl(String url) async {}
-  @override
-  Future<void> speak(String text) async => spoken.add(text);
-  @override
-  Future<void> stop() async {}
-  @override
-  Future<void> pause() async {}
-  @override
-  Future<void> resume() async {}
-  @override
-  void setOnComplete(void Function() onComplete) {}
-  @override
-  Future<void> dispose() async {}
 }

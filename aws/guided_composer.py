@@ -76,11 +76,35 @@ class Composer:
 
     # ------------------------------------------------------------------
     def compose(self, guided: dict) -> str:
+        return self.compose_traced(guided)[0]
+
+    def confirmed_facts(self, guided: dict) -> set:
+        """Opciones elegidas (no omitidas) que redactan algo, `'Q.ID#opcion'`.
+
+        Gemelo de `GuidedComposer.confirmedFacts`. Las opciones que no
+        redactan nada solo abren la pregunta que lleva el hecho.
+        """
+        out = set()
+        for a in guided.get("respuestas") or []:
+            if a.get("estado") == "omitido":
+                continue
+            q = self.questions.get(a.get("pregunta"))
+            if q is None:
+                continue
+            for o in self._chosen(q, a):
+                if _writes_something(o):
+                    out.add(f"{a['pregunta']}#{o['id']}")
+        return out
+
+    def compose_traced(self, guided: dict) -> tuple:
+        """(texto, opciones representadas). Gemelo de `composeTraced`."""
         self._answers = {}
         for a in guided.get("respuestas") or []:
             self._answers[a["pregunta"]] = a
         self._consumed = set()
+        self._represented = set()
         self._reply = guided.get("proposito") == "reply"
+        referenced = self._referenced_fragments()
         sentences = []
 
         for qid in self._order(guided):
@@ -93,9 +117,17 @@ class Composer:
             if q is None:
                 continue
             self._extras = []
+            # Lo que se marque al redactar esta frase solo cuenta si la frase
+            # llega al texto.
+            antes = set(self._represented)
             if q.get("modo") == "fragmento":
+                # Lo redacta la pregunta que lo cita; solo si ninguna lo cita
+                # se usa su frase suelta.
+                if qid in referenced:
+                    continue
                 frag = self._fragment(qid)
                 if frag is None or not q.get("fraseSuelta"):
+                    self._represented = antes
                     sentences.extend(self._finalize(e) for e in self._extras)
                     continue
                 text = q["fraseSuelta"].replace("{frag}", frag)
@@ -105,8 +137,31 @@ class Composer:
             text = self._finalize(text)
             if text:
                 sentences.append(text)
+            else:
+                self._represented = antes
             sentences.extend(self._finalize(e) for e in self._extras)
-        return " ".join(s for s in sentences if s)
+        return " ".join(s for s in sentences if s), set(self._represented)
+
+    def _referenced_fragments(self) -> set:
+        """Preguntas en modo fragmento citadas por alguna respuesta elegida."""
+        out = set()
+        for qid, a in self._answers.items():
+            q = self.questions.get(qid)
+            if q is None or a.get("estado") == "omitido":
+                continue
+            for o in self._chosen(q, a):
+                for token in _TOKEN.findall(self._phrase_of(o, a)):
+                    if not token.startswith(("Q.", "I.")):
+                        continue
+                    ref = token.partition("|")[0]
+                    target, atributo = self._resolve_ref(ref)
+                    if target is None or atributo:
+                        continue
+                    ra = self._answers.get(target)
+                    if (self.questions[target].get("modo") == "fragmento"
+                            and ra and ra.get("estado") != "omitido"):
+                        out.add(target)
+        return out
 
     # ------------------------------------------------------------------
     def _order(self, guided: dict) -> list:
@@ -154,6 +209,7 @@ class Composer:
             texto = self._fill(o, self._phrase_of(o, a), a)
             if texto:
                 partes.append(texto)
+                self._represented.add(f"{a['pregunta']}#{o['id']}")
             if o.get("fraseExtra"):
                 self._extras.append(o["fraseExtra"])
         if not partes:
@@ -176,6 +232,7 @@ class Composer:
             texto = self._fill(o, self._phrase_of(o, a), a)
             if texto:
                 partes.append(texto)
+                self._represented.add(f"{qid}#{o['id']}")
             if o.get("fraseExtra"):
                 self._extras.append(o["fraseExtra"])
         if not partes:
@@ -238,6 +295,11 @@ class Composer:
         if text[-1] not in ".?!":
             text += "."
         return text
+
+
+def _writes_something(o: dict) -> bool:
+    return any(str(o.get(k) or "").strip()
+               for k in ("frase", "fraseSinValor", "fraseSingular"))
 
 
 def compose(guided: dict, bank: dict = None) -> str:
