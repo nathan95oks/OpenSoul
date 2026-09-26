@@ -13,6 +13,7 @@ abstract class RemoteTranslationDataSource {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   });
 }
 
@@ -85,6 +86,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   }) async {
     final uri = requireAbsoluteUrl(apiGatewayUrl, 'LSB_API_URL');
 
@@ -102,6 +104,7 @@ class RemoteTranslationDataSourceImpl implements RemoteTranslationDataSource {
             speechAct: speechAct,
             replyToId: replyToId,
             business: business,
+            guided: guided,
           )),
         )
         .timeout(requestTimeout);

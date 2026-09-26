@@ -1,0 +1,7695 @@
+[
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "internet"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por internet. Me los envía un hombre; no sé quién es. No lo sé. Tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.DIG.CANAL#internet",
+   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.CONTINUA#no_sabe",
+   "Q.DIG.REMITENTE#hombre"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». No sé quién me envía los mensajes. Sigo recibiendo mensajes. No tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.DIG.CAPTURAS#no",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.CONTINUA#si",
+   "Q.DIG.REMITENTE#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "amenazas"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "afirmado",
+     "opciones": [
+      "conoce"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.VINCULO",
+     "estado": "afirmado",
+     "opciones": [
+      "pareja"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes con amenazas. Me llegaron mensajes por «un recibo firmado». Sé quién me envía los mensajes. Es mi pareja. No lo sé. No guardé los mensajes. No sé si tengo fotos de la pantalla. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.DIG.CANAL#otro",
+   "Q.DIG.CAPTURAS#no_sabe",
+   "Q.DIG.CONTENIDO#amenazas",
+   "Q.DIG.CONTINUA#no_sabe",
+   "Q.DIG.GUARDO#no",
+   "Q.DIG.REMITENTE#conoce",
+   "Q.PER.VINCULO#pareja"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "afirmado",
+     "opciones": [
+      "solo_numero"
+     ],
+     "valores": {
+      "solo_numero": {
+       "telefono": "78168203"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por «un recibo firmado». No conozco su nombre; el número que aparece es 78168203. No lo sé. No guardé los mensajes. Quiero presentar una denuncia. Quiero presentarla ante la Policía.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#policia",
+   "Q.DEN.INTENCION#si",
+   "Q.DIG.CANAL#otro",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.CONTINUA#no_sabe",
+   "Q.DIG.GUARDO#no",
+   "Q.DIG.REMITENTE#solo_numero"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "amenazas"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes con amenazas. Me los envía una mujer; no sé quién es. Sigo recibiendo mensajes. Guardé los mensajes. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.DIG.CONTENIDO#amenazas",
+   "Q.DIG.CONTINUA#si",
+   "Q.DIG.GUARDO#si",
+   "Q.DIG.REMITENTE#mujer"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "celular"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Ya no recibo mensajes. No guardé los mensajes. Sí, tengo fotos de la pantalla. Sí, quiero presentar una denuncia. Quiero presentarla ante la FELCV.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#felcv",
+   "Q.DEN.INTENCION#si",
+   "Q.DIG.CANAL#celular",
+   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.CONTINUA#no",
+   "Q.DIG.GUARDO#no"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». No lo sé. No guardé los mensajes. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.CONTINUA#no_sabe",
+   "Q.DIG.GUARDO#no"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "celular"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Me los envía una mujer; no sé quién es. Sigo recibiendo mensajes. Tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.DIG.CANAL#celular",
+   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.CONTINUA#si",
+   "Q.DIG.REMITENTE#mujer"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "amenazas"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "afirmado",
+     "opciones": [
+      "todos"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes con amenazas. No sé por dónde llegaron los mensajes. Sí, sigo recibiendo mensajes. Sí, guardé todos los mensajes.",
+  "representadas": [
+   "Q.DIG.CANAL#no_sabe",
+   "Q.DIG.CONTENIDO#amenazas",
+   "Q.DIG.CONTINUA#si",
+   "Q.DIG.GUARDO#todos"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por «un recibo firmado». Me los envía una mujer; no sé quién es. No sé si se guardaron. Tengo fotos de la pantalla. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.DIG.CANAL#otro",
+   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.GUARDO#no_sabe",
+   "Q.DIG.REMITENTE#mujer"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "celular"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "afirmado",
+     "opciones": [
+      "conoce"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.VINCULO",
+     "estado": "afirmado",
+     "opciones": [
+      "pariente"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.NOMBRE_TERCERO",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "María Quispe"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Sé quién me envía los mensajes. Es un pariente. Se llama María Quispe. Sigo recibiendo mensajes. No guardé los mensajes. No tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.DIG.CANAL#celular",
+   "Q.DIG.CAPTURAS#no",
+   "Q.DIG.CONTENIDO#otro",
+   "Q.DIG.CONTINUA#si",
+   "Q.DIG.GUARDO#no",
+   "Q.DIG.REMITENTE#conoce",
+   "Q.PER.NOMBRE_TERCERO#nombre",
+   "Q.PER.VINCULO#pariente"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "amenaza_digital",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIG.CONTENIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "amenazas"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CANAL",
+     "estado": "afirmado",
+     "opciones": [
+      "internet"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.REMITENTE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIG.CONTINUA",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.DIG.CONTENIDO",
+    "Q.DIG.CANAL",
+    "Q.DIG.REMITENTE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.DIG.CONTINUA",
+    "Q.DIG.GUARDO",
+    "Q.DIG.CAPTURAS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí mensajes con amenazas. Me llegaron mensajes por internet. No sé si se guardaron. Sí, tengo fotos de la pantalla.",
+  "representadas": [
+   "Q.DIG.CANAL#internet",
+   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CONTENIDO#amenazas",
+   "Q.DIG.GUARDO#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "escapar"
+     ]
+    },
+    {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "otra"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "temprano",
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "1"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "avenida"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "cerca"
+     ],
+     "valores": {
+      "cerca": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "afirmado",
+     "opciones": [
+      "fotos"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Otra persona escapó. Ocurrió hace un mes temprano. Ocurrió en la avenida. Fue cerca de este lugar: «el mercado 25 de Mayo». No hay testigos. Tengo fotos.",
+  "representadas": [
+   "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#fotos",
+   "Q.HEC.ESCAPE_ACTOR#otra",
+   "Q.LUG.DONDE#avenida",
+   "Q.LUG.RELACION#cerca",
+   "Q.TES.EXISTE#no",
+   "Q.TIE.CUANDO#hace_m",
+   "Q.TIE.CUANDO#temprano"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "escapar"
+     ]
+    },
+    {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "yo"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "anteayer"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Logré escapar. Ocurrió anteayer. No hay testigos. No tengo fotos, video ni otra cosa para mostrar. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.HEC.ESCAPE_ACTOR#yo",
+   "Q.TES.EXISTE#no",
+   "Q.TIE.CUANDO#anteayer"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "robar"
+     ]
+    },
+    {
+     "pregunta": "Q.ROB.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "chamarra",
+      "bolsa",
+      "celular",
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "plaza"
+     ],
+     "valores": {
+      "plaza": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "lejos"
+     ],
+     "valores": {
+      "lejos": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.SEXO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.EDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "numero"
+     ],
+     "valores": {
+      "numero": {
+       "n": "50"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.DESC.ESTATURA",
+     "estado": "afirmado",
+     "opciones": [
+      "bajo"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.CONTEXTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "flaco"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA",
+     "estado": "afirmado",
+     "opciones": [
+      "polera",
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.EVI.FACTURA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me robaron el celular, la bolsa, la chamarra y «un recibo firmado». Ocurrió en la plaza Heroínas. Fue lejos de este lugar: «el mercado 25 de Mayo». No sé si era hombre o mujer. Tenía 50 años. Era una persona baja. Era una persona delgada. Llevaba una polera y «un recibo firmado». No sé si tengo la factura. No sé si tengo algo para mostrar. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.FACTURA#no_sabe",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#plaza",
+   "Q.LUG.RELACION#lejos",
+   "Q.PER.DESC.CONTEXTURA#flaco",
+   "Q.PER.DESC.EDAD#numero",
+   "Q.PER.DESC.ESTATURA#bajo",
+   "Q.PER.DESC.ROPA#otro",
+   "Q.PER.DESC.ROPA#polera",
+   "Q.PER.DESC.SEXO#no_sabe",
+   "Q.ROB.QUE#bolsa",
+   "Q.ROB.QUE#celular",
+   "Q.ROB.QUE#chamarra",
+   "Q.ROB.QUE#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "escapar"
+     ]
+    },
+    {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "yo"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "casa"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "lejos"
+     ],
+     "valores": {
+      "lejos": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Logré escapar. No recuerdo cuándo ocurrió. Ocurrió en mi casa. Fue lejos de este lugar: «el mercado 25 de Mayo».",
+  "representadas": [
+   "Q.HEC.ESCAPE_ACTOR#yo",
+   "Q.LUG.DONDE#casa",
+   "Q.LUG.RELACION#lejos",
+   "Q.TIE.CUANDO#no_recuerda"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "robar",
+      "danar"
+     ]
+    },
+    {
+     "pregunta": "Q.ROB.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "dinero",
+      "gorra",
+      "papel"
+     ],
+     "valores": {
+      "dinero": {
+       "monto": "500",
+       "moneda": "Bs"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DOC.ACLARAR",
+     "estado": "afirmado",
+     "opciones": [
+      "comprobante_banco"
+     ],
+     "padre": "Q.ROB.QUE"
+    },
+    {
+     "pregunta": "Q.DAN.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "casa"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "barrio"
+     ],
+     "valores": {
+      "barrio": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "al_lado"
+     ],
+     "valores": {
+      "al_lado": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.CANTIDAD",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me robaron Bs 500, la gorra y el comprobante del banco. Dañaron mi casa. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Hay testigos, pero no sé cuántos. No tengo fotos, video ni otra cosa para mostrar. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DAN.QUE#casa",
+   "Q.DEN.INTENCION#no",
+   "Q.DOC.ACLARAR#comprobante_banco",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.HEC.QUE_OCURRIO#danar",
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#barrio",
+   "Q.LUG.RELACION#al_lado",
+   "Q.PER.CONOCE#no_sabe",
+   "Q.ROB.QUE#dinero",
+   "Q.ROB.QUE#gorra",
+   "Q.ROB.QUE#papel",
+   "Q.TES.CANTIDAD#no_sabe",
+   "Q.TES.EXISTE#si"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "perder"
+     ]
+    },
+    {
+     "pregunta": "Q.FALTA.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "gorra"
+     ]
+    },
+    {
+     "pregunta": "Q.HEC.PERDIDA_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "robo_creo"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_s"
+     ],
+     "valores": {
+      "hace_s": {
+       "n": "12"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me falta la gorra; creo que fue un robo, pero no estoy seguro. Ocurrió hace 12 semanas. No sé exactamente dónde ocurrió. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.FALTA.QUE#gorra",
+   "Q.HEC.PERDIDA_TIPO#robo_creo",
+   "Q.LUG.DONDE#no_sabe",
+   "Q.TES.EXISTE#no_sabe",
+   "Q.TIE.CUANDO#hace_s"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "escapar",
+      "danar"
+     ]
+    },
+    {
+     "pregunta": "Q.DAN.QUE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "otra"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "11"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "cerca"
+     ],
+     "valores": {
+      "cerca": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.SEXO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.PER.DESC.EDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "adulto"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ESTATURA",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.PER.DESC.CONTEXTURA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA",
+     "estado": "afirmado",
+     "opciones": [
+      "pantalon",
+      "mochila",
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.CANTIDAD",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Dañaron algo mío. Otra persona escapó. Ocurrió hace 11 meses. Ocurrió dentro de un micro. Fue cerca de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Era una persona adulta. No recuerdo su contextura. Llevaba un pantalón, una mochila y «un recibo firmado». Hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HEC.ESCAPE_ACTOR#otra",
+   "Q.HEC.QUE_OCURRIO#danar",
+   "Q.LUG.DONDE#micro",
+   "Q.LUG.RELACION#cerca",
+   "Q.PER.CONOCE#no_sabe",
+   "Q.PER.DESC.CONTEXTURA#no_sabe",
+   "Q.PER.DESC.EDAD#adulto",
+   "Q.PER.DESC.ROPA#mochila",
+   "Q.PER.DESC.ROPA#otro",
+   "Q.PER.DESC.ROPA#pantalon",
+   "Q.TES.EXISTE#si",
+   "Q.TIE.CUANDO#hace_m"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "perder"
+     ]
+    },
+    {
+     "pregunta": "Q.FALTA.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "otro",
+      "carnet"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.HEC.PERDIDA_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "robo_creo"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "tarde"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "mercado"
+     ],
+     "valores": {
+      "mercado": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "al_lado"
+     ],
+     "valores": {
+      "al_lado": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me falta mi carnet de identidad y «un recibo firmado»; creo que fue un robo, pero no estoy seguro. Ocurrió por la tarde. Ocurrió en el mercado Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». Hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.FALTA.QUE#carnet",
+   "Q.FALTA.QUE#otro",
+   "Q.HEC.PERDIDA_TIPO#robo_creo",
+   "Q.LUG.DONDE#mercado",
+   "Q.LUG.RELACION#al_lado",
+   "Q.TES.EXISTE#si",
+   "Q.TIE.CUANDO#tarde"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "robar"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.SEXO",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.EDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "adulto"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ESTATURA",
+     "estado": "afirmado",
+     "opciones": [
+      "alto"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.CONTEXTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "flaco"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA",
+     "estado": "afirmado",
+     "opciones": [
+      "pantalon"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me robaron algo. No sé exactamente dónde ocurrió. No sé si la conozco. Era un hombre. Era una persona adulta. Era una persona alta. Era una persona delgada. Llevaba un pantalón. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar.",
+  "representadas": [
+   "Q.EVI.QUE_TIENE#no",
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#no_sabe",
+   "Q.PER.CONOCE#no_sabe",
+   "Q.PER.DESC.CONTEXTURA#flaco",
+   "Q.PER.DESC.EDAD#adulto",
+   "Q.PER.DESC.ESTATURA#alto",
+   "Q.PER.DESC.ROPA#pantalon",
+   "Q.PER.DESC.SEXO#hombre",
+   "Q.TES.EXISTE#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "escapar",
+      "robar"
+     ]
+    },
+    {
+     "pregunta": "Q.ROB.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "chamarra",
+      "celular",
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "otra"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_d"
+     ],
+     "valores": {
+      "hace_d": {
+       "n": "10"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "casa"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "cerca"
+     ],
+     "valores": {
+      "cerca": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me robaron el celular, la chamarra y «un recibo firmado». Otra persona escapó. Ocurrió hace 10 días. Ocurrió en mi casa. Fue cerca de este lugar: «el mercado 25 de Mayo». No sé si la conozco. No sé si hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HEC.ESCAPE_ACTOR#otra",
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#casa",
+   "Q.LUG.RELACION#cerca",
+   "Q.PER.CONOCE#no_sabe",
+   "Q.ROB.QUE#celular",
+   "Q.ROB.QUE#chamarra",
+   "Q.ROB.QUE#otro",
+   "Q.TES.EXISTE#no_sabe",
+   "Q.TIE.CUANDO#hace_d"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "escapar",
+      "robar"
+     ]
+    },
+    {
+     "pregunta": "Q.ROB.QUE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "otra"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "lejos"
+     ],
+     "valores": {
+      "lejos": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me robaron algo que no sé precisar. Otra persona escapó. Ocurrió dentro de un micro. Fue lejos de este lugar: «el mercado 25 de Mayo». No conozco a esa persona. No hay testigos. No sé si tengo algo para mostrar. Quiero presentar una denuncia. Quiero presentarla ante la Policía.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#policia",
+   "Q.DEN.INTENCION#si",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HEC.ESCAPE_ACTOR#otra",
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#micro",
+   "Q.LUG.RELACION#lejos",
+   "Q.PER.CONOCE#no",
+   "Q.ROB.QUE#no_sabe",
+   "Q.TES.EXISTE#no"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "denuncia_robo",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HEC.QUE_OCURRIO",
+     "estado": "afirmado",
+     "opciones": [
+      "robar"
+     ]
+    },
+    {
+     "pregunta": "Q.ROB.QUE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "barrio"
+     ],
+     "valores": {
+      "barrio": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "al_lado"
+     ],
+     "valores": {
+      "al_lado": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.SEXO",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.EDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "adulto"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ESTATURA",
+     "estado": "afirmado",
+     "opciones": [
+      "bajo"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.CONTEXTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "flaco"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA",
+     "estado": "afirmado",
+     "opciones": [
+      "chamarra"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.HEC.PERDIDA_TIPO",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me robaron algo. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». Era una mujer. Era una persona adulta. Era una persona baja. Era una persona delgada. Llevaba una chamarra. No hay testigos.",
+  "representadas": [
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#barrio",
+   "Q.LUG.RELACION#al_lado",
+   "Q.PER.DESC.CONTEXTURA#flaco",
+   "Q.PER.DESC.EDAD#adulto",
+   "Q.PER.DESC.ESTATURA#bajo",
+   "Q.PER.DESC.ROPA#chamarra",
+   "Q.PER.DESC.SEXO#mujer",
+   "Q.TES.EXISTE#no"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Entregué dinero de esta forma: «un recibo firmado». No recuerdo el monto exacto. Lo recibió un hombre que no conozco. No tengo comprobante. No sé si la conservo. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.DIN.CHAT#no_sabe",
+   "Q.DIN.COMPROBANTE#no",
+   "Q.DIN.MECANISMO#otro",
+   "Q.DIN.MONTO#no_recuerda",
+   "Q.DIN.RECEPTOR#hombre"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.ENGANO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me engañaron con dinero. No recuerdo cómo entregué el dinero. Fueron dinero. No recuerdo el monto exacto. Lo recibió una mujer que no conozco. No sé si tengo comprobante. No conservo la conversación.",
+  "representadas": [
+   "Q.DIN.CHAT#no",
+   "Q.DIN.COMPROBANTE#no_sabe",
+   "Q.DIN.ENGANO#si",
+   "Q.DIN.MECANISMO#no_recuerda",
+   "Q.DIN.MONTO#no_recuerda",
+   "Q.DIN.RECEPTOR#mujer"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "banco"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Envié dinero mediante un banco. No recuerdo el monto exacto. Lo recibió un hombre que no conozco. Sí, conservo toda la conversación. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.DIN.CHAT#si",
+   "Q.DIN.MECANISMO#banco",
+   "Q.DIN.MONTO#no_recuerda",
+   "Q.DIN.RECEPTOR#hombre"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "mano"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.ENGANO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Entregué dinero en mano. No sé quién recibió el dinero. No tengo comprobante. No conservo la conversación. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.DIN.CHAT#no",
+   "Q.DIN.COMPROBANTE#no",
+   "Q.DIN.MECANISMO#mano",
+   "Q.DIN.RECEPTOR#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "celular"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "banco",
+      "papel"
+     ]
+    },
+    {
+     "pregunta": "Q.DOC.ACLARAR",
+     "estado": "afirmado",
+     "opciones": [
+      "citacion"
+     ],
+     "padre": "Q.DIN.COMPROBANTE_TIPO"
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Envié dinero desde el celular. Lo recibió una mujer que no conozco. Tengo el comprobante del banco y una citación. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.DIN.COMPROBANTE#si",
+   "Q.DIN.COMPROBANTE_TIPO#banco",
+   "Q.DIN.COMPROBANTE_TIPO#papel",
+   "Q.DIN.MECANISMO#celular",
+   "Q.DIN.RECEPTOR#mujer",
+   "Q.DOC.ACLARAR#citacion"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "celular"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.ENGANO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Envié dinero desde el celular. No recuerdo el monto exacto. No sé quién recibió el dinero. No tengo comprobante. Sí, conservo toda la conversación. Sí, quiero presentar una denuncia. Quiero presentarla ante la FELCV.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#felcv",
+   "Q.DEN.INTENCION#si",
+   "Q.DIN.CHAT#si",
+   "Q.DIN.COMPROBANTE#no",
+   "Q.DIN.MECANISMO#celular",
+   "Q.DIN.MONTO#no_recuerda",
+   "Q.DIN.RECEPTOR#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Entregué dinero de esta forma: «un recibo firmado». No sé si tengo comprobante. No sé si la conservo. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.DIN.CHAT#no_sabe",
+   "Q.DIN.COMPROBANTE#no_sabe",
+   "Q.DIN.MECANISMO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "internet"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcc"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Envié dinero por internet. No recuerdo el monto exacto. No sé quién recibió el dinero. Conservo toda la conversación. Quiero presentar una denuncia. Quiero presentarla ante la FELCC.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#felcc",
+   "Q.DEN.INTENCION#si",
+   "Q.DIN.CHAT#si",
+   "Q.DIN.MECANISMO#internet",
+   "Q.DIN.MONTO#no_recuerda",
+   "Q.DIN.RECEPTOR#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "negado",
+     "opciones": [
+      "ninguno"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "No entregué ni envié dinero. No conservo la conversación. Sí, quiero presentar una denuncia. Quiero presentarla ante la Policía.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#policia",
+   "Q.DEN.INTENCION#si",
+   "Q.DIN.CHAT#no",
+   "Q.DIN.MECANISMO#ninguno"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "afirmado",
+     "opciones": [
+      "monto"
+     ],
+     "valores": {
+      "monto": {
+       "monto": "20",
+       "moneda": "USD"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIN.RECEPTOR",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.ENGANO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me engañaron con dinero. No recuerdo cómo entregué el dinero. Fueron USD 20. No tengo comprobante. Conservo toda la conversación. Quiero presentar una denuncia. Quiero presentarla ante la Policía.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#policia",
+   "Q.DEN.INTENCION#si",
+   "Q.DIN.CHAT#si",
+   "Q.DIN.COMPROBANTE#no",
+   "Q.DIN.ENGANO#si",
+   "Q.DIN.MECANISMO#no_recuerda",
+   "Q.DIN.MONTO#monto"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "negado",
+     "opciones": [
+      "ninguno"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.ENGANO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "No entregué ni envié dinero. Conservo toda la conversación. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.DIN.CHAT#si",
+   "Q.DIN.MECANISMO#ninguno"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "engano_dinero",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.DIN.MECANISMO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DIN.MONTO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DIN.COMPROBANTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.CHAT",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIN.ENGANO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.DIN.MECANISMO",
+    "Q.DIN.MONTO",
+    "Q.DIN.RECEPTOR",
+    "Q.DIN.COMPROBANTE",
+    "Q.DIN.COMPROBANTE_TIPO",
+    "Q.DOC.ACLARAR",
+    "Q.DIN.CHAT",
+    "Q.DIN.ENGANO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Entregué dinero de esta forma: «un recibo firmado». No sé si tengo comprobante. Sí, conservo toda la conversación.",
+  "representadas": [
+   "Q.DIN.CHAT#si",
+   "Q.DIN.COMPROBANTE#no_sabe",
+   "Q.DIN.MECANISMO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "Juan Mamani"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "negado",
+     "opciones": [
+      "ninguno"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "73845804"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "acompanado"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE_QUIEN",
+     "estado": "afirmado",
+     "opciones": [
+      "interprete"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "70"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo Juan Mamani. No tengo un documento conmigo. Mi número de celular es 73845804. No quiero recibir avisos por mensaje escrito. Vine con un intérprete. Tengo 70 años. No sé si necesito intérprete. No puedo leerlo.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no_sabe",
+   "Q.ACC.LECTURA#no",
+   "Q.ID.ACOMPANANTE#acompanado",
+   "Q.ID.ACOMPANANTE_QUIEN#interprete",
+   "Q.ID.AVISO#no",
+   "Q.ID.DOC_TIPO#ninguno",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "Juan Mamani"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "pasaporte"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.DOC_NUMERO",
+     "estado": "afirmado",
+     "opciones": [
+      "numero"
+     ],
+     "valores": {
+      "numero": {
+       "numero": "4567890 CB"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "solo"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "48"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "poco"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo Juan Mamani. Presento mi pasaporte. El número de mi documento es 4567890 CB. No quiero recibir avisos por mensaje escrito. Vine sin acompañante. Tengo 48 años. Necesito un intérprete de LSB. Leo poco.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#si",
+   "Q.ACC.LECTURA#poco",
+   "Q.ID.ACOMPANANTE#solo",
+   "Q.ID.AVISO#no",
+   "Q.ID.DOC_NUMERO#numero",
+   "Q.ID.DOC_TIPO#pasaporte",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "75145208"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "solo"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Mi número de celular es 75145208. No quiero recibir avisos por mensaje escrito. Vine sin acompañante. No sé si necesito intérprete. No puedo leerlo.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no_sabe",
+   "Q.ACC.LECTURA#no",
+   "Q.ID.ACOMPANANTE#solo",
+   "Q.ID.AVISO#no",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "María Quispe"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "negado",
+     "opciones": [
+      "ninguno"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "78168203"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "acompanado"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "23"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo María Quispe. No tengo un documento conmigo. Mi número de celular es 78168203. No sé qué prefiero. Vine con otra persona. Tengo 23 años. Necesito un intérprete de LSB. Puedo leerlo.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#si",
+   "Q.ACC.LECTURA#si",
+   "Q.ID.ACOMPANANTE#acompanado",
+   "Q.ID.AVISO#no_sabe",
+   "Q.ID.DOC_TIPO#ninguno",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "María Quispe"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "73702992"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "25"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo María Quispe. Presento este documento: «un recibo firmado». Mi número de celular es 73702992. No sé qué prefiero. Tengo 25 años. No necesito intérprete.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no",
+   "Q.ID.AVISO#no_sabe",
+   "Q.ID.DOC_TIPO#otro",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "carnet"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.DOC_NUMERO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "76474201"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "13"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Presento mi carnet de identidad. Mi número de celular es 76474201. No sé qué prefiero. Tengo 13 años. No necesito intérprete. No puedo leerlo.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no",
+   "Q.ACC.LECTURA#no",
+   "Q.ID.AVISO#no_sabe",
+   "Q.ID.DOC_TIPO#carnet",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "78394846"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "acompanado"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE_QUIEN",
+     "estado": "afirmado",
+     "opciones": [
+      "interprete"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "56"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Mi número de celular es 78394846. Prefiero recibir avisos por mensaje escrito. Vine con un intérprete. Tengo 56 años. No sé si necesito intérprete.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no_sabe",
+   "Q.ID.ACOMPANANTE#acompanado",
+   "Q.ID.ACOMPANANTE_QUIEN#interprete",
+   "Q.ID.AVISO#si",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_NUMERO",
+     "estado": "afirmado",
+     "opciones": [
+      "numero"
+     ],
+     "valores": {
+      "numero": {
+       "numero": "4567890 CB"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "22"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Presento este documento: «un recibo firmado». El número de mi documento es 4567890 CB. Prefiero recibir avisos por mensaje escrito. Tengo 22 años. No necesito intérprete.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no",
+   "Q.ID.AVISO#si",
+   "Q.ID.DOC_NUMERO#numero",
+   "Q.ID.DOC_TIPO#otro",
+   "Q.ID.EDAD_PROPIA#edad"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "Juan Mamani"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "pasaporte"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.DOC_NUMERO",
+     "estado": "afirmado",
+     "opciones": [
+      "numero"
+     ],
+     "valores": {
+      "numero": {
+       "numero": "4567890 CB"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "76414449"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "solo"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "39"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo Juan Mamani. Presento mi pasaporte. El número de mi documento es 4567890 CB. Mi número de celular es 76414449. Sí, prefiero recibir avisos por mensaje escrito. Vine sin acompañante. Tengo 39 años. Sí, necesito un intérprete de LSB. No puedo leerlo.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#si",
+   "Q.ACC.LECTURA#no",
+   "Q.ID.ACOMPANANTE#solo",
+   "Q.ID.AVISO#si",
+   "Q.ID.DOC_NUMERO#numero",
+   "Q.ID.DOC_TIPO#pasaporte",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "María Quispe"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "pasaporte"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.DOC_NUMERO",
+     "estado": "afirmado",
+     "opciones": [
+      "numero"
+     ],
+     "valores": {
+      "numero": {
+       "numero": "4567890 CB"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "78709384"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "acompanado"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE_QUIEN",
+     "estado": "afirmado",
+     "opciones": [
+      "hermano"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "11"
+      }
+     }
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo María Quispe. Presento mi pasaporte. El número de mi documento es 4567890 CB. Mi número de celular es 78709384. No sé qué prefiero. Vine con mi hermano. Tengo 11 años.",
+  "representadas": [
+   "Q.ID.ACOMPANANTE#acompanado",
+   "Q.ID.ACOMPANANTE_QUIEN#hermano",
+   "Q.ID.AVISO#no_sabe",
+   "Q.ID.DOC_NUMERO#numero",
+   "Q.ID.DOC_TIPO#pasaporte",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "María Quispe"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "pasaporte"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.DOC_NUMERO",
+     "estado": "afirmado",
+     "opciones": [
+      "numero"
+     ],
+     "valores": {
+      "numero": {
+       "numero": "4567890 CB"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "75737674"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "acompanado"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE_QUIEN",
+     "estado": "afirmado",
+     "opciones": [
+      "interprete"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "33"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "poco"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo María Quispe. Presento mi pasaporte. El número de mi documento es 4567890 CB. Mi número de celular es 75737674. Vine con un intérprete. Tengo 33 años. No necesito intérprete. Leo poco.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no",
+   "Q.ACC.LECTURA#poco",
+   "Q.ID.ACOMPANANTE#acompanado",
+   "Q.ID.ACOMPANANTE_QUIEN#interprete",
+   "Q.ID.DOC_NUMERO#numero",
+   "Q.ID.DOC_TIPO#pasaporte",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "identificacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ID.NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "Juan Mamani"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.DOC_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "carnet"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.DOC_NUMERO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.ID.TELEFONO_PROPIO",
+     "estado": "afirmado",
+     "opciones": [
+      "telefono"
+     ],
+     "valores": {
+      "telefono": {
+       "telefono": "74259613"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ID.AVISO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.ACOMPANANTE",
+     "estado": "afirmado",
+     "opciones": [
+      "solo"
+     ]
+    },
+    {
+     "pregunta": "Q.ID.EDAD_PROPIA",
+     "estado": "afirmado",
+     "opciones": [
+      "edad"
+     ],
+     "valores": {
+      "edad": {
+       "n": "59"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.ACC.INTERPRETE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.ACC.LECTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "poco"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ID.NOMBRE",
+    "Q.ID.DOC_TIPO",
+    "Q.ID.DOC_NUMERO",
+    "Q.ID.TELEFONO_PROPIO",
+    "Q.ID.AVISO",
+    "Q.ID.ACOMPANANTE",
+    "Q.ID.ACOMPANANTE_QUIEN",
+    "Q.ID.EDAD_PROPIA",
+    "Q.ACC.INTERPRETE",
+    "Q.ACC.LECTURA"
+   ]
+  },
+  "texto": "Me llamo Juan Mamani. Presento mi carnet de identidad. Mi número de celular es 74259613. No sé qué prefiero. Vine sin acompañante. Tengo 59 años. No necesito intérprete. Leo poco.",
+  "representadas": [
+   "Q.ACC.INTERPRETE#no",
+   "Q.ACC.LECTURA#poco",
+   "Q.ID.ACOMPANANTE#solo",
+   "Q.ID.AVISO#no_sabe",
+   "Q.ID.DOC_TIPO#carnet",
+   "Q.ID.EDAD_PROPIA#edad",
+   "Q.ID.NOMBRE#nombre",
+   "Q.ID.TELEFONO_PROPIO#telefono"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.OBSERVADA",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "1"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "avenida"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi esto: «un recibo firmado». Vi a una mujer. Ocurrió hace un mes. Ocurrió en la avenida. Puedo dar testimonio de lo que vi.",
+  "representadas": [
+   "Q.LUG.DONDE#avenida",
+   "Q.PER.OBSERVADA#mujer",
+   "Q.TES.PUEDE_TESTIMONIO#si",
+   "Q.TES.QUE_VIO#otro",
+   "Q.TIE.CUANDO#hace_m"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "corregir"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Quiero corregir algo de lo que dije.",
+  "representadas": [
+   "Q.TES.QUE_VIO#corregir"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "agresion"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.OBSERVADA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "tarde"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi que golpearon a una persona. No vi bien a la persona. Ocurrió por la tarde. Sí, puedo dar testimonio de lo que vi.",
+  "representadas": [
+   "Q.PER.OBSERVADA#no_sabe",
+   "Q.TES.PUEDE_TESTIMONIO#si",
+   "Q.TES.QUE_VIO#agresion",
+   "Q.TIE.CUANDO#tarde"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "robo"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hoy"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi un robo. Ocurrió hoy. No sé exactamente dónde ocurrió. No puedo dar testimonio.",
+  "representadas": [
+   "Q.LUG.DONDE#no_sabe",
+   "Q.TES.PUEDE_TESTIMONIO#no",
+   "Q.TES.QUE_VIO#robo",
+   "Q.TIE.CUANDO#hoy"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "dano"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_s"
+     ],
+     "valores": {
+      "hace_s": {
+       "n": "4"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "barrio"
+     ],
+     "valores": {
+      "barrio": {
+       "nombre": "Heroínas"
+      }
+     }
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi que dañaron algo. Ocurrió hace 4 semanas. Ocurrió en el barrio Heroínas.",
+  "representadas": [
+   "Q.LUG.DONDE#barrio",
+   "Q.TES.QUE_VIO#dano",
+   "Q.TIE.CUANDO#hace_s"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "dano"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.OBSERVADA",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_d"
+     ],
+     "valores": {
+      "hace_d": {
+       "n": "45"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi que dañaron algo. Vi a una mujer. Ocurrió hace 45 días. Ocurrió en «un recibo firmado». Sí, puedo dar testimonio de lo que vi.",
+  "representadas": [
+   "Q.LUG.DONDE#otro",
+   "Q.PER.OBSERVADA#mujer",
+   "Q.TES.PUEDE_TESTIMONIO#si",
+   "Q.TES.QUE_VIO#dano",
+   "Q.TIE.CUANDO#hace_d"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.OBSERVADA",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi esto: «un recibo firmado». Ocurrió dentro de un micro. No sé si puedo dar testimonio.",
+  "representadas": [
+   "Q.LUG.DONDE#micro",
+   "Q.TES.PUEDE_TESTIMONIO#no_sabe",
+   "Q.TES.QUE_VIO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "escape"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.OBSERVADA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "ahora"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi que alguien escapó. No vi bien a la persona. Ocurrió hace un momento. Ocurrió dentro de un micro. No puedo dar testimonio.",
+  "representadas": [
+   "Q.LUG.DONDE#micro",
+   "Q.PER.OBSERVADA#no_sabe",
+   "Q.TES.PUEDE_TESTIMONIO#no",
+   "Q.TES.QUE_VIO#escape",
+   "Q.TIE.CUANDO#ahora"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "agregar"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Quiero agregar información a lo que dije.",
+  "representadas": [
+   "Q.TES.QUE_VIO#agregar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "corregir"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Quiero corregir algo de lo que dije.",
+  "representadas": [
+   "Q.TES.QUE_VIO#corregir"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "agregar"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Quiero agregar información a lo que dije.",
+  "representadas": [
+   "Q.TES.QUE_VIO#agregar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "otro",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.TES.QUE_VIO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.OBSERVADA",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "barrio"
+     ],
+     "valores": {
+      "barrio": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.PUEDE_TESTIMONIO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.TES.QUE_VIO",
+    "Q.PER.OBSERVADA",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.TES.PUEDE_TESTIMONIO"
+   ]
+  },
+  "texto": "Vi esto: «un recibo firmado». Ocurrió en el barrio Heroínas. No puedo dar testimonio.",
+  "representadas": [
+   "Q.LUG.DONDE#barrio",
+   "Q.TES.PUEDE_TESTIMONIO#no",
+   "Q.TES.QUE_VIO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "tema"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.SOBRE_TEMA",
+     "estado": "afirmado",
+     "opciones": [
+      "fotocopia"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Necesito fotocopias?",
+  "representadas": [
+   "I.PREG.SOBRE_TEMA#fotocopia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "tema"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.SOBRE_TEMA",
+     "estado": "afirmado",
+     "opciones": [
+      "fotocopia"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Necesito fotocopias?",
+  "representadas": [
+   "I.PREG.SOBRE_TEMA#fotocopia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "tema"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.SOBRE_TEMA",
+     "estado": "afirmado",
+     "opciones": [
+      "buscar_celular"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Pueden buscar mi celular?",
+  "representadas": [
+   "I.PREG.SOBRE_TEMA#buscar_celular"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "cuando"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "volver"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Cuándo debo volver?",
+  "representadas": [
+   "I.PREG.CUANDO#volver"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "hablar"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.HABLAR_CON",
+     "estado": "afirmado",
+     "opciones": [
+      "interprete"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Aquí hay intérprete de LSB?",
+  "representadas": [
+   "I.PREG.HABLAR_CON#interprete"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "hablar"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.HABLAR_CON",
+     "estado": "afirmado",
+     "opciones": [
+      "juez"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Puedo hablar con el juez?",
+  "representadas": [
+   "I.PREG.HABLAR_CON#juez"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "cuanto"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.CUANTO",
+     "estado": "afirmado",
+     "opciones": [
+      "horas"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Cuántas horas debo esperar?",
+  "representadas": [
+   "I.PREG.CUANTO#horas"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "tema"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.SOBRE_TEMA",
+     "estado": "afirmado",
+     "opciones": [
+      "investigacion"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿La investigación continúa?",
+  "representadas": [
+   "I.PREG.SOBRE_TEMA#investigacion"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "hablar"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.HABLAR_CON",
+     "estado": "afirmado",
+     "opciones": [
+      "juez"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Puedo hablar con el juez?",
+  "representadas": [
+   "I.PREG.HABLAR_CON#juez"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "tema"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.SOBRE_TEMA",
+     "estado": "afirmado",
+     "opciones": [
+      "certificado"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Necesito un certificado?",
+  "representadas": [
+   "I.PREG.SOBRE_TEMA#certificado"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "tema"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.SOBRE_TEMA",
+     "estado": "afirmado",
+     "opciones": [
+      "buscar_celular"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Pueden buscar mi celular?",
+  "representadas": [
+   "I.PREG.SOBRE_TEMA#buscar_celular"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "preguntas",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "I.PREG.ELEGIR",
+     "estado": "afirmado",
+     "opciones": [
+      "hablar"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.HABLAR_CON",
+     "estado": "afirmado",
+     "opciones": [
+      "autoridad"
+     ]
+    }
+   ],
+   "pasos": [
+    "I.PREG.ELEGIR",
+    "I.PREG.DONDE_QUEDA",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.CUANDO",
+    "I.PREG.CUANTO",
+    "I.PREG.SOBRE_TEMA"
+   ]
+  },
+  "texto": "¿Puedo hablar con la autoridad?",
+  "representadas": [
+   "I.PREG.HABLAR_CON#autoridad"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "juzgado"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero consultar esto: «un recibo firmado». Mi trámite es con el juzgado.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#juzgado",
+   "Q.SEG.MOTIVO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero consultar esto: «un recibo firmado».",
+  "representadas": [
+   "Q.SEG.MOTIVO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "citacion"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.FECHA_PROGRAMADA",
+     "estado": "afirmado",
+     "opciones": [
+      "fecha"
+     ],
+     "valores": {
+      "fecha": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.SEG.NUM_REFERENCIA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Recibí una citación y quiero consultar sobre ella. Me dieron fecha para el un recibo firmado. No tengo el número de referencia. Mi trámite es con la Policía.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#policia",
+   "Q.SEG.FECHA_PROGRAMADA#fecha",
+   "Q.SEG.MOTIVO#citacion",
+   "Q.SEG.NUM_REFERENCIA#no"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "hablar"
+     ]
+    },
+    {
+     "pregunta": "I.PREG.HABLAR_CON",
+     "estado": "afirmado",
+     "opciones": [
+      "interprete"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "¿Aquí hay intérprete de LSB? No sé con qué institución es mi trámite.",
+  "representadas": [
+   "I.PREG.HABLAR_CON#interprete",
+   "Q.SEG.AUTORIDAD#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "fotocopia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero pedir una fotocopia.",
+  "representadas": [
+   "Q.SEG.MOTIVO#fotocopia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "continua"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.NUM_REFERENCIA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcc"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero saber si la investigación continúa. No tengo el número de referencia. Mi trámite es con la FELCC.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#felcc",
+   "Q.SEG.MOTIVO#continua",
+   "Q.SEG.NUM_REFERENCIA#no"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "esperar"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero saber cuánto tiempo debo esperar. Mi trámite es con la FELCV.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#felcv",
+   "Q.SEG.MOTIVO#esperar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero consultar esto: «un recibo firmado». Mi trámite es con la Policía.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#policia",
+   "Q.SEG.MOTIVO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "fotocopia"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "juzgado"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero pedir una fotocopia. Mi trámite es con el juzgado.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#juzgado",
+   "Q.SEG.MOTIVO#fotocopia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "juzgado"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero consultar esto: «un recibo firmado». Mi trámite es con el juzgado.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#juzgado",
+   "Q.SEG.MOTIVO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero consultar esto: «un recibo firmado». No sé con qué institución es mi trámite.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#no_sabe",
+   "Q.SEG.MOTIVO#otro"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "seguimiento",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.SEG.MOTIVO",
+     "estado": "afirmado",
+     "opciones": [
+      "fotocopia"
+     ]
+    },
+    {
+     "pregunta": "Q.SEG.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "juzgado"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.SEG.MOTIVO",
+    "I.PREG.HABLAR_CON",
+    "I.PREG.DONDE_QUEDA",
+    "Q.SEG.FECHA_PROGRAMADA",
+    "Q.SEG.NUM_REFERENCIA",
+    "Q.SEG.AUTORIDAD"
+   ]
+  },
+  "texto": "Quiero pedir una fotocopia. Mi trámite es con el juzgado.",
+  "representadas": [
+   "Q.SEG.AUTORIDAD#juzgado",
+   "Q.SEG.MOTIVO#fotocopia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "abusar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hoy"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.SAL.HERIDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "afirmado",
+     "opciones": [
+      "certificado"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Abusaron de mí. No necesito auxilio ahora. Fue una mujer que no conozco. Ocurrió hoy. No sé decirlo. No estoy herido. No tengo miedo de volver a mi casa. No lo sé. No hay otras personas en riesgo. Tengo un certificado. Todavía no lo sé. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#certificado",
+   "Q.RIE.AUXILIO#no",
+   "Q.RIE.MIEDO_CASA#no",
+   "Q.RIE.PIDE_PROTECCION#no_sabe",
+   "Q.RIE.PROTECCION_OTROS#no",
+   "Q.SAL.HERIDO#no",
+   "Q.TIE.CUANDO#hoy",
+   "Q.VIO.AGRESOR#mujer",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#no_sabe",
+   "Q.VIO.FRECUENCIA#no_sabe",
+   "Q.VIO.TIPO#abusar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "danar"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "anteayer"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.QUIENES",
+     "estado": "afirmado",
+     "opciones": [
+      "hija",
+      "hijo"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Dañaron mis cosas. Fue una mujer que no conozco. Ocurrió anteayer. Ocurrió en «un recibo firmado». Tengo miedo de volver a mi casa. Necesito protección. Hay otras personas que necesitan protección. Estas personas necesitan protección: mi hijo y mi hija. No tengo fotos, video ni otra cosa para mostrar. Todavía no lo sé. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.LUG.DONDE#otro",
+   "Q.RIE.MIEDO_CASA#si",
+   "Q.RIE.PIDE_PROTECCION#si",
+   "Q.RIE.PROTECCION_OTROS#si",
+   "Q.RIE.QUIENES#hija",
+   "Q.RIE.QUIENES#hijo",
+   "Q.TIE.CUANDO#anteayer",
+   "Q.VIO.AGRESOR#mujer",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#no_sabe",
+   "Q.VIO.TIPO#danar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "maltratar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "afirmado",
+     "opciones": [
+      "cada_dia"
+     ]
+    },
+    {
+     "pregunta": "Q.SAL.HERIDO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me maltrataron. No lo sé. Fue un hombre que no conozco. Pasa todos los días. No estoy seguro de estar herido. No lo sé. No lo sé. No lo sé. Por ahora no quiero asistencia. Sí, quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#si",
+   "Q.RIE.AUXILIO#no_sabe",
+   "Q.RIE.MIEDO_CASA#no_sabe",
+   "Q.RIE.PIDE_PROTECCION#no_sabe",
+   "Q.RIE.PROTECCION_OTROS#no_sabe",
+   "Q.SAL.HERIDO#no_sabe",
+   "Q.VIO.AGRESOR#hombre",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#no",
+   "Q.VIO.FRECUENCIA#cada_dia",
+   "Q.VIO.TIPO#maltratar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "pegar"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_min"
+     ],
+     "valores": {
+      "hace_min": {
+       "n": "34"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "casa"
+     ]
+    },
+    {
+     "pregunta": "Q.SAL.HERIDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "afirmado",
+     "opciones": [
+      "certificado"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me pegaron. Fue un hombre que no conozco. Ocurrió hace 34 minutos. Ocurrió en mi casa. No lo sé. Tengo un certificado. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#certificado",
+   "Q.LUG.DONDE#casa",
+   "Q.RIE.PROTECCION_OTROS#no_sabe",
+   "Q.TIE.CUANDO#hace_min",
+   "Q.VIO.AGRESOR#hombre",
+   "Q.VIO.TIPO#pegar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "gritar",
+      "maltratar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_h"
+     ],
+     "valores": {
+      "hace_h": {
+       "n": "15"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "mercado"
+     ],
+     "valores": {
+      "mercado": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.APO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "abogado_gratis"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me maltrataron. Me gritaron. No lo sé. Fue una mujer que no conozco. Ocurrió hace 15 horas. Ocurrió en el mercado Heroínas. No lo sé. Necesito protección. No lo sé. No tengo fotos, video ni otra cosa para mostrar. Quiero asistencia. Necesito un abogado gratuito. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.APO.TIPO#abogado_gratis",
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.LUG.DONDE#mercado",
+   "Q.RIE.AUXILIO#no_sabe",
+   "Q.RIE.MIEDO_CASA#no_sabe",
+   "Q.RIE.PIDE_PROTECCION#si",
+   "Q.RIE.PROTECCION_OTROS#no_sabe",
+   "Q.TIE.CUANDO#hace_h",
+   "Q.VIO.AGRESOR#mujer",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#si",
+   "Q.VIO.TIPO#gritar",
+   "Q.VIO.TIPO#maltratar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "gritar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_s"
+     ],
+     "valores": {
+      "hace_s": {
+       "n": "12"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "plaza"
+     ],
+     "valores": {
+      "plaza": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "afirmado",
+     "opciones": [
+      "certificado",
+      "video"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.APO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me gritaron. No necesito auxilio ahora. No sé quién fue. Ocurrió hace 12 semanas. No sé decirlo. Ocurrió en la plaza Heroínas. Sí, tengo miedo de volver a mi casa. No necesito protección. No hay otras personas en riesgo. Sí, tengo un video y un certificado. Sí, quiero asistencia. Quiero acudir a la FELCV.",
+  "representadas": [
+   "Q.APO.TIPO#felcv",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#certificado",
+   "Q.EVI.TIPOS#video",
+   "Q.LUG.DONDE#plaza",
+   "Q.RIE.AUXILIO#no",
+   "Q.RIE.MIEDO_CASA#si",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.RIE.PROTECCION_OTROS#no",
+   "Q.TIE.CUANDO#hace_s",
+   "Q.VIO.AGRESOR#no_sabe",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#si",
+   "Q.VIO.FRECUENCIA#no_sabe",
+   "Q.VIO.TIPO#gritar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "abusar",
+      "danar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "11"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "afirmado",
+     "opciones": [
+      "primera"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.SAL.HERIDO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.QUIENES",
+     "estado": "afirmado",
+     "opciones": [
+      "hijo",
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.APO.TIPO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Abusaron de mí. Dañaron mis cosas. Ocurrió hace 11 meses. Es la primera vez. Ocurrió dentro de un micro. No estoy seguro de estar herido. No lo sé. No necesito protección. Hay otras personas que necesitan protección. Estas personas necesitan protección: mi hijo y «un recibo firmado». No sé si tengo algo para mostrar. Quiero asistencia. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.LUG.DONDE#micro",
+   "Q.RIE.MIEDO_CASA#no_sabe",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.RIE.PROTECCION_OTROS#si",
+   "Q.RIE.QUIENES#hijo",
+   "Q.RIE.QUIENES#otro",
+   "Q.SAL.HERIDO#no_sabe",
+   "Q.TIE.CUANDO#hace_m",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#si",
+   "Q.VIO.FRECUENCIA#primera",
+   "Q.VIO.TIPO#abusar",
+   "Q.VIO.TIPO#danar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "amenazar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "afirmado",
+     "opciones": [
+      "primera"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me amenazaron. No lo sé. Fue una mujer que no conozco. Es la primera vez. Tengo miedo de volver a mi casa. No necesito protección. No hay otras personas en riesgo. No tengo fotos, video ni otra cosa para mostrar. Todavía no lo sé. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.RIE.AUXILIO#no_sabe",
+   "Q.RIE.MIEDO_CASA#si",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.RIE.PROTECCION_OTROS#no",
+   "Q.VIO.AGRESOR#mujer",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#no_sabe",
+   "Q.VIO.FRECUENCIA#primera",
+   "Q.VIO.TIPO#amenazar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "violencia",
+      "gritar"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_min"
+     ],
+     "valores": {
+      "hace_min": {
+       "n": "31"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.QUIENES",
+     "estado": "afirmado",
+     "opciones": [
+      "hijo"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.APO.TIPO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me gritaron. Sufrí violencia. Ocurrió hace 31 minutos. No sé decirlo. No tengo miedo de volver a mi casa. No necesito protección. Sí, hay otras personas que necesitan protección. Estas personas necesitan protección: mi hijo. No sé si tengo algo para mostrar. Sí, quiero asistencia. No sé qué apoyo necesito.",
+  "representadas": [
+   "Q.APO.TIPO#no_sabe",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.RIE.MIEDO_CASA#no",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.RIE.PROTECCION_OTROS#si",
+   "Q.RIE.QUIENES#hijo",
+   "Q.TIE.CUANDO#hace_min",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#si",
+   "Q.VIO.FRECUENCIA#no_sabe",
+   "Q.VIO.TIPO#gritar",
+   "Q.VIO.TIPO#violencia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "danar",
+      "amenazar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hoy"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "afirmado",
+     "opciones": [
+      "siempre"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "casa"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me amenazaron. Dañaron mis cosas. No necesito auxilio ahora. No sé quién fue. Ocurrió hoy. Pasa siempre. Ocurrió en mi casa. Tengo miedo de volver a mi casa. Necesito protección. No lo sé. Tengo algo que puedo mostrar. Todavía no lo sé. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.LUG.DONDE#casa",
+   "Q.RIE.AUXILIO#no",
+   "Q.RIE.MIEDO_CASA#si",
+   "Q.RIE.PIDE_PROTECCION#si",
+   "Q.RIE.PROTECCION_OTROS#no_sabe",
+   "Q.TIE.CUANDO#hoy",
+   "Q.VIO.AGRESOR#no_sabe",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#no_sabe",
+   "Q.VIO.FRECUENCIA#siempre",
+   "Q.VIO.TIPO#amenazar",
+   "Q.VIO.TIPO#danar"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "violencia",
+      "gritar"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "afirmado",
+     "opciones": [
+      "cada_dia"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.SAL.HERIDO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.SAL.PARTE",
+     "estado": "afirmado",
+     "opciones": [
+      "brazo"
+     ]
+    },
+    {
+     "pregunta": "Q.SAL.ASISTENCIA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.QUIENES",
+     "estado": "afirmado",
+     "opciones": [
+      "hija",
+      "hijo"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.APO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "abogado_gratis"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Me gritaron. Sufrí violencia. No lo sé. Fue una mujer que no conozco. No recuerdo cuándo ocurrió. Pasa todos los días. Estoy herido. Tengo una herida en el brazo. No sé si necesito atención médica. No tengo miedo de volver a mi casa. No lo sé. Hay otras personas que necesitan protección. Estas personas necesitan protección: mi hijo y mi hija. Quiero asistencia. Necesito un abogado gratuito.",
+  "representadas": [
+   "Q.APO.TIPO#abogado_gratis",
+   "Q.RIE.AUXILIO#no_sabe",
+   "Q.RIE.MIEDO_CASA#no",
+   "Q.RIE.PIDE_PROTECCION#no_sabe",
+   "Q.RIE.PROTECCION_OTROS#si",
+   "Q.RIE.QUIENES#hija",
+   "Q.RIE.QUIENES#hijo",
+   "Q.SAL.ASISTENCIA#no_sabe",
+   "Q.SAL.HERIDO#si",
+   "Q.SAL.PARTE#brazo",
+   "Q.TIE.CUANDO#no_recuerda",
+   "Q.VIO.AGRESOR#mujer",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#si",
+   "Q.VIO.FRECUENCIA#cada_dia",
+   "Q.VIO.TIPO#gritar",
+   "Q.VIO.TIPO#violencia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "violencia",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.VIO.TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "abusar",
+      "violencia"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.AUXILIO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "2"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.VIO.FRECUENCIA",
+     "estado": "afirmado",
+     "opciones": [
+      "cada_dia"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "mercado"
+     ]
+    },
+    {
+     "pregunta": "Q.SAL.HERIDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.MIEDO_CASA",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PROTECCION_OTROS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.VIO.TIPO",
+    "Q.RIE.AUXILIO",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TIE.CUANDO",
+    "Q.VIO.FRECUENCIA",
+    "Q.LUG.DONDE",
+    "Q.SAL.HERIDO",
+    "Q.SAL.PARTE",
+    "Q.SAL.ASISTENCIA",
+    "Q.RIE.MIEDO_CASA",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.RIE.PROTECCION_OTROS",
+    "Q.RIE.QUIENES",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+    "Q.APO.TIPO",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Abusaron de mí. Sufrí violencia. Ocurrió hace 2 meses. Pasa todos los días. Ocurrió en el mercado. No estoy herido. Sí, tengo miedo de volver a mi casa. No necesito protección. No hay otras personas en riesgo. Por ahora no quiero asistencia. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.LUG.DONDE#mercado",
+   "Q.RIE.MIEDO_CASA#si",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.RIE.PROTECCION_OTROS#no",
+   "Q.SAL.HERIDO#no",
+   "Q.TIE.CUANDO#hace_m",
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA#no",
+   "Q.VIO.FRECUENCIA#cada_dia",
+   "Q.VIO.TIPO#abusar",
+   "Q.VIO.TIPO#violencia"
+  ]
+ }
+]

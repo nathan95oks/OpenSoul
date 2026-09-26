@@ -22,6 +22,9 @@ import logging
 import re
 
 from guided_composer import compose as compose_guided
+from guided_composer import Composer as GuidedComposer
+from guided_composer import EDITOR_KEYS as GUIDED_EDITOR_KEYS
+from guided_composer import load_bank as load_guided_bank
 
 import boto3
 from botocore.exceptions import ClientError
@@ -2264,6 +2267,14 @@ def generate_structured_sentence(d: dict) -> str:
         time_text = time_val.strip()
     elif isinstance(time_val, dict):
         time_text = (time_val.get("date_or_moment") or time_val.get("dateOrMoment") or "").lower()
+        # «Hace 15 días» también es un dato de tiempo: antes se descartaba y
+        # solo sobrevivía una glosa de momento.
+        unidad = str(time_val.get("elapsedUnit") or time_val.get("elapsed_unit") or "").upper()
+        cantidad = str(time_val.get("elapsedCount") or time_val.get("elapsed_count") or "").strip()
+        plural = {"MINUTO": "minutos", "HORA": "horas", "DÍA": "días", "DIA": "días",
+                  "SEMANA": "semanas", "MES": "meses"}.get(unidad)
+        if plural and cantidad and not time_text:
+            time_text = f"hace {cantidad} {plural}"
 
     objects = d.get("objects") or d.get("objetos") or []
     stolen = [o for o in objects if (o.get("role") or o.get("rol")) in ("stolen", "robado")]
@@ -2293,7 +2304,17 @@ def generate_structured_sentence(d: dict) -> str:
 
     if context_id == "violencia":
         violence = d.get("violence") or d.get("violencia") or {}
-        sentences.append("Denuncio agresión física y violencia sufrida.")
+        # «Física» solo si lo que se declaró lo es: una amenaza o un grito no
+        # se convierten en agresión física.
+        fisicas = {"PEGAR", "GOLPEAR", "MALTRATAR", "ABUSAR", "VIOLENCIA", "PELEAR"}
+        acciones_v = {f["action"] for f in facts if not f["negated"]} | ({action} if action else set())
+        tipo_v = violence.get("aggressionType") or violence.get("tipo_agresion")
+        if acciones_v & fisicas or violence.get("physicalInjury") or tipo_hecho == "violencia_fisica":
+            sentences.append("Denuncio agresión física y violencia sufrida.")
+        elif tipo_v:
+            sentences.append(f"Denuncio haber sufrido: {str(tipo_v).lower().replace('_', ' ')}.")
+        else:
+            sentences.append("Denuncio una situación de violencia.")
         if violence.get("agresor_relacion"):
             sentences.append(f"La persona agresora es mi {violence['agresor_relacion']}.")
         if violence.get("heridas"):
@@ -2316,8 +2337,12 @@ def generate_structured_sentence(d: dict) -> str:
             sentences.append(f"Remitente: {threat['remitente']}.")
         if threat.get("numero_telefono") or threat.get("phoneNumber"):
             sentences.append(f"Número de contacto / remitente: {threat.get('numero_telefono') or threat.get('phoneNumber')}.")
-        if threat.get("has_saved_evidence") or threat.get("mensajes_guardados") or threat.get("capturas_pantalla"):
-            sentences.append("Dispongo de capturas de pantalla y mensajes guardados como evidencia.")
+        # Guardar los mensajes y tener capturas son dos hechos distintos: uno
+        # no implica el otro.
+        if threat.get("has_saved_evidence") or threat.get("hasSavedEvidence") or threat.get("mensajes_guardados"):
+            sentences.append("Guardé los mensajes.")
+        if threat.get("capturas_pantalla"):
+            sentences.append("Tengo capturas de pantalla de los mensajes.")
 
     elif context_id == "engano_dinero":
         fraud = d.get("fraud") or d.get("engano_dinero") or {}
@@ -2329,8 +2354,12 @@ def generate_structured_sentence(d: dict) -> str:
             sentences.append(f"Medio de pago / transferencia: {fraud.get('via_pago') or fraud.get('delivery_method')}.")
         if fraud.get("destinatario") or fraud.get("recipient_name"):
             sentences.append(f"Beneficiario o destinatario del dinero: {fraud.get('destinatario') or fraud.get('recipient_name')}.")
-        if fraud.get("tiene_comprobante") or fraud.get("receipt_doc"):
-            sentences.append("Cuento con comprobantes bancarios y respaldo de la transacción.")
+        # El tipo de comprobante no se supone: «bancario» solo si se dijo.
+        recibo = fraud.get("receipt_doc") or fraud.get("receiptDoc")
+        if recibo:
+            sentences.append(f"Cuento con este comprobante: {recibo}.")
+        elif fraud.get("tiene_comprobante"):
+            sentences.append("Cuento con un comprobante de la transacción.")
 
     elif context_id == "seguimiento":
         proc = d.get("procedure") or d.get("procedimiento") or {}
@@ -2358,7 +2387,7 @@ def generate_structured_sentence(d: dict) -> str:
         if id_doc:
             sentences.append(f"Documento de identidad: {id_doc}.")
         if id_con:
-            sentences.append(f"Teléfono / WhatsApp de contacto: {id_con}.")
+            sentences.append(f"Teléfono de contacto: {id_con}.")
         if id_aco:
             sentences.append(f"Acompañante: {id_aco}.")
         if d.get("necesita_interprete") or d.get("needs_interpreter"):
@@ -2377,7 +2406,8 @@ def generate_structured_sentence(d: dict) -> str:
             if inq.get("tiempo_espera"):
                 sentences.append(f"Tiempo estimado o plazo informado: {inq['tiempo_espera']}.")
         else:
-            sentences.append("¿Dónde debo realizar esta consulta o presentar el trámite?")
+            # Sin pregunta declarada no se inventa una («¿Dónde…?»).
+            sentences.append("Quiero hacer una consulta.")
 
     elif context_id == "otro":
         relato = fact.get("relato_libre") or fact.get("narrative")
@@ -2415,7 +2445,8 @@ def generate_structured_sentence(d: dict) -> str:
                 if what:
                     sentences.append(f"Denuncio el robo de {what}.")
                 else:
-                    sentences.append("Denuncio el robo de mis pertenencias.")
+                    # Sin objetos declarados no se supone qué se llevaron.
+                    sentences.append("Denuncio un robo.")
             else:
                 # Hay hechos, pero ninguno es un robo ni una pérdida. Se
                 # relatan por lo que son, sin ascenderlos a denuncia de robo.
@@ -2450,7 +2481,46 @@ def generate_structured_sentence(d: dict) -> str:
 
             evid = d.get("evidence") or d.get("evidencia") or []
             if evid:
-                sentences.append("Cuento con elementos de prueba o respaldo:")
+                # Se nombra cada elemento: antes quedaba «Cuento con…:» sin
+                # decir con qué.
+                nombres = []
+                for e in evid:
+                    if isinstance(e, dict):
+                        if (e.get("availability") or "confirmed") == "negated":
+                            continue
+                        concepto = str(e.get("concept") or e.get("concepto") or "")
+                    else:
+                        concepto = str(e)
+                    if not concepto:
+                        continue
+                    entry = lexicon_lookup(concepto)
+                    nombres.append(entry["es"] if entry else concepto.lower().replace("_", " "))
+                if nombres:
+                    sentences.append(f"Cuento con elementos de prueba o respaldo: {_join(nombres)}.")
+
+        # Lo que el cliente ya mandaba y esta ruta descartaba: herida,
+        # atención médica, voluntad de denunciar, apoyo y autoridad elegida.
+        if d.get("injured"):
+            sentences.append("Estoy herido y necesito atención médica."
+                             if d.get("medicalHelpRequested") else "Estoy herido.")
+        elif d.get("medicalHelpRequested"):
+            sentences.append("Necesito atención médica.")
+        voluntad = d.get("willFileComplaint")
+        if voluntad == "confirmed":
+            sentences.append("Quiero presentar una denuncia formal.")
+        elif voluntad == "negated":
+            sentences.append("Por ahora no quiero presentar una denuncia formal.")
+        elif voluntad == "uncertain":
+            sentences.append("Todavía no sé si quiero presentar una denuncia formal.")
+        if d.get("needsLegalSupport"):
+            sentences.append("Necesito apoyo legal.")
+        destino = d.get("receivingInstitution")
+        if isinstance(destino, str) and destino.strip():
+            entry = lexicon_lookup(destino)
+            nombre = entry["es"] if entry else destino.strip().lower()
+            if nombre.startswith("en "):
+                nombre = nombre[3:]
+            sentences.append(f"Deseo presentar esto ante {nombre}.")
 
         # Testigos: estado propio, sin equiparar la ausencia de respuesta a
         # que no los hay (auditoría 2026-09, hallazgo NO+TESTIGO / "no sabe").
@@ -2954,7 +3024,7 @@ BACKEND_CONTRACT_VERSION = 4
 #
 # Subir este número al cambiar el generador invalida lo anterior sin tener que
 # vaciar el bucket a mano.
-GENERATOR_VERSION = 3
+GENERATOR_VERSION = 4
 
 
 def generate_cache_key(context_type: str, cards: list, institution_type: str = "",
@@ -3085,7 +3155,9 @@ def validate_request(body: dict) -> tuple:
         return False, "El campo 'cards' es obligatorio."
     if not isinstance(cards, list):
         return False, "El campo 'cards' debe ser una lista de glosas."
-    if len(cards) == 0:
+    # Una intervención guiada hecha solo de valores escritos (un nombre, un
+    # teléfono) no tiene glosas: las glosas no se inventan para rellenar.
+    if len(cards) == 0 and not isinstance(body.get("guided"), dict):
         return False, "El campo 'cards' no puede estar vacío."
     if len(cards) > MAX_CARDS:
         return False, f"No se admiten más de {MAX_CARDS} glosas por solicitud."
@@ -3105,6 +3177,133 @@ def validate_request(body: dict) -> tuple:
         if len(context_type) > MAX_CONTEXT_LENGTH:
             return False, "El campo 'context' es demasiado largo."
     return True, None
+
+# ---------------------------------------------------------------------------
+# Contrato v4: intervención guiada
+# ---------------------------------------------------------------------------
+# Las mismas reglas que aplica el dominio del cliente (GuidedFlow): la
+# configuración de la interfaz no sustituye la validación del backend. Una
+# respuesta con Sí y No a la vez, una quinta opción donde caben cuatro o un
+# valor escrito sin tope se rechazan aquí, no se redactan.
+
+MAX_GUIDED_ANSWERS = 64
+MAX_GUIDED_STEPS = 128
+MAX_VALUE_LENGTH = 120
+MAX_HEARING_TEXT = 1000
+GUIDED_STATES = ("afirmado", "negado", "desconocido", "omitido")
+GUIDED_PURPOSES = ("standalone", "initiative", "reply")
+
+_GUIDED_BANK = None
+
+
+def _guided_bank() -> dict:
+    global _GUIDED_BANK
+    if _GUIDED_BANK is None:
+        _GUIDED_BANK = load_guided_bank()
+    return _GUIDED_BANK
+
+
+def _max_picks(q: dict) -> int:
+    if q.get("control") == "seleccion_multiple":
+        return int(q.get("maximo") or len(q.get("opciones") or []) or 1)
+    return 1
+
+
+def _is_exclusive(o: dict) -> bool:
+    return bool(o.get("salida")) or (o.get("estado") or "afirmado") != "afirmado"
+
+
+def validate_guided(body: dict) -> tuple:
+    """Comprueba la intervención guiada (contrato v4) contra el banco."""
+    guided = body.get("guided")
+    if guided is None:
+        return True, None
+    if not isinstance(guided, dict):
+        return False, "El campo 'guided' debe ser un objeto."
+    bank = _guided_bank()
+    questions = {q["id"]: q for q in bank["preguntas"]}
+
+    journey = guided.get("recorrido", "")
+    if not isinstance(journey, str) or len(journey) > MAX_ID_LENGTH:
+        return False, "El recorrido guiado no es válido."
+    if journey and journey not in bank.get("recorridos", {}):
+        return False, f"Recorrido guiado desconocido: {journey}."
+    if guided.get("proposito") not in GUIDED_PURPOSES:
+        return False, "El propósito de la intervención guiada no es válido."
+    for campo, tope in (("conversationId", MAX_ID_LENGTH),
+                        ("hearingTurnId", MAX_ID_LENGTH),
+                        ("hearingTurnText", MAX_HEARING_TEXT)):
+        valor = guided.get(campo)
+        if valor is not None and (not isinstance(valor, str) or len(valor) > tope):
+            return False, f"El campo '{campo}' de la intervención no es válido."
+    pasos = guided.get("pasos", [])
+    if (not isinstance(pasos, list) or len(pasos) > MAX_GUIDED_STEPS
+            or not all(isinstance(p, str) and p in questions for p in pasos)):
+        return False, "Los pasos de la intervención guiada no son válidos."
+
+    respuestas = guided.get("respuestas")
+    if not isinstance(respuestas, list) or len(respuestas) > MAX_GUIDED_ANSWERS:
+        return False, "Las respuestas de la intervención guiada no son válidas."
+    vistas = set()
+    for i, a in enumerate(respuestas):
+        donde = f"La respuesta {i}"
+        if not isinstance(a, dict):
+            return False, f"{donde} no es un objeto."
+        qid = a.get("pregunta")
+        q = questions.get(qid) if isinstance(qid, str) else None
+        if q is None:
+            return False, f"{donde} cita una pregunta inexistente."
+        if qid in vistas:
+            return False, f"{donde} repite la pregunta {qid}."
+        vistas.add(qid)
+        estado = a.get("estado")
+        if estado not in GUIDED_STATES:
+            return False, f"{donde} tiene un estado no válido."
+        opciones = a.get("opciones", [])
+        if not isinstance(opciones, list) or not all(isinstance(o, str) for o in opciones):
+            return False, f"{donde} tiene opciones no válidas."
+        por_id = {o["id"]: o for o in q.get("opciones", [])}
+        if len(set(opciones)) != len(opciones) or any(o not in por_id for o in opciones):
+            return False, f"{donde} elige una opción que {qid} no tiene."
+        if estado == "omitido":
+            if opciones:
+                return False, f"{donde} está omitida y a la vez elige opciones."
+        else:
+            if not opciones:
+                return False, f"{donde} no elige ninguna opción."
+            if len(opciones) > _max_picks(q):
+                return False, f"{donde} supera el máximo de opciones de {qid}."
+            elegidas = [por_id[o] for o in opciones]
+            if len(elegidas) > 1 and any(_is_exclusive(o) for o in elegidas):
+                return False, f"{donde} mezcla una respuesta excluyente con otras."
+            esperado = (elegidas[0].get("estado") or "afirmado") if len(elegidas) == 1 else "afirmado"
+            if estado != esperado:
+                return False, f"{donde} declara un estado que no corresponde a su opción."
+        valores = a.get("valores", {})
+        if not isinstance(valores, dict):
+            return False, f"{donde} tiene valores no válidos."
+        for oid, vals in valores.items():
+            if oid not in opciones or not isinstance(vals, dict):
+                return False, f"{donde} trae valores de una opción no elegida."
+            permitidas = set(GUIDED_EDITOR_KEYS.get(por_id[oid].get("editor") or "", ())) | {"aprox"}
+            for clave, valor in vals.items():
+                if clave not in permitidas:
+                    return False, f"{donde} trae un valor desconocido ({clave})."
+                if not isinstance(valor, (str, int)) or isinstance(valor, bool):
+                    return False, f"{donde} trae un valor que no es texto."
+                if len(str(valor)) > MAX_VALUE_LENGTH:
+                    return False, f"{donde} trae un valor demasiado largo."
+        mencion = a.get("mencion")
+        if mencion is not None:
+            if (not isinstance(mencion, dict)
+                    or not isinstance(mencion.get("frase", ""), str)
+                    or len(mencion.get("frase", "")) > MAX_VALUE_LENGTH):
+                return False, f"{donde} trae una mención no válida."
+        padre = a.get("padre")
+        if padre is not None and padre not in questions:
+            return False, f"{donde} cita un padre inexistente."
+    return True, None
+
 
 # ===================================================================
 # SUGERENCIA GENERATIVA DE OPCIONES
@@ -3256,6 +3455,10 @@ def lambda_handler(event, context):
     if not is_valid:
         return build_response(400, {"error": "VALIDATION_ERROR", "message": err})
 
+    is_valid, err = validate_guided(body)
+    if not is_valid:
+        return build_response(400, {"error": "VALIDATION_ERROR", "message": err})
+
     cards = [c.strip().upper() for c in body["cards"]]
     context_type = body.get("context", "general").strip().lower()
     institution_type = (body.get("institutionType") or "").strip().lower()
@@ -3310,12 +3513,17 @@ def lambda_handler(event, context):
 
     intermediate = build_intermediate_representation(cards, analysis, context_type)
 
+    guided_covered = False
     if guided:
         # Contrato v4: el banco compartido ya contiene la redacción exacta de
         # cada respuesta tipada. No se vuelve a inferir desde tarjetas ni se
         # manda a Bedrock, porque hacerlo podría cambiar negación, actor o un
         # literal escrito por la persona.
-        base_sentence = compose_guided(guided)
+        composer = GuidedComposer(_guided_bank())
+        base_sentence, representadas = composer.compose_traced(guided)
+        # Cobertura: toda respuesta confirmada que redacta algo está en el
+        # texto. Es la misma comprobación que hace el cliente.
+        guided_covered = composer.confirmed_facts(guided) <= representadas
     elif uses_structured:
         # El cliente ya mandó las relaciones explícitas (persona↔prenda↔color,
         # objeto↔papel, lugar↔referencia): redactarlas no requiere volver a
@@ -3335,7 +3543,7 @@ def lambda_handler(event, context):
     # y yo escapé" de "me robaron y el ladrón escapó".
     hechos = normalize_facts(declaration) if declaration else []
     if guided:
-        generated_text, generation_validated = base_sentence, True
+        generated_text, generation_validated = base_sentence, guided_covered
     else:
         generated_text, generation_validated = generate_with_bedrock(
             cards, analysis, base_sentence, context_type, institution_type,

@@ -35,6 +35,7 @@ class _FakeRepository implements TranslationRepository {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   }) async {
     if (_error != null) throw _error;
     return _result!;
