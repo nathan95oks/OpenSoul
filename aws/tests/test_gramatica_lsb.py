@@ -126,6 +126,25 @@ class GramaticaLsb(unittest.TestCase):
         errores = self.errores(self.cambiar("Q.DEN.INTENCION", estado="GRAMMAR_PROVISIONAL"))
         self.assertTrue(any("LEXICAL_GAP" in e for e in errores), errores)
 
+    def test_fallback_visual_deriva_de_secuencia_estado_y_tratamiento(self):
+        decisiones = {
+            q["id"]: B.formulacion_lsb_utilizable(q)
+            for q in self.banco["preguntas"]
+        }
+        self.assertEqual(134, sum(decisiones.values()))
+        self.assertEqual(9, len(decisiones) - sum(decisiones.values()))
+        self.assertTrue(decisiones["Q.HEC.QUE_OCURRIO"])
+        self.assertFalse(decisiones["I.PREG.CUANDO"])
+        self.assertFalse(decisiones["Q.EVI.QUE_TIENE"])
+        self.assertTrue(decisiones["Q.DEN.INTENCION"])
+        self.assertTrue(decisiones["Q.SEG.DONDE_FISCALIA"])
+
+        ejecucion = {
+            q["id"]: q["formulacionLsb"]["utilizable"]
+            for q in B.banco_ejecucion(self.banco, self.acep)["preguntas"]
+        }
+        self.assertEqual(decisiones, ejecucion)
+
     def test_un_registro_de_validacion_exige_el_estado_validado(self):
         registro = {"validador": "x", "fecha": "2026-09-26", "evidencia": "y", "secuencia": []}
         errores = self.errores(self.cambiar("Q.ROB.QUE", validacion=registro))
