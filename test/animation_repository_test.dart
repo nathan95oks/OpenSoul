@@ -34,14 +34,14 @@ void main() {
       );
 
   AnimationCache cacheThatServes(String body) => AnimationCache(
-        client: MockClient((_) async => http.Response(body, 200)),
-        allowedHosts: {bucketHost},
-      );
+    client: MockClient((_) async => http.Response(body, 200)),
+    allowedHosts: {bucketHost},
+  );
 
   test('un modelo descargable se sirve desde el archivo local', () async {
     final repo = repositoryWith(cacheThatServes('modelo'));
 
-    final sources = await repo.playableSources(['${bucket}avatar_test.glb']);
+    final sources = await repo.playableSources(['${bucket}modelo_futuro.glb']);
 
     expect(sources, hasLength(1));
     expect(sources.single, startsWith('file://'));
@@ -49,10 +49,12 @@ void main() {
   });
 
   test('un placeholder pasa intacto y no toca la red', () async {
-    final repo = repositoryWith(AnimationCache(
-      client: MockClient((_) async => throw StateError('no debe descargar')),
-      allowedHosts: {bucketHost},
-    ));
+    final repo = repositoryWith(
+      AnimationCache(
+        client: MockClient((_) async => throw StateError('no debe descargar')),
+        allowedHosts: {bucketHost},
+      ),
+    );
 
     const placeholder = '${AnimationUrlResolver.placeholderScheme}TESTIGO';
     expect(await repo.playableSources([placeholder]), [placeholder]);
@@ -61,14 +63,18 @@ void main() {
   test('un origen no permitido degrada a placeholder, no a la URL', () async {
     final repo = repositoryWith(cacheThatServes('modelo'));
 
-    final sources =
-        await repo.playableSources(['https://atacante.example/evil.glb']);
+    final sources = await repo.playableSources([
+      'https://atacante.example/evil.glb',
+    ]);
 
     expect(sources, [
-      '${AnimationUrlResolver.placeholderScheme}https://atacante.example/evil.glb'
+      '${AnimationUrlResolver.placeholderScheme}https://atacante.example/evil.glb',
     ]);
-    expect(temp.listSync(), isEmpty,
-        reason: 'Un origen rechazado no escribe nada en la caché.');
+    expect(
+      temp.listSync(),
+      isEmpty,
+      reason: 'Un origen rechazado no escribe nada en la caché.',
+    );
   });
 
   test('sin URLs no se abre siquiera el directorio temporal', () async {
@@ -91,24 +97,45 @@ void main() {
 
     expect(sources, hasLength(3));
     expect(sources[0], '${AnimationUrlResolver.placeholderScheme}A');
-    expect(sources[1], startsWith('file://'));
-    expect(sources[2],
-        startsWith(AnimationUrlResolver.placeholderScheme));
+    expect(sources[1], AnimationUrlResolver.bundledModelAsset);
+    expect(sources[2], startsWith(AnimationUrlResolver.placeholderScheme));
   });
 
-  test('isCached reporta correctamente si el archivo ya está descargado', () async {
-    final repo = repositoryWith(cacheThatServes('modelo'));
+  test(
+    'isCached reporta correctamente si el archivo ya está descargado',
+    () async {
+      final repo = repositoryWith(cacheThatServes('modelo'));
+      const modeloUrl = '${bucket}modelo_futuro.glb';
+
+      expect(await repo.isCached(modeloUrl), isFalse);
+
+      await repo.playableSources([modeloUrl]);
+
+      expect(await repo.isCached(modeloUrl), isTrue);
+    },
+  );
+
+  test('el modelo completo viene incluido y no toca disco ni red', () async {
+    final repo = AnimationRepositoryImpl(
+      cache: AnimationCache(
+        client: MockClient((_) async => throw StateError('no debe descargar')),
+        allowedHosts: {bucketHost},
+      ),
+      cacheDirectory: () async => throw StateError('no debe abrirse'),
+    );
     const modeloUrl = '${bucket}avatar_test.glb';
 
-    expect(await repo.isCached(modeloUrl), isFalse);
-
-    await repo.playableSources([modeloUrl]);
-
+    expect(await repo.playableSources(const [modeloUrl]), const [
+      AnimationUrlResolver.bundledModelAsset,
+    ]);
     expect(await repo.isCached(modeloUrl), isTrue);
   });
 
-  test('precacheDefaultModel no arroja excepciones si no hay URL configurada', () async {
-    final repo = repositoryWith(cacheThatServes('modelo'));
-    await expectLater(repo.precacheDefaultModel(), completes);
-  });
+  test(
+    'precacheDefaultModel no arroja excepciones si no hay URL configurada',
+    () async {
+      final repo = repositoryWith(cacheThatServes('modelo'));
+      await expectLater(repo.precacheDefaultModel(), completes);
+    },
+  );
 }

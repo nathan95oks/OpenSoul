@@ -272,8 +272,16 @@ La Lambda `aws/lambda_text_to_lsb.py`:
 2. analiza el texto;
 3. resuelve términos polisémicos cuando el contexto lo permite;
 4. genera glosas;
-5. contrasta cada glosa con las animaciones conocidas del GLB;
-6. devuelve una secuencia de animación o dactilología.
+5. antes de aceptar la salida de Bedrock, aplica las expresiones compuestas con
+   coincidencia más larga: si el alias está declarado y su clip existe en el
+   GLB, usa una sola glosa (por ejemplo, `como estas` → `COMO_ESTAS`) y nunca
+   deletrea una de sus partes;
+6. contrasta cada glosa con las animaciones conocidas del GLB;
+7. devuelve una secuencia de animación o dactilología.
+
+La versión interna de estas reglas forma parte de la clave de caché. Por ello,
+un despliegue que corrija la traducción no reutiliza respuestas semánticas
+guardadas por una versión anterior aunque `CACHE_VERSION` esté fijada en AWS.
 
 Archivos cliente relevantes:
 
@@ -282,6 +290,36 @@ Archivos cliente relevantes:
 - `animation_repository_impl.dart`
 - `animation_url_resolver.dart`
 - `avatar_3d_viewer.dart`
+
+Desde 2026-09-25, `assets/models/avatar_test.glb` se distribuye dentro del
+APK/IPA y está declarado en `pubspec.yaml`. Ese único archivo contiene todos
+los clips 3D disponibles, por lo que el primer envío ya no descarga el modelo
+desde S3. El repositorio reconoce cualquier URL permitida que apunte a
+`avatar_test.glb` y la resuelve al asset local; modelos futuros que no estén
+empaquetados se guardan en el directorio persistente de soporte de la app, no
+en almacenamiento temporal.
+
+Al enviar texto, la pantalla cierra explícitamente el teclado, oculta el panel
+de entrada y expande el avatar durante el procesamiento y la reproducción. La
+pantalla no repite debajo del campo la etiqueta «FRASE TRADUCIDA» ni el texto
+enviado: al volver solo se presenta el campo blanco para la siguiente entrada.
+secuencia se reproduce una vez; al terminar vuelve el campo de texto. El botón
+de volver, situado a la izquierda de la glosa, solicita la salida sin congelar
+al avatar: el clip actual termina de forma natural, se descarta el resto de la
+secuencia y el visor regresa al ciclo neutral. A su lado existe un botón de
+repetición que vuelve a ejecutar la misma secuencia.
+Cada envío lleva un `playbackRequestId`, de modo que repetir exactamente la
+misma frase también inicia una reproducción nueva aunque el resultado provenga
+de caché y reutilice las mismas listas.
+
+Cuando no hay una seña en curso ni texto/dictado en composición, el visor busca
+los clips `NEUTRO1`, `NEUTRO2` y `NEUTRO3` dentro del mismo
+`avatar_test.glb` y los alterna. La disponibilidad se consulta en tiempo de
+ejecución mediante `availableAnimations`: mientras esos clips todavía no estén
+horneados en el GLB, el avatar queda quieto y no falla. Subir tres archivos GLB
+separados no los incorpora al esqueleto cargado; hay que publicar un
+`avatar_test.glb` actualizado y reemplazar también el asset empaquetado antes
+de generar la aplicación.
 
 La lista estática `AVAILABLE_3D_GLOSSES` es un respaldo, no una prueba del
 contenido del modelo real. Cuando la Lambda tiene permisos, debe inspeccionar la

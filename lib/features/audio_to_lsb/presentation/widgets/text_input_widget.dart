@@ -21,6 +21,7 @@ class TextInputWidget extends ConsumerStatefulWidget {
   /// poniendo el cursor aqui. Solo enfoca: el dictado sigue necesitando que
   /// el oyente pulse el microfono.
   final FocusNode? focusNode;
+  final ValueChanged<bool>? onComposingChanged;
 
   const TextInputWidget({
     super.key,
@@ -29,17 +30,25 @@ class TextInputWidget extends ConsumerStatefulWidget {
     this.hintText = 'Ingresar texto',
     this.isActive = true,
     this.focusNode,
+    this.onComposingChanged,
   });
 
   @override
   ConsumerState<TextInputWidget> createState() => _TextInputWidgetState();
 }
 
-class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTickerProviderStateMixin {
+class _TextInputWidgetState extends ConsumerState<TextInputWidget>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   bool _isRecording = false;
   late stt.SpeechToText _speechToText;
   late AnimationController _animationController;
+
+  void _notifyComposing() {
+    widget.onComposingChanged?.call(
+      _isRecording || _controller.text.trim().isNotEmpty,
+    );
+  }
 
   @override
   void initState() {
@@ -73,10 +82,10 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
     _isRecording = false;
     _lastRecognizedWords = '';
     _controller.clear();
+    _notifyComposing();
     try {
       await _speechToText.cancel();
-    } catch (_) {
-    }
+    } catch (_) {}
     if (mounted) setState(() {});
   }
 
@@ -136,8 +145,11 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           _isRecording = true;
           _controller.clear();
         });
+        _notifyComposing();
 
-        ref.read(audioTranslationControllerProvider.notifier).setRecordingState();
+        ref
+            .read(audioTranslationControllerProvider.notifier)
+            .setRecordingState();
 
         final localeId = await _resolveLocaleId();
 
@@ -150,7 +162,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                 TextPosition(offset: _controller.text.length),
               );
             });
-            ref.read(audioTranslationControllerProvider.notifier)
+            _notifyComposing();
+            ref
+                .read(audioTranslationControllerProvider.notifier)
                 .updateRecognizedText(result.recognizedWords);
           },
           listenOptions: localeId == null
@@ -168,9 +182,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
 
   void _warn(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   String _lastRecognizedWords = '';
@@ -207,14 +221,21 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
       });
     }
     _lastRecognizedWords = '';
+    _notifyComposing();
 
     if (text.isEmpty) {
-      ref.read(audioTranslationControllerProvider.notifier).processAudioAsText('');
+      ref
+          .read(audioTranslationControllerProvider.notifier)
+          .processAudioAsText('');
       if (porError) {
-        _warn('No se reconoció nada. Puedes intentar de nuevo o escribir el mensaje.');
+        _warn(
+          'No se reconoció nada. Puedes intentar de nuevo o escribir el mensaje.',
+        );
       }
     } else if (porError) {
-      _warn('Revisa el texto reconocido antes de enviarlo: puede tener errores.');
+      _warn(
+        'Revisa el texto reconocido antes de enviarlo: puede tener errores.',
+      );
     }
     // Sin error y con texto: se deja tal cual en el campo para que la
     // persona lo revise y confirme con el botón de enviar.
@@ -228,6 +249,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
     if (_controller.text.trim().isNotEmpty) {
       final text = _controller.text.trim();
       _controller.clear();
+      _notifyComposing();
       FocusScope.of(context).unfocus();
       FocusManager.instance.primaryFocus?.unfocus();
       SystemChannels.textInput.invokeMethod('TextInput.hide');
@@ -265,6 +287,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
+              onChanged: (_) => _notifyComposing(),
               onSubmitted: (_) => _submit(),
             ),
           ),
@@ -275,7 +298,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _isRecording
-                      ? Colors.red.withValues(alpha: 0.15 + (_animationController.value * 0.2))
+                      ? Colors.red.withValues(
+                          alpha: 0.15 + (_animationController.value * 0.2),
+                        )
                       : Colors.transparent,
                   boxShadow: _isRecording
                       ? [
@@ -283,14 +308,16 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
                             color: AppTheme.errorDark.withValues(alpha: 0.3),
                             spreadRadius: _animationController.value * 6,
                             blurRadius: 8,
-                          )
+                          ),
                         ]
                       : null,
                 ),
                 child: IconButton(
                   icon: Icon(
                     _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-                    color: _isRecording ? AppTheme.errorDark : const Color(0xFF1E1E2F),
+                    color: _isRecording
+                        ? AppTheme.errorDark
+                        : const Color(0xFF1E1E2F),
                     size: 24,
                   ),
                   onPressed: _toggleRecording,
@@ -301,7 +328,11 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget> with SingleTi
           ),
           const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.send_rounded, color: Color(0xFF6C5CE7), size: 24),
+            icon: const Icon(
+              Icons.send_rounded,
+              color: Color(0xFF6C5CE7),
+              size: 24,
+            ),
             onPressed: _submit,
             tooltip: 'Enviar mensaje',
           ),

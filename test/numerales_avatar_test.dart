@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
@@ -23,7 +24,8 @@ const _resolver = AnimationUrlResolver(baseUrl: 'https://cdn.example/');
 
 Set<String> _digitosDelCatalogo() {
   final doc = jsonDecode(
-      File('assets/dictionary/official_dictionary.json').readAsStringSync());
+    File('assets/dictionary/official_dictionary.json').readAsStringSync(),
+  );
   return {
     for (final e in (doc['entries'] as List))
       if ((e['gloss'] as String).length == 1 &&
@@ -45,16 +47,23 @@ void main() {
 
       for (final d in digitos) {
         final nombre = AnimationUrlResolver.animationNameFor(d);
-        expect(AnimationUrlResolver.available3DGlosses, contains(nombre),
-            reason: 'El dígito $d pedía "$d", que el resolutor no declara.');
+        expect(
+          AnimationUrlResolver.available3DGlosses,
+          contains(nombre),
+          reason: 'El dígito $d pedía "$d", que el resolutor no declara.',
+        );
       }
     });
 
     test('un dígito ya no cae en marcador de posición', () {
       final urls = _resolver.resolveAll(
-          gloss: '3', animationFile: 'avatar_test.glb');
-      expect(urls.single,
-          isNot(startsWith(AnimationUrlResolver.placeholderScheme)));
+        gloss: '3',
+        animationFile: 'avatar_test.glb',
+      );
+      expect(
+        urls.single,
+        isNot(startsWith(AnimationUrlResolver.placeholderScheme)),
+      );
       expect(urls.single, 'https://cdn.example/avatar_test.glb');
     });
 
@@ -67,8 +76,10 @@ void main() {
 
     test('DIEZ sigue funcionando por su nombre', () {
       expect(AnimationUrlResolver.animationNameFor('DIEZ'), 'DIEZ');
-      expect(_resolver.resolveAll(gloss: 'DIEZ').single,
-          'https://cdn.example/avatar_test.glb');
+      expect(
+        _resolver.resolveAll(gloss: 'DIEZ').single,
+        'https://cdn.example/avatar_test.glb',
+      );
     });
 
     test('la Ñ conserva su nombre propio de animación', () {
@@ -77,50 +88,49 @@ void main() {
 
     test('una glosa sin animación sigue siendo marcador', () {
       final urls = _resolver.resolveAll(gloss: 'CELULAR');
-      expect(urls.single,
-          startsWith(AnimationUrlResolver.placeholderScheme));
+      expect(urls.single, startsWith(AnimationUrlResolver.placeholderScheme));
     });
   });
 
   group('cliente y backend usan el mismo mapa', () {
     test('coincide con _DIGITO_A_GLOSA de lambda_text_to_lsb.py', () {
       final fuente = File('aws/lambda_text_to_lsb.py').readAsStringSync();
-      final bloque = RegExp(r'_DIGITO_A_GLOSA = \{(.*?)\}', dotAll: true)
-          .firstMatch(fuente);
+      final bloque = RegExp(
+        r'_DIGITO_A_GLOSA = \{(.*?)\}',
+        dotAll: true,
+      ).firstMatch(fuente);
       expect(bloque, isNotNull, reason: 'El mapa del backend desapareció.');
 
-      final pares = RegExp(r'"(\d)":\s*"([A-ZÑ]+)"')
-          .allMatches(bloque!.group(1)!);
+      final pares = RegExp(
+        r'"(\d)":\s*"([A-ZÑ]+)"',
+      ).allMatches(bloque!.group(1)!);
       expect(pares, isNotEmpty);
 
       for (final m in pares) {
-        expect(AnimationUrlResolver.digitToNumeral[m.group(1)], m.group(2),
-            reason: 'El dígito ${m.group(1)} se traduce distinto en cada lado.');
+        expect(
+          AnimationUrlResolver.digitToNumeral[m.group(1)],
+          m.group(2),
+          reason: 'El dígito ${m.group(1)} se traduce distinto en cada lado.',
+        );
       }
     });
   });
 
-  group('límites declarados sin exagerar', () {
-    test('el modelo no está en el repositorio', () {
-      // Si algún día se añade, esta prueba lo dice y toca revisar las
-      // afirmaciones de cobertura, que hoy salen de una constante.
-      final glbs = Directory('.')
-          .listSync(recursive: false)
-          .whereType<Directory>()
-          .where((d) => !d.path.contains('build'))
-          .expand((d) {
-            try {
-              return d.listSync(recursive: true);
-            } catch (_) {
-              return const <FileSystemEntity>[];
-            }
-          })
-          .whereType<File>()
-          .where((f) => f.path.endsWith('.glb'));
+  group('modelo disponible desde la instalación', () {
+    testWidgets('rootBundle incluye el GLB y su cabecera es válida', (_) async {
+      final data = await rootBundle.load(
+        AnimationUrlResolver.bundledModelAsset,
+      );
+      final bytes = data.buffer.asUint8List(
+        data.offsetInBytes,
+        data.lengthInBytes,
+      );
 
-      expect(glbs, isEmpty,
-          reason: 'Las cifras de cobertura del avatar se declaran como '
-              'lectura de código, no como inspección del modelo.');
+      expect(bytes.length, greaterThan(12));
+      expect(
+        bytes.take(4),
+        [0x67, 0x6c, 0x54, 0x46], // "glTF"
+      );
     });
   });
 }
