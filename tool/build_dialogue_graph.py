@@ -256,23 +256,13 @@ def build_graph():
         # Vocabulario del ENUNCIADO: las glosas con que se formula la
         # intervención. Sirven para reconocerla y para el avatar; nunca son
         # tarjetas de respuesta.
-        formulacion = []
-        for o in reachable:
-            if o.get("kind") == "card":
-                formulacion.append(o["gloss"])
-                continue
-            # Dactilología institucional explícita del corpus, d(FISCALÍA):
-            # si la sigla existe en el catálogo v4 (FISCALIA, SEPDAVI,
-            # SEPDEP…), forma parte del enunciado en la posición que le da el
-            # corpus. Antes se descartaba y «¿Dónde está la Fiscalía?» quedaba
-            # como un DÓNDE suelto. Solo en las preguntas del banco, que es lo
-            # auditado (docs/negocio/13_Auditoria_Gramatica_LSB.md); no valida
-            # el orden, solo deja de perder una pieza.
-            m = re.match(r"^d\((.+)\)$", o.get("concept", "").strip(), re.IGNORECASE)
-            if pregunta is not None and o.get("kind") == "spelling" and m:
-                sigla = gloss_if_present(m.group(1))
-                if sigla:
-                    formulacion.append(sigla)
+        formulacion = [o["gloss"] for o in reachable if o.get("kind") == "card"]
+        # En las preguntas del banco manda su formulación LSB canónica
+        # (`gramaticaLsb.secuencia`): la misma que ve la app y recibe la
+        # Lambda. Así el grafo no puede quedarse con otra secuencia.
+        canonica = ((pregunta or {}).get("gramaticaLsb") or {}).get("secuencia")
+        if canonica:
+            formulacion = list(canonica)
         # Valores literales y mecanismos: números, deletreos y conceptos
         # pendientes. No son señas nuevas.
         literales = [

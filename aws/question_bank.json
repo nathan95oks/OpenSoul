@@ -700,6 +700,9 @@
    "dominio": "intervencion_propia",
    "entidad": "PreguntaPropia",
    "formulacion": "¿Qué quiere saber cuándo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PENDING"
+   },
    "id": "I.PREG.CUANDO",
    "modo": "frase",
    "noOfrecer": [],
@@ -751,6 +754,9 @@
    "dominio": "intervencion_propia",
    "entidad": "PreguntaPropia",
    "formulacion": "¿Qué quiere saber cuánto?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PENDING"
+   },
    "id": "I.PREG.CUANTO",
    "modo": "frase",
    "noOfrecer": [],
@@ -791,6 +797,15 @@
    "dominio": "intervencion_propia",
    "entidad": "PreguntaPropia",
    "formulacion": "¿Dónde queda…?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "DÓNDE"
+    ],
+    "interrogativo": "DÓNDE",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "I.PREG.DONDE_QUEDA",
    "modo": "frase",
    "noOfrecer": [
@@ -910,6 +925,17 @@
    "dominio": "intervencion_propia",
    "entidad": "PreguntaPropia",
    "formulacion": "¿Qué quieres preguntar?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "SABER",
+     "QUÉ",
+     "QUERER"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "I.PREG.ELEGIR",
    "modo": "frase",
    "noOfrecer": [],
@@ -984,6 +1010,17 @@
    "dominio": "intervencion_propia",
    "entidad": "PreguntaPropia",
    "formulacion": "¿Con quién quiere hablar?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HABLAR",
+     "QUIÉN",
+     "QUERER"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "I.PREG.HABLAR_CON",
    "modo": "frase",
    "noOfrecer": [
@@ -1073,6 +1110,20 @@
    "dominio": "intervencion_propia",
    "entidad": "PreguntaPropia",
    "formulacion": "¿Sobre qué quiere preguntar?",
+   "formulacionLsb": {
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "SABER",
+     "QUÉ",
+     "QUERER"
+    ],
+    "huecos": [
+     "TEMA"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "I.PREG.SOBRE_TEMA",
    "modo": "frase",
    "noOfrecer": [
@@ -1183,6 +1234,16 @@
    "dominio": "acceso",
    "entidad": "Conversacion",
    "formulacion": "¿Comprende lo que le estoy explicando?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TÚ",
+     "COMPRENDER",
+     "EXPLICAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ACC.COMPRENSION",
    "modo": "frase",
    "noOfrecer": [
@@ -1235,6 +1296,16 @@
    "dominio": "acceso",
    "entidad": "Ciudadano",
    "formulacion": "¿Prefiere que le escriba en papel?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ESCRIBIR",
+     "PAPEL",
+     "MEJOR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ACC.ESCRITO",
    "modo": "frase",
    "noOfrecer": [
@@ -1289,6 +1360,15 @@
    "dominio": "acceso",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita un intérprete de LSB?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "INTÉRPRETE",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ACC.INTERPRETE",
    "modo": "frase",
    "noOfrecer": [
@@ -1342,6 +1422,20 @@
    "dominio": "acceso",
    "entidad": "Ciudadano",
    "formulacion": "¿Puede leer este texto?",
+   "formulacionLsb": {
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "TÚ",
+     "LEER",
+     "PUEDO"
+    ],
+    "huecos": [
+     "TEXTO"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "el texto se señala (deíctico); no hay glosa TEXTO",
+    "tipo": "polar"
+   },
    "id": "Q.ACC.LECTURA",
    "modo": "frase",
    "noOfrecer": [
@@ -1393,6 +1487,17 @@
    "dominio": "acceso",
    "entidad": "Conversacion",
    "formulacion": "¿Quiere que lo explique otra vez y más despacio?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "VOLVER",
+     "EXPLICAR",
+     "LENTO",
+     "QUERER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ACC.REPARACION",
    "modo": "frase",
    "noOfrecer": [
@@ -1438,6 +1543,15 @@
    "dominio": "acceso",
    "entidad": "Ciudadano",
    "formulacion": "¿Usted es una persona sorda?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TÚ",
+     "SORDO"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ACC.SORDO",
    "modo": "frase",
    "noOfrecer": [
@@ -1482,6 +1596,17 @@
    "dominio": "apoyo",
    "entidad": "Solicitud",
    "formulacion": "¿Qué apoyo necesita?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ASISTENCIA",
+     "CUÁL",
+     "NECESITAR"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.APO.TIPO",
    "modo": "frase",
    "noOfrecer": [
@@ -1553,6 +1678,16 @@
    "dominio": "robo",
    "entidad": "Hecho[DAÑAR].objetos",
    "formulacion": "¿Qué dañaron?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "DAÑAR",
+     "QUÉ"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Dañaron {frag}.",
    "id": "Q.DAN.QUE",
    "maximo": 3,
@@ -1627,6 +1762,18 @@
    "dominio": "denuncia",
    "entidad": "Intencion",
    "formulacion": "¿Ante qué institución quiere presentarla?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PRESENTAR",
+     "INSTITUCIÓN",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la denuncia (Q.DEN.INTENCION): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "tipo": "qu"
+   },
    "id": "Q.DEN.AUTORIDAD",
    "modo": "frase",
    "noOfrecer": [
@@ -1695,6 +1842,26 @@
    "dominio": "denuncia",
    "entidad": "Intencion",
    "formulacion": "¿Desea presentar una denuncia?",
+   "formulacionLsb": {
+    "compuestos": [
+     [
+      "QUEJAR",
+      "AUTORIDAD"
+     ]
+    ],
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "PRESENTAR",
+     "QUEJAR",
+     "AUTORIDAD",
+     "QUERER"
+    ],
+    "huecos": [
+     "DENUNCIA"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DEN.INTENCION",
    "modo": "frase",
    "noOfrecer": [
@@ -1755,6 +1922,18 @@
    "dominio": "mensajes",
    "entidad": "Mensajes",
    "formulacion": "¿Por dónde le llegaron los mensajes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "INTERNET",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "referente": "los mensajes (Q.DIG.CONTENIDO): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.DIG.CANAL",
    "maximo": 2,
    "modo": "frase",
@@ -1814,6 +1993,17 @@
    "dominio": "mensajes",
    "entidad": "Mensajes",
    "formulacion": "¿Son uno o varios números?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "NÚM(...)",
+     "CUÁNTOS"
+    ],
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.DIG.CANT_NUMEROS",
    "modo": "frase",
    "noOfrecer": [
@@ -1870,6 +2060,16 @@
    "dominio": "mensajes",
    "entidad": "Evidencia[capturas]",
    "formulacion": "¿Tiene fotos de la pantalla?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "FOTOS",
+     "CELULAR",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIG.CAPTURAS",
    "modo": "frase",
    "noOfrecer": [
@@ -1927,6 +2127,16 @@
    "dominio": "mensajes",
    "entidad": "Mensajes",
    "formulacion": "¿Qué decían los mensajes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ESCRIBIR",
+     "QUÉ"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.DIG.CONTENIDO",
    "modo": "frase",
    "noOfrecer": [],
@@ -1962,6 +2172,16 @@
    "dominio": "mensajes",
    "entidad": "Mensajes",
    "formulacion": "¿Sigue recibiendo mensajes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AÚN",
+     "RECIBIR",
+     "ESCRIBIR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIG.CONTINUA",
    "modo": "frase",
    "noOfrecer": [
@@ -2016,6 +2236,15 @@
    "dominio": "mensajes",
    "entidad": "Evidencia[mensajes]",
    "formulacion": "¿Guardó los mensajes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ESCRIBIR",
+     "GUARDAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIG.GUARDO",
    "modo": "frase",
    "noOfrecer": [
@@ -2079,6 +2308,17 @@
    "dominio": "mensajes",
    "entidad": "Evidencia",
    "formulacion": "¿Puede mostrar el celular ahora?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "AHORA",
+     "MOSTRAR",
+     "PUEDO"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIG.MOSTRAR",
    "modo": "frase",
    "noOfrecer": [
@@ -2134,6 +2374,16 @@
    "dominio": "mensajes",
    "entidad": "Persona[remitente]",
    "formulacion": "¿Conoce el número desde el que le escribieron?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "NÚM(...)",
+     "CONOCER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIG.NUMERO_CONOCE",
    "modo": "frase",
    "noOfrecer": [
@@ -2190,6 +2440,16 @@
    "dominio": "mensajes",
    "entidad": "Mensajes",
    "formulacion": "¿Las amenazas llegaron por celular?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AMENAZAR",
+     "CELULAR",
+     "ENVIAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIG.POR_CELULAR",
    "modo": "frase",
    "noOfrecer": [
@@ -2244,6 +2504,16 @@
    "dominio": "mensajes",
    "entidad": "Mensajes",
    "formulacion": "¿Le escribieron por internet?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "INTERNET",
+     "ESCRIBIR",
+     "ENVIAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIG.POR_INTERNET",
    "modo": "frase",
    "noOfrecer": [
@@ -2298,6 +2568,17 @@
    "dominio": "mensajes",
    "entidad": "Persona[remitente]",
    "formulacion": "¿Quién le envió los mensajes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUIÉN",
+     "ESCRIBIR",
+     "ENVIAR"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.DIG.REMITENTE",
    "modo": "frase",
    "noOfrecer": [
@@ -2369,6 +2650,16 @@
    "dominio": "dinero",
    "entidad": "Evidencia[conversacion]",
    "formulacion": "¿Conserva toda la conversación?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ESCRIBIR",
+     "TOTAL",
+     "GUARDAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.CHAT",
    "modo": "frase",
    "noOfrecer": [
@@ -2423,6 +2714,23 @@
    "dominio": "dinero",
    "entidad": "Evidencia[comprobante]",
    "formulacion": "¿Tiene algún comprobante?",
+   "formulacionLsb": {
+    "compuestos": [
+     [
+      "PAPEL",
+      "BANCO"
+     ]
+    ],
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "FACTURA",
+     "PAPEL",
+     "BANCO",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.COMPROBANTE",
    "modo": "frase",
    "noOfrecer": [
@@ -2487,6 +2795,19 @@
    "dominio": "dinero",
    "entidad": "Evidencia[comprobante]",
    "formulacion": "¿Qué comprobante tiene?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "FACTURA",
+     "PAPEL",
+     "FOTOS",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "comprobante (Q.DIN.COMPROBANTE): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Tengo {frag}.",
    "id": "Q.DIN.COMPROBANTE_TIPO",
    "maximo": 3,
@@ -2549,6 +2870,15 @@
    "dominio": "dinero",
    "entidad": "Hecho[ENGAÑAR]",
    "formulacion": "¿Quiere decir que lo engañaron?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ENGAÑAR",
+     "BILLETES"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.ENGANO",
    "modo": "frase",
    "noOfrecer": [],
@@ -2592,6 +2922,16 @@
    "dominio": "dinero",
    "entidad": "Transaccion",
    "formulacion": "¿Entregó o envió dinero?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "BILLETES",
+     "DAR",
+     "ENVIAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.ENTREGO",
    "modo": "frase",
    "noOfrecer": [
@@ -2648,6 +2988,15 @@
    "dominio": "dinero",
    "entidad": "Transaccion",
    "formulacion": "¿Se comunicaron por internet?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "INTERNET",
+     "ESCRIBIR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.INTERNET",
    "modo": "frase",
    "noOfrecer": [
@@ -2701,6 +3050,17 @@
    "dominio": "dinero",
    "entidad": "Transaccion",
    "formulacion": "¿Cómo entregó el dinero?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "BILLETES",
+     "DAR",
+     "CÓMO"
+    ],
+    "interrogativo": "CÓMO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.DIN.MECANISMO",
    "modo": "frase",
    "noOfrecer": [
@@ -2799,6 +3159,16 @@
    "dominio": "dinero",
    "entidad": "Transaccion",
    "formulacion": "¿Cuánto dinero fue?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "BILLETES",
+     "CUÁNTOS"
+    ],
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Fueron {frag}.",
    "id": "Q.DIN.MONTO",
    "modo": "fragmento",
@@ -2848,6 +3218,16 @@
    "dominio": "dinero",
    "entidad": "Transaccion",
    "formulacion": "¿Lo hizo mediante un banco?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "BANCO",
+     "BILLETES",
+     "ENVIAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.POR_BANCO",
    "modo": "frase",
    "noOfrecer": [
@@ -2902,6 +3282,17 @@
    "dominio": "dinero",
    "entidad": "Persona[receptor]",
    "formulacion": "¿Quién recibió el dinero?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUIÉN",
+     "RECIBIR",
+     "BILLETES"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.DIN.RECEPTOR",
    "modo": "frase",
    "noOfrecer": [
@@ -2973,6 +3364,22 @@
    "dominio": "dinero",
    "entidad": "Persona[receptor]",
    "formulacion": "¿Conoce el nombre de la persona?",
+   "formulacionLsb": {
+    "alternativas": {
+     "0": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ÉL",
+     "NOMBRE",
+     "CONOCER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.RECEPTOR_NOMBRE",
    "modo": "frase",
    "noOfrecer": [
@@ -3033,6 +3440,23 @@
    "dominio": "dinero",
    "entidad": "Persona[receptor]",
    "formulacion": "¿Tiene su número de celular?",
+   "formulacionLsb": {
+    "alternativas": {
+     "0": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ÉL",
+     "CELULAR",
+     "NÚM(...)",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.DIN.RECEPTOR_NUMERO",
    "modo": "frase",
    "noOfrecer": [
@@ -3091,6 +3515,16 @@
    "dominio": "documento",
    "entidad": "Documento",
    "formulacion": "¿Qué papel es?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PAPEL",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "El papel es {frag}.",
    "id": "Q.DOC.ACLARAR",
    "modo": "fragmento",
@@ -3198,6 +3632,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia[caja]",
    "formulacion": "¿Tiene la caja del celular?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "CAJA",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.CAJA",
    "modo": "frase",
    "noOfrecer": [],
@@ -3246,6 +3690,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia[video_lugar]",
    "formulacion": "¿Hay cámaras o video del lugar?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "VIDEO",
+     "FILMAR",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.CAMARAS",
    "modo": "frase",
    "noOfrecer": [
@@ -3300,6 +3754,15 @@
    "dominio": "evidencia",
    "entidad": "Evidencia[certificado]",
    "formulacion": "¿Tiene un certificado?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CERTIFICADO",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.CERTIFICADO",
    "modo": "frase",
    "noOfrecer": [
@@ -3353,6 +3816,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia[factura]",
    "formulacion": "¿Tiene la factura?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "FACTURA",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.FACTURA",
    "modo": "frase",
    "noOfrecer": [],
@@ -3407,6 +3880,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia",
    "formulacion": "¿Tiene la factura o la caja del celular?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "FACTURA",
+     "CAJA",
+     "TENER"
+    ],
+    "tipo": "compuesta"
+   },
    "id": "Q.EVI.FACTURA_O_CAJA",
    "modo": "frase",
    "noOfrecer": [],
@@ -3439,6 +3922,15 @@
    "dominio": "evidencia",
    "entidad": "Evidencia[fotos]",
    "formulacion": "¿Tiene fotografías?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "FOTOS",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.FOTOS",
    "modo": "frase",
    "noOfrecer": [
@@ -3492,6 +3984,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia",
    "formulacion": "¿Puede mostrarlo ahora?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AHORA",
+     "MOSTRAR",
+     "PUEDO"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.MOSTRAR_AHORA",
    "modo": "frase",
    "noOfrecer": [
@@ -3546,6 +4048,16 @@
    "dominio": "evidencia",
    "entidad": "Intencion",
    "formulacion": "¿Desea presentar estos elementos?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PRESENTAR",
+     "QUERER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "«estos elementos»: los ya mencionados (FOTOS/VIDEO/PAPEL según el caso)",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.PRESENTAR",
    "modo": "frase",
    "noOfrecer": [
@@ -3603,6 +4115,19 @@
    "dominio": "evidencia",
    "entidad": "Evidencia",
    "formulacion": "¿Tiene fotos, video u otra cosa que pueda mostrar?",
+   "formulacionLsb": {
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "FOTOS",
+     "VIDEO",
+     "TENER"
+    ],
+    "huecos": [
+     "ALGO / OTRA COSA"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.QUE_TIENE",
    "modo": "frase",
    "noOfrecer": [],
@@ -3654,6 +4179,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia[documento_previo]",
    "formulacion": "¿Tiene una resolución o papel previo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "RESOLUCIÓN",
+     "PAPEL",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.RESOLUCION_PREVIA",
    "modo": "frase",
    "noOfrecer": [
@@ -3708,6 +4243,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia",
    "formulacion": "¿Qué tiene?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TENER",
+     "QUÉ"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Tengo {frag}.",
    "id": "Q.EVI.TIPOS",
    "maximo": 4,
@@ -3766,6 +4311,16 @@
    "dominio": "evidencia",
    "entidad": "Evidencia",
    "formulacion": "¿La tiene aquí con usted?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AQUÍ",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "la factura (Q.EVI.FACTURA): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.TRAE_COPIA",
    "modo": "frase",
    "noOfrecer": [],
@@ -3814,6 +4369,15 @@
    "dominio": "evidencia",
    "entidad": "Evidencia[video]",
    "formulacion": "¿Tiene video?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "VIDEO",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.EVI.VIDEO",
    "modo": "frase",
    "noOfrecer": [
@@ -3869,6 +4433,16 @@
    "dominio": "robo",
    "entidad": "Hecho[PERDER].objetos",
    "formulacion": "¿Qué le falta?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PERDER",
+     "QUÉ"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Me falta {frag}.",
    "id": "Q.FALTA.QUE",
    "maximo": 4,
@@ -3992,6 +4566,16 @@
    "dominio": "relato",
    "entidad": "Conversacion",
    "formulacion": "¿Quiere agregar algo que no le pregunté?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AUMENTAR",
+     "NARRAR",
+     "QUERER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.HEC.AMPLIAR",
    "modo": "frase",
    "noOfrecer": [
@@ -4036,6 +4620,16 @@
    "dominio": "relato",
    "entidad": "Hecho[ESCAPAR]",
    "formulacion": "¿Quién escapó?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUIÉN",
+     "ESCAPAR"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.HEC.ESCAPE_ACTOR",
    "modo": "frase",
    "noOfrecer": [],
@@ -4108,6 +4702,17 @@
    "dominio": "relato",
    "entidad": "Hecho[PERDER]",
    "formulacion": "¿Lo perdió usted o cree que se lo quitaron?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PERDER",
+     "ROBAR",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.HEC.PERDIDA_TIPO",
    "modo": "frase",
    "noOfrecer": [],
@@ -4162,6 +4767,17 @@
    "dominio": "relato",
    "entidad": "Hecho",
    "formulacion": "¿Qué ocurrió?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TÚ",
+     "NARRAR",
+     "QUÉ"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.HEC.QUE_OCURRIO",
    "maximo": 2,
    "modo": "frase",
@@ -4239,6 +4855,16 @@
    "dominio": "relato",
    "entidad": "Conversacion",
    "formulacion": "¿Puede contarme lo sucedido desde el inicio?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "NARRAR",
+     "EMPEZAR",
+     "PRIMERA_VEZ"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.HEC.RELATO_ORDENADO",
    "modo": "frase",
    "noOfrecer": [
@@ -4283,6 +4909,19 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Vino solo o acompañado?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TÚ",
+     "1",
+     "VENIR",
+     "ACOMPAÑAR",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.ID.ACOMPANANTE",
    "modo": "frase",
    "noOfrecer": [
@@ -4325,6 +4964,16 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Quién le acompaña?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUIÉN",
+     "ACOMPAÑAR"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Vine con {frag}.",
    "id": "Q.ID.ACOMPANANTE_QUIEN",
    "modo": "fragmento",
@@ -4415,6 +5064,18 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Puede deletrear su apellido?",
+   "formulacionLsb": {
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "NOMBRE",
+     "PUEDO"
+    ],
+    "huecos": [
+     "DELETREAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ID.APELLIDO",
    "modo": "frase",
    "noOfrecer": [
@@ -4446,6 +5107,17 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Prefiere recibir avisos por mensaje escrito?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AVISAR",
+     "ESCRIBIR",
+     "ENVIAR",
+     "MEJOR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ID.AVISO",
    "modo": "frase",
    "noOfrecer": [
@@ -4502,6 +5174,18 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Cuál es el número de su documento?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TUYO",
+     "PAPEL",
+     "NÚM(...)",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.ID.DOC_NUMERO",
    "modo": "frase",
    "noOfrecer": [],
@@ -4528,6 +5212,22 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Tiene su carnet de identidad?",
+   "formulacionLsb": {
+    "compuestos": [
+     [
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    ],
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PAPEL",
+     "IDENTIDAD",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ID.DOC_TIENE",
    "modo": "frase",
    "noOfrecer": [
@@ -4582,6 +5282,17 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Qué documento presenta?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PRESENTAR",
+     "PAPEL",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.ID.DOC_TIPO",
    "modo": "frase",
    "noOfrecer": [],
@@ -4644,6 +5355,17 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Qué edad tiene?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TUYO",
+     "EDAD",
+     "CUÁNTOS"
+    ],
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.ID.EDAD_PROPIA",
    "modo": "frase",
    "noOfrecer": [
@@ -4679,6 +5401,17 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Cuál es su nombre completo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TUYO",
+     "NOMBRE",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.ID.NOMBRE",
    "modo": "frase",
    "noOfrecer": [
@@ -4711,6 +5444,18 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Cuál es su número de celular?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TUYO",
+     "CELULAR",
+     "NÚM(...)",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.ID.TELEFONO_PROPIO",
    "modo": "frase",
    "noOfrecer": [
@@ -4741,6 +5486,17 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Este número de celular es suyo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CELULAR",
+     "NÚM(...)",
+     "TUYO",
+     "VERDAD"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ID.TELEFONO_VALIDA",
    "modo": "frase",
    "noOfrecer": [
@@ -4795,6 +5551,17 @@
    "dominio": "lugar",
    "entidad": "Lugar",
    "formulacion": "¿Ocurrió dentro o fuera del lugar?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "DENTRO",
+     "FUERA",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.LUG.DENTRO_FUERA",
    "modo": "frase",
    "noOfrecer": [
@@ -4845,6 +5612,15 @@
    "dominio": "lugar",
    "entidad": "Lugar",
    "formulacion": "¿Dónde ocurrió?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "DÓNDE"
+    ],
+    "interrogativo": "DÓNDE",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.LUG.DONDE",
    "modo": "frase",
    "noOfrecer": [
@@ -4984,6 +5760,18 @@
    "dominio": "lugar",
    "entidad": "Lugar",
    "formulacion": "¿Fue cerca de algún lugar que conozca?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CERCA",
+     "AL_LADO",
+     "LEJOS",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.LUG.RELACION",
    "modo": "frase",
    "noOfrecer": [],
@@ -5032,6 +5820,16 @@
    "dominio": "apoyo",
    "entidad": "Solicitud",
    "formulacion": "¿Desea orientación para recibir asistencia de SEPDAVI?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ASISTENCIA",
+     "d(SEPDAVI)",
+     "QUERER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ORI.SEPDAVI",
    "modo": "frase",
    "noOfrecer": [
@@ -5085,6 +5883,22 @@
    "dominio": "persona",
    "entidad": "Persona[autor]",
    "formulacion": "¿Conoce a la persona involucrada?",
+   "formulacionLsb": {
+    "alternativas": {
+     "1": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TÚ",
+     "ÉL",
+     "CONOCER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.PER.CONOCE",
    "modo": "frase",
    "noOfrecer": [
@@ -5139,6 +5953,19 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Qué color de cabello recuerda?",
+   "formulacionLsb": {
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "CABELLO",
+     "CUÁL"
+    ],
+    "huecos": [
+     "COLOR"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.PER.DESC.CABELLO",
    "modo": "frase",
    "noOfrecer": [],
@@ -5188,6 +6015,17 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Era delgado o de contextura gruesa?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "FLACO",
+     "GORDO",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.PER.DESC.CONTEXTURA",
    "modo": "frase",
    "noOfrecer": [
@@ -5238,6 +6076,18 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Qué edad aproximada tenía?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "EDAD",
+     "CUÁNTOS",
+     "MÁS_O_MENOS"
+    ],
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la persona descrita: referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "tipo": "qu"
+   },
    "id": "Q.PER.DESC.EDAD",
    "modo": "frase",
    "noOfrecer": [
@@ -5308,6 +6158,17 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Era alto o bajo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ALTO",
+     "BAJO",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.PER.DESC.ESTATURA",
    "modo": "frase",
    "noOfrecer": [
@@ -5358,6 +6219,15 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Llevaba gorra?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "GORRA",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.PER.DESC.GORRA",
    "modo": "frase",
    "noOfrecer": [
@@ -5411,6 +6281,15 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Usaba lentes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "LENTES",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.PER.DESC.LENTES",
    "modo": "frase",
    "noOfrecer": [
@@ -5465,6 +6344,17 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Llevaba mochila o bolsa?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "MOCHILA",
+     "BOLSA",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.PER.DESC.MOCHILA",
    "modo": "frase",
    "noOfrecer": [
@@ -5524,6 +6414,16 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Recuerda alguna característica particular?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "RECORDAR",
+     "QUÉ"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.PER.DESC.RASGO",
    "modo": "frase",
    "noOfrecer": [
@@ -5569,6 +6469,18 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Qué ropa llevaba?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "POLERA",
+     "PANTALÓN",
+     "CHAMARRA",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.PER.DESC.ROPA",
    "maximo": 4,
    "modo": "frase",
@@ -5661,6 +6573,17 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Era un hombre o una mujer?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HOMBRE",
+     "MUJER",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.PER.DESC.SEXO",
    "modo": "frase",
    "noOfrecer": [
@@ -5711,6 +6634,12 @@
    "dominio": "descripcion",
    "entidad": "Persona",
    "formulacion": "¿Quiere describir a la persona?",
+   "formulacionLsb": {
+    "estado": "LEXICAL_GAP",
+    "huecos": [
+     "DESCRIBIR"
+    ]
+   },
    "id": "Q.PER.DESCRIBIR",
    "modo": "frase",
    "noOfrecer": [],
@@ -5754,6 +6683,23 @@
    "dominio": "persona",
    "entidad": "Persona",
    "formulacion": "¿Sabe cómo se llama esa persona?",
+   "formulacionLsb": {
+    "alternativas": {
+     "0": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ÉL",
+     "NOMBRE",
+     "CONOCER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "la persona involucrada",
+    "tipo": "polar"
+   },
    "id": "Q.PER.NOMBRE_TERCERO",
    "modo": "frase",
    "noOfrecer": [],
@@ -5793,6 +6739,16 @@
    "dominio": "testigos",
    "entidad": "Persona",
    "formulacion": "¿A quién vio?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "VER",
+     "QUIÉN"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.PER.OBSERVADA",
    "modo": "frase",
    "noOfrecer": [
@@ -5860,6 +6816,17 @@
    "dominio": "persona",
    "entidad": "Testigos",
    "formulacion": "¿Había otras personas presentes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HOMBRE",
+     "MUJER",
+     "ALLÍ",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.PER.OTROS_PRESENTES",
    "modo": "frase",
    "noOfrecer": [
@@ -5915,6 +6882,17 @@
    "dominio": "persona",
    "entidad": "Persona[autor]",
    "formulacion": "¿Puede identificarla si la vuelve a ver?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "IDENTIFICAR",
+     "VOLVER",
+     "VER",
+     "PUEDO"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.PER.RECONOCE",
    "modo": "frase",
    "noOfrecer": [
@@ -5970,6 +6948,19 @@
    "dominio": "persona",
    "entidad": "Persona",
    "formulacion": "¿Qué relación tiene con esa persona?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PAREJA",
+     "PARIENTE",
+     "AMIGO",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la persona conocida (Q.PER.CONOCE)",
+    "tipo": "qu"
+   },
    "id": "Q.PER.VINCULO",
    "modo": "frase",
    "noOfrecer": [],
@@ -6069,6 +7060,15 @@
    "dominio": "riesgo",
    "entidad": "Hecho[AMENAZAR]",
    "formulacion": "¿Recibió amenazas?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AMENAZAR",
+     "RECIBIR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.RIE.AMENAZAS",
    "modo": "frase",
    "noOfrecer": [
@@ -6122,6 +7122,16 @@
    "dominio": "riesgo",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita auxilio ahora?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "AUXILIO",
+     "AHORA",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.RIE.AUXILIO",
    "modo": "frase",
    "noOfrecer": [
@@ -6179,6 +7189,16 @@
    "dominio": "riesgo",
    "entidad": "Riesgo",
    "formulacion": "¿Tiene miedo de volver a su casa?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "MIEDO",
+     "CASA",
+     "VOLVER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.RIE.MIEDO_CASA",
    "modo": "frase",
    "noOfrecer": [
@@ -6233,6 +7253,15 @@
    "dominio": "riesgo",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita protección?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PROTEGER",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.RIE.PIDE_PROTECCION",
    "modo": "frase",
    "noOfrecer": [],
@@ -6281,6 +7310,22 @@
    "dominio": "riesgo",
    "entidad": "Riesgo",
    "formulacion": "¿Hay niños u otras personas que necesiten protección?",
+   "formulacionLsb": {
+    "alternativas": {
+     "0": [
+      "HIJO",
+      "HIJA"
+     ]
+    },
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HIJO",
+     "PROTEGER",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.RIE.PROTECCION_OTROS",
    "modo": "frase",
    "noOfrecer": [
@@ -6334,6 +7379,17 @@
    "dominio": "riesgo",
    "entidad": "Riesgo",
    "formulacion": "¿Quiénes necesitan protección?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUIÉN",
+     "PROTEGER",
+     "NECESITAR"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.RIE.QUIENES",
    "maximo": 3,
    "modo": "frase",
@@ -6384,6 +7440,14 @@
    "dominio": "robo",
    "entidad": "Hecho[ROBAR]",
    "formulacion": "¿Le robaron algún objeto?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ROBAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ROB.ALGO",
    "modo": "frase",
    "noOfrecer": [
@@ -6439,6 +7503,16 @@
    "dominio": "robo",
    "entidad": "Hecho[ROBAR]+Objeto",
    "formulacion": "¿Le robaron {mencionado}?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ROBAR",
+     "CELULAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "CELULAR es el objeto de la fila del corpus; con otro objeto mencionado va en su lugar, tras ROBAR",
+    "tipo": "polar"
+   },
    "id": "Q.ROB.CONFIRMA_OBJETO",
    "modo": "frase",
    "noOfrecer": [
@@ -6522,6 +7596,22 @@
    "dominio": "robo",
    "entidad": "Objeto[carnet]",
    "formulacion": "¿Le falta su carnet de identidad?",
+   "formulacionLsb": {
+    "compuestos": [
+     [
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    ],
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PAPEL",
+     "IDENTIDAD",
+     "PERDER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ROB.FALTA_CARNET",
    "modo": "frase",
    "noOfrecer": [
@@ -6579,6 +7669,15 @@
    "dominio": "robo",
    "entidad": "Objeto[dinero]",
    "formulacion": "¿Le falta dinero?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "BILLETES",
+     "PERDER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ROB.FALTA_DINERO",
    "modo": "frase",
    "noOfrecer": [
@@ -6632,6 +7731,15 @@
    "dominio": "robo",
    "entidad": "Hecho[ESCAPAR]",
    "formulacion": "¿El ladrón escapó?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "LADRÓN",
+     "ESCAPAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ROB.LADRON_ESCAPO",
    "modo": "frase",
    "noOfrecer": [
@@ -6690,6 +7798,16 @@
    "dominio": "robo",
    "entidad": "Hecho[ROBAR].objetos",
    "formulacion": "¿Qué le robaron?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ROBAR",
+     "QUÉ"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Me robaron {frag}.",
    "id": "Q.ROB.QUE",
    "maximo": 4,
@@ -6823,6 +7941,15 @@
    "dominio": "robo",
    "entidad": "Persona[autor]",
    "formulacion": "¿Vio al ladrón?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "LADRÓN",
+     "VER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.ROB.VIO_LADRON",
    "modo": "frase",
    "noOfrecer": [
@@ -6876,6 +8003,16 @@
    "dominio": "salud",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita asistencia médica?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ASISTENCIA",
+     "DOCTOR",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SAL.ASISTENCIA",
    "modo": "frase",
    "noOfrecer": [
@@ -6930,6 +8067,16 @@
    "dominio": "salud",
    "entidad": "Evidencia[certificado_medico]",
    "formulacion": "¿Tiene certificado del doctor?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CERTIFICADO",
+     "DOCTOR",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SAL.CERTIFICADO",
    "modo": "frase",
    "noOfrecer": [
@@ -6984,6 +8131,15 @@
    "dominio": "salud",
    "entidad": "Salud",
    "formulacion": "¿Está herido?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HERIDA",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SAL.HERIDO",
    "modo": "frase",
    "noOfrecer": [
@@ -7037,6 +8193,15 @@
    "dominio": "salud",
    "entidad": "Salud",
    "formulacion": "¿Fue al hospital?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HOSPITAL",
+     "IR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SAL.HOSPITAL",
    "modo": "frase",
    "noOfrecer": [
@@ -7090,6 +8255,16 @@
    "dominio": "salud",
    "entidad": "Salud",
    "formulacion": "¿Dónde tiene la herida?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HERIDA",
+     "DÓNDE"
+    ],
+    "interrogativo": "DÓNDE",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.SAL.PARTE",
    "modo": "frase",
    "noOfrecer": [],
@@ -7125,6 +8300,18 @@
    "dominio": "consulta",
    "entidad": "Consulta",
    "formulacion": "¿Con qué institución es su trámite?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TUYO",
+     "TRÁMITE",
+     "INSTITUCIÓN",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.SEG.AUTORIDAD",
    "modo": "frase",
    "noOfrecer": [
@@ -7228,6 +8415,22 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Recibió un papel de convocatoria?",
+   "formulacionLsb": {
+    "compuestos": [
+     [
+      "PAPEL",
+      "CONVOCAR"
+     ]
+    ],
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PAPEL",
+     "CONVOCAR",
+     "RECIBIR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.CITACION",
    "modo": "frase",
    "noOfrecer": [
@@ -7283,6 +8486,15 @@
    "dominio": "seguimiento",
    "entidad": "Conversacion",
    "formulacion": "¿Está de acuerdo con lo escrito?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ESTAR_DE_ACUERDO",
+     "ESCRIBIR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.CONFORMIDAD",
    "modo": "frase",
    "noOfrecer": [
@@ -7346,6 +8558,17 @@
    "dominio": "seguimiento",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita defensa pública gratuita?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ABOGADO",
+     "GRATIS",
+     "d(SEPDEP)",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.DEFENSA_PUBLICA",
    "modo": "frase",
    "noOfrecer": [
@@ -7400,6 +8623,15 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Le indicaron ir a la Fiscalía?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "d(FISCALÍA)",
+     "IR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.DERIVACION_FISCALIA",
    "modo": "frase",
    "noOfrecer": [
@@ -7452,6 +8684,17 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Necesita saber dónde está la Fiscalía?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "d(FISCALÍA)",
+     "DÓNDE",
+     "SABER",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.DONDE_FISCALIA",
    "modo": "frase",
    "noOfrecer": [
@@ -7494,6 +8737,16 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Vino a consultar el estado de su caso?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "INVESTIGACIÓN",
+     "BUSCAR",
+     "VENIR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.ESTADO_CASO",
    "modo": "frase",
    "noOfrecer": [
@@ -7548,6 +8801,26 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Cuándo presentó la denuncia?",
+   "formulacionLsb": {
+    "compuestos": [
+     [
+      "QUEJAR",
+      "AUTORIDAD"
+     ]
+    ],
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "QUEJAR",
+     "AUTORIDAD",
+     "CUÁNDO"
+    ],
+    "huecos": [
+     "DENUNCIA"
+    ],
+    "interrogativo": "CUÁNDO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.SEG.FECHA_DENUNCIA",
    "modo": "frase",
    "noOfrecer": [
@@ -7620,6 +8893,17 @@
    "dominio": "consulta",
    "entidad": "Consulta",
    "formulacion": "¿Para cuándo le dieron fecha?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CONVOCAR",
+     "CUÁNDO"
+    ],
+    "interrogativo": "CUÁNDO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la citación (Q.SEG.MOTIVO)",
+    "tipo": "qu"
+   },
    "id": "Q.SEG.FECHA_PROGRAMADA",
    "modo": "frase",
    "noOfrecer": [],
@@ -7686,6 +8970,16 @@
    "dominio": "seguimiento",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita hablar con un abogado?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ABOGADO",
+     "HABLAR",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.HABLAR_ABOGADO",
    "modo": "frase",
    "noOfrecer": [
@@ -7740,6 +9034,16 @@
    "dominio": "seguimiento",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita hablar con el fiscal?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "d(FISCAL)",
+     "HABLAR",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.HABLAR_FISCAL",
    "modo": "frase",
    "noOfrecer": [
@@ -7793,6 +9097,16 @@
    "dominio": "seguimiento",
    "entidad": "Solicitud",
    "formulacion": "¿Quiere hablar con el policía encargado?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "POLICÍA",
+     "HABLAR",
+     "QUERER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.HABLAR_POLICIA",
    "modo": "frase",
    "noOfrecer": [
@@ -7847,6 +9161,16 @@
    "dominio": "seguimiento",
    "entidad": "Solicitud",
    "formulacion": "¿Necesita intérprete para esa reunión?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "INTÉRPRETE",
+     "REUNIÓN",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.INTERPRETE_REUNION",
    "modo": "frase",
    "noOfrecer": [
@@ -7901,6 +9225,15 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Debe presentarse ante un juez?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "JUEZ",
+     "PRESENTAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.JUEZ",
    "modo": "frase",
    "noOfrecer": [
@@ -7954,6 +9287,24 @@
    "dominio": "seguimiento",
    "entidad": "Solicitud",
    "formulacion": "¿Quiere leer el papel antes de escribir su nombre?",
+   "formulacionLsb": {
+    "compuestos": [
+     [
+      "NOMBRE",
+      "ESCRIBIR"
+     ]
+    ],
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PAPEL",
+     "LEER",
+     "NOMBRE",
+     "ESCRIBIR",
+     "QUERER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.LEER_ANTES_FIRMAR",
    "modo": "frase",
    "noOfrecer": [
@@ -8011,6 +9362,17 @@
    "dominio": "consulta",
    "entidad": "Consulta",
    "formulacion": "¿Qué quiere consultar?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "SABER",
+     "QUÉ",
+     "QUERER"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.SEG.MOTIVO",
    "modo": "frase",
    "noOfrecer": [],
@@ -8135,6 +9497,15 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Tiene el número de referencia?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "NÚM(...)",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.NUM_REFERENCIA",
    "modo": "frase",
    "noOfrecer": [
@@ -8190,6 +9561,16 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Sabe dónde está el Órgano Judicial?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ÓRGANO_JUDICIAL",
+     "DÓNDE",
+     "SABER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.ORGANO_JUDICIAL",
    "modo": "frase",
    "noOfrecer": [
@@ -8233,6 +9614,15 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Recibió una resolución?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "RESOLUCIÓN",
+     "RECIBIR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.RESOLUCION",
    "modo": "frase",
    "noOfrecer": [
@@ -8286,6 +9676,16 @@
    "dominio": "seguimiento",
    "entidad": "Consulta",
    "formulacion": "¿Tiene que volver otro día?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "VOLVER",
+     "DÍA",
+     "NECESITAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.SEG.RETORNO",
    "modo": "frase",
    "noOfrecer": [
@@ -8340,6 +9740,16 @@
    "dominio": "testigos",
    "entidad": "Testigos",
    "formulacion": "¿Cuántos testigos hay?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TESTIGO",
+     "CUÁNTOS"
+    ],
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "fraseSuelta": "Hay {frag}.",
    "id": "Q.TES.CANTIDAD",
    "modo": "fragmento",
@@ -8387,6 +9797,15 @@
    "dominio": "testigos",
    "entidad": "Testigos",
    "formulacion": "¿Hay testigos?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TESTIGO",
+     "TENER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.TES.EXISTE",
    "modo": "frase",
    "noOfrecer": [
@@ -8441,6 +9860,16 @@
    "dominio": "testigos",
    "entidad": "Intencion",
    "formulacion": "¿Puede dar testimonio de lo que vio?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "OBSERVAR",
+     "TESTIMONIO",
+     "PUEDO"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.TES.PUEDE_TESTIMONIO",
    "modo": "frase",
    "noOfrecer": [],
@@ -8489,6 +9918,9 @@
    "dominio": "testigos",
    "entidad": "Hecho(perspectiva=testigo)",
    "formulacion": "¿Qué vio o qué quiere declarar?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PENDING"
+   },
    "id": "Q.TES.QUE_VIO",
    "modo": "frase",
    "noOfrecer": [
@@ -8583,6 +10015,16 @@
    "dominio": "testigos",
    "entidad": "Testigos",
    "formulacion": "¿Puede traer al testigo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TESTIGO",
+     "TRAER",
+     "PUEDO"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.TES.TRAER",
    "modo": "frase",
    "noOfrecer": [
@@ -8637,6 +10079,16 @@
    "dominio": "testigos",
    "entidad": "Testigos",
    "formulacion": "¿El testigo vio todo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "TESTIGO",
+     "TOTAL",
+     "VER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.TES.VIO_TODO",
    "modo": "frase",
    "noOfrecer": [
@@ -8691,6 +10143,18 @@
    "dominio": "tiempo",
    "entidad": "Tiempo",
    "formulacion": "¿Fue hoy, ayer o antes?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HOY",
+     "AYER",
+     "PASADO",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.TIE.APROX",
    "modo": "frase",
    "noOfrecer": [],
@@ -8749,6 +10213,17 @@
    "dominio": "tiempo",
    "entidad": "Tiempo",
    "formulacion": "¿Cuándo ocurrió?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "CUÁNDO",
+     "FECHA",
+     "HORA"
+    ],
+    "interrogativo": "CUÁNDO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.TIE.CUANDO",
    "maximo": 2,
    "modo": "frase",
@@ -8925,6 +10400,17 @@
    "dominio": "tiempo",
    "entidad": "Tiempo",
    "formulacion": "¿A qué hora aproximadamente?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "HORA",
+     "CUÁNTOS",
+     "MÁS_O_MENOS"
+    ],
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu"
+   },
    "id": "Q.TIE.HORA",
    "modo": "frase",
    "noOfrecer": [
@@ -8986,6 +10472,15 @@
    "dominio": "violencia",
    "entidad": "Hecho",
    "formulacion": "¿Alguien le pegó o maltrató?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PEGAR",
+     "MALTRATAR"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.VIO.AGRESION",
    "modo": "frase",
    "noOfrecer": [
@@ -9039,6 +10534,17 @@
    "dominio": "violencia",
    "entidad": "Persona[autor]",
    "formulacion": "¿Quién le agredió?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUIÉN",
+     "HACER"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la agresión (Q.VIO.TIPO): referente ya establecido en la pregunta anterior: no se repite (anáfora); HACER dirigido a la persona sorda (dirección no modelada)",
+    "tipo": "qu"
+   },
    "id": "Q.VIO.AGRESOR",
    "modo": "frase",
    "noOfrecer": [
@@ -9098,6 +10604,15 @@
    "dominio": "apoyo",
    "entidad": "Solicitud",
    "formulacion": "¿Desea asistencia especializada?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ASISTENCIA",
+     "QUERER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "tipo": "polar"
+   },
    "id": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
    "modo": "frase",
    "noOfrecer": [
@@ -9149,6 +10664,17 @@
    "dominio": "violencia",
    "entidad": "Hecho",
    "formulacion": "¿Es la primera vez o pasa seguido?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PRIMERA_VEZ",
+     "SIEMPRE",
+     "CUÁL"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "tipo": "disyuntiva"
+   },
    "id": "Q.VIO.FRECUENCIA",
    "modo": "frase",
    "noOfrecer": [],
@@ -9204,6 +10730,17 @@
    "dominio": "violencia",
    "entidad": "Hecho",
    "formulacion": "¿Qué le hicieron?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUÉ",
+     "HACER"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "HACER dirigido a la persona sorda (dirección no modelada)",
+    "tipo": "qu"
+   },
    "id": "Q.VIO.TIPO",
    "maximo": 2,
    "modo": "frase",

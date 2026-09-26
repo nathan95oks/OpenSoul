@@ -1703,6 +1703,7 @@
    "bankQuestion": "Q.ID.TELEFONO_VALIDA",
    "formulationGlosses": [
     "CELULAR",
+    "NÚM(...)",
     "TUYO",
     "VERDAD"
    ],
@@ -1998,7 +1999,10 @@
    "bankQuestion": "Q.ID.ACOMPANANTE",
    "formulationGlosses": [
     "TÚ",
-    "VENIR"
+    "1",
+    "VENIR",
+    "ACOMPAÑAR",
+    "CUÁL"
    ],
    "answerOptions": [
     {
@@ -2179,7 +2183,10 @@
    "markers": [],
    "bankQuestion": "Q.DEN.INTENCION",
    "formulationGlosses": [
-    "PRESENTAR"
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
    ],
    "answerOptions": [
     {
@@ -3147,7 +3154,8 @@
    "formulationGlosses": [
     "HOY",
     "AYER",
-    "PASADO"
+    "PASADO",
+    "CUÁL"
    ],
    "answerOptions": [
     {
@@ -5111,9 +5119,9 @@
    "markers": [],
    "bankQuestion": "Q.PER.DESC.EDAD",
    "formulationGlosses": [
-    "JOVEN",
-    "ADULTO",
-    "CUÁL"
+    "EDAD",
+    "CUÁNTOS",
+    "MÁS_O_MENOS"
    ],
    "answerOptions": [
     {
@@ -8507,9 +8515,9 @@
    "markers": [],
    "bankQuestion": "Q.EVI.FACTURA_O_CAJA",
    "formulationGlosses": [
+    "CELULAR",
     "FACTURA",
     "CAJA",
-    "CELULAR",
     "TENER"
    ],
    "answerOptions": [],
@@ -10340,7 +10348,7 @@
    "bankQuestion": "Q.ORI.SEPDAVI",
    "formulationGlosses": [
     "ASISTENCIA",
-    "SEPDAVI",
+    "d(SEPDAVI)",
     "QUERER"
    ],
    "answerOptions": [
@@ -10720,6 +10728,7 @@
    "bankQuestion": "Q.DIG.NUMERO_CONOCE",
    "formulationGlosses": [
     "CELULAR",
+    "NÚM(...)",
     "CONOCER"
    ],
    "answerOptions": [
@@ -11201,6 +11210,7 @@
    "bankQuestion": "Q.DIG.CANT_NUMEROS",
    "formulationGlosses": [
     "CELULAR",
+    "NÚM(...)",
     "CUÁNTOS"
    ],
    "answerOptions": [
@@ -11470,7 +11480,8 @@
    "bankQuestion": "Q.DIN.ENTREGO",
    "formulationGlosses": [
     "BILLETES",
-    "DAR"
+    "DAR",
+    "ENVIAR"
    ],
    "answerOptions": [
     {
@@ -11831,6 +11842,7 @@
    "bankQuestion": "Q.DIN.COMPROBANTE",
    "formulationGlosses": [
     "FACTURA",
+    "PAPEL",
     "BANCO",
     "TENER"
    ],
@@ -12063,6 +12075,7 @@
    "formulationGlosses": [
     "ÉL",
     "CELULAR",
+    "NÚM(...)",
     "TENER"
    ],
    "answerOptions": [
@@ -13979,6 +13992,7 @@
    "bankQuestion": "Q.EVI.RESOLUCION_PREVIA",
    "formulationGlosses": [
     "RESOLUCIÓN",
+    "PAPEL",
     "TENER"
    ],
    "answerOptions": [
@@ -14179,7 +14193,6 @@
    "bankQuestion": "Q.EVI.PRESENTAR",
    "formulationGlosses": [
     "PRESENTAR",
-    "FOTOS",
     "QUERER"
    ],
    "answerOptions": [
@@ -14573,6 +14586,7 @@
    "markers": [],
    "bankQuestion": "Q.SEG.NUM_REFERENCIA",
    "formulationGlosses": [
+    "NÚM(...)",
     "TENER"
    ],
    "answerOptions": [
@@ -14772,6 +14786,8 @@
    "markers": [],
    "bankQuestion": "Q.SEG.FECHA_DENUNCIA",
    "formulationGlosses": [
+    "QUEJAR",
+    "AUTORIDAD",
     "CUÁNDO"
    ],
    "answerOptions": [
@@ -15410,7 +15426,7 @@
    "formulationGlosses": [
     "ABOGADO",
     "GRATIS",
-    "SEPDEP",
+    "d(SEPDEP)",
     "NECESITAR"
    ],
    "answerOptions": [
@@ -15610,8 +15626,10 @@
    "markers": [],
    "bankQuestion": "Q.SEG.DONDE_FISCALIA",
    "formulationGlosses": [
-    "FISCALIA",
-    "DÓNDE"
+    "d(FISCALÍA)",
+    "DÓNDE",
+    "SABER",
+    "NECESITAR"
    ],
    "answerOptions": [
     {
@@ -16375,6 +16393,7 @@
    "markers": [],
    "bankQuestion": "Q.SEG.HABLAR_FISCAL",
    "formulationGlosses": [
+    "d(FISCAL)",
     "HABLAR",
     "NECESITAR"
    ],
@@ -16573,7 +16592,7 @@
    "markers": [],
    "bankQuestion": "Q.SEG.DERIVACION_FISCALIA",
    "formulationGlosses": [
-    "FISCALIA",
+    "d(FISCALÍA)",
     "IR"
    ],
    "answerOptions": [
@@ -17160,7 +17179,8 @@
    "bankQuestion": "Q.SEG.ORGANO_JUDICIAL",
    "formulationGlosses": [
     "ÓRGANO_JUDICIAL",
-    "DÓNDE"
+    "DÓNDE",
+    "SABER"
    ],
    "answerOptions": [
     {

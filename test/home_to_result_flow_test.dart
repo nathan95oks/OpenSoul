@@ -132,6 +132,15 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
     expect(pasoVisible(), 0);
     expect(find.text('¿Qué ocurrió?'), findsOneWidget);
+    // La tarjeta formula la pregunta en LSB con la secuencia del banco.
+    final lsb = find.byKey(const Key('formulacion_lsb'));
+    expect(lsb, findsOneWidget);
+    for (final pieza in ['TÚ', 'NARRAR', '¿QUÉ?']) {
+      expect(find.descendant(of: lsb, matching: find.text(pieza)),
+          findsOneWidget);
+    }
+    expect(find.descendant(of: lsb, matching: find.text('LSB provisional')),
+        findsOneWidget);
 
     await tocar(tester, find.text('Me robaron'));
     expect(vistaPrevia(tester), 'Me robaron algo.');
@@ -140,6 +149,10 @@ void main() {
 
     await tocar(tester, find.text('CONTINUAR'));
     expect(find.text('¿Qué le robaron?'), findsOneWidget);
+    for (final pieza in ['ROBAR', '¿QUÉ?']) {
+      expect(find.descendant(of: lsb, matching: find.text(pieza)),
+          findsOneWidget);
+    }
     await tocar(tester, find.text('Celular'));
     expect(vistaPrevia(tester), 'Me robaron el celular.');
 
