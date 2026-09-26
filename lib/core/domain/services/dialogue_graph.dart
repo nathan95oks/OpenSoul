@@ -21,9 +21,7 @@ class DialogueGraph {
   final String generatedFrom;
   final List<DialogueNode> nodes;
 
-  late final Map<String, DialogueNode> _byId = {
-    for (final n in nodes) n.id: n,
-  };
+  late final Map<String, DialogueNode> _byId = {for (final n in nodes) n.id: n};
 
   DialogueGraph({
     required this.version,
@@ -31,20 +29,19 @@ class DialogueGraph {
     this.generatedFrom = '',
   });
 
-  static final DialogueGraph empty =
-      DialogueGraph(version: 0, nodes: const []);
+  static final DialogueGraph empty = DialogueGraph(version: 0, nodes: const []);
 
   factory DialogueGraph.fromJsonString(String raw) =>
       DialogueGraph.fromJson(jsonDecode(raw) as Map<String, dynamic>);
 
   factory DialogueGraph.fromJson(Map<String, dynamic> json) => DialogueGraph(
-        version: (json['version'] as num?)?.toInt() ?? 0,
-        generatedFrom: (json['generatedFrom'] ?? '').toString(),
-        nodes: [
-          for (final n in (json['nodes'] as List? ?? const []))
-            DialogueNode.fromJson(Map<String, dynamic>.from(n as Map)),
-        ],
-      );
+    version: (json['version'] as num?)?.toInt() ?? 0,
+    generatedFrom: (json['generatedFrom'] ?? '').toString(),
+    nodes: [
+      for (final n in (json['nodes'] as List? ?? const []))
+        DialogueNode.fromJson(Map<String, dynamic>.from(n as Map)),
+    ],
+  );
 
   bool get isEmpty => nodes.isEmpty;
 
@@ -52,8 +49,10 @@ class DialogueGraph {
 
   List<DialogueNode> get all => List.unmodifiable(nodes);
 
-  List<DialogueNode> forIntent(String intent) =>
-      [for (final n in nodes) if (n.intent == intent) n];
+  List<DialogueNode> forIntent(String intent) => [
+    for (final n in nodes)
+      if (n.intent == intent) n,
+  ];
 
   /// El nodo que mejor corresponde a [text], o `null` si nada encaja con
   /// seguridad suficiente.
@@ -114,7 +113,9 @@ class DialogueGraph {
       final nodeTokens = _tokens(node.phrase);
       final shared = wanted.intersection(nodeTokens).length;
       if (shared == 0) continue;
-      scored.add(MapEntry(node, 2 * shared / (wanted.length + nodeTokens.length)));
+      scored.add(
+        MapEntry(node, 2 * shared / (wanted.length + nodeTokens.length)),
+      );
     }
     scored.sort((a, b) => b.value.compareTo(a.value));
 
@@ -128,7 +129,10 @@ class DialogueGraph {
   }
 
   /// Los nodos a los que se puede seguir desde [node], ya resueltos.
-  List<DialogueNode> nextFrom(DialogueNode node, {Set<String> answered = const {}}) {
+  List<DialogueNode> nextFrom(
+    DialogueNode node, {
+    Set<String> answered = const {},
+  }) {
     final out = <DialogueNode>[];
     for (final t in node.transitions) {
       final target = _byId[t.to];
@@ -141,15 +145,56 @@ class DialogueGraph {
   }
 
   static const _stopwords = {
-    'de', 'la', 'el', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o',
-    'que', 'en', 'a', 'al', 'del', 'se', 'su', 'sus', 'le', 'lo', 'me', 'mi',
-    'es', 'esta', 'con', 'por', 'para', 'usted', 'si', 'no', 'mas', 'este',
-    'ese', 'esa', 'tu', 'te', 'ya', 'ha', 'he', 'fue',
+    'de',
+    'la',
+    'el',
+    'los',
+    'las',
+    'un',
+    'una',
+    'unos',
+    'unas',
+    'y',
+    'o',
+    'que',
+    'en',
+    'a',
+    'al',
+    'del',
+    'se',
+    'su',
+    'sus',
+    'le',
+    'lo',
+    'me',
+    'mi',
+    'es',
+    'esta',
+    'con',
+    'por',
+    'para',
+    'usted',
+    'si',
+    'no',
+    'mas',
+    'este',
+    'ese',
+    'esa',
+    'tu',
+    'te',
+    'ya',
+    'ha',
+    'he',
+    'fue',
   };
 
+  /// Los tokens con los que [match] compara un enunciado con un nodo.
+  static Set<String> tokensOf(String text) => _tokens(text);
+
   static Set<String> _tokens(String text) {
-    final clean = _unaccent(text.toLowerCase())
-        .replaceAll(RegExp(r'[^a-z0-9ñ ]'), ' ');
+    final clean = _unaccent(
+      text.toLowerCase(),
+    ).replaceAll(RegExp(r'[^a-z0-9ñ ]'), ' ');
     return {
       for (final w in clean.split(RegExp(r'\s+')))
         if (w.length > 3 && !_stopwords.contains(w)) _stem(w),
@@ -160,9 +205,26 @@ class DialogueGraph {
   /// comparar («robaron» / «robado» / «robar», «fotos» / «fotografías»).
   static String _stem(String w) {
     for (final suffix in const [
-      'aciones', 'iciones', 'amiento', 'aron', 'aban', 'ando', 'iendo',
-      'ados', 'idos', 'adas', 'idas', 'ado', 'ido', 'ada', 'ida', 'ar',
-      'er', 'ir', 'es', 's',
+      'aciones',
+      'iciones',
+      'amiento',
+      'aron',
+      'aban',
+      'ando',
+      'iendo',
+      'ados',
+      'idos',
+      'adas',
+      'idas',
+      'ado',
+      'ido',
+      'ada',
+      'ida',
+      'ar',
+      'er',
+      'ir',
+      'es',
+      's',
     ]) {
       if (w.length > suffix.length + 3 && w.endsWith(suffix)) {
         return w.substring(0, w.length - suffix.length);

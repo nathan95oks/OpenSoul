@@ -5,14 +5,13 @@ import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/sign_image.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/suggested_gloss_panel.dart';
 
 /// Lienzo central del flujo guiado.
 ///
 /// 1. Tarjeta de la pregunta activa del banco: su formulación completa en LSB
-///    o, cuando no existe, el español de fallback, con «Omitir» si es opcional.
+///    o, cuando no existe, el español de fallback.
 /// 2. Grilla de tarjetas con las respuestas que admite esa pregunta.
 class NodeFlowCanvas extends ConsumerWidget {
   const NodeFlowCanvas({super.key});
@@ -29,7 +28,6 @@ class NodeFlowCanvas extends ConsumerWidget {
     final question = questionId == null
         ? null
         : ref.watch(questionBankProvider).question(questionId);
-    final step = questionId == null ? null : session!.stepOf(questionId);
     final answer = questionId == null ? null : session!.answerOf(questionId);
     final maxPicks = question?.maxPicks ?? 1;
     final picks = answer == null || answer.isOmitted
@@ -53,18 +51,8 @@ class NodeFlowCanvas extends ConsumerWidget {
                 _HeroQuestionCard(
                   question: rules.formulationOf(session, question.id),
                   lsb: question.lsb,
-                  isOptional: !(step?.required ?? false),
-                  isOmitted: answer?.isOmitted ?? false,
                   maxPicks: maxPicks,
                   currentPicks: picks,
-                  onOmit: () {
-                    final outcome = ref
-                        .read(guidedFlowProvider.notifier)
-                        .omit(question.id);
-                    if (!outcome.accepted && outcome.message != null) {
-                      AppToastManager.showInfo(context, outcome.message!);
-                    }
-                  },
                 ),
             ],
           ),
@@ -90,20 +78,14 @@ class NodeFlowCanvas extends ConsumerWidget {
 class _HeroQuestionCard extends StatelessWidget {
   final String question;
   final LsbFormulation lsb;
-  final bool isOptional;
-  final bool isOmitted;
   final int maxPicks;
   final int currentPicks;
-  final VoidCallback onOmit;
 
   const _HeroQuestionCard({
     required this.question,
     required this.lsb,
-    required this.isOptional,
-    required this.isOmitted,
     required this.maxPicks,
     required this.currentPicks,
-    required this.onOmit,
   });
 
   static const _orange = AppTheme.brandPrimary;
@@ -111,11 +93,11 @@ class _HeroQuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: AppTheme.lightSurface,
+        color: _orange.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _orange.withValues(alpha: 0.35), width: 1.2),
+        border: Border.all(color: _orange.withValues(alpha: 0.55), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -124,40 +106,23 @@ class _HeroQuestionCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                LsbQuestionDisplay(spanish: question, formulation: lsb),
-                if (maxPicks > 1)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      'Puedes elegir hasta $maxPicks ($currentPicks elegidas)',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.lightTextSub,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                if (isOptional)
-                  TextButton(
-                    key: const Key('omitir_pregunta'),
-                    onPressed: isOmitted ? null : onOmit,
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppTheme.lightTextSub,
-                      visualDensity: VisualDensity.compact,
-                    ),
-                    child: Text(isOmitted ? 'Pregunta omitida' : 'Omitir'),
-                  ),
-              ],
+          LsbQuestionDisplay(spanish: question, formulation: lsb),
+          if (maxPicks > 1)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                'Puedes elegir hasta $maxPicks ($currentPicks elegidas)',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppTheme.lightTextSub,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -190,9 +155,9 @@ class LsbQuestionDisplay extends StatelessWidget {
       key: const Key('formulacion_es_fallback'),
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: width < 360 ? 20 : 23,
+        fontSize: width < 360 ? 17 : 19,
         fontWeight: FontWeight.w800,
-        height: 1.2,
+        height: 1.15,
         color: AppTheme.lightText,
         letterSpacing: -0.2,
       ),
@@ -221,8 +186,9 @@ class LsbFormulationStrip extends ConsumerWidget {
       child: Wrap(
         key: const Key('formulacion_lsb'),
         alignment: WrapAlignment.center,
-        spacing: 8,
-        runSpacing: 7,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: 6,
+        runSpacing: 5,
         children: [
           for (final s in segmentos)
             _LsbPiece(segment: s, withImage: conImagen),
@@ -238,49 +204,79 @@ class _LsbPiece extends StatelessWidget {
 
   const _LsbPiece({required this.segment, required this.withImage});
 
+  static const _imageSize = 22.0;
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    final fontSize = width < 360 ? 16.0 : 18.0;
+    final fontSize = width < 360 ? 16.0 : 17.0;
     final esSena =
         segment.kind == LsbSegmentKind.sign ||
         segment.kind == LsbSegmentKind.compound;
+    final marca = withImage ? _marca(esSena) : null;
+
+    // Imagen y glosa en la misma fila: apiladas, cada pieza medía el doble
+    // de alto y la cabecera empujaba las tarjetas hacia abajo.
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppTheme.brandPrimary.withValues(alpha: esSena ? 0.08 : 0.03),
+        color: AppTheme.brandPrimary.withValues(alpha: esSena ? 0.08 : 0.04),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: AppTheme.brandPrimary.withValues(alpha: 0.30),
         ),
       ),
-      child: Column(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (withImage && esSena)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final g in segment.glosses)
-                  SignImage(
-                    gloss: g,
-                    semanticIcon: 'sign_language',
-                    size: 34,
-                    color: AppTheme.brandPrimary,
-                  ),
-              ],
-            ),
-          Text(
-            segment.label.replaceAll('_', ' '),
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.w800,
-              fontStyle: esSena ? FontStyle.normal : FontStyle.italic,
-              color: AppTheme.lightText,
+          if (marca != null) ...[marca, const SizedBox(width: 5)],
+          Flexible(
+            child: Text(
+              segment.label.replaceAll('_', ' '),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: fontSize,
+                height: 1.2,
+                fontWeight: FontWeight.w800,
+                fontStyle: esSena ? FontStyle.normal : FontStyle.italic,
+                color: AppTheme.lightText,
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget? _marca(bool esSena) {
+    if (esSena) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final g in segment.glosses)
+            SignImage(
+              gloss: g,
+              semanticIcon: 'sign_language',
+              size: _imageSize,
+              color: AppTheme.brandPrimary,
+            ),
+        ],
+      );
+    }
+    final icono = switch (segment.kind) {
+      LsbSegmentKind.number => Icons.tag_rounded,
+      LsbSegmentKind.dactylology => Icons.front_hand_rounded,
+      _ => null,
+    };
+    if (icono == null) return null;
+    return Container(
+      width: _imageSize,
+      height: _imageSize,
+      decoration: BoxDecoration(
+        color: AppTheme.brandPrimary.withValues(alpha: 0.12),
+        shape: BoxShape.circle,
+      ),
+      child: Icon(icono, size: 13, color: AppTheme.brandPrimary),
     );
   }
 }

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/semantic_node.dart';
 
-class AdaptiveNodeLayout extends ConsumerWidget {
+/// Tarjetas de respuesta en filas de dos (una sola si solo hay una).
+///
+/// Cada fila mide lo que necesita su tarjeta más alta: con una proporción
+/// fija, una etiqueta de dos líneas o una imagen desbordaban la tarjeta y se
+/// pintaban encima de la fila siguiente.
+class AdaptiveNodeLayout extends StatelessWidget {
   final List<LsbCard> cards;
   final void Function(LsbCard) onCardTap;
 
@@ -23,34 +26,52 @@ class AdaptiveNodeLayout extends ConsumerWidget {
     this.selectedIds,
   });
 
+  static const _spacing = 10.0;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     if (cards.isEmpty) return const SizedBox.shrink();
 
     final columns = cards.length == 1 ? 1 : 2;
+    final rows = <List<LsbCard>>[
+      for (var i = 0; i < cards.length; i += columns)
+        cards.sublist(i, (i + columns).clamp(0, cards.length)),
+    ];
 
-    final conImagen = ref.watch(signImagesEnabledProvider);
-    final ratio = cards.length == 1
-        ? (conImagen ? 2.6 : 3.5)
-        : (conImagen ? 1.05 : 1.5);
-
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: columns,
-        childAspectRatio: ratio,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: cards.length,
-      itemBuilder: (_, i) => SemanticNode(
-        card: cards[i],
-        isSelected: selectedIds?.contains(cards[i].id) ??
-            selectedGlosses.contains(cards[i].gloss),
-        onTap: () => onCardTap(cards[i]),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var r = 0; r < rows.length; r++) ...[
+            if (r > 0) const SizedBox(height: _spacing),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (var c = 0; c < columns; c++) ...[
+                    if (c > 0) const SizedBox(width: _spacing),
+                    Expanded(
+                      child: c < rows[r].length
+                          ? _node(rows[r][c])
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
+
+  Widget _node(LsbCard card) => SemanticNode(
+    key: ValueKey(card.id),
+    card: card,
+    isSelected:
+        selectedIds?.contains(card.id) ?? selectedGlosses.contains(card.gloss),
+    onTap: () => onCardTap(card),
+  );
 }

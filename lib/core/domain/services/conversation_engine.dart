@@ -1,3 +1,4 @@
+import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
@@ -209,9 +210,22 @@ class ConversationEngine {
       message.text,
       situation: activeContextId,
     );
+    final backend = translation.semanticTurn;
 
     return ConversationTurn(
       pending: false,
+      // La lectura semántica llega con la traducción: Conversation la
+      // conserva tal cual y no vuelve a interpretar el mensaje.
+      semantic: backend == null
+          ? null
+          : SemanticTurn.fromBackend(
+              turnId: message.id,
+              text: message.text,
+              speechAct: message.speechAct,
+              backend: backend,
+              glosses: translation.glosses,
+              disambiguations: translation.disambiguations,
+            ),
       message: SemanticMessage(
         id: message.id,
         speaker: message.speaker,

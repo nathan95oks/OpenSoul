@@ -1,3 +1,4 @@
+import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 
@@ -11,6 +12,7 @@ class LsbTranslationModel extends LsbTranslation {
     super.pendingClarifications = const [],
     super.semanticStatus = SemanticStatus.resolved,
     super.representationStatus = RepresentationStatus.complete,
+    super.semanticTurn,
   });
 
   factory LsbTranslationModel.fromJson(Map<String, dynamic> json) {
@@ -29,9 +31,13 @@ class LsbTranslationModel extends LsbTranslation {
         for (final item in (json['pendingClarifications'] as List? ?? const []))
           PendingClarification.fromJson(Map<String, dynamic>.from(item as Map)),
       ],
-      semanticStatus: semanticStatusFromJson(json['semanticStatus']?.toString()),
-      representationStatus:
-          representationStatusFromJson(json['representationStatus']?.toString()),
+      semanticStatus: semanticStatusFromJson(
+        json['semanticStatus']?.toString(),
+      ),
+      representationStatus: representationStatusFromJson(
+        json['representationStatus']?.toString(),
+      ),
+      semanticTurn: BackendSemanticTurn.fromJson(json['semanticTurn']),
     );
   }
 
@@ -59,7 +65,10 @@ class LsbTranslationModel extends LsbTranslation {
           ? 'needs_clarification'
           : 'resolved',
       'representationStatus':
-          representationStatus == RepresentationStatus.partial ? 'partial' : 'complete',
+          representationStatus == RepresentationStatus.partial
+          ? 'partial'
+          : 'complete',
+      if (semanticTurn != null) 'semanticTurn': semanticTurn!.toJson(),
     };
   }
 }

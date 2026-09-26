@@ -1453,6 +1453,134 @@ def attach_animation_plan(result: dict) -> dict:
 
 
 # ===================================================================
+# MÓDULO 3b: LECTURA SEMÁNTICA DEL TURNO (SemanticTurn)
+# ===================================================================
+# Conversation necesita saber QUÉ pide el oyente, no solo cómo se señaliza.
+# Esa lectura sale de la MISMA traducción: las glosas finales ya son la forma
+# canónica que Bedrock eligió al desambiguar («¿Dónde fue?», «¿Dónde pasó?» y
+# «¿En qué lugar ocurrió?» terminan en DONDE). No hay otra llamada al modelo ni
+# se toca el prompt; se deriva de forma determinista y no se guarda en la
+# caché de traducción, así que también acompaña a las respuestas cacheadas.
+#
+# Solo lleva lo que la respuesta no trae ya: las glosas (`glosses`) y los
+# sentidos resueltos (`disambiguation`) viajan en sus campos de siempre.
+
+SEMANTIC_TURN_VERSION = 1
+
+# Dato que pide cada interrogativo del catálogo (ranuras del grafo).
+_SLOT_POR_INTERROGATIVO = {
+    "DONDE": "place",
+    "CUANDO": "time",
+    "QUIEN": "person",
+    "CUANTOS": "amount",
+}
+_INTERROGATIVOS_ABIERTOS = {"QUE", "CUAL", "COMO", "POR_QUE", "PARA_QUE"}
+# Núcleos que convierten una pregunta en la pregunta por un dato: «¿a qué
+# hora?», «¿qué día?», «¿en qué lugar?». Las glosas del catálogo y, para lo
+# que el catálogo no tiene seña propia, la palabra reconocida.
+_SLOT_POR_NUCLEO = {
+    "HORA": "time",
+    "FECHA": "time",
+    "DIA": "time",
+    "MOMENTO": "time",
+    "DIRECCION": "place",
+}
+_SLOT_POR_PALABRA = {"LUGAR": "place", "SITIO": "place"}
+_NEGADORES = {"NO", "JAMAS", "NUNCA", "NADA", "NADIE", "NINGUNO"}
+
+# Situaciones (las mismas de SITUATION_LABELS) que el oyente nombra: glosas
+# canónicas del catálogo y raíces de palabras sin seña propia. Una misma pista
+# puede nombrar varias situaciones («denunciar» vale para todas las denuncias):
+# quien consume la lectura decide si eso es una familia.
+SITUATION_CUES = {
+    "denuncia_robo": {"glosas": {"ROBAR", "LADRON"},
+                      "raices": {"denunci", "rob", "hurt", "asalt"}},
+    "violencia": {"glosas": {"VIOLENCIA", "PEGAR", "MALTRATAR", "ABUSAR"},
+                  "raices": {"denunci", "violenci", "agresi", "agredi"}},
+    "amenaza_digital": {"glosas": {"AMENAZAR"},
+                        "raices": {"denunci", "amenaz"}},
+    "engano_dinero": {"glosas": {"ENGANAR"},
+                      "raices": {"denunci", "estaf", "engan"}},
+    "otro": {"glosas": {"TESTIMONIO"},
+             "raices": {"denunci", "testimoni", "declar"}},
+    "seguimiento": {"glosas": {"TRAMITE", "RESOLUCION"},
+                    "raices": {"consult", "tramit"}},
+    "identificacion": {"glosas": set(), "raices": {"dato", "identific"}},
+    "preguntas": {"glosas": set(), "raices": {"pregunt"}},
+}
+# «Quejar» es la seña con la que el banco formula «presentar una denuncia».
+for _situacion in ("denuncia_robo", "violencia", "amenaza_digital",
+                   "engano_dinero", "otro"):
+    SITUATION_CUES[_situacion]["glosas"].add("QUEJAR")
+
+
+def _raiz(palabra: str) -> str:
+    """Raíz para reconocer una pista: sin tildes y en minúsculas."""
+    return remove_accents(palabra.upper()).lower()
+
+
+def build_semantic_turn(text: str, result: dict) -> dict:
+    """Lectura semántica del turno a partir de la traducción ya hecha."""
+    glosas = [canonical_gloss(str(g)) for g in result.get("glosses") or []]
+    palabras = [remove_accents(w.upper()) for w in _PALABRA.findall(text or "")]
+    es_pregunta = ("?" in (text or "") or "¿" in (text or "")
+                   or any(g in _SLOT_POR_INTERROGATIVO or g in _INTERROGATIVOS_ABIERTOS
+                          for g in glosas))
+
+    slots = []
+
+    def _anadir(slot):
+        if slot not in slots:
+            slots.append(slot)
+
+    if es_pregunta:
+        for g in glosas:
+            if g in _SLOT_POR_INTERROGATIVO:
+                _anadir(_SLOT_POR_INTERROGATIVO[g])
+            elif g in _SLOT_POR_NUCLEO:
+                _anadir(_SLOT_POR_NUCLEO[g])
+        for w in palabras:
+            if w in _SLOT_POR_PALABRA:
+                _anadir(_SLOT_POR_PALABRA[w])
+
+    raices = [_raiz(w) for w in palabras]
+    menciones = []
+    for situacion, pistas in SITUATION_CUES.items():
+        evidencia = [g for g in glosas if g in pistas["glosas"]]
+        evidencia += [r for r in pistas["raices"]
+                      if any(p.startswith(r) for p in raices)]
+        if evidencia:
+            menciones.append({"id": situacion, "evidence": sorted(set(evidencia))})
+
+    negaciones = sorted({g for g in glosas if g in _NEGADORES}
+                        | {w for w in palabras if w in _NEGADORES})
+
+    abierta = any(g in _INTERROGATIVOS_ABIERTOS for g in glosas)
+    if slots:
+        intent, confianza = "askInformation", 0.9
+    elif menciones:
+        intent, confianza = "mentionContext", 0.8
+    elif es_pregunta and abierta:
+        intent, confianza = "askPurpose", 0.6
+    elif es_pregunta:
+        intent, confianza = "askInformation", 0.5
+    else:
+        intent, confianza = "statement", 0.5
+    # Un sentido sin resolver deja la lectura menos firme, no la anula.
+    if result.get("pendingClarifications"):
+        confianza *= 0.7
+
+    return {
+        "version": SEMANTIC_TURN_VERSION,
+        "intent": intent,
+        "requestedSlots": slots,
+        "mentionedContexts": menciones,
+        "negations": negaciones,
+        "confidence": round(confianza, 3),
+    }
+
+
+# ===================================================================
 # MÓDULO 4: UTILIDADES
 # ===================================================================
 
@@ -1581,7 +1709,9 @@ def lambda_handler(event, context):
     Retorna:
       { "glosses": [...], "glossDetails": [...], "disambiguation": [...],
         "pendingClarifications": [...], "semanticStatus": "resolved",
-        "representationStatus": "complete", "situation": "denuncia_robo" }
+        "representationStatus": "complete", "situation": "denuncia_robo",
+        "semanticTurn": {"intent", "requestedSlots", "mentionedContexts",
+                         "negations", "confidence", "version"} }
     """
 
     # 0. Manejar preflight CORS
@@ -1648,7 +1778,11 @@ def lambda_handler(event, context):
         logger.info("Cache HIT — respuesta servida desde caché: %s", cache_key)
         # La traducción sale de la caché, pero qué señas tiene el avatar se
         # comprueba ahora: el .glb puede haber cambiado desde que se guardó.
-        return build_response(200, {**attach_animation_plan(cached), "cacheHit": True})
+        return build_response(200, {
+            **attach_animation_plan(cached),
+            "semanticTurn": build_semantic_turn(text, cached),
+            "cacheHit": True,
+        })
 
     # 4. Construir el Prompt de desambiguación semántica
     prompt = build_disambiguation_prompt(text, context_type, situation)
@@ -1695,4 +1829,10 @@ def lambda_handler(event, context):
     }
     save_to_cache(cache_key, payload)
 
-    return build_response(200, {**payload, "cacheHit": False})
+    # La lectura semántica sale de esta misma traducción (sin otra llamada al
+    # modelo) y no se persiste: así también acompaña a los aciertos de caché.
+    return build_response(200, {
+        **payload,
+        "semanticTurn": build_semantic_turn(text, payload),
+        "cacheHit": False,
+    })

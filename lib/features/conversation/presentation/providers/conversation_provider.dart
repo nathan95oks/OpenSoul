@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer' as developer;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/di/injection.dart';
@@ -43,22 +46,71 @@ class ConversationNotifier extends Notifier<ConversationState> {
       processing: true,
     );
 
+    final activeContextId = conversation.activeContextId;
     try {
-      final turn = await engine.translateHearingTurn(
+      final translated = await engine.translateHearingTurn(
         draft,
-        activeContextId: conversation.activeContextId,
+        activeContextId: activeContextId,
       );
+      final turn = await _withRoute(translated, activeContextId);
       state = ConversationState(
         conversation: state.conversation.replaceTurn(turn),
       );
+      if (turn.route?.needsModel ?? false) {
+        unawaited(_refineRoute(turn, activeContextId));
+      }
     } catch (_) {
       state = ConversationState(
-        conversation:
-            state.conversation.replaceTurn(draft.copyWith(pending: false)),
-        error: 'No se pudo traducir el mensaje a señas. '
+        conversation: state.conversation.replaceTurn(
+          draft.copyWith(pending: false, failed: true),
+        ),
+        error:
+            'No se pudo traducir el mensaje a señas. '
             'Revisa tu conexión e intenta de nuevo.',
       );
     }
+  }
+
+  /// Lee el turno ya traducido contra el grafo y decide con qué parte de
+  /// LSB→Texto/Audio se responde. Usa lo que devolvió Audio/Texto→LSB: no
+  /// hay otra traducción. Sin catálogo (aún cargando) el turno queda sin
+  /// ruta y las tarjetas se abren como siempre.
+  Future<ConversationTurn> _withRoute(
+    ConversationTurn turn,
+    String? activeContextId,
+  ) async {
+    try {
+      await ref.read(conversationGraphCatalogProvider.future);
+    } catch (_) {
+      return turn;
+    }
+    final routed = routeForTurn(ref, turn, activeContextId: activeContextId);
+    return routed ?? turn;
+  }
+
+  /// Desempate con el modelo cuando el determinista dejó varias rutas
+  /// reales. Corre aparte: el avatar no espera por él.
+  Future<void> _refineRoute(
+    ConversationTurn turn,
+    String? activeContextId,
+  ) async {
+    final router = ref.read(conversationGraphRouterProvider);
+    final semantic = turn.semantic;
+    if (router == null || semantic == null) return;
+    final route = await router.route(
+      semantic,
+      activeContextId: activeContextId,
+      suggestion: turn.message.contextSuggestion,
+    );
+    final current = state.conversation.turnById(turn.message.id);
+    if (current == null) return;
+    state = ConversationState(
+      conversation: state.conversation.replaceTurn(
+        current.copyWith(route: route),
+      ),
+      processing: state.processing,
+      error: state.error,
+    );
   }
 
   /// Añade el turno de la persona sorda enlazado a [replyToId].
@@ -87,7 +139,9 @@ class ConversationNotifier extends Notifier<ConversationState> {
       return SubmitOutcome.staleReply;
     }
 
-    final turn = ref.read(conversationEngineProvider).turnFromDeclaration(
+    final turn = ref
+        .read(conversationEngineProvider)
+        .turnFromDeclaration(
           result: result,
           glosses: glosses,
           contextId: contextId,
@@ -108,7 +162,47 @@ class ConversationNotifier extends Notifier<ConversationState> {
       state = ConversationState(conversation: conversation);
 }
 
+/// El turno con su [SemanticTurn] y su ruta determinista, o `null` si el
+/// router aún no está disponible.
+///
+/// La lectura preferida es la que Audio/Texto→LSB entregó con la traducción
+/// (ya está en el turno). Solo si no llegó —backend anterior al contrato— se
+/// arma con el respaldo del cliente, sin traducir de nuevo.
+ConversationTurn? routeForTurn(
+  Ref ref,
+  ConversationTurn turn, {
+  String? activeContextId,
+}) {
+  final router = ref.read(conversationGraphRouterProvider);
+  if (router == null) return null;
+  var semantic = turn.semantic;
+  if (semantic == null) {
+    final builder = ref.read(semanticTurnBuilderProvider);
+    if (builder == null) return null;
+    semantic = builder.build(
+      turnId: turn.message.id,
+      text: turn.message.text,
+      glosses: turn.message.glosses,
+      speechAct: turn.message.speechAct,
+      disambiguations: turn.message.disambiguations,
+      activeContextId: activeContextId,
+    );
+  }
+  developer.log(
+    'turn=${turn.message.id} semanticTurnSource=${semantic.source.name}',
+    name: 'conversation.semantics',
+  );
+  return turn.copyWith(
+    semantic: semantic,
+    route: router.routeDeterministic(
+      semantic,
+      activeContextId: activeContextId,
+      suggestion: turn.message.contextSuggestion,
+    ),
+  );
+}
+
 final conversationProvider =
     NotifierProvider<ConversationNotifier, ConversationState>(
-  ConversationNotifier.new,
-);
+      ConversationNotifier.new,
+    );

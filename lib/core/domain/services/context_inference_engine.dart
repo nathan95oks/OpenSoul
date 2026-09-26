@@ -15,16 +15,16 @@ class ContextInferenceEngine {
     required Map<String, Set<String>> contextStems,
     required List<String> contextIds,
     required this.minConfidence,
-  })  : _glossContexts = glossContexts,
-        _contextStems = contextStems,
-        _contextIds = contextIds;
+  }) : _glossContexts = glossContexts,
+       _contextStems = contextStems,
+       _contextIds = contextIds;
 
   factory ContextInferenceEngine.empty() => ContextInferenceEngine._(
-        glossContexts: const {},
-        contextStems: const {},
-        contextIds: const [],
-        minConfidence: 1.0,
-      );
+    glossContexts: const {},
+    contextStems: const {},
+    contextIds: const [],
+    minConfidence: 1.0,
+  );
 
   factory ContextInferenceEngine.fromLexicon(
     List<LsbCard> entries, {
@@ -102,8 +102,12 @@ class ContextInferenceEngine {
     final scores = <String, double>{};
     final evidence = <String, Map<String, double>>{};
 
-    void award(String contextId, String token, double weight,
-        {bool asEvidence = true}) {
+    void award(
+      String contextId,
+      String token,
+      double weight, {
+      bool asEvidence = true,
+    }) {
       if (weight <= 0) return;
       scores[contextId] = (scores[contextId] ?? 0) + weight;
       if (!asEvidence) return;
@@ -149,25 +153,22 @@ class ContextInferenceEngine {
 
     if (evidence.isEmpty) return null;
 
-    final ranked = scores.entries
-        .where((e) => evidence.containsKey(e.key))
-        .toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final ranked =
+        scores.entries.where((e) => evidence.containsKey(e.key)).toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
     if (ranked.isEmpty) return null;
     final best = ranked.first;
     final confidence = best.value / total;
     if (confidence < minConfidence) return null;
 
-    final tokens = (evidence[best.key] ?? const <String, double>{}).entries
-        .toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final tokens =
+        (evidence[best.key] ?? const <String, double>{}).entries.toList()
+          ..sort((a, b) => b.value.compareTo(a.value));
 
     return ContextSuggestion(
       contextId: best.key,
       confidence: confidence,
-      evidence: [
-        for (final t in tokens.take(3)) t.key.toUpperCase(),
-      ],
+      evidence: [for (final t in tokens.take(3)) t.key.toUpperCase()],
     );
   }
 
@@ -191,47 +192,128 @@ class _HardRule {
 
 const List<_HardRule> _hardRules = [
   _HardRule([
-    'nombre completo', 'cual es su nombre', 'cual es tu nombre',
-    'como se llama', 'como te llamas', 'como se llaman',
-    'su nombre', 'tu nombre', 'digame su nombre', 'apellido',
-    'que edad', 'cuantos anos tiene', 'cuantos anos tienes', 'su edad',
-    'tu edad', 'edad tiene', 'edad tienes',
-    'su carnet', 'tu carnet', 'carnet de identidad', 'su cedula',
-    'documento de identidad', 'su documento', 'tu documento',
-    'mostrar su documento', 'identificarse', 'su identidad', 'identificarte',
+    'nombre completo',
+    'cual es su nombre',
+    'cual es tu nombre',
+    'como se llama',
+    'como te llamas',
+    'como se llaman',
+    'su nombre',
+    'tu nombre',
+    'digame su nombre',
+    'apellido',
+    'que edad',
+    'cuantos anos tiene',
+    'cuantos anos tienes',
+    'su edad',
+    'tu edad',
+    'edad tiene',
+    'edad tienes',
+    'su carnet',
+    'tu carnet',
+    'carnet de identidad',
+    'su cedula',
+    'documento de identidad',
+    'su documento',
+    'tu documento',
+    'mostrar su documento',
+    'identificarse',
+    'su identidad',
+    'identificarte',
   ], 'identificacion'),
 
   _HardRule([
-    'que ocurrio', 'que paso', 'que sucedio', 'que le paso', 'que te paso',
-    'que ha ocurrido', 'que le ocurrio', 'que te ocurrio',
-    'cuando ocurrio', 'cuando fue', 'cuando paso', 'en que momento',
-    'donde ocurrio', 'donde fue', 'donde paso', 'en que lugar',
-    'conoce a la persona', 'conoces a la persona', 'la conoce', 'lo conoce',
-    'conoce al agresor', 'persona involucrada',
-    'describir a la persona', 'puede describir', 'como era la persona',
-    'como era el', 'que aspecto',
-    'hay testigos', 'algun testigo', 'habia testigos', 'hubo testigos',
-    'tiene fotografias', 'tienes fotografias', 'tiene pruebas',
-    'tienes pruebas', 'alguna prueba', 'tiene evidencia',
-    'esta herido', 'estas herido', 'esta herida', 'atencion medica',
-    'necesita un medico', 'necesita atencion',
-    'desea realizar una denuncia', 'desea denunciar', 'quiere denunciar',
-    'presentar una denuncia', 'realizar la denuncia',
-    'apoyo legal', 'asistencia legal', 'necesita abogado',
-    'necesita un abogado', 'defensa publica',
+    'que ocurrio',
+    'que paso',
+    'que sucedio',
+    'que le paso',
+    'que te paso',
+    'que ha ocurrido',
+    'que le ocurrio',
+    'que te ocurrio',
+    'cuando ocurrio',
+    'cuando fue',
+    'cuando paso',
+    'en que momento',
+    'donde ocurrio',
+    'donde fue',
+    'donde paso',
+    'en que lugar',
+    'conoce a la persona',
+    'conoces a la persona',
+    'la conoce',
+    'lo conoce',
+    'conoce al agresor',
+    'persona involucrada',
+    'describir a la persona',
+    'puede describir',
+    'como era la persona',
+    'como era el',
+    'que aspecto',
+    'hay testigos',
+    'algun testigo',
+    'habia testigos',
+    'hubo testigos',
+    'tiene fotografias',
+    'tienes fotografias',
+    'tiene pruebas',
+    'tienes pruebas',
+    'alguna prueba',
+    'tiene evidencia',
+    'esta herido',
+    'estas herido',
+    'esta herida',
+    'atencion medica',
+    'necesita un medico',
+    'necesita atencion',
+    'desea realizar una denuncia',
+    'desea denunciar',
+    'quiere denunciar',
+    'presentar una denuncia',
+    'realizar la denuncia',
+    'apoyo legal',
+    'asistencia legal',
+    'necesita abogado',
+    'necesita un abogado',
+    'defensa publica',
   ], null),
 ];
 
 const List<String> _suffixes = [
-  'aciones', 'iciones', 'aron', 'eron', 'ando', 'iendo', 'aba', 'ado',
-  'ido', 'ion', 'ar', 'er', 'ir', 'on', 'os', 'as', 'es', 'a', 'e', 'o', 'n',
+  'aciones',
+  'iciones',
+  'aron',
+  'eron',
+  'ando',
+  'iendo',
+  'aba',
+  'ado',
+  'ido',
+  'ion',
+  'ar',
+  'er',
+  'ir',
+  'on',
+  'os',
+  'as',
+  'es',
+  'a',
+  'e',
+  'o',
+  'n',
 ];
 
 const int _minStemLength = 3;
 
 String _removeAccents(String value) {
   const map = {
-    'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'ü': 'u', 'ñ': 'n',
+    'á': 'a',
+    'é': 'e',
+    'í': 'i',
+    'ó': 'o',
+    'ú': 'u',
+    'ü': 'u',
+    'ñ': 'n',
   };
   var result = value;
   map.forEach((from, to) => result = result.replaceAll(from, to));
@@ -258,24 +340,122 @@ String _stem(String word) {
 }
 
 const Set<String> _stopwords = {
-  'como', 'cual', 'cuales', 'quien', 'quienes', 'donde', 'cuando', 'cuanto',
-  'cuanta', 'cuantos', 'cuantas', 'porque', 'para', 'pero', 'esta', 'este',
-  'esto', 'esos', 'esas', 'ese', 'eso', 'aqui', 'alli', 'sobre', 'desde',
-  'hasta', 'entre', 'ante', 'tras', 'segun', 'sino', 'cada', 'todo', 'toda',
-  'todos', 'todas', 'algo', 'alguno', 'alguna', 'algun', 'nada', 'nadie',
-  'otro', 'otra', 'otros', 'otras', 'mismo', 'misma', 'tanto', 'tanta',
-  'usted', 'ustedes', 'nosotros', 'ellos', 'ellas', 'suyo', 'suya',
-  'tiene', 'tienes', 'tengo', 'tenia', 'tener', 'hacer', 'hace', 'haces',
-  'puede', 'puedes', 'pueden', 'podria', 'quiere', 'quieres', 'quiero',
-  'debe', 'debes', 'debo', 'estan', 'estoy', 'estar', 'estas',
-  'seria', 'fueron', 'siendo', 'haber', 'habia', 'hubo', 'sera',
-  'favor', 'gracias', 'senor', 'senora', 'senorita', 'buenos', 'buenas',
-  'dias', 'tardes', 'noches', 'ahora', 'luego', 'entonces', 'tambien',
-  'solo', 'muy', 'mas', 'menos', 'bien', 'alla',
+  'como',
+  'cual',
+  'cuales',
+  'quien',
+  'quienes',
+  'donde',
+  'cuando',
+  'cuanto',
+  'cuanta',
+  'cuantos',
+  'cuantas',
+  'porque',
+  'para',
+  'pero',
+  'esta',
+  'este',
+  'esto',
+  'esos',
+  'esas',
+  'ese',
+  'eso',
+  'aqui',
+  'alli',
+  'sobre',
+  'desde',
+  'hasta',
+  'entre',
+  'ante',
+  'tras',
+  'segun',
+  'sino',
+  'cada',
+  'todo',
+  'toda',
+  'todos',
+  'todas',
+  'algo',
+  'alguno',
+  'alguna',
+  'algun',
+  'nada',
+  'nadie',
+  'otro',
+  'otra',
+  'otros',
+  'otras',
+  'mismo',
+  'misma',
+  'tanto',
+  'tanta',
+  'usted',
+  'ustedes',
+  'nosotros',
+  'ellos',
+  'ellas',
+  'suyo',
+  'suya',
+  'tiene',
+  'tienes',
+  'tengo',
+  'tenia',
+  'tener',
+  'hacer',
+  'hace',
+  'haces',
+  'puede',
+  'puedes',
+  'pueden',
+  'podria',
+  'quiere',
+  'quieres',
+  'quiero',
+  'debe',
+  'debes',
+  'debo',
+  'estan',
+  'estoy',
+  'estar',
+  'estas',
+  'seria',
+  'fueron',
+  'siendo',
+  'haber',
+  'habia',
+  'hubo',
+  'sera',
+  'favor',
+  'gracias',
+  'senor',
+  'senora',
+  'senorita',
+  'buenos',
+  'buenas',
+  'dias',
+  'tardes',
+  'noches',
+  'ahora',
+  'luego',
+  'entonces',
+  'tambien',
+  'solo',
+  'muy',
+  'mas',
+  'menos',
+  'bien',
+  'alla',
 };
 
+/// Raíces de contenido de [text]: sin tildes, sin palabras vacías y con los
+/// finales flexivos recortados («denunciar», «denuncias» → `denunci`).
+Set<String> spanishContentStems(String text) => _stemAll(text);
+
 Set<String> _stemAll(String text) {
-  final words = _removeAccents(text.toLowerCase()).split(RegExp(r'[^a-z0-9_]+'));
+  final words = _removeAccents(
+    text.toLowerCase(),
+  ).split(RegExp(r'[^a-z0-9_]+'));
   return {
     for (final word in words)
       if (word.length >= 4 && !_stopwords.contains(word)) _stem(word),

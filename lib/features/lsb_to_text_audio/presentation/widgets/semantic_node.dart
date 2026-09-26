@@ -89,7 +89,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
           ),
           padding: EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: conImagen ? 10 : 14,
+            vertical: conImagen ? 8 : 14,
           ),
           child: Stack(
             clipBehavior: Clip.none,
@@ -103,10 +103,10 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                             gloss: widget.card.gloss,
                             semanticIcon: widget.card.semanticIcon,
                             frames: widget.card.imageFrames,
-                            size: 56,
+                            size: 44,
                             color: colorContenido,
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           _etiqueta(colorContenido, TextAlign.center, selected),
                         ],
                       ),
@@ -165,6 +165,8 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
       letterSpacing: 0.2,
       height: 1.2,
     ),
+    maxLines: 2,
+    overflow: TextOverflow.ellipsis,
   );
 }
 

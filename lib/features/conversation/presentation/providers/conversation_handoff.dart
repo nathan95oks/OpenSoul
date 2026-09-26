@@ -46,6 +46,16 @@ class ConversationHandoff {
       );
     }
 
+    // La parte del grafo con la que se responde. Una conversación restaurada
+    // no guarda rutas (son derivadas): se recalculan aquí.
+    final route =
+        pending.route ??
+        routeForTurn(
+          ref,
+          pending,
+          activeContextId: conversation.activeContextId,
+        )?.route;
+
     return CardsFlowLaunch.reply(
       conversationId: conversation.id,
       hearingTurnId: pending.message.id,
@@ -55,6 +65,7 @@ class ConversationHandoff {
       activeContextId: conversation.activeContextId,
       need: necesidad,
       institutionProfileId: perfil,
+      route: route,
     );
   }
 
@@ -111,5 +122,6 @@ class ConversationHandoff {
       ref.read(selectedTabProvider.notifier).select(AppTabId.conversation);
 }
 
-final conversationHandoffProvider =
-    Provider<ConversationHandoff>(ConversationHandoff.new);
+final conversationHandoffProvider = Provider<ConversationHandoff>(
+  ConversationHandoff.new,
+);

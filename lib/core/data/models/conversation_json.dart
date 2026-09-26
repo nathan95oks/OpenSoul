@@ -15,10 +15,10 @@ class ConversationJson {
   const ConversationJson._();
 
   static Map<String, dynamic> encode(Conversation conversation) => {
-        'id': conversation.id,
-        'startedAt': conversation.startedAt.toIso8601String(),
-        'turns': [for (final t in conversation.turns) _encodeTurn(t)],
-      };
+    'id': conversation.id,
+    'startedAt': conversation.startedAt.toIso8601String(),
+    'turns': [for (final t in conversation.turns) _encodeTurn(t)],
+  };
 
   /// Devuelve `null` si lo guardado no se puede reconstruir. Una conversación
   /// a medio leer sería peor que ninguna: mostraría turnos sueltos sin el hilo
@@ -34,7 +34,7 @@ class ConversationJson {
         id: (json['id'] ?? '').toString(),
         startedAt:
             DateTime.tryParse((json['startedAt'] ?? '').toString()) ??
-                DateTime.now(),
+            DateTime.now(),
         turns: turnos,
       );
     } catch (_) {
@@ -43,38 +43,39 @@ class ConversationJson {
   }
 
   static Map<String, dynamic> _encodeTurn(ConversationTurn turn) => {
-        'pending': turn.pending,
-        'message': {
-          'id': turn.message.id,
-          'speaker': turn.message.speaker.name,
-          'source': turn.message.source.name,
-          'speechAct': turn.message.speechAct.name,
-          'glosses': turn.message.glosses,
-          'text': turn.message.text,
-          'contextId': turn.message.contextId,
-          'replyToId': turn.message.replyToId,
-          'createdAt': turn.message.createdAt.toIso8601String(),
-          'contextSuggestion': turn.message.contextSuggestion == null
-              ? null
-              : {
-                  'contextId': turn.message.contextSuggestion!.contextId,
-                  'confidence': turn.message.contextSuggestion!.confidence,
-                  'evidence': turn.message.contextSuggestion!.evidence,
-                },
-          'disambiguations': [
-            for (final d in turn.message.disambiguations)
-              {'original': d.original, 'meaning': d.meaning, 'reason': d.reason},
-          ],
-        },
-        'outputs': {
-          'text': turn.outputs.text,
-          'baseText': turn.outputs.baseText,
-          'audioUrl': turn.outputs.audioUrl,
-          'animationUrls': turn.outputs.animationUrls,
-          'animationGlosses': turn.outputs.animationGlosses,
-          'refinedByAi': turn.outputs.refinedByAi,
-        },
-      };
+    'pending': turn.pending,
+    'failed': turn.failed,
+    'message': {
+      'id': turn.message.id,
+      'speaker': turn.message.speaker.name,
+      'source': turn.message.source.name,
+      'speechAct': turn.message.speechAct.name,
+      'glosses': turn.message.glosses,
+      'text': turn.message.text,
+      'contextId': turn.message.contextId,
+      'replyToId': turn.message.replyToId,
+      'createdAt': turn.message.createdAt.toIso8601String(),
+      'contextSuggestion': turn.message.contextSuggestion == null
+          ? null
+          : {
+              'contextId': turn.message.contextSuggestion!.contextId,
+              'confidence': turn.message.contextSuggestion!.confidence,
+              'evidence': turn.message.contextSuggestion!.evidence,
+            },
+      'disambiguations': [
+        for (final d in turn.message.disambiguations)
+          {'original': d.original, 'meaning': d.meaning, 'reason': d.reason},
+      ],
+    },
+    'outputs': {
+      'text': turn.outputs.text,
+      'baseText': turn.outputs.baseText,
+      'audioUrl': turn.outputs.audioUrl,
+      'animationUrls': turn.outputs.animationUrls,
+      'animationGlosses': turn.outputs.animationGlosses,
+      'refinedByAi': turn.outputs.refinedByAi,
+    },
+  };
 
   static ConversationTurn? _decodeTurn(Map<String, dynamic> json) {
     final m = json['message'];
@@ -87,31 +88,41 @@ class ConversationJson {
 
     return ConversationTurn(
       pending: json['pending'] == true,
+      failed: json['failed'] == true,
       message: SemanticMessage(
         id: (mensaje['id'] ?? '').toString(),
         speaker: _porNombre(
-            SpeakerRole.values, mensaje['speaker'], SpeakerRole.hearing),
+          SpeakerRole.values,
+          mensaje['speaker'],
+          SpeakerRole.hearing,
+        ),
         source: _porNombre(
-            MessageSource.values, mensaje['source'], MessageSource.text),
+          MessageSource.values,
+          mensaje['source'],
+          MessageSource.text,
+        ),
         speechAct: _porNombre(
-            SpeechAct.values, mensaje['speechAct'], SpeechAct.statement),
+          SpeechAct.values,
+          mensaje['speechAct'],
+          SpeechAct.statement,
+        ),
         glosses: _textos(mensaje['glosses']),
         text: (mensaje['text'] ?? '').toString(),
         contextId: mensaje['contextId'] as String?,
         replyToId: mensaje['replyToId'] as String?,
-        createdAt:
-            DateTime.tryParse((mensaje['createdAt'] ?? '').toString()),
+        createdAt: DateTime.tryParse((mensaje['createdAt'] ?? '').toString()),
         contextSuggestion: sugerencia is Map
             ? ContextSuggestion(
                 contextId: (sugerencia['contextId'] ?? '').toString(),
-                confidence:
-                    (sugerencia['confidence'] as num?)?.toDouble() ?? 0,
+                confidence: (sugerencia['confidence'] as num?)?.toDouble() ?? 0,
                 evidence: _textos(sugerencia['evidence']),
               )
             : null,
         disambiguations: [
           for (final d in (mensaje['disambiguations'] as List? ?? const []))
-            SemanticDisambiguation.fromJson(Map<String, dynamic>.from(d as Map)),
+            SemanticDisambiguation.fromJson(
+              Map<String, dynamic>.from(d as Map),
+            ),
         ],
       ),
       outputs: GeneratedOutputs(
@@ -125,13 +136,17 @@ class ConversationJson {
     );
   }
 
-  static List<String> _textos(dynamic valor) =>
-      [for (final v in (valor as List? ?? const [])) v.toString()];
+  static List<String> _textos(dynamic valor) => [
+    for (final v in (valor as List? ?? const [])) v.toString(),
+  ];
 
   /// Un valor desconocido —porque se guardó con otra versión— cae al
   /// predeterminado en vez de tumbar toda la conversación.
   static T _porNombre<T extends Enum>(
-      List<T> valores, dynamic nombre, T porDefecto) {
+    List<T> valores,
+    dynamic nombre,
+    T porDefecto,
+  ) {
     final texto = nombre?.toString();
     for (final v in valores) {
       if (v.name == texto) return v;

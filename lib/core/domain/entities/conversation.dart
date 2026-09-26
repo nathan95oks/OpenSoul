@@ -1,3 +1,5 @@
+import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
+import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 
 class GeneratedOutputs {
@@ -21,27 +23,53 @@ class GeneratedOutputs {
   bool get hasAvatar => animationUrls.isNotEmpty;
 }
 
+enum ConversationTurnStatus { pending, completed, error }
+
 class ConversationTurn {
   final SemanticMessage message;
   final GeneratedOutputs outputs;
   final bool pending;
 
+  /// La traducción del turno falló: se muestra lo escrito, sin señas.
+  final bool failed;
+
+  /// Lectura semántica del turno del oyente (derivada: no se guarda).
+  final SemanticTurn? semantic;
+
+  /// Qué parte del grafo abre la persona sorda para responder a este turno
+  /// (derivada: no se guarda; se recalcula si hace falta).
+  final ConversationRoute? route;
+
   const ConversationTurn({
     required this.message,
     required this.outputs,
     this.pending = false,
+    this.failed = false,
+    this.semantic,
+    this.route,
   });
+
+  ConversationTurnStatus get status => pending
+      ? ConversationTurnStatus.pending
+      : (failed
+            ? ConversationTurnStatus.error
+            : ConversationTurnStatus.completed);
 
   ConversationTurn copyWith({
     SemanticMessage? message,
     GeneratedOutputs? outputs,
     bool? pending,
-  }) =>
-      ConversationTurn(
-        message: message ?? this.message,
-        outputs: outputs ?? this.outputs,
-        pending: pending ?? this.pending,
-      );
+    bool? failed,
+    SemanticTurn? semantic,
+    ConversationRoute? route,
+  }) => ConversationTurn(
+    message: message ?? this.message,
+    outputs: outputs ?? this.outputs,
+    pending: pending ?? this.pending,
+    failed: failed ?? this.failed,
+    semantic: semantic ?? this.semantic,
+    route: route ?? this.route,
+  );
 }
 
 class Conversation {
@@ -56,9 +84,9 @@ class Conversation {
   });
 
   factory Conversation.start() => Conversation(
-        id: DateTime.now().microsecondsSinceEpoch.toString(),
-        startedAt: DateTime.now(),
-      );
+    id: DateTime.now().microsecondsSinceEpoch.toString(),
+    startedAt: DateTime.now(),
+  );
 
   bool get isEmpty => turns.isEmpty;
 
@@ -97,11 +125,8 @@ class Conversation {
   String? get suggestedReplyContextId =>
       pendingReply?.message.contextSuggestion?.contextId ?? activeContextId;
 
-  Conversation addTurn(ConversationTurn turn) => Conversation(
-        id: id,
-        turns: [...turns, turn],
-        startedAt: startedAt,
-      );
+  Conversation addTurn(ConversationTurn turn) =>
+      Conversation(id: id, turns: [...turns, turn], startedAt: startedAt);
 
   /// Sustituye el turno con el mismo id, normalmente para completar uno que
   /// se mostró mientras viajaba la traducción.
@@ -111,9 +136,11 @@ class Conversation {
   /// intervención de la otra persona. El id único es lo que lo evita de
   /// verdad ([ConversationEngine]); esto es la red por debajo.
   Conversation replaceTurn(ConversationTurn turn) {
-    final index = turns.indexWhere((t) =>
-        t.message.id == turn.message.id &&
-        t.message.speaker == turn.message.speaker);
+    final index = turns.indexWhere(
+      (t) =>
+          t.message.id == turn.message.id &&
+          t.message.speaker == turn.message.speaker,
+    );
     if (index < 0) return this;
     return Conversation(
       id: id,

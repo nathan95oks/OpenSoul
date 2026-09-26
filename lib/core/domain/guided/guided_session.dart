@@ -73,19 +73,18 @@ class GuidedSession {
   GuidedSession copyWith({
     Map<String, GuidedAnswer>? answers,
     String? currentQuestionId,
-  }) =>
-      GuidedSession(
-        journeyId: journeyId,
-        purpose: purpose,
-        steps: steps,
-        answers: answers ?? this.answers,
-        currentQuestionId: currentQuestionId ?? this.currentQuestionId,
-        hasInstitutionProfile: hasInstitutionProfile,
-        requestedQuestionIds: requestedQuestionIds,
-        conversationId: conversationId,
-        hearingTurnId: hearingTurnId,
-        hearingTurnText: hearingTurnText,
-      );
+  }) => GuidedSession(
+    journeyId: journeyId,
+    purpose: purpose,
+    steps: steps,
+    answers: answers ?? this.answers,
+    currentQuestionId: currentQuestionId ?? this.currentQuestionId,
+    hasInstitutionProfile: hasInstitutionProfile,
+    requestedQuestionIds: requestedQuestionIds,
+    conversationId: conversationId,
+    hearingTurnId: hearingTurnId,
+    hearingTurnText: hearingTurnText,
+  );
 
   /// La intervención que se redacta y se envía: respuestas en el orden de
   /// los pasos.
@@ -179,13 +178,18 @@ class GuidedFlow {
     GuidedPurpose purpose = GuidedPurpose.standalone,
     bool hasInstitutionProfile = false,
     Iterable<String> requestedQuestionIds = const [],
+    Iterable<String>? onlySteps,
     String? conversationId,
     String? hearingTurnId,
     String? hearingTurnText,
   }) {
     final journey = bank.journey(journeyId);
     if (journey == null) {
-      throw ArgumentError.value(journeyId, 'journeyId', 'recorrido inexistente');
+      throw ArgumentError.value(
+        journeyId,
+        'journeyId',
+        'recorrido inexistente',
+      );
     }
     final stepIds = {for (final s in journey.steps) s.questionId};
     final requested = [
@@ -198,10 +202,18 @@ class GuidedFlow {
       for (final id in requested)
         if (!stepIds.contains(id)) JourneyStep(questionId: id),
     ];
+    // Un recorrido mínimo (ver [minimalPath]) conserva solo sus pasos, con
+    // las condiciones del recorrido: una hija obligatoria sigue apareciendo
+    // únicamente si se elige la opción que la abre.
+    final kept = onlySteps?.toSet();
     final session = GuidedSession(
       journeyId: journeyId,
       purpose: purpose,
-      steps: [...extra, ...journey.steps],
+      steps: [
+        ...extra,
+        for (final s in journey.steps)
+          if (kept == null || kept.contains(s.questionId)) s,
+      ],
       hasInstitutionProfile: hasInstitutionProfile,
       requestedQuestionIds: requested.toSet(),
       conversationId: conversationId,
@@ -211,6 +223,83 @@ class GuidedFlow {
     return session.copyWith(
       currentQuestionId: requested.firstOrNull ?? firstQuestion(session),
     );
+  }
+
+  /// Pasos mínimos de [journeyId] para responder [targets], en el orden en
+  /// que se preguntan.
+  ///
+  /// Solo se añade lo que el grafo exige:
+  ///   * las preguntas de las que depende un objetivo (sus condiciones),
+  ///     salvo que el objetivo esté en [presupposed] —el oyente lo preguntó
+  ///     tal cual y la pregunta ya presupone su respuesta—;
+  ///   * las hijas **obligatorias** de cualquier pregunta del camino
+  ///     («¿Quién escapó?» tras «Alguien escapó»), que solo se muestran si se
+  ///     elige la opción que las abre.
+  ///
+  /// Un objetivo fuera del recorrido se conserva (se antepone al empezar);
+  /// una pregunta inexistente o de derivación no entra.
+  List<String> minimalPath(
+    String journeyId,
+    Iterable<String> targets, {
+    Set<String> presupposed = const {},
+  }) {
+    final journey = bank.journey(journeyId);
+    if (journey == null) return const [];
+    final byId = {for (final s in journey.steps) s.questionId: s};
+    final path = <String>{};
+
+    void visit(String id, {required bool asked}) {
+      final question = bank.question(id);
+      if (question == null || question.isDerivation || path.contains(id)) {
+        return;
+      }
+      final step = byId[id];
+      if (step != null && !asked) {
+        for (final c in step.conditions) {
+          if (c.questionId != null) visit(c.questionId!, asked: false);
+        }
+      }
+      path.add(id);
+    }
+
+    for (final t in targets) {
+      visit(t, asked: presupposed.contains(t));
+    }
+    var changed = true;
+    while (changed) {
+      changed = false;
+      for (final s in journey.steps) {
+        if (!s.required || path.contains(s.questionId)) continue;
+        if (s.conditions.any((c) => path.contains(c.questionId))) {
+          path.add(s.questionId);
+          changed = true;
+        }
+      }
+    }
+    return [
+      for (final t in targets)
+        if (path.contains(t) && !byId.containsKey(t)) t,
+      for (final s in journey.steps)
+        if (path.contains(s.questionId)) s.questionId,
+    ];
+  }
+
+  /// Preguntas de las que depende [questionId] en [journeyId] (sus
+  /// condiciones, transitivamente). Vacío si no depende de nada.
+  Set<String> dependenciesOf(String journeyId, String questionId) {
+    final journey = bank.journey(journeyId);
+    if (journey == null) return const {};
+    final byId = {for (final s in journey.steps) s.questionId: s};
+    final out = <String>{};
+    void visit(String id) {
+      for (final c in byId[id]?.conditions ?? const <GuidedCondition>[]) {
+        final parent = c.questionId;
+        if (parent != null && out.add(parent)) visit(parent);
+      }
+    }
+
+    visit(questionId);
+    return out;
   }
 
   // ---- Alcanzabilidad ------------------------------------------------------
@@ -242,8 +331,10 @@ class GuidedFlow {
   }
 
   /// Pasos que tocan con las respuestas actuales, en orden.
-  List<JourneyStep> reachableSteps(GuidedSession session) =>
-      [for (final s in session.steps) if (isReachable(session, s)) s];
+  List<JourneyStep> reachableSteps(GuidedSession session) => [
+    for (final s in session.steps)
+      if (isReachable(session, s)) s,
+  ];
 
   String? firstQuestion(GuidedSession session) =>
       reachableSteps(session).firstOrNull?.questionId;
@@ -292,22 +383,30 @@ class GuidedFlow {
   }) {
     final question = bank.question(questionId);
     if (question == null) {
-      return SelectionOutcome._(session,
-          rejection: SelectionRejection.unknownQuestion);
+      return SelectionOutcome._(
+        session,
+        rejection: SelectionRejection.unknownQuestion,
+      );
     }
     final option = question.option(optionId);
     if (option == null) {
-      return SelectionOutcome._(session,
-          rejection: SelectionRejection.unknownOption);
+      return SelectionOutcome._(
+        session,
+        rejection: SelectionRejection.unknownOption,
+      );
     }
     final step = session.stepOf(questionId);
     if (step == null || !isReachable(session, step)) {
-      return SelectionOutcome._(session,
-          rejection: SelectionRejection.unreachable);
+      return SelectionOutcome._(
+        session,
+        rejection: SelectionRejection.unreachable,
+      );
     }
     if (!offeredOptions(session, questionId).any((o) => o.id == optionId)) {
-      return SelectionOutcome._(session,
-          rejection: SelectionRejection.notOffered);
+      return SelectionOutcome._(
+        session,
+        rejection: SelectionRejection.notOffered,
+      );
     }
 
     final previous = session.answers[questionId];
@@ -318,11 +417,17 @@ class GuidedFlow {
     // Valor del editor: el nuevo, validado; o el que ya tenía la opción.
     Map<String, Object?>? optionValues = previous?.values[optionId];
     if (values != null && option.editor != null) {
-      final check =
-          GuidedValues.check(option.editor!, values, range: option.range);
+      final check = GuidedValues.check(
+        option.editor!,
+        values,
+        range: option.range,
+      );
       if (!check.isValid) {
-        return SelectionOutcome._(session,
-            rejection: SelectionRejection.invalidValue, message: check.error);
+        return SelectionOutcome._(
+          session,
+          rejection: SelectionRejection.invalidValue,
+          message: check.error,
+        );
       }
       optionValues = {
         for (final e in check.values.entries)
@@ -332,8 +437,10 @@ class GuidedFlow {
     }
     if (option.requiresValue &&
         !GuidedValues.isComplete(option.editor!, optionValues)) {
-      return SelectionOutcome._(session,
-          rejection: SelectionRejection.needsValue);
+      return SelectionOutcome._(
+        session,
+        rejection: SelectionRejection.needsValue,
+      );
     }
 
     List<String> chosen;
@@ -347,19 +454,25 @@ class GuidedFlow {
         return option.group == null || other.group != option.group;
       }
 
-      chosen = [for (final id in previousOptions) if (keeps(id)) id];
+      chosen = [
+        for (final id in previousOptions)
+          if (keeps(id)) id,
+      ];
       if (!chosen.contains(optionId)) {
         if (chosen.length >= question.maxPicks) {
-          return SelectionOutcome._(session,
-              rejection: SelectionRejection.maxReached,
-              message: 'Puedes elegir hasta ${question.maxPicks}.');
+          return SelectionOutcome._(
+            session,
+            rejection: SelectionRejection.maxReached,
+            message: 'Puedes elegir hasta ${question.maxPicks}.',
+          );
         }
         chosen.add(optionId);
       }
     }
 
     final replaced = [
-      for (final id in previousOptions) if (!chosen.contains(id)) id,
+      for (final id in previousOptions)
+        if (!chosen.contains(id)) id,
     ];
     final newValues = <String, Map<String, Object?>>{};
     for (final id in chosen) {
@@ -380,7 +493,10 @@ class GuidedFlow {
   /// Quita [optionId] de [questionId]. Si no queda ninguna, la pregunta
   /// vuelve a no estar respondida (no «omitida», no «no»).
   SelectionOutcome deselect(
-      GuidedSession session, String questionId, String optionId) {
+    GuidedSession session,
+    String questionId,
+    String optionId,
+  ) {
     final previous = session.answers[questionId];
     if (previous == null || !previous.optionIds.contains(optionId)) {
       return SelectionOutcome._(session);
@@ -406,23 +522,28 @@ class GuidedFlow {
   }
 
   SelectionOutcome toggle(
-          GuidedSession session, String questionId, String optionId) =>
-      session.isSelected(questionId, optionId)
-          ? deselect(session, questionId, optionId)
-          : select(session, questionId, optionId);
+    GuidedSession session,
+    String questionId,
+    String optionId,
+  ) => session.isSelected(questionId, optionId)
+      ? deselect(session, questionId, optionId)
+      : select(session, questionId, optionId);
 
   /// «Omitir»: queda registrado que se saltó, sin redactar nada.
   SelectionOutcome omit(GuidedSession session, String questionId) {
     final step = session.stepOf(questionId);
     if (step == null || !isReachable(session, step)) {
-      return SelectionOutcome._(session,
-          rejection: SelectionRejection.unreachable);
+      return SelectionOutcome._(
+        session,
+        rejection: SelectionRejection.unreachable,
+      );
     }
     if (step.required) {
-      return SelectionOutcome._(session,
-          rejection: SelectionRejection.requiredQuestion,
-          message:
-              'Esta pregunta es necesaria para que la frase tenga sentido.');
+      return SelectionOutcome._(
+        session,
+        rejection: SelectionRejection.requiredQuestion,
+        message: 'Esta pregunta es necesaria para que la frase tenga sentido.',
+      );
     }
     return _commit(
       session,
@@ -441,8 +562,12 @@ class GuidedFlow {
     if (!session.answers.containsKey(questionId)) {
       return SelectionOutcome._(session);
     }
-    return _commit(session, questionId, null,
-        replaced: session.answers[questionId]!.optionIds);
+    return _commit(
+      session,
+      questionId,
+      null,
+      replaced: session.answers[questionId]!.optionIds,
+    );
   }
 
   GuidedAnswerState _stateOf(BankQuestion question, List<String> chosen) {
@@ -483,10 +608,11 @@ class GuidedFlow {
         }
         final a = entry.value;
         if (a.isOmitted) continue;
-        final offered = {
-          for (final o in offeredOptions(next, entry.key)) o.id,
-        };
-        final kept = [for (final id in a.optionIds) if (offered.contains(id)) id];
+        final offered = {for (final o in offeredOptions(next, entry.key)) o.id};
+        final kept = [
+          for (final id in a.optionIds)
+            if (offered.contains(id)) id,
+        ];
         if (kept.length != a.optionIds.length) {
           if (kept.isEmpty) {
             dangling.add(entry.key);
@@ -504,13 +630,18 @@ class GuidedFlow {
       }
       if (dangling.isEmpty && trimmed.isEmpty) break;
       pruned.addAll(dangling);
-      next = next.copyWith(answers: {
-        for (final e in next.answers.entries)
-          if (!dangling.contains(e.key)) e.key: trimmed[e.key] ?? e.value,
-      });
+      next = next.copyWith(
+        answers: {
+          for (final e in next.answers.entries)
+            if (!dangling.contains(e.key)) e.key: trimmed[e.key] ?? e.value,
+        },
+      );
     }
-    return SelectionOutcome._(next,
-        replacedOptionIds: replaced, prunedQuestionIds: pruned);
+    return SelectionOutcome._(
+      next,
+      replacedOptionIds: replaced,
+      prunedQuestionIds: pruned,
+    );
   }
 
   // ---- Navegación ----------------------------------------------------------
@@ -524,16 +655,18 @@ class GuidedFlow {
   /// Siguiente paso alcanzable después del actual, o `null` si es el último.
   String? nextQuestion(GuidedSession session) {
     final steps = reachableSteps(session);
-    final index =
-        steps.indexWhere((s) => s.questionId == session.currentQuestionId);
+    final index = steps.indexWhere(
+      (s) => s.questionId == session.currentQuestionId,
+    );
     if (index < 0) return steps.firstOrNull?.questionId;
     return index + 1 < steps.length ? steps[index + 1].questionId : null;
   }
 
   String? previousQuestion(GuidedSession session) {
     final steps = reachableSteps(session);
-    final index =
-        steps.indexWhere((s) => s.questionId == session.currentQuestionId);
+    final index = steps.indexWhere(
+      (s) => s.questionId == session.currentQuestionId,
+    );
     return index > 0 ? steps[index - 1].questionId : null;
   }
 
@@ -556,9 +689,9 @@ class GuidedFlow {
 
   /// Pasos obligatorios alcanzables que aún no tienen respuesta válida.
   List<String> missingRequired(GuidedSession session) => [
-        for (final s in reachableSteps(session))
-          if (isRequiredAndMissing(session, s.questionId)) s.questionId,
-      ];
+    for (final s in reachableSteps(session))
+      if (isRequiredAndMissing(session, s.questionId)) s.questionId,
+  ];
 
   /// Suficiencia: se puede terminar cuando hay algo que decir y nada
   /// obligatorio pendiente.
@@ -575,10 +708,10 @@ class GuidedFlow {
   /// Solo las que la opción declara como seña: un valor escrito (nombre,
   /// monto, teléfono) nunca se convierte en glosa.
   List<String> glossesOf(GuidedIntervention intervention) => [
-        for (final a in intervention.answers)
-          if (!a.isOmitted)
-            for (final id in a.optionIds)
-              if (bank.question(a.questionId)?.option(id) case final option?)
-                if (option.hasSign) ...option.glosses,
-      ];
+    for (final a in intervention.answers)
+      if (!a.isOmitted)
+        for (final id in a.optionIds)
+          if (bank.question(a.questionId)?.option(id) case final option?)
+            if (option.hasSign) ...option.glosses,
+  ];
 }

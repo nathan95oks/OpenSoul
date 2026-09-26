@@ -13,14 +13,17 @@ import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
-final questionBankProvider =
-    Provider<QuestionBank>((ref) => QuestionBank.generated());
+final questionBankProvider = Provider<QuestionBank>(
+  (ref) => QuestionBank.generated(),
+);
 
 final guidedComposerProvider = Provider<GuidedComposer>(
-    (ref) => GuidedComposer(ref.watch(questionBankProvider)));
+  (ref) => GuidedComposer(ref.watch(questionBankProvider)),
+);
 
-final guidedFlowRulesProvider =
-    Provider<GuidedFlow>((ref) => GuidedFlow(ref.watch(questionBankProvider)));
+final guidedFlowRulesProvider = Provider<GuidedFlow>(
+  (ref) => GuidedFlow(ref.watch(questionBankProvider)),
+);
 
 /// Pregunta del banco que corresponde a cada campo que el oyente puede haber
 /// preguntado, en orden de preferencia.
@@ -86,6 +89,15 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
     final pending = launch.purpose == CardsFlowPurpose.conversationReply
         ? ref.read(pendingReplyProvider)
         : null;
+    // Conversation ya decidió qué preguntas del grafo responden al oyente:
+    // se abre esa pregunta o el recorrido mínimo validado, no el contexto
+    // entero. Si la persona eligió otro contexto, vale lo de siempre.
+    final route = launch.route;
+    final routed =
+        route != null &&
+        route.opensQuestions &&
+        route.targetContextId == context.id &&
+        route.pathQuestionIds.isNotEmpty;
     return _rules.startJourney(
       context.id,
       purpose: switch (launch.purpose) {
@@ -94,9 +106,14 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
         CardsFlowPurpose.conversationReply => GuidedPurpose.reply,
       },
       hasInstitutionProfile: _hasInstitutionProfile(),
-      requestedQuestionIds: pending == null
-          ? const []
-          : _requestedQuestions(context, pending.question),
+      // Con ruta, lo que pidió el oyente ya está leído: no se reinterpreta
+      // su texto. La inferencia por texto queda para encargos sin ruta.
+      requestedQuestionIds: routed
+          ? route.presupposedQuestionIds
+          : (pending == null || route != null
+                ? const []
+                : _requestedQuestions(context, pending.question)),
+      onlySteps: routed ? route.pathQuestionIds : null,
       conversationId: launch.conversationId,
       hearingTurnId: launch.hearingTurnId,
       hearingTurnText: launch.hearingText,
@@ -117,10 +134,13 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
       for (final s in journey?.steps ?? const <JourneyStep>[]) s.questionId,
     };
     final out = <String>[];
-    for (final zone
-        in const ZoneInferenceEngine().zonesFor(context: context, text: text)) {
+    for (final zone in const ZoneInferenceEngine().zonesFor(
+      context: context,
+      text: text,
+    )) {
       final candidates = _questionsForZone[zone] ?? const <String>[];
-      final chosen = candidates.where(inJourney.contains).firstOrNull ??
+      final chosen =
+          candidates.where(inJourney.contains).firstOrNull ??
           candidates.firstOrNull;
       if (chosen != null && !out.contains(chosen)) out.add(chosen);
     }
@@ -138,14 +158,17 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
   SelectionOutcome _apply(SelectionOutcome outcome) {
     if (!outcome.accepted) return outcome;
     var session = outcome.session;
-    session = session.copyWith(currentQuestionId: _rules.currentOrFirst(session));
+    session = session.copyWith(
+      currentQuestionId: _rules.currentOrFirst(session),
+    );
     String? notice;
     if (outcome.prunedQuestionIds.isNotEmpty) {
       final names = [
         for (final id in outcome.prunedQuestionIds)
           '«${_bank.question(id)?.formulation ?? id}»',
       ];
-      notice = 'Se borraron respuestas que dependían de la anterior: '
+      notice =
+          'Se borraron respuestas que dependían de la anterior: '
           '${names.join(', ')}.';
     }
     state = GuidedFlowState(session: session, notice: notice);
@@ -154,7 +177,8 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
   }
 
   SelectionOutcome _require(
-      SelectionOutcome Function(GuidedSession session) change) {
+    SelectionOutcome Function(GuidedSession session) change,
+  ) {
     final session = state.session;
     if (session == null) {
       throw StateError('No hay recorrido guiado para el contexto actual.');
@@ -173,8 +197,10 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
 
   /// Confirmar en un editor: elige la opción con su valor, de una vez.
   SelectionOutcome commit(
-          String questionId, String optionId, Map<String, Object?> values) =>
-      _require((s) => _rules.select(s, questionId, optionId, values: values));
+    String questionId,
+    String optionId,
+    Map<String, Object?> values,
+  ) => _require((s) => _rules.select(s, questionId, optionId, values: values));
 
   SelectionOutcome deselect(String questionId, String optionId) =>
       _require((s) => _rules.deselect(s, questionId, optionId));
@@ -218,7 +244,9 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
 
   void _syncSentence() {
     final intervention = state.session?.toIntervention();
-    ref.read(sentenceProvider.notifier).setWords(
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(
           intervention == null ? const [] : _rules.glossesOf(intervention),
         );
   }
@@ -226,8 +254,8 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
 
 final guidedFlowProvider =
     NotifierProvider<GuidedFlowNotifier, GuidedFlowState>(
-  GuidedFlowNotifier.new,
-);
+      GuidedFlowNotifier.new,
+    );
 
 /// Texto de la vista previa: la redacción determinista del banco.
 ///

@@ -5,14 +5,12 @@ import 'package:go_router/go_router.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/app/navigation_provider.dart';
-import 'package:lsb_legal_app/core/di/injection.dart';
-import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/conversation_return.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
@@ -31,8 +29,10 @@ class DeclarationResultScreen extends ConsumerWidget {
     // Que la declaración sirva a una conversación es propiedad del
     // lanzamiento, no de la pestaña ni de la superficie: en modo A no se
     // ofrece enviarla al chat aunque haya un chat abierto detrás.
-    final servesConversation =
-        ref.watch(cardsFlowLaunchProvider).purpose.servesConversation;
+    final servesConversation = ref
+        .watch(cardsFlowLaunchProvider)
+        .purpose
+        .servesConversation;
     // Mientras el backend responde se muestra la misma redacción del banco
     // que ya se veía en la vista previa: nunca otra frase.
     final guidedText = ref.watch(guidedPreviewProvider);
@@ -47,11 +47,7 @@ class DeclarationResultScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: AppTheme.lightBg,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.lightText),
-          tooltip: 'Volver a editar',
-          onPressed: () => _backToEdit(context, ref),
-        ),
+        automaticallyImplyLeading: false,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
           child: Container(height: 1, color: AppTheme.lightBorder),
@@ -65,18 +61,6 @@ class DeclarationResultScreen extends ConsumerWidget {
             letterSpacing: -0.3,
           ),
         ),
-        actions: [
-          TextButton.icon(
-            onPressed: () => _cambiarContexto(context, ref),
-            icon: const Icon(Icons.swap_horiz_rounded, size: 20),
-            label: Text(
-              ref.watch(contextProvider)?.name ?? 'Contexto',
-              overflow: TextOverflow.ellipsis,
-            ),
-            style: TextButton.styleFrom(foregroundColor: _orange),
-          ),
-          const SizedBox(width: 4),
-        ],
       ),
       body: SafeArea(
         child: !hasContent
@@ -98,8 +82,10 @@ class DeclarationResultScreen extends ConsumerWidget {
                     const SizedBox(height: 4),
                     const Text(
                       'Tu declaración formal ha sido consolidada',
-                      style:
-                          TextStyle(fontSize: 14, color: AppTheme.lightTextSub),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.lightTextSub,
+                      ),
                     ),
                     const SizedBox(height: 18),
 
@@ -108,9 +94,7 @@ class DeclarationResultScreen extends ConsumerWidget {
                         const Expanded(
                           child: _Label('Texto formal para autoridades:'),
                         ),
-                        _OriginChip(
-                          bedrockUsed: result?.bedrockUsed ?? false,
-                        ),
+                        _OriginChip(bedrockUsed: result?.bedrockUsed ?? false),
                       ],
                     ),
                     const SizedBox(height: 8),
@@ -155,7 +139,8 @@ class DeclarationResultScreen extends ConsumerWidget {
                     // Reproductor de Audio TTS (Polly / Flutter TTS local)
                     _AudioControls(
                       playback: playback,
-                      hasRemoteAudio: result?.audioUrl != null &&
+                      hasRemoteAudio:
+                          result?.audioUrl != null &&
                           result!.audioUrl!.isNotEmpty,
                       onPlay: () {
                         if (playback == AudioPlaybackState.paused) {
@@ -173,7 +158,6 @@ class DeclarationResultScreen extends ConsumerWidget {
                           .pauseAudio(),
                     ),
                     const SizedBox(height: 20),
-
 
                     const SizedBox(height: 24),
 
@@ -238,18 +222,18 @@ class DeclarationResultScreen extends ConsumerWidget {
   }
 
   Future<void> _sendToConversation(
-      BuildContext context, WidgetRef ref, TranslationResult result) async {
-    final launch = ref.read(cardsFlowLaunchProvider);
-
+    BuildContext context,
+    WidgetRef ref,
+    TranslationResult result,
+  ) async {
     // El enlace es el que se congeló al abrir, no el último turno de ahora:
     // si entró otro mensaje mientras se armaba la respuesta, esta sigue
     // colgando de la pregunta que la persona sorda tenía delante.
-    final outcome = ref.read(conversationBridgeProvider).submitDeclaration(
-          result: result,
-          glosses: ref.read(sentenceProvider),
-          contextId: ref.read(contextProvider)?.id,
-          replyToId: launch.hearingTurnId,
-          conversationId: launch.conversationId,
+    final outcome = await ref
+        .read(conversationReturnProvider)
+        .deliver(
+          result,
+          intervention: ref.read(guidedFlowProvider.notifier).intervention,
         );
 
     if (outcome == SubmitOutcome.staleReply) {
@@ -261,98 +245,37 @@ class DeclarationResultScreen extends ConsumerWidget {
         ..showSnackBar(
           const SnackBar(
             content: Text(
-                'El mensaje al que respondías ya no está en el chat. '
-                'Tu declaración no se envió: vuelve al chat y responde de nuevo.'),
+              'El mensaje al que respondías ya no está en el chat. '
+              'Tu declaración no se envió: vuelve al chat y responde de nuevo.',
+            ),
             duration: Duration(seconds: 5),
             behavior: SnackBarBehavior.floating,
           ),
         );
-      return;
     }
-
-    final session = ref.read(cardsFlowSessionProvider);
-    ref.read(selectedTabProvider.notifier).select(AppTabId.conversation);
-    ref.read(resultVisibleProvider.notifier).hide();
-    await session.reset();
-  }
-
-  /// Cambia el contexto sin salir de la declaración.
-  ///
-  /// Se confirma antes porque no es reversible: el contexto determina las
-  /// zonas y las tarjetas disponibles, así que lo respondido bajo el anterior
-  /// deja de tener sentido y el flujo arranca limpio.
-  Future<void> _cambiarContexto(BuildContext context, WidgetRef ref) async {
-    final actual = ref.read(contextProvider);
-
-    final elegido = await showModalBottomSheet<SemanticContext>(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (sheetContext) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 4),
-              child: Text(
-                'Cambiar de contexto',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
-              child: Text(
-                'Se empezará una declaración nueva.',
-                style: TextStyle(fontSize: 13, color: AppTheme.lightTextSub),
-              ),
-            ),
-            Flexible(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  for (final c in allSelectableContexts)
-                    ListTile(
-                      leading: Text(c.emoji,
-                          style: const TextStyle(fontSize: 22)),
-                      title: Text(c.name),
-                      subtitle: Text(
-                        c.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      selected: c.id == actual?.id,
-                      selectedTileColor:
-                          _orange.withValues(alpha: 0.08),
-                      trailing: c.id == actual?.id
-                          ? const Icon(Icons.check_rounded, color: _orange)
-                          : null,
-                      onTap: () => Navigator.of(sheetContext).pop(c),
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    if (elegido == null || elegido.id == actual?.id) return;
-
-    ref.read(translationControllerProvider.notifier).pauseAudio();
-    await ref.read(cardsFlowSessionProvider).reset();
-    ref.read(contextProvider.notifier).setContext(elegido);
-    ref.read(resultVisibleProvider.notifier).hide();
   }
 
   void _backToEdit(BuildContext context, WidgetRef ref) {
     ref.read(translationControllerProvider.notifier).pauseAudio();
-    // El resultado es un paso de la pestana, no una ruta apilada: se vuelve
-    // ocultandolo, y el armado de la frase sigue intacto detras.
+    // El resultado es un paso de la pestaña, no una ruta apilada: se vuelve
+    // ocultándolo, y el armado de la frase sigue intacto detrás para permitir
+    // cambiar y editar las glosas y respuestas usadas.
     ref.read(resultVisibleProvider.notifier).hide();
+    if (context.canPop()) {
+      context.pop();
+    }
   }
 
   Future<void> _newDeclaration(BuildContext context, WidgetRef ref) async {
-    await ref.read(cardsFlowSessionProvider).reset(keepContext: true);
+    ref.read(translationControllerProvider.notifier).pauseAudio();
+    // Limpia todo el flujo y contexto para redirigir a la selección de contexto
+    // (trámites, consultas, demandas o preguntas).
+    await ref.read(cardsFlowSessionProvider).reset(keepContext: false);
+    ref
+        .read(cardsFlowLaunchProvider.notifier)
+        .start(const CardsFlowLaunch.standalone());
+    ref.read(resultVisibleProvider.notifier).hide();
+    ref.read(selectedTabProvider.notifier).select(AppTabId.cards);
     if (!context.mounted) return;
     if (context.canPop()) {
       context.pop();
@@ -523,13 +446,17 @@ class _FullWidthBtn extends StatelessWidget {
     final enabled = onTap != null;
     final fg = filled
         ? Colors.white
-        : (enabled ? AppTheme.lightText : AppTheme.lightTextSub.withValues(alpha: 0.5));
+        : (enabled
+              ? AppTheme.lightText
+              : AppTheme.lightTextSub.withValues(alpha: 0.5));
     final bg = filled
         ? (enabled ? _orange : AppTheme.lightBorder)
         : AppTheme.lightSurface;
     final borderColor = filled
         ? bg
-        : (enabled ? AppTheme.lightBorder : AppTheme.lightBorder.withValues(alpha: 0.5));
+        : (enabled
+              ? AppTheme.lightBorder
+              : AppTheme.lightBorder.withValues(alpha: 0.5));
 
     return SizedBox(
       height: 52,
