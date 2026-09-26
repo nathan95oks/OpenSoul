@@ -47,6 +47,7 @@ class _DeclRepo implements TranslationRepository {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   }) async =>
       TranslationResult(baseSentence: '...', generatedText: '...');
 }
@@ -76,23 +77,22 @@ Future<UsageSession> _sesionCargada(ProviderContainer c) async {
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  group('elegir el modo al entrar', () {
-    test('sin configuración guardada hay que elegir', () async {
+  group('el modo al entrar', () {
+    test('sin configuración guardada se usa el modo personal', () async {
       final c = _app();
       final estado = await _sesionCargada(c);
 
-      expect(estado.needsSelection, isTrue);
-      expect(estado.mode, isNull);
+      expect(estado.loading, isFalse);
+      expect(estado.isPersonal, isTrue);
     });
 
-    test('con modo guardado no se vuelve a preguntar', () async {
+    test('se respeta el modo guardado', () async {
       SharedPreferences.setMockInitialValues({
         'device_config_v1': jsonEncode({'schemaVersion': 1, 'mode': 'counter'}),
       });
       final c = _app();
       final estado = await _sesionCargada(c);
 
-      expect(estado.needsSelection, isFalse);
       expect(estado.isCounter, isTrue);
     });
 
@@ -123,21 +123,6 @@ void main() {
       expect(await repo.loadContent(), isNull,
           reason: 'Lo declarado en una atención no sigue en el uso personal.');
       expect((await repo.loadConfig()).mode, UsageMode.personal);
-    });
-
-    test('volver al selector no borra nada todavía', () async {
-      final c = _app();
-      await _sesionCargada(c);
-      final repo = c.read(sessionRepositoryProvider);
-
-      await c.read(usageSessionProvider.notifier).choose(UsageMode.personal);
-      await repo.saveContent(const SessionContent(contextId: 'denuncia_robo'));
-
-      c.read(usageSessionProvider.notifier).reopenSelection();
-
-      expect(c.read(usageSessionProvider).needsSelection, isTrue);
-      expect(await repo.loadContent(), isNotNull,
-          reason: 'Solo se descarta al elegir un modo distinto.');
     });
   });
 

@@ -1,12 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lsb_legal_app/app/screens/main_navigation_screen.dart';
-import 'package:lsb_legal_app/app/screens/mode_selection_screen.dart';
 import 'package:lsb_legal_app/app/screens/splash_screen.dart';
 import 'package:lsb_legal_app/app/app.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/screens/conversation_screen.dart';
@@ -34,20 +31,20 @@ void main() {
     }
   }
 
-  testWidgets('sin modo elegido, la app pide elegirlo', (tester) async {
+  testWidgets('sin modo guardado, del splash se entra directo a la navegación',
+      (tester) async {
     SharedPreferences.setMockInitialValues({});
 
     await tester.pumpWidget(const ProviderScope(child: AppScope()));
     expect(find.byType(SplashScreen), findsOneWidget,
         reason: 'La app arranca en el splash.');
     await tester.pump(const Duration(seconds: 3));
-    await tester.pumpAndSettle();
+    for (var i = 0; i < 6; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
 
-    expect(find.byType(ModeSelectionScreen), findsOneWidget);
-    expect(find.byType(MainNavigationScreen), findsNothing,
-        reason: 'No se monta la navegación antes de decidir la sesión.');
-    expect(find.byType(ConversationScreen), findsNothing,
-        reason: 'Ninguna conversación puede verse antes de elegir el modo.');
+    expect(find.byType(MainNavigationScreen), findsOneWidget,
+        reason: 'Ya no hay pantalla para elegir entre personal y ventanilla.');
   });
 
   testWidgets('con modo ya elegido, se entra directo a la navegación',
@@ -62,25 +59,10 @@ void main() {
 
     await arrancar(tester);
 
-    expect(find.byType(ModeSelectionScreen), findsNothing);
     expect(find.byType(MainNavigationScreen), findsOneWidget);
     // La pestaña por defecto es la Conversación, en el centro de la barra.
     // (IndexedStack es lazy: las demás se construyen al visitarlas.)
     expect(find.byType(ConversationScreen), findsOneWidget);
-  });
-
-  testWidgets('elegir uso personal lleva a la navegación', (tester) async {
-    SharedPreferences.setMockInitialValues({});
-
-    await arrancar(tester);
-    expect(find.byType(ModeSelectionScreen), findsOneWidget);
-
-    await tester.tap(find.byKey(const Key('modo_personal')));
-    for (var i = 0; i < 6; i++) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
-
-    expect(find.byType(MainNavigationScreen), findsOneWidget);
   });
 
   testWidgets('la barra inferior tiene Conversación en el centro',
