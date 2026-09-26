@@ -44,6 +44,19 @@ void main() {
     expect(fuera, isEmpty);
   });
 
+  test('allFormulationGlossesExistInCorpusV4: secuencias del grafo que carga la app',
+      () {
+    final grafo = jsonDecode(File('assets/dialogue/dialogue_graph.json')
+        .readAsStringSync()) as Map<String, dynamic>;
+    final fuera = [
+      for (final n in grafo['nodes'] as List)
+        for (final g in ((n as Map<String, dynamic>)['formulationGlosses'] as List? ??
+            const []))
+          if (!corpus.contains(g)) '${n['id']}: $g',
+    ];
+    expect(fuera, isEmpty);
+  });
+
   test('allLsbGlossesExistInCorpusV4: tarjetas de los recorridos visibles', () {
     // Lo que puede aparecer en pantalla: las opciones de cada paso de los
     // ocho recorridos del módulo.
