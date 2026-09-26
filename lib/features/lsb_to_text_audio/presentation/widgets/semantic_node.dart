@@ -34,9 +34,10 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
-    _scale = Tween<double>(begin: 1.0, end: 0.95).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
-    );
+    _scale = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -73,9 +74,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
             color: selected ? null : AppTheme.lightSurface,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: selected
-                  ? const Color(0xFFC084FC)
-                  : AppTheme.lightBorder,
+              color: selected ? const Color(0xFFC084FC) : AppTheme.lightBorder,
               width: selected ? 2.2 : 1.5,
             ),
             boxShadow: selected
@@ -118,14 +117,17 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                           selected
                               ? Icons.check_circle_rounded
                               : (kLsbIconMap[widget.card.semanticIcon] ??
-                                  Icons.circle_outlined),
+                                    Icons.circle_outlined),
                           size: 20,
                           color: colorContenido,
                         ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: _etiqueta(
-                              colorContenido, TextAlign.start, selected),
+                            colorContenido,
+                            TextAlign.start,
+                            selected,
+                          ),
                         ),
                       ],
                     ),
@@ -154,18 +156,16 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
   }
 
   Widget _etiqueta(Color color, TextAlign alineacion, bool selected) => Text(
-        widget.card.displayText.replaceAll('_', ' '),
-        textAlign: alineacion,
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-          color: color,
-          letterSpacing: 0.2,
-          height: 1.2,
-        ),
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      );
+    widget.card.displayText.replaceAll('_', ' '),
+    textAlign: alineacion,
+    style: TextStyle(
+      fontSize: 14,
+      fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+      color: color,
+      letterSpacing: 0.2,
+      height: 1.2,
+    ),
+  );
 }
 
 class AnswerNode extends StatelessWidget {
@@ -214,10 +214,7 @@ class QuestionNode extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppTheme.lightSubtle.withValues(alpha: dimmed ? 0.5 : 1.0),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppTheme.lightBorder,
-          width: 1.5,
-        ),
+        border: Border.all(color: AppTheme.lightBorder, width: 1.5),
       ),
       child: Text(
         question,

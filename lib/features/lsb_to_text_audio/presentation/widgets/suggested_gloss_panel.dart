@@ -62,10 +62,11 @@ class SuggestedGlossPanel extends ConsumerWidget {
     final summary = option.editor == null
         ? ''
         : GuidedValues.summary(option.editor!, values);
+    final visible = option.displayFormulation;
     return LsbCard(
       id: option.id,
       gloss: option.hasSign ? option.glosses.first : '',
-      displayText: summary.isEmpty ? option.label : '${option.label}: $summary',
+      displayText: summary.isEmpty ? visible : '$visible: $summary',
       iconUrl: '',
       imageFrames: base?.imageFrames ?? 1,
       categoryId: base?.categoryId ?? '',
@@ -75,7 +76,8 @@ class SuggestedGlossPanel extends ConsumerWidget {
       suggestedNextCardIds: const [],
       isFrequent: false,
       isEmergency: base?.isEmergency ?? false,
-      semanticIcon: base?.semanticIcon ??
+      semanticIcon:
+          base?.semanticIcon ??
           switch (option.editor) {
             'monto' => 'payments',
             null => 'help',
@@ -119,7 +121,9 @@ Future<void> elegirOpcionGuiada(
   final result = await showGuidedValueEditor(
     context,
     option: option,
-    question: ref.read(guidedFlowRulesProvider).formulationOf(session, questionId),
+    question: ref
+        .read(guidedFlowRulesProvider)
+        .formulationOf(session, questionId),
     initial: session.valuesOf(questionId, option.id),
     canRemove: selected || option.editorOptional,
   );
@@ -137,11 +141,13 @@ Future<void> elegirOpcionGuiada(
 void _informar(BuildContext context, SelectionOutcome outcome) {
   if (!context.mounted) return;
   if (!outcome.accepted) {
-    final mensaje = outcome.message ??
+    final mensaje =
+        outcome.message ??
         switch (outcome.rejection!) {
           SelectionRejection.needsValue =>
             'Escribe el dato para elegir esta respuesta.',
-          SelectionRejection.maxReached => 'Ya elegiste el máximo de respuestas.',
+          SelectionRejection.maxReached =>
+            'Ya elegiste el máximo de respuestas.',
           _ => 'Esta respuesta no corresponde a la pregunta actual.',
         };
     AppToastManager.showInfo(context, mensaje);

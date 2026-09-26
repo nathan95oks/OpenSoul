@@ -39,6 +39,20 @@ EDITOR_KEYS = {
 ESTADOS = ("afirmado", "negado", "desconocido", "omitido")
 PROPOSITOS = ("standalone", "initiative", "reply")
 
+# Versión del contrato semántico que recibe el realizador lingüístico. No es
+# la versión del banco ni la de la caché: permite evolucionar esta forma sin
+# volver ambiguas las respuestas ya almacenadas.
+SEMANTIC_FRAME_VERSION = 1
+
+# Relaciones que ya están resueltas por el grafo aunque el banco histórico
+# todavía conserve una frase de fallback. Son IDs de dominio, nunca texto para
+# mostrar ni instrucciones de redacción.
+_ACTION_ROLES = {
+    "ROBAR": {"actorRole": "unknownPerson", "patientRole": "citizen"},
+    "DAÑAR": {"actorRole": "unknownPerson", "patientRole": "citizen"},
+    "PERDER": {"experiencerRole": "citizen"},
+}
+
 
 def load_bank(path: str = BANK_PATH) -> dict:
     with open(path, encoding="utf-8") as f:
@@ -77,6 +91,142 @@ class Composer:
     # ------------------------------------------------------------------
     def compose(self, guided: dict) -> str:
         return self.compose_traced(guided)[0]
+
+    def semantic_frame(self, guided: dict, context: str = "",
+                       institution_context: str = "",
+                       speech_act: str = "") -> dict:
+        """Significado canónico de una intervención, sin frases españolas.
+
+        El banco decide cada hecho, rol, slot, negación y literal. La lista de
+        glosas conserva exactamente el orden de las respuestas y opciones que
+        envió el cliente; no se ordena para la caché ni para Bedrock.
+
+        Las plantillas ``frase`` del banco no entran en esta estructura: solo
+        las consume :meth:`compose_traced` como fallback determinista.
+        """
+        facts = []
+        roles = []
+        slots = []
+        negations = []
+        unknowns = []
+        literals = []
+        lsb_sequence = []
+
+        for answer in guided.get("respuestas") or []:
+            if answer.get("estado") == "omitido":
+                continue
+            qid = answer.get("pregunta")
+            question = self.questions.get(qid)
+            if question is None:
+                continue
+            by_id = {o["id"]: o for o in question.get("opciones", [])}
+            for option_id in answer.get("opciones") or []:
+                option = by_id.get(option_id)
+                if option is None:
+                    continue
+                fact_id = f"{qid}#{option_id}"
+                glosses = list(option.get("glosas") or [])
+                if glosses and not option.get("literal") and not option.get("sinSena"):
+                    lsb_sequence.extend(glosses)
+
+                state = answer.get("estado") or option.get("estado") or "afirmado"
+                effect = {}
+                action = option.get("accion")
+                if not action and question.get("campo") == "accion" and glosses:
+                    action = glosses[0]
+                if action:
+                    effect["action"] = action
+                if option.get("actor"):
+                    effect["actorRole"] = option["actor"]
+                if option.get("tipoPerdida"):
+                    effect["lossType"] = option["tipoPerdida"]
+                if option.get("certeza"):
+                    effect["certainty"] = option["certeza"]
+
+                fact = {
+                    "id": fact_id,
+                    "questionId": qid,
+                    "optionId": option_id,
+                    "state": state,
+                    "domain": question.get("dominio") or "",
+                    "entity": question.get("entidad") or "",
+                    "field": question.get("campo") or "",
+                    "concepts": glosses,
+                }
+                if effect:
+                    fact["effect"] = effect
+                parent = answer.get("padre")
+                if parent:
+                    fact["parentQuestionId"] = parent
+                facts.append(fact)
+
+                role = {
+                    "factId": fact_id,
+                    "entity": question.get("entidad") or "",
+                }
+                role.update(_ACTION_ROLES.get(action, {}))
+                if option.get("actor"):
+                    role["actorRole"] = option["actor"]
+                if len(role) > 2:
+                    roles.append(role)
+
+                option_values = ((answer.get("valores") or {}).get(option_id)
+                                 or {})
+                slot = {
+                    "factId": fact_id,
+                    "field": question.get("campo") or "",
+                    "types": list(question.get("campos") or []),
+                    "valueId": option_id,
+                }
+                if option_values:
+                    slot["literalKeys"] = list(option_values.keys())
+                slots.append(slot)
+
+                if state == "negado":
+                    negations.append({"factId": fact_id, "scope": "fact"})
+                elif state == "desconocido":
+                    unknowns.append({"factId": fact_id, "scope": "fact"})
+
+                for key, value in option_values.items():
+                    literals.append({
+                        "factId": fact_id,
+                        "key": key,
+                        "value": value,
+                    })
+
+                mention = answer.get("mencion")
+                if isinstance(mention, dict):
+                    for key, value in mention.items():
+                        if key == "glosas":
+                            continue
+                        literals.append({
+                            "factId": fact_id,
+                            "key": f"mention.{key}",
+                            "value": value,
+                        })
+
+        intent = {
+            "journeyId": guided.get("recorrido") or context or "general",
+            "purpose": guided.get("proposito") or "standalone",
+        }
+        if speech_act:
+            intent["speechAct"] = speech_act
+
+        frame = {
+            "version": SEMANTIC_FRAME_VERSION,
+            "lsbSequence": lsb_sequence,
+            "intent": intent,
+            "facts": facts,
+            "roles": roles,
+            "slots": slots,
+            "negations": negations,
+            "unknowns": unknowns,
+            "literals": literals,
+            "context": context or guided.get("recorrido") or "general",
+        }
+        if institution_context:
+            frame["institutionContext"] = institution_context
+        return frame
 
     def confirmed_facts(self, guided: dict) -> set:
         """Opciones elegidas (no omitidas) que redactan algo, `'Q.ID#opcion'`.
