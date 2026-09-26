@@ -148,8 +148,12 @@ class BankQuestion {
   final int? maximum;
   final List<BankOption> options;
 
-  /// Glosas que solo **formulan** la pregunta. Nunca son respuestas.
-  final List<String> formulationGlosses;
+  /// Glosas que no se ofrecen como respuesta a esta pregunta (`noOfrecer`):
+  /// las que la formulan y las que el banco descarta por otro motivo.
+  final List<String> notOfferedGlosses;
+
+  /// Cómo se formula la pregunta en LSB (`formulacionLsb`).
+  final LsbFormulation lsb;
 
   /// Plantilla de la frase suelta de una pregunta en modo `fragmento`.
   final String? looseSentence;
@@ -161,7 +165,8 @@ class BankQuestion {
     required this.options,
     this.mode = 'frase',
     this.maximum,
-    this.formulationGlosses = const [],
+    this.notOfferedGlosses = const [],
+    this.lsb = LsbFormulation.none,
     this.looseSentence,
   });
 
@@ -175,7 +180,8 @@ class BankQuestion {
           for (final o in (json['opciones'] as List<dynamic>? ?? const []))
             BankOption.fromJson(o as Map<String, dynamic>),
         ],
-        formulationGlosses: _strings(json['noOfrecer']),
+        notOfferedGlosses: _strings(json['noOfrecer']),
+        lsb: LsbFormulation.fromJson(json['formulacionLsb']),
         looseSentence: json['fraseSuelta'] as String?,
       );
 
@@ -292,6 +298,143 @@ class BankOption {
   /// Excluye a las demás opciones de la misma pregunta: «No sé», «Ninguno»,
   /// «No recuerdo» y cualquier respuesta negativa o desconocida.
   bool get isExclusive => isExit || state != GuidedAnswerState.affirmed;
+}
+
+/// Formulación LSB de una pregunta del banco.
+///
+/// `glosa válida ≠ oración LSB validada`: la secuencia sale del corpus v4 (o
+/// de sus patrones) y es provisional hasta que la valide una persona señante;
+/// [status] lo dice. Los tokens son glosas del catálogo, dactilología
+/// `d(SIGLA)` o el mecanismo numérico `NÚM(...)`. Lo que la secuencia lineal
+/// no representa (marcas no manuales, dirección) viaja como metadata.
+class LsbFormulation {
+  final List<String> glosses;
+  final String status;
+  final String? type;
+  final String? interrogative;
+  final String? nonManual;
+  final List<List<String>> compounds;
+  final Map<int, List<String>> alternatives;
+  final String? referent;
+  final List<String> gaps;
+
+  const LsbFormulation({
+    this.glosses = const [],
+    this.status = 'GRAMMAR_PENDING',
+    this.type,
+    this.interrogative,
+    this.nonManual,
+    this.compounds = const [],
+    this.alternatives = const {},
+    this.referent,
+    this.gaps = const [],
+  });
+
+  static const none = LsbFormulation();
+
+  static const numberToken = 'NÚM(...)';
+
+  factory LsbFormulation.fromJson(dynamic raw) {
+    if (raw is! Map) return none;
+    final json = Map<String, dynamic>.from(raw);
+    final alternativas = json['alternativas'];
+    return LsbFormulation(
+      glosses: _strings(json['glosas']),
+      status: (json['estado'] ?? 'GRAMMAR_PENDING').toString(),
+      type: json['tipo'] as String?,
+      interrogative: json['interrogativo'] as String?,
+      nonManual: json['noManuales'] as String?,
+      compounds: [
+        for (final c in (json['compuestos'] as List<dynamic>? ?? const []))
+          _strings(c),
+      ],
+      alternatives: alternativas is Map
+          ? {
+              for (final e in alternativas.entries)
+                int.parse(e.key.toString()): _strings(e.value),
+            }
+          : const {},
+      referent: json['referente'] as String?,
+      gaps: _strings(json['huecos']),
+    );
+  }
+
+  bool get isEmpty => glosses.isEmpty;
+
+  bool get isValidated => status == 'GRAMMAR_VALIDATED';
+
+  static bool isDactylology(String token) => token.startsWith('d(');
+
+  /// Piezas para mostrar: un compuesto va en una sola pieza, una glosa con
+  /// alternativas muestra las dos (ÉL/ELLA) y un interrogativo lleva ¿?.
+  List<LsbFormulationSegment> get segments {
+    final out = <LsbFormulationSegment>[];
+    var i = 0;
+    while (i < glosses.length) {
+      final compound = compounds.firstWhere(
+        (c) => c.isNotEmpty &&
+            i + c.length <= glosses.length &&
+            _sameList(glosses.sublist(i, i + c.length), c),
+        orElse: () => const [],
+      );
+      if (compound.isNotEmpty) {
+        out.add(LsbFormulationSegment(
+          label: compound.join('+'),
+          glosses: compound,
+          kind: LsbSegmentKind.compound,
+        ));
+        i += compound.length;
+        continue;
+      }
+      final token = glosses[i];
+      if (isDactylology(token)) {
+        out.add(LsbFormulationSegment(
+            label: token, glosses: const [], kind: LsbSegmentKind.dactylology));
+      } else if (token == numberToken) {
+        out.add(const LsbFormulationSegment(
+            label: 'NÚM', glosses: [], kind: LsbSegmentKind.number));
+      } else {
+        final alts = alternatives[i];
+        final label = alts != null ? alts.join('/') : token;
+        out.add(LsbFormulationSegment(
+          label: token == interrogative ||
+                  const {'QUÉ', 'QUIÉN', 'DÓNDE', 'CUÁNDO', 'CUÁL', 'CÓMO', 'CUÁNTOS'}
+                      .contains(token)
+              ? '¿$label?'
+              : label,
+          glosses: [token],
+          kind: LsbSegmentKind.sign,
+        ));
+      }
+      i++;
+    }
+    return out;
+  }
+}
+
+enum LsbSegmentKind { sign, compound, dactylology, number }
+
+class LsbFormulationSegment {
+  final String label;
+
+  /// Glosas del catálogo que componen la pieza (vacío en dactilología y
+  /// número, que no son señas del catálogo).
+  final List<String> glosses;
+  final LsbSegmentKind kind;
+
+  const LsbFormulationSegment({
+    required this.label,
+    required this.glosses,
+    required this.kind,
+  });
+}
+
+bool _sameList(List<String> a, List<String> b) {
+  if (a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
 }
 
 List<String> _strings(dynamic raw) {

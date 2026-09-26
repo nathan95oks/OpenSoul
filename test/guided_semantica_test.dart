@@ -209,7 +209,7 @@ void main() {
       for (final q in bank.allQuestions) {
         for (final o in q.options) {
           if (o.isExit || o.glosses.isEmpty) continue;
-          expect(q.formulationGlosses, isNot(contains(o.glosses.first)),
+          expect(q.notOfferedGlosses, isNot(contains(o.glosses.first)),
               reason: '${q.id}/${o.id}');
         }
       }

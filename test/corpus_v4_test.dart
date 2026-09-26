@@ -22,6 +22,24 @@ void main() {
       (e as Map<String, dynamic>)['gloss'] as String,
   };
   final bank = QuestionBank.generated();
+  final letras = {
+    for (final g in corpus)
+      if (g.length == 1 && int.tryParse(g) == null) g,
+  };
+
+  /// Pieza de una formulación LSB: glosa v4, dactilología d(SIGLA) con
+  /// letras del alfabeto v4, o el mecanismo numérico NÚM(...) del corpus.
+  bool piezaValida(String t) {
+    if (corpus.contains(t) || t == LsbFormulation.numberToken) return true;
+    final m = RegExp(r'^d\((.+)\)$').firstMatch(t);
+    if (m == null) return false;
+    const con = 'ÁÉÍÓÚÜ';
+    const sin = 'AEIOUU';
+    return m.group(1)!.toUpperCase().split('').every((c) {
+      final i = con.indexOf(c);
+      return letras.contains(i >= 0 ? sin[i] : c);
+    });
+  }
 
   test('allLsbGlossesExistInCorpusV4: respuestas del banco', () {
     final fuera = <String>[];
@@ -38,7 +56,7 @@ void main() {
   test('allLsbGlossesExistInCorpusV4: glosas que formulan preguntas', () {
     final fuera = [
       for (final q in bank.allQuestions)
-        for (final g in q.formulationGlosses)
+        for (final g in q.notOfferedGlosses)
           if (!corpus.contains(g)) '${q.id}: $g',
     ];
     expect(fuera, isEmpty);
@@ -52,9 +70,20 @@ void main() {
       for (final n in grafo['nodes'] as List)
         for (final g in ((n as Map<String, dynamic>)['formulationGlosses'] as List? ??
             const []))
-          if (!corpus.contains(g)) '${n['id']}: $g',
+          if (!piezaValida(g as String)) '${n['id']}: $g',
     ];
     expect(fuera, isEmpty);
+  });
+
+  test('allFormulationGlossesExistInCorpusV4: formulación que muestra la app', () {
+    final fuera = [
+      for (final q in bank.allQuestions)
+        for (final g in q.lsb.glosses)
+          if (!piezaValida(g)) '${q.id}: $g',
+    ];
+    expect(fuera, isEmpty);
+    expect(piezaValida('d(FISCAL1)'), isFalse);
+    expect(piezaValida('DINERO'), isFalse);
   });
 
   test('allLsbGlossesExistInCorpusV4: tarjetas de los recorridos visibles', () {

@@ -144,7 +144,9 @@
    "dominio": "intervencion_propia",
    "formulacion": "¿Qué quiere saber cuándo?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PENDING",
+    "secuencia": [],
+    "motivo": "pregunta de interfaz («¿qué quiere saber cuándo?») sobre otra pregunta; el corpus no documenta cómo preguntar por el tipo de pregunta"
    },
    "acto": "intervencion",
    "entidad": "PreguntaPropia",
@@ -198,7 +200,9 @@
    "dominio": "intervencion_propia",
    "formulacion": "¿Qué quiere saber cuánto?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PENDING",
+    "secuencia": [],
+    "motivo": "pregunta de interfaz («¿qué quiere saber cuánto?») sobre otra pregunta; el corpus no documenta cómo preguntar por el tipo de pregunta"
    },
    "acto": "intervencion",
    "entidad": "PreguntaPropia",
@@ -240,7 +244,15 @@
    "dominio": "intervencion_propia",
    "formulacion": "¿Dónde queda…?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "DÓNDE"
+    ],
+    "tipo": "qu",
+    "interrogativo": "DÓNDE",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: la opción completa la pregunta (X · ¿DÓNDE?); el enunciado es ¿DÓNDE?",
+    "evidencia": "corpus §6 «¿Dónde ocurrió?» → ¿DÓNDE?; «¿Dónde está la Fiscalía?» → d(FISCALÍA) · ¿DÓNDE? (§7)"
    },
    "acto": "intervencion",
    "entidad": "PreguntaPropia",
@@ -362,7 +374,17 @@
    "dominio": "intervencion_propia",
    "formulacion": "¿Qué quieres preguntar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "SABER",
+     "QUÉ",
+     "QUERER"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R17: PREGUNTAR no existe en v4; el corpus expresa consultar como SABER · QUERER. interrogativo entre verbo y modal: TRAER · ¿QUÉ? · AÚN · NECESITAR (§7)",
+    "evidencia": "cláusula + SABER + modal: INVESTIGACIÓN · CONTINUAR · SABER · QUERER (§8)"
    },
    "acto": "intervencion",
    "entidad": "PreguntaPropia",
@@ -436,7 +458,17 @@
    "dominio": "intervencion_propia",
    "formulacion": "¿Con quién quiere hablar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HABLAR",
+     "QUIÉN",
+     "QUERER"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: interrogativo entre verbo y modal: TRAER · ¿QUÉ? · AÚN · NECESITAR (§7); QUERER al final en 12 de 12 filas",
+    "evidencia": "§7 TRAER · ¿QUÉ? · AÚN · NECESITAR; §6 POLICÍA · HABLAR · QUERER"
    },
    "acto": "intervencion",
    "entidad": "PreguntaPropia",
@@ -527,7 +559,23 @@
    "dominio": "intervencion_propia",
    "formulacion": "¿Sobre qué quiere preguntar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "SABER",
+     "QUÉ",
+     "QUERER"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "TEMA",
+      "posicion": 1
+     }
+    ],
+    "regla": "R17: PREGUNTAR y TEMA no existen en v4; sin TEMA la pregunta no se distingue de I.PREG.ELEGIR",
+    "evidencia": "cláusula + SABER + modal: INVESTIGACIÓN · CONTINUAR · SABER · QUERER (§8)"
    },
    "acto": "intervencion",
    "entidad": "PreguntaPropia",
@@ -641,7 +689,16 @@
    "dominio": "acceso",
    "formulacion": "¿Comprende lo que le estoy explicando?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TÚ",
+     "COMPRENDER",
+     "EXPLICAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Comprende lo que le estoy explicando?» → TÚ · COMPRENDER · EXPLICAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Conversacion",
@@ -698,7 +755,16 @@
    "dominio": "acceso",
    "formulacion": "¿Prefiere que le escriba en papel?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ESCRIBIR",
+     "PAPEL",
+     "MEJOR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Prefiere que le escriba en papel?» → ESCRIBIR · PAPEL · MEJOR"
    },
    "acto": "pregunta_polar",
    "entidad": "Ciudadano",
@@ -755,7 +821,15 @@
    "dominio": "acceso",
    "formulacion": "¿Necesita un intérprete de LSB?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "INTÉRPRETE",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Necesita un intérprete de LSB?» → INTÉRPRETE · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -810,7 +884,23 @@
    "dominio": "acceso",
    "formulacion": "¿Puede leer este texto?",
    "gramaticaLsb": {
-    "estado": "LEXICAL_GAP"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "TÚ",
+     "LEER",
+     "PUEDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "el texto se señala (deíctico); no hay glosa TEXTO",
+    "huecos": [
+     {
+      "concepto": "TEXTO",
+      "posicion": 3
+     }
+    ],
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Puede leer este texto?» → TÚ · LEER · PUEDO · TEXTO"
    },
    "acto": "pregunta_polar",
    "entidad": "Ciudadano",
@@ -865,7 +955,17 @@
    "dominio": "acceso",
    "formulacion": "¿Quiere que lo explique otra vez y más despacio?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "VOLVER",
+     "EXPLICAR",
+     "LENTO",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Quiere que lo explique otra vez y más despacio?» → VOLVER · EXPLICAR · LENTO · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Conversacion",
@@ -913,7 +1013,15 @@
    "dominio": "acceso",
    "formulacion": "¿Usted es una persona sorda?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TÚ",
+     "SORDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Usted es una persona sorda?» → TÚ · SORDO"
    },
    "acto": "pregunta_polar",
    "entidad": "Ciudadano",
@@ -959,7 +1067,17 @@
    "dominio": "apoyo",
    "formulacion": "¿Qué apoyo necesita?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ASISTENCIA",
+     "CUÁL",
+     "NECESITAR"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: «qué + sustantivo» de elección = SUSTANTIVO · ¿CUÁL? (§6: TUYO · NOMBRE · ¿CUÁL?, CABELLO · COLOR · ¿CUÁL?, «¿Qué ropa…?» → … · ¿CUÁL?); interrogativo entre verbo y modal: TRAER · ¿QUÉ? · AÚN · NECESITAR (§7)",
+    "evidencia": "corpus §6 «¿Necesita asistencia médica?» → ASISTENCIA · DOCTOR · NECESITAR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Solicitud",
@@ -1035,7 +1153,16 @@
    "dominio": "robo",
    "formulacion": "¿Qué dañaron?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "DAÑAR",
+     "QUÉ"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: QU- final tras el verbo en §6: ROBAR · ¿QUÉ?, RECORDAR · ¿QUÉ?, TÚ · NARRAR · ¿QUÉ?",
+    "evidencia": "corpus §6 «¿Qué le robaron?» → ROBAR · ¿QUÉ? (misma construcción)"
    },
    "acto": "pregunta_abierta",
    "entidad": "Hecho[DAÑAR].objetos",
@@ -1110,7 +1237,18 @@
    "dominio": "denuncia",
    "formulacion": "¿Ante qué institución quiere presentarla?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PRESENTAR",
+     "INSTITUCIÓN",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la denuncia (Q.DEN.INTENCION): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "regla": "R6 + R10: «qué + sustantivo» de elección = SUSTANTIVO · ¿CUÁL? (§6: TUYO · NOMBRE · ¿CUÁL?, CABELLO · COLOR · ¿CUÁL?, «¿Qué ropa…?» → … · ¿CUÁL?)",
+    "evidencia": "§6 PRESENTAR · FOTOS/VIDEO/PAPEL · QUERER; TUYO · NOMBRE · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Intencion",
@@ -1185,7 +1323,30 @@
    "dominio": "denuncia",
    "formulacion": "¿Desea presentar una denuncia?",
    "gramaticaLsb": {
-    "estado": "LEXICAL_GAP"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "PRESENTAR",
+     "QUEJAR",
+     "AUTORIDAD",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "compuestos": [
+     [
+      "QUEJAR",
+      "AUTORIDAD"
+     ]
+    ],
+    "huecos": [
+     {
+      "concepto": "DENUNCIA",
+      "posicion": 1,
+      "tratamiento": "QUEJAR + AUTORIDAD (§4, provisional)"
+     }
+    ],
+    "regla": "R11 + R15: DENUNCIA no tiene seña directa (§4); se usa la composición provisional QUEJAR + AUTORIDAD que propone el propio corpus (§4), sin validar; «¿Desea…?» → … · QUERER (QUERER al final en 12 de 12 filas)",
+    "evidencia": "corpus §6 «¿Desea presentar una denuncia?» → PRESENTAR · [DENUNCIA]; «¿Desea presentar estos elementos?» → PRESENTAR · … · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Intencion",
@@ -1257,7 +1418,18 @@
    "dominio": "mensajes",
    "formulacion": "¿Por dónde le llegaron los mensajes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "INTERNET",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "referente": "los mensajes (Q.DIG.CONTENIDO): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "regla": "R8 + R10: «¿por dónde?» con opciones celular/internet es una elección: elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
+    "evidencia": "§6 AMENAZAR · CELULAR · ENVIAR; INTERNET · ESCRIBIR · ENVIAR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Mensajes",
@@ -1318,7 +1490,17 @@
    "dominio": "mensajes",
    "formulacion": "¿Son uno o varios números?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "NÚM(...)",
+     "CUÁNTOS"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Son uno o varios números?» → CELULAR · NÚM(...) · ¿CUÁNTOS?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Mensajes",
@@ -1377,7 +1559,16 @@
    "dominio": "mensajes",
    "formulacion": "¿Tiene fotos de la pantalla?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "FOTOS",
+     "CELULAR",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene fotos de la pantalla?» → FOTOS · CELULAR · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[capturas]",
@@ -1437,7 +1628,16 @@
    "dominio": "mensajes",
    "formulacion": "¿Qué decían los mensajes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ESCRIBIR",
+     "QUÉ"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: QU- final tras el verbo en §6: ROBAR · ¿QUÉ?, RECORDAR · ¿QUÉ?, TÚ · NARRAR · ¿QUÉ?; mensajes = ESCRIBIR en el corpus",
+    "evidencia": "§6 «¿Guardó los mensajes?» → ESCRIBIR · GUARDAR; ROBAR · ¿QUÉ?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Mensajes",
@@ -1474,7 +1674,16 @@
    "dominio": "mensajes",
    "formulacion": "¿Sigue recibiendo mensajes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AÚN",
+     "RECIBIR",
+     "ESCRIBIR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Sigue recibiendo mensajes?» → AÚN · RECIBIR · ESCRIBIR"
    },
    "acto": "pregunta_polar",
    "entidad": "Mensajes",
@@ -1531,7 +1740,15 @@
    "dominio": "mensajes",
    "formulacion": "¿Guardó los mensajes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ESCRIBIR",
+     "GUARDAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Guardó los mensajes?» → ESCRIBIR · GUARDAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[mensajes]",
@@ -1597,7 +1814,17 @@
    "dominio": "mensajes",
    "formulacion": "¿Puede mostrar el celular ahora?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "AHORA",
+     "MOSTRAR",
+     "PUEDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Puede mostrar el celular ahora?» → CELULAR · AHORA · MOSTRAR · PUEDO"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia",
@@ -1655,7 +1882,16 @@
    "dominio": "mensajes",
    "formulacion": "¿Conoce el número desde el que le escribieron?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "NÚM(...)",
+     "CONOCER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Conoce el número desde el que le escribieron?» → CELULAR · NÚM(...) · CONOCER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona[remitente]",
@@ -1722,7 +1958,16 @@
    "dominio": "mensajes",
    "formulacion": "¿Las amenazas llegaron por celular?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AMENAZAR",
+     "CELULAR",
+     "ENVIAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Las amenazas llegaron por celular?» → AMENAZAR · CELULAR · ENVIAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Mensajes",
@@ -1779,7 +2024,16 @@
    "dominio": "mensajes",
    "formulacion": "¿Le escribieron por internet?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "INTERNET",
+     "ESCRIBIR",
+     "ENVIAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Le escribieron por internet?» → INTERNET · ESCRIBIR · ENVIAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Mensajes",
@@ -1836,7 +2090,17 @@
    "dominio": "mensajes",
    "formulacion": "¿Quién le envió los mensajes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "QUIÉN",
+     "ESCRIBIR",
+     "ENVIAR"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: ¿QUIÉN? sujeto va al inicio en las 2 filas que lo usan: ¿QUIÉN? · RECIBIR · [DENUNCIA], ¿QUIÉN? · INVESTIGACIÓN · [DENUNCIA] (§7)",
+    "evidencia": "§6 «¿Le escribieron por internet?» → INTERNET · ESCRIBIR · ENVIAR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona[remitente]",
@@ -1916,7 +2180,16 @@
    "dominio": "dinero",
    "formulacion": "¿Conserva toda la conversación?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ESCRIBIR",
+     "TOTAL",
+     "GUARDAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Conserva toda la conversación?» → ESCRIBIR · TOTAL · GUARDAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[conversacion]",
@@ -1973,7 +2246,23 @@
    "dominio": "dinero",
    "formulacion": "¿Tiene algún comprobante?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "FACTURA",
+     "PAPEL",
+     "BANCO",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "compuestos": [
+     [
+      "PAPEL",
+      "BANCO"
+     ]
+    ],
+    "regla": "R15: la fila tiene FACTURA / PAPEL · BANCO (factura o papel del banco); se perdía PAPEL",
+    "evidencia": "corpus §6 «¿Tiene factura o papel del banco?» → FACTURA / PAPEL · BANCO · TENER; §8 PAPEL · BANCO · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[comprobante]",
@@ -2047,7 +2336,19 @@
    "dominio": "dinero",
    "formulacion": "¿Qué comprobante tiene?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "FACTURA",
+     "PAPEL",
+     "FOTOS",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "comprobante (Q.DIN.COMPROBANTE): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "regla": "R10: elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
+    "evidencia": "§6 «¿Qué ropa llevaba?» → POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Evidencia[comprobante]",
@@ -2114,7 +2415,15 @@
    "dominio": "dinero",
    "formulacion": "¿Quiere decir que lo engañaron?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ENGAÑAR",
+     "BILLETES"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R11: pregunta sí/no sobre la declaración del corpus «Me engañaron con dinero»",
+    "evidencia": "§8 «Me engañaron con dinero.» → ENGAÑAR · DINERO/BILLETES"
    },
    "acto": "pregunta_polar",
    "entidad": "Hecho[ENGAÑAR]",
@@ -2157,7 +2466,16 @@
    "dominio": "dinero",
    "formulacion": "¿Entregó o envió dinero?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "BILLETES",
+     "DAR",
+     "ENVIAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "la fila tiene DAR/ENVIAR (entregó o envió); se perdía ENVIAR. DINERO no está en v4: BILLETES",
+    "evidencia": "corpus §6 «¿Entregó o envió dinero?» → DINERO/BILLETES · DAR/ENVIAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Transaccion",
@@ -2225,7 +2543,15 @@
    "dominio": "dinero",
    "formulacion": "¿Se comunicaron por internet?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "INTERNET",
+     "ESCRIBIR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Se comunicaron por internet?» → INTERNET · ESCRIBIR"
    },
    "acto": "pregunta_polar",
    "entidad": "Transaccion",
@@ -2281,7 +2607,17 @@
    "dominio": "dinero",
    "formulacion": "¿Cómo entregó el dinero?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "BILLETES",
+     "DAR",
+     "CÓMO"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CÓMO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10 (evidencia parcial): no hay filas con ¿CÓMO?; posición final por analogía con las QU- de §6",
+    "evidencia": "§6 «¿Cuánto dinero entregó?» → BILLETES · ¿CUÁNTOS?; «¿Entregó o envió dinero?» → DINERO/BILLETES · DAR/ENVIAR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Transaccion",
@@ -2382,7 +2718,16 @@
    "dominio": "dinero",
    "formulacion": "¿Cuánto dinero fue?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "BILLETES",
+     "CUÁNTOS"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Cuánto dinero entregó?» → BILLETES · ¿CUÁNTOS?"
    },
    "acto": "pregunta_cantidad",
    "entidad": "Transaccion",
@@ -2434,7 +2779,16 @@
    "dominio": "dinero",
    "formulacion": "¿Lo hizo mediante un banco?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "BANCO",
+     "BILLETES",
+     "ENVIAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Lo hizo mediante un banco?» → BANCO · BILLETES · ENVIAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Transaccion",
@@ -2500,7 +2854,17 @@
    "dominio": "dinero",
    "formulacion": "¿Quién recibió el dinero?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "QUIÉN",
+     "RECIBIR",
+     "BILLETES"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: ¿QUIÉN? sujeto va al inicio en las 2 filas que lo usan: ¿QUIÉN? · RECIBIR · [DENUNCIA], ¿QUIÉN? · INVESTIGACIÓN · [DENUNCIA] (§7)",
+    "evidencia": "§7 «¿Quién va a recibir mi denuncia?» → ¿QUIÉN? · RECIBIR · [DENUNCIA] (misma construcción)"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona[receptor]",
@@ -2580,7 +2944,22 @@
    "dominio": "dinero",
    "formulacion": "¿Conoce el nombre de la persona?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ÉL",
+     "NOMBRE",
+     "CONOCER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "alternativas": {
+     "0": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Conoce el nombre de la persona?» → ÉL/ELLA · NOMBRE · CONOCER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona[receptor]",
@@ -2651,7 +3030,23 @@
    "dominio": "dinero",
    "formulacion": "¿Tiene su número de celular?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ÉL",
+     "CELULAR",
+     "NÚM(...)",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "alternativas": {
+     "0": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene su número de celular?» → ÉL/ELLA · CELULAR · NÚM(...) · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona[receptor]",
@@ -2719,7 +3114,16 @@
    "dominio": "documento",
    "formulacion": "¿Qué papel es?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PAPEL",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: «qué + sustantivo» de elección = SUSTANTIVO · ¿CUÁL? (§6: TUYO · NOMBRE · ¿CUÁL?, CABELLO · COLOR · ¿CUÁL?, «¿Qué ropa…?» → … · ¿CUÁL?)",
+    "evidencia": "§6 TUYO · NOMBRE · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Documento",
@@ -2829,7 +3233,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene la caja del celular?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "CAJA",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R14: el todo delante de la parte; TENER al final en 30 de 30 filas",
+    "evidencia": "§7 «¿Traigo la caja del celular?» → CELULAR · CAJA · TRAER · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[caja]",
@@ -2879,7 +3292,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Hay cámaras o video del lugar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "VIDEO",
+     "FILMAR",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Hay cámaras o video del lugar?» → VIDEO · FILMAR · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[video_lugar]",
@@ -2936,7 +3358,15 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene un certificado?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CERTIFICADO",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene un certificado?» → CERTIFICADO · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[certificado]",
@@ -2992,7 +3422,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene la factura?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "FACTURA",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R14: el todo delante de la parte; TENER al final en 30 de 30 filas",
+    "evidencia": "§8 «Tengo la factura del celular.» → CELULAR · FACTURA · TENER; §7 CELULAR · FACTURA · TRAER · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[factura]",
@@ -3057,7 +3496,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene la factura o la caja del celular?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "FACTURA",
+     "CAJA",
+     "TENER"
+    ],
+    "tipo": "compuesta",
+    "regla": "R14: la fila seguía el orden español («la factura o la caja del celular»); el corpus pone el todo delante",
+    "evidencia": "§8 CELULAR · FACTURA · TENER; §7 CELULAR · FACTURA · TRAER · NECESITAR; CELULAR · CAJA · TRAER · NECESITAR"
    },
    "acto": "pregunta_polar_compuesta",
    "entidad": "Evidencia",
@@ -3095,7 +3543,15 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene fotografías?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "FOTOS",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene fotografías?» → FOTOS · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[fotos]",
@@ -3151,7 +3607,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Puede mostrarlo ahora?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AHORA",
+     "MOSTRAR",
+     "PUEDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Puede mostrarlo ahora?» → AHORA · MOSTRAR · PUEDO"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia",
@@ -3208,7 +3673,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Desea presentar estos elementos?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PRESENTAR",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "«estos elementos»: los ya mencionados (FOTOS/VIDEO/PAPEL según el caso)",
+    "regla": "R6: la fila lista FOTOS/VIDEO/PAPEL como alternativas; guardar solo FOTOS estrechaba la pregunta",
+    "evidencia": "corpus §6 «¿Desea presentar estos elementos?» → PRESENTAR · FOTOS/VIDEO/PAPEL · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Intencion",
@@ -3268,7 +3742,22 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene fotos, video u otra cosa que pueda mostrar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "FOTOS",
+     "VIDEO",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "huecos": [
+     {
+      "concepto": "ALGO / OTRA COSA",
+      "posicion": 2
+     }
+    ],
+    "regla": "R2: TENER al final en 30 de 30 filas; «u otra cosa» no tiene glosa en v4 y cambia el alcance del «No»",
+    "evidencia": "§6 FOTOS · TENER; VIDEO · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia",
@@ -3329,7 +3818,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene una resolución o papel previo?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "RESOLUCIÓN",
+     "PAPEL",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "la fila tiene RESOLUCIÓN / PAPEL (resolución o papel); se perdía PAPEL",
+    "evidencia": "corpus §6 «¿Tiene una resolución o papel previo?» → RESOLUCIÓN / PAPEL · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[documento_previo]",
@@ -3393,7 +3891,16 @@
    "dominio": "evidencia",
    "formulacion": "¿Qué tiene?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TENER",
+     "QUÉ"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: QU- final tras el verbo en §6: ROBAR · ¿QUÉ?, RECORDAR · ¿QUÉ?, TÚ · NARRAR · ¿QUÉ?",
+    "evidencia": "§6 ROBAR · ¿QUÉ?; RECORDAR · ¿QUÉ?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Evidencia",
@@ -3454,7 +3961,16 @@
    "dominio": "evidencia",
    "formulacion": "¿La tiene aquí con usted?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AQUÍ",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "la factura (Q.EVI.FACTURA): referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "regla": "R6: TENER al final en 30 de 30 filas",
+    "evidencia": "§7 «¿Aquí hay intérprete de LSB?» → INTÉRPRETE · AQUÍ · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia",
@@ -3504,7 +4020,15 @@
    "dominio": "evidencia",
    "formulacion": "¿Tiene video?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "VIDEO",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene video?» → VIDEO · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[video]",
@@ -3562,7 +4086,16 @@
    "dominio": "robo",
    "formulacion": "¿Qué le falta?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PERDER",
+     "QUÉ"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10 + R17: «faltar» = PERDER en el corpus; QU- final tras el verbo en §6: ROBAR · ¿QUÉ?, RECORDAR · ¿QUÉ?, TÚ · NARRAR · ¿QUÉ?",
+    "evidencia": "§6 «¿Le falta dinero?» → DINERO/BILLETES · PERDER; ROBAR · ¿QUÉ?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Hecho[PERDER].objetos",
@@ -3687,7 +4220,16 @@
    "dominio": "relato",
    "formulacion": "¿Quiere agregar algo que no le pregunté?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AUMENTAR",
+     "NARRAR",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Quiere agregar algo que no le pregunté?» → AUMENTAR · NARRAR · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Conversacion",
@@ -3743,7 +4285,17 @@
    "dominio": "relato",
    "formulacion": "¿Quién escapó?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "QUIÉN",
+     "ESCAPAR"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tiempo": "pasado (por contexto, sin glosa)",
+    "regla": "R10: ¿QUIÉN? sujeto va al inicio en las 2 filas que lo usan: ¿QUIÉN? · RECIBIR · [DENUNCIA], ¿QUIÉN? · INVESTIGACIÓN · [DENUNCIA] (§7)",
+    "evidencia": "§6 «¿El ladrón escapó?» → LADRÓN · ESCAPAR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Hecho[ESCAPAR]",
@@ -3817,7 +4369,17 @@
    "dominio": "relato",
    "formulacion": "¿Lo perdió usted o cree que se lo quitaron?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PERDER",
+     "ROBAR",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "R8: elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
+    "evidencia": "§6 ALTO · BAJO · ¿CUÁL?; MOCHILA · BOLSA · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Hecho[PERDER]",
@@ -3873,7 +4435,17 @@
    "dominio": "relato",
    "formulacion": "¿Qué ocurrió?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TÚ",
+     "NARRAR",
+     "QUÉ"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Qué ocurrió?» → TÚ · NARRAR · ¿QUÉ?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Hecho",
@@ -3973,7 +4545,16 @@
    "dominio": "relato",
    "formulacion": "¿Puede contarme lo sucedido desde el inicio?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "NARRAR",
+     "EMPEZAR",
+     "PRIMERA_VEZ"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Puede contarme lo sucedido desde el inicio?» → NARRAR · EMPEZAR · PRIMERA-VEZ"
    },
    "acto": "pregunta_polar",
    "entidad": "Conversacion",
@@ -4028,7 +4609,19 @@
    "dominio": "identificacion",
    "formulacion": "¿Vino solo o acompañado?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TÚ",
+     "1",
+     "VENIR",
+     "ACOMPAÑAR",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "R8: se recuperan NÚM(1) y ACOMPAÑAR de la fila (se perdían) y se marca la elección: elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
+    "evidencia": "corpus §6 «¿Vino solo o acompañado?» → TÚ · NÚM(1) · VENIR / ACOMPAÑAR"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Ciudadano",
@@ -4080,7 +4673,16 @@
    "dominio": "identificacion",
    "formulacion": "¿Quién le acompaña?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "QUIÉN",
+     "ACOMPAÑAR"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: ¿QUIÉN? sujeto va al inicio en las 2 filas que lo usan: ¿QUIÉN? · RECIBIR · [DENUNCIA], ¿QUIÉN? · INVESTIGACIÓN · [DENUNCIA] (§7)",
+    "evidencia": "§6 «¿Vino solo o acompañado?» → TÚ · NÚM(1) · VENIR / ACOMPAÑAR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Ciudadano",
@@ -4173,7 +4775,21 @@
    "dominio": "identificacion",
    "formulacion": "¿Puede deletrear su apellido?",
    "gramaticaLsb": {
-    "estado": "LEXICAL_GAP"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "NOMBRE",
+     "PUEDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "huecos": [
+     {
+      "concepto": "DELETREAR",
+      "posicion": 0
+     }
+    ],
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Puede deletrear su apellido?» → DELETREAR · NOMBRE · PUEDO"
    },
    "acto": "pregunta_polar",
    "entidad": "Ciudadano",
@@ -4207,7 +4823,17 @@
    "dominio": "identificacion",
    "formulacion": "¿Prefiere recibir avisos por mensaje escrito?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AVISAR",
+     "ESCRIBIR",
+     "ENVIAR",
+     "MEJOR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Prefiere recibir avisos por mensaje escrito?» → AVISAR · ESCRIBIR · ENVIAR · MEJOR"
    },
    "acto": "pregunta_polar",
    "entidad": "Ciudadano",
@@ -4266,7 +4892,18 @@
    "dominio": "identificacion",
    "formulacion": "¿Cuál es el número de su documento?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TUYO",
+     "PAPEL",
+     "NÚM(...)",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R14 + R10: poseedor delante: TUYO · NOMBRE (§6), MÍO · CELULAR · NÚM(...) (§7), ROBAR · MÍO · CELULAR (§8); número = NÚM(...) en el corpus",
+    "evidencia": "§6 TUYO · NOMBRE · ¿CUÁL?; CELULAR · NÚM(...) · CONOCER"
    },
    "acto": "pregunta_abierta",
    "entidad": "Ciudadano",
@@ -4294,7 +4931,22 @@
    "dominio": "identificacion",
    "formulacion": "¿Tiene su carnet de identidad?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PAPEL",
+     "IDENTIDAD",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "compuestos": [
+     [
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    ],
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene su carnet de identidad?» → PAPEL · IDENTIDAD · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Ciudadano",
@@ -4360,7 +5012,17 @@
    "dominio": "identificacion",
    "formulacion": "¿Qué documento presenta?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PRESENTAR",
+     "PAPEL",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: «qué + sustantivo» de elección = SUSTANTIVO · ¿CUÁL? (§6: TUYO · NOMBRE · ¿CUÁL?, CABELLO · COLOR · ¿CUÁL?, «¿Qué ropa…?» → … · ¿CUÁL?); documento = PAPEL en el corpus",
+    "evidencia": "§6 PRESENTAR · FOTOS/VIDEO/PAPEL · QUERER; TUYO · NOMBRE · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Ciudadano",
@@ -4433,7 +5095,17 @@
    "dominio": "identificacion",
    "formulacion": "¿Qué edad tiene?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TUYO",
+     "EDAD",
+     "CUÁNTOS"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R14 + R10: poseedor delante: TUYO · NOMBRE (§6), MÍO · CELULAR · NÚM(...) (§7), ROBAR · MÍO · CELULAR (§8); «qué + medida» = ¿CUÁNTOS? (§6 «¿A qué hora…?» → HORA · ¿CUÁNTOS?)",
+    "evidencia": "§6 TUYO · NOMBRE · ¿CUÁL?; HORA · ¿CUÁNTOS? · MÁS-O-MENOS; TESTIGO · ¿CUÁNTOS?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Ciudadano",
@@ -4471,7 +5143,17 @@
    "dominio": "identificacion",
    "formulacion": "¿Cuál es su nombre completo?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TUYO",
+     "NOMBRE",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Cuál es su nombre completo?» → TUYO · NOMBRE · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Ciudadano",
@@ -4509,7 +5191,18 @@
    "dominio": "identificacion",
    "formulacion": "¿Cuál es su número de celular?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TUYO",
+     "CELULAR",
+     "NÚM(...)",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R14 + R10: poseedor delante: TUYO · NOMBRE (§6), MÍO · CELULAR · NÚM(...) (§7), ROBAR · MÍO · CELULAR (§8)",
+    "evidencia": "§6 TUYO · NOMBRE · ¿CUÁL?; §7 «¿Puedo cambiar mi número de celular?» → MÍO · CELULAR · NÚM(...) · CAMBIAR · PUEDO"
    },
    "acto": "pregunta_abierta",
    "entidad": "Ciudadano",
@@ -4542,7 +5235,17 @@
    "dominio": "identificacion",
    "formulacion": "¿Este número de celular es suyo?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CELULAR",
+     "NÚM(...)",
+     "TUYO",
+     "VERDAD"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Este número de celular es suyo?» → CELULAR · NÚM(...) · TUYO · VERDAD"
    },
    "acto": "pregunta_polar",
    "entidad": "Ciudadano",
@@ -4607,7 +5310,17 @@
    "dominio": "lugar",
    "formulacion": "¿Ocurrió dentro o fuera del lugar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "DENTRO",
+     "FUERA",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Ocurrió dentro o fuera del lugar?» → DENTRO · FUERA · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Lugar",
@@ -4660,7 +5373,15 @@
    "dominio": "lugar",
    "formulacion": "¿Dónde ocurrió?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "DÓNDE"
+    ],
+    "tipo": "qu",
+    "interrogativo": "DÓNDE",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Dónde ocurrió?» → ¿DÓNDE?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Lugar",
@@ -4811,7 +5532,18 @@
    "dominio": "lugar",
    "formulacion": "¿Fue cerca de algún lugar que conozca?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CERCA",
+     "AL_LADO",
+     "LEJOS",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "R8: elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?); «lugar que conozca» lo aporta el editor de referencia",
+    "evidencia": "§8 «Ocurrió en la calle cerca del mercado.» → CALLE · MERCADO · CERCA; ALTO · BAJO · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Lugar",
@@ -4861,7 +5593,16 @@
    "dominio": "apoyo",
    "formulacion": "¿Desea orientación para recibir asistencia de SEPDAVI?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ASISTENCIA",
+     "d(SEPDAVI)",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Desea orientación para recibir asistencia de SEPDAVI?» → ASISTENCIA · d(SEPDAVI) · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -4917,7 +5658,22 @@
    "dominio": "persona",
    "formulacion": "¿Conoce a la persona involucrada?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TÚ",
+     "ÉL",
+     "CONOCER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "alternativas": {
+     "1": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Conoce a la persona involucrada?» → TÚ · ÉL/ELLA · CONOCER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona[autor]",
@@ -4984,7 +5740,22 @@
    "dominio": "descripcion",
    "formulacion": "¿Qué color de cabello recuerda?",
    "gramaticaLsb": {
-    "estado": "LEXICAL_GAP"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "CABELLO",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "COLOR",
+      "posicion": 1
+     }
+    ],
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Qué color de cabello recuerda?» → CABELLO · COLOR · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona",
@@ -5036,7 +5807,17 @@
    "dominio": "descripcion",
    "formulacion": "¿Era delgado o de contextura gruesa?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "FLACO",
+     "GORDO",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Era delgado o de contextura gruesa?» → FLACO · GORDO · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Persona",
@@ -5090,7 +5871,18 @@
    "dominio": "descripcion",
    "formulacion": "¿Qué edad aproximada tenía?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "EDAD",
+     "CUÁNTOS",
+     "MÁS_O_MENOS"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la persona descrita: referente ya establecido en la pregunta anterior: no se repite (anáfora)",
+    "regla": "la fila enlazada era «¿Era joven o adulto?» (JOVEN · ADULTO · ¿CUÁL?), otra pregunta; se sigue «¿A qué hora aproximadamente?»",
+    "evidencia": "corpus §6 «¿A qué hora aproximadamente?» → HORA · ¿CUÁNTOS? · MÁS-O-MENOS"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona",
@@ -5164,7 +5956,17 @@
    "dominio": "descripcion",
    "formulacion": "¿Era alto o bajo?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ALTO",
+     "BAJO",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Era alto o bajo?» → ALTO · BAJO · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Persona",
@@ -5218,7 +6020,15 @@
    "dominio": "descripcion",
    "formulacion": "¿Llevaba gorra?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "GORRA",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Llevaba gorra?» → GORRA · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona",
@@ -5274,7 +6084,15 @@
    "dominio": "descripcion",
    "formulacion": "¿Usaba lentes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "LENTES",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Usaba lentes?» → LENTES · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona",
@@ -5330,7 +6148,17 @@
    "dominio": "descripcion",
    "formulacion": "¿Llevaba mochila o bolsa?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "MOCHILA",
+     "BOLSA",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Llevaba mochila o bolsa?» → MOCHILA · BOLSA · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Persona",
@@ -5393,7 +6221,16 @@
    "dominio": "descripcion",
    "formulacion": "¿Recuerda alguna característica particular?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "RECORDAR",
+     "QUÉ"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Recuerda alguna característica particular?» → RECORDAR · ¿QUÉ?"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona",
@@ -5441,7 +6278,18 @@
    "dominio": "descripcion",
    "formulacion": "¿Qué ropa llevaba?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "POLERA",
+     "PANTALÓN",
+     "CHAMARRA",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Qué ropa llevaba?» → POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona",
@@ -5537,7 +6385,17 @@
    "dominio": "descripcion",
    "formulacion": "¿Era un hombre o una mujer?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HOMBRE",
+     "MUJER",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Era un hombre o una mujer?» → HOMBRE · MUJER · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Persona",
@@ -5593,7 +6451,16 @@
    "dominio": "descripcion",
    "formulacion": "¿Quiere describir a la persona?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [],
+    "huecos": [
+     {
+      "concepto": "DESCRIBIR",
+      "posicion": 0
+     }
+    ],
+    "regla": "DESCRIBIR no existe en v4 y el corpus no tiene fila equivalente",
+    "evidencia": "—"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona",
@@ -5636,7 +6503,23 @@
    "dominio": "persona",
    "formulacion": "¿Sabe cómo se llama esa persona?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ÉL",
+     "NOMBRE",
+     "CONOCER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "alternativas": {
+     "0": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "referente": "la persona involucrada",
+    "regla": "fila equivalente del corpus (mismo significado)",
+    "evidencia": "§6 «¿Conoce el nombre de la persona?» → ÉL/ELLA · NOMBRE · CONOCER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona",
@@ -5677,7 +6560,16 @@
    "dominio": "testigos",
    "formulacion": "¿A quién vio?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "VER",
+     "QUIÉN"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: ¿QUIÉN? objeto tras el verbo, como el QU- objeto de §6",
+    "evidencia": "§6 ROBAR · ¿QUÉ?; LADRÓN · VER"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona",
@@ -5747,7 +6639,17 @@
    "dominio": "persona",
    "formulacion": "¿Había otras personas presentes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HOMBRE",
+     "MUJER",
+     "ALLÍ",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Había otras personas presentes?» → HOMBRE · MUJER · ALLÍ · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Testigos",
@@ -5814,7 +6716,17 @@
    "dominio": "persona",
    "formulacion": "¿Puede identificarla si la vuelve a ver?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "IDENTIFICAR",
+     "VOLVER",
+     "VER",
+     "PUEDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Puede identificarla si la vuelve a ver?» → IDENTIFICAR · VOLVER · VER · PUEDO"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona[autor]",
@@ -5872,7 +6784,19 @@
    "dominio": "persona",
    "formulacion": "¿Qué relación tiene con esa persona?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PAREJA",
+     "PARIENTE",
+     "AMIGO",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la persona conocida (Q.PER.CONOCE)",
+    "regla": "R10: «relación» no tiene glosa; se listan relaciones y ¿CUÁL? como en «¿Qué ropa…?». elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
+    "evidencia": "§6 POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona",
@@ -5973,7 +6897,15 @@
    "dominio": "riesgo",
    "formulacion": "¿Recibió amenazas?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AMENAZAR",
+     "RECIBIR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Recibió amenazas?» → AMENAZAR · RECIBIR"
    },
    "acto": "pregunta_polar",
    "entidad": "Hecho[AMENAZAR]",
@@ -6029,7 +6961,16 @@
    "dominio": "riesgo",
    "formulacion": "¿Necesita auxilio ahora?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "AUXILIO",
+     "AHORA",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Necesita auxilio ahora?» → AUXILIO · AHORA · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -6089,7 +7030,16 @@
    "dominio": "riesgo",
    "formulacion": "¿Tiene miedo de volver a su casa?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "MIEDO",
+     "CASA",
+     "VOLVER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene miedo de volver a su casa?» → MIEDO · CASA · VOLVER"
    },
    "acto": "pregunta_polar",
    "entidad": "Riesgo",
@@ -6146,7 +7096,15 @@
    "dominio": "riesgo",
    "formulacion": "¿Necesita protección?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PROTEGER",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R11: NECESITAR al final en 28 de 28 filas",
+    "evidencia": "§6 HIJO/HIJA · PROTEGER · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -6196,7 +7154,22 @@
    "dominio": "riesgo",
    "formulacion": "¿Hay niños u otras personas que necesiten protección?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HIJO",
+     "PROTEGER",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "alternativas": {
+     "0": [
+      "HIJO",
+      "HIJA"
+     ]
+    },
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Hay niños u otras personas que necesiten protección?» → HIJO/HIJA · PROTEGER · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Riesgo",
@@ -6261,7 +7234,17 @@
    "dominio": "riesgo",
    "formulacion": "¿Quiénes necesitan protección?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "QUIÉN",
+     "PROTEGER",
+     "NECESITAR"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: ¿QUIÉN? sujeto va al inicio en las 2 filas que lo usan: ¿QUIÉN? · RECIBIR · [DENUNCIA], ¿QUIÉN? · INVESTIGACIÓN · [DENUNCIA] (§7); NECESITAR al final en 28 de 28 filas",
+    "evidencia": "§6 HIJO/HIJA · PROTEGER · NECESITAR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Riesgo",
@@ -6313,7 +7296,14 @@
    "dominio": "robo",
    "formulacion": "¿Le robaron algún objeto?",
    "gramaticaLsb": {
-    "estado": "LEXICAL_GAP"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ROBAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R2: OBJETO no está en v4 y la nota del corpus pide objeto concreto: el genérico no se signa",
+    "evidencia": "corpus §6 «¿Le robaron algún objeto?» → ROBAR · OBJETO (nota: objeto debe ser concreto)"
    },
    "acto": "pregunta_polar",
    "entidad": "Hecho[ROBAR]",
@@ -6379,7 +7369,16 @@
    "dominio": "robo",
    "formulacion": "¿Le robaron {mencionado}?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ROBAR",
+     "CELULAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "CELULAR es el objeto de la fila del corpus; con otro objeto mencionado va en su lugar, tras ROBAR",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Le robaron el celular?» → ROBAR · CELULAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Hecho[ROBAR]+Objeto",
@@ -6475,7 +7474,22 @@
    "dominio": "robo",
    "formulacion": "¿Le falta su carnet de identidad?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PAPEL",
+     "IDENTIDAD",
+     "PERDER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "compuestos": [
+     [
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    ],
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Le falta su carnet de identidad?» → PAPEL · IDENTIDAD · PERDER"
    },
    "acto": "pregunta_polar",
    "entidad": "Objeto[carnet]",
@@ -6535,7 +7549,15 @@
    "dominio": "robo",
    "formulacion": "¿Le falta dinero?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "BILLETES",
+     "PERDER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Le falta dinero?» → DINERO/BILLETES · PERDER"
    },
    "acto": "pregunta_polar",
    "entidad": "Objeto[dinero]",
@@ -6600,7 +7622,15 @@
    "dominio": "robo",
    "formulacion": "¿El ladrón escapó?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "LADRÓN",
+     "ESCAPAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿El ladrón escapó?» → LADRÓN · ESCAPAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Hecho[ESCAPAR]",
@@ -6659,7 +7689,16 @@
    "dominio": "robo",
    "formulacion": "¿Qué le robaron?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ROBAR",
+     "QUÉ"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Qué le robaron?» → ROBAR · ¿QUÉ?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Hecho[ROBAR].objetos",
@@ -6797,7 +7836,15 @@
    "dominio": "robo",
    "formulacion": "¿Vio al ladrón?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "LADRÓN",
+     "VER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Vio al ladrón?» → LADRÓN · VER"
    },
    "acto": "pregunta_polar",
    "entidad": "Persona[autor]",
@@ -6862,7 +7909,16 @@
    "dominio": "salud",
    "formulacion": "¿Necesita asistencia médica?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ASISTENCIA",
+     "DOCTOR",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Necesita asistencia médica?» → ASISTENCIA · DOCTOR · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -6920,7 +7976,16 @@
    "dominio": "salud",
    "formulacion": "¿Tiene certificado del doctor?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CERTIFICADO",
+     "DOCTOR",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene certificado del doctor?» → CERTIFICADO · DOCTOR · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Evidencia[certificado_medico]",
@@ -6978,7 +8043,15 @@
    "dominio": "salud",
    "formulacion": "¿Está herido?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HERIDA",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Está herido?» → HERIDA · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Salud",
@@ -7045,7 +8118,15 @@
    "dominio": "salud",
    "formulacion": "¿Fue al hospital?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HOSPITAL",
+     "IR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Fue al hospital?» → HOSPITAL · IR"
    },
    "acto": "pregunta_polar",
    "entidad": "Salud",
@@ -7102,7 +8183,16 @@
    "dominio": "salud",
    "formulacion": "¿Dónde tiene la herida?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HERIDA",
+     "DÓNDE"
+    ],
+    "tipo": "qu",
+    "interrogativo": "DÓNDE",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: «¿dónde está X?» = X · ¿DÓNDE? (4 filas)",
+    "evidencia": "§6 d(FISCALÍA) · ¿DÓNDE?; ÓRGANO-JUDICIAL · ¿DÓNDE?; §8 BRAZO · HERIDA · TENER"
    },
    "acto": "pregunta_abierta",
    "entidad": "Salud",
@@ -7140,7 +8230,18 @@
    "dominio": "consulta",
    "formulacion": "¿Con qué institución es su trámite?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TUYO",
+     "TRÁMITE",
+     "INSTITUCIÓN",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R14 + R10: poseedor delante: TUYO · NOMBRE (§6), MÍO · CELULAR · NÚM(...) (§7), ROBAR · MÍO · CELULAR (§8); «qué + sustantivo» de elección = SUSTANTIVO · ¿CUÁL? (§6: TUYO · NOMBRE · ¿CUÁL?, CABELLO · COLOR · ¿CUÁL?, «¿Qué ropa…?» → … · ¿CUÁL?)",
+    "evidencia": "§6 TUYO · NOMBRE · ¿CUÁL?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Consulta",
@@ -7249,7 +8350,22 @@
    "dominio": "seguimiento",
    "formulacion": "¿Recibió un papel de convocatoria?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PAPEL",
+     "CONVOCAR",
+     "RECIBIR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "compuestos": [
+     [
+      "PAPEL",
+      "CONVOCAR"
+     ]
+    ],
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Recibió un papel de convocatoria?» → PAPEL · CONVOCAR · RECIBIR"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -7306,7 +8422,15 @@
    "dominio": "seguimiento",
    "formulacion": "¿Está de acuerdo con lo escrito?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ESTAR_DE_ACUERDO",
+     "ESCRIBIR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Está de acuerdo con lo escrito?» → ESTAR-DE-ACUERDO · ESCRIBIR"
    },
    "acto": "pregunta_polar",
    "entidad": "Conversacion",
@@ -7373,7 +8497,17 @@
    "dominio": "seguimiento",
    "formulacion": "¿Necesita defensa pública gratuita?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ABOGADO",
+     "GRATIS",
+     "d(SEPDEP)",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Necesita defensa pública gratuita?» → ABOGADO · GRATIS · d(SEPDEP) · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -7430,7 +8564,15 @@
    "dominio": "seguimiento",
    "formulacion": "¿Le indicaron ir a la Fiscalía?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "d(FISCALÍA)",
+     "IR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Le indicaron ir a la Fiscalía?» → d(FISCALÍA) · IR"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -7485,7 +8627,17 @@
    "dominio": "seguimiento",
    "formulacion": "¿Necesita saber dónde está la Fiscalía?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "d(FISCALÍA)",
+     "DÓNDE",
+     "SABER",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R11: la fila preguntaba «¿dónde está?» y la pregunta es sí/no («¿necesita saber…?»); cláusula + SABER + modal: INVESTIGACIÓN · CONTINUAR · SABER · QUERER (§8); NECESITAR al final en 28 de 28 filas",
+    "evidencia": "corpus §6 «¿Necesita saber dónde está la Fiscalía?» → d(FISCALÍA) · ¿DÓNDE?"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -7530,7 +8682,16 @@
    "dominio": "seguimiento",
    "formulacion": "¿Vino a consultar el estado de su caso?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "INVESTIGACIÓN",
+     "BUSCAR",
+     "VENIR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Vino a consultar el estado de su caso?» → INVESTIGACIÓN · BUSCAR · VENIR"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -7595,7 +8756,31 @@
    "dominio": "seguimiento",
    "formulacion": "¿Cuándo presentó la denuncia?",
    "gramaticaLsb": {
-    "estado": "LEXICAL_GAP"
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "QUEJAR",
+     "AUTORIDAD",
+     "CUÁNDO"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNDO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "compuestos": [
+     [
+      "QUEJAR",
+      "AUTORIDAD"
+     ]
+    ],
+    "tiempo": "pasado",
+    "huecos": [
+     {
+      "concepto": "DENUNCIA",
+      "posicion": 0,
+      "tratamiento": "QUEJAR + AUTORIDAD (§4, provisional)"
+     }
+    ],
+    "regla": "R15: DENUNCIA no tiene seña directa (§4); se usa la composición provisional QUEJAR + AUTORIDAD que propone el propio corpus (§4), sin validar",
+    "evidencia": "corpus §6 «¿Cuándo presentó la denuncia?» → [DENUNCIA] · ¿CUÁNDO?"
    },
    "acto": "pregunta_abierta",
    "entidad": "Consulta",
@@ -7670,7 +8855,18 @@
    "dominio": "consulta",
    "formulacion": "¿Para cuándo le dieron fecha?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CONVOCAR",
+     "CUÁNDO"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNDO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la citación (Q.SEG.MOTIVO)",
+    "tiempo": "futuro: fecha programada",
+    "regla": "R10: sustantivo · ¿CUÁNDO? como en la fila de la denuncia",
+    "evidencia": "§6 «¿Cuándo presentó la denuncia?» → [DENUNCIA] · ¿CUÁNDO?; PAPEL · CONVOCAR · RECIBIR"
    },
    "acto": "pregunta_abierta",
    "entidad": "Consulta",
@@ -7738,7 +8934,16 @@
    "dominio": "seguimiento",
    "formulacion": "¿Necesita hablar con un abogado?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ABOGADO",
+     "HABLAR",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Necesita hablar con un abogado?» → ABOGADO · HABLAR · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -7795,7 +9000,16 @@
    "dominio": "seguimiento",
    "formulacion": "¿Necesita hablar con el fiscal?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "d(FISCAL)",
+     "HABLAR",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Necesita hablar con el fiscal?» → d(FISCAL) · HABLAR · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -7851,7 +9065,16 @@
    "dominio": "seguimiento",
    "formulacion": "¿Quiere hablar con el policía encargado?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "POLICÍA",
+     "HABLAR",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Quiere hablar con el policía encargado?» → POLICÍA · HABLAR · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -7908,7 +9131,16 @@
    "dominio": "seguimiento",
    "formulacion": "¿Necesita intérprete para esa reunión?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "INTÉRPRETE",
+     "REUNIÓN",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Necesita intérprete para esa reunión?» → INTÉRPRETE · REUNIÓN · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -7965,7 +9197,15 @@
    "dominio": "seguimiento",
    "formulacion": "¿Debe presentarse ante un juez?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "JUEZ",
+     "PRESENTAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Debe presentarse ante un juez?» → JUEZ · PRESENTAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -8021,7 +9261,24 @@
    "dominio": "seguimiento",
    "formulacion": "¿Quiere leer el papel antes de escribir su nombre?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PAPEL",
+     "LEER",
+     "NOMBRE",
+     "ESCRIBIR",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "compuestos": [
+     [
+      "NOMBRE",
+      "ESCRIBIR"
+     ]
+    ],
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Quiere leer el papel antes de escribir su nombre?» → PAPEL · LEER · NOMBRE · ESCRIBIR · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -8080,7 +9337,17 @@
    "dominio": "consulta",
    "formulacion": "¿Qué quiere consultar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "SABER",
+     "QUÉ",
+     "QUERER"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R17: consultar = SABER · QUERER en el corpus; interrogativo entre verbo y modal: TRAER · ¿QUÉ? · AÚN · NECESITAR (§7)",
+    "evidencia": "cláusula + SABER + modal: INVESTIGACIÓN · CONTINUAR · SABER · QUERER (§8)"
    },
    "acto": "pregunta_abierta",
    "entidad": "Consulta",
@@ -8207,7 +9474,15 @@
    "dominio": "seguimiento",
    "formulacion": "¿Tiene el número de referencia?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "NÚM(...)",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene el número de referencia?» → NÚM(...) · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -8273,7 +9548,16 @@
    "dominio": "seguimiento",
    "formulacion": "¿Sabe dónde está el Órgano Judicial?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ÓRGANO_JUDICIAL",
+     "DÓNDE",
+     "SABER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R11: la fila preguntaba «¿dónde está?» y la pregunta es sí/no («¿sabe dónde…?»); cláusula + SABER + modal: INVESTIGACIÓN · CONTINUAR · SABER · QUERER (§8)",
+    "evidencia": "corpus §6 «¿Sabe dónde está el Órgano Judicial?» → ÓRGANO-JUDICIAL · ¿DÓNDE?"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -8319,7 +9603,15 @@
    "dominio": "seguimiento",
    "formulacion": "¿Recibió una resolución?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "RESOLUCIÓN",
+     "RECIBIR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Recibió una resolución?» → RESOLUCIÓN · RECIBIR"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -8375,7 +9667,16 @@
    "dominio": "seguimiento",
    "formulacion": "¿Tiene que volver otro día?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "VOLVER",
+     "DÍA",
+     "NECESITAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Tiene que volver otro día?» → VOLVER · DÍA · NECESITAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Consulta",
@@ -8432,7 +9733,16 @@
    "dominio": "testigos",
    "formulacion": "¿Cuántos testigos hay?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TESTIGO",
+     "CUÁNTOS"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Cuántos testigos hay?» → TESTIGO · ¿CUÁNTOS?"
    },
    "acto": "pregunta_cantidad",
    "entidad": "Testigos",
@@ -8482,7 +9792,15 @@
    "dominio": "testigos",
    "formulacion": "¿Hay testigos?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TESTIGO",
+     "TENER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Hay testigos del robo?» → TESTIGO · TENER"
    },
    "acto": "pregunta_polar",
    "entidad": "Testigos",
@@ -8550,7 +9868,16 @@
    "dominio": "testigos",
    "formulacion": "¿Puede dar testimonio de lo que vio?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "OBSERVAR",
+     "TESTIMONIO",
+     "PUEDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R11: pregunta sí/no sobre la declaración equivalente; PUEDO al final en 34 de 35 filas",
+    "evidencia": "§8 «Vi lo ocurrido y puedo dar testimonio.» → OBSERVAR · TESTIMONIO · PUEDO"
    },
    "acto": "pregunta_polar",
    "entidad": "Intencion",
@@ -8600,7 +9927,9 @@
    "dominio": "testigos",
    "formulacion": "¿Qué vio o qué quiere declarar?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PENDING",
+    "secuencia": [],
+    "motivo": "pregunta compuesta («¿Qué vio o qué quiere declarar?»): dos preguntas QU- coordinadas con «o»; el corpus no documenta cómo coordinarlas y dividirla cambiaría el banco"
    },
    "acto": "pregunta_abierta",
    "entidad": "Hecho(perspectiva=testigo)",
@@ -8695,7 +10024,16 @@
    "dominio": "testigos",
    "formulacion": "¿Puede traer al testigo?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TESTIGO",
+     "TRAER",
+     "PUEDO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Puede traer al testigo?» → TESTIGO · TRAER · PUEDO"
    },
    "acto": "pregunta_polar",
    "entidad": "Testigos",
@@ -8752,7 +10090,16 @@
    "dominio": "testigos",
    "formulacion": "¿El testigo vio todo?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TESTIGO",
+     "TOTAL",
+     "VER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿El testigo vio todo?» → TESTIGO · TOTAL · VER"
    },
    "acto": "pregunta_polar",
    "entidad": "Testigos",
@@ -8809,7 +10156,18 @@
    "dominio": "tiempo",
    "formulacion": "¿Fue hoy, ayer o antes?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HOY",
+     "AYER",
+     "PASADO",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "R8: la fila no distinguía pregunta de afirmación; elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
+    "evidencia": "corpus §6 «¿Fue hoy, ayer o antes?» → HOY · AYER · PASADO; ALTO · BAJO · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Tiempo",
@@ -8878,7 +10236,17 @@
    "dominio": "tiempo",
    "formulacion": "¿Cuándo ocurrió?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "CUÁNDO",
+     "FECHA",
+     "HORA"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNDO",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Cuándo ocurrió?» → ¿CUÁNDO? · FECHA · HORA"
    },
    "acto": "pregunta_abierta",
    "entidad": "Tiempo",
@@ -9057,7 +10425,17 @@
    "dominio": "tiempo",
    "formulacion": "¿A qué hora aproximadamente?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "HORA",
+     "CUÁNTOS",
+     "MÁS_O_MENOS"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁNTOS",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿A qué hora aproximadamente?» → HORA · ¿CUÁNTOS? · MÁS-O-MENOS"
    },
    "acto": "pregunta_abierta",
    "entidad": "Tiempo",
@@ -9121,7 +10499,15 @@
    "dominio": "violencia",
    "formulacion": "¿Alguien le pegó o maltrató?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PEGAR",
+     "MALTRATAR"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "secuencia de la fila del corpus, sin cambios de orden",
+    "evidencia": "corpus §6 «¿Alguien le pegó o maltrató?» → PEGAR · MALTRATAR"
    },
    "acto": "pregunta_polar",
    "entidad": "Hecho",
@@ -9185,7 +10571,17 @@
    "dominio": "violencia",
    "formulacion": "¿Quién le agredió?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "QUIÉN",
+     "HACER"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la agresión (Q.VIO.TIPO): referente ya establecido en la pregunta anterior: no se repite (anáfora); HACER dirigido a la persona sorda (dirección no modelada)",
+    "regla": "R10 + R6: ¿QUIÉN? sujeto va al inicio en las 2 filas que lo usan: ¿QUIÉN? · RECIBIR · [DENUNCIA], ¿QUIÉN? · INVESTIGACIÓN · [DENUNCIA] (§7); no se estrecha a PEGAR",
+    "evidencia": "§7 «¿Qué hago si…?» → … YO · ¿QUÉ? · HACER"
    },
    "acto": "pregunta_abierta",
    "entidad": "Persona[autor]",
@@ -9253,7 +10649,15 @@
    "dominio": "apoyo",
    "formulacion": "¿Desea asistencia especializada?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "ASISTENCIA",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R11: QUERER al final en 12 de 12 filas; «especializada» sin glosa (la precisa la opción)",
+    "evidencia": "§6 ASISTENCIA · d(SEPDAVI) · QUERER"
    },
    "acto": "pregunta_polar",
    "entidad": "Solicitud",
@@ -9315,7 +10719,17 @@
    "dominio": "violencia",
    "formulacion": "¿Es la primera vez o pasa seguido?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "PRIMERA_VEZ",
+     "SIEMPRE",
+     "CUÁL"
+    ],
+    "tipo": "disyuntiva",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
+    "regla": "R8: elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
+    "evidencia": "§6 ALTO · BAJO · ¿CUÁL?"
    },
    "acto": "pregunta_alternativa",
    "entidad": "Hecho",
@@ -9372,7 +10786,17 @@
    "dominio": "violencia",
    "formulacion": "¿Qué le hicieron?",
    "gramaticaLsb": {
-    "estado": "GRAMMAR_PENDING"
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "QUÉ",
+     "HACER"
+    ],
+    "tipo": "qu",
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "HACER dirigido a la persona sorda (dirección no modelada)",
+    "regla": "R10: ¿QUÉ? delante de HACER, como en la única fila con HACER",
+    "evidencia": "§7 «¿Qué hago si vuelve a amenazarme?» → … YO · ¿QUÉ? · HACER"
    },
    "acto": "pregunta_abierta",
    "entidad": "Hecho",
