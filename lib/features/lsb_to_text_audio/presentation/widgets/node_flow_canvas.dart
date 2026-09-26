@@ -32,8 +32,9 @@ class NodeFlowCanvas extends ConsumerWidget {
     final step = questionId == null ? null : session!.stepOf(questionId);
     final answer = questionId == null ? null : session!.answerOf(questionId);
     final maxPicks = question?.maxPicks ?? 1;
-    final picks =
-        answer == null || answer.isOmitted ? 0 : answer.optionIds.length;
+    final picks = answer == null || answer.isOmitted
+        ? 0
+        : answer.optionIds.length;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -41,8 +42,10 @@ class NodeFlowCanvas extends ConsumerWidget {
         // Cabecera fija: pregunta activa + fichas de lo ya configurado. No
         // va dentro del scroll de la grilla para que, al desplazarse por
         // muchas tarjetas, lo ya elegido no desaparezca de la vista.
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+        SafeArea(
+          key: const Key('guided_question_header'),
+          bottom: false,
+          minimum: const EdgeInsets.fromLTRB(16, 2, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -71,6 +74,7 @@ class NodeFlowCanvas extends ConsumerWidget {
         // activa.
         Expanded(
           child: SingleChildScrollView(
+            key: const Key('guided_options_scroll'),
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -107,7 +111,7 @@ class _HeroQuestionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
         color: AppTheme.lightSurface,
         borderRadius: BorderRadius.circular(16),
@@ -128,10 +132,7 @@ class _HeroQuestionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                LsbQuestionDisplay(
-                  spanish: question,
-                  formulation: lsb,
-                ),
+                LsbQuestionDisplay(spanish: question, formulation: lsb),
                 if (maxPicks > 1)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
@@ -157,7 +158,6 @@ class _HeroQuestionCard extends StatelessWidget {
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -181,6 +181,7 @@ class LsbQuestionDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
     if (formulation.hasUsableLsb) {
       return LsbFormulationStrip(formulation: formulation);
     }
@@ -188,8 +189,8 @@ class LsbQuestionDisplay extends StatelessWidget {
       spanish,
       key: const Key('formulacion_es_fallback'),
       textAlign: TextAlign.center,
-      style: const TextStyle(
-        fontSize: 19,
+      style: TextStyle(
+        fontSize: width < 360 ? 20 : 23,
         fontWeight: FontWeight.w800,
         height: 1.2,
         color: AppTheme.lightText,
@@ -220,8 +221,8 @@ class LsbFormulationStrip extends ConsumerWidget {
       child: Wrap(
         key: const Key('formulacion_lsb'),
         alignment: WrapAlignment.center,
-        spacing: 6,
-        runSpacing: 6,
+        spacing: 8,
+        runSpacing: 7,
         children: [
           for (final s in segmentos)
             _LsbPiece(segment: s, withImage: conImagen),
@@ -239,14 +240,19 @@ class _LsbPiece extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final esSena = segment.kind == LsbSegmentKind.sign ||
+    final width = MediaQuery.sizeOf(context).width;
+    final fontSize = width < 360 ? 16.0 : 18.0;
+    final esSena =
+        segment.kind == LsbSegmentKind.sign ||
         segment.kind == LsbSegmentKind.compound;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
         color: AppTheme.brandPrimary.withValues(alpha: esSena ? 0.08 : 0.03),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppTheme.brandPrimary.withValues(alpha: 0.30)),
+        border: Border.all(
+          color: AppTheme.brandPrimary.withValues(alpha: 0.30),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -267,7 +273,7 @@ class _LsbPiece extends StatelessWidget {
           Text(
             segment.label.replaceAll('_', ' '),
             style: TextStyle(
-              fontSize: 12,
+              fontSize: fontSize,
               fontWeight: FontWeight.w800,
               fontStyle: esSena ? FontStyle.normal : FontStyle.italic,
               color: AppTheme.lightText,

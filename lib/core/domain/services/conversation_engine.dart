@@ -44,7 +44,9 @@ class ConversationEngine {
       glosses: glosses,
       contextId: contextId,
       replyToId: replyToId,
-      speechAct: declaration == null ? null : _speechActFrom(declaration.speechAct),
+      speechAct: declaration == null
+          ? null
+          : _speechActFrom(declaration.speechAct),
     );
   }
 
@@ -61,8 +63,9 @@ class ConversationEngine {
             contextId: assemblerContextId ?? contextId,
             glosses: glosses,
           );
-    final safeLocal =
-        localSentence.isNotEmpty ? localSentence : glosses.join(' ');
+    final safeLocal = localSentence.isNotEmpty
+        ? localSentence
+        : glosses.join(' ');
 
     TranslationResult result;
     try {
@@ -79,13 +82,15 @@ class ConversationEngine {
       // detectarlo mirando el texto —suena bien—, así que se decide por la
       // capacidad anunciada: si no puede conservarlos, manda la redacción
       // local, que sí los tiene todos.
-      final pierdeHechos = declaration != null &&
+      final pierdeHechos =
+          declaration != null &&
           !BackendCompatibility.canSendWithoutLoss(
             declaration,
             RemoteTranslationDataSourceImpl.lastKnownCapability,
           );
 
-      final degenerate = pierdeHechos ||
+      final degenerate =
+          pierdeHechos ||
           (remote.coverageValidated
               ? remote.generatedText.trim().isEmpty
               : assembler.isBackendDegenerate(
@@ -113,14 +118,11 @@ class ConversationEngine {
 
   /// Declaración de una intervención guiada (contrato v4).
   ///
-  /// El texto definitivo es **siempre** [localText], la redacción
-  /// determinista del banco, la misma de la vista previa. El servidor redacta
-  /// la misma intervención con el mismo banco; su respuesta solo se usa si es
-  /// idéntica, y entonces aporta el audio de Polly de ese mismo texto. Si
-  /// difiere —banco desplegado distinto, refinamiento, error—, no se puede
-  /// demostrar que conserve todos los hechos y negaciones: se descarta y el
-  /// audio se sintetiza en el dispositivo con el texto local. Ninguna IA
-  /// tiene autoridad sobre los hechos.
+  /// [localText] sigue siendo el fallback determinista. El servidor puede
+  /// devolver otra redacción natural solo cuando certifica
+  /// [TranslationResult.coverageValidated]: esa bandera la emite el validador
+  /// semántico, no el modelo. Sin ella, con texto vacío o ante error, gana la
+  /// vista previa local y se descarta también el audio remoto.
   Future<TranslationResult> generateGuided({
     required GuidedIntervention intervention,
     required String localText,
@@ -142,15 +144,17 @@ class ConversationEngine {
         business: business,
         guided: intervention.toJson(),
       );
-      if (_normalizeText(remote.generatedText) != _normalizeText(localText)) {
+      if (!remote.coverageValidated || remote.generatedText.trim().isEmpty) {
         return local;
       }
       return TranslationResult(
         baseSentence: localText,
-        generatedText: localText,
+        generatedText: remote.generatedText,
         audioUrl: remote.audioUrl,
         cacheHit: remote.cacheHit,
+        bedrockUsed: remote.bedrockUsed,
         coverageValidated: true,
+        intermediateRepresentation: remote.intermediateRepresentation,
         glossSequence: remote.glossSequence,
       );
     } catch (_) {
@@ -158,13 +162,10 @@ class ConversationEngine {
     }
   }
 
-  static String _normalizeText(String text) =>
-      text.replaceAll(RegExp(r'\s+'), ' ').trim();
-
   SpeechAct _speechActFrom(String name) => SpeechAct.values.firstWhere(
-        (v) => v.name == name,
-        orElse: () => SpeechAct.statement,
-      );
+    (v) => v.name == name,
+    orElse: () => SpeechAct.statement,
+  );
 
   Future<ConversationTurn> composeHearingTurn({
     required String text,
@@ -221,7 +222,8 @@ class ConversationEngine {
         replyToId: message.replyToId,
         createdAt: message.createdAt,
         disambiguations: translation.disambiguations,
-        contextSuggestion: contextInference.infer(
+        contextSuggestion:
+            contextInference.infer(
               glosses: translation.glosses,
               text: message.text,
             ) ??

@@ -2,14 +2,10 @@
 Lambda: translate-lsb-dev — Arquitectura Híbrida
 Motor Inteligente Propio + Bedrock como Refinador Complementario
 
-Flujo:
-  1. Recibe glosas LSB desde la app Flutter
-  2. Análisis semántico propio (clasifica roles gramaticales)
-  3. Representación intermedia (estructura JSON semántica)
-  4. Generación de oración base (reglas y plantillas propias)
-  5. Refinamiento opcional con Bedrock (solo pulir redacción)
-  6. Síntesis de audio con Polly → S3
-  7. Respuesta JSON con baseSentence + generatedText
+Flujos:
+  guided: grafo → SemanticFrame → Bedrock → validador → Polly/S3
+          (GuidedComposer es el fallback seguro)
+  free/legacy: glosas → análisis local → base → Bedrock → Polly/S3
 
 Dominio: Trámites y consultas ciudadanas en entidades públicas bolivianas
 Autor: Nathanael Alba — Proyecto de Grado OpenSoul
@@ -2600,7 +2596,8 @@ _ESCAPE_MARKERS = {
 
 # Cómo se reconoce que el texto AFIRMA cada acción.
 _ACTION_ASSERTIONS = {
-    "ROBAR": ("robo", "robaron", "me robo", "sustrajo", "sustraccion"),
+    "ROBAR": ("robo", "robaron", "me robo", "sustrajo", "sustrajeron",
+              "sustraido", "sustraccion"),
     "PERDER": ("perdi", "extravie", "he extraviado", "perdido"),
     "GOLPEAR": ("agredio", "me agredio", "golpeo", "agresion"),
     "AMENAZAR": ("amenazo", "amenaza"),
@@ -2754,6 +2751,221 @@ def _generation_is_safe(cards: list, generated: str, base: str,
     return True, ""
 
 
+def _semantic_frame_relation_facts(frame: dict) -> list:
+    """Adapta el frame guiado al validador de relaciones ya existente."""
+    roles = {r.get("factId"): r for r in frame.get("roles") or []}
+    out = []
+    for fact in frame.get("facts") or []:
+        effect = fact.get("effect") or {}
+        action = effect.get("action")
+        if not action:
+            action = next((g for g in fact.get("concepts") or []
+                           if str(g).upper() in _ACTION_ASSERTIONS), None)
+        if not action:
+            continue
+        role = roles.get(fact.get("id"), {})
+        state = fact.get("state")
+        out.append({
+            "id": fact.get("id"),
+            "action": str(action).upper(),
+            "actorRole": (effect.get("actorRole")
+                          or role.get("actorRole") or "unknown"),
+            "negated": state == "negado",
+            "certainty": ("unknown" if state == "desconocido"
+                          else effect.get("certainty") or "confirmed"),
+            "objectIds": [],
+            "actorDetail": "",
+            "lossType": effect.get("lossType") or "",
+        })
+    return out
+
+
+def _semantic_validation_cards(frame: dict) -> list:
+    """Conceptos cuya presencia léxica sí se puede comprobar sin ambigüedad.
+
+    Acciones, polaridad e incertidumbre se validan por estado/relaciones. El
+    dinero con monto se valida por sus literales: exigir además la palabra
+    «billetes» rechazaría una salida fiel como «Bs 500».
+    """
+    action_ids = set(_ACTION_ASSERTIONS)
+    skip = action_ids | {"SÍ", "SI", "NO", "NO_SABER"}
+    money_facts = {
+        literal.get("factId")
+        for literal in frame.get("literals") or []
+        if literal.get("key") in ("monto", "moneda")
+    }
+    cards = []
+    for fact in frame.get("facts") or []:
+        for concept in fact.get("concepts") or []:
+            key = str(concept).upper().strip()
+            if key in skip:
+                continue
+            if fact.get("id") in money_facts and key in ("BILLETES", "DINERO"):
+                continue
+            cards.append(key)
+    return cards
+
+
+def _literal_is_present(literal: dict, generated: str) -> bool:
+    """Los datos escritos se conservan exactamente en valor y tipo."""
+    key = str(literal.get("key") or "").split(".")[-1].lower()
+    value = literal.get("value")
+    if value is None or isinstance(value, bool) or key == "aprox":
+        return True
+    raw = str(value).strip()
+    if not raw:
+        return True
+    plano = _normalizar(generated)
+    esperado = _normalizar(raw)
+
+    if key in ("telefono", "numero"):
+        digits = re.sub(r"\D", "", raw)
+        return bool(digits) and digits in re.sub(r"\D", "", generated)
+    if key in ("monto", "n") or re.fullmatch(r"\d+(?:[.,]\d+)?", raw):
+        return re.search(rf"(?<!\d){re.escape(raw)}(?!\d)", generated) is not None
+    if key == "moneda":
+        aliases = {
+            "bs": ("bs", "bob", "boliviano", "bolivianos"),
+            "bob": ("bs", "bob", "boliviano", "bolivianos"),
+            "usd": ("usd", "dolar", "dolares"),
+        }
+        return any(re.search(rf"\b{re.escape(a)}\b", plano)
+                   for a in aliases.get(esperado, (esperado,)))
+    return esperado in plano
+
+
+def _unexpected_catalog_fact(frame: dict, generated: str) -> str:
+    """Detecta entidades concretas del catálogo que el frame no confirmó."""
+    expected = {
+        _normalizar(str(g).replace("_", " "))
+        for fact in frame.get("facts") or []
+        for g in fact.get("concepts") or []
+    }
+    if frame.get("institutionContext"):
+        expected.add(_normalizar(str(frame["institutionContext"])
+                                 .replace("_", " ")))
+    plano = _normalizar(generated)
+    checked_roles = {"LUGAR", "INSTITUCION", "OBJETO", "DOCUMENTO", "TIEMPO"}
+    stop = {"a", "al", "de", "del", "el", "en", "la", "las", "lo", "los",
+            "mi", "mis", "un", "una", "unos", "unas"}
+    for concept, entry in GLOSS_LEXICON.items():
+        if entry.get("rol") not in checked_roles:
+            continue
+        canonical = _normalizar(str(concept).replace("_", " "))
+        if canonical in expected:
+            continue
+        words = [w for w in re.findall(r"[a-z0-9]+", _normalizar(entry.get("es", "")))
+                 if w not in stop]
+        if not words:
+            continue
+        marker = " ".join(words)
+        if len(marker) < 4:
+            continue
+        if re.search(rf"\b{re.escape(marker)}\b", plano):
+            return str(concept)
+    return ""
+
+
+def semantic_frame_is_preserved(frame: dict, generated: str,
+                                deterministic_fallback: str) -> tuple:
+    """Valida que la salida exprese exactamente el frame guiado.
+
+    Es deliberadamente conservador: ante una equivalencia que el código no
+    puede demostrar, devuelve falso y gana el compositor determinista.
+    """
+    relation_facts = _semantic_frame_relation_facts(frame)
+    safe, reason = _generation_is_safe(
+        _semantic_validation_cards(frame), generated,
+        deterministic_fallback, relation_facts)
+    if not safe:
+        return False, reason
+
+    plano = _normalizar(generated)
+    expected_actions = {f["action"] for f in relation_facts
+                        if not f.get("negated")}
+    for action in expected_actions:
+        if not _asserts_action(plano, action):
+            return False, f"omite acción confirmada {action}"
+    for action in _ACTION_ASSERTIONS:
+        if action not in expected_actions and _asserts_action(plano, action):
+            return False, f"agrega acción no confirmada {action}"
+
+    has_negation = bool(frame.get("negations"))
+    has_unknown = bool(frame.get("unknowns"))
+    output_has_negation = any(marker in f" {plano} "
+                              for marker in _NEGATION_MARKERS)
+    output_has_uncertainty = any(marker in plano
+                                 for marker in _UNCERTAINTY_MARKERS)
+    if has_negation and not output_has_negation:
+        return False, "elimina una negación confirmada"
+    if has_unknown and not output_has_uncertainty:
+        return False, "convierte desconocimiento en afirmación"
+    if not has_negation and not has_unknown and output_has_negation:
+        return False, "agrega una negación no confirmada"
+
+    for literal in frame.get("literals") or []:
+        if not _literal_is_present(literal, generated):
+            return False, f"cambia u omite literal {literal.get('key', '')}"
+
+    unexpected = _unexpected_catalog_fact(frame, generated)
+    if unexpected:
+        return False, f"agrega entidad no confirmada {unexpected}"
+    return True, ""
+
+
+def build_guided_realization_prompt(frame: dict) -> str:
+    """Prompt de guided: semántica+LSB, nunca la frase española fallback."""
+    payload = {
+        key: frame[key]
+        for key in ("lsbSequence", "intent", "facts", "roles", "slots",
+                    "negations", "unknowns", "literals", "context",
+                    "institutionContext")
+        if key in frame
+    }
+    return """Actúas únicamente como REALIZADOR LINGÜÍSTICO. Convierte el SemanticFrame de una persona sorda a español natural, formal y claro de Bolivia.
+
+REGLAS INNEGOCIABLES:
+1. El SemanticFrame y lsbSequence son la única fuente de verdad. No infieras hechos por contexto.
+2. Expresa todos y solo los facts confirmados. No omitas, agregues ni reinterpretes ninguno.
+3. Conserva exactamente roles (actor, paciente, receptor), negations, estados desconocidos y el intent.
+4. Conserva literalmente cantidades, monedas, fechas, horas, nombres, teléfonos, códigos y documentos incluidos en literals.
+5. No agregues institución, lugar, medio, culpable, víctima, relación, objeto ni trámite si no aparecen confirmados.
+6. No generes opciones ni glosas nuevas. No expliques tu trabajo.
+7. Devuelve SOLO el texto final en español, sin JSON, etiquetas, comillas, markdown ni comentarios.
+
+SEMANTIC_FRAME:
+""" + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+
+
+def generate_spanish_from_semantic_frame(frame: dict,
+                                         deterministic_fallback: str) -> tuple:
+    """Realiza guided con Bedrock; retorna (texto, usado, mismatch)."""
+    if not ENABLE_BEDROCK:
+        return deterministic_fallback, False, False
+
+    prompt = build_guided_realization_prompt(frame)
+    try:
+        request_body = _build_bedrock_request_body(prompt, max_tokens=400)
+        response = bedrock_runtime.invoke_model(
+            modelId=BEDROCK_MODEL_ID, contentType="application/json",
+            accept="application/json", body=json.dumps(request_body),
+        )
+        texto = _parse_bedrock_response(json.loads(response["body"].read()))
+    except Exception as e:  # noqa: BLE001 — todo fallo cae al compositor seguro
+        logger.warning("Realización guided con Bedrock falló: %s", e)
+        return deterministic_fallback, False, False
+
+    texto = (texto or "").strip().strip('"').strip()
+    safe, reason = semantic_frame_is_preserved(
+        frame, texto, deterministic_fallback)
+    if not safe:
+        logger.warning(
+            "Realización guided descartada por mismatch semántico (%s), "
+            "%d caracteres", reason, len(texto))
+        return deterministic_fallback, False, True
+    return texto, True, False
+
+
 def generate_with_bedrock(cards: list, analysis: dict, base_sentence: str,
                           context_type: str, institution_type: str = "",
                           facts: list = ()) -> tuple:
@@ -2794,7 +3006,8 @@ def generate_with_bedrock(cards: list, analysis: dict, base_sentence: str,
 
 def refine_with_bedrock(base_sentence: str, context_type: str,
                         institution_type: str = "") -> str:
-    """
+    """Compatibilidad del refinador legacy; guided no llama esta función.
+
     Envía la oración BASE (ya generada por el motor propio) a Bedrock
     para refinamiento de redacción. NO traduce glosas — solo pule.
     Si falla, retorna la oración base sin modificar (fallback elegante).
@@ -2847,11 +3060,13 @@ Tu respuesta (solo la oración refinada):"""
         refined = _parse_bedrock_response(response_body)
         if not _refinement_is_safe(base_sentence, refined):
             logger.warning(
-                "Refinamiento DESCARTADO por divergencia (posible alucinación): '%s' → '%s'",
-                base_sentence, refined,
+                "Refinamiento legacy descartado por divergencia: "
+                "base_chars=%d final_chars=%d",
+                len(base_sentence), len(refined),
             )
             return base_sentence
-        logger.info("Bedrock refinó: '%s' → '%s'", base_sentence, refined)
+        logger.info("Refinamiento legacy aceptado: base_chars=%d final_chars=%d",
+                    len(base_sentence), len(refined))
         return refined
     except Exception as e:
         logger.warning("Bedrock falló, usando oración base como fallback: %s", str(e))
@@ -2984,6 +3199,8 @@ def get_cached_response(cache_key: str):
     audio_key = data.pop("audioKey", None)
     data["audioUrl"] = _presign_audio(audio_key) if audio_key else None
     data["cacheHit"] = True
+    data["cachedGenerationSource"] = data.get("generationSource", "")
+    data["generationSource"] = "cache"
     return data
 
 def put_cached_response(cache_key: str, payload: dict, audio_key: str) -> None:
@@ -3024,12 +3241,17 @@ BACKEND_CONTRACT_VERSION = 4
 #
 # Subir este número al cambiar el generador invalida lo anterior sin tener que
 # vaciar el bucket a mano.
-GENERATOR_VERSION = 4
+#
+# La versión 5 incorpora SemanticFrame y realización Bedrock validada en la
+# ruta guiada. Una respuesta v4 podía ser la frase determinista; reutilizarla
+# impediría activar el nuevo pipeline y mezclaría métricas de origen.
+GENERATOR_VERSION = 5
 
 
 def generate_cache_key(context_type: str, cards: list, institution_type: str = "",
                         language: str = "", speech_act: str = "",
-                        declaration=None, contract_version=None, guided=None) -> str:
+                        declaration=None, contract_version=None, guided=None,
+                        semantic_frame=None) -> str:
     """Clave de caché. Todo lo que puede cambiar la salida debe estar aquí:
     antes solo entraban `context`/`cards`, así que dos peticiones con las
     mismas glosas pero distinto `institutionType`, `language`, acto
@@ -3053,6 +3275,8 @@ def generate_cache_key(context_type: str, cards: list, institution_type: str = "
         speech_act.lower().strip(),
         declaration_part,
         json.dumps(guided, sort_keys=True, ensure_ascii=False) if guided else "",
+        (json.dumps(semantic_frame, sort_keys=True, ensure_ascii=False)
+         if semantic_frame else ""),
     ])
     return hashlib.md5(normalized.encode("utf-8")).hexdigest()
 
@@ -3484,9 +3708,21 @@ def lambda_handler(event, context):
         has_structured_declaration(body) and contract_version >= 2
     )
 
+    # Guided ya llega resuelto por el grafo. Su representación primaria no es
+    # ninguna plantilla española: es este frame tipado, construido antes de
+    # la caché para que hechos, roles, negaciones y literales formen parte de
+    # la identidad de la salida.
+    guided_composer = GuidedComposer(_guided_bank()) if guided else None
+    semantic_frame = (
+        guided_composer.semantic_frame(
+            guided, context=context_type,
+            institution_context=institution_type, speech_act=speech_act)
+        if guided_composer else None
+    )
+
     cache_key = generate_cache_key(
         context_type, cards, institution_type, language, speech_act,
-        declaration, contract_version, guided)
+        declaration, contract_version, guided, semantic_frame)
     # No se registran las glosas ni el `declaration` completos: son el
     # contenido de una declaración que puede llegar a un expediente y no
     # debe quedar en texto plano en los registros de la Lambda (auditoría
@@ -3500,36 +3736,40 @@ def lambda_handler(event, context):
 
     cached = get_cached_response(cache_key)
     if cached is not None:
-        logger.info("Cache HIT — cache_key: %s", cache_key)
+        logger.info(
+            "Cache HIT — cache_key: %s | generation_source=cache | "
+            "semantic_mismatch=%s", cache_key,
+            bool(cached.get("semanticMismatch")))
         return build_response(200, cached)
     logger.info("Cache MISS — procesando pipeline completo: %s", cache_key)
 
-    analysis = analyze_glosses(cards)
-
-    # CAMBIO (paridad Dart): cierra la cadena temporal antes de generar. Debe
-    # ir aquí y no en analyze_glosses porque la dirección depende del contexto.
-    _resolve_gender(analysis)
-    _resolve_time(analysis, context_type, cards)
-
-    intermediate = build_intermediate_representation(cards, analysis, context_type)
-
     guided_covered = False
     if guided:
-        # Contrato v4: el banco compartido ya contiene la redacción exacta de
-        # cada respuesta tipada. No se vuelve a inferir desde tarjetas ni se
-        # manda a Bedrock, porque hacerlo podría cambiar negación, actor o un
-        # literal escrito por la persona.
-        composer = GuidedComposer(_guided_bank())
-        base_sentence, representadas = composer.compose_traced(guided)
-        # Cobertura: toda respuesta confirmada que redacta algo está en el
-        # texto. Es la misma comprobación que hace el cliente.
-        guided_covered = composer.confirmed_facts(guided) <= representadas
+        # El compositor español queda como fallback verificable. Bedrock no
+        # recibe esta frase: recibe exclusivamente semantic_frame.
+        base_sentence, representadas = guided_composer.compose_traced(guided)
+        guided_covered = (
+            guided_composer.confirmed_facts(guided) <= representadas)
+        intermediate = semantic_frame
     elif uses_structured:
+        analysis = analyze_glosses(cards)
+        _resolve_gender(analysis)
+        _resolve_time(analysis, context_type, cards)
+        intermediate = build_intermediate_representation(
+            cards, analysis, context_type)
         # El cliente ya mandó las relaciones explícitas (persona↔prenda↔color,
         # objeto↔papel, lugar↔referencia): redactarlas no requiere volver a
         # adivinarlas desde una lista plana de glosas.
         base_sentence = generate_structured_sentence(declaration)
     else:
+        # Free/legacy conserva su analizador local. Guided no pasa por aquí:
+        # el grafo ya resolvió esos hechos y volver a inferirlos sería perder
+        # precisión y gastar trabajo de forma redundante.
+        analysis = analyze_glosses(cards)
+        _resolve_gender(analysis)
+        _resolve_time(analysis, context_type, cards)
+        intermediate = build_intermediate_representation(
+            cards, analysis, context_type)
         base_sentence = generate_base_sentence(intermediate, analysis, context_type, institution_type)
     logger.info("Oración base generada (%d caracteres, estructurada=%s)",
                 len(base_sentence), uses_structured)
@@ -3543,13 +3783,25 @@ def lambda_handler(event, context):
     # y yo escapé" de "me robaron y el ladrón escapó".
     hechos = normalize_facts(declaration) if declaration else []
     if guided:
-        generated_text, generation_validated = base_sentence, guided_covered
+        if guided_covered:
+            generated_text, bedrock_used, semantic_mismatch = (
+                generate_spanish_from_semantic_frame(
+                    semantic_frame, base_sentence))
+        else:
+            generated_text = base_sentence
+            bedrock_used = False
+            semantic_mismatch = True
+        generation_validated = guided_covered
+        generation_source = (
+            "bedrock" if bedrock_used else "deterministic_fallback")
     else:
         generated_text, generation_validated = generate_with_bedrock(
             cards, analysis, base_sentence, context_type, institution_type,
             facts=hechos)
-
-    bedrock_used = generated_text != base_sentence
+        bedrock_used = generated_text != base_sentence
+        semantic_mismatch = False
+        generation_source = (
+            "bedrock" if bedrock_used else "deterministic_fallback")
 
     try:
         audio_bytes = synthesize_audio(generated_text, language)
@@ -3572,8 +3824,10 @@ def lambda_handler(event, context):
     # Se registran longitudes, no el contenido de la declaración (auditoría
     # 2026-09, hallazgo de logging).
     logger.info(
-        "Completado — base: %d caracteres | final: %d caracteres | bedrock: %s",
-        len(base_sentence), len(generated_text), bedrock_used,
+        "Completado — base: %d caracteres | final: %d caracteres | "
+        "generation_source=%s | semantic_mismatch=%s",
+        len(base_sentence), len(generated_text), generation_source,
+        semantic_mismatch,
     )
 
     gloss_sequence = []
@@ -3598,6 +3852,8 @@ def lambda_handler(event, context):
         "audioUrl": audio_url,
         "cacheHit": False,
         "bedrockUsed": bedrock_used,
+        "generationSource": generation_source,
+        "semanticMismatch": semantic_mismatch,
         # El servidor ya comprobó, con las mismas reglas que el cliente, que
         # el texto generado representa TODAS las glosas. El cliente lo usa
         # para no volver a exigir una coincidencia literal que una redacción
@@ -3606,6 +3862,12 @@ def lambda_handler(event, context):
         # no una promesa del modelo.
         "coverageValidated": generation_validated,
     }
+
+    # El frame se devuelve para auditoría del contrato y pruebas de cobertura;
+    # nunca se escribe en logs. La asignación separada evita incluir una clave
+    # nula en el camino libre/legacy.
+    if semantic_frame is not None:
+        response_payload["semanticFrame"] = semantic_frame
 
     put_cached_response(cache_key, response_payload, _audio_s3_key(cache_key))
 

@@ -15,12 +15,13 @@ import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart
 
 /// Preview, resultado y backend parten de la MISMA intervención.
 ///
-/// El servidor recibe exactamente la intervención de la vista previa, y su
-/// respuesta solo se acepta si es la misma frase: un backend que pierda o
-/// cambie un hecho no puede colarse en el resultado.
+/// El servidor recibe exactamente la intervención de la vista previa. Una
+/// redacción distinta solo se acepta con la garantía del validador semántico
+/// del backend; sin ella gana el fallback de la vista previa.
 class _Backend implements TranslationRepository {
-  _Backend(this.responder);
+  _Backend(this.responder, {this.validated = true});
   final String Function(Map<String, dynamic>? guided) responder;
+  final bool validated;
   Map<String, dynamic>? guidedEnviado;
   List<String>? cardsEnviadas;
   bool falla = false;
@@ -43,16 +44,19 @@ class _Backend implements TranslationRepository {
       baseSentence: texto,
       generatedText: texto,
       audioUrl: 'https://audio/x.mp3',
-      coverageValidated: true,
+      bedrockUsed: true,
+      coverageValidated: validated,
     );
   }
 }
 
 class _Signs implements AudioTranslationRepository {
   @override
-  Future<LsbTranslation> translateText(String text,
-          {String? situation, Map<String, String>? resolvedSenses}) async =>
-      LsbTranslation(glosses: const [], animationUrl: '');
+  Future<LsbTranslation> translateText(
+    String text, {
+    String? situation,
+    Map<String, String>? resolvedSenses,
+  }) async => LsbTranslation(glosses: const [], animationUrl: '');
 }
 
 void main() {
@@ -64,44 +68,55 @@ void main() {
     var s = flow.startJourney('denuncia_robo');
     s = flow.select(s, 'Q.HEC.QUE_OCURRIO', 'robar').session;
     s = flow
-        .select(s, 'Q.ROB.QUE', 'dinero',
-            values: {'monto': '500', 'moneda': 'Bs'})
+        .select(
+          s,
+          'Q.ROB.QUE',
+          'dinero',
+          values: {'monto': '500', 'moneda': 'Bs'},
+        )
         .session;
     s = flow.select(s, 'Q.PER.CONOCE', 'no_sabe').session;
     return s.toIntervention();
   }
 
-  ConversationEngine engine(TranslationRepository backend) => ConversationEngine(
+  ConversationEngine engine(TranslationRepository backend) =>
+      ConversationEngine(
         assembler: const LocalSentenceAssembler(),
         declarationRepository: backend,
         signRepository: _Signs(),
       );
 
-  test('el backend recibe exactamente la intervención de la vista previa',
-      () async {
-    final intervention = robo();
-    final local = composer.compose(intervention);
-    final backend = _Backend((_) => local);
-    await engine(backend).generateGuided(
-      intervention: intervention,
-      localText: local,
-      glosses: flow.glossesOf(intervention),
-    );
-    expect(jsonEncode(backend.guidedEnviado),
-        jsonEncode(intervention.toJson()));
-    expect(jsonEncode(backend.guidedEnviado),
-        contains('{"monto":"500","moneda":"Bs"}'));
-    expect(backend.cardsEnviadas, ['ROBAR', 'BILLETES', 'NO_SABER']);
+  test(
+    'el backend recibe exactamente la intervención de la vista previa',
+    () async {
+      final intervention = robo();
+      final local = composer.compose(intervention);
+      final backend = _Backend((_) => local);
+      await engine(backend).generateGuided(
+        intervention: intervention,
+        localText: local,
+        glosses: flow.glossesOf(intervention),
+      );
+      expect(
+        jsonEncode(backend.guidedEnviado),
+        jsonEncode(intervention.toJson()),
+      );
+      expect(
+        jsonEncode(backend.guidedEnviado),
+        contains('{"monto":"500","moneda":"Bs"}'),
+      );
+      expect(backend.cardsEnviadas, ['ROBAR', 'BILLETES', 'NO_SABER']);
 
-    // El cuerpo HTTP real lleva el mismo objeto, sin tocar.
-    final body = RemoteTranslationDataSourceImpl.buildRequestBody(
-      context: 'denuncia_robo',
-      cards: backend.cardsEnviadas!,
-      guided: backend.guidedEnviado,
-    );
-    expect(body['guided'], same(backend.guidedEnviado));
-    expect(body['contractVersion'], 4);
-  });
+      // El cuerpo HTTP real lleva el mismo objeto, sin tocar.
+      final body = RemoteTranslationDataSourceImpl.buildRequestBody(
+        context: 'denuncia_robo',
+        cards: backend.cardsEnviadas!,
+        guided: backend.guidedEnviado,
+      );
+      expect(body['guided'], same(backend.guidedEnviado));
+      expect(body['contractVersion'], 4);
+    },
+  );
 
   test('una respuesta idéntica del servidor aporta su audio', () async {
     final intervention = robo();
@@ -116,24 +131,49 @@ void main() {
     expect(r.coverageValidated, isTrue);
   });
 
-  test('una respuesta distinta del servidor se descarta: gana la preview',
-      () async {
+  test('una redacción distinta y validada se acepta con su audio', () async {
     final intervention = robo();
     final local = composer.compose(intervention);
-    // Un servidor que pierde la duda y cambia el monto.
-    final r = await engine(
-            _Backend((_) => 'Me robaron 50 bolivianos y conozco al ladrón.'))
-        .generateGuided(
-      intervention: intervention,
-      localText: local,
-      glosses: flow.glossesOf(intervention),
+    final r =
+        await engine(
+          _Backend(
+            (_) => 'Sufrí el robo de Bs 500. No sé si conozco a esa persona.',
+          ),
+        ).generateGuided(
+          intervention: intervention,
+          localText: local,
+          glosses: flow.glossesOf(intervention),
+        );
+    expect(
+      r.generatedText,
+      'Sufrí el robo de Bs 500. No sé si conozco a esa persona.',
     );
-    expect(r.generatedText, local);
-    expect(r.generatedText, contains('Bs 500'));
-    expect(r.generatedText, contains('No sé si la conozco.'));
-    expect(r.audioUrl, isNull,
-        reason: 'el audio del servidor sería de otra frase');
+    expect(r.audioUrl, 'https://audio/x.mp3');
+    expect(r.bedrockUsed, isTrue);
   });
+
+  test(
+    'una respuesta sin garantía semántica se descarta: gana la preview',
+    () async {
+      final intervention = robo();
+      final local = composer.compose(intervention);
+      final r =
+          await engine(
+            _Backend(
+              (_) => 'Me robaron 50 bolivianos y conozco al ladrón.',
+              validated: false,
+            ),
+          ).generateGuided(
+            intervention: intervention,
+            localText: local,
+            glosses: flow.glossesOf(intervention),
+          );
+      expect(r.generatedText, local);
+      expect(r.generatedText, contains('Bs 500'));
+      expect(r.generatedText, contains('No sé si la conozco.'));
+      expect(r.audioUrl, isNull);
+    },
+  );
 
   test('sin red, el resultado es la misma frase de la vista previa', () async {
     final intervention = robo();

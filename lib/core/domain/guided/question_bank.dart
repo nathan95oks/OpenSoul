@@ -6,14 +6,14 @@ import 'package:lsb_legal_app/core/domain/guided/question_bank_data.g.dart';
 /// El banco semántico de preguntas y recorridos.
 ///
 /// Es la **única** fuente de las preguntas que ve la persona sorda en el
-/// módulo LSB → texto/audio, de las opciones que puede elegir y de la frase
-/// que produce cada elección. Lo genera `tool/build_question_matrix.py` desde
+/// módulo LSB → texto/audio, de las opciones que puede elegir y del significado
+/// estructurado que produce cada elección. Lo genera `tool/build_question_matrix.py` desde
 /// `docs/negocio/config/banco_preguntas.json`; la Lambda carga el mismo banco
 /// (`aws/question_bank.json`), así que cliente y servidor redactan con las
 /// mismas plantillas.
 ///
-/// [questions] conserva el JSON crudo porque [GuidedComposer] lo recorre tal
-/// cual (gemelo del compositor Python). Las vistas tipadas —[question],
+/// [questions] conserva el JSON crudo porque [GuidedComposer] lo usa como
+/// fallback determinista (gemelo del compositor Python). Las vistas tipadas —[question],
 /// [journey]— son para las reglas del flujo y la interfaz, y se derivan del
 /// mismo JSON: no hay una segunda copia de nada.
 class QuestionBank {
@@ -33,7 +33,9 @@ class QuestionBank {
     for (final entry
         in (data['recorridos'] as Map<String, dynamic>? ?? const {}).entries)
       entry.key: BankJourney.fromJson(
-          entry.key, entry.value as Map<String, dynamic>),
+        entry.key,
+        entry.value as Map<String, dynamic>,
+      ),
   };
 
   QuestionBank(this.data);
@@ -42,8 +44,8 @@ class QuestionBank {
 
   /// El banco empaquetado con la aplicación. Se decodifica una sola vez.
   factory QuestionBank.generated() => _generated ??= QuestionBank(
-        jsonDecode(kQuestionBankJson) as Map<String, dynamic>,
-      );
+    jsonDecode(kQuestionBankJson) as Map<String, dynamic>,
+  );
 
   BankQuestion? question(String id) => _typed[id];
 
@@ -101,16 +103,16 @@ class JourneyStep {
   });
 
   factory JourneyStep.fromJson(Map<String, dynamic> json) => JourneyStep(
-        questionId: json['pregunta'] as String,
-        conditions: [
-          for (final c in (json['cuando'] as List<dynamic>? ?? const []))
-            GuidedCondition.fromJson(c as Map<String, dynamic>),
-        ],
-        required: json['obligatoria'] == true,
-        hiddenOptions: _strings(json['ocultar']),
-        parent: json['padre'] as String?,
-        formulation: json['formulacion'] as String?,
-      );
+    questionId: json['pregunta'] as String,
+    conditions: [
+      for (final c in (json['cuando'] as List<dynamic>? ?? const []))
+        GuidedCondition.fromJson(c as Map<String, dynamic>),
+    ],
+    required: json['obligatoria'] == true,
+    hiddenOptions: _strings(json['ocultar']),
+    parent: json['padre'] as String?,
+    formulation: json['formulacion'] as String?,
+  );
 }
 
 class BankJourney {
@@ -171,19 +173,19 @@ class BankQuestion {
   });
 
   factory BankQuestion.fromJson(Map<String, dynamic> json) => BankQuestion(
-        id: json['id'] as String,
-        formulation: (json['formulacion'] ?? '').toString(),
-        control: (json['control'] ?? '').toString(),
-        mode: (json['modo'] ?? 'frase').toString(),
-        maximum: (json['maximo'] as num?)?.toInt(),
-        options: [
-          for (final o in (json['opciones'] as List<dynamic>? ?? const []))
-            BankOption.fromJson(o as Map<String, dynamic>),
-        ],
-        notOfferedGlosses: _strings(json['noOfrecer']),
-        lsb: LsbFormulation.fromJson(json['formulacionLsb']),
-        looseSentence: json['fraseSuelta'] as String?,
-      );
+    id: json['id'] as String,
+    formulation: (json['formulacion'] ?? '').toString(),
+    control: (json['control'] ?? '').toString(),
+    mode: (json['modo'] ?? 'frase').toString(),
+    maximum: (json['maximo'] as num?)?.toInt(),
+    options: [
+      for (final o in (json['opciones'] as List<dynamic>? ?? const []))
+        BankOption.fromJson(o as Map<String, dynamic>),
+    ],
+    notOfferedGlosses: _strings(json['noOfrecer']),
+    lsb: LsbFormulation.fromJson(json['formulacionLsb']),
+    looseSentence: json['fraseSuelta'] as String?,
+  );
 
   bool get isPolar => control == 'polar2' || control == 'polar3';
 
@@ -251,32 +253,30 @@ class BankOption {
   });
 
   factory BankOption.fromJson(Map<String, dynamic> json) => BankOption(
-        id: json['id'] as String,
-        label: (json['etiqueta'] ?? json['id']).toString(),
-        glosses: _strings(json['glosas']),
-        state: GuidedAnswerStateWire.parse(json['estado'] as String?) ??
-            GuidedAnswerState.affirmed,
-        isExit: json['salida'] == true,
-        editor: json['editor'] as String?,
-        editorOptional: json['editorOpcional'] == true,
-        group: json['grupo'] as String?,
-        conditions: [
-          for (final c in (json['cuando'] as List<dynamic>? ?? const []))
-            GuidedCondition.fromJson(c as Map<String, dynamic>),
-        ],
-        literal: json['literal'] == true,
-        noSign: json['sinSena'] == true,
-        noApproximate: json['sinAproximado'] == true,
-        range: json['rango'] == null
-            ? null
-            : [
-                for (final n in json['rango'] as List<dynamic>)
-                  (n as num).toInt()
-              ],
-        phrase: (json['frase'] ?? '').toString(),
-        phraseWithoutValue: json['fraseSinValor'] as String?,
-        singularPhrase: json['fraseSingular'] as String?,
-      );
+    id: json['id'] as String,
+    label: (json['etiqueta'] ?? json['id']).toString(),
+    glosses: _strings(json['glosas']),
+    state:
+        GuidedAnswerStateWire.parse(json['estado'] as String?) ??
+        GuidedAnswerState.affirmed,
+    isExit: json['salida'] == true,
+    editor: json['editor'] as String?,
+    editorOptional: json['editorOpcional'] == true,
+    group: json['grupo'] as String?,
+    conditions: [
+      for (final c in (json['cuando'] as List<dynamic>? ?? const []))
+        GuidedCondition.fromJson(c as Map<String, dynamic>),
+    ],
+    literal: json['literal'] == true,
+    noSign: json['sinSena'] == true,
+    noApproximate: json['sinAproximado'] == true,
+    range: json['rango'] == null
+        ? null
+        : [for (final n in json['rango'] as List<dynamic>) (n as num).toInt()],
+    phrase: (json['frase'] ?? '').toString(),
+    phraseWithoutValue: json['fraseSinValor'] as String?,
+    singularPhrase: json['fraseSingular'] as String?,
+  );
 
   bool get hasEditor => editor != null;
 
@@ -287,9 +287,15 @@ class BankOption {
   /// sin seña se presenta como texto, sin fingir una tarjeta LSB.
   bool get hasSign => glosses.isNotEmpty && !literal && !noSign;
 
-  /// Si la opción redacta algo por sí misma. Las que no —«Me falta algo»,
-  /// «Alguien escapó», «¿Quiere describirla?»— solo abren la pregunta que
-  /// sí lo hace.
+  /// Formulación que ve la persona sorda en la tarjeta.
+  ///
+  /// La secuencia conserva el orden canónico del banco. El español de
+  /// [label] solo queda como fallback cuando la opción no tiene una secuencia
+  /// LSB completa que pueda mostrarse.
+  String get displayFormulation => hasSign ? glosses.join(' · ') : label;
+
+  /// Si la opción aporta texto al fallback determinista. Algunas opciones
+  /// semánticas solo abren la pregunta dependiente que completa el hecho.
   bool get writesSomething =>
       phrase.trim().isNotEmpty ||
       (phraseWithoutValue?.trim().isNotEmpty ?? false) ||
@@ -383,39 +389,62 @@ class LsbFormulation {
     var i = 0;
     while (i < glosses.length) {
       final compound = compounds.firstWhere(
-        (c) => c.isNotEmpty &&
+        (c) =>
+            c.isNotEmpty &&
             i + c.length <= glosses.length &&
             _sameList(glosses.sublist(i, i + c.length), c),
         orElse: () => const [],
       );
       if (compound.isNotEmpty) {
-        out.add(LsbFormulationSegment(
-          label: compound.join('+'),
-          glosses: compound,
-          kind: LsbSegmentKind.compound,
-        ));
+        out.add(
+          LsbFormulationSegment(
+            label: compound.join('+'),
+            glosses: compound,
+            kind: LsbSegmentKind.compound,
+          ),
+        );
         i += compound.length;
         continue;
       }
       final token = glosses[i];
       if (isDactylology(token)) {
-        out.add(LsbFormulationSegment(
-            label: token, glosses: const [], kind: LsbSegmentKind.dactylology));
+        out.add(
+          LsbFormulationSegment(
+            label: token,
+            glosses: const [],
+            kind: LsbSegmentKind.dactylology,
+          ),
+        );
       } else if (token == numberToken) {
-        out.add(const LsbFormulationSegment(
-            label: 'NÚM', glosses: [], kind: LsbSegmentKind.number));
+        out.add(
+          const LsbFormulationSegment(
+            label: 'NÚM',
+            glosses: [],
+            kind: LsbSegmentKind.number,
+          ),
+        );
       } else {
         final alts = alternatives[i];
         final label = alts != null ? alts.join('/') : token;
-        out.add(LsbFormulationSegment(
-          label: token == interrogative ||
-                  const {'QUÉ', 'QUIÉN', 'DÓNDE', 'CUÁNDO', 'CUÁL', 'CÓMO', 'CUÁNTOS'}
-                      .contains(token)
-              ? '¿$label?'
-              : label,
-          glosses: [token],
-          kind: LsbSegmentKind.sign,
-        ));
+        out.add(
+          LsbFormulationSegment(
+            label:
+                token == interrogative ||
+                    const {
+                      'QUÉ',
+                      'QUIÉN',
+                      'DÓNDE',
+                      'CUÁNDO',
+                      'CUÁL',
+                      'CÓMO',
+                      'CUÁNTOS',
+                    }.contains(token)
+                ? '¿$label?'
+                : label,
+            glosses: [token],
+            kind: LsbSegmentKind.sign,
+          ),
+        );
       }
       i++;
     }

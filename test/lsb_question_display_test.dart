@@ -13,6 +13,34 @@ class _ImagesOff extends SignImagesNotifier {
 void main() {
   final bank = QuestionBank.generated();
 
+  test('las 492 opciones con seña muestran su secuencia LSB completa', () {
+    final options = [
+      for (final question in bank.allQuestions) ...question.options,
+    ];
+    final signed = options.where((option) => option.hasSign).toList();
+    final fallback = options.where((option) => !option.hasSign).toList();
+    expect(options, hasLength(528));
+    expect(signed, hasLength(492));
+    expect(fallback, hasLength(36));
+
+    for (final option in signed) {
+      expect(
+        option.displayFormulation,
+        option.glosses.join(' · '),
+        reason: option.id,
+      );
+    }
+    for (final option in fallback) {
+      expect(option.displayFormulation, option.label, reason: option.id);
+    }
+
+    final happened = bank.question('Q.HEC.QUE_OCURRIO')!;
+    expect(
+      {for (final option in happened.options) option.displayFormulation},
+      {'ROBAR', 'PERDER', 'DAÑAR', 'ESCAPAR'},
+    );
+  });
+
   Future<void> pumpQuestion(WidgetTester tester, BankQuestion question) async {
     await tester.pumpWidget(
       ProviderScope(
@@ -100,6 +128,47 @@ void main() {
       );
     }
     expect(find.text('¿Qué ocurrió?'), findsNothing);
+    final token = tester.widget<Text>(find.text('NARRAR'));
+    expect(token.style?.fontSize, greaterThanOrEqualTo(16));
+  });
+
+  testWidgets('las glosas grandes hacen wrap sin overflow en móvil pequeño', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [signImagesEnabledProvider.overrideWith(_ImagesOff.new)],
+        child: const MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 240,
+              child: LsbQuestionDisplay(
+                spanish: 'fallback no visible',
+                formulation: LsbFormulation(
+                  displayReady: true,
+                  glosses: [
+                    'INVESTIGACIÓN',
+                    'CONTINUAR',
+                    'DOCUMENTO',
+                    'PRESENTAR',
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    final first = tester.getTopLeft(find.text('INVESTIGACIÓN')).dy;
+    final last = tester.getTopLeft(find.text('PRESENTAR')).dy;
+    expect(
+      last,
+      greaterThan(first),
+      reason: 'la secuencia debe ocupar más de una fila',
+    );
+    expect(find.text('fallback no visible'), findsNothing);
   });
 
   testWidgets('pendiente y hueco incompleto usan español sin LSB parcial', (

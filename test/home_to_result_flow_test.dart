@@ -76,22 +76,30 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   Future<(ProviderContainer, _Backend)> montar(WidgetTester tester) async {
-    final backend =
-        _Backend('Un hombre me robó mi celular por WhatsApp en la calle.');
+    final backend = _Backend(
+      'Un hombre me robó mi celular por WhatsApp en la calle.',
+    );
     final router = GoRouter(
       initialLocation: '/lsb-to-audio',
       routes: [
-        GoRoute(path: '/lsb-to-audio', builder: (_, _) => const LsbFlowScreen()),
+        GoRoute(
+          path: '/lsb-to-audio',
+          builder: (_, _) => const LsbFlowScreen(),
+        ),
       ],
     );
-    final container = ProviderContainer(overrides: [
-      translationRepositoryProvider.overrideWithValue(backend),
-      audioOutputProvider.overrideWithValue(_NoopAudio()),
-      lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-      signImagesEnabledProvider.overrideWith(_SinImagenes.new),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        translationRepositoryProvider.overrideWithValue(backend),
+        audioOutputProvider.overrideWithValue(_NoopAudio()),
+        lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
+        signImagesEnabledProvider.overrideWith(_SinImagenes.new),
+      ],
+    );
     addTearDown(container.dispose);
-    container.read(contextProvider.notifier).setContext(
+    container
+        .read(contextProvider.notifier)
+        .setContext(
           availableContexts.firstWhere((c) => c.id == 'denuncia_robo'),
         );
     await tester.pumpWidget(
@@ -118,117 +126,199 @@ void main() {
       .widget<Text>(find.byKey(const ValueKey('live-declaration-preview')))
       .data!;
 
-  testWidgets('responder, ver la vista previa y emitir: el resultado es esa frase',
-      (tester) async {
-    final (container, backend) = await montar(tester);
+  testWidgets(
+    'responder, ver la vista previa y emitir: el resultado es esa frase',
+    (tester) async {
+      final (container, backend) = await montar(tester);
 
-    int pasoVisible() => tester
-        .widget<IndexedStack>(find.descendant(
-          of: find.byType(LsbFlowScreen),
-          matching: find.byType(IndexedStack),
-        ))
-        .index!;
+      int pasoVisible() => tester
+          .widget<IndexedStack>(
+            find.descendant(
+              of: find.byType(LsbFlowScreen),
+              matching: find.byType(IndexedStack),
+            ),
+          )
+          .index!;
 
-    expect(find.byType(HomeScreen), findsOneWidget);
-    expect(pasoVisible(), 0);
-    expect(find.text('¿Qué ocurrió?'), findsNothing);
-    // La tarjeta muestra solo la secuencia LSB utilizable del banco.
-    final lsb = find.byKey(const Key('formulacion_lsb'));
-    expect(lsb, findsOneWidget);
-    for (final pieza in ['TÚ', 'NARRAR', '¿QUÉ?']) {
-      expect(find.descendant(of: lsb, matching: find.text(pieza)),
-          findsOneWidget);
-    }
-    expect(find.text('LSB provisional'), findsNothing);
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(pasoVisible(), 0);
+      expect(find.text('¿Qué ocurrió?'), findsNothing);
+      // La tarjeta muestra solo la secuencia LSB utilizable del banco.
+      final lsb = find.byKey(const Key('formulacion_lsb'));
+      expect(lsb, findsOneWidget);
+      for (final pieza in ['TÚ', 'NARRAR', '¿QUÉ?']) {
+        expect(
+          find.descendant(of: lsb, matching: find.text(pieza)),
+          findsOneWidget,
+        );
+      }
+      expect(find.text('LSB provisional'), findsNothing);
 
-    await tocar(tester, find.text('Me robaron'));
-    expect(vistaPrevia(tester), 'Me robaron algo.');
-    expect(container.read(sentenceProvider), ['ROBAR'],
-        reason: 'el reflejo en glosas sale de la misma respuesta');
+      for (final spanish in const [
+        'Me robaron',
+        'Me falta algo (lo perdí o no sé)',
+        'Dañaron algo mío',
+        'Alguien escapó',
+      ]) {
+        expect(find.text(spanish), findsNothing);
+      }
+      for (final option in const ['ROBAR', 'PERDER', 'DAÑAR', 'ESCAPAR']) {
+        expect(find.text(option), findsOneWidget);
+      }
 
-    await tocar(tester, find.text('CONTINUAR'));
-    expect(find.text('¿Qué le robaron?'), findsNothing);
-    for (final pieza in ['ROBAR', '¿QUÉ?']) {
-      expect(find.descendant(of: lsb, matching: find.text(pieza)),
-          findsOneWidget);
-    }
-    await tocar(tester, find.text('Celular'));
-    expect(vistaPrevia(tester), 'Me robaron el celular.');
+      await tocar(tester, find.text('ROBAR'));
+      expect(vistaPrevia(tester), 'Me robaron algo.');
+      expect(
+        container.read(sentenceProvider),
+        ['ROBAR'],
+        reason: 'el reflejo en glosas sale de la misma respuesta',
+      );
 
-    // Suficiencia: ya se puede terminar sin recorrer lo opcional.
-    await tocar(tester, find.byKey(const Key('terminar_aqui')));
+      await tocar(tester, find.text('CONTINUAR'));
+      expect(find.text('¿Qué le robaron?'), findsNothing);
+      for (final pieza in ['ROBAR', '¿QUÉ?']) {
+        expect(
+          find.descendant(of: lsb, matching: find.text(pieza)),
+          findsOneWidget,
+        );
+      }
+      await tocar(tester, find.text('CELULAR'));
+      expect(vistaPrevia(tester), 'Me robaron el celular.');
 
-    expect(pasoVisible(), 1);
-    expect(find.byType(DeclarationResultScreen), findsOneWidget);
-    expect(find.text('Me robaron el celular.'), findsWidgets);
-    expect(find.textContaining('WhatsApp'), findsNothing,
-        reason: 'la frase distinta del servidor se descarta');
-    expect(backend.guided, isNotNull);
-    expect(backend.guided!['recorrido'], 'denuncia_robo');
-    expect(find.bySemanticsLabel('Nueva declaración'), findsOneWidget);
-  });
+      // Suficiencia: ya se puede terminar sin recorrer lo opcional.
+      await tocar(tester, find.byKey(const Key('terminar_aqui')));
 
-  testWidgets('una pregunta obligatoria no se salta con CONTINUAR',
-      (tester) async {
+      expect(pasoVisible(), 1);
+      expect(find.byType(DeclarationResultScreen), findsOneWidget);
+      expect(find.text('Me robaron el celular.'), findsWidgets);
+      expect(
+        find.textContaining('WhatsApp'),
+        findsNothing,
+        reason: 'la frase distinta del servidor se descarta',
+      );
+      expect(backend.guided, isNotNull);
+      expect(backend.guided!['recorrido'], 'denuncia_robo');
+      expect(find.bySemanticsLabel('Nueva declaración'), findsOneWidget);
+    },
+  );
+
+  testWidgets('una pregunta obligatoria no se salta con CONTINUAR', (
+    tester,
+  ) async {
     final (container, _) = await montar(tester);
 
-    await tocar(tester, find.text('Alguien escapó'));
+    await tocar(tester, find.text('ESCAPAR'));
     await tocar(tester, find.text('CONTINUAR'));
     final escapeLsb = find.byKey(const Key('formulacion_lsb'));
     for (final pieza in const ['¿QUIÉN?', 'ESCAPAR']) {
-      expect(find.descendant(of: escapeLsb, matching: find.text(pieza)),
-          findsOneWidget);
+      expect(
+        find.descendant(of: escapeLsb, matching: find.text(pieza)),
+        findsOneWidget,
+      );
     }
     expect(find.text('¿Quién escapó?'), findsNothing);
 
     await tocar(tester, find.text('CONTINUAR'));
-    expect(escapeLsb, findsOneWidget,
-        reason: 'sin saber quién escapó, «Alguien escapó» no se puede redactar');
+    expect(
+      escapeLsb,
+      findsOneWidget,
+      reason: 'sin saber quién escapó, «Alguien escapó» no se puede redactar',
+    );
     expect(find.byKey(const Key('omitir_pregunta')), findsNothing);
 
-    await tocar(tester, find.text('Yo logré escapar'));
+    await tocar(tester, find.text('YO · ESCAPAR'));
     expect(vistaPrevia(tester), 'Logré escapar.');
-    expect(container.read(guidedFlowProvider).session!
-        .answerOf('Q.HEC.ESCAPE_ACTOR')!.optionIds, ['yo']);
+    expect(
+      container
+          .read(guidedFlowProvider)
+          .session!
+          .answerOf('Q.HEC.ESCAPE_ACTOR')!
+          .optionIds,
+      ['yo'],
+    );
     // Deja que el aviso se cierre solo.
     await tester.pump(const Duration(seconds: 5));
   });
 
-  testWidgets('omitir una pregunta opcional no redacta nada y queda registrado',
-      (tester) async {
-    final (container, _) = await montar(tester);
+  testWidgets(
+    'omitir una pregunta opcional no redacta nada y queda registrado',
+    (tester) async {
+      final (container, _) = await montar(tester);
 
-    await tocar(tester, find.text('Me robaron'));
-    await tocar(tester, find.text('CONTINUAR'));
-    await tocar(tester, find.byKey(const Key('omitir_pregunta')));
+      await tocar(tester, find.text('ROBAR'));
+      await tocar(tester, find.text('CONTINUAR'));
+      await tocar(tester, find.byKey(const Key('omitir_pregunta')));
 
-    final session = container.read(guidedFlowProvider).session!;
-    expect(session.answerOf('Q.ROB.QUE')!.isOmitted, isTrue);
-    expect(vistaPrevia(tester), 'Me robaron algo.');
-  });
+      final session = container.read(guidedFlowProvider).session!;
+      expect(session.answerOf('Q.ROB.QUE')!.isOmitted, isTrue);
+      expect(vistaPrevia(tester), 'Me robaron algo.');
+    },
+  );
 
-  testWidgets('el monto se escribe con su moneda y llega literal a la frase',
-      (tester) async {
+  testWidgets('el monto se escribe con su moneda y llega literal a la frase', (
+    tester,
+  ) async {
     await montar(tester);
 
-    await tocar(tester, find.text('Me robaron'));
+    await tocar(tester, find.text('ROBAR'));
     await tocar(tester, find.text('CONTINUAR'));
-    await tocar(tester, find.text('Dinero'));
+    await tocar(tester, find.text('BILLETES'));
 
     // Editor opcional: la opción ya está elegida y se puede precisar.
     expect(find.byKey(const Key('editor_confirmar')), findsOneWidget);
-    await tester.enterText(
-        find.byKey(const Key('editor_campo_monto')), '500');
+    await tester.enterText(find.byKey(const Key('editor_campo_monto')), '500');
     await tester.pumpAndSettle();
-    final confirmar = tester
-        .widget<FilledButton>(find.byKey(const Key('editor_confirmar')));
-    expect(confirmar.onPressed, isNull,
-        reason: 'sin moneda elegida no hay monto: la moneda no se inventa');
+    final confirmar = tester.widget<FilledButton>(
+      find.byKey(const Key('editor_confirmar')),
+    );
+    expect(
+      confirmar.onPressed,
+      isNull,
+      reason: 'sin moneda elegida no hay monto: la moneda no se inventa',
+    );
 
     await tocar(tester, find.byKey(const Key('editor_moneda_Bs')));
     await tocar(tester, find.byKey(const Key('editor_confirmar')));
 
     expect(vistaPrevia(tester), 'Me robaron Bs 500.');
-    expect(find.text('Dinero: Bs 500'), findsOneWidget);
+    expect(find.text('BILLETES: Bs 500'), findsOneWidget);
+  });
+
+  testWidgets('la cabecera permanece visible, respeta SafeArea y no se mueve', (
+    tester,
+  ) async {
+    await montar(tester);
+    await tocar(tester, find.text('ROBAR'));
+    await tocar(tester, find.text('CONTINUAR'));
+
+    final header = find.byKey(const Key('guided_question_header'));
+    final scroll = find.byKey(const Key('guided_options_scroll'));
+    expect(header, findsOneWidget);
+    expect(scroll, findsOneWidget);
+    final safeArea = tester.widget<SafeArea>(header);
+    expect(safeArea.top, isTrue);
+    expect(safeArea.bottom, isFalse);
+
+    final appBarBottom = tester.getBottomLeft(find.byType(AppBar)).dy;
+    final before = tester.getTopLeft(header);
+    expect(before.dy, greaterThanOrEqualTo(appBarBottom));
+
+    final scrollable = find
+        .descendant(of: scroll, matching: find.byType(Scrollable))
+        .first;
+    final beforePixels = tester
+        .state<ScrollableState>(scrollable)
+        .position
+        .pixels;
+    await tester.drag(scroll, const Offset(0, -300));
+    await tester.pumpAndSettle();
+    final afterPixels = tester
+        .state<ScrollableState>(scrollable)
+        .position
+        .pixels;
+    expect(afterPixels, greaterThan(beforePixels));
+    final after = tester.getTopLeft(header);
+    expect(after.dy, closeTo(before.dy, 0.1));
+    expect(find.byKey(const Key('formulacion_lsb')), findsOneWidget);
   });
 }
