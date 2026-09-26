@@ -17,6 +17,14 @@ const _lambdaCards = 'aws/lambda_function.py';
 const _inicio = 'AVAILABLE_GLOSSES = {';
 const _fin = '}';
 
+String _normalizarSaltos(String texto) =>
+    texto.replaceAll('\r\n', '\n').replaceAll('\r', '\n');
+
+String _saltosDelArchivo(String bloque, String archivo) {
+  final salto = archivo.contains('\r\n') ? '\r\n' : '\n';
+  return _normalizarSaltos(bloque).replaceAll('\n', salto);
+}
+
 void main(List<String> args) {
   final soloVerificar = args.contains('--check');
 
@@ -57,7 +65,8 @@ void main(List<String> args) {
   final hasta = fuente.indexOf('\n$_fin', desde) + _fin.length + 1;
   final bloqueActual = fuente.substring(desde, hasta);
 
-  if (bloqueActual.trim() == bloqueNuevo.trim()) {
+  if (_normalizarSaltos(bloqueActual).trim() ==
+      _normalizarSaltos(bloqueNuevo).trim()) {
     stdout.writeln('vocabulario sincronizado (${entradas.length} glosas)');
     sincronizarLexicon(soloVerificar);
     return;
@@ -67,7 +76,9 @@ void main(List<String> args) {
         'Ejecuta: dart run tool/sync_vocabulary.dart');
     exit(1);
   }
-  File(_lambda).writeAsStringSync(fuente.replaceRange(desde, hasta, bloqueNuevo));
+  File(_lambda).writeAsStringSync(
+    fuente.replaceRange(desde, hasta, _saltosDelArchivo(bloqueNuevo, fuente)),
+  );
   stdout.writeln('vocabulario regenerado: ${entradas.length} glosas '
       'en ${porCategoria.length} categorías');
 
@@ -115,7 +126,8 @@ void sincronizarLexicon(bool soloVerificar) {
     exit(1);
   }
   final hasta = fuente.indexOf('\n}', desde) + 2;
-  if (fuente.substring(desde, hasta).trim() == bloqueNuevo.trim()) {
+  if (_normalizarSaltos(fuente.substring(desde, hasta)).trim() ==
+      _normalizarSaltos(bloqueNuevo).trim()) {
     stdout.writeln('lexicón sincronizado (${glosas.length} glosas)');
     return;
   }
@@ -124,8 +136,9 @@ void sincronizarLexicon(bool soloVerificar) {
         'Ejecuta: dart run tool/sync_vocabulary.dart');
     exit(1);
   }
-  File(_lambdaCards)
-      .writeAsStringSync(fuente.replaceRange(desde, hasta, bloqueNuevo));
+  File(_lambdaCards).writeAsStringSync(
+    fuente.replaceRange(desde, hasta, _saltosDelArchivo(bloqueNuevo, fuente)),
+  );
   stdout.writeln('lexicón regenerado: ${glosas.length} glosas');
 }
 

@@ -1492,6 +1492,11 @@ _NEGADORES = {"NO", "JAMAS", "NUNCA", "NADA", "NADIE", "NINGUNO"}
 # canónicas del catálogo y raíces de palabras sin seña propia. Una misma pista
 # puede nombrar varias situaciones («denunciar» vale para todas las denuncias):
 # quien consume la lectura decide si eso es una familia.
+#
+# Esta tabla es configuración lingüística deliberada, no metadata de UI. Las
+# etiquetas no contienen todos los sinónimos hablados ni expresan que QUEJAR
+# nombra a toda la familia de denuncias; derivarla de ellas cambiaría el
+# reconocimiento. Los tests validan que sus IDs y glosas sigan siendo reales.
 SITUATION_CUES = {
     "denuncia_robo": {"glosas": {"ROBAR", "LADRON"},
                       "raices": {"denunci", "rob", "hurt", "asalt"}},

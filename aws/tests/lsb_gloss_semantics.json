@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "interrogativeSlots": {
+    "DONDE": "place",
+    "CUANDO": "time",
+    "QUIEN": "person",
+    "CUANTOS": "amount"
+  },
+  "openInterrogatives": [
+    "COMO",
+    "CUAL",
+    "PARA_QUE",
+    "POR_QUE",
+    "QUE"
+  ],
+  "headSlots": {
+    "DIA": "time",
+    "DIRECCION": "place",
+    "FECHA": "time",
+    "HORA": "time",
+    "MOMENTO": "time"
+  },
+  "negators": [
+    "JAMAS",
+    "NADA",
+    "NADIE",
+    "NINGUNO",
+    "NO",
+    "NUNCA"
+  ]
+}
