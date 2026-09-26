@@ -16,6 +16,7 @@ import os
 import hashlib
 import logging
 import re
+import time
 
 from guided_composer import compose as compose_guided
 from guided_composer import Composer as GuidedComposer
@@ -3182,11 +3183,11 @@ def upload_audio_to_s3(audio_bytes: bytes, cache_key: str) -> str:
     logger.info("Url prefirmada generada exitosamente")
     return presigned_url
 
-def get_cached_response(cache_key: str):
-    """Devuelve la respuesta cacheada (con audioUrl prefirmado fresco) o None."""
+def read_cache_json(cache_key: str):
+    """Lee una entrada JSON de la caché S3, o None si no hay acierto."""
     try:
         obj = s3_client.get_object(Bucket=S3_BUCKET, Key=_cache_s3_key(cache_key))
-        data = json.loads(obj["Body"].read())
+        return json.loads(obj["Body"].read())
     except ClientError as e:
         code = e.response.get("Error", {}).get("Code", "")
         if code not in ("NoSuchKey", "404", "NotFound"):
@@ -3194,6 +3195,26 @@ def get_cached_response(cache_key: str):
         return None
     except Exception as e:
         logger.warning("Caché ilegible %s: %s", cache_key, e)
+        return None
+
+
+def write_cache_json(cache_key: str, body: dict) -> None:
+    """Escribe una entrada JSON en la caché S3; un fallo no corta la respuesta."""
+    try:
+        s3_client.put_object(
+            Bucket=S3_BUCKET,
+            Key=_cache_s3_key(cache_key),
+            Body=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+            ContentType="application/json",
+        )
+    except Exception as e:
+        logger.warning("No se pudo escribir la caché %s: %s", cache_key, e)
+
+
+def get_cached_response(cache_key: str):
+    """Devuelve la respuesta cacheada (con audioUrl prefirmado fresco) o None."""
+    data = read_cache_json(cache_key)
+    if data is None:
         return None
 
     audio_key = data.pop("audioKey", None)
@@ -3205,17 +3226,9 @@ def get_cached_response(cache_key: str):
 
 def put_cached_response(cache_key: str, payload: dict, audio_key: str) -> None:
     """Guarda la respuesta (sin la URL firmada efímera) para futuros aciertos."""
-    try:
-        body = {k: v for k, v in payload.items() if k not in ("audioUrl", "cacheHit")}
-        body["audioKey"] = audio_key
-        s3_client.put_object(
-            Bucket=S3_BUCKET,
-            Key=_cache_s3_key(cache_key),
-            Body=json.dumps(body, ensure_ascii=False).encode("utf-8"),
-            ContentType="application/json",
-        )
-    except Exception as e:
-        logger.warning("No se pudo escribir la caché %s: %s", cache_key, e)
+    body = {k: v for k, v in payload.items() if k not in ("audioUrl", "cacheHit")}
+    body["audioKey"] = audio_key
+    write_cache_json(cache_key, body)
 
 def build_response(status_code: int, body: dict) -> dict:
     return {"statusCode": status_code, "headers": CORS_HEADERS,
@@ -3653,6 +3666,308 @@ def suggest_options(body):
     })
 
 
+# ===================================================================
+# RUTEO DE CONVERSACIÓN SOBRE EL GRAFO (action: "route")
+# ===================================================================
+# Conversation no tiene traductor propio. El turno del oyente ya llega
+# entendido por Audio/Texto→LSB (su SemanticTurn); aquí el modelo solo decide
+# QUÉ parte del grafo de LSB→Texto/Audio permite a la persona sorda
+# responder, y solo entre rutas candidatas que el cliente armó con el banco.
+#
+# El modelo elige por id. La respuesta copia los campos de la candidata ya
+# validada contra el banco, nunca los del modelo: un contexto, una pregunta o
+# una opción inventados no tienen por dónde salir. No se traduce el turno otra
+# vez ni se responde por nadie.
+
+ROUTE_TYPES = (
+    "CONTEXT_SELECTOR",
+    "DIRECT_CONTEXT",
+    "DIRECT_QUESTION",
+    "MINIMAL_GRAPH_PATH",
+    "NO_SAFE_ROUTE",
+)
+ROUTER_PROMPT_VERSION = 1
+MAX_ROUTE_CANDIDATES = 12
+MAX_ROUTE_QUESTIONS = 8
+MAX_ROUTE_LABEL = 200
+ROUTE_MIN_CONFIDENCE = 0.6
+_ROUTE_ID_RE = re.compile(r"^[a-z][a-z0-9_]{0,63}$")
+# Ranuras que puede pedir un turno: el vocabulario del grafo de diálogo, el
+# mismo que emite la lectura semántica de Audio/Texto→LSB.
+ROUTE_SLOTS = {"time", "place", "person", "object", "amount", "evidence",
+               "polarity", "free_text"}
+# Una elección del modelo vale mientras no cambien el router, el banco ni el
+# modelo (todos van en la clave). "Sin ruta" se guarda poco tiempo: un banco
+# ampliado puede tener mañana la ruta que hoy falta.
+ROUTE_NO_ROUTE_TTL_SECONDS = int(os.environ.get("ROUTE_NO_ROUTE_TTL_SECONDS", "900"))
+_BANK_FINGERPRINT = None
+_PROMPT_CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _texto_para_prompt(texto, tope):
+    """Texto del cliente listo para ir entre comillas en el prompt."""
+    limpio = _PROMPT_CONTROL.sub(" ", str(texto or ""))
+    limpio = limpio.replace("«", "\"").replace("»", "\"")
+    return re.sub(r"\s+", " ", limpio).strip()[:tope]
+
+
+def _bank_fingerprint(bank):
+    """Huella del banco guiado: si cambia una pregunta o un recorrido, las
+    rutas guardadas con el banco anterior dejan de encontrarse."""
+    global _BANK_FINGERPRINT
+    if _BANK_FINGERPRINT is None:
+        material = json.dumps(bank, sort_keys=True, ensure_ascii=False)
+        _BANK_FINGERPRINT = hashlib.sha256(material.encode("utf-8")).hexdigest()[:16]
+    return _BANK_FINGERPRINT
+
+
+def _sin_tildes(texto):
+    for con, sin in (("Á", "A"), ("É", "E"), ("Í", "I"), ("Ó", "O"), ("Ú", "U"), ("Ü", "U")):
+        texto = texto.replace(con, sin)
+    return texto
+
+
+def _turn_signature(turn):
+    """Lo que el turno significa, normalizado: no el texto tal como se dijo.
+
+    Dos frases con el mismo significado («¿Dónde fue?», «¿Dónde pasó?»)
+    comparten ruta; la misma frase con otra negación o contexto, no."""
+    def lista(valor, tope):
+        return [_sin_tildes(str(v).upper().strip())
+                for v in (valor or [])[:tope] if isinstance(v, str)]
+
+    menciones = turn.get("mentionedContexts") or []
+    return {
+        "intent": str(turn.get("intent") or ""),
+        "speechAct": str(turn.get("speechAct") or ""),
+        "slots": sorted(set(lista(turn.get("requestedSlots"), 16))),
+        "entities": sorted(set(lista(turn.get("entities"), MAX_CARDS))),
+        "mentions": sorted({str(m.get("id")) for m in menciones[:16]
+                            if isinstance(m, dict) and m.get("id")}),
+        "negations": sorted(set(lista(turn.get("negations"), 8))),
+    }
+
+
+def route_cache_key(turn, candidates, active_context):
+    """Clave de la caché de rutas: versión del router, huella del banco,
+    modelo, significado normalizado del turno, contexto activo y candidatas."""
+    material = {
+        "router": ROUTER_PROMPT_VERSION,
+        "bank": _bank_fingerprint(_guided_bank()),
+        "model": BEDROCK_MODEL_ID,
+        "turn": _turn_signature(turn),
+        "active": active_context,
+        "candidates": sorted(c["id"] for c in candidates),
+    }
+    digest = hashlib.sha256(
+        json.dumps(material, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+    return f"route-v{ROUTER_PROMPT_VERSION}-{digest}"
+
+
+def _route_payload(ruta, confianza, razon, fuente):
+    return {
+        "generated": True,
+        "routerVersion": ROUTER_PROMPT_VERSION,
+        "routeSource": fuente,
+        "candidateId": ruta["id"],
+        "routeType": ruta["routeType"],
+        "targetContextId": ruta["targetContextId"],
+        "targetFamilyId": ruta["targetFamilyId"],
+        "targetQuestionIds": ruta["targetQuestionIds"],
+        "requestedSlots": ruta["requestedSlots"],
+        "confidence": confianza,
+        "reason": razon,
+    }
+
+
+def _no_route(razon="", cache_hit=False):
+    return {"generated": False, "routerVersion": ROUTER_PROMPT_VERSION,
+            "routeSource": "noSafeRoute", "reason": razon, "cacheHit": cache_hit}
+
+
+def serve_cached_route(cached, candidates):
+    """Una ruta guardada se vuelve a validar contra las candidatas actuales
+    (ya comprobadas contra el banco). Si no encaja, es un fallo de caché."""
+    if not isinstance(cached, dict) or cached.get("kind") != "route":
+        return None
+    if cached.get("routerVersion") != ROUTER_PROMPT_VERSION:
+        return None
+    if not cached.get("generated"):
+        try:
+            edad = time.time() - float(cached.get("cachedAt") or 0)
+        except (TypeError, ValueError):
+            return None
+        if edad > ROUTE_NO_ROUTE_TTL_SECONDS:
+            return None
+        return _no_route(str(cached.get("reason") or ""), cache_hit=True)
+    ruta = {c["id"]: c for c in candidates}.get(cached.get("candidateId"))
+    try:
+        confianza = float(cached.get("confidence", 0))
+    except (TypeError, ValueError):
+        return None
+    if ruta is None or confianza < ROUTE_MIN_CONFIDENCE:
+        return None
+    return {**_route_payload(ruta, confianza, str(cached.get("reason") or ""), "cache"),
+            "cacheHit": True}
+
+
+def validate_route_candidate(raw, bank):
+    """Una candidata solo con identificadores reales del banco."""
+    if not isinstance(raw, dict):
+        return None, "La candidata no es un objeto."
+    questions = {q["id"]: q for q in bank["preguntas"]}
+    recorridos = bank.get("recorridos", {})
+    route_type = raw.get("routeType")
+    if route_type not in ROUTE_TYPES:
+        return None, "Tipo de ruta desconocido."
+    cid = raw.get("id")
+    if not isinstance(cid, str) or not cid or len(cid) > 256:
+        return None, "La candidata no tiene id."
+    context = raw.get("targetContextId")
+    if context is not None and (not isinstance(context, str) or context not in recorridos):
+        return None, f"Contexto desconocido: {str(context)[:40]}."
+    family = raw.get("targetFamilyId")
+    if family is not None and (not isinstance(family, str) or not _ROUTE_ID_RE.match(family)):
+        return None, "Familia no válida."
+    qids = raw.get("targetQuestionIds", [])
+    if (not isinstance(qids, list) or len(qids) > MAX_ROUTE_QUESTIONS
+            or not all(isinstance(q, str) and q in questions
+                       and questions[q].get("control") != "derivacion" for q in qids)):
+        return None, "La candidata cita una pregunta inexistente."
+    slots = raw.get("requestedSlots", [])
+    if not isinstance(slots, list) or not all(
+            isinstance(s, str) and s in ROUTE_SLOTS for s in slots):
+        return None, "La candidata cita una ranura inexistente."
+    if route_type in ("DIRECT_QUESTION", "MINIMAL_GRAPH_PATH"):
+        if context is None or not qids:
+            return None, "Una ruta de preguntas necesita contexto y preguntas."
+        if route_type == "DIRECT_QUESTION" and len(qids) != 1:
+            return None, "DIRECT_QUESTION abre una sola pregunta."
+    elif qids:
+        return None, "Esta ruta no abre preguntas."
+    if route_type == "DIRECT_CONTEXT" and context is None and family is None:
+        return None, "DIRECT_CONTEXT sin contexto ni familia."
+    if route_type in ("CONTEXT_SELECTOR", "NO_SAFE_ROUTE") and context is not None:
+        return None, "Esta ruta no fija contexto."
+    return {
+        "id": cid,
+        "routeType": route_type,
+        "targetContextId": context,
+        "targetFamilyId": family,
+        "targetQuestionIds": list(qids),
+        "requestedSlots": list(slots),
+        "label": _texto_para_prompt(raw.get("label"), MAX_ROUTE_LABEL),
+    }, None
+
+
+def build_route_prompt(turn, candidates, active_context):
+    """Prompt para elegir una ruta del grafo; nunca para traducir."""
+    texto = _texto_para_prompt(turn.get("text"), MAX_HEARING_TEXT)
+    glosas = [_texto_para_prompt(g, MAX_CARD_LENGTH)
+              for g in (turn.get("entities") or [])[:MAX_CARDS] if isinstance(g, str)]
+    acto = _texto_para_prompt(turn.get("speechAct"), 32)
+    activo = _texto_para_prompt(active_context, MAX_CONTEXT_LENGTH) or "ninguno"
+    rutas = "\n".join(f"- id: {c['id']} | {c['routeType']} | {c['label']}" for c in candidates)
+    return f"""Eres el enrutador de conversación de una aplicación para personas sordas en instituciones públicas de Bolivia.
+
+Una persona oyente acaba de decir: «{texto}»
+Su traducción a LSB (ya hecha, no la repitas): {' '.join(glosas) or '(sin glosas)'}
+Acto comunicativo: {acto or 'desconocido'}. Contexto activo de la conversación: {activo}.
+
+La persona sorda va a RESPONDER eligiendo tarjetas LSB en UNA de estas rutas del grafo existente:
+{rutas}
+
+REGLAS:
+1. Elige la ruta que permite responder exactamente a lo que preguntó el oyente.
+2. Solo puedes devolver un id de la lista, copiado tal cual. No inventes rutas, preguntas ni contextos.
+3. No respondas por la persona sorda ni propongas respuestas, opciones ni glosas.
+4. Si ninguna ruta sirve con seguridad, devuelve "candidateId": null.
+
+FORMATO (JSON estricto, sin texto alrededor):
+{{"candidateId": "<id o null>", "confidence": 0.0, "reason": "motivo breve"}}"""
+
+
+def route_conversation_turn(body):
+    """Elige, con el modelo, una ruta real del grafo para responder al oyente."""
+    turn = body.get("semanticTurn")
+    if not isinstance(turn, dict) or not isinstance(turn.get("text"), str):
+        return build_response(400, {
+            "error": "VALIDATION_ERROR",
+            "message": "semanticTurn con su texto es obligatorio.",
+        })
+    if len(turn["text"]) > MAX_HEARING_TEXT:
+        return build_response(400, {
+            "error": "VALIDATION_ERROR",
+            "message": "El turno del oyente es demasiado largo.",
+        })
+    raw_candidates = body.get("candidates")
+    if (not isinstance(raw_candidates, list) or not raw_candidates
+            or len(raw_candidates) > MAX_ROUTE_CANDIDATES):
+        return build_response(400, {
+            "error": "VALIDATION_ERROR",
+            "message": "candidates es obligatorio: el modelo solo elige dentro de él.",
+        })
+    bank = _guided_bank()
+    candidates = []
+    for raw in raw_candidates:
+        clean, err = validate_route_candidate(raw, bank)
+        if clean is None:
+            return build_response(400, {"error": "VALIDATION_ERROR", "message": err})
+        candidates.append(clean)
+    active = body.get("activeContextId")
+    if active is not None and active not in bank.get("recorridos", {}):
+        active = None
+
+    # 1. Caché: una ruta ya elegida para el mismo significado no vuelve a
+    #    pasar por el modelo. Se revalida antes de servirla.
+    cache_key = route_cache_key(turn, candidates, active)
+    servida = serve_cached_route(read_cache_json(cache_key), candidates)
+    if servida is not None:
+        logger.info("Ruta de conversación desde caché (%s)", servida["routeSource"])
+        return build_response(200, servida)
+
+    # 2. Modelo: elige por id entre las candidatas validadas.
+    try:
+        crudo = invoke_bedrock_json(build_route_prompt(turn, candidates, active))
+    except Exception as e:  # noqa: BLE001 — sin modelo queda la ruta determinista
+        logger.warning("Ruteo de conversación no generado (%s)", e)
+        return build_response(200, _no_route("model_error"))
+    if not isinstance(crudo, dict):
+        crudo = {}
+
+    elegido = crudo.get("candidateId")
+    por_id = {c["id"]: c for c in candidates}
+    try:
+        confianza = float(crudo.get("confidence", 0))
+    except (TypeError, ValueError):
+        confianza = 0.0
+    confianza = max(0.0, min(1.0, confianza))
+    razon = _texto_para_prompt(crudo.get("reason"), MAX_ROUTE_LABEL)
+
+    if not isinstance(elegido, str) or elegido not in por_id:
+        if elegido is not None:
+            logger.info("Ruta descartada por no estar entre las candidatas: %.60r", elegido)
+        motivo = "outside_candidates" if elegido is not None else "no_route"
+    elif confianza < ROUTE_MIN_CONFIDENCE:
+        motivo = "low_confidence"
+    else:
+        motivo = None
+
+    # 3. Guardar lo decidido. "Sin ruta" caduca pronto (ver TTL).
+    if motivo is not None:
+        write_cache_json(cache_key, {"kind": "route", "routerVersion": ROUTER_PROMPT_VERSION,
+                                     "generated": False, "reason": motivo,
+                                     "cachedAt": time.time()})
+        return build_response(200, _no_route(motivo))
+    write_cache_json(cache_key, {"kind": "route", "routerVersion": ROUTER_PROMPT_VERSION,
+                                 "generated": True, "candidateId": elegido,
+                                 "confidence": confianza, "reason": razon,
+                                 "cachedAt": time.time()})
+    return build_response(200, {**_route_payload(por_id[elegido], confianza, razon, "bedrock"),
+                                "cacheHit": False})
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -3670,6 +3985,8 @@ def lambda_handler(event, context):
     # La sugerencia de opciones no valida `cards`: su entrada es otra.
     if (body.get("action") or "").strip().lower() == "suggest":
         return suggest_options(body)
+    if (body.get("action") or "").strip().lower() == "route":
+        return route_conversation_turn(body)
 
     is_valid, err = validate_request(body)
     if not is_valid:

@@ -1,3 +1,4 @@
+import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 
 class LsbTranslation {
@@ -15,6 +16,10 @@ class LsbTranslation {
   final SemanticStatus semanticStatus;
   final RepresentationStatus representationStatus;
 
+  /// Qué pide el mensaje, leído en la misma traducción (sin otra llamada al
+  /// modelo). `null` si el backend todavía no lo envía.
+  final BackendSemanticTurn? semanticTurn;
+
   bool get needsClarification =>
       semanticStatus == SemanticStatus.needsClarification ||
       pendingClarifications.isNotEmpty;
@@ -28,5 +33,6 @@ class LsbTranslation {
     this.pendingClarifications = const [],
     this.semanticStatus = SemanticStatus.resolved,
     this.representationStatus = RepresentationStatus.complete,
+    this.semanticTurn,
   });
 }

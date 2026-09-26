@@ -5,6 +5,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 
 class ContextSelectionWidget extends ConsumerStatefulWidget {
   const ContextSelectionWidget({super.key});
@@ -18,8 +19,29 @@ class _ContextSelectionWidgetState
     extends ConsumerState<ContextSelectionWidget> {
   ContextFamily? _abierta;
 
+  /// La familia que pidió Conversation («¿Quiere denunciar algo?» abre
+  /// Denuncias). La persona puede volver a la lista general igual.
+  static ContextFamily? _familiaDe(CardsFlowLaunch launch) {
+    final id = launch.focusedFamilyId;
+    if (id == null) return null;
+    for (final f in contextFamilies) {
+      if (f.id == id) return f;
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _abierta = _familiaDe(ref.read(cardsFlowLaunchProvider));
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(cardsFlowLaunchProvider, (anterior, launch) {
+      if (anterior?.sameErrand(launch) ?? false) return;
+      setState(() => _abierta = _familiaDe(launch));
+    });
     final pending = ref.watch(pendingReplyProvider);
     final suggestion = pending?.suggestion;
     final highlightedId = pending?.proposedContextId;
@@ -66,12 +88,15 @@ class _ContextSelectionWidgetState
               ...contextFamilies.map(
                 (f) => _FamilyButton(
                   family: f,
-                  highlighted: highlightedId != null &&
+                  highlighted:
+                      highlightedId != null &&
                       f.contextIds.contains(highlightedId),
                   onTap: () {
                     final contextos = contextsOfFamily(f);
                     if (contextos.length == 1) {
-                      ref.read(contextProvider.notifier).setContext(contextos.first);
+                      ref
+                          .read(contextProvider.notifier)
+                          .setContext(contextos.first);
                     } else {
                       setState(() => _abierta = f);
                     }
@@ -83,16 +108,16 @@ class _ContextSelectionWidgetState
                 onPressed: () => setState(() => _abierta = null),
                 icon: const Icon(Icons.arrow_back, size: 18),
                 label: const Text('Volver'),
-                style: TextButton.styleFrom(
-                    foregroundColor:Colors.white),
+                style: TextButton.styleFrom(foregroundColor: Colors.white),
               ),
               const SizedBox(height: 8),
               ...desplegados.map(
                 (ctx) => _ContextButton(
                   context: ctx,
                   highlighted: ctx.id == highlightedId,
-                  suggestion:
-                      ctx.id == suggestion?.contextId ? suggestion : null,
+                  suggestion: ctx.id == suggestion?.contextId
+                      ? suggestion
+                      : null,
                 ),
               ),
             ],
@@ -134,7 +159,9 @@ class _FamilyButton extends StatelessWidget {
               color: AppTheme.lightSurface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: highlighted ? AppTheme.brandPrimary : AppTheme.lightBorder,
+                color: highlighted
+                    ? AppTheme.brandPrimary
+                    : AppTheme.lightBorder,
                 width: highlighted ? 2 : 1,
               ),
               boxShadow: AppTheme.cardShadow,
@@ -202,8 +229,11 @@ class _ReplyingToBanner extends StatelessWidget {
           children: [
             Row(
               children: const [
-                Icon(Icons.record_voice_over,
-                    size: 14, color: AppTheme.brandPrimary),
+                Icon(
+                  Icons.record_voice_over,
+                  size: 14,
+                  color: AppTheme.brandPrimary,
+                ),
                 SizedBox(width: 6),
                 Text(
                   'RESPONDIENDO A',
@@ -322,7 +352,9 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
                             const SizedBox(width: 8),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 7, vertical: 2),
+                                horizontal: 7,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: _orange,
                                 borderRadius: BorderRadius.circular(6),

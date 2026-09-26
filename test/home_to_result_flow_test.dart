@@ -122,9 +122,8 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  String vistaPrevia(WidgetTester tester) => tester
-      .widget<Text>(find.byKey(const ValueKey('live-declaration-preview')))
-      .data!;
+  String vistaPrevia(ProviderContainer container) =>
+      container.read(guidedPreviewProvider);
 
   testWidgets(
     'responder, ver la vista previa y emitir: el resultado es esa frase',
@@ -167,14 +166,14 @@ void main() {
       }
 
       await tocar(tester, find.text('ROBAR'));
-      expect(vistaPrevia(tester), 'Me robaron algo.');
+      expect(vistaPrevia(container), 'Me robaron algo.');
       expect(
         container.read(sentenceProvider),
         ['ROBAR'],
         reason: 'el reflejo en glosas sale de la misma respuesta',
       );
 
-      await tocar(tester, find.text('CONTINUAR'));
+      await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
       expect(find.text('¿Qué le robaron?'), findsNothing);
       for (final pieza in ['ROBAR', '¿QUÉ?']) {
         expect(
@@ -183,7 +182,7 @@ void main() {
         );
       }
       await tocar(tester, find.text('CELULAR'));
-      expect(vistaPrevia(tester), 'Me robaron el celular.');
+      expect(vistaPrevia(container), 'Me robaron el celular.');
 
       // Suficiencia: ya se puede terminar sin recorrer lo opcional.
       await tocar(tester, find.byKey(const Key('terminar_aqui')));
@@ -199,6 +198,32 @@ void main() {
       expect(backend.guided, isNotNull);
       expect(backend.guided!['recorrido'], 'denuncia_robo');
       expect(find.bySemanticsLabel('Nueva declaración'), findsOneWidget);
+
+      // El AppBar de Declaración no tiene flecha hacia atrás a la par del título
+      final appBars = tester.widgetList<AppBar>(find.byType(AppBar));
+      final declarationAppBar = appBars.last;
+      expect(declarationAppBar.leading, isNull);
+      expect(declarationAppBar.automaticallyImplyLeading, isFalse);
+      // Sin la frase de cambiar de contexto ni sus acciones asociadas: el
+      // título queda solo y centrado, coherente con el resto de la app.
+      expect(declarationAppBar.actions, anyOf(isNull, isEmpty));
+      expect(find.text('Cambiar de contexto'), findsNothing);
+      expect(find.byIcon(Icons.swap_horiz_rounded), findsNothing);
+
+      // «Volver a editar» regresa al lienzo conservando las glosas y respuestas
+      await tocar(tester, find.bySemanticsLabel('Volver a editar'));
+      expect(pasoVisible(), 0);
+      expect(find.text('CELULAR'), findsOneWidget);
+
+      // Volver a emitir para quedar en el resultado
+      await tocar(tester, find.byKey(const Key('terminar_aqui')));
+      expect(pasoVisible(), 1);
+
+      // «Nueva declaración» limpia el contexto y redirige a la selección de contexto
+      await tocar(tester, find.bySemanticsLabel('Nueva declaración'));
+      expect(pasoVisible(), 0);
+      expect(container.read(contextProvider), isNull);
+      expect(find.text('Selecciona el contexto'), findsOneWidget);
     },
   );
 
@@ -208,7 +233,7 @@ void main() {
     final (container, _) = await montar(tester);
 
     await tocar(tester, find.text('ESCAPAR'));
-    await tocar(tester, find.text('CONTINUAR'));
+    await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
     final escapeLsb = find.byKey(const Key('formulacion_lsb'));
     for (final pieza in const ['¿QUIÉN?', 'ESCAPAR']) {
       expect(
@@ -218,7 +243,7 @@ void main() {
     }
     expect(find.text('¿Quién escapó?'), findsNothing);
 
-    await tocar(tester, find.text('CONTINUAR'));
+    await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
     expect(
       escapeLsb,
       findsOneWidget,
@@ -227,7 +252,7 @@ void main() {
     expect(find.byKey(const Key('omitir_pregunta')), findsNothing);
 
     await tocar(tester, find.text('YO · ESCAPAR'));
-    expect(vistaPrevia(tester), 'Logré escapar.');
+    expect(vistaPrevia(container), 'Logré escapar.');
     expect(
       container
           .read(guidedFlowProvider)
@@ -246,22 +271,23 @@ void main() {
       final (container, _) = await montar(tester);
 
       await tocar(tester, find.text('ROBAR'));
-      await tocar(tester, find.text('CONTINUAR'));
-      await tocar(tester, find.byKey(const Key('omitir_pregunta')));
+      await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
+      container.read(guidedFlowProvider.notifier).omit('Q.ROB.QUE');
+      await tester.pumpAndSettle();
 
       final session = container.read(guidedFlowProvider).session!;
       expect(session.answerOf('Q.ROB.QUE')!.isOmitted, isTrue);
-      expect(vistaPrevia(tester), 'Me robaron algo.');
+      expect(vistaPrevia(container), 'Me robaron algo.');
     },
   );
 
   testWidgets('el monto se escribe con su moneda y llega literal a la frase', (
     tester,
   ) async {
-    await montar(tester);
+    final (container, _) = await montar(tester);
 
     await tocar(tester, find.text('ROBAR'));
-    await tocar(tester, find.text('CONTINUAR'));
+    await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
     await tocar(tester, find.text('BILLETES'));
 
     // Editor opcional: la opción ya está elegida y se puede precisar.
@@ -280,7 +306,7 @@ void main() {
     await tocar(tester, find.byKey(const Key('editor_moneda_Bs')));
     await tocar(tester, find.byKey(const Key('editor_confirmar')));
 
-    expect(vistaPrevia(tester), 'Me robaron Bs 500.');
+    expect(vistaPrevia(container), 'Me robaron Bs 500.');
     expect(find.text('BILLETES: Bs 500'), findsOneWidget);
   });
 
@@ -289,7 +315,7 @@ void main() {
   ) async {
     await montar(tester);
     await tocar(tester, find.text('ROBAR'));
-    await tocar(tester, find.text('CONTINUAR'));
+    await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
 
     final header = find.byKey(const Key('guided_question_header'));
     final scroll = find.byKey(const Key('guided_options_scroll'));
@@ -302,6 +328,17 @@ void main() {
     final appBarBottom = tester.getBottomLeft(find.byType(AppBar)).dy;
     final before = tester.getTopLeft(header);
     expect(before.dy, greaterThanOrEqualTo(appBarBottom));
+
+    // La cabecera de pregunta debe ser compacta: no puede acaparar media
+    // pantalla ni desplazar las glosas hacia abajo.
+    final headerHeight = tester.getRect(header).height;
+    final screenHeight =
+        tester.view.physicalSize.height / tester.view.devicePixelRatio;
+    expect(
+      headerHeight,
+      lessThan(screenHeight * 0.3),
+      reason: 'la cabecera no debe ocupar una fracción excesiva de la pantalla',
+    );
 
     final scrollable = find
         .descendant(of: scroll, matching: find.byType(Scrollable))
@@ -321,4 +358,25 @@ void main() {
     expect(after.dy, closeTo(before.dy, 0.1));
     expect(find.byKey(const Key('formulacion_lsb')), findsOneWidget);
   });
+
+  testWidgets(
+    'en seleccion de glosas la flecha atras sale a la seleccion de contextos',
+    (tester) async {
+      final (container, _) = await montar(tester);
+
+      // En selección de glosas la AppBar muestra la flecha hacia atrás y el título del contexto
+      expect(find.byKey(const Key('volver_a_contextos')), findsOneWidget);
+      expect(find.text('Denunciar robo'), findsOneWidget);
+      expect(find.text('OpenSoul'), findsNothing);
+
+      // Tocamos la flecha hacia atrás para salir a los contextos
+      await tocar(tester, find.byKey(const Key('volver_a_contextos')));
+
+      // Ahora el contexto es nulo y estamos en la pantalla de contextos con el logo y OpenSoul
+      expect(container.read(contextProvider), isNull);
+      expect(find.text('Selecciona el contexto'), findsOneWidget);
+      expect(find.text('OpenSoul'), findsOneWidget);
+      expect(find.byKey(const Key('volver_a_contextos')), findsNothing);
+    },
+  );
 }

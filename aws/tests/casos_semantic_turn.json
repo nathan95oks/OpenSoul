@@ -1,0 +1,465 @@
+{
+  "nota": "Frases del oyente con las glosas que devolvería la traducción. semanticTurn se captura de lambda_text_to_lsb.build_semantic_turn con regenerar_casos_semantic_turn.py; no se escribe a mano.",
+  "casos": [
+    {
+      "id": "motivo",
+      "texto": "Hola, ¿cómo está? ¿Qué viene a realizar?",
+      "glosas": [
+        "HOLA",
+        "COMO_ESTAS",
+        "QUE",
+        "VENIR",
+        "HACER"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askPurpose",
+        "requestedSlots": [],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.6
+      }
+    },
+    {
+      "id": "denunciar",
+      "texto": "¿Quiere denunciar algo?",
+      "glosas": [
+        "TU",
+        "QUERER",
+        "QUEJAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "violencia",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "amenaza_digital",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "engano_dinero",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "otro",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "donde_ocurrio",
+      "texto": "¿Dónde ocurrió?",
+      "glosas": [
+        "DONDE"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "place"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "donde_fue",
+      "texto": "¿Dónde fue?",
+      "glosas": [
+        "DONDE"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "place"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "donde_paso",
+      "texto": "¿Dónde pasó?",
+      "glosas": [
+        "DONDE",
+        "PASAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "place"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "en_que_lugar",
+      "texto": "¿En qué lugar ocurrió?",
+      "glosas": [
+        "QUE"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "place"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "hora_y_donde",
+      "texto": "¿A qué hora y dónde ocurrió?",
+      "glosas": [
+        "HORA",
+        "QUE",
+        "DONDE"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time",
+          "place"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "cuando",
+      "texto": "¿Cuándo ocurrió?",
+      "glosas": [
+        "CUANDO"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "que_robaron",
+      "texto": "¿Qué le robaron?",
+      "glosas": [
+        "ROBAR",
+        "QUE"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "robaron_celular",
+      "texto": "¿Le robaron su celular?",
+      "glosas": [
+        "ROBAR",
+        "CELULAR",
+        "TUYO"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "nombre",
+      "texto": "¿Cuál es su nombre completo?",
+      "glosas": [
+        "TUYO",
+        "NOMBRE",
+        "CUAL"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askPurpose",
+        "requestedSlots": [],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.6
+      }
+    },
+    {
+      "id": "testigos_robo",
+      "texto": "¿Hay testigos del robo?",
+      "glosas": [
+        "TESTIGO",
+        "TENER",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "cuantos_testigos",
+      "texto": "¿Cuántos testigos hay?",
+      "glosas": [
+        "TESTIGO",
+        "CUANTOS"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "amount"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "herido",
+      "texto": "¿Está herido?",
+      "glosas": [
+        "TU",
+        "HERIDA"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.5
+      }
+    },
+    {
+      "id": "quien_escapo",
+      "texto": "¿Quién escapó?",
+      "glosas": [
+        "QUIEN",
+        "ESCAPAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "person"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "consultar_o_denunciar",
+      "texto": "¿Viene a consultar o a denunciar?",
+      "glosas": [
+        "TU",
+        "VENIR",
+        "QUEJAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "violencia",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "amenaza_digital",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "engano_dinero",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "otro",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "seguimiento",
+            "evidence": [
+              "consult"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "persona_vio",
+      "texto": "¿Y a esa persona la vio bien?",
+      "glosas": [
+        "VER",
+        "BUENO"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.5
+      }
+    },
+    {
+      "id": "violencia",
+      "texto": "¿Viene por un caso de violencia?",
+      "glosas": [
+        "TU",
+        "VENIR",
+        "VIOLENCIA"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "violencia",
+            "evidence": [
+              "VIOLENCIA",
+              "violenci"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "parqueo",
+      "texto": "El parqueo cierra a medianoche",
+      "glosas": [],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "statement",
+        "requestedSlots": [],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.5
+      }
+    },
+    {
+      "id": "donde_robo",
+      "texto": "¿Dónde ocurrió el robo?",
+      "glosas": [
+        "DONDE",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "place"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    }
+  ]
+}

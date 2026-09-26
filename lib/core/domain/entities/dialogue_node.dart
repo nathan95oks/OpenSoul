@@ -13,12 +13,12 @@ enum OptionCoverage {
   unsupported;
 
   static OptionCoverage parse(String? raw) => switch (raw) {
-        'direct_sign' => OptionCoverage.directSign,
-        'dactylology' => OptionCoverage.dactylology,
-        'validated_composition' => OptionCoverage.validatedComposition,
-        'needs_validation' => OptionCoverage.needsValidation,
-        _ => OptionCoverage.unsupported,
-      };
+    'direct_sign' => OptionCoverage.directSign,
+    'dactylology' => OptionCoverage.dactylology,
+    'validated_composition' => OptionCoverage.validatedComposition,
+    'needs_validation' => OptionCoverage.needsValidation,
+    _ => OptionCoverage.unsupported,
+  };
 
   /// Si puede ofrecerse como tarjeta sin inventar nada.
   bool get isOfferable =>
@@ -56,28 +56,28 @@ class DialogueOption {
   });
 
   factory DialogueOption.fromJson(Map<String, dynamic> json) => DialogueOption(
-        concept: (json['concept'] ?? '').toString(),
-        gloss: json['gloss'] as String?,
-        kind: switch (json['kind']) {
-          'number' => OptionKind.number,
-          'spelling' => OptionKind.spelling,
-          _ => OptionKind.card,
-        },
-        coverage: OptionCoverage.parse(json['coverage'] as String?),
-      avatar: switch (json['avatar']) {
-        'baked' => AvatarSupport.baked,
-        'spelled' => AvatarSupport.spelled,
-        _ => json['kind'] == 'spelling'
+    concept: (json['concept'] ?? '').toString(),
+    gloss: json['gloss'] as String?,
+    kind: switch (json['kind']) {
+      'number' => OptionKind.number,
+      'spelling' => OptionKind.spelling,
+      _ => OptionKind.card,
+    },
+    coverage: OptionCoverage.parse(json['coverage'] as String?),
+    avatar: switch (json['avatar']) {
+      'baked' => AvatarSupport.baked,
+      'spelled' => AvatarSupport.spelled,
+      _ =>
+        json['kind'] == 'spelling'
             ? AvatarSupport.spelled
             : AvatarSupport.placeholder,
-      },
-        reason: (json['reason'] ?? '').toString(),
-        corpusSource: json['corpusSource'] as String?,
-        alternatives: [
-          for (final a in (json['alternatives'] as List? ?? const []))
-            a.toString(),
-        ],
-      );
+    },
+    reason: (json['reason'] ?? '').toString(),
+    corpusSource: json['corpusSource'] as String?,
+    alternatives: [
+      for (final a in (json['alternatives'] as List? ?? const [])) a.toString(),
+    ],
+  );
 }
 
 /// De dónde sale el nodo. Sin esto no se puede decir que una opción tenga
@@ -126,7 +126,9 @@ class DialogueTransition {
   factory DialogueTransition.fromJson(Map<String, dynamic> json) =>
       DialogueTransition(
         to: (json['to'] ?? '').toString(),
-        adds: [for (final a in (json['adds'] as List? ?? const [])) a.toString()],
+        adds: [
+          for (final a in (json['adds'] as List? ?? const [])) a.toString(),
+        ],
         priority: (json['priority'] as num?)?.toInt() ?? 0,
       );
 }
@@ -146,6 +148,9 @@ class DialogueNode {
   final List<String> slots;
   final List<String> markers;
   final List<String> formulationGlosses;
+
+  /// Pregunta del banco guiado que responde a este nodo, si la hay.
+  final String? bankQuestion;
   final List<DialogueOption> options;
   final List<DialogueOption> literals;
   final List<DialogueOption> pendingOptions;
@@ -168,6 +173,7 @@ class DialogueNode {
     this.guideText = '',
     this.markers = const [],
     this.formulationGlosses = const [],
+    this.bankQuestion,
     this.literals = const [],
     this.pendingOptions = const [],
     this.coverage = OptionCoverage.unsupported,
@@ -182,12 +188,14 @@ class DialogueNode {
 
   factory DialogueNode.fromJson(Map<String, dynamic> json) {
     final entry = Map<String, dynamic>.from(
-        (json['entry'] as Map?) ?? const <String, dynamic>{});
+      (json['entry'] as Map?) ?? const <String, dynamic>{},
+    );
     return DialogueNode(
       id: (json['id'] ?? '').toString(),
       version: (json['version'] as num?)?.toInt() ?? 0,
       provenance: DialogueProvenance.fromJson(
-          Map<String, dynamic>.from(json['provenance'] as Map? ?? {})),
+        Map<String, dynamic>.from(json['provenance'] as Map? ?? {}),
+      ),
       scope: (json['scope'] ?? '').toString(),
       intent: (json['intent'] ?? '').toString(),
       speaker: (json['speaker'] ?? '').toString(),
@@ -201,7 +209,9 @@ class DialogueNode {
         for (final k in (entry['keywords'] as List? ?? const [])) k.toString(),
       ],
       guideText: (json['guideText'] ?? '').toString(),
-      slots: [for (final s in (json['slots'] as List? ?? const [])) s.toString()],
+      slots: [
+        for (final s in (json['slots'] as List? ?? const [])) s.toString(),
+      ],
       markers: [
         for (final m in (json['markers'] as List? ?? const [])) m.toString(),
       ],
@@ -209,6 +219,7 @@ class DialogueNode {
         for (final g in (json['formulationGlosses'] as List? ?? const []))
           g.toString(),
       ],
+      bankQuestion: json['bankQuestion'] as String?,
       options: [
         for (final o in (json['options'] as List? ?? const []))
           DialogueOption.fromJson(Map<String, dynamic>.from(o as Map)),
@@ -231,10 +242,10 @@ class DialogueNode {
 
   /// Las glosas que se pueden poner como tarjetas, en su orden de utilidad.
   List<String> get offerableGlosses => [
-        for (final o in options)
-          if (o.coverage.isOfferable && o.gloss != null && o.gloss!.isNotEmpty)
-            o.gloss!,
-      ];
+    for (final o in options)
+      if (o.coverage.isOfferable && o.gloss != null && o.gloss!.isNotEmpty)
+        o.gloss!,
+  ];
 
   bool get invitesPolarAnswer =>
       speechAct == 'question' && slots.contains('polarity');

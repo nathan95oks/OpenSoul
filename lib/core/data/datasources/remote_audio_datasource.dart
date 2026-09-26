@@ -144,6 +144,7 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           'pendingClarifications': decodedResponse['pendingClarifications'],
           'semanticStatus': decodedResponse['semanticStatus'],
           'representationStatus': decodedResponse['representationStatus'],
+          'semanticTurn': decodedResponse['semanticTurn'],
         });
       } else {
         throw Exception('AWS API Error: ${response.statusCode} - ${response.body}');

@@ -418,8 +418,8 @@ class LsbFormulation {
       } else if (token == numberToken) {
         out.add(
           const LsbFormulationSegment(
-            label: 'NÚM',
-            glosses: [],
+            label: 'NÚMERO',
+            glosses: ['NUMERO'],
             kind: LsbSegmentKind.number,
           ),
         );

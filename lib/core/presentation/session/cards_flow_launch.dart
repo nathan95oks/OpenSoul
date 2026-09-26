@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
@@ -20,12 +21,12 @@ enum CommunicativeAct {
 
   /// El `speechAct` que viaja al backend en el contrato.
   String get wireName => switch (this) {
-        CommunicativeAct.statement => 'statement',
-        CommunicativeAct.question => 'question',
-        CommunicativeAct.request => 'request',
-        CommunicativeAct.answer => 'reply',
-        CommunicativeAct.instructionReceived => 'instruction',
-      };
+    CommunicativeAct.statement => 'statement',
+    CommunicativeAct.question => 'question',
+    CommunicativeAct.request => 'request',
+    CommunicativeAct.answer => 'reply',
+    CommunicativeAct.instructionReceived => 'instruction',
+  };
 }
 
 /// Para qué se abrió el módulo LSB → texto/audio.
@@ -60,6 +61,11 @@ enum CardsFlowPurpose {
 
 /// El encargo con el que se abrió el módulo de tarjetas.
 ///
+/// Con propósito de conversación es la solicitud de respuesta de
+/// Conversation (`ConversationReplyRequest`): hilo, turno de origen, texto
+/// congelado y [route], la parte del grafo que se abre para responder. La
+/// vuelta es un `ConversationReplyResult` al mismo hilo y turno.
+///
 /// Es inmutable a propósito: el `hearingTurnId` se congela al abrir, así que
 /// si llega otro turno del oyente mientras la persona sorda arma su respuesta,
 /// esa respuesta sigue enlazada a la pregunta que estaba leyendo y no a la que
@@ -90,6 +96,11 @@ class CardsFlowLaunch {
   final ContextSuggestion? suggestion;
   final String? activeContextId;
 
+  /// Qué parte del grafo se abre para responder, validada. Solo existe en
+  /// los modos de conversación y es derivada del turno: no forma parte de
+  /// la identidad del encargo ([sameErrand]).
+  final ConversationRoute? route;
+
   const CardsFlowLaunch({
     required this.purpose,
     this.intendedAct = CommunicativeAct.statement,
@@ -102,6 +113,7 @@ class CardsFlowLaunch {
     this.hearingSpeechAct = SpeechAct.statement,
     this.suggestion,
     this.activeContextId,
+    this.route,
   });
 
   /// Modo A: intervención propia, sin nada del chat.
@@ -110,13 +122,14 @@ class CardsFlowLaunch {
     this.need,
     this.intentId,
     this.institutionProfileId,
-  })  : purpose = CardsFlowPurpose.standaloneIntervention,
-        conversationId = null,
-        hearingTurnId = null,
-        hearingText = null,
-        hearingSpeechAct = SpeechAct.statement,
-        suggestion = null,
-        activeContextId = null;
+  }) : purpose = CardsFlowPurpose.standaloneIntervention,
+       conversationId = null,
+       hearingTurnId = null,
+       hearingText = null,
+       hearingSpeechAct = SpeechAct.statement,
+       suggestion = null,
+       activeContextId = null,
+       route = null;
 
   /// Modo B: la persona sorda abre el turno dentro del chat.
   const CardsFlowLaunch.initiative({
@@ -126,11 +139,12 @@ class CardsFlowLaunch {
     this.need,
     this.intentId,
     this.institutionProfileId,
-  })  : purpose = CardsFlowPurpose.conversationInitiative,
-        hearingTurnId = null,
-        hearingText = null,
-        hearingSpeechAct = SpeechAct.statement,
-        suggestion = null;
+    this.route,
+  }) : purpose = CardsFlowPurpose.conversationInitiative,
+       hearingTurnId = null,
+       hearingText = null,
+       hearingSpeechAct = SpeechAct.statement,
+       suggestion = null;
 
   /// Modo C: respuesta a un turno oyente concreto, congelado al abrir.
   const CardsFlowLaunch.reply({
@@ -143,16 +157,33 @@ class CardsFlowLaunch {
     this.need,
     this.intentId,
     this.institutionProfileId,
-  })  : purpose = CardsFlowPurpose.conversationReply,
-        // Responder es responder, sea cual sea el acto del turno entrante.
-        intendedAct = CommunicativeAct.answer;
+    this.route,
+  }) : purpose = CardsFlowPurpose.conversationReply,
+       // Responder es responder, sea cual sea el acto del turno entrante.
+       intendedAct = CommunicativeAct.answer;
 
   /// El contexto que se propone al abrir. En A no se propone ninguno: lo
-  /// elige la persona.
-  String? get proposedContextId => purpose ==
-          CardsFlowPurpose.standaloneIntervention
-      ? null
-      : (suggestion?.contextId ?? activeContextId);
+  /// elige la persona. Con ruta, manda la ruta: `null` abre el selector.
+  String? get proposedContextId {
+    if (purpose == CardsFlowPurpose.standaloneIntervention) return null;
+    final route = this.route;
+    if (route != null) return route.targetContextId;
+    return suggestion?.contextId ?? activeContextId;
+  }
+
+  /// Familia que el selector abre desplegada: la ruta nombró una familia
+  /// con varios contextos («¿Quiere denunciar algo?»).
+  String? get focusedFamilyId {
+    final route = this.route;
+    if (route == null || route.targetContextId != null) return null;
+    return route.type == ConversationRouteType.directContext
+        ? route.targetFamilyId
+        : null;
+  }
+
+  /// Al terminar, la respuesta vuelve al hilo de Conversation en vez de
+  /// quedarse en la pantalla de resultado.
+  bool get returnToConversation => purpose.servesConversation;
 
   /// Dos lanzamientos son el mismo encargo si apuntan al mismo turno del mismo
   /// chat con el mismo propósito. Sirve para decidir si hay que descartar un
@@ -169,24 +200,24 @@ class CardsFlowLaunch {
     String? intentId,
     String? institutionProfileId,
     CommunicativeAct? intendedAct,
-  }) =>
-      CardsFlowLaunch(
-        purpose: purpose,
-        intendedAct: intendedAct ?? this.intendedAct,
-        need: need ?? this.need,
-        intentId: intentId ?? this.intentId,
-        institutionProfileId:
-            institutionProfileId ?? this.institutionProfileId,
-        conversationId: conversationId,
-        hearingTurnId: hearingTurnId,
-        hearingText: hearingText,
-        hearingSpeechAct: hearingSpeechAct,
-        suggestion: suggestion,
-        activeContextId: activeContextId,
-      );
+  }) => CardsFlowLaunch(
+    purpose: purpose,
+    intendedAct: intendedAct ?? this.intendedAct,
+    need: need ?? this.need,
+    intentId: intentId ?? this.intentId,
+    institutionProfileId: institutionProfileId ?? this.institutionProfileId,
+    conversationId: conversationId,
+    hearingTurnId: hearingTurnId,
+    hearingText: hearingText,
+    hearingSpeechAct: hearingSpeechAct,
+    suggestion: suggestion,
+    activeContextId: activeContextId,
+    route: route,
+  );
 
   @override
-  String toString() => 'CardsFlowLaunch(${purpose.name}, '
+  String toString() =>
+      'CardsFlowLaunch(${purpose.name}, '
       'conversation: $conversationId, hearingTurn: $hearingTurnId)';
 }
 
@@ -199,5 +230,5 @@ class CardsFlowLaunchNotifier extends Notifier<CardsFlowLaunch> {
 
 final cardsFlowLaunchProvider =
     NotifierProvider<CardsFlowLaunchNotifier, CardsFlowLaunch>(
-  CardsFlowLaunchNotifier.new,
-);
+      CardsFlowLaunchNotifier.new,
+    );

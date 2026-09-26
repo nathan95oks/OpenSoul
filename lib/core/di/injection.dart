@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/datasources/asset_lexicon_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/lexicon_local_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_graph_route_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_lexicon_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
@@ -16,7 +17,11 @@ import 'package:lsb_legal_app/core/data/repositories/lexicon_repository_impl.dar
 import 'package:lsb_legal_app/core/data/repositories/suggestion_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/translation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/services/real_audio_output.dart';
+import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalog.dart';
+import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_router.dart';
+import 'package:lsb_legal_app/core/domain/conversation/semantic_turn_builder.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/domain/repositories/animation_repository.dart';
 import 'package:lsb_legal_app/core/domain/repositories/session_repository.dart';
 import 'package:lsb_legal_app/core/data/repositories/session_repository_impl.dart';
@@ -44,25 +49,30 @@ final httpClientProvider = Provider<http.Client>((ref) {
 
 final remoteTranslationDataSourceProvider =
     Provider<RemoteTranslationDataSource>((ref) {
-  return RemoteTranslationDataSourceImpl(client: ref.watch(httpClientProvider));
-});
+      return RemoteTranslationDataSourceImpl(
+        client: ref.watch(httpClientProvider),
+      );
+    });
 
 final translationRepositoryProvider = Provider<TranslationRepository>((ref) {
-  return TranslationRepositoryImpl(ref.watch(remoteTranslationDataSourceProvider));
+  return TranslationRepositoryImpl(
+    ref.watch(remoteTranslationDataSourceProvider),
+  );
 });
 
 final remoteAudioDataSourceProvider = Provider<RemoteAudioDataSource>((ref) {
   return RemoteAudioDataSourceImpl(client: ref.watch(httpClientProvider));
 });
 
-final audioTranslationRepositoryProvider =
-    Provider<AudioTranslationRepository>((ref) {
-  return CachingAudioTranslationRepository(
-    AudioTranslationRepositoryImpl(
-      remoteDataSource: ref.watch(remoteAudioDataSourceProvider),
-    ),
-  );
-});
+final audioTranslationRepositoryProvider = Provider<AudioTranslationRepository>(
+  (ref) {
+    return CachingAudioTranslationRepository(
+      AudioTranslationRepositoryImpl(
+        remoteDataSource: ref.watch(remoteAudioDataSourceProvider),
+      ),
+    );
+  },
+);
 
 final sessionRepositoryProvider = Provider<SessionRepository>(
   (ref) => SessionRepositoryImpl(),
@@ -81,7 +91,9 @@ final audioOutputProvider = Provider<AudioOutput>((ref) {
 final lexiconRepositoryProvider = Provider<LexiconRepository>((ref) {
   return LexiconRepositoryImpl(
     assetDataSource: AssetLexiconDataSource(),
-    remoteDataSource: RemoteLexiconDataSource(client: ref.watch(httpClientProvider)),
+    remoteDataSource: RemoteLexiconDataSource(
+      client: ref.watch(httpClientProvider),
+    ),
     localDataSource: LexiconLocalDataSource(),
   );
 });
@@ -165,8 +177,9 @@ final suggestionRepositoryProvider = Provider<SuggestionRepository>(
   (ref) => SuggestionRepositoryImpl(ref.watch(suggestionDataSourceProvider)),
 );
 
-final conversationBridgeProvider =
-    Provider<ConversationBridge>((ref) => const NoConversationBridge());
+final conversationBridgeProvider = Provider<ConversationBridge>(
+  (ref) => const NoConversationBridge(),
+);
 
 final conversationEngineProvider = Provider<ConversationEngine>((ref) {
   return ConversationEngine(
@@ -174,5 +187,47 @@ final conversationEngineProvider = Provider<ConversationEngine>((ref) {
     declarationRepository: ref.watch(translationRepositoryProvider),
     signRepository: ref.watch(audioTranslationRepositoryProvider),
     contextInference: ref.watch(contextInferenceEngineProvider),
+  );
+});
+
+// ---- Ruteo de conversación hacia el grafo de LSB→Texto/Audio -------------
+
+/// Catálogo del router: banco guiado + grafo de diálogo + contextos. Espera
+/// al grafo, que es un asset; mientras carga no hay router y Conversation
+/// abre las tarjetas como siempre.
+final conversationGraphCatalogProvider =
+    FutureProvider<ConversationGraphCatalog>((ref) async {
+      final graph = await ref.watch(dialogueGraphProvider.future);
+      return ConversationGraphCatalog(
+        bank: QuestionBank.generated(),
+        graph: graph,
+      );
+    });
+
+final semanticTurnBuilderProvider = Provider<SemanticTurnBuilder?>((ref) {
+  final catalog = ref.watch(conversationGraphCatalogProvider).asData?.value;
+  return catalog == null ? null : SemanticTurnBuilder(catalog);
+});
+
+/// El Bedrock de LSB→Texto/Audio como desempate del router. `null` si no hay
+/// endpoint configurado: el router se queda con las reglas deterministas.
+final graphRouteModelProvider = Provider<GraphRouteModel?>((ref) {
+  final catalog = ref.watch(conversationGraphCatalogProvider).asData?.value;
+  if (catalog == null) return null;
+  final remote = RemoteGraphRouteDataSource(
+    client: ref.watch(httpClientProvider),
+    catalog: catalog,
+  );
+  return remote.isConfigured ? remote : null;
+});
+
+final conversationGraphRouterProvider = Provider<ConversationGraphRouter?>((
+  ref,
+) {
+  final catalog = ref.watch(conversationGraphCatalogProvider).asData?.value;
+  if (catalog == null) return null;
+  return ConversationGraphRouter(
+    catalog,
+    model: ref.watch(graphRouteModelProvider),
   );
 });
