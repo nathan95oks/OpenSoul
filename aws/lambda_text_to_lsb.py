@@ -53,6 +53,10 @@ CACHE_PREFIX = os.environ.get("APP_PREFIX", "text-to-lsb")
 # cambien las reglas del prompt: el texto de entrada sería el mismo, pero la
 # traducción esperada ya no.
 CACHE_VERSION = os.environ.get("CACHE_VERSION", "v2")
+# Versión interna de las reglas deterministas. Forma parte de la clave aunque
+# CACHE_VERSION esté fijada en las variables de entorno de Lambda, para que un
+# despliegue de reglas nuevas nunca siga sirviendo traducciones antiguas.
+TRANSLATION_RULESET_VERSION = "compound-glosses-v1"
 
 # Animaciones del avatar. Todas las señas son clips dentro de UN solo .glb en
 # S3, y el visor elige el clip por nombre. La lista de clips del propio archivo
@@ -510,6 +514,13 @@ fundamentado en el Manual Práctico de Enseñanza de Educación Bilingüe del Mi
 
 Tu misión es transformar la frase en español a un ARREGLO ORDENADO DE GLOSAS LSB oficiales siguiendo estrictamente estas reglas:
 
+0. SEÑAS COMPUESTAS — MÁXIMA PRIORIDAD:
+   - Si varias palabras consecutivas forman una glosa compuesta del catálogo,
+     usa UNA sola glosa compuesta. Nunca la dividas en señas individuales ni
+     deletrees una de sus partes.
+   - Regla obligatoria: "cómo estás" / "como estas" -> ["COMO_ESTAS"].
+     No devuelvas ["COMO", "ESTAS"] ni ["COMO", "ESTAR"].
+
 1. SUPRESIÓN DE ELEMENTOS SIN VALOR LSB:
    - Elimina artículos (el, la, los, las, un, una, unos, unas).
    - Elimina preposiciones y conjunciones sin carga semántica (a, de, con, y, en, para, por, que).
@@ -687,6 +698,95 @@ def canonical_gloss(gloss: str) -> str:
         strip_gloss_accents(gloss.upper().strip()),
         strip_gloss_accents(gloss.upper().strip()),
     )
+
+
+def _phrase_words(text: str) -> tuple:
+    """Palabras comparables de una frase, sin tildes ni puntuación."""
+    return tuple(re.findall(r"[A-ZÑ0-9]+", remove_accents(text.upper())))
+
+
+# Las equivalencias multipalabra son reglas lingüísticas escritas por el
+# proyecto, no inferencias de Bedrock. Solo se fuerzan cuando el GLB confirma
+# que el clip de destino existe. Así una regla obsoleta jamás deja al avatar
+# inmóvil y, a la vez, un clip como COMO_ESTAS gana a COMO + deletreo(ESTAS).
+_MULTIWORD_GLOSS_RULES = tuple(sorted({
+    (_phrase_words(source), canonical_gloss(target))
+    for source, target in GLOSS_ALIASES.items()
+    if len(_phrase_words(source)) > 1
+}, key=lambda item: (-len(item[0]), item[0], item[1])))
+
+# Variantes que el modelo puede producir después de lematizar un verbo. Se
+# aceptan únicamente para colapsarlas hacia la regla compuesta ya verificada.
+_COMPOUND_OUTPUT_VARIANTS = {
+    "COMO_ESTAS": (("COMO", "ESTAS"), ("COMO", "ESTAR")),
+}
+
+
+def enforce_baked_compound_glosses(glosses: list, text: str,
+                                    clips: dict) -> tuple:
+    """Prioriza la seña compuesta más larga presente en texto y en el GLB.
+
+    Devuelve (glosas, glosas_compuestas_verificadas). La segunda colección se
+    entrega a la validación del catálogo: el alias aporta el significado y el
+    GLB aporta evidencia de que la animación realmente existe.
+    """
+    input_words = _phrase_words(text)
+    if not input_words:
+        return list(glosses), set()
+
+    matches = []
+    occupied = set()
+    for words, target in _MULTIWORD_GLOSS_RULES:
+        if _clip_key(target) not in clips:
+            continue
+        width = len(words)
+        for start in range(len(input_words) - width + 1):
+            positions = set(range(start, start + width))
+            if positions & occupied or input_words[start:start + width] != words:
+                continue
+            matches.append((start, words, target))
+            occupied.update(positions)
+
+    if not matches:
+        return list(glosses), set()
+
+    resultado = list(glosses)
+    verificadas = set()
+    for _start, words, target in sorted(matches):
+        verificadas.add(target)
+
+        # Para una entrada que es exactamente la expresión compuesta no se
+        # permite que ninguna interpretación fragmentada de Bedrock sobreviva.
+        if input_words == words:
+            resultado = [target]
+            continue
+
+        keys = tuple(_clave(g) for g in resultado)
+        target_key = _clave(target)
+
+        # Si Bedrock ya respetó la glosa compuesta, no se duplica.
+        if target_key in keys:
+            continue
+
+        patterns = _COMPOUND_OUTPUT_VARIANTS.get(target, (words,))
+        replaced = False
+        for pattern in patterns:
+            width = len(pattern)
+            for idx in range(len(keys) - width + 1):
+                if keys[idx:idx + width] == pattern:
+                    resultado[idx:idx + width] = [target]
+                    replaced = True
+                    break
+            if replaced:
+                break
+
+        if not replaced:
+            # El modelo puede omitir por completo una parte. La regla sigue
+            # siendo obligatoria porque la frase se reconoció en la entrada y
+            # el clip existe; se agrega antes que permitir un deletreo falso.
+            resultado.append(target)
+
+    return resultado, verificadas
 
 
 # Forma admisible de una glosa: mayúsculas, dígitos, guiones y guion bajo.
@@ -905,7 +1005,8 @@ def _spell_out(word: str) -> list:
     return [c for c in strip_gloss_accents(word.upper()) if c.isalnum()]
 
 
-def enforce_catalog_membership(glosses: list) -> tuple:
+def enforce_catalog_membership(glosses: list,
+                               verified_animation_glosses=None) -> tuple:
     """Ninguna glosa que no esté en el catálogo sale como si fuera una seña real.
 
     Antes, `post_process_glosses` solo comprobaba FORMA: una glosa bien escrita
@@ -917,10 +1018,16 @@ def enforce_catalog_membership(glosses: list) -> tuple:
     letra, todas sí catalogadas) y se dice explícitamente que ese concepto no
     tiene seña, en vez de dejarlo pasar con apariencia de traducción válida.
     """
+    verified_animation_glosses = {
+        strip_gloss_accents(g.upper())
+        for g in (verified_animation_glosses or ())
+    }
     resultado, incidencias = [], []
     for gloss in glosses:
         clave = strip_gloss_accents(gloss.upper())
-        if clave in _AVAILABLE_GLOSSES_NORM or len(clave) <= 1:
+        if (clave in _AVAILABLE_GLOSSES_NORM
+                or clave in verified_animation_glosses
+                or len(clave) <= 1):
             resultado.append(gloss)
             continue
         resultado.extend(_spell_out(gloss))
@@ -1116,13 +1223,23 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
                    if _clave(g) != termino and _clave(g) not in glosas_en_juego]
         disambiguation.append(item)
 
+    # Las frases compuestas verificadas tienen prioridad absoluta sobre la
+    # salida del modelo. La lista real de clips evita forzar una seña declarada
+    # en una regla antigua pero ausente del GLB.
+    clips = get_baked_clips()
+    limpias, compuestas_verificadas = enforce_baked_compound_glosses(
+        limpias, text, clips,
+    )
+
     # Reconocimiento frente a generación: aquí se comprueba que la
     # representación no haya perdido ninguna palabra de lo que se dijo.
     raw_glosses, incidencias = repair_coverage(limpias, text)
 
     # Ninguna glosa que salga de aquí puede ser una invención: lo que no está
     # documentado se deletrea en vez de presentarse como una seña real.
-    raw_glosses, incidencias_catalogo = enforce_catalog_membership(raw_glosses)
+    raw_glosses, incidencias_catalogo = enforce_catalog_membership(
+        raw_glosses, compuestas_verificadas,
+    )
     incidencias += incidencias_catalogo
 
     incidencias += detect_fidelity_losses(raw_glosses, text)
@@ -1224,7 +1341,8 @@ def generate_cache_key(text: str, situation: str = None, resolved_senses: dict =
     # El modelo forma parte de la clave: cambiar BEDROCK_MODEL_ID cambia la
     # traducción, y servir la del modelo anterior sería devolver el resultado
     # de un sistema que ya no está en producción.
-    seed = f"{CACHE_VERSION}|{BEDROCK_MODEL_ID}|{normalized}"
+    seed = (f"{CACHE_VERSION}|{TRANSLATION_RULESET_VERSION}|"
+            f"{BEDROCK_MODEL_ID}|{normalized}")
     return hashlib.md5(seed.encode("utf-8")).hexdigest()
 
 

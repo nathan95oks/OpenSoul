@@ -101,15 +101,13 @@ representa).
   "BILLETES"`) es razonable para el caso general, pero no distingue el caso
   límite de un nombre propio. No se tocó por no ser el error señalado en el
   encargo (que sí era BILLETERA/CORRER); queda listado para revisión.
-- **Alias sin respaldo documentado**: al construir la prueba de regresión de
-  esta auditoría se encontró que `GLOSS_ALIASES["¿COMO ESTAS?"] →
-  "COMO_ESTAS"` y `GLOSS_ALIASES["ESTOY BIEN"] → "ESTOY_BIEN"` apuntan a
-  glosas que NO están en `AVAILABLE_GLOSSES` ni en
-  `official_dictionary.json` — nunca tuvieron una seña real detrás. Con la
-  validación de catálogo (`enforce_catalog_membership`) ahora se deletrean en
-  vez de presentarse como si existieran, pero valdría la pena decidir si esas
-  frases de cortesía merecen una seña propia documentada o si se retiran del
-  todo del alias.
+- **Alias compuestos verificados contra el GLB**: `COMO_ESTAS` ya existe como
+  clip horneado en `avatar_test.glb`. El traductor aplica coincidencia de frase
+  más larga y fuerza `como estas` / `¿cómo estás?` a una sola glosa
+  `COMO_ESTAS`, incluso si Bedrock devuelve `COMO` + `ESTAS` o una salida
+  incompleta. Esta excepción solo se habilita cuando el alias está declarado y
+  el clip aparece realmente en el GLB; un alias sin clip (por ejemplo
+  `ESTOY_BIEN` mientras no se hornee) continúa deletreándose.
 
 ## Limitaciones que este trabajo NO puede cerrar
 

@@ -8,31 +8,64 @@ import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
 class AnimationRepositoryImpl implements AnimationRepository {
   final AnimationCache cache;
-  final Future<Directory> Function() temporaryDirectory;
+  final Future<Directory> Function() cacheDirectory;
 
   AnimationRepositoryImpl({
     AnimationCache? cache,
+    Future<Directory> Function()? cacheDirectory,
+    @Deprecated('Usa cacheDirectory')
     Future<Directory> Function()? temporaryDirectory,
-  })  : cache = cache ?? AnimationCache(),
-        temporaryDirectory = temporaryDirectory ?? getTemporaryDirectory;
+  }) : cache = cache ?? AnimationCache(),
+       cacheDirectory =
+           cacheDirectory ??
+           temporaryDirectory ??
+           _persistentAnimationDirectory;
+
+  static Future<Directory> _persistentAnimationDirectory() async {
+    final support = await getApplicationSupportDirectory();
+    final directory = Directory(
+      '${support.path}${Platform.pathSeparator}animations',
+    );
+    if (!await directory.exists()) {
+      await directory.create(recursive: true);
+    }
+    return directory;
+  }
+
+  bool _isBundledModel(String source) {
+    if (source == AnimationUrlResolver.bundledModelAsset ||
+        source == AnimationUrlResolver.bundledModelFileName) {
+      return true;
+    }
+    final uri = Uri.tryParse(source);
+    return uri != null &&
+        cache.isAllowed(source) &&
+        uri.pathSegments.isNotEmpty &&
+        uri.pathSegments.last == AnimationUrlResolver.bundledModelFileName;
+  }
 
   @override
   Future<List<String>> playableSources(List<String> animationUrls) async {
     if (animationUrls.isEmpty) return const [];
 
-    final directory = await temporaryDirectory();
     final sources = <String>[];
     final resolvedMap = <String, String>{};
+    Directory? directory;
 
     for (final url in animationUrls) {
       if (url.startsWith(AnimationUrlResolver.placeholderScheme)) {
         sources.add(url);
         continue;
       }
+      if (_isBundledModel(url)) {
+        sources.add(AnimationUrlResolver.bundledModelAsset);
+        continue;
+      }
       if (resolvedMap.containsKey(url)) {
         sources.add(resolvedMap[url]!);
         continue;
       }
+      directory ??= await cacheDirectory();
       final localPath = await cache.localPathFor(url, directory);
       String resolved;
       if (localPath != null) {
@@ -50,20 +83,14 @@ class AnimationRepositoryImpl implements AnimationRepository {
 
   @override
   Future<bool> isCached(String url) async {
-    final directory = await temporaryDirectory();
+    if (_isBundledModel(url)) return true;
+    final directory = await cacheDirectory();
     return cache.isCached(url, directory);
   }
 
   @override
   Future<void> precacheDefaultModel() async {
-    final base = AnimationUrlResolver.defaultBaseUrl;
-    if (base.isEmpty) return;
-    final modelUrl = '${base}avatar_test.glb';
-    try {
-      final directory = await temporaryDirectory();
-      await cache.localPathFor(modelUrl, directory);
-    } catch (_) {
-      // Ignorar si no hay conexión al arrancar; se reintentará en demanda
-    }
+    // El modelo predeterminado forma parte del paquete de instalación. Copiarlo
+    // a otra carpeta duplicaría casi 20 MB sin mejorar el tiempo de carga.
   }
 }

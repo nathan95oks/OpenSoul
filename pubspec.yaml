@@ -79,6 +79,9 @@ flutter:
 
   assets:
     - assets/logo.png
+    # Un unico GLB contiene todos los clips del avatar. Se distribuye con la
+    # aplicacion para que la primera sena no dependa de una descarga de red.
+    - assets/models/avatar_test.glb
     - assets/dictionary/official_dictionary.json
     - assets/dialogue/dialogue_graph.json
     - assets/business/institution_profiles.json

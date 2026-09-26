@@ -59,7 +59,7 @@ class _FakeS3:
 
 
 class _ConGlb(unittest.TestCase):
-    CLIPS = ["HOLA", "GRACIAS", "NO", "A", "B", "C", "E", "O", "R", "S", "ENE",
+    CLIPS = ["HOLA", "GRACIAS", "COMO_ESTAS", "NO", "A", "B", "C", "E", "O", "R", "S", "ENE",
              "CERO", "UNO", "DOS", "CINCO", "PRIMERA_VEZ", "ACOMPANAR"]
 
     def setUp(self):
@@ -160,6 +160,39 @@ class SenaODeletreo(_ConGlb):
         r = m.post_process_glosses({"glosses": ["PRIMERA", "VEZ"]}, "primera vez")
         self.assertIn("PRIMERA_VEZ", r["glosses"])
         self.assertEqual(r["representationStatus"], "complete")
+
+    def test_como_estas_prioriza_el_clip_compuesto(self):
+        r = m.post_process_glosses(
+            {"glosses": ["COMO", "ESTAS"]}, "como estas",
+        )
+        self.assertEqual(r["glosses"], ["COMO_ESTAS"])
+        self.assertEqual(r["glossDetails"][0]["animationName"], "COMO_ESTAS")
+        self.assertEqual(
+            [paso["animationName"] for paso in r["animationSequence"]],
+            ["COMO_ESTAS"],
+        )
+        self.assertEqual(r["representationStatus"], "complete")
+
+    def test_como_estas_corrige_incluso_una_salida_incompleta_del_modelo(self):
+        r = m.post_process_glosses(
+            {"glosses": ["COMO"]}, "¿Cómo estás?",
+        )
+        self.assertEqual(r["glosses"], ["COMO_ESTAS"])
+        self.assertEqual(
+            [paso["animationName"] for paso in r["animationSequence"]],
+            ["COMO_ESTAS"],
+        )
+
+    def test_no_fuerza_la_compuesta_si_el_glb_no_tiene_el_clip(self):
+        self.s3 = _FakeS3(_glb([c for c in self.CLIPS if c != "COMO_ESTAS"]))
+        m.s3 = self.s3
+        m._clips_cache.update(clips=None, expires=0.0)
+
+        r = m.post_process_glosses(
+            {"glosses": ["COMO", "ESTAS"]}, "como estas",
+        )
+        self.assertNotIn("COMO_ESTAS", r["glosses"])
+        self.assertEqual(r["representationStatus"], "partial")
 
 
 class FallosYCache(_ConGlb):

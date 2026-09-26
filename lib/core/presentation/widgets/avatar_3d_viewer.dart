@@ -14,6 +14,11 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   final List<String>? glosses;
   final List<String>? animationUrls;
   final Duration animationDuration;
+  final bool expandToFit;
+  final ValueChanged<bool>? onPlaybackStateChanged;
+  final VoidCallback? onReturnToInput;
+  final int playbackRequestId;
+  final bool isUserComposing;
 
   /// Cuando es `false` el visor detiene la reproduccion y libera el WebView.
   /// Lo usan las superficies que quedan vivas en segundo plano (IndexedStack)
@@ -27,13 +32,16 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
     this.animationUrls,
     this.animationDuration = const Duration(milliseconds: 2500),
     this.isActive = true,
+    this.expandToFit = false,
+    this.onPlaybackStateChanged,
+    this.onReturnToInput,
+    this.playbackRequestId = 0,
+    this.isUserComposing = false,
   });
 
   @override
   ConsumerState<Avatar3DViewer> createState() => _Avatar3DViewerState();
 }
-
-const _s3Base = AnimationUrlResolver.defaultBaseUrl;
 
 /// Margen sobre la duracion de una sena antes de dar el paso por perdido.
 /// Cubre el caso de una glosa que no existe dentro del .glb: el visor no
@@ -43,11 +51,12 @@ const _s3Base = AnimationUrlResolver.defaultBaseUrl;
 /// solo un segundo de margen y en un equipo cargado habrian cortado senas
 /// buenas. El reloj es una red de seguridad, no un temporizador: conviene que
 /// tarde de mas antes que quitarle tiempo a una sena que se esta viendo bien.
-const _stepWatchdog = Duration(seconds: 4);
+const _stepWatchdog = Duration(seconds: 6);
 
 /// Suelo por debajo del cual un aviso de fin no es creible. Protege del caso
 /// en que el visor arranca una sena ya terminada y avisa en el acto.
 const _minStepDuration = Duration(milliseconds: 300);
+const _neutralAnimations = ['NEUTRO1', 'NEUTRO2', 'NEUTRO3'];
 
 class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     with SingleTickerProviderStateMixin {
@@ -70,6 +79,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// termino mas de una vez —el evento 'loop' se reenvia como 'finished'— y
   /// ademas esta el reloj de seguridad, asi que cerrar el paso es idempotente.
   bool _stepSettled = false;
+  bool _reportedPlaying = false;
+  bool _modelLoaded = false;
+  bool _returnRequested = false;
 
   AnimationController? _pulseController;
 
@@ -78,53 +90,92 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// Fuente del unico modelo 3D, resuelta una vez. Todas las senas estan
   /// horneadas dentro, asi que el visor no cambia de `src` en toda la sesion:
   /// es lo que evita recargar y reparsear 8,5 MB en cada traduccion.
-  String? _modelSource;
+  static const _modelSource = AnimationUrlResolver.bundledModelAsset;
 
   /// Vence el paso en curso si el visor no avisa: un placeholder no tiene
   /// `model-viewer` que emita 'finished', y una glosa que no exista dentro
   /// del .glb tampoco lo emite. Sin esto la secuencia se queda clavada.
   Timer? _placeholderTimer;
-
-  /// Timer de espera (1.5s) antes de reiniciar la secuencia en bucle continuo.
-  Timer? _loopTimer;
+  Timer? _neutralTimer;
+  int _neutralIndex = 0;
 
   void _cancelPlaceholderTimer() {
     _placeholderTimer?.cancel();
     _placeholderTimer = null;
   }
 
-  void _cancelLoopTimer() {
-    _loopTimer?.cancel();
-    _loopTimer = null;
+  bool get _canPlayNeutral =>
+      widget.isActive &&
+      !widget.isProcessing &&
+      !widget.isUserComposing &&
+      !_isPlayingSequence;
+
+  void _cancelNeutral({bool pause = true}) {
+    _neutralTimer?.cancel();
+    _neutralTimer = null;
+    if (!pause) return;
+    final controller = _controllerA;
+    if (controller == null) return;
+    try {
+      controller
+          .runJavaScript('''
+        const mv = document.querySelector('model-viewer');
+        window.__lsbMode = 'idle';
+        if (mv) mv.pause();
+      ''')
+          .catchError((e) {});
+    } catch (_) {}
+  }
+
+  void _startNeutral() {
+    _neutralTimer?.cancel();
+    _neutralTimer = null;
+    if (!_canPlayNeutral || !_modelLoaded) return;
+    final controller = _controllerA;
+    if (controller == null) return;
+    final preferred = _neutralIndex++;
+    try {
+      controller
+          .runJavaScript('''
+        (async () => {
+          const mv = document.querySelector('model-viewer');
+          if (!mv) return;
+          const candidates = ${_neutralAnimations.map((e) => "'$e'").toList()};
+          const available = mv.availableAnimations || [];
+          const neutrals = candidates.filter((name) => available.includes(name));
+          if (neutrals.length === 0) {
+            if (window.ModelViewerChannel) {
+              window.ModelViewerChannel.postMessage('neutral-unavailable');
+            }
+            return;
+          }
+          const name = neutrals[$preferred % neutrals.length];
+          window.__lsbMode = 'neutral';
+          mv.animationName = name;
+          if (mv.updateComplete) await mv.updateComplete;
+          const duration = mv.duration;
+          if (!duration || duration <= 0) return;
+          mv.currentTime = 0;
+          mv.play({ repetitions: 1 });
+          setTimeout(() => {
+            if (window.__lsbMode === 'neutral' && window.ModelViewerChannel) {
+              window.ModelViewerChannel.postMessage('neutral-finished');
+            }
+          }, Math.round(duration * 1000) + 80);
+        })();
+      ''')
+          .catchError((e) {});
+    } catch (_) {}
   }
 
   @override
   void initState() {
     super.initState();
-    _resolveModelSource();
 
     if (widget.isActive && (widget.animationUrls?.isNotEmpty ?? false)) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _startSequence();
       });
-    }
-  }
-
-  /// Deja el modelo listo en local antes de que haga falta, para que la
-  /// primera traduccion no pague la descarga.
-  Future<void> _resolveModelSource() async {
-    const remoto = '${_s3Base}avatar_test.glb';
-    try {
-      final fuentes = await ref
-          .read(animationRepositoryProvider)
-          .playableSources(const [remoto]);
-      final local = fuentes.firstWhere(
-        (f) => !f.startsWith(AnimationUrlResolver.placeholderScheme),
-        orElse: () => remoto,
-      );
-      if (mounted) setState(() => _modelSource = local);
-    } catch (_) {
-      if (mounted) setState(() => _modelSource = remoto);
     }
   }
 
@@ -137,6 +188,24 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       return;
     }
 
+    if (!oldWidget.isActive && widget.isActive) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startNeutral();
+      });
+    }
+
+    if (widget.isProcessing && !oldWidget.isProcessing) {
+      _cancelNeutral();
+    } else if (widget.isUserComposing != oldWidget.isUserComposing) {
+      if (widget.isUserComposing) {
+        _cancelNeutral();
+      } else {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _startNeutral();
+        });
+      }
+    }
+
     if (_testUrls == null && _hasNothingToPlay && _isBusy) {
       _stopPlayback();
       return;
@@ -144,37 +213,84 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
     if (!widget.isActive) return;
 
-    final hasNewUrls = widget.animationUrls != oldWidget.animationUrls &&
+    final hasNewUrls =
+        widget.animationUrls != oldWidget.animationUrls &&
         widget.animationUrls != null &&
         widget.animationUrls!.isNotEmpty;
-    final hasNewGlosses = widget.glosses != oldWidget.glosses &&
+    final hasNewGlosses =
+        widget.glosses != oldWidget.glosses &&
         widget.glosses != null &&
         widget.glosses!.isNotEmpty;
+    final hasNewRequest =
+        widget.playbackRequestId != oldWidget.playbackRequestId &&
+        ((widget.animationUrls?.isNotEmpty ?? false) ||
+            (widget.glosses?.isNotEmpty ?? false));
 
-    if (hasNewUrls || hasNewGlosses) {
+    if (hasNewRequest || hasNewUrls || hasNewGlosses) {
       _startSequence();
     }
   }
 
   bool get _hasNothingToPlay =>
-      (widget.animationUrls?.isEmpty ?? true) && (widget.glosses?.isEmpty ?? true);
+      (widget.animationUrls?.isEmpty ?? true) &&
+      (widget.glosses?.isEmpty ?? true);
 
-  bool get _isBusy =>
-      _localUrls.isNotEmpty || _isPlayingSequence;
+  bool get _isBusy => _localUrls.isNotEmpty || _isPlayingSequence;
 
   /// Corta la secuencia en curso: pausa el `model-viewer`, cancela el timer de
   /// los placeholders y devuelve el visor a reposo.
   void _stopPlayback() {
+    _returnRequested = false;
     _cancelPlaceholderTimer();
-    _cancelLoopTimer();
+    _cancelNeutral();
     _pauseViewers();
     _resetToIdle();
+  }
+
+  void _returnToInput() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    if (_isPlayingSequence) {
+      setState(() => _returnRequested = true);
+      return;
+    }
+    _finishReturnToInput();
+  }
+
+  void _finishReturnToInput() {
+    if (!mounted) return;
+    _returnRequested = false;
+    _resetToIdle();
+    widget.onReturnToInput?.call();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _startNeutral();
+    });
+  }
+
+  void _replaySequence() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    _startSequence();
+  }
+
+  void _reportPlayback(bool playing) {
+    if (_reportedPlaying == playing) return;
+    _reportedPlaying = playing;
+    final callback = widget.onPlaybackStateChanged;
+    if (callback == null) return;
+    // didUpdateWidget puede iniciar o detener una secuencia mientras el padre
+    // aun se esta construyendo. Notificar al final del frame evita setState
+    // durante build y descarta transiciones que ya quedaron obsoletas.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _reportedPlaying == playing) callback(playing);
+    });
   }
 
   void _pauseViewers() {
     const pauseJs = """
       const mv = document.querySelector('model-viewer');
       if (mv) {
+        window.__lsbMode = 'idle';
         mv.pause();
         mv.currentTime = 0;
       }
@@ -184,14 +300,18 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (controller == null) return;
     try {
       controller.runJavaScript(pauseJs).catchError((e) {});
-    } catch (_) {
-    }
+    } catch (_) {}
   }
 
-  void _startSequence({List<String>? overrideUrls, List<String>? overrideGlosses}) {
+  void _startSequence({
+    List<String>? overrideUrls,
+    List<String>? overrideGlosses,
+  }) {
     if (!mounted) return;
+    _returnRequested = false;
     _cancelPlaceholderTimer();
-    _cancelLoopTimer();
+    _cancelNeutral();
+    _reportPlayback(true);
     setState(() {
       _currentIndex = 0;
       _isPlayingSequence = false;
@@ -211,26 +331,35 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   void _resetToIdle() {
     if (!mounted) return;
     _cancelPlaceholderTimer();
-    _cancelLoopTimer();
+    _reportPlayback(false);
     setState(() {
       _localUrls = [];
       _testUrls = null;
       _testGlosses = null;
       _currentIndex = 0;
       _isPlayingSequence = false;
-      _stepSettled = false;
+      // Mantener cerrado el ultimo token evita que un evento `finished`
+      // duplicado vuelva a entrar despues de haber regresado al modo neutral.
+      _stepSettled = true;
     });
   }
 
   Future<void> _downloadAndStartSequence() async {
     final urlsToDownload = _testUrls ?? widget.animationUrls;
     if (urlsToDownload == null || urlsToDownload.isEmpty) {
+      _reportPlayback(false);
       return;
     }
 
-    final localPaths = await ref
-        .read(animationRepositoryProvider)
-        .playableSources(urlsToDownload);
+    List<String> localPaths;
+    try {
+      localPaths = await ref
+          .read(animationRepositoryProvider)
+          .playableSources(urlsToDownload);
+    } catch (_) {
+      _reportPlayback(false);
+      return;
+    }
 
     if (mounted) {
       setState(() {
@@ -253,6 +382,12 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       _handleLoaded(viewerId);
       return;
     }
+
+    if (message == 'neutral-finished') {
+      _neutralTimer = Timer(const Duration(milliseconds: 350), _startNeutral);
+      return;
+    }
+    if (message == 'neutral-unavailable') return;
 
     if (message.startsWith('diag:')) return;
 
@@ -279,9 +414,11 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   void _handleLoaded(String viewerId) {
     if (!mounted) return;
+    _modelLoaded = true;
     // El WebView acaba de existir. Si el paso en curso quedo sin reproducir
     // por no haber controller todavia, este es el momento de lanzarlo.
     _playCurrentStep();
+    if (_localUrls.isEmpty) _startNeutral();
   }
 
   void _handleFinished(String viewerId) => _finishCurrentStep();
@@ -305,6 +442,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (!mounted || _currentIndex >= _localUrls.length) return;
 
     _cancelPlaceholderTimer();
+    _cancelNeutral();
     _stepSettled = false;
     _playToken++;
 
@@ -314,9 +452,11 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       final tipo = url.startsWith(AnimationUrlResolver.placeholderScheme)
           ? 'placeholder'
           : 'modelo';
-      debugPrint('[avatar] PLAY paso=$_currentIndex token=$_playToken '
-          'tipo=$tipo gloss=${_glossAt(_currentIndex)} '
-          'controller=${_controllerA == null ? "NULL" : "ok"}');
+      debugPrint(
+        '[avatar] PLAY paso=$_currentIndex token=$_playToken '
+        'tipo=$tipo gloss=${_glossAt(_currentIndex)} '
+        'controller=${_controllerA == null ? "NULL" : "ok"}',
+      );
     }
 
     if (url.startsWith(AnimationUrlResolver.placeholderScheme)) {
@@ -331,7 +471,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     _placeholderTimer = Timer(_stepWatchdog, _finishCurrentStep);
 
     final controller = _controllerA;
-    if (controller == null) return;
+    if (controller == null || !_modelLoaded) return;
 
     // El paquete construye el HTML una sola vez y no reacciona a cambios de
     // props, asi que cambiar `animationName` en el widget no llega al visor
@@ -352,10 +492,12 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       //
       // Tampoco se llama a pause(): playAnimation hace
       // `if (element.paused) mixer.stopAllAction()`, que congela el avatar.
-      controller.runJavaScript('''
+      controller
+          .runJavaScript('''
         (async () => {
           const mv = document.querySelector('model-viewer');
           if (!mv) return;
+          window.__lsbMode = 'sign';
           window.__lsbStep = $token;
           $seleccion
           if (mv.updateComplete) { await mv.updateComplete; }
@@ -383,9 +525,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
             }
           }, Math.round(dur * 1000) + 60);
         })();
-      ''').catchError((e) {});
-    } catch (_) {
-    }
+      ''')
+          .catchError((e) {});
+    } catch (_) {}
   }
 
   /// Cierra el paso en curso y encadena el siguiente. Idempotente.
@@ -393,27 +535,28 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (!mounted || _stepSettled) return;
     _stepSettled = true;
     _cancelPlaceholderTimer();
-    _cancelLoopTimer();
 
     if (!kReleaseMode) {
       final ms = _stepStartedAt == null
           ? -1
           : DateTime.now().difference(_stepStartedAt!).inMilliseconds;
-      debugPrint('[avatar] FIN  paso=$_currentIndex token=$_playToken '
-          'tras=${ms}ms');
+      debugPrint(
+        '[avatar] FIN  paso=$_currentIndex token=$_playToken '
+        'tras=${ms}ms',
+      );
+    }
+
+    if (_returnRequested) {
+      _finishReturnToInput();
+      return;
     }
 
     if (_currentIndex >= _localUrls.length - 1) {
-      // Fin de la secuencia completa: en vez de detenerse o mostrar pantalla de fin,
-      // espera 1.5 segundos en reposo y reinicia la secuencia automáticamente en bucle continuo.
-      _loopTimer = Timer(const Duration(milliseconds: 1500), () {
-        if (!mounted || !widget.isActive || _localUrls.isEmpty) return;
-        setState(() {
-          _currentIndex = 0;
-          _isPlayingSequence = true;
-        });
-        _playCurrentStep();
-      });
+      // Una reproduccion por envio. El boton de repetir sigue disponible, pero
+      // el campo de texto vuelve al terminar la frase completa.
+      setState(() => _isPlayingSequence = false);
+      _reportPlayback(false);
+      _neutralTimer = Timer(const Duration(milliseconds: 350), _startNeutral);
       return;
     }
 
@@ -424,7 +567,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   @override
   void dispose() {
     _cancelPlaceholderTimer();
-    _cancelLoopTimer();
+    _cancelNeutral(pause: false);
     _pauseViewers();
     _pulseController?.dispose();
     super.dispose();
@@ -438,37 +581,37 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       key: const ValueKey('processing'),
       color: const Color(0xFF1A1A2E).withValues(alpha: 0.92),
       child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 60,
-          height: 60,
-          child: CircularProgressIndicator(
-            strokeWidth: 3,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              Colors.deepPurpleAccent.shade200,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 60,
+            height: 60,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Colors.deepPurpleAccent.shade200,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            letterSpacing: 0.5,
+          const SizedBox(height: 20),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.5,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          subtitle,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.4),
-            fontSize: 12,
+          const SizedBox(height: 8),
+          Text(
+            subtitle,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.4),
+              fontSize: 12,
+            ),
           ),
-        ),
-      ],
+        ],
       ),
     );
   }
@@ -480,12 +623,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// reproduciendo por su cuenta la primera sena de la secuencia, que se veia
   /// antes de tiempo y encima emitia avisos de fin que no eran de ningun paso.
   Widget _buildPersistentViewer() {
-    final src = _modelSource;
-    if (src == null) return const SizedBox.shrink();
-
     return ModelViewer(
       key: const ValueKey('avatar_viewer'),
-      src: src,
+      src: _modelSource,
       alt: 'Avatar LSB',
       autoPlay: false,
       autoRotate: false,
@@ -497,6 +637,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       fieldOfView: "30deg",
       onWebViewCreated: (controller) {
         _controllerA = controller;
+        _modelLoaded = false;
       },
       javascriptChannels: {
         JavascriptChannel(
@@ -516,6 +657,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         });
 
         const avisarFin = () => {
+          if (window.__lsbMode === 'neutral') return;
           if (window.ModelViewerChannel) {
             window.ModelViewerChannel.postMessage(
               'finished:' + (window.__lsbStep === undefined ? '' : window.__lsbStep)
@@ -531,13 +673,17 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   Widget _buildDualModelViewer() {
     final activeGlosses = _testGlosses ?? widget.glosses;
-    final currentGloss = (activeGlosses != null && _currentIndex < activeGlosses.length)
+    final currentGloss =
+        (activeGlosses != null && _currentIndex < activeGlosses.length)
         ? activeGlosses[_currentIndex]
         : '';
 
-    final currentUrl = _currentIndex < _localUrls.length ? _localUrls[_currentIndex] : '';
-    final isPlaceholder =
-        currentUrl.startsWith(AnimationUrlResolver.placeholderScheme);
+    final currentUrl = _currentIndex < _localUrls.length
+        ? _localUrls[_currentIndex]
+        : '';
+    final isPlaceholder = currentUrl.startsWith(
+      AnimationUrlResolver.placeholderScheme,
+    );
 
     // Solo los rotulos: el visor vive debajo, en [build], y no se desmonta al
     // cambiar de estado.
@@ -579,10 +725,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                     const SizedBox(height: 8),
                     const Text(
                       'Seña no disponible en 3D (Simulación)',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 13,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 13),
                     ),
                   ],
                 ),
@@ -620,9 +763,27 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           right: 14,
           child: Row(
             children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+                tooltip: 'Volver a escribir',
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
+                onPressed: _returnToInput,
+              ),
+              const SizedBox(width: 18),
+              IconButton(
+                icon: const Icon(Icons.replay_rounded, color: Colors.white),
+                tooltip: 'Volver a hacer la seña',
+                constraints: const BoxConstraints(),
+                padding: EdgeInsets.zero,
+                onPressed: _replaySequence,
+              ),
+              const Spacer(),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
                   borderRadius: BorderRadius.circular(20),
@@ -637,25 +798,12 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                   ),
                 ),
               ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.replay_rounded, color: Colors.white),
-                tooltip: 'Repetir secuencia',
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  _startSequence();
-                },
-              ),
             ],
           ),
         ),
       ],
     );
   }
-
 
   /// Estado que se muestra cuando el modulo quedo en segundo plano: sin
   /// `ModelViewer`, para que ningun WebView siga animando fuera de pantalla.
@@ -698,10 +846,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// Antes este estado montaba su *propio* ModelViewer apuntando a la URL de
   /// S3 en vez de al archivo ya cacheado, asi que cada vuelta a reposo volvia
   /// a bajar 8,5 MB por red.
-Widget _buildIdleState() {
-  return const SizedBox.shrink();
-}
-
+  Widget _buildIdleState() {
+    return const SizedBox.shrink();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -719,7 +866,7 @@ Widget _buildIdleState() {
 
     return Container(
       width: double.infinity,
-      height: 300,
+      height: widget.expandToFit ? double.infinity : 300,
       decoration: BoxDecoration(
         color: const Color(0xFF1A1A2E),
         borderRadius: BorderRadius.circular(20),

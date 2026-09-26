@@ -1,6 +1,12 @@
 class AnimationUrlResolver {
-  static const String defaultBaseUrl =
-      String.fromEnvironment('LSB_ANIMATIONS_BASE_URL');
+  /// Modelo distribuido dentro del APK/IPA. Todos los clips disponibles viven
+  /// en este GLB, por lo que queda precargado desde la instalacion.
+  static const String bundledModelAsset = 'assets/models/avatar_test.glb';
+  static const String bundledModelFileName = 'avatar_test.glb';
+
+  static const String defaultBaseUrl = String.fromEnvironment(
+    'LSB_ANIMATIONS_BASE_URL',
+  );
 
   static const String placeholderScheme = 'placeholder://';
   final String baseUrl;
@@ -16,10 +22,47 @@ class AnimationUrlResolver {
   /// la secuencia colgada en esa letra. Mientras no se horneen, se deletrean
   /// como placeholder, que al menos se ve.
   static const Set<String> available3DGlosses = {
-    'HOLA', 'PERMISO', 'GRACIAS', 'SI', 'NO',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'L', 'M',
-    'N', 'Ñ', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO', 'NUEVE', 'DIEZ',
+    'HOLA',
+    'PERMISO',
+    'GRACIAS',
+    'SI',
+    'NO',
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'J',
+    'L',
+    'M',
+    'N',
+    'Ñ',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
+    'CERO',
+    'UNO',
+    'DOS',
+    'TRES',
+    'CUATRO',
+    'CINCO',
+    'SEIS',
+    'SIETE',
+    'OCHO',
+    'NUEVE',
+    'DIEZ',
     'PRIMERA_VEZ',
   };
 
@@ -34,14 +77,20 @@ class AnimationUrlResolver {
   /// tiene. El backend ya hacia esta traduccion
   /// (`lambda_text_to_lsb.py`, `_DIGITO_A_GLOSA`); faltaba en el cliente.
   static const Map<String, String> digitToNumeral = {
-    '0': 'CERO', '1': 'UNO', '2': 'DOS', '3': 'TRES', '4': 'CUATRO',
-    '5': 'CINCO', '6': 'SEIS', '7': 'SIETE', '8': 'OCHO', '9': 'NUEVE',
+    '0': 'CERO',
+    '1': 'UNO',
+    '2': 'DOS',
+    '3': 'TRES',
+    '4': 'CUATRO',
+    '5': 'CINCO',
+    '6': 'SEIS',
+    '7': 'SIETE',
+    '8': 'OCHO',
+    '9': 'NUEVE',
   };
 
   /// Glosas cuyo nombre de animacion dentro del .glb no coincide con la glosa.
-  static const Map<String, String> animationNameOverrides = {
-    'Ñ': 'ENE',
-  };
+  static const Map<String, String> animationNameOverrides = {'Ñ': 'ENE'};
 
   /// Forma canonica de la glosa para buscarla entre las animaciones.
   static String canonicalFor(String gloss) {
@@ -66,11 +115,32 @@ class AnimationUrlResolver {
   }
 
   static const Set<String> wordsToSpell = {
-    'DENUNCIA', 'DENUNCIAR', 'DENUNCIANTE', 'DENUNCIADO', 'FISCALIA',
-    'JUZGADO', 'COMISARIA', 'QUERELLA', 'IMPUTACION', 'IMPUTADO',
-    'VICTIMA', 'SOSPECHOSO', 'DETENIDO', 'ACTA', 'CEDULA', 'CEDULA DE IDENTIDAD',
-    'FIRMA', 'FIRMAR', 'DECLARACION', 'DECLARAR', 'MINISTERIO PUBLICO',
-    'FELCC', 'FELCV', 'SEPDAVI', 'SEPDEP', 'AUDIENCIA'
+    'DENUNCIA',
+    'DENUNCIAR',
+    'DENUNCIANTE',
+    'DENUNCIADO',
+    'FISCALIA',
+    'JUZGADO',
+    'COMISARIA',
+    'QUERELLA',
+    'IMPUTACION',
+    'IMPUTADO',
+    'VICTIMA',
+    'SOSPECHOSO',
+    'DETENIDO',
+    'ACTA',
+    'CEDULA',
+    'CEDULA DE IDENTIDAD',
+    'FIRMA',
+    'FIRMAR',
+    'DECLARACION',
+    'DECLARAR',
+    'MINISTERIO PUBLICO',
+    'FELCC',
+    'FELCV',
+    'SEPDAVI',
+    'SEPDEP',
+    'AUDIENCIA',
   };
 
   /// Quita las tildes de una glosa conservando la N con virgulilla, que es una
@@ -103,7 +173,7 @@ class AnimationUrlResolver {
     final cleanGloss = canonicalFor(gloss);
 
     if (available3DGlosses.contains(cleanGloss)) {
-      return ['${baseUrl}avatar_test.glb'];
+      return ['$baseUrl$bundledModelFileName'];
     }
 
     if (wordsToSpell.contains(cleanGloss) && cleanGloss.length > 1) {
@@ -111,9 +181,11 @@ class AnimationUrlResolver {
       // Descartarla cambiaba la palabra en silencio (FISCALIA se deletreaba
       // "FSCALA" al no estar la I).
       final letters = spelledLetters(cleanGloss)!
-          .map((char) => available3DGlosses.contains(char)
-              ? '${baseUrl}avatar_test.glb'
-              : '$placeholderScheme$char')
+          .map(
+            (char) => available3DGlosses.contains(char)
+                ? '$baseUrl$bundledModelFileName'
+                : '$placeholderScheme$char',
+          )
           .toList();
       if (letters.isNotEmpty) {
         return letters;
@@ -122,7 +194,7 @@ class AnimationUrlResolver {
 
     if (animationFile != null && animationFile.isNotEmpty) {
       if (animationFile.endsWith('.glb')) {
-        return ['${baseUrl}avatar_test.glb'];
+        return ['$baseUrl$bundledModelFileName'];
       }
     }
 
