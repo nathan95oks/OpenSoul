@@ -184,7 +184,9 @@ void main() {
     }
     expect(file.existsSync(), isTrue,
         reason: 'Genera el fixture con ACTUALIZAR_PARIDAD=1');
-    expect(file.readAsStringSync(), actual,
+    // Git puede entregar el fixture con CRLF en Windows: se compara el
+    // contenido, no el fin de línea.
+    expect(file.readAsStringSync().replaceAll('\r\n', '\n'), actual,
         reason: 'El compositor cambió: regenera el fixture y pasa '
             'aws/tests/test_guiado_precision.py');
   });
