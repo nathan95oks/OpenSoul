@@ -14,6 +14,10 @@ class ConversationReplyResult {
   /// El turno del oyente al que responde; `null` si la persona sorda abrió
   /// el turno ella misma.
   final String? replyToTurnId;
+
+  /// Texto congelado del turno al abrir las tarjetas. Permite rechazar una
+  /// entrega si una restauración reemplazó el turno conservando su id.
+  final String? replyToTurnText;
   final String? contextId;
 
   /// Los hechos confirmados con las tarjetas (respuestas del banco).
@@ -26,6 +30,7 @@ class ConversationReplyResult {
   const ConversationReplyResult({
     required this.conversationId,
     required this.replyToTurnId,
+    this.replyToTurnText,
     required this.contextId,
     required this.result,
     this.intervention,
@@ -47,6 +52,7 @@ extension ConversationReplySubmission on ConversationBridge {
     glosses: reply.glosses,
     contextId: reply.contextId,
     replyToId: reply.replyToTurnId,
+    expectedReplyText: reply.replyToTurnText,
     conversationId: reply.conversationId,
   );
 }

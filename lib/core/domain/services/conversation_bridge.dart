@@ -56,6 +56,7 @@ abstract class ConversationBridge {
     required List<String> glosses,
     String? contextId,
     String? replyToId,
+    String? expectedReplyText,
     String? conversationId,
   });
 }
@@ -69,7 +70,7 @@ class NoConversationBridge implements ConversationBridge {
     required List<String> glosses,
     String? contextId,
     String? replyToId,
+    String? expectedReplyText,
     String? conversationId,
-  }) =>
-      SubmitOutcome.noConversation;
+  }) => SubmitOutcome.noConversation;
 }

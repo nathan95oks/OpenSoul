@@ -64,10 +64,7 @@ class NodeFlowCanvas extends ConsumerWidget {
           child: SingleChildScrollView(
             key: const Key('guided_options_scroll'),
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: const SuggestedGlossPanel(),
-            ),
+            child: const SuggestedGlossPanel(),
           ),
         ),
       ],
@@ -88,23 +85,14 @@ class _HeroQuestionCard extends StatelessWidget {
     required this.currentPicks,
   });
 
-  static const _orange = AppTheme.brandPrimary;
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: _orange.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _orange.withValues(alpha: 0.55), width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: AppTheme.lightSurface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppTheme.lightBorder),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,11 +101,11 @@ class _HeroQuestionCard extends StatelessWidget {
           LsbQuestionDisplay(spanish: question, formulation: lsb),
           if (maxPicks > 1)
             Padding(
-              padding: const EdgeInsets.only(top: 4),
+              padding: const EdgeInsets.only(top: 3),
               child: Text(
                 'Puedes elegir hasta $maxPicks ($currentPicks elegidas)',
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 11.5,
                   color: AppTheme.lightTextSub,
                   fontWeight: FontWeight.w600,
                 ),
@@ -155,9 +143,9 @@ class LsbQuestionDisplay extends StatelessWidget {
       key: const Key('formulacion_es_fallback'),
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: width < 360 ? 17 : 19,
-        fontWeight: FontWeight.w800,
-        height: 1.15,
+        fontSize: width < 360 ? 16 : 17,
+        fontWeight: FontWeight.w700,
+        height: 1.2,
         color: AppTheme.lightText,
         letterSpacing: -0.2,
       ),
@@ -187,8 +175,8 @@ class LsbFormulationStrip extends ConsumerWidget {
         key: const Key('formulacion_lsb'),
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 6,
-        runSpacing: 5,
+        spacing: 5,
+        runSpacing: 4,
         children: [
           for (final s in segmentos)
             _LsbPiece(segment: s, withImage: conImagen),
@@ -204,12 +192,12 @@ class _LsbPiece extends StatelessWidget {
 
   const _LsbPiece({required this.segment, required this.withImage});
 
-  static const _imageSize = 22.0;
+  static const _imageSize = 20.0;
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    final fontSize = width < 360 ? 16.0 : 17.0;
+    final fontSize = width < 360 ? 15.0 : 16.0;
     final esSena =
         segment.kind == LsbSegmentKind.sign ||
         segment.kind == LsbSegmentKind.compound;
@@ -218,13 +206,11 @@ class _LsbPiece extends StatelessWidget {
     // Imagen y glosa en la misma fila: apiladas, cada pieza medía el doble
     // de alto y la cabecera empujaba las tarjetas hacia abajo.
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
       decoration: BoxDecoration(
-        color: AppTheme.brandPrimary.withValues(alpha: esSena ? 0.08 : 0.04),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppTheme.brandPrimary.withValues(alpha: 0.30),
-        ),
+        color: AppTheme.lightSubtle,
+        borderRadius: BorderRadius.circular(9),
+        border: Border.all(color: AppTheme.lightBorder),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -236,7 +222,7 @@ class _LsbPiece extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: fontSize,
-                height: 1.2,
+                height: 1.15,
                 fontWeight: FontWeight.w800,
                 fontStyle: esSena ? FontStyle.normal : FontStyle.italic,
                 color: AppTheme.lightText,
@@ -258,7 +244,7 @@ class _LsbPiece extends StatelessWidget {
               gloss: g,
               semanticIcon: 'sign_language',
               size: _imageSize,
-              color: AppTheme.brandPrimary,
+              color: AppTheme.lightTextSub,
             ),
         ],
       );
@@ -273,10 +259,10 @@ class _LsbPiece extends StatelessWidget {
       width: _imageSize,
       height: _imageSize,
       decoration: BoxDecoration(
-        color: AppTheme.brandPrimary.withValues(alpha: 0.12),
+        color: AppTheme.lightBorder,
         shape: BoxShape.circle,
       ),
-      child: Icon(icono, size: 13, color: AppTheme.brandPrimary),
+      child: Icon(icono, size: 12, color: AppTheme.lightTextSub),
     );
   }
 }

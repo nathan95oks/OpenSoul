@@ -104,6 +104,92 @@ void main() {
     },
   );
 
+  testWidgets('la grilla usa una, dos o tres columnas según el ancho', (
+    tester,
+  ) async {
+    final cards = [for (var i = 0; i < 6; i++) _card('r$i', 'GLOSA $i')];
+
+    await _pump(
+      tester,
+      AdaptiveNodeLayout(cards: cards, onCardTap: (_) {}),
+      size: const Size(280, 640),
+    );
+    var rects = [
+      for (final card in cards) tester.getRect(find.byKey(ValueKey(card.id))),
+    ];
+    expect(rects[1].top, greaterThan(rects[0].bottom));
+    expect(rects[1].left, rects[0].left);
+
+    await _pump(
+      tester,
+      AdaptiveNodeLayout(cards: cards, onCardTap: (_) {}),
+      size: const Size(360, 640),
+    );
+    rects = [
+      for (final card in cards) tester.getRect(find.byKey(ValueKey(card.id))),
+    ];
+    expect(rects[1].top, rects[0].top);
+    expect(rects[2].top, greaterThan(rects[0].bottom));
+
+    await _pump(
+      tester,
+      AdaptiveNodeLayout(cards: cards, onCardTap: (_) {}),
+      size: const Size(800, 640),
+    );
+    rects = [
+      for (final card in cards) tester.getRect(find.byKey(ValueKey(card.id))),
+    ];
+    expect(rects[1].top, rects[0].top);
+    expect(rects[2].top, rects[0].top);
+    expect(rects[3].top, greaterThan(rects[0].bottom));
+  });
+
+  testWidgets('la selección es visible y las etiquetas no se truncan', (
+    tester,
+  ) async {
+    final cards = [
+      _card('selected', 'UNA GLOSA SELECCIONADA DE VARIAS PALABRAS'),
+      _card('plain', 'OTRA GLOSA EXTENSA QUE DEBE VERSE COMPLETA'),
+    ];
+    String? tapped;
+    await _pump(
+      tester,
+      AdaptiveNodeLayout(
+        cards: cards,
+        selectedIds: const {'selected'},
+        onCardTap: (card) => tapped = card.id,
+      ),
+    );
+
+    BoxDecoration decorationOf(String id) =>
+        tester
+                .widget<AnimatedContainer>(
+                  find.descendant(
+                    of: find.byKey(ValueKey(id)),
+                    matching: find.byType(AnimatedContainer),
+                  ),
+                )
+                .decoration
+            as BoxDecoration;
+
+    expect(decorationOf('selected').gradient, isNotNull);
+    expect(decorationOf('plain').gradient, isNull);
+    for (final id in ['selected', 'plain']) {
+      final label = tester.widget<Text>(
+        find.descendant(
+          of: find.byKey(ValueKey(id)),
+          matching: find.byType(Text),
+        ),
+      );
+      expect(label.maxLines, isNull);
+      expect(label.data, contains('GLOSA'));
+    }
+
+    await tester.tap(find.byKey(const ValueKey('plain')));
+    await tester.pumpAndSettle();
+    expect(tapped, 'plain');
+  });
+
   testWidgets('la formulación superior es compacta en las 143 preguntas', (
     tester,
   ) async {
