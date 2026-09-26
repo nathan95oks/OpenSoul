@@ -10340,6 +10340,7 @@
    "bankQuestion": "Q.ORI.SEPDAVI",
    "formulationGlosses": [
     "ASISTENCIA",
+    "SEPDAVI",
     "QUERER"
    ],
    "answerOptions": [
@@ -15409,6 +15410,7 @@
    "formulationGlosses": [
     "ABOGADO",
     "GRATIS",
+    "SEPDEP",
     "NECESITAR"
    ],
    "answerOptions": [
@@ -15608,6 +15610,7 @@
    "markers": [],
    "bankQuestion": "Q.SEG.DONDE_FISCALIA",
    "formulationGlosses": [
+    "FISCALIA",
     "DÓNDE"
    ],
    "answerOptions": [
@@ -16570,6 +16573,7 @@
    "markers": [],
    "bankQuestion": "Q.SEG.DERIVACION_FISCALIA",
    "formulationGlosses": [
+    "FISCALIA",
     "IR"
    ],
    "answerOptions": [
