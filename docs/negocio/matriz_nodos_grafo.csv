@@ -52,7 +52,7 @@ n-s6-agresion_violenci-06;6;6;¿Recibió amenazas?;AMENAZA;violencia;hearing;que
 n-s6-agresion_violenci-07;6;7;¿Tiene miedo de volver a su casa?;RIESGO_RETORNO;violencia;hearing;question;C;Q.RIE.MIEDO_CASA;MIEDO|CASA|VOLVER;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-agresion_violenci-08;6;8;¿Necesita auxilio ahora?;AUXILIO_INMEDIATO;violencia;hearing;question;C;Q.RIE.AUXILIO;AUXILIO|AHORA|NECESITAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-agresion_violenci-09;6;9;¿Hay niños u otras personas que necesiten protección?;PROTECCION_OTROS;violencia;hearing;question;C;Q.RIE.PROTECCION_OTROS;HIJO|PROTEGER|NECESITAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
-n-s6-agresion_violenci-10;6;10;¿Desea orientación para recibir asistencia de SEPDAVI?;DERIVACION_SEPDAVI;violencia;hearing;question;C;Q.ORI.SEPDAVI;ASISTENCIA|QUERER;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;d(SEPDAVI);
+n-s6-agresion_violenci-10;6;10;¿Desea orientación para recibir asistencia de SEPDAVI?;DERIVACION_SEPDAVI;violencia;hearing;question;C;Q.ORI.SEPDAVI;ASISTENCIA|SEPDAVI|QUERER;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;d(SEPDAVI);
 n-s6-amenazas_mensajes-01;6;1;¿Las amenazas llegaron por celular?;AMENAZA_CELULAR;amenaza_digital;hearing;question;C;Q.DIG.POR_CELULAR;AMENAZAR|CELULAR|ENVIAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-amenazas_mensajes-02;6;2;¿Le escribieron por internet?;MENSAJE_INTERNET;amenaza_digital;hearing;question;C;Q.DIG.POR_INTERNET;INTERNET|ESCRIBIR|ENVIAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-amenazas_mensajes-03;6;3;¿Conoce el número desde el que le escribieron?;NUMERO_ORIGEN;amenaza_digital;hearing;question;C;Q.DIG.NUMERO_CONOCE;CELULAR|CONOCER;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;NÚM(...);
@@ -84,13 +84,13 @@ n-s6-seguimiento_prelim-02;6;2;¿Tiene el número de referencia?;NUMERO_REFERENC
 n-s6-seguimiento_prelim-03;6;3;¿Cuándo presentó la denuncia?;FECHA_DENUNCIA;seguimiento;hearing;question;C;Q.SEG.FECHA_DENUNCIA;CUÁNDO;hace_d|hace_s|hace_m|ayer;DÍA|SEMANA|MES|AYER;no_recuerda|omitir;[DENUNCIA];
 n-s6-seguimiento_prelim-04;6;4;¿Quiere hablar con el policía encargado?;HABLAR_POLICIA;seguimiento;hearing;question;C;Q.SEG.HABLAR_POLICIA;POLICÍA|HABLAR|QUERER;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-seguimiento_prelim-05;6;5;¿Necesita hablar con un abogado?;HABLAR_ABOGADO;seguimiento;hearing;question;C;Q.SEG.HABLAR_ABOGADO;ABOGADO|HABLAR|NECESITAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
-n-s6-seguimiento_prelim-06;6;6;¿Necesita defensa pública gratuita?;SEPDEP;seguimiento;hearing;question;C;Q.SEG.DEFENSA_PUBLICA;ABOGADO|GRATIS|NECESITAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;d(SEPDEP);
-n-s6-seguimiento_prelim-07;6;7;¿Necesita saber dónde está la Fiscalía?;FISCALIA;seguimiento;hearing;question;C;Q.SEG.DONDE_FISCALIA;DÓNDE;si|no;SÍ|NO;omitir;d(FISCALÍA);
+n-s6-seguimiento_prelim-06;6;6;¿Necesita defensa pública gratuita?;SEPDEP;seguimiento;hearing;question;C;Q.SEG.DEFENSA_PUBLICA;ABOGADO|GRATIS|SEPDEP|NECESITAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;d(SEPDEP);
+n-s6-seguimiento_prelim-07;6;7;¿Necesita saber dónde está la Fiscalía?;FISCALIA;seguimiento;hearing;question;C;Q.SEG.DONDE_FISCALIA;FISCALIA|DÓNDE;si|no;SÍ|NO;omitir;d(FISCALÍA);
 n-s6-seguimiento_prelim-08;6;8;¿Recibió un papel de convocatoria?;CITACION;seguimiento;hearing;question;C;Q.SEG.CITACION;PAPEL|CONVOCAR|RECIBIR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-seguimiento_prelim-09;6;9;¿Tiene que volver otro día?;RETORNO;seguimiento;hearing;question;C;Q.SEG.RETORNO;VOLVER|DÍA|NECESITAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-seguimiento_prelim-10;6;10;¿Prefiere que le avisemos por escrito?;AVISO_ESCRITO;seguimiento;hearing;question;C;Q.ID.AVISO;AVISAR|ESCRIBIR|ENVIAR|MEJOR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-interaccion_con_fi-01;6;1;¿Necesita hablar con el fiscal?;HABLAR_FISCAL;seguimiento;hearing;question;C;Q.SEG.HABLAR_FISCAL;HABLAR|NECESITAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;d(FISCAL);
-n-s6-interaccion_con_fi-02;6;2;¿Le indicaron ir a la Fiscalía?;DERIVACION_FISCALIA;seguimiento;hearing;question;C;Q.SEG.DERIVACION_FISCALIA;IR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;d(FISCALÍA);
+n-s6-interaccion_con_fi-02;6;2;¿Le indicaron ir a la Fiscalía?;DERIVACION_FISCALIA;seguimiento;hearing;question;C;Q.SEG.DERIVACION_FISCALIA;FISCALIA|IR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;d(FISCALÍA);
 n-s6-interaccion_con_fi-03;6;3;¿Recibió una resolución?;RECIBIR_RESOLUCION;seguimiento;hearing;question;C;Q.SEG.RESOLUCION;RESOLUCIÓN|RECIBIR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-interaccion_con_fi-04;6;4;¿Debe presentarse ante un juez?;JUEZ;seguimiento;hearing;question;C;Q.SEG.JUEZ;JUEZ|PRESENTAR;si|no|no_sabe;SÍ|NO|NO_SABER;omitir;;
 n-s6-interaccion_con_fi-05;6;5;¿Sabe dónde está el Órgano Judicial?;ORGANO_JUDICIAL;seguimiento;hearing;question;C;Q.SEG.ORGANO_JUDICIAL;ÓRGANO_JUDICIAL|DÓNDE;si|no;SÍ|NO;omitir;;
