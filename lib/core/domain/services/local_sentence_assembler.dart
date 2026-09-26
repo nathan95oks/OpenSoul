@@ -256,8 +256,9 @@ class LocalSentenceAssembler {
     if ((o.concept.toUpperCase() == 'BILLETES' || o.concept.toUpperCase() == 'DINERO') &&
         o.quantity != null &&
         o.quantity!.trim().isNotEmpty) {
-      final unidad = (o.unit == null || o.unit!.trim().isEmpty) ? 'bolivianos' : o.unit!;
-      return '${o.quantity} $unidad en billetes';
+      // Sin moneda elegida no se escribe ninguna: sería un dato inventado.
+      final unidad = (o.unit == null || o.unit!.trim().isEmpty) ? '' : ' ${o.unit!}';
+      return '${o.quantity}$unidad en billetes';
     }
     if (o.contents != null && o.contents!.trim().isNotEmpty) {
       final lex = _lexicon[_normalize(o.concept)];
@@ -363,7 +364,8 @@ class LocalSentenceAssembler {
         break;
 
       case 'engano_dinero':
-        final monto = d.fraud?.amount != null ? ' por el monto de ${d.fraud!.amount} ${d.fraud!.currency ?? "bolivianos"}' : '';
+        final moneda = d.fraud?.currency == null ? '' : ' ${d.fraud!.currency}';
+        final monto = d.fraud?.amount != null ? ' por el monto de ${d.fraud!.amount}$moneda' : '';
         final medio = d.fraud?.deliveryMethod != null ? ' mediante ${d.fraud!.deliveryMethod}' : '';
         sentences.add('${_cap(timePrefix)}El declarante denuncia haber sido víctima de engaño económico$monto$medio$locClause.'.trim());
         break;

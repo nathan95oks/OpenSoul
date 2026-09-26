@@ -17,6 +17,11 @@ abstract class TranslationRepository {
     /// eligieron. Sirven para desambiguar y ordenar. **No son contenido**: el
     /// generador no puede escribirlas dentro de la declaración de nadie.
     BusinessSignals? business,
+
+    /// Contrato v4: la intervención guiada canónica (respuestas tipadas del
+    /// banco). Cuando viaja, el servidor la redacta con el mismo banco que
+    /// el cliente y sin refinamiento generativo.
+    Map<String, dynamic>? guided,
   });
 }
 

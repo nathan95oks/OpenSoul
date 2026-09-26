@@ -1,19 +1,53 @@
 import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 
+/// Texto redactado y qué respuestas quedaron representadas en él.
+class ComposedText {
+  final String text;
+
+  /// Opciones cuya frase entró en [text], como `'Q.ID#opcion'`.
+  final Set<String> represented;
+
+  const ComposedText(this.text, this.represented);
+}
+
+/// Redacción determinista de una intervención guiada.
+///
+/// Gemelo exacto de `aws/guided_composer.py`: los dos leen el mismo banco y
+/// deben producir la misma oración para las mismas respuestas. Nada aquí
+/// interpreta ni completa: cada oración sale de la plantilla de la opción
+/// elegida y de los valores escritos por la persona.
 class GuidedComposer {
   final QuestionBank bank;
 
   const GuidedComposer(this.bank);
 
-  String compose(GuidedIntervention intervention) {
+  String compose(GuidedIntervention intervention) =>
+      composeTraced(intervention).text;
+
+  /// Hechos confirmados: opciones elegidas (no omitidas) que redactan algo.
+  ///
+  /// Las opciones que no redactan nada por sí mismas solo abren otra
+  /// pregunta (p. ej. «Alguien escapó» → «¿Quién escapó?»), que es la que
+  /// lleva el hecho; por eso no cuentan aquí.
+  Set<String> confirmedFacts(GuidedIntervention intervention) => {
+        for (final a in intervention.answers)
+          if (!a.isOmitted)
+            for (final id in a.optionIds)
+              if (bank.question(a.questionId)?.option(id) case final option?)
+                if (option.writesSomething) '${a.questionId}#$id',
+      };
+
+  ComposedText composeTraced(GuidedIntervention intervention) {
     final answers = <String, Map<String, dynamic>>{
       for (final answer in intervention.answers)
         answer.questionId: answer.toJson(),
     };
     final consumed = <String>{};
+    final represented = <String>{};
     final sentences = <String>[];
     final reply = intervention.purpose == GuidedPurpose.reply;
+    final referenced = _referencedFragments(answers);
 
     String? fragment(String id, List<String> extras) {
       final answer = answers[id];
@@ -22,16 +56,17 @@ class GuidedComposer {
         return null;
       }
       consumed.add(id);
-      final parts = _chosen(question, answer)
-          .map((option) {
-            final phrase = _fill(option, _phraseOf(option, answer), answer,
-                answers, fragment, extras);
-            final extra = option['fraseExtra'] as String?;
-            if (extra != null) extras.add(extra);
-            return phrase;
-          })
-          .where((text) => text.isNotEmpty)
-          .toList();
+      final parts = <String>[];
+      for (final option in _chosen(question, answer)) {
+        final phrase = _fill(
+            option, _phraseOf(option, answer), answer, answers, fragment, extras);
+        final extra = option['fraseExtra'] as String?;
+        if (extra != null) extras.add(extra);
+        if (phrase.isNotEmpty) {
+          parts.add(phrase);
+          represented.add('$id#${option['id']}');
+        }
+      }
       return parts.isEmpty ? null : _joinEs(parts);
     }
 
@@ -43,21 +78,31 @@ class GuidedComposer {
         continue;
       }
       final extras = <String>[];
+      // Lo que se marque al redactar esta frase solo cuenta si la frase
+      // llega al texto.
+      final before = {...represented};
       String text;
       if (question['modo'] == 'fragmento') {
+        // Lo redacta la pregunta que lo cita («Me robaron {Q.ROB.QUE}»); solo
+        // si ninguna lo cita se usa su frase suelta.
+        if (referenced.contains(id)) continue;
         final value = fragment(id, extras);
         final loose = question['fraseSuelta'] as String?;
         text = value == null || loose == null ? '' : loose.replaceAll('{frag}', value);
       } else {
         consumed.add(id);
         final chosen = _chosen(question, answer);
-        final parts = chosen.map((option) {
+        final parts = <String>[];
+        for (final option in chosen) {
           final result = _fill(option, _phraseOf(option, answer), answer,
               answers, fragment, extras);
           final extra = option['fraseExtra'] as String?;
           if (extra != null) extras.add(extra);
-          return result;
-        }).where((value) => value.isNotEmpty).toList();
+          if (result.isNotEmpty) {
+            parts.add(result);
+            represented.add('$id#${option['id']}');
+          }
+        }
         final hasExit = chosen.any((option) => option['salida'] == true);
         if (parts.isEmpty) {
           text = '';
@@ -69,10 +114,49 @@ class GuidedComposer {
         }
       }
       final finalized = _finalize(text, reply: reply);
-      if (finalized.isNotEmpty) sentences.add(finalized);
-      sentences.addAll(extras.map((e) => _finalize(e, reply: reply)).where((e) => e.isNotEmpty));
+      if (finalized.isNotEmpty) {
+        sentences.add(finalized);
+      } else {
+        represented
+          ..clear()
+          ..addAll(before);
+      }
+      sentences.addAll(extras
+          .map((e) => _finalize(e, reply: reply))
+          .where((e) => e.isNotEmpty));
     }
-    return sentences.join(' ');
+    return ComposedText(sentences.join(' '), represented);
+  }
+
+  /// Preguntas en modo fragmento que alguna respuesta elegida cita
+  /// explícitamente (`{Q.ID|respaldo}`) y que, por tanto, se redactan dentro
+  /// de la frase de quien las cita.
+  Set<String> _referencedFragments(Map<String, Map<String, dynamic>> answers) {
+    final out = <String>{};
+    for (final entry in answers.entries) {
+      final answer = entry.value;
+      final question = bank.questions[entry.key];
+      if (question == null || answer['estado'] == 'omitido') continue;
+      for (final option in _chosen(question, answer)) {
+        final template = _phraseOf(option, answer);
+        for (final match in RegExp(r'\{([^{}]+)\}').allMatches(template)) {
+          final token = match.group(1)!;
+          if (!token.startsWith('Q.') && !token.startsWith('I.')) continue;
+          final separator = token.indexOf('|');
+          final reference = separator < 0 ? token : token.substring(0, separator);
+          final resolved = _resolveReference(reference);
+          if (resolved == null || resolved.$2.isNotEmpty) continue;
+          final target = bank.questions[resolved.$1];
+          final targetAnswer = answers[resolved.$1];
+          if (target?['modo'] == 'fragmento' &&
+              targetAnswer != null &&
+              targetAnswer['estado'] != 'omitido') {
+            out.add(resolved.$1);
+          }
+        }
+      }
+    }
+    return out;
   }
 
   List<String> _order(GuidedIntervention intervention,

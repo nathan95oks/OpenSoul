@@ -15,6 +15,7 @@ class TranslationRepositoryImpl implements TranslationRepository {
     String? speechAct,
     String? replyToId,
     BusinessSignals? business,
+    Map<String, dynamic>? guided,
   }) async {
     return await remoteDataSource.translateCards(
       business: business,
@@ -23,6 +24,7 @@ class TranslationRepositoryImpl implements TranslationRepository {
       declaration: declaration,
       speechAct: speechAct,
       replyToId: replyToId,
+      guided: guided,
     );
   }
 }

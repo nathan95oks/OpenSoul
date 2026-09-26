@@ -1553,6 +1553,7 @@
    "dominio": "robo",
    "entidad": "Hecho[DAÑAR].objetos",
    "formulacion": "¿Qué dañaron?",
+   "fraseSuelta": "Dañaron {frag}.",
    "id": "Q.DAN.QUE",
    "maximo": 3,
    "modo": "fragmento",
@@ -2486,6 +2487,7 @@
    "dominio": "dinero",
    "entidad": "Evidencia[comprobante]",
    "formulacion": "¿Qué comprobante tiene?",
+   "fraseSuelta": "Tengo {frag}.",
    "id": "Q.DIN.COMPROBANTE_TIPO",
    "maximo": 3,
    "modo": "fragmento",
@@ -2571,7 +2573,8 @@
       "NO"
      ],
      "id": "no",
-     "polar": true
+     "polar": true,
+     "soloControl": "La persona prefiere no calificarlo como engaño: no afirma ni niega un hecho."
     }
    ],
    "reglas": [
@@ -3088,6 +3091,7 @@
    "dominio": "documento",
    "entidad": "Documento",
    "formulacion": "¿Qué papel es?",
+   "fraseSuelta": "El papel es {frag}.",
    "id": "Q.DOC.ACLARAR",
    "modo": "fragmento",
    "noOfrecer": [],
@@ -3704,6 +3708,7 @@
    "dominio": "evidencia",
    "entidad": "Evidencia",
    "formulacion": "¿Qué tiene?",
+   "fraseSuelta": "Tengo {frag}.",
    "id": "Q.EVI.TIPOS",
    "maximo": 4,
    "modo": "fragmento",
@@ -3864,6 +3869,7 @@
    "dominio": "robo",
    "entidad": "Hecho[PERDER].objetos",
    "formulacion": "¿Qué le falta?",
+   "fraseSuelta": "Me falta {frag}.",
    "id": "Q.FALTA.QUE",
    "maximo": 4,
    "modo": "fragmento",
@@ -4319,6 +4325,7 @@
    "dominio": "identificacion",
    "entidad": "Ciudadano",
    "formulacion": "¿Quién le acompaña?",
+   "fraseSuelta": "Vine con {frag}.",
    "id": "Q.ID.ACOMPANANTE_QUIEN",
    "modo": "fragmento",
    "noOfrecer": [],
@@ -5717,7 +5724,8 @@
       "SÍ"
      ],
      "id": "si",
-     "polar": true
+     "polar": true,
+     "soloControl": "Solo abre las preguntas de descripción."
     },
     {
      "estado": "negado",
@@ -5727,7 +5735,8 @@
       "NO"
      ],
      "id": "no",
-     "polar": true
+     "polar": true,
+     "soloControl": "Solo cierra las preguntas de descripción."
     }
    ],
    "reglas": [
@@ -6681,6 +6690,7 @@
    "dominio": "robo",
    "entidad": "Hecho[ROBAR].objetos",
    "formulacion": "¿Qué le robaron?",
+   "fraseSuelta": "Me robaron {frag}.",
    "id": "Q.ROB.QUE",
    "maximo": 4,
    "modo": "fragmento",

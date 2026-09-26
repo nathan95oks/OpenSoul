@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
-import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/presentation/session/active_need_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/needs_screen.dart';
-import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
-import 'package:lsb_legal_app/core/data/datasources/backend_capability.dart';
 
-/// Panel Prominente de Previsualización en Tiempo Real ("Coherencia Visible").
+/// Panel de vista previa en tiempo real.
 ///
-/// Muestra la redacción formal en español generada instantáneamente por
-/// [LocalSentenceAssembler] a medida que la persona usuaria selecciona señas
-/// o configura entidades en el wizard.
-/// Integra advertencias de coherencia y el botón principal de acción de 56dp.
+/// Muestra la redacción del banco guiado a medida que la persona responde:
+/// es exactamente la frase que tendrá el resultado y la que redacta la
+/// Lambda con el mismo banco. Debajo, la navegación entre preguntas.
 class LiveDeclarationPreviewPanel extends ConsumerStatefulWidget {
   const LiveDeclarationPreviewPanel({super.key});
 
@@ -35,21 +28,22 @@ class _LiveDeclarationPreviewPanelState
 
   @override
   Widget build(BuildContext context) {
-    final selectedWords = ref.watch(sentenceProvider);
-    final zonesState = ref.watch(semanticZonesProvider);
+    final session = ref.watch(guidedFlowProvider).session;
     final translationState = ref.watch(translationControllerProvider);
-    final contextState = ref.watch(contextProvider);
-    ref.watch(declarationDraftProvider);
+    final rules = ref.watch(guidedFlowRulesProvider);
+    final previewText = ref.watch(guidedPreviewProvider);
 
-    final draft = buildFullDeclarationDraft(ref);
-    final hasContent = selectedWords.isNotEmpty ||
-        !draft.location.isEmpty ||
-        draft.persons.isNotEmpty ||
-        draft.objects.isNotEmpty ||
-        draft.facts.isNotEmpty;
-    final previewText = const LocalSentenceAssembler().assembleStructured(draft);
-
-    final isLastStep = !zonesState.hasNextQuestion;
+    final canGoBack =
+        session != null && rules.previousQuestion(session) != null;
+    final isLastStep = session == null || rules.nextQuestion(session) == null;
+    // Se puede avanzar sin responder una pregunta opcional (queda «sin
+    // responder», que no es «no»); emitir exige tener algo que decir.
+    final hasContent =
+        session != null && (session.hasAnswers || !isLastStep);
+    // Suficiencia: si ya hay algo que decir y nada obligatorio pendiente, se
+    // puede terminar sin recorrer las preguntas opcionales que quedan.
+    final canFinishEarly =
+        session != null && !isLastStep && rules.canFinish(session);
     final isLoading = translationState.isLoading;
 
     return Container(
@@ -72,6 +66,19 @@ class _LiveDeclarationPreviewPanelState
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            if (canFinishEarly)
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  key: const Key('terminar_aqui'),
+                  onPressed: isLoading
+                      ? null
+                      : () => _ejecutarTraduccionFinal(context, ref),
+                  icon: const Icon(Icons.check_circle_outline, size: 18),
+                  label: const Text('Ya dije lo necesario: terminar aquí'),
+                  style: TextButton.styleFrom(foregroundColor: _orange),
+                ),
+              ),
             if (previewText.isNotEmpty) ...[
               Semantics(
                 label: 'Vista previa de la frase: $previewText',
@@ -91,7 +98,7 @@ class _LiveDeclarationPreviewPanelState
               const SizedBox(height: 12),
             ],
             Row(children: [
-            if (zonesState.canGoBack) ...[
+            if (canGoBack) ...[
               Expanded(
                 child: SizedBox(
                   height: 56,
@@ -112,8 +119,8 @@ class _LiveDeclarationPreviewPanelState
                           ? null
                           : () {
                               ref
-                                  .read(semanticZonesProvider.notifier)
-                                  .goToPreviousZone();
+                                  .read(guidedFlowProvider.notifier)
+                                  .goPrevious();
                             },
                       child: const Center(
                         child: Row(
@@ -173,23 +180,26 @@ class _LiveDeclarationPreviewPanelState
                       onTap: isLoading || !hasContent
                           ? null
                           : () async {
+                              final actual = session;
+                              final pendiente = actual.currentQuestionId;
+                              if (pendiente != null &&
+                                  rules.isRequiredAndMissing(
+                                      actual, pendiente)) {
+                                // Sin esta respuesta la anterior no se puede
+                                // redactar («Alguien escapó» exige «¿quién?»).
+                                AppToastManager.showInfo(
+                                  context,
+                                  'Esta pregunta es necesaria. Si no lo sabes, '
+                                  'elige «No sé».',
+                                );
+                                return;
+                              }
                               if (!isLastStep) {
-                                final prevZone = zonesState.activeZoneId;
                                 ref
-                                    .read(semanticZonesProvider.notifier)
-                                    .goToNextZone();
-                                final newZone = ref
-                                    .read(semanticZonesProvider)
-                                    .activeZoneId;
-                                if (prevZone == newZone) {
-                                  // No hay más zonas a las que avanzar, ir a resultado final
-                                  await _ejecutarTraduccionFinal(
-                                      context, ref, contextState);
-                                }
+                                    .read(guidedFlowProvider.notifier)
+                                    .goNext();
                               } else {
-                                // Emitir y traducir declaración final
-                                await _ejecutarTraduccionFinal(
-                                    context, ref, contextState);
+                                await _ejecutarTraduccionFinal(context, ref);
                               }
                             },
                       child: Center(
@@ -247,80 +257,49 @@ class _LiveDeclarationPreviewPanelState
     );
   }
 
+  /// Emite la declaración: la misma intervención que se ve en la vista
+  /// previa viaja al backend, y el resultado solo acepta del servidor una
+  /// redacción idéntica.
   Future<void> _ejecutarTraduccionFinal(
-      BuildContext context, WidgetRef ref, dynamic contextState) async {
-    final selectedWords = ref.read(sentenceProvider);
-    final markedCards =
-        ref.read(semanticZonesProvider.notifier).orderedGlossesMarked();
-    final cardsForEngines =
-        markedCards.isEmpty ? selectedWords : markedCards;
+      BuildContext context, WidgetRef ref) async {
+    final flow = ref.read(guidedFlowProvider.notifier);
+    final session = ref.read(guidedFlowProvider).session;
+    final rules = ref.read(guidedFlowRulesProvider);
+    if (session == null) return;
 
-    // El destino lo decide el enrutador, con la necesidad y la intención
-    // activas. Antes esta línea caía a 'denuncia_robo' cuando no había
-    // contexto: un trámite acababa redactado como denuncia de robo.
-    final launch = ref.read(cardsFlowLaunchProvider);
+    final faltan = rules.missingRequired(session);
+    if (faltan.isNotEmpty) {
+      final primera = faltan.first;
+      flow.goTo(primera);
+      AppToastManager.showInfo(
+        context,
+        'Falta responder: «${rules.formulationOf(session, primera)}».',
+      );
+      return;
+    }
+
+    final intervention = flow.intervention;
+    if (intervention == null || intervention.isEmpty) return;
+    final text = ref.read(guidedComposerProvider).compose(intervention);
+    final glosses = rules.glossesOf(intervention);
 
     // El acto comunicativo se decide por ESTA intervención, no por la
-    // necesidad elegida hace cinco pantallas: dentro de Consultas también se
-    // declara y se responde.
+    // necesidad elegida hace cinco pantallas.
+    final launch = ref.read(cardsFlowLaunchProvider);
     final acto = NeedsScreen.actForIntervention(
       purpose: launch.purpose,
       need: ref.read(activeNeedProvider),
-      glosses: cardsForEngines,
+      glosses: glosses,
     );
-    ref.read(declarationDraftProvider.notifier).setSpeechAct(acto.wireName);
 
-    final ruta = routeToAssembler(
-      currentContextId: contextState?.id ?? '',
-      glosses: cardsForEngines,
-      needId: ref.read(activeNeedProvider)?.id,
-      intentId: launch.intentId,
-    );
-    final assemblerContext = ruta.contextId;
-
-    // Se arma DESPUÉS de fijar el acto, para que el borrador que viaja lleve
-    // el acto de esta intervención y no el de la anterior.
-    final declaracion = buildFullDeclarationDraft(ref);
-
-    // Compuerta de capacidad. Un backend anterior acepta la petición, responde
-    // 200 y redacta habiendo perdido el segundo hecho: no devolver error no es
-    // compatibilidad. Se avisa antes de enviar, y nunca se reduce en silencio
-    // a un solo hecho.
-    final perdidos = BackendCompatibility.wouldLose(
-      declaracion,
-      RemoteTranslationDataSourceImpl.lastKnownCapability,
-    );
-    if (perdidos.isNotEmpty && context.mounted) {
-      AppToastManager.showInfo(
-        context,
-        'El servidor todavía no conserva dos acciones. Se enviará el mensaje '
-        'y se redactará localmente para no perder «${perdidos.join(", ")}».',
-      );
-    }
-
-    if (!ruta.isSupported && context.mounted) {
-      // No se aproxima ni se calla: se dice qué falta y se sigue con lo que
-      // sí se puede comunicar.
-      AppToastManager.showInfo(
-        context,
-        ruta.missingVocabulary.isEmpty
-            ? 'Este caso todavía no tiene un recorrido propio. Se redactará '
-                'de forma general.'
-            : 'Falta vocabulario para esto: '
-                '${ruta.missingVocabulary.join(", ")}. Se redactará solo lo '
-                'que sí se puede comunicar.',
-      );
-    }
-
-    // Mostrar inmediatamente la pantalla de resultado con el borrador determinista
     ref.read(resultVisibleProvider.notifier).show();
 
     try {
-      await ref.read(translationControllerProvider.notifier).translateCards(
-            context: assemblerContext,
-            cards: cardsForEngines,
-            assemblerContext: assemblerContext,
-            declaration: declaracion,
+      await ref.read(translationControllerProvider.notifier).translateGuided(
+            intervention: intervention,
+            localText: text,
+            glosses: glosses,
+            speechAct: acto.wireName,
           );
     } catch (_) {}
   }
