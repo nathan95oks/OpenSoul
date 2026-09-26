@@ -310,6 +310,12 @@ class BankOption {
 class LsbFormulation {
   final List<String> glosses;
   final String status;
+
+  /// Decisión derivada por el generador desde secuencia, estado y huecos.
+  ///
+  /// Un estado provisional no la vuelve falsa: solo la bloquean una secuencia
+  /// ausente o un hueco léxico sin tratamiento documentado en el banco.
+  final bool displayReady;
   final String? type;
   final String? interrogative;
   final String? nonManual;
@@ -321,6 +327,7 @@ class LsbFormulation {
   const LsbFormulation({
     this.glosses = const [],
     this.status = 'GRAMMAR_PENDING',
+    this.displayReady = false,
     this.type,
     this.interrogative,
     this.nonManual,
@@ -341,6 +348,7 @@ class LsbFormulation {
     return LsbFormulation(
       glosses: _strings(json['glosas']),
       status: (json['estado'] ?? 'GRAMMAR_PENDING').toString(),
+      displayReady: json['utilizable'] == true,
       type: json['tipo'] as String?,
       interrogative: json['interrogativo'] as String?,
       nonManual: json['noManuales'] as String?,
@@ -360,6 +368,9 @@ class LsbFormulation {
   }
 
   bool get isEmpty => glosses.isEmpty;
+
+  /// La UI puede mostrar esta secuencia completa en vez del español.
+  bool get hasUsableLsb => displayReady && glosses.isNotEmpty;
 
   bool get isValidated => status == 'GRAMMAR_VALIDATED';
 

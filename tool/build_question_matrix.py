@@ -583,12 +583,31 @@ def validar_gramatica(banco, grafo, errores, resolver=None):
     return analisis
 
 
+def formulacion_lsb_utilizable(q):
+    """Si la formulación completa puede mostrarse a la persona sorda.
+
+    El estado provisional no bloquea la visualización: en este banco significa
+    que la secuencia es completa pero aún requiere validación humana. Un hueco
+    léxico solo deja de bloquear cuando el propio banco documenta un
+    ``tratamiento`` ya incorporado a la secuencia (por ejemplo, una composición
+    autorizada por el corpus). No se infiere ninguna glosa nueva aquí.
+    """
+    g = q.get("gramaticaLsb") or {}
+    secuencia = list(g.get("secuencia") or [])
+    huecos_sin_tratamiento = [
+        h for h in g.get("huecos", [])
+        if not str(h.get("tratamiento") or "").strip()
+    ]
+    return bool(secuencia) and g.get("estado") != "GRAMMAR_PENDING" and not huecos_sin_tratamiento
+
+
 def formulacion_ejecucion(q):
     """Lo que la app y la Lambda reciben de la formulación LSB."""
     g = q.get("gramaticaLsb") or {}
     return {k: v for k, v in {
         "glosas": list(g.get("secuencia") or []),
         "estado": g.get("estado"),
+        "utilizable": formulacion_lsb_utilizable(q),
         "tipo": g.get("tipo"),
         "interrogativo": g.get("interrogativo"),
         "noManuales": g.get("noManuales"),

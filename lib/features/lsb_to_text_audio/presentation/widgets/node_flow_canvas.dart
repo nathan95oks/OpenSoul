@@ -11,9 +11,8 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/su
 
 /// Lienzo central del flujo guiado.
 ///
-/// 1. Tarjeta de la pregunta activa del banco: su formulación en LSB (del
-///    banco, la misma que recibe la Lambda) y en español, con «Omitir» si es
-///    opcional.
+/// 1. Tarjeta de la pregunta activa del banco: su formulación completa en LSB
+///    o, cuando no existe, el español de fallback, con «Omitir» si es opcional.
 /// 2. Grilla de tarjetas con las respuestas que admite esa pregunta.
 class NodeFlowCanvas extends ConsumerWidget {
   const NodeFlowCanvas({super.key});
@@ -129,20 +128,9 @@ class _HeroQuestionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (!lsb.isEmpty) ...[
-                  LsbFormulationStrip(formulation: lsb),
-                  const SizedBox(height: 8),
-                ],
-                Text(
-                  question,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.w800,
-                    height: 1.2,
-                    color: AppTheme.lightText,
-                    letterSpacing: -0.2,
-                  ),
+                LsbQuestionDisplay(
+                  spanish: question,
+                  formulation: lsb,
                 ),
                 if (maxPicks > 1)
                   Padding(
@@ -176,13 +164,47 @@ class _HeroQuestionCard extends StatelessWidget {
   }
 }
 
+/// Representación única de una pregunta para la persona sorda.
+///
+/// La decisión es central para todas las preguntas: LSB cuando la secuencia
+/// está completa y utilizable; español natural cuando falta cobertura. Nunca
+/// se muestran ambas versiones a la vez.
+class LsbQuestionDisplay extends StatelessWidget {
+  final String spanish;
+  final LsbFormulation formulation;
+
+  const LsbQuestionDisplay({
+    super.key,
+    required this.spanish,
+    required this.formulation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (formulation.hasUsableLsb) {
+      return LsbFormulationStrip(formulation: formulation);
+    }
+    return Text(
+      spanish,
+      key: const Key('formulacion_es_fallback'),
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        fontSize: 19,
+        fontWeight: FontWeight.w800,
+        height: 1.2,
+        color: AppTheme.lightText,
+        letterSpacing: -0.2,
+      ),
+    );
+  }
+}
+
 /// La pregunta formulada en LSB, pieza a pieza.
 ///
 /// Una glosa del catálogo se muestra con su imagen de seña (si las imágenes
 /// están activas) y su nombre; la dactilología `d(SIGLA)` y el número se
-/// muestran como tales, sin fingir una seña. Lo que la secuencia no puede
-/// mostrar —marca no manual de pregunta, un concepto sin seña en v4— se dice
-/// debajo en una línea, en vez de inventar una glosa para ello.
+/// muestran como tales, sin fingir una seña. El estado de auditoría y las
+/// notas técnicas permanecen en el modelo, pero no se exponen en la interfaz.
 class LsbFormulationStrip extends ConsumerWidget {
   final LsbFormulation formulation;
 
@@ -192,33 +214,17 @@ class LsbFormulationStrip extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final conImagen = ref.watch(signImagesEnabledProvider);
     final segmentos = formulation.segments;
-    final nota = [
-      if (formulation.gaps.isNotEmpty)
-        'Sin seña en el corpus: ${formulation.gaps.join(', ')}',
-      formulation.isValidated ? 'LSB validada' : 'LSB provisional',
-    ].join(' · ');
     return Semantics(
-      label: 'Pregunta en LSB: ${segmentos.map((s) => s.label).join(' ')}. $nota',
+      label: 'Pregunta en LSB: ${segmentos.map((s) => s.label).join(' ')}',
       excludeSemantics: true,
-      child: Column(
+      child: Wrap(
         key: const Key('formulacion_lsb'),
-        mainAxisSize: MainAxisSize.min,
+        alignment: WrapAlignment.center,
+        spacing: 6,
+        runSpacing: 6,
         children: [
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 6,
-            runSpacing: 6,
-            children: [
-              for (final s in segmentos)
-                _LsbPiece(segment: s, withImage: conImagen),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(
-            nota,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 11, color: AppTheme.lightTextSub),
-          ),
+          for (final s in segmentos)
+            _LsbPiece(segment: s, withImage: conImagen),
         ],
       ),
     );

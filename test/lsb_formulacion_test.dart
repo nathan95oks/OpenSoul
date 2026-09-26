@@ -13,18 +13,33 @@ void main() {
   final bank = QuestionBank.generated();
   LsbFormulation lsb(String id) => bank.question(id)!.lsb;
 
-  test('todas las preguntas traen su formulación y ninguna está validada', () {
+  test('las 143 preguntas tienen exactamente una representación elegida', () {
+    expect(bank.allQuestions, hasLength(143));
     final estados = {for (final q in bank.allQuestions) q.lsb.status};
     expect(estados, isNot(contains('GRAMMAR_VALIDATED')));
-    final conSecuencia =
-        bank.allQuestions.where((q) => !q.lsb.isEmpty).length;
-    expect(conSecuencia, greaterThanOrEqualTo(130));
+    expect(bank.allQuestions.where((q) => q.lsb.hasUsableLsb), hasLength(134));
+    expect(bank.allQuestions.where((q) => !q.lsb.hasUsableLsb), hasLength(9));
     for (final q in bank.allQuestions) {
-      if (q.lsb.isEmpty) {
-        expect(q.lsb.status, anyOf('GRAMMAR_PENDING', 'LEXICAL_GAP'),
-            reason: q.id);
-      }
+      expect(q.lsb.hasUsableLsb || q.formulation.trim().isNotEmpty, isTrue,
+          reason: q.id);
     }
+  });
+
+  test('la decisión no confunde provisional, pendiente ni hueco léxico', () {
+    expect(lsb('Q.HEC.QUE_OCURRIO').status, 'GRAMMAR_PROVISIONAL');
+    expect(lsb('Q.HEC.QUE_OCURRIO').hasUsableLsb, isTrue);
+
+    expect(lsb('I.PREG.CUANDO').status, 'GRAMMAR_PENDING');
+    expect(lsb('I.PREG.CUANDO').hasUsableLsb, isFalse);
+
+    expect(lsb('Q.EVI.QUE_TIENE').status, 'LEXICAL_GAP');
+    expect(lsb('Q.EVI.QUE_TIENE').glosses, isNotEmpty);
+    expect(lsb('Q.EVI.QUE_TIENE').hasUsableLsb, isFalse,
+        reason: 'la secuencia parcial cambia el alcance de la pregunta');
+
+    expect(lsb('Q.DEN.INTENCION').status, 'LEXICAL_GAP');
+    expect(lsb('Q.DEN.INTENCION').hasUsableLsb, isTrue,
+        reason: 'el corpus ya autoriza QUEJAR + AUTORIDAD como tratamiento');
   });
 
   test('las preguntas sí/no no llevan SÍ, NO ni NO SÉ en la formulación', () {
@@ -51,6 +66,7 @@ void main() {
     expect(carnet.first.kind, LsbSegmentKind.compound);
 
     final fiscalia = lsb('Q.SEG.DONDE_FISCALIA').segments;
+    expect(lsb('Q.SEG.DONDE_FISCALIA').hasUsableLsb, isTrue);
     expect(fiscalia.first.label, 'd(FISCALÍA)');
     expect(fiscalia.first.kind, LsbSegmentKind.dactylology);
     expect(fiscalia.first.glosses, isEmpty,
