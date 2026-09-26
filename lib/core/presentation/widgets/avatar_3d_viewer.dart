@@ -624,7 +624,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// antes de tiempo y encima emitia avisos de fin que no eran de ningun paso.
   Widget _buildPersistentViewer() {
     return ModelViewer(
-      key: const ValueKey('avatar_viewer'),
+      key: ValueKey('avatar_viewer_${widget.key ?? hashCode}'),
       src: _modelSource,
       alt: 'Avatar LSB',
       autoPlay: false,

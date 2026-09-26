@@ -56,7 +56,7 @@ CACHE_VERSION = os.environ.get("CACHE_VERSION", "v2")
 # Versión interna de las reglas deterministas. Forma parte de la clave aunque
 # CACHE_VERSION esté fijada en las variables de entorno de Lambda, para que un
 # despliegue de reglas nuevas nunca siga sirviendo traducciones antiguas.
-TRANSLATION_RULESET_VERSION = "compound-glosses-v1"
+TRANSLATION_RULESET_VERSION = "compound-glosses-v3"
 
 # Animaciones del avatar. Todas las señas son clips dentro de UN solo .glb en
 # S3, y el visor elige el clip por nombre. La lista de clips del propio archivo
@@ -519,7 +519,8 @@ Tu misión es transformar la frase en español a un ARREGLO ORDENADO DE GLOSAS L
      usa UNA sola glosa compuesta. Nunca la dividas en señas individuales ni
      deletrees una de sus partes.
    - Regla obligatoria: "cómo estás" / "como estas" -> ["COMO_ESTAS"].
-     No devuelvas ["COMO", "ESTAS"] ni ["COMO", "ESTAR"].
+     NUNCA traduzcas "cómo estás" como ["ESTAR", "BIEN", "TU"] ni ["ESTAR", "BIEN", "TU", "YO"]
+     ni devuelvas ["COMO", "ESTAS"] ni ["COMO", "ESTAR"]. La única glosa oficial es ["COMO_ESTAS"].
 
 1. SUPRESIÓN DE ELEMENTOS SIN VALOR LSB:
    - Elimina artículos (el, la, los, las, un, una, unos, unas).
@@ -715,11 +716,77 @@ _MULTIWORD_GLOSS_RULES = tuple(sorted({
     if len(_phrase_words(source)) > 1
 }, key=lambda item: (-len(item[0]), item[0], item[1])))
 
-# Variantes que el modelo puede producir después de lematizar un verbo. Se
-# aceptan únicamente para colapsarlas hacia la regla compuesta ya verificada.
-_COMPOUND_OUTPUT_VARIANTS = {
-    "COMO_ESTAS": (("COMO", "ESTAS"), ("COMO", "ESTAR")),
+_COMPOUND_SPECS = {
+    "COMO_ESTAS": {
+        "phrases": [("COMO", "ESTAS"), ("COMO", "ESTA")],
+        "constituents": {"COMO", "ESTAS", "ESTA", "ESTAR", "BIEN", "TU", "YO"},
+        "patterns": [
+            ("COMO", "ESTAS"), ("COMO", "ESTAR"), ("COMO", "ESTA"),
+            ("ESTAS", "COMO"), ("ESTAR", "COMO"), ("ESTA", "COMO"),
+            ("COMO",), ("ESTAS",), ("ESTAR",), ("ESTA",),
+        ],
+    },
+    "POR_FAVOR": {
+        "phrases": [("POR", "FAVOR")],
+        "constituents": {"POR", "FAVOR"},
+        "patterns": [("POR", "FAVOR"), ("FAVOR", "POR"), ("FAVOR",)],
+    },
+    "LO_SIENTO": {
+        "phrases": [("LO", "SIENTO")],
+        "constituents": {"LO", "SIENTO", "SENTIR"},
+        "patterns": [("LO", "SIENTO"), ("SIENTO", "LO"), ("SIENTO",), ("SENTIR",)],
+    },
+    "NO_PUEDO": {
+        "phrases": [("NO", "PUEDO"), ("NO", "PUEDE")],
+        "constituents": {"NO", "PUEDO", "PUEDE", "PODER"},
+        "patterns": [
+            ("NO", "PUEDO"), ("NO", "PODER"), ("NO", "PUEDE"),
+            ("PUEDO", "NO"), ("PODER", "NO"), ("PUEDE", "NO"),
+            ("PUEDO",), ("PODER",),
+        ],
+    },
+    "NO_SABER": {
+        "phrases": [("NO", "SE"), ("NO", "SABER"), ("NO", "SABE")],
+        "constituents": {"NO", "SE", "SABER", "SABE"},
+        "patterns": [
+            ("NO", "SABER"), ("NO", "SE"), ("NO", "SABE"),
+            ("SABER", "NO"), ("SE", "NO"), ("SABE", "NO"),
+            ("SE",), ("SABE",),
+        ],
+    },
+    "PARA_QUE": {
+        "phrases": [("PARA", "QUE")],
+        "constituents": {"PARA", "QUE"},
+        "patterns": [("PARA", "QUE"), ("QUE", "PARA"), ("PARA_QUE",)],
+    },
+    "POR_QUE": {
+        "phrases": [("POR", "QUE"), ("PORQUE",)],
+        "constituents": {"POR", "QUE", "PORQUE"},
+        "patterns": [("POR", "QUE"), ("QUE", "POR"), ("PORQUE",), ("POR_QUE",)],
+    },
+    "PRIMERA_VEZ": {
+        "phrases": [("PRIMERA", "VEZ"), ("PRIMERO", "VEZ")],
+        "constituents": {"PRIMERA", "PRIMERO", "VEZ"},
+        "patterns": [
+            ("PRIMERA", "VEZ"), ("PRIMERO", "VEZ"),
+            ("VEZ", "PRIMERA"), ("VEZ", "PRIMERO"),
+        ],
+    },
 }
+
+
+def _compound_target_available(target: str, clips: dict) -> bool:
+    """¿El clip compuesto existe en el GLB o al menos en el catálogo oficial?
+
+    Antes se exigía presencia en el GLB y, si la lectura de S3 fallaba o el clip
+    aún no estaba horneado, la regla compuesta se ignoraba por completo. Ahora
+    basta con que la glosa esté en AVAILABLE_GLOSSES para forzar la seña
+    compuesta: la animación se resolverá más abajo (plan_gloss_animation la
+    deletreará si no tiene clip, pero al menos no perderá el significado).
+    """
+    if _clip_key(target) in clips:
+        return True
+    return strip_gloss_accents(target.upper()) in _AVAILABLE_GLOSSES_NORM
 
 
 def enforce_baked_compound_glosses(glosses: list, text: str,
@@ -734,57 +801,102 @@ def enforce_baked_compound_glosses(glosses: list, text: str,
     if not input_words:
         return list(glosses), set()
 
-    matches = []
+    found_compounds = []
     occupied = set()
+
+    for target, spec in sorted(_COMPOUND_SPECS.items(),
+                               key=lambda x: -max(len(p) for p in x[1]["phrases"])):
+        if not _compound_target_available(target, clips):
+            continue
+        for phrase in spec["phrases"]:
+            width = len(phrase)
+            for start in range(len(input_words) - width + 1):
+                positions = set(range(start, start + width))
+                if positions & occupied:
+                    continue
+                if input_words[start:start + width] == phrase:
+                    found_compounds.append((start, target, spec))
+                    occupied.update(positions)
+                    break
+
+    # Soporte para reglas adicionales en GLOSS_ALIASES no enumeradas arriba
     for words, target in _MULTIWORD_GLOSS_RULES:
-        if _clip_key(target) not in clips:
+        if target in _COMPOUND_SPECS or not _compound_target_available(target, clips):
             continue
         width = len(words)
         for start in range(len(input_words) - width + 1):
             positions = set(range(start, start + width))
             if positions & occupied or input_words[start:start + width] != words:
                 continue
-            matches.append((start, words, target))
+            found_compounds.append((
+                start, target,
+                {"phrases": [words], "constituents": set(words), "patterns": [words]}
+            ))
             occupied.update(positions)
 
-    if not matches:
+    if not found_compounds:
         return list(glosses), set()
 
+    found_compounds.sort(key=lambda x: x[0])
     resultado = list(glosses)
     verificadas = set()
-    for _start, words, target in sorted(matches):
-        verificadas.add(target)
 
-        # Para una entrada que es exactamente la expresión compuesta no se
-        # permite que ninguna interpretación fragmentada de Bedrock sobreviva.
-        if input_words == words:
+    for start_pos, target, spec in found_compounds:
+        verificadas.add(target)
+        target_key = _clave(target)
+        constituents = spec.get("constituents", set())
+
+        # Si la entrada entera coincide con la expresión compuesta
+        if len(input_words) <= max(len(p) for p in spec["phrases"]) and len(found_compounds) == 1:
             resultado = [target]
             continue
 
-        keys = tuple(_clave(g) for g in resultado)
-        target_key = _clave(target)
-
-        # Si Bedrock ya respetó la glosa compuesta, no se duplica.
-        if target_key in keys:
-            continue
-
-        patterns = _COMPOUND_OUTPUT_VARIANTS.get(target, (words,))
+        keys = [_clave(g) for g in resultado]
         replaced = False
-        for pattern in patterns:
+        for pattern in spec.get("patterns", []):
             width = len(pattern)
             for idx in range(len(keys) - width + 1):
-                if keys[idx:idx + width] == pattern:
+                if tuple(keys[idx:idx + width]) == pattern:
                     resultado[idx:idx + width] = [target]
+                    # Limpiar cualquier fragmento constituyente que quede disperso
+                    resultado = [
+                        g for g_idx, g in enumerate(resultado)
+                        if _clave(g) not in constituents or g_idx == idx
+                    ]
                     replaced = True
                     break
             if replaced:
                 break
 
         if not replaced:
-            # El modelo puede omitir por completo una parte. La regla sigue
-            # siendo obligatoria porque la frase se reconoció en la entrada y
-            # el clip existe; se agrega antes que permitir un deletreo falso.
-            resultado.append(target)
+            if target_key in keys:
+                # Si la glosa compuesta ya estaba, solo limpiamos residuos fragmentados
+                resultado = [
+                    g for g in resultado
+                    if _clave(g) not in constituents or _clave(g) == target_key
+                ]
+            else:
+                # Si Bedrock produjo solo parte del compuesto, reemplazamos la primera
+                # aparición y eliminamos los demás residuos para no deletrear letras
+                first_idx = None
+                new_res = []
+                for g in resultado:
+                    k = _clave(g)
+                    if k in constituents:
+                        if first_idx is None:
+                            first_idx = len(new_res)
+                            new_res.append(target)
+                    else:
+                        new_res.append(g)
+
+                if first_idx is not None:
+                    resultado = new_res
+                else:
+                    # No produjo ninguna parte: se ubica según su orden en el texto
+                    if start_pos == 0:
+                        resultado.insert(0, target)
+                    else:
+                        resultado.append(target)
 
     return resultado, verificadas
 
@@ -1027,6 +1139,7 @@ def enforce_catalog_membership(glosses: list,
         clave = strip_gloss_accents(gloss.upper())
         if (clave in _AVAILABLE_GLOSSES_NORM
                 or clave in verified_animation_glosses
+                or clave in _COMPOUND_SPECS
                 or len(clave) <= 1):
             resultado.append(gloss)
             continue
@@ -1179,25 +1292,57 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
             continue
         limpias.append(candidata)
 
-    # Fusión inteligente de bigramas conocidos (ej: "PRIMERA" + "VEZ" -> "PRIMERA_VEZ")
+    # Fusión inteligente de bigramas conocidos del catálogo.
+    # Cubre todos los pares que forman una seña compuesta oficial.
+    _BIGRAM_FUSIONS = {
+        ("PRIMERA", "VEZ"): "PRIMERA_VEZ",
+        ("COMO", "ESTAS"): "COMO_ESTAS",
+        ("COMO", "ESTAR"): "COMO_ESTAS",
+        ("COMO", "ESTA"): "COMO_ESTAS",
+        ("POR", "FAVOR"): "POR_FAVOR",
+        ("LO", "SIENTO"): "LO_SIENTO",
+        ("NO", "PUEDO"): "NO_PUEDO",
+        ("NO", "SABER"): "NO_SABER",
+        ("POR", "QUE"): "POR_QUE",
+        ("PARA", "QUE"): "PARA_QUE",
+        ("MAS", "MENOS"): "MAS_O_MENOS",
+    }
     fused = []
     idx = 0
     while idx < len(limpias):
-        if (
-            idx + 1 < len(limpias)
-            and limpias[idx] == "PRIMERA"
-            and limpias[idx + 1] == "VEZ"
-        ):
-            fused.append("PRIMERA_VEZ")
-            idx += 2
-        else:
-            fused.append(limpias[idx])
-            idx += 1
+        if idx + 1 < len(limpias):
+            pair = (limpias[idx], limpias[idx + 1])
+            target = _BIGRAM_FUSIONS.get(pair)
+            if target:
+                fused.append(target)
+                idx += 2
+                continue
+        fused.append(limpias[idx])
+        idx += 1
     limpias = fused
 
-    # Reconocimiento rápido: si la frase incluye "primera vez" y no se incluyó, agregarla al inicio (tiempo)
-    if re.search(r'\bprimera\s+vez\b', text, re.IGNORECASE) and "PRIMERA_VEZ" not in limpias:
-        limpias.insert(0, "PRIMERA_VEZ")
+    # Reconocimiento rápido basado en el texto original: si la frase contiene
+    # una expresión compuesta conocida y el modelo no la produjo, se inyecta.
+    # Cada regla indica la posición donde insertarla (0 = inicio, -1 = final).
+    _TEXT_COMPOUND_RULES = [
+        (r'\bprimera\s+vez\b', "PRIMERA_VEZ", 0),
+        (r'\bc[oó]mo\s+est[aá]s?\b', "COMO_ESTAS", -1),
+        (r'\bpor\s+favor\b', "POR_FAVOR", -1),
+        (r'\blo\s+siento\b', "LO_SIENTO", -1),
+        (r'\bpor\s*qu[eé]\b', "POR_QUE", -1),
+        (r'\bpara\s+qu[eé]\b', "PARA_QUE", -1),
+    ]
+    for pattern, target_gloss, insert_pos in _TEXT_COMPOUND_RULES:
+        if re.search(pattern, text, re.IGNORECASE) and target_gloss not in limpias:
+            # Eliminar fragmentos sueltos que pertenezcan al compuesto
+            spec = _COMPOUND_SPECS.get(target_gloss)
+            if spec:
+                constituents = {_clave(c) for c in spec.get("constituents", set())}
+                limpias = [g for g in limpias if _clave(g) not in constituents]
+            if insert_pos == 0:
+                limpias.insert(0, target_gloss)
+            else:
+                limpias.append(target_gloss)
 
     # Términos polisémicos documentados: la decisión (o la pregunta) manda
     # sobre lo que haya dicho Bedrock, no al revés.

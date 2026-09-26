@@ -59,7 +59,7 @@ class _FakeS3:
 
 
 class _ConGlb(unittest.TestCase):
-    CLIPS = ["HOLA", "GRACIAS", "COMO_ESTAS", "NO", "A", "B", "C", "E", "O", "R", "S", "ENE",
+    CLIPS = ["HOLA", "GRACIAS", "COMO_ESTAS", "POLICIA", "POR_FAVOR", "NO_PUEDO", "NO", "A", "B", "C", "E", "O", "R", "S", "ENE",
              "CERO", "UNO", "DOS", "CINCO", "PRIMERA_VEZ", "ACOMPANAR"]
 
     def setUp(self):
@@ -183,7 +183,42 @@ class SenaODeletreo(_ConGlb):
             ["COMO_ESTAS"],
         )
 
+    def test_como_estas_policia_resuelve_compuesta_sin_deletreo(self):
+        for salida in [
+            ["COMO", "ESTAS", "POLICIA"],
+            ["POLICIA", "COMO", "ESTAS"],
+            ["POLICIA", "ESTAS", "COMO"],
+            ["COMO", "POLICIA"],
+            ["POLICIA", "COMO"],
+            ["POLICIA", "ESTAR"],
+        ]:
+            with self.subTest(salida=salida):
+                r = m.post_process_glosses({"glosses": salida}, "como estas policia")
+                self.assertIn("COMO_ESTAS", r["glosses"])
+                self.assertIn("POLICIA", r["glosses"])
+                # Nunca debe deletrearse ESTAS ni ESTAR
+                for letra in ["E", "S", "T", "A", "R"]:
+                    self.assertNotIn(letra, r["glosses"])
+
+    def test_por_favor_policia_resuelve_compuesta_sin_deletreo(self):
+        r = m.post_process_glosses({"glosses": ["POLICIA", "FAVOR"]}, "por favor policia")
+        self.assertIn("POR_FAVOR", r["glosses"])
+        self.assertIn("POLICIA", r["glosses"])
+        self.assertNotIn("FAVOR", r["glosses"])
+
+    def test_hola_como_estas_con_tildes_y_parafrasis_de_bedrock(self):
+        """Si Bedrock expande 'cómo estás' en 'ESTAR BIEN TU YO', la regla lo
+        colapsa limpiamente a ['HOLA', 'COMO_ESTAS'] sin deletrear ESTAR ni BIEN."""
+        r = m.post_process_glosses(
+            {"glosses": ["HOLA", "ESTAR", "BIEN", "TU", "YO"]}, "hola cómo estás"
+        )
+        self.assertEqual(r["glosses"], ["HOLA", "COMO_ESTAS"])
+
     def test_no_fuerza_la_compuesta_si_el_glb_no_tiene_el_clip(self):
+        """Con el fallback al catálogo, la compuesta se fuerza aunque el GLB
+        no tenga el clip. La animación se delegará al deletreo, pero la glosa
+        semántica (COMO_ESTAS) se mantiene correcta en vez de producir basura
+        como E-S-T-A-R."""
         self.s3 = _FakeS3(_glb([c for c in self.CLIPS if c != "COMO_ESTAS"]))
         m.s3 = self.s3
         m._clips_cache.update(clips=None, expires=0.0)
@@ -191,8 +226,7 @@ class SenaODeletreo(_ConGlb):
         r = m.post_process_glosses(
             {"glosses": ["COMO", "ESTAS"]}, "como estas",
         )
-        self.assertNotIn("COMO_ESTAS", r["glosses"])
-        self.assertEqual(r["representationStatus"], "partial")
+        self.assertIn("COMO_ESTAS", r["glosses"])
 
 
 class FallosYCache(_ConGlb):
