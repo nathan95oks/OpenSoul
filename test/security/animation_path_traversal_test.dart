@@ -194,8 +194,8 @@ void main() {
       // estos payloads termina en `.glb`, así que la glosa cae a su texto.
       for (final payload in traversalPayloads) {
         final urls =
-            resolver.resolveAll(gloss: 'ROBAR', animationFile: payload);
-        expect(urls, ['${AnimationUrlResolver.placeholderScheme}ROBAR'],
+            resolver.resolveAll(gloss: 'ESCAPAR', animationFile: payload);
+        expect(urls, ['${AnimationUrlResolver.placeholderScheme}ESCAPAR'],
             reason: 'El payload del atacante no debe aparecer en la URL.');
         for (final url in urls) {
           expect(url, isNot(contains('..')));

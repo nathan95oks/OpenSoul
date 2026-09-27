@@ -87,7 +87,7 @@ void main() {
     });
 
     test('una glosa sin animación sigue siendo marcador', () {
-      final urls = _resolver.resolveAll(gloss: 'CELULAR');
+      final urls = _resolver.resolveAll(gloss: 'MOCHILA');
       expect(urls.single, startsWith(AnimationUrlResolver.placeholderScheme));
     });
   });

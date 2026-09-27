@@ -18,12 +18,17 @@ class AdaptiveNodeLayout extends StatelessWidget {
   /// y «Cuándo me avisan» empiezan por CUÁNDO) y no por eso son la misma.
   final Set<String>? selectedIds;
 
+  /// Mantener una tarjeta muestra su seña en el avatar sin elegirla (ver
+  /// [SemanticNode.onPreview]). Sin él, las tarjetas solo responden al toque.
+  final Future<void> Function(LsbCard)? onCardPreview;
+
   const AdaptiveNodeLayout({
     super.key,
     required this.cards,
     required this.onCardTap,
     this.selectedGlosses = const {},
     this.selectedIds,
+    this.onCardPreview,
   });
 
   static const _spacing = 12.0;
@@ -83,11 +88,16 @@ class AdaptiveNodeLayout extends StatelessWidget {
     );
   }
 
-  Widget _node(LsbCard card) => SemanticNode(
-    key: ValueKey(card.id),
-    card: card,
-    isSelected:
-        selectedIds?.contains(card.id) ?? selectedGlosses.contains(card.gloss),
-    onTap: () => onCardTap(card),
-  );
+  Widget _node(LsbCard card) {
+    final preview = onCardPreview;
+    return SemanticNode(
+      key: ValueKey(card.id),
+      card: card,
+      isSelected:
+          selectedIds?.contains(card.id) ??
+          selectedGlosses.contains(card.gloss),
+      onTap: () => onCardTap(card),
+      onPreview: preview == null ? null : () => preview(card),
+    );
+  }
 }

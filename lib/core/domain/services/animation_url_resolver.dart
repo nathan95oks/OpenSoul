@@ -15,55 +15,44 @@ class AnimationUrlResolver {
 
   static const String compositeSeparator = '+';
 
-  /// Senas horneadas en `avatar_test.glb`, tomadas del propio modelo.
+  /// Senas horneadas en `avatar_test.glb`, tomadas del propio modelo: son los
+  /// 149 clips de su lista de animaciones, en su forma canonica.
   ///
-  /// No estan la 'I' ni la 'K': el modelo no las trae. Figuraban aqui y el
-  /// visor pedia una animacion inexistente, que no emite 'finished' y dejaba
-  /// la secuencia colgada en esa letra. Mientras no se horneen, se deletrean
-  /// como placeholder, que al menos se ve.
+  /// Las cuatro palabras con ene se hornearon con N (`DANAR`) y ademas se
+  /// listan con su grafia de glosa (`DAÑAR`), que es la que llega aqui;
+  /// [animationNameFor] la devuelve al nombre del clip. La 'Ñ' suelta no esta:
+  /// el modelo no trae `ENE`, y pedir una animacion inexistente no emite
+  /// 'finished' y deja la secuencia esperando al reloj de seguridad. Mientras
+  /// no se hornee, se deletrea como placeholder, que al menos se ve.
+  ///
+  /// Si se hornea un .glb nuevo, esta lista se actualiza con el.
   static const Set<String> available3DGlosses = {
-    'HOLA',
-    'PERMISO',
-    'GRACIAS',
-    'SI',
-    'NO',
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'J',
-    'L',
-    'M',
-    'N',
-    'Ñ',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z',
-    'CERO',
-    'UNO',
-    'DOS',
-    'TRES',
-    'CUATRO',
-    'CINCO',
-    'SEIS',
-    'SIETE',
-    'OCHO',
-    'NUEVE',
-    'DIEZ',
-    'PRIMERA_VEZ',
+    // Letras del alfabeto dactilologico.
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    // Numerales.
+    'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE',
+    'OCHO', 'NUEVE', 'DIEZ',
+    // Senas.
+    'ABOGADO', 'ACEPTAR', 'ACOMPANAR', 'ADENTRO', 'AHORA', 'ALLI',
+    'AMENAZAR', 'AQUI', 'ATENDER', 'AUN', 'AUTORIDAD', 'AVENIDA', 'AYER',
+    'AYUDAR', 'BANCO', 'BILLETES', 'BUSCAR', 'CALLE', 'CARPETA', 'CASA',
+    'CELULAR', 'CERCA', 'CERTIFICADO', 'COMO', 'COMO_ESTAS', 'COMPRENDER',
+    'CONTESTAR', 'CUAL', 'CUANDO', 'CUANTOS', 'DANAR', 'DAR', 'DONDE', 'EL',
+    'ELLA', 'ELLOS', 'ENGANAR', 'ENVIAR', 'ESCRIBIR', 'ESPERAR', 'EXPLICAR',
+    'FACTURA', 'FECHA', 'FOTOCOPIA', 'FOTOS', 'GRACIAS', 'GUARDAR', 'HABLAR',
+    'HERIDA', 'HOLA', 'HOMBRE', 'HOY', 'IDENTIDAD', 'INTERPRETE',
+    'INVESTIGACION', 'JUEZ', 'JUSTICIA', 'LEER', 'LENTO', 'LO_SIENTO',
+    'MANANA', 'MIEDO', 'MIO', 'MOSTRAR', 'MUCHO', 'MUJER', 'NECESITAR', 'NO',
+    'NOMBRE', 'NOSOTROS', 'NO_PUEDO', 'NO_SABER', 'NUEVO', 'OBSERVAR',
+    'OFICINA', 'PAPEL', 'PARA_QUE', 'PEDIR', 'PEGAR', 'PERDER', 'PERMISO',
+    'POR_FAVOR', 'POR_QUE', 'PRIMERA_VEZ', 'PROTEGER', 'QUE', 'QUEJAR',
+    'QUERER', 'QUIEN', 'RECHAZAR', 'RECIBIR', 'RECORDAR', 'RESOLUCION',
+    'ROBAR', 'SABER', 'SEMANA', 'SI', 'SORDO', 'TARDE', 'TENER', 'TESTIGO',
+    'TESTIMONIO', 'TRAER', 'TRAMITE', 'TU', 'USTEDES', 'VENIR', 'VER',
+    'VIDEO', 'VIOLENCIA', 'VOLVER', 'YO',
+    // Grafia de glosa de los clips horneados con N.
+    'ACOMPAÑAR', 'DAÑAR', 'ENGAÑAR', 'MAÑANA',
   };
 
   /// Los numerales se hornearon con su nombre en letras, pero el catalogo los
