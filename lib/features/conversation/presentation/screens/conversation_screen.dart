@@ -32,6 +32,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   final ScrollController _scroll = ScrollController();
   final FocusNode _hearingFocus = FocusNode();
 
+  /// Turnos recién llegados que todavía no hicieron su animación de entrada.
+  /// Solo se anima lo que llega mientras se mira el chat: un chat restaurado
+  /// aparece tal cual, sin que cada burbuja entre de nuevo.
+  final Set<String> _porAnimar = {};
+
   @override
   void dispose() {
     _scroll.dispose();
@@ -220,8 +225,12 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     final state = ref.watch(conversationProvider);
     ref.watch(lexiconEntriesProvider);
     ref.listen(conversationProvider, (prev, next) {
-      if ((prev?.conversation.turns.length ?? 0) <
-          next.conversation.turns.length) {
+      final antes = prev?.conversation.turns.length ?? 0;
+      final ahora = next.conversation.turns.length;
+      if (ahora == antes + 1 && prev?.conversation.id == next.conversation.id) {
+        _porAnimar.add(next.conversation.turns.last.message.id);
+      }
+      if (antes < ahora) {
         _scrollToEnd();
       }
     });
@@ -290,50 +299,78 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                       ),
                     ],
                   ),
-                  child: state.conversation.isEmpty
-                      ? const _EmptyConversation()
-                      : ListView.builder(
-                          controller: _scroll,
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          itemCount: state.conversation.turns.length,
-                          itemBuilder: (context, i) {
-                            final turn = state.conversation.turns[i];
-                            return TurnBubble(
-                              turn: turn,
-                              onPlayAudio: () => _playDeafTurn(turn),
-                              onShowAvatar: () {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                SystemChannels.textInput.invokeMethod(
-                                  'TextInput.hide',
-                                );
-                                AvatarPlaybackSheet.show(
-                                  context,
-                                  glosses:
-                                      turn.outputs.animationGlosses.isNotEmpty
-                                      ? turn.outputs.animationGlosses
-                                      : turn.message.glosses,
-                                  animationUrls: turn.outputs.animationUrls,
-                                  animationGlosses:
-                                      turn.outputs.animationGlosses,
-                                  autoDismissOnFinish: false,
-                                );
-                              },
-                            );
-                          },
-                        ),
-                ),
-              ),
-              if (state.error != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _StatusChip(
-                    icon: Icons.error_outline,
-                    text: state.error!,
-                    color: AppTheme.errorLight,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 280),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    child: state.conversation.isEmpty
+                        ? const _EmptyConversation(key: ValueKey('vacio'))
+                        : ListView.builder(
+                            key: const ValueKey('hilo'),
+                            controller: _scroll,
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                            itemCount: state.conversation.turns.length,
+                            itemBuilder: (context, i) {
+                              final turn = state.conversation.turns[i];
+                              return _EntradaMensaje(
+                                key: ValueKey(turn.message.id),
+                                animar: _porAnimar.remove(turn.message.id),
+                                desdeLaIzquierda:
+                                    turn.message.speaker == SpeakerRole.deaf,
+                                child: TurnBubble(
+                                  turn: turn,
+                                  onPlayAudio: () => _playDeafTurn(turn),
+                                  onShowAvatar: () {
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    SystemChannels.textInput.invokeMethod(
+                                      'TextInput.hide',
+                                    );
+                                    AvatarPlaybackSheet.show(
+                                      context,
+                                      glosses:
+                                          turn
+                                              .outputs
+                                              .animationGlosses
+                                              .isNotEmpty
+                                          ? turn.outputs.animationGlosses
+                                          : turn.message.glosses,
+                                      animationUrls: turn.outputs.animationUrls,
+                                      animationGlosses:
+                                          turn.outputs.animationGlosses,
+                                      autoDismissOnFinish: false,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                   ),
                 ),
-              if (_instruccionPendiente(state) != null)
-                QuickReplyBar(onReply: _enviarRespuestaRapida),
+              ),
+              // Los avisos y las respuestas rápidas aparecen y se van
+              // deslizándose, sin que el resto salte de golpe.
+              AnimatedSize(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (state.error != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: _StatusChip(
+                          icon: Icons.error_outline,
+                          text: state.error!,
+                          color: AppTheme.errorLight,
+                        ),
+                      ),
+                    if (_instruccionPendiente(state) != null)
+                      QuickReplyBar(onReply: _enviarRespuestaRapida),
+                  ],
+                ),
+              ),
               _InputArea(
                 onHearingText: _handleHearingSend,
                 onHearingSpeech: (text) =>
@@ -479,7 +516,7 @@ class _StatusChip extends StatelessWidget {
 }
 
 class _EmptyConversation extends StatelessWidget {
-  const _EmptyConversation();
+  const _EmptyConversation({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -518,6 +555,69 @@ class _EmptyConversation extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Entrada de una burbuja nueva: aparece desde su lado (izquierda la persona
+/// sorda, derecha la oyente) con un fundido corto. Si luego cambia de tamaño
+/// —la traducción llega y la burbuja crece— lo hace suavemente.
+class _EntradaMensaje extends StatefulWidget {
+  final bool animar;
+  final bool desdeLaIzquierda;
+  final Widget child;
+
+  const _EntradaMensaje({
+    super.key,
+    required this.animar,
+    required this.desdeLaIzquierda,
+    required this.child,
+  });
+
+  @override
+  State<_EntradaMensaje> createState() => _EntradaMensajeState();
+}
+
+class _EntradaMensajeState extends State<_EntradaMensaje>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 320),
+    value: widget.animar ? 0 : 1,
+  );
+  late final Animation<double> _curva = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeOutCubic,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.animar) _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _curva,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: Offset(widget.desdeLaIzquierda ? -0.06 : 0.06, 0.12),
+          end: Offset.zero,
+        ).animate(_curva),
+        child: AnimatedSize(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.topCenter,
+          child: widget.child,
         ),
       ),
     );

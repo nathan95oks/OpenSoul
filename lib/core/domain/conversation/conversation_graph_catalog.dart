@@ -104,11 +104,58 @@ class ConversationGraphCatalog {
         bank.question(questionId)?.lsb.glosses ?? const [],
       );
 
-  /// Dato que responde la pregunta, leído de su formulación LSB con el mismo
-  /// criterio que el turno del oyente: su interrogativo o su núcleo
-  /// (CUÁNDO → `time`). Vacío en las de sí/no y en las abiertas (QUÉ, CUÁL).
-  Set<String> answerSlotsOf(String questionId) =>
-      LsbGlossSemantics.questionSlotsOf(lsbGlossesOf(questionId));
+  /// Dato al que permite responder la pregunta.
+  ///
+  /// Normalmente sale de su interrogativo LSB (CUÁNDO → `time`). Algunas
+  /// preguntas son una puerta segura hacia ese dato: antes de identificar a
+  /// un autor, por ejemplo, el recorrido puede preguntar si se lo conoce. El
+  /// rol semántico del banco reconoce esa puerta sin depender de una frase o
+  /// de un identificador concreto.
+  Set<String> answerSlotsOf(String questionId) {
+    final direct = LsbGlossSemantics.questionSlotsOf(lsbGlossesOf(questionId));
+    final question = bank.question(questionId);
+    if (question?.entity.toLowerCase() == 'persona[autor]') {
+      return {...direct, 'person'};
+    }
+    // Una pregunta de control («¿Quiere describir a la persona?») es la
+    // puerta del dato de su dominio: abre las preguntas que lo recogen.
+    final gateSlot = _slotByDomain[domainOf(questionId)];
+    if (gateSlot != null && isControlGate(questionId)) {
+      return {...direct, gateSlot};
+    }
+    return direct;
+  }
+
+  /// Dato que recoge cada dominio del banco cuando no hay un interrogativo
+  /// que lo diga (las preguntas de descripción son disyuntivas: «¿Era alto o
+  /// bajo?»).
+  static const Map<String, String> _slotByDomain = {
+    'descripcion': 'description',
+  };
+
+  /// Dominio de la pregunta en el banco (`dominio`).
+  String? domainOf(String questionId) =>
+      bank.questions[questionId]?['dominio'] as String?;
+
+  /// Pregunta de control: todas sus opciones solo abren o cierran otras
+  /// preguntas (`soloControl`) y no escriben nada en la declaración.
+  bool isControlGate(String questionId) {
+    final options = bank.questions[questionId]?['opciones'];
+    if (options is! List || options.isEmpty) return false;
+    return options.every(
+      (o) => o is Map && (o['soloControl'] ?? '').toString().trim().isNotEmpty,
+    );
+  }
+
+  /// Preguntas de [contextId] que abre la puerta [gateId] (su condición es
+  /// una respuesta de la puerta), en el orden del recorrido.
+  List<String> openedBy(String contextId, String gateId) => [
+    if (isControlGate(gateId))
+      for (final s in bank.journey(contextId)?.steps ?? const <JourneyStep>[])
+        if (s.conditions.any((c) => c.questionId == gateId) &&
+            hasQuestion(s.questionId))
+          s.questionId,
+  ];
 
   /// Pregunta de sí/no: tiene formulación y ningún interrogativo.
   bool isPolarQuestion(String questionId) {

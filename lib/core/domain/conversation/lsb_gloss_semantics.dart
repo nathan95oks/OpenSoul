@@ -22,6 +22,7 @@ class LsbGlossSemantics {
     'evidence',
     'polarity',
     'free_text',
+    'description',
   };
 
   static const Map<String, String> interrogativeSlots = {
@@ -116,6 +117,26 @@ class LsbGlossSemantics {
     'SITIO': 'place',
   };
 
+  /// Raíces que piden describir a alguien en cualquier parte del turno, aun
+  /// sin signos de pregunta («describa al agresor»). DESCRIBIR no tiene seña:
+  /// la traducción lo deletrea y solo el texto conserva lo que se pide.
+  static const Map<String, String> spokenStemSlots = {
+    'DESCRIB': 'description',
+    'DESCRIPCION': 'description',
+    'CARACTERISTICA': 'description',
+    'APARIENCIA': 'description',
+    'RASGO': 'description',
+    'FISICAMENTE': 'description',
+  };
+
+  /// «¿Cómo era?», «¿cómo lucían?»: CÓMO + ser/lucir en pasado.
+  static const Map<String, String> spokenAfterHowSlots = {
+    'ERA': 'description',
+    'ERAN': 'description',
+    'LUCIA': 'description',
+    'LUCIAN': 'description',
+  };
+
   static const Set<String> questionPrepositions = {
     'A',
     'EN',
@@ -126,6 +147,59 @@ class LsbGlossSemantics {
     'POR',
     'PARA',
     'HACIA',
+  };
+
+  /// Glosa interrogativa que preserva cada dato pedido en el texto.
+  static const Map<String, String> questionGlossBySlot = {
+    'place': 'DONDE',
+    'time': 'CUANDO',
+    'person': 'QUIEN',
+    'amount': 'CUANTOS',
+  };
+
+  /// Respuestas concretas que un modelo no puede usar en lugar de la
+  /// pregunta. Solo se sustituyen cuando no están respaldadas por una palabra
+  /// del texto: «¿dónde está la plaza?» conserva PLAZA y añade DONDE, mientras
+  /// que «dónde te robaron» nunca puede convertirse en PLAZA.
+  static const Map<String, Set<String>> concreteAnswersBySlot = {
+    'place': {
+      'AVENIDA',
+      'BANCO',
+      'BARRIO',
+      'CALLE',
+      'CASA',
+      'HOSPITAL',
+      'MERCADO',
+      'MICRO',
+      'OFICINA',
+      'PLAZA',
+      'PROVINCIA',
+      'TIENDA',
+      'TRUFI',
+    },
+    'time': {'AHORA', 'AYER', 'HOY', 'MANANA', 'NOCHE', 'SEMANA', 'TARDE'},
+    'person': {
+      'ABOGADO',
+      'HOMBRE',
+      'JUEZ',
+      'LADRON',
+      'MUJER',
+      'POLICIA',
+      'TESTIGO',
+    },
+    'amount': {
+      'CERO',
+      'UNO',
+      'DOS',
+      'TRES',
+      'CUATRO',
+      'CINCO',
+      'SEIS',
+      'SIETE',
+      'OCHO',
+      'NUEVE',
+      'DIEZ',
+    },
   };
 
   /// Ranuras que pide el texto de un turno, en orden.
@@ -142,21 +216,41 @@ class LsbGlossSemantics {
     }
 
     final clauses = _questionClauses(text);
-    if (clauses.isEmpty) return slots;
-    for (final w in _words(text)) {
-      final slot = spokenWordSlots[_plain(w)];
-      if (slot != null) add(slot);
+    if (clauses.isEmpty) {
+      _stemSlotsOf(text).forEach(add);
+      return slots;
+    }
+    final readings = [for (final clause in clauses) _readClause(clause)];
+    // «lugar» pide un lugar en una pregunta QU- («¿cuál fue el lugar?»); en
+    // una de sí/no solo precisa otra cosa («¿hay video del lugar?»).
+    if (readings.any((r) => r.$2)) {
+      for (final w in _words(text)) {
+        final slot = spokenWordSlots[_plain(w)];
+        if (slot != null) add(slot);
+      }
     }
     var polar = false;
-    for (final clause in clauses) {
-      final (clauseSlots, interrogative) = _readClause(clause);
+    for (var i = 0; i < clauses.length; i++) {
+      final (clauseSlots, interrogative) = readings[i];
       clauseSlots.forEach(add);
-      if (!interrogative && DialogueGraph.tokensOf(clause).isNotEmpty) {
+      if (!interrogative && DialogueGraph.tokensOf(clauses[i]).isNotEmpty) {
         polar = true;
       }
     }
     if (slots.isNotEmpty && polar) add('polarity');
+    _stemSlotsOf(text).forEach(add);
     return slots;
+  }
+
+  static List<String> _stemSlotsOf(String text) {
+    final out = <String>[];
+    for (final w in _words(text)) {
+      final key = _plain(w);
+      for (final e in spokenStemSlots.entries) {
+        if (key.startsWith(e.key) && !out.contains(e.value)) out.add(e.value);
+      }
+    }
+    return out;
   }
 
   static final RegExp _word = RegExp(r'[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{2,}');
@@ -176,12 +270,19 @@ class LsbGlossSemantics {
   }
 
   static List<String> _questionClauses(String text) {
-    final spans = text.contains('¿')
+    var spans = text.contains('¿')
         ? [for (final m in RegExp(r'¿([^¿?]*)').allMatches(text)) m.group(1)!]
         : [
             for (final m in RegExp(r'([^.!?]*)\?').allMatches(text))
               m.group(1)!,
           ];
+    // En voz y en escritura móvil los signos suelen omitirse. Solo se toma el
+    // turno completo cuando realmente abre con un interrogativo (o lo lleva
+    // acentuado); así «donde te robaron» es pregunta, pero «cuando llegué me
+    // robaron» sigue siendo una afirmación temporal.
+    if (spans.isEmpty && _startsImplicitQuestion(text)) {
+      spans = [text];
+    }
     return [
       for (final span in spans)
         for (final clause in span.split(
@@ -189,6 +290,90 @@ class LsbGlossSemantics {
         ))
           if (clause.trim().isNotEmpty) clause.trim(),
     ];
+  }
+
+  static bool _startsImplicitQuestion(String text) {
+    final words = _words(text);
+    final keys = [for (final word in words) _plain(word)];
+    var start = 0;
+    while (start < keys.length && questionPrepositions.contains(keys[start])) {
+      start++;
+    }
+    if (start >= keys.length) return false;
+    final key = keys[start];
+    final accented = words[start].toUpperCase() != key;
+    if (key == 'CUANDO' && !accented) {
+      // «cuando llegué…» es una subordinada; «cuando te robaron…» conserva
+      // la forma inequívoca de una pregunta dictada sin signos.
+      final next = start + 1 < keys.length ? keys[start + 1] : '';
+      return const {
+        'TE',
+        'TU',
+        'USTED',
+        'USTEDES',
+        'LE',
+        'LES',
+        'FUE',
+        'OCURRIO',
+        'PASO',
+        'SUCEDIO',
+      }.contains(next);
+    }
+    return spokenInterrogativeSlots.containsKey(key) ||
+        spokenOpenInterrogatives.contains(key);
+  }
+
+  /// Corrige únicamente una contradicción demostrable entre el español y las
+  /// glosas: el texto pide un dato, pero el modelo devolvió una respuesta
+  /// concreta o perdió el interrogativo. No reordena ni reinterpreta el resto
+  /// de la traducción.
+  static List<String> reconcileQuestionGlosses(
+    String text,
+    Iterable<String> glosses,
+  ) {
+    final result = [for (final g in glosses) g.toUpperCase().trim()];
+    final requested = spokenSlotsOf(text);
+    if (requested.isEmpty) return result;
+
+    final sourceWords = [for (final word in _words(text)) _plain(word)];
+    bool grounded(String gloss) {
+      final key = normalize(gloss);
+      if (key == null) return false;
+      for (final word in sourceWords) {
+        if (key == word ||
+            (word.length >= 4 && (key.contains(word) || word.contains(key)))) {
+          return true;
+        }
+        var common = 0;
+        for (var i = 0; i < key.length && i < word.length; i++) {
+          if (key[i] != word[i]) break;
+          common++;
+        }
+        if (common >= 4) return true;
+      }
+      return false;
+    }
+
+    var insertionIndex = 0;
+    for (final slot in requested) {
+      final questionGloss = questionGlossBySlot[slot];
+      if (questionGloss == null) continue;
+      final represented = slotsOf(normalizeAll(result)).contains(slot);
+      if (represented) continue;
+
+      final concrete = concreteAnswersBySlot[slot] ?? const <String>{};
+      final replaceAt = result.indexWhere((g) {
+        final key = normalize(g);
+        return key != null && concrete.contains(key) && !grounded(g);
+      });
+      if (replaceAt >= 0) {
+        result[replaceAt] = questionGloss;
+      } else {
+        result.insert(insertionIndex, questionGloss);
+        insertionIndex++;
+      }
+    }
+    return result;
   }
 
   static (List<String>, bool) _readClause(String clause) {
@@ -209,7 +394,10 @@ class LsbGlossSemantics {
         slots.add(slot);
       } else if (spokenOpenInterrogatives.contains(keys[i])) {
         interrogative = true;
-        final head = i + 1 < keys.length ? spokenHeadSlots[keys[i + 1]] : null;
+        final next = i + 1 < keys.length ? keys[i + 1] : '';
+        final head =
+            spokenHeadSlots[next] ??
+            (keys[i] == 'COMO' ? spokenAfterHowSlots[next] : null);
         if (head != null) slots.add(head);
       }
     }
@@ -236,9 +424,18 @@ class LsbGlossSemantics {
   ];
 
   /// Ranuras que pide una secuencia de glosas.
-  static Set<String> slotsOf(Iterable<String> normalized) => {
-    for (final g in normalized) ?interrogativeSlots[g] ?? headSlots[g],
-  };
+  /// «HORA CUÁNTOS» es cómo LSB pregunta la hora: CUÁNTOS tras un núcleo
+  /// pertenece a él y no pide además una cantidad.
+  static Set<String> slotsOf(Iterable<String> normalized) {
+    final glosses = normalized.toList();
+    return {
+      for (var i = 0; i < glosses.length; i++)
+        if (!(glosses[i] == 'CUANTOS' &&
+            i > 0 &&
+            headSlots.containsKey(glosses[i - 1])))
+          ?interrogativeSlots[glosses[i]] ?? headSlots[glosses[i]],
+    };
+  }
 
   /// Ranuras de UNA pregunta: si trae un núcleo, manda el núcleo
   /// («HORA CUÁNTOS» pide la hora, no una cantidad).

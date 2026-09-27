@@ -147,6 +147,7 @@ class BankQuestion {
   final String formulation;
   final String control;
   final String mode;
+  final String entity;
   final int? maximum;
   final List<BankOption> options;
 
@@ -166,6 +167,7 @@ class BankQuestion {
     required this.control,
     required this.options,
     this.mode = 'frase',
+    this.entity = '',
     this.maximum,
     this.notOfferedGlosses = const [],
     this.lsb = LsbFormulation.none,
@@ -177,6 +179,7 @@ class BankQuestion {
     formulation: (json['formulacion'] ?? '').toString(),
     control: (json['control'] ?? '').toString(),
     mode: (json['modo'] ?? 'frase').toString(),
+    entity: (json['entidad'] ?? '').toString(),
     maximum: (json['maximo'] as num?)?.toInt(),
     options: [
       for (final o in (json['opciones'] as List<dynamic>? ?? const []))

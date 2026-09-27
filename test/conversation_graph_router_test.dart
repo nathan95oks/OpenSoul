@@ -289,6 +289,15 @@ void main() {
       expect(dos.type, ConversationRouteType.minimalGraphPath);
       expect(dos.targetQuestionIds, ['Q.TIE.HORA', 'Q.LUG.DONDE']);
       expect(dos.requestedSlots, ['time', 'place']);
+
+      final autor = builder.build(
+        turnId: 'autor',
+        text: 'hola como estas quien te robo',
+        glosses: const ['HOLA', 'COMO_ESTAS', 'QUIEN', 'TU', 'ROBAR'],
+      );
+      expect(router.routeDeterministic(autor).targetQuestionIds, [
+        'Q.PER.CONOCE',
+      ]);
     });
   });
 
