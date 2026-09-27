@@ -46,7 +46,7 @@ class ConversationNotifier extends Notifier<ConversationState> {
       processing: true,
     );
 
-    final activeContextId = conversation.activeContextId;
+    final activeContextId = conversation.topicContextId;
     try {
       final translated = await engine.translateHearingTurn(
         draft,

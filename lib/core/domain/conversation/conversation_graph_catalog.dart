@@ -262,6 +262,31 @@ class ConversationGraphCatalog {
     }
     return {for (final e in own.entries) e.key: e.value.difference(shared)};
   }();
+
+  /// Raíces que dicen qué papel tiene la persona en un contexto, sacadas de
+  /// su nombre y su descripción: «testig» para «Declaración y testimonio»
+  /// («Testimonio de testigo presencial…»). Solo las propias de un contexto.
+  late final Map<String, Set<String>> roleStems = () {
+    final own = {
+      for (final c in _contexts.values)
+        c.id: spanishContentStems('${c.name} ${c.description}'),
+    };
+    final shared = <String>{for (final s in familyStems.values) ...s};
+    final seen = <String>{};
+    for (final stems in own.values) {
+      for (final s in stems) {
+        if (!seen.add(s)) shared.add(s);
+      }
+    }
+    return {for (final e in own.entries) e.key: e.value.difference(shared)};
+  }();
+
+  /// Raíces que nombran una clase de contexto («trámite», «denuncia»): las
+  /// de las familias y las propias de cada contexto.
+  late final Set<String> kindStems = {
+    for (final s in familyStems.values) ...s,
+    for (final s in contextStems.values) ...s,
+  };
 }
 
 /// Una forma real de hacer una pregunta del banco: frase del corpus o

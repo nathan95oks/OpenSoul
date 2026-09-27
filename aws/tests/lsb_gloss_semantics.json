@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "interrogativeSlots": {
     "DONDE": "place",
     "CUANDO": "time",
@@ -75,12 +75,33 @@
     "CARACTERISTICA": "description",
     "APARIENCIA": "description",
     "RASGO": "description",
-    "FISICAMENTE": "description"
+    "FISICAMENTE": "description",
+    "VESTI": "description"
   },
   "spokenAfterHowSlots": {
     "ERA": "description",
     "ERAN": "description",
     "LUCIA": "description",
     "LUCIAN": "description"
+  },
+  "spokenWearSlots": {
+    "verbs": [
+      "LLEVABA",
+      "LLEVABAN",
+      "USABA",
+      "USABAN",
+      "TENIA",
+      "TENIAN"
+    ],
+    "words": [
+      "ROPA",
+      "PRENDA",
+      "PRENDAS",
+      "PUESTO",
+      "PUESTA",
+      "PUESTOS",
+      "PUESTAS"
+    ],
+    "slot": "description"
   }
 }

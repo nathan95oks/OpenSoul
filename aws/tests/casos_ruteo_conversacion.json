@@ -811,11 +811,13 @@
    ],
    "semanticTurn": {
     "version": 1,
-    "intent": "askPurpose",
-    "requestedSlots": [],
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
     "mentionedContexts": [],
     "negations": [],
-    "confidence": 0.6
+    "confidence": 0.9
    }
   },
   {
@@ -3415,11 +3417,13 @@
    ],
    "semanticTurn": {
     "version": 1,
-    "intent": "askPurpose",
-    "requestedSlots": [],
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
     "mentionedContexts": [],
     "negations": [],
-    "confidence": 0.6
+    "confidence": 0.9
    }
   },
   {
@@ -5701,11 +5705,13 @@
    ],
    "semanticTurn": {
     "version": 1,
-    "intent": "askPurpose",
-    "requestedSlots": [],
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
     "mentionedContexts": [],
     "negations": [],
-    "confidence": 0.6
+    "confidence": 0.9
    },
    "glosasSimuladas": true
   },
@@ -6228,6 +6234,601 @@
     "confidence": 0.9
    },
    "glosasSimuladas": true
+  },
+  {
+   "id": "dispositivo-01",
+   "origen": "dispositivo",
+   "texto": "las amenzas le llegaron por algun medio?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CANAL",
+   "glosasModelo": [
+    "AMENAZAR",
+    "ESCRIBIR",
+    "LLEGAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "AMENAZAR",
+    "ESCRIBIR",
+    "LLEGAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "AMENAZAR"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true,
+   "sinTema": "segura"
+  },
+  {
+   "id": "dispositivo-02",
+   "origen": "dispositivo",
+   "texto": "las amenzas le llegaron por algun medio?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CANAL",
+   "glosasModelo": [
+    "AMENAZAR",
+    "LLEGAR",
+    "CÓMO"
+   ],
+   "glosas": [
+    "AMENAZAR",
+    "LLEGAR",
+    "COMO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "AMENAZAR"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true,
+   "sinTema": "segura"
+  },
+  {
+   "id": "dispositivo-03",
+   "origen": "dispositivo",
+   "texto": "conoce el numero desde el que le escribieron?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.NUMERO_CONOCE",
+   "glosasModelo": [
+    "NÚMERO",
+    "ESCRIBIR",
+    "CONOCER"
+   ],
+   "glosas": [
+    "N",
+    "U",
+    "M",
+    "E",
+    "R",
+    "O",
+    "ESCRIBIR",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-04",
+   "origen": "dispositivo",
+   "texto": "sigue recibiendo mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CONTINUA",
+   "glosasModelo": [
+    "AÚN",
+    "MENSAJE",
+    "RECIBIR"
+   ],
+   "glosas": [
+    "AUN",
+    "M",
+    "E",
+    "N",
+    "S",
+    "A",
+    "J",
+    "E",
+    "RECIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-05",
+   "origen": "dispositivo",
+   "texto": "sigue recibiendo mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CONTINUA",
+   "glosasModelo": [
+    "SEGUIR",
+    "ESCRIBIR",
+    "RECIBIR"
+   ],
+   "glosas": [
+    "S",
+    "E",
+    "G",
+    "U",
+    "I",
+    "R",
+    "ESCRIBIR",
+    "RECIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-06",
+   "origen": "dispositivo",
+   "texto": "tiene fotos o videos?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.QUE_TIENE",
+   "glosasModelo": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "glosas": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "segura"
+  },
+  {
+   "id": "dispositivo-07",
+   "origen": "dispositivo",
+   "texto": "tiene fotos o videos?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CAPTURAS",
+   "glosasModelo": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "glosas": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "libre"
+  },
+  {
+   "id": "dispositivo-08",
+   "origen": "dispositivo",
+   "texto": "que tramite desea realizar",
+   "contexto": null,
+   "preguntaEsperada": "SELECTOR",
+   "glosasModelo": [
+    "TRÁMITE",
+    "HACER",
+    "QUERER",
+    "QUÉ"
+   ],
+   "glosas": [
+    "TRAMITE",
+    "HACER",
+    "QUERER",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "seguimiento",
+      "evidence": [
+       "TRAMITE",
+       "tramit"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true,
+   "sinTema": "selector"
+  },
+  {
+   "id": "dispositivo-09",
+   "origen": "dispositivo",
+   "texto": "vino a consultar el estado de su caso",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.ESTADO_CASO",
+   "glosasModelo": [
+    "VENIR",
+    "SABER",
+    "QUERER"
+   ],
+   "glosas": [
+    "VENIR",
+    "SABER",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "seguimiento",
+      "evidence": [
+       "consult"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-10",
+   "origen": "dispositivo",
+   "texto": "puede indicar que llevaba puesto el individuo",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA",
+   "glosasModelo": [
+    "HOMBRE",
+    "LLEVAR",
+    "QUÉ",
+    "PUEDO"
+   ],
+   "glosas": [
+    "HOMBRE",
+    "LLEVAR",
+    "QUE",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-11",
+   "origen": "dispositivo",
+   "texto": "puede decirme la ropa que llevaba puesta o sus colores",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA",
+   "glosasModelo": [
+    "ROPA",
+    "COLOR",
+    "LLEVAR",
+    "DECIR",
+    "PUEDO"
+   ],
+   "glosas": [
+    "R",
+    "O",
+    "P",
+    "A",
+    "C",
+    "O",
+    "L",
+    "O",
+    "R",
+    "LLEVAR",
+    "D",
+    "E",
+    "C",
+    "I",
+    "R",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-12",
+   "origen": "dispositivo",
+   "texto": "usted fue testigo de un crimen?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TES.QUE_VIO",
+   "glosasModelo": [
+    "TÚ",
+    "TESTIGO",
+    "CRIMEN"
+   ],
+   "glosas": [
+    "TU",
+    "TESTIGO",
+    "C",
+    "R",
+    "I",
+    "M",
+    "E",
+    "N"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-13",
+   "origen": "dispositivo",
+   "texto": "necesita hablar con el fiscal?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.HABLAR_FISCAL",
+   "glosasModelo": [
+    "FISCAL",
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "F",
+    "I",
+    "S",
+    "C",
+    "A",
+    "L",
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-14",
+   "origen": "dispositivo",
+   "texto": "tiene su carnet de identidad?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.DOC_TIENE",
+   "glosasModelo": [
+    "TÚ",
+    "CARNET",
+    "TENER"
+   ],
+   "glosas": [
+    "TU",
+    "C",
+    "A",
+    "R",
+    "N",
+    "E",
+    "T",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-15",
+   "origen": "dispositivo",
+   "texto": "vino solo o acompañado?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.ACOMPANANTE",
+   "glosasModelo": [
+    "VENIR",
+    "SOLO",
+    "ACOMPAÑAR",
+    "CUÁL"
+   ],
+   "glosas": [
+    "VENIR",
+    "S",
+    "O",
+    "L",
+    "O",
+    "ACOMPAÑAR",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-16",
+   "origen": "dispositivo",
+   "texto": "cuando presento su denuncia",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.FECHA_DENUNCIA",
+   "glosasModelo": [
+    "QUEJAR",
+    "PRESENTAR",
+    "CUÁNDO"
+   ],
+   "glosas": [
+    "QUEJAR",
+    "PRESENTAR",
+    "CUANDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "violencia",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "otro",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-17",
+   "origen": "dispositivo",
+   "texto": "le sustrajeron o robaron algo de dinero?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.QUE",
+   "glosasModelo": [
+    "BILLETES",
+    "ROBAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "BILLETES",
+    "ROBAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true,
+   "sinTema": "segura"
   }
  ]
 }

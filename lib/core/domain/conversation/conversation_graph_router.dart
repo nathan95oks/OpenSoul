@@ -4,8 +4,10 @@ import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalo
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route_validator.dart';
 import 'package:lsb_legal_app/core/domain/conversation/graph_matcher.dart';
+import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
+import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 
 /// El modelo que rankea rutas candidatas (Bedrock de LSB→Texto/Audio,
@@ -219,6 +221,23 @@ class ConversationGraphRouter {
       return r;
     }
 
+    // 0. El oyente pregunta por la clase de atención o nombra el papel de la
+    //    persona en un contexto, sin pedir un dato.
+    if (requested.difference(const {'polarity'}).isEmpty) {
+      // «¿Qué trámite desea realizar?», «¿Qué denuncia quiere presentar?»:
+      // la respuesta es elegir el contexto.
+      if (_asksWhichKind(turn.text)) {
+        return done(_selector('pregunta qué clase de atención'));
+      }
+      // «¿Usted fue testigo de un crimen?»: ser testigo es el contexto
+      // «Declaración y testimonio».
+      final role = _roleContext(turn.text);
+      if (role != null) {
+        final route = validator.validate(_contextCandidate(role)).route;
+        if (route != null) return done(route);
+      }
+    }
+
     // 1. Preguntas concretas del grafo: esa pregunta o el mínimo recorrido.
     if (strong.isNotEmpty) {
       final place = _placement(
@@ -234,7 +253,12 @@ class ConversationGraphRouter {
         // (o el modelo, entre esas rutas reales).
         final candidates = [
           for (final c in place.ambiguous)
-            ?_questionRoute(strong, context: c, reason: 'candidata en $c'),
+            ?_questionRoute(
+              strong,
+              context: c,
+              reason: 'candidata en $c',
+              text: turn.text,
+            ),
         ];
         if (candidates.isNotEmpty) {
           return done(
@@ -257,6 +281,7 @@ class ConversationGraphRouter {
               strong,
               context: place.context!,
               reason: 'preguntas del grafo',
+              text: turn.text,
             );
       if (route != null) return done(route);
     }
@@ -265,7 +290,32 @@ class ConversationGraphRouter {
     //    la conversación viniera de otro contexto.
     if (mentionedContexts.isNotEmpty || mentionedFamilies.isNotEmpty) {
       final route = _mentionRoute(mentionedContexts, mentionedFamilies);
-      if (route != null) return done(route);
+      if (route != null) {
+        // «¿Las amenazas le llegaron por algún medio?» nombra el contexto,
+        // pero pregunta algo dentro de él: las preguntas que el turno sugiere
+        // en ese contexto quedan como candidatas para el modelo. Sin modelo
+        // se abre el contexto desde el principio, como siempre.
+        final context = route.targetContextId;
+        final inside = context == null
+            ? const <ConversationRoute>[]
+            : [
+                for (final r in weak)
+                  if (catalog.isStepOf(context, r.questionId))
+                    ?_questionRoute(
+                      [r],
+                      context: context,
+                      reason: 'candidata en el contexto nombrado',
+                      minConfidence: 0,
+                      text: turn.text,
+                    ),
+              ];
+        if (turn.isQuestion && inside.isNotEmpty) {
+          return done(
+            route.copyWith(needsModel: true, candidates: [...inside, route]),
+          );
+        }
+        return done(route);
+      }
       return done(
         ConversationRoute(
           type: ConversationRouteType.contextSelector,
@@ -282,10 +332,8 @@ class ConversationGraphRouter {
 
     // 3. Pregunta abierta por el motivo de la atención: elegir contexto. Va
     //    antes que las coincidencias débiles, que aquí serían solo ruido de
-    //    verbos genéricos. Con la conversación ya situada, un «¿qué…?»
-    //    («¿Qué ropa llevaba?») pregunta dentro del tema: siguen las rutas
-    //    posibles del recorrido, que el modelo puede elegir.
-    if (turn.intent == SemanticIntent.askPurpose && active == null) {
+    //    verbos genéricos.
+    if (turn.intent == SemanticIntent.askPurpose) {
       return done(_selector('pregunta abierta por el motivo de la atención'));
     }
 
@@ -297,7 +345,12 @@ class ConversationGraphRouter {
           needsModel: true,
           candidates: [
             for (final r in weak)
-              ?_candidate([r], active: active, suggestion: suggestion),
+              ?_candidate(
+                [r],
+                active: active,
+                suggestion: suggestion,
+                text: turn.text,
+              ),
             _selector('selector como alternativa'),
           ],
         ),
@@ -406,6 +459,7 @@ class ConversationGraphRouter {
     required String context,
     required String reason,
     double? minConfidence,
+    String text = '',
   }) {
     final ids = [for (final r in requests) r.questionId];
     // Una puerta de control que el oyente preguntó («¿Puede describir a los
@@ -423,6 +477,39 @@ class ConversationGraphRouter {
       }
       for (final child in children) {
         if (opened.add(child) && !targets.contains(child)) targets.add(child);
+      }
+    }
+    // Si el texto nombra uno de los rasgos que abre la puerta («¿Qué ropa
+    // llevaba?»), se abre ese y no toda la descripción. Pedir la ropa
+    // («¿qué llevaba puesto?») es el rasgo cuya pregunta habla de ropa.
+    if (opened.length > 1 && LsbGlossSemantics.asksClothing(text)) {
+      final clothing = [
+        for (final c in opened)
+          if (catalog.replyEntries.any(
+            (e) =>
+                e.questionId == c &&
+                LsbGlossSemantics.speaksOfClothing(e.phrase),
+          ))
+            c,
+      ];
+      if (clothing.length == 1) {
+        targets.removeWhere((t) => opened.contains(t) && t != clothing.single);
+        opened
+          ..clear()
+          ..add(clothing.single);
+      }
+    }
+    if (opened.length > 1 && text.isNotEmpty) {
+      final scores = matcher.textScores(text);
+      final ranked = [for (final c in opened) (c, scores[c] ?? 0.0)]
+        ..sort((a, b) => b.$2.compareTo(a.$2));
+      if (ranked.first.$2 >= _namedChildMatch &&
+          ranked.first.$2 > ranked[1].$2) {
+        final keep = ranked.first.$1;
+        targets.removeWhere((t) => opened.contains(t) && t != keep);
+        opened
+          ..clear()
+          ..add(keep);
       }
     }
     final confidence = requests
@@ -456,6 +543,7 @@ class ConversationGraphRouter {
     required String? active,
     required ContextSuggestion? suggestion,
     String reason = 'candidata débil',
+    String text = '',
   }) {
     final context = _placement(
       requests,
@@ -470,6 +558,7 @@ class ConversationGraphRouter {
       context: context,
       reason: reason,
       minConfidence: 0,
+      text: text,
     );
   }
 
@@ -607,6 +696,44 @@ class ConversationGraphRouter {
       if (journeys.isNotEmpty) return journeys.first;
     }
     return null;
+  }
+
+  /// Parecido mínimo del texto con un rasgo para abrir solo ese rasgo.
+  static const double _namedChildMatch = 0.45;
+
+  static const _copulas = {'FUE', 'ES', 'ERES', 'FUISTE', 'SIDO', 'ERA'};
+
+  static List<String> _plainWords(String text) => [
+    for (final w in GraphMatcher.plainText(text).split(' '))
+      if (w.isNotEmpty) w.toUpperCase(),
+  ];
+
+  /// «¿Qué X…?» donde X nombra una clase de contexto: pide elegirlo.
+  bool _asksWhichKind(String text) {
+    final words = _plainWords(text);
+    var i = 0;
+    while (i < words.length &&
+        LsbGlossSemantics.questionPrepositions.contains(words[i])) {
+      i++;
+    }
+    if (i + 1 >= words.length) return false;
+    if (!const {'QUE', 'CUAL', 'CUALES'}.contains(words[i])) return false;
+    return spanishContentStems(words[i + 1]).any(catalog.kindStems.contains);
+  }
+
+  /// El contexto cuyo papel se atribuye al interlocutor tras un verbo
+  /// copulativo («fue testigo»), si es uno solo.
+  String? _roleContext(String text) {
+    final words = _plainWords(text);
+    final found = <String>{};
+    for (var i = 0; i + 1 < words.length; i++) {
+      if (!_copulas.contains(words[i])) continue;
+      final stems = spanishContentStems(words[i + 1]);
+      for (final e in catalog.roleStems.entries) {
+        if (stems.any(e.value.contains)) found.add(e.key);
+      }
+    }
+    return found.length == 1 ? found.single : null;
   }
 
   ConversationRoute? _mentionRoute(
