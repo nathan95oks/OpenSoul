@@ -13,12 +13,12 @@ void main() {
   final bank = QuestionBank.generated();
   LsbFormulation lsb(String id) => bank.question(id)!.lsb;
 
-  test('las 143 preguntas tienen exactamente una representación elegida', () {
-    expect(bank.allQuestions, hasLength(143));
+  test('las 144 preguntas tienen exactamente una representación elegida', () {
+    expect(bank.allQuestions, hasLength(144));
     final estados = {for (final q in bank.allQuestions) q.lsb.status};
     expect(estados, isNot(contains('GRAMMAR_VALIDATED')));
     expect(bank.allQuestions.where((q) => q.lsb.hasUsableLsb), hasLength(134));
-    expect(bank.allQuestions.where((q) => !q.lsb.hasUsableLsb), hasLength(9));
+    expect(bank.allQuestions.where((q) => !q.lsb.hasUsableLsb), hasLength(10));
     for (final q in bank.allQuestions) {
       expect(q.lsb.hasUsableLsb || q.formulation.trim().isNotEmpty, isTrue,
           reason: q.id);
@@ -36,6 +36,11 @@ void main() {
     expect(lsb('Q.EVI.QUE_TIENE').glosses, isNotEmpty);
     expect(lsb('Q.EVI.QUE_TIENE').hasUsableLsb, isFalse,
         reason: 'la secuencia parcial cambia el alcance de la pregunta');
+
+    // COLOR no tiene seña: la pregunta del color de la ropa se muestra en
+    // español, con NEGRO, AZUL y ROJO como respuestas con seña.
+    expect(lsb('Q.PER.DESC.ROPA_COLOR').status, 'LEXICAL_GAP');
+    expect(lsb('Q.PER.DESC.ROPA_COLOR').hasUsableLsb, isFalse);
 
     expect(lsb('Q.DEN.INTENCION').status, 'LEXICAL_GAP');
     expect(lsb('Q.DEN.INTENCION').hasUsableLsb, isTrue,

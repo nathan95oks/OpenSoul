@@ -3427,6 +3427,33 @@
    }
   },
   {
+   "id": "banco:Q.PER.DESC.ROPA_COLOR@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿De qué color era su ropa?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR",
+   "glosasModelo": [
+    "POLERA",
+    "PANTALÓN",
+    "CHAMARRA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "POLERA",
+    "PANTALON",
+    "CHAMARRA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
    "id": "banco:Q.TES.EXISTE@denuncia_robo",
    "origen": "banco",
    "texto": "¿Hay testigos?",
@@ -6637,6 +6664,78 @@
   {
    "id": "dispositivo-13",
    "origen": "dispositivo",
+   "texto": "¿De qué color era su ropa?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR",
+   "glosasModelo": [
+    "ROPA",
+    "COLOR",
+    "CUÁL"
+   ],
+   "glosas": [
+    "R",
+    "O",
+    "P",
+    "A",
+    "C",
+    "O",
+    "L",
+    "O",
+    "R",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-14",
+   "origen": "dispositivo",
+   "texto": "de que color era la ropa que llevaba",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR",
+   "glosasModelo": [
+    "ROPA",
+    "COLOR",
+    "LLEVAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "R",
+    "O",
+    "P",
+    "A",
+    "C",
+    "O",
+    "L",
+    "O",
+    "R",
+    "LLEVAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true,
+   "sinTema": "directa"
+  },
+  {
+   "id": "dispositivo-15",
+   "origen": "dispositivo",
    "texto": "necesita hablar con el fiscal?",
    "contexto": "seguimiento",
    "preguntaEsperada": "Q.SEG.HABLAR_FISCAL",
@@ -6667,7 +6766,7 @@
    "sinTema": "directa"
   },
   {
-   "id": "dispositivo-14",
+   "id": "dispositivo-16",
    "origen": "dispositivo",
    "texto": "tiene su carnet de identidad?",
    "contexto": "identificacion",
@@ -6699,7 +6798,7 @@
    "sinTema": "directa"
   },
   {
-   "id": "dispositivo-15",
+   "id": "dispositivo-17",
    "origen": "dispositivo",
    "texto": "vino solo o acompañado?",
    "contexto": "identificacion",
@@ -6731,7 +6830,7 @@
    "sinTema": "directa"
   },
   {
-   "id": "dispositivo-16",
+   "id": "dispositivo-18",
    "origen": "dispositivo",
    "texto": "cuando presento su denuncia",
    "contexto": "seguimiento",
@@ -6796,7 +6895,7 @@
    "sinTema": "directa"
   },
   {
-   "id": "dispositivo-17",
+   "id": "dispositivo-19",
    "origen": "dispositivo",
    "texto": "le sustrajeron o robaron algo de dinero?",
    "contexto": "denuncia_robo",

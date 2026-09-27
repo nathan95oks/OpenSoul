@@ -81,6 +81,26 @@ class ParidadConElCliente(unittest.TestCase):
                 self.assertLessEqual(
                     self.composer.confirmed_facts(caso["guided"]), representadas)
 
+    def test_una_pregunta_que_el_servidor_no_conoce_no_se_certifica(self):
+        """Una Lambda con un banco anterior no puede certificar una redacción
+        que pierde una respuesta nueva (el color de la ropa)."""
+        viejo = copy.deepcopy(self.composer.bank)
+        viejo["preguntas"] = [q for q in viejo["preguntas"]
+                              if q["id"] != "Q.PER.DESC.ROPA_COLOR"]
+        composer = G.Composer(viejo)
+        guided = {
+            "recorrido": "denuncia_robo",
+            "proposito": "standalone",
+            "respuestas": [
+                {"pregunta": "Q.PER.DESC.ROPA", "opciones": ["chamarra"],
+                 "estado": "afirmado"},
+                {"pregunta": "Q.PER.DESC.ROPA_COLOR", "opciones": ["negro"],
+                 "estado": "afirmado"},
+            ],
+        }
+        _, representadas = composer.compose_traced(guided)
+        self.assertFalse(composer.confirmed_facts(guided) <= representadas)
+
     def test_el_handler_devuelve_la_misma_frase_sin_ia(self):
         for caso in self.casos[:24]:
             with self.subTest(recorrido=caso["guided"]["recorrido"]):

@@ -47,8 +47,12 @@ están en caché.
 
 ## 3. Dependencias
 
-Ninguna nueva. `lambda_function.py` usa solo la biblioteca estándar más
-`boto3`, que el entorno de Lambda ya provee. El paquete es un único archivo.
+Ninguna externa nueva: `lambda_function.py` usa solo la biblioteca estándar
+más `boto3`, que el entorno de Lambda ya provee. Pero el paquete **no** es
+un único archivo: `lambda_function.py` importa `guided_composer.py` al
+arrancar, y este lee `question_bank.json` del disco. `build_package.py`
+mete los tres en el ZIP; si alguno falta, la Lambda no arranca o certifica
+redacciones que ya no coinciden con el banco.
 
 ## 4. Procedimiento
 

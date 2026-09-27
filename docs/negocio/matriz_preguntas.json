@@ -6,9 +6,9 @@
  ],
  "fecha": "2026-09-25",
  "totales": {
-  "preguntas": 143,
+  "preguntas": 144,
   "recorridos": 8,
-  "opciones": 528
+  "opciones": 533
  },
  "preguntas": [
   {
@@ -1083,7 +1083,7 @@
     "institucion"
    ],
    "recorridos": [
-    "denuncia_robo#27",
+    "denuncia_robo#28",
     "violencia#21",
     "amenaza_digital#10",
     "engano_dinero#10"
@@ -1163,7 +1163,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#26",
+    "denuncia_robo#27",
     "violencia#20",
     "amenaza_digital#9",
     "engano_dinero#9"
@@ -3066,7 +3066,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#22"
+    "denuncia_robo#23"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3354,7 +3354,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#24",
+    "denuncia_robo#25",
     "violencia#16"
    ],
    "nodos": [],
@@ -3477,7 +3477,7 @@
     "documento"
    ],
    "recorridos": [
-    "denuncia_robo#25",
+    "denuncia_robo#26",
     "violencia#17"
    ],
    "nodos": [],
@@ -3542,7 +3542,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#23"
+    "denuncia_robo#24"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -5740,6 +5740,85 @@
    "rutas": [
     "recorrido",
     "respuesta al funcionario"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era su ropa?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color",
+   "control": "seleccion_multiple",
+   "modo": "frase",
+   "campos": [
+    "modificador"
+   ],
+   "recorridos": [
+    "denuncia_robo#20"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de su ropa."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "reglas": [
+    "Se abre siempre que se elige una prenda en «¿Qué ropa llevaba?»: una descripción de la ropa no queda sin color.",
+    "Plantilla: «Su ropa era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "rutas": [
+    "recorrido"
    ],
    "opcionesSinSena": []
   },
@@ -8853,7 +8932,7 @@
     "cantidad"
    ],
    "recorridos": [
-    "denuncia_robo#21"
+    "denuncia_robo#22"
    ],
    "nodos": [
     "n-s6-testigos_fotos_v-02"
@@ -8911,7 +8990,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#20"
+    "denuncia_robo#21"
    ],
    "nodos": [
     "n-s6-robo_hurto_y_obje-10",

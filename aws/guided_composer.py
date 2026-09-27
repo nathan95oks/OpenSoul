@@ -240,6 +240,11 @@ class Composer:
                 continue
             q = self.questions.get(a.get("pregunta"))
             if q is None:
+                # Una respuesta a una pregunta que este banco no conoce (la
+                # app va por delante del despliegue) no puede darse por
+                # redactada: se marca como hecho que nada representa, así la
+                # cobertura falla y la app conserva su propia redacción.
+                out.add(f"{a.get('pregunta')}#desconocida")
                 continue
             for o in self._chosen(q, a):
                 if _writes_something(o):
