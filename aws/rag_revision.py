@@ -301,3 +301,138 @@ def revisar(items: list, invocar, embed) -> list:
         salida.append({"texto": it["texto"], "vuelta": limpia,
                        "similitud": similitud, **comp})
     return salida
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Corrección (`action: "corregir"`)
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Para una frase marcada, Bedrock propone glosas corregidas con lo que falta
+# y sin lo que sobra, usando solo señas del catálogo oficial. Toda glosa se
+# comprueba y la corrección se vuelve a comparar con la frase: se acepta
+# solo si deja menos errores que antes y ninguno nuevo que sobre.
+
+def validar_pedido_correccion(body: dict) -> tuple:
+    """(items, error). Cada item: {texto, glosas, faltan, sobran, rol?}."""
+    items, error = validar_pedido(body)
+    if error:
+        return None, error
+    for it, crudo in zip(items, body["items"]):
+        for campo in ("faltan", "sobran"):
+            valores = crudo.get(campo) or []
+            if (not isinstance(valores, list) or len(valores) > 20
+                    or not all(isinstance(v, str) and len(v) <= 60
+                               for v in valores)):
+                return None, f"{campo} inválido."
+            it[campo] = valores
+    return items, None
+
+
+def prompt_corregir(items: list, catalogo: dict) -> str:
+    lista = ", ".join(sorted(catalogo))
+    pares = "\n".join(
+        f"{i + 1}. (habla {_QUIEN[it['rol']]}) Frase: «{it['texto']}» | "
+        f"Glosas: {' · '.join(legibles(it['glosas']))} | "
+        f"Faltan: {', '.join(it['faltan']) or '—'} | "
+        f"Sobran: {', '.join(it['sobran']) or '—'}"
+        for i, it in enumerate(items))
+    return f"""Corrige la traducción a glosas de Lengua de Señas Boliviana (LSB) de
+cada frase: añade lo que falta, quita lo que sobra y conserva lo demás.
+
+Reglas de las glosas:
+- Una glosa por seña, en mayúsculas. Verbos en infinitivo (COMPRAR, QUERER).
+- Sin artículos, preposiciones ni el verbo «ser/estar» como cópula.
+- Orden LSB: tiempo, lugar, sujeto, objeto, verbo; la negación NO después
+  del verbo; en una pregunta, la palabra interrogativa al final.
+- Solo puedes usar glosas de este catálogo, escritas igual:
+  {lista}
+- Una palabra de la frase sin seña en el catálogo se escribe
+  SENA_PENDIENTE:PALABRA (en infinitivo si es verbo): SENA_PENDIENTE:AUTO.
+- Una sigla de la frase (NUREJ, SEGIP) se escribe tal cual; un número, con
+  cifras (2025).
+- No añadas nada que la frase no diga.
+
+Ejemplo: Frase «Compré un auto. Quiero pasarlo a mi nombre.» | Glosas:
+COMPRAR · MÍO · NOMBRE · PASAR | Faltan: auto, Quiero | Sobran: —
+→ ["COMPRAR", "SENA_PENDIENTE:AUTO", "QUERER", "MÍO", "NOMBRE",
+   "SENA_PENDIENTE:PASAR"]
+Ejemplo: Frase «Tengo deuda de mi casa.» | Glosas: CASO · DEUDA · MÍO · CASA
+| Faltan: Tengo | Sobran: CASO → ["MÍO", "CASA", "SENA_PENDIENTE:DEUDA",
+"TENER"]
+
+Frases:
+{pares}
+
+Responde SOLO con JSON: una lista de glosas por frase, en el mismo orden.
+[["GLOSA", ...], ...]"""
+
+
+def glosas_validas(tokens: list, texto: str, catalogo: dict) -> list | None:
+    """Las glosas en el formato del corpus, o `None` si alguna no vale.
+
+    Vale una glosa del catálogo (en su forma del catálogo), una seña a
+    incorporar de una palabra que está en la frase, una sigla escrita así en
+    la frase (se deletrea) o un número de la frase (cifra a cifra).
+    """
+    por_norma = {_norm(g).replace(" ", "_"): g for g in catalogo}
+    palabras = re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", texto)
+    siglas = {_norm(w): w.upper() for w in palabras
+              if sum(c.isupper() for c in w) >= 2}
+    cifras = {w for w in palabras if w.isdigit()}
+    salida = []
+    for t in tokens:
+        if not isinstance(t, str) or not t.strip():
+            return None
+        t = t.strip()
+        if t.upper().startswith(PENDIENTE):
+            palabra = t[len(PENDIENTE):].strip().upper().replace(" ", "_")
+            if not palabra or not any(
+                    conjugada(p, [palabra.replace("_", " ")])
+                    or _norm(p) == _norm(palabra) for p in palabras):
+                return None
+            salida.append(PENDIENTE + palabra)
+            continue
+        clave = _norm(t).replace(" ", "_")
+        if clave in por_norma:
+            salida.append(por_norma[clave])
+        elif clave in siglas:
+            salida.extend(list(_norm(siglas[clave]).upper()))
+        elif t in cifras:
+            salida.extend(list(t))
+        else:
+            return None
+    return salida or None
+
+
+def corregir(items: list, catalogo: dict, invocar) -> list:
+    """[{texto, aceptada, glosas, faltan, sobran, motivo}]."""
+    propuestas = _json_lista(invocar(prompt_corregir(items, catalogo)))
+    candidatas = []
+    for i, it in enumerate(items):
+        tokens = propuestas[i] if i < len(propuestas) else None
+        glosas = (glosas_validas(tokens, it["texto"], catalogo)
+                  if isinstance(tokens, list) else None)
+        candidatas.append(glosas)
+    a_comparar = [{**it, "glosas": g}
+                  for it, g in zip(items, candidatas) if g]
+    comparadas = iter(comparaciones(
+        invocar(prompt_comparar(a_comparar)), a_comparar)
+        if a_comparar else [])
+    salida = []
+    for it, glosas in zip(items, candidatas):
+        base = {"texto": it["texto"], "aceptada": False, "glosas": None,
+                "faltan": it["faltan"], "sobran": it["sobran"]}
+        if not glosas:
+            salida.append({**base, "motivo": "glosas fuera del catálogo"})
+            continue
+        nueva = next(comparadas)
+        antes = len(it["faltan"]) + len(it["sobran"])
+        despues = len(nueva["faltan"]) + len(nueva["sobran"])
+        if despues < antes and len(nueva["sobran"]) <= len(it["sobran"]):
+            salida.append({**base, "aceptada": True, "glosas": glosas,
+                           "faltan": nueva["faltan"],
+                           "sobran": nueva["sobran"], "motivo": ""})
+        else:
+            salida.append({**base, "motivo":
+                           f"no mejora ({antes} → {despues} errores)"})
+    return salida

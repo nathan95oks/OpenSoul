@@ -57,6 +57,9 @@ GLOSAS = os.path.join(RAG, "glosas_cache.json")
 # Señas del catálogo equivalentes a palabras sin seña (tool/rag_equivalencias.py).
 # Solo se usan las aprobadas.
 EQUIVALENCIAS = os.path.join(RAG, "senas_equivalentes.json")
+# Glosas corregidas de frases que marcó la revisión (tool/rag_corregir_glosas.py):
+# mandan sobre las de la caché de traducción.
+CORRECCIONES = os.path.join(RAG, "glosas_correcciones.json")
 # La lista de vocabulario por crecer, para leer y compartir.
 SALIDA_VOCABULARIO = os.path.join(RAG, "senas_a_incorporar.md")
 
@@ -782,6 +785,25 @@ def dart_tramites(banco: dict) -> str:
     )
 
 
+def aplicar_equivalencias(glosas: list, texto: str,
+                          equivalencias: dict) -> list:
+    """Las señas a incorporar con equivalencia aprobada pasan a su seña (en
+    glosas que ya vienen marcadas, como las corregidas)."""
+    presentes = {_norm(g) for g in glosas if not g.startswith(SENA_PENDIENTE)}
+    salida = []
+    for g in glosas:
+        palabra = g[len(SENA_PENDIENTE):] if g.startswith(SENA_PENDIENTE) else None
+        equivalente = (equivalencias.get(_norm(palabra.replace("_", " ")))
+                       if palabra else None)
+        if equivalente and not _mayuscula_interior(palabra, texto):
+            if _norm(equivalente) not in presentes:
+                salida.append(equivalente)
+                presentes.add(_norm(equivalente))
+        else:
+            salida.append(g)
+    return salida
+
+
 def poner_glosas(corpus: dict, avisos: list) -> None:
     """Glosas precalculadas en cada tarjeta del usuario sordo que se muestra."""
     cache = {}
@@ -789,6 +811,10 @@ def poner_glosas(corpus: dict, avisos: list) -> None:
         with open(GLOSAS, encoding="utf-8") as f:
             cache = json.load(f)
     equivalencias = cargar_equivalencias()
+    corregidas = {}
+    if os.path.exists(CORRECCIONES):
+        with open(CORRECCIONES, encoding="utf-8") as f:
+            corregidas = json.load(f)
     faltan = 0
     for e in corpus["escenarios"]:
         tarjetas = [t for t in e["turnos"] if t["rol"] == "sordo"]
@@ -798,6 +824,11 @@ def poner_glosas(corpus: dict, avisos: list) -> None:
         for fase in (tarjetas, None):
             for t in fase if fase is not None else turnos_pregunta(e):
                 if not t["mostrable"]:
+                    continue
+                if t["texto"] in corregidas:
+                    t["glosas"] = aplicar_equivalencias(
+                        corregidas[t["texto"]]["glosas"], t["texto"],
+                        equivalencias)
                     continue
                 traduccion = cache.get(t["texto"])
                 t["glosas"] = marcar_senas_pendientes(

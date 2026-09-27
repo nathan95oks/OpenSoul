@@ -213,6 +213,13 @@ class Equivalencias(unittest.TestCase):
             "Me falta un documento.", self.EQ)
         self.assertEqual(salida, ["YO", "PAPEL", "FALTAR"])
 
+    def test_una_correccion_usa_las_equivalencias_aprobadas(self):
+        self.assertEqual(
+            B.aplicar_equivalencias(
+                ["SENA_PENDIENTE:DOCUMENTO", "SENA_PENDIENTE:AUTO", "PAPEL"],
+                "Traje el documento del auto.", {"documento": "PAPEL"}),
+            ["SENA_PENDIENTE:AUTO", "PAPEL"])
+
     def test_la_marca_pregunta_no_es_una_sena_que_falte(self):
         corr = [{"palabra": "PREGUNTA", "accion": "concepto_sin_catalogo"}]
         self.assertEqual(B.marcar_senas_pendientes(

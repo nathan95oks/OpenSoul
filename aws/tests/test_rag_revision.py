@@ -136,6 +136,49 @@ class Vuelta(unittest.TestCase):
         self.assertIsNone(items[0]["rol"])
 
 
+
+class Correccion(unittest.TestCase):
+    CAT = {"COMPRAR": "", "QUERER": "", "MÍO": "mi", "NOMBRE": "", "CASA": "",
+           "TENER": "", "SÍ": "", "2": "", "0": "", "5": ""}
+    AUTO = {**AUTO, "faltan": ["auto", "Quiero"], "sobran": []}
+
+    def test_solo_valen_glosas_del_catalogo_y_palabras_de_la_frase(self):
+        ok = REV.glosas_validas(
+            ["COMPRAR", "SENA_PENDIENTE:AUTO", "querer", "MIO", "NOMBRE"],
+            self.AUTO["texto"], self.CAT)
+        self.assertEqual(ok, ["COMPRAR", "SENA_PENDIENTE:AUTO", "QUERER",
+                              "MÍO", "NOMBRE"])
+        # Una seña inventada o una palabra que la frase no dice: se rechaza.
+        self.assertIsNone(REV.glosas_validas(["AUTOMOVIL"], "Compré un auto.",
+                                             self.CAT))
+        self.assertIsNone(REV.glosas_validas(["SENA_PENDIENTE:AVION"],
+                                             "Compré un auto.", self.CAT))
+
+    def test_siglas_y_numeros_de_la_frase_se_deletrean(self):
+        self.assertEqual(
+            REV.glosas_validas(["NUREJ", "2025"], "Tengo el NUREJ de 2025.",
+                               {}),
+            [*"NUREJ", *"2025"])
+
+    def test_se_acepta_si_deja_menos_errores(self):
+        propuesta = [["COMPRAR", "SENA_PENDIENTE:AUTO", "QUERER", "MÍO",
+                      "NOMBRE", "SENA_PENDIENTE:PASAR"]]
+        out = REV.corregir([self.AUTO], self.CAT,
+                           modelo(propuesta, [{"faltan": [], "sobran": []}]))
+        self.assertTrue(out[0]["aceptada"])
+        self.assertIn("SENA_PENDIENTE:AUTO", out[0]["glosas"])
+
+    def test_se_rechaza_si_no_mejora_o_inventa(self):
+        igual = REV.corregir(
+            [self.AUTO], self.CAT,
+            modelo([["COMPRAR", "NOMBRE"]],
+                   [{"faltan": ["auto", "Quiero"], "sobran": []}]))
+        self.assertFalse(igual[0]["aceptada"])
+        inventa = REV.corregir([self.AUTO], self.CAT,
+                               modelo([["COMPRAR", "AUTOMOVIL"]], []))
+        self.assertFalse(inventa[0]["aceptada"])
+        self.assertEqual(inventa[0]["motivo"], "glosas fuera del catálogo")
+
 class Accion(unittest.TestCase):
     def llamar(self, cuerpo):
         r = L.lambda_handler({"body": json.dumps(cuerpo)}, None)

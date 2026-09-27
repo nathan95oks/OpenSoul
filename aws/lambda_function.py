@@ -4160,6 +4160,36 @@ def rag_back_translate(body):
                                 "items": revisadas})
 
 
+def rag_correct_glosses(body):
+    global _CATALOGO_LSB
+    items, error = REVISION.validar_pedido_correccion(body)
+    if error:
+        return build_response(400, {"error": "VALIDATION_ERROR", "message": error})
+    if not ENABLE_BEDROCK:
+        return build_response(200, {"generated": False,
+                                    "reason": "bedrock_desactivado"})
+    if _CATALOGO_LSB is None:
+        _CATALOGO_LSB = EQUIV.cargar_catalogo()
+    if not _CATALOGO_LSB:
+        return build_response(200, {"generated": False, "reason": "sin_catalogo"})
+
+    def invocar(texto: str) -> str:
+        respuesta = bedrock_runtime.invoke_model(
+            modelId=BEDROCK_MODEL_ID, contentType="application/json",
+            accept="application/json",
+            body=json.dumps(_build_bedrock_request_body(
+                texto, max_tokens=REVISION.MAX_TOKENS)))
+        return EQUIV.texto_de_respuesta(json.loads(respuesta["body"].read()))
+
+    try:
+        corregidas = REVISION.corregir(items, _CATALOGO_LSB, invocar)
+    except Exception as e:  # noqa: BLE001 — Bedrock: nunca un 500
+        logger.warning("Corrección de glosas fallida: %s", e)
+        return build_response(200, {"generated": False, "reason": "error_modelo"})
+    return build_response(200, {"generated": True, "model": BEDROCK_MODEL_ID,
+                                "items": corregidas})
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -4187,6 +4217,8 @@ def lambda_handler(event, context):
         return rag_equivalences(body)
     if (body.get("action") or "").strip().lower() == "retrotraducir":
         return rag_back_translate(body)
+    if (body.get("action") or "").strip().lower() == "corregir":
+        return rag_correct_glosses(body)
 
     is_valid, err = validate_request(body)
     if not is_valid:
