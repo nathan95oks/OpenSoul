@@ -53,10 +53,15 @@ quiero quiere queremos quieren debo debe deben puedo puede pueden necesito
 necesita tengo tiene tienen voy va vamos
 """.split())
 
-_NUMEROS = frozenset("""
-cero uno una dos tres cuatro cinco seis siete ocho nueve diez once doce
-veinte treinta cien mil primero primera segundo
-""".split())
+_VALOR = {
+    "cero": 0, "uno": 1, "una": 1, "dos": 2, "tres": 3, "cuatro": 4,
+    "cinco": 5, "seis": 6, "siete": 7, "ocho": 8, "nueve": 9, "diez": 10,
+    "once": 11, "doce": 12, "trece": 13, "catorce": 14, "quince": 15,
+    "veinte": 20, "treinta": 30, "cuarenta": 40, "cincuenta": 50,
+    "sesenta": 60, "setenta": 70, "ochenta": 80, "noventa": 90, "cien": 100,
+    "ciento": 100, "mil": 1000,
+}
+_NUMEROS = frozenset(_VALOR) | {"primero", "primera", "segundo"}
 
 
 def _norm(texto: str) -> str:
@@ -209,18 +214,107 @@ def es_espanol(vuelta: str, glosas: list) -> bool:
     return iguales < len(palabras) or len(palabras) == 1 and len(vuelta) <= 4
 
 
+# Palabras que cambian de género o número sin cambiar de significado: OTRO
+# es «otra», TODO es «toda». Un sustantivo no (CASO no es «casa»).
+_VARIABLES = frozenset("""
+otro todo mismo mucho poco nuevo bueno malo alto bajo gordo flaco negro rojo
+oscuro corto lento caro ultimo proximo pasado primero segundo ninguno alguno
+cuanto solo
+""".split())
+
+
+# Verbos irregulares frecuentes: sus formas no comparten raíz con la glosa.
+_IRREGULARES = {
+    "decir": "dije dijo dijeron dijiste digo dice dicen diga digan dicho",
+    "venir": "vine vino vinieron vengo viene vienen venga",
+    "ir": "fui fue fueron voy va van vaya iré irá",
+    "ser": "fui fue fueron soy es son era eran sea",
+    "hacer": "hice hizo hicieron hago hace hacen haga haré hará hecho",
+    "tener": "tuve tuvo tuvieron tengo tiene tienen tenga tendré",
+    "poder": "pude pudo pudieron puedo puede pueden pueda podré podrá",
+    "saber": "supe supo sé sabe saben sepa sabré",
+    "querer": "quise quiso quiero quiere quieren quiera querré",
+    "poner": "puse puso pongo pone ponga pondré",
+    "traer": "traje trajo trajeron traigo trae traiga",
+}
+_IRREGULARES = {k: {_norm(f) for f in v.split()} for k, v in _IRREGULARES.items()}
+
+
+def _sin_final(w: str) -> str:
+    w = w[:-1] if w.endswith("s") and len(w) > 3 else w
+    return w[:-1] if w[-1:] in "aeo" and len(w) > 3 else w
+
+
+def _forma_de(palabra: str, glosa: str) -> bool:
+    """Si [palabra] es una forma irregular o de otro género de [glosa]:
+    CONTAR/«cuente», ENTENDER/«entiendo», PODER/«puede» (diptongo de un
+    verbo), OTRO/«otra», TODO/«toda» (género de una palabra variable)."""
+    p, g = _norm(palabra), _norm(glosa)
+    if p in _IRREGULARES.get(g, ()):
+        return True
+    if p.endswith("mente") and len(p) > 7:
+        p = p[:-5]  # solamente → sola
+    if g.endswith(("ar", "er", "ir")) and len(g) >= 3:
+        # Diptongo (cuente → contar), e/i (sirve → servir) y raíz de tres
+        # letras (estoy → estar, usando → usar).
+        for forma in (p, p.replace("ue", "o").replace("ie", "e"),
+                      p.replace("i", "e", 1)):
+            raiz = _sin_final(forma)
+            if len(raiz) >= 3 and (g.startswith(raiz) or raiz[:3] == g[:3]
+                                   and len(g) <= 5):
+                return True
+        return False
+    if g.rstrip("s") in _VARIABLES or g in _VARIABLES:
+        return _sin_final(p) == _sin_final(g)
+    # Un sustantivo con diptongo o en plural: COSTO/«cuesta», CUOTA/«cuotas».
+    base = p.replace("ue", "o").replace("ie", "e")
+    return len(g) >= 4 and (base[:4] == g[:4] or p.rstrip("s") == g.rstrip("s"))
+
+
 def conjugada(palabra: str, glosas: list) -> bool:
     """Si [palabra] es una forma de alguna glosa: PERDIMOS de PERDER,
     COMPRÉ de COMPRAR. Entonces no falta. QUIERO/QUERER o TENGO/TENER no
     comparten raíz y sí se marcan: esas glosas no están."""
-    palabra = _norm(palabra)
+    palabra_n = _norm(palabra)
     for g in legibles(glosas):
-        for w in (_norm(x) for x in g.split()):
-            if len(palabra) >= 4 and w[:4] == palabra[:4]:
+        for x in g.split():
+            w = _norm(x)
+            if len(palabra_n) >= 4 and w[:4] == palabra_n[:4]:
                 return True
             # Verbos cortos: IR → «iré», VER → «verla».
-            if 2 <= len(w) <= 3 and palabra.startswith(w):
+            if 2 <= len(w) <= 3 and palabra_n.startswith(w):
                 return True
+            if _forma_de(palabra, x):
+                return True
+    return False
+
+
+def _nombre_propio(palabra: str, texto: str) -> bool:
+    """Si [palabra] va con mayúscula dentro de la frase (Antezana, Beijing)."""
+    for m in re.finditer(r"[A-Za-zÁÉÍÓÚÑáéíóúñ]+", texto):
+        antes = texto[:m.start()].rstrip()
+        if (m.group() == palabra and palabra[:1].isupper() and antes
+                and antes[-1] not in ".?!¿¡:"):
+            return True
+    return False
+
+
+def de_la_frase(palabra: str, texto: str) -> bool:
+    """Si una palabra escrita en las glosas (una seña a incorporar) sale de
+    la frase: la misma o una forma suya. Un nombre propio tiene que estar
+    tal cual: ANTERIOR no es «Antezana» aunque empiecen igual."""
+    if _norm(palabra) in _FUNCION or _norm(palabra) in ("ser", "estar"):
+        return True  # ruido, no una palabra inventada
+    palabras = re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", texto)
+    # Una sigla de las iniciales de la frase: LSB = «Lengua de Señas Boliviana».
+    iniciales = "".join(p[0] for p in palabras if p[:1].isupper())
+    if palabra.isupper() and len(palabra) >= 2 and palabra in iniciales.upper():
+        return True
+    for p in palabras:
+        if _norm(p).rstrip("s") == _norm(palabra).rstrip("s"):
+            return True
+        if not _nombre_propio(p, texto) and conjugada(p, [palabra]):
+            return True
     return False
 
 
@@ -256,10 +350,22 @@ def depurar(texto: str, glosas: list, faltan: list, sobran: list) -> dict:
                 and en_frase[clave] not in quedan_f):
             quedan_f.append(en_frase[clave])
     quedan_s = []
+    # Control fijo, sin depender del modelo: una seña a incorporar escribe una
+    # palabra; si la frase no la tiene, sobra (NEED por «necesita», ANTERIOR
+    # por «Antezana»).
+    for g in glosas:
+        if g.startswith(PENDIENTE):
+            palabra = g[len(PENDIENTE):]
+            partes = palabra.split("_")
+            if not all(de_la_frase(p, texto) for p in partes):
+                legible = palabra.replace("_", " ")
+                if legible not in quedan_s:
+                    quedan_s.append(legible)
     for g in sobran:
         clave = _norm(str(g).replace("_", " ")).strip()
         if (clave in en_glosas and clave not in _SUJETOS
                 and not _en_la_frase(clave, texto)
+                and not all(de_la_frase(p, texto) for p in clave.split())
                 and en_glosas[clave] not in quedan_s):
             quedan_s.append(en_glosas[clave])
     leve = bool(quedan_f) and not quedan_s and all(
@@ -363,8 +469,18 @@ Ejemplo: Frase «Tengo deuda de mi casa.» | Glosas: CASO · DEUDA · MÍO · CA
 Frases:
 {pares}
 
-Responde SOLO con JSON: una lista de glosas por frase, en el mismo orden.
-[["GLOSA", ...], ...]"""
+Responde SOLO con JSON, una entrada por frase con su número:
+[{{"n": 1, "glosas": ["GLOSA", ...]}}, ...]"""
+
+
+def _juntas(clave: str, palabras: list) -> list:
+    """Las palabras seguidas de la frase que, pegadas, dan [clave]."""
+    normas = [_norm(p) for p in palabras]
+    for i in range(len(normas)):
+        for j in range(i + 2, min(i + 4, len(normas)) + 1):
+            if "".join(normas[i:j]) == clave.replace("_", ""):
+                return [_norm(p) for p in palabras[i:j]]
+    return []
 
 
 def glosas_validas(tokens: list, texto: str, catalogo: dict) -> tuple:
@@ -382,6 +498,7 @@ def glosas_validas(tokens: list, texto: str, catalogo: dict) -> tuple:
     siglas = {_norm(w): w.upper() for w in palabras
               if sum(c.isupper() for c in w) >= 2}
     cifras = {w for w in palabras if w.isdigit()}
+    cifras |= {str(_VALOR[_norm(w)]) for w in palabras if _norm(w) in _VALOR}
     limpias = [t.strip() for t in tokens if isinstance(t, str) and t.strip()]
     if len(limpias) != len(tokens):
         return None, ["(vacía)"]
@@ -408,10 +525,12 @@ def glosas_validas(tokens: list, texto: str, catalogo: dict) -> tuple:
                 salida.extend(list(_norm(siglas[clave]).upper()))
             elif palabra in cifras:
                 salida.extend(list(palabra))
-            elif clave and any(conjugada(p, [palabra.replace("_", " ")])
-                               or _norm(p) == _norm(palabra)
-                               for p in palabras):
+            elif clave and all(de_la_frase(x, texto)
+                               for x in palabra.replace("_", " ").split()):
                 salida.append(PENDIENTE + palabra.upper().replace(" ", "_"))
+            elif (juntas := _juntas(clave, palabras)):
+                # Palabras seguidas de la frase escritas pegadas: PORCIENTO.
+                salida.append(PENDIENTE + "_".join(juntas).upper())
             else:
                 invalidas.append(t)
     if invalidas or not salida:
@@ -419,9 +538,30 @@ def glosas_validas(tokens: list, texto: str, catalogo: dict) -> tuple:
     return salida, []
 
 
+def propuestas_por_frase(texto: str, n: int) -> list:
+    """La propuesta de cada frase, por su número: el modelo a veces corre las
+    respuestas un lugar y a una frase le tocaban las glosas de la siguiente.
+    Sin número (formato anterior), por orden."""
+    crudo = _json_lista(texto)
+    if crudo and all(isinstance(x, dict) for x in crudo):
+        por_n = {x.get("n"): x.get("glosas") for x in crudo}
+        return [por_n.get(i + 1) for i in range(n)]
+    return (crudo + [None] * n)[:n]
+
+
+def sin_sobras(glosas: list, sobran: list) -> list:
+    """Las glosas sin las que sobran: ya se comprobó que la frase no las
+    dice, así que quitarlas es seguro (un NO añadido cambia el sentido)."""
+    quitar = {_norm(s).replace(" ", "_") for s in sobran}
+    return [g for g in glosas
+            if _norm(g[len(PENDIENTE):] if g.startswith(PENDIENTE) else g)
+            .replace(" ", "_") not in quitar]
+
+
 def corregir(items: list, catalogo: dict, invocar) -> list:
     """[{texto, aceptada, glosas, faltan, sobran, motivo}]."""
-    propuestas = _json_lista(invocar(prompt_corregir(items, catalogo)))
+    propuestas = propuestas_por_frase(
+        invocar(prompt_corregir(items, catalogo)), len(items))
     candidatas = []
     for i, it in enumerate(items):
         tokens = propuestas[i] if i < len(propuestas) else None
@@ -448,9 +588,10 @@ def corregir(items: list, catalogo: dict, invocar) -> list:
         antes = len(it["faltan"]) + len(it["sobran"])
         despues = len(nueva["faltan"]) + len(nueva["sobran"])
         if despues < antes and len(nueva["sobran"]) <= len(it["sobran"]):
-            salida.append({**base, "aceptada": True, "glosas": glosas,
-                           "faltan": nueva["faltan"],
-                           "sobran": nueva["sobran"], "motivo": ""})
+            salida.append({**base, "aceptada": True,
+                           "glosas": sin_sobras(glosas, nueva["sobran"]),
+                           "faltan": nueva["faltan"], "sobran": [],
+                           "motivo": ""})
         else:
             salida.append({**base, "motivo":
                            f"no mejora ({antes} → {despues} errores)"})
