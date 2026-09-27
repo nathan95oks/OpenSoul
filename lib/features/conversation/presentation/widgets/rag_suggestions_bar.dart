@@ -50,8 +50,9 @@ class RagSuggestionsBar extends StatelessWidget {
                   key: ValueKey('${s.scenarioId}#${s.text}'),
                   index: i,
                   child: PressableScale(
-                    child: _SuggestionCard(
-                      suggestion: s,
+                    child: RagPhraseCard(
+                      text: s.text,
+                      glosses: s.glosses,
                       onTap: () => onReply(s),
                     ),
                   ),
@@ -64,17 +65,24 @@ class RagSuggestionsBar extends StatelessWidget {
   }
 }
 
-class _SuggestionCard extends StatelessWidget {
-  final RagSuggestion suggestion;
+/// Una frase documentada con su secuencia LSB, lista para enviar.
+class RagPhraseCard extends StatelessWidget {
+  final String text;
+  final List<String> glosses;
   final VoidCallback onTap;
 
-  const _SuggestionCard({required this.suggestion, required this.onTap});
+  const RagPhraseCard({
+    super.key,
+    required this.text,
+    required this.glosses,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: suggestion.text,
+      label: text,
       excludeSemantics: true,
       child: Material(
         color: AppTheme.framedSurface,
@@ -96,7 +104,7 @@ class _SuggestionCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  suggestion.text,
+                  text,
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -105,7 +113,7 @@ class _SuggestionCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  suggestion.glosses.join(' · '),
+                  glosses.join(' · '),
                   style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,

@@ -124,3 +124,81 @@ class RagVariant {
     ],
   );
 }
+
+/// Un trámite con lo que una persona sorda puede decir para abrirlo o
+/// preguntar sobre él.
+class RagProcedure {
+  final String scenarioId;
+  final String title;
+  final List<RagTurn> phrases;
+
+  const RagProcedure({
+    required this.scenarioId,
+    required this.title,
+    required this.phrases,
+  });
+}
+
+/// Una institución (área del corpus: DDRR, SEGIP…) con sus trámites.
+class RagTopic {
+  final String area;
+  final String institution;
+  final List<RagProcedure> procedures;
+
+  const RagTopic({
+    required this.area,
+    required this.institution,
+    required this.procedures,
+  });
+}
+
+extension RagCorpusTopics on RagCorpus {
+  /// Lo que la persona sorda puede decir para iniciar, por institución: la
+  /// frase con que abrió cada situación y sus preguntas. Se dejan fuera las
+  /// que solo se entienden a mitad del diálogo («¿Entonces no pago…?»,
+  /// «¿Eso incluye…?») y, como siempre, lo no aprobado o sin glosas.
+  List<RagTopic> get deafTopics {
+    final byArea = <String, List<RagScenario>>{};
+    for (final s in scenarios) {
+      final parts = s.id.split('-');
+      if (parts.length < 3) continue;
+      byArea.putIfAbsent(parts[1], () => []).add(s);
+    }
+    return [
+      for (final e in byArea.entries)
+        if (_proceduresOf(e.value) case final procedures
+            when procedures.isNotEmpty)
+          RagTopic(
+            area: e.key,
+            institution: e.value.first.institution,
+            procedures: procedures,
+          ),
+    ];
+  }
+
+  static final RegExp _anaphoric = RegExp(
+    r'^¿?\s*(entonces|eso|ese|esa|esos|esas|después|también|y)\b',
+    caseSensitive: false,
+  );
+
+  static List<RagProcedure> _proceduresOf(List<RagScenario> scenarios) {
+    final seen = <String>{};
+    final out = <RagProcedure>[];
+    for (final s in scenarios) {
+      final phrases = [
+        for (final t in s.turns)
+          if (t.isOfferableReply &&
+              (t.n == 1 || t.text.contains('?')) &&
+              !_anaphoric.hasMatch(t.text) &&
+              seen.add(t.text))
+            t,
+      ];
+      if (phrases.isNotEmpty) {
+        out.add(
+          RagProcedure(scenarioId: s.id, title: s.procedure, phrases: phrases),
+        );
+      }
+    }
+    return out;
+  }
+}

@@ -1,7 +1,7 @@
 # RAG de conocimiento institucional — diseño
 
-Estado: **fases 0 y 1 hechas** (corpus validado, recuperación local en el
-chat); fases 2–3 propuestas. Rama
+Estado: **fases 0 y 1 hechas**, con los casos 1 y 2 (corpus validado,
+recuperación local en el chat); fases 2–3 propuestas. Rama
 `feat/rag-conocimiento-institucional`.
 
 ## 1. Qué problema resuelve
@@ -126,8 +126,13 @@ sugerencia, y cada tarjeta muestra su secuencia LSB como hoy.
   - las frases sin relación no sugieren nada;
   - solo se ofrecen tarjetas aprobadas con glosas;
   - el RAG no entra cuando el grafo reconoce la pregunta.
-- Queda para después el caso 2: la persona sorda abre el turno y se le
-  ofrecen preguntas del trámite.
+- **Caso 2 (hecho):** «Preguntar sobre un trámite», debajo de
+  «Iniciar/Responder con tarjetas LSB». Abre `RagTopicsSheet`: primero la
+  institución y después, por trámite, las frases de apertura y las preguntas
+  del usuario sordo (`RagCorpus.deafTopics`), con su LSB. Quedan fuera las
+  frases que solo se entienden a mitad del diálogo («¿Entonces…?»,
+  «¿Eso…?»). La frase elegida se envía y se lee en voz alta
+  (`test/rag_topics_test.dart`).
 
 ### Fase 2: recuperación semántica en AWS
 
