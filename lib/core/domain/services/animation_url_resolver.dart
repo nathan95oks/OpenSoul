@@ -1,3 +1,5 @@
+import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+
 class AnimationUrlResolver {
   /// Modelo distribuido dentro del APK/IPA. Todos los clips disponibles viven
   /// en este GLB, por lo que queda precargado desde la instalacion.
@@ -157,6 +159,9 @@ class AnimationUrlResolver {
       resolveAll(gloss: gloss, animationFile: animationFile).first;
 
   List<String> resolveAll({required String gloss, String? animationFile}) {
+    // Sin seña en el catálogo: un solo paso con el aviso, sin deletrear.
+    if (PendingSign.isPending(gloss)) return ['$placeholderScheme$gloss'];
+
     // Se compara por la forma canonica: los digitos del catalogo tienen que
     // encontrar la animacion que se horneo con su nombre en letras.
     final cleanGloss = canonicalFor(gloss);

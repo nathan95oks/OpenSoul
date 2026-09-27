@@ -813,6 +813,7 @@
     "version": 1,
     "intent": "askInformation",
     "requestedSlots": [
+     "object",
      "description"
     ],
     "mentionedContexts": [],
@@ -961,8 +962,10 @@
    ],
    "semanticTurn": {
     "version": 1,
-    "intent": "mentionContext",
-    "requestedSlots": [],
+    "intent": "askInformation",
+    "requestedSlots": [
+     "object"
+    ],
     "mentionedContexts": [
      {
       "id": "denuncia_robo",
@@ -973,7 +976,7 @@
      }
     ],
     "negations": [],
-    "confidence": 0.8
+    "confidence": 0.9
    }
   },
   {
@@ -2953,8 +2956,10 @@
    ],
    "semanticTurn": {
     "version": 1,
-    "intent": "mentionContext",
-    "requestedSlots": [],
+    "intent": "askInformation",
+    "requestedSlots": [
+     "object"
+    ],
     "mentionedContexts": [
      {
       "id": "denuncia_robo",
@@ -2965,7 +2970,7 @@
      }
     ],
     "negations": [],
-    "confidence": 0.8
+    "confidence": 0.9
    }
   },
   {
@@ -3419,6 +3424,7 @@
     "version": 1,
     "intent": "askInformation",
     "requestedSlots": [
+     "object",
      "description"
     ],
     "mentionedContexts": [],
@@ -5734,6 +5740,7 @@
     "version": 1,
     "intent": "askInformation",
     "requestedSlots": [
+     "object",
      "description"
     ],
     "mentionedContexts": [],
@@ -6192,8 +6199,10 @@
    ],
    "semanticTurn": {
     "version": 1,
-    "intent": "mentionContext",
-    "requestedSlots": [],
+    "intent": "askInformation",
+    "requestedSlots": [
+     "object"
+    ],
     "mentionedContexts": [
      {
       "id": "denuncia_robo",
@@ -6204,7 +6213,7 @@
      }
     ],
     "negations": [],
-    "confidence": 0.8
+    "confidence": 0.9
    },
    "glosasSimuladas": true
   },
@@ -6724,6 +6733,7 @@
     "version": 1,
     "intent": "askInformation",
     "requestedSlots": [
+     "object",
      "description"
     ],
     "mentionedContexts": [],

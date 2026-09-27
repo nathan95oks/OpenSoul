@@ -11,6 +11,7 @@ import math
 import os
 import re
 import sys
+import tempfile
 import unicodedata
 import unittest
 from unittest import mock
@@ -54,6 +55,16 @@ def indice_completo() -> dict:
 
 
 class ModuloRag(unittest.TestCase):
+    def test_corpus_corrupto_desactiva_rag_sin_error(self):
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8",
+                                         suffix=".json", delete=False) as f:
+            f.write("{no-json")
+            ruta = f.name
+        try:
+            self.assertIsNone(RAG.cargar_corpus(ruta))
+        finally:
+            os.unlink(ruta)
+
     def test_indexa_preguntas_del_funcionario_con_respuestas_ofrecibles(self):
         self.assertGreater(len(LISTA), 200)
         for e in LISTA:

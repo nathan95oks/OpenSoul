@@ -5,6 +5,7 @@ import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
@@ -48,13 +49,36 @@ class ConversationHandoff {
 
     // La parte del grafo con la que se responde. Una conversación restaurada
     // no guarda rutas (son derivadas): se recalculan aquí.
-    final route =
+    final graphRoute =
         pending.route ??
         routeForTurn(
           ref,
           pending,
           activeContextId: conversation.activeContextId,
         )?.route;
+    // Donde el grafo no tiene ruta segura, la pregunta del trámite
+    // documentado que se le parece (Trámites, RAG). La consulta por
+    // significado se lanzó al llegar el turno: aquí solo se usa si ya volvió.
+    final retriever = ref.read(ragRetrieverProvider);
+    final route = graphRoute == null
+        ? null
+        : ragTramiteRoute(
+                conversation,
+                pending,
+                graphRoute,
+                retriever,
+                remote:
+                    ref
+                        .read(
+                          remoteRagSuggestionsProvider(
+                            ragRemoteQueryFor(conversation, pending, retriever),
+                          ),
+                        )
+                        .asData
+                        ?.value ??
+                    const [],
+              ) ??
+              graphRoute;
 
     return CardsFlowLaunch.reply(
       conversationId: conversation.id,

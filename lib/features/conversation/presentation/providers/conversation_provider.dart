@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
@@ -56,6 +57,7 @@ class ConversationNotifier extends Notifier<ConversationState> {
       state = ConversationState(
         conversation: state.conversation.replaceTurn(turn),
       );
+      _anticiparTramite(turn);
       if (turn.route?.needsModel ?? false) {
         unawaited(_refineRoute(turn, activeContextId));
       }
@@ -86,6 +88,27 @@ class ConversationNotifier extends Notifier<ConversationState> {
     }
     final routed = routeForTurn(ref, turn, activeContextId: activeContextId);
     return routed ?? turn;
+  }
+
+  /// Si el grafo no tiene ruta segura y la búsqueda por palabras no encuentra
+  /// un trámite, se pregunta ya a la Lambda por significado: cuando la
+  /// persona sorda toque «Responder con tarjetas LSB» la respuesta estará.
+  void _anticiparTramite(ConversationTurn turn) {
+    final route = turn.route;
+    if (route == null || !ragMayAskRemote(route)) return;
+    if (ref.read(remoteRagProvider) == null) return;
+    final retriever = ref.read(ragRetrieverProvider);
+    final conversation = state.conversation;
+    if (ragTramiteRoute(conversation, turn, route, retriever) != null) return;
+    unawaited(
+      ref
+          .read(
+            remoteRagSuggestionsProvider(
+              ragRemoteQueryFor(conversation, turn, retriever),
+            ).future,
+          )
+          .then((_) {}, onError: (_) {}),
+    );
   }
 
   /// Desempate con el modelo cuando el determinista dejó varias rutas

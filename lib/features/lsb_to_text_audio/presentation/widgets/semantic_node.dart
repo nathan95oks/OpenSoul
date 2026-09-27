@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/di/injection.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/sign_image.dart';
@@ -291,10 +292,17 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
   /// vive dentro del padding, de ahí los márgenes negativos.
   Widget _relleno(bool selected, double paddingV) {
     final radio = _radio - (selected ? 2.0 : 1.2);
-    final color = selected
+    // Con una palabra sin seña el agua es celeste, como la palabra: lo que se
+    // verá es que esa seña está en espera para el avatar.
+    final pendiente = _tienePendientes;
+    final color = pendiente
+        ? AppTheme.pendingSignOnDark.withValues(alpha: selected ? 0.4 : 0.6)
+        : selected
         ? const Color(0xFFC084FC).withValues(alpha: 0.38)
         : const Color(0xFF7C3AED).withValues(alpha: 0.45);
-    final linea = selected
+    final linea = pendiente
+        ? AppTheme.pendingSign.withValues(alpha: 0.8)
+        : selected
         ? Colors.white.withValues(alpha: 0.75)
         : const Color(0xFFC084FC).withValues(alpha: 0.9);
     return Positioned(
@@ -333,18 +341,48 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
     );
   }
 
-  Widget _etiqueta(Color color, bool selected) => Text(
-    widget.card.displayText.replaceAll('_', ' '),
-    textAlign: TextAlign.center,
-    softWrap: true,
-    style: TextStyle(
+  bool get _tienePendientes =>
+      widget.card.displayText.contains(PendingSign.prefix);
+
+  /// La secuencia de la tarjeta. Una palabra sin seña en el catálogo va en
+  /// azul claro y en español, no con su marca.
+  Widget _etiqueta(Color color, bool selected) {
+    final style = TextStyle(
       fontSize: 18,
       fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
       color: color,
       letterSpacing: 0.5,
       height: 1.2,
-    ),
-  );
+    );
+    if (!_tienePendientes) {
+      return Text(
+        widget.card.displayText.replaceAll('_', ' '),
+        textAlign: TextAlign.center,
+        softWrap: true,
+        style: style,
+      );
+    }
+    final azul = selected ? AppTheme.pendingSignOnDark : AppTheme.pendingSign;
+    final piezas = widget.card.displayText.split(' · ');
+    return Text.rich(
+      TextSpan(
+        children: [
+          for (final (i, p) in piezas.indexed) ...[
+            if (i > 0) const TextSpan(text: ' · '),
+            PendingSign.isPending(p)
+                ? TextSpan(
+                    text: PendingSign.wordOf(p),
+                    style: TextStyle(color: azul),
+                  )
+                : TextSpan(text: p.replaceAll('_', ' ')),
+          ],
+        ],
+      ),
+      textAlign: TextAlign.center,
+      softWrap: true,
+      style: style,
+    );
+  }
 }
 
 /// Pulsación larga que también avisa cuando pierde la arena ante otro gesto.

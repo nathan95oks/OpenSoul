@@ -66,6 +66,12 @@ class AppTheme {
   static const Color lsbVioletDeep = Color(0xFF660066);
   static const Color lsbVioletLight = Color(0xFFC084FC);
 
+  // ---- Seña a incorporar -------------------------------------------------------
+  // Una palabra sin seña en el catálogo: el azul del audio, no el violeta de
+  // LSB, porque todavía no es una seña. Claro sobre la burbuja violeta.
+  static const Color pendingSign = audioActionBlue;
+  static const Color pendingSignOnDark = Color(0xFFBFDBFE);
+
   static InputDecoration lightInputDecoration({
     String? hintText,
     String? labelText,

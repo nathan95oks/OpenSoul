@@ -1,4 +1,5 @@
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 
 /// Lo que el avatar reproduce para previsualizar una tarjeta.
 ///
@@ -19,9 +20,14 @@ class SignPreviewPlan {
 
   /// Hay al menos una seña que el avatar sabe hacer. Una secuencia hecha solo
   /// de marcadores de posición no tiene nada que enseñar.
-  bool get isPlayable => animationUrls.any(
-    (url) => !url.startsWith(AnimationUrlResolver.placeholderScheme),
-  );
+  ///
+  /// Una palabra sin seña en el catálogo sí se enseña: el avatar dice que su
+  /// seña está en espera, en lugar de no abrir nada.
+  bool get isPlayable =>
+      animationUrls.any(
+        (url) => !url.startsWith(AnimationUrlResolver.placeholderScheme),
+      ) ||
+      glosses.any(PendingSign.isPending);
 }
 
 /// Pasa una secuencia de glosas a los pasos del avatar, en el dispositivo.

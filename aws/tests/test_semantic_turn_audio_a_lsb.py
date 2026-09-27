@@ -200,7 +200,9 @@ class DatoPedidoFrenteAlTema(unittest.TestCase):
     def test_polar_sola_no_pide_dato(self):
         lectura = _lectura("¿Te robaron el celular?", ["TU", "CELULAR", "ROBAR"])
         self.assertEqual(lectura["requestedSlots"], [])
-        self.assertEqual(_lectura("¿Qué te robaron?", ["QUE", "TU", "ROBAR"])["requestedSlots"], [])
+        self.assertEqual(
+            _lectura("¿Qué te robaron?", ["QUE", "TU", "ROBAR"])["requestedSlots"],
+            ["object"])
 
     def test_polar_y_dato_en_la_misma_intervencion(self):
         lectura = _lectura("¿Te robaron el celular y cuándo fue?",

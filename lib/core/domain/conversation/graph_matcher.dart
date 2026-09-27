@@ -107,7 +107,10 @@ class GraphMatcher {
 
   late final List<_Signature> _signatures = [
     for (final e in catalog.replyEntries)
-      _Signature(e, catalog.answerSlotsOf(e.questionId)),
+      _Signature(
+        e,
+        catalog.answerSlotsOf(e.questionId).difference(const {'object'}),
+      ),
   ];
 
   late final Map<String, int> _questionFrequency = () {
@@ -165,7 +168,8 @@ class GraphMatcher {
       final full = sig.content.every(content.contains);
       final distinctive = shared.where(distinctiveHere).toSet();
       if (!full && distinctive.isEmpty) continue;
-      if (!_slotsAgree(sig.slots, slots, polar: sig.polar)) continue;
+      final answerSlots = _answerSlotsFor(sig, slots);
+      if (!_slotsAgree(answerSlots, slots, polar: sig.polar)) continue;
       // Una pregunta de sí/no reconocida solo por la palabra que nombra el
       // contexto («¿Desea presentar una denuncia?» ante «¿Quiere denunciar
       // algo?») no es un dato pedido: es nombrar el contexto.
@@ -186,9 +190,9 @@ class GraphMatcher {
         score = strongMatch;
       }
       if (score < weakMatch) continue;
-      final answered = sig.slots.isEmpty && sig.polar
+      final answered = answerSlots.isEmpty && sig.polar
           ? slots.intersection(const {'polarity'})
-          : sig.slots.intersection(slots);
+          : answerSlots.intersection(slots);
       found.add(_Found(sig, score, answered, shared));
     }
 
@@ -229,7 +233,7 @@ class GraphMatcher {
       final questions = {
         for (final s in _signatures)
           if (s.content.contains(gloss) &&
-              _slotsAgree(s.slots, slots, polar: s.polar))
+              _slotsAgree(_answerSlotsFor(s, slots), slots, polar: s.polar))
             s.entry.questionId,
       };
       return questions.isNotEmpty &&
@@ -329,9 +333,10 @@ class GraphMatcher {
         return;
       }
       final sig = hit.signature;
-      final answered = sig.slots.isEmpty && sig.polar
+      final answerSlots = _answerSlotsFor(sig, slots);
+      final answered = answerSlots.isEmpty && sig.polar
           ? slots.intersection(const {'polarity'})
-          : sig.slots.intersection(slots);
+          : answerSlots.intersection(slots);
       found.add(_Found(sig, score, answered, const {}));
     }
 
@@ -415,8 +420,9 @@ class GraphMatcher {
       if (known.isEmpty) continue;
       final knownWeight = weightOf(known);
       for (final sig in _signatures) {
+        final answerSlots = _answerSlotsFor(sig, slots);
         if (slots.isNotEmpty &&
-            !_slotsAgree(sig.slots, slots, polar: sig.polar)) {
+            !_slotsAgree(answerSlots, slots, polar: sig.polar)) {
           continue;
         }
         final tokens = _entryTokens[sig.entry.id]!;
@@ -544,6 +550,14 @@ class GraphMatcher {
     }
     return data.isEmpty || (polar && turn.contains('polarity'));
   }
+
+  Set<String> _answerSlotsFor(_Signature signature, Set<String> requested) => {
+    ...signature.slots,
+    if (requested.contains('object'))
+      ...LsbGlossSemantics.spokenSlotsOf(
+        signature.entry.phrase,
+      ).where((slot) => slot == 'object'),
+  };
 
   /// Una por pregunta, sin las que otra más específica ya contiene, en el
   /// orden en que el oyente las hizo.
@@ -681,9 +695,13 @@ class GraphMatcher {
     for (final entry in catalog.replyEntries) {
       final tokens = _entryTokens[entry.id]!;
       if (tokens.isEmpty) continue;
+      final answerSlots = {
+        ...catalog.answerSlotsOf(entry.questionId),
+        ...LsbGlossSemantics.spokenSlotsOf(entry.phrase),
+      };
       if (requested.isNotEmpty &&
           !_slotsAgree(
-            LsbGlossSemantics.questionSlotsOf(entry.glosses),
+            answerSlots,
             requested,
             polar:
                 entry.glosses.isNotEmpty &&
@@ -709,7 +727,9 @@ class GraphMatcher {
           questionId: entry.questionId,
           nodeId: entry.id,
           scope: entry.scope,
-          slots: LsbGlossSemantics.questionSlotsOf(entry.glosses).toList(),
+          slots: requested.isEmpty
+              ? answerSlots.toList()
+              : answerSlots.intersection(requested).toList(),
           score: score.clamp(0, 1).toDouble(),
         );
       }

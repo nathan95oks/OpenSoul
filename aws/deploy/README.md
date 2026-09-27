@@ -10,6 +10,22 @@ python aws/deploy/build_package.py
 
 ---
 
+## 0.1 Equivalencias con señas del catálogo (septiembre 2026)
+
+El paquete lleva también `rag_equivalencias.py` y el catálogo de señas de la
+app (`glosas_opensoul.csv`). Añade la acción `equivalencias`: para las
+palabras del corpus RAG que no tienen seña, el modelo de redacción
+(`BEDROCK_MODEL_ID`, el mismo que ya usa la Lambda) propone una seña oficial
+equivalente o ninguna, y la Lambda descarta cualquier glosa fuera del
+catálogo. No necesita permisos nuevos. Se usa desde el repositorio:
+
+```bash
+python tool/rag_equivalencias.py   # escribe docs/negocio/rag/senas_equivalentes.json
+python tool/build_rag_corpus.py    # aplica las aprobadas
+```
+
+La app no llama a esta acción.
+
 ## 0. RAG por significado (septiembre 2026): pasos nuevos
 
 El paquete incluye ahora `rag_consulta.py` y el corpus RAG
@@ -40,9 +56,10 @@ palabras.
 
 Variables de entorno opcionales: `RAG_EMBEDDING_MODEL` (por defecto
 `amazon.titan-embed-text-v2:0`), `RAG_EMBEDDING_DIM` (256) y
-`RAG_MIN_SIMILARITY` (0.46, calibrado con `tool/rag_calibrar.py`: paráfrasis
-bien encaminadas 0.48–0.79, frases sin relación hasta 0.444; súbelo si
-aparecen sugerencias poco relacionadas y bájalo si faltan).
+`RAG_MIN_SIMILARITY` (0.59, calibrado con `tool/rag_calibrar.py`: la charla
+de ventanilla sin trámite llega a 0.568 y con 0.46 recibía respuestas
+inventadas; súbelo si aparecen sugerencias poco relacionadas y bájalo si
+faltan).
 
 ## 1. Qué cambia y por qué importa el orden
 
@@ -84,8 +101,9 @@ están en caché.
 Ninguna externa nueva: solo la biblioteca estándar más `boto3`, que el
 entorno de Lambda ya provee. Pero el paquete **no** es un único archivo:
 `lambda_function.py` importa `guided_composer.py` (que lee
-`question_bank.json`) y `rag_consulta.py` (que lee
-`rag_escenarios_cbba.json`). `build_package.py` mete los cinco en el ZIP; si
+`question_bank.json`), `rag_consulta.py` (que lee
+`rag_escenarios_cbba.json`) y `rag_equivalencias.py` (que lee
+`glosas_opensoul.csv`). `build_package.py` mete los siete en el ZIP; si
 alguno falta, la Lambda no arranca, certifica redacciones que ya no
 coinciden con el banco o no puede consultar el RAG.
 

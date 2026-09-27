@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/domain/services/context_catalog.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart'
     show kEvidenceMarker, kVehicleMarker, kVictimMarker;
@@ -17,8 +18,14 @@ import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart
 /// `aws/tests/test_corpus_v4.py` leyendo el documento del corpus.
 void main() {
   final corpus = {
-    for (final e in (jsonDecode(File('assets/dictionary/official_dictionary.json')
-            .readAsStringSync()) as Map<String, dynamic>)['entries'] as List)
+    for (final e
+        in (jsonDecode(
+                  File(
+                    'assets/dictionary/official_dictionary.json',
+                  ).readAsStringSync(),
+                )
+                as Map<String, dynamic>)['entries']
+            as List)
       (e as Map<String, dynamic>)['gloss'] as String,
   };
   final bank = QuestionBank.generated();
@@ -62,29 +69,38 @@ void main() {
     expect(fuera, isEmpty);
   });
 
-  test('allFormulationGlossesExistInCorpusV4: secuencias del grafo que carga la app',
-      () {
-    final grafo = jsonDecode(File('assets/dialogue/dialogue_graph.json')
-        .readAsStringSync()) as Map<String, dynamic>;
-    final fuera = [
-      for (final n in grafo['nodes'] as List)
-        for (final g in ((n as Map<String, dynamic>)['formulationGlosses'] as List? ??
-            const []))
-          if (!piezaValida(g as String)) '${n['id']}: $g',
-    ];
-    expect(fuera, isEmpty);
-  });
+  test(
+    'allFormulationGlossesExistInCorpusV4: secuencias del grafo que carga la app',
+    () {
+      final grafo =
+          jsonDecode(
+                File('assets/dialogue/dialogue_graph.json').readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final fuera = [
+        for (final n in grafo['nodes'] as List)
+          for (final g
+              in ((n as Map<String, dynamic>)['formulationGlosses'] as List? ??
+                  const []))
+            if (!piezaValida(g as String)) '${n['id']}: $g',
+      ];
+      expect(fuera, isEmpty);
+    },
+  );
 
-  test('allFormulationGlossesExistInCorpusV4: formulación que muestra la app', () {
-    final fuera = [
-      for (final q in bank.allQuestions)
-        for (final g in q.lsb.glosses)
-          if (!piezaValida(g)) '${q.id}: $g',
-    ];
-    expect(fuera, isEmpty);
-    expect(piezaValida('d(FISCAL1)'), isFalse);
-    expect(piezaValida('DINERO'), isFalse);
-  });
+  test(
+    'allFormulationGlossesExistInCorpusV4: formulación que muestra la app',
+    () {
+      final fuera = [
+        for (final q in bank.allQuestions)
+          for (final g in q.lsb.glosses)
+            if (!piezaValida(g)) '${q.id}: $g',
+      ];
+      expect(fuera, isEmpty);
+      expect(piezaValida('d(FISCAL1)'), isFalse);
+      expect(piezaValida('DINERO'), isFalse);
+    },
+  );
 
   test('allLsbGlossesExistInCorpusV4: tarjetas de los recorridos visibles', () {
     // Lo que puede aparecer en pantalla: las opciones de cada paso de los
@@ -111,14 +127,21 @@ void main() {
       for (final c in allSelectableContexts)
         for (final z in c.zones)
           for (final g in z.glossAllowlist)
-            if (!corpus.contains(g) && !marcadores.contains(g)) '${c.id}.${z.id}: $g',
+            if (!corpus.contains(g) && !marcadores.contains(g))
+              '${c.id}.${z.id}: $g',
     ];
     expect(fuera, isEmpty);
   });
 
   test('los ocho contextos seleccionables tienen su recorrido en el banco', () {
+    // Los trámites documentados (RAG) viven en el banco del módulo de
+    // tarjetas, no en el que comparte la Lambda.
+    final modulo = RagTramites.bankWithTramites();
     for (final c in allSelectableContexts) {
-      expect(bank.journey(c.id), isNotNull, reason: c.id);
+      expect(modulo.journey(c.id), isNotNull, reason: c.id);
+    }
+    for (final id in RagTramites.contextIds) {
+      expect(bank.journey(id), isNull, reason: id);
     }
   });
 }

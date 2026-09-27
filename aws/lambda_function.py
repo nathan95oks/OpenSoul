@@ -23,6 +23,7 @@ from guided_composer import Composer as GuidedComposer
 from guided_composer import EDITOR_KEYS as GUIDED_EDITOR_KEYS
 from guided_composer import load_bank as load_guided_bank
 import rag_consulta as RAG
+import rag_equivalencias as EQUIV
 
 import boto3
 from botocore.exceptions import ClientError
@@ -4083,6 +4084,47 @@ def rag_index_batch():
                                 "pending": len(lista) - hechas, "index": clave})
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# EQUIVALENCIAS CON SEÑAS DEL CATÁLOGO (action: "equivalencias")
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# Para el vocabulario del corpus RAG: Bedrock propone una seña oficial
+# equivalente para cada palabra sin seña, o ninguna. Ver `rag_equivalencias.py`.
+# Solo lo usa `tool/rag_equivalencias.py`; la app no lo llama.
+
+_CATALOGO_LSB = None
+
+
+def rag_equivalences(body):
+    global _CATALOGO_LSB
+    palabras, error = EQUIV.validar_pedido(body)
+    if error:
+        return build_response(400, {"error": "VALIDATION_ERROR", "message": error})
+    if not ENABLE_BEDROCK:
+        return build_response(200, {"generated": False,
+                                    "reason": "bedrock_desactivado"})
+    if _CATALOGO_LSB is None:
+        _CATALOGO_LSB = EQUIV.cargar_catalogo()
+    if not _CATALOGO_LSB:
+        return build_response(200, {"generated": False, "reason": "sin_catalogo"})
+
+    def invocar(texto: str) -> str:
+        respuesta = bedrock_runtime.invoke_model(
+            modelId=BEDROCK_MODEL_ID, contentType="application/json",
+            accept="application/json",
+            body=json.dumps(_build_bedrock_request_body(
+                texto, max_tokens=EQUIV.MAX_TOKENS)))
+        return EQUIV.texto_de_respuesta(json.loads(respuesta["body"].read()))
+
+    try:
+        propuestas = EQUIV.proponer(palabras, _CATALOGO_LSB, invocar)
+    except Exception as e:  # noqa: BLE001 — Bedrock: nunca un 500
+        logger.warning("Equivalencias fallidas: %s", e)
+        return build_response(200, {"generated": False, "reason": "error_modelo"})
+    return build_response(200, {"generated": True, "model": BEDROCK_MODEL_ID,
+                                "propuestas": propuestas})
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -4106,6 +4148,8 @@ def lambda_handler(event, context):
         return rag_consult(body)
     if (body.get("action") or "").strip().lower() == "rag_indexar":
         return rag_index_batch()
+    if (body.get("action") or "").strip().lower() == "equivalencias":
+        return rag_equivalences(body)
 
     is_valid, err = validate_request(body)
     if not is_valid:

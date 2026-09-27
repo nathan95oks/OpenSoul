@@ -19,11 +19,6 @@ import 'package:lsb_legal_app/features/conversation/presentation/providers/conve
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/avatar_playback_sheet.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/turn_bubble.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/quick_reply_bar.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/widgets/rag_suggestions_bar.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/widgets/rag_topics_sheet.dart';
-import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
-import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 class ConversationScreen extends ConsumerStatefulWidget {
@@ -133,41 +128,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         : null;
   }
 
-  /// Una respuesta documentada en una situación parecida: queda enlazada a
-  /// la pregunta del funcionario que responde.
-  Future<void> _enviarSugerencia(RagSuggestion sugerencia) async {
-    final pregunta = ref.read(conversationProvider).conversation.pendingReply;
-    ref
-        .read(conversationProvider.notifier)
-        .addDeafDeclaration(
-          result: TranslationResult(
-            baseSentence: sugerencia.text,
-            generatedText: sugerencia.text,
-          ),
-          glosses: sugerencia.glosses,
-          replyToId: pregunta?.message.id,
-        );
-    await ref.read(audioOutputProvider).speak(sugerencia.text);
-  }
-
-  /// La persona sorda abre el turno con una frase de una situación real del
-  /// trámite que elija.
-  Future<void> _preguntarSobreTramite(List<RagTopic> tramites) async {
-    FocusManager.instance.primaryFocus?.unfocus();
-    final frase = await RagTopicsSheet.show(context, tramites);
-    if (frase == null || !mounted) return;
-    ref
-        .read(conversationProvider.notifier)
-        .addDeafDeclaration(
-          result: TranslationResult(
-            baseSentence: frase.text,
-            generatedText: frase.text,
-          ),
-          glosses: frase.glosses,
-        );
-    await ref.read(audioOutputProvider).speak(frase.text);
-  }
-
   Future<void> _enviarRespuestaRapida(List<String> glosses, String text) async {
     ref
         .read(conversationProvider.notifier)
@@ -263,9 +223,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(conversationProvider);
-    final situaciones = ref.watch(ragSuggestionsProvider);
-    final tramites =
-        ref.watch(ragCorpusProvider).asData?.value.deafTopics ?? const [];
     ref.watch(lexiconEntriesProvider);
     ref.listen(conversationProvider, (prev, next) {
       final antes = prev?.conversation.turns.length ?? 0;
@@ -411,13 +368,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                       ),
                     if (_instruccionPendiente(state) != null)
                       QuickReplyBar(onReply: _enviarRespuestaRapida),
-                    // Cuando el grafo no reconoce la pregunta: respuestas
-                    // de situaciones reales documentadas en Cochabamba.
-                    if (situaciones.isNotEmpty)
-                      RagSuggestionsBar(
-                        suggestions: situaciones,
-                        onReply: _enviarSugerencia,
-                      ),
                   ],
                 ),
               ),
@@ -428,9 +378,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 onDeafCards: _openCardsFlow,
                 deafCardsMode: _deafCardsMode(state),
                 hearingFocus: _hearingFocus,
-                onAskAboutProcedure: tramites.isEmpty
-                    ? null
-                    : () => _preguntarSobreTramite(tramites),
               ),
             ],
           ),
@@ -447,17 +394,12 @@ class _InputArea extends StatelessWidget {
   final CardsFlowPurpose deafCardsMode;
   final FocusNode hearingFocus;
 
-  /// Preguntar sobre un trámite con situaciones reales (RAG). `null` si el
-  /// corpus no está disponible.
-  final VoidCallback? onAskAboutProcedure;
-
   const _InputArea({
     required this.onHearingText,
     required this.onHearingSpeech,
     required this.onDeafCards,
     required this.deafCardsMode,
     required this.hearingFocus,
-    this.onAskAboutProcedure,
   });
 
   /// El botón dice lo que va a pasar. «Responder» cuando hay algo a lo que
@@ -518,26 +460,6 @@ class _InputArea extends StatelessWidget {
               ),
             ),
           ),
-          if (onAskAboutProcedure != null)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                key: const Key('rag_preguntar_tramite'),
-                onPressed: onAskAboutProcedure,
-                icon: const Icon(
-                  Icons.account_balance_outlined,
-                  size: 18,
-                  color: AppTheme.lsbViolet,
-                ),
-                label: const Text(
-                  'Preguntar sobre un trámite',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.lsbViolet,
-                  ),
-                ),
-              ),
-            ),
           const SizedBox(height: 10),
           TextInputWidget(
             onSubmit: onHearingText,

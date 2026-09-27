@@ -112,7 +112,12 @@ class ConversationGraphCatalog {
   /// rol semántico del banco reconoce esa puerta sin depender de una frase o
   /// de un identificador concreto.
   Set<String> answerSlotsOf(String questionId) {
-    final direct = LsbGlossSemantics.questionSlotsOf(lsbGlossesOf(questionId));
+    final direct = {
+      ...LsbGlossSemantics.questionSlotsOf(lsbGlossesOf(questionId)),
+      for (final entry in replyEntries)
+        if (entry.questionId == questionId)
+          ...LsbGlossSemantics.spokenSlotsOf(entry.phrase),
+    };
     final question = bank.question(questionId);
     if (question?.entity.toLowerCase() == 'persona[autor]') {
       return {...direct, 'person'};

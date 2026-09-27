@@ -447,6 +447,19 @@ class LsbGlossSemantics {
         if (head != null) slots.add(head);
       }
     }
+    // «qué» es abierto y normalmente no identifica una ranura por sí solo.
+    // En una pregunta de robo, sin embargo, el verbo la acota al objeto
+    // sustraído («¿Qué te robaron/se llevaron?»).
+    if (interrogative &&
+        keys.contains('QUE') &&
+        keys.any(
+          (key) =>
+              key.startsWith('ROB') ||
+              key.startsWith('QUIT') ||
+              key.startsWith('LLEV'),
+        )) {
+      slots.add('object');
+    }
     return (slots, interrogative);
   }
 

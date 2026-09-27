@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
-import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/widgets/rag_topics_sheet.dart';
 
-/// Caso 2 del RAG: la persona sorda abre la conversación preguntando por un
-/// trámite, con frases de situaciones reales documentadas.
+/// Frases de cada trámite con las que la persona sorda abre el tema. Ya no
+/// tienen botón propio en la conversación, pero clasifican la institución de
+/// lo dicho (RagRetriever.rankAreas).
 void main() {
   final corpus = RagCorpus.fromJsonString(
     File('assets/rag/escenarios_cbba.json').readAsStringSync(),
@@ -63,51 +61,5 @@ void main() {
         ),
       ),
     );
-  });
-
-  testWidgets('institución → trámite → frase: devuelve la frase con su LSB', (
-    tester,
-  ) async {
-    RagSuggestion? elegida;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) => TextButton(
-              onPressed: () async =>
-                  elegida = await RagTopicsSheet.show(context, topics),
-              child: const Text('abrir'),
-            ),
-          ),
-        ),
-      ),
-    );
-    await tester.tap(find.text('abrir'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Preguntar sobre un trámite'), findsOneWidget);
-    final segip = topics.firstWhere((t) => t.area == 'SEGIP');
-    final area = find.byKey(const ValueKey('rag_area_SEGIP'));
-    await tester.scrollUntilVisible(
-      area,
-      200,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.ensureVisible(area);
-    await tester.pumpAndSettle();
-    await tester.tap(area);
-    await tester.pumpAndSettle();
-
-    expect(find.byTooltip('Otras instituciones'), findsOneWidget);
-    expect(find.text(segip.institution), findsOneWidget);
-    final frase = find.text('¿Cuánto cuesta la cédula física?');
-    await tester.ensureVisible(frase);
-    await tester.pumpAndSettle();
-    await tester.tap(frase);
-    await tester.pumpAndSettle();
-
-    expect(elegida?.text, '¿Cuánto cuesta la cédula física?');
-    expect(elegida?.glosses, isNotEmpty);
-    expect(elegida?.scenarioId, startsWith('ESC-SEGIP-'));
   });
 }
