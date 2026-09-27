@@ -12,19 +12,27 @@ class SemanticNode extends ConsumerStatefulWidget {
   final VoidCallback onTap;
   final bool isSelected;
 
+  /// La pregunta es obligatoria y se intentó avanzar sin elegir.
+  final bool requiresSelection;
+
+  /// Color del borde y del aviso cuando una pregunta obligatoria queda sin
+  /// responder. Ámbar, no rojo: no es un error, es un campo pendiente.
+  static const requiredSelectionColor = Color(0xFFF59E0B);
+
   /// Vista previa de la seña. Se dispara al mantener la tarjeta
   /// [holdDuration] y no cambia la selección; el relleno se vacía cuando el
   /// futuro termina. Sin ella la tarjeta solo responde al toque.
   final Future<void> Function()? onPreview;
 
   /// Lo que hay que mantener la tarjeta para ver su seña.
-  static const holdDuration = Duration(milliseconds: 500);
+  static const holdDuration = Duration(milliseconds: 1500);
 
   const SemanticNode({
     super.key,
     required this.card,
     required this.onTap,
     this.isSelected = false,
+    this.requiresSelection = false,
     this.onPreview,
   });
 
@@ -191,14 +199,28 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
             color: selected ? null : AppTheme.lightSurface,
             borderRadius: BorderRadius.circular(_radio),
             border: Border.all(
-              color: selected ? const Color(0xFFC084FC) : Colors.transparent,
-              width: selected ? 2 : 1.2,
+              color: selected
+                  ? const Color(0xFFC084FC)
+                  : widget.requiresSelection
+                  ? SemanticNode.requiredSelectionColor
+                  : Colors.transparent,
+              width: selected || widget.requiresSelection ? 2 : 1.2,
             ),
             boxShadow: selected
                 ? [
                     BoxShadow(
                       color: const Color(0xFF7C3AED).withValues(alpha: 0.3),
                       blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : widget.requiresSelection
+                ? [
+                    BoxShadow(
+                      color: SemanticNode.requiredSelectionColor.withValues(
+                        alpha: 0.2,
+                      ),
+                      blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
                   ]
@@ -254,8 +276,14 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
       ),
     );
 
-    if (!conVistaPrevia) return tarjeta;
-    return Semantics(onLongPressHint: 'previsualizar la seña', child: tarjeta);
+    if (!conVistaPrevia && !widget.requiresSelection) return tarjeta;
+    return Semantics(
+      hint: widget.requiresSelection
+          ? 'Selecciona una opción obligatoria'
+          : null,
+      onLongPressHint: conVistaPrevia ? 'previsualizar la seña' : null,
+      child: tarjeta,
+    );
   }
 
   /// Relleno morado que sube desde abajo, como agua, mientras se mantiene la

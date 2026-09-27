@@ -14,6 +14,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/home_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/lsb_flow_screen.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/semantic_node.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 
 import 'helpers/official_dictionary.dart';
@@ -75,13 +76,26 @@ class _SinImagenes extends SignImagesNotifier {
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
-  Future<(ProviderContainer, _Backend)> montar(WidgetTester tester) async {
+  Future<(ProviderContainer, _Backend)> montar(
+    WidgetTester tester, {
+    bool conNavbar = false,
+  }) async {
     final backend = _Backend(
       'Un hombre me robó mi celular por WhatsApp en la calle.',
     );
     final router = GoRouter(
-      initialLocation: '/lsb-to-audio',
+      initialLocation: conNavbar ? '/home' : '/lsb-to-audio',
       routes: [
+        GoRoute(
+          path: '/home',
+          builder: (_, _) => const Scaffold(
+            body: LsbFlowScreen(),
+            bottomNavigationBar: SizedBox(
+              key: Key('navbar_prueba'),
+              height: 56,
+            ),
+          ),
+        ),
         GoRoute(
           path: '/lsb-to-audio',
           builder: (_, _) => const LsbFlowScreen(),
@@ -128,7 +142,7 @@ void main() {
   testWidgets(
     'responder, ver la vista previa y emitir: el resultado es esa frase',
     (tester) async {
-      final (container, backend) = await montar(tester);
+      final (container, backend) = await montar(tester, conNavbar: true);
 
       int pasoVisible() => tester
           .widget<IndexedStack>(
@@ -224,6 +238,11 @@ void main() {
       expect(pasoVisible(), 0);
       expect(container.read(contextProvider), isNull);
       expect(find.text('Selecciona el contexto'), findsOneWidget);
+      expect(
+        find.byKey(const Key('navbar_prueba')),
+        findsOneWidget,
+        reason: 'reiniciar la declaracion debe permanecer dentro del shell',
+      );
     },
   );
 
@@ -249,6 +268,26 @@ void main() {
       findsOneWidget,
       reason: 'sin saber quién escapó, «Alguien escapó» no se puede redactar',
     );
+    // Sin aviso aparte: la validación vive dentro de las propias tarjetas.
+    expect(find.byKey(const Key('app_toast')), findsNothing);
+    final hint = find.byKey(const Key('seleccion_obligatoria'));
+    expect(hint, findsOneWidget);
+    expect(find.text('Selecciona una opción'), findsOneWidget);
+    final tarjetaYo = tester.widget<AnimatedContainer>(
+      find.descendant(
+        of: find.ancestor(
+          of: find.text('YO · ESCAPAR'),
+          matching: find.byType(SemanticNode),
+        ),
+        matching: find.byType(AnimatedContainer),
+      ),
+    );
+    final decoracion = tarjetaYo.decoration as BoxDecoration;
+    expect(
+      decoracion.border!.top.color,
+      SemanticNode.requiredSelectionColor,
+      reason: 'la tarjeta se resalta en vez de mostrar un aviso aparte',
+    );
     expect(find.byKey(const Key('omitir_pregunta')), findsNothing);
 
     await tocar(tester, find.text('YO · ESCAPAR'));
@@ -261,8 +300,8 @@ void main() {
           .optionIds,
       ['yo'],
     );
-    // Deja que el aviso se cierre solo.
-    await tester.pump(const Duration(seconds: 5));
+    // Elegida la respuesta, la indicación se retira sola.
+    expect(hint, findsNothing);
   });
 
   testWidgets(

@@ -12,6 +12,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/adaptive_node_layout.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/guided_value_editor.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/semantic_node.dart';
 
 /// Las respuestas posibles de la pregunta activa, como tarjetas.
 ///
@@ -24,7 +25,8 @@ class SuggestedGlossPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(guidedFlowProvider).session;
+    final flowState = ref.watch(guidedFlowProvider);
+    final session = flowState.session;
     final questionId = session?.currentQuestionId;
     if (session == null || questionId == null) return const _EmptyState();
 
@@ -43,22 +45,33 @@ class SuggestedGlossPanel extends ConsumerWidget {
       for (final o in options)
         if (session.isSelected(questionId, o.id)) o.id,
     };
+    final requiresSelection =
+        flowState.requiredSelectionQuestionId == questionId &&
+        rules.isRequiredAndMissing(session, questionId);
 
-    return AdaptiveNodeLayout(
-      cards: cards,
-      selectedIds: selected,
-      onCardTap: (card) {
-        final option = options.firstWhere((o) => o.id == card.id);
-        elegirOpcionGuiada(context, ref, questionId, option);
-      },
-      onCardPreview: (card) {
-        final option = options.firstWhere((o) => o.id == card.id);
-        // La secuencia completa de la tarjeta, en el orden en que se ve. Una
-        // opción sin seña (un valor escrito) no tiene nada que enseñar.
-        return ref
-            .read(signPreviewControllerProvider)
-            .show(context, option.hasSign ? option.glosses : const []);
-      },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (requiresSelection) const _RequiredSelectionHint(),
+        AdaptiveNodeLayout(
+          cards: cards,
+          selectedIds: selected,
+          requiresSelection: requiresSelection,
+          onCardTap: (card) {
+            final option = options.firstWhere((o) => o.id == card.id);
+            elegirOpcionGuiada(context, ref, questionId, option);
+          },
+          onCardPreview: (card) {
+            final option = options.firstWhere((o) => o.id == card.id);
+            // La secuencia completa de la tarjeta, en el orden en que se ve.
+            // Una opción sin seña (un valor escrito) no tiene nada que enseñar.
+            return ref
+                .read(signPreviewControllerProvider)
+                .show(context, option.hasSign ? option.glosses : const []);
+          },
+        ),
+      ],
     );
   }
 
@@ -92,6 +105,41 @@ class SuggestedGlossPanel extends ConsumerWidget {
             null => 'help',
             _ => 'draw',
           },
+    );
+  }
+}
+
+class _RequiredSelectionHint extends StatelessWidget {
+  const _RequiredSelectionHint();
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      key: const Key('seleccion_obligatoria'),
+      liveRegion: true,
+      label: 'Pregunta obligatoria. Selecciona una opción.',
+      excludeSemantics: true,
+      child: const Padding(
+        padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+        child: Row(
+          children: [
+            Icon(
+              Icons.touch_app_outlined,
+              size: 18,
+              color: SemanticNode.requiredSelectionColor,
+            ),
+            SizedBox(width: 8),
+            Text(
+              'Selecciona una opción',
+              style: TextStyle(
+                color: SemanticNode.requiredSelectionColor,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

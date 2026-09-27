@@ -110,7 +110,7 @@ class _ToastWidgetState extends State<_ToastWidget>
     );
     _opacity = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
     _offset = Tween<Offset>(
-      begin: const Offset(0, -0.4),
+      begin: const Offset(0.35, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
@@ -126,11 +126,17 @@ class _ToastWidgetState extends State<_ToastWidget>
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context);
+    final width = (media.size.width - 24).clamp(0.0, 320.0).toDouble();
+    final usableHeight =
+        media.size.height - media.padding.top - media.padding.bottom;
     return Positioned(
-      top: media.padding.top + 12,
-      left: 20,
-      right: 20,
+      // La cabecera fija contiene la pregunta que la persona debe responder.
+      // El aviso se ancla al costado y a media altura para no taparla.
+      top: media.padding.top + (usableHeight * 0.5),
+      right: 12,
+      width: width,
       child: Material(
+        key: const Key('app_toast'),
         color: Colors.transparent,
         child: FadeTransition(
           opacity: _opacity,
@@ -140,8 +146,10 @@ class _ToastWidgetState extends State<_ToastWidget>
               liveRegion: true,
               label: widget.message,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: widget.backgroundColor,
                   borderRadius: BorderRadius.circular(16),
@@ -165,8 +173,11 @@ class _ToastWidgetState extends State<_ToastWidget>
                         color: widget.iconColor.withValues(alpha: 0.12),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(widget.icon,
-                          color: widget.iconColor, size: 22),
+                      child: Icon(
+                        widget.icon,
+                        color: widget.iconColor,
+                        size: 22,
+                      ),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
