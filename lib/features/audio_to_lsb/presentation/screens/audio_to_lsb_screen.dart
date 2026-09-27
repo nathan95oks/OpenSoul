@@ -89,30 +89,23 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
   ) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: AppTheme.darkBg,
+      backgroundColor: AppTheme.audioPageBg,
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                'assets/logo.png',
-                width: 32,
-                height: 32,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              'Traductor a LSB',
-              style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.5),
-            ),
-          ],
+        // Sin el logo: dentro de la app ya se sabe que es OpenSoul.
+        title: const Text(
+          'Traductor a LSB',
+          style: TextStyle(
+            color: AppTheme.ink,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
+        foregroundColor: AppTheme.ink,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
       ),
       extendBodyBehindAppBar: true,
       body: GestureDetector(
@@ -225,7 +218,7 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                               Text(
                                 pendiente.question,
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.ink,
                                   fontSize: 14,
                                 ),
                               ),
@@ -249,6 +242,9 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                             ],
                             TextButton(
                               onPressed: controller.cancelClarification,
+                              style: TextButton.styleFrom(
+                                foregroundColor: AppTheme.brandLight,
+                              ),
                               child: const Text('Prefiero reformular la frase'),
                             ),
                           ],
@@ -279,9 +275,11 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                             ),
                             const SizedBox(width: 8),
                             Expanded(
+                              // El icono y el recuadro rojos marcan el
+                              // error; el texto, en tinta, se lee bien.
                               child: Text(
                                 state.errorMessage ?? 'Ocurrió un error',
-                                style: const TextStyle(color: Colors.redAccent),
+                                style: const TextStyle(color: AppTheme.ink),
                               ),
                             ),
                           ],

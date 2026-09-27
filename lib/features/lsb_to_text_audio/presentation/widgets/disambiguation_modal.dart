@@ -35,7 +35,9 @@ class DisambiguationModal {
     if (eleccion == null) return;
 
     final notifier = ref.read(declarationDraftProvider.notifier);
-    final escapar = ref.read(declarationDraftProvider).factWithAction('ESCAPAR');
+    final escapar = ref
+        .read(declarationDraftProvider)
+        .factWithAction('ESCAPAR');
     if (escapar == null) return;
 
     if (eleccion.$1 == 'other') {
@@ -64,7 +66,9 @@ class DisambiguationModal {
       if (context.mounted) {
         final label = eleccion.$1 == 'suspect'
             ? 'El agresor escapó'
-            : (eleccion.$1 == 'victim' ? 'El declarante escapó' : 'Un tercero escapó');
+            : (eleccion.$1 == 'victim'
+                  ? 'El declarante escapó'
+                  : 'Un tercero escapó');
         AppToastManager.showSuccess(context, 'Registrado: $label');
       }
     }
@@ -98,8 +102,8 @@ class DisambiguationModal {
       final msg = eleccion == 'loss'
           ? 'Registrado como extravío personal'
           : (eleccion == 'theft'
-              ? 'Registrado como presunta sustracción'
-              : 'Registrado con certeza pendiente');
+                ? 'Registrado como presunta sustracción'
+                : 'Registrado con certeza pendiente');
       AppToastManager.showInfo(context, msg);
     }
   }
@@ -222,11 +226,7 @@ class DisambiguationModal {
     );
 
     final notifier = ref.read(declarationDraftProvider.notifier);
-    notifier.addObject(
-      concept: concept,
-      role: rol,
-      contents: contenido,
-    );
+    notifier.addObject(concept: concept, role: rol, contents: contenido);
 
     if (context.mounted) {
       AppToastManager.showSuccess(
@@ -247,7 +247,8 @@ class DisambiguationModal {
     final eleccion = await _mostrarOpciones<String>(
       context,
       titulo: '¿Cuál es la función del ${vehicleConcept.toLowerCase()}?',
-      subtitulo: 'Aclara si fue el lugar donde ocurrió el hecho o si fue robado',
+      subtitulo:
+          'Aclara si fue el lugar donde ocurrió el hecho o si fue robado',
       icono: Icons.directions_bus,
       opciones: [
         ('Ocurrió dentro / es el transporte público', 'transport'),
@@ -316,8 +317,11 @@ class DisambiguationModal {
                       color: const Color(0xFF7C3AED).withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(icono,
-                        color: const Color(0xFF7C3AED), size: 22),
+                    child: Icon(
+                      icono,
+                      color: const Color(0xFF7C3AED),
+                      size: 22,
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -358,11 +362,15 @@ class DisambiguationModal {
                       onTap: () => Navigator.of(ctx).pop(value),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                              color: AppTheme.lightBorder, width: 1.2),
+                            color: AppTheme.lightBorder,
+                            width: 1.2,
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -376,8 +384,11 @@ class DisambiguationModal {
                                 ),
                               ),
                             ),
-                            const Icon(Icons.arrow_forward_ios_rounded,
-                                size: 14, color: Color(0xFF7C3AED)),
+                            const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                              color: Color(0xFF7C3AED),
+                            ),
                           ],
                         ),
                       ),
@@ -408,7 +419,11 @@ class DisambiguationModal {
       builder: (ctx) => SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(
-              20, 4, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+            20,
+            4,
+            20,
+            MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -427,13 +442,10 @@ class DisambiguationModal {
                 controller: controller,
                 autofocus: true,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
+                cursorColor: AppTheme.lightInputCursor,
+                style: const TextStyle(color: AppTheme.lightInputText),
+                decoration: AppTheme.lightInputDecoration(
                   hintText: hint ?? 'Escribe aquí…',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  filled: true,
-                  fillColor: AppTheme.lightBg,
                 ),
                 onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
               ),
@@ -447,7 +459,9 @@ class DisambiguationModal {
                   ),
                 ),
                 child: Text(
-                  controller.text.trim().isEmpty ? 'Confirmar' : 'Guardar detalle',
+                  controller.text.trim().isEmpty
+                      ? 'Confirmar'
+                      : 'Guardar detalle',
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),

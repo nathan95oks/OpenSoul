@@ -52,13 +52,13 @@ class HomeScreen extends ConsumerWidget {
     final Widget? leadingWidget = enSeleccionGlosas
         ? IconButton(
             key: const Key('volver_a_contextos'),
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: AppTheme.ink),
             tooltip: 'Volver a los contextos',
             onPressed: () => ref.read(cardsFlowSessionProvider).reset(),
           )
         : (sirveConversacion
               ? IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                  icon: const Icon(Icons.arrow_back, color: AppTheme.ink),
                   tooltip: 'Volver a la conversación',
                   onPressed: () => ref
                       .read(selectedTabProvider.notifier)
@@ -75,28 +75,14 @@ class HomeScreen extends ConsumerWidget {
               color: AppTheme.lightText,
             ),
           )
-        : Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/logo.png',
-                  width: 30,
-                  height: 30,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Text(
-                'OpenSoul',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  letterSpacing: -0.3,
-                ),
-              ),
-            ],
+        : const Text(
+            'Expresión en LSB',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: AppTheme.ink,
+              letterSpacing: -0.3,
+            ),
           );
 
     // Con las glosas la barra se funde con la página: título centrado, sin
@@ -108,7 +94,8 @@ class HomeScreen extends ConsumerWidget {
       elevation: 0,
       scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
-      centerTitle: enSeleccionGlosas,
+      foregroundColor: AppTheme.ink,
+      centerTitle: true,
       leading: leadingWidget,
       bottom: enSeleccionGlosas
           ? null
@@ -214,7 +201,7 @@ class _ReplyingToStrip extends StatelessWidget {
             const Icon(
               Icons.record_voice_over,
               size: 15,
-              color: Colors.white70,
+              color: AppTheme.brandLight,
             ),
             const SizedBox(width: 8),
             Expanded(
@@ -229,7 +216,7 @@ class _ReplyingToStrip extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       height: 1.3,
-                      color: Colors.white,
+                      color: AppTheme.ink,
                     ),
                   ),
                   if (inferred != null)

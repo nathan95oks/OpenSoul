@@ -7,38 +7,39 @@ class QuickReplyBar extends StatelessWidget {
 
   const QuickReplyBar({super.key, required this.onReply});
 
-  static const _respuestas = <({String etiqueta, IconData icono, List<String> glosas, String texto})>[
-    (
-      etiqueta: 'Entendido',
-      icono: Icons.check_circle_outline,
-      glosas: ['SI'],
-      texto: 'Sí, entendido.',
-    ),
-    (
-      etiqueta: '¿Dónde queda?',
-      icono: Icons.place_outlined,
-      glosas: ['DONDE'],
-      texto: '¿Dónde queda?',
-    ),
-    (
-      etiqueta: 'Más despacio',
-      icono: Icons.speed_outlined,
-      glosas: ['LENTO', 'EXPLICAR', 'POR_FAVOR'],
-      texto: 'Explíqueme despacio, por favor.',
-    ),
-    (
-      etiqueta: 'Ahora entiendo',
-      icono: Icons.lightbulb_outline,
-      glosas: ['AHORA', 'COMPRENDER'],
-      texto: 'Ahora sí entiendo.',
-    ),
-    (
-      etiqueta: 'Gracias',
-      icono: Icons.thumb_up_outlined,
-      glosas: ['AYUDAR', 'GRACIAS'],
-      texto: 'Muchas gracias por su ayuda.',
-    ),
-  ];
+  static const _respuestas =
+      <({String etiqueta, IconData icono, List<String> glosas, String texto})>[
+        (
+          etiqueta: 'Entendido',
+          icono: Icons.check_circle_outline,
+          glosas: ['SI'],
+          texto: 'Sí, entendido.',
+        ),
+        (
+          etiqueta: '¿Dónde queda?',
+          icono: Icons.place_outlined,
+          glosas: ['DONDE'],
+          texto: '¿Dónde queda?',
+        ),
+        (
+          etiqueta: 'Más despacio',
+          icono: Icons.speed_outlined,
+          glosas: ['LENTO', 'EXPLICAR', 'POR_FAVOR'],
+          texto: 'Explíqueme despacio, por favor.',
+        ),
+        (
+          etiqueta: 'Ahora entiendo',
+          icono: Icons.lightbulb_outline,
+          glosas: ['AHORA', 'COMPRENDER'],
+          texto: 'Ahora sí entiendo.',
+        ),
+        (
+          etiqueta: 'Gracias',
+          icono: Icons.thumb_up_outlined,
+          glosas: ['AYUDAR', 'GRACIAS'],
+          texto: 'Muchas gracias por su ayuda.',
+        ),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class QuickReplyBar extends StatelessWidget {
               fontSize: 11,
               letterSpacing: 0.6,
               fontWeight: FontWeight.w700,
-              color: AppTheme.darkTextSub,
+              color: AppTheme.inkSub,
             ),
           ),
           const SizedBox(height: 6),

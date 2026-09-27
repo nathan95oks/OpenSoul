@@ -259,11 +259,13 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
 
   @override
   Widget build(BuildContext context) {
+    // Azul muy oscuro sobre la página blanca: el campo donde se escribe es lo
+    // que más destaca, con el texto en blanco.
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.darkSurface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black12, width: 1.5),
+        border: Border.all(color: AppTheme.darkBorder, width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.12),
@@ -280,10 +282,13 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
               controller: _controller,
               focusNode: widget.focusNode,
               enabled: !_isRecording,
-              style: const TextStyle(color: Colors.black87, fontSize: 16),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+              cursorColor: Colors.white,
               decoration: InputDecoration(
                 hintText: widget.hintText,
-                hintStyle: const TextStyle(color: Colors.black45),
+                hintStyle: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
@@ -315,9 +320,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
                 child: IconButton(
                   icon: Icon(
                     _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-                    color: _isRecording
-                        ? AppTheme.errorDark
-                        : const Color(0xFF1E1E2F),
+                    color: _isRecording ? AppTheme.errorDark : Colors.white,
                     size: 24,
                   ),
                   onPressed: _toggleRecording,
@@ -330,7 +333,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
           IconButton(
             icon: const Icon(
               Icons.send_rounded,
-              color: Color(0xFF6C5CE7),
+              color: AppTheme.lsbVioletLight,
               size: 24,
             ),
             onPressed: _submit,
