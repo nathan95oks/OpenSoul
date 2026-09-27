@@ -4000,13 +4000,14 @@ def _rag_state():
     return _RAG_STATE or None
 
 
-def _titan_embed(texto: str) -> list:
+def _titan_embed(texto: str, dimensiones: int | None = None) -> list:
     respuesta = bedrock_runtime.invoke_model(
         modelId=RAG_EMBEDDING_MODEL,
         contentType="application/json",
         accept="application/json",
         body=json.dumps({"inputText": texto[:MAX_HEARING_TEXT],
-                         "dimensions": RAG_EMBEDDING_DIM, "normalize": True}),
+                         "dimensions": dimensiones or RAG_EMBEDDING_DIM,
+                         "normalize": True}),
     )
     return json.loads(respuesta["body"].read())["embedding"]
 
@@ -4201,6 +4202,10 @@ def rag_correct_glosses(body):
 _ZONAS_LSB = None
 
 
+def _embed_zonas(texto: str) -> list:
+    return _titan_embed(texto, ZONAS.DIMENSIONES)
+
+
 def rag_zones(body):
     global _ZONAS_LSB
     palabras, error = ZONAS.validar_pedido(body)
@@ -4222,7 +4227,7 @@ def rag_zones(body):
     indice = read_cache_json(clave) or {}
     if len(indice.get("vectores") or {}) < len(textos):
         try:
-            indice = ZONAS.indexar_senas(textos, indice, _titan_embed)
+            indice = ZONAS.indexar_senas(textos, indice, _embed_zonas)
         except Exception as e:  # noqa: BLE001
             logger.warning("Índice de zonas fallido: %s", e)
             return build_response(200, {"generated": False,
@@ -4245,7 +4250,7 @@ def rag_zones(body):
     try:
         clasificadas = ZONAS.clasificar(palabras, descritas,
                                         indice["vectores"], zonas,
-                                        _titan_embed, invocar)
+                                        _embed_zonas, invocar)
     except Exception as e:  # noqa: BLE001 — Bedrock: nunca un 500
         logger.warning("Zonas fallidas: %s", e)
         return build_response(200, {"generated": False, "reason": "error_modelo"})
