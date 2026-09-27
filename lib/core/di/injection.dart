@@ -9,6 +9,7 @@ import 'package:lsb_legal_app/core/data/datasources/remote_lexicon_datasource.da
 import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/dialogue_graph_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/rag_corpus_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/business_catalog_datasource.dart';
 import 'package:lsb_legal_app/core/data/repositories/animation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/audio_translation_repository_impl.dart';
@@ -19,6 +20,8 @@ import 'package:lsb_legal_app/core/data/repositories/translation_repository_impl
 import 'package:lsb_legal_app/core/data/services/real_audio_output.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalog.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_router.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
 import 'package:lsb_legal_app/core/domain/conversation/semantic_turn_builder.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
@@ -219,6 +222,19 @@ final graphRouteModelProvider = Provider<GraphRouteModel?>((ref) {
     catalog: catalog,
   );
   return remote.isConfigured ? remote : null;
+});
+
+/// Corpus RAG de trámites de Cochabamba (asset local).
+final ragCorpusProvider = FutureProvider<RagCorpus>(
+  (ref) => RagCorpusDataSource().load(),
+);
+
+/// Recuperador de situaciones parecidas. `null` mientras el corpus carga:
+/// Conversation sigue sin sugerencias, como antes.
+final ragRetrieverProvider = Provider<RagRetriever?>((ref) {
+  final corpus = ref.watch(ragCorpusProvider).asData?.value;
+  if (corpus == null || corpus.scenarios.isEmpty) return null;
+  return RagRetriever(corpus);
 });
 
 final conversationGraphRouterProvider = Provider<ConversationGraphRouter?>((
