@@ -1,3 +1,4 @@
+import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
@@ -193,6 +194,30 @@ class SemanticTurn {
   };
 
   bool get isQuestion => speechAct == SpeechAct.question;
+
+  /// De qué o de quién habla el oyente, sin lo que pregunta ni las pistas del
+  /// contexto: CELULAR en «¿Cuándo te robaron el celular?» (el robo es el
+  /// contexto; el tiempo, lo pedido).
+  ///
+  /// Sitúa la conversación y orienta el ruteo. Nunca es un hecho declarado
+  /// por la persona sorda: sus hechos son solo las respuestas que ella elige.
+  List<String> get mentionedEntities {
+    final cues = {
+      for (final m in mentionedContexts)
+        for (final e in m.evidence) ?LsbGlossSemantics.normalize(e),
+    };
+    final out = <String>[];
+    for (final g in LsbGlossSemantics.normalizeAll(entities)) {
+      if (LsbGlossSemantics.contentOf([g]).isEmpty ||
+          LsbGlossSemantics.negators.contains(g) ||
+          cues.contains(g) ||
+          out.contains(g)) {
+        continue;
+      }
+      out.add(g);
+    }
+    return out;
+  }
 
   Map<String, dynamic> toJson() => {
     'turnId': turnId,

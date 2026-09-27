@@ -56,7 +56,50 @@ class GraphMatcher {
   List<RequestedQuestion> match(SemanticTurn turn, {String? activeContextId}) =>
       turn.source == SemanticTurnSource.backend
       ? bySemantics(turn, activeContextId: activeContextId)
-      : byText(turn.text, activeContextId: activeContextId);
+      : byText(
+          turn.text,
+          activeContextId: activeContextId,
+          requestedSlots: requestedSlotsOf(turn),
+          contexts: contextsOf(turn, activeContextId: activeContextId),
+        );
+
+  /// Lo que el oyente quiere saber: las ranuras de la lectura y las que dicen
+  /// sus glosas interrogativas. Es lo primero que decide la ruta; el tema
+  /// solo restringe o desempata.
+  static Set<String> requestedSlotsOf(SemanticTurn turn) => {
+    ...turn.requestedSlots,
+    if (turn.isQuestion ||
+        LsbGlossSemantics.hasInterrogative(
+          LsbGlossSemantics.normalizeAll(turn.entities),
+        ))
+      ...LsbGlossSemantics.slotsOf(
+        LsbGlossSemantics.normalizeAll(turn.entities),
+      ),
+  }.intersection(LsbGlossSemantics.slotVocabulary);
+
+  /// Contextos donde se sitúa el turno: el activo y los que nombra.
+  Set<String> contextsOf(SemanticTurn turn, {String? activeContextId}) => {
+    if (activeContextId != null && catalog.hasContext(activeContextId))
+      activeContextId,
+    for (final m in turn.mentionedContexts)
+      if (m.isFamily)
+        ...catalog.contextsOfFamily(m.id)
+      else if (catalog.hasContext(m.id))
+        m.id,
+  };
+
+  /// Lo que el turno nombra y el recorrido de su contexto ofrece como
+  /// respuesta (CELULAR en «¿Cuándo te robaron el celular?»): el oyente lo da
+  /// por supuesto. No es otra pregunta ni un hecho de la persona sorda.
+  Set<String> presupposedOf(SemanticTurn turn, {String? activeContextId}) {
+    final content = LsbGlossSemantics.contentOf(
+      LsbGlossSemantics.normalizeAll(turn.entities),
+    );
+    return {
+      for (final c in contextsOf(turn, activeContextId: activeContextId))
+        ...content.intersection(catalog.optionGlossesOf(c)),
+    };
+  }
 
   // ---- Significado (lectura del backend) -----------------------------------
 
@@ -92,10 +135,9 @@ class GraphMatcher {
     final glosses = LsbGlossSemantics.normalizeAll(turn.entities);
     final content = LsbGlossSemantics.contentOf(glosses);
     final heads = LsbGlossSemantics.headsOf(glosses);
-    final slots = {
-      ...turn.requestedSlots,
-      ...LsbGlossSemantics.slotsOf(glosses),
-    }.intersection(LsbGlossSemantics.slotVocabulary);
+    final slots = requestedSlotsOf(turn);
+    final contexts = contextsOf(turn, activeContextId: activeContextId);
+    final presupposed = presupposedOf(turn, activeContextId: activeContextId);
     final cues = {
       for (final m in turn.mentionedContexts)
         for (final e in m.evidence) ?LsbGlossSemantics.normalize(e),
@@ -103,7 +145,8 @@ class GraphMatcher {
 
     final found = <_Found>[];
 
-    // 1. Por contenido: la pregunta trata de lo mismo y pide el mismo dato.
+    // 1. Por contenido, solo entre las preguntas que responden lo pedido:
+    //    compartir el tema («robar», «celular») no basta si piden otro dato.
     for (final sig in _signatures) {
       if (sig.content.isEmpty) continue;
       final shared = content.intersection(sig.content);
@@ -111,7 +154,7 @@ class GraphMatcher {
       final full = sig.content.every(content.contains);
       final distinctive = shared.where(_distinctive).toSet();
       if (!full && distinctive.isEmpty) continue;
-      if (!_slotsAgree(sig.slots, slots)) continue;
+      if (!_slotsAgree(sig.slots, slots, polar: sig.polar)) continue;
       // Una pregunta de sí/no reconocida solo por la palabra que nombra el
       // contexto («¿Desea presentar una denuncia?» ante «¿Quiere denunciar
       // algo?») no es un dato pedido: es nombrar el contexto.
@@ -127,43 +170,40 @@ class GraphMatcher {
       // turno dice más cosas (ver paso 3).
       if (full && score < strongMatch) score = strongMatch;
       if (score < weakMatch) continue;
-      found.add(_Found(sig, score, sig.slots.intersection(slots), shared));
+      final answered = sig.slots.isEmpty && sig.polar
+          ? slots.intersection(const {'polarity'})
+          : sig.slots.intersection(slots);
+      found.add(_Found(sig, score, answered, shared));
     }
 
     // 2. Por ranura: lo pedido que ninguna pregunta de contenido cubre va a
-    //    la pregunta que solo pide ese dato («¿Dónde ocurrió?»).
+    //    la pregunta que solo pide ese dato («¿Dónde ocurrió?»). Aquí llega
+    //    «¿Cuándo te robaron el celular?»: el robo sitúa, no se pregunta.
     final covered = {
       for (final f in found)
         if (f.score >= strongMatch) ...f.slots,
     };
-    for (final slot in slots.difference(covered)) {
-      _Found? best;
-      for (final sig in _signatures) {
-        if (sig.content.isNotEmpty || !sig.slots.contains(slot)) continue;
-        var score = 0.7 + 0.2 * _dice(heads, sig.heads);
-        if (sig.entry.fromNode) score += 0.05;
-        final q = sig.entry.questionId;
-        if (activeContextId != null && catalog.isStepOf(activeContextId, q)) {
-          score += 0.03;
-        } else if (catalog.journeysOf(q).isNotEmpty) {
-          score += 0.02;
-        }
-        if (best == null || score > best.score) {
-          best = _Found(sig, score.clamp(0, 1).toDouble(), {slot}, const {});
-        }
-      }
+    for (final slot in slots.difference(covered).difference(const {
+      'polarity',
+    })) {
+      final best = _bySlot(slot, heads, contexts, activeContextId);
       if (best != null) found.add(best);
     }
 
     // 3. Lo que el turno dice y ninguna pregunta segura explica. Si apunta a
     //    otra pregunta concreta («¿Qué viene a realizar?»: VENIR), las
-    //    coincidencias parciales dejan de ser seguras.
+    //    coincidencias parciales dejan de ser seguras. Lo que el oyente da
+    //    por supuesto (una respuesta que ofrece el recorrido de su contexto,
+    //    como CELULAR o MOCHILA en el robo) no es otra pregunta.
     final strong = [
       for (final f in found)
         if (f.score >= strongMatch) f,
     ];
     final explained = {for (final f in strong) ...f.sig.content};
-    final unexplained = content.difference(explained).difference(cues);
+    final unexplained = content
+        .difference(explained)
+        .difference(cues)
+        .difference(presupposed);
     if (unexplained.any(_pointsElsewhere)) {
       for (final f in strong) {
         if (f.score < exactMatch) f.score = strongMatch - 0.01;
@@ -182,17 +222,64 @@ class GraphMatcher {
     return _settle(found, glosses);
   }
 
+  /// La pregunta que pide solo [slot], por etapas: primero la misma forma
+  /// del dato («¿a qué hora?» es HORA, no FECHA); después, dentro del
+  /// contexto de la conversación si alguna lo es; y por último el desempate
+  /// de siempre (frase real del corpus, paso de algún recorrido).
+  _Found? _bySlot(
+    String slot,
+    Set<String> heads,
+    Set<String> contexts,
+    String? activeContextId,
+  ) {
+    var candidates = [
+      for (final sig in _signatures)
+        if (sig.content.isEmpty && sig.slots.contains(slot)) sig,
+    ];
+    if (candidates.isEmpty) return null;
+    final form = candidates
+        .map((s) => _dice(heads, s.heads))
+        .reduce((a, b) => a > b ? a : b);
+    candidates = [
+      for (final s in candidates)
+        if (_dice(heads, s.heads) == form) s,
+    ];
+    final inContext = [
+      for (final s in candidates)
+        if (contexts.any((c) => catalog.isStepOf(c, s.entry.questionId))) s,
+    ];
+    if (inContext.isNotEmpty) candidates = inContext;
+
+    _Found? best;
+    for (final sig in candidates) {
+      var score = 0.7 + 0.2 * form;
+      if (sig.entry.fromNode) score += 0.05;
+      final q = sig.entry.questionId;
+      if (activeContextId != null && catalog.isStepOf(activeContextId, q)) {
+        score += 0.03;
+      } else if (catalog.journeysOf(q).isNotEmpty) {
+        score += 0.02;
+      }
+      if (best == null || score > best.score) {
+        best = _Found(sig, score.clamp(0, 1).toDouble(), {slot}, const {});
+      }
+    }
+    return best;
+  }
+
   /// Preguntas que comparten algo con la lectura aunque ninguna coincida con
-  /// seguridad: las candidatas entre las que el modelo puede elegir.
+  /// seguridad: las candidatas entre las que el modelo puede elegir. Si el
+  /// oyente pidió un dato, solo las que lo responden.
   List<(String, String)> nearby(SemanticTurn turn, {int limit = 3}) {
     final glosses = LsbGlossSemantics.normalizeAll(turn.entities);
     final content = LsbGlossSemantics.contentOf(glosses);
-    final slots = {
-      ...turn.requestedSlots,
-      ...LsbGlossSemantics.slotsOf(glosses),
-    };
+    final slots = requestedSlotsOf(turn);
+    final asksData = slots.difference(const {'polarity'}).isNotEmpty;
     final best = <String, (double, String)>{};
     for (final sig in _signatures) {
+      if (asksData && !_slotsAgree(sig.slots, slots, polar: sig.polar)) {
+        continue;
+      }
       final overlap =
           content.intersection(sig.content).length +
           slots.intersection(sig.slots).length;
@@ -209,8 +296,18 @@ class GraphMatcher {
     return [for (final e in ordered.take(limit)) (e.key, e.value.$2)];
   }
 
-  static bool _slotsAgree(Set<String> question, Set<String> turn) =>
-      question.isEmpty ? turn.isEmpty : question.intersection(turn).isNotEmpty;
+  /// Si una pregunta con ranuras [question] responde a lo que pide el turno.
+  /// Una sin ranura solo vale si el turno no pide ningún dato, o si pide
+  /// además un sí/no (`polarity`) y ella es de sí/no.
+  static bool _slotsAgree(
+    Set<String> question,
+    Set<String> turn, {
+    required bool polar,
+  }) {
+    final data = turn.difference(const {'polarity'});
+    if (question.isNotEmpty) return question.intersection(data).isNotEmpty;
+    return data.isEmpty || (polar && turn.contains('polarity'));
+  }
 
   /// Una por pregunta, sin las que otra más específica ya contiene, en el
   /// orden en que el oyente las hizo.
@@ -279,15 +376,26 @@ class GraphMatcher {
   /// Preguntas del banco formuladas en [text], por parecido con las frases
   /// del grafo. Un mensaje puede traer varias («¿A qué hora y dónde
   /// ocurrió?»): se compara cada cláusula además del mensaje entero.
-  List<RequestedQuestion> byText(String text, {String? activeContextId}) {
+  ///
+  /// Con [requestedSlots] solo cuentan las frases cuya pregunta responde lo
+  /// pedido: «¿Cuándo te robaron el celular?» se parece mucho a «¿Le robaron
+  /// el celular?», pero pide una fecha. Lo pedido que ninguna frase cubre va
+  /// a la pregunta que solo pide ese dato, preferentemente en [contexts].
+  List<RequestedQuestion> byText(
+    String text, {
+    String? activeContextId,
+    Iterable<String> requestedSlots = const [],
+    Set<String> contexts = const {},
+  }) {
+    final requested = requestedSlots.toSet();
     final best = <String, RequestedQuestion>{};
-    final whole = _bestEntry(text, activeContextId);
+    final whole = _bestEntry(text, activeContextId, requested);
     if (whole != null) best[whole.questionId] = whole;
     final explained = whole == null
         ? const <String>{}
         : _entryTokens[whole.nodeId] ?? const <String>{};
     for (final clause in _clauses(text)) {
-      final match = _bestEntry(clause, activeContextId);
+      final match = _bestEntry(clause, activeContextId, requested);
       if (match == null) continue;
       // Una cláusula que la pregunta del mensaje entero ya contiene no es
       // otra pregunta: «¿Tiene fotos, video…?» es una sola.
@@ -301,17 +409,52 @@ class GraphMatcher {
         best[match.questionId] = match;
       }
     }
-    return best.values.toList()
-      ..sort((a, b) => _position(text, a).compareTo(_position(text, b)));
+    final covered = {
+      for (final r in best.values)
+        if (r.score >= strongMatch) ...r.slots,
+    };
+    final bySlot = <String, RequestedQuestion>{};
+    for (final slot in requested.difference(covered).difference(const {
+      'polarity',
+    })) {
+      final f = _bySlot(slot, const {}, contexts, activeContextId);
+      if (f == null || best.containsKey(f.sig.entry.questionId)) continue;
+      bySlot[f.sig.entry.questionId] = RequestedQuestion(
+        questionId: f.sig.entry.questionId,
+        nodeId: f.sig.entry.id,
+        scope: f.sig.entry.scope,
+        slots: f.slots.toList(),
+        score: f.score,
+      );
+    }
+    return [
+      ...best.values.toList()
+        ..sort((a, b) => _position(text, a).compareTo(_position(text, b))),
+      ...bySlot.values,
+    ];
   }
 
-  RequestedQuestion? _bestEntry(String clause, String? activeContextId) {
+  RequestedQuestion? _bestEntry(
+    String clause,
+    String? activeContextId,
+    Set<String> requested,
+  ) {
     final wanted = DialogueGraph.tokensOf(clause);
     if (wanted.isEmpty) return null;
     RequestedQuestion? best;
     for (final entry in catalog.replyEntries) {
       final tokens = _entryTokens[entry.id]!;
       if (tokens.isEmpty) continue;
+      if (requested.isNotEmpty &&
+          !_slotsAgree(
+            LsbGlossSemantics.questionSlotsOf(entry.glosses),
+            requested,
+            polar:
+                entry.glosses.isNotEmpty &&
+                !LsbGlossSemantics.hasInterrogative(entry.glosses),
+          )) {
+        continue;
+      }
       final shared = wanted.intersection(tokens);
       if (shared.isEmpty) continue;
       var score = 2 * shared.length / (wanted.length + tokens.length);

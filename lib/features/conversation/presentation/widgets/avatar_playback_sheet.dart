@@ -56,7 +56,7 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
       // Solo auto-descartar si realmente se reprodujo la animación (al menos 1.8s)
       if (elapsed >= 1800) {
         _dismissTimer?.cancel();
-        _dismissTimer = Timer(const Duration(milliseconds: 1500), () {
+        _dismissTimer = Timer(const Duration(milliseconds: 500), () {
           if (mounted) {
             Navigator.of(context).maybePop();
           }

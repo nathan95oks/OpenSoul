@@ -75,6 +75,7 @@ class _DeclarationRepo implements TranslationRepository {
 
   final TranslationResult? response;
   int calls = 0;
+  Map<String, dynamic>? lastGuided;
 
   @override
   Future<TranslationResult> translateCards({
@@ -87,6 +88,7 @@ class _DeclarationRepo implements TranslationRepository {
     Map<String, dynamic>? guided,
   }) async {
     calls++;
+    lastGuided = guided;
     return response ?? TranslationResult(baseSentence: '', generatedText: '');
   }
 }
@@ -178,33 +180,38 @@ void main() {
     expect(respuesta.message.replyToId, pregunta.message.id);
   }
 
+  // «¿Dónde ocurrió?» sin conversación previa vale en varios contextos y ya
+  // no se abre en uno adivinado (va al selector): estas pruebas de ida y
+  // vuelta usan una pregunta que nombra el contexto.
+  const dondeRobo = '¿Dónde ocurrió el robo?';
+
   group('una intervención se interpreta una sola vez', () {
     test('1/4. Conversation usa la lectura del backend', () async {
       final c = app();
-      final turno = await oyente(c, '¿Dónde ocurrió?');
+      final turno = await oyente(c, dondeRobo);
       expect(turno.semantic!.source, SemanticTurnSource.backend);
       expect(turno.semantic!.requestedSlots, ['place']);
-      expect(turno.semantic!.entities, ['DONDE']);
+      expect(turno.semantic!.entities, ['DONDE', 'ROBAR']);
       expect(turno.route!.targetQuestionIds, ['Q.LUG.DONDE']);
     });
 
     test('3. con un backend antiguo sin lectura, vale el respaldo', () async {
       final c = app(backend: false);
-      final turno = await oyente(c, '¿Dónde ocurrió?');
+      final turno = await oyente(c, dondeRobo);
       expect(turno.semantic!.source, SemanticTurnSource.clientFallback);
       expect(turno.route!.targetQuestionIds, ['Q.LUG.DONDE']);
     });
 
     test('5. responder de punta a punta no vuelve a traducir', () async {
       final c = app();
-      await oyente(c, '¿Dónde ocurrió?');
+      await oyente(c, dondeRobo);
       responder(c);
       c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
       // Releer la pregunta y volver a abrir las tarjetas tampoco traduce.
       c.read(conversationHandoffProvider).nextDeafLaunch();
       await emitir(c);
 
-      expect(signRepo.calls, {'¿Dónde ocurrió?': 1});
+      expect(signRepo.calls, {dondeRobo: 1});
       expect(declarationRepo.calls, 1, reason: 'Una sola redacción.');
     });
 
@@ -215,7 +222,7 @@ void main() {
             .copyWith(confidence: 0.8, source: RouteSource.bedrock),
       );
       final c = app(model: model);
-      await oyente(c, '¿Dónde ocurrió?');
+      await oyente(c, dondeRobo);
       await oyente(c, 'Hola, ¿cómo está? ¿Qué viene a realizar?');
       expect(model.calls, 0, reason: 'Lo determinista no gasta el modelo.');
 
@@ -291,7 +298,7 @@ void main() {
       'C. pregunta exacta del banco → solo esa respuesta → vuelta',
       () async {
         final c = app();
-        final pregunta = await oyente(c, '¿Dónde ocurrió?');
+        final pregunta = await oyente(c, dondeRobo);
         final conversationId = c.read(conversationProvider).conversation.id;
         responder(c);
 
@@ -385,7 +392,7 @@ void main() {
 
     test('H. conversación reiniciada mientras responde: no se envía', () async {
       final c = app();
-      await oyente(c, '¿Dónde ocurrió?');
+      await oyente(c, dondeRobo);
       responder(c);
       c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
 
@@ -454,10 +461,54 @@ void main() {
     );
 
     test(
+      'P. «¿Cuándo te robaron el celular?»: se responde CUÁNDO, y lo que '
+      'dio por hecho el oyente no se vuelve un hecho de la persona sorda',
+      () async {
+        final c = app();
+        final pregunta = await oyente(c, '¿Cuándo te robaron el celular?');
+        expect(pregunta.semantic!.requestedSlots, ['time']);
+        expect(pregunta.route!.targetQuestionIds, ['Q.TIE.CUANDO']);
+        final conversationId = c.read(conversationProvider).conversation.id;
+        responder(c);
+
+        // Las tarjetas son las de TIEMPO; nada de ROBAR · CELULAR.
+        final session = c.read(guidedFlowProvider).session!;
+        expect(session.journeyId, 'denuncia_robo');
+        expect([for (final s in session.steps) s.questionId], ['Q.TIE.CUANDO']);
+        final flow = c.read(guidedFlowProvider.notifier);
+        expect(flow.select('Q.TIE.CUANDO', 'hoy').accepted, isTrue);
+
+        // Solo cuenta lo que eligió la persona sorda.
+        final respuestas = [
+          for (final a in flow.intervention!.answers)
+            if (!a.isOmitted) a.questionId,
+        ];
+        expect(respuestas, ['Q.TIE.CUANDO']);
+
+        await emitir(c);
+        vueltaAlMismoTurno(c, pregunta, conversationId: conversationId);
+        final enviadas = [
+          for (final r in declarationRepo.lastGuided!['respuestas'] as List)
+            (r as Map)['pregunta'],
+        ];
+        expect(enviadas, ['Q.TIE.CUANDO']);
+        final texto = c
+            .read(conversationProvider)
+            .conversation
+            .lastTurn!
+            .outputs
+            .text;
+        expect(texto, 'Ocurrió hoy.');
+        expect(texto.toLowerCase(), isNot(contains('rob')));
+        expect(texto.toLowerCase(), isNot(contains('celular')));
+      },
+    );
+
+    test(
       '13. una respuesta múltiple conserva las mismas reglas del módulo',
       () async {
         final c = app();
-        final pregunta = await oyente(c, '¿Cuándo ocurrió?');
+        final pregunta = await oyente(c, '¿Cuándo te robaron el celular?');
         responder(c);
 
         final flow = c.read(guidedFlowProvider.notifier);
@@ -483,7 +534,7 @@ void main() {
             coverageValidated: true,
           ),
         );
-        final pregunta = await oyente(c, '¿Dónde ocurrió?');
+        final pregunta = await oyente(c, dondeRobo);
         responder(c);
         c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
 
@@ -502,7 +553,7 @@ void main() {
       'N. si el turno conserva el id pero cambia, no se inserta a ciegas',
       () async {
         final c = app();
-        final original = await oyente(c, '¿Dónde ocurrió?');
+        final original = await oyente(c, dondeRobo);
         responder(c);
         c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
 
@@ -546,7 +597,7 @@ void main() {
       'O. cancelar antes de emitir conserva chat y borrador sin responder',
       () async {
         final c = app();
-        final pregunta = await oyente(c, '¿Dónde ocurrió?');
+        final pregunta = await oyente(c, dondeRobo);
         final conversationId = c.read(conversationProvider).conversation.id;
         responder(c);
         c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
@@ -579,7 +630,7 @@ void main() {
       '14. si entra otro turno, la respuesta va al que se tenía delante',
       () async {
         final c = app();
-        final primera = await oyente(c, '¿Dónde ocurrió?');
+        final primera = await oyente(c, dondeRobo);
         responder(c);
         c.read(guidedFlowProvider.notifier).select('Q.LUG.DONDE', 'calle');
 

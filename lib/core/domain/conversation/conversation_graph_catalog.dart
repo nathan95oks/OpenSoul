@@ -104,6 +104,51 @@ class ConversationGraphCatalog {
         bank.question(questionId)?.lsb.glosses ?? const [],
       );
 
+  /// Dato que responde la pregunta, leído de su formulación LSB con el mismo
+  /// criterio que el turno del oyente: su interrogativo o su núcleo
+  /// (CUÁNDO → `time`). Vacío en las de sí/no y en las abiertas (QUÉ, CUÁL).
+  Set<String> answerSlotsOf(String questionId) =>
+      LsbGlossSemantics.questionSlotsOf(lsbGlossesOf(questionId));
+
+  /// Pregunta de sí/no: tiene formulación y ningún interrogativo.
+  bool isPolarQuestion(String questionId) {
+    final glosses = lsbGlossesOf(questionId);
+    return glosses.isNotEmpty && !LsbGlossSemantics.hasInterrogative(glosses);
+  }
+
+  /// Si [questionId] responde a lo que pidió el oyente ([requested]).
+  ///
+  /// Sin ranuras pedidas no hay restricción. Con ranuras, la pregunta tiene
+  /// que responder alguna; `polarity` la cumple una pregunta de sí/no. Que
+  /// comparta glosas con el turno no basta: «¿Cuándo te robaron el celular?»
+  /// no se responde con «¿Le robaron el celular?».
+  bool answers(String questionId, Iterable<String> requested) {
+    final asked = requested.toSet();
+    final data = asked.difference(const {'polarity'});
+    if (asked.isEmpty) return true;
+    if (answerSlotsOf(questionId).intersection(data).isNotEmpty) return true;
+    return asked.contains('polarity') && isPolarQuestion(questionId);
+  }
+
+  /// Glosas de las respuestas que ofrece el recorrido de [contextId]
+  /// (CELULAR, MOCHILA… en el robo). Si el oyente nombra una, la da por
+  /// supuesta: orienta el ruteo, pero no es otra pregunta ni un hecho
+  /// confirmado por la persona sorda.
+  Set<String> optionGlossesOf(String contextId) => _optionGlosses.putIfAbsent(
+    contextId,
+    () {
+      final out = <String>{};
+      for (final step in bank.journey(contextId)?.steps ?? const []) {
+        for (final o in bank.question(step.questionId)?.options ?? const []) {
+          if (o.hasSign) out.addAll(LsbGlossSemantics.normalizeAll(o.glosses));
+        }
+      }
+      return out;
+    },
+  );
+
+  final Map<String, Set<String>> _optionGlosses = {};
+
   /// Ranuras que pueden pedirse: el vocabulario del grafo de diálogo.
   late final Set<String> knownSlots = {
     ...LsbGlossSemantics.slotVocabulary,

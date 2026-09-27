@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/di/injection.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
@@ -37,13 +38,13 @@ class NodeFlowCanvas extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Cabecera fija: pregunta activa + fichas de lo ya configurado. No
-        // va dentro del scroll de la grilla para que, al desplazarse por
-        // muchas tarjetas, lo ya elegido no desaparezca de la vista.
+        // Cabecera fija: solo la pregunta activa. No va dentro del scroll
+        // de la grilla para que no desaparezca al desplazarse por muchas
+        // tarjetas.
         SafeArea(
           key: const Key('guided_question_header'),
           bottom: false,
-          minimum: const EdgeInsets.fromLTRB(16, 2, 16, 0),
+          minimum: const EdgeInsets.fromLTRB(20, 12, 20, 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -87,32 +88,25 @@ class _HeroQuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: AppTheme.lightSurface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.lightBorder),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          LsbQuestionDisplay(spanish: question, formulation: lsb),
-          if (maxPicks > 1)
-            Padding(
-              padding: const EdgeInsets.only(top: 3),
-              child: Text(
-                'Puedes elegir hasta $maxPicks ($currentPicks elegidas)',
-                style: const TextStyle(
-                  fontSize: 11.5,
-                  color: AppTheme.lightTextSub,
-                  fontWeight: FontWeight.w600,
-                ),
+    // Sin recuadro: la pregunta sola, grande y centrada.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        LsbQuestionDisplay(spanish: question, formulation: lsb),
+        if (maxPicks > 1)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Text(
+              'Puedes elegir hasta $maxPicks ($currentPicks elegidas)',
+              style: const TextStyle(
+                fontSize: 12.5,
+                color: AppTheme.lightTextSub,
+                fontWeight: FontWeight.w600,
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }
@@ -132,9 +126,12 @@ class LsbQuestionDisplay extends StatelessWidget {
     required this.formulation,
   });
 
+  /// Tamaño de la pregunta, en LSB o en español.
+  static double fontSizeFor(BuildContext context) =>
+      MediaQuery.sizeOf(context).width < 360 ? 20 : 22;
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
     if (formulation.hasUsableLsb) {
       return LsbFormulationStrip(formulation: formulation);
     }
@@ -143,11 +140,10 @@ class LsbQuestionDisplay extends StatelessWidget {
       key: const Key('formulacion_es_fallback'),
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: width < 360 ? 16 : 17,
-        fontWeight: FontWeight.w700,
+        fontSize: fontSizeFor(context),
+        fontWeight: FontWeight.w800,
         height: 1.2,
         color: AppTheme.lightText,
-        letterSpacing: -0.2,
       ),
     );
   }
@@ -166,7 +162,10 @@ class LsbFormulationStrip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final conImagen = ref.watch(signImagesEnabledProvider);
+    // Como en las tarjetas: la imagen solo si hay una seña que enseñar.
+    final conImagen =
+        ref.watch(signImagesEnabledProvider) &&
+        ref.watch(signImageResolverProvider).isConfigured;
     final segmentos = formulation.segments;
     return Semantics(
       label: 'Pregunta en LSB: ${segmentos.map((s) => s.label).join(' ')}',
@@ -175,7 +174,7 @@ class LsbFormulationStrip extends ConsumerWidget {
         key: const Key('formulacion_lsb'),
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 5,
+        spacing: 8,
         runSpacing: 4,
         children: [
           for (final s in segmentos)
@@ -196,41 +195,32 @@ class _LsbPiece extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final fontSize = width < 360 ? 15.0 : 16.0;
     final esSena =
         segment.kind == LsbSegmentKind.sign ||
         segment.kind == LsbSegmentKind.compound;
     final marca = withImage ? _marca(esSena) : null;
 
-    // Imagen y glosa en la misma fila: apiladas, cada pieza medía el doble
-    // de alto y la cabecera empujaba las tarjetas hacia abajo.
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      decoration: BoxDecoration(
-        color: AppTheme.lightSubtle,
-        borderRadius: BorderRadius.circular(9),
-        border: Border.all(color: AppTheme.lightBorder),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (marca != null) ...[marca, const SizedBox(width: 5)],
-          Flexible(
-            child: Text(
-              segment.label.replaceAll('_', ' '),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: fontSize,
-                height: 1.15,
-                fontWeight: FontWeight.w800,
-                fontStyle: esSena ? FontStyle.normal : FontStyle.italic,
-                color: AppTheme.lightText,
-              ),
+    // Cada glosa como palabra de la pregunta, sin recuadro. La imagen, si la
+    // hay, va en la misma fila: apilada, la cabecera empujaba las tarjetas.
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (marca != null) ...[marca, const SizedBox(width: 5)],
+        Flexible(
+          child: Text(
+            segment.label.replaceAll('_', ' '),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: LsbQuestionDisplay.fontSizeFor(context),
+              height: 1.2,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.3,
+              fontStyle: esSena ? FontStyle.normal : FontStyle.italic,
+              color: AppTheme.lightText,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
