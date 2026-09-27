@@ -8,6 +8,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(AQUI))
@@ -313,6 +314,40 @@ class ZonasDeTramite(unittest.TestCase):
     def test_sin_zona_de_respuesta_no_hay_tarjetas(self):
         self.assertEqual(
             B.tarjetas_de_zona(self.ESC, [{"glosas": ["SI"]}], self.ZONAS), [])
+
+
+class ConfirmacionAutomatica(unittest.TestCase):
+    """Una equivalencia de Bedrock se decide sola con Titan y la vuelta."""
+
+    def decidir(self, vecinas, faltan, sobran):
+        import rag_equivalencias as E
+        import rag_zonas as ZN
+        import rag_indexar_embeddings as RI
+        salida = {"BOLETA": {"sena": "FACTURA", "estado": "propuesta",
+                             "origen": "bedrock",
+                             "ejemplos": ["Tengo mi boleta."]}}
+        with tempfile.TemporaryDirectory() as d:
+            zonas = os.path.join(d, "zonas.json")
+            with open(zonas, "w", encoding="utf-8") as f:
+                json.dump({"BOLETA": {"vecinas": vecinas}}, f)
+            respuesta = {"generated": True, "items": [
+                {"faltan": faltan, "sobran": sobran}]}
+            with mock.patch.object(ZN, "DESTINO", zonas),                     mock.patch.object(RI, "llamar", return_value=respuesta),                     mock.patch.object(E, "_frases_con_glosas", return_value={
+                        "Tengo mi boleta.": ["TENER", "MÍO",
+                                             "SENA_PENDIENTE:BOLETA"]}):
+                E.confirmar("url", salida)
+        return salida["BOLETA"]
+
+    def test_con_las_tres_senales_se_aprueba_sola(self):
+        e = self.decidir(["FACTURA", "PAPEL"], [], [])
+        self.assertEqual((e["estado"], e["automatica"]), ("aprobada", True))
+
+    def test_si_titan_no_la_pone_cerca_se_rechaza(self):
+        self.assertEqual(self.decidir(["CASA"], [], [])["estado"], "rechazada")
+
+    def test_si_la_vuelta_pierde_la_palabra_se_rechaza(self):
+        e = self.decidir(["FACTURA"], ["boleta"], [])
+        self.assertEqual(e["estado"], "rechazada")
 
 if __name__ == "__main__":
     unittest.main()
