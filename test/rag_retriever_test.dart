@@ -135,19 +135,41 @@ void main() {
       expect(found.map((s) => s.text), contains('Soy denunciado.'));
     });
 
-    test('con una pregunta del grafo: nada, mandan las tarjetas guiadas', () {
+    test('el grafo solo reconoció el tema: el RAG entra', () {
+      // «denunciado» nombra Denuncias y el grafo abre ese contexto, pero la
+      // pregunta es de SEPDEP.
       final found = ragSuggestionsFor(
         withHearing(
           pregunta,
           route: const ConversationRoute(
-            type: ConversationRouteType.directQuestion,
-            targetContextId: 'denuncia_robo',
-            targetQuestionIds: ['Q.PER.CONOCE'],
+            type: ConversationRouteType.directContext,
+            targetFamilyId: 'denuncias',
+            confidence: 0.75,
           ),
         ),
         retriever,
       );
-      expect(found, isEmpty);
+      expect(found.map((s) => s.text), contains('Soy denunciado.'));
+    });
+
+    test('el grafo eligió una pregunta con seguridad: manda el grafo', () {
+      // Parecido alto pero no literal (0.84) contra un grafo seguro.
+      const nurej = '¿Tiene el número de NUREJ y el WebID?';
+      ConversationRoute graph(double confidence) => ConversationRoute(
+        type: ConversationRouteType.directQuestion,
+        targetContextId: 'seguimiento',
+        targetQuestionIds: const ['Q.SEG.NUM_REFERENCIA'],
+        confidence: confidence,
+      );
+      expect(
+        ragSuggestionsFor(withHearing(nurej, route: graph(0.95)), retriever),
+        isEmpty,
+      );
+      // Con un grafo que dudaba, el RAG se ofrece junto a sus tarjetas.
+      expect(
+        ragSuggestionsFor(withHearing(nurej, route: graph(0.6)), retriever),
+        isNotEmpty,
+      );
     });
 
     test('mientras se traduce, sin ruta todavía o sin corpus: nada', () {
@@ -171,6 +193,32 @@ void main() {
         isEmpty,
       );
     });
+  });
+
+  test('cuándo pesa más el RAG que el grafo', () {
+    const noSafe = ConversationRoute.noSafeRoute();
+    const topic = ConversationRoute(
+      type: ConversationRouteType.contextSelector,
+      confidence: 0.6,
+    );
+    ConversationRoute question(double c) => ConversationRoute(
+      type: ConversationRouteType.directQuestion,
+      targetContextId: 'denuncia_robo',
+      targetQuestionIds: const ['Q.LUG.DONDE'],
+      confidence: c,
+    );
+    // El grafo no sabe: basta un parecido suficiente.
+    expect(ragOutranksGraph(noSafe, RagRetriever.minScore), isTrue);
+    expect(ragOutranksGraph(noSafe, RagRetriever.minScore - 0.01), isFalse);
+    // Solo reconoció el tema: hace falta un parecido bueno.
+    expect(ragOutranksGraph(topic, 0.6), isTrue);
+    expect(ragOutranksGraph(topic, 0.59), isFalse);
+    // Eligió preguntas: casi literal y bastante más seguro que el grafo…
+    expect(ragOutranksGraph(question(0.6), 0.8), isTrue);
+    expect(ragOutranksGraph(question(0.6), 0.79), isFalse);
+    expect(ragOutranksGraph(question(0.9), 0.95), isFalse);
+    // …o la pregunta documentada tal cual, aunque el grafo esté seguro.
+    expect(ragOutranksGraph(question(1.0), 1.0), isTrue);
   });
 
   testWidgets('la barra muestra la frase y su LSB, y envía lo elegido', (
