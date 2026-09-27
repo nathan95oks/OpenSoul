@@ -86,6 +86,14 @@ class ModuloRag(unittest.TestCase):
         for s in found:
             self.assertTrue(s["glosses"])
 
+    def test_no_mezcla_instituciones(self):
+        found = RAG.consultar("¿Usted está en peligro ahorita?", LISTA,
+                              indice_completo(), falso_embed, minimo=0.3,
+                              limite=8)
+        self.assertTrue(found)
+        areas = {s["scenarioId"].split("-")[1] for s in found}
+        self.assertEqual(1, len(areas), found)
+
     def test_lo_que_no_se_parece_no_sugiere_nada(self):
         self.assertEqual([], RAG.consultar("¿Le gusta el fútbol?", LISTA,
                                            indice_completo(), falso_embed))

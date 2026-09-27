@@ -21,7 +21,7 @@ void main() {
       final fallas = <String>[];
       for (final s in corpus.scenarios) {
         for (final t in s.turns) {
-          if (t.speaker != RagSpeaker.official) continue;
+          if (t.speaker != RagSpeaker.official || !t.showable) continue;
           final next = s.turn(t.n + 1);
           final hasReply =
               (next != null && next.isOfferableReply) ||

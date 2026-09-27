@@ -181,7 +181,13 @@ Guía de uso: `docs/negocio/rag/README.md`.
   (turnos del funcionario y variantes, con sus respuestas ofrecibles) y las
   compara por significado con Titan Text Embeddings V2 (256 dimensiones,
   normalizados).
-  - Umbral `RAG_MIN_SIMILARITY` (0.6), margen 0.05 y ventaja de tema 0.02.
+  - Umbral `RAG_MIN_SIMILARITY` = 0.46, calibrado con la Lambda real
+    (`tool/rag_calibrar.py`): paráfrasis bien encaminadas 0.48–0.79, frases
+    sin relación hasta 0.444; acepta 11 de 15 paráfrasis y rechaza las 7
+    frases sin relación.
+  - Margen 0.05 y ventaja de tema 0.02. Solo junta respuestas de la
+    institución de la mejor coincidencia.
+  - Las frases del funcionario no mostrables no son claves: atraían ruido.
   - Es extractiva, igual que la fase 1.
 - `lambda_function.py`:
   - `action: "consulta"`: una llamada a Titan por pregunta. Sin índice,
@@ -199,7 +205,6 @@ Guía de uso: `docs/negocio/rag/README.md`.
   Una vez por turno; cualquier fallo es «sin sugerencias».
 - Pruebas: `aws/tests/test_rag_consulta.py` (embedding falso con
   sinónimos) y `test/rag_remote_test.dart` (servidor simulado).
-- Umbral por calibrar con frases reales tras desplegar.
 
 ### Fase 3 (opcional): respuestas redactadas
 
