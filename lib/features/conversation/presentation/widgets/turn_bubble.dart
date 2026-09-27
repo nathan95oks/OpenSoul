@@ -21,7 +21,6 @@ class TurnBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final align = _isDeaf ? Alignment.centerLeft : Alignment.centerRight;
-    final bg = _isDeaf ? AppTheme.darkElevated : AppTheme.brandPrimary;
     final radius = BorderRadius.only(
       topLeft: const Radius.circular(18),
       topRight: const Radius.circular(18),
@@ -29,117 +28,126 @@ class TurnBubble extends StatelessWidget {
       bottomRight: Radius.circular(_isDeaf ? 18 : 4),
     );
 
-    return Align(
-      alignment: align,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.82,
-        ),
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: radius,
-            border: Border.all(
-              color: _isDeaf ? AppTheme.darkBorder : AppTheme.brandDeep,
-            ),
+    // Sin etiqueta de quién habla: lo dicen el color y el lado. Lo que llega
+    // por Audio/Texto→LSB va en azul muy oscuro, a la derecha; lo que sale de
+    // las tarjetas (LSB→Texto/Audio), con el violeta de las glosas, a la
+    // izquierda. Quién habla sigue en el modelo y en la lectura de pantalla.
+    return Semantics(
+      container: true,
+      label: _isDeaf
+          ? 'Mensaje de la persona sorda'
+          : 'Mensaje de la persona oyente',
+      child: Align(
+        alignment: align,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.82,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    _isDeaf ? Icons.sign_language : Icons.record_voice_over,
-                    size: 13,
-                    color: _isDeaf ? AppTheme.brandLight : Colors.white70,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
+            decoration: BoxDecoration(
+              color: _isDeaf ? null : AppTheme.brandPrimary,
+              gradient: _isDeaf
+                  ? const LinearGradient(
+                      colors: [AppTheme.lsbViolet, AppTheme.lsbVioletDeep],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+              borderRadius: radius,
+              border: Border.all(
+                color: _isDeaf ? AppTheme.lsbVioletLight : AppTheme.brandLight,
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: (_isDeaf ? AppTheme.lsbViolet : AppTheme.brandPrimary)
+                      .withValues(alpha: 0.18),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  turn.outputs.text,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    height: 1.35,
                   ),
-                  const SizedBox(width: 5),
+                ),
+                if (turn.message.glosses.isNotEmpty) ...[
+                  const SizedBox(height: 6),
                   Text(
-                    _isDeaf ? 'Persona sorda · LSB' : 'Persona oyente',
+                    turn.message.glosses
+                        .map((g) => g.replaceAll('_', ' '))
+                        .join(' • '),
                     style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
-                      color: _isDeaf ? AppTheme.brandLight : Colors.white70,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: _isDeaf
+                          ? Colors.white.withValues(alpha: 0.9)
+                          : Colors.white60,
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 6),
-              Text(
-                turn.outputs.text,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  height: 1.35,
-                ),
-              ),
-              if (turn.message.glosses.isNotEmpty) ...[
-                const SizedBox(height: 6),
-                Text(
-                  turn.message.glosses
-                      .map((g) => g.replaceAll('_', ' '))
-                      .join(' • '),
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                    color: _isDeaf ? AppTheme.darkTextSub : Colors.white60,
-                  ),
-                ),
-              ],
-              if (turn.message.disambiguations.isNotEmpty) ...[
-                const SizedBox(height: 6),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 4,
-                  children: [
-                    for (final d in turn.message.disambiguations)
-                      Tooltip(
-                        message: d.reason,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.14),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            '${d.original} → ${d.meaning}',
-                            style: const TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                if (turn.message.disambiguations.isNotEmpty) ...[
+                  const SizedBox(height: 6),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 4,
+                    children: [
+                      for (final d in turn.message.disambiguations)
+                        Tooltip(
+                          message: d.reason,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.14),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              '${d.original} → ${d.meaning}',
+                              style: const TextStyle(
+                                fontSize: 10.5,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
+                ],
+                const SizedBox(height: 4),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: _isDeaf
+                      ? _ActionChip(
+                          icon: Icons.volume_up_rounded,
+                          label: 'Escuchar',
+                          onTap: onPlayAudio,
+                        )
+                      : (turn.outputs.hasAvatar
+                            ? _ActionChip(
+                                icon: Icons.threed_rotation,
+                                label: 'Ver en avatar',
+                                onTap: onShowAvatar,
+                              )
+                            : (turn.pending
+                                  ? const _PendingSigns()
+                                  : const SizedBox.shrink())),
                 ),
               ],
-              const SizedBox(height: 4),
-              Align(
-                alignment: Alignment.centerRight,
-                child: _isDeaf
-                    ? _ActionChip(
-                        icon: Icons.volume_up_rounded,
-                        label: 'Escuchar',
-                        onTap: onPlayAudio,
-                      )
-                    : (turn.outputs.hasAvatar
-                        ? _ActionChip(
-                            icon: Icons.threed_rotation,
-                            label: 'Ver en avatar',
-                            onTap: onShowAvatar,
-                          )
-                        : (turn.pending
-                            ? const _PendingSigns()
-                            : const SizedBox.shrink())),
-              ),
-            ],
+            ),
           ),
         ),
       ),

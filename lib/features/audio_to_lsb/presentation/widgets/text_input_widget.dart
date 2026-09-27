@@ -260,13 +260,14 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: const Key('hearing_input_box'),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppTheme.lightInputBg,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black12, width: 1.5),
+        border: Border.all(color: AppTheme.lightInputBorder, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.12),
+            color: AppTheme.brandPrimary.withValues(alpha: 0.10),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -280,10 +281,14 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
               controller: _controller,
               focusNode: widget.focusNode,
               enabled: !_isRecording,
-              style: const TextStyle(color: Colors.black87, fontSize: 16),
+              style: const TextStyle(
+                color: AppTheme.lightInputText,
+                fontSize: 16,
+              ),
+              cursorColor: AppTheme.lightInputCursor,
               decoration: InputDecoration(
                 hintText: widget.hintText,
-                hintStyle: const TextStyle(color: Colors.black45),
+                hintStyle: const TextStyle(color: AppTheme.lightInputHint),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
@@ -291,38 +296,41 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
               onSubmitted: (_) => _submit(),
             ),
           ),
+          // Sin círculos de fondo: el color va en el propio ícono
+          // (audio azul, enviar morado). Al grabar, el ícono de detener
+          // parpadea en rojo.
           AnimatedBuilder(
             animation: _animationController,
             builder: (context, child) {
-              return Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _isRecording
-                      ? Colors.red.withValues(
-                          alpha: 0.15 + (_animationController.value * 0.2),
-                        )
-                      : Colors.transparent,
-                  boxShadow: _isRecording
-                      ? [
-                          BoxShadow(
-                            color: AppTheme.errorDark.withValues(alpha: 0.3),
-                            spreadRadius: _animationController.value * 6,
-                            blurRadius: 8,
-                          ),
-                        ]
-                      : null,
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
-                    color: _isRecording
-                        ? AppTheme.errorDark
-                        : const Color(0xFF1E1E2F),
-                    size: 24,
+              return IconButton(
+                icon: Opacity(
+                  opacity: _isRecording
+                      ? 0.6 + (_animationController.value * 0.4)
+                      : 1,
+                  // Micrófono ↔ detener gira y escala en lugar de saltar.
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 220),
+                    transitionBuilder: (child, animation) => RotationTransition(
+                      turns: Tween<double>(
+                        begin: 0.75,
+                        end: 1,
+                      ).animate(animation),
+                      child: ScaleTransition(scale: animation, child: child),
+                    ),
+                    child: Icon(
+                      _isRecording ? Icons.stop_rounded : Icons.mic_rounded,
+                      key: ValueKey(
+                        _isRecording ? 'hearing_stop' : 'hearing_audio_action',
+                      ),
+                      color: _isRecording
+                          ? AppTheme.errorLight
+                          : AppTheme.audioActionBlue,
+                      size: 26,
+                    ),
                   ),
-                  onPressed: _toggleRecording,
-                  tooltip: _isRecording ? 'Detener grabación' : 'Grabar voz',
                 ),
+                onPressed: _toggleRecording,
+                tooltip: _isRecording ? 'Detener grabación' : 'Grabar voz',
               );
             },
           ),
@@ -330,8 +338,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
           IconButton(
             icon: const Icon(
               Icons.send_rounded,
-              color: Color(0xFF6C5CE7),
-              size: 24,
+              key: Key('hearing_send_action'),
+              color: AppTheme.lsbViolet,
+              size: 26,
             ),
             onPressed: _submit,
             tooltip: 'Enviar mensaje',

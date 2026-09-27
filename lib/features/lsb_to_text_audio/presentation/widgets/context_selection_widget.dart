@@ -108,7 +108,9 @@ class _ContextSelectionWidgetState
                 onPressed: () => setState(() => _abierta = null),
                 icon: const Icon(Icons.arrow_back, size: 18),
                 label: const Text('Volver'),
-                style: TextButton.styleFrom(foregroundColor: Colors.white),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppTheme.brandLight,
+                ),
               ),
               const SizedBox(height: 8),
               ...desplegados.map(

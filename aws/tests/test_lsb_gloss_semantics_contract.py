@@ -36,6 +36,9 @@ class GlossSemanticsParity(unittest.TestCase):
                          t2l._INTERROGATIVOS_ABIERTOS_HABLADOS)
         self.assertEqual(CONTRACT["spokenHeadSlots"], t2l._SLOT_POR_NUCLEO_HABLADO)
         self.assertEqual(CONTRACT["spokenWordSlots"], t2l._SLOT_POR_PALABRA)
+        self.assertEqual(CONTRACT["spokenStemSlots"], t2l._SLOT_POR_RAIZ_HABLADA)
+        self.assertEqual(CONTRACT["spokenAfterHowSlots"],
+                         t2l._SLOT_TRAS_COMO_HABLADO)
         self.assertEqual(set(CONTRACT["questionPrepositions"]),
                          t2l._PREPOSICIONES_INTERROGATIVAS)
 

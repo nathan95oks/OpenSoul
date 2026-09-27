@@ -5,17 +5,11 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/ls
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/screens/audio_to_lsb_screen.dart';
 
-final appRouter = GoRouter(
-  initialLocation: '/',
+GoRouter createAppRouter({required bool showSplash}) => GoRouter(
+  initialLocation: showSplash ? '/' : '/home',
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const SplashScreen(),
-    ),
-    GoRoute(
-      path: '/home',
-      builder: (context, state) => const AppShell(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
+    GoRoute(path: '/home', builder: (context, state) => const AppShell()),
     GoRoute(
       path: '/lsb-to-audio',
       builder: (context, state) => const LsbFlowScreen(),

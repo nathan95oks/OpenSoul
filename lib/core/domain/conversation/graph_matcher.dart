@@ -104,7 +104,8 @@ class GraphMatcher {
   // ---- Significado (lectura del backend) -----------------------------------
 
   late final List<_Signature> _signatures = [
-    for (final e in catalog.replyEntries) _Signature(e),
+    for (final e in catalog.replyEntries)
+      _Signature(e, catalog.answerSlotsOf(e.questionId)),
   ];
 
   late final Map<String, int> _questionFrequency = () {
@@ -204,7 +205,23 @@ class GraphMatcher {
         .difference(explained)
         .difference(cues)
         .difference(presupposed);
-    if (unexplained.any(_pointsElsewhere)) {
+    // Si el oyente pidió un dato, solo cuentan las preguntas que lo
+    // responden: EXPLICAR en «¿Puedes describirlos?» no apunta a «¿Me
+    // explico?», que no responde a una descripción.
+    final asksData = slots.difference(const {'polarity'}).isNotEmpty;
+    bool pointsElsewhere(String gloss) {
+      if (!asksData) return _pointsElsewhere(gloss);
+      final questions = {
+        for (final s in _signatures)
+          if (s.content.contains(gloss) &&
+              _slotsAgree(s.slots, slots, polar: s.polar))
+            s.entry.questionId,
+      };
+      return questions.isNotEmpty &&
+          questions.length <= _distinctiveMaxQuestions;
+    }
+
+    if (unexplained.any(pointsElsewhere)) {
       for (final f in strong) {
         if (f.score < exactMatch) f.score = strongMatch - 0.01;
       }
@@ -236,6 +253,30 @@ class GraphMatcher {
       for (final sig in _signatures)
         if (sig.content.isEmpty && sig.slots.contains(slot)) sig,
     ];
+    final directInContext = [
+      for (final sig in candidates)
+        if (contexts.any(
+          (context) => catalog.isStepOf(context, sig.entry.questionId),
+        ))
+          sig,
+    ];
+    if (directInContext.isNotEmpty) {
+      candidates = directInContext;
+    } else if (contexts.isNotEmpty) {
+      // Si el banco no tiene una pregunta QU directa para el dato dentro del
+      // contexto, usa una pregunta-puerta del mismo recorrido. Solo se
+      // habilita con contexto explícito o activo: un "quién" aislado no basta
+      // para adivinar de qué persona se habla.
+      final bridge = [
+        for (final sig in _signatures)
+          if (sig.slots.contains(slot) &&
+              contexts.any(
+                (context) => catalog.isStepOf(context, sig.entry.questionId),
+              ))
+            sig,
+      ];
+      if (bridge.isNotEmpty) candidates = bridge;
+    }
     if (candidates.isEmpty) return null;
     final form = candidates
         .map((s) => _dice(heads, s.heads))
@@ -244,12 +285,6 @@ class GraphMatcher {
       for (final s in candidates)
         if (_dice(heads, s.heads) == form) s,
     ];
-    final inContext = [
-      for (final s in candidates)
-        if (contexts.any((c) => catalog.isStepOf(c, s.entry.questionId))) s,
-    ];
-    if (inContext.isNotEmpty) candidates = inContext;
-
     _Found? best;
     for (final sig in candidates) {
       var score = 0.7 + 0.2 * form;
@@ -305,7 +340,12 @@ class GraphMatcher {
     required bool polar,
   }) {
     final data = turn.difference(const {'polarity'});
-    if (question.isNotEmpty) return question.intersection(data).isNotEmpty;
+    // Una pregunta de sí/no con ranura es una puerta («¿Conoce a la
+    // persona?» abre quién fue): responde también cuando el oyente la hace
+    // tal cual, sin pedir el dato.
+    if (question.isNotEmpty) {
+      return question.intersection(data).isNotEmpty || (polar && data.isEmpty);
+    }
     return data.isEmpty || (polar && turn.contains('polarity'));
   }
 
@@ -325,8 +365,8 @@ class GraphMatcher {
           (o) =>
               o != f &&
               o.score >= f.score &&
-              f.sig.features.length < o.sig.features.length &&
-              o.sig.features.containsAll(f.sig.features),
+              f.features.length < o.features.length &&
+              o.features.containsAll(f.features),
         ))
           f,
     ];
@@ -535,11 +575,10 @@ class _Signature {
   final Set<String> slots;
   final bool polar;
 
-  _Signature(this.entry)
+  _Signature(this.entry, this.slots)
     : glosses = entry.glosses,
       content = LsbGlossSemantics.contentOf(entry.glosses),
       heads = LsbGlossSemantics.headsOf(entry.glosses),
-      slots = LsbGlossSemantics.questionSlotsOf(entry.glosses),
       polar = !LsbGlossSemantics.hasInterrogative(entry.glosses);
 
   late final Set<String> features = {...content, for (final s in slots) '#$s'};
@@ -554,4 +593,13 @@ class _Found {
   final Set<String> shared;
 
   _Found(this.sig, this.score, this.slots, this.shared);
+
+  /// Lo que la pregunta tiene en común con lo pedido: su contenido y las
+  /// ranuras que responde de verdad. Una puerta de sí/no reconocida sin que
+  /// se pidiera su dato («¿Conoce…?») no cuenta esa ranura, así que otra
+  /// pregunta que la contiene («¿Conoce el número…?») la sustituye.
+  late final Set<String> features = {
+    ...sig.content,
+    for (final s in slots) '#$s',
+  };
 }

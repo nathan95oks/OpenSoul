@@ -5,8 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/session_snapshot.dart';
-import 'package:lsb_legal_app/core/data/models/conversation_json.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
@@ -60,9 +58,6 @@ class SessionRestorer {
         contextId: ref.read(contextProvider)?.id,
         sentence: ref.read(sentenceProvider),
         resultVisible: ref.read(resultVisibleProvider),
-        conversation: ConversationJson.encode(
-          ref.read(conversationProvider).conversation,
-        ),
       ),
     );
   }
@@ -77,6 +72,10 @@ class SessionRestorer {
     final tab = AppTabId.byId(config.lastTabId);
     if (tab != null) _tab = tab;
 
+    // El chat no se guarda en disco: un proceso nuevo ya empieza con la
+    // conversación vacía. Si Android mató el proceso con la tarea todavía en
+    // recientes, la repone [ConversationRestoration].
+
     // En ventanilla no se repone contenido: el dispositivo es compartido y la
     // atención anterior ya terminó, aunque el proceso muriera sin que nadie
     // pulsara «Finalizar atención».
@@ -88,24 +87,11 @@ class SessionRestorer {
     final content = await repo.loadContent();
     if (content == null || !content.isWorthRestoring) return tab;
 
-    // La conversación se repone antes que nada: es el hilo del que cuelga el
-    // resto —quién preguntó, qué contexto se propuso— y sin ella el flujo de
-    // tarjetas no sabría a qué está respondiendo.
-    final guardada = content.conversation;
-    if (guardada != null) {
-      final conversacion = ConversationJson.decode(guardada);
-      if (conversacion != null && conversacion.turns.isNotEmpty) {
-        ref.read(conversationProvider.notifier).replaceConversation(
-              conversacion,
-            );
-      }
-    }
-
     final contexto = content.contextId == null
         ? null
         : allSelectableContexts
-            .where((c) => c.id == content.contextId)
-            .firstOrNull;
+              .where((c) => c.id == content.contextId)
+              .firstOrNull;
 
     if (contexto != null) {
       ref.read(contextProvider.notifier).setContext(contexto);

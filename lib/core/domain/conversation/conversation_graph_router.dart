@@ -34,7 +34,7 @@ abstract class GraphRouteModel {
 class ConversationGraphRouter {
   /// Versión de las reglas; viaja a la Lambda y forma parte de la clave de
   /// su caché de rutas.
-  static const int version = 2;
+  static const int version = 3;
 
   final ConversationGraphCatalog catalog;
   final ConversationRouteValidator validator;
@@ -111,8 +111,12 @@ class ConversationGraphRouter {
       );
     }
     final requested = GraphMatcher.requestedSlotsOf(turn);
-    if (!validation.route!.targetQuestionIds.every(
-      (q) => catalog.answers(q, requested),
+    final targets = validation.route!.targetQuestionIds;
+    final context = validation.route!.targetContextId ?? '';
+    // Lo que abre una puerta de la ruta responde con ella.
+    final opened = {for (final q in targets) ...catalog.openedBy(context, q)};
+    if (!targets.every(
+      (q) => catalog.answers(q, requested) || opened.contains(q),
     )) {
       return settled.copyWith(
         reason: 'propuesta del modelo que no responde a lo pedido',
@@ -185,15 +189,30 @@ class ConversationGraphRouter {
       for (final r in matcher.match(turn, activeContextId: active))
         if (catalog.answers(r.questionId, requested)) r,
     ];
-    final strong = [
+    final (mentionedContexts, mentionedFamilies) = _mentions(turn);
+    var strong = [
       for (final r in matches)
         if (r.score >= GraphMatcher.strongMatch) r,
     ];
+    // En una conversación ya situada, lo que el recorrido activo pregunta
+    // manda sobre preguntas parecidas de otros contextos («¿Qué tiene?» en
+    // un robo no es el número de trámite de un seguimiento). Nombrar otro
+    // contexto sí cambia de tema.
+    if (active != null && mentionedContexts.every((c) => c == active)) {
+      // Una pregunta que no es paso de ningún recorrido también es del
+      // activo: se antepone en él.
+      final inActive = [
+        for (final r in strong)
+          if (catalog.isStepOf(active, r.questionId) ||
+              catalog.journeysOf(r.questionId).isEmpty)
+            r,
+      ];
+      if (inActive.isNotEmpty) strong = inActive;
+    }
     final weak = [
       for (final r in matches)
         if (r.score < GraphMatcher.strongMatch) r,
     ];
-    final (mentionedContexts, mentionedFamilies) = _mentions(turn);
 
     ConversationRoute done(ConversationRoute r) {
       _log(turn, r);
@@ -263,8 +282,10 @@ class ConversationGraphRouter {
 
     // 3. Pregunta abierta por el motivo de la atención: elegir contexto. Va
     //    antes que las coincidencias débiles, que aquí serían solo ruido de
-    //    verbos genéricos.
-    if (turn.intent == SemanticIntent.askPurpose) {
+    //    verbos genéricos. Con la conversación ya situada, un «¿qué…?»
+    //    («¿Qué ropa llevaba?») pregunta dentro del tema: siguen las rutas
+    //    posibles del recorrido, que el modelo puede elegir.
+    if (turn.intent == SemanticIntent.askPurpose && active == null) {
       return done(_selector('pregunta abierta por el motivo de la atención'));
     }
 
@@ -387,16 +408,33 @@ class ConversationGraphRouter {
     double? minConfidence,
   }) {
     final ids = [for (final r in requests) r.questionId];
+    // Una puerta de control que el oyente preguntó («¿Puede describir a los
+    // agresores?») se sustituye por las preguntas que abre: pedir la
+    // descripción es pedir esos rasgos. La puerta no escribe nada, así que
+    // saltarla no responde por la persona sorda; cada rasgo tiene su «No
+    // sé».
+    final opened = <String>{};
+    final targets = <String>[];
+    for (final id in ids) {
+      final children = catalog.openedBy(context, id);
+      if (children.isEmpty) {
+        if (!targets.contains(id)) targets.add(id);
+        continue;
+      }
+      for (final child in children) {
+        if (opened.add(child) && !targets.contains(child)) targets.add(child);
+      }
+    }
     final confidence = requests
         .map((r) => r.score)
         .reduce((a, b) => a < b ? a : b);
     final route = ConversationRoute(
-      type: ids.length == 1
+      type: targets.length == 1
           ? ConversationRouteType.directQuestion
           : ConversationRouteType.minimalGraphPath,
       targetFamilyId: catalog.familyOf(context),
       targetContextId: context,
-      targetQuestionIds: ids,
+      targetQuestionIds: targets,
       requestedSlots: {for (final r in requests) ...r.slots}.toList(),
       confidence: confidence,
       reason: '$reason: ${[for (final r in requests) r.nodeId].join(', ')}',
@@ -408,7 +446,7 @@ class ConversationGraphRouter {
                     catalog,
                     minConfidence: minConfidence,
                   ))
-            .validate(route, presupposed: ids.toSet());
+            .validate(route, presupposed: {...ids, ...opened});
     return validation.route;
   }
 

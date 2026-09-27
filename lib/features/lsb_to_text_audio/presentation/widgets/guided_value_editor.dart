@@ -78,16 +78,17 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
   String get _editor => widget.option.editor!;
 
   List<String> get _textKeys => [
-        for (final k in kEditorKeys[_editor] ?? const <String>[])
-          if (k != 'moneda') k
-      ];
+    for (final k in kEditorKeys[_editor] ?? const <String>[])
+      if (k != 'moneda') k,
+  ];
 
   @override
   void initState() {
     super.initState();
     for (final key in _textKeys) {
-      _fields[key] =
-          TextEditingController(text: widget.initial?[key]?.toString() ?? '');
+      _fields[key] = TextEditingController(
+        text: widget.initial?[key]?.toString() ?? '',
+      );
     }
     // Sin moneda por defecto: una moneda no elegida sería un dato inventado.
     _currency = widget.initial?['moneda']?.toString();
@@ -103,10 +104,10 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
   }
 
   Map<String, Object?> get _draft => {
-        for (final e in _fields.entries) e.key: e.value.text,
-        if (_editor == 'monto') 'moneda': _currency,
-        if (_editor == 'edad' && _approximate) 'aprox': 'si',
-      };
+    for (final e in _fields.entries) e.key: e.value.text,
+    if (_editor == 'monto') 'moneda': _currency,
+    if (_editor == 'edad' && _approximate) 'aprox': 'si',
+  };
 
   ValueCheck get _check =>
       GuidedValues.check(_editor, _draft, range: widget.option.range);
@@ -123,46 +124,50 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
   (String, TextInputType, List<TextInputFormatter>, int) _fieldSpec() {
     return switch (_editor) {
       'telefono' => (
-          'Número de celular',
-          TextInputType.phone,
-          [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9+ ]')),
-            LengthLimitingTextInputFormatter(14),
-          ],
-          1
-        ),
+        'Número de celular',
+        TextInputType.phone,
+        [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9+ ]')),
+          LengthLimitingTextInputFormatter(14),
+        ],
+        1,
+      ),
       'entero' || 'edad' => (
-          _editor == 'edad' ? 'Edad en años' : 'Número',
-          TextInputType.number,
-          [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(3),
-          ],
-          1
-        ),
+        _editor == 'edad' ? 'Edad en años' : 'Número',
+        TextInputType.number,
+        [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(3),
+        ],
+        1,
+      ),
       'monto' => (
-          'Monto',
-          const TextInputType.numberWithOptions(decimal: true),
-          [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-            LengthLimitingTextInputFormatter(12),
-          ],
-          1
-        ),
+        'Monto',
+        const TextInputType.numberWithOptions(decimal: true),
+        [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+          LengthLimitingTextInputFormatter(12),
+        ],
+        1,
+      ),
       'hora' => (
-          'Hora (por ejemplo 18:30)',
-          TextInputType.datetime,
-          [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9:]')),
-            LengthLimitingTextInputFormatter(5),
-          ],
-          1
-        ),
+        'Hora (por ejemplo 18:30)',
+        TextInputType.datetime,
+        [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9:]')),
+          LengthLimitingTextInputFormatter(5),
+        ],
+        1,
+      ),
       'texto_nombre' => ('Nombre', TextInputType.name, const [], 1),
       'lugar_literal' => ('Nombre del lugar', TextInputType.text, const [], 1),
       'referencia' => ('Lugar de referencia', TextInputType.text, const [], 1),
-      'documento_numero' =>
-        ('Número del documento', TextInputType.text, const [], 1),
+      'documento_numero' => (
+        'Número del documento',
+        TextInputType.text,
+        const [],
+        1,
+      ),
       _ => ('Escribe aquí', TextInputType.multiline, const [], 3),
     };
   }
@@ -173,7 +178,11 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
     final (label, keyboard, format, lines) = _fieldSpec();
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          20, 0, 20, MediaQuery.of(context).viewInsets.bottom + 20),
+        20,
+        0,
+        20,
+        MediaQuery.of(context).viewInsets.bottom + 20,
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -192,7 +201,10 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
             Text(
               widget.question,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 13, color: AppTheme.lightTextSub),
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppTheme.lightTextSub,
+              ),
             ),
             const SizedBox(height: 14),
             for (final key in _textKeys) ...[
@@ -209,34 +221,42 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
                     ? TextCapitalization.words
                     : TextCapitalization.sentences,
                 onChanged: (_) => setState(() {}),
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                decoration: InputDecoration(
+                cursorColor: AppTheme.lightInputCursor,
+                style: const TextStyle(
+                  color: AppTheme.lightInputText,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                ),
+                decoration: AppTheme.lightInputDecoration(
                   labelText: label,
                   counterText: '',
-                  filled: true,
-                  fillColor: AppTheme.lightBg,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14)),
                 ),
               ),
               const SizedBox(height: 12),
             ],
             if (_editor == 'monto') ...[
-              const Text('Moneda',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700, color: AppTheme.lightText)),
+              const Text(
+                'Moneda',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.lightText,
+                ),
+              ),
               const SizedBox(height: 6),
-              Wrap(spacing: 10, children: [
-                for (final c in kCurrencies)
-                  ChoiceChip(
-                    key: Key('editor_moneda_$c'),
-                    label: Text(
-                        c == 'Bs' ? 'Bolivianos (Bs)' : 'Dólares (USD)'),
-                    selected: _currency == c,
-                    onSelected: (_) => setState(() => _currency = c),
-                  ),
-              ]),
+              Wrap(
+                spacing: 10,
+                children: [
+                  for (final c in kCurrencies)
+                    ChoiceChip(
+                      key: Key('editor_moneda_$c'),
+                      label: Text(
+                        c == 'Bs' ? 'Bolivianos (Bs)' : 'Dólares (USD)',
+                      ),
+                      selected: _currency == c,
+                      onSelected: (_) => setState(() => _currency = c),
+                    ),
+                ],
+              ),
               const SizedBox(height: 12),
             ],
             if (_editor == 'edad' && !widget.option.noApproximate)
@@ -260,9 +280,10 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
               child: FilledButton(
                 key: const Key('editor_confirmar'),
                 onPressed: check.isValid ? _confirm : null,
-                child: const Text('Confirmar',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+                child: const Text(
+                  'Confirmar',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                ),
               ),
             ),
             if (widget.canRemove) ...[

@@ -1,0 +1,6233 @@
+{
+ "_nota": "Regenera casos_ruteo_conversacion.json: preguntas del oyente → lectura real.",
+ "casos": [
+  {
+   "id": "n-s6-acceso_comunicativ-01",
+   "origen": "corpus",
+   "texto": "¿Usted es una persona sorda?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.SORDO",
+   "glosasModelo": [
+    "TÚ",
+    "SORDO"
+   ],
+   "glosas": [
+    "TU",
+    "SORDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-02",
+   "origen": "corpus",
+   "texto": "¿Necesita un intérprete de LSB?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.INTERPRETE",
+   "glosasModelo": [
+    "INTÉRPRETE",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "INTERPRETE",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-03",
+   "origen": "corpus",
+   "texto": "¿Prefiere que le escriba en papel?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.ESCRITO",
+   "glosasModelo": [
+    "ESCRIBIR",
+    "PAPEL",
+    "MEJOR"
+   ],
+   "glosas": [
+    "ESCRIBIR",
+    "PAPEL",
+    "MEJOR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-04",
+   "origen": "corpus",
+   "texto": "¿Puede leer este texto?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.LECTURA",
+   "glosasModelo": [
+    "TÚ",
+    "LEER",
+    "PUEDO"
+   ],
+   "glosas": [
+    "TU",
+    "LEER",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-05",
+   "origen": "corpus",
+   "texto": "¿Comprende lo que le estoy explicando?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.COMPRENSION",
+   "glosasModelo": [
+    "TÚ",
+    "COMPRENDER",
+    "EXPLICAR"
+   ],
+   "glosas": [
+    "TU",
+    "COMPRENDER",
+    "EXPLICAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-06",
+   "origen": "corpus",
+   "texto": "¿Quiere que lo explique otra vez y más despacio?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.REPARACION",
+   "glosasModelo": [
+    "VOLVER",
+    "EXPLICAR",
+    "LENTO",
+    "QUERER"
+   ],
+   "glosas": [
+    "VOLVER",
+    "EXPLICAR",
+    "LENTO",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-07",
+   "origen": "corpus",
+   "texto": "¿Cuál es su nombre completo?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.NOMBRE",
+   "glosasModelo": [
+    "TUYO",
+    "NOMBRE",
+    "CUÁL"
+   ],
+   "glosas": [
+    "TUYO",
+    "NOMBRE",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-08",
+   "origen": "corpus",
+   "texto": "¿Puede deletrear su apellido?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.APELLIDO",
+   "glosasModelo": [
+    "NOMBRE",
+    "PUEDO"
+   ],
+   "glosas": [
+    "NOMBRE",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-09",
+   "origen": "corpus",
+   "texto": "¿Tiene su carnet de identidad?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.DOC_TIENE",
+   "glosasModelo": [
+    "PAPEL",
+    "IDENTIDAD",
+    "TENER"
+   ],
+   "glosas": [
+    "PAPEL",
+    "IDENTIDAD",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-10",
+   "origen": "corpus",
+   "texto": "¿Este número de celular es suyo?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.TELEFONO_VALIDA",
+   "glosasModelo": [
+    "CELULAR",
+    "TUYO",
+    "VERDAD"
+   ],
+   "glosas": [
+    "CELULAR",
+    "TUYO",
+    "VERDAD"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-11",
+   "origen": "corpus",
+   "texto": "¿Prefiere recibir avisos por mensaje escrito?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.AVISO",
+   "glosasModelo": [
+    "AVISAR",
+    "ESCRIBIR",
+    "ENVIAR",
+    "MEJOR"
+   ],
+   "glosas": [
+    "AVISAR",
+    "ESCRIBIR",
+    "ENVIAR",
+    "MEJOR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-acceso_comunicativ-12",
+   "origen": "corpus",
+   "texto": "¿Vino solo o acompañado?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.ACOMPANANTE",
+   "glosasModelo": [
+    "TÚ",
+    "1",
+    "VENIR",
+    "ACOMPAÑAR",
+    "CUÁL"
+   ],
+   "glosas": [
+    "TU",
+    "1",
+    "VENIR",
+    "ACOMPAÑAR",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-01",
+   "origen": "corpus",
+   "texto": "¿Desea presentar una denuncia?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.DEN.INTENCION",
+   "glosasModelo": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "violencia",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "otro",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-02",
+   "origen": "corpus",
+   "texto": "¿Qué ocurrió?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.HEC.QUE_OCURRIO",
+   "glosasModelo": [
+    "TÚ",
+    "NARRAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "TU",
+    "NARRAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-03",
+   "origen": "corpus",
+   "texto": "¿Puede contarme lo sucedido desde el inicio?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.HEC.RELATO_ORDENADO",
+   "glosasModelo": [
+    "NARRAR",
+    "EMPEZAR",
+    "PRIMERA_VEZ"
+   ],
+   "glosas": [
+    "NARRAR",
+    "EMPEZAR",
+    "PRIMERA_VEZ"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-04",
+   "origen": "corpus",
+   "texto": "¿Cuándo ocurrió?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "CUÁNDO",
+    "FECHA",
+    "HORA"
+   ],
+   "glosas": [
+    "CUANDO",
+    "FECHA",
+    "HORA"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-05",
+   "origen": "corpus",
+   "texto": "¿Fue hoy, ayer o antes?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TIE.APROX",
+   "glosasModelo": [
+    "HOY",
+    "AYER",
+    "PASADO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "HOY",
+    "AYER",
+    "PASADO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-06",
+   "origen": "corpus",
+   "texto": "¿A qué hora aproximadamente?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TIE.HORA",
+   "glosasModelo": [
+    "HORA",
+    "CUÁNTOS",
+    "MÁS_O_MENOS"
+   ],
+   "glosas": [
+    "HORA",
+    "CUANTOS",
+    "MAS_O_MENOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-07",
+   "origen": "corpus",
+   "texto": "¿Dónde ocurrió?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "DÓNDE"
+   ],
+   "glosas": [
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-08",
+   "origen": "corpus",
+   "texto": "¿Ocurrió dentro o fuera del lugar?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.LUG.DENTRO_FUERA",
+   "glosasModelo": [
+    "DENTRO",
+    "FUERA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "DENTRO",
+    "FUERA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-09",
+   "origen": "corpus",
+   "texto": "¿Conoce a la persona involucrada?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.CONOCE",
+   "glosasModelo": [
+    "TÚ",
+    "ÉL",
+    "CONOCER"
+   ],
+   "glosas": [
+    "TU",
+    "EL",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-10",
+   "origen": "corpus",
+   "texto": "¿Puede identificarla si la vuelve a ver?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.RECONOCE",
+   "glosasModelo": [
+    "IDENTIFICAR",
+    "VOLVER",
+    "VER",
+    "PUEDO"
+   ],
+   "glosas": [
+    "IDENTIFICAR",
+    "VOLVER",
+    "VER",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "identificacion",
+      "evidence": [
+       "identific"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-11",
+   "origen": "corpus",
+   "texto": "¿Había otras personas presentes?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.OTROS_PRESENTES",
+   "glosasModelo": [
+    "HOMBRE",
+    "MUJER",
+    "ALLÍ",
+    "TENER"
+   ],
+   "glosas": [
+    "HOMBRE",
+    "MUJER",
+    "ALLI",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-inicio_de_denuncia-12",
+   "origen": "corpus",
+   "texto": "¿Quiere agregar algo que no le pregunté?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.HEC.AMPLIAR",
+   "glosasModelo": [
+    "AUMENTAR",
+    "NARRAR",
+    "QUERER"
+   ],
+   "glosas": [
+    "AUMENTAR",
+    "NARRAR",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "preguntas",
+      "evidence": [
+       "pregunt"
+      ]
+     }
+    ],
+    "negations": [
+     "NO"
+    ],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-01",
+   "origen": "corpus",
+   "texto": "¿Era un hombre o una mujer?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.SEXO",
+   "glosasModelo": [
+    "HOMBRE",
+    "MUJER",
+    "CUÁL"
+   ],
+   "glosas": [
+    "HOMBRE",
+    "MUJER",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-02",
+   "origen": "corpus",
+   "texto": "¿Era joven o adulto?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.EDAD",
+   "glosasModelo": [
+    "EDAD",
+    "CUÁNTOS",
+    "MÁS_O_MENOS"
+   ],
+   "glosas": [
+    "EDAD",
+    "CUANTOS",
+    "MAS_O_MENOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount",
+     "polarity"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-03",
+   "origen": "corpus",
+   "texto": "¿Era alto o bajo?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ESTATURA",
+   "glosasModelo": [
+    "ALTO",
+    "BAJO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "ALTO",
+    "BAJO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-04",
+   "origen": "corpus",
+   "texto": "¿Era delgado o de contextura gruesa?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.CONTEXTURA",
+   "glosasModelo": [
+    "FLACO",
+    "GORDO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "FLACO",
+    "GORDO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-05",
+   "origen": "corpus",
+   "texto": "¿Qué color de cabello recuerda?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.CABELLO",
+   "glosasModelo": [
+    "CABELLO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "CABELLO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-06",
+   "origen": "corpus",
+   "texto": "¿Qué ropa llevaba?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA",
+   "glosasModelo": [
+    "POLERA",
+    "PANTALÓN",
+    "CHAMARRA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "POLERA",
+    "PANTALON",
+    "CHAMARRA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-07",
+   "origen": "corpus",
+   "texto": "¿Llevaba gorra?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.GORRA",
+   "glosasModelo": [
+    "GORRA",
+    "TENER"
+   ],
+   "glosas": [
+    "GORRA",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-08",
+   "origen": "corpus",
+   "texto": "¿Llevaba mochila o bolsa?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.MOCHILA",
+   "glosasModelo": [
+    "MOCHILA",
+    "BOLSA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "MOCHILA",
+    "BOLSA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-09",
+   "origen": "corpus",
+   "texto": "¿Usaba lentes?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.LENTES",
+   "glosasModelo": [
+    "LENTES",
+    "TENER"
+   ],
+   "glosas": [
+    "LENTES",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-descripcion_de_per-10",
+   "origen": "corpus",
+   "texto": "¿Recuerda alguna característica particular?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.RASGO",
+   "glosasModelo": [
+    "RECORDAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "RECORDAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-01",
+   "origen": "corpus",
+   "texto": "¿Le robaron algún objeto?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.ALGO",
+   "glosasModelo": [
+    "ROBAR"
+   ],
+   "glosas": [
+    "ROBAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-02",
+   "origen": "corpus",
+   "texto": "¿Qué le robaron?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.QUE",
+   "glosasModelo": [
+    "ROBAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "ROBAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-03",
+   "origen": "corpus",
+   "texto": "¿Le robaron el celular?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.CONFIRMA_OBJETO",
+   "glosasModelo": [
+    "ROBAR",
+    "CELULAR"
+   ],
+   "glosas": [
+    "ROBAR",
+    "CELULAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-04",
+   "origen": "corpus",
+   "texto": "¿Le falta su carnet de identidad?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.FALTA_CARNET",
+   "glosasModelo": [
+    "PAPEL",
+    "IDENTIDAD",
+    "PERDER"
+   ],
+   "glosas": [
+    "PAPEL",
+    "IDENTIDAD",
+    "PERDER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-05",
+   "origen": "corpus",
+   "texto": "¿Le falta dinero?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.FALTA_DINERO",
+   "glosasModelo": [
+    "BILLETES",
+    "PERDER"
+   ],
+   "glosas": [
+    "BILLETES",
+    "PERDER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-06",
+   "origen": "corpus",
+   "texto": "¿Vio al ladrón?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.VIO_LADRON",
+   "glosasModelo": [
+    "LADRÓN",
+    "VER"
+   ],
+   "glosas": [
+    "LADRON",
+    "VER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "LADRON"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-07",
+   "origen": "corpus",
+   "texto": "¿El ladrón escapó?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.LADRON_ESCAPO",
+   "glosasModelo": [
+    "LADRÓN",
+    "ESCAPAR"
+   ],
+   "glosas": [
+    "LADRON",
+    "ESCAPAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "LADRON"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-08",
+   "origen": "corpus",
+   "texto": "¿Tiene la factura o la caja del celular?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.FACTURA_O_CAJA",
+   "glosasModelo": [
+    "CELULAR",
+    "FACTURA",
+    "CAJA",
+    "TENER"
+   ],
+   "glosas": [
+    "CELULAR",
+    "FACTURA",
+    "CAJA",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-09",
+   "origen": "corpus",
+   "texto": "¿Hay cámaras o video del lugar?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.CAMARAS",
+   "glosasModelo": [
+    "VIDEO",
+    "FILMAR",
+    "TENER"
+   ],
+   "glosas": [
+    "VIDEO",
+    "FILMAR",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-robo_hurto_y_obje-10",
+   "origen": "corpus",
+   "texto": "¿Hay testigos del robo?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TES.EXISTE",
+   "glosasModelo": [
+    "TESTIGO",
+    "TENER"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-01",
+   "origen": "corpus",
+   "texto": "¿Alguien le pegó o maltrató?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.VIO.AGRESION",
+   "glosasModelo": [
+    "PEGAR",
+    "MALTRATAR"
+   ],
+   "glosas": [
+    "PEGAR",
+    "MALTRATAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "violencia",
+      "evidence": [
+       "MALTRATAR",
+       "PEGAR"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-02",
+   "origen": "corpus",
+   "texto": "¿Está herido?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.HERIDO",
+   "glosasModelo": [
+    "HERIDA",
+    "TENER"
+   ],
+   "glosas": [
+    "HERIDA",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-03",
+   "origen": "corpus",
+   "texto": "¿Necesita asistencia médica?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.ASISTENCIA",
+   "glosasModelo": [
+    "ASISTENCIA",
+    "DOCTOR",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "ASISTENCIA",
+    "DOCTOR",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-04",
+   "origen": "corpus",
+   "texto": "¿Fue al hospital?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.HOSPITAL",
+   "glosasModelo": [
+    "HOSPITAL",
+    "IR"
+   ],
+   "glosas": [
+    "HOSPITAL",
+    "IR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-05",
+   "origen": "corpus",
+   "texto": "¿Tiene certificado del doctor?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.CERTIFICADO",
+   "glosasModelo": [
+    "CERTIFICADO",
+    "DOCTOR",
+    "TENER"
+   ],
+   "glosas": [
+    "CERTIFICADO",
+    "DOCTOR",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-06",
+   "origen": "corpus",
+   "texto": "¿Recibió amenazas?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.AMENAZAS",
+   "glosasModelo": [
+    "AMENAZAR",
+    "RECIBIR"
+   ],
+   "glosas": [
+    "AMENAZAR",
+    "RECIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "AMENAZAR",
+       "amenaz"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-07",
+   "origen": "corpus",
+   "texto": "¿Tiene miedo de volver a su casa?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.MIEDO_CASA",
+   "glosasModelo": [
+    "MIEDO",
+    "CASA",
+    "VOLVER"
+   ],
+   "glosas": [
+    "MIEDO",
+    "CASA",
+    "VOLVER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-08",
+   "origen": "corpus",
+   "texto": "¿Necesita auxilio ahora?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.AUXILIO",
+   "glosasModelo": [
+    "AUXILIO",
+    "AHORA",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "AUXILIO",
+    "AHORA",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-09",
+   "origen": "corpus",
+   "texto": "¿Hay niños u otras personas que necesiten protección?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.PROTECCION_OTROS",
+   "glosasModelo": [
+    "HIJO",
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "HIJO",
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-agresion_violenci-10",
+   "origen": "corpus",
+   "texto": "¿Desea orientación para recibir asistencia de SEPDAVI?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.ORI.SEPDAVI",
+   "glosasModelo": [
+    "ASISTENCIA",
+    "SEPDAVI",
+    "QUERER"
+   ],
+   "glosas": [
+    "ASISTENCIA",
+    "SEPDAVI",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-01",
+   "origen": "corpus",
+   "texto": "¿Las amenazas llegaron por celular?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.POR_CELULAR",
+   "glosasModelo": [
+    "AMENAZAR",
+    "CELULAR",
+    "ENVIAR"
+   ],
+   "glosas": [
+    "AMENAZAR",
+    "CELULAR",
+    "ENVIAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "AMENAZAR",
+       "amenaz"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-02",
+   "origen": "corpus",
+   "texto": "¿Le escribieron por internet?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.POR_INTERNET",
+   "glosasModelo": [
+    "INTERNET",
+    "ESCRIBIR",
+    "ENVIAR"
+   ],
+   "glosas": [
+    "INTERNET",
+    "ESCRIBIR",
+    "ENVIAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-03",
+   "origen": "corpus",
+   "texto": "¿Conoce el número desde el que le escribieron?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.NUMERO_CONOCE",
+   "glosasModelo": [
+    "CELULAR",
+    "CONOCER"
+   ],
+   "glosas": [
+    "CELULAR",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-04",
+   "origen": "corpus",
+   "texto": "¿Guardó los mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.GUARDO",
+   "glosasModelo": [
+    "ESCRIBIR",
+    "GUARDAR"
+   ],
+   "glosas": [
+    "ESCRIBIR",
+    "GUARDAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-05",
+   "origen": "corpus",
+   "texto": "¿Tiene fotos de la pantalla?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CAPTURAS",
+   "glosasModelo": [
+    "FOTOS",
+    "CELULAR",
+    "TENER"
+   ],
+   "glosas": [
+    "FOTOS",
+    "CELULAR",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-06",
+   "origen": "corpus",
+   "texto": "¿Sigue recibiendo mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CONTINUA",
+   "glosasModelo": [
+    "AÚN",
+    "RECIBIR",
+    "ESCRIBIR"
+   ],
+   "glosas": [
+    "AUN",
+    "RECIBIR",
+    "ESCRIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-07",
+   "origen": "corpus",
+   "texto": "¿Son uno o varios números?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CANT_NUMEROS",
+   "glosasModelo": [
+    "CELULAR",
+    "CUÁNTOS"
+   ],
+   "glosas": [
+    "CELULAR",
+    "CUANTOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount",
+     "polarity"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-amenazas_mensajes-08",
+   "origen": "corpus",
+   "texto": "¿Puede mostrar el celular ahora?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.MOSTRAR",
+   "glosasModelo": [
+    "CELULAR",
+    "AHORA",
+    "MOSTRAR",
+    "PUEDO"
+   ],
+   "glosas": [
+    "CELULAR",
+    "AHORA",
+    "MOSTRAR",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-01",
+   "origen": "corpus",
+   "texto": "¿Entregó o envió dinero?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.ENTREGO",
+   "glosasModelo": [
+    "BILLETES",
+    "DAR",
+    "ENVIAR"
+   ],
+   "glosas": [
+    "BILLETES",
+    "DAR",
+    "ENVIAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-02",
+   "origen": "corpus",
+   "texto": "¿Cuánto dinero entregó?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.MONTO",
+   "glosasModelo": [
+    "BILLETES",
+    "CUÁNTOS"
+   ],
+   "glosas": [
+    "BILLETES",
+    "CUANTOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-03",
+   "origen": "corpus",
+   "texto": "¿Lo hizo mediante un banco?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.POR_BANCO",
+   "glosasModelo": [
+    "BANCO",
+    "BILLETES",
+    "ENVIAR"
+   ],
+   "glosas": [
+    "BANCO",
+    "BILLETES",
+    "ENVIAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-04",
+   "origen": "corpus",
+   "texto": "¿Tiene factura o papel del banco?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.COMPROBANTE",
+   "glosasModelo": [
+    "FACTURA",
+    "PAPEL",
+    "BANCO",
+    "TENER"
+   ],
+   "glosas": [
+    "FACTURA",
+    "PAPEL",
+    "BANCO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-05",
+   "origen": "corpus",
+   "texto": "¿Conoce el nombre de la persona?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.RECEPTOR_NOMBRE",
+   "glosasModelo": [
+    "ÉL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "glosas": [
+    "EL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-06",
+   "origen": "corpus",
+   "texto": "¿Tiene su número de celular?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.RECEPTOR_NUMERO",
+   "glosasModelo": [
+    "ÉL",
+    "CELULAR",
+    "TENER"
+   ],
+   "glosas": [
+    "EL",
+    "CELULAR",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-07",
+   "origen": "corpus",
+   "texto": "¿Se comunicaron por internet?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.INTERNET",
+   "glosasModelo": [
+    "INTERNET",
+    "ESCRIBIR"
+   ],
+   "glosas": [
+    "INTERNET",
+    "ESCRIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-engaño_dinero_y_t-08",
+   "origen": "corpus",
+   "texto": "¿Conserva toda la conversación?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.CHAT",
+   "glosasModelo": [
+    "ESCRIBIR",
+    "TOTAL",
+    "GUARDAR"
+   ],
+   "glosas": [
+    "ESCRIBIR",
+    "TOTAL",
+    "GUARDAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-01",
+   "origen": "corpus",
+   "texto": "¿Hay algún testigo?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TES.EXISTE",
+   "glosasModelo": [
+    "TESTIGO",
+    "TENER"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-02",
+   "origen": "corpus",
+   "texto": "¿Cuántos testigos hay?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TES.CANTIDAD",
+   "glosasModelo": [
+    "TESTIGO",
+    "CUÁNTOS"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "CUANTOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-03",
+   "origen": "corpus",
+   "texto": "¿El testigo vio todo?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TES.VIO_TODO",
+   "glosasModelo": [
+    "TESTIGO",
+    "TOTAL",
+    "VER"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "TOTAL",
+    "VER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-04",
+   "origen": "corpus",
+   "texto": "¿Puede traer al testigo?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TES.TRAER",
+   "glosasModelo": [
+    "TESTIGO",
+    "TRAER",
+    "PUEDO"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "TRAER",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-05",
+   "origen": "corpus",
+   "texto": "¿Tiene fotografías?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.EVI.FOTOS",
+   "glosasModelo": [
+    "FOTOS",
+    "TENER"
+   ],
+   "glosas": [
+    "FOTOS",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-06",
+   "origen": "corpus",
+   "texto": "¿Tiene video?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.EVI.VIDEO",
+   "glosasModelo": [
+    "VIDEO",
+    "TENER"
+   ],
+   "glosas": [
+    "VIDEO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-07",
+   "origen": "corpus",
+   "texto": "¿Puede mostrarlo ahora?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.EVI.MOSTRAR_AHORA",
+   "glosasModelo": [
+    "AHORA",
+    "MOSTRAR",
+    "PUEDO"
+   ],
+   "glosas": [
+    "AHORA",
+    "MOSTRAR",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-08",
+   "origen": "corpus",
+   "texto": "¿Tiene un certificado?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.EVI.CERTIFICADO",
+   "glosasModelo": [
+    "CERTIFICADO",
+    "TENER"
+   ],
+   "glosas": [
+    "CERTIFICADO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-09",
+   "origen": "corpus",
+   "texto": "¿Tiene una resolución o papel previo?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.EVI.RESOLUCION_PREVIA",
+   "glosasModelo": [
+    "RESOLUCIÓN",
+    "PAPEL",
+    "TENER"
+   ],
+   "glosas": [
+    "RESOLUCION",
+    "PAPEL",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "seguimiento",
+      "evidence": [
+       "RESOLUCION"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-testigos_fotos_v-10",
+   "origen": "corpus",
+   "texto": "¿Desea presentar estos elementos?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.EVI.PRESENTAR",
+   "glosasModelo": [
+    "PRESENTAR",
+    "QUERER"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-01",
+   "origen": "corpus",
+   "texto": "¿Vino a consultar el estado de su caso?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.ESTADO_CASO",
+   "glosasModelo": [
+    "INVESTIGACIÓN",
+    "BUSCAR",
+    "VENIR"
+   ],
+   "glosas": [
+    "INVESTIGACION",
+    "BUSCAR",
+    "VENIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "seguimiento",
+      "evidence": [
+       "consult"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-02",
+   "origen": "corpus",
+   "texto": "¿Tiene el número de referencia?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.NUM_REFERENCIA",
+   "glosasModelo": [
+    "TENER"
+   ],
+   "glosas": [
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-03",
+   "origen": "corpus",
+   "texto": "¿Cuándo presentó la denuncia?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.FECHA_DENUNCIA",
+   "glosasModelo": [
+    "QUEJAR",
+    "AUTORIDAD",
+    "CUÁNDO"
+   ],
+   "glosas": [
+    "QUEJAR",
+    "AUTORIDAD",
+    "CUANDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "violencia",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "otro",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-04",
+   "origen": "corpus",
+   "texto": "¿Quiere hablar con el policía encargado?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.HABLAR_POLICIA",
+   "glosasModelo": [
+    "POLICÍA",
+    "HABLAR",
+    "QUERER"
+   ],
+   "glosas": [
+    "POLICIA",
+    "HABLAR",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-05",
+   "origen": "corpus",
+   "texto": "¿Necesita hablar con un abogado?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.HABLAR_ABOGADO",
+   "glosasModelo": [
+    "ABOGADO",
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "ABOGADO",
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-06",
+   "origen": "corpus",
+   "texto": "¿Necesita defensa pública gratuita?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.DEFENSA_PUBLICA",
+   "glosasModelo": [
+    "ABOGADO",
+    "GRATIS",
+    "SEPDEP",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "ABOGADO",
+    "GRATIS",
+    "SEPDEP",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-07",
+   "origen": "corpus",
+   "texto": "¿Necesita saber dónde está la Fiscalía?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.DONDE_FISCALIA",
+   "glosasModelo": [
+    "FISCALÍA",
+    "DÓNDE",
+    "SABER",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "FISCALIA",
+    "DONDE",
+    "SABER",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-08",
+   "origen": "corpus",
+   "texto": "¿Recibió un papel de convocatoria?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.CITACION",
+   "glosasModelo": [
+    "PAPEL",
+    "CONVOCAR",
+    "RECIBIR"
+   ],
+   "glosas": [
+    "PAPEL",
+    "CONVOCAR",
+    "RECIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-09",
+   "origen": "corpus",
+   "texto": "¿Tiene que volver otro día?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.RETORNO",
+   "glosasModelo": [
+    "VOLVER",
+    "DÍA",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "VOLVER",
+    "DIA",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time",
+     "polarity"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-seguimiento_prelim-10",
+   "origen": "corpus",
+   "texto": "¿Prefiere que le avisemos por escrito?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.ID.AVISO",
+   "glosasModelo": [
+    "AVISAR",
+    "ESCRIBIR",
+    "ENVIAR",
+    "MEJOR"
+   ],
+   "glosas": [
+    "AVISAR",
+    "ESCRIBIR",
+    "ENVIAR",
+    "MEJOR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-01",
+   "origen": "corpus",
+   "texto": "¿Necesita hablar con el fiscal?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.HABLAR_FISCAL",
+   "glosasModelo": [
+    "FISCAL",
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "F",
+    "I",
+    "S",
+    "C",
+    "A",
+    "L",
+    "HABLAR",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-02",
+   "origen": "corpus",
+   "texto": "¿Le indicaron ir a la Fiscalía?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.DERIVACION_FISCALIA",
+   "glosasModelo": [
+    "FISCALÍA",
+    "IR"
+   ],
+   "glosas": [
+    "FISCALIA",
+    "IR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-03",
+   "origen": "corpus",
+   "texto": "¿Recibió una resolución?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.RESOLUCION",
+   "glosasModelo": [
+    "RESOLUCIÓN",
+    "RECIBIR"
+   ],
+   "glosas": [
+    "RESOLUCION",
+    "RECIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "seguimiento",
+      "evidence": [
+       "RESOLUCION"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-04",
+   "origen": "corpus",
+   "texto": "¿Debe presentarse ante un juez?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.JUEZ",
+   "glosasModelo": [
+    "JUEZ",
+    "PRESENTAR"
+   ],
+   "glosas": [
+    "JUEZ",
+    "PRESENTAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-05",
+   "origen": "corpus",
+   "texto": "¿Sabe dónde está el Órgano Judicial?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.ORGANO_JUDICIAL",
+   "glosasModelo": [
+    "ÓRGANO_JUDICIAL",
+    "DÓNDE",
+    "SABER"
+   ],
+   "glosas": [
+    "ORGANO_JUDICIAL",
+    "DONDE",
+    "SABER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-06",
+   "origen": "corpus",
+   "texto": "¿Necesita intérprete para esa reunión?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.INTERPRETE_REUNION",
+   "glosasModelo": [
+    "INTÉRPRETE",
+    "REUNIÓN",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "INTERPRETE",
+    "REUNION",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-07",
+   "origen": "corpus",
+   "texto": "¿Quiere leer el papel antes de escribir su nombre?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.LEER_ANTES_FIRMAR",
+   "glosasModelo": [
+    "PAPEL",
+    "LEER",
+    "NOMBRE",
+    "ESCRIBIR",
+    "QUERER"
+   ],
+   "glosas": [
+    "PAPEL",
+    "LEER",
+    "NOMBRE",
+    "ESCRIBIR",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "n-s6-interaccion_con_fi-08",
+   "origen": "corpus",
+   "texto": "¿Está de acuerdo con lo escrito?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.CONFORMIDAD",
+   "glosasModelo": [
+    "ESTAR_DE_ACUERDO",
+    "ESCRIBIR"
+   ],
+   "glosas": [
+    "ESTAR_DE_ACUERDO",
+    "ESCRIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.DIG.CONTENIDO@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Qué decían los mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CONTENIDO",
+   "glosasModelo": [
+    "ESCRIBIR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "ESCRIBIR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.DIG.CANAL@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Por dónde le llegaron los mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CANAL",
+   "glosasModelo": [
+    "CELULAR",
+    "INTERNET",
+    "CUÁL"
+   ],
+   "glosas": [
+    "DONDE",
+    "CELULAR",
+    "INTERNET",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.DIG.REMITENTE@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Quién le envió los mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.REMITENTE",
+   "glosasModelo": [
+    "QUIÉN",
+    "ESCRIBIR",
+    "ENVIAR"
+   ],
+   "glosas": [
+    "QUIEN",
+    "ESCRIBIR",
+    "ENVIAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.PER.VINCULO@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Qué relación tiene con esa persona?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.PER.VINCULO",
+   "glosasModelo": [
+    "PAREJA",
+    "PARIENTE",
+    "AMIGO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PAREJA",
+    "PARIENTE",
+    "AMIGO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.NOMBRE_TERCERO@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Sabe cómo se llama esa persona?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.PER.NOMBRE_TERCERO",
+   "glosasModelo": [
+    "ÉL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "glosas": [
+    "EL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.DIG.CONTINUA@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Sigue recibiendo mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CONTINUA",
+   "glosasModelo": [
+    "AÚN",
+    "RECIBIR",
+    "ESCRIBIR"
+   ],
+   "glosas": [
+    "AUN",
+    "RECIBIR",
+    "ESCRIBIR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.DIG.GUARDO@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Guardó los mensajes?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.GUARDO",
+   "glosasModelo": [
+    "ESCRIBIR",
+    "GUARDAR"
+   ],
+   "glosas": [
+    "ESCRIBIR",
+    "GUARDAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.DIG.CAPTURAS@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Tiene fotos de la pantalla?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DIG.CAPTURAS",
+   "glosasModelo": [
+    "FOTOS",
+    "CELULAR",
+    "TENER"
+   ],
+   "glosas": [
+    "FOTOS",
+    "CELULAR",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.DEN.INTENCION@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Desea presentar una denuncia?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DEN.INTENCION",
+   "glosasModelo": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "violencia",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "otro",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.DEN.AUTORIDAD@amenaza_digital",
+   "origen": "banco",
+   "texto": "¿Ante qué institución quiere presentarla?",
+   "contexto": "amenaza_digital",
+   "preguntaEsperada": "Q.DEN.AUTORIDAD",
+   "glosasModelo": [
+    "PRESENTAR",
+    "INSTITUCIÓN",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "INSTITUCION",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.HEC.QUE_OCURRIO@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué ocurrió?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.HEC.QUE_OCURRIO",
+   "glosasModelo": [
+    "TÚ",
+    "NARRAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "TU",
+    "NARRAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.ROB.QUE@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué le robaron?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.QUE",
+   "glosasModelo": [
+    "ROBAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "ROBAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.DOC.ACLARAR@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué papel es?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.DOC.ACLARAR",
+   "glosasModelo": [
+    "PAPEL",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PAPEL",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.FALTA.QUE@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué le falta?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.FALTA.QUE",
+   "glosasModelo": [
+    "PERDER",
+    "QUÉ"
+   ],
+   "glosas": [
+    "PERDER",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.HEC.PERDIDA_TIPO@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Lo perdió usted o cree que se lo quitaron?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.HEC.PERDIDA_TIPO",
+   "glosasModelo": [
+    "PERDER",
+    "ROBAR",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PERDER",
+    "ROBAR",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.DAN.QUE@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué dañaron?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.DAN.QUE",
+   "glosasModelo": [
+    "DAÑAR",
+    "QUÉ"
+   ],
+   "glosas": [
+    "DAÑAR",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.HEC.ESCAPE_ACTOR@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Quién escapó?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.HEC.ESCAPE_ACTOR",
+   "glosasModelo": [
+    "QUIÉN",
+    "ESCAPAR"
+   ],
+   "glosas": [
+    "QUIEN",
+    "ESCAPAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.TIE.CUANDO@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Cuándo ocurrió?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "CUÁNDO",
+    "FECHA",
+    "HORA"
+   ],
+   "glosas": [
+    "CUANDO",
+    "FECHA",
+    "HORA"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.LUG.DONDE@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Dónde ocurrió?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "DÓNDE"
+   ],
+   "glosas": [
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.LUG.RELACION@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Fue cerca de algún lugar que conozca?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.LUG.RELACION",
+   "glosasModelo": [
+    "CERCA",
+    "AL_LADO",
+    "LEJOS",
+    "CUÁL"
+   ],
+   "glosas": [
+    "CERCA",
+    "AL_LADO",
+    "LEJOS",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.CONOCE@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Conoce a la persona involucrada?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.CONOCE",
+   "glosasModelo": [
+    "TÚ",
+    "ÉL",
+    "CONOCER"
+   ],
+   "glosas": [
+    "TU",
+    "EL",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.PER.VINCULO@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué relación tiene con esa persona?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.VINCULO",
+   "glosasModelo": [
+    "PAREJA",
+    "PARIENTE",
+    "AMIGO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PAREJA",
+    "PARIENTE",
+    "AMIGO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.NOMBRE_TERCERO@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Sabe cómo se llama esa persona?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.NOMBRE_TERCERO",
+   "glosasModelo": [
+    "ÉL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "glosas": [
+    "EL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESCRIBIR@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Quiere describir a la persona?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "QUIERE",
+    "DESCRIBIR",
+    "PERSONA"
+   ],
+   "glosas": [
+    "Q",
+    "U",
+    "I",
+    "E",
+    "R",
+    "E",
+    "D",
+    "E",
+    "S",
+    "C",
+    "R",
+    "I",
+    "B",
+    "I",
+    "R",
+    "P",
+    "E",
+    "R",
+    "S",
+    "O",
+    "N",
+    "A"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "banco:Q.PER.DESC.SEXO@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Era un hombre o una mujer?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.SEXO",
+   "glosasModelo": [
+    "HOMBRE",
+    "MUJER",
+    "CUÁL"
+   ],
+   "glosas": [
+    "HOMBRE",
+    "MUJER",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.EDAD@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué edad aproximada tenía?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.EDAD",
+   "glosasModelo": [
+    "EDAD",
+    "CUÁNTOS",
+    "MÁS_O_MENOS"
+   ],
+   "glosas": [
+    "EDAD",
+    "CUANTOS",
+    "MAS_O_MENOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.ESTATURA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Era alto o bajo?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ESTATURA",
+   "glosasModelo": [
+    "ALTO",
+    "BAJO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "ALTO",
+    "BAJO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.CONTEXTURA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Era delgado o de contextura gruesa?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.CONTEXTURA",
+   "glosasModelo": [
+    "FLACO",
+    "GORDO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "FLACO",
+    "GORDO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.ROPA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué ropa llevaba?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA",
+   "glosasModelo": [
+    "POLERA",
+    "PANTALÓN",
+    "CHAMARRA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "POLERA",
+    "PANTALON",
+    "CHAMARRA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.TES.EXISTE@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Hay testigos?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TES.EXISTE",
+   "glosasModelo": [
+    "TESTIGO",
+    "TENER"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.TES.CANTIDAD@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Cuántos testigos hay?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TES.CANTIDAD",
+   "glosasModelo": [
+    "TESTIGO",
+    "CUÁNTOS"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "CUANTOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.EVI.FACTURA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Tiene la factura del celular?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.FACTURA",
+   "glosasModelo": [
+    "CELULAR",
+    "FACTURA",
+    "TENER"
+   ],
+   "glosas": [
+    "CELULAR",
+    "FACTURA",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.EVI.TRAE_COPIA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿La tiene aquí con usted?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.TRAE_COPIA",
+   "glosasModelo": [
+    "AQUÍ",
+    "TENER"
+   ],
+   "glosas": [
+    "AQUI",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.EVI.QUE_TIENE@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Tiene fotos, video u otra cosa que pueda mostrar?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.QUE_TIENE",
+   "glosasModelo": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "glosas": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.EVI.TIPOS@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Qué tiene?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.TIPOS",
+   "glosasModelo": [
+    "TENER",
+    "QUÉ"
+   ],
+   "glosas": [
+    "TENER",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.DEN.INTENCION@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Desea presentar una denuncia?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.DEN.INTENCION",
+   "glosasModelo": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "violencia",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "otro",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.DEN.AUTORIDAD@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Ante qué institución quiere presentarla?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.DEN.AUTORIDAD",
+   "glosasModelo": [
+    "PRESENTAR",
+    "INSTITUCIÓN",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "INSTITUCION",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.DIN.MECANISMO@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Cómo entregó el dinero?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.MECANISMO",
+   "glosasModelo": [
+    "BILLETES",
+    "DAR",
+    "CÓMO"
+   ],
+   "glosas": [
+    "BILLETES",
+    "DAR",
+    "COMO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.DIN.MONTO@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Cuánto dinero fue?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.MONTO",
+   "glosasModelo": [
+    "BILLETES",
+    "CUÁNTOS"
+   ],
+   "glosas": [
+    "BILLETES",
+    "CUANTOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.DIN.RECEPTOR@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Quién recibió el dinero?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.RECEPTOR",
+   "glosasModelo": [
+    "QUIÉN",
+    "RECIBIR",
+    "BILLETES"
+   ],
+   "glosas": [
+    "QUIEN",
+    "RECIBIR",
+    "BILLETES"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.DIN.COMPROBANTE@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Tiene algún comprobante?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.COMPROBANTE",
+   "glosasModelo": [
+    "FACTURA",
+    "PAPEL",
+    "BANCO",
+    "TENER"
+   ],
+   "glosas": [
+    "FACTURA",
+    "PAPEL",
+    "BANCO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.DIN.COMPROBANTE_TIPO@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Qué comprobante tiene?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.COMPROBANTE_TIPO",
+   "glosasModelo": [
+    "FACTURA",
+    "PAPEL",
+    "FOTOS",
+    "CUÁL"
+   ],
+   "glosas": [
+    "FACTURA",
+    "PAPEL",
+    "FOTOS",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.DOC.ACLARAR@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Qué papel es?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DOC.ACLARAR",
+   "glosasModelo": [
+    "PAPEL",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PAPEL",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.DIN.CHAT@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Conserva toda la conversación?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.CHAT",
+   "glosasModelo": [
+    "ESCRIBIR",
+    "TOTAL",
+    "GUARDAR"
+   ],
+   "glosas": [
+    "ESCRIBIR",
+    "TOTAL",
+    "GUARDAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.DIN.ENGANO@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Quiere decir que lo engañaron?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.ENGANO",
+   "glosasModelo": [
+    "ENGAÑAR",
+    "BILLETES"
+   ],
+   "glosas": [
+    "ENGAÑAR",
+    "BILLETES"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "engan"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.DEN.INTENCION@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Desea presentar una denuncia?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DEN.INTENCION",
+   "glosasModelo": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "violencia",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "otro",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.DEN.AUTORIDAD@engano_dinero",
+   "origen": "banco",
+   "texto": "¿Ante qué institución quiere presentarla?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DEN.AUTORIDAD",
+   "glosasModelo": [
+    "PRESENTAR",
+    "INSTITUCIÓN",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "INSTITUCION",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.ID.NOMBRE@identificacion",
+   "origen": "banco",
+   "texto": "¿Cuál es su nombre completo?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.NOMBRE",
+   "glosasModelo": [
+    "TUYO",
+    "NOMBRE",
+    "CUÁL"
+   ],
+   "glosas": [
+    "TUYO",
+    "NOMBRE",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.ID.DOC_TIPO@identificacion",
+   "origen": "banco",
+   "texto": "¿Qué documento presenta?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.DOC_TIPO",
+   "glosasModelo": [
+    "PRESENTAR",
+    "PAPEL",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "PAPEL",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.ID.DOC_NUMERO@identificacion",
+   "origen": "banco",
+   "texto": "¿Cuál es el número de su documento?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.DOC_NUMERO",
+   "glosasModelo": [
+    "TUYO",
+    "PAPEL",
+    "CUÁL"
+   ],
+   "glosas": [
+    "TUYO",
+    "PAPEL",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.ID.TELEFONO_PROPIO@identificacion",
+   "origen": "banco",
+   "texto": "¿Cuál es su número de celular?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.TELEFONO_PROPIO",
+   "glosasModelo": [
+    "TUYO",
+    "CELULAR",
+    "CUÁL"
+   ],
+   "glosas": [
+    "TUYO",
+    "CELULAR",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.ID.AVISO@identificacion",
+   "origen": "banco",
+   "texto": "¿Prefiere recibir avisos por mensaje escrito?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.AVISO",
+   "glosasModelo": [
+    "AVISAR",
+    "ESCRIBIR",
+    "ENVIAR",
+    "MEJOR"
+   ],
+   "glosas": [
+    "AVISAR",
+    "ESCRIBIR",
+    "ENVIAR",
+    "MEJOR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.ID.ACOMPANANTE@identificacion",
+   "origen": "banco",
+   "texto": "¿Vino solo o acompañado?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.ACOMPANANTE",
+   "glosasModelo": [
+    "TÚ",
+    "1",
+    "VENIR",
+    "ACOMPAÑAR",
+    "CUÁL"
+   ],
+   "glosas": [
+    "TU",
+    "1",
+    "VENIR",
+    "ACOMPAÑAR",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.ID.ACOMPANANTE_QUIEN@identificacion",
+   "origen": "banco",
+   "texto": "¿Quién le acompaña?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.ACOMPANANTE_QUIEN",
+   "glosasModelo": [
+    "QUIÉN",
+    "ACOMPAÑAR"
+   ],
+   "glosas": [
+    "QUIEN",
+    "ACOMPAÑAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.ID.EDAD_PROPIA@identificacion",
+   "origen": "banco",
+   "texto": "¿Qué edad tiene?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ID.EDAD_PROPIA",
+   "glosasModelo": [
+    "TUYO",
+    "EDAD",
+    "CUÁNTOS"
+   ],
+   "glosas": [
+    "TUYO",
+    "EDAD",
+    "CUANTOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.ACC.INTERPRETE@identificacion",
+   "origen": "banco",
+   "texto": "¿Necesita un intérprete de LSB?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.INTERPRETE",
+   "glosasModelo": [
+    "INTÉRPRETE",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "INTERPRETE",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.ACC.LECTURA@identificacion",
+   "origen": "banco",
+   "texto": "¿Puede leer este texto?",
+   "contexto": "identificacion",
+   "preguntaEsperada": "Q.ACC.LECTURA",
+   "glosasModelo": [
+    "TÚ",
+    "LEER",
+    "PUEDO"
+   ],
+   "glosas": [
+    "TU",
+    "LEER",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.TES.QUE_VIO@otro",
+   "origen": "banco",
+   "texto": "¿Qué vio o qué quiere declarar?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TES.QUE_VIO",
+   "glosasModelo": [
+    "VIO",
+    "QUIERE",
+    "DECLARAR"
+   ],
+   "glosas": [
+    "V",
+    "I",
+    "O",
+    "Q",
+    "U",
+    "I",
+    "E",
+    "R",
+    "E",
+    "D",
+    "E",
+    "C",
+    "L",
+    "A",
+    "R",
+    "A",
+    "R"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "otro",
+      "evidence": [
+       "declar"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "banco:Q.PER.OBSERVADA@otro",
+   "origen": "banco",
+   "texto": "¿A quién vio?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.PER.OBSERVADA",
+   "glosasModelo": [
+    "VER",
+    "QUIÉN"
+   ],
+   "glosas": [
+    "VER",
+    "QUIEN"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.TIE.CUANDO@otro",
+   "origen": "banco",
+   "texto": "¿Cuándo ocurrió?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "CUÁNDO",
+    "FECHA",
+    "HORA"
+   ],
+   "glosas": [
+    "CUANDO",
+    "FECHA",
+    "HORA"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.LUG.DONDE@otro",
+   "origen": "banco",
+   "texto": "¿Dónde ocurrió?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "DÓNDE"
+   ],
+   "glosas": [
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.TES.PUEDE_TESTIMONIO@otro",
+   "origen": "banco",
+   "texto": "¿Puede dar testimonio de lo que vio?",
+   "contexto": "otro",
+   "preguntaEsperada": "Q.TES.PUEDE_TESTIMONIO",
+   "glosasModelo": [
+    "OBSERVAR",
+    "TESTIMONIO",
+    "PUEDO"
+   ],
+   "glosas": [
+    "OBSERVAR",
+    "TESTIMONIO",
+    "PUEDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "otro",
+      "evidence": [
+       "TESTIMONIO",
+       "testimoni"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:I.PREG.ELEGIR@preguntas",
+   "origen": "banco",
+   "texto": "¿Qué quieres preguntar?",
+   "contexto": "preguntas",
+   "preguntaEsperada": "I.PREG.ELEGIR",
+   "glosasModelo": [
+    "SABER",
+    "QUÉ",
+    "QUERER"
+   ],
+   "glosas": [
+    "SABER",
+    "QUE",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "preguntas",
+      "evidence": [
+       "pregunt"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:I.PREG.DONDE_QUEDA@preguntas",
+   "origen": "banco",
+   "texto": "¿Dónde queda…?",
+   "contexto": "preguntas",
+   "preguntaEsperada": "I.PREG.DONDE_QUEDA",
+   "glosasModelo": [
+    "DÓNDE"
+   ],
+   "glosas": [
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:I.PREG.HABLAR_CON@preguntas",
+   "origen": "banco",
+   "texto": "¿Con quién quiere hablar?",
+   "contexto": "preguntas",
+   "preguntaEsperada": "I.PREG.HABLAR_CON",
+   "glosasModelo": [
+    "HABLAR",
+    "QUIÉN",
+    "QUERER"
+   ],
+   "glosas": [
+    "HABLAR",
+    "QUIEN",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:I.PREG.CUANDO@preguntas",
+   "origen": "banco",
+   "texto": "¿Qué quiere saber cuándo?",
+   "contexto": "preguntas",
+   "preguntaEsperada": "I.PREG.CUANDO",
+   "glosasModelo": [
+    "QUIERE",
+    "SABER",
+    "CUANDO"
+   ],
+   "glosas": [
+    "Q",
+    "U",
+    "I",
+    "E",
+    "R",
+    "E",
+    "SABER",
+    "CUANDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "banco:I.PREG.CUANTO@preguntas",
+   "origen": "banco",
+   "texto": "¿Qué quiere saber cuánto?",
+   "contexto": "preguntas",
+   "preguntaEsperada": "I.PREG.CUANTO",
+   "glosasModelo": [
+    "QUIERE",
+    "SABER",
+    "CUANTO"
+   ],
+   "glosas": [
+    "CUANTOS",
+    "Q",
+    "U",
+    "I",
+    "E",
+    "R",
+    "E",
+    "SABER",
+    "C",
+    "U",
+    "A",
+    "N",
+    "T",
+    "O"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "banco:I.PREG.SOBRE_TEMA@preguntas",
+   "origen": "banco",
+   "texto": "¿Sobre qué quiere preguntar?",
+   "contexto": "preguntas",
+   "preguntaEsperada": "I.PREG.SOBRE_TEMA",
+   "glosasModelo": [
+    "SABER",
+    "QUÉ",
+    "QUERER"
+   ],
+   "glosas": [
+    "SABER",
+    "QUE",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "preguntas",
+      "evidence": [
+       "pregunt"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.SEG.MOTIVO@seguimiento",
+   "origen": "banco",
+   "texto": "¿Qué quiere consultar?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.MOTIVO",
+   "glosasModelo": [
+    "SABER",
+    "QUÉ",
+    "QUERER"
+   ],
+   "glosas": [
+    "SABER",
+    "QUE",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "seguimiento",
+      "evidence": [
+       "consult"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:I.PREG.HABLAR_CON@seguimiento",
+   "origen": "banco",
+   "texto": "¿Con quién quiere hablar?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "I.PREG.HABLAR_CON",
+   "glosasModelo": [
+    "HABLAR",
+    "QUIÉN",
+    "QUERER"
+   ],
+   "glosas": [
+    "HABLAR",
+    "QUIEN",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:I.PREG.DONDE_QUEDA@seguimiento",
+   "origen": "banco",
+   "texto": "¿Dónde queda…?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "I.PREG.DONDE_QUEDA",
+   "glosasModelo": [
+    "DÓNDE"
+   ],
+   "glosas": [
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.SEG.FECHA_PROGRAMADA@seguimiento",
+   "origen": "banco",
+   "texto": "¿Para cuándo le dieron fecha?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.FECHA_PROGRAMADA",
+   "glosasModelo": [
+    "CONVOCAR",
+    "CUÁNDO"
+   ],
+   "glosas": [
+    "CONVOCAR",
+    "CUANDO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.SEG.NUM_REFERENCIA@seguimiento",
+   "origen": "banco",
+   "texto": "¿Tiene el número de referencia?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.NUM_REFERENCIA",
+   "glosasModelo": [
+    "TENER"
+   ],
+   "glosas": [
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.SEG.AUTORIDAD@seguimiento",
+   "origen": "banco",
+   "texto": "¿Con qué institución es su trámite?",
+   "contexto": "seguimiento",
+   "preguntaEsperada": "Q.SEG.AUTORIDAD",
+   "glosasModelo": [
+    "TUYO",
+    "TRÁMITE",
+    "INSTITUCIÓN",
+    "CUÁL"
+   ],
+   "glosas": [
+    "TUYO",
+    "TRAMITE",
+    "INSTITUCION",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "seguimiento",
+      "evidence": [
+       "TRAMITE",
+       "tramit"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.VIO.TIPO@violencia",
+   "origen": "banco",
+   "texto": "¿Qué le hicieron?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.VIO.TIPO",
+   "glosasModelo": [
+    "QUÉ",
+    "HACER"
+   ],
+   "glosas": [
+    "QUE",
+    "HACER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.RIE.AUXILIO@violencia",
+   "origen": "banco",
+   "texto": "¿Necesita auxilio ahora?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.AUXILIO",
+   "glosasModelo": [
+    "AUXILIO",
+    "AHORA",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "AUXILIO",
+    "AHORA",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.VIO.AGRESOR@violencia",
+   "origen": "banco",
+   "texto": "¿Quién le agredió?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.VIO.AGRESOR",
+   "glosasModelo": [
+    "QUIÉN",
+    "HACER"
+   ],
+   "glosas": [
+    "QUIEN",
+    "HACER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "violencia",
+      "evidence": [
+       "agredi"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.PER.VINCULO@violencia",
+   "origen": "banco",
+   "texto": "¿Qué relación tiene con esa persona?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.PER.VINCULO",
+   "glosasModelo": [
+    "PAREJA",
+    "PARIENTE",
+    "AMIGO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PAREJA",
+    "PARIENTE",
+    "AMIGO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.NOMBRE_TERCERO@violencia",
+   "origen": "banco",
+   "texto": "¿Sabe cómo se llama esa persona?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.PER.NOMBRE_TERCERO",
+   "glosasModelo": [
+    "ÉL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "glosas": [
+    "EL",
+    "NOMBRE",
+    "CONOCER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.TIE.CUANDO@violencia",
+   "origen": "banco",
+   "texto": "¿Cuándo ocurrió?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "CUÁNDO",
+    "FECHA",
+    "HORA"
+   ],
+   "glosas": [
+    "CUANDO",
+    "FECHA",
+    "HORA"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.VIO.FRECUENCIA@violencia",
+   "origen": "banco",
+   "texto": "¿Es la primera vez o pasa seguido?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.VIO.FRECUENCIA",
+   "glosasModelo": [
+    "PRIMERA_VEZ",
+    "SIEMPRE",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PRIMERA_VEZ",
+    "SIEMPRE",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.LUG.DONDE@violencia",
+   "origen": "banco",
+   "texto": "¿Dónde ocurrió?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "DÓNDE"
+   ],
+   "glosas": [
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.SAL.HERIDO@violencia",
+   "origen": "banco",
+   "texto": "¿Está herido?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.HERIDO",
+   "glosasModelo": [
+    "HERIDA",
+    "TENER"
+   ],
+   "glosas": [
+    "HERIDA",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.SAL.PARTE@violencia",
+   "origen": "banco",
+   "texto": "¿Dónde tiene la herida?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.PARTE",
+   "glosasModelo": [
+    "HERIDA",
+    "DÓNDE"
+   ],
+   "glosas": [
+    "HERIDA",
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.SAL.ASISTENCIA@violencia",
+   "origen": "banco",
+   "texto": "¿Necesita asistencia médica?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.ASISTENCIA",
+   "glosasModelo": [
+    "ASISTENCIA",
+    "DOCTOR",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "ASISTENCIA",
+    "DOCTOR",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.RIE.MIEDO_CASA@violencia",
+   "origen": "banco",
+   "texto": "¿Tiene miedo de volver a su casa?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.MIEDO_CASA",
+   "glosasModelo": [
+    "MIEDO",
+    "CASA",
+    "VOLVER"
+   ],
+   "glosas": [
+    "MIEDO",
+    "CASA",
+    "VOLVER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.RIE.PIDE_PROTECCION@violencia",
+   "origen": "banco",
+   "texto": "¿Necesita protección?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.PIDE_PROTECCION",
+   "glosasModelo": [
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.RIE.PROTECCION_OTROS@violencia",
+   "origen": "banco",
+   "texto": "¿Hay niños u otras personas que necesiten protección?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.PROTECCION_OTROS",
+   "glosasModelo": [
+    "HIJO",
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "HIJO",
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.RIE.QUIENES@violencia",
+   "origen": "banco",
+   "texto": "¿Quiénes necesitan protección?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.RIE.QUIENES",
+   "glosasModelo": [
+    "QUIÉN",
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "QUIEN",
+    "PROTEGER",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.EVI.QUE_TIENE@violencia",
+   "origen": "banco",
+   "texto": "¿Tiene fotos, video u otra cosa que pueda mostrar?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.EVI.QUE_TIENE",
+   "glosasModelo": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "glosas": [
+    "FOTOS",
+    "VIDEO",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.EVI.TIPOS@violencia",
+   "origen": "banco",
+   "texto": "¿Qué tiene?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.EVI.TIPOS",
+   "glosasModelo": [
+    "TENER",
+    "QUÉ"
+   ],
+   "glosas": [
+    "TENER",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.VIO.ASISTENCIA_ESPECIALIZADA@violencia",
+   "origen": "banco",
+   "texto": "¿Desea asistencia especializada?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.VIO.ASISTENCIA_ESPECIALIZADA",
+   "glosasModelo": [
+    "ASISTENCIA",
+    "QUERER"
+   ],
+   "glosas": [
+    "ASISTENCIA",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   }
+  },
+  {
+   "id": "banco:Q.APO.TIPO@violencia",
+   "origen": "banco",
+   "texto": "¿Qué apoyo necesita?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.APO.TIPO",
+   "glosasModelo": [
+    "ASISTENCIA",
+    "CUÁL",
+    "NECESITAR"
+   ],
+   "glosas": [
+    "ASISTENCIA",
+    "CUAL",
+    "NECESITAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.DEN.INTENCION@violencia",
+   "origen": "banco",
+   "texto": "¿Desea presentar una denuncia?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.DEN.INTENCION",
+   "glosasModelo": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "QUEJAR",
+    "AUTORIDAD",
+    "QUERER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "violencia",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "amenaza_digital",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "engano_dinero",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     },
+     {
+      "id": "otro",
+      "evidence": [
+       "QUEJAR",
+       "denunci"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "banco:Q.DEN.AUTORIDAD@violencia",
+   "origen": "banco",
+   "texto": "¿Ante qué institución quiere presentarla?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.DEN.AUTORIDAD",
+   "glosasModelo": [
+    "PRESENTAR",
+    "INSTITUCIÓN",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PRESENTAR",
+    "INSTITUCION",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "parafrasis-01",
+   "origen": "parafrasis",
+   "texto": "¿Puedes describir a los agresores?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "TÚ",
+    "PUEDO",
+    "EXPLICAR",
+    "CÓMO",
+    "ÉL"
+   ],
+   "glosas": [
+    "TU",
+    "PUEDO",
+    "EXPLICAR",
+    "COMO",
+    "EL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-02",
+   "origen": "parafrasis",
+   "texto": "¿Puedes describir a los agresores?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "TÚ",
+    "PODER",
+    "DESCRIBIR",
+    "AGRESOR"
+   ],
+   "glosas": [
+    "TU",
+    "P",
+    "O",
+    "D",
+    "E",
+    "R",
+    "D",
+    "E",
+    "S",
+    "C",
+    "R",
+    "I",
+    "B",
+    "I",
+    "R",
+    "A",
+    "G",
+    "R",
+    "E",
+    "S",
+    "O",
+    "R"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-03",
+   "origen": "parafrasis",
+   "texto": "¿Puede describir al ladrón?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "TÚ",
+    "PUEDO",
+    "DESCRIBIR",
+    "LADRÓN"
+   ],
+   "glosas": [
+    "TU",
+    "PUEDO",
+    "D",
+    "E",
+    "S",
+    "C",
+    "R",
+    "I",
+    "B",
+    "I",
+    "R",
+    "LADRON"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "LADRON"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-04",
+   "origen": "parafrasis",
+   "texto": "puedes describir a los agresores",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "TÚ",
+    "PUEDO",
+    "DESCRIBIR",
+    "HOMBRE"
+   ],
+   "glosas": [
+    "TU",
+    "PUEDO",
+    "D",
+    "E",
+    "S",
+    "C",
+    "R",
+    "I",
+    "B",
+    "I",
+    "R",
+    "HOMBRE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-05",
+   "origen": "parafrasis",
+   "texto": "Describa a la persona que le robó",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "DESCRIBIR",
+    "PERSONA",
+    "ROBAR",
+    "TÚ"
+   ],
+   "glosas": [
+    "D",
+    "E",
+    "S",
+    "C",
+    "R",
+    "I",
+    "B",
+    "I",
+    "R",
+    "P",
+    "E",
+    "R",
+    "S",
+    "O",
+    "N",
+    "A",
+    "ROBAR",
+    "TU"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-06",
+   "origen": "parafrasis",
+   "texto": "¿Cómo era el ladrón?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "LADRÓN",
+    "CÓMO"
+   ],
+   "glosas": [
+    "LADRON",
+    "COMO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "LADRON"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-07",
+   "origen": "parafrasis",
+   "texto": "¿Cómo eran los que te robaron?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "ÉL",
+    "ROBAR",
+    "TÚ",
+    "CÓMO"
+   ],
+   "glosas": [
+    "EL",
+    "ROBAR",
+    "TU",
+    "COMO"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-08",
+   "origen": "parafrasis",
+   "texto": "¿Qué características tenía?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESCRIBIR",
+   "glosasModelo": [
+    "CARACTERÍSTICA",
+    "TENER",
+    "QUÉ"
+   ],
+   "glosas": [
+    "C",
+    "A",
+    "R",
+    "A",
+    "C",
+    "T",
+    "E",
+    "R",
+    "I",
+    "S",
+    "T",
+    "I",
+    "C",
+    "A",
+    "TENER",
+    "QUE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "description"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-09",
+   "origen": "parafrasis",
+   "texto": "¿Era hombre o mujer?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.SEXO",
+   "glosasModelo": [
+    "HOMBRE",
+    "MUJER",
+    "CUÁL"
+   ],
+   "glosas": [
+    "HOMBRE",
+    "MUJER",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-10",
+   "origen": "parafrasis",
+   "texto": "¿Era alto o bajo?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ESTATURA",
+   "glosasModelo": [
+    "ALTO",
+    "BAJO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "ALTO",
+    "BAJO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-11",
+   "origen": "parafrasis",
+   "texto": "¿Era flaco o gordo?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.CONTEXTURA",
+   "glosasModelo": [
+    "FLACO",
+    "GORDO",
+    "CUÁL"
+   ],
+   "glosas": [
+    "FLACO",
+    "GORDO",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-12",
+   "origen": "parafrasis",
+   "texto": "¿Qué ropa llevaba?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA",
+   "glosasModelo": [
+    "ROPA",
+    "QUÉ",
+    "LLEVAR"
+   ],
+   "glosas": [
+    "R",
+    "O",
+    "P",
+    "A",
+    "QUE",
+    "LLEVAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-13",
+   "origen": "parafrasis",
+   "texto": "¿Cuándo te robaron?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "CUÁNDO",
+    "ROBAR",
+    "TÚ"
+   ],
+   "glosas": [
+    "CUANDO",
+    "ROBAR",
+    "TU"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-14",
+   "origen": "parafrasis",
+   "texto": "cuando te robaron el celular",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "CUÁNDO",
+    "ROBAR",
+    "CELULAR"
+   ],
+   "glosas": [
+    "CUANDO",
+    "ROBAR",
+    "CELULAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-15",
+   "origen": "parafrasis",
+   "texto": "¿A qué hora pasó?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "HORA",
+    "QUÉ",
+    "PASAR"
+   ],
+   "glosas": [
+    "HORA",
+    "QUE",
+    "P",
+    "A",
+    "S",
+    "A",
+    "R"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-16",
+   "origen": "parafrasis",
+   "texto": "¿Dónde fue?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "DÓNDE"
+   ],
+   "glosas": [
+    "DONDE"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-17",
+   "origen": "parafrasis",
+   "texto": "donde te robaron",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "PLAZA",
+    "ROBAR"
+   ],
+   "glosas": [
+    "DONDE",
+    "ROBAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-18",
+   "origen": "parafrasis",
+   "texto": "¿En qué lugar ocurrió?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "LUGAR",
+    "QUÉ",
+    "PASAR"
+   ],
+   "glosas": [
+    "DONDE",
+    "L",
+    "U",
+    "G",
+    "A",
+    "R",
+    "QUE",
+    "P",
+    "A",
+    "S",
+    "A",
+    "R"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-19",
+   "origen": "parafrasis",
+   "texto": "¿Dónde te agredieron?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.LUG.DONDE",
+   "glosasModelo": [
+    "DÓNDE",
+    "PEGAR",
+    "TÚ"
+   ],
+   "glosas": [
+    "DONDE",
+    "PEGAR",
+    "TU"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "place"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "violencia",
+      "evidence": [
+       "PEGAR",
+       "agredi"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-20",
+   "origen": "parafrasis",
+   "texto": "¿Cuándo ocurrió la agresión?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.TIE.CUANDO",
+   "glosasModelo": [
+    "CUÁNDO",
+    "PEGAR"
+   ],
+   "glosas": [
+    "CUANDO",
+    "PEGAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "time"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "violencia",
+      "evidence": [
+       "PEGAR",
+       "agresi"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-21",
+   "origen": "parafrasis",
+   "texto": "¿Quién te agredió?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.VIO.AGRESOR",
+   "glosasModelo": [
+    "QUIÉN",
+    "PEGAR",
+    "TÚ"
+   ],
+   "glosas": [
+    "QUIEN",
+    "PEGAR",
+    "TU"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [
+     {
+      "id": "violencia",
+      "evidence": [
+       "PEGAR",
+       "agredi"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-22",
+   "origen": "parafrasis",
+   "texto": "¿Conoces a la persona que te robó?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.CONOCE",
+   "glosasModelo": [
+    "TÚ",
+    "CONOCER",
+    "PERSONA",
+    "ROBAR"
+   ],
+   "glosas": [
+    "TU",
+    "CONOCER",
+    "P",
+    "E",
+    "R",
+    "S",
+    "O",
+    "N",
+    "A",
+    "ROBAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-23",
+   "origen": "parafrasis",
+   "texto": "¿Hubo testigos?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TES.EXISTE",
+   "glosasModelo": [
+    "TESTIGO",
+    "HABER"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "H",
+    "A",
+    "B",
+    "E",
+    "R"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-24",
+   "origen": "parafrasis",
+   "texto": "¿Cuántos testigos hubo?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.TES.CANTIDAD",
+   "glosasModelo": [
+    "TESTIGO",
+    "CUÁNTOS"
+   ],
+   "glosas": [
+    "TESTIGO",
+    "CUANTOS"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-25",
+   "origen": "parafrasis",
+   "texto": "¿Tienes alguna prueba?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.EVI.QUE_TIENE",
+   "glosasModelo": [
+    "TÚ",
+    "PRUEBA",
+    "TENER"
+   ],
+   "glosas": [
+    "TU",
+    "P",
+    "R",
+    "U",
+    "E",
+    "B",
+    "A",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-26",
+   "origen": "parafrasis",
+   "texto": "¿Qué te robaron?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.ROB.QUE",
+   "glosasModelo": [
+    "QUÉ",
+    "ROBAR",
+    "TÚ"
+   ],
+   "glosas": [
+    "QUE",
+    "ROBAR",
+    "TU"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "mentionContext",
+    "requestedSlots": [],
+    "mentionedContexts": [
+     {
+      "id": "denuncia_robo",
+      "evidence": [
+       "ROBAR",
+       "rob"
+      ]
+     }
+    ],
+    "negations": [],
+    "confidence": 0.8
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-27",
+   "origen": "parafrasis",
+   "texto": "¿Estás herido?",
+   "contexto": "violencia",
+   "preguntaEsperada": "Q.SAL.HERIDO",
+   "glosasModelo": [
+    "TÚ",
+    "HERIDA",
+    "TENER"
+   ],
+   "glosas": [
+    "TU",
+    "HERIDA",
+    "TENER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.5
+   },
+   "glosasSimuladas": true
+  },
+  {
+   "id": "parafrasis-28",
+   "origen": "parafrasis",
+   "texto": "¿Cuánto dinero perdiste?",
+   "contexto": "engano_dinero",
+   "preguntaEsperada": "Q.DIN.MONTO",
+   "glosasModelo": [
+    "BILLETES",
+    "CUÁNTOS",
+    "PERDER"
+   ],
+   "glosas": [
+    "BILLETES",
+    "CUANTOS",
+    "PERDER"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "amount"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   },
+   "glosasSimuladas": true
+  }
+ ]
+}

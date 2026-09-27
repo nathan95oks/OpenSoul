@@ -36,6 +36,10 @@ enum UsageMode {
 
 /// Configuración del dispositivo. No contiene nada dicho por nadie.
 class DeviceConfig {
+  /// La animación de bienvenida ya se mostró al menos una vez en este
+  /// dispositivo.
+  final bool hasOpened;
+
   /// `null` cuando todavía no se ha elegido: entonces toca el selector.
   final UsageMode? mode;
 
@@ -48,6 +52,7 @@ class DeviceConfig {
   static const int schemaVersion = 1;
 
   const DeviceConfig({
+    this.hasOpened = false,
     this.mode,
     this.institutionProfileId,
     this.lastTabId,
@@ -58,32 +63,37 @@ class DeviceConfig {
   bool get hasMode => mode != null;
 
   DeviceConfig copyWith({
+    bool? hasOpened,
     UsageMode? mode,
     String? institutionProfileId,
     String? lastTabId,
     bool clearInstitution = false,
-  }) =>
-      DeviceConfig(
-        mode: mode ?? this.mode,
-        institutionProfileId: clearInstitution
-            ? null
-            : (institutionProfileId ?? this.institutionProfileId),
-        lastTabId: lastTabId ?? this.lastTabId,
-      );
+  }) => DeviceConfig(
+    hasOpened: hasOpened ?? this.hasOpened,
+    mode: mode ?? this.mode,
+    institutionProfileId: clearInstitution
+        ? null
+        : (institutionProfileId ?? this.institutionProfileId),
+    lastTabId: lastTabId ?? this.lastTabId,
+  );
 
   Map<String, dynamic> toJson() => {
-        'schemaVersion': schemaVersion,
-        if (mode != null) 'mode': mode!.name,
-        if (institutionProfileId != null)
-          'institutionProfileId': institutionProfileId,
-        if (lastTabId != null) 'lastTabId': lastTabId,
-      };
+    'schemaVersion': schemaVersion,
+    'hasOpened': hasOpened,
+    if (mode != null) 'mode': mode!.name,
+    if (institutionProfileId != null)
+      'institutionProfileId': institutionProfileId,
+    if (lastTabId != null) 'lastTabId': lastTabId,
+  };
 
   factory DeviceConfig.fromJson(Map<String, dynamic> json) => DeviceConfig(
-        mode: UsageMode.byName(json['mode'] as String?),
-        institutionProfileId: json['institutionProfileId'] as String?,
-        lastTabId: json['lastTabId'] as String?,
-      );
+    // Una configuración de versiones anteriores solo puede existir si la
+    // app ya fue abierta; no se repite el splash tras actualizar.
+    hasOpened: json.containsKey('hasOpened') ? json['hasOpened'] == true : true,
+    mode: UsageMode.byName(json['mode'] as String?),
+    institutionProfileId: json['institutionProfileId'] as String?,
+    lastTabId: json['lastTabId'] as String?,
+  );
 }
 
 /// Lo que se dijo en una sesión personal o en una atención.
@@ -97,44 +107,32 @@ class SessionContent {
   /// Si se estaba viendo la declaración terminada.
   final bool resultVisible;
 
-  /// La conversación en curso, ya serializada.
-  ///
-  /// Se guarda opaca —tal cual la dejó la capa de datos— para que el dominio
-  /// no tenga que conocer el formato de almacenamiento.
-  final Map<String, dynamic>? conversation;
-
   static const int schemaVersion = 1;
 
   const SessionContent({
     this.contextId,
     this.sentence = const [],
     this.resultVisible = false,
-    this.conversation,
   });
 
   static const empty = SessionContent();
 
   /// Una sesión sin contexto ni frase no merece restaurarse: devolver a la
   /// persona a una pantalla vacía no es continuidad, es ruido.
-  bool get isWorthRestoring =>
-      contextId != null || sentence.isNotEmpty || conversation != null;
+  bool get isWorthRestoring => contextId != null || sentence.isNotEmpty;
 
   Map<String, dynamic> toJson() => {
-        'schemaVersion': schemaVersion,
-        'contextId': contextId,
-        'sentence': sentence,
-        'resultVisible': resultVisible,
-        'conversation': conversation,
-      };
+    'schemaVersion': schemaVersion,
+    'contextId': contextId,
+    'sentence': sentence,
+    'resultVisible': resultVisible,
+  };
 
   factory SessionContent.fromJson(Map<String, dynamic> json) => SessionContent(
-        contextId: json['contextId'] as String?,
-        sentence: [
-          for (final w in (json['sentence'] as List? ?? const [])) w.toString(),
-        ],
-        resultVisible: json['resultVisible'] == true,
-        conversation: json['conversation'] is Map
-            ? Map<String, dynamic>.from(json['conversation'] as Map)
-            : null,
-      );
+    contextId: json['contextId'] as String?,
+    sentence: [
+      for (final w in (json['sentence'] as List? ?? const [])) w.toString(),
+    ],
+    resultVisible: json['resultVisible'] == true,
+  );
 }

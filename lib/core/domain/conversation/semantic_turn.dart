@@ -171,19 +171,32 @@ class SemanticTurn {
     required BackendSemanticTurn backend,
     List<String> glosses = const [],
     List<SemanticDisambiguation> disambiguations = const [],
-  }) => SemanticTurn(
-    turnId: turnId,
-    text: text,
-    speechAct: speechAct,
-    intent: backend.intent,
-    entities: glosses,
-    mentionedContexts: backend.mentionedContexts,
-    requestedSlots: backend.requestedSlots,
-    resolvedSenses: resolvedSensesOf(disambiguations),
-    negations: backend.negations,
-    confidence: backend.confidence,
-    source: SemanticTurnSource.backend,
-  );
+  }) {
+    // Compatibilidad defensiva con una Lambda anterior: el texto puede
+    // conservar «dónde» aunque su bloque semántico lo haya perdido. Se unen
+    // únicamente interrogativos de clase cerrada; el cliente no infiere
+    // hechos ni sustituye el análisis del backend.
+    final spokenSlots = LsbGlossSemantics.spokenSlotsOf(text);
+    final requestedSlots = <String>{
+      ...backend.requestedSlots,
+      ...spokenSlots,
+    }.toList();
+    return SemanticTurn(
+      turnId: turnId,
+      text: text,
+      speechAct: speechAct,
+      intent: spokenSlots.isNotEmpty
+          ? SemanticIntent.askInformation
+          : backend.intent,
+      entities: glosses,
+      mentionedContexts: backend.mentionedContexts,
+      requestedSlots: requestedSlots,
+      resolvedSenses: resolvedSensesOf(disambiguations),
+      negations: backend.negations,
+      confidence: backend.confidence,
+      source: SemanticTurnSource.backend,
+    );
+  }
 
   static Map<String, String> resolvedSensesOf(
     List<SemanticDisambiguation> disambiguations,
