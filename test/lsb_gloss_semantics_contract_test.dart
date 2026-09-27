@@ -46,6 +46,14 @@ void main() {
       (contract['spokenWordSlots'] as Map).cast<String, String>(),
     );
     expect(
+      LsbGlossSemantics.spokenStemSlots,
+      (contract['spokenStemSlots'] as Map).cast<String, String>(),
+    );
+    expect(
+      LsbGlossSemantics.spokenAfterHowSlots,
+      (contract['spokenAfterHowSlots'] as Map).cast<String, String>(),
+    );
+    expect(
       LsbGlossSemantics.questionPrepositions,
       Set<String>.from(contract['questionPrepositions'] as List),
     );

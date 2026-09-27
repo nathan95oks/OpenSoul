@@ -148,17 +148,74 @@ void main() {
       answersWhatWasAsked(r, turn, why);
     });
 
-    test('3. «¿Quién te robó el celular?» no se convierte en el hecho', () {
-      // El robo no tiene una pregunta del banco que pida QUIÉN robó (solo
-      // «¿Quién escapó?»): se abre el robo, sin inventar la pregunta y sin
-      // confirmar ROBAR · CELULAR.
+    test('2b. backend antiguo no puede degradar DÓNDE a PLAZA', () {
+      final turn = SemanticTurn.fromBackend(
+        turnId: 'donde-sin-signos',
+        text: 'donde te robaron el celular',
+        speechAct: SpeechAct.question,
+        backend: const BackendSemanticTurn(
+          version: 1,
+          intent: SemanticIntent.mentionContext,
+          requestedSlots: [],
+          mentionedContexts: [
+            ContextMention(
+              id: 'denuncia_robo',
+              evidence: ['ROBAR'],
+              isFamily: false,
+            ),
+          ],
+          confidence: 0.8,
+        ),
+        glosses: const ['PLAZA', 'CELULAR', 'ROBAR'],
+      );
+
+      expect(turn.requestedSlots, ['place']);
+      expect(turn.intent, SemanticIntent.askInformation);
+      final (r, why) = route(turn);
+      expect(r.targetQuestionIds, ['Q.LUG.DONDE'], reason: why);
+      expect(r.targetQuestionIds, isNot(contains('Q.ROB.CONFIRMA_OBJETO')));
+      answersWhatWasAsked(r, turn, why);
+    });
+
+    test('3. «¿Quién te robó el celular?» abre identificación del autor', () {
+      // El recorrido no inventa un nombre: empieza por la puerta segura que
+      // permite a la persona decir si conoce al autor.
       final turn = backendTurn('quien_te_robo_celular');
       expect(turn.requestedSlots, ['person']);
       final (r, why) = route(turn);
       expect(r.targetQuestionIds, isNot(contains('Q.ROB.CONFIRMA_OBJETO')));
       expect(r.targetQuestionIds, isNot(contains('Q.HEC.ESCAPE_ACTOR')));
-      expect(r.type, ConversationRouteType.directContext, reason: why);
+      expect(r.type, ConversationRouteType.directQuestion, reason: why);
       expect(r.targetContextId, 'denuncia_robo', reason: why);
+      expect(r.targetQuestionIds, ['Q.PER.CONOCE'], reason: why);
+      answersWhatWasAsked(r, turn, why);
+    });
+
+    test('el saludo no tapa la pregunta concreta aunque no haya signos', () {
+      final turn = SemanticTurn.fromBackend(
+        turnId: 'compuesta',
+        text: 'hola como estas quien te robo',
+        speechAct: SpeechAct.statement,
+        backend: const BackendSemanticTurn(
+          version: 1,
+          intent: SemanticIntent.askInformation,
+          requestedSlots: ['person'],
+          mentionedContexts: [
+            ContextMention(
+              id: 'denuncia_robo',
+              isFamily: false,
+              evidence: ['ROBAR'],
+            ),
+          ],
+          confidence: 0.9,
+        ),
+        glosses: const ['HOLA', 'COMO_ESTAS', 'QUIEN', 'TU', 'ROBAR'],
+      );
+
+      final (r, why) = route(turn);
+      expect(r.type, ConversationRouteType.directQuestion, reason: why);
+      expect(r.targetContextId, 'denuncia_robo', reason: why);
+      expect(r.targetQuestionIds, ['Q.PER.CONOCE'], reason: why);
     });
 
     test('4. «¿Qué te robaron?» → el objeto robado', () {

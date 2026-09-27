@@ -19,8 +19,25 @@ class MainNavigationScreen extends ConsumerStatefulWidget {
 }
 
 class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   AppTabId get _currentTab => ref.watch(selectedTabProvider);
+
+  /// Entrada de la pestaña al cambiar: un fundido corto con un leve
+  /// desplazamiento. Las pestañas siguen montadas en el `IndexedStack`, así
+  /// que animar no reconstruye nada ni pierde su estado.
+  late final AnimationController _entrada = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 260),
+    value: 1,
+  );
+  late final Animation<double> _opacidad = CurvedAnimation(
+    parent: _entrada,
+    curve: Curves.easeOutCubic,
+  );
+  late final Animation<Offset> _desplazamiento = Tween<Offset>(
+    begin: const Offset(0, 0.015),
+    end: Offset.zero,
+  ).animate(_opacidad);
 
   @override
   void initState() {
@@ -32,6 +49,7 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _entrada.dispose();
     super.dispose();
   }
 
@@ -60,10 +78,10 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   }
 
   static FlowSurface _surfaceOf(AppTabId tab) => switch (tab) {
-        AppTabId.conversation => FlowSurface.conversation,
-        AppTabId.cards => FlowSurface.standaloneCards,
-        AppTabId.avatar => FlowSurface.standaloneAvatar,
-      };
+    AppTabId.conversation => FlowSurface.conversation,
+    AppTabId.cards => FlowSurface.standaloneCards,
+    AppTabId.avatar => FlowSurface.standaloneAvatar,
+  };
 
   void _select(int visualIndex) {
     final tab = kTabOrder[visualIndex];
@@ -78,16 +96,17 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   /// El `IndexedStack` se indexa por posición visual y no por `AppTabId.index`:
   /// así reordenar la barra es cambiar [kTabOrder] y nada más.
   List<Widget> _screensInVisualOrder(AppTabId current) => [
-        for (final tab in kTabOrder)
-          switch (tab) {
-            AppTabId.cards => const LsbFlowScreen(),
-            AppTabId.conversation => const ConversationScreen(),
-            // El IndexedStack mantiene la pantalla montada: le avisamos cuando
-            // deja de estar visible para que el avatar deje de senar.
-            AppTabId.avatar =>
-              AudioToLsbScreen(isActive: current == AppTabId.avatar),
-          },
-      ];
+    for (final tab in kTabOrder)
+      switch (tab) {
+        AppTabId.cards => const LsbFlowScreen(),
+        AppTabId.conversation => const ConversationScreen(),
+        // El IndexedStack mantiene la pantalla montada: le avisamos cuando
+        // deja de estar visible para que el avatar deje de senar.
+        AppTabId.avatar => AudioToLsbScreen(
+          isActive: current == AppTabId.avatar,
+        ),
+      },
+  ];
 
   static const Map<AppTabId, BottomNavigationBarItem> _items = {
     AppTabId.cards: BottomNavigationBarItem(
@@ -107,10 +126,19 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   @override
   Widget build(BuildContext context) {
     final current = _currentTab;
+    ref.listen(selectedTabProvider, (prev, next) {
+      if (prev != next) _entrada.forward(from: 0);
+    });
     return Scaffold(
-      body: IndexedStack(
-        index: visualIndexOf(current),
-        children: _screensInVisualOrder(current),
+      body: FadeTransition(
+        opacity: _opacidad,
+        child: SlideTransition(
+          position: _desplazamiento,
+          child: IndexedStack(
+            index: visualIndexOf(current),
+            children: _screensInVisualOrder(current),
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: visualIndexOf(current),

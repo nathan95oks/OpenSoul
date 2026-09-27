@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
+import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 
@@ -13,8 +14,9 @@ abstract class RemoteAudioDataSource {
 }
 
 class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
-  static const String defaultApiGatewayUrl =
-      String.fromEnvironment('LSB_TEXT_API_URL');
+  static const String defaultApiGatewayUrl = String.fromEnvironment(
+    'LSB_TEXT_API_URL',
+  );
 
   static const Duration requestTimeout = Duration(seconds: 12);
 
@@ -55,8 +57,10 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
       if (response.statusCode == 200) {
         final decodedResponse = jsonDecode(response.body);
 
-        final glossDetails = decodedResponse['glossDetails'] as List<dynamic>? ?? [];
-        final sequence = decodedResponse['animationSequence'] as List<dynamic>? ?? [];
+        final glossDetails =
+            decodedResponse['glossDetails'] as List<dynamic>? ?? [];
+        final sequence =
+            decodedResponse['animationSequence'] as List<dynamic>? ?? [];
         final urls = <String>[];
         final animationGlosses = <String>[];
 
@@ -68,11 +72,14 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           for (final step in sequence) {
             final gloss = (step['gloss'] ?? '').toString();
             if (gloss.isEmpty) continue;
-            final hasClip = (step['animationFile']?.toString() ?? '').isNotEmpty;
-            urls.add(hasClip
-                ? '${animationResolver.baseUrl}avatar_test.glb'
-                : '${AnimationUrlResolver.placeholderScheme}'
-                    '${AnimationUrlResolver.canonicalFor(gloss)}');
+            final hasClip =
+                (step['animationFile']?.toString() ?? '').isNotEmpty;
+            urls.add(
+              hasClip
+                  ? '${animationResolver.baseUrl}avatar_test.glb'
+                  : '${AnimationUrlResolver.placeholderScheme}'
+                        '${AnimationUrlResolver.canonicalFor(gloss)}',
+            );
             animationGlosses.add(gloss);
           }
         } else if (glossDetails.isNotEmpty) {
@@ -113,12 +120,13 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
         // Colapsar compuestos multipalabra (ej: "COMO" + deletreo "ESTAS" -> "COMO_ESTAS")
         // protegiendo contra respuestas fragmentadas o desactualizadas del backend.
         _collapseCompoundAnimations(animationGlosses, urls, text);
+        _reconcileQuestionAnimations(animationGlosses, urls, text);
 
         final effectiveGlosses = animationGlosses.isNotEmpty
             ? animationGlosses
             : (decodedResponse['glosses'] as List<dynamic>? ?? [])
-                .map((e) => e.toString().toUpperCase())
-                .toList();
+                  .map((e) => e.toString().toUpperCase())
+                  .toList();
 
         final finalUrls = <String>[];
         for (int i = 0; i < effectiveGlosses.length; i++) {
@@ -129,11 +137,15 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           }
         }
 
-        final rawSemantic = (decodedResponse['glosses'] as List<dynamic>?)
+        final rawSemantic =
+            (decodedResponse['glosses'] as List<dynamic>?)
                 ?.map((e) => e.toString().toUpperCase().trim())
                 .toList() ??
             effectiveGlosses;
-        final semanticGlosses = _collapseSemanticCompounds(rawSemantic, text);
+        final semanticGlosses = LsbGlossSemantics.reconcileQuestionGlosses(
+          text,
+          _collapseSemanticCompounds(rawSemantic, text),
+        );
 
         return LsbTranslationModel.fromJson({
           'glosses': semanticGlosses,
@@ -147,7 +159,9 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           'semanticTurn': decodedResponse['semanticTurn'],
         });
       } else {
-        throw Exception('AWS API Error: ${response.statusCode} - ${response.body}');
+        throw Exception(
+          'AWS API Error: ${response.statusCode} - ${response.body}',
+        );
       }
     } catch (e) {
       throw Exception('Network or Server error: $e');
@@ -156,15 +170,64 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
 
   static final RegExp _punct = RegExp(r'[^\w\s]', unicode: true);
 
+  /// Respaldo para respuestas de una Lambda anterior o una entrada de caché
+  /// vieja. Si el español pide DÓNDE y la secuencia afirma PLAZA, reemplaza
+  /// ese paso por DONDE y resuelve su clip local del mismo avatar. No cambia
+  /// el modelo 3D ni vuelve a llamar a Bedrock.
+  void _reconcileQuestionAnimations(
+    List<String> glosses,
+    List<String> urls,
+    String text,
+  ) {
+    final corrected = LsbGlossSemantics.reconcileQuestionGlosses(text, glosses);
+    if (_sameGlosses(glosses, corrected)) return;
+
+    final inserted = corrected.length - glosses.length;
+    for (var i = 0; i < inserted; i++) {
+      glosses.insert(i, corrected[i]);
+      urls.insert(i, animationResolver.resolveAll(gloss: corrected[i]).first);
+    }
+    for (var i = 0; i < corrected.length; i++) {
+      if (i >= glosses.length) {
+        glosses.add(corrected[i]);
+        urls.add(animationResolver.resolveAll(gloss: corrected[i]).first);
+      } else if (AnimationUrlResolver.canonicalFor(glosses[i]) !=
+          AnimationUrlResolver.canonicalFor(corrected[i])) {
+        glosses[i] = corrected[i];
+        urls[i] = animationResolver.resolveAll(gloss: corrected[i]).first;
+      }
+    }
+  }
+
+  static bool _sameGlosses(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (AnimationUrlResolver.canonicalFor(a[i]) !=
+          AnimationUrlResolver.canonicalFor(b[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   static List<String> _textWords(String text) {
-    final clean = AnimationUrlResolver.stripAccents(text.toUpperCase())
-        .replaceAll(_punct, ' ');
+    final clean = AnimationUrlResolver.stripAccents(
+      text.toUpperCase(),
+    ).replaceAll(_punct, ' ');
     return clean.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
   }
 
   static const List<(String, String, List<String>)> _compounds = [
-    ('COMO ESTAS', 'COMO_ESTAS', ['COMO', 'ESTAS', 'ESTA', 'ESTAR', 'BIEN', 'TU', 'YO']),
-    ('COMO ESTA', 'COMO_ESTAS', ['COMO', 'ESTAS', 'ESTA', 'ESTAR', 'BIEN', 'TU', 'YO']),
+    (
+      'COMO ESTAS',
+      'COMO_ESTAS',
+      ['COMO', 'ESTAS', 'ESTA', 'ESTAR', 'BIEN', 'TU', 'YO'],
+    ),
+    (
+      'COMO ESTA',
+      'COMO_ESTAS',
+      ['COMO', 'ESTAS', 'ESTA', 'ESTAR', 'BIEN', 'TU', 'YO'],
+    ),
     ('POR FAVOR', 'POR_FAVOR', ['POR', 'FAVOR']),
     ('LO SIENTO', 'LO_SIENTO', ['LO', 'SIENTO', 'SENTIR']),
     ('NO PUEDO', 'NO_PUEDO', ['NO', 'PUEDO', 'PUEDE', 'PODER']),
@@ -187,21 +250,27 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
       if (!joined.contains(phrase)) continue;
       if (result.contains(target)) {
         result = result
-            .where((g) =>
-                !constituents.contains(AnimationUrlResolver.canonicalFor(g)) ||
-                g == target)
+            .where(
+              (g) =>
+                  !constituents.contains(
+                    AnimationUrlResolver.canonicalFor(g),
+                  ) ||
+                  g == target,
+            )
             .toList();
         continue;
       }
-      final firstIdx = result.indexWhere((g) =>
-          constituents.contains(AnimationUrlResolver.canonicalFor(g)));
+      final firstIdx = result.indexWhere(
+        (g) => constituents.contains(AnimationUrlResolver.canonicalFor(g)),
+      );
       if (firstIdx != -1) {
         result[firstIdx] = target;
         result = [
           for (int i = 0; i < result.length; i++)
             if (i == firstIdx ||
-                !constituents
-                    .contains(AnimationUrlResolver.canonicalFor(result[i])))
+                !constituents.contains(
+                  AnimationUrlResolver.canonicalFor(result[i]),
+                ))
               result[i],
         ];
       }

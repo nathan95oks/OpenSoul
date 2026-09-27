@@ -48,6 +48,7 @@ class AppTheme {
   static const Color lightInputHint = Color(0xFF586174);
   static const Color lightInputBorder = Color(0xFF7E8AA3);
   static const Color lightInputCursor = lsbVioletDeep;
+  static const Color audioActionBlue = Color(0xFF2563EB);
 
   // El módulo LSB→Texto/Audio ya consumía estos tokens de forma centralizada.
   // Se conservan sus nombres para no dispersar cambios por todos sus widgets.
