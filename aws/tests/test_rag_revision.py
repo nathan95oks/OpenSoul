@@ -66,12 +66,39 @@ class Comparacion(unittest.TestCase):
         out = REV.comparaciones(texto, [AUTO, CASA])
         # «avión» no está en la frase, «un» no se signa, COCHE y PERRO no
         # están en las glosas: se descartan.
-        self.assertEqual(out[0], {"faltan": ["auto", "Quiero"], "sobran": []})
-        self.assertEqual(out[1], {"faltan": ["Tengo"], "sobran": ["CASO"]})
+        self.assertEqual(out[0], {"faltan": ["auto", "Quiero"], "sobran": [],
+                                  "leve": False})
+        self.assertEqual(out[1], {"faltan": ["Tengo"], "sobran": ["CASO"],
+                                  "leve": False})
+
+    def test_un_verbo_conjugado_de_una_glosa_no_falta(self):
+        copia = {"texto": "Sí. Perdimos la copia anterior.",
+                 "glosas": ["SI", "SENA_PENDIENTE:COPIA", "PERDER"]}
+        out = REV.comparaciones(
+            json.dumps([{"faltan": ["Perdimos", "anterior"]}]), [copia])
+        self.assertEqual(out[0]["faltan"], ["anterior"])
+        self.assertTrue(REV.conjugada("Iré", ["MAÑANA", "IR"]))
+        self.assertFalse(REV.conjugada("Quiero", ["SABER"]))
 
     def test_una_respuesta_rota_no_marca_nada(self):
         self.assertEqual(REV.comparaciones("no sé", [AUTO]),
-                         [{"faltan": [], "sobran": []}])
+                         [{"faltan": [], "sobran": [], "leve": False}])
+
+    def test_lo_que_no_es_un_error_comprobable_se_descarta(self):
+        # YO: sujeto que el español calla; SI y 2/0/5: están en la frase;
+        # «soy», «entre»: LSB no los signa.
+        out = REV.depurar(
+            "Sí, soy titular desde 2025 entre otros.",
+            ["SI", "YO", "2", "0", "5", "OTRO", "CASA"],
+            ["soy", "entre", "titular"], ["YO", "SI", "2", "CASA"])
+        self.assertEqual(out, {"faltan": ["titular"], "sobran": ["CASA"],
+                               "leve": False})
+
+    def test_solo_un_auxiliar_que_falta_es_menor(self):
+        out = REV.depurar("Quiero confirmar.", ["CONFIRMAR"], ["Quiero"], [])
+        self.assertEqual(out, {"faltan": ["Quiero"], "sobran": [], "leve": True})
+        grave = REV.depurar("No recuerdo.", ["RECORDAR"], ["No"], [])
+        self.assertFalse(grave["leve"])
 
 
 class Vuelta(unittest.TestCase):

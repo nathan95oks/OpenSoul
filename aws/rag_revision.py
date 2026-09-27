@@ -33,11 +33,29 @@ MAX_TOKENS = 900
 PENDIENTE = "SENA_PENDIENTE:"
 
 # Palabras del español que LSB no signa: su ausencia en las glosas no es
-# una pérdida.
+# una pérdida. Artículos, preposiciones, conjunciones, pronombres átonos y el
+# verbo copulativo (LSB no signa «ser»/«estar» como cópula).
 _FUNCION = frozenset("""
-a al algo ante con de del e el ella ellas ellos en es esa ese eso esta este
-esto fue ha han hay la las le les lo los me mi mis nos o para pero por que
-se sea ser si sin sobre su sus te tu tus un una unas uno unos y ya yo
+a al algo ante aunque con de del desde e el ella ellas ellos en entonces
+entre era eran eres es esa ese eso esta estaba estaban estamos estan este
+esto estoy fue fueron ha han hasta hay hacia la las le les lo los me mi mis
+ni nos o para pero pues por porque que se sea segun ser si sin sobre somos
+son soy su sus tambien te tu tus u un una unas uno unos y ya yo
+""".split())
+
+# Sujetos que el español calla («Tengo») y LSB signa (YO TENER): no sobran.
+_SUJETOS = frozenset({"yo", "tu", "el", "ella", "nosotros", "ellos", "ellas",
+                      "usted", "ustedes"})
+
+# Verbos auxiliares o de modo: si solo faltan estos, la pérdida es menor.
+_AUXILIARES = frozenset("""
+quiero quiere queremos quieren debo debe deben puedo puede pueden necesito
+necesita tengo tiene tienen voy va vamos
+""".split())
+
+_NUMEROS = frozenset("""
+cero uno una dos tres cuatro cinco seis siete ocho nueve diez once doce
+veinte treinta cien mil primero primera segundo
 """.split())
 
 
@@ -191,27 +209,72 @@ def es_espanol(vuelta: str, glosas: list) -> bool:
     return iguales < len(palabras) or len(palabras) == 1 and len(vuelta) <= 4
 
 
+def conjugada(palabra: str, glosas: list) -> bool:
+    """Si [palabra] es una forma de alguna glosa: PERDIMOS de PERDER,
+    COMPRÉ de COMPRAR. Entonces no falta. QUIERO/QUERER o TENGO/TENER no
+    comparten raíz y sí se marcan: esas glosas no están."""
+    palabra = _norm(palabra)
+    for g in legibles(glosas):
+        for w in (_norm(x) for x in g.split()):
+            if len(palabra) >= 4 and w[:4] == palabra[:4]:
+                return True
+            # Verbos cortos: IR → «iré», VER → «verla».
+            if 2 <= len(w) <= 3 and palabra.startswith(w):
+                return True
+    return False
+
+
+def _en_la_frase(glosa: str, texto: str) -> bool:
+    """Si la glosa dice algo que la frase sí dice: la misma palabra sin
+    tildes (SI/«Sí», QUE/«¿Qué?»), otra forma (CUANTOS/«cuánto») o un número
+    escrito con cifras o letras (2, 0, 5 en «2025»; 6 en «seis»)."""
+    palabras = [_norm(w) for w in
+                re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", texto)]
+    partes = [_norm(w) for w in glosa.split()]
+    if all(p.isdigit() for p in partes):
+        return any(w.isdigit() or w in _NUMEROS for w in palabras)
+    return all(any(w == p or len(p) >= 4 and w[:4] == p[:4]
+                   for w in palabras) for p in partes)
+
+
+def depurar(texto: str, glosas: list, faltan: list, sobran: list) -> dict:
+    """Quita de lo que el modelo marcó lo que no es un error comprobable.
+
+    Falta: debe estar en la frase, no ser una palabra que LSB no signa ni una
+    forma de alguna glosa. Sobra: debe estar en las glosas, no ser un sujeto
+    que el español calla ni algo que la frase sí dice. `leve` si solo faltan
+    auxiliares («quiero», «debe») y no sobra nada.
+    """
+    en_frase = {_norm(w): w for w in
+                re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", texto)}
+    en_glosas = {_norm(g): g for g in legibles(glosas)}
+    quedan_f = []
+    for w in faltan:
+        clave = _norm(str(w)).strip()
+        if (clave in en_frase and clave not in _FUNCION
+                and not conjugada(clave, glosas)
+                and en_frase[clave] not in quedan_f):
+            quedan_f.append(en_frase[clave])
+    quedan_s = []
+    for g in sobran:
+        clave = _norm(str(g).replace("_", " ")).strip()
+        if (clave in en_glosas and clave not in _SUJETOS
+                and not _en_la_frase(clave, texto)
+                and en_glosas[clave] not in quedan_s):
+            quedan_s.append(en_glosas[clave])
+    leve = bool(quedan_f) and not quedan_s and all(
+        _norm(w) in _AUXILIARES for w in quedan_f)
+    return {"faltan": quedan_f, "sobran": quedan_s, "leve": leve}
+
+
 def comparaciones(texto: str, items: list) -> list:
     """{faltan, sobran} por item, comprobados contra la frase y las glosas."""
     crudo = _json_lista(texto)
     salida = []
     for i, it in enumerate(items):
         r = crudo[i] if i < len(crudo) and isinstance(crudo[i], dict) else {}
-        en_frase = {_norm(w): w for w in
-                    re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", it["texto"])}
-        en_glosas = {_norm(g): g for g in legibles(it["glosas"])}
-        faltan = []
-        for w in r.get("faltan") or []:
-            clave = _norm(str(w)).strip()
-            if clave in en_frase and clave not in _FUNCION \
-                    and en_frase[clave] not in faltan:
-                faltan.append(en_frase[clave])
-        sobran = []
-        for g in r.get("sobran") or []:
-            clave = _norm(str(g).replace("_", " ")).strip()
-            if clave in en_glosas and en_glosas[clave] not in sobran:
-                sobran.append(en_glosas[clave])
-        salida.append({"faltan": faltan, "sobran": sobran})
+        salida.append(depurar(it["texto"], it["glosas"],
+                              r.get("faltan") or [], r.get("sobran") or []))
     return salida
 
 
