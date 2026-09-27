@@ -81,6 +81,13 @@ class Clasificacion(unittest.TestCase):
         self.assertIsNone(out[0]["bedrock"])
         self.assertIsNone(out[0]["zona"])
 
+    def test_titan_ve_la_palabra_en_su_frase(self):
+        self.assertEqual(Z.texto_palabra(BOLETA),
+                         "boleta: Sí tengo mi última boleta.")
+        self.assertEqual(Z.textos_senas({"PAPEL": "Documentos"},
+                                        {"PAPEL": ["Papel", "el documento"]}),
+                         {"PAPEL": "papel: Papel; el documento"})
+
     def test_el_indice_de_senas_se_llena_por_tandas(self):
         indice = Z.indexar_senas(TEXTOS, {}, embed, lote=2)
         self.assertEqual(len(indice["vectores"]), 2)
@@ -105,7 +112,7 @@ class Accion(unittest.TestCase):
                                   create=True, return_value={
                                       "body": io.BytesIO(
                                           json.dumps(cuerpo).encode())}), \
-                mock.patch.object(L, "_titan_embed", embed):
+                mock.patch.object(L, "_embed_zonas", embed):
             estado, datos = self.llamar({"action": "zonas",
                                          "palabras": [BOLETA]})
         self.assertEqual(estado, 200)

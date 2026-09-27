@@ -35,6 +35,10 @@ VECINAS = 5
 # Vectores de señas por llamada: con 40, la llamada (más leer y guardar el
 # índice en S3) pasaba los 29 s de API Gateway y nunca se guardaba.
 LOTE_INDICE = 15
+# Dimensiones de los vectores de este índice. Con 256 y palabras sueltas,
+# Titan juntaba por forma (BOLETA con MIEDO y HOLA; AUTO con 5 y 4); con la
+# palabra en su frase y 1024 dimensiones compara significados.
+DIMENSIONES = 1024
 # Categorías del catálogo que no son zonas de respuesta: el deletreo.
 _NO_ZONAS = {"Abecedario"}
 _EJEMPLOS_POR_ZONA = 25
@@ -127,16 +131,25 @@ def zonas_de_bedrock(texto: str, n: int, zonas: dict) -> list:
 
 def textos_senas(zonas: dict, formas: dict) -> dict:
     """{glosa: texto que se vectoriza} de las señas con zona de respuesta:
-    su significado en español («papel; el documento»)."""
-    return {g: "; ".join(formas.get(g) or [g.replace("_", " ").lower()])
+    la seña con su significado en español («papel: papel; el documento»)."""
+    return {g: f"{g.replace('_', ' ').lower()}: "
+               + "; ".join(formas.get(g) or [g.replace("_", " ").lower()])
             for g, z in sorted(zonas.items()) if z not in _NO_ZONAS}
+
+
+def texto_palabra(palabra: dict) -> str:
+    """La palabra con la frase donde aparece: «boleta: Sí tengo mi última
+    boleta.». Sola, Titan no sabe qué significa."""
+    legible = palabra["palabra"].replace("_", " ").lower()
+    ejemplo = (palabra.get("ejemplos") or [""])[0]
+    return f"{legible}: {ejemplo}".strip(": ")
 
 
 def clave_indice(modelo: str, textos: dict) -> str:
     huella = hashlib.sha256(json.dumps(textos, sort_keys=True,
                                        ensure_ascii=False).encode()).hexdigest()
     return (f"zonas-senas-{modelo.replace(':', '_').replace('.', '_')}-"
-            f"{huella[:16]}")
+            f"{DIMENSIONES}-{huella[:16]}")
 
 
 def indexar_senas(textos: dict, indice: dict, embed,
@@ -171,7 +184,7 @@ def clasificar(palabras: list, zonas_desc: dict, vectores: dict, zonas: dict,
                                 len(palabras), zonas_desc)
     salida = []
     for p, bedrock in zip(palabras, elegidas):
-        v = embed(p["palabra"].replace("_", " ").lower())
+        v = embed(texto_palabra(p))
         titan, similitud, vecinas = zona_por_vecinas(v, vectores, zonas)
         salida.append({
             "palabra": p["palabra"], "titan": titan, "similitud": similitud,
