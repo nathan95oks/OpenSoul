@@ -213,6 +213,14 @@ class Equivalencias(unittest.TestCase):
             "Me falta un documento.", self.EQ)
         self.assertEqual(salida, ["YO", "PAPEL", "FALTAR"])
 
+    def test_la_marca_pregunta_no_es_una_sena_que_falte(self):
+        corr = [{"palabra": "PREGUNTA", "accion": "concepto_sin_catalogo"}]
+        self.assertEqual(B.marcar_senas_pendientes(
+            ["TENER", *"PREGUNTA"], corr, "¿Tiene la placa?"), ["TENER"])
+        self.assertEqual(B.marcar_senas_pendientes(
+            [*"PREGUNTA"], corr, "Tengo una pregunta."),
+            ["SENA_PENDIENTE:PREGUNTA"])
+
     def test_la_sena_equivalente_no_se_repite(self):
         corr = [{"palabra": "CUANTO", "accion": "concepto_sin_catalogo"}]
         salida = B.marcar_senas_pendientes(
@@ -258,6 +266,22 @@ class HerramientaEquivalencias(unittest.TestCase):
         self.assertEqual((caso["estado"], caso["misma_raiz"]),
                          ("propuesta", False))
         self.assertEqual(nada["estado"], "sin_equivalente")
+
+
+class Vocabulario(unittest.TestCase):
+    def test_la_lista_ordena_por_uso_y_no_muestra_la_marca(self):
+        corpus = {"escenarios": [{
+            "id": "ESC-SERECI-02", "variantes": [],
+            "turnos": [
+                {"texto": "Sí. Perdimos la copia.", "glosas":
+                 ["SI", "SENA_PENDIENTE:COPIA", "PERDER"]},
+                {"texto": "¿Otra copia anterior?", "glosas":
+                 ["SENA_PENDIENTE:COPIA", "SENA_PENDIENTE:ANTERIOR"]},
+            ]}]}
+        md = B.vocabulario_md(corpus)
+        self.assertIn("**2 palabras · 3 usos.**", md)
+        self.assertLess(md.index("| COPIA | 2 |"), md.index("| ANTERIOR | 1 |"))
+        self.assertNotIn("SENA_PENDIENTE", md)
 
 if __name__ == "__main__":
     unittest.main()

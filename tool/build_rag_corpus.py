@@ -57,6 +57,8 @@ GLOSAS = os.path.join(RAG, "glosas_cache.json")
 # Señas del catálogo equivalentes a palabras sin seña (tool/rag_equivalencias.py).
 # Solo se usan las aprobadas.
 EQUIVALENCIAS = os.path.join(RAG, "senas_equivalentes.json")
+# La lista de vocabulario por crecer, para leer y compartir.
+SALIDA_VOCABULARIO = os.path.join(RAG, "senas_a_incorporar.md")
 
 # Un hecho con plazo («hasta el 2026-10-05») deja de valer al pasar la fecha.
 _HASTA = re.compile(r"hasta\s+(?:el\s+)?(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
@@ -544,7 +546,11 @@ def marcar_senas_pendientes(glosas: list | None, correcciones: list,
         letras = letras_de(palabra)
         palabras.remove(palabra)
         equivalente = (equivalencias or {}).get(_norm(palabra.replace("_", " ")))
-        if _es_sigla(palabra, texto):
+        if _norm(palabra) == "pregunta" and "pregunt" not in _norm(texto):
+            # La marca de interrogación que añade el modelo: en LSB la
+            # pregunta va en la cara (cejas, cabeza), no es una seña que falte.
+            pass
+        elif _es_sigla(palabra, texto):
             salida.extend(glosas[i:i + len(letras)])
         elif equivalente and not _mayuscula_interior(palabra, texto):
             # Una seña oficial que significa lo mismo (revisada o con
@@ -577,6 +583,78 @@ def senas_pendientes(corpus: dict) -> dict:
                     palabra = g[len(SENA_PENDIENTE):].replace("_", " ")
                     cuenta[palabra] = cuenta.get(palabra, 0) + 1
     return cuenta
+
+
+def vocabulario_md(corpus: dict) -> str:
+    """Las señas a incorporar, de la más usada a la menos, con un ejemplo.
+
+    Es la lista de trabajo para crecer el vocabulario: cada palabra que se
+    incorpora al catálogo (con su seña y su animación) deja de verse en azul
+    en todas las tarjetas que la usan. También se listan las equivalencias
+    con señas existentes, con su origen, y las que se rechazaron.
+    """
+    usos, ejemplo, areas = {}, {}, {}
+    for e in corpus["escenarios"]:
+        area = e["id"].split("-")[1]
+        tarjetas = e["turnos"] + [r for p in e["variantes"] for r in p["respuestas"]]
+        for t in tarjetas:
+            for g in t.get("glosas") or []:
+                if not g.startswith(SENA_PENDIENTE):
+                    continue
+                palabra = g[len(SENA_PENDIENTE):].replace("_", " ")
+                usos[palabra] = usos.get(palabra, 0) + 1
+                ejemplo.setdefault(palabra, t["texto"])
+                areas.setdefault(palabra, set()).add(area)
+    equivalencias = {}
+    if os.path.exists(EQUIVALENCIAS):
+        with open(EQUIVALENCIAS, encoding="utf-8") as f:
+            equivalencias = json.load(f)
+    notas = {}
+    for p, e in equivalencias.items():
+        if e.get("estado") == "rechazada" and e.get("sena"):
+            notas[p.replace("_", " ")] = f"no es {e['sena']} (revisado)"
+    orden = sorted(usos, key=lambda p: (-usos[p], _norm(p)))
+    lineas = [
+        "# Señas a incorporar",
+        "",
+        "Generado por `tool/build_rag_corpus.py` desde el corpus RAG. No editar a mano.",
+        "",
+        "Palabras de los trámites de Cochabamba que no tienen seña en el "
+        "catálogo del avatar. En la app se ven en azul claro («seña a "
+        "incorporar») y el avatar dice «En espera para su avatar». Al "
+        "incorporar una seña (catálogo + animación) y regenerar el corpus, "
+        "deja de verse en azul en todas sus tarjetas.",
+        "",
+        f"**{len(usos)} palabras · {sum(usos.values())} usos.** "
+        "Las siglas (NUREJ, CRPVA…) no están: en LSB se deletrean.",
+        "",
+    ]
+    aprobadas = [(p, e) for p, e in sorted(equivalencias.items())
+                 if e.get("estado") == "aprobada" and e.get("sena")]
+    if aprobadas:
+        lineas += [
+            "## Ya resueltas con una seña existente",
+            "",
+            "| Palabra | Seña | Origen |",
+            "|---|---|---|",
+        ]
+        for p, e in aprobadas:
+            origen = ("catálogo oficial" if e.get("origen") == "catalogo"
+                      else "Bedrock, revisado")
+            lineas.append(f"| {p.replace('_', ' ')} | {e['sena']} | {origen} |")
+        lineas.append("")
+    lineas += [
+        "## Por incorporar",
+        "",
+        "| # | Palabra | Usos | Instituciones | Ejemplo | Nota |",
+        "|---:|---|---:|---|---|---|",
+    ]
+    for i, p in enumerate(orden, 1):
+        ej = ejemplo[p].replace("|", "/")
+        lineas.append(f"| {i} | {p} | {usos[p]} | "
+                      f"{', '.join(sorted(areas[p]))} | {ej} | "
+                      f"{notas.get(p, '')} |")
+    return "\n".join(lineas) + "\n"
 
 
 def _ofrecible(t: dict) -> bool:
@@ -776,7 +854,8 @@ def main() -> int:
         return 1
     texto = json.dumps(corpus, ensure_ascii=False, indent=1) + "\n"
     banco = banco_tramites(corpus)
-    salidas = {SALIDA: texto, SALIDA_TRAMITES: dart_tramites(banco)}
+    salidas = {SALIDA: texto, SALIDA_TRAMITES: dart_tramites(banco),
+               SALIDA_VOCABULARIO: vocabulario_md(corpus)}
     for linea in resumen(corpus):
         print(linea)
     print(f"trámites: {len(banco['contextos'])} recorridos · "
