@@ -36,9 +36,11 @@ from build_rag_corpus import RAG, ROOT, SALIDA, turnos_pregunta  # noqa: E402
 CACHE = os.path.join(RAG, "revision_glosas.json")
 INFORME = os.path.join(RAG, "revision_glosas.md")
 TANDA = 8
-# Por debajo, la vuelta ya no dice lo mismo que la frase. Calibrado con la
-# Lambda real el 2026-09-27 (ver el informe): las frases con una palabra
-# perdida o añadida quedan por debajo.
+# Primera medición con la Lambda real (2026-09-27, Nova 2 Lite + Titan v2):
+# mediana 0.72, p25 0.61. No separa bien: muchas vueltas salen como glosas
+# («Comprar mío nombre pasar») y bajan frases correctas, y una palabra
+# añadida («mi casa» con CASO) no baja nada (0.79). Sirve para priorizar la
+# revisión, no como filtro.
 UMBRAL = 0.6
 
 
@@ -75,9 +77,13 @@ def informe(cache: dict, umbral: float) -> str:
         "Generado por `tool/rag_revisar_glosas.py`. No editar a mano.",
         "",
         "Bedrock traduce las glosas de cada frase de vuelta al español (sin "
-        "ver la frase) y Titan compara su significado con la original. Las "
-        "frases de abajo parecen haber perdido o ganado algo al pasar a LSB: "
-        "hay que revisarlas.",
+        "ver la frase) y Titan compara su significado con la original.",
+        "",
+        "**Es una lista para priorizar, no un veredicto.** En la primera "
+        "medición, de las 15 frases más bajas solo unas 3 tenían un problema "
+        "real (p. ej. «Me la robaron.» → ROBAR · CELULAR): muchas vueltas "
+        "salen escritas como glosas y bajan frases correctas, y una palabra "
+        "añadida puede no bajar el parecido.",
         "",
         f"**{len(cache)} frases revisadas · mediana {mediana:.2f} · "
         f"{len(bajas)} por debajo de {umbral:.2f}.**",
