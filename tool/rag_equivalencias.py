@@ -72,6 +72,16 @@ def actualizar_catalogo() -> int:
                   ensure_ascii=False, indent=1)
         f.write("\n")
     print(f"catálogo: {len(foto)} señas · {os.path.relpath(FOTO_CATALOGO, ROOT)}")
+    # La zona de cada seña: su categoría en el diccionario oficial.
+    with open(os.path.join(ROOT, "assets", "dictionary",
+                           "official_dictionary.json"), encoding="utf-8") as f:
+        zonas = {e["gloss"]: e["categoryId"] for e in json.load(f)["entries"]}
+    destino = os.path.join(ROOT, "aws", "zonas_senas.json")
+    with open(destino, "w", encoding="utf-8", newline="") as f:
+        json.dump({k: zonas[k] for k in sorted(zonas)}, f,
+                  ensure_ascii=False, indent=1)
+        f.write("\n")
+    print(f"zonas: {len(zonas)} señas · {os.path.relpath(destino, ROOT)}")
     return 0
 
 
