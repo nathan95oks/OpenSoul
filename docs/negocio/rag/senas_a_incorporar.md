@@ -8,7 +8,9 @@ Palabras de los trámites de Cochabamba que no tienen seña en el catálogo del 
 
 ## Ya resueltas con una seña existente
 
-| Palabra | Seña | Origen |
+La primera columna es lo que dejó la traducción automática, a veces mal escrito (COUCHABAMBA por Cochabamba); la segunda, la seña correcta que se hace.
+
+| Dejó la traducción | Seña | Origen |
 |---|---|---|
 | COOCHABAMBA | COCHABAMBA | Bedrock, revisado |
 | COUCHABAMBA | COCHABAMBA | Bedrock, revisado |
