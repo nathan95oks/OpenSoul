@@ -113,10 +113,19 @@ sugerencia, y cada tarjeta muestra su secuencia LSB como hoy.
 - `lib/core/data/datasources/rag_corpus_datasource.dart` y
   `ragCorpusProvider` / `ragRetrieverProvider` en `injection.dart`: asset
   local, sin red. Un corpus ilegible no rompe nada.
-- `rag_suggestions_provider.dart`: `ragSuggestionsFor` consulta el RAG solo
-  para la pregunta pendiente del oyente, ya traducida y con ruta
-  `noSafeRoute`. Si el modelo de desempate encuentra después una ruta, la
-  sugerencia desaparece.
+- `rag_suggestions_provider.dart`: `ragSuggestionsFor` consulta el RAG para
+  la pregunta pendiente del oyente, ya traducida, y `ragOutranksGraph` decide
+  si el RAG pesa más que el grafo:
+  - `noSafeRoute` (el grafo no sabe): parecido ≥ 0.45;
+  - contexto o selector (el grafo solo reconoció un tema, p. ej.
+    «denunciado» abre Denuncias): parecido ≥ 0.6;
+  - preguntas del grafo: parecido ≥ 0.8 y, además, la pregunta documentada
+    literal (≥ 0.99) o 0.15 más de seguridad que el grafo.
+
+  Las tarjetas del RAG se ofrecen junto a las guiadas; la persona elige. Si
+  el modelo de desempate cambia la ruta después, el RAG se vuelve a medir.
+  Con 24 frases leídas por la Lambda real, esto corrigió 6 casos en que el
+  grafo se adelantaba con una palabra suelta.
 - `RagSuggestionsBar` en el chat, «Situaciones parecidas · institución»:
   cada tarjeta muestra la frase y su secuencia LSB. Al elegirla se envía
   enlazada a la pregunta y se lee en voz alta.
