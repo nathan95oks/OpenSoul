@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/motion.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
@@ -89,9 +90,17 @@ class CardGrid extends ConsumerWidget {
               itemCount: visible.length,
               itemBuilder: (context, index) {
                 final card = visible[index];
-                return _AnswerCard(
-                  card: card,
-                  onTap: () => _onAnswerPicked(context, ref, card),
+                // La clave por tarjeta hace que las opciones de una pregunta
+                // nueva entren escalonadas; las que siguen no se repiten.
+                return StaggeredEntrance(
+                  key: ValueKey('${card.id}#$index'),
+                  index: index,
+                  child: PressableScale(
+                    child: _AnswerCard(
+                      card: card,
+                      onTap: () => _onAnswerPicked(context, ref, card),
+                    ),
+                  ),
                 );
               },
             ),
@@ -139,8 +148,10 @@ class CardGrid extends ConsumerWidget {
   }
 
   Future<void> _onAnswerPicked(
-          BuildContext context, WidgetRef ref, LsbCard card) =>
-      elegirGlosa(context, ref, card);
+    BuildContext context,
+    WidgetRef ref,
+    LsbCard card,
+  ) => elegirGlosa(context, ref, card);
 }
 
 class _PairPickHint extends StatelessWidget {
@@ -154,9 +165,7 @@ class _PairPickHint extends StatelessWidget {
     final label = current == 0
         ? 'Puedes elegir hasta $max cards para describir mejor'
         : 'Card $current de $max — toca otra para complementar, o salta';
-    final color = remaining > 0
-        ? AppTheme.brandPrimary
-        : AppTheme.lightTextSub;
+    final color = remaining > 0 ? AppTheme.brandPrimary : AppTheme.lightTextSub;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
@@ -208,7 +217,11 @@ class _FlowCompleteBanner extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle, color: AppTheme.successLight, size: 28),
+            const Icon(
+              Icons.check_circle,
+              color: AppTheme.successLight,
+              size: 28,
+            ),
             const SizedBox(height: 8),
             const Text(
               'Respondiste todas las preguntas',
@@ -238,7 +251,11 @@ class _FlowCompleteBanner extends StatelessWidget {
 
 @visibleForTesting
 class AnswerCardForTest extends _AnswerCard {
-  const AnswerCardForTest({super.key, required super.card, required super.onTap});
+  const AnswerCardForTest({
+    super.key,
+    required super.card,
+    required super.onTap,
+  });
 }
 
 class _AnswerCard extends ConsumerWidget {

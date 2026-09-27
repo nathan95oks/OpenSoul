@@ -28,7 +28,7 @@ class SessionRepositoryImpl implements SessionRepository {
   final Future<SharedPreferences> Function() _preferences;
 
   SessionRepositoryImpl({Future<SharedPreferences> Function()? preferences})
-      : _preferences = preferences ?? SharedPreferences.getInstance;
+    : _preferences = preferences ?? SharedPreferences.getInstance;
 
   Future<Map<String, dynamic>?> _leer(SharedPreferences prefs, String clave) {
     try {
@@ -53,15 +53,20 @@ class SessionRepositoryImpl implements SessionRepository {
     if (legado == null) return;
 
     if (prefs.getString(_claveConfig) == null) {
-      final tab = AppTabId.fromLegacyIndex((legado['tabIndex'] as num?)?.toInt());
+      final tab = AppTabId.fromLegacyIndex(
+        (legado['tabIndex'] as num?)?.toInt(),
+      );
       await prefs.setString(
         _claveConfig,
-        jsonEncode(DeviceConfig(
-          // Un dispositivo que ya estaba en marcha se venía usando en
-          // personal: es el uso que existía antes de que hubiera modos.
-          mode: UsageMode.personal,
-          lastTabId: tab?.id,
-        ).toJson()),
+        jsonEncode(
+          DeviceConfig(
+            // Un dispositivo que ya estaba en marcha se venía usando en
+            // personal: es el uso que existía antes de que hubiera modos.
+            hasOpened: true,
+            mode: UsageMode.personal,
+            lastTabId: tab?.id,
+          ).toJson(),
+        ),
       );
     }
 

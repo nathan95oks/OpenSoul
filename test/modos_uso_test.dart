@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/app/session_restorer.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
@@ -34,8 +35,7 @@ class _SignRepo implements AudioTranslationRepository {
     String text, {
     String? situation,
     Map<String, String>? resolvedSenses,
-  }) async =>
-      LsbTranslation(glosses: const ['TU'], animationUrl: '');
+  }) async => LsbTranslation(glosses: const ['TU'], animationUrl: '');
 }
 
 class _DeclRepo implements TranslationRepository {
@@ -48,18 +48,19 @@ class _DeclRepo implements TranslationRepository {
     String? replyToId,
     BusinessSignals? business,
     Map<String, dynamic>? guided,
-  }) async =>
-      TranslationResult(baseSentence: '...', generatedText: '...');
+  }) async => TranslationResult(baseSentence: '...', generatedText: '...');
 }
 
 ProviderContainer _app() {
-  final c = ProviderContainer(overrides: [
-    lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-    audioTranslationRepositoryProvider.overrideWithValue(_SignRepo()),
-    translationRepositoryProvider.overrideWithValue(_DeclRepo()),
-    audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-    ...conversationOverrides(),
-  ]);
+  final c = ProviderContainer(
+    overrides: [
+      lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
+      audioTranslationRepositoryProvider.overrideWithValue(_SignRepo()),
+      translationRepositoryProvider.overrideWithValue(_DeclRepo()),
+      audioOutputProvider.overrideWithValue(FakeAudioOutput()),
+      ...conversationOverrides(),
+    ],
+  );
   addTearDown(c.dispose);
   return c;
 }
@@ -113,15 +114,17 @@ void main() {
       final repo = c.read(sessionRepositoryProvider);
 
       await c.read(usageSessionProvider.notifier).choose(UsageMode.counter);
-      await repo.saveContent(const SessionContent(
-        contextId: 'denuncia_robo',
-        sentence: ['ROBAR'],
-      ));
+      await repo.saveContent(
+        const SessionContent(contextId: 'denuncia_robo', sentence: ['ROBAR']),
+      );
 
       await c.read(usageSessionProvider.notifier).choose(UsageMode.personal);
 
-      expect(await repo.loadContent(), isNull,
-          reason: 'Lo declarado en una atención no sigue en el uso personal.');
+      expect(
+        await repo.loadContent(),
+        isNull,
+        reason: 'Lo declarado en una atención no sigue en el uso personal.',
+      );
       expect((await repo.loadConfig()).mode, UsageMode.personal);
     });
   });
@@ -131,13 +134,14 @@ void main() {
       final c = _app();
       await _sesionCargada(c);
 
-      await c.read(usageSessionProvider.notifier).choose(
-            UsageMode.counter,
-            institutionProfileId: 'derechos_reales',
-          );
+      await c
+          .read(usageSessionProvider.notifier)
+          .choose(UsageMode.counter, institutionProfileId: 'derechos_reales');
 
-      expect(c.read(usageSessionProvider).institutionProfileId,
-          'derechos_reales');
+      expect(
+        c.read(usageSessionProvider).institutionProfileId,
+        'derechos_reales',
+      );
       final config = await c.read(sessionRepositoryProvider).loadConfig();
       expect(config.institutionProfileId, 'derechos_reales');
     });
@@ -160,35 +164,41 @@ void main() {
       await _sesionCargada(c);
       final repo = c.read(sessionRepositoryProvider);
 
-      await c.read(usageSessionProvider.notifier).choose(
-            UsageMode.counter,
-            institutionProfileId: 'derechos_reales',
-          );
+      await c
+          .read(usageSessionProvider.notifier)
+          .choose(UsageMode.counter, institutionProfileId: 'derechos_reales');
 
       // Una atención con contenido real.
       await c.read(lexiconEntriesProvider.future);
       await c
           .read(conversationProvider.notifier)
           .sendHearingMessage('¿Cuál es su nombre?');
-      c.read(contextProvider.notifier).setContext(contextById('identificacion')!);
+      c
+          .read(contextProvider.notifier)
+          .setContext(contextById('identificacion')!);
       c.read(sentenceProvider.notifier).setWords(['NOMBRE']);
-      await repo.saveContent(const SessionContent(
-        contextId: 'identificacion',
-        sentence: ['NOMBRE'],
-      ));
+      await repo.saveContent(
+        const SessionContent(contextId: 'identificacion', sentence: ['NOMBRE']),
+      );
 
       await c.read(counterSessionProvider).endAttention();
 
-      expect(c.read(conversationProvider).conversation.turns, isEmpty,
-          reason: 'La siguiente persona no puede ver lo anterior.');
+      expect(
+        c.read(conversationProvider).conversation.turns,
+        isEmpty,
+        reason: 'La siguiente persona no puede ver lo anterior.',
+      );
       expect(c.read(sentenceProvider), isEmpty);
       expect(c.read(contextProvider), isNull);
       expect(await repo.loadContent(), isNull);
 
       final config = await repo.loadConfig();
       expect(config.mode, UsageMode.counter);
-      expect(config.institutionProfileId, 'derechos_reales',
-          reason: 'El perfil es del dispositivo, no del ciudadano.');
+      expect(
+        config.institutionProfileId,
+        'derechos_reales',
+        reason: 'El perfil es del dispositivo, no del ciudadano.',
+      );
     });
 
     test('empezar una atención parte de cero', () async {
@@ -206,6 +216,56 @@ void main() {
   });
 
   group('restaurar la sesión respeta el modo', () {
+    test(
+      'restaurar conserva la pestaña y no toca el chat en memoria',
+      () async {
+        SharedPreferences.setMockInitialValues({
+          'device_config_v1': jsonEncode({
+            'schemaVersion': 1,
+            'hasOpened': true,
+            'mode': 'personal',
+            'lastTabId': 'conversation',
+          }),
+          // Compatibilidad con una versión que todavía guardaba el chat.
+          'session_content_v1': jsonEncode({
+            'schemaVersion': 1,
+            'contextId': null,
+            'sentence': <String>[],
+            'resultVisible': false,
+            'conversation': {'turns': <Object>[]},
+          }),
+        });
+
+        final c = _app();
+        await c.read(lexiconEntriesProvider.future);
+        await c
+            .read(conversationProvider.notifier)
+            .sendHearingMessage('Mensaje del chat en curso');
+        expect(c.read(conversationProvider).conversation.turns, isNotEmpty);
+
+        final tab = await c.read(sessionRestorerProvider).restore();
+
+        expect(tab, AppTabId.conversation);
+        // Volver a la app no borra el chat: solo un proceso nuevo empieza
+        // vacío (y si Android lo mató con la tarea en recientes, lo repone
+        // ConversationRestoration).
+        expect(c.read(conversationProvider).conversation.turns, isNotEmpty);
+        // Un proceso nuevo empieza vacío: lo guardado por una versión antigua
+        // no se repone.
+        final nuevo = _app();
+        await nuevo.read(sessionRestorerProvider).restore();
+        expect(nuevo.read(conversationProvider).conversation.turns, isEmpty);
+
+        await c.read(sessionRestorerProvider).saveNow();
+        final saved = await c.read(sessionRepositoryProvider).loadContent();
+        expect(
+          saved?.toJson(),
+          isNot(contains('conversation')),
+          reason: 'El chat no debe escribirse otra vez en disco.',
+        );
+      },
+    );
+
     test('en ventanilla no se repone el contenido guardado', () async {
       SharedPreferences.setMockInitialValues({
         'device_config_v1': jsonEncode({
@@ -226,13 +286,20 @@ void main() {
       final c = _app();
       await c.read(sessionRestorerProvider).restore();
 
-      expect(c.read(contextProvider), isNull,
-          reason: 'Aunque el proceso muriera sin finalizar, esa atención '
-              'terminó: reponerla sería enseñársela a la siguiente persona.');
+      expect(
+        c.read(contextProvider),
+        isNull,
+        reason:
+            'Aunque el proceso muriera sin finalizar, esa atención '
+            'terminó: reponerla sería enseñársela a la siguiente persona.',
+      );
       expect(c.read(sentenceProvider), isEmpty);
       expect(await c.read(sessionRepositoryProvider).loadContent(), isNull);
-      expect((await c.read(sessionRepositoryProvider).loadConfig())
-          .institutionProfileId, 'policia');
+      expect(
+        (await c.read(sessionRepositoryProvider).loadConfig())
+            .institutionProfileId,
+        'policia',
+      );
     });
 
     test('en personal sí se repone donde se dejó', () async {

@@ -111,12 +111,67 @@ class DatoPedidoFrenteAlTema(unittest.TestCase):
                 self.assertEqual([m["id"] for m in lectura["mentionedContexts"]],
                                  ["denuncia_robo"])
 
+    def test_saludo_sin_signos_no_tapa_la_pregunta_principal(self):
+        lectura = _lectura(
+            "hola como estas quien te robo",
+            ["HOLA", "COMO_ESTAS", "QUIEN", "TU", "ROBAR"],
+        )
+        self.assertEqual(lectura["requestedSlots"], ["person"])
+        self.assertEqual(lectura["intent"], "askInformation")
+        self.assertEqual(
+            [m["id"] for m in lectura["mentionedContexts"]],
+            ["denuncia_robo"],
+        )
+
     def test_la_traduccion_sin_interrogativo_no_pierde_el_dato(self):
         """Si la traducción no conserva CUANDO, el texto sigue diciéndolo."""
         for texto in ("¿Cuándo te robaron el celular?", "¿cuando te robaron el celular?"):
             with self.subTest(texto=texto):
                 lectura = _lectura(texto, ["TU", "CELULAR", "ROBAR"])
                 self.assertEqual(lectura["requestedSlots"], ["time"])
+
+    def test_sin_signos_y_con_glosa_contradictoria_conserva_donde(self):
+        lectura = _lectura(
+            "donde te robaron el celular",
+            ["PLAZA", "CELULAR", "ROBAR"],
+        )
+        self.assertEqual(lectura["requestedSlots"], ["place"])
+        self.assertEqual(lectura["intent"], "askInformation")
+        self.assertEqual(
+            [m["id"] for m in lectura["mentionedContexts"]],
+            ["denuncia_robo"],
+        )
+
+    def test_pedir_una_descripcion_pide_rasgos(self):
+        """DESCRIBIR no tiene seña: el texto conserva lo que se pide."""
+        for texto, glosas in (
+            ("¿Puedes describir a los agresores?",
+             ["TU", "PUEDO", "EXPLICAR", "COMO", "EL"]),
+            ("puedes describir a los agresores", ["TU", "PUEDO", "HOMBRE"]),
+            ("Describa a la persona que le robó", ["PERSONA", "ROBAR"]),
+            ("¿Cómo era el ladrón?", ["LADRON", "COMO"]),
+            ("¿Qué características tenía?", ["TENER", "QUE"]),
+        ):
+            with self.subTest(texto=texto):
+                lectura = _lectura(texto, glosas)
+                self.assertIn("description", lectura["requestedSlots"])
+                self.assertEqual(lectura["intent"], "askInformation")
+
+    def test_como_sin_ser_en_pasado_no_pide_descripcion(self):
+        lectura = _lectura("¿Cómo te robaron?", ["COMO", "ROBAR", "TU"])
+        self.assertNotIn("description", lectura["requestedSlots"])
+
+    def test_hora_cuantos_pide_la_hora_no_una_cantidad(self):
+        lectura = _lectura("¿A qué hora aproximadamente?",
+                           ["HORA", "CUANTOS", "MAS_O_MENOS"])
+        self.assertEqual(lectura["requestedSlots"], ["time"])
+
+    def test_lugar_en_una_pregunta_de_si_o_no_no_pide_un_lugar(self):
+        lectura = _lectura("¿Hay cámaras o video del lugar?",
+                           ["VIDEO", "FILMAR", "TENER"])
+        self.assertNotIn("place", lectura["requestedSlots"])
+        lectura = _lectura("¿Cuál fue el lugar?", ["LUGAR", "CUAL"])
+        self.assertIn("place", lectura["requestedSlots"])
 
     def test_equivalentes_temporales(self):
         for texto, glosas in (("¿A qué hora fue?", ["HORA", "QUE"]),
@@ -185,6 +240,41 @@ class SinSegundaLlamada(unittest.TestCase):
             self.assertIn(campo, cuerpo)
         self.assertEqual(cuerpo["semanticTurn"]["intent"], "mentionContext")
 
+    def test_donde_no_se_convierte_en_una_plaza_inventada(self):
+        cuerpo, llamadas = _llamar(
+            "donde te robaron el celular",
+            ["PLAZA", "CELULAR", "ROBAR"],
+        )
+        self.assertEqual(llamadas, 1)
+        self.assertEqual(cuerpo["glosses"], ["DONDE", "CELULAR", "ROBAR"])
+        self.assertNotIn("PLAZA", cuerpo["glosses"])
+        self.assertEqual(cuerpo["semanticTurn"]["requestedSlots"], ["place"])
+
+    def test_un_lugar_dicho_expresamente_no_se_elimina(self):
+        glosas, _ = t2l.enforce_spoken_question_fidelity(
+            ["PLAZA"], "donde esta la plaza",
+        )
+        self.assertEqual(glosas, ["DONDE", "PLAZA"])
+
+    def test_una_relativa_sin_signos_no_se_vuelve_pregunta(self):
+        for texto, glosas in (
+            ("donde vivo hay una plaza", ["CASA", "PLAZA"]),
+            ("quien me robo fue un hombre", ["HOMBRE", "ROBAR"]),
+            ("cuando llegue me robaron", ["LLEGAR", "ROBAR"]),
+        ):
+            with self.subTest(texto=texto):
+                resultado, incidencias = t2l.enforce_spoken_question_fidelity(
+                    glosas, texto,
+                )
+                self.assertEqual(resultado, glosas)
+                self.assertEqual(incidencias, [])
+
+    def test_un_pronombre_corto_no_respalda_una_persona_inventada(self):
+        glosas, _ = t2l.enforce_spoken_question_fidelity(
+            ["TESTIGO", "ROBAR"], "quien te robo",
+        )
+        self.assertEqual(glosas, ["QUIEN", "ROBAR"])
+
     def test_acierto_de_cache_trae_la_lectura_sin_bedrock(self):
         guardado = {"glosses": ["DONDE"], "disambiguation": [],
                     "pendingClarifications": [], "semanticStatus": "resolved"}
@@ -195,6 +285,21 @@ class SinSegundaLlamada(unittest.TestCase):
             modelo.assert_not_called()
         cuerpo = json.loads(respuesta["body"])
         self.assertTrue(cuerpo["cacheHit"])
+        self.assertEqual(cuerpo["semanticTurn"]["requestedSlots"], ["place"])
+
+    def test_cache_antigua_con_plaza_tambien_se_repara(self):
+        guardado = {"glosses": ["PLAZA", "CELULAR", "ROBAR"],
+                    "disambiguation": [], "pendingClarifications": [],
+                    "semanticStatus": "resolved"}
+        with mock.patch.object(t2l, "check_cache", return_value=guardado), \
+                mock.patch.object(t2l, "invoke_bedrock") as modelo:
+            respuesta = t2l.lambda_handler(
+                {"body": json.dumps({"text": "donde te robaron el celular"})},
+                None,
+            )
+            modelo.assert_not_called()
+        cuerpo = json.loads(respuesta["body"])
+        self.assertEqual(cuerpo["glosses"], ["DONDE", "CELULAR", "ROBAR"])
         self.assertEqual(cuerpo["semanticTurn"]["requestedSlots"], ["place"])
 
     def test_la_lectura_no_se_guarda_en_la_cache_de_traduccion(self):

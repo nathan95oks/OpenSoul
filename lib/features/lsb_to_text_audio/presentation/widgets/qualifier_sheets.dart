@@ -37,7 +37,11 @@ Future<String?> mostrarSelectorCantidad(
         return SafeArea(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-                20, 4, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+              20,
+              4,
+              20,
+              MediaQuery.of(ctx).viewInsets.bottom + 20,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,7 +49,10 @@ Future<String?> mostrarSelectorCantidad(
                 Text(
                   '¿Cuántos/as $unidad?',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 14),
                 TextField(
@@ -59,18 +66,20 @@ Future<String?> mostrarSelectorCantidad(
                   ],
                   onChanged: (_) => setModalState(() {}),
                   onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+                  cursorColor: AppTheme.lightInputCursor,
                   style: const TextStyle(
+                    color: AppTheme.lightInputText,
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
                   ),
-                  decoration: InputDecoration(
+                  decoration: AppTheme.lightInputDecoration(
                     hintText: '0',
                     suffixText: unidad,
-                    filled: true,
-                    fillColor: AppTheme.lightBg,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
+                    suffixStyle: const TextStyle(
+                      color: AppTheme.lightInputHint,
+                      fontWeight: FontWeight.w600,
                     ),
+                    radius: 16,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -84,8 +93,8 @@ Future<String?> mostrarSelectorCantidad(
                     for (final valor in const [1, 2, 3, 5, 10, 15, 30])
                       _Tecla(
                         etiqueta: '$valor',
-                        onTap: () => setModalState(
-                            () => controlador.text = '$valor'),
+                        onTap: () =>
+                            setModalState(() => controlador.text = '$valor'),
                       ),
                   ],
                 ),
@@ -103,17 +112,17 @@ Future<String?> mostrarSelectorCantidad(
                   const SizedBox(height: 10),
                 ],
                 FilledButton(
-                  onPressed: n.isEmpty
-                      ? null
-                      : () => Navigator.of(ctx).pop(n),
+                  onPressed: n.isEmpty ? null : () => Navigator.of(ctx).pop(n),
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  child: const Text('Confirmar',
-                      style: TextStyle(fontWeight: FontWeight.w700)),
+                  child: const Text(
+                    'Confirmar',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
                 ),
               ],
             ),
@@ -202,7 +211,11 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-            16, 0, 16, MediaQuery.of(context).viewInsets.bottom + 16),
+          16,
+          0,
+          16,
+          MediaQuery.of(context).viewInsets.bottom + 16,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -227,22 +240,25 @@ class _TecladoDactilologicoState extends State<_TecladoDactilologico> {
                 FilteringTextInputFormatter.allow(_permitido),
                 LengthLimitingTextInputFormatter(40),
               ],
+              cursorColor: AppTheme.lightInputCursor,
               style: const TextStyle(
+                color: AppTheme.lightInputText,
                 fontSize: 22,
                 letterSpacing: 2,
                 fontWeight: FontWeight.w700,
               ),
-              decoration: InputDecoration(
-                hintText: widget.soloDigitos ? 'Escribe el número' : 'Escribe aquí',
-                filled: true,
-                fillColor: AppTheme.lightSurface,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              decoration: AppTheme.lightInputDecoration(
+                hintText: widget.soloDigitos
+                    ? 'Escribe el número'
+                    : 'Escribe aquí',
+                radius: 12,
                 suffixIcon: _controlador.text.isEmpty
                     ? null
                     : IconButton(
-                        icon: const Icon(Icons.backspace_outlined),
+                        icon: const Icon(
+                          Icons.backspace_outlined,
+                          color: AppTheme.brandLight,
+                        ),
                         tooltip: 'Borrar',
                         onPressed: () => setState(_controlador.clear),
                       ),
@@ -297,17 +313,47 @@ class _Tecla extends StatelessWidget {
   }
 }
 
-({String titulo, bool alfanumerico, bool soloDigitos})? detalleQuePide(String gloss) {
+({String titulo, bool alfanumerico, bool soloDigitos})? detalleQuePide(
+  String gloss,
+) {
   final etiqueta = LocalSentenceAssembler.etiquetaDeDetalle(gloss);
   if (etiqueta == null) return null;
   return switch (etiqueta) {
-    'placa' => (titulo: 'Deletrea la placa', alfanumerico: true, soloDigitos: false),
-    'numero' => (titulo: 'Escribe el número', alfanumerico: true, soloDigitos: false),
-    'edad' => (titulo: '¿Qué edad tienes?', alfanumerico: true, soloDigitos: true),
-    'carnet' => (titulo: 'Escribe tu número de carnet', alfanumerico: true, soloDigitos: false),
-    'nombre' => (titulo: 'Deletrea tu nombre', alfanumerico: false, soloDigitos: false),
-    'apellido' => (titulo: 'Deletrea tu apellido', alfanumerico: false, soloDigitos: false),
-    _ => (titulo: 'Deletrea el nombre de la $etiqueta', alfanumerico: false, soloDigitos: false),
+    'placa' => (
+      titulo: 'Deletrea la placa',
+      alfanumerico: true,
+      soloDigitos: false,
+    ),
+    'numero' => (
+      titulo: 'Escribe el número',
+      alfanumerico: true,
+      soloDigitos: false,
+    ),
+    'edad' => (
+      titulo: '¿Qué edad tienes?',
+      alfanumerico: true,
+      soloDigitos: true,
+    ),
+    'carnet' => (
+      titulo: 'Escribe tu número de carnet',
+      alfanumerico: true,
+      soloDigitos: false,
+    ),
+    'nombre' => (
+      titulo: 'Deletrea tu nombre',
+      alfanumerico: false,
+      soloDigitos: false,
+    ),
+    'apellido' => (
+      titulo: 'Deletrea tu apellido',
+      alfanumerico: false,
+      soloDigitos: false,
+    ),
+    _ => (
+      titulo: 'Deletrea el nombre de la $etiqueta',
+      alfanumerico: false,
+      soloDigitos: false,
+    ),
   };
 }
 
@@ -328,14 +374,18 @@ Future<void> elegirGlosa(
   if (gloss == 'ESCAPAR') {
     await DisambiguationModal.desambiguarEscapar(context, ref);
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
   if (gloss == 'PERDER') {
     await DisambiguationModal.desambiguarPerderVsRobar(context, ref);
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
@@ -343,14 +393,18 @@ Future<void> elegirGlosa(
   if (gloss == 'PAPEL') {
     await DisambiguationModal.desambiguarPapel(context, ref);
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
   if (gloss == 'IDENTIDAD') {
     await DisambiguationModal.desambiguarIdentidad(context, ref);
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
@@ -367,31 +421,45 @@ Future<void> elegirGlosa(
     if (texto == null || texto.isEmpty) return;
     zonesNotifier.toggleAnswer(card.gloss);
     zonesNotifier.appendQualifiers(card.gloss, [texto]);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
   // MOCHILA es contenedor en la zona de objetos (pide qué llevaba dentro) y
   // prenda/accesorio en la zona de persona (pide color, vía el wizard de
   // abajo): la misma glosa tiene un papel distinto según qué se describe.
-  if (gloss == 'CAJA' || gloss == 'BOLSA' || (gloss == 'MOCHILA' && zoneId != 'persona')) {
+  if (gloss == 'CAJA' ||
+      gloss == 'BOLSA' ||
+      (gloss == 'MOCHILA' && zoneId != 'persona')) {
     await DisambiguationModal.desambiguarCajaBolsa(context, ref, gloss);
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
   if (gloss == 'MICRO' || gloss == 'TRUFI') {
-    await DisambiguationModal.desambiguarTransporteVehiculo(context, ref, gloss);
+    await DisambiguationModal.desambiguarTransporteVehiculo(
+      context,
+      ref,
+      gloss,
+    );
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
   if (gloss == 'BILLETES' || gloss == 'DINERO') {
     await mostrarEditorMontoDinero(context, ref);
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 
@@ -409,7 +477,9 @@ Future<void> elegirGlosa(
         break;
     }
     zonesNotifier.toggleAnswer(card.gloss);
-    ref.read(sentenceProvider.notifier).setWords(zonesNotifier.orderedGlosses());
+    ref
+        .read(sentenceProvider.notifier)
+        .setWords(zonesNotifier.orderedGlosses());
     return;
   }
 

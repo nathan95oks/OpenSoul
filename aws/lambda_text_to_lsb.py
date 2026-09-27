@@ -1380,6 +1380,15 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
     # representación no haya perdido ninguna palabra de lo que se dijo.
     raw_glosses, incidencias = repair_coverage(limpias, text)
 
+    # Un interrogativo del texto no puede transformarse en una respuesta
+    # inventada. Por ejemplo, «donde te robaron» no puede salir como PLAZA si
+    # la persona nunca dijo «plaza». Esta regla es determinista y usa la misma
+    # taxonomía cerrada de ranuras que `build_semantic_turn`.
+    raw_glosses, incidencias_pregunta = enforce_spoken_question_fidelity(
+        raw_glosses, text,
+    )
+    incidencias += incidencias_pregunta
+
     # Ninguna glosa que salga de aquí puede ser una invención: lo que no está
     # documentado se deletrea en vez de presentarse como una seña real.
     raw_glosses, incidencias_catalogo = enforce_catalog_membership(
@@ -1520,6 +1529,49 @@ _SLOT_POR_NUCLEO_HABLADO = {
 }
 _PREPOSICIONES_INTERROGATIVAS = {"A", "EN", "DE", "DESDE", "HASTA", "CON",
                                  "POR", "PARA", "HACIA"}
+# Pedir que se describa a alguien pide sus rasgos, no confirmar un hecho:
+# «¿Puede describir a los agresores?», «descríbalo», «¿qué características
+# tenía?». Raíces cerradas del español, en cualquier parte del turno: DESCRIBIR
+# no tiene seña en el catálogo y la traducción lo deletrea, así que solo el
+# texto conserva lo que se pide.
+_SLOT_POR_RAIZ_HABLADA = {
+    "DESCRIB": "description",
+    "DESCRIPCION": "description",
+    "CARACTERISTICA": "description",
+    "APARIENCIA": "description",
+    "RASGO": "description",
+    "FISICAMENTE": "description",
+}
+# «¿Cómo era?», «¿cómo eran los ladrones?», «¿cómo lucía?»: CÓMO seguido de
+# ser/lucir en pasado pide la descripción de alguien ya mencionado.
+_SLOT_TRAS_COMO_HABLADO = {
+    "ERA": "description",
+    "ERAN": "description",
+    "LUCIA": "description",
+    "LUCIAN": "description",
+}
+
+_GLOSA_INTERROGATIVA_POR_SLOT = {
+    "place": "DONDE",
+    "time": "CUANDO",
+    "person": "QUIEN",
+    "amount": "CUANTOS",
+}
+
+# Respuestas cerradas que el banco guiado ofrece para estas clases. Solo se
+# sustituyen si no están respaldadas por el texto original: «¿dónde está la
+# plaza?» conserva PLAZA y añade DONDE; «donde te robaron» reemplaza la PLAZA
+# alucinada por DONDE.
+_RESPUESTAS_CONCRETAS_POR_SLOT = {
+    "place": {"AVENIDA", "BANCO", "BARRIO", "CALLE", "CASA", "HOSPITAL",
+              "MERCADO", "MICRO", "OFICINA", "PLAZA", "PROVINCIA",
+              "TIENDA", "TRUFI"},
+    "time": {"AHORA", "AYER", "HOY", "MANANA", "NOCHE", "SEMANA", "TARDE"},
+    "person": {"ABOGADO", "HOMBRE", "JUEZ", "LADRON", "MUJER", "POLICIA",
+               "TESTIGO"},
+    "amount": {"CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS",
+               "SIETE", "OCHO", "NUEVE", "DIEZ"},
+}
 
 # Situaciones (las mismas de SITUATION_LABELS) que el oyente nombra: glosas
 # canónicas del catálogo y raíces de palabras sin seña propia. Una misma pista
@@ -1568,9 +1620,41 @@ def _clausulas_de_pregunta(text: str) -> list:
         tramos = re.findall(r"¿([^¿?]*)", text)
     else:
         tramos = re.findall(r"([^.!?]*)\?", text)
+    # Dictado y escritura móvil suelen omitir ¿?. Se acepta el turno completo
+    # solo cuando abre con un interrogativo (o lo conserva acentuado). Así
+    # «donde te robaron» es pregunta, mientras «cuando llegué me robaron» no.
+    if not tramos and _empieza_pregunta_sin_signos(text):
+        tramos = [text]
     return [c.strip() for t in tramos
             for c in re.split(r"\s+(?:y|e|o|u)\s+", t, flags=re.IGNORECASE)
             if c.strip()]
+
+
+def _empieza_pregunta_sin_signos(text: str) -> bool:
+    palabras = _PALABRA.findall(text or "")
+    claves = [remove_accents(w.upper()) for w in palabras]
+    inicio = 0
+    while (inicio < len(claves)
+           and claves[inicio] in _PREPOSICIONES_INTERROGATIVAS):
+        inicio += 1
+    if inicio >= len(claves):
+        return False
+    clave = claves[inicio]
+    acentuada = strip_gloss_accents(palabras[inicio].upper()) != palabras[inicio].upper()
+    siguiente = claves[inicio + 1] if inicio + 1 < len(claves) else ""
+    if clave == "CUANDO" and not acentuada:
+        return siguiente in {"TE", "TU", "USTED", "USTEDES", "LE", "LES",
+                             "FUE", "OCURRIO", "PASO", "SUCEDIO"}
+    # «donde»/«quien» sin tilde también abren relativas: «donde vivo hay una
+    # plaza» o «quien me robó fue un hombre» afirman, no preguntan.
+    if clave in {"DONDE", "QUIEN"} and not acentuada:
+        return siguiente in {"TE", "TU", "USTED", "USTEDES", "LE", "LES",
+                             "LO", "LA", "SE", "FUE", "OCURRIO", "PASO",
+                             "SUCEDIO", "ES", "ERA", "ESTA", "ESTAN",
+                             "ESTABA", "ESTABAS", "ESTAS", "QUEDA", "VIVE",
+                             "VIVES", "HIZO", "ROBO"}
+    return (clave in _SLOT_POR_INTERROGATIVO_HABLADO
+            or clave in _INTERROGATIVOS_ABIERTOS_HABLADOS)
 
 
 def _lectura_de_clausula(clausula: str) -> tuple:
@@ -1592,14 +1676,103 @@ def _lectura_de_clausula(clausula: str) -> tuple:
             nucleo = claves[i + 1] if i + 1 < len(claves) else ""
             if nucleo in _SLOT_POR_NUCLEO_HABLADO:
                 ranuras.append(_SLOT_POR_NUCLEO_HABLADO[nucleo])
+            elif clave == "COMO" and nucleo in _SLOT_TRAS_COMO_HABLADO:
+                ranuras.append(_SLOT_TRAS_COMO_HABLADO[nucleo])
     return ranuras, interrogativa
+
+
+def _ranuras_por_raiz(palabras: list) -> list:
+    """Ranuras que pide el turno por la raíz de sus palabras («describir»)."""
+    ranuras = []
+    for w in palabras:
+        for raiz, slot in _SLOT_POR_RAIZ_HABLADA.items():
+            if w.startswith(raiz) and slot not in ranuras:
+                ranuras.append(slot)
+    return ranuras
+
+
+def enforce_spoken_question_fidelity(glosses: list, text: str) -> tuple:
+    """Preserva el interrogativo hablado y elimina respuestas alucinadas.
+
+    Devuelve (glosas, incidencias). No intenta volver a traducir la frase: solo
+    actúa cuando una clase cerrada del español pide un dato y la salida no lo
+    representa. Una respuesta concreta se reemplaza únicamente si esa palabra
+    no aparece en el original; en otro caso se inserta el interrogativo.
+    """
+    resultado = [canonical_gloss(str(g)) for g in glosses]
+    slots = []
+    for clausula in _clausulas_de_pregunta(text or ""):
+        ranuras, _ = _lectura_de_clausula(clausula)
+        for slot in ranuras:
+            if slot not in slots:
+                slots.append(slot)
+    if not slots:
+        return resultado, []
+
+    palabras = _PALABRA.findall(text or "")
+
+    def _respaldada(glosa, palabra):
+        g, p = _clave(glosa), _clave(palabra)
+        if g == p:
+            return True
+        if len(p) < 4:
+            return False
+        if g in p or p in g:
+            return True
+        comun = 0
+        for a, b in zip(g, p):
+            if a != b:
+                break
+            comun += 1
+        return comun >= 4
+
+    incidencias = []
+    posicion_insercion = 0
+    for slot in slots:
+        glosa_pregunta = _GLOSA_INTERROGATIVA_POR_SLOT.get(slot)
+        if not glosa_pregunta:
+            continue
+        representadas = {
+            _SLOT_POR_INTERROGATIVO.get(_clave(g))
+            or _SLOT_POR_NUCLEO.get(_clave(g))
+            for g in resultado
+        }
+        if slot in representadas:
+            continue
+
+        candidatas = _RESPUESTAS_CONCRETAS_POR_SLOT.get(slot, set())
+        reemplazo = next((
+            i for i, glosa in enumerate(resultado)
+            if _clave(glosa) in candidatas
+            and not any(_respaldada(glosa, palabra) for palabra in palabras)
+        ), None)
+        if reemplazo is None:
+            resultado.insert(posicion_insercion, glosa_pregunta)
+            posicion_insercion += 1
+            incidencias.append({
+                "accion": "interrogativo_recuperado",
+                "slot": slot,
+                "glosa": glosa_pregunta,
+            })
+        else:
+            anterior = resultado[reemplazo]
+            resultado[reemplazo] = glosa_pregunta
+            incidencias.append({
+                "accion": "respuesta_no_dicha_sustituida",
+                "slot": slot,
+                "glosa": glosa_pregunta,
+                "retirada": anterior,
+            })
+    return resultado, incidencias
 
 
 def build_semantic_turn(text: str, result: dict) -> dict:
     """Lectura semántica del turno a partir de la traducción ya hecha."""
     glosas = [canonical_gloss(str(g)) for g in result.get("glosses") or []]
     palabras = [remove_accents(w.upper()) for w in _PALABRA.findall(text or "")]
-    es_pregunta = ("?" in (text or "") or "¿" in (text or "")
+    clausulas = [(c, *_lectura_de_clausula(c))
+                 for c in _clausulas_de_pregunta(text or "")]
+    es_pregunta = ("?" in (text or "") or "¿" in (text or "") or bool(clausulas)
                    or any(g in _SLOT_POR_INTERROGATIVO or g in _INTERROGATIVOS_ABIERTOS
                           for g in glosas))
 
@@ -1610,17 +1783,22 @@ def build_semantic_turn(text: str, result: dict) -> dict:
             slots.append(slot)
 
     if es_pregunta:
-        for g in glosas:
+        for i, g in enumerate(glosas):
+            # «HORA CUÁNTOS» es cómo LSB pregunta la hora: el interrogativo
+            # pertenece al núcleo, no pide además una cantidad.
+            if (g == "CUANTOS" and i > 0 and glosas[i - 1] in _SLOT_POR_NUCLEO):
+                continue
             if g in _SLOT_POR_INTERROGATIVO:
                 _anadir(_SLOT_POR_INTERROGATIVO[g])
             elif g in _SLOT_POR_NUCLEO:
                 _anadir(_SLOT_POR_NUCLEO[g])
-        for w in palabras:
-            if w in _SLOT_POR_PALABRA:
-                _anadir(_SLOT_POR_PALABRA[w])
+        # «lugar» pide un lugar en una pregunta QU- («¿cuál fue el lugar?»);
+        # en una de sí/no solo precisa otra cosa («¿hay video del lugar?»).
+        if any(interrogativa for _, _, interrogativa in clausulas):
+            for w in palabras:
+                if w in _SLOT_POR_PALABRA:
+                    _anadir(_SLOT_POR_PALABRA[w])
         # El interrogativo del texto, por si la traducción no lo conservó.
-        clausulas = [(c, *_lectura_de_clausula(c))
-                     for c in _clausulas_de_pregunta(text or "")]
         for _, ranuras, _ in clausulas:
             for slot in ranuras:
                 _anadir(slot)
@@ -1631,6 +1809,10 @@ def build_semantic_turn(text: str, result: dict) -> dict:
         if slots and any(not interrogativa and recognize_input(c)
                          for c, _, interrogativa in clausulas):
             _anadir("polarity")
+    # Pedir una descripción es pedir un dato aunque se diga sin signos de
+    # pregunta («describa al agresor»).
+    for slot in _ranuras_por_raiz(palabras):
+        _anadir(slot)
 
     raices = [_raiz(w) for w in palabras]
     menciones = []
@@ -1865,6 +2047,19 @@ def lambda_handler(event, context):
     cached = check_cache(cache_key)
     if cached:
         logger.info("Cache HIT — respuesta servida desde caché: %s", cache_key)
+        # Las entradas creadas antes de esta regla pueden contener una
+        # respuesta concreta en lugar del interrogativo. Se reparan al servir
+        # sin invocar Bedrock y sin mutar silenciosamente el objeto cacheado.
+        cached = dict(cached)
+        glosas_cache, arreglos = enforce_spoken_question_fidelity(
+            cached.get("glosses") or [], text,
+        )
+        cached["glosses"] = glosas_cache
+        if arreglos:
+            cached["fidelityFixes"] = [
+                *(cached.get("fidelityFixes") or []),
+                *arreglos,
+            ]
         # La traducción sale de la caché, pero qué señas tiene el avatar se
         # comprueba ahora: el .glb puede haber cambiado desde que se guardó.
         return build_response(200, {

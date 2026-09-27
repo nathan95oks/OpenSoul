@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/app.dart';
+import 'package:lsb_legal_app/app/app_launch.dart';
+import 'package:lsb_legal_app/core/data/repositories/session_repository_impl.dart';
 import 'package:lsb_legal_app/features/conversation/di/conversation_bindings.dart';
 
 Future<void> main() async {
@@ -11,8 +13,12 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  final showSplash = await prepareAppLaunch(SessionRepositoryImpl());
 
   runApp(
-    ProviderScope(overrides: conversationOverrides(), child: const AppScope()),
+    ProviderScope(
+      overrides: conversationOverrides(),
+      child: AppScope(showSplash: showSplash),
+    ),
   );
 }

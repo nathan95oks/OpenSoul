@@ -64,11 +64,14 @@ class _AmountInputSheetContentState
     _rol = widget.initialRole;
     if (widget.existingObjectId != null) {
       final draft = ref.read(declarationDraftProvider);
-      final obj = draft.objects.where((o) => o.id == widget.existingObjectId).firstOrNull;
+      final obj = draft.objects
+          .where((o) => o.id == widget.existingObjectId)
+          .firstOrNull;
       if (obj != null) {
         if (obj.quantity != null) _controller.text = obj.quantity!;
         if (obj.unit != null && obj.unit!.isNotEmpty) {
-          _moneda = obj.unit!.toLowerCase().contains('dolar') || obj.unit == 'USD'
+          _moneda =
+              obj.unit!.toLowerCase().contains('dolar') || obj.unit == 'USD'
               ? 'dólares'
               : 'bolivianos';
         }
@@ -95,7 +98,9 @@ class _AmountInputSheetContentState
 
     if (montoStr.isEmpty) {
       AppToastManager.showInfo(
-          context, 'Digita una cifra o selecciona un monto rápido');
+        context,
+        'Digita una cifra o selecciona un monto rápido',
+      );
       return;
     }
 
@@ -109,7 +114,9 @@ class _AmountInputSheetContentState
         role: _rol,
       );
       AppToastManager.showSuccess(
-          context, 'Monto actualizado: $montoStr $displayMoneda');
+        context,
+        'Monto actualizado: $montoStr $displayMoneda',
+      );
     } else {
       notifier.addObject(
         concept: 'BILLETES',
@@ -118,7 +125,9 @@ class _AmountInputSheetContentState
         unit: _moneda,
       );
       AppToastManager.showSuccess(
-          context, 'Monto registrado: $montoStr $displayMoneda');
+        context,
+        'Monto registrado: $montoStr $displayMoneda',
+      );
     }
 
     Navigator.of(context).pop();
@@ -161,8 +170,11 @@ class _AmountInputSheetContentState
                       color: _purple.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.payments_outlined,
-                        color: _purple, size: 24),
+                    child: const Icon(
+                      Icons.payments_outlined,
+                      color: _purple,
+                      size: 24,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   const Text(
@@ -180,10 +192,7 @@ class _AmountInputSheetContentState
               const Text(
                 'Digita la cantidad aproximada o exacta del monto sustraído/entregado',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  color: AppTheme.lightTextSub,
-                ),
+                style: TextStyle(fontSize: 12.5, color: AppTheme.lightTextSub),
               ),
 
               const SizedBox(height: 16),
@@ -214,52 +223,38 @@ class _AmountInputSheetContentState
               TextField(
                 controller: _controller,
                 autofocus: true,
-                keyboardType: const TextInputType.numberWithOptions(decimal: false),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: false,
+                ),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(8),
                 ],
                 textAlign: TextAlign.center,
                 onChanged: (_) => setState(() {}),
+                cursorColor: AppTheme.lightInputCursor,
                 style: const TextStyle(
                   fontSize: 36,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.5,
-                  color: AppTheme.lightText,
+                  color: AppTheme.lightInputText,
                 ),
-                decoration: InputDecoration(
+                decoration: AppTheme.lightInputDecoration(
                   hintText: '0',
-                  hintStyle: TextStyle(
-                    color: AppTheme.lightTextSub.withValues(alpha: 0.5),
-                  ),
                   suffixText: displayMoneda,
                   suffixStyle: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
                     color: _purpleDark,
                   ),
-                  filled: true,
-                  fillColor: AppTheme.lightBg,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(
-                        color: AppTheme.lightBorder, width: 2),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: montoActual.isNotEmpty
-                          ? _purple
-                          : AppTheme.lightBorder,
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: _purple, width: 2),
-                  ),
+                  radius: 20,
+                  enabledBorderColor: montoActual.isNotEmpty ? _purple : null,
+                  enabledBorderWidth: 2,
+                  focusedBorderColor: _purple,
                 ),
               ),
 
@@ -276,7 +271,9 @@ class _AmountInputSheetContentState
                         onTap: () => _fijarMonto(m),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           margin: const EdgeInsets.only(right: 8),
                           decoration: BoxDecoration(
                             color: montoActual == m.toString()
@@ -285,8 +282,8 @@ class _AmountInputSheetContentState
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: montoActual == m.toString()
-                                    ? _purple
-                                    : AppTheme.lightBorder,
+                                  ? _purple
+                                  : AppTheme.lightBorder,
                             ),
                           ),
                           child: Text(
@@ -415,4 +412,3 @@ class _MonedaChip extends StatelessWidget {
     );
   }
 }
-

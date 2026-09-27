@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "interrogativeSlots": {
     "DONDE": "place",
     "CUANDO": "time",
@@ -68,5 +68,19 @@
     "HASTA",
     "PARA",
     "POR"
-  ]
+  ],
+  "spokenStemSlots": {
+    "DESCRIB": "description",
+    "DESCRIPCION": "description",
+    "CARACTERISTICA": "description",
+    "APARIENCIA": "description",
+    "RASGO": "description",
+    "FISICAMENTE": "description"
+  },
+  "spokenAfterHowSlots": {
+    "ERA": "description",
+    "ERAN": "description",
+    "LUCIA": "description",
+    "LUCIAN": "description"
+  }
 }
