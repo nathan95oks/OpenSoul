@@ -6381,6 +6381,100 @@
    ]
   },
   {
+   "id": "Q.PER.DESC.ROPA_COLOR",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era su ropa?",
+   "gramaticaLsb": {
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "POLERA",
+     "PANTALÓN",
+     "CHAMARRA",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "COLOR",
+      "posicion": 3
+     }
+    ],
+    "regla": "R10 con el patrón del corpus para el color: SUSTANTIVO · COLOR · ¿CUÁL?; «ropa» se signa como en su fila del corpus (POLERA · PANTALÓN · CHAMARRA)",
+    "evidencia": "corpus §6 «¿Qué color de cabello recuerda?» → CABELLO · COLOR · ¿CUÁL? y «¿Qué ropa llevaba?» → POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color",
+   "control": "seleccion_multiple",
+   "maximo": 3,
+   "reglas": [
+    "Se abre siempre que se elige una prenda en «¿Qué ropa llevaba?»: una descripción de la ropa no queda sin color.",
+    "Plantilla: «Su ropa era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "condicion": "Solo si se eligió alguna prenda.",
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de su ropa."
+    }
+   ],
+   "variantes": [],
+   "plantilla": "Su ropa era de color {items}.",
+   "campos": [
+    "modificador"
+   ]
+  },
+  {
    "id": "Q.PER.DESC.SEXO",
    "dominio": "descripcion",
    "formulacion": "¿Era un hombre o una mujer?",
@@ -11077,6 +11171,24 @@
        ]
       }
      ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR",
+     "cuando": [
+      {
+       "pregunta": "Q.PER.DESC.ROPA",
+       "opciones": [
+        "polera",
+        "pantalon",
+        "chamarra",
+        "gorra",
+        "mochila",
+        "otro"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.PER.DESC.ROPA"
     },
     {
      "pregunta": "Q.TES.EXISTE"

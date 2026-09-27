@@ -3,8 +3,14 @@
     python aws/deploy/build_package.py
 
 No sube nada. Escribe `aws/deploy/lambda_function.zip` y su SHA-256, y antes
-comprueba que el archivo compile y que la suite local pase: empaquetar algo
-que no pasa sus propias pruebas es empaquetar un problema.
+comprueba que los tres archivos compilen y que la suite local pase: empaquetar
+algo que no pasa sus propias pruebas es empaquetar un problema.
+
+`lambda_function.py` no es autocontenido: importa `guided_composer.py` en
+tiempo de módulo y este a su vez lee `question_bank.json` del disco
+(`guided_composer.BANK_PATH`, relativo al propio archivo). Los tres van en
+el mismo ZIP, en la raíz — si falta alguno, la Lambda no arranca o certifica
+redacciones que ya no coinciden con el banco actual.
 """
 
 from __future__ import annotations
@@ -22,11 +28,22 @@ AWS = os.path.dirname(AQUI)
 ROOT = os.path.dirname(AWS)
 
 FUENTE = os.path.join(AWS, "lambda_function.py")
+# Los tres archivos que `lambda_function.py` necesita para arrancar: se
+# empaquetan juntos, en la raíz del ZIP.
+FUENTES = [
+    FUENTE,
+    os.path.join(AWS, "guided_composer.py"),
+    os.path.join(AWS, "question_bank.json"),
+]
 DESTINO = os.path.join(AQUI, "lambda_function.zip")
 
 
 def comprobar_sintaxis() -> None:
-    py_compile.compile(FUENTE, doraise=True)
+    for archivo in FUENTES:
+        if archivo.endswith(".py"):
+            py_compile.compile(archivo, doraise=True)
+        elif not os.path.exists(archivo):
+            raise SystemExit(f"Falta {archivo}: no se empaqueta.")
     print("sintaxis: ok")
 
 
@@ -62,7 +79,8 @@ def empaquetar() -> str:
         os.remove(DESTINO)
     # Sin dependencias externas: `boto3` lo provee el entorno de Lambda.
     with zipfile.ZipFile(DESTINO, "w", zipfile.ZIP_DEFLATED) as z:
-        z.write(FUENTE, arcname="lambda_function.py")
+        for archivo in FUENTES:
+            z.write(archivo, arcname=os.path.basename(archivo))
     with open(DESTINO, "rb") as f:
         return hashlib.sha256(f.read()).hexdigest()
 
@@ -70,6 +88,8 @@ def empaquetar() -> str:
 def main() -> None:
     comprobar_sintaxis()
     compileall.compile_file(FUENTE, quiet=1)
+    compileall.compile_file(
+        os.path.join(AWS, "guided_composer.py"), quiet=1)
     ejecutar_pruebas()
 
     contrato, generador = version_declarada()

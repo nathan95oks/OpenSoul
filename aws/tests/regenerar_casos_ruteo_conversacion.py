@@ -125,6 +125,11 @@ DISPOSITIVO = [
      "Q.PER.DESC.ROPA", "directa"),
     ("usted fue testigo de un crimen?", ["TÚ", "TESTIGO", "CRIMEN"], "otro",
      "Q.TES.QUE_VIO", "directa"),
+    # El color de la ropa (pedido del 2026-09-27).
+    ("¿De qué color era su ropa?", ["ROPA", "COLOR", "CUÁL"], "denuncia_robo",
+     "Q.PER.DESC.ROPA_COLOR", "directa"),
+    ("de que color era la ropa que llevaba", ["ROPA", "COLOR", "LLEVAR", "QUÉ"],
+     "denuncia_robo", "Q.PER.DESC.ROPA_COLOR", "directa"),
     # Las que ya funcionaban en el teléfono no pueden romperse.
     ("necesita hablar con el fiscal?", ["FISCAL", "HABLAR", "NECESITAR"],
      "seguimiento", "Q.SEG.HABLAR_FISCAL", "directa"),

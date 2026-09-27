@@ -217,6 +217,13 @@
     "origen": "rol del ensamblador"
    }
   ],
+  "AZUL": [
+   {
+    "campo": "modificador",
+    "sentido": "color",
+    "origen": "revisión 2026-09-27: color de la ropa"
+   }
+  ],
   "AÑO": [
    {
     "campo": "tiempo",
@@ -1367,6 +1374,13 @@
     "campo": "hecho",
     "sentido": "acción",
     "origen": "revisión fase 2"
+   }
+  ],
+  "ROJO": [
+   {
+    "campo": "modificador",
+    "sentido": "color",
+    "origen": "revisión 2026-09-27: color de la ropa"
    }
   ],
   "SABER": [

@@ -76,6 +76,9 @@
   "AYUDAR": [
    "hecho"
   ],
+  "AZUL": [
+   "modificador"
+  ],
   "AÑO": [
    "tiempo"
   ],
@@ -531,6 +534,9 @@
   ],
   "ROBAR": [
    "hecho"
+  ],
+  "ROJO": [
+   "modificador"
   ],
   "SABER": [
    "consulta"
@@ -6648,6 +6654,95 @@
    "variantes": []
   },
   {
+   "acto": "pregunta_abierta",
+   "campo": "ropa_color",
+   "campos": [
+    "modificador"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "descripcion",
+   "entidad": "Persona",
+   "formulacion": "¿De qué color era su ropa?",
+   "formulacionLsb": {
+    "estado": "LEXICAL_GAP",
+    "glosas": [
+     "POLERA",
+     "PANTALÓN",
+     "CHAMARRA",
+     "CUÁL"
+    ],
+    "huecos": [
+     "COLOR"
+    ],
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "tipo": "qu",
+    "utilizable": false
+   },
+   "id": "Q.PER.DESC.ROPA_COLOR",
+   "maximo": 3,
+   "modo": "frase",
+   "noOfrecer": [
+    "CUÁL"
+   ],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Negro",
+     "frase": "negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "id": "negro"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Azul",
+     "frase": "azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "id": "azul"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Rojo",
+     "frase": "rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "id": "rojo"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otro color (escribir)",
+     "frase": "«{texto}»",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No recuerdo",
+     "frase": "No recuerdo el color de su ropa.",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "id": "no_recuerda",
+     "salida": true
+    }
+   ],
+   "plantilla": "Su ropa era de color {items}.",
+   "reglas": [
+    "Se abre siempre que se elige una prenda en «¿Qué ropa llevaba?»: una descripción de la ropa no queda sin color.",
+    "Plantilla: «Su ropa era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "variantes": []
+  },
+  {
    "acto": "pregunta_alternativa",
    "campo": "sexo",
    "campos": [
@@ -11220,6 +11315,24 @@
       }
      ],
      "pregunta": "Q.PER.DESC.ROPA"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "polera",
+        "pantalon",
+        "chamarra",
+        "gorra",
+        "mochila",
+        "otro"
+       ],
+       "pregunta": "Q.PER.DESC.ROPA"
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.PER.DESC.ROPA",
+     "pregunta": "Q.PER.DESC.ROPA_COLOR"
     },
     {
      "pregunta": "Q.TES.EXISTE"

@@ -239,6 +239,8 @@ void main() {
         'Q.PER.DESC.ESTATURA',
         'Q.PER.DESC.CONTEXTURA',
         'Q.PER.DESC.ROPA',
+        // Describir la ropa sin su color no es describirla.
+        'Q.PER.DESC.ROPA_COLOR',
       ];
       expect(route.pathQuestionIds, rasgos);
       // La puerta «¿Quiere describir a la persona?» no se responde por nadie.
@@ -258,6 +260,7 @@ void main() {
         ('Q.PER.DESC.ESTATURA', 'alto'),
         ('Q.PER.DESC.CONTEXTURA', 'gordo'),
         ('Q.PER.DESC.ROPA', 'chamarra'),
+        ('Q.PER.DESC.ROPA_COLOR', 'negro'),
       ]) {
         expect(session.currentQuestionId, pregunta);
         vistas.add(pregunta);
@@ -275,7 +278,7 @@ void main() {
       expect(flow.canFinish(session), isTrue);
       expect(
         flow.glossesOf(session.toIntervention()),
-        containsAll(['HOMBRE', 'ALTO', 'GORDO']),
+        containsAll(['HOMBRE', 'ALTO', 'GORDO', 'CHAMARRA', 'NEGRO']),
       );
     },
   );
@@ -318,9 +321,10 @@ void main() {
               (sinTema.type == ConversationRouteType.contextSelector ||
                   sinTema.type == ConversationRouteType.noSafeRoute),
       };
-      // Pedir la ropa abre la ropa, no toda la descripción.
+      // Pedir la ropa abre la ropa y su color, no toda la descripción.
       if (question == 'Q.PER.DESC.ROPA' &&
-          enTema.pathQuestionIds.join() != question) {
+          enTema.pathQuestionIds.join('+') !=
+              'Q.PER.DESC.ROPA+Q.PER.DESC.ROPA_COLOR') {
         fallas.add('«${c['texto']}» abre ${enTema.pathQuestionIds}');
       }
       if (!okEnTema) {

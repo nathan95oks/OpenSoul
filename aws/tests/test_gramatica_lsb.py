@@ -29,9 +29,10 @@ import build_question_matrix as B  # noqa: E402
 import corpus_dialogue as CD  # noqa: E402
 
 # Huella del banco de ejecución sin `formulacionLsb`, tomada de 6320bcc
-# (antes de esta fase). Si cambia, algo distinto de la formulación cambió:
+# (antes de esta fase) y actualizada el 2026-09-27 al añadir
+# Q.PER.DESC.ROPA_COLOR («¿De qué color era su ropa?»). Si cambia, algo distinto de la formulación cambió:
 # preguntas, opciones, estados, frases o recorridos.
-HUELLA_SIN_FORMULACION = "23184d21361f9e09a618d65112e5d95105793e8219cd16f8316424e87b1186f0"
+HUELLA_SIN_FORMULACION = "899e4c5927312be19eeeee985d500729867f5d60417de5ac35cf75af0a882e12"
 
 
 class GramaticaLsb(unittest.TestCase):
@@ -132,7 +133,7 @@ class GramaticaLsb(unittest.TestCase):
             for q in self.banco["preguntas"]
         }
         self.assertEqual(134, sum(decisiones.values()))
-        self.assertEqual(9, len(decisiones) - sum(decisiones.values()))
+        self.assertEqual(10, len(decisiones) - sum(decisiones.values()))
         self.assertTrue(decisiones["Q.HEC.QUE_OCURRIO"])
         self.assertFalse(decisiones["I.PREG.CUANDO"])
         self.assertFalse(decisiones["Q.EVI.QUE_TIENE"])
