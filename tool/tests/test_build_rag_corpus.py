@@ -290,6 +290,30 @@ class Vocabulario(unittest.TestCase):
         self.assertLess(md.index("| COPIA | 2 |"), md.index("| ANTERIOR | 1 |"))
         self.assertNotIn("SENA_PENDIENTE", md)
 
+
+class ZonasDeTramite(unittest.TestCase):
+    ZONAS = {"senas": {"papel": ("PAPEL", "Documentos"), "si": ("SÍ", "Respuesta"),
+                       "casa": ("CASA", "Lugares")},
+             "formas": {"papel": ["Papel", "el documento"], "casa": ["Casa"]},
+             "palabras": {"BOLETA": "Documentos"}}
+    ESC = {"turnos": [
+        {"texto": "¿Qué trae?", "glosas": ["TRAER"]},
+        {"texto": "Traje la boleta.", "glosas": ["TRAER", "SENA_PENDIENTE:BOLETA"]},
+        {"texto": "Tengo el papel de la casa.", "glosas": ["PAPEL", "CASA"]},
+    ], "variantes": []}
+
+    def test_la_pregunta_abre_las_zonas_de_sus_respuestas(self):
+        respuestas = [{"glosas": ["SI", "SENA_PENDIENTE:BOLETA"]}]
+        tarjetas = B.tarjetas_de_zona(self.ESC, respuestas, self.ZONAS)
+        # Documentos (por BOLETA), no Lugares ni Respuesta.
+        self.assertEqual([(t["glosas"], t["frase"]) for t in tarjetas],
+                         [(["SENA_PENDIENTE:BOLETA"], "boleta"),
+                          (["PAPEL"], "el documento")])
+
+    def test_sin_zona_de_respuesta_no_hay_tarjetas(self):
+        self.assertEqual(
+            B.tarjetas_de_zona(self.ESC, [{"glosas": ["SI"]}], self.ZONAS), [])
+
 if __name__ == "__main__":
     unittest.main()
 

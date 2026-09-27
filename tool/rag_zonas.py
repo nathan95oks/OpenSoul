@@ -29,7 +29,9 @@ from build_rag_corpus import RAG, ROOT, SALIDA, SENA_PENDIENTE  # noqa: E402
 
 DESTINO = os.path.join(RAG, "zonas_palabras.json")
 TANDA = 10
-HILOS = 2
+# De a una: cada llamada lee el índice de señas y vectoriza su tanda; dos a
+# la vez saturaban Bedrock (error_modelo, 503).
+HILOS = 1
 REINTENTOS = 4
 
 
@@ -86,12 +88,19 @@ def main() -> int:
             return tanda, r
 
         # Primero, que la Lambda tenga los vectores de todas las señas.
-        while True:
-            r = llamar(url, {"action": "zonas", "palabras": [
-                {"palabra": pendientes[0], "ejemplos": palabras[pendientes[0]]}]})
+        for _ in range(30):
+            try:
+                r = llamar(url, {"action": "zonas", "palabras": [
+                    {"palabra": pendientes[0],
+                     "ejemplos": palabras[pendientes[0]]}]})
+            except SystemExit as e:  # un corte (503) mientras se indexa
+                print(f"  reintento: {e}", flush=True)
+                time.sleep(10)
+                continue
             if r.get("reason") != "indexando":
                 break
             print(f"  vectores de señas: faltan {r.get('pending')}", flush=True)
+            time.sleep(3)
         tandas = [pendientes[i:i + TANDA]
                   for i in range(0, len(pendientes), TANDA)]
         hechas = 0
