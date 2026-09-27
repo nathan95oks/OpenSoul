@@ -2479,8 +2479,7 @@
       "SENA_PENDIENTE:VEHICULO",
       "SENA_PENDIENTE:PLACA",
       "SENA_PENDIENTE:ACTUAL",
-      "TENER",
-      "SENA_PENDIENTE:PREGUNTA"
+      "TENER"
      ]
     },
     {
@@ -2642,8 +2641,7 @@
       "SENA_PENDIENTE:NUMERO",
       "SENA_PENDIENTE:CATASTRAL",
       "SENA_PENDIENTE:CODIGO",
-      "TENER",
-      "SENA_PENDIENTE:PREGUNTA"
+      "TENER"
      ]
     },
     {
@@ -3542,8 +3540,7 @@
      "glosas": [
       "SENA_PENDIENTE:DENUNCIAR",
       "SENA_PENDIENTE:ORIENTACION",
-      "NECESITAR",
-      "SENA_PENDIENTE:PREGUNTA"
+      "NECESITAR"
      ]
     },
     {
@@ -4176,8 +4173,7 @@
      "glosas": [
       "SENA_PENDIENTE:EXPEDIENTE",
       "SENA_PENDIENTE:CARATULA",
-      "TENER",
-      "SENA_PENDIENTE:PREGUNTA"
+      "TENER"
      ]
     },
     {
@@ -5263,8 +5259,7 @@
       "TU",
       "PAPEL",
       "IDENTIDAD",
-      "TENER",
-      "SENA_PENDIENTE:PREGUNTA"
+      "TENER"
      ]
     },
     {
@@ -5452,8 +5447,7 @@
      "glosas": [
       "ABOGADO",
       "SENA_PENDIENTE:PARTICULAR",
-      "TENER",
-      "SENA_PENDIENTE:PREGUNTA"
+      "TENER"
      ]
     },
     {
@@ -7237,8 +7231,7 @@
      "glosas": [
       "AHORA",
       "SENA_PENDIENTE:PRESENCIALMENTE",
-      "SENA_PENDIENTE:ACUDIR",
-      "SENA_PENDIENTE:PREGUNTA"
+      "SENA_PENDIENTE:ACUDIR"
      ]
     },
     {
@@ -10791,8 +10784,7 @@
       "OFICINA",
       "SENA_PENDIENTE:DEFENSORIA",
       "VENIR",
-      "SENA_PENDIENTE:PODER",
-      "SENA_PENDIENTE:PREGUNTA"
+      "SENA_PENDIENTE:PODER"
      ]
     },
     {
