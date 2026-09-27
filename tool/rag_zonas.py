@@ -80,9 +80,18 @@ def main() -> int:
                     r = {"generated": False, "reason": str(e)}
                 if r.get("generated") is True:
                     break
+                if r.get("reason") == "indexando":
+                    continue  # la Lambda está guardando los vectores de señas
                 time.sleep(3 * 2 ** intento)
             return tanda, r
 
+        # Primero, que la Lambda tenga los vectores de todas las señas.
+        while True:
+            r = llamar(url, {"action": "zonas", "palabras": [
+                {"palabra": pendientes[0], "ejemplos": palabras[pendientes[0]]}]})
+            if r.get("reason") != "indexando":
+                break
+            print(f"  vectores de señas: faltan {r.get('pending')}", flush=True)
         tandas = [pendientes[i:i + TANDA]
                   for i in range(0, len(pendientes), TANDA)]
         hechas = 0
@@ -94,6 +103,7 @@ def main() -> int:
                 for p, res in zip(tanda, r["palabras"]):
                     zonas[p] = {"zona": res["zona"], "titan": res["titan"],
                                 "similitud": res["similitud"],
+                                "vecinas": res.get("vecinas", []),
                                 "bedrock": res["bedrock"],
                                 "ejemplos": palabras[p], "fecha": hoy}
                 hechas += len(tanda)

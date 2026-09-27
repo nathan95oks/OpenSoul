@@ -54,22 +54,38 @@ class Catalogo(unittest.TestCase):
         self.assertIn("papel", descritas["Documentos"])
 
 
+SENAS = {"AYER": "Tiempo", "HOY": "Tiempo", "PAPEL": "Documentos",
+         "FACTURA": "Documentos", "CERTIFICADO": "Documentos"}
+TEXTOS = {"AYER": "ayer", "HOY": "hoy", "PAPEL": "papel",
+          "FACTURA": "factura papel", "CERTIFICADO": "certificado papel"}
+VECTORES = {g: embed(t) for g, t in TEXTOS.items()}
+
+
 class Clasificacion(unittest.TestCase):
     def test_con_las_dos_senales_de_acuerdo_hay_zona(self):
-        out = Z.clasificar([BOLETA, SEMANA], ZONAS, embed,
+        out = Z.clasificar([BOLETA, SEMANA], ZONAS, VECTORES, SENAS, embed,
                            modelo(["Documentos", "Tiempo"]))
         self.assertEqual([o["zona"] for o in out], ["Documentos", "Tiempo"])
+        self.assertIn("PAPEL", out[0]["vecinas"])
 
     def test_si_no_coinciden_no_hay_zona(self):
-        out = Z.clasificar([BOLETA], ZONAS, embed, modelo(["Tiempo"]))
+        out = Z.clasificar([BOLETA], ZONAS, VECTORES, SENAS, embed,
+                           modelo(["Tiempo"]))
         self.assertIsNone(out[0]["zona"])
         self.assertEqual((out[0]["titan"], out[0]["bedrock"]),
                          ("Documentos", "Tiempo"))
 
     def test_una_zona_que_no_existe_no_vale(self):
-        out = Z.clasificar([BOLETA], ZONAS, embed, modelo(["Finanzas"]))
+        out = Z.clasificar([BOLETA], ZONAS, VECTORES, SENAS, embed,
+                           modelo(["Finanzas"]))
         self.assertIsNone(out[0]["bedrock"])
         self.assertIsNone(out[0]["zona"])
+
+    def test_el_indice_de_senas_se_llena_por_tandas(self):
+        indice = Z.indexar_senas(TEXTOS, {}, embed, lote=2)
+        self.assertEqual(len(indice["vectores"]), 2)
+        indice = Z.indexar_senas(TEXTOS, indice, embed, lote=10)
+        self.assertEqual(len(indice["vectores"]), 5)
 
 
 class Accion(unittest.TestCase):
@@ -81,8 +97,10 @@ class Accion(unittest.TestCase):
         cuerpo = {"output": {"message": {"content": [
             {"text": json.dumps([{"n": 1, "zona": "Documentos"}])}]}}}
         with mock.patch.object(L, "ENABLE_BEDROCK", True), \
-                mock.patch.object(L, "_ZONAS_LSB", ZONAS), \
-                mock.patch.object(L, "_VECTORES_ZONA", {}), \
+                mock.patch.object(L, "_ZONAS_LSB",
+                                  (SENAS, ZONAS, TEXTOS, "clave")), \
+                mock.patch.object(L, "read_cache_json",
+                                  return_value={"vectores": VECTORES}), \
                 mock.patch.object(L.bedrock_runtime, "invoke_model",
                                   create=True, return_value={
                                       "body": io.BytesIO(

@@ -8,8 +8,10 @@ incorporar) no, y sin zona no puede ofrecerse como tarjeta.
 
 Para cada palabra deciden dos señales independientes:
 
-1. **Titan**: la zona cuyas señas se parecen más en significado a la
-   palabra (el vector de la palabra frente al de cada zona).
+1. **Titan**: las señas del catálogo más parecidas en significado a la
+   palabra (sus vecinas); la zona es la que más pesa entre ellas. BOLETA
+   queda junto a FACTURA, PAPEL, CERTIFICADO: Documentos. Los vectores de
+   las señas se calculan una vez y se guardan (`indexar_senas`).
 2. **Bedrock**: la zona que elige leyendo las frases donde aparece.
 
 Si coinciden, la palabra entra a esa zona. Si no, queda sin zona: sin
@@ -18,6 +20,7 @@ revisión humana, pero tampoco a ciegas.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import os
@@ -28,6 +31,8 @@ ZONAS_PATH = os.path.join(AQUI, "zonas_senas.json")
 
 MAX_PALABRAS = 10
 MAX_TOKENS = 700
+VECINAS = 5
+LOTE_INDICE = 40
 # Categorías del catálogo que no son zonas de respuesta: el deletreo.
 _NO_ZONAS = {"Abecedario"}
 _EJEMPLOS_POR_ZONA = 25
@@ -90,8 +95,8 @@ Zonas:
 Palabras:
 {pedidas}
 
-Elige exactamente una zona de la lista, escrita igual. Si ninguna encaja,
-responde null.
+Elige siempre la zona más cercana de la lista, escrita igual (un verbo
+suele ir en Acciones; un papel o comprobante, en Documentos).
 Responde SOLO con JSON: [{{"n": 1, "zona": "..."}}, ...]"""
 
 
@@ -118,25 +123,57 @@ def zonas_de_bedrock(texto: str, n: int, zonas: dict) -> list:
     return [por_n.get(i + 1) for i in range(n)]
 
 
-def clasificar(palabras: list, zonas: dict, embed, invocar,
-               vectores_zona: dict | None = None) -> list:
-    """[{palabra, zona, titan, similitud, bedrock}]; `zona` solo si Titan y
-    Bedrock coinciden. [vectores_zona]: caché {zona: vector}."""
-    vectores = vectores_zona if vectores_zona is not None else {}
-    for z, ej in zonas.items():
-        if z not in vectores:
-            vectores[z] = embed(f"{z}: {', '.join(ej)}")
-    elegidas = zonas_de_bedrock(invocar(prompt(palabras, zonas)),
-                                len(palabras), zonas)
+def textos_senas(zonas: dict, formas: dict) -> dict:
+    """{glosa: texto que se vectoriza} de las señas con zona de respuesta:
+    su significado en español («papel; el documento»)."""
+    return {g: "; ".join(formas.get(g) or [g.replace("_", " ").lower()])
+            for g, z in sorted(zonas.items()) if z not in _NO_ZONAS}
+
+
+def clave_indice(modelo: str, textos: dict) -> str:
+    huella = hashlib.sha256(json.dumps(textos, sort_keys=True,
+                                       ensure_ascii=False).encode()).hexdigest()
+    return (f"zonas-senas-{modelo.replace(':', '_').replace('.', '_')}-"
+            f"{huella[:16]}")
+
+
+def indexar_senas(textos: dict, indice: dict, embed,
+                  lote: int = LOTE_INDICE) -> dict:
+    """Añade al índice hasta [lote] vectores de señas que faltan."""
+    vectores = dict(indice.get("vectores") or {})
+    for g in [g for g in textos if g not in vectores][:lote]:
+        vectores[g] = embed(textos[g])
+    return {"vectores": vectores}
+
+
+def zona_por_vecinas(vector: list, vectores: dict, zonas: dict,
+                     k: int = VECINAS) -> tuple:
+    """(zona, parecido, vecinas): la zona que más pesa entre las [k] señas
+    más parecidas, sumando su parecido."""
+    cercanas = sorted(((coseno(vector, v), g) for g, v in vectores.items()),
+                      reverse=True)[:k]
+    peso = {}
+    for s, g in cercanas:
+        peso[zonas[g]] = peso.get(zonas[g], 0.0) + s
+    if not peso:
+        return None, 0.0, []
+    zona = max(peso, key=peso.get)
+    return zona, round(cercanas[0][0], 4), [g for _, g in cercanas]
+
+
+def clasificar(palabras: list, zonas_desc: dict, vectores: dict, zonas: dict,
+               embed, invocar) -> list:
+    """[{palabra, zona, titan, similitud, vecinas, bedrock}]; `zona` solo si
+    Titan (por vecinas) y Bedrock coinciden."""
+    elegidas = zonas_de_bedrock(invocar(prompt(palabras, zonas_desc)),
+                                len(palabras), zonas_desc)
     salida = []
     for p, bedrock in zip(palabras, elegidas):
         v = embed(p["palabra"].replace("_", " ").lower())
-        puntajes = sorted(((coseno(v, vz), z) for z, vz in vectores.items()),
-                          reverse=True)
-        similitud, titan = puntajes[0] if puntajes else (0.0, None)
+        titan, similitud, vecinas = zona_por_vecinas(v, vectores, zonas)
         salida.append({
-            "palabra": p["palabra"], "titan": titan,
-            "similitud": round(similitud, 4), "bedrock": bedrock,
+            "palabra": p["palabra"], "titan": titan, "similitud": similitud,
+            "vecinas": vecinas, "bedrock": bedrock,
             "zona": titan if titan and titan == bedrock else None,
         })
     return salida
