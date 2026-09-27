@@ -12,6 +12,8 @@ import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_composer.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_session.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
@@ -137,12 +139,35 @@ void main() {
           'PERDER',
         ]),
       );
-      expect(q.options.map((o) => o.label), [
+      // Las frases documentadas se eligen solas…
+      expect(q.options.where((o) => o.isExit).map((o) => o.label), [
         'Sí. Perdimos la copia anterior.',
         'Sí.',
         'No.',
         'No sé cuál certificado.',
       ]);
+      // …y la zona de sus respuestas (Documentos) ofrece tarjetas sueltas.
+      expect(q.isMultiple, isTrue);
+      expect(
+        q.options.where((o) => !o.isExit).map((o) => o.glosses.single),
+        contains('CERTIFICADO'),
+      );
+    });
+
+    test('las tarjetas de zona se juntan en una respuesta', () {
+      final bank = RagTramites.bankWithTramites();
+      final rules = GuidedFlow(bank);
+      final q = bank.question(pregunta)!;
+      var s = rules.startJourney('tramite_sereci_02');
+      final tarjeta = q.options.firstWhere((o) => !o.isExit);
+      s = rules.select(s, pregunta, tarjeta.id).session;
+      expect(GuidedComposer(bank).compose(s.toIntervention()), 'Certificado.');
+      // Una frase documentada reemplaza a las tarjetas y va sola.
+      s = rules.select(s, pregunta, 'r1').session;
+      expect(
+        GuidedComposer(bank).compose(s.toIntervention()),
+        'Sí. Perdimos la copia anterior.',
+      );
     });
   });
 

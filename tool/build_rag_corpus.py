@@ -66,18 +66,22 @@ CORRECCIONES = os.path.join(RAG, "glosas_correcciones.json")
 ZONAS_SENAS = os.path.join(ROOT, "aws", "zonas_senas.json")
 FORMAS_SENAS = os.path.join(ROOT, "aws", "catalogo_senas.json")
 ZONAS_PALABRAS = os.path.join(RAG, "zonas_palabras.json")
-# Zonas con las que se contesta un trámite (no Respuesta, Cortesía,
-# Preguntas ni el deletreo: esas ya van en las frases documentadas).
+# Zonas con las que se contesta un trámite juntando tarjetas: cosas y datos
+# («la boleta y el folio»). Los verbos (Acciones, donde el catálogo también
+# pone ¿Dónde? o ¿Cuál?), los adjetivos y las partículas no se juntan en una
+# lista: esas respuestas ya van en las frases documentadas.
 ZONAS_DE_RESPUESTA = {
     "Documentos", "Objetos", "Lugares", "Tiempo", "Identificación",
-    "Instituciones", "Conceptos jurídicos", "Hechos y urgencia",
-    "Descripción", "Acciones", "Estado y emoción", "Números",
+    "Instituciones", "Conceptos jurídicos", "Números",
 }
 MAX_TARJETAS = 8
 # Partículas de respuesta: ya van en las frases documentadas, no abren zona
 # ni son tarjeta (el diccionario pone SÍ en «Hechos y urgencia»).
 _PARTICULAS = {"si", "no", "no_saber", "tal_vez", "puedo", "no_puedo",
-               "verdad", "mentira", "estar_de_acuerdo", "no_estar_de_acuerdo"}
+               "verdad", "mentira", "estar_de_acuerdo", "no_estar_de_acuerdo",
+               # Adverbios de lugar: en una lista quedan «Casa y aquí».
+               "aqui", "alli", "alla", "cerca", "lejos", "dentro", "fuera",
+               "atras", "enfrente", "al_lado"}
 # La lista de vocabulario por crecer, para leer y compartir.
 SALIDA_VOCABULARIO = os.path.join(RAG, "senas_a_incorporar.md")
 
@@ -752,8 +756,9 @@ def _tarjeta(glosa: str, zonas: dict) -> tuple | None:
         return None
     _, zona = zonas["senas"][clave]
     formas = zonas["formas"].get(clave) or [glosa.replace("_", " ").lower()]
-    frase = formas[1] if len(formas) > 1 else formas[0].lower()
-    return zona, formas[0], frase
+    # El significado de la seña («casa», «papel»), no el fragmento de oración
+    # del catálogo («mi nombre es», «debo volver»), que no se junta en lista.
+    return zona, formas[0], formas[0].lower()
 
 
 def tarjetas_de_zona(e: dict, respuestas: list, zonas: dict) -> list:
@@ -818,7 +823,10 @@ def banco_tramites(corpus: dict) -> dict:
                     "id": f"r{len(opciones) + 1}",
                 })
             glosas = t.get("glosas") or []
-            tarjetas = tarjetas_de_zona(e, respuestas_de(e, t["n"]), zonas)
+            # Solo una pregunta abre zonas; una indicación («Escríbala sin
+            # espacios») se contesta con sus frases.
+            tarjetas = (tarjetas_de_zona(e, respuestas_de(e, t["n"]), zonas)
+                        if "?" in t["texto"] else [])
             if tarjetas:
                 # Una frase documentada se elige sola; las tarjetas se juntan.
                 for o in opciones:

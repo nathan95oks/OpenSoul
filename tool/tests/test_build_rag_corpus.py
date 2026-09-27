@@ -308,7 +308,7 @@ class ZonasDeTramite(unittest.TestCase):
         # Documentos (por BOLETA), no Lugares ni Respuesta.
         self.assertEqual([(t["glosas"], t["frase"]) for t in tarjetas],
                          [(["SENA_PENDIENTE:BOLETA"], "boleta"),
-                          (["PAPEL"], "el documento")])
+                          (["PAPEL"], "papel")])
 
     def test_sin_zona_de_respuesta_no_hay_tarjetas(self):
         self.assertEqual(
