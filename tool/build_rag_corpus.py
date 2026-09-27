@@ -635,7 +635,11 @@ def vocabulario_md(corpus: dict) -> str:
         lineas += [
             "## Ya resueltas con una seña existente",
             "",
-            "| Palabra | Seña | Origen |",
+            "La primera columna es lo que dejó la traducción automática, a "
+            "veces mal escrito (COUCHABAMBA por Cochabamba); la segunda, la "
+            "seña correcta que se hace.",
+            "",
+            "| Dejó la traducción | Seña | Origen |",
             "|---|---|---|",
         ]
         for p, e in aprobadas:

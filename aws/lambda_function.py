@@ -24,6 +24,7 @@ from guided_composer import EDITOR_KEYS as GUIDED_EDITOR_KEYS
 from guided_composer import load_bank as load_guided_bank
 import rag_consulta as RAG
 import rag_equivalencias as EQUIV
+import rag_revision as REVISION
 
 import boto3
 from botocore.exceptions import ClientError
@@ -4125,6 +4126,40 @@ def rag_equivalences(body):
                                 "propuestas": propuestas})
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# CONTROL DE GLOSAS DEL CORPUS (action: "retrotraducir")
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# Bedrock traduce las glosas de vuelta al español y Titan compara su
+# significado con la frase original. Ver `rag_revision.py`. Solo lo usa
+# `tool/rag_revisar_glosas.py`; la app no lo llama.
+
+def rag_back_translate(body):
+    items, error = REVISION.validar_pedido(body)
+    if error:
+        return build_response(400, {"error": "VALIDATION_ERROR", "message": error})
+    if not ENABLE_BEDROCK:
+        return build_response(200, {"generated": False,
+                                    "reason": "bedrock_desactivado"})
+
+    def invocar(texto: str) -> str:
+        respuesta = bedrock_runtime.invoke_model(
+            modelId=BEDROCK_MODEL_ID, contentType="application/json",
+            accept="application/json",
+            body=json.dumps(_build_bedrock_request_body(
+                texto, max_tokens=REVISION.MAX_TOKENS)))
+        return EQUIV.texto_de_respuesta(json.loads(respuesta["body"].read()))
+
+    try:
+        revisadas = REVISION.revisar(items, invocar, _titan_embed)
+    except Exception as e:  # noqa: BLE001 — Bedrock: nunca un 500
+        logger.warning("Retrotraducción fallida: %s", e)
+        return build_response(200, {"generated": False, "reason": "error_modelo"})
+    return build_response(200, {"generated": True, "model": BEDROCK_MODEL_ID,
+                                "embeddings": RAG_EMBEDDING_MODEL,
+                                "items": revisadas})
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -4150,6 +4185,8 @@ def lambda_handler(event, context):
         return rag_index_batch()
     if (body.get("action") or "").strip().lower() == "equivalencias":
         return rag_equivalences(body)
+    if (body.get("action") or "").strip().lower() == "retrotraducir":
+        return rag_back_translate(body)
 
     is_valid, err = validate_request(body)
     if not is_valid:
