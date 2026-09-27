@@ -79,7 +79,9 @@ class RagRetriever {
       }
 
       for (final t in s.turns) {
-        if (t.speaker != RagSpeaker.official) continue;
+        // Lo no mostrable (habla de la fuente, dato sin verificar o vencido)
+        // tampoco es algo que diga un funcionario: como clave atrae ruido.
+        if (t.speaker != RagSpeaker.official || !t.showable) continue;
         final replies = repliesAfter(t.n);
         if (replies.isEmpty) continue;
         out.add(_Entry(s, DialogueGraph.tokensOf(t.text), replies));

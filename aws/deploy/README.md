@@ -40,8 +40,9 @@ palabras.
 
 Variables de entorno opcionales: `RAG_EMBEDDING_MODEL` (por defecto
 `amazon.titan-embed-text-v2:0`), `RAG_EMBEDDING_DIM` (256) y
-`RAG_MIN_SIMILARITY` (0.6; súbelo si aparecen sugerencias poco
-relacionadas y bájalo si faltan).
+`RAG_MIN_SIMILARITY` (0.46, calibrado con `tool/rag_calibrar.py`: paráfrasis
+bien encaminadas 0.48–0.79, frases sin relación hasta 0.444; súbelo si
+aparecen sugerencias poco relacionadas y bájalo si faltan).
 
 ## 1. Qué cambia y por qué importa el orden
 

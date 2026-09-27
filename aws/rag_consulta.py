@@ -33,11 +33,11 @@ CORPUS_PATH = os.path.join(AQUI, "rag_escenarios_cbba.json")
 CORPUS_REPO = os.path.join(os.path.dirname(AQUI), "assets", "rag",
                            "escenarios_cbba.json")
 
-# Similitud del coseno mínima para ofrecer respuestas. Titan v2 con vectores
-# normalizados: paráfrasis cercanas suelen superar 0.6; temas distintos quedan
-# por debajo de 0.4. Se puede ajustar sin desplegar código (variable de
-# entorno) tras medir con frases reales.
-MIN_SIMILARITY = float(os.environ.get("RAG_MIN_SIMILARITY", "0.6"))
+# Similitud del coseno mínima para ofrecer respuestas. Calibrada con la Lambda
+# real (tool/rag_calibrar.py, 2026-09-27, Titan v2 256 dims): paráfrasis bien
+# encaminadas 0.48–0.79; frases sin relación hasta 0.444. Se puede ajustar sin
+# desplegar código con la variable de entorno.
+MIN_SIMILARITY = float(os.environ.get("RAG_MIN_SIMILARITY", "0.46"))
 # Solo se juntan preguntas casi tan parecidas como la mejor.
 MARGIN = 0.05
 # Ventaja del trámite del que ya se venía hablando (desempate).
@@ -82,7 +82,10 @@ def entradas(corpus: dict) -> list:
             "tramite": esc.get("tramite", ""),
         }
         for t in esc.get("turnos", []):
-            if t.get("rol") != "funcionario":
+            # Lo que el constructor marcó como no mostrable (habla de la
+            # fuente, depende de un dato sin verificar o vencido) tampoco es
+            # algo que un funcionario diga: como clave solo atrae ruido.
+            if t.get("rol") != "funcionario" or not t.get("mostrable"):
                 continue
             resp = respuestas_tras(t["n"])
             if resp:
@@ -157,10 +160,16 @@ def consultar(texto: str, lista: list, indice: dict, embed, *,
     if not puntuadas:
         return []
     mejor = puntuadas[0][0]
+    # Solo la institución de la mejor coincidencia: las similitudes por
+    # significado quedan muy juntas y mezclar trámites pondría «Soy la persona
+    # denunciada» ante «¿Está en peligro?».
+    area = puntuadas[0][2]["area"]
     out = []
     for orden, sim, e in puntuadas:
         if orden < mejor - MARGIN:
             break
+        if e["area"] != area:
+            continue
         for r in e["respuestas"]:
             if any(s["text"] == r["texto"] for s in out):
                 continue
