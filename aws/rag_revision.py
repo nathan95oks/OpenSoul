@@ -1,19 +1,23 @@
 """Control de las glosas del corpus RAG: ¿dicen lo mismo que la frase?
 
 `action: "retrotraducir"` de `lambda_function.py`. Para cada frase del corpus
-y sus glosas LSB precalculadas:
+y sus glosas LSB precalculadas hace dos cosas:
 
-1. Bedrock traduce las glosas de vuelta al español, sin mirar la frase
-   original: solo lo que dicen las glosas.
-2. Titan compara el significado de esa vuelta con la frase original.
+1. **Comparación verificable.** Bedrock ve la frase y sus glosas y dice qué
+   palabras de la frase no tienen glosa (`faltan`) y qué glosas no están en
+   la frase (`sobran`). Cada respuesta se comprueba: una palabra que falta
+   tiene que estar en la frase y una glosa que sobra, en las glosas; lo
+   demás se descarta. Así se ve «Compré un auto…» sin AUTO o «mi casa» con
+   un CASO de más, sin depender de interpretar nada.
+2. **Vuelta al español + Titan.** Bedrock traduce las glosas de vuelta al
+   español sin ver la frase, y Titan compara su significado con la
+   original. Es una segunda señal para ordenar la revisión. Si la vuelta
+   sale escrita como glosas («PAPEL IDENTIDAD NUEVO NECESITAR») no es
+   español y no se compara (`similitud: null`): antes eso hundía frases
+   correctas.
 
-Una similitud baja señala una traducción que perdió o añadió algo («Compré
-un auto…» sin AUTO; «mi casa» con un CASO de más). No corrige nada: marca
-frases para que una persona las revise. Comparar palabra por palabra no
-sirve (TRAER no es «traje», PAPEL·IDENTIDAD es «cédula»); comparar
-significados sí.
-
-Las glosas llegan como las ve la persona sorda: una seña a incorporar
+No corrige nada: marca frases para que una persona las revise. Las glosas
+llegan como las ve la persona sorda: una seña a incorporar
 (`SENA_PENDIENTE:FOLIO_REAL`) cuenta como su palabra, que se muestra.
 """
 
@@ -22,10 +26,24 @@ from __future__ import annotations
 import json
 import math
 import re
+import unicodedata
 
 MAX_ITEMS = 8
-MAX_TOKENS = 700
+MAX_TOKENS = 900
 PENDIENTE = "SENA_PENDIENTE:"
+
+# Palabras del español que LSB no signa: su ausencia en las glosas no es
+# una pérdida.
+_FUNCION = frozenset("""
+a al algo ante con de del e el ella ellas ellos en es esa ese eso esta este
+esto fue ha han hay la las le les lo los me mi mis nos o para pero por que
+se sea ser si sin sobre su sus te tu tus un una unas uno unos y ya yo
+""".split())
+
+
+def _norm(texto: str) -> str:
+    sin = unicodedata.normalize("NFD", texto.lower())
+    return "".join(c for c in sin if unicodedata.category(c) != "Mn")
 
 
 def legibles(glosas: list) -> list:
@@ -46,7 +64,7 @@ def legibles(glosas: list) -> list:
 
 
 def validar_pedido(body: dict) -> tuple:
-    """(items, error). Cada item: {texto, glosas}."""
+    """(items, error). Cada item: {texto, glosas, rol?}."""
     items = body.get("items")
     if not isinstance(items, list) or not 1 <= len(items) <= MAX_ITEMS:
         return None, f"items: entre 1 y {MAX_ITEMS}."
@@ -61,35 +79,140 @@ def validar_pedido(body: dict) -> tuple:
                 or not all(isinstance(g, str) and 0 < len(g) <= 80
                            for g in glosas)):
             return None, "glosas inválidas."
-        limpios.append({"texto": texto, "glosas": glosas})
+        rol = it.get("rol") if it.get("rol") in ("sordo", "funcionario") else None
+        limpios.append({"texto": texto, "glosas": glosas, "rol": rol})
     return limpios, None
 
 
-def prompt(items: list) -> str:
+_QUIEN = {"sordo": "la persona sorda", "funcionario": "el funcionario",
+          None: "alguien"}
+
+_GRAMATICA = """Cómo leer las glosas de LSB:
+- Los verbos van en infinitivo: conjúgalos según quién habla (YO NECESITAR
+  → «necesito»).
+- MÍO es «mi»/«mío»; TÚ/TUYO es «usted»/«su» si habla el funcionario.
+- PAPEL IDENTIDAD es «cédula de identidad»; PAPEL solo es «documento».
+- El orden es tema-comentario: reordénalo como en español.
+- Los artículos, preposiciones y pronombres no se signan: añádelos."""
+
+
+def prompt_vuelta(items: list) -> str:
     lineas = "\n".join(
-        f"{i + 1}. {' · '.join(legibles(it['glosas']))}"
+        f"{i + 1}. (habla {_QUIEN[it['rol']]}) "
+        f"{' · '.join(legibles(it['glosas']))}"
         for i, it in enumerate(items))
     return f"""Traduce al español estas secuencias de glosas de Lengua de Señas
-Boliviana (LSB). Cada glosa es una seña; las glosas en español sin seña
-propia también cuentan. Escribe una frase natural por secuencia con SOLO lo
-que dicen las glosas: no añadas nada que no esté y no quites nada que esté.
-Si una secuencia es una pregunta, escríbela como pregunta.
+Boliviana (LSB), dichas en una oficina pública de Cochabamba.
 
+{_GRAMATICA}
+
+Escribe una frase en español correcto por secuencia, con SOLO lo que dicen
+las glosas: no añadas información que no esté ni quites la que esté. Nunca
+respondas con las glosas: escribe español normal.
+
+Ejemplos:
+- (habla la persona sorda) YO · PAPEL · IDENTIDAD · PERDER → «Perdí mi cédula
+  de identidad.»
+- (habla el funcionario) TÚ · ABOGADO · TENER → «¿Usted tiene abogado?»
+- (habla la persona sorda) SÍ · MÍO · NOMBRE · CASA → «Sí, la casa está a mi
+  nombre.»
+
+Secuencias:
 {lineas}
 
 Responde SOLO con JSON: ["frase 1", "frase 2", ...], en el mismo orden."""
 
 
-def frases_de_respuesta(texto: str, n: int) -> list:
-    """Las [n] frases del JSON del modelo; vacías si no se puede leer."""
+def prompt_comparar(items: list) -> str:
+    lineas = "\n".join(
+        f"{i + 1}. Frase: «{it['texto']}» | Glosas: "
+        f"{' · '.join(legibles(it['glosas']))}"
+        for i, it in enumerate(items))
+    return f"""Compara cada frase en español con su traducción a glosas de Lengua
+de Señas Boliviana (LSB).
+
+{_GRAMATICA}
+
+Para cada par indica:
+- "faltan": palabras de la frase con significado propio (sustantivos, verbos,
+  adjetivos, números, negaciones) que ninguna glosa expresa. Copia la
+  palabra tal como está en la frase.
+- "sobran": glosas que añaden algo que la frase no dice. Copia la glosa tal
+  como está.
+No cuentes como faltantes los artículos, preposiciones o pronombres, ni una
+palabra expresada con otra glosa equivalente (cédula = PAPEL IDENTIDAD).
+
+Ejemplo: Frase «Compré un auto. Quiero pasarlo a mi nombre.» | Glosas:
+COMPRAR · MÍO · NOMBRE · PASAR → {{"faltan": ["auto", "Quiero"], "sobran": []}}
+Ejemplo: Frase «Tengo deuda de mi casa.» | Glosas: CASO · DEUDA · MÍO · CASA
+→ {{"faltan": ["Tengo"], "sobran": ["CASO"]}}
+
+Pares:
+{lineas}
+
+Responde SOLO con JSON, una entrada por par en el mismo orden:
+[{{"faltan": [...], "sobran": [...]}}, ...]"""
+
+
+def _json_lista(texto: str) -> list:
     try:
         inicio, fin = texto.index("["), texto.rindex("]") + 1
         crudo = json.loads(texto[inicio:fin])
     except (ValueError, json.JSONDecodeError):
-        crudo = []
+        return []
+    return crudo if isinstance(crudo, list) else []
+
+
+def frases_de_respuesta(texto: str, n: int) -> list:
+    """Las [n] frases del JSON del modelo; vacías si no se puede leer."""
     frases = [str(f) if isinstance(f, (str, int, float)) else ""
-              for f in (crudo if isinstance(crudo, list) else [])]
+              for f in _json_lista(texto)]
     return (frases + [""] * n)[:n]
+
+
+def es_espanol(vuelta: str, glosas: list) -> bool:
+    """Si la vuelta es una frase y no las glosas copiadas.
+
+    Nova a veces devuelve «PAPEL IDENTIDAD NUEVO NECESITAR» o «Comprar mío
+    nombre pasar»: eso no es español y compararlo con la frase hunde el
+    parecido de una traducción correcta.
+    """
+    palabras = re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ]+", vuelta)
+    if not palabras:
+        return False
+    mayusculas = sum(1 for p in palabras if len(p) > 1 and p.isupper())
+    if mayusculas * 2 > len(palabras):
+        return False
+    glosa = {_norm(w) for g in legibles(glosas) for w in g.split()}
+    iguales = sum(1 for p in palabras if _norm(p) in glosa)
+    # Una sola palabra que es su propia glosa («Llamar») tampoco es frase,
+    # pero sí lo es «Fue robo.»: se exige algo que no sea glosa, salvo en
+    # frases de una palabra corta (Sí, No).
+    return iguales < len(palabras) or len(palabras) == 1 and len(vuelta) <= 4
+
+
+def comparaciones(texto: str, items: list) -> list:
+    """{faltan, sobran} por item, comprobados contra la frase y las glosas."""
+    crudo = _json_lista(texto)
+    salida = []
+    for i, it in enumerate(items):
+        r = crudo[i] if i < len(crudo) and isinstance(crudo[i], dict) else {}
+        en_frase = {_norm(w): w for w in
+                    re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", it["texto"])}
+        en_glosas = {_norm(g): g for g in legibles(it["glosas"])}
+        faltan = []
+        for w in r.get("faltan") or []:
+            clave = _norm(str(w)).strip()
+            if clave in en_frase and clave not in _FUNCION \
+                    and en_frase[clave] not in faltan:
+                faltan.append(en_frase[clave])
+        sobran = []
+        for g in r.get("sobran") or []:
+            clave = _norm(str(g).replace("_", " ")).strip()
+            if clave in en_glosas and en_glosas[clave] not in sobran:
+                sobran.append(en_glosas[clave])
+        salida.append({"faltan": faltan, "sobran": sobran})
+    return salida
 
 
 def coseno(a: list, b: list) -> float:
@@ -101,14 +224,17 @@ def coseno(a: list, b: list) -> float:
 
 
 def revisar(items: list, invocar, embed) -> list:
-    """[{texto, vuelta, similitud}]. [invocar]: prompt → texto del modelo;
-    [embed]: texto → vector (Titan)."""
-    vueltas = frases_de_respuesta(invocar(prompt(items)), len(items))
+    """[{texto, vuelta, similitud, faltan, sobran}].
+
+    [invocar]: prompt → texto del modelo; [embed]: texto → vector (Titan).
+    """
+    comparadas = comparaciones(invocar(prompt_comparar(items)), items)
+    vueltas = frases_de_respuesta(invocar(prompt_vuelta(items)), len(items))
     salida = []
-    for it, vuelta in zip(items, vueltas):
+    for it, vuelta, comp in zip(items, vueltas, comparadas):
         limpia = re.sub(r"\s+", " ", vuelta).strip()
         similitud = (round(coseno(embed(it["texto"]), embed(limpia)), 4)
-                     if limpia else 0.0)
+                     if limpia and es_espanol(limpia, it["glosas"]) else None)
         salida.append({"texto": it["texto"], "vuelta": limpia,
-                       "similitud": similitud})
+                       "similitud": similitud, **comp})
     return salida
