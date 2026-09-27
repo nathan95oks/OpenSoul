@@ -2,9 +2,10 @@ import 'dart:convert';
 
 /// Corpus RAG de trámites de Cochabamba: situaciones reales documentadas.
 ///
-/// Lo genera `tool/build_rag_corpus.py` desde
-/// `docs/negocio/escenarios_tramites_cochabamba_RAG_2026-09-27.md`. Aquí solo
-/// se lee: qué se puede mostrar ya lo decidió el constructor (`mostrable`).
+/// Lo genera `tool/build_rag_corpus.py` desde todos los
+/// `docs/negocio/rag/escenarios/*.md` (ver `docs/negocio/rag/README.md`). Aquí
+/// solo se lee: qué se puede mostrar ya lo decidió el constructor
+/// (`mostrable`).
 class RagCorpus {
   final List<RagScenario> scenarios;
 
@@ -57,6 +58,12 @@ class RagScenario {
         RagVariant.fromJson(Map<String, dynamic>.from(v as Map)),
     ],
   );
+
+  /// Área del corpus (DDRR, SEGIP…): la institución de la situación.
+  String get area {
+    final parts = id.split('-');
+    return parts.length >= 3 ? parts[1] : id;
+  }
 
   RagTurn? turn(int n) {
     for (final t in turns) {

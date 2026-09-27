@@ -8,9 +8,9 @@ misma petición que la app (`RemoteAudioDataSourceImpl`), una vez por frase
 distinta que puede mostrarse (turnos y respuestas alternativas del usuario
 sordo, según `assets/rag/escenarios_cbba.json`).
 
-Escribe la caché revisable:
+Escribe la caché revisable, compartida por todos los archivos de escenarios:
 
-    docs/negocio/escenarios_tramites_cochabamba_RAG_glosas.json
+    docs/negocio/rag/glosas_cache.json
 
 `tool/build_rag_corpus.py` la lee sin red y pone las glosas en el corpus. Se
 puede interrumpir: guarda cada pocas frases y la siguiente ejecución sigue
@@ -30,12 +30,12 @@ import urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CORPUS = os.path.join(ROOT, "assets", "rag", "escenarios_cbba.json")
-CACHE = os.path.join(
-    ROOT, "docs", "negocio", "escenarios_tramites_cochabamba_RAG_glosas.json")
+CACHE = os.path.join(ROOT, "docs", "negocio", "rag", "glosas_cache.json")
 ENV = os.path.join(ROOT, ".env")
 
-HILOS = 4
-INTENTOS = 3
+# Con 4 peticiones a la vez Bedrock devolvía errores 500 de saturación.
+HILOS = 2
+INTENTOS = 5
 ESPERA = 30
 
 
@@ -90,7 +90,8 @@ def traducir(url: str, texto: str) -> dict:
         except (urllib.error.URLError, TimeoutError, ValueError,
                 json.JSONDecodeError) as e:
             ultimo = e
-            time.sleep(2 * (intento + 1))
+            # Espera creciente: 2, 4, 8, 16 s. Un 500 suele ser saturación.
+            time.sleep(2 ** (intento + 1))
     raise RuntimeError(f"«{texto}»: {ultimo}")
 
 
@@ -102,7 +103,6 @@ def guardar(cache: dict) -> None:
 
 
 def main() -> int:
-    url = endpoint()
     cache = {}
     if os.path.exists(CACHE) and "--todo" not in sys.argv:
         with open(CACHE, encoding="utf-8") as f:
@@ -111,6 +111,9 @@ def main() -> int:
     total = len(frases())
     print(f"frases: {total} · ya traducidas: {total - len(pendientes)} · "
           f"pendientes: {len(pendientes)}")
+    if not pendientes:
+        return 0
+    url = endpoint()
     hoy = datetime.date.today().isoformat()
     fallos = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=HILOS) as pool:

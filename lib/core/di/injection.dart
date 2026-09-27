@@ -10,6 +10,7 @@ import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/dialogue_graph_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/rag_corpus_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/remote_rag_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/business_catalog_datasource.dart';
 import 'package:lsb_legal_app/core/data/repositories/animation_repository_impl.dart';
 import 'package:lsb_legal_app/core/data/repositories/audio_translation_repository_impl.dart';
@@ -235,6 +236,13 @@ final ragRetrieverProvider = Provider<RagRetriever?>((ref) {
   final corpus = ref.watch(ragCorpusProvider).asData?.value;
   if (corpus == null || corpus.scenarios.isEmpty) return null;
   return RagRetriever(corpus);
+});
+
+/// RAG por significado en la Lambda. `null` sin endpoint configurado: la
+/// app se queda con la búsqueda por palabras.
+final remoteRagProvider = Provider<RemoteRagDataSource?>((ref) {
+  final remote = RemoteRagDataSource(client: ref.watch(httpClientProvider));
+  return remote.isConfigured ? remote : null;
 });
 
 final conversationGraphRouterProvider = Provider<ConversationGraphRouter?>((

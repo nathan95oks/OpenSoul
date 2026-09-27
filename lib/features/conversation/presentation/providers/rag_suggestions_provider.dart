@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 
@@ -58,16 +59,87 @@ List<RagSuggestion> ragSuggestionsFor(
   }
   final route = pending.route;
   if (route == null) return const [];
-  final found = retriever.suggest(pending.message.text);
+  final found = retriever.suggest(
+    pending.message.text,
+    preferArea: _recentArea(conversation, pending, retriever),
+  );
   if (found.isEmpty || !ragOutranksGraph(route, found.first.score)) {
     return const [];
   }
   return found;
 }
 
-final ragSuggestionsProvider = Provider<List<RagSuggestion>>(
-  (ref) => ragSuggestionsFor(
-    ref.watch(conversationProvider).conversation,
-    ref.watch(ragRetrieverProvider),
-  ),
-);
+/// El trámite del que se venía hablando: el de las preguntas anteriores del
+/// funcionario más recientes que se parecen a alguno. Decide empates en
+/// preguntas que valen en muchos trámites («¿Trajo su cédula?»).
+String? _recentArea(
+  Conversation conversation,
+  ConversationTurn pending,
+  RagRetriever retriever, {
+  int lookBack = 3,
+}) {
+  var seen = 0;
+  for (final t in conversation.turns.reversed) {
+    if (identical(t, pending) ||
+        t.message.id == pending.message.id ||
+        t.message.speaker != SpeakerRole.hearing) {
+      continue;
+    }
+    final area = retriever.areaOf(t.message.text);
+    if (area != null) return area;
+    if (++seen >= lookBack) break;
+  }
+  return null;
+}
+
+/// Si vale la pena preguntar a la Lambda por significado: solo cuando el
+/// grafo no tiene una pregunta segura (no sabe, o abrió un contexto por una
+/// palabra suelta). Con preguntas del grafo o un selector ya hay un camino
+/// para responder.
+bool ragMayAskRemote(ConversationRoute route) =>
+    route.type == ConversationRouteType.noSafeRoute ||
+    route.type == ConversationRouteType.directContext;
+
+/// Consulta por significado de un turno: (id del turno, texto, área del
+/// tema). El id hace que cada turno se consulte una sola vez.
+typedef RagRemoteQuery = (String turnId, String text, String? preferArea);
+
+final remoteRagSuggestionsProvider =
+    FutureProvider.family<List<RagSuggestion>, RagRemoteQuery>((ref, q) async {
+      final remote = ref.watch(remoteRagProvider);
+      if (remote == null) return const [];
+      return remote.consult(q.$2, preferArea: q.$3);
+    });
+
+/// Primero la búsqueda por palabras, en el teléfono y sin red. Solo si no
+/// encuentra nada y el grafo tampoco tiene una pregunta segura, se usa lo que
+/// devuelva la búsqueda por significado de la Lambda (cuando llegue).
+final ragSuggestionsProvider = Provider<List<RagSuggestion>>((ref) {
+  final conversation = ref.watch(conversationProvider).conversation;
+  final retriever = ref.watch(ragRetrieverProvider);
+  final local = ragSuggestionsFor(conversation, retriever);
+  if (local.isNotEmpty) return local;
+
+  final pending = conversation.pendingReply;
+  final route = pending?.route;
+  if (pending == null ||
+      pending.pending ||
+      route == null ||
+      !ragMayAskRemote(route)) {
+    return const [];
+  }
+  final area = retriever == null
+      ? null
+      : _recentArea(conversation, pending, retriever);
+  return ref
+          .watch(
+            remoteRagSuggestionsProvider((
+              pending.message.id,
+              pending.message.text,
+              area,
+            )),
+          )
+          .asData
+          ?.value ??
+      const [];
+});

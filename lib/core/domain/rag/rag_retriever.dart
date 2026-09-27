@@ -45,6 +45,11 @@ class RagRetriever {
   /// trámite distinto confundiría más que ayudaría.
   static const double margin = 0.1;
 
+  /// Ventaja del trámite del que ya se viene hablando. Decide empates
+  /// («¿Trajo su cédula?» vale en muchos trámites) sin imponerse a una
+  /// coincidencia claramente mejor de otro.
+  static const double topicBonus = 0.05;
+
   late final List<_Entry> _entries = _index();
   late final Map<String, int> _scenarioFrequency = () {
     final perToken = <String, Set<String>>{};
@@ -118,35 +123,77 @@ class RagRetriever {
     return 2 * precision * recall / (precision + recall);
   }
 
+  /// Las oraciones de lo dicho: un saludo antes de la pregunta («Buenos
+  /// días, bienvenido. ¿Trae su matrícula?») no la diluye, y dos preguntas
+  /// en un mensaje se buscan cada una.
+  static List<Set<String>> _sentences(String text) {
+    final sentences = [
+      // «;» y «:» no separan preguntas: siguen dentro de la misma oración.
+      for (final s in text.split(RegExp(r'[.?!¿¡]+')))
+        if (DialogueGraph.tokensOf(s).isNotEmpty) DialogueGraph.tokensOf(s),
+    ];
+    return sentences.isEmpty ? [DialogueGraph.tokensOf(text)] : sentences;
+  }
+
   /// Respuestas documentadas para [hearingText], de la situación más
   /// parecida primero. Vacío si nada se parece lo suficiente.
-  List<RagSuggestion> suggest(String hearingText, {int limit = 4}) {
-    final said = DialogueGraph.tokensOf(hearingText);
-    if (said.isEmpty) return const [];
-    final ranked = [for (final e in _entries) (e, _score(said, e))]
-      ..sort((a, b) => b.$2.compareTo(a.$2));
-    if (ranked.isEmpty || ranked.first.$2 < minScore) return const [];
+  ///
+  /// Cada oración aporta sus respuestas (hasta [limit] cada una). [preferArea]
+  /// es el área del trámite del que ya se viene hablando: gana los empates.
+  List<RagSuggestion> suggest(
+    String hearingText, {
+    int limit = 4,
+    String? preferArea,
+  }) {
+    double ranking((_Entry, double) r) =>
+        r.$2 + (r.$1.scenario.area == preferArea ? topicBonus : 0);
 
-    final best = ranked.first.$2;
+    // Por oración: sus coincidencias casi tan buenas como su mejor.
+    final groups = <List<(_Entry, double)>>[];
+    for (final said in _sentences(hearingText)) {
+      if (said.isEmpty) continue;
+      final ranked = [
+        for (final e in _entries)
+          if (_score(said, e) case final score when score >= minScore)
+            (e, score),
+      ]..sort((a, b) => ranking(b).compareTo(ranking(a)));
+      if (ranked.isEmpty) continue;
+      final best = ranking(ranked.first);
+      groups.add([
+        for (final r in ranked)
+          if (ranking(r) >= best - margin) r,
+      ]);
+    }
+    groups.sort((a, b) => ranking(b.first).compareTo(ranking(a.first)));
+
     final out = <RagSuggestion>[];
-    for (final (entry, score) in ranked) {
-      if (score < minScore || score < best - margin) break;
-      for (final r in entry.replies) {
-        if (out.any((s) => s.text == r.text)) continue;
-        out.add(
-          RagSuggestion(
-            text: r.text,
-            glosses: r.glosses,
-            scenarioId: entry.scenario.id,
-            institution: entry.scenario.institution,
-            procedure: entry.scenario.procedure,
-            score: score,
-          ),
-        );
-        if (out.length >= limit) return out;
+    for (final group in groups) {
+      var added = 0;
+      for (final (entry, score) in group) {
+        for (final reply in entry.replies) {
+          if (added >= limit) break;
+          if (out.any((s) => s.text == reply.text)) continue;
+          out.add(
+            RagSuggestion(
+              text: reply.text,
+              glosses: reply.glosses,
+              scenarioId: entry.scenario.id,
+              institution: entry.scenario.institution,
+              procedure: entry.scenario.procedure,
+              score: score,
+            ),
+          );
+          added++;
+        }
       }
     }
     return out;
+  }
+
+  /// Área del trámite al que más se parece [text], o `null`.
+  String? areaOf(String text) {
+    final found = suggest(text, limit: 1);
+    return found.isEmpty ? null : found.first.scenarioId.split('-')[1];
   }
 }
 
