@@ -39,14 +39,12 @@ FUENTES = [
     os.path.join(AWS, "rag_consulta.py"),
     os.path.join(AWS, "rag_equivalencias.py"),
     os.path.join(AWS, "rag_revision.py"),
+    os.path.join(AWS, "catalogo_senas.json"),
 ]
 # (origen, nombre dentro del ZIP) de archivos que viven fuera de aws/.
 EXTRAS = [
     (os.path.join(ROOT, "assets", "rag", "escenarios_cbba.json"),
      "rag_escenarios_cbba.json"),
-    # El catálogo de señas de la app, para las equivalencias.
-    (os.path.join(ROOT, "assets", "dictionary", "glosas_opensoul.csv"),
-     "glosas_opensoul.csv"),
 ]
 DESTINO = os.path.join(AQUI, "lambda_function.zip")
 

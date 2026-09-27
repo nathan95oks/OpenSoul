@@ -7,8 +7,8 @@ Las palabras salen de `docs/negocio/rag/glosas_cache.json`: las que la
 traducción Texto→LSB marcó «concepto_sin_catalogo», menos las siglas (NUREJ,
 CRPVA), que en LSB se deletrean. Para cada una:
 
-1. **Catálogo.** Si una seña oficial de `assets/dictionary/glosas_opensoul.csv`
-   se escribe exactamente así en español («el documento» → PAPEL, «mi» →
+1. **Catálogo.** Si una seña oficial de `aws/catalogo_senas.json` se
+   escribe exactamente así en español («el documento» → PAPEL, «mi» →
    MÍO), queda aprobada: la evidencia es el propio catálogo, con su fuente.
 2. **Bedrock.** Si no, la Lambda LSB→Texto/Audio (`action: "equivalencias"`)
    pide al modelo una seña oficial equivalente en esas frases, o ninguna. La
@@ -17,7 +17,13 @@ CRPVA), que en LSB se deletrean. Para cada una:
    (FISCAL no es FISCALÍA, JUDICIAL no es ÓRGANO_JUDICIAL). `misma_raiz`
    solo ayuda a revisar.
 
-Escribe `docs/negocio/rag/senas_equivalentes.json`. Para revisar a mano, se
+Escribe `docs/negocio/rag/senas_equivalentes.json`.
+
+    python tool/rag_equivalencias.py --actualizar-catalogo
+
+regenera `aws/catalogo_senas.json` desde la exportación del catálogo
+(`assets/dictionary/glosas_opensoul.csv`, de `tool/generate_csv.py`), que no
+se versiona. Para revisar a mano, se
 cambia `estado` a «aprobada» o «rechazada» y se pone `"revisado": true`: una
 entrada revisada no se vuelve a tocar. `tool/build_rag_corpus.py` usa solo
 las aprobadas.
@@ -37,7 +43,8 @@ sys.path.insert(0, AQUI)
 
 from build_rag_corpus import GLOSAS, ROOT, _es_sigla, _norm  # noqa: E402
 
-CATALOGO = os.path.join(ROOT, "assets", "dictionary", "glosas_opensoul.csv")
+CSV_CATALOGO = os.path.join(ROOT, "assets", "dictionary", "glosas_opensoul.csv")
+FOTO_CATALOGO = os.path.join(ROOT, "aws", "catalogo_senas.json")
 SALIDA = os.path.join(ROOT, "docs", "negocio", "rag", "senas_equivalentes.json")
 TANDA = 10
 _ARTICULOS = ("el ", "la ", "los ", "las ", "un ", "una ")
@@ -45,14 +52,27 @@ _ARTICULOS = ("el ", "la ", "los ", "las ", "un ", "una ")
 
 def catalogo() -> dict:
     """{glosa: [formas en español]} de las señas oficiales."""
-    with open(CATALOGO, encoding="utf-8-sig") as f:
+    with open(FOTO_CATALOGO, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def actualizar_catalogo() -> int:
+    """Regenera la foto versionada desde la exportación local del catálogo."""
+    with open(CSV_CATALOGO, encoding="utf-8-sig") as f:
         filas = list(csv.DictReader(f))
-    return {
-        r["Glosa"]: [v.strip() for v in (r["Significado_Espanol"],
-                                         r["Forma_Espanol_Oracion"])
-                     if v and v.strip()]
+    foto = {
+        r["Glosa"]: list(dict.fromkeys(
+            v.strip() for v in (r["Significado_Espanol"],
+                                r["Forma_Espanol_Oracion"])
+            if v and v.strip()))
         for r in filas if r["Tipo_Entrada"].startswith("Cat")
     }
+    with open(FOTO_CATALOGO, "w", encoding="utf-8", newline="") as f:
+        json.dump({k: foto[k] for k in sorted(foto)}, f,
+                  ensure_ascii=False, indent=1)
+        f.write("\n")
+    print(f"catálogo: {len(foto)} señas · {os.path.relpath(FOTO_CATALOGO, ROOT)}")
+    return 0
 
 
 def _sin_articulo(forma: str) -> str:
@@ -134,6 +154,8 @@ def decidir(palabra: str, propuesta: dict, cat: dict) -> dict:
 
 
 def main() -> int:
+    if "--actualizar-catalogo" in sys.argv:
+        return actualizar_catalogo()
     cat = catalogo()
     previas = {}
     if os.path.exists(SALIDA):
