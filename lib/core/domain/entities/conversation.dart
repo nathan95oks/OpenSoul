@@ -100,6 +100,22 @@ class Conversation {
     return null;
   }
 
+  /// De qué trata la conversación: el contexto de la última respuesta de la
+  /// persona sorda o, si todavía no respondió, el de la última pregunta del
+  /// oyente que se abrió en un contexto. Así «¿Sigue recibiendo mensajes?»
+  /// tras «¿Las amenazas llegaron por celular?» sigue en las amenazas.
+  String? get topicContextId {
+    for (final turn in turns.reversed) {
+      final ctx = turn.message.contextId;
+      if (ctx != null && ctx.isNotEmpty) return ctx;
+      final routed = turn.route?.targetContextId;
+      if (turn.message.speaker == SpeakerRole.hearing && routed != null) {
+        return routed;
+      }
+    }
+    return null;
+  }
+
   ConversationTurn? get lastHearingTurn {
     for (final turn in turns.reversed) {
       if (turn.message.speaker == SpeakerRole.hearing) return turn;

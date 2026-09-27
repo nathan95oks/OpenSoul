@@ -39,6 +39,10 @@ class GlossSemanticsParity(unittest.TestCase):
         self.assertEqual(CONTRACT["spokenStemSlots"], t2l._SLOT_POR_RAIZ_HABLADA)
         self.assertEqual(CONTRACT["spokenAfterHowSlots"],
                          t2l._SLOT_TRAS_COMO_HABLADO)
+        self.assertEqual(set(CONTRACT["spokenWearSlots"]["verbs"]),
+                         t2l._VERBOS_DE_VESTIR)
+        self.assertEqual(set(CONTRACT["spokenWearSlots"]["words"]),
+                         t2l._PALABRAS_DE_VESTIR)
         self.assertEqual(set(CONTRACT["questionPrepositions"]),
                          t2l._PREPOSICIONES_INTERROGATIVAS)
 

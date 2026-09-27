@@ -53,6 +53,9 @@ void main() {
       LsbGlossSemantics.spokenAfterHowSlots,
       (contract['spokenAfterHowSlots'] as Map).cast<String, String>(),
     );
+    final wear = contract['spokenWearSlots'] as Map;
+    expect(LsbGlossSemantics.spokenWearVerbs, Set<String>.from(wear['verbs']));
+    expect(LsbGlossSemantics.spokenWearWords, Set<String>.from(wear['words']));
     expect(
       LsbGlossSemantics.questionPrepositions,
       Set<String>.from(contract['questionPrepositions'] as List),

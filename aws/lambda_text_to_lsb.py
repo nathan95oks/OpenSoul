@@ -1541,7 +1541,15 @@ _SLOT_POR_RAIZ_HABLADA = {
     "APARIENCIA": "description",
     "RASGO": "description",
     "FISICAMENTE": "description",
+    "VESTI": "description",
 }
+# «¿Qué ropa llevaba?», «¿qué llevaba puesto?»: un verbo de llevar puesto con
+# la prenda (o «puesto») pide la ropa. Sin el verbo, «¿qué ropa le robaron?»
+# pregunta por el objeto robado.
+_VERBOS_DE_VESTIR = {"LLEVABA", "LLEVABAN", "USABA", "USABAN", "TENIA",
+                     "TENIAN"}
+_PALABRAS_DE_VESTIR = {"ROPA", "PRENDA", "PRENDAS", "PUESTO", "PUESTA",
+                       "PUESTOS", "PUESTAS"}
 # «¿Cómo era?», «¿cómo eran los ladrones?», «¿cómo lucía?»: CÓMO seguido de
 # ser/lucir en pasado pide la descripción de alguien ya mencionado.
 _SLOT_TRAS_COMO_HABLADO = {
@@ -1688,6 +1696,10 @@ def _ranuras_por_raiz(palabras: list) -> list:
         for raiz, slot in _SLOT_POR_RAIZ_HABLADA.items():
             if w.startswith(raiz) and slot not in ranuras:
                 ranuras.append(slot)
+    claves = set(palabras)
+    if (claves & _VERBOS_DE_VESTIR and claves & _PALABRAS_DE_VESTIR
+            and "description" not in ranuras):
+        ranuras.append("description")
     return ranuras
 
 

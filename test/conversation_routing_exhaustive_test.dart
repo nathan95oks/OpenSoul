@@ -29,9 +29,8 @@ const _limitacionesConocidas = {
   'n-s6-seguimiento_prelim-10': 'Q.ID.AVISO es paso de identificación',
   // «¿Por dónde…?» se lee como lugar; aquí pregunta el canal.
   'banco:Q.DIG.CANAL@amenaza_digital': '«por dónde» leído como lugar',
-  // ROPA y PRUEBA no tienen seña: la traducción las deletrea y no queda
-  // contenido con qué reconocer la pregunta.
-  'parafrasis-12': 'ROPA sin seña en el catálogo',
+  // PRUEBA no tiene seña: la traducción la deletrea y no queda contenido
+  // con qué reconocer la pregunta.
   'parafrasis-25': 'PRUEBA sin seña; abre «¿Qué tiene?» (evidencia)',
 };
 
@@ -151,6 +150,7 @@ void main() {
     final fallas = <String>[];
     var evaluados = 0;
     for (final c in casos) {
+      if (c['preguntaEsperada'] == 'SELECTOR') continue;
       final context = c['contexto'] as String;
       final question = c['preguntaEsperada'] as String;
       // Solo lo que la app puede abrir: un contexto con recorrido y una
@@ -279,4 +279,57 @@ void main() {
       );
     },
   );
+
+  test('las frases probadas en el teléfono, también sin tema previo', () {
+    final fallas = <String>[];
+    for (final c in casos.where((c) => c['origen'] == 'dispositivo')) {
+      final turn = turnOf(c);
+      final question = c['preguntaEsperada'] as String;
+      final exigido = c['sinTema'] as String;
+      final sinTema = router.routeDeterministic(turn);
+      String describe(ConversationRoute r) =>
+          '${r.type.wireName} ${r.targetContextId ?? '-'} '
+          '${r.targetQuestionIds.join('+')} (${r.reason})';
+      if (question == 'SELECTOR') {
+        for (final active in [null, 'denuncia_robo']) {
+          final r = router.routeDeterministic(turn, activeContextId: active);
+          if (r.type != ConversationRouteType.contextSelector) {
+            fallas.add('«${c['texto']}» con tema $active → ${describe(r)}');
+          }
+        }
+        continue;
+      }
+      final context = c['contexto'] as String;
+      final enTema = router.routeDeterministic(turn, activeContextId: context);
+      final resultadoEnTema = outcome(enTema, context, question);
+      final resultadoSinTema = outcomeAnywhere(sinTema, question);
+      final seguro = {'directa', 'equivalente', 'modelo'};
+      final okEnTema = exigido == 'segura'
+          ? seguro.contains(resultadoEnTema)
+          : resultadoEnTema == 'directa' || resultadoEnTema == 'equivalente';
+      final okSinTema = switch (exigido) {
+        'libre' => true,
+        'directa' =>
+          resultadoSinTema == 'directa' || resultadoSinTema == 'equivalente',
+        // Sin tema, una pregunta que vale en varios contextos puede pedir
+        // elegir: lo que no puede es abrir otra pregunta.
+        _ =>
+          seguro.contains(resultadoSinTema) ||
+              (sinTema.type == ConversationRouteType.contextSelector ||
+                  sinTema.type == ConversationRouteType.noSafeRoute),
+      };
+      // Pedir la ropa abre la ropa, no toda la descripción.
+      if (question == 'Q.PER.DESC.ROPA' &&
+          enTema.pathQuestionIds.join() != question) {
+        fallas.add('«${c['texto']}» abre ${enTema.pathQuestionIds}');
+      }
+      if (!okEnTema) {
+        fallas.add('«${c['texto']}» en $context → ${describe(enTema)}');
+      }
+      if (!okSinTema) {
+        fallas.add('«${c['texto']}» sin tema → ${describe(sinTema)}');
+      }
+    }
+    expect(fallas, isEmpty, reason: fallas.join('\n'));
+  });
 }

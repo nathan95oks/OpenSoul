@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalog.dart';
 import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
@@ -145,6 +147,14 @@ class GraphMatcher {
     };
 
     final found = <_Found>[];
+    // Dentro del tema de la conversación una seña identifica aunque abunde
+    // en el banco: FOTOS está en muchas preguntas, pero en las amenazas solo
+    // en «¿Tiene fotos de la pantalla?».
+    bool distinctiveHere(String gloss) =>
+        _distinctive(gloss) ||
+        (activeContextId != null &&
+            _journeyGlossFrequency(activeContextId, gloss) <=
+                _distinctiveMaxQuestions);
 
     // 1. Por contenido, solo entre las preguntas que responden lo pedido:
     //    compartir el tema («robar», «celular») no basta si piden otro dato.
@@ -153,7 +163,7 @@ class GraphMatcher {
       final shared = content.intersection(sig.content);
       if (shared.isEmpty) continue;
       final full = sig.content.every(content.contains);
-      final distinctive = shared.where(_distinctive).toSet();
+      final distinctive = shared.where(distinctiveHere).toSet();
       if (!full && distinctive.isEmpty) continue;
       if (!_slotsAgree(sig.slots, slots, polar: sig.polar)) continue;
       // Una pregunta de sí/no reconocida solo por la palabra que nombra el
@@ -168,8 +178,13 @@ class GraphMatcher {
       if (sig.polar && full && shared.every(cues.contains)) continue;
       var score = _dice(content, sig.content);
       // Toda la pregunta está en el turno: segura, pero no exacta si el
-      // turno dice más cosas (ver paso 3).
-      if (full && score < strongMatch) score = strongMatch;
+      // turno dice más cosas (ver paso 3). Una sola seña genérica no basta
+      // para reconocer una pregunta: ESCRIBIR aparece en decenas.
+      if (full &&
+          score < strongMatch &&
+          (distinctive.isNotEmpty || sig.content.length > 1)) {
+        score = strongMatch;
+      }
       if (score < weakMatch) continue;
       final answered = sig.slots.isEmpty && sig.polar
           ? slots.intersection(const {'polarity'})
@@ -236,7 +251,188 @@ class GraphMatcher {
       );
     }
 
+    _weighText(found, turn.text, slots);
+    _preferJourney(found, activeContextId, turn);
     return _settle(found, glosses);
+  }
+
+  /// Preguntas del recorrido activo que llevan [gloss] en su formulación.
+  int _journeyGlossFrequency(String contextId, String gloss) => {
+    for (final s in _signatures)
+      if (s.content.contains(gloss) &&
+          catalog.isStepOf(contextId, s.entry.questionId))
+        s.entry.questionId,
+  }.length;
+
+  /// En una conversación ya situada, si el recorrido activo tiene una
+  /// pregunta segura para el turno, lo demás deja de serlo: una pregunta de
+  /// otro recorrido o sin recorrido no debe, por contener más palabras,
+  /// desplazar a la del tema. Nombrar otro contexto sí cambia de tema.
+  void _preferJourney(
+    List<_Found> found,
+    String? activeContextId,
+    SemanticTurn turn,
+  ) {
+    if (activeContextId == null) return;
+    if (turn.mentionedContexts.any(
+      (m) => !m.isFamily && m.id != activeContextId,
+    )) {
+      return;
+    }
+    bool inJourney(_Found f) =>
+        catalog.isStepOf(activeContextId, f.sig.entry.questionId);
+    final ours = [
+      for (final f in found)
+        if (f.score >= strongMatch && inJourney(f)) f,
+    ];
+    if (ours.isEmpty) return;
+    // Solo compite lo que responde al mismo dato: en «¿Te robaron el
+    // celular y cuándo fue?» la confirmación y el cuándo son dos preguntas.
+    final covered = {for (final f in ours) ...f.slots};
+    for (final f in found) {
+      if (f.score >= strongMatch &&
+          !inJourney(f) &&
+          f.slots.difference(covered).isEmpty) {
+        f.score = strongMatch - 0.01;
+      }
+    }
+  }
+
+  /// 5. El español del oyente como segunda evidencia. La traducción puede
+  ///    deletrear lo que no tiene seña (NÚMERO, MENSAJE, CONSULTAR) y dejar
+  ///    sin qué comparar, mientras el texto repite casi literalmente una
+  ///    pregunta real del funcionario.
+  ///
+  ///    * Casi literal: manda el texto. Lo que las glosas leyeron y el texto
+  ///      no respalda con seguridad sale.
+  ///    * Si no: donde el texto apunta a otras preguntas, una lectura por
+  ///      glosas que el texto no respalda en nada deja de ser segura, y las
+  ///      preguntas del texto quedan como candidatas para el modelo.
+  void _weighText(List<_Found> found, String text, Set<String> slots) {
+    final hits = _textEvidence(text, slots);
+    if (hits.isEmpty) return;
+    double support(_Found f) => hits[f.sig.entry.questionId]?.score ?? 0;
+    // Solo se juzgan por el texto las coincidencias por contenido. Las que
+    // responden a un dato pedido («¿Quién…?» → quién fue) se eligieron por
+    // lo que se pide, no por parecido de palabras.
+    bool byContent(_Found f) => f.shared.isNotEmpty;
+
+    void add(String questionId, double score) {
+      final hit = hits[questionId]!;
+      final existing = found
+          .where((f) => f.sig.entry.questionId == questionId)
+          .toList();
+      if (existing.isNotEmpty) {
+        for (final f in existing) {
+          if (f.score < score) f.score = score;
+        }
+        return;
+      }
+      final sig = hit.signature;
+      final answered = sig.slots.isEmpty && sig.polar
+          ? slots.intersection(const {'polarity'})
+          : sig.slots.intersection(slots);
+      found.add(_Found(sig, score, answered, const {}));
+    }
+
+    final literal = [
+      for (final e in hits.entries)
+        if (e.value.score >= exactMatch) e.key,
+    ];
+    if (literal.isNotEmpty) {
+      found.removeWhere((f) => byContent(f) && support(f) < strongMatch);
+      for (final q in literal) {
+        add(q, hits[q]!.score);
+      }
+      return;
+    }
+    final supported = [
+      for (final e in hits.entries)
+        if (e.value.score >= weakMatch) e.key,
+    ];
+    if (supported.isEmpty) return;
+    for (final f in found) {
+      if (byContent(f) &&
+          f.score >= strongMatch &&
+          f.score < exactMatch &&
+          support(f) == 0) {
+        f.score = strongMatch - 0.01;
+      }
+    }
+    for (final q in supported) {
+      add(q, math.min(hits[q]!.score, strongMatch - 0.01));
+    }
+  }
+
+  /// Preguntas distintas en las que aparece cada palabra del corpus.
+  late final Map<String, int> _textQuestionFrequency = () {
+    final perToken = <String, Set<String>>{};
+    for (final e in catalog.replyEntries) {
+      for (final t in _entryTokens[e.id]!) {
+        perToken.putIfAbsent(t, () => <String>{}).add(e.questionId);
+      }
+    }
+    return {for (final e in perToken.entries) e.key: e.value.length};
+  }();
+
+  late final int _textQuestionCount = {
+    for (final e in catalog.replyEntries) e.questionId,
+  }.length;
+
+  /// Cuánto identifica una palabra: «tiene» o «puede» aparecen en decenas
+  /// de preguntas, «mensajes» en pocas. Una palabra que el corpus no usa no
+  /// cuenta ni a favor ni en contra.
+  double _textWeight(String token) {
+    final df = _textQuestionFrequency[token];
+    if (df == null) return 0;
+    return math.log(1 + _textQuestionCount / df);
+  }
+
+  /// Parecido del texto (o de cada una de sus cláusulas) con cada forma real
+  /// de hacer cada pregunta del banco, entre las que responden lo pedido:
+  /// cuánto de la pregunta está en el texto y cuánto del texto explica,
+  /// pesando cada palabra por lo que identifica.
+  /// Puntuación del texto por pregunta (ver [_textEvidence]).
+  Map<String, double> textScores(
+    String text, {
+    Set<String> slots = const {},
+  }) => {
+    for (final e in _textEvidence(text, slots).entries) e.key: e.value.score,
+  };
+
+  Map<String, ({_Signature signature, double score})> _textEvidence(
+    String text,
+    Set<String> slots,
+  ) {
+    final best = <String, ({_Signature signature, double score})>{};
+    double weightOf(Iterable<String> tokens) =>
+        tokens.fold(0.0, (sum, t) => sum + _textWeight(t));
+    for (final span in {text, ..._clauses(text)}) {
+      final known = {
+        for (final t in DialogueGraph.tokensOf(span))
+          if (_textWeight(t) > 0) t,
+      };
+      if (known.isEmpty) continue;
+      final knownWeight = weightOf(known);
+      for (final sig in _signatures) {
+        if (slots.isNotEmpty &&
+            !_slotsAgree(sig.slots, slots, polar: sig.polar)) {
+          continue;
+        }
+        final tokens = _entryTokens[sig.entry.id]!;
+        final shared = known.intersection(tokens);
+        if (shared.isEmpty) continue;
+        final sharedWeight = weightOf(shared);
+        final recall = sharedWeight / weightOf(tokens);
+        final precision = sharedWeight / knownWeight;
+        final score = 2 * precision * recall / (precision + recall);
+        final previous = best[sig.entry.questionId];
+        if (previous == null || score > previous.score) {
+          best[sig.entry.questionId] = (signature: sig, score: score);
+        }
+      }
+    }
+    return best;
   }
 
   /// La pregunta que pide solo [slot], por etapas: primero la misma forma

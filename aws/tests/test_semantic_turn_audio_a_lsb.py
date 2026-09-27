@@ -157,6 +157,16 @@ class DatoPedidoFrenteAlTema(unittest.TestCase):
                 self.assertIn("description", lectura["requestedSlots"])
                 self.assertEqual(lectura["intent"], "askInformation")
 
+    def test_llevar_puesto_pide_la_ropa_pero_robar_ropa_no(self):
+        for texto in ("puede indicar que llevaba puesto el individuo",
+                      "puede decirme la ropa que llevaba puesta o sus colores",
+                      "¿Cómo estaba vestido?"):
+            with self.subTest(texto=texto):
+                lectura = _lectura(texto, ["LLEVAR", "QUE"])
+                self.assertIn("description", lectura["requestedSlots"])
+        lectura = _lectura("¿Qué ropa le robaron?", ["ROBAR", "QUE"])
+        self.assertNotIn("description", lectura["requestedSlots"])
+
     def test_como_sin_ser_en_pasado_no_pide_descripcion(self):
         lectura = _lectura("¿Cómo te robaron?", ["COMO", "ROBAR", "TU"])
         self.assertNotIn("description", lectura["requestedSlots"])

@@ -93,6 +93,52 @@ PARAFRASIS = [
 ]
 
 
+# Frases probadas en el teléfono (2026-09-27), escritas tal cual, con una
+# traducción plausible de Bedrock. `sinTema` es lo que debe pasar si es la
+# primera pregunta de la conversación: "directa" (abre la pregunta),
+# "selector" (elegir contexto) o "segura" (abre la pregunta o deja que el
+# modelo elija entre candidatas reales, nunca otra pregunta).
+DISPOSITIVO = [
+    ("las amenzas le llegaron por algun medio?",
+     ["AMENAZAR", "ESCRIBIR", "LLEGAR", "QUÉ"], "amenaza_digital", "Q.DIG.CANAL", "segura"),
+    ("las amenzas le llegaron por algun medio?",
+     ["AMENAZAR", "LLEGAR", "CÓMO"], "amenaza_digital", "Q.DIG.CANAL", "segura"),
+    ("conoce el numero desde el que le escribieron?",
+     ["NÚMERO", "ESCRIBIR", "CONOCER"], "amenaza_digital", "Q.DIG.NUMERO_CONOCE", "directa"),
+    ("sigue recibiendo mensajes?", ["AÚN", "MENSAJE", "RECIBIR"],
+     "amenaza_digital", "Q.DIG.CONTINUA", "directa"),
+    ("sigue recibiendo mensajes?", ["SEGUIR", "ESCRIBIR", "RECIBIR"],
+     "amenaza_digital", "Q.DIG.CONTINUA", "directa"),
+    ("tiene fotos o videos?", ["FOTOS", "VIDEO", "TENER"], "denuncia_robo",
+     "Q.EVI.QUE_TIENE", "segura"),
+    # Sin tema, «fotos o videos» abre las pruebas del robo (caso anterior).
+    ("tiene fotos o videos?", ["FOTOS", "VIDEO", "TENER"], "amenaza_digital",
+     "Q.DIG.CAPTURAS", "libre"),
+    ("que tramite desea realizar", ["TRÁMITE", "HACER", "QUERER", "QUÉ"],
+     None, "SELECTOR", "selector"),
+    ("vino a consultar el estado de su caso", ["VENIR", "SABER", "QUERER"],
+     "seguimiento", "Q.SEG.ESTADO_CASO", "directa"),
+    ("puede indicar que llevaba puesto el individuo",
+     ["HOMBRE", "LLEVAR", "QUÉ", "PUEDO"], "denuncia_robo", "Q.PER.DESC.ROPA", "directa"),
+    ("puede decirme la ropa que llevaba puesta o sus colores",
+     ["ROPA", "COLOR", "LLEVAR", "DECIR", "PUEDO"], "denuncia_robo",
+     "Q.PER.DESC.ROPA", "directa"),
+    ("usted fue testigo de un crimen?", ["TÚ", "TESTIGO", "CRIMEN"], "otro",
+     "Q.TES.QUE_VIO", "directa"),
+    # Las que ya funcionaban en el teléfono no pueden romperse.
+    ("necesita hablar con el fiscal?", ["FISCAL", "HABLAR", "NECESITAR"],
+     "seguimiento", "Q.SEG.HABLAR_FISCAL", "directa"),
+    ("tiene su carnet de identidad?", ["TÚ", "CARNET", "TENER"],
+     "identificacion", "Q.ID.DOC_TIENE", "directa"),
+    ("vino solo o acompañado?", ["VENIR", "SOLO", "ACOMPAÑAR", "CUÁL"],
+     "identificacion", "Q.ID.ACOMPANANTE", "directa"),
+    ("cuando presento su denuncia", ["QUEJAR", "PRESENTAR", "CUÁNDO"],
+     "seguimiento", "Q.SEG.FECHA_DENUNCIA", "directa"),
+    ("le sustrajeron o robaron algo de dinero?", ["BILLETES", "ROBAR", "QUÉ"],
+     "denuncia_robo", "Q.ROB.QUE", "segura"),
+]
+
+
 def _nodos_oyente(grafo):
     for n in grafo["nodes"]:
         if n.get("speaker") == "hearing" and n.get("bankQuestion") and "C" in n.get("modes", []):
@@ -173,6 +219,11 @@ def generar():
     for i, (texto, glosas, contexto, pregunta) in enumerate(PARAFRASIS, 1):
         casos.append(_caso(f"parafrasis-{i:02d}", "parafrasis", texto, glosas,
                            contexto, pregunta, simuladas=True))
+    for i, (texto, glosas, contexto, pregunta, sin_tema) in enumerate(DISPOSITIVO, 1):
+        caso = _caso(f"dispositivo-{i:02d}", "dispositivo", texto, glosas,
+                     contexto, pregunta, simuladas=True)
+        caso["sinTema"] = sin_tema
+        casos.append(caso)
     return casos
 
 

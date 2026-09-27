@@ -127,6 +127,29 @@ class LsbGlossSemantics {
     'APARIENCIA': 'description',
     'RASGO': 'description',
     'FISICAMENTE': 'description',
+    'VESTI': 'description',
+  };
+
+  /// «¿Qué ropa llevaba?», «¿qué llevaba puesto?»: un verbo de llevar puesto
+  /// junto a la prenda (o «puesto») pide la ropa. Sin el verbo, «¿qué ropa le
+  /// robaron?» pregunta por el objeto robado.
+  static const Set<String> spokenWearVerbs = {
+    'LLEVABA',
+    'LLEVABAN',
+    'USABA',
+    'USABAN',
+    'TENIA',
+    'TENIAN',
+  };
+
+  static const Set<String> spokenWearWords = {
+    'ROPA',
+    'PRENDA',
+    'PRENDAS',
+    'PUESTO',
+    'PUESTA',
+    'PUESTOS',
+    'PUESTAS',
   };
 
   /// «¿Cómo era?», «¿cómo lucían?»: CÓMO + ser/lucir en pasado.
@@ -242,13 +265,36 @@ class LsbGlossSemantics {
     return slots;
   }
 
+  /// El turno pide la ropa: un verbo de llevar puesto con la prenda, o
+  /// «vestido», «vestía».
+  static bool asksClothing(String text) {
+    final keys = {for (final w in _words(text)) _plain(w)};
+    return keys.any((k) => k.startsWith('VESTI')) ||
+        (keys.any(spokenWearVerbs.contains) &&
+            keys.any(spokenWearWords.contains));
+  }
+
+  /// La frase nombra la ropa («¿Qué ropa llevaba?»). El verbo solo no
+  /// basta: «¿Qué edad aproximada tenía?» no habla de ropa.
+  static bool speaksOfClothing(String phrase) {
+    final keys = {for (final w in _words(phrase)) _plain(w)};
+    return keys.any(
+      (k) => spokenWearWords.contains(k) || k.startsWith('VESTI'),
+    );
+  }
+
   static List<String> _stemSlotsOf(String text) {
     final out = <String>[];
-    for (final w in _words(text)) {
-      final key = _plain(w);
+    final keys = {for (final w in _words(text)) _plain(w)};
+    for (final key in keys) {
       for (final e in spokenStemSlots.entries) {
         if (key.startsWith(e.key) && !out.contains(e.value)) out.add(e.value);
       }
+    }
+    if (keys.any(spokenWearVerbs.contains) &&
+        keys.any(spokenWearWords.contains) &&
+        !out.contains('description')) {
+      out.add('description');
     }
     return out;
   }
