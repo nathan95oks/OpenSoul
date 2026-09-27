@@ -7,10 +7,12 @@ ninguna. No inventa señas: solo puede nombrar glosas del catálogo, y toda
 glosa que no esté en él se descarta aquí, diga lo que diga el modelo. Una
 seña «parecida» o «relacionada» tampoco vale: solo la equivalente.
 
-El catálogo es `glosas_opensoul.csv` (el de la app), empaquetado en el ZIP;
-solo cuentan las entradas «Catálogo Oficial», que tienen seña documentada.
-Las «Variante / Alias Semántico» son reglas del ensamblador de texto (PAGAR,
-DENUNCIAR): no hay seña detrás.
+El catálogo es `catalogo_senas.json` (junto a este archivo, versionado y
+empaquetado en el ZIP): las señas «Catálogo Oficial» de la app, que tienen
+seña documentada, con sus formas en español. Las «Variante / Alias
+Semántico» (PAGAR, DENUNCIAR) son reglas del ensamblador de texto, sin seña
+detrás, y no están. Se regenera con
+`python tool/rag_equivalencias.py --actualizar-catalogo`.
 
 Lo que se propone aquí no se aplica solo: `tool/rag_equivalencias.py` lo
 guarda para revisar y decide qué se aprueba.
@@ -18,16 +20,13 @@ guarda para revisar y decide qué se aprueba.
 
 from __future__ import annotations
 
-import csv
 import json
 import os
 import re
 import unicodedata
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
-CATALOGO_PATH = os.path.join(AQUI, "glosas_opensoul.csv")
-CATALOGO_REPO = os.path.join(os.path.dirname(AQUI), "assets", "dictionary",
-                             "glosas_opensoul.csv")
+CATALOGO_PATH = os.path.join(AQUI, "catalogo_senas.json")
 
 MAX_PALABRAS = 10
 MAX_EJEMPLOS = 3
@@ -39,23 +38,18 @@ def _norm(texto: str) -> str:
     return "".join(c for c in sin if unicodedata.category(c) != "Mn")
 
 
+def cargar_formas(ruta: str | None = None) -> dict:
+    """{glosa: [formas en español]} de las señas oficiales, o {}."""
+    ruta = ruta or CATALOGO_PATH
+    if not os.path.exists(ruta):
+        return {}
+    with open(ruta, encoding="utf-8") as f:
+        return json.load(f)
+
+
 def cargar_catalogo(ruta: str | None = None) -> dict:
     """{glosa: significado} de las señas oficiales, o {} sin catálogo."""
-    for candidata in ([ruta] if ruta else [CATALOGO_PATH, CATALOGO_REPO]):
-        if not candidata or not os.path.exists(candidata):
-            continue
-        with open(candidata, encoding="utf-8-sig") as f:
-            filas = list(csv.DictReader(f))
-        return {
-            r["Glosa"]: "; ".join(dict.fromkeys(
-                v.strip() for v in (r.get("Significado_Espanol", ""),
-                                    r.get("Forma_Espanol_Oracion", ""))
-                if v and v.strip()))
-            for r in filas
-            if (r.get("Tipo_Entrada") or "").startswith("Cat")
-            and r.get("Glosa")
-        }
-    return {}
+    return {g: "; ".join(f) for g, f in cargar_formas(ruta).items()}
 
 
 def validar_pedido(body: dict) -> tuple:

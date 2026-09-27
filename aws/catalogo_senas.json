@@ -1,0 +1,1337 @@
+{
+ "0": [
+  "0"
+ ],
+ "1": [
+  "1"
+ ],
+ "2": [
+  "2"
+ ],
+ "3": [
+  "3"
+ ],
+ "4": [
+  "4"
+ ],
+ "5": [
+  "5"
+ ],
+ "6": [
+  "6"
+ ],
+ "7": [
+  "7"
+ ],
+ "8": [
+  "8"
+ ],
+ "9": [
+  "9"
+ ],
+ "A": [
+  "a"
+ ],
+ "ABOGADO": [
+  "Abogado",
+  "un abogado"
+ ],
+ "ABRIR": [
+  "Abrir",
+  "abrí"
+ ],
+ "ABUSAR": [
+  "Abusar",
+  "cometió abusos"
+ ],
+ "ACEPTAR": [
+  "Aceptar",
+  "acepto"
+ ],
+ "ACOMPAÑAR": [
+  "Acompañar",
+  "acompañar"
+ ],
+ "ADULTO": [
+  "Adulto",
+  "adulto"
+ ],
+ "AHORA": [
+  "Ahora",
+  "ahora mismo"
+ ],
+ "ALCALDÍA": [
+  "Alcaldía",
+  "en la alcaldía"
+ ],
+ "ALLÁ": [
+  "Allá",
+  "allá"
+ ],
+ "ALLÍ": [
+  "Allí",
+  "allí"
+ ],
+ "ALTO": [
+  "Alto",
+  "alto"
+ ],
+ "AL_LADO": [
+  "el",
+  "al lado"
+ ],
+ "AMBOS": [
+  "Ambos",
+  "ambos"
+ ],
+ "AMENAZAR": [
+  "Amenazar",
+  "amenazó"
+ ],
+ "AMIGO": [
+  "Amigo",
+  "un amigo"
+ ],
+ "ANDAR": [
+  "Andar",
+  "caminaba"
+ ],
+ "ANTEAYER": [
+  "Anteayer",
+  "anteayer"
+ ],
+ "AQUÍ": [
+  "Aquí",
+  "aquí"
+ ],
+ "ARREGLAR": [
+  "Arreglar",
+  "quiero corregir"
+ ],
+ "ARRESTAR": [
+  "Arrestar",
+  "arrestaron"
+ ],
+ "ASISTENCIA": [
+  "Asistencia",
+  "asistencia"
+ ],
+ "ASISTENTE": [
+  "Asistente",
+  "un asistente"
+ ],
+ "ASOCIACIÓN_SORDOS": [
+  "asociación (sordos)",
+  "la asociación de sordos"
+ ],
+ "ATENDER": [
+  "Atender",
+  "atender"
+ ],
+ "ATRÁS": [
+  "Atrás",
+  "atrás"
+ ],
+ "AUMENTAR": [
+  "Aumentar",
+  "quiero agregar información"
+ ],
+ "AUTORIDAD": [
+  "Autoridad",
+  "la autoridad"
+ ],
+ "AUXILIO": [
+  "Auxilio",
+  "auxilio urgente"
+ ],
+ "AVENIDA": [
+  "Avenida",
+  "en la avenida"
+ ],
+ "AVISAR": [
+  "Avisar",
+  "avisar"
+ ],
+ "AYER": [
+  "Ayer",
+  "ayer"
+ ],
+ "AYUDAR": [
+  "Ayudar",
+  "necesito ayuda"
+ ],
+ "AZUL": [
+  "Azul",
+  "de color azul"
+ ],
+ "AÑO": [
+  "Año",
+  "año"
+ ],
+ "AÑO_PASADO": [
+  "año pasado",
+  "el año pasado"
+ ],
+ "AÚN": [
+  "Aún",
+  "aún"
+ ],
+ "B": [
+  "b"
+ ],
+ "BAJO": [
+  "Bajo",
+  "bajo"
+ ],
+ "BANCO": [
+  "Banco",
+  "en el banco"
+ ],
+ "BARRIO": [
+  "Barrio",
+  "en el barrio"
+ ],
+ "BILLETES": [
+  "Billetes",
+  "billetes y dinero"
+ ],
+ "BOCA": [
+  "Boca",
+  "la boca"
+ ],
+ "BOLSA": [
+  "Bolsa",
+  "mi bolsa"
+ ],
+ "BRAZO": [
+  "Brazo",
+  "el brazo"
+ ],
+ "BUENO": [
+  "Bueno",
+  "bueno"
+ ],
+ "BUENOS_DÍAS": [
+  "buenos días"
+ ],
+ "BURLAR": [
+  "Burlar",
+  "se burlaron"
+ ],
+ "BUSCAR": [
+  "Buscar",
+  "quiero buscar"
+ ],
+ "C": [
+  "c"
+ ],
+ "CABELLO": [
+  "Cabello",
+  "el cabello"
+ ],
+ "CADA_DÍA": [
+  "cada día"
+ ],
+ "CAJA": [
+  "Caja",
+  "la caja"
+ ],
+ "CALLE": [
+  "Calle",
+  "en la calle"
+ ],
+ "CAMBIAR": [
+  "Cambiar",
+  "cambié"
+ ],
+ "CARO": [
+  "Caro",
+  "costoso"
+ ],
+ "CARPETA": [
+  "Carpeta",
+  "la carpeta de documentos"
+ ],
+ "CASA": [
+  "Casa",
+  "en mi casa"
+ ],
+ "CELULAR": [
+  "Celular",
+  "mi celular"
+ ],
+ "CERCA": [
+  "Cerca",
+  "cerca"
+ ],
+ "CERTIFICADO": [
+  "Certificado",
+  "un certificado"
+ ],
+ "CHAMARRA": [
+  "Chamarra",
+  "mi chamarra"
+ ],
+ "COCHABAMBA": [
+  "Cochabamba",
+  "en Cochabamba"
+ ],
+ "COMPAÑERO": [
+  "Compañera",
+  "un compañero"
+ ],
+ "COMPRAR": [
+  "Comprar",
+  "compré"
+ ],
+ "COMPRENDER": [
+  "Comprender",
+  "comprender"
+ ],
+ "COMPUTADORA": [
+  "Computadora",
+  "una computadora"
+ ],
+ "COMUNIDAD_SORDA": [
+  "comunidad sorda",
+  "la comunidad sorda"
+ ],
+ "CONFIANZA": [
+  "Confianza",
+  "tengo confianza"
+ ],
+ "CONOCER": [
+  "Conocido",
+  "conozco a esa persona"
+ ],
+ "CONTESTAR_DOS_VECES": [
+  "contestar dos veces",
+  "contesté dos veces"
+ ],
+ "CONTINUAR": [
+  "Continuar",
+  "continúa"
+ ],
+ "CONVOCAR": [
+  "Convocar",
+  "una citación"
+ ],
+ "CORTO": [
+  "Corto",
+  "corto"
+ ],
+ "CREER": [
+  "Creer",
+  "creo"
+ ],
+ "CURAR": [
+  "Curar",
+  "curar"
+ ],
+ "CUÁL": [
+  "¿Cuál?",
+  "cuál"
+ ],
+ "CUÁNDO": [
+  "¿Cuándo?",
+  "cuándo"
+ ],
+ "CUÁNTOS": [
+  "¿Cuántos?",
+  "cuántos"
+ ],
+ "CÁMARA_FOTOGRÁFICA": [
+  "cámara fotográfica",
+  "una cámara fotográfica"
+ ],
+ "CÓMO": [
+  "¿Cómo?",
+  "cómo"
+ ],
+ "D": [
+  "d"
+ ],
+ "DAR": [
+  "Dar",
+  "entregué"
+ ],
+ "DAÑAR": [
+  "Dañar",
+  "dañó"
+ ],
+ "DECIDIR": [
+  "Decidir",
+  "decidí"
+ ],
+ "DEJAR": [
+  "Dejar",
+  "dejé"
+ ],
+ "DENTRO": [
+  "Dentro",
+  "dentro"
+ ],
+ "DESCANSO": [
+  "Descanso",
+  "en horario de descanso"
+ ],
+ "DESPUÉS": [
+  "Después",
+  "después"
+ ],
+ "DEVOLVER": [
+  "Devolver",
+  "quiero que devuelvan"
+ ],
+ "DE_NADA": [
+  "de nada"
+ ],
+ "DIBUJAR": [
+  "Dibujar",
+  "dibujé"
+ ],
+ "DIFERENTE": [
+  "Diferente",
+  "diferente"
+ ],
+ "DIFÍCIL": [
+  "Difícil",
+  "difícil"
+ ],
+ "DIRECCIÓN": [
+  "Dirección",
+  "en mi dirección"
+ ],
+ "DISCRIMINACIÓN": [
+  "Discriminación",
+  "discriminación"
+ ],
+ "DOCTOR": [
+  "Doctor",
+  "un doctor"
+ ],
+ "DOLOR": [
+  "Dolor",
+  "dolor físico"
+ ],
+ "DORMIR": [
+  "Dormir",
+  "dormía"
+ ],
+ "DURANTE": [
+  "Durante",
+  "durante ese tiempo"
+ ],
+ "DÍA": [
+  "Día",
+  "día"
+ ],
+ "DÓNDE": [
+  "¿Dónde?",
+  "dónde"
+ ],
+ "E": [
+  "e"
+ ],
+ "EDAD": [
+  "Edad",
+  "tengo esa edad"
+ ],
+ "ELLA": [
+  "Ella",
+  "ella"
+ ],
+ "ELLOS": [
+  "Ellos",
+  "ellos"
+ ],
+ "EMPEZAR": [
+  "Empezar",
+  "empezó"
+ ],
+ "ENCONTRARSE": [
+  "Encontrarse",
+  "me encontré"
+ ],
+ "ENFRENTE": [
+  "Enfrente",
+  "enfrente"
+ ],
+ "ENGAÑAR": [
+  "Engañar",
+  "engañó y estafó"
+ ],
+ "ENVIAR": [
+  "Enviar",
+  "envié"
+ ],
+ "ESCAPAR": [
+  "Escapar",
+  "escapó"
+ ],
+ "ESCONDER": [
+  "Esconder",
+  "escondió"
+ ],
+ "ESCRIBIR": [
+  "Escribir",
+  "quiero escribir"
+ ],
+ "ESCUELA": [
+  "Escuela",
+  "en la escuela"
+ ],
+ "ESCUELA_NOCTURNA": [
+  "escuela nocturna",
+  "en la escuela nocturna"
+ ],
+ "ESPERAR": [
+  "Esperar",
+  "esperar"
+ ],
+ "ESPOSA": [
+  "Esposa",
+  "mi esposa"
+ ],
+ "ESTAR_DE_ACUERDO": [
+  "estar de acuerdo",
+  "estoy de acuerdo"
+ ],
+ "EVALUAR": [
+  "Evaluar",
+  "evaluar"
+ ],
+ "EXPLICAR": [
+  "Explicar",
+  "quiero explicar"
+ ],
+ "F": [
+  "f"
+ ],
+ "FACTURA": [
+  "Factura",
+  "la factura"
+ ],
+ "FECHA": [
+  "Fecha",
+  "en la fecha indicada"
+ ],
+ "FELCC": [
+  "felcc",
+  "en la FELCC"
+ ],
+ "FELCV": [
+  "felcv",
+  "en la FELCV"
+ ],
+ "FILMAR": [
+  "Filmar",
+  "filmé"
+ ],
+ "FISCALIA": [
+  "fiscalía",
+  "en la Fiscalía"
+ ],
+ "FLACO": [
+  "Flaco",
+  "delgado"
+ ],
+ "FOTOCOPIA": [
+  "Fotocopia",
+  "una fotocopia"
+ ],
+ "FOTOS": [
+  "Fotos",
+  "fotografías"
+ ],
+ "FRACTURA": [
+  "Fractura",
+  "una fractura"
+ ],
+ "FUERA": [
+  "Fuera",
+  "fuera"
+ ],
+ "FUNCIONAR": [
+  "Funcionar",
+  "funciona"
+ ],
+ "FUTURO": [
+  "Futuro",
+  "en el futuro"
+ ],
+ "G": [
+  "g"
+ ],
+ "GANAR_DINERO": [
+  "ganar dinero",
+  "gané dinero"
+ ],
+ "GOBIERNO": [
+  "Gobierno",
+  "el gobierno"
+ ],
+ "GORDO": [
+  "Gordo",
+  "de contextura gruesa"
+ ],
+ "GORRA": [
+  "Gorra",
+  "mi gorra"
+ ],
+ "GRACIAS": [
+  "Gracias",
+  "muchas gracias"
+ ],
+ "GRATIS": [
+  "Gratis",
+  "gratuito"
+ ],
+ "GRITAR": [
+  "Gritar",
+  "gritó"
+ ],
+ "GUARDAR": [
+  "Guardar",
+  "guardé"
+ ],
+ "H": [
+  "h"
+ ],
+ "HABLAR": [
+  "Hablar",
+  "quiero hablar"
+ ],
+ "HACER": [
+  "Hacer",
+  "hice"
+ ],
+ "HASTA_LUEGO": [
+  "hasta luego"
+ ],
+ "HASTA_MAÑANA": [
+  "hasta mañana"
+ ],
+ "HERIDA": [
+  "Herida",
+  "una herida"
+ ],
+ "HERMANA": [
+  "Hermana",
+  "mi hermana"
+ ],
+ "HERMANO": [
+  "Hermano",
+  "mi hermano"
+ ],
+ "HIJA": [
+  "Hija",
+  "mi hija"
+ ],
+ "HIJO": [
+  "Hijo",
+  "mi hijo"
+ ],
+ "HOLA": [
+  "Hola",
+  "hola"
+ ],
+ "HOMBRE": [
+  "Hombre",
+  "un hombre"
+ ],
+ "HORA": [
+  "Hora",
+  "hora"
+ ],
+ "HOSPITAL": [
+  "Hospital",
+  "en el hospital"
+ ],
+ "HOY": [
+  "Hoy",
+  "hoy"
+ ],
+ "HUESOS": [
+  "Huesos",
+  "los huesos"
+ ],
+ "I": [
+  "i"
+ ],
+ "IDENTIDAD": [
+  "Identidad",
+  "mi carnet de identidad"
+ ],
+ "IDENTIFICAR": [
+  "Identificar",
+  "puedo identificar"
+ ],
+ "IGNORAR": [
+  "Ignorar",
+  "me ignoraron"
+ ],
+ "INSTITUCIÓN": [
+  "Institución",
+  "en la institución"
+ ],
+ "INTERNET": [
+  "Internet",
+  "por internet"
+ ],
+ "INTÉRPRETE": [
+  "Intérprete",
+  "un intérprete de LSB"
+ ],
+ "INVESTIGACIÓN": [
+  "Investigación",
+  "la investigación de mi caso"
+ ],
+ "IR": [
+  "Ir",
+  "fui"
+ ],
+ "J": [
+  "j"
+ ],
+ "JAMÁS": [
+  "Jamás",
+  "jamás"
+ ],
+ "JEFE": [
+  "Jefe",
+  "mi jefe"
+ ],
+ "JOVEN": [
+  "Joven",
+  "joven"
+ ],
+ "JUEVES": [
+  "Jueves",
+  "el jueves"
+ ],
+ "JUEZ": [
+  "Juez",
+  "el juez"
+ ],
+ "JULIO": [
+  "Julio",
+  "en julio"
+ ],
+ "JUSTICIA": [
+  "Justicia",
+  "la justicia"
+ ],
+ "JUZGADO": [
+  "juzgado",
+  "en el juzgado"
+ ],
+ "K": [
+  "k"
+ ],
+ "L": [
+  "l"
+ ],
+ "LADRÓN": [
+  "Ladrón/a",
+  "un ladrón"
+ ],
+ "LEER": [
+  "Leer",
+  "quiero leer"
+ ],
+ "LEJOS": [
+  "Lejos",
+  "lejos"
+ ],
+ "LENTES": [
+  "Lentes",
+  "mis lentes"
+ ],
+ "LENTO": [
+  "Lento",
+  "despacio"
+ ],
+ "LEY": [
+  "Ley",
+  "la ley"
+ ],
+ "LIBRE": [
+  "Libre",
+  "libre"
+ ],
+ "LISTA": [
+  "Lista",
+  "la lista"
+ ],
+ "LLAMAR": [
+  "Llamar",
+  "llamé"
+ ],
+ "LLEGAR": [
+  "Llegar",
+  "llegué"
+ ],
+ "LLEVAR": [
+  "Llevar",
+  "llevaba"
+ ],
+ "LO_SIENTO": [
+  "lo siento"
+ ],
+ "LUEGO": [
+  "Luego",
+  "luego"
+ ],
+ "LUNES": [
+  "Lunes",
+  "el lunes"
+ ],
+ "M": [
+  "m"
+ ],
+ "MAL": [
+  "Mal",
+  "mal"
+ ],
+ "MALTRATAR": [
+  "Maltratar",
+  "maltrató"
+ ],
+ "MAMÁ": [
+  "Mamá",
+  "mi mamá"
+ ],
+ "MARTES": [
+  "Martes",
+  "el martes"
+ ],
+ "MARZO": [
+  "Marzo",
+  "en marzo"
+ ],
+ "MAÑANA": [
+  "Mañana",
+  "mañana"
+ ],
+ "MEDICINA": [
+  "Medicina",
+  "medicinas"
+ ],
+ "MEJOR": [
+  "Mejor",
+  "mejor"
+ ],
+ "MENTIRA": [
+  "Mentira",
+  "es mentira"
+ ],
+ "MERCADO": [
+  "Mercado",
+  "en el mercado"
+ ],
+ "MES": [
+  "Mes",
+  "mes"
+ ],
+ "MICRO": [
+  "Micro",
+  "un micro"
+ ],
+ "MIEDO": [
+  "Miedo",
+  "tengo miedo"
+ ],
+ "MINUTO": [
+  "Minuto",
+  "minuto"
+ ],
+ "MIRAR": [
+  "Ver",
+  "vi"
+ ],
+ "MOCHILA": [
+  "Mochila",
+  "mi mochila"
+ ],
+ "MOMENTO": [
+  "Momento",
+  "en ese momento"
+ ],
+ "MOSTRAR": [
+  "Mostrar",
+  "puedo mostrar"
+ ],
+ "MUCHO": [
+  "Mucho",
+  "mucho"
+ ],
+ "MUJER": [
+  "Mujer",
+  "una mujer"
+ ],
+ "MÁS_O_MENOS": [
+  "más o menos"
+ ],
+ "MÍO": [
+  "Mío",
+  "mi"
+ ],
+ "N": [
+  "n"
+ ],
+ "NARRAR": [
+  "Narrar",
+  "quiero relatar"
+ ],
+ "NECESITAR": [
+  "Necesitar",
+  "necesitar"
+ ],
+ "NEGRO": [
+  "Negro",
+  "de color negro"
+ ],
+ "NO": [
+  "No",
+  "no"
+ ],
+ "NOMBRE": [
+  "Nombre",
+  "mi nombre es"
+ ],
+ "NOSOTROS": [
+  "Nosotros",
+  "nosotros"
+ ],
+ "NO_ESTAR_DE_ACUERDO": [
+  "no estar de acuerdo",
+  "no estoy de acuerdo"
+ ],
+ "NO_PUEDO": [
+  "no puedo"
+ ],
+ "NO_SABER": [
+  "no saber",
+  "no sé"
+ ],
+ "NUEVO": [
+  "Nuevo",
+  "nuevo"
+ ],
+ "O": [
+  "o"
+ ],
+ "OBSERVAR": [
+  "Observar",
+  "observé"
+ ],
+ "OCUPADO": [
+  "Ocupado",
+  "ocupado"
+ ],
+ "OFICIAL": [
+  "Oficial",
+  "un oficial"
+ ],
+ "OFICINA": [
+  "Oficina",
+  "en la oficina"
+ ],
+ "ORGANIZAR": [
+  "Organizar",
+  "organicé"
+ ],
+ "OSCURO": [
+  "Oscuro",
+  "oscuro"
+ ],
+ "OYENTE": [
+  "Oyente",
+  "oyente"
+ ],
+ "OÍR": [
+  "Oír",
+  "escuché"
+ ],
+ "P": [
+  "p"
+ ],
+ "PALABRA": [
+  "Palabra",
+  "palabra"
+ ],
+ "PANTALÓN": [
+  "Pantalón",
+  "mi pantalón"
+ ],
+ "PAPEL": [
+  "Papel",
+  "el documento"
+ ],
+ "PAREJA": [
+  "Pareja",
+  "mi pareja"
+ ],
+ "PARIENTE": [
+  "Pariente",
+  "un pariente"
+ ],
+ "PASADO": [
+  "Pasado",
+  "en el pasado"
+ ],
+ "PASADO_MAÑANA": [
+  "pasado mañana"
+ ],
+ "PEDIR": [
+  "Pedir",
+  "solicito"
+ ],
+ "PEGAR": [
+  "Pegar",
+  "golpeó y pegó"
+ ],
+ "PELEAR": [
+  "Pelear",
+  "inició una pelea"
+ ],
+ "PERDER": [
+  "Perder",
+  "perdí"
+ ],
+ "PERMISO": [
+  "Permiso",
+  "con permiso"
+ ],
+ "PLAZA": [
+  "Plaza",
+  "en la plaza"
+ ],
+ "PLAZO": [
+  "Plazo",
+  "el plazo"
+ ],
+ "POCO": [
+  "Poco",
+  "poco"
+ ],
+ "POLERA": [
+  "Polera",
+  "mi polera"
+ ],
+ "POLICÍA": [
+  "Policía",
+  "en la policía"
+ ],
+ "POR_FAVOR": [
+  "por favor"
+ ],
+ "POSTERGAR": [
+  "Postergar",
+  "postergar"
+ ],
+ "PREOCUPAR": [
+  "Preocupar",
+  "estoy preocupado"
+ ],
+ "PRESENTAR": [
+  "Presentar",
+  "quiero presentar"
+ ],
+ "PRIMERA_VEZ": [
+  "primera vez",
+  "la primera vez"
+ ],
+ "PROHIBIDO": [
+  "Prohibido",
+  "prohibido"
+ ],
+ "PROTEGER": [
+  "Proteger",
+  "necesito protección"
+ ],
+ "PROVINCIA": [
+  "Provincia",
+  "en la provincia"
+ ],
+ "PRÓXIMO": [
+  "Próximo",
+  "el próximo"
+ ],
+ "PUEDO": [
+  "Puedo",
+  "puedo"
+ ],
+ "PUERTA": [
+  "Puerta",
+  "la puerta"
+ ],
+ "PÁGINA": [
+  "Página",
+  "la página"
+ ],
+ "Q": [
+  "q"
+ ],
+ "QUEJAR": [
+  "Quejar",
+  "quejar"
+ ],
+ "QUERER": [
+  "Querer",
+  "querer"
+ ],
+ "QUIÉN": [
+  "¿Quién?",
+  "quién"
+ ],
+ "QUÉ": [
+  "¿Qué?",
+  "qué"
+ ],
+ "R": [
+  "r"
+ ],
+ "RAYOS_X": [
+  "rayos x",
+  "placas de rayos X"
+ ],
+ "RECHAZAR": [
+  "Rechazar",
+  "rechazo"
+ ],
+ "RECIBIR": [
+  "Recibir",
+  "recibí"
+ ],
+ "RECORDAR": [
+  "Recordar",
+  "recuerdo"
+ ],
+ "RESOLUCIÓN": [
+  "Resolución",
+  "una resolución"
+ ],
+ "RESULTADO": [
+  "Resultado",
+  "el resultado"
+ ],
+ "REUNIÓN": [
+  "Reunión",
+  "reunión"
+ ],
+ "ROBAR": [
+  "Robar",
+  "robó"
+ ],
+ "ROJO": [
+  "Rojo",
+  "de color rojo"
+ ],
+ "S": [
+  "s"
+ ],
+ "SABER": [
+  "Saber",
+  "sé"
+ ],
+ "SEGUNDO": [
+  "Segundo",
+  "segundo"
+ ],
+ "SELLO": [
+  "Sello",
+  "un sello oficial"
+ ],
+ "SEMANA": [
+  "Semana",
+  "semana"
+ ],
+ "SEPARADOS": [
+  "Separados",
+  "separados"
+ ],
+ "SEPDAVI": [
+  "sepdavi",
+  "en el SEPDAVI"
+ ],
+ "SEPDEP": [
+  "sepdep",
+  "en el SEPDEP"
+ ],
+ "SEÑOR": [
+  "Señor",
+  "el señor"
+ ],
+ "SIEMPRE": [
+  "Siempre",
+  "siempre"
+ ],
+ "SORDO": [
+  "Sordo",
+  "una persona sorda"
+ ],
+ "SUYO": [
+  "Suyo",
+  "suyo"
+ ],
+ "SÁBADO": [
+  "Sábado",
+  "el sábado"
+ ],
+ "SÍ": [
+  "Sí",
+  "sí"
+ ],
+ "T": [
+  "t"
+ ],
+ "TAL_VEZ": [
+  "tal vez"
+ ],
+ "TARDE": [
+  "Tarde",
+  "por la tarde"
+ ],
+ "TEMPRANO": [
+  "Temprano",
+  "temprano"
+ ],
+ "TENER": [
+  "Tener",
+  "tener"
+ ],
+ "TERMINAR": [
+  "Terminar",
+  "terminó"
+ ],
+ "TESTIGO": [
+  "Testigo",
+  "un testigo"
+ ],
+ "TESTIMONIO": [
+  "Testimonio",
+  "mi testimonio"
+ ],
+ "TIENDA": [
+  "Tienda",
+  "en la tienda"
+ ],
+ "TODOS_LOS_DÍAS": [
+  "todos los días"
+ ],
+ "TOTAL": [
+  "Total",
+  "total"
+ ],
+ "TRABAJADOR": [
+  "Trabajador",
+  "un trabajador"
+ ],
+ "TRAER": [
+  "Traer",
+  "puedo traer"
+ ],
+ "TRISTE": [
+  "Triste",
+  "estoy triste"
+ ],
+ "TRUFI": [
+  "Trufi",
+  "un trufi"
+ ],
+ "TRÁMITE": [
+  "Trámite",
+  "un trámite"
+ ],
+ "TUYO": [
+  "Tuyo",
+  "su"
+ ],
+ "TÚ": [
+  "Tú",
+  "tú"
+ ],
+ "U": [
+  "u"
+ ],
+ "URGENTE": [
+  "Urgente",
+  "de manera urgente"
+ ],
+ "V": [
+  "v"
+ ],
+ "VARIOS": [
+  "Algunos",
+  "varios"
+ ],
+ "VENDER": [
+  "Vender",
+  "vendí"
+ ],
+ "VENIR": [
+  "Venir",
+  "vine"
+ ],
+ "VER": [
+  "Ver",
+  "vi"
+ ],
+ "VERDAD": [
+  "Verdad",
+  "es verdad"
+ ],
+ "VIDEO": [
+  "Video",
+  "un video"
+ ],
+ "VIERNES": [
+  "Viernes",
+  "el viernes"
+ ],
+ "VIOLENCIA": [
+  "Violencia",
+  "un hecho de violencia"
+ ],
+ "VIVIR": [
+  "Vivir",
+  "vivo"
+ ],
+ "VOLVER": [
+  "Volver",
+  "debo volver"
+ ],
+ "W": [
+  "w"
+ ],
+ "X": [
+  "x"
+ ],
+ "Y": [
+  "y"
+ ],
+ "YO": [
+  "Yo",
+  "yo"
+ ],
+ "Z": [
+  "z"
+ ],
+ "ÉL": [
+  "Él",
+  "él"
+ ],
+ "Ñ": [
+  "ñ"
+ ],
+ "ÓRGANO_JUDICIAL": [
+  "órgano judicial",
+  "en el Órgano Judicial"
+ ],
+ "ÚLTIMO": [
+  "Último",
+  "el último"
+ ]
+}

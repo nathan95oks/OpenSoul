@@ -13,7 +13,7 @@ python aws/deploy/build_package.py
 ## 0.1 Equivalencias con señas del catálogo (septiembre 2026)
 
 El paquete lleva también `rag_equivalencias.py` y el catálogo de señas de la
-app (`glosas_opensoul.csv`). Añade la acción `equivalencias`: para las
+app (`catalogo_senas.json`, versionado en `aws/`). Añade la acción `equivalencias`: para las
 palabras del corpus RAG que no tienen seña, el modelo de redacción
 (`BEDROCK_MODEL_ID`, el mismo que ya usa la Lambda) propone una seña oficial
 equivalente o ninguna, y la Lambda descarta cualquier glosa fuera del
@@ -102,8 +102,9 @@ Ninguna externa nueva: solo la biblioteca estándar más `boto3`, que el
 entorno de Lambda ya provee. Pero el paquete **no** es un único archivo:
 `lambda_function.py` importa `guided_composer.py` (que lee
 `question_bank.json`), `rag_consulta.py` (que lee
-`rag_escenarios_cbba.json`) y `rag_equivalencias.py` (que lee
-`glosas_opensoul.csv`). `build_package.py` mete los siete en el ZIP; si
+`rag_escenarios_cbba.json`), `rag_equivalencias.py` (que lee
+`catalogo_senas.json`) y `rag_revision.py`. `build_package.py` los mete en
+el ZIP; si
 alguno falta, la Lambda no arranca, certifica redacciones que ya no
 coinciden con el banco o no puede consultar el RAG.
 
