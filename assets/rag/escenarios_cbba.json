@@ -1,324 +1,379 @@
 {
- "version": 1,
- "fuente": "docs/negocio/escenarios_tramites_cochabamba_RAG_2026-09-27.md",
+ "version": 2,
+ "archivos": [
+  "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
+ ],
  "fuentes": {
   "F-DDRR-01": {
    "institucion": "Derechos Reales",
    "titulo": "Folio Real Actualizado — requisitos",
    "url": "https://cm.organojudicial.gob.bo/consejo/requisitosddrr/42_-folio-real-actualizado.html",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DDRR-02": {
    "institucion": "Derechos Reales",
    "titulo": "Certificado de Gravámenes",
    "url": "https://cm.organojudicial.gob.bo/consejo/manualprocedimientosddrr/46_-certificado-de-gravamenes.html",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DDRR-03": {
    "institucion": "Derechos Reales",
    "titulo": "Certificado Alodial — requisitos",
    "url": "https://cm.organojudicial.gob.bo/consejo/requisitosddrr/45_-certificado-alodial.html",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DDRR-04": {
    "institucion": "Derechos Reales",
    "titulo": "Compra Venta — procedimiento",
    "url": "https://cm.organojudicial.gob.bo/consejo/manualprocedimientosddrr/4_-compra-venta.html",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-IMP-01": {
    "institucion": "GAM Cochabamba",
    "titulo": "Consulta de deudas",
    "url": "https://www.gob.bo/tramites/consulta-de-deudas",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-IMP-02": {
    "institucion": "RUAT",
    "titulo": "Consulta deuda — vehículos",
    "url": "https://www.ruat.gob.bo/vehiculos/consultageneral/InicioBusquedaVehiculo.jsf",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-IMP-03": {
    "institucion": "RUAT",
    "titulo": "Consulta deuda — inmuebles",
    "url": "https://www.ruat.gob.bo/inmuebles/consultageneral/InicioBusquedaInmueble.jsf",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-IMP-04": {
    "institucion": "RUAT",
    "titulo": "Preguntas frecuentes",
    "url": "https://ns01.ruat.gob.bo/informaciongeneral/preguntasfrecuentes/InicioPreguntasFrecuentes.jsf",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-IMP-05": {
    "institucion": "Opinión",
    "titulo": "Perdonazo y pronto pago 2026",
    "url": "https://www.opinion.com.bo/cochabamba/amplia-perdonazo-octubre-habra-100-condonacion-multas-intereses/20260701171355992896.html",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FIS-01": {
    "institucion": "Ministerio Público",
    "titulo": "Código de Procedimiento Penal — denuncia",
    "url": "https://obs.organojudicial.gob.bo/wp-content/anexos/archivos/normativa/e0abc5c64b992ee58de451af9c9acde8.pdf",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FIS-02": {
    "institucion": "Ministerio Público",
    "titulo": "Fiscalía General del Estado / Fiscalía ROMA",
    "url": "https://www.fiscalia.gob.bo/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FIS-03": {
    "institucion": "Ministerio Público",
    "titulo": "Ecosistema ROMA en Expocruz 2026",
    "url": "https://www.fiscalia.gob.bo/comunicacion/noticias/el-ministerio-publico-le-muestra-a-bolivia-el-rostro-tecnologico-del-ecosistema-roma-argo-y-ley-n1636-en-la-expocruz-2026",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FIS-04": {
    "institucion": "Fiscalía Cochabamba",
    "titulo": "Puntos de información en plataformas",
    "url": "https://www.fiscalia.gob.bo/comunicacion/noticias/cochabamba-fiscalia-habilita-puntos-de-informacion-para-no-videntes-con-cartillas-informativas-braille-en-plataformas-de-atencion-al-publico",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-OJ-01": {
    "institucion": "Órgano Judicial",
    "titulo": "SIREJ — consulta",
    "url": "https://magistratura.organojudicial.gob.bo/sirej/?r=consulta%2Findex",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-OJ-02": {
    "institucion": "Órgano Judicial",
    "titulo": "SIREJ — forma de uso",
    "url": "https://magistratura.organojudicial.gob.bo/sirej/?r=formauso%2Findex",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-OJ-03": {
    "institucion": "TDJ Cochabamba",
    "titulo": "Contactos y horarios",
    "url": "https://tdjcbba.organojudicial.gob.bo/Home/Contact",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-OJ-04": {
    "institucion": "TDJ Cochabamba",
    "titulo": "Sede Los Ceibos",
    "url": "https://tdjcbba.organojudicial.gob.bo/Paper/Detail/13880",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-OJ-05": {
    "institucion": "TDJ Cochabamba",
    "titulo": "Sede EPI Sur",
    "url": "https://tdjcbba.organojudicial.gob.bo/Paper/Detail/13900",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-OJ-06": {
    "institucion": "Órgano Judicial",
    "titulo": "SIGC",
    "url": "https://justicia.organojudicial.gob.bo/login",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDEP-01": {
    "institucion": "SEPDEP",
    "titulo": "Sitio institucional — misión y defensa penal gratuita",
    "url": "https://sepdep.gob.bo/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDEP-02": {
    "institucion": "SEPDEP",
    "titulo": "Misión, visión y principios",
    "url": "https://sepdep.gob.bo/index.php/declaracion-de-la-mision-vision-valores-y-principios-de-la-entidad/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDEP-03": {
    "institucion": "SEPDEP",
    "titulo": "Direcciones y horarios",
    "url": "https://sepdep.gob.bo/index.php/contacto2/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDAVI-01": {
    "institucion": "SEPDAVI",
    "titulo": "Entidad y servicios",
    "url": "https://www.gob.bo/entidades/servicio-plurinacional-de-asistencia-a-la-victima",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDAVI-02": {
    "institucion": "SEPDAVI",
    "titulo": "Asesoramiento a víctimas de lesiones",
    "url": "https://www.gob.bo/tramites/asesoramiento-y-representacion-legal-a-victimas-de-lesiones-graves-y-leves",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDAVI-03": {
    "institucion": "SEPDAVI",
    "titulo": "Atención a víctimas de violencia familiar",
    "url": "https://www.gob.bo/tramites/apoyo-profesional-y-completo-a-victimas-de-violencia-familiar-o-domestica",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDAVI-04": {
    "institucion": "SEPDAVI",
    "titulo": "Direcciones",
    "url": "https://sepdavi.gob.bo/?page_id=17608",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEPDAVI-05": {
    "institucion": "SEPDAVI",
    "titulo": "Ruta de atención y procesos",
    "url": "https://sepdavi.gob.bo/?page_id=17664",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FELCC-01": {
    "institucion": "Policía Boliviana / FELCC",
    "titulo": "Trámites FELCC",
    "url": "https://www.policia.bo/tramite-felcc/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FELCC-02": {
    "institucion": "Policía Boliviana",
    "titulo": "Direcciones Generales y Nacionales",
    "url": "https://www.policia.bo/direcciones-nacionales/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FELCV-01": {
    "institucion": "Policía Boliviana",
    "titulo": "Direcciones Generales — FELCV",
    "url": "https://www.policia.bo/direcciones-nacionales/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-FELCV-02": {
    "institucion": "Policía Boliviana",
    "titulo": "Campaña Unidos contra la violencia",
    "url": "https://www.policia.bo/%F0%9D%97%96%F0%9D%97%94%F0%9D%97%A0%F0%9D%97%A3%F0%9D%97%94%F0%9D%97%A1%CC%83%F0%9D%97%94-%F0%9D%97%A8%F0%9D%97%A1%F0%9D%97%9C%F0%9D%97%97%F0%9D%97%A2%F0%9D%97%A6-%F0%9D%97%96%F0%9D%97%A2/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-LSB-01": {
    "institucion": "Defensoría del Pueblo",
    "titulo": "Atención virtual a personas sordas en LSB",
    "url": "https://www.defensoria.gob.bo/noticias/defensoria-del-pueblo-facilita-atencion-virtual-a-personas-sordas-mediante-interpretacion-en-lengua-de-senyas-boliviana",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SLIM-01": {
    "institucion": "GAM Cochabamba",
    "titulo": "Observatorio Municipal de Violencia — SLIM",
    "url": "https://observatorioviolencia.cochabamba.bo/nosotros",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SLIM-02": {
    "institucion": "GAM Cochabamba",
    "titulo": "SLIM y líneas de atención",
    "url": "https://cochabamba.bo/noticias/slim-atendido-35-casos-de-violencia",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DNA-01": {
    "institucion": "GAM Cochabamba",
    "titulo": "Información municipal con línea DNA",
    "url": "https://cochabamba.bo/noticias/slim-atendido-35-casos-de-violencia",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DNA-02": {
    "institucion": "Defensoría del Pueblo",
    "titulo": "Continuidad de servicios municipales Cochabamba",
    "url": "https://www.defensoria.gob.bo/oficinas/prensa/defensoria-del-pueblo-exhorta-a-municipios-de-cochabamba-a-garantizar-atencion-continua-durante-transicion-de-autoridades",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-NOT-01": {
    "institucion": "DIRNOPLU",
    "titulo": "Arancel del Notariado Plurinacional",
    "url": "https://astro.dnp.gob.bo/paginas/aranceles/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-NOT-02": {
    "institucion": "DIRNOPLU",
    "titulo": "Portal institucional y buscador de notarios",
    "url": "https://astro.dnp.gob.bo/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-NOT-03": {
    "institucion": "DIRNOPLU",
    "titulo": "Normativa notarial",
    "url": "https://astro.dnp.gob.bo/paginas/normativa/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SEGIP-01": {
    "institucion": "SEGIP",
    "titulo": "Reglamento de Cédula de Identidad física/digital",
    "url": "https://www.segip.gob.bo/fuent/2025/09/REGLAMENTO-AL-D.S.-N%C2%B04861-Y-AUTORIZA-LA-ENTRADA-EN-VIGENCIA-Y-OPERACION-PLENA-DE-LA-C.I.-Y-LA-LICENCIA-PARA-CONDUCIR-EN-FORMATO-DIGITAL.pdf",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SERECI-01": {
    "institucion": "OEP / SERECI",
    "titulo": "Servicios de Registro Civil",
    "url": "https://web.oep.org.bo/registro-civico/servicios-registro-civil/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SERECI-02": {
    "institucion": "OEP / SERECI",
    "titulo": "Venta de certificados duplicados",
    "url": "https://web.oep.org.bo/registro-civico/servicios-registro-civil/venta-duplicados/",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SERECI-03": {
    "institucion": "Gob.bo / SERECI",
    "titulo": "Duplicado de certificado de defunción",
    "url": "https://www.gob.bo/tramites/duplicado-de-certificado-de-defuncion-src-dcd-14",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SERECI-04": {
    "institucion": "Gob.bo / SERECI",
    "titulo": "Registro de defunción",
    "url": "https://www.gob.bo/tramites/certificado-de-defuncion-ante-orc-src-ido-05",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-SERECI-05": {
    "institucion": "OEP",
    "titulo": "Contactos SERECI Cochabamba",
    "url": "https://www.oep.org.bo/wp-content/uploads/2023/08/contactos_sereci.pdf",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DISC-01": {
    "institucion": "Ministerio de Salud y Deportes",
    "titulo": "Normas y Manuales — Discapacidad",
    "url": "https://minsalud.gob.bo/3147-unidad-discapacidad-reha",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DISC-02": {
    "institucion": "Ministerio de Salud y Deportes",
    "titulo": "Presentación Norma Nacional de Carnetización 2025",
    "url": "https://minsalud.gob.bo/8458-gobierno-presenta-norma-nacional-para-la-carnetizacion-de-personas-con-discapacidad-que-reduce-tiempos-y-procedimientos",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DISC-03": {
    "institucion": "Ministerio de Salud y Deportes",
    "titulo": "Servicios y bonos para personas con discapacidad",
    "url": "https://www.minsalud.gob.bo/8845-mas-de-118-000-personas-con-discapacidad-acceden-a-servicios-y-bonos-en-bolivia",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-DISC-04": {
    "institucion": "Ministerio de Salud y Deportes",
    "titulo": "Carnetización y beneficios 2025",
    "url": "https://www.minsalud.gob.bo/8827-mas-de-118-000-personas-con-discapacidad-pasaron-de-la-exclusion-a-la-gratuidad-en-carnetizacion-salud-vivienda-y-educacion",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-LSB-02": {
    "institucion": "Defensoría del Pueblo",
    "titulo": "Oficina Cochabamba",
    "url": "https://www.defensoria.gob.bo/oficinas?oficina_id=4",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-LSB-03": {
    "institucion": "Defensoría del Pueblo",
    "titulo": "Preguntas frecuentes",
    "url": "https://www.defensoria.gob.bo/contenido/preguntas-frecuentes",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-LSB-04": {
    "institucion": "Defensoría del Pueblo",
    "titulo": "Reglamento de peritos, intérpretes y traductores — taller 2026",
    "url": "https://www.defensoria.gob.bo/noticias/defensoria-del-pueblo-promueve-nuevo-reglamento-para-peritos%2C-interpretes-y-traductores-del-tsj-con-enfoque-interseccional",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   },
   "F-LSB-05": {
    "institucion": "Referencia legal secundaria",
    "titulo": "Ley Nº 1658 de 31 de octubre de 2025",
    "url": "https://www.lexivox.org/norms/BO-L-N1658.html",
-   "consultado": "2026-09-27"
+   "consultado": "2026-09-27",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
   }
  },
  "hechos": {
@@ -331,7 +386,10 @@
    ],
    "vigencia": "Página oficial sin fecha visible de actualización; [VERIFICAR] vigencia al 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DDRR-02": {
    "institucion": "Derechos Reales",
@@ -342,7 +400,10 @@
    ],
    "vigencia": "Página oficial sin fecha visible de actualización; [VERIFICAR] vigencia al 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DDRR-03": {
    "institucion": "Derechos Reales",
@@ -353,7 +414,10 @@
    ],
    "vigencia": "Página oficial sin fecha visible de actualización; [VERIFICAR] vigencia al 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DDRR-04": {
    "institucion": "Derechos Reales",
@@ -364,7 +428,10 @@
    ],
    "vigencia": "Página oficial sin fecha visible de actualización; [VERIFICAR] vigencia al 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DDRR-05": {
    "institucion": "Derechos Reales",
@@ -375,7 +442,10 @@
    ],
    "vigencia": "Página oficial sin fecha visible de actualización; [VERIFICAR] vigencia al 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DDRR-06": {
    "institucion": "Derechos Reales",
@@ -384,7 +454,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DDRR-07": {
    "institucion": "Derechos Reales",
@@ -393,7 +466,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-01": {
    "institucion": "GAM Cochabamba",
@@ -404,7 +480,10 @@
    ],
    "vigencia": "Actualizado 2026-08-05; consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-02": {
    "institucion": "RUAT",
@@ -415,7 +494,10 @@
    ],
    "vigencia": "Función verificada 2026-09-27; página sin fecha visible de actualización",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-03": {
    "institucion": "RUAT",
@@ -426,7 +508,10 @@
    ],
    "vigencia": "Función verificada 2026-09-27; página sin fecha visible de actualización",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-04": {
    "institucion": "RUAT",
@@ -437,7 +522,10 @@
    ],
    "vigencia": "Función verificada 2026-09-27; página sin fecha visible de actualización",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-05": {
    "institucion": "RUAT",
@@ -448,7 +536,10 @@
    ],
    "vigencia": "Función verificada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-06": {
    "institucion": "GAM Cochabamba",
@@ -459,7 +550,10 @@
    ],
    "vigencia": "Publicado 2026-07-01; vigente a fecha de corte según plazo informado",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": "2026-12-28",
+   "vencido": false
   },
   "H-IMP-07": {
    "institucion": "GAM Cochabamba",
@@ -470,7 +564,10 @@
    ],
    "vigencia": "Publicado 2026-07-01; vigente a fecha de corte según plazo informado",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": "2026-10-05",
+   "vencido": false
   },
   "H-IMP-08": {
    "institucion": "RUAT",
@@ -481,7 +578,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-09": {
    "institucion": "RUAT",
@@ -492,7 +592,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-10": {
    "institucion": "RUAT",
@@ -503,7 +606,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-11": {
    "institucion": "RUAT",
@@ -514,7 +620,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-IMP-12": {
    "institucion": "GAM Cochabamba",
@@ -523,7 +632,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FIS-01": {
    "institucion": "Ministerio Público",
@@ -534,7 +646,10 @@
    ],
    "vigencia": "Norma consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FIS-02": {
    "institucion": "Ministerio Público",
@@ -545,7 +660,10 @@
    ],
    "vigencia": "Norma consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FIS-03": {
    "institucion": "Ministerio Público",
@@ -557,7 +675,10 @@
    ],
    "vigencia": "Funcionalidad verificada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FIS-04": {
    "institucion": "Fiscalía Cochabamba",
@@ -568,7 +689,10 @@
    ],
    "vigencia": "Publicado 2026-03-20",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FIS-05": {
    "institucion": "Fiscalía Cochabamba",
@@ -577,7 +701,10 @@
    "fuentes": [],
    "vigencia": "Depende del caso",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-01": {
    "institucion": "Órgano Judicial",
@@ -588,7 +715,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-02": {
    "institucion": "Órgano Judicial",
@@ -599,7 +729,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-03": {
    "institucion": "Órgano Judicial",
@@ -610,7 +743,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-04": {
    "institucion": "Órgano Judicial",
@@ -621,7 +757,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-05": {
    "institucion": "TDJ Cochabamba",
@@ -632,7 +771,10 @@
    ],
    "vigencia": "Página sin fecha visible de actualización; consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-06": {
    "institucion": "TDJ Cochabamba",
@@ -643,7 +785,10 @@
    ],
    "vigencia": "Página sin fecha visible de actualización; consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-07": {
    "institucion": "TDJ Cochabamba",
@@ -654,7 +799,10 @@
    ],
    "vigencia": "Publicado 2025-05-13; [VERIFICAR] antes de asistir",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-08": {
    "institucion": "TDJ Cochabamba",
@@ -665,7 +813,10 @@
    ],
    "vigencia": "Publicado 2025-05-14; [VERIFICAR] antes de asistir",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-OJ-09": {
    "institucion": "Órgano Judicial",
@@ -676,7 +827,10 @@
    ],
    "vigencia": "Depende del caso",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDEP-01": {
    "institucion": "SEPDEP",
@@ -688,7 +842,10 @@
    ],
    "vigencia": "Sitio oficial consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDEP-02": {
    "institucion": "SEPDEP",
@@ -699,7 +856,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDEP-03": {
    "institucion": "SEPDEP",
@@ -710,7 +870,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDEP-04": {
    "institucion": "SEPDEP",
@@ -721,7 +884,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDEP-05": {
    "institucion": "SEPDEP",
@@ -733,7 +899,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDEP-06": {
    "institucion": "SEPDEP",
@@ -742,7 +911,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDAVI-01": {
    "institucion": "SEPDAVI",
@@ -753,7 +925,10 @@
    ],
    "vigencia": "Ficha oficial consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDAVI-02": {
    "institucion": "SEPDAVI",
@@ -765,7 +940,10 @@
    ],
    "vigencia": "Fichas actualizadas 2026-08-01",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDAVI-03": {
    "institucion": "SEPDAVI",
@@ -777,7 +955,10 @@
    ],
    "vigencia": "Actualizado 2026-08-01",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDAVI-04": {
    "institucion": "SEPDAVI",
@@ -788,7 +969,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDAVI-05": {
    "institucion": "SEPDAVI",
@@ -799,7 +983,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEPDAVI-06": {
    "institucion": "SEPDAVI",
@@ -810,7 +997,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCC-01": {
    "institucion": "FELCC",
@@ -821,7 +1011,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCC-02": {
    "institucion": "FELCC",
@@ -832,7 +1025,10 @@
    ],
    "vigencia": "Página sin fecha visible; consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCC-03": {
    "institucion": "FELCC",
@@ -843,7 +1039,10 @@
    ],
    "vigencia": "Página sin fecha visible; [VERIFICAR] tarifa antes de pagar",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCC-04": {
    "institucion": "FELCC",
@@ -854,7 +1053,10 @@
    ],
    "vigencia": "Página sin fecha visible; [VERIFICAR] vigencia",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCC-05": {
    "institucion": "FELCC",
@@ -863,7 +1065,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCV-01": {
    "institucion": "FELCV",
@@ -874,7 +1079,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCV-02": {
    "institucion": "FELCV",
@@ -885,7 +1093,10 @@
    ],
    "vigencia": "Publicado 2026-05-04",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCV-03": {
    "institucion": "FELCV",
@@ -896,7 +1107,10 @@
    ],
    "vigencia": "Publicado 2026-02-23",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-FELCV-04": {
    "institucion": "FELCV",
@@ -905,7 +1119,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SLIM-01": {
    "institucion": "SLIM",
@@ -916,7 +1133,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SLIM-02": {
    "institucion": "SLIM",
@@ -927,7 +1147,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SLIM-03": {
    "institucion": "SLIM",
@@ -938,7 +1161,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SLIM-04": {
    "institucion": "SLIM",
@@ -949,7 +1175,10 @@
    ],
    "vigencia": "Publicado 2024-03-14; [VERIFICAR] vigencia si se usa como canal principal",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DNA-01": {
    "institucion": "DNA",
@@ -960,7 +1189,10 @@
    ],
    "vigencia": "Publicado 2024-03-14; [VERIFICAR] vigencia 2026",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DNA-02": {
    "institucion": "DNA",
@@ -971,7 +1203,10 @@
    ],
    "vigencia": "Publicado 2024-03-14; [VERIFICAR] antes de asistir",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DNA-03": {
    "institucion": "DNA",
@@ -982,7 +1217,10 @@
    ],
    "vigencia": "Publicado 2026-04-20",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DNA-04": {
    "institucion": "DNA",
@@ -991,7 +1229,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-NOT-01": {
    "institucion": "Notarías",
@@ -1002,7 +1243,10 @@
    ],
    "vigencia": "Arancel consultado 2026-09-27; portal indica última actualización institucional 2025-06-05",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-NOT-02": {
    "institucion": "Notarías",
@@ -1013,7 +1257,10 @@
    ],
    "vigencia": "Consultado 2026-09-27; confirmar aplicabilidad exacta al instrumento concreto",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-NOT-03": {
    "institucion": "Notarías",
@@ -1024,7 +1271,10 @@
    ],
    "vigencia": "Consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-NOT-04": {
    "institucion": "Notarías",
@@ -1036,7 +1286,10 @@
    ],
    "vigencia": "[VERIFICAR] según acto",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEGIP-01": {
    "institucion": "SEGIP",
@@ -1047,7 +1300,10 @@
    ],
    "vigencia": "Documento alojado por SEGIP; consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEGIP-02": {
    "institucion": "SEGIP",
@@ -1058,7 +1314,10 @@
    ],
    "vigencia": "Documento consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEGIP-03": {
    "institucion": "SEGIP",
@@ -1069,7 +1328,10 @@
    ],
    "vigencia": "Documento consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEGIP-04": {
    "institucion": "SEGIP",
@@ -1080,7 +1342,10 @@
    ],
    "vigencia": "Documento consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SEGIP-05": {
    "institucion": "SEGIP",
@@ -1089,7 +1354,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SERECI-01": {
    "institucion": "SERECI",
@@ -1101,7 +1369,10 @@
    ],
    "vigencia": "Portales consultados 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SERECI-02": {
    "institucion": "SERECI",
@@ -1112,7 +1383,10 @@
    ],
    "vigencia": "Ficha consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SERECI-03": {
    "institucion": "SERECI",
@@ -1123,7 +1397,10 @@
    ],
    "vigencia": "Actualizado 2026-09-04",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SERECI-04": {
    "institucion": "SERECI",
@@ -1134,7 +1411,10 @@
    ],
    "vigencia": "Documento 2023; [VERIFICAR] antes de asistir",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-SERECI-05": {
    "institucion": "SERECI",
@@ -1143,7 +1423,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DISC-01": {
    "institucion": "Discapacidad",
@@ -1154,7 +1437,10 @@
    ],
    "vigencia": "Vigente como norma publicada por el Ministerio; consultada 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DISC-02": {
    "institucion": "Discapacidad",
@@ -1165,7 +1451,10 @@
    ],
    "vigencia": "Publicado 2025-01-07",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DISC-03": {
    "institucion": "Discapacidad",
@@ -1177,7 +1466,10 @@
    ],
    "vigencia": "Publicado 2025; consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DISC-04": {
    "institucion": "Discapacidad",
@@ -1188,7 +1480,10 @@
    ],
    "vigencia": "Norma 2025; sustituye referencias antiguas de 30%",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DISC-05": {
    "institucion": "Discapacidad",
@@ -1200,7 +1495,10 @@
    ],
    "vigencia": "Información publicada 2025; [VERIFICAR] procedimiento municipal exacto 2026",
    "verificar": false,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-DISC-06": {
    "institucion": "Discapacidad",
@@ -1209,7 +1507,10 @@
    "fuentes": [],
    "vigencia": "[VERIFICAR]",
    "verificar": true,
-   "vigenciaSinConfirmar": true
+   "vigenciaSinConfirmar": true,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-LSB-01": {
    "institucion": "LSB",
@@ -1221,7 +1522,10 @@
    ],
    "vigencia": "Ley promulgada 2025-10-31",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-LSB-02": {
    "institucion": "LSB",
@@ -1232,7 +1536,10 @@
    ],
    "vigencia": "Ley 1658; texto legal consultado mediante referencia secundaria",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-LSB-03": {
    "institucion": "LSB",
@@ -1243,7 +1550,10 @@
    ],
    "vigencia": "Publicado 2026-02-23",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-LSB-04": {
    "institucion": "Defensoría del Pueblo",
@@ -1254,7 +1564,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-LSB-05": {
    "institucion": "Defensoría del Pueblo",
@@ -1265,7 +1578,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-LSB-06": {
    "institucion": "Defensoría del Pueblo",
@@ -1277,7 +1593,10 @@
    ],
    "vigencia": "Portal consultado 2026-09-27",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   },
   "H-LSB-07": {
    "institucion": "LSB",
@@ -1288,12 +1607,16 @@
    ],
    "vigencia": "Publicado 2026-04-01",
    "verificar": false,
-   "vigenciaSinConfirmar": false
+   "vigenciaSinConfirmar": false,
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+   "vence": null,
+   "vencido": false
   }
  },
  "escenarios": [
   {
    "id": "ESC-DDRR-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Folio Real actualizado",
    "institucion": "Derechos Reales – Cochabamba",
    "tramite": "Folio Real actualizado",
@@ -1560,6 +1883,7 @@
   },
   {
    "id": "ESC-DDRR-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Certificado de gravámenes",
    "institucion": "Derechos Reales – Cochabamba",
    "tramite": "Certificado de gravámenes",
@@ -1781,6 +2105,7 @@
   },
   {
    "id": "ESC-DDRR-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Certificado alodial por tercera persona",
    "institucion": "Derechos Reales – Cochabamba",
    "tramite": "Certificado alodial por tercera persona",
@@ -2016,6 +2341,7 @@
   },
   {
    "id": "ESC-DDRR-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Inscripción de compra venta",
    "institucion": "Derechos Reales – Cochabamba",
    "tramite": "Inscripción de compra venta",
@@ -2278,6 +2604,7 @@
   },
   {
    "id": "ESC-IMP-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Consulta de deuda de moto por placa",
    "institucion": "GAM Cochabamba / RUAT",
    "tramite": "Consulta de deuda de moto por placa",
@@ -2437,6 +2764,7 @@
   },
   {
    "id": "ESC-IMP-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Consulta de deuda de inmueble",
    "institucion": "GAM Cochabamba / RUAT",
    "tramite": "Consulta de deuda de inmueble",
@@ -2594,6 +2922,7 @@
   },
   {
    "id": "ESC-IMP-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Descuento de pronto pago 2026",
    "institucion": "GAM Cochabamba / RUAT",
    "tramite": "Descuento de pronto pago 2026",
@@ -2732,6 +3061,7 @@
   },
   {
    "id": "ESC-IMP-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Perdonazo de deudas antiguas",
    "institucion": "GAM Cochabamba / RUAT",
    "tramite": "Perdonazo de deudas antiguas",
@@ -2901,6 +3231,7 @@
   },
   {
    "id": "ESC-IMP-05",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Plan de cuotas de vehículo",
    "institucion": "GAM Cochabamba / RUAT",
    "tramite": "Plan de cuotas de vehículo",
@@ -3100,6 +3431,7 @@
   },
   {
    "id": "ESC-IMP-06",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Transferencia de vehículo",
    "institucion": "GAM Cochabamba / RUAT",
    "tramite": "Transferencia de vehículo",
@@ -3268,6 +3600,7 @@
   },
   {
    "id": "ESC-FIS-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Presentar denuncia verbal por robo",
    "institucion": "Ministerio Público – Fiscalía Departamental de Cochabamba",
    "tramite": "Presentar denuncia verbal por robo",
@@ -3448,6 +3781,7 @@
   },
   {
    "id": "ESC-FIS-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Orientación para denuncia escrita",
    "institucion": "Ministerio Público – Fiscalía Departamental de Cochabamba",
    "tramite": "Orientación para denuncia escrita",
@@ -3603,6 +3937,7 @@
   },
   {
    "id": "ESC-FIS-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Seguimiento de denuncia",
    "institucion": "Ministerio Público – Fiscalía Departamental de Cochabamba",
    "tramite": "Seguimiento de denuncia",
@@ -3750,6 +4085,7 @@
   },
   {
    "id": "ESC-FIS-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Identificar fiscal asignado",
    "institucion": "Ministerio Público – Fiscalía Departamental de Cochabamba",
    "tramite": "Identificar fiscal asignado",
@@ -3909,6 +4245,7 @@
   },
   {
    "id": "ESC-OJ-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Consultar causa con NUREJ y WebID",
    "institucion": "Órgano Judicial – TDJ Cochabamba",
    "tramite": "Consultar causa con NUREJ y WebID",
@@ -4070,6 +4407,7 @@
   },
   {
    "id": "ESC-OJ-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "No conoce NUREJ ni WebID",
    "institucion": "Órgano Judicial – TDJ Cochabamba",
    "tramite": "No conoce NUREJ ni WebID",
@@ -4236,6 +4574,7 @@
   },
   {
    "id": "ESC-OJ-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Ubicar juzgado de familia",
    "institucion": "Órgano Judicial – TDJ Cochabamba",
    "tramite": "Ubicar juzgado de familia",
@@ -4379,6 +4718,7 @@
   },
   {
    "id": "ESC-OJ-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Confirmar modalidad de audiencia",
    "institucion": "Órgano Judicial – TDJ Cochabamba",
    "tramite": "Confirmar modalidad de audiencia",
@@ -4544,6 +4884,7 @@
   },
   {
    "id": "ESC-SEPDEP-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Solicitar defensor público tras una denuncia",
    "institucion": "SEPDEP – Cochabamba",
    "tramite": "Solicitar defensor público tras una denuncia",
@@ -4768,6 +5109,7 @@
   },
   {
    "id": "ESC-SEPDEP-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Persona víctima llega a SEPDEP por error",
    "institucion": "SEPDEP – Cochabamba",
    "tramite": "Persona víctima llega a SEPDEP por error",
@@ -4953,6 +5295,7 @@
   },
   {
    "id": "ESC-SEPDEP-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Ubicar oficina SEPDEP Cochabamba",
    "institucion": "SEPDEP – Cochabamba",
    "tramite": "Ubicar oficina SEPDEP Cochabamba",
@@ -5109,6 +5452,7 @@
   },
   {
    "id": "ESC-SEPDEP-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Atención fuera de horario de ventanilla",
    "institucion": "SEPDEP – Cochabamba",
    "tramite": "Atención fuera de horario de ventanilla",
@@ -5262,6 +5606,7 @@
   },
   {
    "id": "ESC-SEPDAVI-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Solicitar patrocinio como víctima de delito",
    "institucion": "SEPDAVI – Cochabamba",
    "tramite": "Solicitar patrocinio como víctima de delito",
@@ -5470,6 +5815,7 @@
   },
   {
    "id": "ESC-SEPDAVI-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Atención integral por violencia familiar",
    "institucion": "SEPDAVI – Cochabamba",
    "tramite": "Atención integral por violencia familiar",
@@ -5628,6 +5974,7 @@
   },
   {
    "id": "ESC-SEPDAVI-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Ubicar SEPDAVI Cochabamba",
    "institucion": "SEPDAVI – Cochabamba",
    "tramite": "Ubicar SEPDAVI Cochabamba",
@@ -5768,6 +6115,7 @@
   },
   {
    "id": "ESC-SEPDAVI-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Atención en representación La Chimba",
    "institucion": "SEPDAVI – Cochabamba",
    "tramite": "Atención en representación La Chimba",
@@ -5930,6 +6278,7 @@
   },
   {
    "id": "ESC-FELCC-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Denunciar robo de celular",
    "institucion": "Policía Boliviana – FELCC",
    "tramite": "Denunciar robo de celular",
@@ -6104,6 +6453,7 @@
   },
   {
    "id": "ESC-FELCC-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Denunciar estafa digital",
    "institucion": "Policía Boliviana – FELCC",
    "tramite": "Denunciar estafa digital",
@@ -6284,6 +6634,7 @@
   },
   {
    "id": "ESC-FELCC-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Certificado por documentos robados",
    "institucion": "Policía Boliviana – FELCC",
    "tramite": "Certificado por documentos robados",
@@ -6448,6 +6799,7 @@
   },
   {
    "id": "ESC-FELCC-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Llegar a oficina incorrecta",
    "institucion": "Policía Boliviana – FELCC",
    "tramite": "Llegar a oficina incorrecta",
@@ -6596,6 +6948,7 @@
   },
   {
    "id": "ESC-FELCV-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Denunciar violencia familiar",
    "institucion": "Policía Boliviana – FELCV",
    "tramite": "Denunciar violencia familiar",
@@ -6775,6 +7128,7 @@
   },
   {
    "id": "ESC-FELCV-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Pedir intérprete de LSB",
    "institucion": "Policía Boliviana – FELCV",
    "tramite": "Pedir intérprete de LSB",
@@ -6917,6 +7271,7 @@
   },
   {
    "id": "ESC-FELCV-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Violencia psicológica y amenazas",
    "institucion": "Policía Boliviana – FELCV",
    "tramite": "Violencia psicológica y amenazas",
@@ -7060,6 +7415,7 @@
   },
   {
    "id": "ESC-FELCV-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Confirmar sede antes de acudir",
    "institucion": "Policía Boliviana – FELCV",
    "tramite": "Confirmar sede antes de acudir",
@@ -7215,6 +7571,7 @@
   },
   {
    "id": "ESC-SLIM-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Solicitar apoyo por violencia de pareja",
    "institucion": "SLIM – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Solicitar apoyo por violencia de pareja",
@@ -7353,6 +7710,7 @@
   },
   {
    "id": "ESC-SLIM-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Ubicar Jefatura SLIM",
    "institucion": "SLIM – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Ubicar Jefatura SLIM",
@@ -7467,6 +7825,7 @@
   },
   {
    "id": "ESC-SLIM-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Llamar por una situación urgente",
    "institucion": "SLIM – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Llamar por una situación urgente",
@@ -7629,6 +7988,7 @@
   },
   {
    "id": "ESC-SLIM-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Pedir atención accesible en LSB",
    "institucion": "SLIM – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Pedir atención accesible en LSB",
@@ -7812,6 +8172,7 @@
   },
   {
    "id": "ESC-DNA-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Reportar posible vulneración de derechos de un niño",
    "institucion": "DNA – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Reportar posible vulneración de derechos de un niño",
@@ -7964,6 +8325,7 @@
   },
   {
    "id": "ESC-DNA-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Ubicar oficina publicada de DNA",
    "institucion": "DNA – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Ubicar oficina publicada de DNA",
@@ -8102,6 +8464,7 @@
   },
   {
    "id": "ESC-DNA-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Derivación desde SLIM a DNA",
    "institucion": "DNA – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Derivación desde SLIM a DNA",
@@ -8237,6 +8600,7 @@
   },
   {
    "id": "ESC-DNA-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Oficina cerrada o servicio trasladado",
    "institucion": "DNA – Gobierno Autónomo Municipal de Cochabamba",
    "tramite": "Oficina cerrada o servicio trasladado",
@@ -8410,6 +8774,7 @@
   },
   {
    "id": "ESC-NOT-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Reconocimiento o certificación de firmas",
    "institucion": "Notarías de Fe Pública / DIRNOPLU",
    "tramite": "Reconocimiento o certificación de firmas",
@@ -8589,6 +8954,7 @@
   },
   {
    "id": "ESC-NOT-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Contrato de alquiler",
    "institucion": "Notarías de Fe Pública / DIRNOPLU",
    "tramite": "Contrato de alquiler",
@@ -8759,6 +9125,7 @@
   },
   {
    "id": "ESC-NOT-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Contrato de anticrético",
    "institucion": "Notarías de Fe Pública / DIRNOPLU",
    "tramite": "Contrato de anticrético",
@@ -8938,6 +9305,7 @@
   },
   {
    "id": "ESC-NOT-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Buscar una notaría habilitada",
    "institucion": "Notarías de Fe Pública / DIRNOPLU",
    "tramite": "Buscar una notaría habilitada",
@@ -9085,6 +9453,7 @@
   },
   {
    "id": "ESC-SEGIP-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Cédula por primera vez",
    "institucion": "SEGIP",
    "tramite": "Cédula por primera vez",
@@ -9244,6 +9613,7 @@
   },
   {
    "id": "ESC-SEGIP-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Renovar cédula próxima a vencer",
    "institucion": "SEGIP",
    "tramite": "Renovar cédula próxima a vencer",
@@ -9389,6 +9759,7 @@
   },
   {
    "id": "ESC-SEGIP-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Reposición por pérdida",
    "institucion": "SEGIP",
    "tramite": "Reposición por pérdida",
@@ -9586,6 +9957,7 @@
   },
   {
    "id": "ESC-SEGIP-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Confirmar oficina antes de ir",
    "institucion": "SEGIP",
    "tramite": "Confirmar oficina antes de ir",
@@ -9748,6 +10120,7 @@
   },
   {
    "id": "ESC-SERECI-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Duplicado de certificado de nacimiento",
    "institucion": "SERECI – Cochabamba",
    "tramite": "Duplicado de certificado de nacimiento",
@@ -9899,6 +10272,7 @@
   },
   {
    "id": "ESC-SERECI-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Duplicado de certificado de matrimonio",
    "institucion": "SERECI – Cochabamba",
    "tramite": "Duplicado de certificado de matrimonio",
@@ -10064,6 +10438,7 @@
   },
   {
    "id": "ESC-SERECI-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Duplicado de certificado de defunción",
    "institucion": "SERECI – Cochabamba",
    "tramite": "Duplicado de certificado de defunción",
@@ -10229,6 +10604,7 @@
   },
   {
    "id": "ESC-SERECI-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Registrar una defunción",
    "institucion": "SERECI – Cochabamba",
    "tramite": "Registrar una defunción",
@@ -10375,6 +10751,7 @@
   },
   {
    "id": "ESC-DISC-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Iniciar calificación y carnetización",
    "institucion": "Registro y carnet de discapacidad",
    "tramite": "Iniciar calificación y carnetización",
@@ -10600,6 +10977,7 @@
   },
   {
    "id": "ESC-DISC-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Aclarar porcentaje mínimo de carnetización",
    "institucion": "Registro y carnet de discapacidad",
    "tramite": "Aclarar porcentaje mínimo de carnetización",
@@ -10724,6 +11102,7 @@
   },
   {
    "id": "ESC-DISC-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Renovar carnet",
    "institucion": "Registro y carnet de discapacidad",
    "tramite": "Renovar carnet",
@@ -10903,6 +11282,7 @@
   },
   {
    "id": "ESC-DISC-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Consultar bono por discapacidad",
    "institucion": "Registro y carnet de discapacidad",
    "tramite": "Consultar bono por discapacidad",
@@ -11070,6 +11450,7 @@
   },
   {
    "id": "ESC-LSB-01",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Pedir intérprete en una denuncia policial",
    "institucion": "Derechos lingüísticos LSB / Defensoría del Pueblo",
    "tramite": "Pedir intérprete en una denuncia policial",
@@ -11235,6 +11616,7 @@
   },
   {
    "id": "ESC-LSB-02",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Pedir intérprete en un juzgado",
    "institucion": "Derechos lingüísticos LSB / Defensoría del Pueblo",
    "tramite": "Pedir intérprete en un juzgado",
@@ -11403,6 +11785,7 @@
   },
   {
    "id": "ESC-LSB-03",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Reclamar por negativa de accesibilidad",
    "institucion": "Derechos lingüísticos LSB / Defensoría del Pueblo",
    "tramite": "Reclamar por negativa de accesibilidad",
@@ -11542,6 +11925,7 @@
   },
   {
    "id": "ESC-LSB-04",
+   "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "titulo": "Atención virtual de Defensoría en LSB",
    "institucion": "Derechos lingüísticos LSB / Defensoría del Pueblo",
    "tramite": "Atención virtual de Defensoría en LSB",

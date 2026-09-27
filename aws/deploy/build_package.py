@@ -6,11 +6,13 @@ No sube nada. Escribe `aws/deploy/lambda_function.zip` y su SHA-256, y antes
 comprueba que los tres archivos compilen y que la suite local pase: empaquetar
 algo que no pasa sus propias pruebas es empaquetar un problema.
 
-`lambda_function.py` no es autocontenido: importa `guided_composer.py` en
-tiempo de módulo y este a su vez lee `question_bank.json` del disco
-(`guided_composer.BANK_PATH`, relativo al propio archivo). Los tres van en
-el mismo ZIP, en la raíz — si falta alguno, la Lambda no arranca o certifica
-redacciones que ya no coinciden con el banco actual.
+`lambda_function.py` no es autocontenido. Al arrancar importa
+`guided_composer.py` (que lee `question_bank.json` del disco) y
+`rag_consulta.py` (que lee el corpus RAG, el mismo de la app:
+`assets/rag/escenarios_cbba.json`, empaquetado como `rag_escenarios_cbba.json`).
+Todo va en el mismo ZIP, en la raíz: si falta algo, la Lambda no arranca,
+certifica redacciones que ya no coinciden con el banco o no puede consultar
+el RAG.
 """
 
 from __future__ import annotations
@@ -34,12 +36,18 @@ FUENTES = [
     FUENTE,
     os.path.join(AWS, "guided_composer.py"),
     os.path.join(AWS, "question_bank.json"),
+    os.path.join(AWS, "rag_consulta.py"),
+]
+# (origen, nombre dentro del ZIP) de archivos que viven fuera de aws/.
+EXTRAS = [
+    (os.path.join(ROOT, "assets", "rag", "escenarios_cbba.json"),
+     "rag_escenarios_cbba.json"),
 ]
 DESTINO = os.path.join(AQUI, "lambda_function.zip")
 
 
 def comprobar_sintaxis() -> None:
-    for archivo in FUENTES:
+    for archivo in FUENTES + [origen for origen, _ in EXTRAS]:
         if archivo.endswith(".py"):
             py_compile.compile(archivo, doraise=True)
         elif not os.path.exists(archivo):
@@ -81,6 +89,8 @@ def empaquetar() -> str:
     with zipfile.ZipFile(DESTINO, "w", zipfile.ZIP_DEFLATED) as z:
         for archivo in FUENTES:
             z.write(archivo, arcname=os.path.basename(archivo))
+        for origen, nombre in EXTRAS:
+            z.write(origen, arcname=nombre)
     with open(DESTINO, "rb") as f:
         return hashlib.sha256(f.read()).hexdigest()
 
@@ -88,8 +98,8 @@ def empaquetar() -> str:
 def main() -> None:
     comprobar_sintaxis()
     compileall.compile_file(FUENTE, quiet=1)
-    compileall.compile_file(
-        os.path.join(AWS, "guided_composer.py"), quiet=1)
+    for modulo in ("guided_composer.py", "rag_consulta.py"):
+        compileall.compile_file(os.path.join(AWS, modulo), quiet=1)
     ejecutar_pruebas()
 
     contrato, generador = version_declarada()

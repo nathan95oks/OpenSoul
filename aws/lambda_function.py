@@ -22,6 +22,7 @@ from guided_composer import compose as compose_guided
 from guided_composer import Composer as GuidedComposer
 from guided_composer import EDITOR_KEYS as GUIDED_EDITOR_KEYS
 from guided_composer import load_bank as load_guided_bank
+import rag_consulta as RAG
 
 import boto3
 from botocore.exceptions import ClientError
@@ -35,6 +36,10 @@ VOICE_ID = os.environ.get("VOICE_ID", "Lupe")
 BEDROCK_MODEL_ID = os.environ.get("BEDROCK_MODEL_ID", "global.amazon.nova-2-lite-v1:0").strip()
 APP_REGION = os.environ.get("APP_REGION", os.environ.get("AWS_REGION", "us-east-1"))
 ENABLE_BEDROCK = os.environ.get("ENABLE_BEDROCK", "true").lower() == "true"
+# Embeddings del RAG por significado (acciones «consulta» y «rag_indexar»).
+RAG_EMBEDDING_MODEL = os.environ.get(
+    "RAG_EMBEDDING_MODEL", "amazon.titan-embed-text-v2:0").strip()
+RAG_EMBEDDING_DIM = int(os.environ.get("RAG_EMBEDDING_DIM", "256"))
 
 bedrock_runtime = boto3.client("bedrock-runtime", region_name=APP_REGION)
 polly_client = boto3.client("polly", region_name=APP_REGION)
@@ -3968,6 +3973,116 @@ def route_conversation_turn(body):
                                 "cacheHit": False})
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# RAG POR SIGNIFICADO (action: "consulta" / "rag_indexar")
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# La app busca primero por palabras, sin red; solo si no encuentra nada
+# pregunta aquí. Ver `rag_consulta.py`. Un fallo nunca es un error para la
+# app: responde `generated: false` y ella sigue sin sugerencias.
+
+_RAG_STATE = None
+
+
+def _rag_state():
+    """(entradas, clave S3 del índice), o None sin corpus empaquetado."""
+    global _RAG_STATE
+    if _RAG_STATE is None:
+        corpus = RAG.cargar_corpus()
+        if corpus is None:
+            _RAG_STATE = ()
+        else:
+            lista = RAG.entradas(corpus)
+            _RAG_STATE = (lista, RAG.clave_indice(RAG_EMBEDDING_MODEL, lista))
+    return _RAG_STATE or None
+
+
+def _titan_embed(texto: str) -> list:
+    respuesta = bedrock_runtime.invoke_model(
+        modelId=RAG_EMBEDDING_MODEL,
+        contentType="application/json",
+        accept="application/json",
+        body=json.dumps({"inputText": texto[:MAX_HEARING_TEXT],
+                         "dimensions": RAG_EMBEDDING_DIM, "normalize": True}),
+    )
+    return json.loads(respuesta["body"].read())["embedding"]
+
+
+def _rag_no(razon: str) -> dict:
+    return build_response(200, {"generated": False, "reason": razon,
+                                "suggestions": []})
+
+
+def rag_consult(body):
+    """Respuestas documentadas de las situaciones más parecidas en significado."""
+    texto = body.get("text")
+    if not isinstance(texto, str) or not texto.strip():
+        return build_response(400, {"error": "VALIDATION_ERROR",
+                                    "message": "text es obligatorio."})
+    if len(texto) > MAX_HEARING_TEXT:
+        return build_response(400, {"error": "VALIDATION_ERROR",
+                                    "message": "El texto es demasiado largo."})
+    area = body.get("preferArea")
+    if area is not None and not (isinstance(area, str)
+                                 and re.fullmatch(r"[A-Z]{2,10}", area)):
+        area = None
+    limite = body.get("limit", 4)
+    if not isinstance(limite, int) or not 1 <= limite <= RAG.MAX_LIMIT:
+        limite = 4
+    # Umbral por petición, solo para calibrar (la app no lo envía): acotado
+    # para que no sirva para vaciar el corpus.
+    minimo = body.get("minSimilarity")
+    if not (isinstance(minimo, (int, float)) and not isinstance(minimo, bool)
+            and 0.3 <= minimo <= 0.9):
+        minimo = RAG.MIN_SIMILARITY
+    if not ENABLE_BEDROCK:
+        return _rag_no("bedrock_desactivado")
+    estado = _rag_state()
+    if estado is None:
+        return _rag_no("sin_corpus")
+    lista, clave = estado
+    indice = read_cache_json(clave)
+    if not indice or len(indice.get("vectores") or {}) < len(lista):
+        return _rag_no("sin_indice")
+    mejor = {}
+    try:
+        sugerencias = RAG.consultar(texto, lista, indice, _titan_embed,
+                                    prefer_area=area, limite=limite,
+                                    minimo=minimo, diagnostico=mejor)
+    except Exception as e:  # noqa: BLE001 — Bedrock o datos: nunca un 500
+        logger.warning("Consulta RAG fallida: %s", e)
+        return _rag_no("error_modelo")
+    # La pregunta más parecida y su similitud, aunque no supere el umbral:
+    # permite calibrarlo y vigilarlo en los registros.
+    logger.info("RAG consulta: mejor %.3f %s (umbral %.2f, %d sugerencias)",
+                mejor.get("score", 0), mejor.get("scenarioId", "-"), minimo,
+                len(sugerencias))
+    return build_response(200, {"generated": True, "suggestions": sugerencias,
+                                "best": mejor, "minSimilarity": minimo,
+                                "index": clave})
+
+
+def rag_index_batch():
+    """Calcula la siguiente tanda de vectores del corpus empaquetado."""
+    if not ENABLE_BEDROCK:
+        return _rag_no("bedrock_desactivado")
+    estado = _rag_state()
+    if estado is None:
+        return _rag_no("sin_corpus")
+    lista, clave = estado
+    indice = read_cache_json(clave) or {}
+    try:
+        indice = RAG.indexar(lista, indice, _titan_embed)
+    except Exception as e:  # noqa: BLE001
+        logger.warning("Indexación RAG fallida: %s", e)
+        return build_response(502, {"error": "BEDROCK_ERROR",
+                                    "message": "No se pudo calcular la tanda."})
+    write_cache_json(clave, indice)
+    hechas = len(indice["vectores"])
+    return build_response(200, {"indexed": hechas, "total": len(lista),
+                                "pending": len(lista) - hechas, "index": clave})
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -3987,6 +4102,10 @@ def lambda_handler(event, context):
         return suggest_options(body)
     if (body.get("action") or "").strip().lower() == "route":
         return route_conversation_turn(body)
+    if (body.get("action") or "").strip().lower() == "consulta":
+        return rag_consult(body)
+    if (body.get("action") or "").strip().lower() == "rag_indexar":
+        return rag_index_batch()
 
     is_valid, err = validate_request(body)
     if not is_valid:

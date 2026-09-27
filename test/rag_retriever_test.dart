@@ -88,6 +88,42 @@ void main() {
     });
   });
 
+  group('lo dicho de verdad en ventanilla', () {
+    const nurej = '¿Tiene el número de NUREJ y el WebID?';
+
+    test('un saludo antes de la pregunta no la diluye', () {
+      final sola = retriever.suggest(nurej);
+      final saludo = retriever.suggest(
+        'Buenos días señor, bienvenido a la oficina. $nurej',
+      );
+      expect(saludo.first.scenarioId, sola.first.scenarioId);
+      expect(saludo.first.score, sola.first.score);
+    });
+
+    test('dos preguntas en un mensaje: respuestas para cada una', () {
+      final found = retriever.suggest(
+        '¿Ya tiene abogado particular? ¿Y trajo su cédula de identidad?',
+        limit: 12,
+      );
+      final areas = {for (final s in found) s.scenarioId.split('-')[1]};
+      expect(areas, contains('SEPDEP'));
+      expect(areas.length, greaterThan(1), reason: '$areas');
+    });
+
+    test('una pregunta genérica sigue el trámite del que se habla', () {
+      final found = retriever.suggest(
+        '¿Trae también su cédula de identidad?',
+        preferArea: 'DDRR',
+      );
+      expect(found.first.scenarioId, startsWith('ESC-DDRR-'));
+    });
+
+    test('el tema no se impone a una coincidencia claramente mejor', () {
+      final found = retriever.suggest(nurej, preferArea: 'DDRR');
+      expect(found.first.scenarioId, startsWith('ESC-OJ-'));
+    });
+  });
+
   test('solo se ofrecen tarjetas aprobadas, con glosas y sin datos de '
       'ejemplo', () {
     for (final s in corpus.scenarios) {
@@ -170,6 +206,32 @@ void main() {
         ragSuggestionsFor(withHearing(nurej, route: graph(0.6)), retriever),
         isNotEmpty,
       );
+    });
+
+    test('el chat recuerda de qué trámite venía hablando el funcionario', () {
+      final conversation = Conversation(
+        id: 'c',
+        startedAt: DateTime(2026, 9, 27),
+        turns: [
+          for (final (id, text) in [
+            ('t0', '¿Trae el número de matrícula o el Folio Real antiguo?'),
+            ('t1', '¿Trae también su cédula de identidad?'),
+          ])
+            ConversationTurn(
+              route: const ConversationRoute.noSafeRoute(),
+              message: SemanticMessage(
+                id: id,
+                speaker: SpeakerRole.hearing,
+                source: MessageSource.text,
+                glosses: const [],
+                text: text,
+              ),
+              outputs: GeneratedOutputs(text: text),
+            ),
+        ],
+      );
+      final found = ragSuggestionsFor(conversation, retriever);
+      expect(found.first.scenarioId, startsWith('ESC-DDRR-'));
     });
 
     test('mientras se traduce, sin ruta todavía o sin corpus: nada', () {

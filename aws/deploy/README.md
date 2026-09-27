@@ -10,6 +10,39 @@ python aws/deploy/build_package.py
 
 ---
 
+## 0. RAG por significado (septiembre 2026): pasos nuevos
+
+El paquete incluye ahora `rag_consulta.py` y el corpus RAG
+(`rag_escenarios_cbba.json`). Añade dos acciones: `consulta` (búsqueda por
+significado) y `rag_indexar` (construye el índice por tandas). Sin estos
+pasos la Lambda funciona igual que antes; la app sigue con la búsqueda por
+palabras.
+
+1. **Acceso al modelo en Bedrock** (una vez, consola de Bedrock en la región
+   de la Lambda, `us-east-1`): *Model access* → activar **Titan Text
+   Embeddings V2** (`amazon.titan-embed-text-v2:0`).
+2. **Permiso del rol de la Lambda:** `bedrock:InvokeModel` sobre
+   `arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0`.
+   Si la política actual solo permite el modelo de redacción, añade este
+   ARN. El rol ya puede leer y escribir en el bucket `S3_BUCKET`, que es
+   donde se guarda el índice (`<APP_PREFIX>/cache/rag-embeddings-*.json`).
+3. Sube el ZIP (sección 4).
+4. **Construye el índice** desde el repositorio:
+
+   ```bash
+   python tool/rag_indexar_embeddings.py
+   ```
+
+   Llama a `rag_indexar` hasta completar el índice (25 vectores por llamada,
+   unas 12 llamadas) y termina con una consulta de prueba («¿Usted está en
+   peligro ahorita?»). Repítelo después de cada despliegue que cambie el
+   corpus: un corpus nuevo tiene otra huella y empieza sin índice.
+
+Variables de entorno opcionales: `RAG_EMBEDDING_MODEL` (por defecto
+`amazon.titan-embed-text-v2:0`), `RAG_EMBEDDING_DIM` (256) y
+`RAG_MIN_SIMILARITY` (0.6; súbelo si aparecen sugerencias poco
+relacionadas y bájalo si faltan).
+
 ## 1. Qué cambia y por qué importa el orden
 
 | Versión | Lee los hechos | Redacta ESCAPAR como robo | Lee `actorRole` |
@@ -47,12 +80,13 @@ están en caché.
 
 ## 3. Dependencias
 
-Ninguna externa nueva: `lambda_function.py` usa solo la biblioteca estándar
-más `boto3`, que el entorno de Lambda ya provee. Pero el paquete **no** es
-un único archivo: `lambda_function.py` importa `guided_composer.py` al
-arrancar, y este lee `question_bank.json` del disco. `build_package.py`
-mete los tres en el ZIP; si alguno falta, la Lambda no arranca o certifica
-redacciones que ya no coinciden con el banco.
+Ninguna externa nueva: solo la biblioteca estándar más `boto3`, que el
+entorno de Lambda ya provee. Pero el paquete **no** es un único archivo:
+`lambda_function.py` importa `guided_composer.py` (que lee
+`question_bank.json`) y `rag_consulta.py` (que lee
+`rag_escenarios_cbba.json`). `build_package.py` mete los cinco en el ZIP; si
+alguno falta, la Lambda no arranca, certifica redacciones que ya no
+coinciden con el banco o no puede consultar el RAG.
 
 ## 4. Procedimiento
 

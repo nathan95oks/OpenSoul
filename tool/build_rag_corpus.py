@@ -4,21 +4,28 @@
     python tool/build_rag_corpus.py --check    # valida y comprueba que lo
                                                # generado está al día
 
-Fuente editable (la entrega de la investigación, revisada a mano):
+Fuentes editables (crecen añadiendo archivos, sin tocar este programa):
 
-    docs/negocio/escenarios_tramites_cochabamba_RAG_2026-09-27.md
+    docs/negocio/rag/escenarios/*.md    escenarios con el formato del prompt
+                                        (docs/negocio/rag/prompt_*.md)
+    docs/negocio/rag/documentos/        PDFs y .md oficiales que las fuentes
+                                        pueden citar como «documentos/x.pdf#p=3»
+    docs/negocio/rag/glosas_cache.json  glosas LSB ya traducidas
+                                        (tool/rag_precalcular_glosas.py)
 
 Genera (no editar a mano):
 
-    assets/rag/escenarios_cbba.json   corpus que usa la appok esta perfecto ahora ya tengo lo que es el documento  y esta como Escenarios de trámites públicos y judiciales en Cochabamba — Corpus RAG
+    assets/rag/escenarios_cbba.json   corpus que usa la app
 
-El documento viene de fuera del repositorio: se trata como datos, no como
-verdad. Devuelve 1 y no escribe nada si contradice su propio formato
-(identificador repetido, hecho o fuente inexistente, turno sin rol válido).
-Además marca, sin fallar, lo que nunca debe mostrarse a la persona sorda:
+Los escenarios vienen de fuera del repositorio: se tratan como datos, no como
+verdad. Devuelve 1 y no escribe nada si contradicen su formato (identificador
+repetido, también entre archivos; hecho, fuente o documento inexistente;
+página fuera del PDF; turno sin rol válido). Además marca, sin fallar, lo que
+nunca debe mostrarse a la persona sorda:
 
-  * turnos que dependen de un dato `[VERIFICAR]` o hablan de la fuente en vez
-    de atender («la página señala…», «para este corpus…»);
+  * turnos que dependen de un dato `[VERIFICAR]` o de un dato vencido
+    («hasta el 2026-10-05» ya pasado), o que hablan de la fuente en vez de
+    atender («la página señala…», «para este corpus…»);
   * respuestas del usuario sordo con datos concretos de ejemplo (placas,
     edades, años, montos): ofrecerlas como tarjeta pondría un dato ficticio
     en boca de la persona.
@@ -26,6 +33,8 @@ Además marca, sin fallar, lo que nunca debe mostrarse a la persona sorda:
 
 from __future__ import annotations
 
+import datetime
+import glob
 import json
 import os
 import re
@@ -33,13 +42,16 @@ import sys
 import unicodedata
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FUENTE = os.path.join(
-    ROOT, "docs", "negocio", "escenarios_tramites_cochabamba_RAG_2026-09-27.md")
+RAG = os.path.join(ROOT, "docs", "negocio", "rag")
+ESCENARIOS = os.path.join(RAG, "escenarios")
+DOCUMENTOS = os.path.join(RAG, "documentos")
 SALIDA = os.path.join(ROOT, "assets", "rag", "escenarios_cbba.json")
 # Glosas de las frases del usuario sordo, traducidas una vez por la Lambda
 # Texto→LSB (tool/rag_precalcular_glosas.py). Se leen sin red.
-GLOSAS = os.path.join(
-    ROOT, "docs", "negocio", "escenarios_tramites_cochabamba_RAG_glosas.json")
+GLOSAS = os.path.join(RAG, "glosas_cache.json")
+
+# Un hecho con plazo («hasta el 2026-10-05») deja de valer al pasar la fecha.
+_HASTA = re.compile(r"hasta\s+(?:el\s+)?(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
 
 ROLES = {"Usuario Sordo": "sordo", "Funcionario": "funcionario"}
 TIPOS = {"conocimiento_fijo", "dato_en_vivo", "mixto"}
@@ -126,9 +138,15 @@ def _valores_ficticios(lineas: list) -> list:
     return out
 
 
-def leer(ruta: str = FUENTE) -> tuple:
+def _rel(ruta: str) -> str:
+    return os.path.relpath(ruta, ROOT).replace(os.sep, "/")
+
+
+def leer(ruta: str) -> tuple:
+    """(fuentes, hechos, escenarios, errores, avisos) de un archivo."""
     with open(ruta, encoding="utf-8") as f:
         lineas = f.read().splitlines()
+    archivo = _rel(ruta)
 
     fuentes, hechos, escenarios = {}, {}, []
     errores, avisos = [], []
@@ -155,7 +173,7 @@ def leer(ruta: str = FUENTE) -> tuple:
                 seccion = "escenario"
                 esc = {"id": m.group(1), "titulo": m.group(2).strip(),
                        "meta": {}, "turnos": [], "variantes": [],
-                       "ficticios": [], "_linea": n}
+                       "ficticios": [], "_linea": n, "archivo": archivo}
             else:
                 seccion = None
             continue
@@ -175,23 +193,24 @@ def leer(ruta: str = FUENTE) -> tuple:
                 continue
             fid = c[0]
             if fid in fuentes and fuentes[fid]["url"] != c[3]:
-                errores.append(f"línea {n}: fuente {fid} repetida con otra URL")
+                errores.append(f"{archivo}:{n}: fuente {fid} repetida con otra URL")
             fuentes[fid] = {"institucion": c[1], "titulo": c[2],
-                            "url": c[3], "consultado": c[4]}
+                            "url": c[3], "consultado": c[4], "archivo": archivo}
         elif seccion == "hechos" and linea.startswith("|"):
             c = _celdas(linea)
             if c[0] == "ID" or len(c) < 6:
                 continue
             hid = c[0]
             if hid in hechos:
-                errores.append(f"línea {n}: hecho {hid} repetido")
+                errores.append(f"{archivo}:{n}: hecho {hid} repetido")
             hechos[hid] = {"institucion": c[1], "hecho": c[2], "tipo": c[3],
                            "fuentes": _ids(c[4], "F"), "vigencia": c[5],
                            # El dato mismo no está confirmado: nunca se muestra.
                            "verificar": "[VERIFICAR]" in c[2],
                            # El dato está en la fuente, pero no se pudo probar
                            # que siga vigente: se muestra como «a confirmar».
-                           "vigenciaSinConfirmar": "[VERIFICAR]" in c[5]}
+                           "vigenciaSinConfirmar": "[VERIFICAR]" in c[5],
+                           "archivo": archivo}
         elif seccion == "escenario" and esc is not None:
             if sub is None and linea.startswith("- **"):
                 m = re.match(r"- \*\*([^:*]+):\*\*\s*(.*)", linea)
@@ -214,15 +233,81 @@ def leer(ruta: str = FUENTE) -> tuple:
     return fuentes, hechos, escenarios, errores, avisos
 
 
-def construir(fuentes, hechos, escenarios, errores, avisos) -> dict:
+def leer_todos(carpeta: str = ESCENARIOS) -> tuple:
+    """Une todos los `.md` de [carpeta]. Un identificador solo puede definirse
+    una vez en todo el corpus; una fuente puede repetirse si es la misma."""
+    fuentes, hechos, escenarios, errores, avisos = {}, {}, [], [], []
+    archivos = sorted(glob.glob(os.path.join(carpeta, "*.md")))
+    if not archivos:
+        errores.append(f"no hay escenarios en {_rel(carpeta)}")
+    donde = {}
+    for ruta in archivos:
+        f, h, e, err, av = leer(ruta)
+        errores += err
+        avisos += av
+        for fid, fuente in f.items():
+            previa = fuentes.get(fid)
+            if previa and previa["url"] != fuente["url"]:
+                errores.append(f"{fid} definida en {previa['archivo']} y en "
+                               f"{fuente['archivo']} con otra URL")
+            fuentes.setdefault(fid, fuente)
+        for hid, hecho in h.items():
+            if hid in hechos:
+                errores.append(f"{hid} definido en {hechos[hid]['archivo']} y en "
+                               f"{hecho['archivo']}")
+            hechos.setdefault(hid, hecho)
+        for esc in e:
+            if esc["id"] in donde:
+                errores.append(f"{esc['id']} definido en {donde[esc['id']]} y en "
+                               f"{esc['archivo']}")
+                continue
+            donde[esc["id"]] = esc["archivo"]
+            escenarios.append(esc)
+    return fuentes, hechos, escenarios, errores, avisos, [_rel(a) for a in archivos]
+
+
+def _documento_local(url: str):
+    """(ruta, página) si la fuente es un documento del repositorio."""
+    if url.startswith(("http://", "https://")):
+        return None
+    ruta, _, fragmento = url.partition("#")
+    m = re.fullmatch(r"p=(\d+)", fragmento)
+    return os.path.join(RAG, ruta), int(m.group(1)) if m else None
+
+
+def _paginas_pdf(ruta: str):
+    try:
+        from pypdf import PdfReader
+    except ImportError:
+        return None
+    return len(PdfReader(ruta).pages)
+
+
+def construir(fuentes, hechos, escenarios, errores, avisos,
+              hoy: str | None = None, archivos: list | None = None) -> dict:
+    hoy = hoy or os.environ.get("RAG_HOY") or datetime.date.today().isoformat()
     vistos = set()
     for fid, f in fuentes.items():
-        if not f["url"].startswith("https://"):
-            avisos.append(f"{fid}: URL sin https: {f['url']}")
-        dominio = re.sub(r"https?://([^/]+).*", r"\1", f["url"])
-        if not (dominio.endswith(".gob.bo") or dominio.endswith(".bo")
-                or dominio.endswith(".org.bo")):
-            avisos.append(f"{fid}: fuente fuera de dominios oficiales ({dominio})")
+        local = _documento_local(f["url"])
+        if local is not None:
+            ruta, pagina = local
+            if not os.path.exists(ruta):
+                errores.append(f"{fid}: el documento {f['url']} no existe en "
+                               f"{_rel(DOCUMENTOS)}")
+            elif pagina is not None and ruta.lower().endswith(".pdf"):
+                total = _paginas_pdf(ruta)
+                if total is None:
+                    avisos.append(f"{fid}: sin pypdf no se comprueba la página {pagina}")
+                elif not 1 <= pagina <= total:
+                    errores.append(f"{fid}: página {pagina} fuera de {f['url']} "
+                                   f"({total} páginas)")
+        else:
+            if not f["url"].startswith("https://"):
+                avisos.append(f"{fid}: URL sin https: {f['url']}")
+            dominio = re.sub(r"https?://([^/]+).*", r"\1", f["url"])
+            if not (dominio.endswith(".gob.bo") or dominio.endswith(".bo")
+                    or dominio.endswith(".org.bo")):
+                avisos.append(f"{fid}: fuente fuera de dominios oficiales ({dominio})")
         if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", f["consultado"]):
             errores.append(f"{fid}: fecha de consulta inválida «{f['consultado']}»")
     for hid, h in hechos.items():
@@ -231,6 +316,22 @@ def construir(fuentes, hechos, escenarios, errores, avisos) -> dict:
                 errores.append(f"{hid}: cita la fuente inexistente {fid}")
         if not h["fuentes"] and not h["verificar"] and h["tipo"] != "dato_en_vivo":
             errores.append(f"{hid}: hecho sin fuente y sin [VERIFICAR]")
+        plazos = _HASTA.findall(f"{h['hecho']} {h['vigencia']}")
+        h["vence"] = max(plazos) if plazos else None
+        h["vencido"] = bool(h["vence"] and h["vence"] < hoy)
+        if h["vencido"]:
+            avisos.append(f"{hid}: venció el {h['vence']}; sus turnos dejan de "
+                          "mostrarse hasta actualizar el dato")
+
+    # Una misma área (ESC-DDRR-…) nombra una sola institución.
+    instituciones = {}
+    for esc in escenarios:
+        area = esc["id"].split("-")[1]
+        nombre = esc["meta"].get("institucion", "")
+        previa = instituciones.setdefault(area, (nombre, esc["id"]))
+        if previa[0] != nombre:
+            avisos.append(f"{esc['id']}: institución «{nombre}» distinta de "
+                          f"«{previa[0]}» ({previa[1]}); la app usa la primera")
 
     salida = []
     for esc in escenarios:
@@ -255,6 +356,8 @@ def construir(fuentes, hechos, escenarios, errores, avisos) -> dict:
             if "[VERIFICAR]" in texto or any(
                     hechos.get(h, {}).get("verificar") for h in citados):
                 motivos.append("dato_sin_verificar")
+            if any(hechos.get(h, {}).get("vencido") for h in citados):
+                motivos.append("dato_vencido")
             if rol == "funcionario" and _META.search(texto):
                 motivos.append("habla_de_la_fuente")
             if rol == "sordo":
@@ -321,6 +424,7 @@ def construir(fuentes, hechos, escenarios, errores, avisos) -> dict:
 
         salida.append({
             "id": eid,
+            "archivo": esc["archivo"],
             "titulo": esc["titulo"],
             "institucion": meta.get("institucion", ""),
             "tramite": meta.get("tramite", ""),
@@ -332,8 +436,8 @@ def construir(fuentes, hechos, escenarios, errores, avisos) -> dict:
         })
 
     return {
-        "version": 1,
-        "fuente": os.path.relpath(FUENTE, ROOT).replace(os.sep, "/"),
+        "version": 2,
+        "archivos": archivos or [],
         "fuentes": fuentes,
         "hechos": hechos,
         "escenarios": salida,
@@ -372,11 +476,13 @@ def resumen(corpus: dict) -> list:
         for m in t["motivos"]:
             motivos[m] = motivos.get(m, 0) + 1
     return [
+        f"archivos: {len(corpus['archivos'])} · "
         f"escenarios: {len(corpus['escenarios'])} · fuentes: {len(corpus['fuentes'])} · "
         f"hechos: {len(corpus['hechos'])} "
         f"({sum(h['verificar'] for h in corpus['hechos'].values())} por verificar, "
         f"{sum(h['vigenciaSinConfirmar'] and not h['verificar'] for h in corpus['hechos'].values())} "
-        "con vigencia a confirmar)",
+        "con vigencia a confirmar, "
+        f"{sum(h['vencido'] for h in corpus['hechos'].values())} vencidos)",
         f"turnos: {len(turnos)} ({len(sordo)} del usuario sordo) · "
         f"mostrables: {sum(t['mostrable'] for t in turnos)}",
         f"respuestas alternativas: {len(respuestas)} · "
@@ -387,8 +493,9 @@ def resumen(corpus: dict) -> list:
 
 
 def main() -> int:
-    fuentes, hechos, escenarios, errores, avisos = leer()
-    corpus = construir(fuentes, hechos, escenarios, errores, avisos)
+    fuentes, hechos, escenarios, errores, avisos, archivos = leer_todos()
+    corpus = construir(fuentes, hechos, escenarios, errores, avisos,
+                       archivos=archivos)
     poner_glosas(corpus, avisos)
     for a in avisos:
         print(f"aviso: {a}")

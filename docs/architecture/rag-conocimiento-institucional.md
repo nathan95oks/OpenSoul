@@ -1,7 +1,8 @@
 # RAG de conocimiento institucional — diseño
 
 Estado: **fases 0 y 1 hechas**, con los casos 1 y 2 (corpus validado,
-recuperación local en el chat); fases 2–3 propuestas. Rama
+recuperación local en el chat); fase 2 lista para desplegar; fase 3
+propuesta. Rama
 `feat/rag-conocimiento-institucional`.
 
 ## 1. Qué problema resuelve
@@ -84,8 +85,8 @@ sugerencia, y cada tarjeta muestra su secuencia LSB como hoy.
 ### Fase 0: corpus (hecha)
 
 - ChatGPT investigó los sitios oficiales con el prompt de
-  `docs/rag/prompt_investigacion_chatgpt.md`. La entrega es la fuente
-  editable: `docs/negocio/escenarios_tramites_cochabamba_RAG_2026-09-27.md`
+  `docs/negocio/rag/prompt_investigacion_chatgpt.md`. La entrega es la fuente
+  editable: `docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md`
   (62 escenarios, 53 fuentes, 89 hechos).
 - `tool/build_rag_corpus.py`, gemelo de `build_question_matrix.py`:
   - falla si el documento contradice su formato (identificador repetido,
@@ -143,17 +144,62 @@ sugerencia, y cada tarjeta muestra su secuencia LSB como hoy.
   «¿Eso…?»). La frase elegida se envía y se lee en voz alta
   (`test/rag_topics_test.dart`).
 
-### Fase 2: recuperación semántica en AWS
+### Crecimiento del corpus (hecho)
 
-- Embeddings del corpus con **Amazon Titan Text Embeddings V2** (Bedrock),
-  calculados al construir el corpus y guardados en S3.
-- Nueva acción `action: "consulta"` en `lambda_function.py`, junto a
-  `"route"`, que hace similitud de coseno en memoria.
-- Para unos cientos o miles de turnos alcanza. **Bedrock Knowledge Bases**
-  (gestionado) solo si el corpus crece mucho: con OpenSearch Serverless tiene
-  un costo mínimo mensual fijo aunque no se use.
-- La app combina el resultado local (fase 1) con el semántico: gana el de
-  mayor puntaje y, si discrepan, se muestran ambos.
+Guía de uso: `docs/negocio/rag/README.md`.
+
+- **Varios archivos.** `tool/build_rag_corpus.py` lee todos los
+  `docs/negocio/rag/escenarios/*.md`. Un identificador (escenario, hecho o
+  fuente con otra URL) repetido entre archivos es error, con los dos
+  archivos nombrados.
+- **Documentos locales como fuentes.** Una fuente puede citar
+  `documentos/<archivo>#p=N`. Se comprueba que exista y que la página esté
+  dentro del PDF.
+- **Ingesta de PDFs y `.md`** (`tool/rag_ingestar_documentos.py`):
+  - extrae el texto por página;
+  - genera un prompt con los siguientes identificadores libres por área y
+    las reglas del prompt de investigación (sin duplicarlas);
+  - avisa de los PDFs escaneados.
+- **Datos que vencen.** Un hecho «hasta el AAAA-MM-DD» vencido marca sus
+  turnos como no mostrables (`dato_vencido`) y el constructor avisa.
+- **Un solo comando** (`tool/rag_actualizar.py`): valida, traduce a LSB solo
+  lo nuevo y regenera el corpus.
+- Pruebas: `tool/tests/test_build_rag_corpus.py`.
+
+### Correcciones del recuperador (hechas)
+
+- Cada oración se compara por separado: un saludo antes de la pregunta no la
+  diluye, y dos preguntas en un mensaje aportan respuestas cada una.
+- Tema de la conversación: el área de las preguntas anteriores del
+  funcionario gana los empates en preguntas genéricas («¿Trajo su cédula?»)
+  con una ventaja pequeña (`topicBonus = 0.05`), sin imponerse a una
+  coincidencia claramente mejor.
+
+### Fase 2: recuperación semántica en AWS (hecha, pendiente de desplegar)
+
+- `aws/rag_consulta.py` indexa las mismas preguntas documentadas que la app
+  (turnos del funcionario y variantes, con sus respuestas ofrecibles) y las
+  compara por significado con Titan Text Embeddings V2 (256 dimensiones,
+  normalizados).
+  - Umbral `RAG_MIN_SIMILARITY` (0.6), margen 0.05 y ventaja de tema 0.02.
+  - Es extractiva, igual que la fase 1.
+- `lambda_function.py`:
+  - `action: "consulta"`: una llamada a Titan por pregunta. Sin índice,
+    sin Bedrock o ante un error responde `generated: false`, nunca un 500.
+  - `action: "rag_indexar"`: 25 vectores por llamada, solo de textos del
+    corpus empaquetado, así que no sirve para gastar Bedrock con textos
+    arbitrarios.
+  - El índice vive en S3 bajo una huella del corpus: un corpus nuevo no
+    compara contra vectores viejos.
+- `aws/deploy/build_package.py` empaqueta el módulo y el corpus;
+  `tool/rag_indexar_embeddings.py` construye el índice tras desplegar.
+- App: `RemoteRagDataSource` y `remoteRagSuggestionsProvider`. Solo se
+  consulta si la búsqueda por palabras no encontró nada **y** el grafo no
+  tiene una pregunta segura (`noSafeRoute` o contexto por palabra suelta).
+  Una vez por turno; cualquier fallo es «sin sugerencias».
+- Pruebas: `aws/tests/test_rag_consulta.py` (embedding falso con
+  sinónimos) y `test/rag_remote_test.dart` (servidor simulado).
+- Umbral por calibrar con frases reales tras desplegar.
 
 ### Fase 3 (opcional): respuestas redactadas
 
