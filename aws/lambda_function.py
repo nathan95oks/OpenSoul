@@ -4199,7 +4199,6 @@ def rag_correct_glosses(body):
 # si coinciden, entra a esa zona. Ver `rag_zonas.py`.
 
 _ZONAS_LSB = None
-_VECTORES_ZONA = {}
 
 
 def rag_zones(body):
@@ -4211,10 +4210,29 @@ def rag_zones(body):
         return build_response(200, {"generated": False,
                                     "reason": "bedrock_desactivado"})
     if _ZONAS_LSB is None:
-        _ZONAS_LSB = ZONAS.zonas_con_senas(ZONAS.cargar_zonas(),
-                                           EQUIV.cargar_formas())
-    if not _ZONAS_LSB:
+        zonas, formas = ZONAS.cargar_zonas(), EQUIV.cargar_formas()
+        textos = ZONAS.textos_senas(zonas, formas)
+        _ZONAS_LSB = (zonas, ZONAS.zonas_con_senas(zonas, formas), textos,
+                      ZONAS.clave_indice(RAG_EMBEDDING_MODEL, textos))
+    zonas, descritas, textos, clave = _ZONAS_LSB
+    if not textos:
         return build_response(200, {"generated": False, "reason": "sin_zonas"})
+    # Los vectores de las señas se calculan una vez, por tandas, y quedan en
+    # S3: mientras falten, cada llamada añade una tanda y lo dice.
+    indice = read_cache_json(clave) or {}
+    if len(indice.get("vectores") or {}) < len(textos):
+        try:
+            indice = ZONAS.indexar_senas(textos, indice, _titan_embed)
+        except Exception as e:  # noqa: BLE001
+            logger.warning("Índice de zonas fallido: %s", e)
+            return build_response(200, {"generated": False,
+                                        "reason": "error_modelo"})
+        write_cache_json(clave, indice)
+        faltan = len(textos) - len(indice["vectores"])
+        if faltan:
+            return build_response(200, {"generated": False,
+                                        "reason": "indexando",
+                                        "pending": faltan})
 
     def invocar(texto: str) -> str:
         respuesta = bedrock_runtime.invoke_model(
@@ -4225,8 +4243,9 @@ def rag_zones(body):
         return EQUIV.texto_de_respuesta(json.loads(respuesta["body"].read()))
 
     try:
-        clasificadas = ZONAS.clasificar(palabras, _ZONAS_LSB, _titan_embed,
-                                        invocar, _VECTORES_ZONA)
+        clasificadas = ZONAS.clasificar(palabras, descritas,
+                                        indice["vectores"], zonas,
+                                        _titan_embed, invocar)
     except Exception as e:  # noqa: BLE001 — Bedrock: nunca un 500
         logger.warning("Zonas fallidas: %s", e)
         return build_response(200, {"generated": False, "reason": "error_modelo"})
