@@ -32,7 +32,9 @@ ZONAS_PATH = os.path.join(AQUI, "zonas_senas.json")
 MAX_PALABRAS = 10
 MAX_TOKENS = 700
 VECINAS = 5
-LOTE_INDICE = 40
+# Vectores de señas por llamada: con 40, la llamada (más leer y guardar el
+# índice en S3) pasaba los 29 s de API Gateway y nunca se guardaba.
+LOTE_INDICE = 15
 # Categorías del catálogo que no son zonas de respuesta: el deletreo.
 _NO_ZONAS = {"Abecedario"}
 _EJEMPLOS_POR_ZONA = 25
