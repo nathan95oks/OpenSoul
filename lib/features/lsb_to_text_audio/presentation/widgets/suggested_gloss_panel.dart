@@ -8,6 +8,7 @@ import 'package:lsb_legal_app/core/domain/guided/guided_values.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_preview_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/adaptive_node_layout.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/guided_value_editor.dart';
@@ -49,6 +50,14 @@ class SuggestedGlossPanel extends ConsumerWidget {
       onCardTap: (card) {
         final option = options.firstWhere((o) => o.id == card.id);
         elegirOpcionGuiada(context, ref, questionId, option);
+      },
+      onCardPreview: (card) {
+        final option = options.firstWhere((o) => o.id == card.id);
+        // La secuencia completa de la tarjeta, en el orden en que se ve. Una
+        // opción sin seña (un valor escrito) no tiene nada que enseñar.
+        return ref
+            .read(signPreviewControllerProvider)
+            .show(context, option.hasSign ? option.glosses : const []);
       },
     );
   }
