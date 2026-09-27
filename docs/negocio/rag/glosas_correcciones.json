@@ -1,0 +1,1696 @@
+{
+ "Compré un auto. Quiero pasarlo a mi nombre.": {
+  "glosas": [
+   "COMPRAR",
+   "SENA_PENDIENTE:AUTO",
+   "QUERER",
+   "MÍO",
+   "NOMBRE",
+   "SENA_PENDIENTE:PASAR"
+  ],
+  "antes": [
+   "COMPRAR",
+   "MÍO",
+   "NOMBRE",
+   "SENA_PENDIENTE:PASAR"
+  ],
+  "faltan": [
+   "Quiero"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Confirmaré antes de pagar.": {
+  "glosas": [
+   "SENA_PENDIENTE:PAGAR",
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:ANTES"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:PAGAR",
+   "SENA_PENDIENTE:CONFIRMAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Consulte primero el monto actualizado antes de pagar.": {
+  "glosas": [
+   "SENA_PENDIENTE:MONTO",
+   "SENA_PENDIENTE:ACTUALIZAR",
+   "SENA_PENDIENTE:PAGAR",
+   "SENA_PENDIENTE:PRIMERO",
+   "SENA_PENDIENTE:CONSULTAR"
+  ],
+  "antes": [
+   "AHORA",
+   "SENA_PENDIENTE:MONTO",
+   "SENA_PENDIENTE:ACTUALIZAR",
+   "SENA_PENDIENTE:PAGAR",
+   "SENA_PENDIENTE:ANTES"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Contacte SEPDEP para activar la atención correspondiente.": {
+  "glosas": [
+   "SEPDEP",
+   "ATENDER",
+   "SENA_PENDIENTE:ACTIVAR",
+   "SENA_PENDIENTE:CORRESPONDIENTE",
+   "SENA_PENDIENTE:CONTACTAR"
+  ],
+  "antes": [
+   "SEPDEP",
+   "ATENDER",
+   "SENA_PENDIENTE:ACTIVAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "DIRNOPLU ofrece un buscador de notarios.": {
+  "glosas": [
+   "D",
+   "I",
+   "R",
+   "N",
+   "O",
+   "P",
+   "L",
+   "U",
+   "BUSCAR",
+   "SENA_PENDIENTE:NOTARIO",
+   "SENA_PENDIENTE:OFRECER"
+  ],
+  "antes": [
+   "D",
+   "I",
+   "R",
+   "N",
+   "O",
+   "P",
+   "L",
+   "U",
+   "BUSCAR",
+   "SENA_PENDIENTE:NOTARIO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Debe acreditar la relación permitida y su identidad.": {
+  "glosas": [
+   "SENA_PENDIENTE:RELACION",
+   "SENA_PENDIENTE:PERMITIDO",
+   "IDENTIDAD",
+   "SENA_PENDIENTE:ACREDITAR"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:RELACION",
+   "SENA_PENDIENTE:PERMITIDO",
+   "IDENTIDAD",
+   "SENA_PENDIENTE:DEMOSTRAR"
+  ],
+  "faltan": [
+   "Debe"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Debe tramitarse la interpretación conforme al procedimiento aplicable.": {
+  "glosas": [
+   "TRÁMITE",
+   "SENA_PENDIENTE:INTERPRETAR",
+   "SENA_PENDIENTE:CONFORME",
+   "SENA_PENDIENTE:PROCEDIMIENTO",
+   "SENA_PENDIENTE:APLICABLE",
+   "SENA_PENDIENTE:DEBER"
+  ],
+  "antes": [
+   "TRAMITE",
+   "SENA_PENDIENTE:INTERPRETAR",
+   "SENA_PENDIENTE:PROCEDIMIENTO",
+   "SENA_PENDIENTE:APLICABLE"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Depende de su grado y situación; revise la norma aplicable.": {
+  "glosas": [
+   "SENA_PENDIENTE:GRADO",
+   "SENA_PENDIENTE:SITUACION",
+   "SENA_PENDIENTE:NORMA",
+   "SENA_PENDIENTE:APLICABLE",
+   "SENA_PENDIENTE:REVISAR",
+   "SENA_PENDIENTE:DEPERDER"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:GRADO",
+   "SENA_PENDIENTE:SITUACION",
+   "SENA_PENDIENTE:NORMA",
+   "SENA_PENDIENTE:APLICABLE",
+   "SENA_PENDIENTE:REVISAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Describa cuándo y dónde ocurrió.": {
+  "glosas": [
+   "CUÁNDO",
+   "DÓNDE",
+   "SENA_PENDIENTE:DESCRIBIR",
+   "SENA_PENDIENTE:OCURRIR"
+  ],
+  "antes": [
+   "CUANDO",
+   "DONDE",
+   "SENA_PENDIENTE:OCURRIR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "El arancel publicado incluye anticréticos entre otras escrituras.": {
+  "glosas": [
+   "SENA_PENDIENTE:PUBLICAR",
+   "SENA_PENDIENTE:ARANCELE",
+   "SENA_PENDIENTE:INCLUIR",
+   "SENA_PENDIENTE:ESCRITURA",
+   "SENA_PENDIENTE:ANTICRETICOS",
+   "SENA_PENDIENTE:OTRAS"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:PUBLICAR",
+   "SENA_PENDIENTE:ARANCELE",
+   "SENA_PENDIENTE:INCLUIR",
+   "SENA_PENDIENTE:OTRO",
+   "SENA_PENDIENTE:ESCRITURA"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "El servicio para violencia familiar figura actualizado en 2026.": {
+  "glosas": [
+   "VIOLENCIA",
+   "SENA_PENDIENTE:FAMILIAR",
+   "SENA_PENDIENTE:SERVICIO",
+   "SENA_PENDIENTE:ACTUALIZAR",
+   "2",
+   "0",
+   "2",
+   "6",
+   "SENA_PENDIENTE:FIGURA"
+  ],
+  "antes": [
+   "VIOLENCIA",
+   "SENA_PENDIENTE:FAMILIAR",
+   "SENA_PENDIENTE:SERVICIO",
+   "SENA_PENDIENTE:ACTUALIZAR",
+   "2",
+   "0",
+   "2",
+   "6"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Entiendo. Iré al servicio para víctimas.": {
+  "glosas": [
+   "SENA_PENDIENTE:ENTENDER",
+   "SENA_PENDIENTE:SERVICIO",
+   "SENA_PENDIENTE:VICTIMA",
+   "IR"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:ENTENDER",
+   "SENA_PENDIENTE:SERVICIO",
+   "SENA_PENDIENTE:VICTIMA",
+   "IR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Entonces confirmaré el trámite exacto.": {
+  "glosas": [
+   "TRÁMITE",
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:EXACTO"
+  ],
+  "antes": [
+   "TRAMITE",
+   "SENA_PENDIENTE:CONFIRMAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Entonces quiero confirmar el precio primero.": {
+  "glosas": [
+   "SENA_PENDIENTE:PRECIO",
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:PRIMERO",
+   "QUERER"
+  ],
+  "antes": [
+   "AHORA",
+   "SENA_PENDIENTE:PRECIO",
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:PRIMERO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Entonces ya puedo renovarla.": {
+  "glosas": [
+   "PUEDO",
+   "SENA_PENDIENTE:RENOVAR"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:YA",
+   "PUEDO",
+   "SENA_PENDIENTE:RENOVAR",
+   "SENA_PENDIENTE:LA",
+   "SENA_PENDIENTE:ENTONCES"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Escríbala sin espacios ni guiones.": {
+  "glosas": [
+   "ESCRIBIR",
+   "SENA_PENDIENTE:ESPACIOS",
+   "SENA_PENDIENTE:GUIONES"
+  ],
+  "antes": [
+   "ESCRIBIR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Estoy cerca de La Chimba.": {
+  "glosas": [
+   "CERCA",
+   "SENA_PENDIENTE:CHIMBA"
+  ],
+  "antes": [
+   "CERCA",
+   "SENA_PENDIENTE:CHIMBA",
+   "SENA_PENDIENTE:ESTAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Existe representación en Centro Integral FELCV, avenida Beijing.": {
+  "glosas": [
+   "SENA_PENDIENTE:CENTRO",
+   "SENA_PENDIENTE:INTEGRAL",
+   "FELCV",
+   "AVENIDA",
+   "SENA_PENDIENTE:BEIJING",
+   "SENA_PENDIENTE:EXISTIR",
+   "SENA_PENDIENTE:REPRESENTACIÓN"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:CENTRO_INTEGRAL_FELCV",
+   "AVENIDA",
+   "SENA_PENDIENTE:BEIJING"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "FELCV atiende hechos de violencia y activa la ruta correspondiente.": {
+  "glosas": [
+   "FELCV",
+   "VIOLENCIA",
+   "SENA_PENDIENTE:HECHO",
+   "ATENDER",
+   "SENA_PENDIENTE:RUTA",
+   "SENA_PENDIENTE:ACTIVAR",
+   "SENA_PENDIENTE:CORRESPONDIENTE"
+  ],
+  "antes": [
+   "FELCV",
+   "VIOLENCIA",
+   "SENA_PENDIENTE:HECHO",
+   "ATENDER",
+   "SENA_PENDIENTE:RUTA",
+   "SENA_PENDIENTE:ACTIVAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Falta más tiempo.": {
+  "glosas": [
+   "SENA_PENDIENTE:TIEMPO",
+   "SENA_PENDIENTE:MAS",
+   "SENA_PENDIENTE:FALTA"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:TIEMPO",
+   "SENA_PENDIENTE:MAS"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Fui víctima de robo. Necesito abogado gratuito.": {
+  "glosas": [
+   "YO",
+   "SENA_PENDIENTE:VICTIMA",
+   "ROBAR",
+   "NECESITAR",
+   "SENA_PENDIENTE:FUI",
+   "ABOGADO",
+   "GRATIS"
+  ],
+  "antes": [
+   "YO",
+   "SENA_PENDIENTE:VICTIMA",
+   "ROBAR",
+   "NECESITAR",
+   "ABOGADO",
+   "GRATIS"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Gracias. Esperaré la asistencia adecuada.": {
+  "glosas": [
+   "GRACIAS",
+   "ESPERAR",
+   "ASISTENCIA",
+   "SENA_PENDIENTE:ADE_CUADA"
+  ],
+  "antes": [
+   "GRACIAS",
+   "ESPERAR",
+   "ASISTENCIA"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Haré la consulta en línea.": {
+  "glosas": [
+   "HACER",
+   "SENA_PENDIENTE:CONSULTA",
+   "SENA_PENDIENTE:LÍNEA",
+   "YO"
+  ],
+  "antes": [
+   "HACER",
+   "SENA_PENDIENTE:CONSULTA",
+   "INTERNET"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Incluya qué pasó, cuándo y dónde, si lo sabe.": {
+  "glosas": [
+   "PASADO",
+   "DÓNDE",
+   "CUÁNDO",
+   "SABER",
+   "YO",
+   "SENA_PENDIENTE:INCLUIR"
+  ],
+  "antes": [
+   "PASADO",
+   "DONDE",
+   "CUANDO",
+   "SABER",
+   "YO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "La Ley 1658 contempla interpretación gratuita en justicia.": {
+  "glosas": [
+   "LEY",
+   "1",
+   "6",
+   "5",
+   "8",
+   "JUSTICIA",
+   "SENA_PENDIENTE:INTERPRETAR",
+   "GRATIS",
+   "SENA_PENDIENTE:CONTEMPLAR"
+  ],
+  "antes": [
+   "LEY",
+   "1",
+   "6",
+   "5",
+   "8",
+   "JUSTICIA",
+   "SENA_PENDIENTE:INTERPRETAR",
+   "GRATIS"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "La norma 2025 incorporó mecanismos de renovación automática.": {
+  "glosas": [
+   "SENA_PENDIENTE:NORMA",
+   "2",
+   "0",
+   "2",
+   "5",
+   "SENA_PENDIENTE:INCORPORAR",
+   "SENA_PENDIENTE:MECANISMO",
+   "SENA_PENDIENTE:RENOVACION",
+   "SENA_PENDIENTE:AUTOMATICO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:NORMA",
+   "2",
+   "0",
+   "2",
+   "5",
+   "SENA_PENDIENTE:MECANISMO",
+   "SENA_PENDIENTE:RENOVACION",
+   "SENA_PENDIENTE:AUTOMATICO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "La norma 2025 mantiene el registro dentro del sistema nacional.": {
+  "glosas": [
+   "SENA_PENDIENTE:NORMA",
+   "2",
+   "0",
+   "2",
+   "5",
+   "SENA_PENDIENTE:REGISTRO",
+   "SENA_PENDIENTE:SISTEMA",
+   "SENA_PENDIENTE:NACIONAL",
+   "SENA_PENDIENTE:MANTENER",
+   "DENTRO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:NORMA",
+   "2",
+   "0",
+   "2",
+   "5",
+   "SENA_PENDIENTE:REGISTRO",
+   "SENA_PENDIENTE:SISTEMA",
+   "SENA_PENDIENTE:NACIONAL",
+   "SENA_PENDIENTE:MANTENER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "La renovación puede solicitarse desde seis meses antes.": {
+  "glosas": [
+   "SENA_PENDIENTE:MESES",
+   "6",
+   "SENA_PENDIENTE:ANTES",
+   "SENA_PENDIENTE:SOLICITAR",
+   "SENA_PENDIENTE:RENOVACION",
+   "SENA_PENDIENTE:PODER"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:MESES",
+   "6",
+   "SENA_PENDIENTE:ANTES",
+   "SENA_PENDIENTE:SOLICITAR",
+   "SENA_PENDIENTE:PODER"
+  ],
+  "faltan": [
+   "puede"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "La reposición aplica por extravío, robo o deterioro.": {
+  "glosas": [
+   "SENA_PENDIENTE:EXTRAVIO",
+   "ROBAR",
+   "SENA_PENDIENTE:DETERIORO",
+   "SENA_PENDIENTE:APLICAR"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:EXTRAVIO",
+   "ROBAR",
+   "SENA_PENDIENTE:DETIEN",
+   "SENA_PENDIENTE:APLICAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Me la robaron.": {
+  "glosas": [
+   "ROBAR"
+  ],
+  "antes": [
+   "CELULAR",
+   "ROBAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Mi expareja me amenaza todos los días.": {
+  "glosas": [
+   "PAREJA",
+   "AMENAZAR",
+   "SENA_PENDIENTE:TODOS",
+   "SENA_PENDIENTE:DÍAS"
+  ],
+  "antes": [
+   "DIA",
+   "PAREJA",
+   "AMENAZAR",
+   "MUCHO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Necesito certificado porque robaron mis documentos.": {
+  "glosas": [
+   "CERTIFICADO",
+   "NECESITAR",
+   "PAPEL",
+   "ROBAR"
+  ],
+  "antes": [
+   "CERTIFICADO",
+   "NECESITAR",
+   "PAPEL",
+   "ROBAR",
+   "POR_QUE"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Necesito comunicarme en Lengua de Señas Boliviana.": {
+  "glosas": [
+   "NECESITAR",
+   "SENA_PENDIENTE:COMUNICAR",
+   "YO",
+   "SENA_PENDIENTE:LSB"
+  ],
+  "antes": [
+   "YO",
+   "NECESITAR",
+   "SENA_PENDIENTE:COMUNICAR",
+   "SENA_PENDIENTE:LSB"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Necesito hacerle algunas preguntas sobre la denuncia.": {
+  "glosas": [
+   "SENA_PENDIENTE:PREGUNTAR",
+   "SENA_PENDIENTE:DENUNCIA",
+   "NECESITAR",
+   "SENA_PENDIENTE:HACERLE",
+   "SENA_PENDIENTE:ALGUNAS"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:PREGUNTAR",
+   "SENA_PENDIENTE:DENUNCIA",
+   "NECESITAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No asumiremos que el servicio dejó de funcionar.": {
+  "glosas": [
+   "SENA_PENDIENTE:SERVICIO",
+   "FUNCIONAR",
+   "DEJAR",
+   "NO",
+   "SENA_PENDIENTE:ASUMIR"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:SERVICIO",
+   "FUNCIONAR",
+   "DEJAR",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No borre ni modifique mensajes relacionados al hecho.": {
+  "glosas": [
+   "NO",
+   "SENA_PENDIENTE:BORRAR",
+   "SENA_PENDIENTE:MODIFICAR",
+   "SENA_PENDIENTE:MENSAJE",
+   "SENA_PENDIENTE:RELACIONAR",
+   "SENA_PENDIENTE:HECHO"
+  ],
+  "antes": [
+   "NO",
+   "SENA_PENDIENTE:BORRAR",
+   "SENA_PENDIENTE:MODIFICAR",
+   "SENA_PENDIENTE:MENSAJE",
+   "SENA_PENDIENTE:HECHO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No entiendo bien explicaciones solo habladas.": {
+  "glosas": [
+   "NO",
+   "SENA_PENDIENTE:ENTENDER",
+   "SENA_PENDIENTE:BIEN",
+   "EXPLICAR",
+   "HABLAR",
+   "SENA_PENDIENTE:SOLO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:ENTENDER",
+   "SENA_PENDIENTE:BIEN",
+   "SENA_PENDIENTE:EXPLICACION",
+   "HABLAR",
+   "SENA_PENDIENTE:SOLO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No entiendo.": {
+  "glosas": [
+   "NO",
+   "COMPRENDER"
+  ],
+  "antes": [
+   "NO",
+   "COMPRENDER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No la traje.": {
+  "glosas": [
+   "NO",
+   "TRAER"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:TRAE",
+   "NO"
+  ],
+  "faltan": [
+   "traje"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No lo traje.": {
+  "glosas": [
+   "NO",
+   "TRAER"
+  ],
+  "antes": [
+   "TRABAJADOR",
+   "TRAER",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No recuerdo esos números.": {
+  "glosas": [
+   "RECORDAR",
+   "NO",
+   "SENA_PENDIENTE:NUMERO",
+   "SENA_PENDIENTE:ESOS"
+  ],
+  "antes": [
+   "RECORDAR",
+   "NO",
+   "SENA_PENDIENTE:NUMERO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No recuerdo.": {
+  "glosas": [
+   "RECORDAR",
+   "NO"
+  ],
+  "antes": [
+   "RECORDAR",
+   "NO_SABER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No responderé cosas que no comprendo.": {
+  "glosas": [
+   "NO",
+   "COMPRENDER",
+   "SENA_PENDIENTE:COSAS",
+   "SENA_PENDIENTE:RESPONDER"
+  ],
+  "antes": [
+   "NO_SABER",
+   "SENA_PENDIENTE:COSAS",
+   "SENA_PENDIENTE:RESPONDER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No sé cuáles son.": {
+  "glosas": [
+   "NO_SABER",
+   "CUÁL"
+  ],
+  "antes": [
+   "NO_SABER",
+   "CUAL",
+   "SENA_PENDIENTE:SER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No sé cuándo podré ir.": {
+  "glosas": [
+   "NO_SABER",
+   "CUÁNDO",
+   "PUEDO",
+   "SENA_PENDIENTE:PODRÉ",
+   "IR"
+  ],
+  "antes": [
+   "NO_SABER",
+   "CUANDO",
+   "SENA_PENDIENTE:PODER",
+   "IR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No sé cómo hacerlo.": {
+  "glosas": [
+   "NO_SABER",
+   "CÓMO",
+   "HACER"
+  ],
+  "antes": [
+   "NO_SABER",
+   "COMO",
+   "HACER",
+   "SENA_PENDIENTE:LO",
+   "YO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No sé dónde está.": {
+  "glosas": [
+   "NO_SABER",
+   "DÓNDE"
+  ],
+  "antes": [
+   "NO_SABER",
+   "DONDE",
+   "SENA_PENDIENTE:ESTAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No sé si puedo pedirlo.": {
+  "glosas": [
+   "NO_SABER",
+   "PUEDO",
+   "PEDIR"
+  ],
+  "antes": [
+   "NO_SABER",
+   "PUEDO",
+   "PEDIR",
+   "SENA_PENDIENTE:LO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "No sé si sirve copia.": {
+  "glosas": [
+   "NO_SABER",
+   "SENA_PENDIENTE:COPIA",
+   "SENA_PENDIENTE:SERVIR"
+  ],
+  "antes": [
+   "NO_SABER",
+   "SENA_PENDIENTE:COPIA",
+   "SENA_PENDIENTE:SERVIR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Para violencia corresponde activar la ruta de FELCV.": {
+  "glosas": [
+   "VIOLENCIA",
+   "FELCV",
+   "SENA_PENDIENTE:RUTA",
+   "SENA_PENDIENTE:ACTIVAR",
+   "SENA_PENDIENTE:CORRESPONDER"
+  ],
+  "antes": [
+   "VIOLENCIA",
+   "FELCV",
+   "SENA_PENDIENTE:RUTA",
+   "SENA_PENDIENTE:ACTIVAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Perdí mi cédula. Necesito otra.": {
+  "glosas": [
+   "YO",
+   "PAPEL",
+   "IDENTIDAD",
+   "PERDER",
+   "NECESITAR",
+   "SENA_PENDIENTE:OTRA"
+  ],
+  "antes": [
+   "YO",
+   "PAPEL",
+   "IDENTIDAD",
+   "PERDER",
+   "NUEVO",
+   "NECESITAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Primero confirmaré el monto.": {
+  "glosas": [
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:MONTO",
+   "SENA_PENDIENTE:PRIMERO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:MONTO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Primero confirmaré la sede y horario.": {
+  "glosas": [
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:SEDE",
+   "HORA",
+   "SENA_PENDIENTE:PRIMERO"
+  ],
+  "antes": [
+   "AHORA",
+   "SENA_PENDIENTE:SEDE",
+   "HORA",
+   "SENA_PENDIENTE:CONFIRMAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Primero confirmaré la sede.": {
+  "glosas": [
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:SEDE",
+   "SENA_PENDIENTE:PRIMERO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:SEDE"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Primero debe seguir el proceso de calificación correspondiente.": {
+  "glosas": [
+   "SENA_PENDIENTE:PROCESO",
+   "SENA_PENDIENTE:CALIFICACION",
+   "SENA_PENDIENTE:CORRESPONDIENTE",
+   "SENA_PENDIENTE:PRIMERO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:PROCESO",
+   "SENA_PENDIENTE:CALIFICACION",
+   "SENA_PENDIENTE:CORRESPONDIENTE"
+  ],
+  "faltan": [
+   "debe"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Queda entre Antezana y Lanza, Edificio Aly.": {
+  "glosas": [
+   "SENA_PENDIENTE:ANTEZANA",
+   "SENA_PENDIENTE:LANZA",
+   "SENA_PENDIENTE:EDIFICIO",
+   "SENA_PENDIENTE:ALY",
+   "SENA_PENDIENTE:QUEDA"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:ANTERIOR",
+   "SENA_PENDIENTE:LANZA_EDIFICIO_ALY"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Quiero confirmar el costo total primero.": {
+  "glosas": [
+   "YO",
+   "SENA_PENDIENTE:COSTO",
+   "TOTAL",
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:PRIMERO"
+  ],
+  "antes": [
+   "YO",
+   "SENA_PENDIENTE:COSTO",
+   "TOTAL",
+   "PRIMERA_VEZ",
+   "SENA_PENDIENTE:CONFIRMAR"
+  ],
+  "faltan": [
+   "Quiero"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Quiero entender todas las preguntas de la denuncia.": {
+  "glosas": [
+   "YO",
+   "SENA_PENDIENTE:ENTENDER",
+   "SENA_PENDIENTE:DENUNCIA",
+   "SENA_PENDIENTE:PREGUNTA",
+   "SENA_PENDIENTE:TODAS",
+   "QUERER"
+  ],
+  "antes": [
+   "YO",
+   "SENA_PENDIENTE:ENTENDER",
+   "SENA_PENDIENTE:PREGUNTA",
+   "SENA_PENDIENTE:DENUNCIA",
+   "SENA_PENDIENTE:TODOS"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Quiero participar directamente en mi audiencia.": {
+  "glosas": [
+   "QUERER",
+   "SENA_PENDIENTE:PARTICIPAR",
+   "SENA_PENDIENTE:DIRECTAMENTE",
+   "MÍO",
+   "SENA_PENDIENTE:AUDIENCIA"
+  ],
+  "antes": [
+   "YO",
+   "SENA_PENDIENTE:AUDIENCIA",
+   "SENA_PENDIENTE:PARTICIPAR"
+  ],
+  "faltan": [
+   "Quiero"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Quiero que quede registrada mi solicitud.": {
+  "glosas": [
+   "QUERER",
+   "MÍO",
+   "SENA_PENDIENTE:SOLICITUD",
+   "SENA_PENDIENTE:REGISTRAR"
+  ],
+  "antes": [
+   "YO",
+   "SENA_PENDIENTE:SOLICITUD",
+   "SENA_PENDIENTE:REGISTRAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Quiero revisar todo antes de pagar.": {
+  "glosas": [
+   "QUERER",
+   "SENA_PENDIENTE:TODO",
+   "SENA_PENDIENTE:REVISAR",
+   "SENA_PENDIENTE:PAGAR",
+   "SENA_PENDIENTE:ANTES"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:TODO",
+   "SENA_PENDIENTE:REVISAR",
+   "SENA_PENDIENTE:PAGAR",
+   "NO_PUEDO"
+  ],
+  "faltan": [
+   "Quiero"
+  ],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Quiero saber cómo está mi proceso.": {
+  "glosas": [
+   "SABER",
+   "CÓMO",
+   "SENA_PENDIENTE:ESTAR",
+   "MÍO",
+   "SENA_PENDIENTE:PROCESO"
+  ],
+  "antes": [
+   "QUERER",
+   "SABER",
+   "COMO_ESTAS",
+   "MÍO",
+   "SENA_PENDIENTE:PROCESO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Registraremos los datos que usted pueda aportar.": {
+  "glosas": [
+   "SENA_PENDIENTE:DATOS",
+   "SENA_PENDIENTE:APORTAR",
+   "SENA_PENDIENTE:REGISTRAR",
+   "SENA_PENDIENTE:USTED",
+   "SENA_PENDIENTE:PODER"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:DATOS",
+   "SENA_PENDIENTE:APORTAR",
+   "SENA_PENDIENTE:REGISTRAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Registraremos su necesidad de interpretación.": {
+  "glosas": [
+   "NECESITAR",
+   "INTÉRPRETE"
+  ],
+  "antes": [
+   "NECESITAR",
+   "INTERPRETE"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "SERECI incluye ese servicio entre certificados duplicados.": {
+  "glosas": [
+   "CERTIFICADO",
+   "SENA_PENDIENTE:DUPLICADO",
+   "SENA_PENDIENTE:INCLUIR",
+   "S",
+   "E",
+   "R",
+   "E",
+   "C",
+   "I",
+   "SENA_PENDIENTE:SERVICIO"
+  ],
+  "antes": [
+   "CERTIFICADO",
+   "SENA_PENDIENTE:DUPLICADO",
+   "SENA_PENDIENTE:INCLUIR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "SIREJ indica acudir a información del Tribunal.": {
+  "glosas": [
+   "S",
+   "I",
+   "R",
+   "E",
+   "J",
+   "SENA_PENDIENTE:TRIBUNAL",
+   "SENA_PENDIENTE:INFORMACION",
+   "SENA_PENDIENTE:ACUDIR",
+   "SENA_PENDIENTE:INDICAR"
+  ],
+  "antes": [
+   "S",
+   "I",
+   "R",
+   "E",
+   "J",
+   "SENA_PENDIENTE:TRIBUNAL",
+   "SENA_PENDIENTE:INFORMACION",
+   "SENA_PENDIENTE:ACUDIR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Se informó condonación de multas e intereses hasta octubre.": {
+  "glosas": [
+   "SENA_PENDIENTE:INFORMAR",
+   "SENA_PENDIENTE:CONDONACIÓN",
+   "SENA_PENDIENTE:MULTA",
+   "SENA_PENDIENTE:INTERÉS",
+   "SENA_PENDIENTE:OCTUBRE"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:INFORMAR",
+   "SENA_PENDIENTE:MULTA",
+   "SENA_PENDIENTE:INTERES",
+   "SENA_PENDIENTE:OCTUBRE",
+   "SENA_PENDIENTE:HASTA"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Solo legal.": {
+  "glosas": [
+   "SENA_PENDIENTE:SOLO",
+   "SENA_PENDIENTE:LEGAL"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:LEGAL"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Sí tengo mi última boleta.": {
+  "glosas": [
+   "ÚLTIMO",
+   "TENER",
+   "YO",
+   "SENA_PENDIENTE:BOLETA"
+  ],
+  "antes": [
+   "ULTIMO",
+   "BILLETES",
+   "TENER",
+   "YO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Sí, pero escribí muy poco.": {
+  "glosas": [
+   "SÍ",
+   "ESCRIBIR",
+   "POCO",
+   "SENA_PENDIENTE:MUY"
+  ],
+  "antes": [
+   "SI",
+   "ESCRIBIR",
+   "POCO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Sí. Estoy lejos de esa persona.": {
+  "glosas": [
+   "LEJOS",
+   "SENA_PENDIENTE:PERSONA"
+  ],
+  "antes": [
+   "LEJOS",
+   "SENA_PENDIENTE:PERSONA",
+   "SENA_PENDIENTE:ESTAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Sí. La dirección que tenía estaba cerrada.": {
+  "glosas": [
+   "DIRECCIÓN",
+   "TENER",
+   "SENA_PENDIENTE:CERRADO"
+  ],
+  "antes": [
+   "DIRECCION",
+   "TENER",
+   "SENA_PENDIENTE:CERRADO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Sí. Me citaron y no tengo abogado.": {
+  "glosas": [
+   "YO",
+   "LLAMAR",
+   "NO",
+   "ABOGADO",
+   "TENER",
+   "SENA_PENDIENTE:CITAR"
+  ],
+  "antes": [
+   "YO",
+   "LLAMAR",
+   "NO",
+   "ABOGADO",
+   "TENER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "También enumera identificación del fallecido y dos testigos.": {
+  "glosas": [
+   "IDENTIFICAR",
+   "SENA_PENDIENTE:FALLECIDO",
+   "TESTIGO",
+   "TESTIGO",
+   "SENA_PENDIENTE:ENUMERAR",
+   "SENA_PENDIENTE:DOS"
+  ],
+  "antes": [
+   "IDENTIFICAR",
+   "SENA_PENDIENTE:FALLECIDO",
+   "TESTIGO",
+   "TESTIGO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Tengo deuda antigua de mi casa.": {
+  "glosas": [
+   "TENER",
+   "SENA_PENDIENTE:ANTIGUO",
+   "SENA_PENDIENTE:DEUDA",
+   "MÍO",
+   "CASA"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:CASO",
+   "SENA_PENDIENTE:ANTIGUO",
+   "SENA_PENDIENTE:DEUDA",
+   "MÍO",
+   "CASA"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Usaré el buscador oficial.": {
+  "glosas": [
+   "BUSCAR",
+   "SENA_PENDIENTE:USAR",
+   "OFICIAL"
+  ],
+  "antes": [
+   "BUSCAR",
+   "OFICIAL"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "Vine por violencia contra mi sobrino adolescente.": {
+  "glosas": [
+   "VIOLENCIA",
+   "SENA_PENDIENTE:SOBRINO",
+   "YO",
+   "VENIR",
+   "SENA_PENDIENTE:CONTRA",
+   "SENA_PENDIENTE:ADOLESCENTE"
+  ],
+  "antes": [
+   "VIOLENCIA",
+   "SENA_PENDIENTE:SOBRINO",
+   "ADULTO",
+   "YO",
+   "VENIR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Cuesta lo mismo que la cédula física?": {
+  "glosas": [
+   "PAPEL",
+   "IDENTIDAD",
+   "SENA_PENDIENTE:FISICA",
+   "SENA_PENDIENTE:COSTAR",
+   "SENA_PENDIENTE:MISMO"
+  ],
+  "antes": [
+   "CUÁNTOS",
+   "PAPEL",
+   "IDENTIDAD",
+   "SENA_PENDIENTE:FISICA",
+   "SENA_PENDIENTE:COSTAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Cuándo y dónde ocurrió el robo?": {
+  "glosas": [
+   "ROBAR",
+   "CUÁNDO",
+   "DÓNDE",
+   "SENA_PENDIENTE:OCURRIR"
+  ],
+  "antes": [
+   "ROBAR",
+   "CUANDO",
+   "DONDE"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Cuánto cuesta la cédula física?": {
+  "glosas": [
+   "CUÁNTOS",
+   "PAPEL",
+   "IDENTIDAD",
+   "SENA_PENDIENTE:FISICA",
+   "SENA_PENDIENTE:COSTAR"
+  ],
+  "antes": [
+   "CUANTOS",
+   "SENA_PENDIENTE:COSTO",
+   "PAPEL",
+   "IDENTIDAD",
+   "SENA_PENDIENTE:FISICA"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Cuánto dice la página que cuesta?": {
+  "glosas": [
+   "CUÁNTOS",
+   "PÁGINA",
+   "SENA_PENDIENTE:DICE",
+   "SENA_PENDIENTE:COSTAR"
+  ],
+  "antes": [
+   "CUANTOS",
+   "PAGINA",
+   "SENA_PENDIENTE:COSTO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿El trámite sigue usando el sistema SIPRUNPCD?": {
+  "glosas": [
+   "TRÁMITE",
+   "SENA_PENDIENTE:SIGUIR",
+   "SENA_PENDIENTE:SISTEMA",
+   "S",
+   "I",
+   "P",
+   "R",
+   "U",
+   "N",
+   "P",
+   "C",
+   "D"
+  ],
+  "antes": [
+   "TRAMITE",
+   "SENA_PENDIENTE:SIGUIR",
+   "SENA_PENDIENTE:USAR",
+   "SENA_PENDIENTE:SISTEMA",
+   "S",
+   "I",
+   "P",
+   "R",
+   "U",
+   "N",
+   "P",
+   "C",
+   "D"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Entonces aquí no sigo el trámite?": {
+  "glosas": [
+   "AQUÍ",
+   "TRÁMITE",
+   "SENA_PENDIENTE:SIGUIR",
+   "NO"
+  ],
+  "antes": [
+   "AQUI",
+   "TRAMITE",
+   "SENA_PENDIENTE:SIGUIR",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿La dirección sigue vigente?": {
+  "glosas": [
+   "DIRECCIÓN",
+   "SENA_PENDIENTE:VIGENTE"
+  ],
+  "antes": [
+   "DIRECCION",
+   "SENA_PENDIENTE:VIGENTE",
+   "SI"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Las amenazas continúan actualmente?": {
+  "glosas": [
+   "AMENAZAR",
+   "CONTINUAR"
+  ],
+  "antes": [
+   "AHORA",
+   "AMENAZAR",
+   "CONTINUAR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Le dijeron que necesita treinta por ciento?": {
+  "glosas": [
+   "SENA_PENDIENTE:DECIR",
+   "ELLOS",
+   "NECESITAR",
+   "3",
+   "0",
+   "SENA_PENDIENTE:POR_CIENTO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:NEED",
+   "SENA_PENDIENTE:THIRTY",
+   "SENA_PENDIENTE:PERCENT",
+   "SENA_PENDIENTE:YES"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Puede ingresar a su cuenta?": {
+  "glosas": [
+   "SENA_PENDIENTE:CUENTA",
+   "SENA_PENDIENTE:INGRESAR",
+   "PUEDO"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:CUENTA",
+   "SENA_PENDIENTE:INGRESAR",
+   "PUEDO",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Pueden indicarme cómo contactarla?": {
+  "glosas": [
+   "PUEDO",
+   "YO",
+   "SENA_PENDIENTE:CONTACTAR",
+   "ELLA",
+   "CÓMO",
+   "SENA_PENDIENTE:INDICARME"
+  ],
+  "antes": [
+   "YO",
+   "SENA_PENDIENTE:CONTACTAR",
+   "ELLA",
+   "COMO"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Qué ayuda necesita?": {
+  "glosas": [
+   "SENA_PENDIENTE:AYUDA",
+   "NECESITAR"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:AYUDA",
+   "NECESITAR",
+   "QUIEN"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Qué trámite viene a registrar?": {
+  "glosas": [
+   "TRÁMITE",
+   "SENA_PENDIENTE:REGISTRAR",
+   "VENIR"
+  ],
+  "antes": [
+   "TRAMITE",
+   "SENA_PENDIENTE:REGISTRAR",
+   "VENIR"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Sigue funcionando allí?": {
+  "glosas": [
+   "ALLÍ",
+   "FUNCIONAR"
+  ],
+  "antes": [
+   "ALLI",
+   "FUNCIONAR",
+   "SI"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Su deuda es de vehículo, inmueble o actividad?": {
+  "glosas": [
+   "SENA_PENDIENTE:VEHÍCULO",
+   "SENA_PENDIENTE:INMUEBLE",
+   "SENA_PENDIENTE:ACTIVIDAD",
+   "SENA_PENDIENTE:DEUDA"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:VEHICULO",
+   "SENA_PENDIENTE:INMUEBLE",
+   "SENA_PENDIENTE:ACTIVIDAD",
+   "SENA_PENDIENTE:DEUDA",
+   "SENA_PENDIENTE:ES",
+   "CUAL"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Tiene actualmente abogado particular?": {
+  "glosas": [
+   "TENER",
+   "SENA_PENDIENTE:ACTUALMENTE",
+   "ABOGADO",
+   "SENA_PENDIENTE:PARTICULAR"
+  ],
+  "antes": [
+   "AHORA",
+   "ABOGADO",
+   "SENA_PENDIENTE:PARTICULAR",
+   "TENER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Todavía hay descuento si pago hoy?": {
+  "glosas": [
+   "HOY",
+   "SENA_PENDIENTE:PAGAR",
+   "SENA_PENDIENTE:DESCUENTO",
+   "AÚN",
+   "SENA_PENDIENTE:TODAVÍA"
+  ],
+  "antes": [
+   "HOY",
+   "SENA_PENDIENTE:PAGAR",
+   "SENA_PENDIENTE:DESCUENTO",
+   "AUN"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ },
+ "¿Usted es la persona denunciada o la víctima?": {
+  "glosas": [
+   "SENA_PENDIENTE:PERSONA",
+   "SENA_PENDIENTE:DENUNCIAR",
+   "SENA_PENDIENTE:VICTIMA",
+   "TÚ"
+  ],
+  "antes": [
+   "SENA_PENDIENTE:PERSONA",
+   "SENA_PENDIENTE:DENUNCIAR",
+   "SENA_PENDIENTE:VICTIMA",
+   "TU",
+   "SENA_PENDIENTE:SER"
+  ],
+  "faltan": [],
+  "sobran": [],
+  "fecha": "2026-09-27"
+ }
+}

@@ -15,16 +15,15 @@
  "Compré un auto. Quiero pasarlo a mi nombre.": {
   "glosas": [
    "COMPRAR",
+   "SENA_PENDIENTE:AUTO",
+   "QUERER",
    "MÍO",
    "NOMBRE",
    "SENA_PENDIENTE:PASAR"
   ],
-  "vuelta": "Mi nombre pasará a comprar",
-  "similitud": 0.5687,
-  "faltan": [
-   "auto",
-   "Quiero"
-  ],
+  "vuelta": "Quiero comprar un auto a mi nombre para pasar",
+  "similitud": 0.7357,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -49,13 +48,12 @@
  "Confirmaré antes de pagar.": {
   "glosas": [
    "SENA_PENDIENTE:PAGAR",
-   "SENA_PENDIENTE:CONFIRMAR"
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:ANTES"
   ],
-  "vuelta": "Confirmo que he pagado",
-  "similitud": 0.5957,
-  "faltan": [
-   "antes"
-  ],
+  "vuelta": "Antes de confirmar, pagar",
+  "similitud": 0.738,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -91,20 +89,16 @@
  },
  "Consulte primero el monto actualizado antes de pagar.": {
   "glosas": [
-   "AHORA",
    "SENA_PENDIENTE:MONTO",
    "SENA_PENDIENTE:ACTUALIZAR",
    "SENA_PENDIENTE:PAGAR",
-   "SENA_PENDIENTE:ANTES"
+   "SENA_PENDIENTE:PRIMERO",
+   "SENA_PENDIENTE:CONSULTAR"
   ],
-  "vuelta": "Ahora debe pagar el monto actualizado",
-  "similitud": 0.7119,
-  "faltan": [
-   "Consulte"
-  ],
-  "sobran": [
-   "AHORA"
-  ],
+  "vuelta": "Primero consulte el monto actualizado para pagar",
+  "similitud": 0.8972,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -112,14 +106,13 @@
   "glosas": [
    "SEPDEP",
    "ATENDER",
-   "SENA_PENDIENTE:ACTIVAR"
+   "SENA_PENDIENTE:ACTIVAR",
+   "SENA_PENDIENTE:CORRESPONDIENTE",
+   "SENA_PENDIENTE:CONTACTAR"
   ],
-  "vuelta": "Vamos a activar para atender a SEPDEP",
-  "similitud": 0.6681,
-  "faltan": [
-   "Contacte",
-   "correspondiente"
-  ],
+  "vuelta": "El SEPDEP activará para contactar al correspondiente",
+  "similitud": 0.7049,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -133,9 +126,7 @@
   ],
   "vuelta": "Cuente lo ocurrido con sus propias palabras.",
   "similitud": 1.0,
-  "faltan": [
-   "Cuente"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -151,13 +142,12 @@
    "L",
    "U",
    "BUSCAR",
-   "SENA_PENDIENTE:NOTARIO"
+   "SENA_PENDIENTE:NOTARIO",
+   "SENA_PENDIENTE:OFRECER"
   ],
-  "vuelta": "Busque al director o al jefe de nómina",
-  "similitud": 0.4653,
-  "faltan": [
-   "ofrece"
-  ],
+  "vuelta": "Busco al notario que ofrece Dirnoplu",
+  "similitud": 0.7648,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -167,10 +157,10 @@
    "SENA_PENDIENTE:RELACION",
    "SENA_PENDIENTE:PERMITIDO",
    "IDENTIDAD",
-   "SENA_PENDIENTE:DEMOSTRAR"
+   "SENA_PENDIENTE:ACREDITAR"
   ],
-  "vuelta": "¿Usted tiene permitido demostrar identidad?",
-  "similitud": 0.4854,
+  "vuelta": "La relación está permitida para acreditar la identidad",
+  "similitud": 0.8457,
   "faltan": [
    "Debe"
   ],
@@ -231,17 +221,16 @@
  },
  "Debe tramitarse la interpretación conforme al procedimiento aplicable.": {
   "glosas": [
-   "TRAMITE",
+   "TRÁMITE",
    "SENA_PENDIENTE:INTERPRETAR",
+   "SENA_PENDIENTE:CONFORME",
    "SENA_PENDIENTE:PROCEDIMIENTO",
-   "SENA_PENDIENTE:APLICABLE"
+   "SENA_PENDIENTE:APLICABLE",
+   "SENA_PENDIENTE:DEBER"
   ],
-  "vuelta": "Necesito interpretar el procedimiento aplicable para el trámite.",
-  "similitud": 0.7394,
-  "faltan": [
-   "Debe",
-   "conforme"
-  ],
+  "vuelta": "El trámite debe interpretarse conforme al procedimiento aplicable",
+  "similitud": 0.9044,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -266,28 +255,26 @@
    "SENA_PENDIENTE:SITUACION",
    "SENA_PENDIENTE:NORMA",
    "SENA_PENDIENTE:APLICABLE",
-   "SENA_PENDIENTE:REVISAR"
+   "SENA_PENDIENTE:REVISAR",
+   "SENA_PENDIENTE:DEPERDER"
   ],
-  "vuelta": "Revisaré el grado de situación según la norma aplicable",
-  "similitud": 0.736,
-  "faltan": [
-   "Depende"
-  ],
+  "vuelta": "Revisaré la situación de grado según la norma aplicable para evitar perderlo.",
+  "similitud": 0.6695,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Describa cuándo y dónde ocurrió.": {
   "glosas": [
-   "CUANDO",
-   "DONDE",
+   "CUÁNDO",
+   "DÓNDE",
+   "SENA_PENDIENTE:DESCRIBIR",
    "SENA_PENDIENTE:OCURRIR"
   ],
   "vuelta": "¿Cuándo y dónde ocurrió?",
   "similitud": 0.5753,
-  "faltan": [
-   "Describa"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -348,15 +335,13 @@
    "SENA_PENDIENTE:PUBLICAR",
    "SENA_PENDIENTE:ARANCELE",
    "SENA_PENDIENTE:INCLUIR",
-   "SENA_PENDIENTE:OTRO",
-   "SENA_PENDIENTE:ESCRITURA"
+   "SENA_PENDIENTE:ESCRITURA",
+   "SENA_PENDIENTE:ANTICRETICOS",
+   "SENA_PENDIENTE:OTRAS"
   ],
-  "vuelta": "Incluir otro escrito en la tarifa pública",
-  "similitud": 0.3049,
-  "faltan": [
-   "anticréticos",
-   "otras"
-  ],
+  "vuelta": "Publicar el arancel incluyendo escritura anticréditos y otras",
+  "similitud": 0.6857,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -419,13 +404,12 @@
    "2",
    "0",
    "2",
-   "6"
+   "6",
+   "SENA_PENDIENTE:FIGURA"
   ],
-  "vuelta": "¿Actualiza el servicio de violencia familiar el 20 de febrero?",
-  "similitud": 0.7249,
-  "faltan": [
-   "figura"
-  ],
+  "vuelta": "Señor, actualice el servicio de Violencia Familiar al 2026",
+  "similitud": 0.8513,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -450,59 +434,47 @@
   ],
   "vuelta": "Entiendo que el servicio para víctima va",
   "similitud": 0.7011,
-  "faltan": [
-   "Entiendo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Entonces confirmaré el trámite exacto.": {
   "glosas": [
-   "TRAMITE",
-   "SENA_PENDIENTE:CONFIRMAR"
+   "TRÁMITE",
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:EXACTO"
   ],
-  "vuelta": "Confirmo el trámite",
-  "similitud": 0.7411,
-  "faltan": [
-   "exacto"
-  ],
+  "vuelta": "El trámite está confirmado exactamente",
+  "similitud": 0.7675,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Entonces quiero confirmar el precio primero.": {
   "glosas": [
-   "AHORA",
    "SENA_PENDIENTE:PRECIO",
    "SENA_PENDIENTE:CONFIRMAR",
-   "SENA_PENDIENTE:PRIMERO"
+   "SENA_PENDIENTE:PRIMERO",
+   "QUERER"
   ],
-  "vuelta": "Primero debo confirmar el precio ahora.",
-  "similitud": 0.8819,
-  "faltan": [
-   "quiero"
-  ],
-  "sobran": [
-   "AHORA"
-  ],
+  "vuelta": "Primero quiero confirmar el precio",
+  "similitud": 0.9188,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Entonces ya puedo renovarla.": {
   "glosas": [
-   "SENA_PENDIENTE:YA",
    "PUEDO",
-   "SENA_PENDIENTE:RENOVAR",
-   "SENA_PENDIENTE:LA",
-   "SENA_PENDIENTE:ENTONCES"
+   "SENA_PENDIENTE:RENOVAR"
   ],
-  "vuelta": "Ya puedo renovarla entonces",
-  "similitud": 0.9048,
+  "vuelta": "Puedo renovar",
+  "similitud": null,
   "faltan": [],
-  "sobran": [
-   "LA"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -519,14 +491,13 @@
  },
  "Escríbala sin espacios ni guiones.": {
   "glosas": [
-   "ESCRIBIR"
+   "ESCRIBIR",
+   "SENA_PENDIENTE:ESPACIOS",
+   "SENA_PENDIENTE:GUIONES"
   ],
-  "vuelta": "Escriba",
-  "similitud": 0.4286,
-  "faltan": [
-   "espacios",
-   "guiones"
-  ],
+  "vuelta": "Escriba en espacios con guiones",
+  "similitud": 0.5679,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -545,11 +516,10 @@
  "Estoy cerca de La Chimba.": {
   "glosas": [
    "CERCA",
-   "SENA_PENDIENTE:CHIMBA",
-   "SENA_PENDIENTE:ESTAR"
+   "SENA_PENDIENTE:CHIMBA"
   ],
-  "vuelta": "Chimba está cerca",
-  "similitud": 0.7641,
+  "vuelta": "Está cerca",
+  "similitud": 0.4745,
   "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
@@ -612,15 +582,17 @@
  },
  "Existe representación en Centro Integral FELCV, avenida Beijing.": {
   "glosas": [
-   "SENA_PENDIENTE:CENTRO_INTEGRAL_FELCV",
+   "SENA_PENDIENTE:CENTRO",
+   "SENA_PENDIENTE:INTEGRAL",
+   "FELCV",
    "AVENIDA",
-   "SENA_PENDIENTE:BEIJING"
+   "SENA_PENDIENTE:BEIJING",
+   "SENA_PENDIENTE:EXISTIR",
+   "SENA_PENDIENTE:REPRESENTACIÓN"
   ],
-  "vuelta": "El Centro Integral FELCV está en la Avenida Beijing",
-  "similitud": 0.8432,
-  "faltan": [
-   "Existe"
-  ],
+  "vuelta": "Señor, existe representación en el Centro Integral FELCV en la Avenida Beijing",
+  "similitud": 0.962,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -632,14 +604,12 @@
    "SENA_PENDIENTE:HECHO",
    "ATENDER",
    "SENA_PENDIENTE:RUTA",
-   "SENA_PENDIENTE:ACTIVAR"
+   "SENA_PENDIENTE:ACTIVAR",
+   "SENA_PENDIENTE:CORRESPONDIENTE"
   ],
-  "vuelta": "Activen la ruta para atender el hecho de violencia felina",
-  "similitud": 0.6799,
-  "faltan": [
-   "atiende",
-   "correspondiente"
-  ],
+  "vuelta": "Se activará la ruta para atender el hecho de violencia",
+  "similitud": 0.6878,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -647,13 +617,12 @@
  "Falta más tiempo.": {
   "glosas": [
    "SENA_PENDIENTE:TIEMPO",
-   "SENA_PENDIENTE:MAS"
+   "SENA_PENDIENTE:MAS",
+   "SENA_PENDIENTE:FALTA"
   ],
-  "vuelta": "Más tiempo",
+  "vuelta": "Falta más tiempo",
   "similitud": null,
-  "faltan": [
-   "Falta"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -715,14 +684,13 @@
    "SENA_PENDIENTE:VICTIMA",
    "ROBAR",
    "NECESITAR",
+   "SENA_PENDIENTE:FUI",
    "ABOGADO",
    "GRATIS"
   ],
-  "vuelta": "Necesito un abogado gratis porque soy víctima de robo",
-  "similitud": 0.925,
-  "faltan": [
-   "Fui"
-  ],
+  "vuelta": "Yo, víctima de un robo, necesité ir a un abogado gratis",
+  "similitud": 0.819,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -731,14 +699,15 @@
   "glosas": [
    "GRACIAS",
    "ESPERAR",
-   "ASISTENCIA"
+   "ASISTENCIA",
+   "SENA_PENDIENTE:ADE_CUADA"
   ],
-  "vuelta": "Gracias por la asistencia a la espera",
-  "similitud": 0.5513,
-  "faltan": [
-   "adecuada"
+  "vuelta": "Gracias por la asistencia esperada adecuada",
+  "similitud": 0.7314,
+  "faltan": [],
+  "sobran": [
+   "ADE CUADA"
   ],
-  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -746,14 +715,13 @@
   "glosas": [
    "HACER",
    "SENA_PENDIENTE:CONSULTA",
-   "INTERNET"
+   "SENA_PENDIENTE:LÍNEA",
+   "YO"
   ],
-  "vuelta": "Hice la consulta por internet",
-  "similitud": 0.7748,
+  "vuelta": "Yo hacer consulta en línea",
+  "similitud": 0.8653,
   "faltan": [],
-  "sobran": [
-   "INTERNET"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -772,16 +740,15 @@
  "Incluya qué pasó, cuándo y dónde, si lo sabe.": {
   "glosas": [
    "PASADO",
-   "DONDE",
-   "CUANDO",
+   "DÓNDE",
+   "CUÁNDO",
    "SABER",
-   "YO"
+   "YO",
+   "SENA_PENDIENTE:INCLUIR"
   ],
-  "vuelta": "Yo sé dónde y cuándo fue lo pasado",
-  "similitud": 0.587,
-  "faltan": [
-   "Incluya"
-  ],
+  "vuelta": "Yo incluiré en el pasado dónde y cuándo",
+  "similitud": 0.424,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -848,13 +815,12 @@
    "8",
    "JUSTICIA",
    "SENA_PENDIENTE:INTERPRETAR",
-   "GRATIS"
+   "GRATIS",
+   "SENA_PENDIENTE:CONTEMPLAR"
   ],
-  "vuelta": "La ley 1658 interpreta justicia gratis",
-  "similitud": 0.8459,
-  "faltan": [
-   "contempla"
-  ],
+  "vuelta": "La ley 1658 contempla interpretar justicia gratis.",
+  "similitud": 0.9549,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -959,15 +925,14 @@
    "0",
    "2",
    "5",
+   "SENA_PENDIENTE:INCORPORAR",
    "SENA_PENDIENTE:MECANISMO",
    "SENA_PENDIENTE:RENOVACION",
    "SENA_PENDIENTE:AUTOMATICO"
   ],
-  "vuelta": "La norma 2025 tiene un mecanismo de renovación automática",
-  "similitud": 0.8844,
-  "faltan": [
-   "incorporó"
-  ],
+  "vuelta": "La norma 2025 incorpora un mecanismo de renovación automática.",
+  "similitud": 0.9405,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -982,13 +947,12 @@
    "SENA_PENDIENTE:REGISTRO",
    "SENA_PENDIENTE:SISTEMA",
    "SENA_PENDIENTE:NACIONAL",
-   "SENA_PENDIENTE:MANTENER"
+   "SENA_PENDIENTE:MANTENER",
+   "DENTRO"
   ],
-  "vuelta": "Mantiene la norma 2025 del Registro del Sistema Nacional",
-  "similitud": 0.8589,
-  "faltan": [
-   "dentro"
-  ],
+  "vuelta": "Mantener dentro del sistema nacional de registro la norma 2025",
+  "similitud": 0.883,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1011,14 +975,12 @@
    "6",
    "SENA_PENDIENTE:ANTES",
    "SENA_PENDIENTE:SOLICITAR",
+   "SENA_PENDIENTE:RENOVACION",
    "SENA_PENDIENTE:PODER"
   ],
-  "vuelta": "Puede solicitarlo 6 meses antes",
-  "similitud": 0.7305,
-  "faltan": [
-   "renovación",
-   "puede"
-  ],
+  "vuelta": "¿Puede solicitar la renovación seis meses antes?",
+  "similitud": 0.9236,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1027,15 +989,13 @@
   "glosas": [
    "SENA_PENDIENTE:EXTRAVIO",
    "ROBAR",
-   "SENA_PENDIENTE:DETIEN",
+   "SENA_PENDIENTE:DETERIORO",
    "SENA_PENDIENTE:APLICAR"
   ],
-  "vuelta": "Si hay extravío o robo, deben aplicar el detenimiento",
-  "similitud": 0.5773,
+  "vuelta": "¿Se aplica robo, extravío o deterioro?",
+  "similitud": 0.7096,
   "faltan": [],
-  "sobran": [
-   "DETIEN"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -1101,12 +1061,10 @@
   ],
   "vuelta": "No tengo abogado para denunciar",
   "similitud": 0.8375,
-  "faltan": [
-   "tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Me falta el certificado catastral.": {
   "glosas": [
@@ -1137,15 +1095,12 @@
  },
  "Me la robaron.": {
   "glosas": [
-   "CELULAR",
    "ROBAR"
   ],
-  "vuelta": "Me robaron el celular",
-  "similitud": 0.5381,
+  "vuelta": "Robar",
+  "similitud": null,
   "faltan": [],
-  "sobran": [
-   "CELULAR"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -1174,12 +1129,10 @@
   ],
   "vuelta": "Yo quiero denunciar que me robaron el celular",
   "similitud": 0.9504,
-  "faltan": [
-   "Quiero"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Mi carnet necesita renovación.": {
   "glosas": [
@@ -1197,20 +1150,15 @@
  },
  "Mi expareja me amenaza todos los días.": {
   "glosas": [
-   "DIA",
    "PAREJA",
    "AMENAZAR",
-   "MUCHO"
+   "SENA_PENDIENTE:TODOS",
+   "SENA_PENDIENTE:DÍAS"
   ],
-  "vuelta": "Mi pareja me amenazó mucho hoy",
-  "similitud": 0.5987,
-  "faltan": [
-   "todos"
-  ],
-  "sobran": [
-   "DIA",
-   "MUCHO"
-  ],
+  "vuelta": "Mi pareja me amenaza todos los días",
+  "similitud": 0.7875,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -1360,23 +1308,20 @@
    "CERTIFICADO",
    "NECESITAR",
    "PAPEL",
-   "ROBAR",
-   "POR_QUE"
+   "ROBAR"
   ],
-  "vuelta": "Necesito el certificado porque me robaron el documento",
-  "similitud": 0.8697,
+  "vuelta": "Necesito un certificado porque me robaron el documento",
+  "similitud": 0.8824,
   "faltan": [],
-  "sobran": [
-   "POR QUE"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Necesito comunicarme en Lengua de Señas Boliviana.": {
   "glosas": [
-   "YO",
    "NECESITAR",
    "SENA_PENDIENTE:COMUNICAR",
+   "YO",
    "SENA_PENDIENTE:LSB"
   ],
   "vuelta": "Yo necesito comunicarme en LSB",
@@ -1405,14 +1350,13 @@
   "glosas": [
    "SENA_PENDIENTE:PREGUNTAR",
    "SENA_PENDIENTE:DENUNCIA",
-   "NECESITAR"
+   "NECESITAR",
+   "SENA_PENDIENTE:HACERLE",
+   "SENA_PENDIENTE:ALGUNAS"
   ],
-  "vuelta": "¿Necesita denunciar?",
-  "similitud": 0.4524,
-  "faltan": [
-   "hacerle",
-   "algunas"
-  ],
+  "vuelta": "¿Necesita hacerle algunas preguntas sobre la denuncia?",
+  "similitud": 0.896,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1556,13 +1500,12 @@
    "SENA_PENDIENTE:SERVICIO",
    "FUNCIONAR",
    "DEJAR",
-   "NO"
+   "NO",
+   "SENA_PENDIENTE:ASUMIR"
   ],
-  "vuelta": "¿No deja de funcionar el servicio?",
-  "similitud": 0.4723,
-  "faltan": [
-   "asumiremos"
-  ],
+  "vuelta": "No dejaremos de asumir el servicio",
+  "similitud": 0.5335,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1573,13 +1516,12 @@
    "SENA_PENDIENTE:BORRAR",
    "SENA_PENDIENTE:MODIFICAR",
    "SENA_PENDIENTE:MENSAJE",
+   "SENA_PENDIENTE:RELACIONAR",
    "SENA_PENDIENTE:HECHO"
   ],
-  "vuelta": "No borre ni modifique el mensaje hecho",
-  "similitud": 0.7215,
-  "faltan": [
-   "relacionados"
-  ],
+  "vuelta": "No borre, modifique el mensaje relacionado con el hecho",
+  "similitud": 0.658,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1613,17 +1555,16 @@
  },
  "No entiendo bien explicaciones solo habladas.": {
   "glosas": [
+   "NO",
    "SENA_PENDIENTE:ENTENDER",
    "SENA_PENDIENTE:BIEN",
-   "SENA_PENDIENTE:EXPLICACION",
+   "EXPLICAR",
    "HABLAR",
    "SENA_PENDIENTE:SOLO"
   ],
-  "vuelta": "Entiendo bien la explicación, hable solo",
-  "similitud": 0.484,
-  "faltan": [
-   "No"
-  ],
+  "vuelta": "No entiendo bien, explique, solo hable",
+  "similitud": 0.6696,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1680,17 +1621,13 @@
  },
  "No la traje.": {
   "glosas": [
-   "SENA_PENDIENTE:TRAE",
-   "NO"
+   "NO",
+   "TRAER"
   ],
-  "vuelta": "No lo traigo",
-  "similitud": 0.5903,
-  "faltan": [
-   "traje"
-  ],
-  "sobran": [
-   "TRAE"
-  ],
+  "vuelta": "No traje",
+  "similitud": 0.7651,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -1708,16 +1645,13 @@
  },
  "No lo traje.": {
   "glosas": [
-   "TRABAJADOR",
-   "TRAER",
-   "NO"
+   "NO",
+   "TRAER"
   ],
-  "vuelta": "El trabajador no trae",
-  "similitud": 0.562,
+  "vuelta": "No traje",
+  "similitud": 0.7594,
   "faltan": [],
-  "sobran": [
-   "TRABAJADOR"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -1730,9 +1664,7 @@
   ],
   "vuelta": "No puedo pagar la deuda, todo",
   "similitud": 0.5754,
-  "faltan": [
-   "toda"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1771,13 +1703,12 @@
   "glosas": [
    "RECORDAR",
    "NO",
-   "SENA_PENDIENTE:NUMERO"
+   "SENA_PENDIENTE:NUMERO",
+   "SENA_PENDIENTE:ESOS"
   ],
-  "vuelta": "No recuerdo el número",
-  "similitud": 0.6674,
-  "faltan": [
-   "esos"
-  ],
+  "vuelta": "No recuerdo esos números",
+  "similitud": 0.979,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1785,29 +1716,26 @@
  "No recuerdo.": {
   "glosas": [
    "RECORDAR",
-   "NO_SABER"
+   "NO"
   ],
-  "vuelta": "No sé recordarlo",
-  "similitud": 0.6724,
+  "vuelta": "No recuerdo",
+  "similitud": 0.9588,
   "faltan": [],
-  "sobran": [
-   "NO SABER"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "No responderé cosas que no comprendo.": {
   "glosas": [
-   "NO_SABER",
+   "NO",
+   "COMPRENDER",
    "SENA_PENDIENTE:COSAS",
    "SENA_PENDIENTE:RESPONDER"
   ],
-  "vuelta": "No sé las cosas para responder",
-  "similitud": 0.5108,
+  "vuelta": "No comprendo las cosas a las que debo responder.",
+  "similitud": 0.602,
   "faltan": [],
-  "sobran": [
-   "NO SABER"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -1878,11 +1806,10 @@
  "No sé cuáles son.": {
   "glosas": [
    "NO_SABER",
-   "CUAL",
-   "SENA_PENDIENTE:SER"
+   "CUÁL"
   ],
-  "vuelta": "No sé cuál es",
-  "similitud": 0.6226,
+  "vuelta": "No sé cuál",
+  "similitud": 0.5798,
   "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
@@ -1891,15 +1818,14 @@
  "No sé cuándo podré ir.": {
   "glosas": [
    "NO_SABER",
-   "CUANDO",
-   "SENA_PENDIENTE:PODER",
+   "CUÁNDO",
+   "PUEDO",
+   "SENA_PENDIENTE:PODRÉ",
    "IR"
   ],
   "vuelta": "No sé cuándo podré ir",
   "similitud": 0.9727,
-  "faltan": [
-   "podré"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -1920,17 +1846,13 @@
  "No sé cómo hacerlo.": {
   "glosas": [
    "NO_SABER",
-   "COMO",
-   "HACER",
-   "SENA_PENDIENTE:LO",
-   "YO"
+   "CÓMO",
+   "HACER"
   ],
-  "vuelta": "No sé cómo hacer esto yo",
-  "similitud": 0.8135,
+  "vuelta": "No sé cómo hacer",
+  "similitud": 0.8753,
   "faltan": [],
-  "sobran": [
-   "LO"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -1978,15 +1900,12 @@
  "No sé dónde está.": {
   "glosas": [
    "NO_SABER",
-   "DONDE",
-   "SENA_PENDIENTE:ESTAR"
+   "DÓNDE"
   ],
-  "vuelta": "No sé dónde está",
-  "similitud": 0.9444,
+  "vuelta": "No sé dónde",
+  "similitud": 0.7967,
   "faltan": [],
-  "sobran": [
-   "NO SABER"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -2199,8 +2118,7 @@
   "glosas": [
    "NO_SABER",
    "PUEDO",
-   "PEDIR",
-   "SENA_PENDIENTE:LO"
+   "PEDIR"
   ],
   "vuelta": "No sé si puedo pedirlo",
   "similitud": 0.9589,
@@ -2270,12 +2188,10 @@
   ],
   "vuelta": "No tengo CRPVA",
   "similitud": 0.9297,
-  "faltan": [
-   "tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "No tengo el formulario.": {
   "glosas": [
@@ -2304,12 +2220,10 @@
   ],
   "vuelta": "No tengo el memorial, solo traigo mi cédula de identidad",
   "similitud": 0.8169,
-  "faltan": [
-   "tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "No tengo.": {
   "glosas": [
@@ -2318,12 +2232,10 @@
   ],
   "vuelta": "No tengo",
   "similitud": 0.9636,
-  "faltan": [
-   "tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "No, es de mi hermana.": {
   "glosas": [
@@ -2483,13 +2395,12 @@
    "VIOLENCIA",
    "FELCV",
    "SENA_PENDIENTE:RUTA",
-   "SENA_PENDIENTE:ACTIVAR"
+   "SENA_PENDIENTE:ACTIVAR",
+   "SENA_PENDIENTE:CORRESPONDER"
   ],
-  "vuelta": "Se activa la ruta del FELCV por violencia",
-  "similitud": 0.8068,
-  "faltan": [
-   "corresponde"
-  ],
+  "vuelta": "Activar la ruta correspondiente del Felcv por violencia",
+  "similitud": 0.8939,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -2529,62 +2440,52 @@
    "PAPEL",
    "IDENTIDAD",
    "PERDER",
-   "NUEVO",
-   "NECESITAR"
+   "NECESITAR",
+   "SENA_PENDIENTE:OTRA"
   ],
-  "vuelta": "Necesito una nueva cédula de identidad porque la perdí",
-  "similitud": 0.8261,
-  "faltan": [
-   "otra"
-  ],
-  "sobran": [
-   "NUEVO"
-  ],
+  "vuelta": "Perdí mi cédula de identidad, necesito otra",
+  "similitud": 0.8628,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Primero confirmaré el monto.": {
   "glosas": [
    "SENA_PENDIENTE:CONFIRMAR",
-   "SENA_PENDIENTE:MONTO"
+   "SENA_PENDIENTE:MONTO",
+   "SENA_PENDIENTE:PRIMERO"
   ],
-  "vuelta": "Confirmo el monto",
-  "similitud": 0.7318,
-  "faltan": [
-   "Primero"
-  ],
+  "vuelta": "Primero confirmar el monto",
+  "similitud": 0.8519,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Primero confirmaré la sede y horario.": {
   "glosas": [
-   "AHORA",
+   "SENA_PENDIENTE:CONFIRMAR",
    "SENA_PENDIENTE:SEDE",
    "HORA",
-   "SENA_PENDIENTE:CONFIRMAR"
+   "SENA_PENDIENTE:PRIMERO"
   ],
-  "vuelta": "Ahora confirmar la hora de la sede",
-  "similitud": 0.7493,
-  "faltan": [
-   "Primero"
-  ],
-  "sobran": [
-   "AHORA"
-  ],
+  "vuelta": "Primero confirmar la hora de la sede",
+  "similitud": 0.82,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Primero confirmaré la sede.": {
   "glosas": [
    "SENA_PENDIENTE:CONFIRMAR",
-   "SENA_PENDIENTE:SEDE"
+   "SENA_PENDIENTE:SEDE",
+   "SENA_PENDIENTE:PRIMERO"
   ],
-  "vuelta": "Confirmo la sede",
-  "similitud": 0.7195,
-  "faltan": [
-   "Primero"
-  ],
+  "vuelta": "Confirmo la sede primero",
+  "similitud": 0.8834,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -2593,17 +2494,17 @@
   "glosas": [
    "SENA_PENDIENTE:PROCESO",
    "SENA_PENDIENTE:CALIFICACION",
-   "SENA_PENDIENTE:CORRESPONDIENTE"
+   "SENA_PENDIENTE:CORRESPONDIENTE",
+   "SENA_PENDIENTE:PRIMERO"
   ],
-  "vuelta": "El proceso de calificación corresponde",
-  "similitud": 0.7491,
+  "vuelta": "Primero la calificación del proceso corresponde",
+  "similitud": 0.7552,
   "faltan": [
-   "Primero",
    "debe"
   ],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": false
+  "leve": true
  },
  "Puede acudir a la Defensoría por posible vulneración de derechos.": {
   "glosas": [
@@ -2664,14 +2565,15 @@
  },
  "Queda entre Antezana y Lanza, Edificio Aly.": {
   "glosas": [
-   "SENA_PENDIENTE:ANTERIOR",
-   "SENA_PENDIENTE:LANZA_EDIFICIO_ALY"
+   "SENA_PENDIENTE:ANTEZANA",
+   "SENA_PENDIENTE:LANZA",
+   "SENA_PENDIENTE:EDIFICIO",
+   "SENA_PENDIENTE:ALY",
+   "SENA_PENDIENTE:QUEDA"
   ],
-  "vuelta": "El edificio anterior lanza alianzas",
-  "similitud": 0.3834,
-  "faltan": [
-   "Queda"
-  ],
+  "vuelta": "Señor, queda en el edificio Antezana Lanza Alley",
+  "similitud": 0.6443,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -2697,19 +2599,17 @@
    "YO",
    "SENA_PENDIENTE:COSTO",
    "TOTAL",
-   "PRIMERA_VEZ",
-   "SENA_PENDIENTE:CONFIRMAR"
+   "SENA_PENDIENTE:CONFIRMAR",
+   "SENA_PENDIENTE:PRIMERO"
   ],
-  "vuelta": "Yo confirmo el costo total por primera vez",
-  "similitud": 0.7634,
+  "vuelta": "Confirmo primero el costo total",
+  "similitud": 0.883,
   "faltan": [
    "Quiero"
   ],
-  "sobran": [
-   "PRIMERA VEZ"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
-  "leve": false
+  "leve": true
  },
  "Quiero continuar con el trámite.": {
   "glosas": [
@@ -2763,18 +2663,17 @@
   "glosas": [
    "YO",
    "SENA_PENDIENTE:ENTENDER",
-   "SENA_PENDIENTE:PREGUNTA",
    "SENA_PENDIENTE:DENUNCIA",
-   "SENA_PENDIENTE:TODOS"
+   "SENA_PENDIENTE:PREGUNTA",
+   "SENA_PENDIENTE:TODAS",
+   "QUERER"
   ],
-  "vuelta": "Entiendo todas las preguntas de la denuncia",
-  "similitud": 0.8244,
-  "faltan": [
-   "Quiero"
-  ],
+  "vuelta": "Quiero entender todas las preguntas de la denuncia",
+  "similitud": 0.9848,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Quiero hablar con el equipo.": {
   "glosas": [
@@ -2815,12 +2714,10 @@
   ],
   "vuelta": "Hoy quiero hacerlo",
   "similitud": 0.9185,
-  "faltan": [
-   "Quiero"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Quiero hacerlo verbalmente.": {
   "glosas": [
@@ -2867,16 +2764,15 @@
  },
  "Quiero participar directamente en mi audiencia.": {
   "glosas": [
-   "YO",
-   "SENA_PENDIENTE:AUDIENCIA",
-   "SENA_PENDIENTE:PARTICIPAR"
+   "QUERER",
+   "SENA_PENDIENTE:PARTICIPAR",
+   "SENA_PENDIENTE:DIRECTAMENTE",
+   "MÍO",
+   "SENA_PENDIENTE:AUDIENCIA"
   ],
-  "vuelta": "Participaré en la audiencia",
-  "similitud": 0.5952,
-  "faltan": [
-   "Quiero",
-   "directamente"
-  ],
+  "vuelta": "Quiero participar directamente en mi audiencia.",
+  "similitud": 1.0,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -2911,16 +2807,14 @@
  },
  "Quiero que quede registrada mi solicitud.": {
   "glosas": [
-   "YO",
+   "QUERER",
+   "MÍO",
    "SENA_PENDIENTE:SOLICITUD",
    "SENA_PENDIENTE:REGISTRAR"
   ],
-  "vuelta": "Yo necesito registrar la solicitud.",
-  "similitud": 0.8175,
-  "faltan": [
-   "Quiero",
-   "quede"
-  ],
+  "vuelta": "Quiero registrar mi solicitud.",
+  "similitud": 0.8513,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -2988,20 +2882,16 @@
  },
  "Quiero revisar todo antes de pagar.": {
   "glosas": [
+   "QUERER",
    "SENA_PENDIENTE:TODO",
    "SENA_PENDIENTE:REVISAR",
    "SENA_PENDIENTE:PAGAR",
-   "NO_PUEDO"
+   "SENA_PENDIENTE:ANTES"
   ],
-  "vuelta": "Reviso todo, no puedo pagar",
-  "similitud": 0.4846,
-  "faltan": [
-   "Quiero",
-   "antes"
-  ],
-  "sobran": [
-   "NO PUEDO"
-  ],
+  "vuelta": "Quiero revisar todo y pagar antes",
+  "similitud": 0.8736,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -3023,20 +2913,20 @@
  },
  "Quiero saber cómo está mi proceso.": {
   "glosas": [
-   "QUERER",
    "SABER",
-   "COMO_ESTAS",
+   "CÓMO",
+   "SENA_PENDIENTE:ESTAR",
    "MÍO",
    "SENA_PENDIENTE:PROCESO"
   ],
-  "vuelta": "Quiero saber cómo está mi proceso",
-  "similitud": 0.9836,
-  "faltan": [],
-  "sobran": [
-   "QUERER"
+  "vuelta": "Sé cómo está mi proceso",
+  "similitud": 0.8559,
+  "faltan": [
+   "Quiero"
   ],
+  "sobran": [],
   "fecha": "2026-09-27",
-  "leve": false
+  "leve": true
  },
  "Quiero saber dónde iniciar en Cochabamba.": {
   "glosas": [
@@ -3130,12 +3020,10 @@
   ],
   "vuelta": "Quiero sacar mi documento de identidad de discapacidad",
   "similitud": 0.6587,
-  "faltan": [
-   "Quiero"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Quiero solicitar ese certificado.": {
   "glosas": [
@@ -3172,12 +3060,10 @@
   ],
   "vuelta": "Yo quiero texto",
   "similitud": 0.8799,
-  "faltan": [
-   "Quiero"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Quiero una copia de mi denuncia.": {
   "glosas": [
@@ -3197,15 +3083,13 @@
   "glosas": [
    "SENA_PENDIENTE:DATOS",
    "SENA_PENDIENTE:APORTAR",
+   "SENA_PENDIENTE:REGISTRAR",
+   "SENA_PENDIENTE:USTED",
    "SENA_PENDIENTE:PODER"
   ],
-  "vuelta": "Puede aportar datos",
-  "similitud": 0.6597,
-  "faltan": [
-   "Registraremos",
-   "usted",
-   "pueda"
-  ],
+  "vuelta": "¿Usted puede aportar datos para registrar?",
+  "similitud": 0.7695,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -3227,13 +3111,11 @@
  "Registraremos su necesidad de interpretación.": {
   "glosas": [
    "NECESITAR",
-   "INTERPRETE"
+   "INTÉRPRETE"
   ],
-  "vuelta": "¿Necesita intérprete?",
-  "similitud": 0.4802,
-  "faltan": [
-   "Registraremos"
-  ],
+  "vuelta": "Necesitamos un intérprete",
+  "similitud": 0.459,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -3258,14 +3140,18 @@
   "glosas": [
    "CERTIFICADO",
    "SENA_PENDIENTE:DUPLICADO",
-   "SENA_PENDIENTE:INCLUIR"
+   "SENA_PENDIENTE:INCLUIR",
+   "S",
+   "E",
+   "R",
+   "E",
+   "C",
+   "I",
+   "SENA_PENDIENTE:SERVICIO"
   ],
-  "vuelta": "El certificado duplicado incluye",
-  "similitud": 0.7304,
-  "faltan": [
-   "SERECI",
-   "servicio"
-  ],
+  "vuelta": "El certificado duplicado incluye el servicio de la SERECI",
+  "similitud": 0.8981,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -3299,13 +3185,12 @@
    "J",
    "SENA_PENDIENTE:TRIBUNAL",
    "SENA_PENDIENTE:INFORMACION",
-   "SENA_PENDIENTE:ACUDIR"
+   "SENA_PENDIENTE:ACUDIR",
+   "SENA_PENDIENTE:INDICAR"
   ],
-  "vuelta": "Al Tribunal Sirej hay que acudir para información",
-  "similitud": 0.8111,
-  "faltan": [
-   "indica"
-  ],
+  "vuelta": "Señor, indique acudir al Tribunal SIREJ por información",
+  "similitud": 0.8772,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -3313,29 +3198,26 @@
  "Se informó condonación de multas e intereses hasta octubre.": {
   "glosas": [
    "SENA_PENDIENTE:INFORMAR",
+   "SENA_PENDIENTE:CONDONACIÓN",
    "SENA_PENDIENTE:MULTA",
-   "SENA_PENDIENTE:INTERES",
-   "SENA_PENDIENTE:OCTUBRE",
-   "SENA_PENDIENTE:HASTA"
+   "SENA_PENDIENTE:INTERÉS",
+   "SENA_PENDIENTE:OCTUBRE"
   ],
-  "vuelta": "Informar de la multa de interés hasta octubre",
-  "similitud": 0.6434,
-  "faltan": [
-   "condonación"
-  ],
+  "vuelta": "Informaré sobre la condonación de la multa e interés en octubre",
+  "similitud": 0.7472,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "Solo legal.": {
   "glosas": [
+   "SENA_PENDIENTE:SOLO",
    "SENA_PENDIENTE:LEGAL"
   ],
-  "vuelta": "Es legal",
-  "similitud": 0.6565,
-  "faltan": [
-   "Solo"
-  ],
+  "vuelta": "Solo lo legal",
+  "similitud": 0.6543,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -3433,17 +3315,15 @@
  },
  "Sí tengo mi última boleta.": {
   "glosas": [
-   "ULTIMO",
-   "BILLETES",
+   "ÚLTIMO",
    "TENER",
-   "YO"
+   "YO",
+   "SENA_PENDIENTE:BOLETA"
   ],
-  "vuelta": "Yo tengo los últimos billetes",
-  "similitud": 0.6924,
+  "vuelta": "Yo tengo la última boleta",
+  "similitud": 0.931,
   "faltan": [],
-  "sobran": [
-   "BILLETES"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -3537,15 +3417,14 @@
  },
  "Sí, pero escribí muy poco.": {
   "glosas": [
-   "SI",
+   "SÍ",
    "ESCRIBIR",
-   "POCO"
+   "POCO",
+   "SENA_PENDIENTE:MUY"
   ],
-  "vuelta": "Sí, escribir poco",
-  "similitud": null,
-  "faltan": [
-   "muy"
-  ],
+  "vuelta": "Sí, escribo muy poco",
+  "similitud": 0.863,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -3602,12 +3481,10 @@
   ],
   "vuelta": "Sí, tengo todo",
   "similitud": 0.9906,
-  "faltan": [
-   "tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Sí.": {
   "glosas": [
@@ -3651,11 +3528,10 @@
  "Sí. Estoy lejos de esa persona.": {
   "glosas": [
    "LEJOS",
-   "SENA_PENDIENTE:PERSONA",
-   "SENA_PENDIENTE:ESTAR"
+   "SENA_PENDIENTE:PERSONA"
   ],
-  "vuelta": "La persona está lejos.",
-  "similitud": 0.4541,
+  "vuelta": "Está lejos la persona",
+  "similitud": 0.5559,
   "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
@@ -3716,16 +3592,14 @@
  },
  "Sí. La dirección que tenía estaba cerrada.": {
   "glosas": [
-   "DIRECCION",
+   "DIRECCIÓN",
    "TENER",
    "SENA_PENDIENTE:CERRADO"
   ],
-  "vuelta": "La dirección está cerrada",
-  "similitud": 0.7325,
+  "vuelta": "Tengo la dirección cerrada",
+  "similitud": 0.765,
   "faltan": [],
-  "sobran": [
-   "TENER"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -3790,13 +3664,12 @@
    "LLAMAR",
    "NO",
    "ABOGADO",
-   "TENER"
+   "TENER",
+   "SENA_PENDIENTE:CITAR"
   ],
-  "vuelta": "No necesito llamar a un abogado",
-  "similitud": 0.6224,
-  "faltan": [
-   "citaron"
-  ],
+  "vuelta": "Yo no tengo abogado para citar",
+  "similitud": 0.7104,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -3930,12 +3803,10 @@
   ],
   "vuelta": "Sí, ambos tenemos código",
   "similitud": 0.7539,
-  "faltan": [
-   "Tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Sí. Ya firmamos la compra.": {
   "glosas": [
@@ -3967,13 +3838,13 @@
    "IDENTIFICAR",
    "SENA_PENDIENTE:FALLECIDO",
    "TESTIGO",
-   "TESTIGO"
+   "TESTIGO",
+   "SENA_PENDIENTE:ENUMERAR",
+   "SENA_PENDIENTE:DOS"
   ],
-  "vuelta": "¿Puede identificar al fallecido, testigo?",
-  "similitud": 0.5535,
-  "faltan": [
-   "enumera"
-  ],
+  "vuelta": "Identificar al fallecido, enumerar dos testigos",
+  "similitud": 0.7774,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -4044,29 +3915,23 @@
   ],
   "vuelta": "Perdí mi cédula de identidad, pero no traje el CRPVA",
   "similitud": 0.7266,
-  "faltan": [
-   "Tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Tengo deuda antigua de mi casa.": {
   "glosas": [
-   "SENA_PENDIENTE:CASO",
+   "TENER",
    "SENA_PENDIENTE:ANTIGUO",
    "SENA_PENDIENTE:DEUDA",
    "MÍO",
    "CASA"
   ],
-  "vuelta": "En mi caso antiguo la deuda es de la casa",
-  "similitud": 0.7749,
-  "faltan": [
-   "Tengo"
-  ],
-  "sobran": [
-   "CASO"
-  ],
+  "vuelta": "Tenía una deuda antigua de mi casa",
+  "similitud": 0.9153,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -4093,12 +3958,10 @@
   ],
   "vuelta": "Tengo el certificado médico original",
   "similitud": 0.9458,
-  "faltan": [
-   "Tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Tengo los mensajes guardados.": {
   "glosas": [
@@ -4108,23 +3971,20 @@
   ],
   "vuelta": "Tengo que guardar el mensaje",
   "similitud": 0.607,
-  "faltan": [
-   "Tengo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "Usaré el buscador oficial.": {
   "glosas": [
    "BUSCAR",
+   "SENA_PENDIENTE:USAR",
    "OFICIAL"
   ],
-  "vuelta": "Busco al oficial",
-  "similitud": 0.4926,
-  "faltan": [
-   "Usaré"
-  ],
+  "vuelta": "Busco usar el oficial",
+  "similitud": 0.6369,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -4157,20 +4017,15 @@
   "glosas": [
    "VIOLENCIA",
    "SENA_PENDIENTE:SOBRINO",
-   "ADULTO",
    "YO",
-   "VENIR"
+   "VENIR",
+   "SENA_PENDIENTE:CONTRA",
+   "SENA_PENDIENTE:ADOLESCENTE"
   ],
-  "vuelta": "Violencia de sobrino adulto, yo vengo",
-  "similitud": 0.6781,
-  "faltan": [
-   "Vine",
-   "contra",
-   "adolescente"
-  ],
-  "sobran": [
-   "ADULTO"
-  ],
+  "vuelta": "Yo vengo contra mi sobrino adolescente por violencia",
+  "similitud": 0.8463,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -4292,16 +4147,15 @@
  },
  "¿Cuesta lo mismo que la cédula física?": {
   "glosas": [
-   "SENA_PENDIENTE:CEDULA",
+   "PAPEL",
+   "IDENTIDAD",
    "SENA_PENDIENTE:FISICA",
-   "SENA_PENDIENTE:COSTO",
-   "SENA_PENDIENTE:IGUAL"
+   "SENA_PENDIENTE:COSTAR",
+   "SENA_PENDIENTE:MISMO"
   ],
-  "vuelta": "La cédula física cuesta lo mismo",
-  "similitud": 0.9161,
-  "faltan": [
-   "mismo"
-  ],
+  "vuelta": "Perdí mi cédula de identidad física, cuesta lo mismo",
+  "similitud": 0.5776,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -4309,14 +4163,13 @@
  "¿Cuándo y dónde ocurrió el robo?": {
   "glosas": [
    "ROBAR",
-   "CUANDO",
-   "DONDE"
+   "CUÁNDO",
+   "DÓNDE",
+   "SENA_PENDIENTE:OCURRIR"
   ],
-  "vuelta": "¿Cuándo y dónde robaron?",
-  "similitud": 0.6421,
-  "faltan": [
-   "ocurrió"
-  ],
+  "vuelta": "¿Cuándo y dónde ocurrió el robo?",
+  "similitud": 1.0,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -4349,14 +4202,14 @@
  },
  "¿Cuánto cuesta la cédula física?": {
   "glosas": [
-   "CUANTOS",
-   "SENA_PENDIENTE:COSTO",
+   "CUÁNTOS",
    "PAPEL",
    "IDENTIDAD",
-   "SENA_PENDIENTE:FISICA"
+   "SENA_PENDIENTE:FISICA",
+   "SENA_PENDIENTE:COSTAR"
   ],
-  "vuelta": "¿Cuánto cuesta el documento de identidad físico?",
-  "similitud": 0.2878,
+  "vuelta": "Cuánto cuesta el documento de identidad físico",
+  "similitud": 0.2813,
   "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
@@ -4364,15 +4217,14 @@
  },
  "¿Cuánto dice la página que cuesta?": {
   "glosas": [
-   "CUANTOS",
-   "PAGINA",
-   "SENA_PENDIENTE:COSTO"
+   "CUÁNTOS",
+   "PÁGINA",
+   "SENA_PENDIENTE:DICE",
+   "SENA_PENDIENTE:COSTAR"
   ],
-  "vuelta": "¿Cuántas páginas cuestan?",
-  "similitud": 0.7548,
-  "faltan": [
-   "dice"
-  ],
+  "vuelta": "Cuántas páginas dice que cuesta",
+  "similitud": 0.6377,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -4625,9 +4477,8 @@
  },
  "¿El trámite sigue usando el sistema SIPRUNPCD?": {
   "glosas": [
-   "TRAMITE",
+   "TRÁMITE",
    "SENA_PENDIENTE:SIGUIR",
-   "SENA_PENDIENTE:USAR",
    "SENA_PENDIENTE:SISTEMA",
    "S",
    "I",
@@ -4639,8 +4490,8 @@
    "C",
    "D"
   ],
-  "vuelta": "Debo seguir el trámite usando el sistema SIPRUNPCD",
-  "similitud": 0.8691,
+  "vuelta": "Yo quiero seguir el trámite por el sistema SIPRUNPCD",
+  "similitud": 0.8812,
   "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
@@ -4661,16 +4512,14 @@
  },
  "¿Entonces aquí no sigo el trámite?": {
   "glosas": [
-   "AQUI",
-   "TRAMITE",
+   "AQUÍ",
+   "TRÁMITE",
    "SENA_PENDIENTE:SIGUIR",
    "NO"
   ],
   "vuelta": "Aquí no se sigue el trámite",
   "similitud": 0.7007,
-  "faltan": [
-   "sigo"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -4732,16 +4581,13 @@
  },
  "¿La dirección sigue vigente?": {
   "glosas": [
-   "DIRECCION",
-   "SENA_PENDIENTE:VIGENTE",
-   "SI"
+   "DIRECCIÓN",
+   "SENA_PENDIENTE:VIGENTE"
   ],
-  "vuelta": "La dirección está vigente, ¿sí?",
-  "similitud": 0.8836,
+  "vuelta": "La dirección está vigente",
+  "similitud": 0.8735,
   "faltan": [],
-  "sobran": [
-   "SI"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -4776,32 +4622,29 @@
  },
  "¿Las amenazas continúan actualmente?": {
   "glosas": [
-   "AHORA",
    "AMENAZAR",
    "CONTINUAR"
   ],
-  "vuelta": "Ahora continúe, lo estoy amenazando",
-  "similitud": 0.5567,
+  "vuelta": "Señor, continúe sin amenazar",
+  "similitud": 0.4766,
   "faltan": [],
-  "sobran": [
-   "AHORA"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "¿Le dijeron que necesita treinta por ciento?": {
   "glosas": [
-   "SENA_PENDIENTE:NEED",
-   "SENA_PENDIENTE:THIRTY",
-   "SENA_PENDIENTE:PERCENT",
-   "SENA_PENDIENTE:YES"
+   "SENA_PENDIENTE:DECIR",
+   "ELLOS",
+   "NECESITAR",
+   "3",
+   "0",
+   "SENA_PENDIENTE:POR_CIENTO"
   ],
-  "vuelta": "Necesito el 30%",
-  "similitud": 0.6945,
+  "vuelta": "¿Necesitan decirles el 3 por ciento?",
+  "similitud": 0.6309,
   "faltan": [],
-  "sobran": [
-   "YES"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -4893,15 +4736,12 @@
   "glosas": [
    "SENA_PENDIENTE:CUENTA",
    "SENA_PENDIENTE:INGRESAR",
-   "PUEDO",
-   "NO"
+   "PUEDO"
   ],
-  "vuelta": "No puedo ingresar la cuenta",
-  "similitud": 0.6555,
+  "vuelta": "Puedo ingresar a la cuenta",
+  "similitud": 0.7445,
   "faltan": [],
-  "sobran": [
-   "NO"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -4921,17 +4761,16 @@
  },
  "¿Pueden indicarme cómo contactarla?": {
   "glosas": [
+   "PUEDO",
    "YO",
    "SENA_PENDIENTE:CONTACTAR",
    "ELLA",
-   "COMO"
+   "CÓMO",
+   "SENA_PENDIENTE:INDICARME"
   ],
-  "vuelta": "Yo contactar a ella, ¿cómo?",
-  "similitud": 0.6054,
-  "faltan": [
-   "Pueden",
-   "indicarme"
-  ],
+  "vuelta": "Yo puedo contactarla, ¿cómo me indica?",
+  "similitud": 0.7903,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
@@ -5020,15 +4859,12 @@
  "¿Qué ayuda necesita?": {
   "glosas": [
    "SENA_PENDIENTE:AYUDA",
-   "NECESITAR",
-   "QUIEN"
+   "NECESITAR"
   ],
-  "vuelta": "¿Quién necesita ayuda?",
-  "similitud": 0.8753,
+  "vuelta": "Necesito ayuda",
+  "similitud": 0.7309,
   "faltan": [],
-  "sobran": [
-   "QUIEN"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -5055,12 +4891,10 @@
   ],
   "vuelta": "¿Cuál es su hora?",
   "similitud": 0.5464,
-  "faltan": [
-   "tiene"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
-  "leve": true
+  "leve": false
  },
  "¿Qué información necesita del inmueble?": {
   "glosas": [
@@ -5131,31 +4965,26 @@
  },
  "¿Qué trámite viene a registrar?": {
   "glosas": [
-   "TRAMITE",
+   "TRÁMITE",
    "SENA_PENDIENTE:REGISTRAR",
    "VENIR"
   ],
-  "vuelta": "Venga a registrar el trámite",
-  "similitud": 0.8318,
-  "faltan": [
-   "viene"
-  ],
+  "vuelta": "¿Viene a registrar el trámite?",
+  "similitud": 0.8977,
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "¿Sigue funcionando allí?": {
   "glosas": [
-   "ALLI",
-   "FUNCIONAR",
-   "SI"
+   "ALLÍ",
+   "FUNCIONAR"
   ],
-  "vuelta": "Sí, funciona allí",
-  "similitud": 0.655,
+  "vuelta": "Allí funciona",
+  "similitud": 0.6365,
   "faltan": [],
-  "sobran": [
-   "SI"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -5199,28 +5028,22 @@
   ],
   "vuelta": "La deuda corresponde solo al 2025",
   "similitud": 0.7833,
-  "faltan": [
-   "solamente"
-  ],
+  "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
  "¿Su deuda es de vehículo, inmueble o actividad?": {
   "glosas": [
-   "SENA_PENDIENTE:VEHICULO",
+   "SENA_PENDIENTE:VEHÍCULO",
    "SENA_PENDIENTE:INMUEBLE",
    "SENA_PENDIENTE:ACTIVIDAD",
-   "SENA_PENDIENTE:DEUDA",
-   "SENA_PENDIENTE:ES",
-   "CUAL"
+   "SENA_PENDIENTE:DEUDA"
   ],
-  "vuelta": "¿Cuál es la deuda de vehículo, inmueble o actividad?",
-  "similitud": 0.9335,
+  "vuelta": "¿Actividad de deuda vehículo o inmueble?",
+  "similitud": 0.8822,
   "faltan": [],
-  "sobran": [
-   "CUAL"
-  ],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -5287,19 +5110,15 @@
  },
  "¿Tiene actualmente abogado particular?": {
   "glosas": [
-   "AHORA",
+   "TENER",
+   "SENA_PENDIENTE:ACTUALMENTE",
    "ABOGADO",
-   "SENA_PENDIENTE:PARTICULAR",
-   "TENER"
+   "SENA_PENDIENTE:PARTICULAR"
   ],
-  "vuelta": "¿Ahora tiene abogado particular?",
-  "similitud": 0.9177,
-  "faltan": [
-   "actualmente"
-  ],
-  "sobran": [
-   "AHORA"
-  ],
+  "vuelta": "¿Tiene actualmente abogado particular?",
+  "similitud": 1.0,
+  "faltan": [],
+  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -5380,14 +5199,15 @@
    "HOY",
    "SENA_PENDIENTE:PAGAR",
    "SENA_PENDIENTE:DESCUENTO",
-   "AUN"
+   "AÚN",
+   "SENA_PENDIENTE:TODAVÍA"
   ],
-  "vuelta": "Aún hoy puedo pagar con descuento",
-  "similitud": 0.7691,
-  "faltan": [
-   "Todavía"
+  "vuelta": "Hoy aún tengo que pagar con descuento",
+  "similitud": 0.762,
+  "faltan": [],
+  "sobran": [
+   "AÚN"
   ],
-  "sobran": [],
   "fecha": "2026-09-27",
   "leve": false
  },
@@ -5443,11 +5263,10 @@
    "SENA_PENDIENTE:PERSONA",
    "SENA_PENDIENTE:DENUNCIAR",
    "SENA_PENDIENTE:VICTIMA",
-   "TU",
-   "SENA_PENDIENTE:SER"
+   "TÚ"
   ],
-  "vuelta": "¿Usted es la persona que denunció a la víctima?",
-  "similitud": 0.8034,
+  "vuelta": "¿Usted denuncia a la víctima?",
+  "similitud": 0.7459,
   "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27",

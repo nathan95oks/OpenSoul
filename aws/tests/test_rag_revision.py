@@ -78,6 +78,14 @@ class Comparacion(unittest.TestCase):
             json.dumps([{"faltan": ["Perdimos", "anterior"]}]), [copia])
         self.assertEqual(out[0]["faltan"], ["anterior"])
         self.assertTrue(REV.conjugada("Iré", ["MAÑANA", "IR"]))
+        for palabra, glosa in (("Cuente", "CONTAR"), ("Entiendo", "ENTENDER"),
+                               ("puede", "PODER"), ("otra", "OTRO"),
+                               ("toda", "TODO")):
+            self.assertTrue(REV.conjugada(palabra, [glosa]), palabra)
+        self.assertFalse(REV.conjugada("casa", ["CASO"]))
+        for palabra, glosa in (("dijeron", "DECIR"), ("Vine", "VENIR"),
+                               ("podré", "PODER"), ("Haré", "HACER")):
+            self.assertTrue(REV.conjugada(palabra, [glosa]), palabra)
         self.assertFalse(REV.conjugada("Quiero", ["SABER"]))
 
     def test_una_respuesta_rota_no_marca_nada(self):
@@ -93,6 +101,41 @@ class Comparacion(unittest.TestCase):
             ["soy", "entre", "titular"], ["YO", "SI", "2", "CASA"])
         self.assertEqual(out, {"faltan": ["titular"], "sobran": ["CASA"],
                                "leve": False})
+
+    def test_una_sena_a_incorporar_que_la_frase_no_dice_sobra(self):
+        ingles = REV.depurar(
+            "¿Le dijeron que necesita treinta por ciento?",
+            ["SENA_PENDIENTE:NEED", "SENA_PENDIENTE:THIRTY"], [], [])
+        self.assertEqual(ingles["sobran"], ["NEED", "THIRTY"])
+        calle = REV.depurar("Queda entre Antezana y Lanza.",
+                            ["SENA_PENDIENTE:ANTERIOR", "SENA_PENDIENTE:LANZA"],
+                            [], [])
+        self.assertEqual(calle["sobran"], ["ANTERIOR"])
+
+    def test_las_formas_de_una_palabra_no_son_inventadas(self):
+        for palabra, texto in (
+                ("ESTAR", "Estoy cerca."), ("SERVIR", "No sé si sirve."),
+                ("USAR", "Sigue usando el sistema."),
+                ("COSTO", "¿Cuánto cuesta?"), ("TODOS", "Quiero todas."),
+                ("SOLO", "Corresponde solamente a 2025."),
+                ("CUOTA", "¿Quiere un Plan Cuotas?"),
+                ("LSB", "Necesito Lengua de Señas Boliviana.")):
+            self.assertTrue(REV.de_la_frase(palabra, texto), palabra)
+        self.assertFalse(REV.de_la_frase("ANTERIOR", "Queda en Antezana."))
+        self.assertFalse(REV.de_la_frase("NEED", "¿Lo necesita?"))
+
+    def test_lo_que_la_frase_dice_con_otra_forma_no_sobra(self):
+        out = REV.depurar("Quiero revisar todo.", ["QUERER", "REVISAR"],
+                          [], ["QUERER"])
+        self.assertEqual(out["sobran"], [])
+
+    def test_un_numero_con_letras_vale_en_cifras(self):
+        ok, _ = REV.glosas_validas(["NECESITAR", "30"],
+                                   "¿Necesita treinta por ciento?",
+                                   {"NECESITAR": ""})
+        self.assertEqual(ok, ["NECESITAR", "3", "0"])
+        pegadas, _ = REV.glosas_validas(["PORCIENTO"], "Treinta por ciento.", {})
+        self.assertEqual(pegadas, ["SENA_PENDIENTE:POR_CIENTO"])
 
     def test_solo_un_auxiliar_que_falta_es_menor(self):
         out = REV.depurar("Quiero confirmar.", ["CONFIRMAR"], ["Quiero"], [])
@@ -187,6 +230,18 @@ class Correccion(unittest.TestCase):
                            modelo(propuesta, [{"faltan": [], "sobran": []}]))
         self.assertTrue(out[0]["aceptada"])
         self.assertIn("SENA_PENDIENTE:AUTO", out[0]["glosas"])
+
+    def test_lo_que_sobra_se_quita_de_la_correccion(self):
+        self.assertEqual(
+            REV.sin_sobras(["NECESITAR", "3", "0", "SENA_PENDIENTE:POR_CIENTO",
+                            "NO"], ["NO"]),
+            ["NECESITAR", "3", "0", "SENA_PENDIENTE:POR_CIENTO"])
+
+    def test_cada_propuesta_va_a_su_frase_por_numero(self):
+        texto = json.dumps([{"n": 2, "glosas": ["B"]}, {"n": 1, "glosas": ["A"]}])
+        self.assertEqual(REV.propuestas_por_frase(texto, 3), [["A"], ["B"], None])
+        self.assertEqual(REV.propuestas_por_frase('[["A"], ["B"]]', 2),
+                         [["A"], ["B"]])
 
     def test_se_rechaza_si_no_mejora_o_inventa(self):
         igual = REV.corregir(

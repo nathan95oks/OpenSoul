@@ -2007,8 +2007,8 @@
        "mostrable": true,
        "motivos": [],
        "glosas": [
-        "SENA_PENDIENTE:TRAE",
-        "NO"
+        "NO",
+        "TRAER"
        ]
       },
       {
@@ -2237,7 +2237,7 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "TRAMITE",
+      "TRÁMITE",
       "SENA_PENDIENTE:REGISTRAR",
       "VENIR"
      ]
@@ -2380,9 +2380,8 @@
        "mostrable": true,
        "motivos": [],
        "glosas": [
-        "TRABAJADOR",
-        "TRAER",
-        "NO"
+        "NO",
+        "TRAER"
        ]
       },
       {
@@ -2515,7 +2514,9 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "ESCRIBIR"
+      "ESCRIBIR",
+      "SENA_PENDIENTE:ESPACIOS",
+      "SENA_PENDIENTE:GUIONES"
      ]
     },
     {
@@ -2655,7 +2656,8 @@
      "glosas": [
       "RECORDAR",
       "NO",
-      "SENA_PENDIENTE:NUMERO"
+      "SENA_PENDIENTE:NUMERO",
+      "SENA_PENDIENTE:ESOS"
      ]
     },
     {
@@ -2684,10 +2686,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "ULTIMO",
-      "BILLETES",
+      "ÚLTIMO",
       "TENER",
-      "YO"
+      "YO",
+      "SENA_PENDIENTE:BOLETA"
      ]
     },
     {
@@ -2734,8 +2736,7 @@
        "motivos": [],
        "glosas": [
         "NO_SABER",
-        "DONDE",
-        "SENA_PENDIENTE:ESTAR"
+        "DÓNDE"
        ]
       }
      ]
@@ -2764,7 +2765,8 @@
       "HOY",
       "SENA_PENDIENTE:PAGAR",
       "SENA_PENDIENTE:DESCUENTO",
-      "AUN"
+      "AÚN",
+      "SENA_PENDIENTE:TODAVÍA"
      ]
     },
     {
@@ -2820,11 +2822,11 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AHORA",
       "SENA_PENDIENTE:MONTO",
       "SENA_PENDIENTE:ACTUALIZAR",
       "SENA_PENDIENTE:PAGAR",
-      "SENA_PENDIENTE:ANTES"
+      "SENA_PENDIENTE:PRIMERO",
+      "SENA_PENDIENTE:CONSULTAR"
      ]
     },
     {
@@ -2838,7 +2840,8 @@
      "glosas": [
       "HACER",
       "SENA_PENDIENTE:CONSULTA",
-      "INTERNET"
+      "SENA_PENDIENTE:LÍNEA",
+      "YO"
      ]
     }
    ],
@@ -2899,12 +2902,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:VEHICULO",
+      "SENA_PENDIENTE:VEHÍCULO",
       "SENA_PENDIENTE:INMUEBLE",
       "SENA_PENDIENTE:ACTIVIDAD",
-      "SENA_PENDIENTE:DEUDA",
-      "SENA_PENDIENTE:ES",
-      "CUAL"
+      "SENA_PENDIENTE:DEUDA"
      ]
     },
     {
@@ -2916,7 +2917,7 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:CASO",
+      "TENER",
       "SENA_PENDIENTE:ANTIGUO",
       "SENA_PENDIENTE:DEUDA",
       "MÍO",
@@ -2962,10 +2963,10 @@
      "motivos": [],
      "glosas": [
       "SENA_PENDIENTE:INFORMAR",
+      "SENA_PENDIENTE:CONDONACIÓN",
       "SENA_PENDIENTE:MULTA",
-      "SENA_PENDIENTE:INTERES",
-      "SENA_PENDIENTE:OCTUBRE",
-      "SENA_PENDIENTE:HASTA"
+      "SENA_PENDIENTE:INTERÉS",
+      "SENA_PENDIENTE:OCTUBRE"
      ]
     },
     {
@@ -3242,6 +3243,8 @@
      "motivos": [],
      "glosas": [
       "COMPRAR",
+      "SENA_PENDIENTE:AUTO",
+      "QUERER",
       "MÍO",
       "NOMBRE",
       "SENA_PENDIENTE:PASAR"
@@ -3445,8 +3448,9 @@
      "motivos": [],
      "glosas": [
       "ROBAR",
-      "CUANDO",
-      "DONDE"
+      "CUÁNDO",
+      "DÓNDE",
+      "SENA_PENDIENTE:OCURRIR"
      ]
     },
     {
@@ -3507,10 +3511,8 @@
        "motivos": [],
        "glosas": [
         "NO_SABER",
-        "COMO",
-        "HACER",
-        "SENA_PENDIENTE:LO",
-        "YO"
+        "CÓMO",
+        "HACER"
        ]
       }
      ]
@@ -3584,9 +3586,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SI",
+      "SÍ",
       "ESCRIBIR",
-      "POCO"
+      "POCO",
+      "SENA_PENDIENTE:MUY"
      ]
     },
     {
@@ -3601,10 +3604,11 @@
      "motivos": [],
      "glosas": [
       "PASADO",
-      "DONDE",
-      "CUANDO",
+      "DÓNDE",
+      "CUÁNDO",
       "SABER",
-      "YO"
+      "YO",
+      "SENA_PENDIENTE:INCLUIR"
      ]
     },
     {
@@ -3742,8 +3746,7 @@
      "glosas": [
       "SENA_PENDIENTE:CUENTA",
       "SENA_PENDIENTE:INGRESAR",
-      "PUEDO",
-      "NO"
+      "PUEDO"
      ]
     },
     {
@@ -3981,9 +3984,9 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "QUERER",
       "SABER",
-      "COMO_ESTAS",
+      "CÓMO",
+      "SENA_PENDIENTE:ESTAR",
       "MÍO",
       "SENA_PENDIENTE:PROCESO"
      ]
@@ -4109,8 +4112,7 @@
        "motivos": [],
        "glosas": [
         "NO_SABER",
-        "CUAL",
-        "SENA_PENDIENTE:SER"
+        "CUÁL"
        ]
       }
      ]
@@ -4208,7 +4210,8 @@
       "J",
       "SENA_PENDIENTE:TRIBUNAL",
       "SENA_PENDIENTE:INFORMACION",
-      "SENA_PENDIENTE:ACUDIR"
+      "SENA_PENDIENTE:ACUDIR",
+      "SENA_PENDIENTE:INDICAR"
      ]
     },
     {
@@ -4349,9 +4352,8 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "ALLI",
-      "FUNCIONAR",
-      "SI"
+      "ALLÍ",
+      "FUNCIONAR"
      ]
     },
     {
@@ -4603,8 +4605,7 @@
       "SENA_PENDIENTE:PERSONA",
       "SENA_PENDIENTE:DENUNCIAR",
       "SENA_PENDIENTE:VICTIMA",
-      "TU",
-      "SENA_PENDIENTE:SER"
+      "TÚ"
      ]
     },
     {
@@ -4771,8 +4772,7 @@
      "motivos": [],
      "glosas": [
       "SENA_PENDIENTE:AYUDA",
-      "NECESITAR",
-      "QUIEN"
+      "NECESITAR"
      ]
     },
     {
@@ -4788,6 +4788,7 @@
       "SENA_PENDIENTE:VICTIMA",
       "ROBAR",
       "NECESITAR",
+      "SENA_PENDIENTE:FUI",
       "ABOGADO",
       "GRATIS"
      ]
@@ -4954,8 +4955,11 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:ANTERIOR",
-      "SENA_PENDIENTE:LANZA_EDIFICIO_ALY"
+      "SENA_PENDIENTE:ANTEZANA",
+      "SENA_PENDIENTE:LANZA",
+      "SENA_PENDIENTE:EDIFICIO",
+      "SENA_PENDIENTE:ALY",
+      "SENA_PENDIENTE:QUEDA"
      ]
     },
     {
@@ -5076,7 +5080,8 @@
       "LLAMAR",
       "NO",
       "ABOGADO",
-      "TENER"
+      "TENER",
+      "SENA_PENDIENTE:CITAR"
      ]
     },
     {
@@ -5133,7 +5138,9 @@
      "glosas": [
       "SEPDEP",
       "ATENDER",
-      "SENA_PENDIENTE:ACTIVAR"
+      "SENA_PENDIENTE:ACTIVAR",
+      "SENA_PENDIENTE:CORRESPONDIENTE",
+      "SENA_PENDIENTE:CONTACTAR"
      ]
     },
     {
@@ -5224,10 +5231,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AHORA",
+      "TENER",
+      "SENA_PENDIENTE:ACTUALMENTE",
       "ABOGADO",
-      "SENA_PENDIENTE:PARTICULAR",
-      "TENER"
+      "SENA_PENDIENTE:PARTICULAR"
      ]
     },
     {
@@ -5483,7 +5490,8 @@
       "2",
       "0",
       "2",
-      "6"
+      "6",
+      "SENA_PENDIENTE:FIGURA"
      ]
     },
     {
@@ -5660,8 +5668,9 @@
        "motivos": [],
        "glosas": [
         "NO_SABER",
-        "CUANDO",
-        "SENA_PENDIENTE:PODER",
+        "CUÁNDO",
+        "PUEDO",
+        "SENA_PENDIENTE:PODRÉ",
         "IR"
        ]
       }
@@ -5708,8 +5717,7 @@
      "motivos": [],
      "glosas": [
       "CERCA",
-      "SENA_PENDIENTE:CHIMBA",
-      "SENA_PENDIENTE:ESTAR"
+      "SENA_PENDIENTE:CHIMBA"
      ]
     },
     {
@@ -5723,9 +5731,13 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:CENTRO_INTEGRAL_FELCV",
+      "SENA_PENDIENTE:CENTRO",
+      "SENA_PENDIENTE:INTEGRAL",
+      "FELCV",
       "AVENIDA",
-      "SENA_PENDIENTE:BEIJING"
+      "SENA_PENDIENTE:BEIJING",
+      "SENA_PENDIENTE:EXISTIR",
+      "SENA_PENDIENTE:REPRESENTACIÓN"
      ]
     },
     {
@@ -5874,8 +5886,9 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "CUANDO",
-      "DONDE",
+      "CUÁNDO",
+      "DÓNDE",
+      "SENA_PENDIENTE:DESCRIBIR",
       "SENA_PENDIENTE:OCURRIR"
      ]
     },
@@ -5907,6 +5920,8 @@
      "glosas": [
       "SENA_PENDIENTE:DATOS",
       "SENA_PENDIENTE:APORTAR",
+      "SENA_PENDIENTE:REGISTRAR",
+      "SENA_PENDIENTE:USTED",
       "SENA_PENDIENTE:PODER"
      ]
     },
@@ -6022,6 +6037,7 @@
       "SENA_PENDIENTE:BORRAR",
       "SENA_PENDIENTE:MODIFICAR",
       "SENA_PENDIENTE:MENSAJE",
+      "SENA_PENDIENTE:RELACIONAR",
       "SENA_PENDIENTE:HECHO"
      ]
     },
@@ -6143,8 +6159,7 @@
       "CERTIFICADO",
       "NECESITAR",
       "PAPEL",
-      "ROBAR",
-      "POR_QUE"
+      "ROBAR"
      ]
     },
     {
@@ -6184,9 +6199,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "CUANTOS",
-      "PAGINA",
-      "SENA_PENDIENTE:COSTO"
+      "CUÁNTOS",
+      "PÁGINA",
+      "SENA_PENDIENTE:DICE",
+      "SENA_PENDIENTE:COSTAR"
      ]
     },
     {
@@ -6213,7 +6229,8 @@
      "motivos": [],
      "glosas": [
       "SENA_PENDIENTE:CONFIRMAR",
-      "SENA_PENDIENTE:MONTO"
+      "SENA_PENDIENTE:MONTO",
+      "SENA_PENDIENTE:PRIMERO"
      ]
     }
    ],
@@ -6309,7 +6326,8 @@
       "VIOLENCIA",
       "FELCV",
       "SENA_PENDIENTE:RUTA",
-      "SENA_PENDIENTE:ACTIVAR"
+      "SENA_PENDIENTE:ACTIVAR",
+      "SENA_PENDIENTE:CORRESPONDER"
      ]
     },
     {
@@ -6321,8 +6339,8 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AQUI",
-      "TRAMITE",
+      "AQUÍ",
+      "TRÁMITE",
       "SENA_PENDIENTE:SIGUIR",
       "NO"
      ]
@@ -6452,8 +6470,7 @@
      "motivos": [],
      "glosas": [
       "LEJOS",
-      "SENA_PENDIENTE:PERSONA",
-      "SENA_PENDIENTE:ESTAR"
+      "SENA_PENDIENTE:PERSONA"
      ]
     },
     {
@@ -6569,7 +6586,9 @@
      "glosas": [
       "SENA_PENDIENTE:PREGUNTAR",
       "SENA_PENDIENTE:DENUNCIA",
-      "NECESITAR"
+      "NECESITAR",
+      "SENA_PENDIENTE:HACERLE",
+      "SENA_PENDIENTE:ALGUNAS"
      ]
     },
     {
@@ -6597,7 +6616,7 @@
      "motivos": [],
      "glosas": [
       "NECESITAR",
-      "INTERPRETE"
+      "INTÉRPRETE"
      ]
     },
     {
@@ -6644,7 +6663,8 @@
      "glosas": [
       "GRACIAS",
       "ESPERAR",
-      "ASISTENCIA"
+      "ASISTENCIA",
+      "SENA_PENDIENTE:ADE_CUADA"
      ]
     }
    ],
@@ -6706,10 +6726,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "DIA",
       "PAREJA",
       "AMENAZAR",
-      "MUCHO"
+      "SENA_PENDIENTE:TODOS",
+      "SENA_PENDIENTE:DÍAS"
      ]
     },
     {
@@ -6723,7 +6743,6 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AHORA",
       "AMENAZAR",
       "CONTINUAR"
      ]
@@ -6761,7 +6780,8 @@
       "SENA_PENDIENTE:HECHO",
       "ATENDER",
       "SENA_PENDIENTE:RUTA",
-      "SENA_PENDIENTE:ACTIVAR"
+      "SENA_PENDIENTE:ACTIVAR",
+      "SENA_PENDIENTE:CORRESPONDIENTE"
      ]
     },
     {
@@ -6914,7 +6934,8 @@
      "motivos": [],
      "glosas": [
       "SENA_PENDIENTE:CONFIRMAR",
-      "SENA_PENDIENTE:SEDE"
+      "SENA_PENDIENTE:SEDE",
+      "SENA_PENDIENTE:PRIMERO"
      ]
     }
    ],
@@ -7080,6 +7101,7 @@
        "mostrable": true,
        "motivos": [],
        "glosas": [
+        "SENA_PENDIENTE:SOLO",
         "SENA_PENDIENTE:LEGAL"
        ]
       },
@@ -7361,9 +7383,9 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "YO",
       "NECESITAR",
       "SENA_PENDIENTE:COMUNICAR",
+      "YO",
       "SENA_PENDIENTE:LSB"
      ]
     },
@@ -7391,9 +7413,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
+      "NO",
       "SENA_PENDIENTE:ENTENDER",
       "SENA_PENDIENTE:BIEN",
-      "SENA_PENDIENTE:EXPLICACION",
+      "EXPLICAR",
       "HABLAR",
       "SENA_PENDIENTE:SOLO"
      ]
@@ -7702,9 +7725,8 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "DIRECCION",
-      "SENA_PENDIENTE:VIGENTE",
-      "SI"
+      "DIRECCIÓN",
+      "SENA_PENDIENTE:VIGENTE"
      ]
     },
     {
@@ -7779,9 +7801,10 @@
      "glosas": [
       "VIOLENCIA",
       "SENA_PENDIENTE:SOBRINO",
-      "ADULTO",
       "YO",
-      "VENIR"
+      "VENIR",
+      "SENA_PENDIENTE:CONTRA",
+      "SENA_PENDIENTE:ADOLESCENTE"
      ]
     },
     {
@@ -7834,10 +7857,12 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
+      "PUEDO",
       "YO",
       "SENA_PENDIENTE:CONTACTAR",
       "ELLA",
-      "COMO"
+      "CÓMO",
+      "SENA_PENDIENTE:INDICARME"
      ]
     },
     {
@@ -7923,7 +7948,7 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "DIRECCION",
+      "DIRECCIÓN",
       "TENER",
       "SENA_PENDIENTE:CERRADO"
      ]
@@ -7942,7 +7967,8 @@
       "SENA_PENDIENTE:SERVICIO",
       "FUNCIONAR",
       "DEJAR",
-      "NO"
+      "NO",
+      "SENA_PENDIENTE:ASUMIR"
      ]
     },
     {
@@ -7983,10 +8009,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AHORA",
+      "SENA_PENDIENTE:CONFIRMAR",
       "SENA_PENDIENTE:SEDE",
       "HORA",
-      "SENA_PENDIENTE:CONFIRMAR"
+      "SENA_PENDIENTE:PRIMERO"
      ]
     }
    ],
@@ -8122,8 +8148,8 @@
       "YO",
       "SENA_PENDIENTE:COSTO",
       "TOTAL",
-      "PRIMERA_VEZ",
-      "SENA_PENDIENTE:CONFIRMAR"
+      "SENA_PENDIENTE:CONFIRMAR",
+      "SENA_PENDIENTE:PRIMERO"
      ]
     }
    ],
@@ -8260,8 +8286,9 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "TRAMITE",
-      "SENA_PENDIENTE:CONFIRMAR"
+      "TRÁMITE",
+      "SENA_PENDIENTE:CONFIRMAR",
+      "SENA_PENDIENTE:EXACTO"
      ]
     }
    ],
@@ -8343,8 +8370,9 @@
       "SENA_PENDIENTE:PUBLICAR",
       "SENA_PENDIENTE:ARANCELE",
       "SENA_PENDIENTE:INCLUIR",
-      "SENA_PENDIENTE:OTRO",
-      "SENA_PENDIENTE:ESCRITURA"
+      "SENA_PENDIENTE:ESCRITURA",
+      "SENA_PENDIENTE:ANTICRETICOS",
+      "SENA_PENDIENTE:OTRAS"
      ]
     },
     {
@@ -8397,10 +8425,11 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
+      "QUERER",
       "SENA_PENDIENTE:TODO",
       "SENA_PENDIENTE:REVISAR",
       "SENA_PENDIENTE:PAGAR",
-      "NO_PUEDO"
+      "SENA_PENDIENTE:ANTES"
      ]
     }
    ],
@@ -8501,7 +8530,8 @@
       "L",
       "U",
       "BUSCAR",
-      "SENA_PENDIENTE:NOTARIO"
+      "SENA_PENDIENTE:NOTARIO",
+      "SENA_PENDIENTE:OFRECER"
      ]
     },
     {
@@ -8543,6 +8573,7 @@
      "motivos": [],
      "glosas": [
       "BUSCAR",
+      "SENA_PENDIENTE:USAR",
       "OFICIAL"
      ]
     }
@@ -8673,11 +8704,11 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "CUANTOS",
-      "SENA_PENDIENTE:COSTO",
+      "CUÁNTOS",
       "PAPEL",
       "IDENTIDAD",
-      "SENA_PENDIENTE:FISICA"
+      "SENA_PENDIENTE:FISICA",
+      "SENA_PENDIENTE:COSTAR"
      ]
     },
     {
@@ -8798,6 +8829,7 @@
       "6",
       "SENA_PENDIENTE:ANTES",
       "SENA_PENDIENTE:SOLICITAR",
+      "SENA_PENDIENTE:RENOVACION",
       "SENA_PENDIENTE:PODER"
      ]
     },
@@ -8810,11 +8842,8 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:YA",
       "PUEDO",
-      "SENA_PENDIENTE:RENOVAR",
-      "SENA_PENDIENTE:LA",
-      "SENA_PENDIENTE:ENTONCES"
+      "SENA_PENDIENTE:RENOVAR"
      ]
     },
     {
@@ -8866,7 +8895,8 @@
        "motivos": [],
        "glosas": [
         "SENA_PENDIENTE:TIEMPO",
-        "SENA_PENDIENTE:MAS"
+        "SENA_PENDIENTE:MAS",
+        "SENA_PENDIENTE:FALTA"
        ]
       },
       {
@@ -8875,7 +8905,7 @@
        "motivos": [],
        "glosas": [
         "RECORDAR",
-        "NO_SABER"
+        "NO"
        ]
       }
      ]
@@ -8905,8 +8935,8 @@
       "PAPEL",
       "IDENTIDAD",
       "PERDER",
-      "NUEVO",
-      "NECESITAR"
+      "NECESITAR",
+      "SENA_PENDIENTE:OTRA"
      ]
     },
     {
@@ -8922,7 +8952,7 @@
      "glosas": [
       "SENA_PENDIENTE:EXTRAVIO",
       "ROBAR",
-      "SENA_PENDIENTE:DETIEN",
+      "SENA_PENDIENTE:DETERIORO",
       "SENA_PENDIENTE:APLICAR"
      ]
     },
@@ -8967,10 +8997,11 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:CEDULA",
+      "PAPEL",
+      "IDENTIDAD",
       "SENA_PENDIENTE:FISICA",
-      "SENA_PENDIENTE:COSTO",
-      "SENA_PENDIENTE:IGUAL"
+      "SENA_PENDIENTE:COSTAR",
+      "SENA_PENDIENTE:MISMO"
      ]
     },
     {
@@ -9022,7 +9053,6 @@
        "mostrable": true,
        "motivos": [],
        "glosas": [
-        "CELULAR",
         "ROBAR"
        ]
       },
@@ -9256,10 +9286,10 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AHORA",
       "SENA_PENDIENTE:PRECIO",
       "SENA_PENDIENTE:CONFIRMAR",
-      "SENA_PENDIENTE:PRIMERO"
+      "SENA_PENDIENTE:PRIMERO",
+      "QUERER"
      ]
     }
    ],
@@ -9354,7 +9384,14 @@
      "glosas": [
       "CERTIFICADO",
       "SENA_PENDIENTE:DUPLICADO",
-      "SENA_PENDIENTE:INCLUIR"
+      "SENA_PENDIENTE:INCLUIR",
+      "S",
+      "E",
+      "R",
+      "E",
+      "C",
+      "I",
+      "SENA_PENDIENTE:SERVICIO"
      ]
     },
     {
@@ -9395,7 +9432,8 @@
      "motivos": [],
      "glosas": [
       "SENA_PENDIENTE:PAGAR",
-      "SENA_PENDIENTE:CONFIRMAR"
+      "SENA_PENDIENTE:CONFIRMAR",
+      "SENA_PENDIENTE:ANTES"
      ]
     }
    ],
@@ -9491,7 +9529,7 @@
       "SENA_PENDIENTE:RELACION",
       "SENA_PENDIENTE:PERMITIDO",
       "IDENTIDAD",
-      "SENA_PENDIENTE:DEMOSTRAR"
+      "SENA_PENDIENTE:ACREDITAR"
      ]
     },
     {
@@ -9570,8 +9608,7 @@
        "glosas": [
         "NO_SABER",
         "PUEDO",
-        "PEDIR",
-        "SENA_PENDIENTE:LO"
+        "PEDIR"
        ]
       }
      ]
@@ -9647,7 +9684,9 @@
       "IDENTIFICAR",
       "SENA_PENDIENTE:FALLECIDO",
       "TESTIGO",
-      "TESTIGO"
+      "TESTIGO",
+      "SENA_PENDIENTE:ENUMERAR",
+      "SENA_PENDIENTE:DOS"
      ]
     },
     {
@@ -9756,7 +9795,8 @@
      "glosas": [
       "SENA_PENDIENTE:PROCESO",
       "SENA_PENDIENTE:CALIFICACION",
-      "SENA_PENDIENTE:CORRESPONDIENTE"
+      "SENA_PENDIENTE:CORRESPONDIENTE",
+      "SENA_PENDIENTE:PRIMERO"
      ]
     },
     {
@@ -9768,9 +9808,8 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "TRAMITE",
+      "TRÁMITE",
       "SENA_PENDIENTE:SIGUIR",
-      "SENA_PENDIENTE:USAR",
       "SENA_PENDIENTE:SISTEMA",
       "S",
       "I",
@@ -9802,7 +9841,8 @@
       "SENA_PENDIENTE:REGISTRO",
       "SENA_PENDIENTE:SISTEMA",
       "SENA_PENDIENTE:NACIONAL",
-      "SENA_PENDIENTE:MANTENER"
+      "SENA_PENDIENTE:MANTENER",
+      "DENTRO"
      ]
     },
     {
@@ -9925,10 +9965,12 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:NEED",
-      "SENA_PENDIENTE:THIRTY",
-      "SENA_PENDIENTE:PERCENT",
-      "SENA_PENDIENTE:YES"
+      "SENA_PENDIENTE:DECIR",
+      "ELLOS",
+      "NECESITAR",
+      "3",
+      "0",
+      "SENA_PENDIENTE:POR_CIENTO"
      ]
     },
     {
@@ -10020,7 +10062,7 @@
        "motivos": [],
        "glosas": [
         "RECORDAR",
-        "NO_SABER"
+        "NO"
        ]
       }
      ]
@@ -10069,6 +10111,7 @@
       "0",
       "2",
       "5",
+      "SENA_PENDIENTE:INCORPORAR",
       "SENA_PENDIENTE:MECANISMO",
       "SENA_PENDIENTE:RENOVACION",
       "SENA_PENDIENTE:AUTOMATICO"
@@ -10137,7 +10180,8 @@
       "SENA_PENDIENTE:SITUACION",
       "SENA_PENDIENTE:NORMA",
       "SENA_PENDIENTE:APLICABLE",
-      "SENA_PENDIENTE:REVISAR"
+      "SENA_PENDIENTE:REVISAR",
+      "SENA_PENDIENTE:DEPERDER"
      ]
     },
     {
@@ -10378,7 +10422,8 @@
       "8",
       "JUSTICIA",
       "SENA_PENDIENTE:INTERPRETAR",
-      "GRATIS"
+      "GRATIS",
+      "SENA_PENDIENTE:CONTEMPLAR"
      ]
     },
     {
@@ -10392,9 +10437,10 @@
      "glosas": [
       "YO",
       "SENA_PENDIENTE:ENTENDER",
-      "SENA_PENDIENTE:PREGUNTA",
       "SENA_PENDIENTE:DENUNCIA",
-      "SENA_PENDIENTE:TODOS"
+      "SENA_PENDIENTE:PREGUNTA",
+      "SENA_PENDIENTE:TODAS",
+      "QUERER"
      ]
     },
     {
@@ -10424,7 +10470,8 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "NO_SABER",
+      "NO",
+      "COMPRENDER",
       "SENA_PENDIENTE:COSAS",
       "SENA_PENDIENTE:RESPONDER"
      ]
@@ -10554,9 +10601,11 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "YO",
-      "SENA_PENDIENTE:AUDIENCIA",
-      "SENA_PENDIENTE:PARTICIPAR"
+      "QUERER",
+      "SENA_PENDIENTE:PARTICIPAR",
+      "SENA_PENDIENTE:DIRECTAMENTE",
+      "MÍO",
+      "SENA_PENDIENTE:AUDIENCIA"
      ]
     },
     {
@@ -10571,10 +10620,12 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "TRAMITE",
+      "TRÁMITE",
       "SENA_PENDIENTE:INTERPRETAR",
+      "SENA_PENDIENTE:CONFORME",
       "SENA_PENDIENTE:PROCEDIMIENTO",
-      "SENA_PENDIENTE:APLICABLE"
+      "SENA_PENDIENTE:APLICABLE",
+      "SENA_PENDIENTE:DEBER"
      ]
     },
     {
@@ -10586,7 +10637,8 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "YO",
+      "QUERER",
+      "MÍO",
       "SENA_PENDIENTE:SOLICITUD",
       "SENA_PENDIENTE:REGISTRAR"
      ]

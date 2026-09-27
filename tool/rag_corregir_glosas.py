@@ -93,14 +93,79 @@ def main() -> int:
                     }
                     aceptadas += 1
                 else:
-                    rechazadas.append((it["texto"], res["motivo"]))
+                    rechazadas.append((it["texto"], res["motivo"],
+                                       res.get("propuesta")))
             with open(CORRECCIONES, "w", encoding="utf-8", newline="") as f:
                 json.dump({k: correcciones[k] for k in sorted(correcciones)},
                           f, ensure_ascii=False, indent=1)
                 f.write("\n")
+    # Las rechazadas por glosas ajenas o ilegibles se reintentan de a una: en
+    # tandas, el modelo a veces corre las respuestas un lugar.
+    sueltas = [por for por in rechazadas
+               if not por[1].startswith("no mejora")]
+    por_texto_m = {it["texto"]: it for it in marcadas}
+    for texto, _, _ in sueltas:
+        _, r = corregir([por_texto_m[texto]])
+        if r.get("generated") is not True:
+            continue
+        res = r["items"][0]
+        rechazadas = [x for x in rechazadas if x[0] != texto]
+        if res["aceptada"]:
+            correcciones[texto] = {
+                "glosas": res["glosas"],
+                "antes": correcciones.get(texto, {}).get(
+                    "antes", por_texto_m[texto]["glosas"]),
+                "faltan": res["faltan"], "sobran": res["sobran"],
+                "fecha": hoy}
+            aceptadas += 1
+        else:
+            rechazadas.append((texto, res["motivo"], res.get("propuesta")))
+
+    # Segunda pasada en el equipo: las propuestas que la Lambda rechazó se
+    # validan con las reglas actuales de aws/rag_revision.py (pueden ser más
+    # nuevas que las desplegadas) y se vuelven a comparar con «retrotraducir».
+    sys.path.insert(0, os.path.join(ROOT, "aws"))
+    import rag_revision as REV  # noqa: E402
+    import rag_equivalencias as EQ  # noqa: E402
+    catalogo = EQ.cargar_catalogo()
+    por_texto = {it["texto"]: it for it in marcadas}
+    revalidar = []
+    for texto, motivo, propuesta in list(rechazadas):
+        it = por_texto[texto]
+        glosas, _ = (REV.glosas_validas(propuesta, texto, catalogo)
+                     if isinstance(propuesta, list) else (None, []))
+        if glosas:
+            revalidar.append(({**it, "glosas": glosas}, it))
+    for i in range(0, len(revalidar), TANDA):
+        tanda = revalidar[i:i + TANDA]
+        r = llamar(url, {"action": "retrotraducir", "items": [
+            {"texto": c["texto"], "glosas": c["glosas"], "rol": c["rol"]}
+            for c, _ in tanda]})
+        if r.get("generated") is not True:
+            continue
+        for (cand, it), res in zip(tanda, r["items"]):
+            antes = len(it["faltan"]) + len(it["sobran"])
+            despues = len(res["faltan"]) + len(res["sobran"])
+            if despues < antes and len(res["sobran"]) <= len(it["sobran"]):
+                correcciones[it["texto"]] = {
+                    "glosas": cand["glosas"], "antes": it["glosas"],
+                    "faltan": res["faltan"], "sobran": res["sobran"],
+                    "fecha": hoy}
+                aceptadas += 1
+                rechazadas = [x for x in rechazadas if x[0] != it["texto"]]
+    # Lo que aún sobra en una corrección aceptada se quita (comprobado que la
+    # frase no lo dice): también en las aceptadas por una Lambda anterior.
+    for c in correcciones.values():
+        if c.get("sobran"):
+            c["glosas"] = REV.sin_sobras(c["glosas"], c["sobran"])
+            c["sobran"] = []
+    with open(CORRECCIONES, "w", encoding="utf-8", newline="") as f:
+        json.dump({k: correcciones[k] for k in sorted(correcciones)},
+                  f, ensure_ascii=False, indent=1)
+        f.write("\n")
     print(f"corregidas: {aceptadas} · sin corrección aceptable: "
           f"{len(rechazadas)} · sin respuesta: {fallos}")
-    for texto, motivo in rechazadas:
+    for texto, motivo, _ in rechazadas:
         print(f"  · «{texto}»: {motivo}")
     print(f"escrito: {os.path.relpath(CORRECCIONES, ROOT)}")
     return 0
