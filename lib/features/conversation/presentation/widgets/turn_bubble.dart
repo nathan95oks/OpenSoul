@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/widgets/gloss_line.dart';
 
 class TurnBubble extends StatelessWidget {
   final ConversationTurn turn;
@@ -83,10 +84,9 @@ class TurnBubble extends StatelessWidget {
                 ),
                 if (turn.message.glosses.isNotEmpty) ...[
                   const SizedBox(height: 6),
-                  Text(
-                    turn.message.glosses
-                        .map((g) => g.replaceAll('_', ' '))
-                        .join(' • '),
+                  GlossLine(
+                    glosses: turn.message.glosses,
+                    pendingColor: AppTheme.pendingSignOnDark,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,

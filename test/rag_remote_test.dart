@@ -12,6 +12,7 @@ import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_handoff.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
 
@@ -88,6 +89,26 @@ void main() {
       }
     });
 
+    test('JSON inválido y timeout remoto: ninguna sugerencia', () async {
+      final invalido = RemoteRagDataSource(
+        apiUrl: url,
+        client: MockClient((_) async => http.Response('{no-json', 200)),
+      );
+      final lento = RemoteRagDataSource(
+        apiUrl: url,
+        timeout: const Duration(milliseconds: 5),
+        client: MockClient((_) async {
+          await Future<void>.delayed(const Duration(milliseconds: 50));
+          return lambda({
+            'generated': true,
+            'suggestions': [felcv],
+          });
+        }),
+      );
+      expect(await invalido.consult('¿Hola?'), isEmpty);
+      expect(await lento.consult('¿Hola?'), isEmpty);
+    });
+
     test('sin endpoint configurado no se hace ninguna petición', () async {
       var llamadas = 0;
       final s = RemoteRagDataSource(
@@ -135,61 +156,75 @@ void main() {
     },
   );
 
-  test('lo que las palabras no encuentran llega por significado', () async {
-    final retriever = RagRetriever(
-      RagCorpus.fromJsonString(
-        File('assets/rag/escenarios_cbba.json').readAsStringSync(),
-      ),
-    );
-    const texto = '¿Usted está en peligro ahorita?';
-    expect(retriever.suggest(texto), isEmpty, reason: 'sin palabras en común');
-
-    var llamadas = 0;
-    final container = ProviderContainer(
-      overrides: [
-        ragRetrieverProvider.overrideWithValue(retriever),
-        remoteRagProvider.overrideWithValue(
-          source((_) {
-            llamadas++;
-            return lambda({
-              'generated': true,
-              'suggestions': [felcv],
-            });
-          }),
+  test(
+    'lo que las palabras no encuentran abre su trámite por significado',
+    () async {
+      final retriever = RagRetriever(
+        RagCorpus.fromJsonString(
+          File('assets/rag/escenarios_cbba.json').readAsStringSync(),
         ),
-      ],
-    );
-    addTearDown(container.dispose);
-    container
-        .read(conversationProvider.notifier)
-        .replaceConversation(
-          Conversation(
-            id: 'c',
-            startedAt: DateTime(2026, 9, 27),
-            turns: [
-              ConversationTurn(
-                route: const ConversationRoute.noSafeRoute(),
-                message: SemanticMessage(
-                  id: 't1',
-                  speaker: SpeakerRole.hearing,
-                  source: MessageSource.text,
-                  glosses: const [],
-                  text: texto,
-                ),
-                outputs: GeneratedOutputs(text: texto),
-              ),
-            ],
-          ),
-        );
+      );
+      const texto = '¿Usted está en peligro ahorita?';
+      expect(
+        retriever.suggest(texto),
+        isEmpty,
+        reason: 'sin palabras en común',
+      );
 
-    // Mientras la Lambda responde, nada; después, su sugerencia.
-    expect(container.read(ragSuggestionsProvider), isEmpty);
-    await container.read(
-      remoteRagSuggestionsProvider(('t1', texto, null)).future,
-    );
-    expect(container.read(ragSuggestionsProvider).map((s) => s.text), ['Sí.']);
-    // El mismo turno no se vuelve a consultar.
-    container.read(ragSuggestionsProvider);
-    expect(llamadas, 1);
-  });
+      var llamadas = 0;
+      final container = ProviderContainer(
+        overrides: [
+          ragRetrieverProvider.overrideWithValue(retriever),
+          remoteRagProvider.overrideWithValue(
+            source((_) {
+              llamadas++;
+              return lambda({
+                'generated': true,
+                'suggestions': [felcv],
+              });
+            }),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+      container
+          .read(conversationProvider.notifier)
+          .replaceConversation(
+            Conversation(
+              id: 'c',
+              startedAt: DateTime(2026, 9, 27),
+              turns: [
+                ConversationTurn(
+                  route: const ConversationRoute.noSafeRoute(),
+                  message: SemanticMessage(
+                    id: 't1',
+                    speaker: SpeakerRole.hearing,
+                    source: MessageSource.text,
+                    glosses: const [],
+                    text: texto,
+                  ),
+                  outputs: GeneratedOutputs(text: texto),
+                ),
+              ],
+            ),
+          );
+
+      // Mientras la Lambda responde, las tarjetas se abren como siempre; cuando
+      // vuelve, «Responder con tarjetas LSB» abre la pregunta de su trámite.
+      final handoff = container.read(conversationHandoffProvider);
+      expect(
+        handoff.nextDeafLaunch().route?.type,
+        ConversationRouteType.noSafeRoute,
+      );
+      await container.read(
+        remoteRagSuggestionsProvider(('t1', texto, null)).future,
+      );
+      final route = handoff.nextDeafLaunch().route!;
+      expect(route.targetContextId, 'tramite_felcv_01');
+      expect(route.pathQuestionIds.single, startsWith('R.ESC-FELCV-01.'));
+      // El mismo turno no se vuelve a consultar.
+      handoff.nextDeafLaunch();
+      expect(llamadas, 1);
+    },
+  );
 }

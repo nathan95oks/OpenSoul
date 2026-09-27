@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/di/injection.dart';
@@ -208,7 +209,9 @@ class _LsbPiece extends StatelessWidget {
         if (marca != null) ...[marca, const SizedBox(width: 5)],
         Flexible(
           child: Text(
-            segment.label.replaceAll('_', ' '),
+            PendingSign.isPending(segment.label)
+                ? PendingSign.wordOf(segment.label)
+                : segment.label.replaceAll('_', ' '),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: LsbQuestionDisplay.fontSizeFor(context),
@@ -216,7 +219,10 @@ class _LsbPiece extends StatelessWidget {
               fontWeight: FontWeight.w800,
               letterSpacing: 0.3,
               fontStyle: esSena ? FontStyle.normal : FontStyle.italic,
-              color: AppTheme.lightText,
+              // Sin seña en el catálogo: azul claro, como en las tarjetas.
+              color: PendingSign.isPending(segment.label)
+                  ? AppTheme.pendingSign
+                  : AppTheme.lightText,
             ),
           ),
         ),

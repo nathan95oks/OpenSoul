@@ -48,6 +48,20 @@ SIN_RELACION = [
     "El partido empieza a las ocho",
     "¿Tiene hermanos que toquen guitarra?",
     "Mañana voy al cine con mi familia",
+    # Charla de ventanilla sin trámite detrás: se parece al corpus mucho más
+    # que el fútbol (0.46–0.57 con Titan) y es donde el RAG inventaba
+    # respuestas («La oficina cierra a las cuatro» → «Estaba cerrada.»).
+    "La oficina cierra a las cuatro.",
+    "¿Cuál es su dirección?",
+    "¿Tiene seguro de salud?",
+    "¿Tiene número de celular para contactarlo?",
+    "¿Tiene mascota?",
+    "¿Usted trabaja?",
+    "¿Su casa es propia o alquilada?",
+    "¿Sabe leer y escribir?",
+    "¿Cuántos hijos tiene?",
+    "¿Tiene su licencia de conducir?",
+    "Pase a la ventanilla tres.",
 ]
 
 

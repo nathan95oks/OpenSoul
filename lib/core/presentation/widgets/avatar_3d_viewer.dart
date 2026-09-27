@@ -7,7 +7,9 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 
 class Avatar3DViewer extends ConsumerStatefulWidget {
   final bool isProcessing;
@@ -690,7 +692,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     return Stack(
       key: const ValueKey('playing'),
       children: [
-        if (isPlaceholder)
+        if (isPlaceholder && PendingSign.isPending(currentGloss))
+          Positioned.fill(child: _PendingSignNotice(gloss: currentGloss))
+        else if (isPlaceholder)
           Positioned.fill(
             child: Container(
               color: const Color(0xFF1E1E2F).withValues(alpha: 0.9),
@@ -898,6 +902,58 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                 switchOutCurve: Curves.easeIn,
                 child: bodyContent,
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Una palabra sin seña en el catálogo: se dice que falta, no se inventa.
+class _PendingSignNotice extends StatelessWidget {
+  final String gloss;
+
+  const _PendingSignNotice({required this.gloss});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: const Key('avatar_sena_a_incorporar'),
+      color: const Color(0xFF1E1E2F).withValues(alpha: 0.9),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.pendingSignOnDark.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+                border: Border.all(color: AppTheme.pendingSignOnDark, width: 2),
+              ),
+              child: const Icon(
+                Icons.add_circle_outline_rounded,
+                color: AppTheme.pendingSignOnDark,
+                size: 40,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              PendingSign.wordOf(gloss),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: AppTheme.pendingSignOnDark,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.2,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              PendingSign.avatarLabel,
+              style: TextStyle(color: Colors.white70, fontSize: 14),
             ),
           ],
         ),

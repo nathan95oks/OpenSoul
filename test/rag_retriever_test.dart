@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
@@ -8,13 +7,99 @@ import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/widgets/rag_suggestions_bar.dart';
 
 void main() {
   final corpus = RagCorpus.fromJsonString(
     File('assets/rag/escenarios_cbba.json').readAsStringSync(),
   );
   final retriever = RagRetriever(corpus);
+
+  group('separa instituciones', () {
+    const cases = {
+      'Me denunciaron y no puedo pagar abogado': 'SEPDEP',
+      'Soy víctima y necesito abogado': 'SEPDAVI',
+      'Me robaron mi celular': 'FELCC',
+      'Mi pareja me amenaza y me golpea': 'FELCV',
+      'Perdí mi cédula': 'SEGIP',
+      'Perdí mi certificado de nacimiento': 'SERECI',
+      '¿Cómo sigo mi denuncia en Fiscalía?': 'FIS',
+    };
+
+    for (final entry in cases.entries) {
+      test('${entry.key} → ${entry.value}', () {
+        expect(retriever.areaOf(entry.key), entry.value);
+      });
+    }
+
+    test('Fiscalía no se mezcla con NUREJ/WebID del Órgano Judicial', () {
+      final found = retriever.suggest(
+        '¿Tiene acceso a Fiscalía ROMA?',
+        preferArea: 'FIS',
+        limit: 12,
+      );
+      expect(found, isNotEmpty);
+      expect(found.every((s) => s.scenarioId.startsWith('ESC-FIS-')), isTrue);
+      expect(
+        found.any(
+          (s) => RegExp(r'NUREJ|WebID', caseSensitive: false).hasMatch(s.text),
+        ),
+        isFalse,
+      );
+    });
+  });
+
+  group('datos en vivo y ficticios', () {
+    for (final query in const [
+      '¿Cuánto debo?',
+      '¿Quién es mi fiscal?',
+      '¿Cuándo es mi audiencia?',
+      '¿Será virtual?',
+    ]) {
+      test('$query no inventa un valor', () {
+        final found = retriever.suggest(query, limit: 12);
+        for (final suggestion in found) {
+          expect(suggestion.text, isNot(contains('[VERIFICAR]')));
+          expect(
+            suggestion.text,
+            isNot(
+              matches(
+                RegExp(
+                  r'\b(?:Bs\.?\s*)?\d{2,}(?:[.,]\d+)?\b|\b[A-Z]{2,}-?\d{3,}\b',
+                  caseSensitive: false,
+                ),
+              ),
+            ),
+          );
+        }
+      });
+    }
+
+    test(
+      'el corpus mostrable no expone identificadores ficticios conocidos',
+      () {
+        final texts = <String>[
+          for (final s in corpus.scenarios) ...[
+            for (final t in s.turns)
+              if (t.showable) t.text,
+            for (final v in s.variants)
+              for (final r in v.replies)
+                if (r.showable) r.text,
+          ],
+        ].join('\n');
+        expect(texts, isNot(contains('[VERIFICAR]')));
+        expect(texts, isNot(contains('Diego Flores Rojas')));
+        expect(texts, isNot(contains('CBBA-2026-000123')));
+        expect(
+          texts,
+          isNot(
+            matches(
+              RegExp(r'\b(?:NUREJ|WebID|placa)\s*[:#-]?\s*[A-Z0-9-]{4,}'),
+            ),
+          ),
+        );
+      },
+    );
+  });
 
   group('recupera la situación documentada', () {
     test('cada pregunta del funcionario encuentra su propio escenario', () {
@@ -60,19 +145,32 @@ void main() {
         'Por favor, dígame el número de la placa del vehículo.': 'IMP',
         '¿Usted está en peligro ahorita? ¿El agresor está afuera o en su casa?':
             'FELCV',
-        '¿Tiene el número de NUREJ o el nombre completo del denunciante?': 'OJ',
         '¿Qué número de Juzgado de Familia es y cuál es el apellido del '
                 'demandado?':
             'OJ',
         '¿Usted es el denunciado o acusado en el caso?': 'SEPDEP',
-        '¿Traen el contrato impreso, sus carnets vigentes y están presentes '
-                'el dueño y el inquilino?':
-            'NOT',
       };
       casos.forEach((texto, area) {
         final found = retriever.suggest(texto);
         expect(found, isNotEmpty, reason: texto);
         expect(found.first.scenarioId, startsWith('ESC-$area-'), reason: texto);
+      });
+    });
+
+    test('media pregunta fuera del corpus: nada, o su trámite, nunca otro', () {
+      // «nombre completo del denunciante» o «inquilino» no están en ningún
+      // escenario y bajan el parecido; la búsqueda por significado de la
+      // Lambda los recupera cuando el grafo tampoco sabe.
+      const casos = {
+        '¿Tiene el número de NUREJ o el nombre completo del denunciante?': 'OJ',
+        '¿Traen el contrato impreso, sus carnets vigentes y están presentes '
+                'el dueño y el inquilino?':
+            'NOT',
+      };
+      casos.forEach((texto, area) {
+        for (final s in retriever.suggest(texto)) {
+          expect(s.scenarioId, startsWith('ESC-$area-'), reason: texto);
+        }
       });
     });
 
@@ -82,6 +180,16 @@ void main() {
         'Buenos días',
         'Vamos a llenar su ficha',
         '',
+        // Charla de ventanilla sin trámite detrás: comparte «tiene», «tres»
+        // o «seguro» con alguna pregunta documentada, pero habla de otra cosa.
+        '¿Tiene mascota?',
+        '¿Tiene seguro de salud?',
+        '¿Tiene su licencia de conducir?',
+        '¿Tiene algo más que agregar?',
+        'Pase a la ventanilla tres.',
+        'Le voy a pedir que firme aquí.',
+        '¿Cuántos hijos tiene?',
+        '¿Tiene número de celular para contactarlo?',
       ]) {
         expect(retriever.suggest(texto), isEmpty, reason: texto);
       }
@@ -110,12 +218,12 @@ void main() {
       expect(areas.length, greaterThan(1), reason: '$areas');
     });
 
-    test('una pregunta genérica sigue el trámite del que se habla', () {
+    test('una pregunta genérica no salta a otra institución', () {
       final found = retriever.suggest(
         '¿Trae también su cédula de identidad?',
         preferArea: 'DDRR',
       );
-      expect(found.first.scenarioId, startsWith('ESC-DDRR-'));
+      expect(found, isEmpty);
     });
 
     test('el tema no se impone a una coincidencia claramente mejor', () {
@@ -171,7 +279,7 @@ void main() {
       expect(found.map((s) => s.text), contains('Soy denunciado.'));
     });
 
-    test('el grafo solo reconoció el tema: el RAG entra', () {
+    test('un contexto directo determinista bloquea el RAG', () {
       // «denunciado» nombra Denuncias y el grafo abre ese contexto, pero la
       // pregunta es de SEPDEP.
       final found = ragSuggestionsFor(
@@ -185,7 +293,7 @@ void main() {
         ),
         retriever,
       );
-      expect(found.map((s) => s.text), contains('Soy denunciado.'));
+      expect(found, isEmpty);
     });
 
     test('el grafo eligió una pregunta con seguridad: manda el grafo', () {
@@ -201,14 +309,14 @@ void main() {
         ragSuggestionsFor(withHearing(nurej, route: graph(0.95)), retriever),
         isEmpty,
       );
-      // Con un grafo que dudaba, el RAG se ofrece junto a sus tarjetas.
+      // Aunque la confianza sea menor, ya eligió una pregunta determinista.
       expect(
         ragSuggestionsFor(withHearing(nurej, route: graph(0.6)), retriever),
-        isNotEmpty,
+        isEmpty,
       );
     });
 
-    test('el chat recuerda de qué trámite venía hablando el funcionario', () {
+    test('el chat no contamina un trámite recordado sin respuesta segura', () {
       final conversation = Conversation(
         id: 'c',
         startedAt: DateTime(2026, 9, 27),
@@ -231,7 +339,7 @@ void main() {
         ],
       );
       final found = ragSuggestionsFor(conversation, retriever);
-      expect(found.first.scenarioId, startsWith('ESC-DDRR-'));
+      expect(found, isEmpty);
     });
 
     test('mientras se traduce, sin ruta todavía o sin corpus: nada', () {
@@ -275,39 +383,10 @@ void main() {
     // Solo reconoció el tema: hace falta un parecido bueno.
     expect(ragOutranksGraph(topic, 0.6), isTrue);
     expect(ragOutranksGraph(topic, 0.59), isFalse);
-    // Eligió preguntas: casi literal y bastante más seguro que el grafo…
-    expect(ragOutranksGraph(question(0.6), 0.8), isTrue);
+    // Si ya eligió preguntas, el RAG nunca muestra tarjetas competidoras.
+    expect(ragOutranksGraph(question(0.6), 0.8), isFalse);
     expect(ragOutranksGraph(question(0.6), 0.79), isFalse);
     expect(ragOutranksGraph(question(0.9), 0.95), isFalse);
-    // …o la pregunta documentada tal cual, aunque el grafo esté seguro.
-    expect(ragOutranksGraph(question(1.0), 1.0), isTrue);
-  });
-
-  testWidgets('la barra muestra la frase y su LSB, y envía lo elegido', (
-    tester,
-  ) async {
-    final found = retriever.suggest(
-      '¿Usted es el denunciado o acusado en el caso?',
-    );
-    RagSuggestion? elegida;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: RagSuggestionsBar(
-            suggestions: found,
-            onReply: (s) => elegida = s,
-          ),
-        ),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    final primera = found.first;
-    expect(find.textContaining('Situaciones parecidas'), findsOneWidget);
-    expect(find.text(primera.text), findsOneWidget);
-    expect(find.text(primera.glosses.join(' · ')), findsWidgets);
-
-    await tester.tap(find.text(primera.text));
-    expect(elegida?.text, primera.text);
+    expect(ragOutranksGraph(question(1.0), 1.0), isFalse);
   });
 }

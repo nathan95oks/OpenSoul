@@ -37,11 +37,15 @@ FUENTES = [
     os.path.join(AWS, "guided_composer.py"),
     os.path.join(AWS, "question_bank.json"),
     os.path.join(AWS, "rag_consulta.py"),
+    os.path.join(AWS, "rag_equivalencias.py"),
 ]
 # (origen, nombre dentro del ZIP) de archivos que viven fuera de aws/.
 EXTRAS = [
     (os.path.join(ROOT, "assets", "rag", "escenarios_cbba.json"),
      "rag_escenarios_cbba.json"),
+    # El catálogo de señas de la app, para las equivalencias.
+    (os.path.join(ROOT, "assets", "dictionary", "glosas_opensoul.csv"),
+     "glosas_opensoul.csv"),
 ]
 DESTINO = os.path.join(AQUI, "lambda_function.zip")
 
@@ -98,7 +102,8 @@ def empaquetar() -> str:
 def main() -> None:
     comprobar_sintaxis()
     compileall.compile_file(FUENTE, quiet=1)
-    for modulo in ("guided_composer.py", "rag_consulta.py"):
+    for modulo in ("guided_composer.py", "rag_consulta.py",
+                   "rag_equivalencias.py"):
         compileall.compile_file(os.path.join(AWS, modulo), quiet=1)
     ejecutar_pruebas()
 

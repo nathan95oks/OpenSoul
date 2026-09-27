@@ -701,7 +701,7 @@ CONTINÚA EN LA PARTE 3
 
 ### Variantes
 
-- **Turno 4 (Funcionario):** «¿Necesita también el horario?» · «¿Quiere confirmar cuándo atienden?»
+- **Turno 5 (Funcionario):** «¿Necesita también el horario?» · «¿Quiere confirmar cuándo atienden?»
 - **Respuestas:** «Sí.» · «No.» · «No sé si llegaré.»
 
 ### Datos ficticios
@@ -810,7 +810,7 @@ CONTINÚA EN LA PARTE 3
 
 ### Variantes
 
-- **Turno 4 (Funcionario):** «¿Necesita el horario?» · «¿Quiere saber cuándo atienden?»
+- **Turno 5 (Funcionario):** «¿Necesita el horario?» · «¿Quiere saber cuándo atienden?»
 - **Respuestas:** «Sí.» · «No.» · «No sé cuándo podré ir.»
 
 ### Datos ficticios
@@ -944,7 +944,7 @@ CONTINÚA EN LA PARTE 4
 
 ### Variantes
 
-- **Turno 4 (Funcionario):** «¿Quiere confirmar el costo?» · «¿Necesita saber la tarifa publicada?»
+- **Turno 5 (Funcionario):** «¿Quiere confirmar el costo?» · «¿Necesita saber la tarifa publicada?»
 - **Respuestas:** «Sí.» · «No.» · «No sé dónde pagar.»
 
 ### Datos ficticios
@@ -1152,7 +1152,7 @@ CONTINÚA EN LA PARTE 5
 
 ### Variantes
 
-- **Turno 3 (Funcionario):** «¿Necesita el horario?» · «¿Quiere saber hasta qué hora atienden?»
+- **Turno 4 (Funcionario):** «¿Necesita el horario?» · «¿Quiere saber hasta qué hora atienden?»
 - **Respuestas:** «Sí.» · «No.» · «No sé si llegaré.»
 
 ### Datos ficticios
@@ -1257,7 +1257,7 @@ CONTINÚA EN LA PARTE 5
 
 ### Variantes
 
-- **Turno 5 (Funcionario):** «¿Quiere confirmar la sede actual?» · «¿Necesita verificar antes de ir?»
+- **Turno 6 (Funcionario):** «¿Quiere confirmar la sede actual?» · «¿Necesita verificar antes de ir?»
 - **Respuestas:** «Sí.» · «No.» · «No sé.»
 
 ### Datos ficticios
@@ -1581,7 +1581,7 @@ CONTINÚA EN LA PARTE 6
 
 ### Variantes
 
-- **Turno 3 (Funcionario):** «¿Necesita conocer el costo?» · «¿Quiere confirmar la valorada?»
+- **Turno 4 (Funcionario):** «¿Necesita conocer el costo?» · «¿Quiere confirmar la valorada?»
 - **Respuestas:** «Sí.» · «No.» · «No sé.»
 
 ### Datos ficticios
@@ -1776,7 +1776,7 @@ CONTINÚA EN LA PARTE 7
 
 ### Variantes
 
-- **Turno 5 (Funcionario):** «¿Su carnet está vencido?» · «¿Conoce su grado registrado?»
+- **Turno 6 (Funcionario):** «¿Su carnet está vencido?» · «¿Conoce su grado registrado?»
 - **Respuestas:** «Está vencido.» · «No está vencido.» · «No sé.»
 
 ### Datos ficticios
@@ -1829,7 +1829,7 @@ CONTINÚA EN LA PARTE 7
 
 ### Variantes
 
-- **Turno 1 (Funcionario):** «¿Necesita intérprete de LSB?» · «¿Requiere apoyo de comunicación?»
+- **Turno 2 (Funcionario):** «¿Necesita intérprete de LSB?» · «¿Requiere apoyo de comunicación?»
 - **Respuestas:** «Sí.» · «No.» · «Necesito texto e intérprete.»
 
 ### Datos ficticios

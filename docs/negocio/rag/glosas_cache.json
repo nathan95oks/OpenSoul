@@ -115,6 +115,939 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Conserve esos elementos y siga instrucciones del investigador.": {
+  "glosas": [
+   "C",
+   "O",
+   "N",
+   "S",
+   "E",
+   "R",
+   "V",
+   "E",
+   "E",
+   "S",
+   "O",
+   "S",
+   "E",
+   "L",
+   "E",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "S",
+   "S",
+   "I",
+   "G",
+   "A",
+   "I",
+   "N",
+   "S",
+   "T",
+   "R",
+   "U",
+   "C",
+   "C",
+   "I",
+   "O",
+   "N",
+   "E",
+   "S",
+   "I",
+   "N",
+   "V",
+   "E",
+   "S",
+   "T",
+   "I",
+   "G",
+   "A",
+   "D",
+   "O",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "Conserve",
+    "accion": "palabra_recuperada"
+   },
+   {
+    "palabra": "esos",
+    "accion": "palabra_recuperada"
+   },
+   {
+    "palabra": "elementos",
+    "accion": "palabra_recuperada"
+   },
+   {
+    "palabra": "siga",
+    "accion": "palabra_recuperada"
+   },
+   {
+    "palabra": "instrucciones",
+    "accion": "palabra_recuperada"
+   },
+   {
+    "palabra": "investigador",
+    "accion": "palabra_recuperada"
+   },
+   {
+    "palabra": "CONSERVE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ELEMENTOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SIGA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INSTRUCCIONES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INVESTIGADOR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Consulte primero el monto actualizado antes de pagar.": {
+  "glosas": [
+   "AHORA",
+   "M",
+   "O",
+   "N",
+   "T",
+   "O",
+   "A",
+   "C",
+   "T",
+   "U",
+   "A",
+   "L",
+   "I",
+   "Z",
+   "A",
+   "R",
+   "P",
+   "A",
+   "G",
+   "A",
+   "R",
+   "A",
+   "N",
+   "T",
+   "E",
+   "S"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MONTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACTUALIZAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PAGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ANTES",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Contacte SEPDEP para activar la atención correspondiente.": {
+  "glosas": [
+   "SEPDEP",
+   "ATENDER",
+   "A",
+   "C",
+   "T",
+   "I",
+   "V",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ACTIVAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Cuente lo ocurrido con sus propias palabras.": {
+  "glosas": [
+   "C",
+   "O",
+   "N",
+   "T",
+   "A",
+   "R",
+   "O",
+   "C",
+   "U",
+   "R",
+   "R",
+   "I",
+   "D",
+   "O",
+   "P",
+   "R",
+   "O",
+   "P",
+   "I",
+   "O",
+   "PALABRA"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CONTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OCURRIDO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PROPIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "DIRNOPLU ofrece un buscador de notarios.": {
+  "glosas": [
+   "D",
+   "I",
+   "R",
+   "N",
+   "O",
+   "P",
+   "L",
+   "U",
+   "BUSCAR",
+   "N",
+   "O",
+   "T",
+   "A",
+   "R",
+   "I",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DIRNOPLU",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NOTARIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Debe acreditar la relación permitida y su identidad.": {
+  "glosas": [
+   "R",
+   "E",
+   "L",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "P",
+   "E",
+   "R",
+   "M",
+   "I",
+   "T",
+   "I",
+   "D",
+   "O",
+   "IDENTIDAD",
+   "D",
+   "E",
+   "M",
+   "O",
+   "S",
+   "T",
+   "R",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "RELACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERMITIDO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEMOSTRAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Debe activarse la atención de la Defensoría de la Niñez.": {
+  "glosas": [
+   "A",
+   "T",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "S",
+   "O",
+   "R",
+   "I",
+   "A",
+   "N",
+   "I",
+   "Ñ",
+   "E",
+   "Z",
+   "A",
+   "C",
+   "T",
+   "I",
+   "V",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ATENCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEFENSORIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACTIVAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Debe garantizarse comunicación accesible durante la atención.": {
+  "glosas": [
+   "A",
+   "T",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "C",
+   "O",
+   "M",
+   "U",
+   "N",
+   "I",
+   "C",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "C",
+   "C",
+   "E",
+   "S",
+   "I",
+   "B",
+   "L",
+   "E",
+   "G",
+   "A",
+   "R",
+   "A",
+   "N",
+   "T",
+   "I",
+   "Z",
+   "A",
+   "R",
+   "DURANTE"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ATENCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COMUNICACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACCESIBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "GARANTIZAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Debe ser derivado al servicio especializado contra la violencia.": {
+  "glosas": [
+   "VIOLENCIA",
+   "S",
+   "E",
+   "R",
+   "V",
+   "I",
+   "C",
+   "I",
+   "O",
+   "E",
+   "S",
+   "P",
+   "E",
+   "C",
+   "I",
+   "A",
+   "L",
+   "I",
+   "Z",
+   "A",
+   "D",
+   "O",
+   "C",
+   "O",
+   "N",
+   "T",
+   "R",
+   "A",
+   "VIOLENCIA",
+   "D",
+   "E",
+   "R",
+   "I",
+   "V",
+   "A",
+   "D",
+   "O"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "SERVICIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESPECIALIZADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CONTRA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DERIVADO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Debe tramitarse la interpretación conforme al procedimiento aplicable.": {
+  "glosas": [
+   "TRAMITE",
+   "I",
+   "N",
+   "T",
+   "E",
+   "R",
+   "P",
+   "R",
+   "E",
+   "T",
+   "A",
+   "R",
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "D",
+   "I",
+   "M",
+   "I",
+   "E",
+   "N",
+   "T",
+   "O",
+   "A",
+   "P",
+   "L",
+   "I",
+   "C",
+   "A",
+   "B",
+   "L",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "INTERPRETAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PROCEDIMIENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "APLICABLE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Debemos revisar la información de su expediente.": {
+  "glosas": [
+   "E",
+   "X",
+   "P",
+   "E",
+   "D",
+   "I",
+   "E",
+   "N",
+   "T",
+   "E",
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "R",
+   "E",
+   "V",
+   "I",
+   "S",
+   "A",
+   "R",
+   "D",
+   "E",
+   "B",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "EXPEDIENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INFORMACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "REVISAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEBER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Depende de su grado y situación; revise la norma aplicable.": {
+  "glosas": [
+   "G",
+   "R",
+   "A",
+   "D",
+   "O",
+   "S",
+   "I",
+   "T",
+   "U",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "N",
+   "O",
+   "R",
+   "M",
+   "A",
+   "A",
+   "P",
+   "L",
+   "I",
+   "C",
+   "A",
+   "B",
+   "L",
+   "E",
+   "R",
+   "E",
+   "V",
+   "I",
+   "S",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "GRADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SITUACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NORMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "APLICABLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "REVISAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Describa cuándo y dónde ocurrió.": {
+  "glosas": [
+   "CUANDO",
+   "DONDE",
+   "O",
+   "C",
+   "U",
+   "R",
+   "R",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "OCURRIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Desde 2026 existe atención virtual en LSB.": {
+  "glosas": [
+   "2",
+   "0",
+   "2",
+   "6",
+   "A",
+   "T",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "V",
+   "I",
+   "R",
+   "T",
+   "U",
+   "A",
+   "L",
+   "E",
+   "X",
+   "I",
+   "S",
+   "T",
+   "I",
+   "R",
+   "L",
+   "S",
+   "B"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "2026",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ATENCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VIRTUAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "EXISTIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "LSB",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "El Ministerio informa que la carnetización es gratuita.": {
+  "glosas": [
+   "M",
+   "I",
+   "N",
+   "I",
+   "S",
+   "T",
+   "E",
+   "R",
+   "I",
+   "O",
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "A",
+   "R",
+   "PAPEL",
+   "IDENTIDAD",
+   "GRATIS"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MINISTERIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INFORMAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "El Ministerio informó cuatro días para el área urbana.": {
+  "glosas": [
+   "M",
+   "I",
+   "N",
+   "I",
+   "S",
+   "T",
+   "E",
+   "R",
+   "I",
+   "O",
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "A",
+   "R",
+   "4",
+   "DIA",
+   "A",
+   "R",
+   "E",
+   "A",
+   "U",
+   "R",
+   "B",
+   "A",
+   "N",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MINISTERIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INFORMAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "AREA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "URBANA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "El arancel publicado incluye anticréticos entre otras escrituras.": {
+  "glosas": [
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "A",
+   "R",
+   "A",
+   "R",
+   "A",
+   "N",
+   "C",
+   "E",
+   "L",
+   "E",
+   "I",
+   "N",
+   "C",
+   "L",
+   "U",
+   "I",
+   "R",
+   "O",
+   "T",
+   "R",
+   "O",
+   "E",
+   "S",
+   "C",
+   "R",
+   "I",
+   "T",
+   "U",
+   "R",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PUBLICAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ARANCELE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INCLUIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESCRITURA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "El equipo puede orientar su ruta de atención.": {
+  "glosas": [
+   "E",
+   "Q",
+   "U",
+   "I",
+   "P",
+   "O",
+   "A",
+   "T",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "R",
+   "U",
+   "T",
+   "A",
+   "O",
+   "R",
+   "I",
+   "E",
+   "N",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "EQUIPO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ATENCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "RUTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ORIENTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "El proceso es contra mí.": {
   "glosas": [
    "P",
@@ -140,6 +1073,123 @@
    },
    {
     "palabra": "CONTRA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "El reglamento exige validarlo con los datos de SERECI.": {
+  "glosas": [
+   "R",
+   "E",
+   "G",
+   "L",
+   "A",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "E",
+   "X",
+   "I",
+   "G",
+   "I",
+   "R",
+   "V",
+   "A",
+   "L",
+   "I",
+   "D",
+   "A",
+   "R",
+   "D",
+   "A",
+   "T",
+   "O",
+   "S",
+   "S",
+   "E",
+   "R",
+   "E",
+   "C",
+   "I"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "REGLAMENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "EXIGIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VALIDAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DATOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SERECI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "El servicio para violencia familiar figura actualizado en 2026.": {
+  "glosas": [
+   "VIOLENCIA",
+   "F",
+   "A",
+   "M",
+   "I",
+   "L",
+   "I",
+   "A",
+   "R",
+   "S",
+   "E",
+   "R",
+   "V",
+   "I",
+   "C",
+   "I",
+   "O",
+   "A",
+   "C",
+   "T",
+   "U",
+   "A",
+   "L",
+   "I",
+   "Z",
+   "A",
+   "R",
+   "2",
+   "0",
+   "2",
+   "6"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "FAMILIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SERVICIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACTUALIZAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "2026",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -327,6 +1377,18 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "Escríbala sin espacios ni guiones.": {
+  "glosas": [
+   "ESCRIBIR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "accion": "negacion_perdida"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "Estaba cerrada.": {
   "glosas": [
    "C",
@@ -406,6 +1468,121 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Está en calle 16 de Julio 680, Plazuela Constitución.": {
+  "glosas": [
+   "CALLE",
+   "1",
+   "6",
+   "D",
+   "E",
+   "JULIO",
+   "6",
+   "8",
+   "0",
+   "P",
+   "L",
+   "A",
+   "Z",
+   "U",
+   "E",
+   "L",
+   "A",
+   "C",
+   "O",
+   "N",
+   "S",
+   "T",
+   "I",
+   "T",
+   "U",
+   "C",
+   "I",
+   "O",
+   "N"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "16",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "680",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PLAZUELA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CONSTITUCION",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Está en el Centro Internacional de Convenciones, piso uno.": {
+  "glosas": [
+   "C",
+   "E",
+   "N",
+   "T",
+   "R",
+   "O",
+   "I",
+   "N",
+   "T",
+   "E",
+   "R",
+   "N",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "L",
+   "C",
+   "O",
+   "N",
+   "V",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "E",
+   "S",
+   "P",
+   "I",
+   "S",
+   "O",
+   "U",
+   "N",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CENTRO_INTERNACIONAL_CONVENCIONES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PISO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "UNO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "Está vencido.": {
   "glosas": [
    "V",
@@ -419,6 +1596,88 @@
   "correcciones": [
    {
     "palabra": "VENCER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Existe representación en Centro Integral FELCV, avenida Beijing.": {
+  "glosas": [
+   "C",
+   "E",
+   "N",
+   "T",
+   "R",
+   "O",
+   "I",
+   "N",
+   "T",
+   "E",
+   "G",
+   "R",
+   "A",
+   "L",
+   "F",
+   "E",
+   "L",
+   "C",
+   "V",
+   "AVENIDA",
+   "B",
+   "E",
+   "I",
+   "J",
+   "I",
+   "N",
+   "G"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CENTRO_INTEGRAL_FELCV",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "BEIJING",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "FELCV atiende hechos de violencia y activa la ruta correspondiente.": {
+  "glosas": [
+   "FELCV",
+   "VIOLENCIA",
+   "H",
+   "E",
+   "C",
+   "H",
+   "O",
+   "ATENDER",
+   "R",
+   "U",
+   "T",
+   "A",
+   "A",
+   "C",
+   "T",
+   "I",
+   "V",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "HECHO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "RUTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACTIVAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -608,6 +1867,18 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Incluya qué pasó, cuándo y dónde, si lo sabe.": {
+  "glosas": [
+   "PASADO",
+   "DONDE",
+   "CUANDO",
+   "SABER",
+   "YO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-09-27"
+ },
  "Iré antes de esa hora.": {
   "glosas": [
    "A",
@@ -658,6 +1929,237 @@
   ],
   "traducido": "2026-09-27"
  },
+ "La DNA atiende situaciones de protección de esta población.": {
+  "glosas": [
+   "D",
+   "N",
+   "A",
+   "PROTEGER",
+   "P",
+   "O",
+   "B",
+   "L",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "S",
+   "I",
+   "T",
+   "U",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "ATENDER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DNA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "POBLACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SITUACION",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La Ley 1658 contempla interpretación gratuita en justicia.": {
+  "glosas": [
+   "LEY",
+   "1",
+   "6",
+   "5",
+   "8",
+   "JUSTICIA",
+   "I",
+   "N",
+   "T",
+   "E",
+   "R",
+   "P",
+   "R",
+   "E",
+   "T",
+   "A",
+   "R",
+   "GRATIS"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "1658",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INTERPRETAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La Ley 1658 incluye el ámbito de administración de justicia.": {
+  "glosas": [
+   "LEY",
+   "1",
+   "6",
+   "5",
+   "8",
+   "JUSTICIA",
+   "A",
+   "D",
+   "M",
+   "I",
+   "N",
+   "I",
+   "S",
+   "T",
+   "R",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "M",
+   "B",
+   "I",
+   "T",
+   "O",
+   "I",
+   "N",
+   "C",
+   "L",
+   "U",
+   "I",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "1658",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ADMINISTRACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "AMBITO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INCLUIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La atención debe adaptarse para que comprenda el trámite.": {
+  "glosas": [
+   "A",
+   "T",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "D",
+   "A",
+   "P",
+   "T",
+   "A",
+   "R",
+   "S",
+   "E",
+   "COMPRENDER",
+   "TRAMITE",
+   "PARA_QUE"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ATENCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ADAPTARSE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La atención debe permitir comunicación accesible.": {
+  "glosas": [
+   "A",
+   "T",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "C",
+   "O",
+   "M",
+   "U",
+   "N",
+   "I",
+   "C",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "C",
+   "C",
+   "E",
+   "S",
+   "I",
+   "B",
+   "L",
+   "E",
+   "P",
+   "E",
+   "R",
+   "M",
+   "I",
+   "T",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ATENCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COMUNICACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACCESIBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERMITIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "La central.": {
   "glosas": [
    "C",
@@ -677,6 +2179,251 @@
   ],
   "traducido": "2026-09-27"
  },
+ "La certificación de firmas tiene arancel publicado específico.": {
+  "glosas": [
+   "CERTIFICADO",
+   "F",
+   "I",
+   "R",
+   "M",
+   "A",
+   "A",
+   "R",
+   "A",
+   "N",
+   "C",
+   "E",
+   "L",
+   "E",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "A",
+   "D",
+   "O",
+   "E",
+   "S",
+   "P",
+   "E",
+   "C",
+   "I",
+   "F",
+   "I",
+   "C",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "FIRMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ARANCELE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PUBLICADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESPECIFICO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La modalidad depende del señalamiento de su expediente.": {
+  "glosas": [
+   "E",
+   "X",
+   "P",
+   "E",
+   "D",
+   "I",
+   "E",
+   "N",
+   "T",
+   "E",
+   "S",
+   "E",
+   "Ñ",
+   "A",
+   "L",
+   "A",
+   "M",
+   "I",
+   "E",
+   "N",
+   "T",
+   "O",
+   "D",
+   "E",
+   "P",
+   "E",
+   "N",
+   "D",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "EXPEDIENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEÑALAMIENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEPENDER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La norma 2025 incorporó mecanismos de renovación automática.": {
+  "glosas": [
+   "N",
+   "O",
+   "R",
+   "M",
+   "A",
+   "2",
+   "0",
+   "2",
+   "5",
+   "M",
+   "E",
+   "C",
+   "A",
+   "N",
+   "I",
+   "S",
+   "M",
+   "O",
+   "R",
+   "E",
+   "N",
+   "O",
+   "V",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "U",
+   "T",
+   "O",
+   "M",
+   "A",
+   "T",
+   "I",
+   "C",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NORMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "2025",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MECANISMO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "RENOVACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "AUTOMATICO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La norma 2025 mantiene el registro dentro del sistema nacional.": {
+  "glosas": [
+   "N",
+   "O",
+   "R",
+   "M",
+   "A",
+   "2",
+   "0",
+   "2",
+   "5",
+   "R",
+   "E",
+   "G",
+   "I",
+   "S",
+   "T",
+   "R",
+   "O",
+   "S",
+   "I",
+   "S",
+   "T",
+   "E",
+   "M",
+   "A",
+   "N",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "L",
+   "M",
+   "A",
+   "N",
+   "T",
+   "E",
+   "N",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NORMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "2025",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "REGISTRO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SISTEMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NACIONAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MANTENER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "La perdí.": {
   "glosas": [
    "PERDER",
@@ -684,6 +2431,163 @@
   ],
   "estado": "partial",
   "correcciones": [],
+  "traducido": "2026-09-27"
+ },
+ "La renovación puede solicitarse desde seis meses antes.": {
+  "glosas": [
+   "M",
+   "E",
+   "S",
+   "E",
+   "S",
+   "S",
+   "E",
+   "I",
+   "S",
+   "A",
+   "N",
+   "T",
+   "E",
+   "S",
+   "S",
+   "O",
+   "L",
+   "I",
+   "C",
+   "I",
+   "T",
+   "A",
+   "R",
+   "P",
+   "O",
+   "D",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MESES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEIS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ANTES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SOLICITAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PODER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La reposición aplica por extravío, robo o deterioro.": {
+  "glosas": [
+   "E",
+   "X",
+   "T",
+   "R",
+   "A",
+   "V",
+   "I",
+   "O",
+   "ROBAR",
+   "D",
+   "E",
+   "T",
+   "I",
+   "E",
+   "N",
+   "A",
+   "P",
+   "L",
+   "I",
+   "C",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "EXTRAVIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DETIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "APLICAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "La reposición mantiene la vigencia del documento reemplazado.": {
+  "glosas": [
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "R",
+   "E",
+   "E",
+   "M",
+   "P",
+   "L",
+   "A",
+   "Z",
+   "A",
+   "R",
+   "V",
+   "I",
+   "G",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A",
+   "M",
+   "A",
+   "N",
+   "T",
+   "E",
+   "N",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "REEMPLAZAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VIGENCIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MANTENER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
   "traducido": "2026-09-27"
  },
  "Llamaré antes de ir.": {
@@ -1266,6 +3170,40 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Necesito hacerle algunas preguntas sobre la denuncia.": {
+  "glosas": [
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A",
+   "R",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "NECESITAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PREGUNTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DENUNCIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "Necesito intérprete de Lengua de Señas Boliviana.": {
   "glosas": [
    "NECESITAR",
@@ -1464,6 +3402,81 @@
    },
    {
     "palabra": "APARECE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "No asumiremos que el servicio dejó de funcionar.": {
+  "glosas": [
+   "S",
+   "E",
+   "R",
+   "V",
+   "I",
+   "C",
+   "I",
+   "O",
+   "FUNCIONAR",
+   "DEJAR",
+   "NO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "SERVICIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "No borre ni modifique mensajes relacionados al hecho.": {
+  "glosas": [
+   "NO",
+   "B",
+   "O",
+   "R",
+   "R",
+   "A",
+   "R",
+   "M",
+   "O",
+   "D",
+   "I",
+   "F",
+   "I",
+   "C",
+   "A",
+   "R",
+   "M",
+   "E",
+   "N",
+   "S",
+   "A",
+   "J",
+   "E",
+   "H",
+   "E",
+   "C",
+   "H",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "BORRAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MODIFICAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MENSAJE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "HECHO",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -2746,6 +4759,102 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Para violencia corresponde activar la ruta de FELCV.": {
+  "glosas": [
+   "VIOLENCIA",
+   "FELCV",
+   "R",
+   "U",
+   "T",
+   "A",
+   "A",
+   "C",
+   "T",
+   "I",
+   "V",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "RUTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACTIVAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Para víctimas, consulte SEPDAVI u otro servicio competente.": {
+  "glosas": [
+   "V",
+   "I",
+   "C",
+   "T",
+   "I",
+   "M",
+   "A",
+   "C",
+   "O",
+   "N",
+   "S",
+   "U",
+   "L",
+   "T",
+   "A",
+   "R",
+   "SEPDAVI",
+   "O",
+   "T",
+   "R",
+   "O",
+   "S",
+   "E",
+   "R",
+   "V",
+   "I",
+   "C",
+   "I",
+   "O",
+   "C",
+   "O",
+   "M",
+   "P",
+   "E",
+   "T",
+   "E",
+   "N",
+   "T",
+   "E"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "VICTIMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CONSULTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SERVICIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COMPETENTE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "Perdí mi certificado de nacimiento.": {
   "glosas": [
    "CERTIFICADO",
@@ -2873,6 +4982,169 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Primero debe seguir el proceso de calificación correspondiente.": {
+  "glosas": [
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O",
+   "C",
+   "A",
+   "L",
+   "I",
+   "F",
+   "I",
+   "C",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "C",
+   "O",
+   "R",
+   "R",
+   "E",
+   "S",
+   "P",
+   "O",
+   "N",
+   "D",
+   "I",
+   "E",
+   "N",
+   "T",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CALIFICACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CORRESPONDIENTE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Puede acudir a la Defensoría por posible vulneración de derechos.": {
+  "glosas": [
+   "P",
+   "O",
+   "S",
+   "I",
+   "B",
+   "L",
+   "E",
+   "D",
+   "E",
+   "R",
+   "E",
+   "C",
+   "H",
+   "O",
+   "S",
+   "V",
+   "U",
+   "L",
+   "N",
+   "E",
+   "R",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "S",
+   "O",
+   "R",
+   "I",
+   "A",
+   "A",
+   "C",
+   "U",
+   "D",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "POSIBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DERECHOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VULNERACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEFENSORIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUDIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Puede buscarlos en una boleta de pago anterior.": {
+  "glosas": [
+   "B",
+   "O",
+   "L",
+   "E",
+   "T",
+   "A",
+   "P",
+   "A",
+   "G",
+   "O",
+   "A",
+   "N",
+   "T",
+   "E",
+   "R",
+   "I",
+   "O",
+   "R",
+   "BUSCAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "BOLETA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PAGO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ANTERIOR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "Puedo ir.": {
   "glosas": [
    "PUEDO",
@@ -2899,6 +5171,54 @@
   "correcciones": [
    {
     "palabra": "RESPONDER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Queda entre Antezana y Lanza, Edificio Aly.": {
+  "glosas": [
+   "A",
+   "N",
+   "T",
+   "E",
+   "R",
+   "I",
+   "O",
+   "R",
+   "L",
+   "A",
+   "N",
+   "Z",
+   "A",
+   "E",
+   "D",
+   "I",
+   "F",
+   "I",
+   "C",
+   "I",
+   "O",
+   "A",
+   "L",
+   "Y"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ANTERIOR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "LANZA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "EDIFICIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ALY",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -3866,6 +6186,369 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Registraremos los datos que usted pueda aportar.": {
+  "glosas": [
+   "D",
+   "A",
+   "T",
+   "O",
+   "S",
+   "A",
+   "P",
+   "O",
+   "R",
+   "T",
+   "A",
+   "R",
+   "P",
+   "O",
+   "D",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DATOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "APORTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PODER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Registraremos su necesidad de comunicación accesible.": {
+  "glosas": [
+   "C",
+   "O",
+   "M",
+   "U",
+   "N",
+   "I",
+   "C",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "C",
+   "C",
+   "E",
+   "S",
+   "I",
+   "B",
+   "L",
+   "E",
+   "N",
+   "E",
+   "C",
+   "E",
+   "S",
+   "I",
+   "D",
+   "A",
+   "D",
+   "R",
+   "E",
+   "G",
+   "I",
+   "S",
+   "T",
+   "R",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "COMUNICACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACCESIBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NECESIDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "REGISTRAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Registraremos su necesidad de interpretación.": {
+  "glosas": [
+   "NECESITAR",
+   "INTERPRETE"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-09-27"
+ },
+ "SEPDAVI evaluará su acceso al patrocinio y apoyo integral.": {
+  "glosas": [
+   "SEPDAVI",
+   "A",
+   "C",
+   "C",
+   "E",
+   "S",
+   "O",
+   "P",
+   "A",
+   "T",
+   "R",
+   "O",
+   "C",
+   "I",
+   "N",
+   "I",
+   "O",
+   "A",
+   "P",
+   "O",
+   "Y",
+   "O",
+   "I",
+   "N",
+   "T",
+   "E",
+   "G",
+   "R",
+   "A",
+   "L",
+   "EVALUAR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ACCESO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PATROCINIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "APOYO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INTEGRAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "SERECI incluye ese servicio entre certificados duplicados.": {
+  "glosas": [
+   "CERTIFICADO",
+   "D",
+   "U",
+   "P",
+   "L",
+   "I",
+   "C",
+   "A",
+   "D",
+   "O",
+   "I",
+   "N",
+   "C",
+   "L",
+   "U",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DUPLICADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INCLUIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "SERECI ofrece venta de certificados duplicados.": {
+  "glosas": [
+   "S",
+   "E",
+   "R",
+   "E",
+   "C",
+   "I",
+   "V",
+   "E",
+   "N",
+   "T",
+   "A",
+   "CERTIFICADO",
+   "D",
+   "U",
+   "P",
+   "L",
+   "I",
+   "C",
+   "A",
+   "D",
+   "O",
+   "O",
+   "F",
+   "R",
+   "E",
+   "C",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "SERECI",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VENTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DUPLICADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OFRECER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "SIREJ indica acudir a información del Tribunal.": {
+  "glosas": [
+   "S",
+   "I",
+   "R",
+   "E",
+   "J",
+   "T",
+   "R",
+   "I",
+   "B",
+   "U",
+   "N",
+   "A",
+   "L",
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "C",
+   "U",
+   "D",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "SIREJ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TRIBUNAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INFORMACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUDIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "Se informó condonación de multas e intereses hasta octubre.": {
+  "glosas": [
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "A",
+   "R",
+   "M",
+   "U",
+   "L",
+   "T",
+   "A",
+   "I",
+   "N",
+   "T",
+   "E",
+   "R",
+   "E",
+   "S",
+   "O",
+   "C",
+   "T",
+   "U",
+   "B",
+   "R",
+   "E",
+   "H",
+   "A",
+   "S",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "INFORMAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MULTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INTERES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OCTUBRE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "HASTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "Solo legal.": {
   "glosas": [
    "L",
@@ -4760,6 +7443,30 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "También enumera identificación del fallecido y dos testigos.": {
+  "glosas": [
+   "IDENTIFICAR",
+   "F",
+   "A",
+   "L",
+   "L",
+   "E",
+   "C",
+   "I",
+   "D",
+   "O",
+   "TESTIGO",
+   "TESTIGO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "FALLECIDO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "Tengo audiencia familiar. No sé dónde ir.": {
   "glosas": [
    "A",
@@ -5245,6 +7952,104 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "¿Busca deuda de inmueble o vehículo?": {
+  "glosas": [
+   "BUSCAR",
+   "D",
+   "E",
+   "U",
+   "D",
+   "A",
+   "I",
+   "N",
+   "M",
+   "U",
+   "E",
+   "B",
+   "L",
+   "E",
+   "V",
+   "E",
+   "H",
+   "I",
+   "C",
+   "U",
+   "L",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DEUDA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INMUEBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEHICULO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Busca una notaría específica?": {
+  "glosas": [
+   "BUSCAR",
+   "N",
+   "O",
+   "T",
+   "A",
+   "R",
+   "I",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NOTARIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Cuenta con abogado particular?": {
+  "glosas": [
+   "ABOGADO",
+   "P",
+   "A",
+   "R",
+   "T",
+   "I",
+   "C",
+   "U",
+   "L",
+   "A",
+   "R",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PARTICULAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿Cuesta lo mismo que la cédula física?": {
   "glosas": [
    "C",
@@ -5289,6 +8094,16 @@
     "accion": "concepto_sin_catalogo"
    }
   ],
+  "traducido": "2026-09-27"
+ },
+ "¿Cuándo y dónde ocurrió el robo?": {
+  "glosas": [
+   "ROBAR",
+   "CUANDO",
+   "DONDE"
+  ],
+  "estado": "complete",
+  "correcciones": [],
   "traducido": "2026-09-27"
  },
  "¿Cuánto aparece en el arancel?": {
@@ -5525,6 +8340,25 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿De qué años son las deudas?": {
+  "glosas": [
+   "AÑO",
+   "D",
+   "E",
+   "U",
+   "D",
+   "A",
+   "CUANTOS"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "DEUDA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿Debo confirmar antes de salir?": {
   "glosas": [
    "S",
@@ -5625,6 +8459,54 @@
    },
    {
     "palabra": "DEBO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Desea denunciar verbalmente o trae escrito?": {
+  "glosas": [
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "V",
+   "E",
+   "R",
+   "B",
+   "A",
+   "L",
+   "M",
+   "E",
+   "N",
+   "T",
+   "E",
+   "E",
+   "S",
+   "C",
+   "R",
+   "I",
+   "T",
+   "O",
+   "TRAER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VERBALMENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESCRITO",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -5805,6 +8687,52 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿El hecho fue robo, estafa u otro delito?": {
+  "glosas": [
+   "H",
+   "E",
+   "C",
+   "H",
+   "O",
+   "ROBAR",
+   "E",
+   "S",
+   "T",
+   "A",
+   "F",
+   "A",
+   "O",
+   "T",
+   "R",
+   "O",
+   "D",
+   "E",
+   "L",
+   "I",
+   "T",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "HECHO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAFA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DELITO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿El monto aparece en línea?": {
   "glosas": [
    "L",
@@ -5929,6 +8857,52 @@
    },
    {
     "palabra": "SIPRUNPCD",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿El vehículo está radicado en Cochabamba?": {
+  "glosas": [
+   "V",
+   "E",
+   "H",
+   "I",
+   "C",
+   "U",
+   "L",
+   "O",
+   "C",
+   "O",
+   "O",
+   "C",
+   "H",
+   "A",
+   "B",
+   "A",
+   "M",
+   "B",
+   "A",
+   "R",
+   "A",
+   "D",
+   "I",
+   "C",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "VEHICULO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COOCHABAMBA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "RADICAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -6080,6 +9054,43 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Está en un lugar seguro ahora?": {
+  "glosas": [
+   "AHORA",
+   "L",
+   "U",
+   "G",
+   "A",
+   "R",
+   "S",
+   "E",
+   "G",
+   "U",
+   "R",
+   "O",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "LUGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEGURO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿La dirección sigue vigente?": {
   "glosas": [
    "DIRECCION",
@@ -6096,6 +9107,63 @@
   "correcciones": [
    {
     "palabra": "VIGENTE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿La estafa ocurrió por internet o presencialmente?": {
+  "glosas": [
+   "INTERNET",
+   "E",
+   "S",
+   "T",
+   "A",
+   "F",
+   "A",
+   "O",
+   "C",
+   "U",
+   "R",
+   "R",
+   "I",
+   "R",
+   "P",
+   "R",
+   "E",
+   "S",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A",
+   "L",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "O",
+    "accion": "letra_descartada"
+   },
+   {
+    "palabra": "ESTAFA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OCURRIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PRESENCIAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -6121,6 +9189,291 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Las amenazas continúan actualmente?": {
+  "glosas": [
+   "AHORA",
+   "AMENAZAR",
+   "CONTINUAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-09-27"
+ },
+ "¿Le dijeron que necesita treinta por ciento?": {
+  "glosas": [
+   "N",
+   "E",
+   "E",
+   "D",
+   "T",
+   "H",
+   "I",
+   "R",
+   "T",
+   "Y",
+   "P",
+   "E",
+   "R",
+   "C",
+   "E",
+   "N",
+   "T",
+   "Y",
+   "E",
+   "S"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NEED",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "THIRTY",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERCENT",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "YES",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Le queda mejor la oficina central o La Chimba?": {
+  "glosas": [
+   "OFICINA",
+   "C",
+   "E",
+   "N",
+   "T",
+   "R",
+   "A",
+   "L",
+   "C",
+   "H",
+   "I",
+   "M",
+   "B",
+   "A",
+   "MEJOR",
+   "QUE"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CENTRAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CHIMBA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Necesita certificado de matrimonio duplicado?": {
+  "glosas": [
+   "CERTIFICADO",
+   "M",
+   "A",
+   "T",
+   "R",
+   "I",
+   "M",
+   "O",
+   "N",
+   "I",
+   "O",
+   "D",
+   "U",
+   "P",
+   "L",
+   "I",
+   "C",
+   "A",
+   "D",
+   "O",
+   "NECESITAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MATRIMONIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DUPLICADO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Necesita primero orientación legal o psicológica?": {
+  "glosas": [
+   "NECESITAR",
+   "O",
+   "R",
+   "I",
+   "E",
+   "N",
+   "T",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "L",
+   "E",
+   "G",
+   "A",
+   "L",
+   "P",
+   "S",
+   "I",
+   "C",
+   "O",
+   "L",
+   "O",
+   "G",
+   "I",
+   "C",
+   "A",
+   "P",
+   "R",
+   "I",
+   "M",
+   "E",
+   "R",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "O",
+    "accion": "letra_descartada"
+   },
+   {
+    "palabra": "ORIENTACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "LEGAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PSICOLOGICA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PRIMERO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Necesita una medida de accesibilidad para la audiencia?": {
+  "glosas": [
+   "A",
+   "U",
+   "D",
+   "I",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A",
+   "A",
+   "C",
+   "C",
+   "E",
+   "S",
+   "I",
+   "B",
+   "I",
+   "L",
+   "I",
+   "D",
+   "A",
+   "D",
+   "M",
+   "E",
+   "D",
+   "I",
+   "D",
+   "A",
+   "NECESITAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "AUDIENCIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACCESIBILIDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MEDIDA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Puede acudir presencialmente ahora?": {
+  "glosas": [
+   "AHORA",
+   "P",
+   "R",
+   "E",
+   "S",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A",
+   "L",
+   "M",
+   "E",
+   "N",
+   "T",
+   "E",
+   "A",
+   "C",
+   "U",
+   "D",
+   "I",
+   "R",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PRESENCIALMENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUDIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿Puede ayudarme a encontrarlo?": {
   "glosas": [
    "AYUDAR",
@@ -6139,6 +9492,83 @@
   "correcciones": [
    {
     "palabra": "ENCONTRAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Puede ingresar a su cuenta?": {
+  "glosas": [
+   "C",
+   "U",
+   "E",
+   "N",
+   "T",
+   "A",
+   "I",
+   "N",
+   "G",
+   "R",
+   "E",
+   "S",
+   "A",
+   "R",
+   "PUEDO",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CUENTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INGRESAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Puede venir a la oficina de la Defensoría?": {
+  "glosas": [
+   "OFICINA",
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "S",
+   "O",
+   "R",
+   "I",
+   "A",
+   "VENIR",
+   "P",
+   "O",
+   "D",
+   "E",
+   "R",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DEFENSORIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PODER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -6277,6 +9707,142 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Quiere consultar un expediente judicial?": {
+  "glosas": [
+   "C",
+   "O",
+   "N",
+   "S",
+   "U",
+   "L",
+   "T",
+   "A",
+   "R",
+   "E",
+   "X",
+   "P",
+   "E",
+   "D",
+   "I",
+   "E",
+   "N",
+   "T",
+   "E",
+   "J",
+   "U",
+   "D",
+   "I",
+   "C",
+   "I",
+   "A",
+   "L"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CONSULTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "EXPEDIENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "JUDICIAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Quiere solicitar un Plan Cuotas?": {
+  "glosas": [
+   "QUERER",
+   "S",
+   "O",
+   "L",
+   "I",
+   "C",
+   "I",
+   "T",
+   "A",
+   "R",
+   "P",
+   "L",
+   "A",
+   "N",
+   "C",
+   "U",
+   "O",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "SOLICITAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PLAN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CUOTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Qué ayuda necesita?": {
+  "glosas": [
+   "A",
+   "Y",
+   "U",
+   "D",
+   "A",
+   "NECESITAR",
+   "QUIEN"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "AYUDA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Qué hecho quiere denunciar?": {
+  "glosas": [
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "H",
+   "E",
+   "C",
+   "H",
+   "O",
+   "QUE"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "HECHO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿Qué horario tiene?": {
   "glosas": [
    "HORA",
@@ -6287,6 +9853,180 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "¿Qué información necesita del inmueble?": {
+  "glosas": [
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "NECESITAR",
+   "I",
+   "N",
+   "M",
+   "U",
+   "E",
+   "B",
+   "L",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "INFORMACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INMUEBLE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Qué necesita consultar de su proceso?": {
+  "glosas": [
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O",
+   "C",
+   "O",
+   "N",
+   "S",
+   "U",
+   "L",
+   "T",
+   "A",
+   "R",
+   "NECESITAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CONSULTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Qué necesita saber sobre su audiencia?": {
+  "glosas": [
+   "A",
+   "U",
+   "D",
+   "I",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A",
+   "NECESITAR",
+   "SABER",
+   "QUE"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "AUDIENCIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Qué número de juzgado aparece?": {
+  "glosas": [
+   "JUZGADO",
+   "N",
+   "U",
+   "M",
+   "E",
+   "R",
+   "O",
+   "A",
+   "P",
+   "A",
+   "R",
+   "E",
+   "C",
+   "E",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "NUMERO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "APARECER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Qué tipo de apoyo necesita?": {
+  "glosas": [
+   "QUE",
+   "T",
+   "I",
+   "P",
+   "O",
+   "A",
+   "P",
+   "O",
+   "Y",
+   "O",
+   "NECESITAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "TIPO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "APOYO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Qué trámite viene a registrar?": {
+  "glosas": [
+   "TRAMITE",
+   "R",
+   "E",
+   "G",
+   "I",
+   "S",
+   "T",
+   "R",
+   "A",
+   "R",
+   "VENIR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "REGISTRAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿Sigue funcionando allí?": {
   "glosas": [
    "ALLI",
@@ -6295,6 +10035,202 @@
   ],
   "estado": "partial",
   "correcciones": [],
+  "traducido": "2026-09-27"
+ },
+ "¿Su consulta es urgente y penal?": {
+  "glosas": [
+   "C",
+   "O",
+   "N",
+   "S",
+   "U",
+   "L",
+   "T",
+   "A",
+   "URGENTE",
+   "P",
+   "E",
+   "N",
+   "A",
+   "L"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CONSULTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PENAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Su cédula ya venció?": {
+  "glosas": [
+   "TU",
+   "PAPEL",
+   "IDENTIDAD",
+   "V",
+   "E",
+   "N",
+   "C",
+   "E",
+   "R",
+   "Y",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "VENCER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "YA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Su deuda corresponde solamente a 2025?": {
+  "glosas": [
+   "D",
+   "E",
+   "U",
+   "D",
+   "A",
+   "C",
+   "O",
+   "R",
+   "R",
+   "E",
+   "S",
+   "P",
+   "O",
+   "N",
+   "D",
+   "E",
+   "R",
+   "S",
+   "O",
+   "L",
+   "O",
+   "2",
+   "0",
+   "2",
+   "5"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DEUDA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CORRESPONDER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SOLO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "2025",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Su deuda es de vehículo, inmueble o actividad?": {
+  "glosas": [
+   "V",
+   "E",
+   "H",
+   "I",
+   "C",
+   "U",
+   "L",
+   "O",
+   "I",
+   "N",
+   "M",
+   "U",
+   "E",
+   "B",
+   "L",
+   "E",
+   "A",
+   "C",
+   "T",
+   "I",
+   "V",
+   "I",
+   "D",
+   "A",
+   "D",
+   "D",
+   "E",
+   "U",
+   "D",
+   "A",
+   "E",
+   "S",
+   "CUAL"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "VEHICULO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INMUEBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACTIVIDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEUDA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Su proceso está en Cochabamba?": {
+  "glosas": [
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "COCHABAMBA"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
   "traducido": "2026-09-27"
  },
  "¿También tienen línea gratuita?": {
@@ -6322,6 +10258,313 @@
    },
    {
     "palabra": "LINEA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene NUREJ y WebID?": {
+  "glosas": [
+   "N",
+   "U",
+   "R",
+   "E",
+   "J",
+   "W",
+   "E",
+   "B",
+   "I",
+   "D"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NUREJ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "WEBID",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene acceso a su proceso en ROMA?": {
+  "glosas": [
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O",
+   "A",
+   "C",
+   "C",
+   "E",
+   "S",
+   "O",
+   "TU",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACCESO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene actualmente abogado particular?": {
+  "glosas": [
+   "AHORA",
+   "ABOGADO",
+   "P",
+   "A",
+   "R",
+   "T",
+   "I",
+   "C",
+   "U",
+   "L",
+   "A",
+   "R",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PARTICULAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene certificado de nacimiento original computarizado?": {
+  "glosas": [
+   "CERTIFICADO",
+   "N",
+   "A",
+   "C",
+   "I",
+   "M",
+   "I",
+   "E",
+   "N",
+   "T",
+   "O",
+   "O",
+   "R",
+   "I",
+   "G",
+   "I",
+   "N",
+   "A",
+   "L",
+   "COMPUTADORA"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "NACIMIENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ORIGINAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene la carátula del expediente?": {
+  "glosas": [
+   "E",
+   "X",
+   "P",
+   "E",
+   "D",
+   "I",
+   "E",
+   "N",
+   "T",
+   "E",
+   "C",
+   "A",
+   "R",
+   "A",
+   "T",
+   "U",
+   "L",
+   "A",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "EXPEDIENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CARATULA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene la placa actual del vehículo?": {
+  "glosas": [
+   "V",
+   "E",
+   "H",
+   "I",
+   "C",
+   "U",
+   "L",
+   "O",
+   "P",
+   "L",
+   "A",
+   "C",
+   "A",
+   "A",
+   "C",
+   "T",
+   "U",
+   "A",
+   "L",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "VEHICULO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PLACA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACTUAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene número de inmueble o código catastral?": {
+  "glosas": [
+   "I",
+   "N",
+   "M",
+   "U",
+   "E",
+   "B",
+   "L",
+   "E",
+   "N",
+   "U",
+   "M",
+   "E",
+   "R",
+   "O",
+   "C",
+   "A",
+   "T",
+   "A",
+   "S",
+   "T",
+   "R",
+   "A",
+   "L",
+   "C",
+   "O",
+   "D",
+   "I",
+   "G",
+   "O",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "INMUEBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NUMERO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CATASTRAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CODIGO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Tiene su cédula de identidad?": {
+  "glosas": [
+   "TU",
+   "PAPEL",
+   "IDENTIDAD",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PREGUNTA",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -6359,6 +10602,75 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Trae copia del CRPVA y su cédula?": {
+  "glosas": [
+   "TRAER",
+   "C",
+   "O",
+   "P",
+   "I",
+   "A",
+   "C",
+   "R",
+   "P",
+   "V",
+   "A",
+   "PAPEL",
+   "IDENTIDAD"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "COPIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CRPVA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Trajo algún relato de lo ocurrido?": {
+  "glosas": [
+   "O",
+   "C",
+   "U",
+   "R",
+   "R",
+   "I",
+   "D",
+   "O",
+   "R",
+   "E",
+   "L",
+   "A",
+   "T",
+   "O",
+   "TRAER",
+   "A",
+   "L",
+   "G",
+   "U",
+   "N"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "OCURRIDO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "RELATO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ALGUN",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
  "¿Usa el mismo número de contacto?": {
   "glosas": [
    "CELULAR",
@@ -6390,6 +10702,236 @@
    },
    {
     "palabra": "NUMERO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Usted es la persona denunciada o la víctima?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "V",
+   "I",
+   "C",
+   "T",
+   "I",
+   "M",
+   "A",
+   "TU",
+   "S",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VICTIMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Usted está denunciado o es víctima?": {
+  "glosas": [
+   "U",
+   "S",
+   "T",
+   "E",
+   "D",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "D",
+   "O",
+   "V",
+   "I",
+   "C",
+   "T",
+   "I",
+   "M",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "O",
+    "accion": "letra_descartada"
+   },
+   {
+    "palabra": "USTED",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DENUNCIADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VICTIMA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Viene a denunciar o necesita orientación?": {
+  "glosas": [
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "O",
+   "R",
+   "I",
+   "E",
+   "N",
+   "T",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "NECESITAR",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ORIENTACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Viene a registrar una defunción?": {
+  "glosas": [
+   "R",
+   "E",
+   "G",
+   "I",
+   "S",
+   "T",
+   "R",
+   "A",
+   "R",
+   "D",
+   "E",
+   "F",
+   "U",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "V",
+   "I",
+   "E",
+   "N",
+   "E",
+   "S"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "REGISTRAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEFUNCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VIENES",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-09-27"
+ },
+ "¿Ya tiene abogado particular?": {
+  "glosas": [
+   "YO",
+   "ABOGADO",
+   "P",
+   "A",
+   "R",
+   "T",
+   "I",
+   "C",
+   "U",
+   "L",
+   "A",
+   "R",
+   "TENER",
+   "Y",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PARTICULAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "YA",
     "accion": "concepto_sin_catalogo"
    }
   ],

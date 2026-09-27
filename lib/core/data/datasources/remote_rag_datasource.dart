@@ -16,8 +16,13 @@ class RemoteRagDataSource {
 
   final http.Client client;
   final String apiUrl;
+  final Duration timeout;
 
-  RemoteRagDataSource({required this.client, this.apiUrl = _envUrl});
+  RemoteRagDataSource({
+    required this.client,
+    this.apiUrl = _envUrl,
+    this.timeout = requestTimeout,
+  });
 
   bool get isConfigured {
     final uri = Uri.tryParse(apiUrl);
@@ -45,7 +50,7 @@ class RemoteRagDataSource {
               'limit': limit,
             }),
           )
-          .timeout(requestTimeout);
+          .timeout(timeout);
       if (response.statusCode != 200) return const [];
       final body = jsonDecode(response.body);
       if (body is! Map || body['generated'] != true) return const [];

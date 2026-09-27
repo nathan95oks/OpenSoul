@@ -4,32 +4,21 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 
 /// Parecido mínimo del RAG cuando el grafo solo reconoció un tema (abrió un
 /// contexto o el selector) sin una pregunta concreta.
 const double ragOverTopicScore = 0.6;
 
-/// Cuando el grafo sí eligió preguntas, el RAG solo entra con una pregunta
-/// documentada casi literal…
-const double ragOverQuestionScore = 0.8;
-
-/// …y con claramente más seguridad que el grafo…
-const double ragOverQuestionMargin = 0.15;
-
-/// …o encontrando la pregunta tal cual está documentada: es la evidencia más
-/// fuerte que hay, aunque el grafo también esté seguro de la suya.
-const double ragLiteralScore = 0.99;
-
 /// Si el RAG tiene más que decir que el grafo sobre este turno.
 ///
-/// El grafo manda cuando reconoce la pregunta con seguridad: sus tarjetas
-/// guiadas son más precisas. El RAG entra cuando el grafo no sabe, cuando
-/// solo reconoció una palabra del tema («denunciado» abre Denuncias) o
-/// cuando el RAG encontró la pregunta casi tal cual y el grafo dudaba
-/// («¿Tiene número de inmueble o código catastral?»). Sus tarjetas se ofrecen
-/// junto a las guiadas: la persona elige.
+/// Una ruta que ya eligió preguntas es determinista: sus tarjetas guiadas
+/// mandan y el RAG no ofrece una respuesta competidora. El RAG entra cuando
+/// el grafo no tiene ruta segura, deja un selector de contexto o solo abrió
+/// un tema por una palabra suelta («¿Usted fue denunciado o es víctima?»
+/// abre Denuncias, pero la respuesta documentada es «Soy la víctima»).
 bool ragOutranksGraph(ConversationRoute route, double ragScore) {
   switch (route.type) {
     case ConversationRouteType.noSafeRoute:
@@ -39,9 +28,7 @@ bool ragOutranksGraph(ConversationRoute route, double ragScore) {
       return ragScore >= ragOverTopicScore;
     case ConversationRouteType.directQuestion:
     case ConversationRouteType.minimalGraphPath:
-      return ragScore >= ragOverQuestionScore &&
-          (ragScore >= ragLiteralScore ||
-              ragScore >= route.confidence + ragOverQuestionMargin);
+      return false;
   }
 }
 
@@ -92,6 +79,63 @@ String? _recentArea(
   return null;
 }
 
+/// La pregunta del trámite documentado que responde [pending], como ruta del
+/// módulo de tarjetas: «¿Necesita un duplicado del certificado de
+/// matrimonio?» abre el paso de SERECI con sus respuestas documentadas.
+///
+/// Solo donde el grafo no tiene una ruta segura ([ragOutranksGraph]): lo que
+/// el grafo reconoce se sigue respondiendo con sus tarjetas guiadas. Primero
+/// la búsqueda por palabras; si no encuentra nada, lo que ya haya devuelto la
+/// búsqueda por significado ([remote]). `null` si nada se parece lo
+/// suficiente.
+ConversationRoute? ragTramiteRoute(
+  Conversation conversation,
+  ConversationTurn pending,
+  ConversationRoute route,
+  RagRetriever? retriever, {
+  List<RagSuggestion> remote = const [],
+}) {
+  if (retriever == null) return null;
+  final local = retriever.suggest(
+    pending.message.text,
+    preferArea: _recentArea(conversation, pending, retriever),
+  );
+  final found = local.isNotEmpty && ragOutranksGraph(route, local.first.score)
+      ? local
+      : ragMayAskRemote(route)
+      ? remote
+      : const <RagSuggestion>[];
+  if (found.isEmpty) return null;
+  final best = found.first;
+  final turn =
+      best.questionTurn ??
+      retriever.corpus.questionTurnOf(best.scenarioId, best.text);
+  final tramite = RagTramites.ofScenario(best.scenarioId);
+  if (turn == null || tramite == null) return null;
+  final questionId = RagTramites.questionId(best.scenarioId, turn);
+  if (RagTramites.bankWithTramites().question(questionId) == null) return null;
+  return ConversationRoute(
+    type: ConversationRouteType.directQuestion,
+    targetFamilyId: 'tramites',
+    targetContextId: tramite.contextId,
+    targetQuestionIds: [questionId],
+    pathQuestionIds: [questionId],
+    confidence: best.score,
+    reason: 'rag:${best.scenarioId}#$turn',
+  );
+}
+
+/// La consulta por significado de [pending] (una por turno).
+RagRemoteQuery ragRemoteQueryFor(
+  Conversation conversation,
+  ConversationTurn pending,
+  RagRetriever? retriever,
+) => (
+  pending.message.id,
+  pending.message.text,
+  retriever == null ? null : _recentArea(conversation, pending, retriever),
+);
+
 /// Si vale la pena preguntar a la Lambda por significado: solo cuando el
 /// grafo no tiene una pregunta segura (no sabe, o abrió un contexto por una
 /// palabra suelta). Con preguntas del grafo o un selector ya hay un camino
@@ -110,36 +154,3 @@ final remoteRagSuggestionsProvider =
       if (remote == null) return const [];
       return remote.consult(q.$2, preferArea: q.$3);
     });
-
-/// Primero la búsqueda por palabras, en el teléfono y sin red. Solo si no
-/// encuentra nada y el grafo tampoco tiene una pregunta segura, se usa lo que
-/// devuelva la búsqueda por significado de la Lambda (cuando llegue).
-final ragSuggestionsProvider = Provider<List<RagSuggestion>>((ref) {
-  final conversation = ref.watch(conversationProvider).conversation;
-  final retriever = ref.watch(ragRetrieverProvider);
-  final local = ragSuggestionsFor(conversation, retriever);
-  if (local.isNotEmpty) return local;
-
-  final pending = conversation.pendingReply;
-  final route = pending?.route;
-  if (pending == null ||
-      pending.pending ||
-      route == null ||
-      !ragMayAskRemote(route)) {
-    return const [];
-  }
-  final area = retriever == null
-      ? null
-      : _recentArea(conversation, pending, retriever);
-  return ref
-          .watch(
-            remoteRagSuggestionsProvider((
-              pending.message.id,
-              pending.message.text,
-              area,
-            )),
-          )
-          .asData
-          ?.value ??
-      const [];
-});

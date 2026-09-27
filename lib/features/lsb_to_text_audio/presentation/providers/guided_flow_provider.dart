@@ -7,14 +7,16 @@ import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_composer.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_session.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/domain/services/zone_inference_engine.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
+/// El banco del módulo, con los trámites documentados (RAG) sumados.
 final questionBankProvider = Provider<QuestionBank>(
-  (ref) => QuestionBank.generated(),
+  (ref) => RagTramites.bankWithTramites(),
 );
 
 final guidedComposerProvider = Provider<GuidedComposer>(

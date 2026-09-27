@@ -181,10 +181,18 @@ Guía de uso: `docs/negocio/rag/README.md`.
   (turnos del funcionario y variantes, con sus respuestas ofrecibles) y las
   compara por significado con Titan Text Embeddings V2 (256 dimensiones,
   normalizados).
-  - Umbral `RAG_MIN_SIMILARITY` = 0.46, calibrado con la Lambda real
-    (`tool/rag_calibrar.py`): paráfrasis bien encaminadas 0.48–0.79, frases
-    sin relación hasta 0.444; acepta 11 de 15 paráfrasis y rechaza las 7
-    frases sin relación.
+  - Umbral `RAG_MIN_SIMILARITY` = 0.59, calibrado con la Lambda real
+    (`tool/rag_calibrar.py`). La primera calibración (0.46) solo usaba frases
+    sin relación («¿Le gusta el fútbol?», hasta 0.444); la charla de
+    ventanilla sin trámite («La oficina cierra a las cuatro», «¿Tiene seguro
+    de salud?») llega a 0.568 y recibía respuestas inventadas. Con 0.59 no
+    pasa ninguna de las 18 frases sin trámite y pasan 5 de 15 paráfrasis
+    escritas sin vocabulario del corpus; Titan no separa mejor frases tan
+    cortas. Una paráfrasis cae en otra institución con 0.677 («¿Extravió su
+    documento de identidad?» → DDRR): límite conocido.
+  - En el teléfono, una palabra que el corpus no conoce cuenta en contra del
+    parecido por palabras (media vez el peso más específico): sin eso
+    «¿Tiene mascota?» se reducía a «¿Tiene?» y ofrecía «Sí, la tengo».
   - Margen 0.05 y ventaja de tema 0.02. Solo junta respuestas de la
     institución de la mejor coincidencia.
   - Las frases del funcionario no mostrables no son claves: atraían ruido.

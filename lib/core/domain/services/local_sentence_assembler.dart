@@ -509,6 +509,13 @@ class LocalSentenceAssembler {
     if (s == 'NO DENUNCIAR') return 'No quiero presentar una denuncia.';
     if (s == 'NO TESTIGO') return 'No hay testigos.';
     if (s == 'SI TESTIGO') return 'Sí, hay un testigo.';
+    if (s == 'NO NOCHE' || s == 'NOCHE NO') return 'No fue de noche.';
+    if (s == 'NO CASA' || s == 'CASA NO') return 'No ocurrió en mi casa.';
+    if (s == 'NO ROBAR BILLETES' ||
+        s == 'ROBAR BILLETES NO' ||
+        s == 'BILLETES ROBAR NO') {
+      return 'No me robaron dinero.';
+    }
     if (s == 'ABOGADO') return 'Necesito un abogado.';
     if (s == 'INTERPRETE') return 'Necesito un intérprete de LSB.';
     if (s == 'DONDE DENUNCIAR') return '¿Dónde puedo presentar una denuncia?';

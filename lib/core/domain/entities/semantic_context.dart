@@ -1,5 +1,7 @@
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
-import 'package:lsb_legal_app/core/domain/services/context_catalog.dart' show contextById;
+import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
+import 'package:lsb_legal_app/core/domain/services/context_catalog.dart'
+    show contextById;
 
 class SemanticContext {
   final String id;
@@ -52,13 +54,20 @@ const contextFamilies = <ContextFamily>[
     name: 'Denuncias',
     emoji: '🚨',
     description: 'Robo, violencia física, engaños, amenazas o testimonio',
-    contextIds: ['denuncia_robo', 'violencia', 'amenaza_digital', 'engano_dinero', 'otro'],
+    contextIds: [
+      'denuncia_robo',
+      'violencia',
+      'amenaza_digital',
+      'engano_dinero',
+      'otro',
+    ],
   ),
   ContextFamily(
     id: 'consultas',
     name: 'Consultas',
     emoji: '📂',
-    description: 'Estado de investigación, citaciones, resoluciones o citas judiciales',
+    description:
+        'Estado de investigación, citaciones, resoluciones o citas judiciales',
     contextIds: ['seguimiento'],
   ),
   ContextFamily(
@@ -72,17 +81,21 @@ const contextFamilies = <ContextFamily>[
     id: 'preguntas',
     name: 'Preguntas',
     emoji: '❓',
-    description: 'Preguntas directas del ciudadano sobre trámites o instituciones',
+    description:
+        'Preguntas directas del ciudadano sobre trámites o instituciones',
     contextIds: ['preguntas'],
   ),
 ];
 
+/// Los contextos que la persona sorda ve al abrir [family].
+///
+/// «Trámites» suma los trámites documentados de Cochabamba (RAG). Solo aquí:
+/// [ContextFamily.contextIds] es lo que usa el grafo de conversación para
+/// enrutar, y no cambia.
 List<SemanticContext> contextsOfFamily(ContextFamily family) {
   return [
     for (final id in family.contextIds)
       if (contextById(id) != null) contextById(id)!,
+    if (family.id == 'tramites') ...RagTramites.contexts,
   ];
 }
-
-
-

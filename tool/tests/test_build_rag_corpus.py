@@ -3,6 +3,7 @@
     python -m pytest tool/tests -q
 """
 
+import json
 import os
 import sys
 import tempfile
@@ -119,6 +120,144 @@ class ConstructorRag(unittest.TestCase):
         self.assertIn("dato_vencido", turno["motivos"])
         self.assertTrue(any("H-AAA-01" in a and "venció" in a for a in avisos))
 
+    def test_vigencia_sin_confirmar_no_se_muestra_como_hecho(self):
+        fuentes = "| F-AAA-01 | Inst | Aviso | https://x.gob.bo/a | 2026-09-27 |\n"
+        hechos = ("| H-AAA-01 | Inst | El trámite no tiene costo. | costo "
+                  "| F-AAA-01 | [VERIFICAR] vigencia actual |\n")
+        self.escribir("a.md", documento(fuentes, hechos,
+                                        escenario("AAA", 1, "H-AAA-01")))
+
+        corpus, errores, _ = self.construir()
+        self.assertEqual([], errores)
+        hecho = corpus["hechos"]["H-AAA-01"]
+        self.assertFalse(hecho["verificar"])
+        self.assertTrue(hecho["vigenciaSinConfirmar"])
+        turno = corpus["escenarios"][0]["turnos"][0]
+        self.assertFalse(turno["mostrable"])
+        self.assertIn("vigencia_sin_confirmar", turno["motivos"])
+
+
+
+class SenasPendientes(unittest.TestCase):
+    CORR = [{"palabra": "FOLIO", "accion": "concepto_sin_catalogo"},
+            {"palabra": "REAL", "accion": "concepto_sin_catalogo"},
+            {"palabra": "NUREJ", "accion": "concepto_sin_catalogo"},
+            {"palabra": "No", "accion": "palabra_recuperada"}]
+
+    def test_deletreo_sin_sena_es_una_sena_pendiente(self):
+        glosas = ["YO", "NECESITAR", *"FOLIO", *"REAL", "CASA", *"NUREJ"]
+        salida = B.marcar_senas_pendientes(
+            glosas, self.CORR, "Necesito el Folio Real de mi casa y el NUREJ.")
+        self.assertEqual(salida, ["YO", "NECESITAR", "SENA_PENDIENTE:FOLIO_REAL",
+                                  "CASA", *"NUREJ"])
+
+    def test_palabras_comunes_seguidas_no_se_juntan(self):
+        salida = B.marcar_senas_pendientes(
+            [*"FOLIO", *"REAL"], self.CORR[:2], "Mi folio real.")
+        self.assertEqual(salida, ["SENA_PENDIENTE:FOLIO", "SENA_PENDIENTE:REAL"])
+
+    def test_letras_que_no_coinciden_se_dejan_deletreadas(self):
+        salida = B.marcar_senas_pendientes(
+            ["YO", *"FOLI"], self.CORR[:1], "Folio")
+        self.assertEqual(salida, ["YO", *"FOLI"])
+
+
+class BancoTramites(unittest.TestCase):
+    def test_palabras_en_otro_orden_que_el_espanol(self):
+        corr = [{"palabra": "NORMA", "accion": "concepto_sin_catalogo"},
+                {"palabra": "REGISTRO", "accion": "concepto_sin_catalogo"}]
+        salida = B.marcar_senas_pendientes(
+            [*"REGISTRO", "MANTENER", *"NORMA"], corr,
+            "La norma mantiene el registro.")
+        self.assertEqual(salida, ["SENA_PENDIENTE:REGISTRO", "MANTENER",
+                                  "SENA_PENDIENTE:NORMA"])
+
+    def test_cada_pregunta_con_respuestas_es_un_paso_del_tramite(self):
+        corpus = {"escenarios": [{
+            "id": "ESC-SERECI-02", "tramite": "Duplicado de matrimonio",
+            "institucion": "SERECI",
+            "turnos": [
+                {"n": 1, "rol": "funcionario", "texto": "¿Necesita duplicado?",
+                 "mostrable": True, "glosas": ["NECESITAR"]},
+                {"n": 2, "rol": "sordo", "texto": "Sí.", "mostrable": True,
+                 "glosas": ["SI"]},
+                {"n": 3, "rol": "funcionario", "texto": "Confirme el valor.",
+                 "mostrable": False},
+                {"n": 4, "rol": "sordo", "texto": "Bien.", "mostrable": True,
+                 "glosas": ["BIEN"]},
+            ],
+            "variantes": [{"turno": 1, "preguntas": ["¿Otra copia?"],
+                           "respuestas": [{"texto": "No sé cuál.",
+                                           "mostrable": True,
+                                           "glosas": ["NO_SABER"]}]}],
+        }]}
+        banco = B.banco_tramites(corpus)
+        self.assertEqual(list(banco["recorridos"]), ["tramite_sereci_02"])
+        self.assertEqual(banco["recorridos"]["tramite_sereci_02"]["pasos"],
+                         [{"pregunta": "R.ESC-SERECI-02.1"}])
+        q = banco["preguntas"][0]
+        self.assertEqual(q["formulacionLsb"]["glosas"], ["NECESITAR"])
+        self.assertEqual([(o["etiqueta"], o["estado"]) for o in q["opciones"]],
+                         [("Sí.", "afirmado"), ("No sé cuál.", "desconocido")])
+
+
+class Equivalencias(unittest.TestCase):
+    CORR = [{"palabra": "DOCUMENTO", "accion": "concepto_sin_catalogo"},
+            {"palabra": "REAL", "accion": "concepto_sin_catalogo"}]
+    # Claves normalizadas, como las deja `cargar_equivalencias`.
+    EQ = {"documento": "PAPEL", "real": "VERDAD"}
+
+    def test_una_equivalencia_aprobada_es_la_sena(self):
+        salida = B.marcar_senas_pendientes(
+            ["YO", *"DOCUMENTO", "FALTAR"], self.CORR[:1],
+            "Me falta un documento.", self.EQ)
+        self.assertEqual(salida, ["YO", "PAPEL", "FALTAR"])
+
+    def test_la_sena_equivalente_no_se_repite(self):
+        corr = [{"palabra": "CUANTO", "accion": "concepto_sin_catalogo"}]
+        salida = B.marcar_senas_pendientes(
+            ["CUANTOS", "PAGINA", *"CUANTO"], corr,
+            "¿Cuánto dice la página?", {"cuanto": "CUÁNTOS"})
+        self.assertEqual(salida, ["CUANTOS", "PAGINA"])
+
+    def test_un_nombre_propio_no_se_cambia_por_otra_sena(self):
+        salida = B.marcar_senas_pendientes(
+            [*"REAL"], self.CORR[1:], "Necesito el Folio Real.", self.EQ)
+        self.assertEqual(salida, ["SENA_PENDIENTE:REAL"])
+
+    def test_solo_se_cargan_las_aprobadas(self):
+        with tempfile.TemporaryDirectory() as d:
+            ruta = os.path.join(d, "eq.json")
+            with open(ruta, "w", encoding="utf-8") as f:
+                json.dump({
+                    "DOCUMENTO": {"sena": "PAPEL", "estado": "aprobada"},
+                    "CASO": {"sena": "INVESTIGACIÓN", "estado": "propuesta"},
+                    "ESTAR": {"sena": None, "estado": "sin_equivalente"},
+                }, f)
+            self.assertEqual(B.cargar_equivalencias(ruta), {"documento": "PAPEL"})
+
+
+class HerramientaEquivalencias(unittest.TestCase):
+    import rag_equivalencias as E  # noqa: E402
+
+    CAT = {"PAPEL": ["Papel", "el documento"], "MÍO": ["Mío", "mi"],
+           "AYUDAR": ["Ayudar", "ayudar"], "INVESTIGACIÓN": ["Investigación"]}
+
+    def test_el_catalogo_escribe_la_palabra_tal_cual(self):
+        self.assertEqual(self.E.por_catalogo("DOCUMENTO", self.CAT)["sena"],
+                         "PAPEL")
+        self.assertEqual(self.E.por_catalogo("MI", self.CAT)["sena"], "MÍO")
+        self.assertIsNone(self.E.por_catalogo("CASO", self.CAT))
+
+    def test_lo_que_propone_bedrock_siempre_se_revisa(self):
+        ayuda = self.E.decidir("AYUDA", {"sena": "AYUDAR"}, self.CAT)
+        caso = self.E.decidir("CASO", {"sena": "INVESTIGACIÓN"}, self.CAT)
+        nada = self.E.decidir("ESTAR", {"sena": None}, self.CAT)
+        self.assertEqual((ayuda["estado"], ayuda["misma_raiz"]),
+                         ("propuesta", True))
+        self.assertEqual((caso["estado"], caso["misma_raiz"]),
+                         ("propuesta", False))
+        self.assertEqual(nada["estado"], "sin_equivalente")
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,5 @@
-"""Precalcula las glosas LSB de las frases del usuario sordo del corpus RAG.
+"""Precalcula las glosas LSB de las frases del corpus RAG (las del usuario
+sordo y las preguntas del funcionario de cada trámite).
 
     python tool/rag_precalcular_glosas.py              # solo lo que falta
     python tool/rag_precalcular_glosas.py --todo       # vuelve a traducir todo
@@ -52,13 +53,18 @@ def endpoint() -> str:
 
 
 def frases() -> list:
-    """Frases del usuario sordo que pueden mostrarse, sin repetir."""
+    """Frases que pueden mostrarse en LSB, sin repetir: las del usuario sordo
+    y las preguntas del funcionario que abren un paso de un trámite."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from build_rag_corpus import turnos_pregunta  # noqa: E402
+
     with open(CORPUS, encoding="utf-8") as f:
         corpus = json.load(f)
     vistas = []
     for e in corpus["escenarios"]:
         candidatas = [t for t in e["turnos"] if t["rol"] == "sordo"]
         candidatas += [r for p in e["variantes"] for r in p["respuestas"]]
+        candidatas += turnos_pregunta(e)
         for t in candidatas:
             if t["mostrable"] and t["texto"] not in vistas:
                 vistas.append(t["texto"])

@@ -34,10 +34,13 @@ CORPUS_REPO = os.path.join(os.path.dirname(AQUI), "assets", "rag",
                            "escenarios_cbba.json")
 
 # Similitud del coseno mínima para ofrecer respuestas. Calibrada con la Lambda
-# real (tool/rag_calibrar.py, 2026-09-27, Titan v2 256 dims): paráfrasis bien
-# encaminadas 0.48–0.79; frases sin relación hasta 0.444. Se puede ajustar sin
-# desplegar código con la variable de entorno.
-MIN_SIMILARITY = float(os.environ.get("RAG_MIN_SIMILARITY", "0.46"))
+# real (tool/rag_calibrar.py, 2026-09-27, Titan v2 256 dims): la charla de
+# ventanilla sin trámite («La oficina cierra a las cuatro», «¿Cuál es su
+# dirección?») llega a 0.568, así que con 0.46 inventaba respuestas. Con 0.59
+# solo pasan paráfrasis claras (5 de 15; la búsqueda por palabras del teléfono
+# cubre las demás que comparten vocabulario). Se puede ajustar sin desplegar
+# código con la variable de entorno.
+MIN_SIMILARITY = float(os.environ.get("RAG_MIN_SIMILARITY", "0.59"))
 # Solo se juntan preguntas casi tan parecidas como la mejor.
 MARGIN = 0.05
 # Ventaja del trámite del que ya se venía hablando (desempate).
@@ -45,13 +48,23 @@ TOPIC_BONUS = 0.02
 MAX_LIMIT = 8
 BATCH = 25
 
+# Un área previa no se abandona por una pregunta genérica que coincide en
+# otra institución. Solo estos identificadores explícitos autorizan el cambio.
+_SWITCH_CUES = {
+    "sepdep", "sepdavi", "felcc", "felcv", "segip", "sereci",
+    "fiscalia", "fiscalía", "roma", "nurej", "webid", "juzgado", "tribunal",
+}
+
 
 def cargar_corpus(ruta: str | None = None) -> dict | None:
     """El corpus empaquetado, o `None` si no hay (la consulta se desactiva)."""
     for candidata in ([ruta] if ruta else [CORPUS_PATH, CORPUS_REPO]):
         if os.path.exists(candidata):
-            with open(candidata, encoding="utf-8") as f:
-                return json.load(f)
+            try:
+                with open(candidata, encoding="utf-8") as f:
+                    return json.load(f)
+            except (OSError, UnicodeError, json.JSONDecodeError):
+                continue
     return None
 
 
@@ -159,6 +172,13 @@ def consultar(texto: str, lista: list, indice: dict, embed, *,
     )
     if not puntuadas:
         return []
+    if prefer_area and not any(e["area"] == prefer_area
+                               for _, _, e in puntuadas):
+        palabras = set("".join(
+            c for c in texto.lower()
+            if c.isalnum() or c.isspace()).split())
+        if not palabras.intersection(_SWITCH_CUES):
+            return []
     mejor = puntuadas[0][0]
     # Solo la institución de la mejor coincidencia: las similitudes por
     # significado quedan muy juntas y mezclar trámites pondría «Soy la persona

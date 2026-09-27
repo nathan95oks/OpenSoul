@@ -2,6 +2,7 @@ import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart'
     show DeclarationDraftLimits;
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart'
     show kEvidenceMarker;
 
@@ -29,8 +30,13 @@ final preguntasContext = SemanticContext(
       emoji: '❓',
       semanticWeight: 0.95,
       glossAllowlist: [
-        'DÓNDE', 'QUIÉN', 'QUÉ', 'CUÁNDO', 'CUÁL',
-        'CÓMO', 'CUÁNTOS',
+        'DÓNDE',
+        'QUIÉN',
+        'QUÉ',
+        'CUÁNDO',
+        'CUÁL',
+        'CÓMO',
+        'CUÁNTOS',
       ],
       relatedZones: ['lugar_pregunta', 'persona_pregunta', 'tema_pregunta'],
     ),
@@ -43,8 +49,17 @@ final preguntasContext = SemanticContext(
       semanticWeight: 0.8,
       optional: true,
       glossAllowlist: [
-        'FISCALIA', 'FELCC', 'FELCV', 'JUZGADO', 'ÓRGANO_JUDICIAL',
-        'SEPDAVI', 'SEPDEP', 'POLICÍA', 'OFICINA', 'HOSPITAL', 'AQUÍ',
+        'FISCALIA',
+        'FELCC',
+        'FELCV',
+        'JUZGADO',
+        'ÓRGANO_JUDICIAL',
+        'SEPDAVI',
+        'SEPDEP',
+        'POLICÍA',
+        'OFICINA',
+        'HOSPITAL',
+        'AQUÍ',
       ],
     ),
     SemanticZone(
@@ -56,8 +71,15 @@ final preguntasContext = SemanticContext(
       semanticWeight: 0.8,
       optional: true,
       glossAllowlist: [
-        'JUEZ', 'ABOGADO', 'INTÉRPRETE', 'POLICÍA', 'OFICIAL',
-        'DOCTOR', 'TESTIGO', 'AUTORIDAD', 'ASISTENTE',
+        'JUEZ',
+        'ABOGADO',
+        'INTÉRPRETE',
+        'POLICÍA',
+        'OFICIAL',
+        'DOCTOR',
+        'TESTIGO',
+        'AUTORIDAD',
+        'ASISTENTE',
       ],
     ),
     SemanticZone(
@@ -69,10 +91,24 @@ final preguntasContext = SemanticContext(
       semanticWeight: 0.8,
       optional: true,
       glossAllowlist: [
-        'INVESTIGACIÓN', 'TRÁMITE', 'RESOLUCIÓN', 'CONVOCAR',
-        'RESULTADO', 'PLAZO', 'CERTIFICADO', 'CARPETA',
-        'PAPEL', 'FOTOCOPIA', 'FACTURA', 'CELULAR',
-        'FOTOS', 'VIDEO', 'SELLO', 'ASISTENCIA', 'JUSTICIA', 'LEY',
+        'INVESTIGACIÓN',
+        'TRÁMITE',
+        'RESOLUCIÓN',
+        'CONVOCAR',
+        'RESULTADO',
+        'PLAZO',
+        'CERTIFICADO',
+        'CARPETA',
+        'PAPEL',
+        'FOTOCOPIA',
+        'FACTURA',
+        'CELULAR',
+        'FOTOS',
+        'VIDEO',
+        'SELLO',
+        'ASISTENCIA',
+        'JUSTICIA',
+        'LEY',
       ],
     ),
     SemanticZone(
@@ -84,8 +120,17 @@ final preguntasContext = SemanticContext(
       semanticWeight: 0.7,
       optional: true,
       glossAllowlist: [
-        'VOLVER', 'ESPERAR', 'AVISAR', 'HOY', 'MAÑANA',
-        'PRÓXIMO', 'DÍA', 'SEMANA', 'MES', 'HORA', 'FECHA',
+        'VOLVER',
+        'ESPERAR',
+        'AVISAR',
+        'HOY',
+        'MAÑANA',
+        'PRÓXIMO',
+        'DÍA',
+        'SEMANA',
+        'MES',
+        'HORA',
+        'FECHA',
       ],
       chainTriggers: ['DÍA', 'SEMANA', 'MES', 'HORA'],
       chainZoneId: 'cantidad_pregunta',
@@ -125,7 +170,15 @@ final identificacionContext = SemanticContext(
       // reconocimiento de seña (ver local_sentence_assembler.dart), pero
       // ofrecerlas aquí como tarjeta táctil inventaría una entrada de
       // catálogo con procedencia que no existe.
-      glossAllowlist: _dedupe(['NOMBRE', 'PAPEL', 'IDENTIDAD', 'SORDO', 'LEER', 'POCO', 'INTÉRPRETE']),
+      glossAllowlist: _dedupe([
+        'NOMBRE',
+        'PAPEL',
+        'IDENTIDAD',
+        'SORDO',
+        'LEER',
+        'POCO',
+        'INTÉRPRETE',
+      ]),
       relatedZones: ['contacto', 'edad'],
     ),
     SemanticZone(
@@ -137,7 +190,15 @@ final identificacionContext = SemanticContext(
       semanticWeight: 0.85,
       optional: true,
       maxPicks: 2,
-      glossAllowlist: ['CELULAR', 'ESCRIBIR', 'ENVIAR', 'AVISAR', 'MEJOR', 'DIRECCIÓN', 'CAMBIAR'],
+      glossAllowlist: [
+        'CELULAR',
+        'ESCRIBIR',
+        'ENVIAR',
+        'AVISAR',
+        'MEJOR',
+        'DIRECCIÓN',
+        'CAMBIAR',
+      ],
       relatedZones: ['acompanante'],
     ),
     SemanticZone(
@@ -148,7 +209,17 @@ final identificacionContext = SemanticContext(
       emoji: '👥',
       semanticWeight: 0.7,
       optional: true,
-      glossAllowlist: ['ACOMPAÑAR', 'AMIGO', 'HERMANO', 'HERMANA', 'MAMÁ', 'HIJO', 'HIJA', 'INTÉRPRETE', '1'],
+      glossAllowlist: [
+        'ACOMPAÑAR',
+        'AMIGO',
+        'HERMANO',
+        'HERMANA',
+        'MAMÁ',
+        'HIJO',
+        'HIJA',
+        'INTÉRPRETE',
+        '1',
+      ],
     ),
     SemanticZone(
       id: 'edad',
@@ -173,7 +244,8 @@ final availableContexts = <SemanticContext>[
     name: 'Denunciar robo',
     icon: 'warning_amber',
     emoji: '🚨',
-    description: 'Robo, hurto o pérdida de celular, dinero, documentos o bienes',
+    description:
+        'Robo, hurto o pérdida de celular, dinero, documentos o bienes',
     entryZoneId: 'hecho',
     baseUrgency: UrgencyLevel.medium,
     // Auditoría 2026-09 (sección 12.1 del prompt de auditoría): se separan
@@ -196,7 +268,13 @@ final availableContexts = <SemanticContext>[
         // relato, y "no sé qué me pasó" no es una respuesta que la persona
         // venga a declarar — a diferencia de "¿conoce a la persona?" o
         // "¿cuándo ocurrió?", donde no saber sí es una respuesta real.
-        glossAllowlist: _dedupe(['ROBAR', 'PERDER', 'ESCAPAR', 'DAÑAR', 'ENGAÑAR']),
+        glossAllowlist: _dedupe([
+          'ROBAR',
+          'PERDER',
+          'ESCAPAR',
+          'DAÑAR',
+          'ENGAÑAR',
+        ]),
         // Un relato puede llevar dos acciones: «me robaron y escapó». Subir
         // esto es condición necesaria, no suficiente: lo que de verdad lo
         // permite es que el borrador guarde una colección de hechos, cada uno
@@ -215,9 +293,19 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.9,
         maxPicks: 8,
         glossAllowlist: _dedupe([
-          'CELULAR', 'BILLETES', 'MOCHILA', 'BOLSA',
-          'PAPEL', 'IDENTIDAD', 'FACTURA', 'CAJA',
-          'CHAMARRA', 'GORRA', 'LENTES', 'MICRO', 'TRUFI',
+          'CELULAR',
+          'BILLETES',
+          'MOCHILA',
+          'BOLSA',
+          'PAPEL',
+          'IDENTIDAD',
+          'FACTURA',
+          'CAJA',
+          'CHAMARRA',
+          'GORRA',
+          'LENTES',
+          'MICRO',
+          'TRUFI',
         ]),
         relatedZones: ['persona', 'lugar'],
       ),
@@ -248,7 +336,15 @@ final availableContexts = <SemanticContext>[
         optional: true,
         // VER ("ver") no es una respuesta a "¿conoce a esa persona?": ni es
         // sí/no ni nombra un vínculo, como sí lo hacen AMIGO/PAREJA/etc.
-        glossAllowlist: _dedupe(['SÍ', 'NO', 'NO_SABER', 'AMIGO', 'PAREJA', 'PARIENTE', 'HERMANO']),
+        glossAllowlist: _dedupe([
+          'SÍ',
+          'NO',
+          'NO_SABER',
+          'AMIGO',
+          'PAREJA',
+          'PARIENTE',
+          'HERMANO',
+        ]),
       ),
       SemanticZone(
         id: 'lugar',
@@ -258,9 +354,21 @@ final availableContexts = <SemanticContext>[
         emoji: '📍',
         semanticWeight: 0.75,
         glossAllowlist: [
-          'CALLE', 'AVENIDA', 'PLAZA', 'MERCADO', 'BARRIO',
-          'TIENDA', 'CASA', 'COCHABAMBA', 'DENTRO', 'FUERA',
-          'CERCA', 'LEJOS', 'AL_LADO', 'MICRO', 'TRUFI',
+          'CALLE',
+          'AVENIDA',
+          'PLAZA',
+          'MERCADO',
+          'BARRIO',
+          'TIENDA',
+          'CASA',
+          'COCHABAMBA',
+          'DENTRO',
+          'FUERA',
+          'CERCA',
+          'LEJOS',
+          'AL_LADO',
+          'MICRO',
+          'TRUFI',
         ],
         relatedZones: ['tiempo', 'evidencia'],
       ),
@@ -273,8 +381,18 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.7,
         optional: true,
         glossAllowlist: [
-          'AHORA', 'HOY', 'AYER', 'ANTEAYER', 'TARDE', 'TEMPRANO',
-          'HORA', 'MINUTO', 'DÍA', 'SEMANA', 'MES', 'NO_SABER',
+          'AHORA',
+          'HOY',
+          'AYER',
+          'ANTEAYER',
+          'TARDE',
+          'TEMPRANO',
+          'HORA',
+          'MINUTO',
+          'DÍA',
+          'SEMANA',
+          'MES',
+          'NO_SABER',
         ],
         chainTriggers: ['HORA', 'MINUTO', 'DÍA', 'SEMANA', 'MES'],
         chainZoneId: 'cantidad',
@@ -319,7 +437,16 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.65,
         optional: true,
         maxPicks: 2,
-        glossAllowlist: ['HERIDA', 'DOLOR', 'HOSPITAL', 'DOCTOR', 'CERTIFICADO', 'AUXILIO', 'SÍ', 'NO'],
+        glossAllowlist: [
+          'HERIDA',
+          'DOLOR',
+          'HOSPITAL',
+          'DOCTOR',
+          'CERTIFICADO',
+          'AUXILIO',
+          'SÍ',
+          'NO',
+        ],
       ),
       SemanticZone(
         id: 'denuncia',
@@ -339,7 +466,16 @@ final availableContexts = <SemanticContext>[
         emoji: '🤝',
         semanticWeight: 0.6,
         optional: true,
-        glossAllowlist: ['ABOGADO', 'INTÉRPRETE', 'SEPDAVI', 'SEPDEP', 'GRATIS', 'AYUDAR', 'SÍ', 'NO'],
+        glossAllowlist: [
+          'ABOGADO',
+          'INTÉRPRETE',
+          'SEPDAVI',
+          'SEPDEP',
+          'GRATIS',
+          'AYUDAR',
+          'SÍ',
+          'NO',
+        ],
       ),
       SemanticZone(
         id: 'institucion',
@@ -350,7 +486,12 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.5,
         optional: true,
         glossAllowlist: [
-          'POLICÍA', 'FELCC', 'FISCALIA', 'SEPDAVI', 'ABOGADO', 'INTÉRPRETE',
+          'POLICÍA',
+          'FELCC',
+          'FISCALIA',
+          'SEPDAVI',
+          'ABOGADO',
+          'INTÉRPRETE',
         ],
       ),
       SemanticZone(
@@ -372,7 +513,8 @@ final availableContexts = <SemanticContext>[
     name: 'Denunciar violencia',
     icon: 'shield',
     emoji: '🛡️',
-    description: 'Agresión física, maltrato, violencia intrafamiliar o amenazas',
+    description:
+        'Agresión física, maltrato, violencia intrafamiliar o amenazas',
     entryZoneId: 'hecho',
     baseUrgency: UrgencyLevel.high,
     zones: [
@@ -385,8 +527,14 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.95,
         urgencyLevel: UrgencyLevel.high,
         glossAllowlist: [
-          'PEGAR', 'MALTRATAR', 'VIOLENCIA', 'AMENAZAR', 'ABUSAR',
-          'PELEAR', 'DAÑAR', 'GRITAR',
+          'PEGAR',
+          'MALTRATAR',
+          'VIOLENCIA',
+          'AMENAZAR',
+          'ABUSAR',
+          'PELEAR',
+          'DAÑAR',
+          'GRITAR',
         ],
         contextTags: [EmotionalTag.amenaza, EmotionalTag.peligro],
         relatedZones: ['persona', 'salud_urgencia', 'emocion_riesgo'],
@@ -400,8 +548,15 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.9,
         maxPicks: 2,
         glossAllowlist: _dedupe([
-          'PAREJA', 'HOMBRE', 'MUJER', 'HERMANO',
-          'HERMANA', 'ESPOSA', 'PARIENTE', 'JOVEN', 'ADULTO',
+          'PAREJA',
+          'HOMBRE',
+          'MUJER',
+          'HERMANO',
+          'HERMANA',
+          'ESPOSA',
+          'PARIENTE',
+          'JOVEN',
+          'ADULTO',
         ]),
         relatedZones: ['salud_urgencia', 'emocion_riesgo'],
       ),
@@ -414,9 +569,18 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.85,
         maxPicks: 3,
         glossAllowlist: [
-          'HERIDA', 'BRAZO', 'DOLOR', 'FRACTURA', 'HUESOS',
-          'HOSPITAL', 'DOCTOR', 'CERTIFICADO', 'CURAR', 'MEDICINA',
-          'AUXILIO', 'URGENTE',
+          'HERIDA',
+          'BRAZO',
+          'DOLOR',
+          'FRACTURA',
+          'HUESOS',
+          'HOSPITAL',
+          'DOCTOR',
+          'CERTIFICADO',
+          'CURAR',
+          'MEDICINA',
+          'AUXILIO',
+          'URGENTE',
         ],
         contextTags: [EmotionalTag.urgente, EmotionalTag.dolor],
         relatedZones: ['emocion_riesgo', 'evidencia'],
@@ -429,8 +593,16 @@ final availableContexts = <SemanticContext>[
         emoji: '💔',
         semanticWeight: 0.8,
         glossAllowlist: [
-          'MIEDO', 'TRISTE', 'CASA', 'VOLVER', 'PROTEGER',
-          'HIJO', 'HIJA', 'AUXILIO', 'AHORA', 'NECESITAR',
+          'MIEDO',
+          'TRISTE',
+          'CASA',
+          'VOLVER',
+          'PROTEGER',
+          'HIJO',
+          'HIJA',
+          'AUXILIO',
+          'AHORA',
+          'NECESITAR',
         ],
         contextTags: [EmotionalTag.miedo, EmotionalTag.urgente],
         relatedZones: ['institucion'],
@@ -444,8 +616,13 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.65,
         optional: true,
         glossAllowlist: [
-          'AHORA', 'HOY', 'AYER', 'SIEMPRE', 'CADA_DÍA',
-          'TODOS_LOS_DÍAS', 'PRIMERA_VEZ',
+          'AHORA',
+          'HOY',
+          'AYER',
+          'SIEMPRE',
+          'CADA_DÍA',
+          'TODOS_LOS_DÍAS',
+          'PRIMERA_VEZ',
         ],
       ),
       SemanticZone(
@@ -458,8 +635,14 @@ final availableContexts = <SemanticContext>[
         optional: true,
         maxPicks: 3,
         glossAllowlist: [
-          'CERTIFICADO', 'DOCTOR', 'FOTOS', 'VIDEO', 'ESCRIBIR',
-          'GUARDAR', 'TOTAL', 'TESTIGO',
+          'CERTIFICADO',
+          'DOCTOR',
+          'FOTOS',
+          'VIDEO',
+          'ESCRIBIR',
+          'GUARDAR',
+          'TOTAL',
+          'TESTIGO',
         ],
         leadGloss: kEvidenceMarker,
       ),
@@ -471,8 +654,14 @@ final availableContexts = <SemanticContext>[
         emoji: '🏛️',
         semanticWeight: 0.6,
         glossAllowlist: [
-          'POLICÍA', 'FELCV', 'SEPDAVI', 'SEPDEP', 'ABOGADO',
-          'GRATIS', 'INTÉRPRETE', 'ASISTENCIA',
+          'POLICÍA',
+          'FELCV',
+          'SEPDAVI',
+          'SEPDEP',
+          'ABOGADO',
+          'GRATIS',
+          'INTÉRPRETE',
+          'ASISTENCIA',
         ],
       ),
     ],
@@ -496,8 +685,13 @@ final availableContexts = <SemanticContext>[
         emoji: '📱',
         semanticWeight: 0.95,
         glossAllowlist: [
-          'AMENAZAR', 'CELULAR', 'INTERNET', 'ESCRIBIR', 'ENVIAR',
-          'RECIBIR', 'AÚN',
+          'AMENAZAR',
+          'CELULAR',
+          'INTERNET',
+          'ESCRIBIR',
+          'ENVIAR',
+          'RECIBIR',
+          'AÚN',
         ],
         contextTags: [EmotionalTag.amenaza],
         relatedZones: ['persona', 'evidencia'],
@@ -510,7 +704,10 @@ final availableContexts = <SemanticContext>[
         emoji: '👤',
         semanticWeight: 0.85,
         glossAllowlist: _dedupe([
-          'PAREJA', 'HOMBRE', 'MUJER', 'CONOCER',
+          'PAREJA',
+          'HOMBRE',
+          'MUJER',
+          'CONOCER',
           'CELULAR',
         ]),
         relatedZones: ['evidencia'],
@@ -524,8 +721,15 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.9,
         maxPicks: 3,
         glossAllowlist: [
-          'ESCRIBIR', 'TOTAL', 'GUARDAR', 'FOTOS', 'CELULAR',
-          'VIDEO', 'MOSTRAR', 'PUEDO', 'AHORA',
+          'ESCRIBIR',
+          'TOTAL',
+          'GUARDAR',
+          'FOTOS',
+          'CELULAR',
+          'VIDEO',
+          'MOSTRAR',
+          'PUEDO',
+          'AHORA',
         ],
         leadGloss: kEvidenceMarker,
       ),
@@ -538,7 +742,12 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.6,
         optional: true,
         glossAllowlist: [
-          'POLICÍA', 'FELCC', 'FELCV', 'FISCALIA', 'SEPDAVI', 'ABOGADO',
+          'POLICÍA',
+          'FELCC',
+          'FELCV',
+          'FISCALIA',
+          'SEPDAVI',
+          'ABOGADO',
         ],
       ),
     ],
@@ -562,7 +771,11 @@ final availableContexts = <SemanticContext>[
         emoji: '⚡',
         semanticWeight: 0.95,
         glossAllowlist: _dedupe([
-          'ENGAÑAR', 'BILLETES', 'ENVIAR', 'DAR', 'PERDER',
+          'ENGAÑAR',
+          'BILLETES',
+          'ENVIAR',
+          'DAR',
+          'PERDER',
         ]),
         relatedZones: ['medio_banco', 'persona', 'comprobante'],
       ),
@@ -574,7 +787,11 @@ final availableContexts = <SemanticContext>[
         emoji: '🏦',
         semanticWeight: 0.85,
         glossAllowlist: [
-          'BANCO', 'CELULAR', 'INTERNET', 'ESCRIBIR', 'BILLETES',
+          'BANCO',
+          'CELULAR',
+          'INTERNET',
+          'ESCRIBIR',
+          'BILLETES',
         ],
         relatedZones: ['comprobante'],
       ),
@@ -585,9 +802,7 @@ final availableContexts = <SemanticContext>[
         question: '¿Conoce el nombre o número de la persona?',
         emoji: '👤',
         semanticWeight: 0.8,
-        glossAllowlist: [
-          'NOMBRE', 'CELULAR', 'HOMBRE', 'MUJER', 'CONOCER',
-        ],
+        glossAllowlist: ['NOMBRE', 'CELULAR', 'HOMBRE', 'MUJER', 'CONOCER'],
         relatedZones: ['comprobante'],
       ),
       SemanticZone(
@@ -599,8 +814,14 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.85,
         maxPicks: 3,
         glossAllowlist: [
-          'PAPEL', 'BANCO', 'FACTURA', 'ESCRIBIR', 'TOTAL',
-          'GUARDAR', 'MOSTRAR', 'PUEDO',
+          'PAPEL',
+          'BANCO',
+          'FACTURA',
+          'ESCRIBIR',
+          'TOTAL',
+          'GUARDAR',
+          'MOSTRAR',
+          'PUEDO',
         ],
         leadGloss: kEvidenceMarker,
       ),
@@ -612,9 +833,7 @@ final availableContexts = <SemanticContext>[
         emoji: '🏛️',
         semanticWeight: 0.5,
         optional: true,
-        glossAllowlist: [
-          'POLICÍA', 'FELCC', 'FISCALIA', 'SEPDAVI', 'ABOGADO',
-        ],
+        glossAllowlist: ['POLICÍA', 'FELCC', 'FISCALIA', 'SEPDAVI', 'ABOGADO'],
       ),
     ],
   ),
@@ -636,23 +855,43 @@ final availableContexts = <SemanticContext>[
         emoji: '📋',
         semanticWeight: 0.95,
         glossAllowlist: [
-          'INVESTIGACIÓN', 'RESOLUCIÓN', 'TRÁMITE', 'CONVOCAR',
-          'RESULTADO', 'PLAZO', 'ASISTENCIA', 'PAPEL', 'CERTIFICADO',
-          'CARPETA', 'FOTOCOPIA', 'SELLO',
+          'INVESTIGACIÓN',
+          'RESOLUCIÓN',
+          'TRÁMITE',
+          'CONVOCAR',
+          'RESULTADO',
+          'PLAZO',
+          'ASISTENCIA',
+          'PAPEL',
+          'CERTIFICADO',
+          'CARPETA',
+          'FOTOCOPIA',
+          'SELLO',
         ],
         relatedZones: ['accion', 'institucion_autoridad'],
       ),
       SemanticZone(
         id: 'accion',
         label: 'Acción en ventanilla',
-        hint: 'Saber estado, presentar documentos, pedir copias o solicitar apoyo',
+        hint:
+            'Saber estado, presentar documentos, pedir copias o solicitar apoyo',
         question: '¿Qué acción necesita realizar?',
         emoji: '🗣️',
         semanticWeight: 0.85,
         glossAllowlist: [
-          'SABER', 'PRESENTAR', 'PEDIR', 'RECIBIR', 'DAR',
-          'BUSCAR', 'VER', 'AVISAR', 'ESPERAR', 'VOLVER',
-          'ESCRIBIR', 'AYUDAR', 'EXPLICAR',
+          'SABER',
+          'PRESENTAR',
+          'PEDIR',
+          'RECIBIR',
+          'DAR',
+          'BUSCAR',
+          'VER',
+          'AVISAR',
+          'ESPERAR',
+          'VOLVER',
+          'ESCRIBIR',
+          'AYUDAR',
+          'EXPLICAR',
         ],
         relatedZones: ['institucion_autoridad'],
       ),
@@ -664,9 +903,19 @@ final availableContexts = <SemanticContext>[
         emoji: '🏛️',
         semanticWeight: 0.9,
         glossAllowlist: _dedupe([
-          'FISCALIA', 'JUZGADO', 'ÓRGANO_JUDICIAL', 'POLICÍA',
-          'FELCC', 'FELCV', 'SEPDAVI', 'SEPDEP', 'JUEZ',
-          'ABOGADO', 'INTÉRPRETE', 'AUTORIDAD', 'OFICINA',
+          'FISCALIA',
+          'JUZGADO',
+          'ÓRGANO_JUDICIAL',
+          'POLICÍA',
+          'FELCC',
+          'FELCV',
+          'SEPDAVI',
+          'SEPDEP',
+          'JUEZ',
+          'ABOGADO',
+          'INTÉRPRETE',
+          'AUTORIDAD',
+          'OFICINA',
         ]),
         relatedZones: ['tiempo'],
       ),
@@ -679,7 +928,13 @@ final availableContexts = <SemanticContext>[
         semanticWeight: 0.65,
         optional: true,
         glossAllowlist: [
-          'HOY', 'MAÑANA', 'PRÓXIMO', 'DÍA', 'SEMANA', 'HORA', 'FECHA',
+          'HOY',
+          'MAÑANA',
+          'PRÓXIMO',
+          'DÍA',
+          'SEMANA',
+          'HORA',
+          'FECHA',
         ],
       ),
     ],
@@ -702,8 +957,16 @@ final availableContexts = <SemanticContext>[
         emoji: '🗣️',
         semanticWeight: 0.95,
         glossAllowlist: [
-          'OBSERVAR', 'TESTIGO', 'TESTIMONIO', 'VER', 'TOTAL',
-          'NARRAR', 'EXPLICAR', 'EMPEZAR', 'AUMENTAR', 'ARREGLAR',
+          'OBSERVAR',
+          'TESTIGO',
+          'TESTIMONIO',
+          'VER',
+          'TOTAL',
+          'NARRAR',
+          'EXPLICAR',
+          'EMPEZAR',
+          'AUMENTAR',
+          'ARREGLAR',
         ],
         relatedZones: ['acceso', 'persona'],
       ),
@@ -715,7 +978,12 @@ final availableContexts = <SemanticContext>[
         emoji: '👤',
         semanticWeight: 0.8,
         glossAllowlist: [
-          'HOMBRE', 'MUJER', 'JOVEN', 'ADULTO', 'LADRÓN', 'CONOCER',
+          'HOMBRE',
+          'MUJER',
+          'JOVEN',
+          'ADULTO',
+          'LADRÓN',
+          'CONOCER',
         ],
       ),
       SemanticZone(
@@ -726,8 +994,15 @@ final availableContexts = <SemanticContext>[
         emoji: '🤝',
         semanticWeight: 0.75,
         glossAllowlist: [
-          'SORDO', 'LEER', 'POCO', 'INTÉRPRETE', 'LENTO',
-          'POR_FAVOR', 'COMPRENDER', 'GRACIAS', 'ESTAR_DE_ACUERDO',
+          'SORDO',
+          'LEER',
+          'POCO',
+          'INTÉRPRETE',
+          'LENTO',
+          'POR_FAVOR',
+          'COMPRENDER',
+          'GRACIAS',
+          'ESTAR_DE_ACUERDO',
         ],
       ),
     ],
@@ -739,6 +1014,8 @@ final allSelectableContexts = <SemanticContext>[
   ...availableContexts,
   identificacionContext,
   preguntasContext,
+  // Trámites documentados de Cochabamba (RAG), dentro de «Trámites».
+  ...RagTramites.contexts,
 ];
 
 /// Lista por defecto para el catálogo
@@ -832,8 +1109,13 @@ String _procedureContextFor(Set<String> norm) {
   if (norm.any(perdida.contains)) return 'perdida';
 
   const gestion = {
-    'PASAPORTE', 'INVESTIGACION', 'GESTIONAR', 'FOTOCOPIA',
-    'LICENCIA_DECONDUCIR', 'PODER', 'TESTIMONIO',
+    'PASAPORTE',
+    'INVESTIGACION',
+    'GESTIONAR',
+    'FOTOCOPIA',
+    'LICENCIA_DECONDUCIR',
+    'PODER',
+    'TESTIMONIO',
   };
   if (norm.any(gestion.contains)) return 'tramite_id';
 
@@ -901,14 +1183,18 @@ AssemblerRoute routeToAssembler({
       norm.contains('LADRON') ||
       norm.contains('QUITAR')) {
     return const AssemblerRoute(
-        contextId: 'denuncia_robo', reason: 'acción de sustracción elegida');
+      contextId: 'denuncia_robo',
+      reason: 'acción de sustracción elegida',
+    );
   }
   if (norm.contains('GOLPEAR') ||
       norm.contains('INSULTAR') ||
       norm.contains('AMENAZAR') ||
       norm.contains('MIEDO')) {
     return const AssemblerRoute(
-        contextId: 'violencia', reason: 'acción o estado de agresión');
+      contextId: 'violencia',
+      reason: 'acción o estado de agresión',
+    );
   }
   if (norm.contains('INTERNET') ||
       norm.contains('MENTIRA') ||
@@ -919,20 +1205,27 @@ AssemblerRoute routeToAssembler({
         norm.contains('BANCO') ||
         norm.contains('PAGAR')) {
       return const AssemblerRoute(
-          contextId: 'engano_dinero', reason: 'medio digital y dinero');
+        contextId: 'engano_dinero',
+        reason: 'medio digital y dinero',
+      );
     }
     return const AssemblerRoute(
-        contextId: 'amenaza_digital', reason: 'medio digital');
+      contextId: 'amenaza_digital',
+      reason: 'medio digital',
+    );
   }
   if (norm.contains('SEGUIR') ||
       norm.contains('MIRAR') ||
       norm.contains('ESCONDER') ||
       norm.contains('ESPERAR')) {
     return const AssemblerRoute(
-        contextId: 'seguimiento', reason: 'acción de seguimiento');
+      contextId: 'seguimiento',
+      reason: 'acción de seguimiento',
+    );
   }
 
-  final esPregunta = norm.contains('DONDE') ||
+  final esPregunta =
+      norm.contains('DONDE') ||
       norm.contains('QUIEN') ||
       norm.contains('QUE') ||
       norm.contains('CUANDO') ||
@@ -951,12 +1244,16 @@ AssemblerRoute routeToAssembler({
           norm.contains('PAPEL'))) {
     if (!norm.contains('ROBAR') && !norm.contains('GOLPEAR')) {
       return const AssemblerRoute(
-          contextId: 'identificacion', reason: 'datos de identificación');
+        contextId: 'identificacion',
+        reason: 'datos de identificación',
+      );
     }
   }
   if (esPregunta) {
     return const AssemblerRoute(
-        contextId: 'preguntas', reason: 'interrogativa explícita');
+      contextId: 'preguntas',
+      reason: 'interrogativa explícita',
+    );
   }
 
   // 3. La necesidad elegida, cuando las glosas no bastan.
@@ -977,7 +1274,9 @@ AssemblerRoute routeToAssembler({
   // 4. El contexto activo, si el ensamblador lo conoce.
   if (assemblerContexts.contains(currentContextId)) {
     return AssemblerRoute(
-        contextId: currentContextId, reason: 'contexto activo');
+      contextId: currentContextId,
+      reason: 'contexto activo',
+    );
   }
 
   // Nada resolvió. No se aproxima a una denuncia.
@@ -1001,13 +1300,12 @@ String resolveAssemblerContext(
   dynamic Function(String)? getCategory,
   String? needId,
   String? intentId,
-]) =>
-    routeToAssembler(
-      currentContextId: currentContextId,
-      glosses: glosses,
-      needId: needId,
-      intentId: intentId,
-    ).contextId;
+]) => routeToAssembler(
+  currentContextId: currentContextId,
+  glosses: glosses,
+  needId: needId,
+  intentId: intentId,
+).contextId;
 
 /// Mapeo de identificadores de contexto para la UI y el motor de selección.
 Set<String> cardSourceContexts(String uiContextId) {

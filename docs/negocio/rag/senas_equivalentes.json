@@ -1,0 +1,3391 @@
+{
+ "ACCESIBILIDAD": {
+  "razon": "No hay una seña equivalente en el catálogo para 'medida de accesibilidad para la audiencia'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Necesita una medida de accesibilidad para la audiencia?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACCESIBLE": {
+  "razon": "Aunque 'COMUNICACIÓN' existe, no hay una seña específica para 'comunicación accesible' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe garantizarse comunicación accesible durante la atención.",
+   "La atención debe permitir comunicación accesible.",
+   "Registraremos su necesidad de comunicación accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACCESO": {
+  "razon": "No hay una seña específica para 'acceso al patrocinio' o 'acceso a su proceso' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral.",
+   "¿Tiene acceso a su proceso en ROMA?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTIVAR": {
+  "razon": "No hay una seña para 'activar la atención' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Contacte SEPDEP para activar la atención correspondiente.",
+   "Debe activarse la atención de la Defensoría de la Niñez.",
+   "FELCV atiende hechos de violencia y activa la ruta correspondiente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTIVIDAD": {
+  "razon": "No hay una seña para 'deuda de vehículo, inmueble o actividad' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Su deuda es de vehículo, inmueble o actividad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTUAL": {
+  "razon": "No hay una seña para 'atención actual' o 'placa actual del vehículo' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cómo confirmo la atención actual?",
+   "¿Tiene la placa actual del vehículo?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTUALIZAR": {
+  "razon": "No hay una seña para 'consultar monto actualizado' o 'Folio Real actualizado' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Consulte primero el monto actualizado antes de pagar.",
+   "El servicio para violencia familiar figura actualizado en 2026.",
+   "Necesito un Folio Real actualizado de mi casa."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACUDIR": {
+  "razon": "Aunque 'IR' existe, no hay una seña específica para 'acudir a la Defensoría' o 'acudir a información del Tribunal' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede acudir a la Defensoría por posible vulneración de derechos.",
+   "Quiero que me indiquen dónde acudir.",
+   "SIREJ indica acudir a información del Tribunal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ADAPTARSE": {
+  "razon": "No hay una seña para 'adaptarse para que comprenda el trámite' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La atención debe adaptarse para que comprenda el trámite."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ADMINISTRACION": {
+  "razon": "No hay una seña para 'ámbito de administración de justicia' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La Ley 1658 incluye el ámbito de administración de justicia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ALGUN": {
+  "razon": "No existe una seña equivalente en el catálogo para 'algún' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Trajo algún relato de lo ocurrido?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ALY": {
+  "razon": "'ALY' es un nombre propio de un edificio, no tiene una seña equivalente en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AMBITO": {
+  "razon": "'ÁMBITO' no tiene una seña equivalente en el catálogo para el significado dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La Ley 1658 incluye el ámbito de administración de justicia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTERIOR": {
+  "razon": "Aunque 'ANTERIOR' podría relacionarse con 'PASADO', no es exactamente equivalente en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede buscarlos en una boleta de pago anterior.",
+   "Queda entre Antezana y Lanza, Edificio Aly.",
+   "Sí. Perdimos la copia anterior."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTES": {
+  "razon": "'ANTES' no tiene una seña directa equivalente en el catálogo para los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Consulte primero el monto actualizado antes de pagar.",
+   "Iré antes de esa hora.",
+   "La renovación puede solicitarse desde seis meses antes."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTICRETICO": {
+  "razon": "'ANTICRETICO' no tiene una seña equivalente en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero hacer un documento de anticrético."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTIGUO": {
+  "razon": "'ANTIGUO' no tiene una seña equivalente en el catálogo para el significado dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo deuda antigua de mi casa."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APARECE": {
+  "razon": "'APARECE' no tiene una seña equivalente en el catálogo para los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No aparece."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APARECER": {
+  "razon": "'APARECER' no tiene una seña equivalente en el catálogo para los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuánto aparece en el arancel?",
+   "¿El monto aparece en línea?",
+   "¿Ese número aparece en la página municipal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APLICABLE": {
+  "razon": "'APLICABLE' no tiene una seña equivalente en el catálogo para los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable.",
+   "Depende de su grado y situación; revise la norma aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APLICAR": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La reposición aplica por extravío, robo o deterioro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APORTAR": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Registraremos los datos que usted pueda aportar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APOYO": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral.",
+   "¿Qué tipo de apoyo necesita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ARANCEL": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuánto aparece en el arancel?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ARANCELE": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras.",
+   "La certificación de firmas tiene arancel publicado específico."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AREA": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El Ministerio informó cuatro días para el área urbana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ATENCION": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe activarse la atención de la Defensoría de la Niñez.",
+   "Debe garantizarse comunicación accesible durante la atención.",
+   "Desde 2026 existe atención virtual en LSB."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AUDIENCIA": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si mi audiencia es virtual.",
+   "Quiero participar directamente en mi audiencia.",
+   "Tengo audiencia familiar. No sé dónde ir."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AUTOMATICO": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La norma 2025 incorporó mecanismos de renovación automática."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AYUDA": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito ayuda legal y psicológica.",
+   "Necesito ayuda para escribir mi denuncia.",
+   "Necesito ayuda por violencia de mi pareja."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BEIJING": {
+  "razon": "No existe una seña para 'BEIJING' en el catálogo. La frase menciona una ubicación específica (avenida Beijing) que no tiene equivalente en las glosas disponibles.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Existe representación en Centro Integral FELCV, avenida Beijing."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BIEN": {
+  "razon": "Aunque 'BIEN' puede relacionarse con 'BUENO', la frase específica 'No entiendo bien explicaciones solo habladas' y 'No quiero responder sin comprender bien' implica comprensión clara, que no se cubre exactamente con ninguna seña del catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No entiendo bien explicaciones solo habladas.",
+   "No quiero responder sin comprender bien."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BOLETA": {
+  "razon": "No hay una seña para 'BOLETA' en el catálogo. La frase se refiere a un documento de pago específico que no tiene equivalente directo en las glosas proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede buscarlos en una boleta de pago anterior."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BORRAR": {
+  "razon": "Aunque existe 'ELIMINAR' en algunos sistemas de LSB, no está en este catálogo. La frase 'No borre ni modifique mensajes relacionados al hecho' requiere una acción específica que no tiene seña equivalente aquí.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No borre ni modifique mensajes relacionados al hecho."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CALIFICACION": {
+  "razon": "No hay una seña para 'CALIFICACION' en el catálogo. La frase se refiere a un proceso administrativo específico que no tiene equivalente directo en las glosas disponibles.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Primero debe seguir el proceso de calificación correspondiente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CALIFICAR": {
+  "razon": "Aunque 'EVALUAR' existe en el catálogo, no es equivalente a 'CALIFICAR' en el contexto de procesos administrativos o académicos mencionado en las frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Ya me calificaron.",
+   "¿Debo volver a calificarme?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CANAL": {
+  "razon": "No hay una seña para 'CANAL' en el catálogo. La frase 'Usaré un canal accesible' se refiere a un método de comunicación que no tiene equivalente directo en las glosas proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Usaré un canal accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CAPTURA": {
+  "razon": "No hay una seña para 'CAPTURA' en el catálogo. La frase se refiere a capturas de pantalla o documentos digitales que no tienen equivalente directo en las glosas disponibles.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo capturas y comprobante de transferencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CARATULA": {
+  "razon": "No hay una seña para 'CARATULA' en el catálogo. La frase se refiere a una parte específica de un expediente legal que no tiene equivalente directo en las glosas proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No. No tengo ninguna carátula.",
+   "¿Tiene la carátula del expediente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CASO": {
+  "razon": "Aunque 'CASO' podría relacionarse con 'HECHO' o 'SITUACIÓN', no hay una seña exacta en el catálogo. Las frases se refieren a casos legales o situaciones específicas que no tienen equivalente directo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Confirmaré mi caso antes de ir.",
+   "Quiero saber dónde puedo informar el caso.",
+   "Tengo deuda antigua de mi casa."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CATARSTRAL": {
+  "razon": "No hay una seña equivalente en el catálogo para 'certificado catastral' o 'código catastral' en las frases proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Me falta el certificado catastral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CATASTRAL": {
+  "razon": "",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Tiene número de inmueble o código catastral?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CEDULA": {
+  "razon": "Aunque existe la seña IDENTIDAD que puede referirse a documentos de identidad, no es exactamente equivalente a 'cédula' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuesta lo mismo que la cédula física?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CENTRAL": {
+  "razon": "No hay una seña específica para 'central' en el catálogo. Las frases se refieren a una ubicación o oficina central, pero no hay una glosa que coincida exactamente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La central.",
+   "¿Le queda mejor la oficina central o La Chimba?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CENTRO": {
+  "razon": "Aunque existe la seña CENTRO_INTEGRAL_FELCV, esta es específica para ese lugar y no equivale a 'centro' en general como en 'una calle del centro'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Ocurrió ayer en una calle del centro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CENTRO_INTEGRAL_FELCV": {
+  "razon": "Existe una seña específica para 'Centro Integral FELCV' en el catálogo.",
+  "origen": "bedrock",
+  "descartada": "CENTRO_INTEGRAL_FELCV",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Existe representación en Centro Integral FELCV, avenida Beijing."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CENTRO_INTERNACIONAL_CONVENCIONES": {
+  "razon": "No hay una seña específica para 'Centro Internacional de Convenciones' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Está en el Centro Internacional de Convenciones, piso uno."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CERRADO": {
+  "razon": "No hay una seña específica para 'cerrado' en el catálogo. Aunque puede relacionarse con ESTAR_DE_ACUERDO o otros verbos de estado, no es exactamente equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Estaba cerrada.",
+   "Sí. La dirección que tenía estaba cerrada."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CERTIFICAR": {
+  "razon": "Aunque existe la seña CERTIFICADO, esta se refiere a un certificado y no al proceso de certificar. No hay una seña para el verbo 'certificar' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero certificar las firmas de este contrato."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CHIMBA": {
+  "razon": "Existe una seña específica para 'La Chimba' en el catálogo.",
+  "origen": "bedrock",
+  "descartada": "CHIMBA",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Estoy cerca de La Chimba.",
+   "La Chimba.",
+   "¿Le queda mejor la oficina central o La Chimba?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CIUDAD": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'ciudad' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuánto tarda en ciudad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CLARO": {
+  "razon": "Aunque existe la seña BUENO que podría implicar claridad, no es equivalente exacto a 'claro' en el contexto de instrucciones escritas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero recibir instrucciones claras por escrito también."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CODIGO": {
+  "razon": "No hay una seña en el catálogo que signifique exactamente 'código' en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Tengo ambos códigos.",
+   "¿Tiene número de inmueble o código catastral?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMPETENTE": {
+  "razon": "No hay una seña en el catálogo que signifique exactamente 'competente' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Para víctimas, consulte SEPDAVI u otro servicio competente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMPROBANTE": {
+  "razon": "No hay una seña en el catálogo que signifique exactamente 'comprobante' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo capturas y comprobante de transferencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMUNICACION": {
+  "razon": "Aunque la seña HABLAR está relacionada, no es equivalente exacto a 'comunicación accesible' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe garantizarse comunicación accesible durante la atención.",
+   "La atención debe permitir comunicación accesible.",
+   "Registraremos su necesidad de comunicación accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMUNICAR": {
+  "razon": "No hay una seña en el catálogo que signifique exactamente 'comunicar' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito comunicarme en Lengua de Señas Boliviana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMUNICARSE": {
+  "razon": "No hay una seña en el catálogo que signifique exactamente 'comunicarse' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito comunicarme usando lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONFIRMAR": {
+  "razon": "No hay una seña en el catálogo que signifique exactamente 'confirmar' en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Confirmaré antes de pagar.",
+   "Confirmaré mi caso antes de ir.",
+   "Entonces confirmaré el trámite exacto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONMIGO": {
+  "razon": "Aunque la seña YO está relacionada, no es equivalente exacto a 'conmigo' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. La tengo conmigo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSERVE": {
+  "razon": "No hay una seña equivalente en el catálogo para 'Conserve' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSTANTE": {
+  "razon": "Aunque 'CONSTANTE' describe frecuencia, ninguna seña del catálogo captura exactamente este significado en el contexto proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Me escribe mensajes constantemente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSTITUCION": {
+  "razon": "'CONSTITUCION' se refiere a una ubicación específica; no hay una seña que signifique exactamente 'Constitución' como nombre de lugar en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Está en calle 16 de Julio 680, Plazuela Constitución."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSULTA": {
+  "razon": "Aunque hay una seña para 'PREGUNTAR', 'CONSULTA' en estos contextos implica más que una simple pregunta; no hay una seña única que cubra todos los usos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Haré la consulta en línea.",
+   "¿Su consulta es urgente y penal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSULTAR": {
+  "razon": "Similares a 'CONSULTA', los usos de 'CONSULTAR' varían demasiado como para ser cubiertos por una sola seña del catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Para víctimas, consulte SEPDAVI u otro servicio competente.",
+   "¿Quiere consultar un expediente judicial?",
+   "¿Qué necesita consultar de su proceso?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTACTAR": {
+  "razon": "No hay una seña que signifique específicamente 'CONTACTAR' en el sentido de establecer comunicación en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Pueden indicarme cómo contactarla?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTAR": {
+  "razon": "'CONTAR' como narrar eventos no tiene una seña directa en el catálogo; señas como 'NARRAR' podrían ser cercanas pero no exactamente equivalentes.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Cuente lo ocurrido con sus propias palabras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTRA": {
+  "razon": "'CONTRA' en estos contextos legales no tiene una seña equivalente en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe ser derivado al servicio especializado contra la violencia.",
+   "El proceso es contra mí."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTRATO": {
+  "razon": "Aunque 'CONTRATO' puede implicar 'FIRMAR', no hay una seña que cubra el concepto completo de contrato en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero certificar las firmas de este contrato.",
+   "¿Eso incluye todo el contrato?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COOCHABAMBA": {
+  "razon": "Existe una seña específica para 'COCHABAMBA' que coincide exactamente con el nombre de la ciudad en los contextos dados.",
+  "origen": "bedrock",
+  "sena": "COCHABAMBA",
+  "estado": "aprobada",
+  "ejemplos": [
+   "Sí. Está registrado en Cochabamba.",
+   "¿El vehículo está radicado en Cochabamba?"
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": false,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "COPIA": {
+  "razon": "«Quiero una copia de mi denuncia.»",
+  "origen": "bedrock",
+  "sena": "FOTOCOPIA",
+  "estado": "rechazada",
+  "ejemplos": [
+   "No sé si sirve copia.",
+   "Quiero una copia de mi denuncia.",
+   "Sí. Perdimos la copia anterior."
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": false,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "CORRESPONDER": {
+  "razon": "No hay una seña equivalente que signifique exactamente 'corresponder' en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé cuál me corresponde.",
+   "¿Su deuda corresponde solamente a 2025?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CORRESPONDIENTE": {
+  "razon": "No hay una seña equivalente que signifique exactamente 'correspondiente' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Primero debe seguir el proceso de calificación correspondiente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COSAS": {
+  "razon": "Aunque existe la seña LISTA, esta no se refiere a 'cosas' de manera equivalente en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No responderé cosas que no comprendo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COSTO": {
+  "razon": "No hay una seña equivalente que signifique exactamente 'costo' en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero confirmar el costo total primero.",
+   "¿Cuesta lo mismo que la cédula física?",
+   "¿Cuánto cuesta actualmente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COUCHABAMBA": {
+  "razon": "«Quiero saber dónde iniciar en Cochabamba.»",
+  "origen": "bedrock",
+  "sena": "COCHABAMBA",
+  "estado": "aprobada",
+  "ejemplos": [
+   "Quiero saber dónde iniciar en Cochabamba.",
+   "¿Dónde atiende SEPDAVI en Cochabamba?",
+   "¿Dónde está Defensa Pública en Cochabamba?"
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": false,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "CUANTO": {
+  "razon": "«¿Cuánto cuesta actualmente?»",
+  "origen": "bedrock",
+  "sena": "CUÁNTOS",
+  "estado": "aprobada",
+  "ejemplos": [
+   "¿Cuánto cuesta actualmente?",
+   "¿Cuánto dice la página que cuesta?"
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": true,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "CUENTA": {
+  "razon": "No hay una seña equivalente que signifique exactamente 'cuenta' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Puede ingresar a su cuenta?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CUOTA": {
+  "razon": "No hay una seña equivalente que signifique exactamente 'cuota' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Quiere solicitar un Plan Cuotas?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CUOTAS": {
+  "razon": "No hay una seña equivalente que signifique exactamente 'cuotas' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Quiero pagar en cuotas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DATOS": {
+  "razon": "No hay una seña específica para «datos» en el catálogo proporcionado. Aunque hay señas relacionadas con información o documentos, ninguna coincide exactamente con el término «datos» en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El reglamento exige validarlo con los datos de SERECI.",
+   "Registraremos los datos que usted pueda aportar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DE": {
+  "razon": "La palabra «de» es una preposición muy común y no tiene una seña específica en el catálogo. En la LSB, las preposiciones suelen estar implícitas en la estructura de la frase o se indican con otras señas según el contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Está en calle 16 de Julio 680, Plazuela Constitución."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEBER": {
+  "razon": "Aunque «deber» puede expresar obligación, no hay una seña específica para esta palabra en el catálogo. Las señas como «NECESITAR» o «OBLIGACIÓN» podrían estar relacionadas, pero no equivalen exactamente a «deber» en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debemos revisar la información de su expediente.",
+   "Quiero saber cuánto debo de mi moto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEBO": {
+  "razon": "Al igual que con «deber», «debo» implica una obligación o deber, pero no hay una seña específica para esta forma verbal en el catálogo. Señas como «NECESITAR» podrían usarse, pero no son equivalentes directas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No debo años anteriores.",
+   "¿Debo confirmar antes de salir?",
+   "¿Debo pagar por el nuevo carnet?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEFENSA_PUBLICA": {
+  "razon": "No hay una seña específica para «Defensa Pública» en el catálogo. Aunque hay señas para instituciones como «FISCALÍA» o «JUZGADO», ninguna coincide exactamente con «Defensa Pública».",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Dónde está Defensa Pública en Cochabamba?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEFENSORIA": {
+  "razon": "Al igual que con «Defensa Pública», no hay una seña específica para «Defensoría» en el catálogo. Las señas para instituciones no cubren este término de manera exacta.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe activarse la atención de la Defensoría de la Niñez.",
+   "Puede acudir a la Defensoría por posible vulneración de derechos.",
+   "¿Puede venir a la oficina de la Defensoría?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEFUNCION": {
+  "razon": "No hay una seña específica para «defunción» en el catálogo. Aunque hay señas para conceptos relacionados con la muerte o certificados, ninguna coincide exactamente con «defunción».",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito otro certificado de defunción de mi padre.",
+   "¿El precio es igual al de defunción?",
+   "¿Viene a registrar una defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DELITO": {
+  "razon": "Aunque hay señas para conceptos delictivos como «ROBAR» o «ESTAFAR», no hay una seña específica para «delito» en el catálogo. La seña sería más genérica o se construirá con otras señas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿El hecho fue robo, estafa u otro delito?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEMOSTRAR": {
+  "razon": "No hay una seña específica para «demostrar» en el catálogo. Aunque hay señas como «COMPRENDER» o «EXPLICAR», ninguna coincide exactamente con «demostrar» en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe acreditar la relación permitida y su identidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DENUNCIA": {
+  "razon": "Aunque hay señas relacionadas con acciones legales como «CONVOCAR» o «TESTIGIO», no hay una seña específica para «denuncia» en el catálogo. Se podría usar una combinación de señas, pero no hay una equivalente directa.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito ayuda para escribir mi denuncia.",
+   "Necesito hacerle algunas preguntas sobre la denuncia.",
+   "Quiero entender todas las preguntas de la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DENUNCIADO": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'denunciado' en las frases proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Soy denunciado.",
+   "¿Usted está denunciado o es víctima?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DENUNCIAR": {
+  "razon": "Aunque la seña 'ACUSAR' podría estar relacionada, no se encuentra en el catálogo proporcionado. Por lo tanto, no hay una seña equivalente en el catálogo para 'denunciar' en estas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Me denunciaron y no tengo abogado.",
+   "Me robaron mi celular. Quiero denunciar.",
+   "No sé dónde denunciar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEPENDER": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'depender' en la frase proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La modalidad depende del señalamiento de su expediente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DERECHOS": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'derechos' en la frase proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede acudir a la Defensoría por posible vulneración de derechos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DERIVADO": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'derivado' en la frase proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe ser derivado al servicio especializado contra la violencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DESCUENTO": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'descuento' en la frase proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Todavía hay descuento si pago hoy?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DETERIORADO": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'deteriorado' en la frase proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Está deteriorada."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DETIEN": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'detien' en la frase proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La reposición aplica por extravío, robo o deterioro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEUDA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'deuda' en las frases proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No puedo pagar toda la deuda del auto.",
+   "Quiero revisar la deuda de mi casa.",
+   "Tengo deuda antigua de mi casa."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DINERO": {
+  "razon": "En la frase 'Fue por internet. Envié dinero.', 'dinero' puede ser representado por la seña 'BILLETES', que significa 'billetes y dinero'.",
+  "origen": "bedrock",
+  "sena": "BILLETES",
+  "estado": "aprobada",
+  "ejemplos": [
+   "Fue por internet. Envié dinero."
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": true,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "DISCAPACIDAD": {
+  "razon": "No hay una seña específica para 'discapacidad' en el catálogo proporcionado. Aunque se menciona el carnet de discapacidad, no existe una seña que signifique exactamente 'discapacidad' en las frases dadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero sacar mi carnet de discapacidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DISTANCIA": {
+  "razon": "No hay una seña específica para 'distancia' en el catálogo. La frase menciona 'atención a distancia', pero no hay una seña que signifique exactamente eso.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No. Necesito atención a distancia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DOCUMENTO": {
+  "sena": "PAPEL",
+  "origen": "catalogo",
+  "estado": "aprobada",
+  "razon": "El catálogo oficial escribe PAPEL como «Papel» / «el documento».",
+  "ejemplos": [
+   "La reposición mantiene la vigencia del documento reemplazado.",
+   "Me falta un documento.",
+   "Necesito certificado porque robaron mis documentos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DUPLICADO": {
+  "razon": "Aunque el catálogo incluye 'CERTIFICADO', no hay una seña específica para 'duplicado'. Las frases hablan de 'certificados duplicados', pero no hay una seña que signifique exactamente 'duplicado'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SERECI incluye ese servicio entre certificados duplicados.",
+   "SERECI ofrece venta de certificados duplicados.",
+   "¿Necesita certificado de matrimonio duplicado?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EDIFICIO": {
+  "razon": "No hay una seña específica para 'edificio' en el catálogo. La frase menciona una ubicación en un edificio, pero no hay una seña que signifique exactamente 'edificio'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ELEMENTOS": {
+  "razon": "No hay una seña específica para 'elementos' en el catálogo. La frase habla de conservar elementos, pero no hay una seña que signifique exactamente 'elementos'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENCONTRAR": {
+  "razon": "Aunque el catálogo incluye 'BUSCAR', no hay una seña específica para 'encontrar'. La frase pide ayuda para encontrar algo, pero no hay una seña que signifique exactamente 'encontrar'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Puede ayudarme a encontrarlo?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTENDER": {
+  "razon": "Aunque el catálogo incluye 'COMPRENDER', no hay una seña específica para 'entender' en el sentido de las frases dadas. Las frases hablan de entender explicaciones y preguntas, pero no hay una seña que signifique exactamente 'entender' en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entiendo. Iré al servicio para víctimas.",
+   "No entiendo bien explicaciones solo habladas.",
+   "Quiero entender todas las preguntas de la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTENDIDO": {
+  "razon": "No hay una seña específica para 'entendido' en el catálogo. Aunque se puede inferir del contexto, no existe una seña que signifique exactamente 'entendido'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entendido."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTONCES": {
+  "razon": "No hay una seña específica para 'entonces' en el catálogo. Las frases usan 'entonces' para indicar una consecuencia, pero no hay una seña que signifique exactamente 'entonces'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entonces ya puedo renovarla.",
+   "¿Entonces no pago el impuesto?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTREGAR": {
+  "razon": "Aunque el catálogo incluye 'DAR', no hay una seña específica para 'entregar' en el sentido de las frases dadas. La frase pregunta si puede entregar algo en una denuncia, pero no hay una seña que signifique exactamente 'entregar' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Puedo entregarlos en la denuncia?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EQUIPO": {
+  "razon": "No existe una seña específica para 'equipo' en las frases proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El equipo puede orientar su ruta de atención.",
+   "Quiero hablar con el equipo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ES": {
+  "razon": "'Es' es un verbo ser o estar, no tiene una seña específica en las frases dadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé cuál es.",
+   "Quiero saber quién es mi fiscal.",
+   "¿Su deuda es de vehículo, inmueble o actividad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESCRITO": {
+  "razon": "No hay una seña específica para 'escrito' en las frases proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Ya la traje escrita.",
+   "¿Desea denunciar verbalmente o trae escrito?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESCRITURA": {
+  "razon": "'Escritura' se refiere a documentos legales y no tiene una seña directa en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras.",
+   "Sí. Aquí tengo la escritura."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESOS": {
+  "razon": "'Esos' es un pronombre demostrativo que no tiene una seña específica en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESPECIALIZADO": {
+  "razon": "No hay una seña específica para 'especializado' en las frases proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe ser derivado al servicio especializado contra la violencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESPECIFICO": {
+  "razon": "'Específico' no tiene una seña directa en el catálogo para el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La certificación de firmas tiene arancel publicado específico."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESTAFA": {
+  "razon": "Aunque 'ENGAÑAR' existe, no se usa para 'estafa' en este contexto específico.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿El hecho fue robo, estafa u otro delito?",
+   "¿La estafa ocurrió por internet o presencialmente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESTAR": {
+  "razon": "'Estar' es un verbo y no tiene una seña específica en las frases proporcionadas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Estoy cerca de La Chimba.",
+   "Está deteriorada.",
+   "No sé dónde está."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESTE": {
+  "razon": "'Este' es un pronombre demostrativo que no tiene una seña específica en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Los tengo en este documento."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXIGIR": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «El reglamento exige validarlo con los datos de SERECI».",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El reglamento exige validarlo con los datos de SERECI."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXISTIR": {
+  "razon": "Aunque «desde 2026 existe atención virtual en LSB» implica presencia o disponibilidad, ninguna seña del catálogo captura exactamente el concepto de existencia como verbo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Desde 2026 existe atención virtual en LSB."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXPEDIENTE": {
+  "razon": "Las frases hablan de revisar, depender del señalamiento o consultar un expediente judicial, pero no hay una seña que signifique el sustantivo «expediente» ni el concepto específico de trámite judicial en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debemos revisar la información de su expediente.",
+   "La modalidad depende del señalamiento de su expediente.",
+   "¿Quiere consultar un expediente judicial?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXPLICACION": {
+  "razon": "Aunque hay señas como EXPLICAR o ENTENDER, ninguna seña del catálogo representa específicamente la palabra «explicación» como sustantivo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No entiendo bien explicaciones solo habladas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXTRAVIO": {
+  "razon": "Las frases describen pérdida o extravío de objetos o documentos, pero no hay una seña que signifique exactamente la palabra «extravío» como concepto o evento.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Fue extravío. No sé dónde quedó.",
+   "La reposición aplica por extravío, robo o deterioro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FALLECIDO": {
+  "razon": "Aunque hay señas relacionadas con muerte o fallecimiento, ninguna seña del catálogo representa específicamente la palabra «fallecido» como adjetivo o sustantivo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "También enumera identificación del fallecido y dos testigos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FALTA": {
+  "razon": "Aunque hay señas como NECESITAR o FALTAR, ninguna seña del catálogo representa exactamente la palabra «falta» como sustantivo que indica ausencia o escasez de algo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Me falta un documento."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FALTAR": {
+  "razon": "Aunque la seña FALTAR existe, en las frases se usa como «Me falta el certificado catastral», donde «faltar» funciona como verbo intransitivo que indica carencia, pero la seña FALTAR del catálogo tiene un significado más general y no captura exactamente este uso específico.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Me falta el certificado catastral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FAMILIA": {
+  "razon": "Aunque hay señas para PARIENTE o FAMILIAR, ninguna seña del catálogo representa específicamente la palabra «familia» como núcleo de parentesco o unidad social.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito ayuda por un niño de mi familia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FAMILIAR": {
+  "razon": "La seña FAMILIAR existe y significa «familiar» como adjetivo que se refiere a algo relacionado con la familia, pero en las frases se usa tanto como adjetivo («servicio para violencia familiar») como sustantivo («No soy familiar», «Tengo audiencia familiar»), y la seña FAMILIAR del catálogo no cubre ",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El servicio para violencia familiar figura actualizado en 2026.",
+   "No soy familiar.",
+   "Tengo audiencia familiar. No sé dónde ir."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FIGURA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'figura' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé quién figura."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FIRMA": {
+  "razon": "Aunque existe la seña CERTIFICADO, esta no se refiere específicamente a 'firma' en el contexto de certificación o reconocimiento de firmas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La certificación de firmas tiene arancel publicado específico.",
+   "Quiero certificar las firmas de este contrato.",
+   "Sí. Queremos reconocer nuestras firmas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FIRMAR": {
+  "razon": "No hay una seña en el catálogo que signifique específicamente 'firmar' en el contexto de documentos o contratos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Ya firmamos la compra."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FISCAL": {
+  "razon": "En la frase 'Quiero saber quién es mi fiscal', la seña FISCALIA puede usarse para referirse a la autoridad fiscal, aunque no es una coincidencia exacta, pero es la más cercana disponible.",
+  "origen": "bedrock",
+  "sena": "FISCALIA",
+  "estado": "rechazada",
+  "ejemplos": [
+   "Quiero saber quién es mi fiscal."
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": true,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "FISICA": {
+  "razon": "No hay una seña en el catálogo que signifique 'física' en el contexto de documentos o cédulas físicas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuesta lo mismo que la cédula física?",
+   "¿Cuánto cuesta la cédula física?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FOLIO": {
+  "razon": "No hay una seña en el catálogo que signifique específicamente 'folio' en el contexto de documentos o cédulas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo cédula y Folio, pero no formulario."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FOLIO_REAL": {
+  "razon": "No hay una seña en el catálogo que signifique 'Folio Real' en el contexto de una casa.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito un Folio Real actualizado de mi casa."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FORMULARIO": {
+  "razon": "No hay una seña en el catálogo que signifique específicamente 'formulario' en el contexto de documentos requeridos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No tengo el formulario.",
+   "Tengo cédula y Folio, pero no formulario."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FUE": {
+  "razon": "Aunque existe la seña IR, esta no se usa para indicar el pasado 'fue' en este contexto específico.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé quién fue la persona."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "GARANTIZAR": {
+  "razon": "No hay una seña en el catálogo que signifique específicamente 'garantizar' en el contexto de comunicación accesible.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe garantizarse comunicación accesible durante la atención."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "GRADO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'grado' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Depende de su grado y situación; revise la norma aplicable.",
+   "No recuerdo el grado de mi carnet."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "HASTA": {
+  "razon": "Aunque existe la seña HASTA_LUEGO y HASTA_MAÑANA, no hay una seña que signifique 'hasta' como límite temporal en frases como 'hasta octubre'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "HECHO": {
+  "razon": "No hay una seña que signifique específicamente 'hecho' en los contextos proporcionados. La seña VIOLENCIA está relacionada, pero no abarca el significado general de 'hecho'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "FELCV atiende hechos de violencia y activa la ruta correspondiente.",
+   "No borre ni modifique mensajes relacionados al hecho.",
+   "¿El hecho fue robo, estafa u otro delito?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "HIPOTECA": {
+  "razon": "No hay una seña para 'hipoteca' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero saber si mi casa tiene hipoteca."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "IGUAL": {
+  "razon": "Aunque existe la seña DIFERENTE, no hay una seña que signifique exactamente 'igual' en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuesta lo mismo que la cédula física?",
+   "¿El precio es igual al de defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "IMPUESTO": {
+  "razon": "No hay una seña para 'impuesto' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Entonces no pago el impuesto?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INCLUIR": {
+  "razon": "No hay una seña que signifique exactamente 'incluir' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras.",
+   "La Ley 1658 incluye el ámbito de administración de justicia.",
+   "No sé qué incluye."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INDICAR": {
+  "razon": "Aunque existe la seña EXPLICAR, no hay una seña que signifique exactamente 'indicar' en el sentido de dar instrucciones o mostrar dirección.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero que me indiquen dónde acudir."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INFORMACION": {
+  "razon": "No hay una seña que signifique exactamente 'información' en los contextos dados. La seña INFORMAR está relacionada, pero no abarca el significado de 'información' como dato o conocimiento.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debemos revisar la información de su expediente.",
+   "SIREJ indica acudir a información del Tribunal.",
+   "¿Qué información necesita del inmueble?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INFORMAR": {
+  "razon": "Aunque existe la seña INFORMAR, no hay una seña que signifique exactamente 'informar' en el sentido de dar notificación oficial o comunicar información específica en todos los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El Ministerio informa que la carnetización es gratuita.",
+   "El Ministerio informó cuatro días para el área urbana.",
+   "Quiero saber dónde puedo informar el caso."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INGRESAR": {
+  "razon": "No hay una seña equivalente en el catálogo para 'ingresar' en el contexto de acceder a una cuenta o iniciar un proceso.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Puede ingresar a su cuenta?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INICIAR": {
+  "razon": "Aunque 'INICIO' podría estar relacionado, no hay una seña específica en el catálogo que signifique exactamente 'iniciar' en los contextos dados (atención o ubicación).",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero iniciar la atención.",
+   "Quiero saber dónde iniciar en Cochabamba."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INMUEBLE": {
+  "razon": "No existe una seña específica para 'inmueble' en el catálogo. Los contextos hacen referencia a deudas o información relacionada con propiedades, pero no hay una seña que cubra este término.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Busca deuda de inmueble o vehículo?",
+   "¿Qué información necesita del inmueble?",
+   "¿Su deuda es de vehículo, inmueble o actividad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INSTRUCCION": {
+  "razon": "No hay una seña para 'instrucción' en el catálogo. Aunque 'EXPLICAR' está presente, no se usa para este término específico.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero recibir instrucciones claras por escrito también."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INSTRUCCIONES": {
+  "razon": "Similares a 'INSTRUCCION', no hay una seña específica para 'instrucciones' en el catálogo. 'EXPLICAR' no cubre este uso.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INTEGRAL": {
+  "razon": "No hay una seña para 'integral' en el catálogo. El contexto se refiere a apoyo completo, pero no hay una seña que signifique exactamente esto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INTERES": {
+  "razon": "Aunque 'INTERÉS' podría estar relacionado con finanzas, no hay una seña específica para 'interés' en el catálogo. Los contextos hacen referencia a multas y condonación, pero no hay una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INTERPRETAR": {
+  "razon": "En los contextos dados, 'INTERPRETAR' se refiere al proceso de interpretación de Lengua de Señas, para lo cual existe la seña INTÉRPRETE. Aunque no es la misma palabra, INTÉRPRETE es la seña más cercana y relevante en estos contextos.",
+  "origen": "bedrock",
+  "sena": "INTÉRPRETE",
+  "estado": "rechazada",
+  "ejemplos": [
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable.",
+   "La Ley 1658 contempla interpretación gratuita en justicia."
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": true,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "INVESTIGADOR": {
+  "razon": "No hay una seña específica para 'investigador' en el catálogo. Aunque 'INVESTIGACIÓN' existe, no representa la persona del investigador.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "JUDICIAL": {
+  "razon": "En el contexto de consultar un expediente, 'JUDICIAL' se refiere al ámbito del sistema judicial. La seña ÓRGANO_JUDICIAL abarca este concepto de manera más precisa en el catálogo.",
+  "origen": "bedrock",
+  "sena": "ÓRGANO_JUDICIAL",
+  "estado": "rechazada",
+  "ejemplos": [
+   "¿Quiere consultar un expediente judicial?"
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": true,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "LA": {
+  "razon": "No hay una seña específica para el artículo «la» en el catálogo proporcionado. Aunque la palabra aparece en frases como «Entonces ya puedo renovarla.» , no existe una glosa que signifique exactamente este artículo en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entonces ya puedo renovarla."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LANZA": {
+  "razon": "La palabra «Lanza» parece ser un nombre propio o topónimo («Queda entre Antezana y Lanza, Edificio Aly.»). No hay una seña en el catálogo que represente nombres propios o topónimos específicos como «Lanza».",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LEGAL": {
+  "razon": "Aunque «ayuda legal» se menciona, no hay una seña específica para «legal» en el catálogo. Las frases como «Necesito ayuda legal y psicológica.» o «Solo legal.» no tienen una glosa que signifique exactamente «legal» por sí misma.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito ayuda legal y psicológica.",
+   "Solo legal.",
+   "¿Necesita primero orientación legal o psicológica?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LENGUA": {
+  "razon": "La palabra «lengua» en el contexto de «lengua de señas» no tiene una seña equivalente en el catálogo. Aunque se menciona «Me negaron atención porque necesito lengua de señas.» , no hay una glosa que signifique específicamente «lengua» en este uso.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Me negaron atención porque necesito lengua de señas.",
+   "Necesito comunicarme usando lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LINEA": {
+  "razon": "La palabra «línea» en frases como «¿El monto aparece en línea?» o «¿También tienen línea gratuita?» no tiene una seña específica en el catálogo. No hay una glosa que signifique exactamente «línea» en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿El monto aparece en línea?",
+   "¿También tienen línea gratuita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LO": {
+  "razon": "La palabra «lo» es un pronombre que no tiene una seña específica en el catálogo. En frases como «No sé cómo hacerlo.» o «No sé si puedo pedirlo.» , no hay una glosa que signifique exactamente este pronombre.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé cómo hacerlo.",
+   "No sé si puedo pedirlo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LOTE": {
+  "razon": "La palabra «lote» en frases como «Necesito certificado del lote de mi hermana.» o «No. El lote pertenece a mi hermana.» no tiene una seña específica en el catálogo. No hay una glosa que signifique exactamente «lote» en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito certificado del lote de mi hermana.",
+   "No. El lote pertenece a mi hermana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LSB": {
+  "razon": "Aunque se menciona «Lengua de Señas Boliviana» (LSB), no hay una seña específica para el acrónimo o nombre completo en el catálogo. La frase «Necesito comunicarme en Lengua de Señas Boliviana.» no tiene una glosa equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito comunicarme en Lengua de Señas Boliviana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LUGAR": {
+  "razon": "La palabra «lugar» en la frase «¿Está en un lugar seguro ahora?» no tiene una seña específica en el catálogo. Aunque hay señas como «ALLÍ» o «AQUÍ», ninguna significa exactamente «lugar» en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Está en un lugar seguro ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MANTENER": {
+  "razon": "La palabra «mantener» en frases como «La norma 2025 mantiene el registro dentro del sistema nacional.» o «La reposición mantiene la vigencia del documento reemplazado.» no tiene una seña específica en el catálogo. No hay una glosa que signifique exactamente «mantener» en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La norma 2025 mantiene el registro dentro del sistema nacional.",
+   "La reposición mantiene la vigencia del documento reemplazado."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MAS": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MAS' en la frase «Falta más tiempo.»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Falta más tiempo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MATRIMONIO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MATRIMONIO' en la frase «¿Necesita certificado de matrimonio duplicado?»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Necesita certificado de matrimonio duplicado?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MECANISMO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MECANISMO' en la frase «La norma 2025 incorporó mecanismos de renovación automática.»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La norma 2025 incorporó mecanismos de renovación automática."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MEDICO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MEDICO' en la frase «Tengo el certificado médico original.»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo el certificado médico original."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MEDIDA": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MEDIDA' en la frase «¿Necesita una medida de accesibilidad para la audiencia?»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Necesita una medida de accesibilidad para la audiencia?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MEMORIAL": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MEMORIAL' en las frases «No sé qué memorial.», «No tengo memorial. Solo traje mi cédula.», «Volveré cuando tenga el memorial.»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé qué memorial.",
+   "No tengo memorial. Solo traje mi cédula.",
+   "Volveré cuando tenga el memorial."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MENSAJE": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MENSAJE' en las frases «No borre ni modifique mensajes relacionados al hecho.», «Sí. Me escribe mensajes constantemente.», «Tengo los mensajes guardados.»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No borre ni modifique mensajes relacionados al hecho.",
+   "Sí. Me escribe mensajes constantemente.",
+   "Tengo los mensajes guardados."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MESES": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MESES' en la frase «La renovación puede solicitarse desde seis meses antes.»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La renovación puede solicitarse desde seis meses antes."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MI": {
+  "sena": "MÍO",
+  "origen": "catalogo",
+  "estado": "aprobada",
+  "razon": "El catálogo oficial escribe MÍO como «Mío» / «mi».",
+  "ejemplos": [
+   "Compré un auto. Quiero pasarlo a mi nombre.",
+   "Necesito ayuda por violencia de mi pareja.",
+   "No tengo memorial. Solo traje mi cédula."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MINISTERIO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MINISTERIO' en las frases «El Ministerio informa que la carnetización es gratuita.», «El Ministerio informó cuatro días para el área urbana.», «¿Cuánto informó el Ministerio?»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El Ministerio informa que la carnetización es gratuita.",
+   "El Ministerio informó cuatro días para el área urbana.",
+   "¿Cuánto informó el Ministerio?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MISMO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'MISMO' en la frase «¿Usa el mismo número de contacto?»",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Usa el mismo número de contacto?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MODALIDAD": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'modalidad' en la frase 'Quiero revisar fecha y modalidad.'",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero revisar fecha y modalidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MODIFICAR": {
+  "razon": "Aunque hay una seña para 'cambiar', no se encuentra una seña específica para 'modificar' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No borre ni modifique mensajes relacionados al hecho."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MONTO": {
+  "razon": "No existe una seña para 'monto' en el catálogo proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Consulte primero el monto actualizado antes de pagar.",
+   "Primero confirmaré el monto.",
+   "¿El monto aparece en línea?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MOTO": {
+  "razon": "No hay una seña para 'moto' en el catálogo proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero saber cuánto debo de mi moto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MULTA": {
+  "razon": "No hay una seña para 'multa' en el catálogo proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MUNICIPAL": {
+  "razon": "Aunque existe la seña para 'alcaldía', no es exactamente igual a 'municipal' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Ese número aparece en la página municipal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NACIMIENTO": {
+  "razon": "No hay una seña específica para 'nacimiento' en el catálogo proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Perdí mi certificado de nacimiento.",
+   "¿Tiene certificado de nacimiento original computarizado?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NACIONAL": {
+  "razon": "No hay una seña para 'nacional' en el catálogo proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La norma 2025 mantiene el registro dentro del sistema nacional."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NECESIDAD": {
+  "razon": "Aunque hay una seña para 'necesitar', no se encuentra una seña específica para 'necesidad' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Registraremos su necesidad de comunicación accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NECESITO": {
+  "razon": "Aunque hay una seña para 'necesitar', la frase 'No. Necesito atención a distancia.' requiere una interpretación más específica que no está presente en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No. Necesito atención a distancia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NEED": {
+  "razon": "No hay una seña equivalente a 'necesitar' en el catálogo. La frase menciona necesidad de un porcentaje, pero no hay una seña específica para este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Le dijeron que necesita treinta por ciento?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NEGAR": {
+  "razon": "Aunque existe la seña 'NEGAR', esta se refiere a negar algo directamente y no necesariamente a la negación de atención o servicios como en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Me negaron atención porque necesito lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NIÑEZ": {
+  "razon": "No hay una seña específica para 'niñez' en el catálogo. Aunque existe 'NIÑO', esta palabra se refiere al concepto general de niñez, que no tiene una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe activarse la atención de la Defensoría de la Niñez."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NIÑO": {
+  "razon": "No hay una seña específica para 'niño' en el catálogo. Aunque el concepto existe, no hay una seña equivalente en la lista proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito ayuda por un niño de mi familia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NORMA": {
+  "razon": "No hay una seña específica para 'norma' en el catálogo. Las frases hacen referencia a normas legales o reglamentarias, pero no hay una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Depende de su grado y situación; revise la norma aplicable.",
+   "La norma 2025 incorporó mecanismos de renovación automática.",
+   "La norma 2025 mantiene el registro dentro del sistema nacional."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NOTARIA": {
+  "razon": "No hay una seña específica para 'notaría' en el catálogo. Aunque existe 'NOTARIO', esta palabra se refiere al lugar y no hay una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Busca una notaría específica?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NOTARIO": {
+  "razon": "No hay una seña específica para 'notario' en el catálogo. Aunque el concepto existe, no hay una seña equivalente en la lista proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "DIRNOPLU ofrece un buscador de notarios."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NUESTRAS": {
+  "razon": "No hay una seña específica para 'nuestras' en el catálogo. Aunque existe 'NUESTROS', esta palabra es un posesivo plural femenino y no hay una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Queremos reconocer nuestras firmas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NUMERO": {
+  "razon": "Aunque hay señas para números del 0 al 9, no hay una seña específica para 'número' como concepto general en el catálogo. Las frases hacen referencia a números específicos o identificadores, pero no hay una seña equivalente para la palabra 'número' en sí.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No recuerdo esos números.",
+   "¿Ese número aparece en la página municipal?",
+   "¿Qué número de juzgado aparece?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OCTUBRE": {
+  "razon": "No hay una seña específica para 'octubre' en el catálogo. Aunque existe 'JULIO', 'MARZO', entre otros meses, octubre no tiene una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OCURRIDO": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'lo ocurrido' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Cuente lo ocurrido con sus propias palabras.",
+   "¿Trajo algún relato de lo ocurrido?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OCURRIR": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'ocurrir' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Describa cuándo y dónde ocurrió.",
+   "Ocurrió ayer en una calle del centro.",
+   "¿La estafa ocurrió por internet o presencialmente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OFRECER": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'ofrecer' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SERECI ofrece venta de certificados duplicados."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ORIENTACION": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'orientación' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Llamaré para pedir orientación.",
+   "¿Necesita primero orientación legal o psicológica?",
+   "¿Viene a denunciar o necesita orientación?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ORIENTAR": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'orientar' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El equipo puede orientar su ruta de atención.",
+   "Necesito orientación.",
+   "Quiero recibir orientación hoy."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ORIGINAL": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'original' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo el certificado médico original.",
+   "¿Tiene certificado de nacimiento original computarizado?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OTRA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'otra' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si la otra persona vendrá."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OTRO": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'otro' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras.",
+   "Necesito otro certificado de defunción de mi padre.",
+   "No, pertenece a otra persona."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PADRE": {
+  "razon": "Aunque existe la seña 'HERMANO' y 'HIJO', ninguna seña del catálogo significa exactamente 'padre' en esas frases. 'PADRE' no está en la lista.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito otro certificado de defunción de mi padre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PAGAR": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente 'pagar' en esas frases.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Confirmaré antes de pagar.",
+   "Consulte primero el monto actualizado antes de pagar.",
+   "No puedo pagar toda la deuda del auto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PAGO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'pago' en el contexto de buscar en una boleta de pago anterior.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede buscarlos en una boleta de pago anterior."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PARTICIPAR": {
+  "razon": "Aunque 'PARTICIPAR' podría relacionarse con 'ACOMPAÑAR' o 'ASISTENCIA', ninguna seña del catálogo significa exactamente 'participar directamente en mi audiencia'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero participar directamente en mi audiencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PARTICULAR": {
+  "razon": "No hay una seña en el catálogo que signifique exactamente 'abogado particular' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuenta con abogado particular?",
+   "¿Tiene actualmente abogado particular?",
+   "¿Ya tiene abogado particular?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PASAR": {
+  "razon": "Las frases indican acciones específicas como 'pasarlo a mi nombre' o 'saber qué pasó', que no se corresponden exactamente con ninguna seña del catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Compré un auto. Quiero pasarlo a mi nombre.",
+   "Quiero saber qué pasó con mi denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PATROCINIO": {
+  "razon": "No hay una seña para 'patrocinio' en el catálogo, aunque 'APOYO' podría estar relacionado, no es equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PENAL": {
+  "razon": "No hay una seña específica para 'penal' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Su consulta es urgente y penal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERCENT": {
+  "razon": "No hay una seña para 'por ciento' o 'treinta por ciento' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Le dijeron que necesita treinta por ciento?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERMITIDO": {
+  "razon": "Aunque existe 'PERMITIR', la forma 'permitido' como adjetivo no tiene una seña equivalente en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe acreditar la relación permitida y su identidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERMITIR": {
+  "razon": "Aunque 'PERMITIR' existe en el catálogo, en este contexto se refiere a 'debe permitir comunicación accesible', lo cual no tiene una seña específica que cubra ese uso.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La atención debe permitir comunicación accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERO": {
+  "razon": "No hay una seña para 'pero' en el catálogo proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo cédula, pero no traje CRPVA."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERSONA": {
+  "razon": "Aunque 'persona' puede relacionarse con 'Hombre' o 'Mujer', no hay una seña específica que cubra el término genérico 'persona' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé quién fue la persona.",
+   "No sé si la otra persona vendrá.",
+   "No, pertenece a otra persona."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERSONALMENTE": {
+  "razon": "No existe una seña específica para 'personalmente' en el catálogo. La idea de 'ir personalmente' no tiene una seña directa que la represente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Quiero ir personalmente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERTENECER": {
+  "razon": "Aunque 'MIÓ' puede indicar posesión, no captura completamente el significado de 'pertenecer' como relación de propiedad o asociación en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No. El lote pertenece a mi hermana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PISO": {
+  "razon": "No hay una seña específica para 'piso' en el sentido de nivel o piso de un edificio en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Está en el Centro Internacional de Convenciones, piso uno."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PLACA": {
+  "razon": "Aunque 'SELLO' puede referirse a un sello oficial, no es equivalente a 'placa' de vehículo. No hay una seña que signifique 'placa' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Tiene la placa actual del vehículo?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PLAN": {
+  "razon": "No hay una seña específica para 'plan' en el sentido de un plan de cuotas o programa. El término es demasiado genérico y no tiene una seña directa en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Quiere solicitar un Plan Cuotas?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PLAZUELA": {
+  "razon": "No existe una seña específica para 'plazuela' en el catálogo. El término se refiere a un espacio público pequeño y no tiene una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Está en calle 16 de Julio 680, Plazuela Constitución."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "POBLACION": {
+  "razon": "Aunque 'COMUNIDAD_SORDA' se refiere a una comunidad específica, 'población' es un término más amplio que no tiene una seña directa en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La DNA atiende situaciones de protección de esta población."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PODER": {
+  "razon": "'PODER' puede relacionarse con la capacidad o habilidad, pero no hay una seña específica que capture todos los usos del término en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La renovación puede solicitarse desde seis meses antes.",
+   "No sé cuándo podré ir.",
+   "Registraremos los datos que usted pueda aportar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PONER": {
+  "razon": "Aunque 'DAR' puede implicar la acción de poner, no captura completamente el significado de 'poner' en el contexto de registrar algo a nombre de alguien.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Compré una casa. Quiero ponerla a mi nombre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "POSIBLE": {
+  "razon": "Ninguna seña del catálogo significa exactamente \"posible\" en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede acudir a la Defensoría por posible vulneración de derechos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRECIO": {
+  "razon": "No hay una seña en el catálogo que signifique específicamente \"precio\".",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entonces quiero confirmar el precio primero.",
+   "¿El precio es igual al de defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PREGUNTA": {
+  "razon": "Aunque existe la seña CÓMO, esta no equivale a \"pregunta\" como sustantivo en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero entender todas las preguntas de la denuncia.",
+   "¿Cuenta con abogado particular?",
+   "¿Puede acudir presencialmente ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PREGUNTAR": {
+  "razon": "No hay una seña que signifique específicamente \"preguntar\" como verbo en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito hacerle algunas preguntas sobre la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRESENCIAL": {
+  "razon": "No hay una seña que signifique específicamente \"presencial\" en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿La estafa ocurrió por internet o presencialmente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRESENCIALMENTE": {
+  "razon": "Es una forma adverbial de \"presencial\"; no hay seña correspondiente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Puede acudir presencialmente ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRIMERO": {
+  "razon": "Aunque existe la seña PRIMERA_VEZ, esta no equivale al adverbio \"primero\" en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entonces quiero confirmar el precio primero.",
+   "Lo confirmaré primero.",
+   "No. Primero necesito llamar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PROCEDIMIENTO": {
+  "razon": "No hay una seña que signifique específicamente \"procedimiento\".",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PROCESO": {
+  "razon": "No hay una seña que signifique específicamente \"proceso\" en estos contextos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El proceso es contra mí.",
+   "Primero debe seguir el proceso de calificación correspondiente.",
+   "Quiero saber cómo está mi proceso."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PROPIO": {
+  "razon": "No hay una seña que signifique específicamente \"propio\" como posesivo o adjetivo en los ejemplos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Cuente lo ocurrido con sus propias palabras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PSICOLOGICA": {
+  "razon": "No hay una seña específica para 'psicológica' en el catálogo. Aunque se menciona 'necesito ayuda', no existe una seña que combine específicamente 'ayuda psicológica'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito ayuda legal y psicológica.",
+   "¿Necesita primero orientación legal o psicológica?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PUBLICADO": {
+  "razon": "No hay una seña específica para 'publicado' en el catálogo. Aunque se menciona 'tarifa publicada', no existe una seña que combine específicamente 'publicado' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La certificación de firmas tiene arancel publicado específico."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PUBLICAR": {
+  "razon": "No hay una seña específica para 'publicar' en el catálogo. Aunque se menciona 'tarifa publicada', no existe una seña que combine específicamente 'publicar' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "QUEDAR": {
+  "razon": "No hay una seña específica para 'quedar' en el catálogo. Aunque se menciona 'no sé dónde quedó', no existe una seña que combine específicamente 'quedar' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Fue extravío. No sé dónde quedó."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "QUITAR": {
+  "razon": "No hay una seña específica para 'quitar' en el catálogo. Aunque se menciona 'me quitaron el celular', no existe una seña que combine específicamente 'quitar' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Fue robo. Me quitaron el celular."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RADICAR": {
+  "razon": "No hay una seña específica para 'radicar' en el catálogo. Aunque se menciona '¿El vehículo está radicado en Cochabamba?', no existe una seña que combine específicamente 'radicar' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿El vehículo está radicado en Cochabamba?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RECLAMO": {
+  "razon": "No hay una seña específica para 'reclamo' en el catálogo. Aunque se menciona 'quiero presentar mi reclamo', no existe una seña que combine específicamente 'reclamo' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero presentar mi reclamo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RECOCNER": {
+  "razon": "No hay una seña específica para 'reconocer' en el catálogo. Aunque se menciona 'queremos reconocer nuestras firmas', no existe una seña que combine específicamente 'reconocer' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Queremos reconocer nuestras firmas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REEMPLAZAR": {
+  "razon": "No hay una seña específica para 'reemplazar' en el catálogo. Aunque se menciona 'documento reemplazado', no existe una seña que combine específicamente 'reemplazar' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La reposición mantiene la vigencia del documento reemplazado."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGISTRADO": {
+  "razon": "No hay una seña específica para 'registrado' en el catálogo. Aunque se menciona 'está registrado aquí' y 'está registrado en Cochabamba', no existe una seña que combine específicamente 'registrado' en este contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí. Está registrado aquí.",
+   "Sí. Está registrado en Cochabamba."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGISTRAR": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'registrar' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero que quede registrada mi solicitud.",
+   "Registraremos su necesidad de comunicación accesible.",
+   "Sí. La casa está registrada a mi nombre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGISTRO": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'registro' en el contexto de mantener información en un sistema nacional.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La norma 2025 mantiene el registro dentro del sistema nacional."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGLAMENTO": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'reglamento' en el contexto de validar datos con SERECI.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El reglamento exige validarlo con los datos de SERECI."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RELACION": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'relación' en el contexto de acreditar permisos y identidad.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe acreditar la relación permitida y su identidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RELATO": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'relato' en el contexto de traer información sobre lo ocurrido.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Trajo algún relato de lo ocurrido?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RENOVACION": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'renovación' en el contexto de mecanismos automáticos en normas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La norma 2025 incorporó mecanismos de renovación automática."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RENOVAR": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'renovar' en el contexto de actualizar un documento o permiso.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entonces ya puedo renovarla."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REPOSICION": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'reposición' en el contexto de realizar una acción nuevamente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Haré la reposición."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REPRESENTAR": {
+  "razon": "Ninguna seña del catálogo significa exactamente 'representar' en el contexto de seguir actuando en nombre de alguien.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si sigue representándome."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RESPONDER": {
+  "razon": "Aunque la seña 'CONTAR' podría interpretarse como dar una respuesta, no coincide exactamente con el significado de 'responder' en los contextos dados, donde implica comprender antes de contestar.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No quiero responder sin comprender bien.",
+   "No responderé cosas que no comprendo.",
+   "Puedo responder."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REVISAR": {
+  "razon": "Ninguna seña del catálogo significa revisar información, normas o fechas y modalidad.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debemos revisar la información de su expediente.",
+   "Depende de su grado y situación; revise la norma aplicable.",
+   "Quiero revisar fecha y modalidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RUTA": {
+  "razon": "Ninguna seña del catálogo significa ruta de atención o activación de rutas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El equipo puede orientar su ruta de atención.",
+   "FELCV atiende hechos de violencia y activa la ruta correspondiente.",
+   "Para violencia corresponde activar la ruta de FELCV."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SACAR": {
+  "razon": "Ninguna seña del catálogo significa sacar documentos como cédula o carnet de discapacidad.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito sacar mi cédula por primera vez.",
+   "Quiero sacar mi carnet de discapacidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SALIR": {
+  "razon": "Ninguna seña del catálogo significa salir en el contexto de confirmar antes de salir.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Debo confirmar antes de salir?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEDE": {
+  "razon": "Ninguna seña del catálogo significa sede en el contexto de confirmar sede y horario.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Primero confirmaré la sede y horario.",
+   "Primero confirmaré la sede."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEGURO": {
+  "razon": "Ninguna seña del catálogo significa estar en un lugar seguro.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Está en un lugar seguro ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEIS": {
+  "razon": "La glosa '6' representa el número seis, usado en la frase 'desde seis meses antes'.",
+  "origen": "bedrock",
+  "sena": "6",
+  "estado": "aprobada",
+  "ejemplos": [
+   "La renovación puede solicitarse desde seis meses antes."
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": false,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "SER": {
+  "razon": "Ninguna seña del catálogo significa ser en los contextos dados (identidad o pregunta sobre persona denunciada/víctima).",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé cuáles son.",
+   "¿Usted es la persona denunciada o la víctima?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SERVICIO": {
+  "razon": "Ninguna seña del catálogo significa servicio en los contextos de derivación, violencia familiar o víctimas.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Debe ser derivado al servicio especializado contra la violencia.",
+   "El servicio para violencia familiar figura actualizado en 2026.",
+   "Entiendo. Iré al servicio para víctimas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SERVIR": {
+  "razon": "Ninguna seña del catálogo significa servir en el contexto de servir copia.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si sirve copia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEÑALAMIENTO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'señalamiento' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La modalidad depende del señalamiento de su expediente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEÑAS": {
+  "razon": "«Necesito comunicarme usando lengua de señas.»",
+  "origen": "bedrock",
+  "descartada": "LENGUA_DE_SEÑAS",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Me negaron atención porque necesito lengua de señas.",
+   "Necesito comunicarme usando lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SIGA": {
+  "razon": "No hay una seña equivalente en el catálogo para 'siga' en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SIGUIR": {
+  "razon": "Aunque 'CONTINUAR' existe, no coincide exactamente con el uso de 'sigue' en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿El trámite sigue usando el sistema SIPRUNPCD?",
+   "¿Entonces aquí no sigo el trámite?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SISTEMA": {
+  "razon": "No hay una seña equivalente en el catálogo para 'sistema' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La norma 2025 mantiene el registro dentro del sistema nacional.",
+   "¿El trámite sigue usando el sistema SIPRUNPCD?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SITUACION": {
+  "razon": "No hay una seña equivalente en el catálogo para 'situación' en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Depende de su grado y situación; revise la norma aplicable.",
+   "La DNA atiende situaciones de protección de esta población."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOBRINO": {
+  "razon": "No hay una seña equivalente en el catálogo para 'sobrino'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Vine por violencia contra mi sobrino adolescente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOLICITAR": {
+  "razon": "Aunque 'PEDIR' existe, no coincide exactamente con el uso formal de 'solicitar' en los contextos proporcionados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La renovación puede solicitarse desde seis meses antes.",
+   "No sé cómo solicitarlo.",
+   "Quiero solicitar ese certificado."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOLICITUD": {
+  "razon": "No hay una seña equivalente en el catálogo para 'solicitud'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero que quede registrada mi solicitud."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOLO": {
+  "razon": "Aunque 'SOLO' existe como palabra, no hay una seña equivalente en el catálogo para los usos dados de 'solo' como adverbio o conjunción.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No entiendo bien explicaciones solo habladas.",
+   "No tengo memorial. Solo traje mi cédula.",
+   "¿Su deuda corresponde solamente a 2025?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TAMBIEN": {
+  "razon": "Ninguna seña del catálogo significa exactamente \"también\" en los ejemplos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero recibir instrucciones claras por escrito también.",
+   "¿Puedo verificar también el documento después?",
+   "¿También tienen línea gratuita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TARDAR": {
+  "razon": "Ninguna seña del catálogo significa exactamente \"tardar\" en el ejemplo dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cuánto tarda en ciudad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TEXTO": {
+  "razon": "Ninguna seña del catálogo significa exactamente \"texto\" en los ejemplos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito texto e intérprete.",
+   "Quiero texto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "THIRTY": {
+  "razon": "La palabra \"thirty\" significa treinta, pero no hay una seña específica para el número treinta en el catálogo; las señas de números van hasta 9.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Le dijeron que necesita treinta por ciento?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TIEMPO": {
+  "razon": "Aunque existe la seña TIEMPO, en el ejemplo \"Falta más tiempo\" se refiere a duración o lapso, para lo cual no hay una seña equivalente específica en el catálogo que cubra exactamente ese uso.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Falta más tiempo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TIPO": {
+  "razon": "Ninguna seña del catálogo significa exactamente \"tipo\" en el ejemplo dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Qué tipo de apoyo necesita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TITULAR": {
+  "razon": "Ninguna seña del catálogo significa exactamente \"titular\" en el ejemplo dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí, soy titular."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TODO": {
+  "razon": "Aunque existe la seña TODO, en los ejemplos dados se usa como \"toda la deuda\" o \"revisar todo\", pero no hay una seña que cubra exactamente ese significado en esos contextos específicos.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No puedo pagar toda la deuda del auto.",
+   "Quiero revisar todo antes de pagar.",
+   "Sí, tengo todo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TODOS": {
+  "razon": "Aunque existe la seña TODOS, en el ejemplo dado se usa para referirse a \"todas las preguntas\", pero no hay una seña que signifique exactamente eso en ese contexto.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero entender todas las preguntas de la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRAE": {
+  "razon": "Ninguna seña del catálogo significa exactamente \"trae\" en el ejemplo dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No la traje."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRAJE": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique \"traje\" en la frase \"Ya la traje escrita.\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Ya la traje escrita."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRANSFERENCIA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique \"transferencia\" en la frase \"Tengo capturas y comprobante de transferencia.\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Tengo capturas y comprobante de transferencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRIBUNAL": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique \"tribunal\" en la frase \"SIREJ indica acudir a información del Tribunal.\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SIREJ indica acudir a información del Tribunal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRIBUNAL_DEPARTAMENTAL": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique \"tribunal departamental\" en la frase \"¿Dónde está el Tribunal Departamental?\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Dónde está el Tribunal Departamental?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "UNO": {
+  "razon": "La seña '1' significa exactamente \"uno\" en la frase \"Está en el Centro Internacional de Convenciones, piso uno.\"",
+  "origen": "bedrock",
+  "sena": "1",
+  "estado": "aprobada",
+  "ejemplos": [
+   "Está en el Centro Internacional de Convenciones, piso uno."
+  ],
+  "fecha": "2026-09-27",
+  "misma_raiz": false,
+  "revisado": true,
+  "revisadoEl": "2026-09-27"
+ },
+ "URBANA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique \"urbana\" en la frase \"El Ministerio informó cuatro días para el área urbana.\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El Ministerio informó cuatro días para el área urbana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "USANDO": {
+  "razon": "Aunque hay una seña 'USAR', no hay una seña específica para \"usando\" que coincida exactamente en la frase \"Necesito comunicarme usando lengua de señas.\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Necesito comunicarme usando lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "USAR": {
+  "razon": "La seña 'USAR' no coincide exactamente con los contextos dados. En las frases \"No sé usarlo.\" y \"Tengo el caso, pero no sé usarlo.\" se refiere al uso de algo específico, pero la seña 'USAR' es más general. En \"Usaré un canal accesible.\" tampoco hay una seña equivalente específica.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé usarlo.",
+   "Tengo el caso, pero no sé usarlo.",
+   "Usaré un canal accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "USTED": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique \"usted\" en la frase \"¿Usted está denunciado o es víctima?\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Usted está denunciado o es víctima?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VALIDAR": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique \"validar\" en la frase \"El reglamento exige validarlo con los datos de SERECI.\"",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "El reglamento exige validarlo con los datos de SERECI."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VALIDO": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «válido» en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si es válido."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VEHICULO": {
+  "razon": "Aunque existe la seña VEHICULO, no está en el catálogo proporcionado. Por lo tanto, no se puede asignar una seña equivalente.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Busca deuda de inmueble o vehículo?",
+   "¿El vehículo está radicado en Cochabamba?",
+   "¿Su deuda es de vehículo, inmueble o actividad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VENCER": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «vencido» o «venció» en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Está vencido.",
+   "No está vencido.",
+   "¿Su cédula ya venció?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VENTA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «venta» en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "SERECI ofrece venta de certificados duplicados."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VERBALMENTE": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «verbalmente» en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero hacerlo verbalmente.",
+   "Verbalmente.",
+   "¿Desea denunciar verbalmente o trae escrito?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VERIFICAR": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «verificar» en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Puedo verificar también el documento después?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VICTIMA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «víctima» en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entiendo. Iré al servicio para víctimas.",
+   "Fui víctima de robo. Necesito abogado gratuito.",
+   "Para víctimas, consulte SEPDAVI u otro servicio competente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIENES": {
+  "razon": "Aunque existe la seña VIERNES, «VIENES» parece ser un error tipográfico o una forma incorrecta de referirse al día «viernes». Por lo tanto, no se puede asignar una seña equivalente basada en el catálogo proporcionado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Viene a registrar una defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIGENCIA": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «vigencia» en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La reposición mantiene la vigencia del documento reemplazado."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIGENTE": {
+  "razon": "No hay una seña equivalente en el catálogo que signifique exactamente «vigente» en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si están vigentes.",
+   "¿La dirección sigue vigente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIRTUAL": {
+  "razon": "No hay una seña equivalente en el catálogo para 'atención virtual' o 'audiencia virtual'.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Desde 2026 existe atención virtual en LSB.",
+   "No sé si mi audiencia es virtual."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VULNERACION": {
+  "razon": "No hay una seña específica para 'vulneración de derechos' en el catálogo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede acudir a la Defensoría por posible vulneración de derechos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "YA": {
+  "razon": "Aunque 'YA' puede implicar 'ahora' o 'ya', no hay una seña directa que coincida exactamente en los contextos dados.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Entonces ya puedo renovarla.",
+   "Ya la traje escrita.",
+   "¿Su cédula ya venció?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "YES": {
+  "razon": "No hay una seña para 'yes' en el catálogo; se podría usar 'SÍ', pero no está en la lista proporcionada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Le dijeron que necesita treinta por ciento?"
+  ],
+  "fecha": "2026-09-27"
+ }
+}

@@ -159,6 +159,28 @@ class RagTopic {
   });
 }
 
+extension RagCorpusQuestions on RagCorpus {
+  /// Turno del funcionario de [scenarioId] al que responde [replyText]
+  /// (la respuesta siguiente o una respuesta alternativa), o `null`.
+  ///
+  /// La búsqueda por significado de la Lambda devuelve la respuesta, no el
+  /// turno: con esto se abre el mismo paso del trámite que con la búsqueda
+  /// por palabras.
+  int? questionTurnOf(String scenarioId, String replyText) {
+    for (final s in scenarios) {
+      if (s.id != scenarioId) continue;
+      for (final t in s.turns) {
+        if (t.speaker != RagSpeaker.official) continue;
+        if (s.turn(t.n + 1)?.text == replyText) return t.n;
+      }
+      for (final v in s.variants) {
+        if (v.replies.any((r) => r.text == replyText)) return v.turn;
+      }
+    }
+    return null;
+  }
+}
+
 extension RagCorpusTopics on RagCorpus {
   /// Lo que la persona sorda puede decir para iniciar, por institución: la
   /// frase con que abrió cada situación y sus preguntas. Se dejan fuera las
@@ -192,10 +214,14 @@ extension RagCorpusTopics on RagCorpus {
     final seen = <String>{};
     final out = <RagProcedure>[];
     for (final s in scenarios) {
+      final firstDeaf = s.turns.cast<RagTurn?>().firstWhere(
+        (t) => t?.speaker == RagSpeaker.deaf,
+        orElse: () => null,
+      );
       final phrases = [
         for (final t in s.turns)
           if (t.isOfferableReply &&
-              (t.n == 1 || t.text.contains('?')) &&
+              (identical(t, firstDeaf) || t.text.contains('?')) &&
               !_anaphoric.hasMatch(t.text) &&
               seen.add(t.text))
             t,

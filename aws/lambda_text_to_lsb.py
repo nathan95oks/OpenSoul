@@ -1686,6 +1686,10 @@ def _lectura_de_clausula(clausula: str) -> tuple:
                 ranuras.append(_SLOT_POR_NUCLEO_HABLADO[nucleo])
             elif clave == "COMO" and nucleo in _SLOT_TRAS_COMO_HABLADO:
                 ranuras.append(_SLOT_TRAS_COMO_HABLADO[nucleo])
+            elif (clave == "QUE" and
+                  any(p.startswith(("ROB", "QUIT", "LLEV"))
+                      for p in claves)):
+                ranuras.append("object")
     return ranuras, interrogativa
 
 

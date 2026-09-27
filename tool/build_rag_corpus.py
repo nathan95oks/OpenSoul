@@ -46,9 +46,17 @@ RAG = os.path.join(ROOT, "docs", "negocio", "rag")
 ESCENARIOS = os.path.join(RAG, "escenarios")
 DOCUMENTOS = os.path.join(RAG, "documentos")
 SALIDA = os.path.join(ROOT, "assets", "rag", "escenarios_cbba.json")
+# Los trámites como recorridos del banco de preguntas (familia «Trámites» del
+# módulo de tarjetas LSB): cada pregunta del funcionario es un paso y las
+# respuestas documentadas de la persona sorda son sus opciones.
+SALIDA_TRAMITES = os.path.join(ROOT, "lib", "core", "domain", "rag",
+                               "tramites_data.g.dart")
 # Glosas de las frases del usuario sordo, traducidas una vez por la Lambda
 # Texto→LSB (tool/rag_precalcular_glosas.py). Se leen sin red.
 GLOSAS = os.path.join(RAG, "glosas_cache.json")
+# Señas del catálogo equivalentes a palabras sin seña (tool/rag_equivalencias.py).
+# Solo se usan las aprobadas.
+EQUIVALENCIAS = os.path.join(RAG, "senas_equivalentes.json")
 
 # Un hecho con plazo («hasta el 2026-10-05») deja de valer al pasar la fecha.
 _HASTA = re.compile(r"hasta\s+(?:el\s+)?(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
@@ -358,6 +366,9 @@ def construir(fuentes, hechos, escenarios, errores, avisos,
                 motivos.append("dato_sin_verificar")
             if any(hechos.get(h, {}).get("vencido") for h in citados):
                 motivos.append("dato_vencido")
+            if any(hechos.get(h, {}).get("vigenciaSinConfirmar")
+                   for h in citados):
+                motivos.append("vigencia_sin_confirmar")
             if rol == "funcionario" and _META.search(texto):
                 motivos.append("habla_de_la_fuente")
             if rol == "sordo":
@@ -444,23 +455,274 @@ def construir(fuentes, hechos, escenarios, errores, avisos,
     }
 
 
+# Una palabra sin seña en el catálogo del avatar. La Lambda la deletrea
+# (F-O-L-I-O), pero no es LSB: es una seña que falta. Se muestra como
+# «seña a incorporar» con la palabra, y queda en la lista de vocabulario por
+# crecer. Las siglas (NUREJ, CRPVA) sí se deletrean en LSB y no se tocan.
+SENA_PENDIENTE = "SENA_PENDIENTE:"
+
+
+def _es_letra(glosa: str) -> bool:
+    return len(glosa) == 1 and glosa.isalpha()
+
+
+def _es_sigla(palabra: str, texto: str) -> bool:
+    """Si en el texto la palabra aparece escrita como sigla (NUREJ, WebID)."""
+    for w in re.findall(r"\w+", texto):
+        if _norm(w) == _norm(palabra) and sum(c.isupper() for c in w) >= 2:
+            return True
+    return False
+
+
+def _es_nombre_propio(palabras: list, texto: str) -> bool:
+    """Si las palabras van seguidas en el texto y todas con mayúscula."""
+    w = re.findall(r"\w+", texto)
+    n = len(palabras)
+    return any(
+        all(_norm(a) == _norm(b) and a[:1].isupper()
+            for a, b in zip(w[i:i + n], palabras))
+        for i in range(len(w) - n + 1))
+
+
+def _mayuscula_interior(palabra: str, texto: str) -> bool:
+    """Si [palabra] va con mayúscula dentro de la frase: es un nombre propio
+    («Folio Real», «Derechos Reales») y no se cambia por otra seña."""
+    for m in re.finditer(r"\w+", texto):
+        antes = texto[:m.start()].rstrip()
+        if (_norm(m.group()) == _norm(palabra) and m.group()[:1].isupper()
+                and antes and antes[-1] not in ".?!¿¡:"):
+            return True
+    return False
+
+
+def cargar_equivalencias(ruta: str = EQUIVALENCIAS) -> dict:
+    """{palabra normalizada: seña} de las equivalencias aprobadas."""
+    if not os.path.exists(ruta):
+        return {}
+    with open(ruta, encoding="utf-8") as f:
+        datos = json.load(f)
+    return {_norm(p.replace("_", " ")): e["sena"] for p, e in datos.items()
+            if e.get("estado") == "aprobada" and e.get("sena")}
+
+
+def marcar_senas_pendientes(glosas: list | None, correcciones: list,
+                            texto: str,
+                            equivalencias: dict | None = None) -> list | None:
+    """Cambia cada palabra deletreada por no tener seña en una seña pendiente.
+
+    La Lambda informa en `correcciones` («concepto_sin_catalogo») qué palabras
+    deletreó, en orden. Si las letras no coinciden con la palabra informada
+    se dejan tal cual: mejor deletreo que una palabra equivocada. Dos señas
+    pendientes seguidas que en el texto forman un nombre propio («Derechos
+    Reales», «Folio Real») son una sola; «es mi fiscal» no.
+    """
+    if not glosas:
+        return glosas
+    palabras = [c["palabra"] for c in correcciones
+                if c.get("accion") == "concepto_sin_catalogo" and c.get("palabra")]
+    salida, i = [], 0
+    while i < len(glosas):
+        if not _es_letra(glosas[i]) or not palabras:
+            salida.append(glosas[i])
+            i += 1
+            continue
+        # La Lambda informa las palabras en el orden del español; las glosas
+        # van en el orden de LSB. Se busca la que empieza aquí (la más larga,
+        # para que «DE» no se coma el comienzo de «DENUNCIA»).
+        def letras_de(p: str) -> list:
+            return [c for c in _norm(p).upper() if c.isalnum()]
+
+        candidatas = [
+            p for p in palabras
+            if [_norm(g).upper() for g in glosas[i:i + len(letras_de(p))]]
+            == letras_de(p)]
+        if not candidatas:
+            salida.append(glosas[i])
+            i += 1
+            continue
+        palabra = max(candidatas, key=lambda p: len(letras_de(p)))
+        letras = letras_de(palabra)
+        palabras.remove(palabra)
+        equivalente = (equivalencias or {}).get(_norm(palabra.replace("_", " ")))
+        if _es_sigla(palabra, texto):
+            salida.extend(glosas[i:i + len(letras)])
+        elif equivalente and not _mayuscula_interior(palabra, texto):
+            # Una seña oficial que significa lo mismo (revisada o con
+            # evidencia del catálogo): se hace la seña, no se espera. Si la
+            # frase ya la tiene («CUANTOS … C-U-A-N-T-O»), no se repite.
+            if _norm(equivalente) not in {_norm(g) for g in glosas
+                                          if not _es_letra(g)}:
+                salida.append(equivalente)
+        else:
+            nombre = palabra.upper().replace(" ", "_")
+            anterior = salida[-1] if salida else ""
+            if (anterior.startswith(SENA_PENDIENTE)
+                    and _es_nombre_propio(anterior[len(SENA_PENDIENTE):]
+                                          .split("_") + [palabra], texto)):
+                salida[-1] = f"{anterior}_{nombre}"
+            else:
+                salida.append(SENA_PENDIENTE + nombre)
+        i += len(letras)
+    return salida
+
+
+def senas_pendientes(corpus: dict) -> dict:
+    """Palabras sin seña del corpus y cuántas tarjetas las usan."""
+    cuenta = {}
+    for e in corpus["escenarios"]:
+        tarjetas = e["turnos"] + [r for p in e["variantes"] for r in p["respuestas"]]
+        for t in tarjetas:
+            for g in t.get("glosas") or []:
+                if g.startswith(SENA_PENDIENTE):
+                    palabra = g[len(SENA_PENDIENTE):].replace("_", " ")
+                    cuenta[palabra] = cuenta.get(palabra, 0) + 1
+    return cuenta
+
+
+def _ofrecible(t: dict) -> bool:
+    """Una respuesta de la persona sorda que se puede ofrecer como tarjeta."""
+    return (t.get("rol", "sordo") == "sordo" and t["mostrable"]
+            and bool(t.get("glosas")))
+
+
+def respuestas_de(e: dict, n: int) -> list:
+    """Lo que respondió la persona sorda al turno [n] del funcionario."""
+    siguiente = next((t for t in e["turnos"] if t["n"] == n + 1), None)
+    out = [siguiente] if siguiente and siguiente["rol"] == "sordo" else []
+    out += [r for p in e["variantes"] if p["turno"] == n for r in p["respuestas"]]
+    return [t for t in out if _ofrecible(t)]
+
+
+def turnos_pregunta(e: dict) -> list:
+    """Turnos del funcionario que se responden con tarjetas.
+
+    Son las mismas claves que busca `RagRetriever`: un turno mostrable del
+    funcionario con alguna respuesta que se puede ofrecer.
+    """
+    return [t for t in e["turnos"]
+            if t["rol"] == "funcionario" and t["mostrable"]
+            and respuestas_de(e, t["n"])]
+
+
+_EMOJI_AREA = {
+    "SEGIP": "🪪", "SERECI": "📜", "FELCC": "🚓", "FELCV": "🛡️", "FIS": "⚖️",
+    "OJ": "🏛️", "SEPDEP": "🧑‍⚖️", "SEPDAVI": "🧑‍⚖️", "IMP": "💰",
+    "DDRR": "🏠", "NOT": "✍️", "SLIM": "🤝", "DNA": "🧒", "DISC": "♿",
+    "LSB": "🤟",
+}
+
+
+def _estado(texto: str) -> str:
+    t = _norm(texto)
+    if t.startswith("no se") or t.startswith("no recuerdo"):
+        return "desconocido"
+    if re.match(r"no\b", t):
+        return "negado"
+    return "afirmado"
+
+
+def banco_tramites(corpus: dict) -> dict:
+    """Preguntas, recorridos y contextos de la familia «Trámites».
+
+    Una pregunta por turno del funcionario con respuestas (`R.<escenario>.<n>`,
+    el mismo turno que encuentra el RAG), con su formulación en LSB y una
+    opción por respuesta documentada distinta. Un recorrido por trámite.
+    """
+    preguntas, recorridos, contextos = [], {}, []
+    for e in corpus["escenarios"]:
+        pasos = []
+        for t in turnos_pregunta(e):
+            qid = f"R.{e['id']}.{t['n']}"
+            opciones, vistas = [], set()
+            for r in respuestas_de(e, t["n"]):
+                if r["texto"] in vistas:
+                    continue
+                vistas.add(r["texto"])
+                opciones.append({
+                    "estado": _estado(r["texto"]),
+                    "etiqueta": r["texto"],
+                    "frase": r["texto"],
+                    "glosas": r["glosas"],
+                    "glosasPropias": True,
+                    "id": f"r{len(opciones) + 1}",
+                })
+            glosas = t.get("glosas") or []
+            preguntas.append({
+                "acto": "pregunta" if "?" in t["texto"] else "indicacion",
+                "campo": "tramite",
+                "campos": ["tramite"],
+                "control": "seleccion_unica",
+                "dominio": "tramite",
+                "entidad": "Tramite",
+                "formulacion": t["texto"],
+                "formulacionLsb": {
+                    "estado": "GRAMMAR_PROVISIONAL",
+                    "glosas": glosas,
+                    "utilizable": bool(glosas),
+                },
+                "id": qid,
+                "modo": "frase",
+                "noOfrecer": [],
+                "nodos": [],
+                "opciones": opciones,
+                "variantes": [],
+            })
+            pasos.append({"pregunta": qid})
+        if not pasos:
+            continue
+        area = e["id"].split("-")[1]
+        cid = "tramite_" + e["id"].lower().removeprefix("esc-").replace("-", "_")
+        recorridos[cid] = {"nombre": e["tramite"], "pasos": pasos}
+        contextos.append({
+            "id": cid,
+            "nombre": e["tramite"],
+            "institucion": e["institucion"],
+            "area": area,
+            "emoji": _EMOJI_AREA.get(area, "📄"),
+            "escenario": e["id"],
+        })
+    return {"preguntas": preguntas, "recorridos": recorridos,
+            "contextos": contextos}
+
+
+def dart_tramites(banco: dict) -> str:
+    datos = json.dumps(banco, ensure_ascii=False, sort_keys=True,
+                       separators=(",", ":"))
+    assert "'''" not in datos
+    return (
+        "// GENERADO por tool/build_rag_corpus.py desde el corpus RAG\n"
+        "// (docs/negocio/rag/escenarios/*.md y glosas_cache.json). No editar a mano.\n"
+        "\n"
+        "/// Trámites de Cochabamba como recorridos del banco de preguntas: cada\n"
+        "/// pregunta del funcionario con sus glosas y las respuestas documentadas\n"
+        "/// de la persona sorda como opciones. Lo lee `RagTramites`.\n"
+        f"const String kRagTramitesJson = r'''{datos}''';\n"
+    )
+
+
 def poner_glosas(corpus: dict, avisos: list) -> None:
     """Glosas precalculadas en cada tarjeta del usuario sordo que se muestra."""
     cache = {}
     if os.path.exists(GLOSAS):
         with open(GLOSAS, encoding="utf-8") as f:
             cache = json.load(f)
+    equivalencias = cargar_equivalencias()
     faltan = 0
     for e in corpus["escenarios"]:
         tarjetas = [t for t in e["turnos"] if t["rol"] == "sordo"]
         tarjetas += [r for p in e["variantes"] for r in p["respuestas"]]
-        for t in tarjetas:
-            if not t["mostrable"]:
-                continue
-            traduccion = cache.get(t["texto"])
-            t["glosas"] = traduccion["glosas"] if traduccion else None
-            if traduccion is None:
-                faltan += 1
+        # Primero las respuestas: qué turnos del funcionario son preguntas
+        # de un trámite depende de que tengan alguna respuesta con glosas.
+        for fase in (tarjetas, None):
+            for t in fase if fase is not None else turnos_pregunta(e):
+                if not t["mostrable"]:
+                    continue
+                traduccion = cache.get(t["texto"])
+                t["glosas"] = marcar_senas_pendientes(
+                    traduccion["glosas"], traduccion.get("correcciones") or [],
+                    t["texto"], equivalencias) if traduccion else None
+                if traduccion is None:
+                    faltan += 1
     if faltan:
         avisos.append(f"{faltan} tarjetas sin glosas: ejecuta "
                       "tool/rag_precalcular_glosas.py")
@@ -489,7 +751,15 @@ def resumen(corpus: dict) -> list:
         f"mostrables: {sum(r['mostrable'] for r in respuestas)}",
         "no mostrables por motivo: " + ", ".join(
             f"{k} {v}" for k, v in sorted(motivos.items())),
+        _linea_pendientes(senas_pendientes(corpus)),
     ]
+
+
+def _linea_pendientes(cuenta: dict) -> str:
+    mas = sorted(cuenta.items(), key=lambda kv: (-kv[1], kv[0]))[:8]
+    return (f"señas a incorporar: {len(cuenta)} palabras en "
+            f"{sum(cuenta.values())} usos · más usadas: "
+            + ", ".join(f"{p} {n}" for p, n in mas))
 
 
 def main() -> int:
@@ -505,19 +775,28 @@ def main() -> int:
         print(f"{len(errores)} errores: no se escribe nada.")
         return 1
     texto = json.dumps(corpus, ensure_ascii=False, indent=1) + "\n"
+    banco = banco_tramites(corpus)
+    salidas = {SALIDA: texto, SALIDA_TRAMITES: dart_tramites(banco)}
     for linea in resumen(corpus):
         print(linea)
+    print(f"trámites: {len(banco['contextos'])} recorridos · "
+          f"{len(banco['preguntas'])} preguntas · "
+          f"{sum(len(q['opciones']) for q in banco['preguntas'])} respuestas")
     if "--check" in sys.argv:
-        if not os.path.exists(SALIDA) or open(SALIDA, encoding="utf-8").read() != texto:
-            print(f"desactualizado: {os.path.relpath(SALIDA, ROOT)}")
+        viejas = [r for r, t in salidas.items()
+                  if not os.path.exists(r) or open(r, encoding="utf-8").read() != t]
+        for r in viejas:
+            print(f"desactualizado: {os.path.relpath(r, ROOT)}")
+        if viejas:
             print("Ejecuta: python tool/build_rag_corpus.py")
             return 1
         print("Corpus RAG al día y coherente con su fuente.")
         return 0
-    os.makedirs(os.path.dirname(SALIDA), exist_ok=True)
-    with open(SALIDA, "w", encoding="utf-8", newline="") as f:
-        f.write(texto)
-    print(f"escrito: {os.path.relpath(SALIDA, ROOT)}")
+    for ruta, contenido in salidas.items():
+        os.makedirs(os.path.dirname(ruta), exist_ok=True)
+        with open(ruta, "w", encoding="utf-8", newline="") as f:
+            f.write(contenido)
+        print(f"escrito: {os.path.relpath(ruta, ROOT)}")
     return 0
 
 
