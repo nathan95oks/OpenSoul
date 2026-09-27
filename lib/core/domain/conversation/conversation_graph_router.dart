@@ -110,6 +110,14 @@ class ConversationGraphRouter {
         reason: 'propuesta del modelo fuera de las rutas candidatas',
       );
     }
+    final requested = GraphMatcher.requestedSlotsOf(turn);
+    if (!validation.route!.targetQuestionIds.every(
+      (q) => catalog.answers(q, requested),
+    )) {
+      return settled.copyWith(
+        reason: 'propuesta del modelo que no responde a lo pedido',
+      );
+    }
     return validation.route!.copyWith(
       source: proposed.source == RouteSource.deterministic
           ? RouteSource.bedrock
@@ -168,7 +176,15 @@ class ConversationGraphRouter {
         activeContextId != null && catalog.hasContext(activeContextId)
         ? activeContextId
         : null;
-    final matches = matcher.match(turn, activeContextId: active);
+    // Lo que el oyente pregunta manda: solo cuentan las preguntas que
+    // responden a las ranuras pedidas. El tema («robar»), el contexto y las
+    // entidades («celular») sitúan o desempatan dentro de ellas; nunca
+    // convierten una pregunta por el tiempo en otra por el hecho.
+    final requested = GraphMatcher.requestedSlotsOf(turn);
+    final matches = [
+      for (final r in matcher.match(turn, activeContextId: active))
+        if (catalog.answers(r.questionId, requested)) r,
+    ];
     final strong = [
       for (final r in matches)
         if (r.score >= GraphMatcher.strongMatch) r,
@@ -186,14 +202,43 @@ class ConversationGraphRouter {
 
     // 1. Preguntas concretas del grafo: esa pregunta o el mínimo recorrido.
     if (strong.isNotEmpty) {
-      final route = _questionRoute(
+      final place = _placement(
         strong,
         active: active,
         mentionedContexts: mentionedContexts,
         mentionedFamilies: mentionedFamilies,
         suggestion: suggestion,
-        reason: 'preguntas del grafo',
       );
+      if (place.ambiguous.isNotEmpty) {
+        // La pregunta vale en varios contextos y nada —ni la conversación ni
+        // el turno— dice cuál: no se elige uno a ciegas. Decide la persona
+        // (o el modelo, entre esas rutas reales).
+        final candidates = [
+          for (final c in place.ambiguous)
+            ?_questionRoute(strong, context: c, reason: 'candidata en $c'),
+        ];
+        if (candidates.isNotEmpty) {
+          return done(
+            _selector(
+              'la pregunta vale en varios contextos: '
+              '${place.ambiguous.join(', ')}',
+            ).copyWith(
+              needsModel: true,
+              candidates: [
+                ...candidates,
+                _selector('selector como alternativa'),
+              ],
+            ),
+          );
+        }
+      }
+      final route = place.context == null
+          ? null
+          : _questionRoute(
+              strong,
+              context: place.context!,
+              reason: 'preguntas del grafo',
+            );
       if (route != null) return done(route);
     }
 
@@ -231,15 +276,7 @@ class ConversationGraphRouter {
           needsModel: true,
           candidates: [
             for (final r in weak)
-              ?_questionRoute(
-                [r],
-                active: active,
-                mentionedContexts: const {},
-                mentionedFamilies: const {},
-                suggestion: suggestion,
-                reason: 'candidata débil',
-                minConfidence: 0,
-              ),
+              ?_candidate([r], active: active, suggestion: suggestion),
             _selector('selector como alternativa'),
           ],
         ),
@@ -251,23 +288,21 @@ class ConversationGraphRouter {
     if (turn.isQuestion || turn.intent == SemanticIntent.askInformation) {
       final candidates = <ConversationRoute>[
         for (final (questionId, scope) in _nearby(turn))
-          ?_questionRoute(
-            [
-              RequestedQuestion(
-                questionId: questionId,
-                nodeId: '',
-                scope: scope,
-                slots: const [],
-                score: 0,
-              ),
-            ],
-            active: active,
-            mentionedContexts: const {},
-            mentionedFamilies: const {},
-            suggestion: null,
-            reason: 'intención cercana',
-            minConfidence: 0,
-          ),
+          if (catalog.answers(questionId, requested))
+            ?_candidate(
+              [
+                RequestedQuestion(
+                  questionId: questionId,
+                  nodeId: '',
+                  scope: scope,
+                  slots: const [],
+                  score: 0,
+                ),
+              ],
+              active: active,
+              suggestion: null,
+              reason: 'intención cercana',
+            ),
       ];
       return done(
         ConversationRoute.noSafeRoute(
@@ -344,24 +379,14 @@ class ConversationGraphRouter {
     return matcher.nearby(turn);
   }
 
+  /// La ruta que abre [requests] en [context], validada.
   ConversationRoute? _questionRoute(
     List<RequestedQuestion> requests, {
-    required String? active,
-    required Set<String> mentionedContexts,
-    required Set<String> mentionedFamilies,
-    required ContextSuggestion? suggestion,
+    required String context,
     required String reason,
     double? minConfidence,
   }) {
     final ids = [for (final r in requests) r.questionId];
-    final context = _contextFor(
-      requests,
-      active: active,
-      mentionedContexts: mentionedContexts,
-      mentionedFamilies: mentionedFamilies,
-      suggestion: suggestion,
-    );
-    if (context == null) return null;
     final confidence = requests
         .map((r) => r.score)
         .reduce((a, b) => a < b ? a : b);
@@ -387,19 +412,48 @@ class ConversationGraphRouter {
     return validation.route;
   }
 
+  /// Una ruta posible, no segura, para que el modelo elija entre reales.
+  ConversationRoute? _candidate(
+    List<RequestedQuestion> requests, {
+    required String? active,
+    required ContextSuggestion? suggestion,
+    String reason = 'candidata débil',
+  }) {
+    final context = _placement(
+      requests,
+      active: active,
+      mentionedContexts: const {},
+      mentionedFamilies: const {},
+      suggestion: suggestion,
+    ).context;
+    if (context == null) return null;
+    return _questionRoute(
+      requests,
+      context: context,
+      reason: reason,
+      minConfidence: 0,
+    );
+  }
+
   /// El contexto donde se abren las preguntas pedidas.
   ///
   /// Manda el contexto activo de la conversación si las preguntas son suyas
   /// (o no son de ningún recorrido); después, un contexto nombrado (cambiar
   /// de tema es legítimo); después, otro contexto de la misma familia que el
-  /// activo; y solo entonces el ámbito del nodo del corpus.
-  String? _contextFor(
+  /// activo; después, la sugerencia o el único contexto donde valen todas.
+  ///
+  /// Si nada de eso lo ancla y las preguntas valen en varios contextos
+  /// («¿Cuándo ocurrió?» sin conversación previa), [ambiguous] los trae: el
+  /// ámbito del nodo del corpus no basta para decidir de qué se habla.
+  ({String? context, List<String> ambiguous}) _placement(
     List<RequestedQuestion> requests, {
     required String? active,
     required Set<String> mentionedContexts,
     required Set<String> mentionedFamilies,
     required ContextSuggestion? suggestion,
   }) {
+    ({String? context, List<String> ambiguous}) anchored(String? c) =>
+        (context: c, ambiguous: const []);
     final ids = [for (final r in requests) r.questionId];
     bool fits(String context) =>
         ids.every((q) => catalog.isStepOf(context, q)) ||
@@ -412,27 +466,75 @@ class ConversationGraphRouter {
         );
     // Un contexto nombrado explícitamente manda sobre el activo: cambiar de
     // tema («¿Dónde ocurrió el robo?» estando en violencia) es legítimo.
-    if (activeFits && mentionedContexts.contains(active)) return active;
+    if (activeFits && mentionedContexts.contains(active)) {
+      return anchored(active);
+    }
     for (final c in mentionedContexts) {
-      if (fits(c)) return c;
+      if (fits(c)) return anchored(c);
     }
     for (final f in mentionedFamilies) {
       final contexts = catalog.contextsOfFamily(f);
-      if (activeFits && contexts.contains(active)) return active;
+      if (activeFits && contexts.contains(active)) return anchored(active);
       for (final c in contexts) {
-        if (requests.any((r) => r.scope == c)) return c;
+        if (requests.any((r) => r.scope == c)) return anchored(c);
       }
       for (final c in contexts) {
-        if (fits(c)) return c;
+        if (fits(c)) return anchored(c);
       }
     }
-    if (activeFits) return active;
+    if (activeFits) return anchored(active);
     final activeFamily = active == null ? null : catalog.familyOf(active);
     if (activeFamily != null) {
       for (final c in catalog.contextsOfFamily(activeFamily)) {
-        if (ids.every((q) => catalog.isStepOf(c, q))) return c;
+        if (ids.every((q) => catalog.isStepOf(c, q))) return anchored(c);
       }
     }
+
+    final possible = _possibleContexts(requests);
+    final suggested = suggestion?.contextId;
+    if (suggested != null && possible.contains(suggested)) {
+      return anchored(suggested);
+    }
+    if (possible.length == 1) return anchored(possible.single);
+    final guess = _guessContext(requests, suggestion);
+    return (
+      context: guess,
+      ambiguous: possible.length > 1 ? possible : const [],
+    );
+  }
+
+  /// Contextos donde valen todas las preguntas: donde son paso del recorrido
+  /// o, si no son paso de ninguno, donde las sitúa el corpus.
+  List<String> _possibleContexts(List<RequestedQuestion> requests) {
+    Set<String>? common;
+    List<String> order = const [];
+    final scopes = <String>{};
+    for (final r in requests) {
+      final journeys = catalog.journeysOf(r.questionId);
+      if (journeys.isEmpty) {
+        if (catalog.hasContext(r.scope)) scopes.add(r.scope);
+        continue;
+      }
+      if (order.isEmpty) order = journeys;
+      common = common == null
+          ? journeys.toSet()
+          : common.intersection(journeys.toSet());
+    }
+    if (common == null) return scopes.toList();
+    final allowed = scopes.isEmpty ? common : common.intersection(scopes);
+    return [
+      for (final c in order)
+        if (allowed.contains(c)) c,
+    ];
+  }
+
+  /// La elección de siempre cuando nada ancla el contexto: sirve para
+  /// ofrecer candidatas al modelo, no para decidir por la persona.
+  String? _guessContext(
+    List<RequestedQuestion> requests,
+    ContextSuggestion? suggestion,
+  ) {
+    final ids = [for (final r in requests) r.questionId];
     bool isStepEverywhere(String context) => ids.every(
       (q) => catalog.isStepOf(context, q) || catalog.journeysOf(q).isEmpty,
     );
@@ -456,7 +558,10 @@ class ConversationGraphRouter {
       if (catalog.hasContext(r.scope)) return r.scope;
     }
     final suggested = suggestion?.contextId;
-    if (suggested != null && catalog.hasContext(suggested) && fits(suggested)) {
+    if (suggested != null &&
+        catalog.hasContext(suggested) &&
+        (ids.every((q) => catalog.isStepOf(suggested, q)) ||
+            requests.any((r) => r.scope == suggested))) {
       return suggested;
     }
     for (final q in ids) {
@@ -518,12 +623,117 @@ class ConversationGraphRouter {
       )
       .route!;
 
+  /// Por qué gana una ruta: lo pedido, lo nombrado, las candidatas con el
+  /// dato que responde cada una y la ruta elegida. Para trazas y pruebas.
+  RouteTrace explain(
+    SemanticTurn turn, {
+    String? activeContextId,
+    ContextSuggestion? suggestion,
+  }) {
+    final requested = GraphMatcher.requestedSlotsOf(turn);
+    return RouteTrace(
+      hearingText: turn.text,
+      requestedSlots: requested.toList(),
+      mentionedContexts: [for (final m in turn.mentionedContexts) m.id],
+      mentionedEntities: turn.mentionedEntities,
+      presupposed: matcher
+          .presupposedOf(turn, activeContextId: activeContextId)
+          .toList(),
+      activeContextId: activeContextId,
+      candidates: [
+        for (final r in matcher.match(turn, activeContextId: activeContextId))
+          RouteTraceCandidate(
+            questionId: r.questionId,
+            answerSlots: catalog.answerSlotsOf(r.questionId).toList(),
+            score: r.score,
+            answersRequest: catalog.answers(r.questionId, requested),
+          ),
+      ],
+      route: routeDeterministic(
+        turn,
+        activeContextId: activeContextId,
+        suggestion: suggestion,
+      ),
+    );
+  }
+
   /// Traza técnica (nunca se muestra a la persona).
   static void _log(SemanticTurn turn, ConversationRoute route) => developer.log(
     'turn=${turn.turnId} semanticTurnSource=${turn.source.name} '
+    'requestedSlots=${turn.requestedSlots.join('+')} '
     'routeSource=${route.sourceLabel} route=${route.type.wireName} '
     'context=${route.targetContextId ?? route.targetFamilyId ?? '-'} '
-    'questions=${route.targetQuestionIds.join('+')}',
+    'questions=${route.targetQuestionIds.join('+')} '
+    'reason=${route.reason}',
     name: 'conversation.routing',
   );
+}
+
+/// La matriz de depuración de una ruta. Nunca se muestra en la interfaz.
+class RouteTrace {
+  final String hearingText;
+  final List<String> requestedSlots;
+  final List<String> mentionedContexts;
+  final List<String> mentionedEntities;
+
+  /// Lo que el oyente da por supuesto (una respuesta del recorrido de su
+  /// contexto). Orienta; no es un hecho de la persona sorda.
+  final List<String> presupposed;
+  final String? activeContextId;
+  final List<RouteTraceCandidate> candidates;
+  final ConversationRoute route;
+
+  const RouteTrace({
+    required this.hearingText,
+    required this.requestedSlots,
+    required this.mentionedContexts,
+    required this.mentionedEntities,
+    required this.presupposed,
+    required this.activeContextId,
+    required this.candidates,
+    required this.route,
+  });
+
+  Map<String, Object?> toJson() => {
+    'hearingText': hearingText,
+    'requestedSlots': requestedSlots,
+    'mentionedContexts': mentionedContexts,
+    'mentionedEntities': mentionedEntities,
+    'presupposed': presupposed,
+    'activeContext': activeContextId,
+    'candidates': [for (final c in candidates) c.toJson()],
+    'selectedRoute': {
+      'type': route.type.wireName,
+      'context': route.targetContextId ?? route.targetFamilyId,
+      'questions': route.targetQuestionIds,
+      'path': route.pathQuestionIds,
+      'needsModel': route.needsModel,
+    },
+    'reason': route.reason,
+    'source': route.sourceLabel,
+  };
+
+  @override
+  String toString() => toJson().toString();
+}
+
+class RouteTraceCandidate {
+  final String questionId;
+  final List<String> answerSlots;
+  final double score;
+  final bool answersRequest;
+
+  const RouteTraceCandidate({
+    required this.questionId,
+    required this.answerSlots,
+    required this.score,
+    required this.answersRequest,
+  });
+
+  Map<String, Object?> toJson() => {
+    'questionId': questionId,
+    'answerSlots': answerSlots,
+    'score': double.parse(score.toStringAsFixed(3)),
+    'answersRequest': answersRequest,
+  };
 }

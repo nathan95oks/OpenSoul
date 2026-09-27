@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "interrogativeSlots": {
     "DONDE": "place",
     "CUANDO": "time",
@@ -27,5 +27,46 @@
     "NINGUNO",
     "NO",
     "NUNCA"
+  ],
+  "spokenInterrogativeSlots": {
+    "ADONDE": "place",
+    "CUANDO": "time",
+    "CUANTA": "amount",
+    "CUANTAS": "amount",
+    "CUANTO": "amount",
+    "CUANTOS": "amount",
+    "DONDE": "place",
+    "QUIEN": "person",
+    "QUIENES": "person"
+  },
+  "spokenOpenInterrogatives": [
+    "COMO",
+    "CUAL",
+    "CUALES",
+    "QUE"
+  ],
+  "spokenHeadSlots": {
+    "DIA": "time",
+    "DIRECCION": "place",
+    "FECHA": "time",
+    "HORA": "time",
+    "LUGAR": "place",
+    "MOMENTO": "time",
+    "SITIO": "place"
+  },
+  "spokenWordSlots": {
+    "LUGAR": "place",
+    "SITIO": "place"
+  },
+  "questionPrepositions": [
+    "A",
+    "CON",
+    "DE",
+    "DESDE",
+    "EN",
+    "HACIA",
+    "HASTA",
+    "PARA",
+    "POR"
   ]
 }

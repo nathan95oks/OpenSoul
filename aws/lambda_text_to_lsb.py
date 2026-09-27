@@ -1488,6 +1488,39 @@ _SLOT_POR_NUCLEO = {
 _SLOT_POR_PALABRA = {"LUGAR": "place", "SITIO": "place"}
 _NEGADORES = {"NO", "JAMAS", "NUNCA", "NADA", "NADIE", "NINGUNO"}
 
+# El interrogativo del texto dice qué dato pide el oyente aunque la traducción
+# no conserve su glosa: «¿Cuándo te robaron el celular?» pide la fecha, no
+# confirmar el robo. Son clases cerradas del español, compartidas con el
+# cliente (tests/lsb_gloss_semantics.json). Con tilde son interrogativos en
+# cualquier parte de la pregunta; sin tilde también son conjunción («cuando
+# llegué…»), así que solo cuentan al abrir la cláusula, detrás de una
+# preposición como mucho («¿a donde fue?»).
+_SLOT_POR_INTERROGATIVO_HABLADO = {
+    "CUANDO": "time",
+    "DONDE": "place",
+    "ADONDE": "place",
+    "QUIEN": "person",
+    "QUIENES": "person",
+    "CUANTO": "amount",
+    "CUANTA": "amount",
+    "CUANTOS": "amount",
+    "CUANTAS": "amount",
+}
+_INTERROGATIVOS_ABIERTOS_HABLADOS = {"QUE", "CUAL", "CUALES", "COMO"}
+# «¿A qué hora…?», «¿qué día…?», «¿en qué lugar…?»: el núcleo que sigue al
+# interrogativo abierto dice el dato.
+_SLOT_POR_NUCLEO_HABLADO = {
+    "HORA": "time",
+    "DIA": "time",
+    "FECHA": "time",
+    "MOMENTO": "time",
+    "LUGAR": "place",
+    "SITIO": "place",
+    "DIRECCION": "place",
+}
+_PREPOSICIONES_INTERROGATIVAS = {"A", "EN", "DE", "DESDE", "HASTA", "CON",
+                                 "POR", "PARA", "HACIA"}
+
 # Situaciones (las mismas de SITUATION_LABELS) que el oyente nombra: glosas
 # canónicas del catálogo y raíces de palabras sin seña propia. Una misma pista
 # puede nombrar varias situaciones («denunciar» vale para todas las denuncias):
@@ -1524,6 +1557,44 @@ def _raiz(palabra: str) -> str:
     return remove_accents(palabra.upper()).lower()
 
 
+def _clausulas_de_pregunta(text: str) -> list:
+    """Cláusulas de las preguntas del turno, en orden.
+
+    Solo lo que está dentro de una pregunta («Dígame, ¿cuándo fue?» es una
+    cláusula: «cuándo fue»), partido por coordinación: «¿Te robaron el
+    celular y cuándo fue?» son dos preguntas.
+    """
+    if "¿" in text:
+        tramos = re.findall(r"¿([^¿?]*)", text)
+    else:
+        tramos = re.findall(r"([^.!?]*)\?", text)
+    return [c.strip() for t in tramos
+            for c in re.split(r"\s+(?:y|e|o|u)\s+", t, flags=re.IGNORECASE)
+            if c.strip()]
+
+
+def _lectura_de_clausula(clausula: str) -> tuple:
+    """(ranuras, es_interrogativa) de una cláusula de pregunta."""
+    palabras = _PALABRA.findall(clausula)
+    claves = [remove_accents(w.upper()) for w in palabras]
+    inicio = 0
+    while inicio < len(claves) and claves[inicio] in _PREPOSICIONES_INTERROGATIVAS:
+        inicio += 1
+    ranuras, interrogativa = [], False
+    for i, (w, clave) in enumerate(zip(palabras, claves)):
+        if strip_gloss_accents(w.upper()) == w.upper() and i != inicio:
+            continue
+        if clave in _SLOT_POR_INTERROGATIVO_HABLADO:
+            interrogativa = True
+            ranuras.append(_SLOT_POR_INTERROGATIVO_HABLADO[clave])
+        elif clave in _INTERROGATIVOS_ABIERTOS_HABLADOS:
+            interrogativa = True
+            nucleo = claves[i + 1] if i + 1 < len(claves) else ""
+            if nucleo in _SLOT_POR_NUCLEO_HABLADO:
+                ranuras.append(_SLOT_POR_NUCLEO_HABLADO[nucleo])
+    return ranuras, interrogativa
+
+
 def build_semantic_turn(text: str, result: dict) -> dict:
     """Lectura semántica del turno a partir de la traducción ya hecha."""
     glosas = [canonical_gloss(str(g)) for g in result.get("glosses") or []]
@@ -1547,6 +1618,19 @@ def build_semantic_turn(text: str, result: dict) -> dict:
         for w in palabras:
             if w in _SLOT_POR_PALABRA:
                 _anadir(_SLOT_POR_PALABRA[w])
+        # El interrogativo del texto, por si la traducción no lo conservó.
+        clausulas = [(c, *_lectura_de_clausula(c))
+                     for c in _clausulas_de_pregunta(text or "")]
+        for _, ranuras, _ in clausulas:
+            for slot in ranuras:
+                _anadir(slot)
+        # Una pregunta de sí/no junto a otra que pide un dato («¿Te robaron
+        # el celular y cuándo fue?»): se pide también la confirmación. En
+        # «¿Cuándo te robaron el celular?» el robo es lo que el oyente da por
+        # hecho, no otra pregunta.
+        if slots and any(not interrogativa and recognize_input(c)
+                         for c, _, interrogativa in clausulas):
+            _anadir("polarity")
 
     raices = [_raiz(w) for w in palabras]
     menciones = []

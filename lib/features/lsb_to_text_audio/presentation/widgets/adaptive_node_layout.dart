@@ -32,6 +32,11 @@ class AdaptiveNodeLayout extends StatelessWidget {
   });
 
   static const _spacing = 12.0;
+  static const _padding = 16.0;
+  static const _cardAspect = 1.15;
+  static const _minCardHeight = 96.0;
+  static const _maxCardHeight = 220.0;
+  static const _singleColumnHeight = 96.0;
   static const _compactBreakpoint = 340.0;
   static const _wideBreakpoint = 720.0;
 
@@ -56,9 +61,21 @@ class AdaptiveNodeLayout extends StatelessWidget {
               i + columns < cards.length ? i + columns : cards.length,
             ),
         ];
+        // Tarjetas grandes, casi cuadradas, con la glosa en el centro. El
+        // alto sale del ancho de la columna, no de la pregunta; una etiqueta
+        // larga o un texto ampliado siguen pudiendo estirarlas.
+        final cellWidth =
+            (constraints.maxWidth - 2 * _padding - (columns - 1) * _spacing) /
+            columns;
+        final minHeight = columns == 1
+            ? _singleColumnHeight
+            : (cellWidth * _cardAspect).clamp(_minCardHeight, _maxCardHeight);
 
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: _padding,
+            vertical: 8,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -73,7 +90,12 @@ class AdaptiveNodeLayout extends StatelessWidget {
                         if (c > 0) const SizedBox(width: _spacing),
                         Expanded(
                           child: c < rows[r].length
-                              ? _node(rows[r][c])
+                              ? ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    minHeight: minHeight,
+                                  ),
+                                  child: _node(rows[r][c]),
+                                )
                               : const SizedBox.shrink(),
                         ),
                       ],

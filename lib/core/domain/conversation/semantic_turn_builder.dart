@@ -29,15 +29,38 @@ class SemanticTurnBuilder {
     String? activeContextId,
   }) {
     final act = speechAct ?? classifySpeechAct(text);
-    final requests = matcher.byText(text, activeContextId: activeContextId);
     final mentions = _mentions(text, glosses);
+    // Primero lo que el oyente quiere saber (el interrogativo del texto o de
+    // las glosas); las frases del grafo solo cuentan si responden a eso.
+    final normalized = LsbGlossSemantics.normalizeAll(glosses);
+    final asked = <String>{
+      if (act == SpeechAct.question ||
+          LsbGlossSemantics.hasInterrogative(normalized))
+        ...LsbGlossSemantics.slotsOf(normalized),
+      ...LsbGlossSemantics.spokenSlotsOf(text),
+    };
+    final requests = matcher.byText(
+      text,
+      activeContextId: activeContextId,
+      requestedSlots: asked,
+      contexts: {
+        if (activeContextId != null && catalog.hasContext(activeContextId))
+          activeContextId,
+        for (final m in mentions)
+          if (m.isFamily)
+            ...catalog.contextsOfFamily(m.id)
+          else if (catalog.hasContext(m.id))
+            m.id,
+      },
+    );
     final best = requests.isEmpty
         ? 0.0
         : requests.map((r) => r.score).reduce((a, b) => a > b ? a : b);
 
     final SemanticIntent intent;
     final double confidence;
-    if (best >= GraphMatcher.strongMatch) {
+    if (best >= GraphMatcher.strongMatch ||
+        asked.difference(const {'polarity'}).isNotEmpty) {
       intent = SemanticIntent.askInformation;
       confidence = best;
     } else if (mentions.isNotEmpty) {
@@ -66,6 +89,7 @@ class SemanticTurnBuilder {
       entities: glosses,
       mentionedContexts: mentions,
       requestedSlots: <String>{
+        ...asked,
         for (final r in requests)
           if (r.score >= GraphMatcher.strongMatch) ...r.slots,
       }.toList(),

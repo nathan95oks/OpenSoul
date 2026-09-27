@@ -92,6 +92,67 @@ class LecturaDeterminista(unittest.TestCase):
         self.assertEqual(lectura["version"], t2l.SEMANTIC_TURN_VERSION)
 
 
+class DatoPedidoFrenteAlTema(unittest.TestCase):
+    """El interrogativo dice qué quiere saber el oyente; el robo o el celular
+    solo dicen de qué habla."""
+
+    def test_el_interrogativo_manda_sobre_el_tema(self):
+        for texto, glosas, ranuras in (
+            ("¿Cuándo te robaron el celular?", ["CUANDO", "TU", "CELULAR", "ROBAR"], ["time"]),
+            ("¿Dónde te robaron el celular?", ["DONDE", "TU", "CELULAR", "ROBAR"], ["place"]),
+            ("¿Quién te robó el celular?", ["QUIEN", "TU", "CELULAR", "ROBAR"], ["person"]),
+            ("¿Cuándo y dónde te robaron el celular?",
+             ["CUANDO", "DONDE", "TU", "CELULAR", "ROBAR"], ["time", "place"]),
+        ):
+            with self.subTest(texto=texto):
+                lectura = _lectura(texto, glosas)
+                self.assertEqual(lectura["requestedSlots"], ranuras)
+                self.assertEqual(lectura["intent"], "askInformation")
+                self.assertEqual([m["id"] for m in lectura["mentionedContexts"]],
+                                 ["denuncia_robo"])
+
+    def test_la_traduccion_sin_interrogativo_no_pierde_el_dato(self):
+        """Si la traducción no conserva CUANDO, el texto sigue diciéndolo."""
+        for texto in ("¿Cuándo te robaron el celular?", "¿cuando te robaron el celular?"):
+            with self.subTest(texto=texto):
+                lectura = _lectura(texto, ["TU", "CELULAR", "ROBAR"])
+                self.assertEqual(lectura["requestedSlots"], ["time"])
+
+    def test_equivalentes_temporales(self):
+        for texto, glosas in (("¿A qué hora fue?", ["HORA", "QUE"]),
+                              ("¿A que hora fue?", ["QUE"]),
+                              ("¿Cuándo ocurrió?", ["CUANDO"]),
+                              ("Dígame, ¿cuándo fue?", ["DECIR", "CUANDO"])):
+            with self.subTest(texto=texto):
+                self.assertEqual(_lectura(texto, glosas)["requestedSlots"], ["time"])
+
+    def test_cuando_conjuncion_no_es_pregunta_por_el_tiempo(self):
+        self.assertEqual(_lectura("¿Me dijo que cuando llegó ya no estaba?",
+                                  ["DECIR", "LLEGAR", "NO", "ESTAR"])["requestedSlots"], [])
+        self.assertEqual(_lectura("Cuando llegué me robaron",
+                                  ["LLEGAR", "ROBAR"])["requestedSlots"], [])
+
+    def test_polar_sola_no_pide_dato(self):
+        lectura = _lectura("¿Te robaron el celular?", ["TU", "CELULAR", "ROBAR"])
+        self.assertEqual(lectura["requestedSlots"], [])
+        self.assertEqual(_lectura("¿Qué te robaron?", ["QUE", "TU", "ROBAR"])["requestedSlots"], [])
+
+    def test_polar_y_dato_en_la_misma_intervencion(self):
+        lectura = _lectura("¿Te robaron el celular y cuándo fue?",
+                           ["TU", "CELULAR", "ROBAR", "CUANDO"])
+        self.assertEqual(lectura["requestedSlots"], ["time", "polarity"])
+        # «¿Cuándo y dónde…?» son dos datos, no una confirmación.
+        self.assertNotIn("polarity", _lectura(
+            "¿Cuándo y dónde te robaron el celular?",
+            ["CUANDO", "DONDE", "TU", "CELULAR", "ROBAR"])["requestedSlots"])
+
+    def test_sin_segunda_llamada(self):
+        cuerpo, llamadas = _llamar("¿Cuándo te robaron el celular?",
+                                   ["TU", "CELULAR", "ROBAR"])
+        self.assertEqual(llamadas, 1)
+        self.assertEqual(cuerpo["semanticTurn"]["requestedSlots"], ["time"])
+
+
 class ContratoConElCliente(unittest.TestCase):
     """Flutter lee `casos_semantic_turn.json` para probar el router con la
     lectura real. Si la Lambda cambia, el archivo tiene que regenerarse."""

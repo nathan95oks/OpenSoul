@@ -460,6 +460,272 @@
         "negations": [],
         "confidence": 0.9
       }
+    },
+    {
+      "id": "cuando_te_robaron_celular",
+      "texto": "¿Cuándo te robaron el celular?",
+      "glosas": [
+        "CUANDO",
+        "TU",
+        "CELULAR",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "cuando_te_robaron_sin_glosa",
+      "texto": "¿Cuándo te robaron el celular?",
+      "glosas": [
+        "TU",
+        "CELULAR",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "cuando_te_robaron_mochila",
+      "texto": "¿Cuándo te robaron la mochila?",
+      "glosas": [
+        "CUANDO",
+        "TU",
+        "MOCHILA",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "donde_te_robaron_celular",
+      "texto": "¿Dónde te robaron el celular?",
+      "glosas": [
+        "DONDE",
+        "TU",
+        "CELULAR",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "place"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "quien_te_robo_celular",
+      "texto": "¿Quién te robó el celular?",
+      "glosas": [
+        "QUIEN",
+        "TU",
+        "CELULAR",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "person"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "que_te_robaron",
+      "texto": "¿Qué te robaron?",
+      "glosas": [
+        "QUE",
+        "TU",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "te_robaron_celular",
+      "texto": "¿Te robaron el celular?",
+      "glosas": [
+        "TU",
+        "CELULAR",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "mentionContext",
+        "requestedSlots": [],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.8
+      }
+    },
+    {
+      "id": "cuando_y_donde_robo",
+      "texto": "¿Cuándo y dónde te robaron el celular?",
+      "glosas": [
+        "CUANDO",
+        "DONDE",
+        "TU",
+        "CELULAR",
+        "ROBAR"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time",
+          "place"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "robaron_celular_y_cuando",
+      "texto": "¿Te robaron el celular y cuándo fue?",
+      "glosas": [
+        "TU",
+        "CELULAR",
+        "ROBAR",
+        "CUANDO"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time",
+          "polarity"
+        ],
+        "mentionedContexts": [
+          {
+            "id": "denuncia_robo",
+            "evidence": [
+              "ROBAR",
+              "rob"
+            ]
+          }
+        ],
+        "negations": [],
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "a_que_hora_fue",
+      "texto": "¿A qué hora fue?",
+      "glosas": [
+        "HORA",
+        "QUE"
+      ],
+      "semanticTurn": {
+        "version": 1,
+        "intent": "askInformation",
+        "requestedSlots": [
+          "time"
+        ],
+        "mentionedContexts": [],
+        "negations": [],
+        "confidence": 0.9
+      }
     }
   ]
 }

@@ -70,10 +70,9 @@ class HomeScreen extends ConsumerWidget {
         ? Text(
             contextState.name as String,
             style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-              letterSpacing: -0.3,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.lightText,
             ),
           )
         : Row(
@@ -100,14 +99,23 @@ class HomeScreen extends ConsumerWidget {
             ],
           );
 
+    // Con las glosas la barra se funde con la página: título centrado, sin
+    // línea divisoria, para que la pregunta y las tarjetas sean lo que se ve.
     return AppBar(
-      backgroundColor: AppTheme.lightSurface,
+      backgroundColor: enSeleccionGlosas
+          ? AppTheme.lightBg
+          : AppTheme.lightSurface,
       elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
+      centerTitle: enSeleccionGlosas,
       leading: leadingWidget,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(1),
-        child: Container(height: 1, color: AppTheme.lightBorder),
-      ),
+      bottom: enSeleccionGlosas
+          ? null
+          : PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Container(height: 1, color: AppTheme.lightBorder),
+            ),
       title: titleWidget,
     );
   }

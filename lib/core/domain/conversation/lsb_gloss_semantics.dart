@@ -1,3 +1,5 @@
+import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
+
 /// Qué dato pide una glosa canónica, para leer preguntas en LSB.
 ///
 /// Es la misma tabla que usa Audio/Texto→LSB (`aws/lambda_text_to_lsb.py`,
@@ -70,6 +72,149 @@ class LsbGlossSemantics {
     'NADIE',
     'NINGUNO',
   };
+
+  // ---- El texto del oyente ---------------------------------------------------
+  //
+  // El interrogativo escrito dice qué dato se pide aunque la traducción no
+  // conserve su glosa. Mismas clases cerradas que `build_semantic_turn`
+  // (contrato en `aws/tests/lsb_gloss_semantics.json`).
+
+  static const Map<String, String> spokenInterrogativeSlots = {
+    'CUANDO': 'time',
+    'DONDE': 'place',
+    'ADONDE': 'place',
+    'QUIEN': 'person',
+    'QUIENES': 'person',
+    'CUANTO': 'amount',
+    'CUANTA': 'amount',
+    'CUANTOS': 'amount',
+    'CUANTAS': 'amount',
+  };
+
+  static const Set<String> spokenOpenInterrogatives = {
+    'QUE',
+    'CUAL',
+    'CUALES',
+    'COMO',
+  };
+
+  /// El núcleo tras un interrogativo abierto: «¿a qué hora?», «¿en qué
+  /// lugar?».
+  static const Map<String, String> spokenHeadSlots = {
+    'HORA': 'time',
+    'DIA': 'time',
+    'FECHA': 'time',
+    'MOMENTO': 'time',
+    'LUGAR': 'place',
+    'SITIO': 'place',
+    'DIRECCION': 'place',
+  };
+
+  /// Palabras que piden un lugar en cualquier parte de la pregunta.
+  static const Map<String, String> spokenWordSlots = {
+    'LUGAR': 'place',
+    'SITIO': 'place',
+  };
+
+  static const Set<String> questionPrepositions = {
+    'A',
+    'EN',
+    'DE',
+    'DESDE',
+    'HASTA',
+    'CON',
+    'POR',
+    'PARA',
+    'HACIA',
+  };
+
+  /// Ranuras que pide el texto de un turno, en orden.
+  ///
+  /// Con tilde, un interrogativo cuenta en cualquier parte de la pregunta;
+  /// sin tilde también es conjunción («cuando llegué…») y solo cuenta al
+  /// abrir la cláusula. Una cláusula de sí/no junto a otra que pide un dato
+  /// («¿Te robaron el celular y cuándo fue?») añade `polarity`; en «¿Cuándo
+  /// te robaron el celular?» el robo es lo que el oyente da por hecho.
+  static List<String> spokenSlotsOf(String text) {
+    final slots = <String>[];
+    void add(String slot) {
+      if (!slots.contains(slot)) slots.add(slot);
+    }
+
+    final clauses = _questionClauses(text);
+    if (clauses.isEmpty) return slots;
+    for (final w in _words(text)) {
+      final slot = spokenWordSlots[_plain(w)];
+      if (slot != null) add(slot);
+    }
+    var polar = false;
+    for (final clause in clauses) {
+      final (clauseSlots, interrogative) = _readClause(clause);
+      clauseSlots.forEach(add);
+      if (!interrogative && DialogueGraph.tokensOf(clause).isNotEmpty) {
+        polar = true;
+      }
+    }
+    if (slots.isNotEmpty && polar) add('polarity');
+    return slots;
+  }
+
+  static final RegExp _word = RegExp(r'[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{2,}');
+
+  static List<String> _words(String text) => [
+    for (final m in _word.allMatches(text)) m.group(0)!,
+  ];
+
+  static String _plain(String word) {
+    const from = 'ÁÉÍÓÚÜ';
+    const to = 'AEIOUU';
+    var out = word.toUpperCase();
+    for (var i = 0; i < from.length; i++) {
+      out = out.replaceAll(from[i], to[i]);
+    }
+    return out;
+  }
+
+  static List<String> _questionClauses(String text) {
+    final spans = text.contains('¿')
+        ? [for (final m in RegExp(r'¿([^¿?]*)').allMatches(text)) m.group(1)!]
+        : [
+            for (final m in RegExp(r'([^.!?]*)\?').allMatches(text))
+              m.group(1)!,
+          ];
+    return [
+      for (final span in spans)
+        for (final clause in span.split(
+          RegExp(r'\s+(?:y|e|o|u)\s+', caseSensitive: false),
+        ))
+          if (clause.trim().isNotEmpty) clause.trim(),
+    ];
+  }
+
+  static (List<String>, bool) _readClause(String clause) {
+    final words = _words(clause);
+    final keys = [for (final w in words) _plain(w)];
+    var start = 0;
+    while (start < keys.length && questionPrepositions.contains(keys[start])) {
+      start++;
+    }
+    final slots = <String>[];
+    var interrogative = false;
+    for (var i = 0; i < words.length; i++) {
+      final accented = words[i].toUpperCase() != keys[i];
+      if (!accented && i != start) continue;
+      final slot = spokenInterrogativeSlots[keys[i]];
+      if (slot != null) {
+        interrogative = true;
+        slots.add(slot);
+      } else if (spokenOpenInterrogatives.contains(keys[i])) {
+        interrogative = true;
+        final head = i + 1 < keys.length ? spokenHeadSlots[keys[i + 1]] : null;
+        if (head != null) slots.add(head);
+      }
+    }
+    return (slots, interrogative);
+  }
 
   /// Forma comparable: mayúsculas, sin tildes (conserva la Ñ), sin signos
   /// de interrogación. `null` para lo que no es una glosa (dactilología

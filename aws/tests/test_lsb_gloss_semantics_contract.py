@@ -29,6 +29,16 @@ class GlossSemanticsParity(unittest.TestCase):
                          t2l._INTERROGATIVOS_ABIERTOS)
         self.assertEqual(set(CONTRACT["negators"]), t2l._NEGADORES)
 
+    def test_python_matches_shared_spoken_contract(self):
+        self.assertEqual(CONTRACT["spokenInterrogativeSlots"],
+                         t2l._SLOT_POR_INTERROGATIVO_HABLADO)
+        self.assertEqual(set(CONTRACT["spokenOpenInterrogatives"]),
+                         t2l._INTERROGATIVOS_ABIERTOS_HABLADOS)
+        self.assertEqual(CONTRACT["spokenHeadSlots"], t2l._SLOT_POR_NUCLEO_HABLADO)
+        self.assertEqual(CONTRACT["spokenWordSlots"], t2l._SLOT_POR_PALABRA)
+        self.assertEqual(set(CONTRACT["questionPrepositions"]),
+                         t2l._PREPOSICIONES_INTERROGATIVAS)
+
 
 class SituationCuesConfiguration(unittest.TestCase):
     def test_covers_exactly_the_supported_situations(self):

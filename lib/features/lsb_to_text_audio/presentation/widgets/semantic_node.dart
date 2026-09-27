@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/di/injection.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/lsb_icons.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/sign_image.dart';
 
 class SemanticNode extends ConsumerStatefulWidget {
@@ -18,7 +18,7 @@ class SemanticNode extends ConsumerStatefulWidget {
   final Future<void> Function()? onPreview;
 
   /// Lo que hay que mantener la tarjeta para ver su seña.
-  static const holdDuration = Duration(milliseconds: 1500);
+  static const holdDuration = Duration(milliseconds: 500);
 
   const SemanticNode({
     super.key,
@@ -55,6 +55,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
       SemanticNode.holdDuration.inMilliseconds;
 
   static const _paddingH = 12.0;
+  static const _radio = 14.0;
 
   @override
   void initState() {
@@ -127,7 +128,11 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
   Widget build(BuildContext context) {
     final selected = widget.isSelected;
     final colorContenido = selected ? Colors.white : AppTheme.lightText;
-    final conImagen = ref.watch(signImagesEnabledProvider);
+    // La imagen solo si existe una seña que enseñar: sin almacén de imágenes
+    // la tarjeta es la glosa sola, sin un icono genérico en su lugar.
+    final conImagen =
+        ref.watch(signImagesEnabledProvider) &&
+        ref.watch(signImageResolverProvider).isConfigured;
     final paddingV = conImagen ? 8.0 : 11.0;
     final conVistaPrevia = widget.onPreview != null;
     final gestureSettings = MediaQuery.maybeGestureSettingsOf(context);
@@ -182,10 +187,11 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                     end: Alignment.bottomRight,
                   )
                 : null,
+            // Plana y sin borde: la glosa es lo único que se ve.
             color: selected ? null : AppTheme.lightSurface,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(_radio),
             border: Border.all(
-              color: selected ? const Color(0xFFC084FC) : AppTheme.lightBorder,
+              color: selected ? const Color(0xFFC084FC) : Colors.transparent,
               width: selected ? 2 : 1.2,
             ),
             boxShadow: selected
@@ -196,7 +202,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                       offset: const Offset(0, 2),
                     ),
                   ]
-                : AppTheme.cardShadow,
+                : null,
           ),
           padding: EdgeInsets.symmetric(
             horizontal: _paddingH,
@@ -218,32 +224,14 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                             size: 36,
                             color: colorContenido,
                           ),
-                          const SizedBox(height: 5),
-                          _etiqueta(colorContenido, TextAlign.center, selected),
+                          const SizedBox(height: 8),
+                          _etiqueta(colorContenido, selected),
                         ],
                       ),
                     )
-                  : Row(
-                      children: [
-                        Icon(
-                          selected
-                              ? Icons.check_circle_rounded
-                              : (kLsbIconMap[widget.card.semanticIcon] ??
-                                    Icons.circle_outlined),
-                          size: 22,
-                          color: colorContenido,
-                        ),
-                        const SizedBox(width: 9),
-                        Expanded(
-                          child: _etiqueta(
-                            colorContenido,
-                            TextAlign.start,
-                            selected,
-                          ),
-                        ),
-                      ],
-                    ),
-              if (selected && conImagen)
+                  : Center(child: _etiqueta(colorContenido, selected)),
+              // La selección no depende solo del color.
+              if (selected)
                 Positioned(
                   top: -4,
                   right: -4,
@@ -274,7 +262,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
   /// tarjeta. Va debajo de la glosa y cubre el interior del borde: el Stack
   /// vive dentro del padding, de ahí los márgenes negativos.
   Widget _relleno(bool selected, double paddingV) {
-    final radio = 16 - (selected ? 2.0 : 1.2);
+    final radio = _radio - (selected ? 2.0 : 1.2);
     final color = selected
         ? const Color(0xFFC084FC).withValues(alpha: 0.38)
         : const Color(0xFF7C3AED).withValues(alpha: 0.45);
@@ -317,15 +305,15 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
     );
   }
 
-  Widget _etiqueta(Color color, TextAlign alineacion, bool selected) => Text(
+  Widget _etiqueta(Color color, bool selected) => Text(
     widget.card.displayText.replaceAll('_', ' '),
-    textAlign: alineacion,
+    textAlign: TextAlign.center,
     softWrap: true,
     style: TextStyle(
-      fontSize: 15,
+      fontSize: 18,
       fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
       color: color,
-      letterSpacing: 0.25,
+      letterSpacing: 0.5,
       height: 1.2,
     ),
   );

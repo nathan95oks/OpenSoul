@@ -96,7 +96,7 @@ void main() {
     });
 
     test('3. una pregunta exacta del banco abre solo esa pregunta', () {
-      final r = route('donde_ocurrio');
+      final r = route('donde_ocurrio', activeContextId: 'denuncia_robo');
       expect(r.type, ConversationRouteType.directQuestion);
       expect(r.targetQuestionIds, ['Q.LUG.DONDE']);
       expect(r.pathQuestionIds, ['Q.LUG.DONDE']);
@@ -106,9 +106,10 @@ void main() {
     test('frases equivalentes: el mismo significado, la misma ruta', () {
       // Nada de esto está escrito en el router: la traducción normaliza la
       // frase a DONDE (o el núcleo «lugar») y la lectura pide `place`.
-      final esperada = route('donde_ocurrio');
+      final esperada = route('donde_ocurrio', activeContextId: 'violencia');
+      expect(esperada.targetQuestionIds, ['Q.LUG.DONDE']);
       for (final id in ['donde_fue', 'donde_paso', 'en_que_lugar']) {
-        final r = route(id);
+        final r = route(id, activeContextId: 'violencia');
         expect(backendTurn(id).requestedSlots, ['place'], reason: id);
         expect(r.type, esperada.type, reason: id);
         expect(r.targetQuestionIds, esperada.targetQuestionIds, reason: id);
@@ -151,7 +152,12 @@ void main() {
         'cuando': 'Q.TIE.CUANDO',
       };
       for (final e in esperado.entries) {
-        final r = route(e.key);
+        // «¿Cuándo ocurrió?» vale en varios contextos: con la conversación
+        // situada se abre directamente (sin ella, ver el caso 7).
+        final r = route(
+          e.key,
+          activeContextId: e.key == 'cuando' ? 'denuncia_robo' : null,
+        );
         expect(r.type, ConversationRouteType.directQuestion, reason: e.key);
         expect(r.targetQuestionIds, [e.value], reason: e.key);
         expect(
@@ -182,9 +188,12 @@ void main() {
         requestedSlots: original.requestedSlots,
         source: SemanticTurnSource.backend,
       );
-      expect(router.routeDeterministic(sinTexto).targetQuestionIds, [
-        'Q.LUG.DONDE',
-      ]);
+      expect(
+        router
+            .routeDeterministic(sinTexto, activeContextId: 'denuncia_robo')
+            .targetQuestionIds,
+        ['Q.LUG.DONDE'],
+      );
     });
   });
 
@@ -267,7 +276,10 @@ void main() {
       );
       expect(
         router
-            .routeDeterministic(fallback('¿Dónde ocurrió?'))
+            .routeDeterministic(
+              fallback('¿Dónde ocurrió?'),
+              activeContextId: 'violencia',
+            )
             .targetQuestionIds,
         ['Q.LUG.DONDE'],
       );
@@ -286,7 +298,7 @@ void main() {
       final r = await ConversationGraphRouter(
         catalog,
         model: model,
-      ).route(backendTurn('donde_ocurrio'));
+      ).route(backendTurn('donde_ocurrio'), activeContextId: 'violencia');
       expect(model.calls, 0);
       expect(r.source, RouteSource.deterministic);
     });
