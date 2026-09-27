@@ -143,21 +143,41 @@ class Correccion(unittest.TestCase):
     AUTO = {**AUTO, "faltan": ["auto", "Quiero"], "sobran": []}
 
     def test_solo_valen_glosas_del_catalogo_y_palabras_de_la_frase(self):
-        ok = REV.glosas_validas(
+        ok, malas = REV.glosas_validas(
             ["COMPRAR", "SENA_PENDIENTE:AUTO", "querer", "MIO", "NOMBRE"],
             self.AUTO["texto"], self.CAT)
         self.assertEqual(ok, ["COMPRAR", "SENA_PENDIENTE:AUTO", "QUERER",
                               "MÍO", "NOMBRE"])
-        # Una seña inventada o una palabra que la frase no dice: se rechaza.
-        self.assertIsNone(REV.glosas_validas(["AUTOMOVIL"], "Compré un auto.",
-                                             self.CAT))
-        self.assertIsNone(REV.glosas_validas(["SENA_PENDIENTE:AVION"],
-                                             "Compré un auto.", self.CAT))
+        self.assertEqual(malas, [])
+        # Una palabra que la frase no dice: se rechaza y se dice cuál.
+        self.assertEqual(REV.glosas_validas(["AVION"], "Compré un auto.",
+                                            self.CAT), (None, ["AVION"]))
+
+    def test_una_palabra_de_la_frase_sin_marca_es_sena_a_incorporar(self):
+        ok, _ = REV.glosas_validas(["COMPRAR", "AUTO"], "Compré un auto.",
+                                   self.CAT)
+        self.assertEqual(ok, ["COMPRAR", "SENA_PENDIENTE:AUTO"])
+
+    def test_un_articulo_que_agrega_el_modelo_se_ignora(self):
+        ok, _ = REV.glosas_validas(["COMPRAR", "UN", "AUTO"], "Compré un auto.",
+                                   self.CAT)
+        self.assertEqual(ok, ["COMPRAR", "SENA_PENDIENTE:AUTO"])
+
+    def test_una_marca_sobre_una_sena_del_catalogo_es_la_sena(self):
+        ok, _ = REV.glosas_validas(["SENA_PENDIENTE:COMPRAR"], "Compré.",
+                                   self.CAT)
+        self.assertEqual(ok, ["COMPRAR"])
+
+    def test_la_sena_compuesta_gana_a_sus_partes(self):
+        ok, _ = REV.glosas_validas(["NO", "SABER", "CASA"], "No sé de la casa.",
+                                   {"NO": "", "SABER": "", "NO_SABER": "",
+                                    "CASA": ""})
+        self.assertEqual(ok, ["NO_SABER", "CASA"])
 
     def test_siglas_y_numeros_de_la_frase_se_deletrean(self):
         self.assertEqual(
             REV.glosas_validas(["NUREJ", "2025"], "Tengo el NUREJ de 2025.",
-                               {}),
+                               {})[0],
             [*"NUREJ", *"2025"])
 
     def test_se_acepta_si_deja_menos_errores(self):
@@ -175,9 +195,10 @@ class Correccion(unittest.TestCase):
                    [{"faltan": ["auto", "Quiero"], "sobran": []}]))
         self.assertFalse(igual[0]["aceptada"])
         inventa = REV.corregir([self.AUTO], self.CAT,
-                               modelo([["COMPRAR", "AUTOMOVIL"]], []))
+                               modelo([["COMPRAR", "AVION"]], []))
         self.assertFalse(inventa[0]["aceptada"])
-        self.assertEqual(inventa[0]["motivo"], "glosas fuera del catálogo")
+        self.assertIn("AVION", inventa[0]["motivo"])
+        self.assertEqual(inventa[0]["propuesta"], ["COMPRAR", "AVION"])
 
 class Accion(unittest.TestCase):
     def llamar(self, cuerpo):

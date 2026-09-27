@@ -367,41 +367,56 @@ Responde SOLO con JSON: una lista de glosas por frase, en el mismo orden.
 [["GLOSA", ...], ...]"""
 
 
-def glosas_validas(tokens: list, texto: str, catalogo: dict) -> list | None:
-    """Las glosas en el formato del corpus, o `None` si alguna no vale.
+def glosas_validas(tokens: list, texto: str, catalogo: dict) -> tuple:
+    """(glosas en el formato del corpus o None, glosas que no valen).
 
-    Vale una glosa del catálogo (en su forma del catálogo), una seña a
-    incorporar de una palabra que está en la frase, una sigla escrita así en
-    la frase (se deletrea) o un número de la frase (cifra a cifra).
+    Vale una glosa del catálogo (en su forma del catálogo, y la compuesta si
+    existe: NO + SABER → NO_SABER), una palabra de la frase sin seña (como
+    seña a incorporar, la escriba el modelo marcada o no; si tiene seña en el
+    catálogo, la seña), una sigla escrita así en la frase (se deletrea) o un
+    número de la frase (cifra a cifra). Cualquier otra cosa invalida la
+    corrección: el modelo no puede traer palabras que la frase no dice.
     """
     por_norma = {_norm(g).replace(" ", "_"): g for g in catalogo}
     palabras = re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", texto)
     siglas = {_norm(w): w.upper() for w in palabras
               if sum(c.isupper() for c in w) >= 2}
     cifras = {w for w in palabras if w.isdigit()}
-    salida = []
-    for t in tokens:
-        if not isinstance(t, str) or not t.strip():
-            return None
-        t = t.strip()
-        if t.upper().startswith(PENDIENTE):
-            palabra = t[len(PENDIENTE):].strip().upper().replace(" ", "_")
-            if not palabra or not any(
-                    conjugada(p, [palabra.replace("_", " ")])
-                    or _norm(p) == _norm(palabra) for p in palabras):
-                return None
-            salida.append(PENDIENTE + palabra)
-            continue
-        clave = _norm(t).replace(" ", "_")
-        if clave in por_norma:
-            salida.append(por_norma[clave])
-        elif clave in siglas:
-            salida.extend(list(_norm(siglas[clave]).upper()))
-        elif t in cifras:
-            salida.extend(list(t))
+    limpias = [t.strip() for t in tokens if isinstance(t, str) and t.strip()]
+    if len(limpias) != len(tokens):
+        return None, ["(vacía)"]
+    salida, invalidas, i = [], [], 0
+    while i < len(limpias):
+        # La seña compuesta del catálogo gana a sus partes sueltas.
+        for n in (3, 2):
+            junta = "_".join(_norm(x) for x in limpias[i:i + n])
+            if len(limpias[i:i + n]) == n and junta in por_norma:
+                salida.append(por_norma[junta])
+                i += n
+                break
         else:
-            return None
-    return salida or None
+            t = limpias[i]
+            i += 1
+            marcada = t.upper().startswith(PENDIENTE)
+            palabra = (t[len(PENDIENTE):] if marcada else t).strip()
+            clave = _norm(palabra).replace(" ", "_")
+            if clave in por_norma:
+                salida.append(por_norma[clave])
+            elif clave in _FUNCION:
+                continue  # un artículo o preposición que LSB no signa
+            elif clave in siglas:
+                salida.extend(list(_norm(siglas[clave]).upper()))
+            elif palabra in cifras:
+                salida.extend(list(palabra))
+            elif clave and any(conjugada(p, [palabra.replace("_", " ")])
+                               or _norm(p) == _norm(palabra)
+                               for p in palabras):
+                salida.append(PENDIENTE + palabra.upper().replace(" ", "_"))
+            else:
+                invalidas.append(t)
+    if invalidas or not salida:
+        return None, invalidas
+    return salida, []
 
 
 def corregir(items: list, catalogo: dict, invocar) -> list:
@@ -410,20 +425,24 @@ def corregir(items: list, catalogo: dict, invocar) -> list:
     candidatas = []
     for i, it in enumerate(items):
         tokens = propuestas[i] if i < len(propuestas) else None
-        glosas = (glosas_validas(tokens, it["texto"], catalogo)
-                  if isinstance(tokens, list) else None)
-        candidatas.append(glosas)
+        glosas, invalidas = (glosas_validas(tokens, it["texto"], catalogo)
+                             if isinstance(tokens, list) else (None, []))
+        candidatas.append((glosas, invalidas, tokens))
     a_comparar = [{**it, "glosas": g}
-                  for it, g in zip(items, candidatas) if g]
+                  for it, (g, _, _) in zip(items, candidatas) if g]
     comparadas = iter(comparaciones(
         invocar(prompt_comparar(a_comparar)), a_comparar)
         if a_comparar else [])
     salida = []
-    for it, glosas in zip(items, candidatas):
+    for it, (glosas, invalidas, tokens) in zip(items, candidatas):
         base = {"texto": it["texto"], "aceptada": False, "glosas": None,
-                "faltan": it["faltan"], "sobran": it["sobran"]}
+                "faltan": it["faltan"], "sobran": it["sobran"],
+                "propuesta": tokens if isinstance(tokens, list) else None}
         if not glosas:
-            salida.append({**base, "motivo": "glosas fuera del catálogo"})
+            motivo = ("glosas fuera del catálogo y de la frase: "
+                      + ", ".join(invalidas)) if invalidas else \
+                "sin propuesta legible"
+            salida.append({**base, "motivo": motivo})
             continue
         nueva = next(comparadas)
         antes = len(it["faltan"]) + len(it["sobran"])
