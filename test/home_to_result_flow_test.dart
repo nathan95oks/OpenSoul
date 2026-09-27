@@ -414,10 +414,12 @@ void main() {
       // Tocamos la flecha hacia atrás para salir a los contextos
       await tocar(tester, find.byKey(const Key('volver_a_contextos')));
 
-      // Ahora el contexto es nulo y estamos en la pantalla de contextos con el logo y OpenSoul
+      // Ahora el contexto es nulo y estamos en la pantalla de contextos con
+      // el título propio del módulo, sin repetir el branding de OpenSoul.
       expect(container.read(contextProvider), isNull);
       expect(find.text('Selecciona el contexto'), findsOneWidget);
-      expect(find.text('OpenSoul'), findsOneWidget);
+      expect(find.text('Expresión en LSB'), findsOneWidget);
+      expect(find.text('OpenSoul'), findsNothing);
       expect(find.byKey(const Key('volver_a_contextos')), findsNothing);
     },
   );

@@ -24,7 +24,7 @@ const _placeConcepts = {
   'BARRIO',
   'TIENDA',
   'CASA',
-  'COCHABAMBA'
+  'COCHABAMBA',
 };
 const _relationConcepts = {'CERCA', 'LEJOS', 'DENTRO', 'FUERA', 'AL_LADO'};
 const _vehicleConcepts = {'MICRO', 'TRUFI'};
@@ -35,7 +35,7 @@ const _clothingConcepts = {
   'GORRA',
   'CHAMARRA',
   'LENTES',
-  'MOCHILA'
+  'MOCHILA',
 };
 const _genderConcepts = {'HOMBRE', 'MUJER'};
 const _ageConcepts = {'JOVEN', 'ADULTO'};
@@ -67,7 +67,11 @@ Future<String?> mostrarTecladoTextoLibre(
       builder: (ctx, setModalState) => SafeArea(
         child: Padding(
           padding: EdgeInsets.fromLTRB(
-              20, 4, 20, MediaQuery.of(ctx).viewInsets.bottom + 20),
+            20,
+            4,
+            20,
+            MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -87,13 +91,11 @@ Future<String?> mostrarTecladoTextoLibre(
                 autofocus: true,
                 textCapitalization: TextCapitalization.words,
                 maxLength: 80,
-                decoration: InputDecoration(
-                  hintText: hint ?? 'Escribe aquí (se conservan espacios y tildes)',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  filled: true,
-                  fillColor: AppTheme.lightBg,
+                cursorColor: AppTheme.lightInputCursor,
+                style: const TextStyle(color: AppTheme.lightInputText),
+                decoration: AppTheme.lightInputDecoration(
+                  hintText:
+                      hint ?? 'Escribe aquí (se conservan espacios y tildes)',
                 ),
                 onChanged: (_) => setModalState(() {}),
                 onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
@@ -169,10 +171,15 @@ Future<T?> _opciones<T>(
                             onTap: () => Navigator.of(ctx).pop(value),
                             child: Container(
                               height: 56,
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 18,
+                              ),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: AppTheme.lightBorder, width: 1.2),
+                                border: Border.all(
+                                  color: AppTheme.lightBorder,
+                                  width: 1.2,
+                                ),
                               ),
                               child: Row(
                                 children: [
@@ -213,7 +220,10 @@ Future<T?> _opciones<T>(
 // -----------------------------------------------------------------------------
 
 Future<void> mostrarEditorLugar(
-    BuildContext context, WidgetRef ref, LsbCard card) async {
+  BuildContext context,
+  WidgetRef ref,
+  LsbCard card,
+) async {
   final gloss = card.gloss.toUpperCase();
   final notifier = ref.read(declarationDraftProvider.notifier);
 
@@ -224,7 +234,10 @@ Future<void> mostrarEditorLugar(
 
   if (_vehicleConcepts.contains(gloss)) {
     await DisambiguationModal.desambiguarTransporteVehiculo(
-        context, ref, gloss);
+      context,
+      ref,
+      gloss,
+    );
     return;
   }
 
@@ -252,7 +265,10 @@ Future<void> mostrarEditorLugar(
 }
 
 Future<void> _abrirRelacionEspacial(
-    BuildContext context, WidgetRef ref, String relation) async {
+  BuildContext context,
+  WidgetRef ref,
+  String relation,
+) async {
   final notifier = ref.read(declarationDraftProvider.notifier);
   final relLabel = switch (relation) {
     'CERCA' => 'cerca',
@@ -269,10 +285,12 @@ Future<void> _abrirRelacionEspacial(
 
   final eleccion = await _opciones<String>(
     context,
-    titulo: '¿${relLabel[0].toUpperCase()}${relLabel.substring(1)} de qué lugar?',
+    titulo:
+        '¿${relLabel[0].toUpperCase()}${relLabel.substring(1)} de qué lugar?',
     opciones: [
       ('Mi casa', 'home'),
-      if (lugarPrevio != null) ('El lugar ya indicado ($lugarPrevio)', 'previous'),
+      if (lugarPrevio != null)
+        ('El lugar ya indicado ($lugarPrevio)', 'previous'),
       ('Otro lugar / referencia (escribir)', 'other'),
       ('Todavía no lo sé — dejar pendiente', 'pending'),
     ],
@@ -294,7 +312,9 @@ Future<void> _abrirRelacionEspacial(
     );
     if (context.mounted) {
       AppToastManager.showSuccess(
-          context, 'Referencia: $relLabel de $lugarPrevio');
+        context,
+        'Referencia: $relLabel de $lugarPrevio',
+      );
     }
     return;
   }
@@ -306,7 +326,9 @@ Future<void> _abrirRelacionEspacial(
   );
   if (texto != null && texto.isNotEmpty) {
     notifier.setLocationReference(
-        referenceType: 'other', referenceLiteralText: texto);
+      referenceType: 'other',
+      referenceLiteralText: texto,
+    );
     if (context.mounted) {
       AppToastManager.showSuccess(context, 'Referencia: $relLabel de $texto');
     }
@@ -318,7 +340,10 @@ Future<void> _abrirRelacionEspacial(
 // -----------------------------------------------------------------------------
 
 Future<void> mostrarEditorObjeto(
-    BuildContext context, WidgetRef ref, LsbCard card) async {
+  BuildContext context,
+  WidgetRef ref,
+  LsbCard card,
+) async {
   final gloss = card.gloss.toUpperCase();
   final notifier = ref.read(declarationDraftProvider.notifier);
 
@@ -343,7 +368,10 @@ Future<void> mostrarEditorObjeto(
   // 4. MICRO / TRUFI
   if (_vehicleConcepts.contains(gloss)) {
     await DisambiguationModal.desambiguarTransporteVehiculo(
-        context, ref, gloss);
+      context,
+      ref,
+      gloss,
+    );
     return;
   }
 
@@ -386,7 +414,10 @@ Future<void> mostrarEditorObjeto(
 /// Paso 3: Complexión y Estatura (Alto/a, Bajo/a, Delgado/a, Robusto/a, Omitir) -> Avanza al Paso 4.
 /// Paso 4: Vestimenta y Accesorios (Chamarra, Polera, Pantalón, Gorra, Lentes, Mochila) -> Abre selector de color específico.
 Future<void> mostrarEditorPersona(
-    BuildContext context, WidgetRef ref, LsbCard card) async {
+  BuildContext context,
+  WidgetRef ref,
+  LsbCard card,
+) async {
   await ejecutarWizardSecuencialPersona(
     context,
     ref,
@@ -454,7 +485,8 @@ class _PersonSequentialWizardSheetState
 
     final draft = ref.read(declarationDraftProvider);
     final esPersonaNueva =
-        widget.personId == null && !(draft.persons.isNotEmpty && widget.initialConcept == null);
+        widget.personId == null &&
+        !(draft.persons.isNotEmpty && widget.initialConcept == null);
 
     if (widget.personId != null) {
       _personId = widget.personId!;
@@ -466,7 +498,8 @@ class _PersonSequentialWizardSheetState
       // creación real en el draft se hace en el primer frame ya montado.
       // `build()` ya sabe mostrar una PersonEntity local con este id
       // mientras tanto (ver más abajo).
-      _personId = 'p_${DateTime.now().microsecondsSinceEpoch}_${identityHashCode(this)}';
+      _personId =
+          'p_${DateTime.now().microsecondsSinceEpoch}_${identityHashCode(this)}';
     }
 
     String? genero, edad, complexion, estatura;
@@ -503,7 +536,9 @@ class _PersonSequentialWizardSheetState
       }
       if (genero != null) notifier.updatePerson(_personId, gender: genero);
       if (edad != null) notifier.updatePerson(_personId, ageApprox: edad);
-      if (complexion != null) notifier.updatePerson(_personId, build: complexion);
+      if (complexion != null) {
+        notifier.updatePerson(_personId, build: complexion);
+      }
       if (estatura != null) notifier.updatePerson(_personId, height: estatura);
     });
   }
@@ -559,14 +594,17 @@ class _PersonSequentialWizardSheetState
 
   void _finalizar() {
     AppToastManager.showSuccess(
-        context, 'Descripción de la persona guardada correctamente');
+      context,
+      'Descripción de la persona guardada correctamente',
+    );
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     final draft = ref.watch(declarationDraftProvider);
-    final person = draft.persons.where((p) => p.id == _personId).firstOrNull ??
+    final person =
+        draft.persons.where((p) => p.id == _personId).firstOrNull ??
         PersonEntity(id: _personId, role: widget.role);
 
     return SafeArea(
@@ -575,8 +613,9 @@ class _PersonSequentialWizardSheetState
         // ejemplo varias prendas agregadas) y los botones de navegación —
         // incluido "FINALIZAR DESCRIPCIÓN" — terminaban fuera de la pantalla,
         // alcanzables solo si se sabía que había que seguir desplazándose.
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.88),
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.88,
+        ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
           child: Column(
@@ -872,8 +911,7 @@ class _PersonSequentialWizardSheetState
       children: [
         const _StepHeader(
           title: 'Paso 4: Vestimenta y Accesorios',
-          subtitle:
-              'Elige las prendas y define su color visual específico',
+          subtitle: 'Elige las prendas y define su color visual específico',
           icon: Icons.checkroom_rounded,
         ),
         const SizedBox(height: 14),
@@ -908,10 +946,16 @@ class _PersonSequentialWizardSheetState
                         Container(
                           padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF7C3AED).withValues(alpha: 0.12),
+                            color: const Color(
+                              0xFF7C3AED,
+                            ).withValues(alpha: 0.12),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(icon, color: const Color(0xFF7C3AED), size: 18),
+                          child: Icon(
+                            icon,
+                            color: const Color(0xFF7C3AED),
+                            size: 18,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
@@ -924,8 +968,11 @@ class _PersonSequentialWizardSheetState
                             ),
                           ),
                         ),
-                        const Icon(Icons.add_circle_outline,
-                            size: 18, color: Color(0xFF7C3AED)),
+                        const Icon(
+                          Icons.add_circle_outline,
+                          size: 18,
+                          color: Color(0xFF7C3AED),
+                        ),
                       ],
                     ),
                   ),
@@ -954,8 +1001,10 @@ class _PersonSequentialWizardSheetState
             children: [
               for (final c in person.clothing)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF660066).withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
@@ -980,7 +1029,11 @@ class _PersonSequentialWizardSheetState
                           notifier.removeClothing(_personId, c.id);
                           setState(() {});
                         },
-                        child: const Icon(Icons.close, size: 15, color: Color(0xFF660066)),
+                        child: const Icon(
+                          Icons.close,
+                          size: 15,
+                          color: Color(0xFF660066),
+                        ),
                       ),
                     ],
                   ),
@@ -1073,10 +1126,7 @@ class _StepHeader extends StatelessWidget {
         Text(
           subtitle,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 12.5,
-            color: AppTheme.lightTextSub,
-          ),
+          style: const TextStyle(fontSize: 12.5, color: AppTheme.lightTextSub),
         ),
       ],
     );
@@ -1097,12 +1147,7 @@ class _WizardStepIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const pasos = [
-      (1, 'Género'),
-      (2, 'Edad'),
-      (3, 'Rasgos'),
-      (4, 'Ropa'),
-    ];
+    const pasos = [(1, 'Género'), (2, 'Edad'), (3, 'Rasgos'), (4, 'Ropa')];
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -1125,15 +1170,15 @@ class _WizardStepIndicator extends StatelessWidget {
                 color: pasos[i].$1 == currentStep
                     ? null
                     : (pasos[i].$1 < currentStep
-                        ? _purple.withValues(alpha: 0.15)
-                        : AppTheme.lightBg),
+                          ? _purple.withValues(alpha: 0.15)
+                          : AppTheme.lightBg),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: pasos[i].$1 == currentStep
                       ? const Color(0xFFC084FC)
                       : (pasos[i].$1 < currentStep
-                          ? _purple
-                          : AppTheme.lightBorder),
+                            ? _purple
+                            : AppTheme.lightBorder),
                   width: pasos[i].$1 == currentStep ? 1.5 : 1.0,
                 ),
                 boxShadow: pasos[i].$1 == currentStep
@@ -1171,8 +1216,8 @@ class _WizardStepIndicator extends StatelessWidget {
                       color: pasos[i].$1 == currentStep
                           ? Colors.white
                           : (pasos[i].$1 < currentStep
-                              ? _purple
-                              : AppTheme.lightTextSub),
+                                ? _purple
+                                : AppTheme.lightTextSub),
                     ),
                   ),
                 ],
@@ -1185,7 +1230,9 @@ class _WizardStepIndicator extends StatelessWidget {
               child: Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 9,
-                color: pasos[i].$1 < currentStep ? _purple : AppTheme.lightBorder,
+                color: pasos[i].$1 < currentStep
+                    ? _purple
+                    : AppTheme.lightBorder,
               ),
             ),
         ],
@@ -1255,7 +1302,9 @@ class _OptionTile extends StatelessWidget {
                 size: 22,
                 color: isSelected
                     ? Colors.white
-                    : (isSecondary ? AppTheme.lightTextSub : const Color(0xFF7C3AED)),
+                    : (isSecondary
+                          ? AppTheme.lightTextSub
+                          : const Color(0xFF7C3AED)),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -1266,14 +1315,20 @@ class _OptionTile extends StatelessWidget {
                     fontWeight: isSelected ? FontWeight.w800 : FontWeight.w700,
                     color: isSelected
                         ? Colors.white
-                        : (isSecondary ? AppTheme.lightTextSub : AppTheme.lightText),
+                        : (isSecondary
+                              ? AppTheme.lightTextSub
+                              : AppTheme.lightText),
                   ),
                 ),
               ),
               Icon(
-                isSelected ? Icons.check_circle_rounded : Icons.arrow_forward_ios_rounded,
+                isSelected
+                    ? Icons.check_circle_rounded
+                    : Icons.arrow_forward_ios_rounded,
                 size: isSelected ? 22 : 14,
-                color: isSelected ? const Color(0xFFC084FC) : AppTheme.lightTextSub,
+                color: isSelected
+                    ? const Color(0xFFC084FC)
+                    : AppTheme.lightTextSub,
               ),
             ],
           ),
@@ -1334,10 +1389,7 @@ Future<void> _elegirColorPrenda(
             const Text(
               'Selecciona el color visual para una descripción formal exacta',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12.5,
-                color: AppTheme.lightTextSub,
-              ),
+              style: TextStyle(fontSize: 12.5, color: AppTheme.lightTextSub),
             ),
             const SizedBox(height: 18),
             Wrap(
@@ -1354,11 +1406,15 @@ Future<void> _elegirColorPrenda(
                       onTap: () => Navigator.of(ctx).pop(value),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 10),
+                          horizontal: 14,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                              color: AppTheme.lightBorder, width: 1.2),
+                            color: AppTheme.lightBorder,
+                            width: 1.2,
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -1402,7 +1458,8 @@ Future<void> _elegirColorPrenda(
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       side: const BorderSide(color: AppTheme.lightBorder),
                     ),
                     child: const Text(
@@ -1422,7 +1479,8 @@ Future<void> _elegirColorPrenda(
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       side: const BorderSide(color: Color(0xFF7C3AED)),
                     ),
                     child: const Text(
@@ -1445,11 +1503,17 @@ Future<void> _elegirColorPrenda(
 
   if (eleccion == null) return;
   if (eleccion == 'UNKNOWN') {
-    notifier.setClothingColor(personId, clothingId, null,
-        state1: ConfirmationState.uncertain);
+    notifier.setClothingColor(
+      personId,
+      clothingId,
+      null,
+      state1: ConfirmationState.uncertain,
+    );
     if (context.mounted) {
       AppToastManager.showInfo(
-          context, 'Prenda ${clothingConcept.toLowerCase()} registrada sin color');
+        context,
+        'Prenda ${clothingConcept.toLowerCase()} registrada sin color',
+      );
     }
     return;
   }
@@ -1464,7 +1528,9 @@ Future<void> _elegirColorPrenda(
       notifier.setClothingColor(personId, clothingId, texto);
       if (context.mounted) {
         AppToastManager.showSuccess(
-            context, 'Color $texto asignado a $clothingConcept');
+          context,
+          'Color $texto asignado a $clothingConcept',
+        );
       }
     }
     return;
@@ -1473,7 +1539,9 @@ Future<void> _elegirColorPrenda(
   notifier.setClothingColor(personId, clothingId, eleccion);
   if (context.mounted) {
     AppToastManager.showSuccess(
-        context, 'Color $eleccion asignado a $clothingConcept');
+      context,
+      'Color $eleccion asignado a $clothingConcept',
+    );
   }
 }
 
@@ -1514,8 +1582,10 @@ class PersonasDescritasResumen extends ConsumerWidget {
                   AppToastManager.showInfo(context, 'Nueva persona agregada');
                 },
                 icon: const Icon(Icons.person_add_alt_1, size: 15),
-                label: const Text('Otra persona',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                label: const Text(
+                  'Otra persona',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                ),
               ),
             ],
           ),
@@ -1545,7 +1615,12 @@ class PersonasDescritasResumen extends ConsumerWidget {
                       .read(declarationDraftProvider.notifier)
                       .addClothing(draft.persons[i].id, eleccion);
                   await _elegirColorPrenda(
-                      context, ref, draft.persons[i].id, cid, eleccion);
+                    context,
+                    ref,
+                    draft.persons[i].id,
+                    cid,
+                    eleccion,
+                  );
                 }
               },
             ),
@@ -1629,8 +1704,10 @@ class _PersonaCard extends StatelessWidget {
               children: [
                 for (final c in person.clothing)
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.lightBg,
                       borderRadius: BorderRadius.circular(8),
@@ -1639,7 +1716,9 @@ class _PersonaCard extends StatelessWidget {
                     child: Text(
                       '${c.concept}: ${c.color ?? "sin color"}',
                       style: const TextStyle(
-                          fontSize: 11.5, fontWeight: FontWeight.w700),
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
               ],
@@ -1649,8 +1728,10 @@ class _PersonaCard extends StatelessWidget {
           TextButton.icon(
             onPressed: onAddClothing,
             icon: const Icon(Icons.add, size: 14),
-            label: const Text('Agregar prenda / color',
-                style: TextStyle(fontSize: 11.5)),
+            label: const Text(
+              'Agregar prenda / color',
+              style: TextStyle(fontSize: 11.5),
+            ),
             style: TextButton.styleFrom(
               padding: EdgeInsets.zero,
               minimumSize: const Size(0, 24),
@@ -1676,7 +1757,10 @@ Future<void> reabrirEditorLugar(BuildContext context, WidgetRef ref) async {
     titulo: '¿Qué deseas modificar del lugar?',
     opciones: [
       if (draft.location.relation != null)
-        ('Modificar la referencia espacial (${draft.location.relation})', 'relation'),
+        (
+          'Modificar la referencia espacial (${draft.location.relation})',
+          'relation',
+        ),
       ('Escribir o cambiar el nombre/detalle del lugar', 'detail'),
       ('Restablecer lugar', 'clear'),
     ],
@@ -1694,7 +1778,10 @@ Future<void> reabrirEditorLugar(BuildContext context, WidgetRef ref) async {
       hint: 'Ej: Mercado Calatayud, Calle San Martín',
     );
     if (detalle != null && detalle.isNotEmpty) {
-      notifier.setMainPlace(draft.location.mainPlaceConcept ?? 'LUGAR', detail: detalle);
+      notifier.setMainPlace(
+        draft.location.mainPlaceConcept ?? 'LUGAR',
+        detail: detalle,
+      );
       if (context.mounted) {
         AppToastManager.showSuccess(context, 'Lugar actualizado: $detalle');
       }
@@ -1708,23 +1795,34 @@ Future<void> reabrirEditorLugar(BuildContext context, WidgetRef ref) async {
 }
 
 Future<void> reabrirEditorPersona(
-    BuildContext context, WidgetRef ref, String personId) async {
+  BuildContext context,
+  WidgetRef ref,
+  String personId,
+) async {
   await ejecutarWizardSecuencialPersona(context, ref, personId: personId);
 }
 
 Future<void> reabrirEditorObjeto(
-    BuildContext context, WidgetRef ref, String objectId) async {
+  BuildContext context,
+  WidgetRef ref,
+  String objectId,
+) async {
   final draft = ref.read(declarationDraftProvider);
   final notifier = ref.read(declarationDraftProvider.notifier);
   final o = draft.objects.firstWhere(
     (e) => e.id == objectId,
-    orElse: () => ObjectInvolved(id: objectId, concept: 'OBJETO', role: 'stolen'),
+    orElse: () =>
+        ObjectInvolved(id: objectId, concept: 'OBJETO', role: 'stolen'),
   );
 
   final gloss = o.concept.toUpperCase();
   if (gloss == 'BILLETES' || gloss == 'DINERO') {
-    await mostrarEditorMontoDinero(context, ref,
-        existingObjectId: objectId, initialRole: o.role);
+    await mostrarEditorMontoDinero(
+      context,
+      ref,
+      existingObjectId: objectId,
+      initialRole: o.role,
+    );
     return;
   }
   if (gloss == 'PAPEL') {
@@ -1740,7 +1838,11 @@ Future<void> reabrirEditorObjeto(
     return;
   }
   if (_vehicleConcepts.contains(gloss)) {
-    await DisambiguationModal.desambiguarTransporteVehiculo(context, ref, gloss);
+    await DisambiguationModal.desambiguarTransporteVehiculo(
+      context,
+      ref,
+      gloss,
+    );
     return;
   }
 

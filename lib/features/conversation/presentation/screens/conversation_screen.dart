@@ -56,8 +56,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       try {
         await audio.playUrl(turn.outputs.audioUrl!);
         return;
-      } catch (_) {
-      }
+      } catch (_) {}
     }
     await audio.speak(turn.outputs.text);
   }
@@ -93,7 +92,8 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       builder: (ctx) => AlertDialog(
         title: const Text('Tienes un mensaje a medias'),
         content: const Text(
-            'Si continúas se descartará lo que estabas armando. ¿Continuar?'),
+          'Si continúas se descartará lo que estabas armando. ¿Continuar?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -109,25 +109,11 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     return discard == true;
   }
 
-  /// Devuelve el turno al oyente. Enfoca su campo de texto y nada más: el
-  /// micrófono solo se enciende si él lo pulsa.
-  void _handBackToHearing() {
-    ref.read(conversationHandoffProvider).handBackToHearing();
-    _hearingFocus.requestFocus();
-  }
-
   /// Qué se le ofrece a la persona sorda: empezar ella (B) o responder (C).
   CardsFlowPurpose _deafCardsMode(ConversationState state) =>
       state.conversation.pendingReply == null
-          ? CardsFlowPurpose.conversationInitiative
-          : CardsFlowPurpose.conversationReply;
-
-  /// El botón de devolver el turno aparece justo cuando le toca al oyente:
-  /// después de que la persona sorda dejara su turno en el chat.
-  bool _showHandBack(ConversationState state) {
-    final last = state.conversation.lastTurn;
-    return last != null && last.message.speaker == SpeakerRole.deaf;
-  }
+      ? CardsFlowPurpose.conversationInitiative
+      : CardsFlowPurpose.conversationReply;
 
   ConversationTurn? _instruccionPendiente(ConversationState state) {
     final pendiente = state.conversation.pendingReply;
@@ -137,9 +123,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
         : null;
   }
 
-  Future<void> _enviarRespuestaRapida(
-      List<String> glosses, String text) async {
-    ref.read(conversationProvider.notifier).addDeafDeclaration(
+  Future<void> _enviarRespuestaRapida(List<String> glosses, String text) async {
+    ref
+        .read(conversationProvider.notifier)
+        .addDeafDeclaration(
           result: TranslationResult(baseSentence: text, generatedText: text),
           glosses: glosses,
         );
@@ -182,9 +169,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       builder: (ctx) => AlertDialog(
         title: const Text('Finalizar atención'),
         content: const Text(
-            'Se borrarán los mensajes, borradores y resultados de esta '
-            'atención. La configuración de la institución se conserva. '
-            '¿Continuar?'),
+          'Se borrarán los mensajes, borradores y resultados de esta '
+          'atención. La configuración de la institución se conserva. '
+          '¿Continuar?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -208,7 +196,8 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       builder: (ctx) => AlertDialog(
         title: const Text('Nuevo chat'),
         content: const Text(
-            'Se borrará el historial de este chat. ¿Continuar?'),
+          'Se borrará el historial de este chat. ¿Continuar?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -240,30 +229,22 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     return Theme(
       data: AppTheme.darkTheme,
       child: Scaffold(
-        backgroundColor: AppTheme.darkBg,
+        backgroundColor: AppTheme.conversationPageBg,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          foregroundColor: AppTheme.ink,
           elevation: 0,
+          scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent,
           centerTitle: true,
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.asset(
-                  'assets/logo.png',
-                  width: 30,
-                  height: 30,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 10),
-              const Text(
-                'Chat',
-                style:
-                    TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.4),
-              ),
-            ],
+          // Sin el logo: dentro de la app ya se sabe que es OpenSoul.
+          title: const Text(
+            'Chat',
+            style: TextStyle(
+              color: AppTheme.ink,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.4,
+            ),
           ),
           actions: [
             // En ventanilla el dispositivo pasa de una persona a la
@@ -274,6 +255,9 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 key: const Key('finalizar_atencion'),
                 icon: const Icon(Icons.logout, size: 18),
                 label: const Text('Finalizar atención'),
+                style: TextButton.styleFrom(
+                  foregroundColor: AppTheme.brandLight,
+                ),
                 onPressed: _confirmEndAttention,
               )
             else if (!state.conversation.isEmpty)
@@ -288,33 +272,56 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           child: Column(
             children: [
               Expanded(
-                child: state.conversation.isEmpty
-                    ? const _EmptyConversation()
-                    : ListView.builder(
-                        controller: _scroll,
-                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                        itemCount: state.conversation.turns.length,
-                        itemBuilder: (context, i) {
-                          final turn = state.conversation.turns[i];
-                          return TurnBubble(
-                            turn: turn,
-                            onPlayAudio: () => _playDeafTurn(turn),
-                            onShowAvatar: () {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              SystemChannels.textInput.invokeMethod('TextInput.hide');
-                              AvatarPlaybackSheet.show(
-                                context,
-                                glosses: turn.outputs.animationGlosses.isNotEmpty
-                                    ? turn.outputs.animationGlosses
-                                    : turn.message.glosses,
-                                animationUrls: turn.outputs.animationUrls,
-                                animationGlosses: turn.outputs.animationGlosses,
-                                autoDismissOnFinish: false,
-                              );
-                            },
-                          );
-                        },
+                child: Container(
+                  margin: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: AppTheme.framedSurface,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: AppTheme.brandLight.withValues(alpha: 0.24),
+                      width: 1.25,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppTheme.brandPrimary.withValues(alpha: 0.08),
+                        blurRadius: 18,
+                        offset: const Offset(0, 6),
                       ),
+                    ],
+                  ),
+                  child: state.conversation.isEmpty
+                      ? const _EmptyConversation()
+                      : ListView.builder(
+                          controller: _scroll,
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                          itemCount: state.conversation.turns.length,
+                          itemBuilder: (context, i) {
+                            final turn = state.conversation.turns[i];
+                            return TurnBubble(
+                              turn: turn,
+                              onPlayAudio: () => _playDeafTurn(turn),
+                              onShowAvatar: () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                SystemChannels.textInput.invokeMethod(
+                                  'TextInput.hide',
+                                );
+                                AvatarPlaybackSheet.show(
+                                  context,
+                                  glosses:
+                                      turn.outputs.animationGlosses.isNotEmpty
+                                      ? turn.outputs.animationGlosses
+                                      : turn.message.glosses,
+                                  animationUrls: turn.outputs.animationUrls,
+                                  animationGlosses:
+                                      turn.outputs.animationGlosses,
+                                  autoDismissOnFinish: false,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
               ),
               if (state.error != null)
                 Padding(
@@ -322,7 +329,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                   child: _StatusChip(
                     icon: Icons.error_outline,
                     text: state.error!,
-                    color: AppTheme.errorDark,
+                    color: AppTheme.errorLight,
                   ),
                 ),
               if (_instruccionPendiente(state) != null)
@@ -332,9 +339,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 onHearingSpeech: (text) =>
                     _handleHearingSend(text, source: MessageSource.speech),
                 onDeafCards: _openCardsFlow,
-                onHandBackToHearing: _handBackToHearing,
                 deafCardsMode: _deafCardsMode(state),
-                showHandBack: _showHandBack(state),
                 hearingFocus: _hearingFocus,
               ),
             ],
@@ -349,18 +354,14 @@ class _InputArea extends StatelessWidget {
   final void Function(String) onHearingText;
   final void Function(String) onHearingSpeech;
   final VoidCallback onDeafCards;
-  final VoidCallback onHandBackToHearing;
   final CardsFlowPurpose deafCardsMode;
-  final bool showHandBack;
   final FocusNode hearingFocus;
 
   const _InputArea({
     required this.onHearingText,
     required this.onHearingSpeech,
     required this.onDeafCards,
-    required this.onHandBackToHearing,
     required this.deafCardsMode,
-    required this.showHandBack,
     required this.hearingFocus,
   });
 
@@ -368,54 +369,54 @@ class _InputArea extends StatelessWidget {
   /// responder; «Iniciar» cuando la persona sorda abre el turno ella misma.
   String get _deafCardsLabel =>
       deafCardsMode == CardsFlowPurpose.conversationReply
-          ? 'Responder con tarjetas LSB'
-          : 'Iniciar con tarjetas LSB';
+      ? 'Responder con tarjetas LSB'
+      : 'Iniciar con tarjetas LSB';
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.fromLTRB(12, 4, 12, 12),
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
+      decoration: BoxDecoration(
+        color: AppTheme.framedSurface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppTheme.lsbViolet.withValues(alpha: 0.24),
+          width: 1.25,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.lsbViolet.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (showHandBack) ...[
-            SizedBox(
-              width: double.infinity,
-              height: 46,
-              child: FilledButton.icon(
-                key: const Key('continuar_como_oyente'),
-                onPressed: onHandBackToHearing,
-                icon: const Icon(Icons.record_voice_over, size: 18),
-                label: const Text(
-                  'Continuar como persona oyente',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-                style: FilledButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(23),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
           SizedBox(
             width: double.infinity,
             height: 46,
+            // Abre las tarjetas LSB: lleva el violeta de las glosas.
             child: OutlinedButton.icon(
               key: const Key('tarjetas_lsb'),
               onPressed: onDeafCards,
-              icon: const Icon(Icons.sign_language, size: 18, color: Colors.white),
+              icon: const Icon(
+                Icons.sign_language,
+                size: 18,
+                color: AppTheme.lsbViolet,
+              ),
               label: Text(
                 _deafCardsLabel,
                 style: const TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                  color: AppTheme.lsbViolet,
                 ),
               ),
               style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.white,
-                side: const BorderSide(color: Colors.white38),
+                foregroundColor: AppTheme.lsbViolet,
+                side: const BorderSide(color: AppTheme.lsbViolet, width: 1.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(23),
                 ),
@@ -459,13 +460,15 @@ class _StatusChip extends StatelessWidget {
         children: [
           Icon(icon, size: 15, color: color),
           const SizedBox(width: 6),
+          // El icono y el borde llevan el color; el texto, la tinta, que se
+          // lee sobre blanco.
           Flexible(
             child: Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: color,
+                color: AppTheme.ink,
               ),
             ),
           ),
@@ -486,27 +489,30 @@ class _EmptyConversation extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.forum_outlined,
-                size: 56, color: AppTheme.brandLight),
+            const Icon(
+              Icons.forum_outlined,
+              size: 56,
+              color: AppTheme.brandLight,
+            ),
             const SizedBox(height: 18),
             const Text(
               'Un chat, dos idiomas',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
+                color: AppTheme.ink,
                 fontSize: 19,
                 fontWeight: FontWeight.w800,
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              'La persona oyente habla o escribe y su mensaje se interpreta '
-              'en el avatar LSB.\n\nLa persona sorda responde con tarjetas y '
-              'su mensaje se convierte en texto y voz.\n\nPásense el teléfono '
+              'Habla o escribe y el mensaje se interpreta en el avatar LSB.\n\n'
+              'Responde con tarjetas para convertir el mensaje en texto y '
+              'voz.\n\nPásense el teléfono '
               'para conversar.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: AppTheme.darkTextSub,
+                color: AppTheme.inkSub,
                 fontSize: 14,
                 height: 1.5,
               ),
