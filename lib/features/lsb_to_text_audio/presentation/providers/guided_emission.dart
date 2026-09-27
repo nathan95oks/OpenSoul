@@ -56,7 +56,7 @@ class GuidedEmission {
     final faltan = rules.missingRequired(session);
     if (faltan.isNotEmpty) {
       final primera = faltan.first;
-      flow.goTo(primera);
+      flow.requireSelection(primera);
       return GuidedEmissionOutcome(
         GuidedEmissionStatus.missingRequired,
         missingQuestion: rules.formulationOf(session, primera),

@@ -60,7 +60,15 @@ class GuidedFlowState {
   /// Aviso pendiente de mostrar (p. ej. respuestas dependientes borradas).
   final String? notice;
 
-  const GuidedFlowState({this.session, this.notice});
+  /// Pregunta obligatoria cuyas opciones deben pedir una selección en la UI.
+  /// Es una validación visual transitoria, no parte de la declaración.
+  final String? requiredSelectionQuestionId;
+
+  const GuidedFlowState({
+    this.session,
+    this.notice,
+    this.requiredSelectionQuestionId,
+  });
 
   static const empty = GuidedFlowState();
 }
@@ -171,7 +179,17 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
           'Se borraron respuestas que dependían de la anterior: '
           '${names.join(', ')}.';
     }
-    state = GuidedFlowState(session: session, notice: notice);
+    final requiredQuestionId = state.requiredSelectionQuestionId;
+    final keepRequiredSelection =
+        requiredQuestionId != null &&
+        _rules.isRequiredAndMissing(session, requiredQuestionId);
+    state = GuidedFlowState(
+      session: session,
+      notice: notice,
+      requiredSelectionQuestionId: keepRequiredSelection
+          ? requiredQuestionId
+          : null,
+    );
     _syncSentence();
     return outcome;
   }
@@ -208,7 +226,22 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
   SelectionOutcome omit(String questionId) =>
       _require((s) => _rules.omit(s, questionId));
 
-  void clearNotice() => state = GuidedFlowState(session: state.session);
+  void clearNotice() => state = GuidedFlowState(
+    session: state.session,
+    requiredSelectionQuestionId: state.requiredSelectionQuestionId,
+  );
+
+  /// Lleva a una pregunta obligatoria y pide la selección dentro de sus
+  /// tarjetas. Elegir una respuesta válida retira la indicación.
+  void requireSelection(String questionId) {
+    final session = state.session;
+    if (session == null) return;
+    state = GuidedFlowState(
+      session: _rules.goTo(session, questionId),
+      notice: state.notice,
+      requiredSelectionQuestionId: questionId,
+    );
+  }
 
   // ---- Navegación -----------------------------------------------------------
 

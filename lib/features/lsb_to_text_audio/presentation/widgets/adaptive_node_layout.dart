@@ -18,6 +18,9 @@ class AdaptiveNodeLayout extends StatelessWidget {
   /// y «Cuándo me avisan» empiezan por CUÁNDO) y no por eso son la misma.
   final Set<String>? selectedIds;
 
+  /// Resalta las opciones como un campo obligatorio pendiente.
+  final bool requiresSelection;
+
   /// Mantener una tarjeta muestra su seña en el avatar sin elegirla (ver
   /// [SemanticNode.onPreview]). Sin él, las tarjetas solo responden al toque.
   final Future<void> Function(LsbCard)? onCardPreview;
@@ -29,6 +32,7 @@ class AdaptiveNodeLayout extends StatelessWidget {
     this.selectedGlosses = const {},
     this.selectedIds,
     this.onCardPreview,
+    this.requiresSelection = false,
   });
 
   static const _spacing = 12.0;
@@ -118,6 +122,7 @@ class AdaptiveNodeLayout extends StatelessWidget {
       isSelected:
           selectedIds?.contains(card.id) ??
           selectedGlosses.contains(card.gloss),
+      requiresSelection: requiresSelection,
       onTap: () => onCardTap(card),
       onPreview: preview == null ? null : () => preview(card),
     );

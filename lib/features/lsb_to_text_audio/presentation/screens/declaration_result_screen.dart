@@ -198,7 +198,7 @@ class DeclarationResultScreen extends ConsumerWidget {
                       label: 'Nueva declaración',
                       icon: Icons.refresh_outlined,
                       filled: true,
-                      onTap: () => _newDeclaration(context, ref),
+                      onTap: () => _newDeclaration(ref),
                     ),
                   ],
                 ),
@@ -266,7 +266,7 @@ class DeclarationResultScreen extends ConsumerWidget {
     }
   }
 
-  Future<void> _newDeclaration(BuildContext context, WidgetRef ref) async {
+  Future<void> _newDeclaration(WidgetRef ref) async {
     ref.read(translationControllerProvider.notifier).pauseAudio();
     // Limpia todo el flujo y contexto para redirigir a la selección de contexto
     // (trámites, consultas, demandas o preguntas).
@@ -276,12 +276,6 @@ class DeclarationResultScreen extends ConsumerWidget {
         .start(const CardsFlowLaunch.standalone());
     ref.read(resultVisibleProvider.notifier).hide();
     ref.read(selectedTabProvider.notifier).select(AppTabId.cards);
-    if (!context.mounted) return;
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go('/lsb-to-audio');
-    }
   }
 }
 

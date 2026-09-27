@@ -92,11 +92,9 @@ class _LiveDeclarationPreviewPanelState
                       rules.isRequiredAndMissing(actual, pendiente)) {
                     // Sin esta respuesta la anterior no se puede redactar
                     // («Alguien escapó» exige «¿quién?»).
-                    AppToastManager.showInfo(
-                      context,
-                      'Esta pregunta es necesaria. Si no lo sabes, '
-                      'elige «No sé».',
-                    );
+                    ref
+                        .read(guidedFlowProvider.notifier)
+                        .requireSelection(pendiente);
                     return;
                   }
                   if (!isLastStep) {
@@ -124,10 +122,9 @@ class _LiveDeclarationPreviewPanelState
     if (!context.mounted) return;
     switch (outcome.status) {
       case GuidedEmissionStatus.missingRequired:
-        AppToastManager.showInfo(
-          context,
-          'Falta responder: «${outcome.missingQuestion}».',
-        );
+        // Ya se resalta dentro de las glosas: la tarjeta obligatoria pendiente
+        // (ver GuidedEmission.emit → requireSelection). Sin aviso aparte.
+        break;
       case GuidedEmissionStatus.staleConversation:
         AppToastManager.showInfo(
           context,
