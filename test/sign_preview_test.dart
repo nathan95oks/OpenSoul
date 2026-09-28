@@ -925,8 +925,11 @@ void main() {
   test(
     'la lista del resolutor coincide con los clips del .glb empaquetado',
     () {
-      final clips = _clipsDelGlb('assets/models/avatar_test.glb');
-      expect(clips, hasLength(149));
+      // Los movimientos de reposo (NEUTRO1..3) no son señas.
+      final clips = _clipsDelGlb(
+        'assets/models/avatar_test.glb',
+      ).where((c) => !c.startsWith('NEUTRO')).toList();
+      expect(clips, hasLength(154));
       for (final clip in clips) {
         expect(
           AnimationUrlResolver.available3DGlosses,
