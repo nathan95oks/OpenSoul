@@ -15,20 +15,26 @@ class SurfaceSession {
     if (ref.read(flowSurfaceProvider) == surface) return;
 
     ref.read(flowSurfaceProvider.notifier).set(surface);
+    ref.read(audioTranslationControllerProvider.notifier).reset();
 
-    // Llegar al módulo de tarjetas por la barra de navegación es el modo A:
-    // una declaración propia. El lanzamiento se reinicia aquí para que un
-    // chat guardado detrás no siga presentando su última pregunta en una
-    // pantalla que ya no responde a nadie.
-    if (surface != FlowSurface.conversation) {
-      ref
-          .read(cardsFlowLaunchProvider.notifier)
-          .start(const CardsFlowLaunch.standalone());
-    }
+    // Salir del módulo de tarjetas no borra lo que se estaba armando: la
+    // persona puede ir al chat y volver a terminar su declaración. Si desde
+    // el chat se abre otro encargo (responder), la pantalla pregunta antes
+    // de descartarlo ("Tienes un mensaje a medias").
+    if (surface != FlowSurface.standaloneCards) return;
 
+    // Volver a una declaración propia: sigue donde quedó.
+    final launch = ref.read(cardsFlowLaunchProvider);
+    if (launch.purpose == CardsFlowPurpose.standaloneIntervention) return;
+
+    // Llegar por la barra mientras se respondía al chat es el modo A: una
+    // declaración propia, limpia. Seguir respondiendo bajo una pregunta que
+    // ya no se tiene delante enlazaría la respuesta al turno equivocado.
+    ref
+        .read(cardsFlowLaunchProvider.notifier)
+        .start(const CardsFlowLaunch.standalone());
     await ref.read(cardsFlowSessionProvider).reset();
     ref.read(openFamilyProvider.notifier).clear();
-    ref.read(audioTranslationControllerProvider.notifier).reset();
   }
 }
 
