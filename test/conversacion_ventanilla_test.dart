@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
@@ -57,11 +59,18 @@ void main() {
         reason: 'pero el mensaje del funcionario se puede volver a pedir');
   });
 
-  test('las glosas de respuesta rápida existen en el diccionario', () {
-    // SI, DONDE y PUEDE_REPETIR se eligieron porque están en el corpus; si
-    // alguna desapareciera, el chip enviaría una glosa que nadie sabe animar.
-    for (final g in ['SI', 'DONDE', 'PUEDE_REPETIR']) {
-      expect(g, isNotEmpty);
-    }
+  test('la conversación no ofrece respuestas rápidas', () {
+    // Bajo el chat solo quedan «Responder con tarjetas LSB» y la caja de
+    // texto: nada de «Entendido», «¿Dónde queda?»… por encima.
+    expect(
+        File('lib/features/conversation/presentation/widgets/'
+                'quick_reply_bar.dart')
+            .existsSync(),
+        isFalse);
+    final pantalla = File('lib/features/conversation/presentation/screens/'
+            'conversation_screen.dart')
+        .readAsStringSync();
+    expect(pantalla, isNot(contains('QuickReply')));
+    expect(pantalla, isNot(contains('Entendido')));
   });
 }
