@@ -1,14 +1,14 @@
 {
  "ACCESIBILIDAD": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4082,
+  "titan": "Cortesía",
+  "similitud": 0.2016,
   "vecinas": [
-   "HASTA_LUEGO",
+   "POR_FAVOR",
+   "NECESITAR",
    "ASISTENCIA",
-   "DESPUÉS",
-   "HASTA_MAÑANA",
-   "GRATIS"
+   "HASTA_LUEGO",
+   "HASTA_MAÑANA"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -19,13 +19,13 @@
  "ACCESIBLE": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3912,
+  "similitud": 0.3109,
   "vecinas": [
-   "HASTA_LUEGO",
-   "GRATIS",
-   "IR",
-   "AQUÍ",
-   "HASTA_MAÑANA"
+   "ASISTENCIA",
+   "ATENDER",
+   "ACEPTAR",
+   "HABLAR",
+   "AUXILIO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -37,14 +37,14 @@
  },
  "ACCESO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4137,
+  "titan": "Instituciones",
+  "similitud": 0.2615,
   "vecinas": [
-   "ACEPTAR",
-   "LLEGAR",
-   "ABRIR",
-   "PERMISO",
-   "ASISTENCIA"
+   "TRÁMITE",
+   "FELCC",
+   "OFICINA",
+   "SEPDEP",
+   "PERMISO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -56,13 +56,13 @@
  "ACREDITAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4421,
+  "similitud": 0.3577,
   "vecinas": [
-   "CERTIFICADO",
-   "ABRIR",
-   "AVISAR",
    "ACEPTAR",
-   "AHORA"
+   "IDENTIFICAR",
+   "CONOCER",
+   "PERMISO",
+   "CREER"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -72,14 +72,14 @@
  },
  "ACTIVAR": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.343,
+  "titan": "Instituciones",
+  "similitud": 0.4561,
   "vecinas": [
-   "ANDAR",
-   "ANTEAYER",
-   "CADA_DÍA",
-   "HASTA_LUEGO",
-   "INTERNET"
+   "SEPDEP",
+   "SEPDAVI",
+   "CONVOCAR",
+   "HABLAR",
+   "ASISTENCIA"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -91,14 +91,14 @@
  },
  "ACTIVIDAD": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3868,
+  "titan": "Instituciones",
+  "similitud": 0.1881,
   "vecinas": [
-   "MARTES",
-   "MAÑANA",
-   "3",
-   "AUTORIDAD",
-   "AYER"
+   "INSTITUCIÓN",
+   "TRAER",
+   "BILLETES",
+   "FACTURA",
+   "BARRIO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -108,14 +108,14 @@
  },
  "ACTUAL": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.5035,
+  "titan": "Lugares",
+  "similitud": 0.2734,
   "vecinas": [
-   "1",
-   "8",
-   "7",
-   "2",
-   "9"
+   "AHORA",
+   "PLAZA",
+   "PÁGINA",
+   "MERCADO",
+   "BANCO"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -125,15 +125,15 @@
   "fecha": "2026-09-27"
  },
  "ACTUALIZAR": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.5411,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2854,
   "vecinas": [
-   "AHORA",
-   "HASTA_LUEGO",
-   "CADA_DÍA",
-   "LUEGO",
-   "AÚN"
+   "DEVOLVER",
+   "PROTEGER",
+   "ARREGLAR",
+   "CASA",
+   "AUMENTAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -144,15 +144,15 @@
   "fecha": "2026-09-27"
  },
  "ACTUALMENTE": {
-  "zona": "Tiempo",
-  "titan": "Tiempo",
-  "similitud": 0.7671,
+  "zona": null,
+  "titan": "Instituciones",
+  "similitud": 0.4372,
   "vecinas": [
+   "ABOGADO",
    "AHORA",
-   "AÚN",
-   "HOY",
-   "CADA_DÍA",
-   "AQUÍ"
+   "JUEZ",
+   "OFICIAL",
+   "ÓRGANO_JUDICIAL"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -163,13 +163,13 @@
  "ACUDIR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.44,
+  "similitud": 0.2629,
   "vecinas": [
-   "ABRIR",
-   "LLEGAR",
-   "ACOMPAÑAR",
-   "ATRÁS",
-   "HASTA_LUEGO"
+   "AUMENTAR",
+   "CONVOCAR",
+   "AVISAR",
+   "PEDIR",
+   "DIRECCIÓN"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -180,15 +180,15 @@
   "fecha": "2026-09-27"
  },
  "ADAPTARSE": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4263,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2806,
   "vecinas": [
-   "CAMBIAR",
-   "DESPUÉS",
-   "LUEGO",
-   "HASTA_LUEGO",
-   "CADA_DÍA"
+   "ACEPTAR",
+   "TRÁMITE",
+   "COMPRENDER",
+   "ATENDER",
+   "ARREGLAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -197,15 +197,15 @@
   "fecha": "2026-09-27"
  },
  "ADE_CUADA": {
-  "zona": null,
-  "titan": "Cortesía",
-  "similitud": 0.3722,
+  "zona": "Conceptos jurídicos",
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.3427,
   "vecinas": [
-   "DE_NADA",
-   "2",
-   "CADA_DÍA",
-   "AMBOS",
-   "ALLÁ"
+   "ASISTENCIA",
+   "GRACIAS",
+   "AYUDAR",
+   "AUXILIO",
+   "BOLSA"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -214,32 +214,32 @@
   "fecha": "2026-09-27"
  },
  "ADMINISTRACION": {
-  "zona": null,
+  "zona": "Instituciones",
   "titan": "Instituciones",
-  "similitud": 0.4123,
+  "similitud": 0.2277,
   "vecinas": [
-   "AUTORIDAD",
-   "ABOGADO",
-   "GOBIERNO",
-   "ASISTENCIA",
-   "DESPUÉS"
+   "ÓRGANO_JUDICIAL",
+   "JUSTICIA",
+   "INSTITUCIÓN",
+   "LEY",
+   "FISCALIA"
   ],
-  "bedrock": "Conceptos jurídicos",
+  "bedrock": "Instituciones",
   "ejemplos": [
    "La Ley 1658 incluye el ámbito de administración de justicia."
   ],
   "fecha": "2026-09-27"
  },
  "ADOLESCENTE": {
-  "zona": "Identificación",
-  "titan": "Identificación",
-  "similitud": 0.5196,
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2769,
   "vecinas": [
-   "ADULTO",
-   "PEGAR",
-   "JOVEN",
-   "TRUFI",
-   "OYENTE"
+   "VIOLENCIA",
+   "TESTIMONIO",
+   "VENIR",
+   "HERMANO",
+   "POLERA"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -249,14 +249,14 @@
  },
  "ALGUN": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.3143,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.3587,
   "vecinas": [
-   "ROBAR",
-   "TESTIGO",
-   "JUZGADO",
-   "DE_NADA",
-   "RESULTADO"
+   "NARRAR",
+   "TESTIMONIO",
+   "INVESTIGACIÓN",
+   "ARRESTAR",
+   "MIEDO"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -266,14 +266,14 @@
  },
  "ALGUNAS": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.4728,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.3171,
   "vecinas": [
-   "VARIOS",
+   "INVESTIGACIÓN",
    "TESTIMONIO",
-   "ALLÁ",
-   "POLICÍA",
-   "DOCTOR"
+   "PROTEGER",
+   "PREOCUPAR",
+   "VARIOS"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -282,15 +282,15 @@
   "fecha": "2026-09-27"
  },
  "ALY": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4403,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.283,
   "vecinas": [
-   "6",
-   "7",
-   "5",
-   "1",
-   "HASTA_LUEGO"
+   "AQUÍ",
+   "AL_LADO",
+   "ALLÍ",
+   "ALLÁ",
+   "AYER"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -300,14 +300,14 @@
  },
  "AMBITO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3911,
+  "titan": "Instituciones",
+  "similitud": 0.2538,
   "vecinas": [
-   "TRÁMITE",
-   "2",
-   "1",
-   "ACEPTAR",
-   "PEDIR"
+   "ÓRGANO_JUDICIAL",
+   "FISCALIA",
+   "INSTITUCIÓN",
+   "AUTORIDAD",
+   "JUZGADO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -318,13 +318,13 @@
  "ANTERIOR": {
   "zona": null,
   "titan": "Lugares",
-  "similitud": 0.4057,
+  "similitud": 0.2861,
   "vecinas": [
-   "ANTEAYER",
    "ATRÁS",
-   "ENFRENTE",
-   "3",
-   "FUERA"
+   "PASADO",
+   "PLAZA",
+   "BOLSA",
+   "BUSCAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -335,14 +335,14 @@
  },
  "ANTES": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4193,
+  "titan": "Instituciones",
+  "similitud": 0.3581,
   "vecinas": [
-   "5",
-   "6",
-   "2",
-   "4",
-   "3"
+   "TEMPRANO",
+   "ASISTENTE",
+   "SEPDAVI",
+   "IR",
+   "LLEGAR"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -353,15 +353,15 @@
   "fecha": "2026-09-27"
  },
  "ANTEZANA": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.2912,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.2609,
   "vecinas": [
-   "3",
-   "ANTEAYER",
-   "FUNCIONAR",
-   "TENER",
-   "1"
+   "AQUÍ",
+   "ALLÍ",
+   "AL_LADO",
+   "ALLÁ",
+   "CERCA"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -371,14 +371,14 @@
  },
  "ANTICRETICO": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.298,
+  "titan": "Acciones",
+  "similitud": 0.3366,
   "vecinas": [
-   "PELEAR",
-   "FUERA",
-   "4",
-   "VOLVER",
-   "SELLO"
+   "ESCRIBIR",
+   "ARREGLAR",
+   "EXPLICAR",
+   "CARPETA",
+   "DIRECCIÓN"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -388,14 +388,14 @@
  },
  "ANTICRETICOS": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.2967,
+  "titan": "Lugares",
+  "similitud": 0.2138,
   "vecinas": [
-   "PELEAR",
-   "4",
    "FUERA",
-   "ELLOS",
-   "POLICÍA"
+   "ENFRENTE",
+   "TRUFI",
+   "AMENAZAR",
+   "ESCRIBIR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -405,14 +405,14 @@
  },
  "ANTIGUO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3042,
+  "titan": "Acciones",
+  "similitud": 0.2789,
   "vecinas": [
-   "NUEVO",
-   "FUTURO",
-   "PASADO",
-   "TAL_VEZ",
-   "AÑO_PASADO"
+   "VOLVER",
+   "CASA",
+   "DEVOLVER",
+   "EDAD",
+   "PROTEGER"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -422,14 +422,14 @@
  },
  "APARECE": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.429,
+  "titan": "Lugares",
+  "similitud": 0.3065,
   "vecinas": [
-   "ATENDER",
-   "HOMBRE",
-   "ASISTENTE",
-   "EMPEZAR",
-   "ASISTENCIA"
+   "FUERA",
+   "ESCONDER",
+   "POCO",
+   "IR",
+   "ALLÍ"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -439,14 +439,14 @@
  },
  "APARECER": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4492,
+  "titan": "Lugares",
+  "similitud": 0.2514,
   "vecinas": [
-   "ATENDER",
-   "EMPEZAR",
-   "ANDAR",
-   "ANTEAYER",
-   "PRESENTAR"
+   "MERCADO",
+   "TIENDA",
+   "PRESENTAR",
+   "GRATIS",
+   "BILLETES"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -458,14 +458,14 @@
  },
  "APLICABLE": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3587,
+  "titan": "Identificación",
+  "similitud": 0.2321,
   "vecinas": [
-   "1",
-   "3",
-   "4",
-   "7",
-   "5"
+   "JOVEN",
+   "DIFÍCIL",
+   "ESCUELA",
+   "GRATIS",
+   "VARIOS"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -475,15 +475,15 @@
   "fecha": "2026-09-27"
  },
  "APLICAR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.3265,
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2793,
   "vecinas": [
-   "POLERA",
-   "AVISAR",
-   "OCUPADO",
-   "5",
-   "MOSTRAR"
+   "ROBAR",
+   "PERDER",
+   "ESCONDER",
+   "PEGAR",
+   "TRABAJADOR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -492,15 +492,15 @@
   "fecha": "2026-09-27"
  },
  "APORTAR": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3209,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.3803,
   "vecinas": [
-   "POSTERGAR",
-   "QUIÉN",
-   "ATENDER",
-   "ANTEAYER",
-   "INTERNET"
+   "AUMENTAR",
+   "RECORDAR",
+   "ENVIAR",
+   "ACOMPAÑAR",
+   "MOSTRAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -510,14 +510,14 @@
  },
  "APOYO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4144,
+  "titan": "Instituciones",
+  "similitud": 0.3283,
   "vecinas": [
-   "ACOMPAÑAR",
+   "SEPDAVI",
    "ASISTENCIA",
-   "DESPUÉS",
-   "POR_FAVOR",
-   "AVISAR"
+   "SEPDEP",
+   "ASISTENTE",
+   "EVALUAR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -528,14 +528,14 @@
  },
  "ARANCEL": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3089,
+  "titan": "Acciones",
+  "similitud": 0.2137,
   "vecinas": [
-   "6",
-   "SEGUNDO",
-   "7",
-   "9",
-   "HASTA_MAÑANA"
+   "CUÁNTOS",
+   "BANCO",
+   "CABELLO",
+   "AZUL",
+   "MES"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -544,15 +544,15 @@
   "fecha": "2026-09-27"
  },
  "ARANCELE": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.2826,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.3132,
   "vecinas": [
-   "9",
-   "8",
-   "6",
-   "DESCANSO",
-   "MÁS_O_MENOS"
+   "CERTIFICADO",
+   "SELLO",
+   "CARPETA",
+   "PAPEL",
+   "ENFRENTE"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -563,14 +563,14 @@
  },
  "AREA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4578,
+  "titan": "Tiempo",
+  "similitud": 0.255,
   "vecinas": [
-   "1",
    "4",
-   "7",
-   "2",
-   "HASTA_LUEGO"
+   "FECHA",
+   "DURANTE",
+   "HORA",
+   "DESCANSO"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -580,14 +580,14 @@
  },
  "ASUMIR": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.2633,
+  "titan": "Tiempo",
+  "similitud": 0.212,
   "vecinas": [
-   "BOCA",
+   "CONTINUAR",
+   "AHORA",
    "AÚN",
-   "ESCONDER",
-   "POR_FAVOR",
-   "SÍ"
+   "DAR",
+   "PERDER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -598,13 +598,13 @@
  "ATENCION": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4459,
+  "similitud": 0.3137,
   "vecinas": [
-   "ATENDER",
-   "ASISTENCIA",
-   "AVISAR",
-   "MERCADO",
-   "MAL"
+   "PRESENTAR",
+   "EMPEZAR",
+   "HABLAR",
+   "ARREGLAR",
+   "DIRECCIÓN"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -617,13 +617,13 @@
  "AUDIENCIA": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4207,
+  "similitud": 0.2401,
   "vecinas": [
+   "NO_SABER",
+   "DIRECCIÓN",
    "OÍR",
-   "AVISAR",
-   "ASISTENCIA",
-   "OBSERVAR",
-   "FUERA"
+   "IR",
+   "AYUDAR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -635,14 +635,14 @@
  },
  "AUTO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4875,
+  "titan": "Identificación",
+  "similitud": 0.2746,
   "vecinas": [
-   "5",
-   "4",
-   "8",
-   "6",
-   "1"
+   "JEFE",
+   "MÍO",
+   "COMPRAR",
+   "NOMBRE",
+   "BOLSA"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -652,14 +652,14 @@
  },
  "AUTOMATICO": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.3873,
+  "titan": "Tiempo",
+  "similitud": 0.2071,
   "vecinas": [
-   "SELLO",
-   "ASISTENTE",
-   "TEMPRANO",
-   "DOCTOR",
-   "OFICIAL"
+   "GRATIS",
+   "NUEVO",
+   "HASTA_MAÑANA",
+   "CADA_DÍA",
+   "JUEVES"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -670,13 +670,13 @@
  "AYUDA": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5589,
+  "similitud": 0.2855,
   "vecinas": [
-   "ASISTENCIA",
-   "AUXILIO",
-   "ACOMPAÑAR",
    "AYUDAR",
-   "AVISAR"
+   "ESCRIBIR",
+   "PROTEGER",
+   "TESTIMONIO",
+   "INVESTIGACIÓN"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -688,14 +688,14 @@
  },
  "BEIJING": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3313,
+  "titan": "Instituciones",
+  "similitud": 0.3977,
   "vecinas": [
-   "5",
-   "2",
-   "4",
-   "AQUÍ",
-   "VIERNES"
+   "FELCV",
+   "FELCC",
+   "AVENIDA",
+   "OFICINA",
+   "PLAZA"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -705,14 +705,14 @@
  },
  "BIEN": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3423,
+  "titan": "Acciones",
+  "similitud": 0.3153,
   "vecinas": [
-   "QUÉ",
-   "BUENO",
-   "SÍ",
-   "1",
-   "2"
+   "EXPLICAR",
+   "NO_SABER",
+   "IGNORAR",
+   "CONTESTAR_DOS_VECES",
+   "COMPRENDER"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -723,14 +723,14 @@
  },
  "BOLETA": {
   "zona": null,
-  "titan": "Estado y emoción",
-  "similitud": 0.308,
+  "titan": "Lugares",
+  "similitud": 0.2227,
   "vecinas": [
-   "MIEDO",
-   "HOLA",
-   "HOMBRE",
-   "BOCA",
-   "NO"
+   "BOLSA",
+   "PLAZA",
+   "BUSCAR",
+   "PASADO",
+   "ATRÁS"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -740,15 +740,15 @@
   "fecha": "2026-09-27"
  },
  "BORRAR": {
-  "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.4082,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2648,
   "vecinas": [
-   "ROBAR",
-   "BURLAR",
-   "PEGAR",
-   "BRAZO",
-   "BAJO"
+   "DE_NADA",
+   "GUARDAR",
+   "RECORDAR",
+   "NO_SABER",
+   "ROBAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -758,14 +758,14 @@
  },
  "CALIFICACION": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.5278,
+  "titan": "Tiempo",
+  "similitud": 0.2284,
   "vecinas": [
-   "CERTIFICADO",
-   "EVALUAR",
+   "PRÓXIMO",
    "LLAMAR",
-   "RESOLUCIÓN",
-   "PASADO_MAÑANA"
+   "CERTIFICADO",
+   "CONVOCAR",
+   "POR_FAVOR"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -776,13 +776,13 @@
  "CALIFICAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5128,
+  "similitud": 0.3394,
   "vecinas": [
-   "CERTIFICADO",
-   "EVALUAR",
    "IDENTIFICAR",
+   "JEFE",
+   "CERTIFICADO",
    "LLAMAR",
-   "QUIÉN"
+   "DECIDIR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -793,14 +793,14 @@
  },
  "CANAL": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3086,
+  "titan": "Acciones",
+  "similitud": 0.2441,
   "vecinas": [
-   "CADA_DÍA",
-   "4",
-   "HOSPITAL",
-   "CALLE",
-   "ROJO"
+   "ENCONTRARSE",
+   "PUEDO",
+   "TRAER",
+   "ANDAR",
+   "MOSTRAR"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -809,15 +809,15 @@
   "fecha": "2026-09-27"
  },
  "CAPTURA": {
-  "zona": "Documentos",
-  "titan": "Documentos",
-  "similitud": 0.4157,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.2997,
   "vecinas": [
-   "CARPETA",
-   "PUERTA",
-   "YO",
-   "ANDAR",
-   "VERDAD"
+   "TRAER",
+   "MOSTRAR",
+   "PROTEGER",
+   "EDAD",
+   "TESTIMONIO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -826,15 +826,15 @@
   "fecha": "2026-09-27"
  },
  "CARATULA": {
-  "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.2311,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2175,
   "vecinas": [
-   "ADULTO",
-   "POLICÍA",
-   "MUJER",
-   "1",
-   "AZUL"
+   "CARPETA",
+   "FACTURA",
+   "CONVOCAR",
+   "AÑO",
+   "PÁGINA"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -845,14 +845,14 @@
  },
  "CASO": {
   "zona": null,
-  "titan": "Objetos",
-  "similitud": 0.4041,
+  "titan": "Respuesta",
+  "similitud": 0.2984,
   "vecinas": [
-   "CAJA",
-   "QUÉ",
-   "ABUSAR",
-   "2",
-   "ASISTENCIA"
+   "NO_PUEDO",
+   "INVESTIGACIÓN",
+   "NO_SABER",
+   "PROTEGER",
+   "MOSTRAR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -864,14 +864,14 @@
  },
  "CATARSTRAL": {
   "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.2761,
+  "titan": "Acciones",
+  "similitud": 0.2419,
   "vecinas": [
-   "POLICÍA",
-   "6",
-   "ALLÍ",
-   "HERMANA",
-   "DIRECCIÓN"
+   "PROTEGER",
+   "ARREGLAR",
+   "DEVOLVER",
+   "TRISTE",
+   "ENFRENTE"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -880,15 +880,15 @@
   "fecha": "2026-09-27"
  },
  "CATASTRAL": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.2833,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2058,
   "vecinas": [
-   "6",
-   "MARZO",
-   "HERMANA",
-   "SEMANA",
-   "4"
+   "CARPETA",
+   "CERTIFICADO",
+   "CAJA",
+   "CELULAR",
+   "CUÁNTOS"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -897,15 +897,15 @@
   "fecha": "2026-09-27"
  },
  "CENTRAL": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4139,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.3665,
   "vecinas": [
-   "7",
-   "6",
-   "2",
-   "8",
-   "4"
+   "OFICINA",
+   "COCHABAMBA",
+   "OFICIAL",
+   "BOCA",
+   "HOY"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -915,15 +915,15 @@
   "fecha": "2026-09-27"
  },
  "CENTRO": {
-  "zona": "Lugares",
-  "titan": "Lugares",
-  "similitud": 0.3567,
+  "zona": null,
+  "titan": "Instituciones",
+  "similitud": 0.4144,
   "vecinas": [
-   "JOVEN",
-   "PROVINCIA",
+   "FELCV",
+   "FELCC",
+   "OFICINA",
    "DENTRO",
-   "CASA",
-   "FUTURO"
+   "CERCA"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -933,15 +933,15 @@
   "fecha": "2026-09-27"
  },
  "CENTRO_INTERNACIONAL_CONVENCIONES": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3347,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.2418,
   "vecinas": [
-   "ACEPTAR",
-   "CONFIANZA",
-   "REUNIÓN",
-   "MARZO",
-   "SEPDAVI"
+   "AQUÍ",
+   "OFICINA",
+   "PLAZA",
+   "FELCC",
+   "SEPDEP"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -951,14 +951,14 @@
  },
  "CERRADO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.505,
+  "titan": "Lugares",
+  "similitud": 0.3547,
   "vecinas": [
+   "DIRECCIÓN",
    "ESCONDER",
-   "DESPUÉS",
-   "GUARDAR",
-   "LUEGO",
-   "OCUPADO"
+   "OCUPADO",
+   "ATRÁS",
+   "TERMINAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -968,15 +968,15 @@
   "fecha": "2026-09-27"
  },
  "CERTIFICAR": {
-  "zona": "Documentos",
-  "titan": "Documentos",
-  "similitud": 0.7821,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.3412,
   "vecinas": [
    "CERTIFICADO",
+   "CONVOCAR",
+   "ARREGLAR",
    "IDENTIFICAR",
-   "DESPUÉS",
-   "ACEPTAR",
-   "LUEGO"
+   "PRESENTAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -987,13 +987,13 @@
  "CHIMBA": {
   "zona": "Lugares",
   "titan": "Lugares",
-  "similitud": 0.3756,
+  "similitud": 0.3485,
   "vecinas": [
+   "OFICINA",
    "COCHABAMBA",
-   "3",
-   "AL_LADO",
-   "2",
-   "INTERNET"
+   "OFICIAL",
+   "BOCA",
+   "POCO"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -1005,14 +1005,14 @@
  },
  "CITAR": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4367,
+  "titan": "Acciones",
+  "similitud": 0.4112,
   "vecinas": [
    "CONVOCAR",
-   "5",
-   "4",
-   "CERCA",
-   "8"
+   "LLAMAR",
+   "PUEDO",
+   "IDENTIFICAR",
+   "PEDIR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -1023,13 +1023,13 @@
  "CIUDAD": {
   "zona": null,
   "titan": "Lugares",
-  "similitud": 0.418,
+  "similitud": 0.2487,
   "vecinas": [
-   "ALCALDÍA",
-   "BARRIO",
-   "AQUÍ",
-   "HOY",
-   "CUÁL"
+   "AVENIDA",
+   "TARDE",
+   "CALLE",
+   "LENTO",
+   "LLEGAR"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -1039,14 +1039,14 @@
  },
  "CLARO": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.354,
+  "titan": "Acciones",
+  "similitud": 0.3648,
   "vecinas": [
-   "FLACO",
-   "LUEGO",
-   "ALTO",
-   "LENTO",
-   "ROJO"
+   "ESCRIBIR",
+   "EXPLICAR",
+   "DIRECCIÓN",
+   "DEVOLVER",
+   "ARREGLAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1055,15 +1055,15 @@
   "fecha": "2026-09-27"
  },
  "CODIGO": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4702,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2186,
   "vecinas": [
-   "1",
-   "7",
-   "8",
-   "9",
-   "2"
+   "CERTIFICADO",
+   "CARPETA",
+   "CAJA",
+   "COMPUTADORA",
+   "BARRIO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1073,17 +1073,17 @@
   "fecha": "2026-09-27"
  },
  "COMPETENTE": {
-  "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.3207,
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.3045,
   "vecinas": [
-   "AZUL",
-   "SABER",
-   "CONFIANZA",
-   "OYENTE",
-   "JOVEN"
+   "SEPDAVI",
+   "SEPDEP",
+   "AUXILIO",
+   "ASISTENCIA",
+   "CONVOCAR"
   ],
-  "bedrock": "Conceptos jurídicos",
+  "bedrock": "Instituciones",
   "ejemplos": [
    "Para víctimas, consulte SEPDAVI u otro servicio competente."
   ],
@@ -1091,14 +1091,14 @@
  },
  "COMPROBANTE": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3876,
+  "titan": "Acciones",
+  "similitud": 0.2913,
   "vecinas": [
-   "VENDER",
-   "6",
-   "LUEGO",
-   "DESPUÉS",
-   "1"
+   "TRAER",
+   "MOSTRAR",
+   "AUMENTAR",
+   "IDENTIDAD",
+   "EDAD"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1107,15 +1107,15 @@
   "fecha": "2026-09-27"
  },
  "COMUNICACION": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3637,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2729,
   "vecinas": [
-   "GRACIAS",
+   "ASISTENCIA",
+   "ATENDER",
+   "HABLAR",
    "AVISAR",
-   "MAÑANA",
-   "CADA_DÍA",
-   "AHORA"
+   "AUXILIO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1128,13 +1128,13 @@
  "COMUNICAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4336,
+  "similitud": 0.4311,
   "vecinas": [
    "HABLAR",
-   "ENVIAR",
+   "ESCRIBIR",
+   "LLAMAR",
    "NARRAR",
-   "HACER",
-   "NOMBRE"
+   "AYUDAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1145,13 +1145,13 @@
  "COMUNICARSE": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5794,
+  "similitud": 0.4901,
   "vecinas": [
    "HABLAR",
    "NARRAR",
-   "ORGANIZAR",
-   "FUNCIONAR",
-   "ENVIAR"
+   "ESCRIBIR",
+   "LLAMAR",
+   "NECESITAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1161,14 +1161,14 @@
  },
  "CONDONACIÓN": {
   "zona": null,
-  "titan": "Descripción",
-  "similitud": 0.3432,
+  "titan": "Tiempo",
+  "similitud": 0.1729,
   "vecinas": [
-   "PERMISO",
-   "CONVOCAR",
-   "OSCURO",
-   "DAR",
-   "LENTO"
+   "DISCRIMINACIÓN",
+   "TARDE",
+   "DURANTE",
+   "RESOLUCIÓN",
+   "PERMISO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -1179,13 +1179,13 @@
  "CONFIRMAR": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4942,
+  "similitud": 0.2377,
   "vecinas": [
-   "ACEPTAR",
-   "GUARDAR",
-   "ESTAR_DE_ACUERDO",
-   "SÍ",
-   "VERDAD"
+   "DECIDIR",
+   "EXPLICAR",
+   "DEVOLVER",
+   "ARREGLAR",
+   "VOLVER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1197,14 +1197,14 @@
  },
  "CONFORME": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3039,
+  "titan": "Acciones",
+  "similitud": 0.3105,
   "vecinas": [
-   "MINUTO",
-   "SEGUNDO",
-   "FUERA",
-   "LLEVAR",
-   "LLEGAR"
+   "ACEPTAR",
+   "TRÁMITE",
+   "CÓMO",
+   "HASTA_LUEGO",
+   "LUEGO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1215,13 +1215,13 @@
  "CONMIGO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3994,
+  "similitud": 0.3297,
   "vecinas": [
-   "NUEVO",
-   "MOSTRAR",
-   "VENDER",
-   "DEVOLVER",
-   "1"
+   "MÍO",
+   "CELULAR",
+   "TRAER",
+   "ESPOSA",
+   "HERMANA"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -1232,13 +1232,13 @@
  "CONSERVE": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4173,
+  "similitud": 0.2581,
   "vecinas": [
    "GUARDAR",
    "RECORDAR",
-   "BAJO",
-   "5",
-   "POCO"
+   "LUEGO",
+   "INVESTIGACIÓN",
+   "CONTINUAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1247,15 +1247,15 @@
   "fecha": "2026-09-27"
  },
  "CONSTANTE": {
-  "zona": "Tiempo",
-  "titan": "Tiempo",
-  "similitud": 0.3554,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.3915,
   "vecinas": [
-   "AÚN",
-   "PRÓXIMO",
-   "MINUTO",
-   "SEGUNDO",
-   "SIEMPRE"
+   "ESCRIBIR",
+   "SIEMPRE",
+   "NARRAR",
+   "ENVIAR",
+   "CONTINUAR"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -1265,14 +1265,14 @@
  },
  "CONSULTA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4372,
+  "titan": "Acciones",
+  "similitud": 0.2511,
   "vecinas": [
-   "5",
-   "8",
-   "6",
-   "9",
-   "7"
+   "BUSCAR",
+   "INTERNET",
+   "CONVOCAR",
+   "INVESTIGACIÓN",
+   "HABLAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1284,13 +1284,13 @@
  "CONSULTAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4077,
+  "similitud": 0.1872,
   "vecinas": [
-   "BUSCAR",
-   "CÓMO",
-   "EVALUAR",
-   "LUEGO",
-   "CONVOCAR"
+   "CONTESTAR_DOS_VECES",
+   "POR_FAVOR",
+   "AVISAR",
+   "OBSERVAR",
+   "COCHABAMBA"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1302,14 +1302,14 @@
  },
  "CONTACTAR": {
   "zona": null,
-  "titan": "Conceptos jurídicos",
-  "similitud": 0.4113,
+  "titan": "Instituciones",
+  "similitud": 0.5147,
   "vecinas": [
+   "SEPDEP",
+   "SEPDAVI",
+   "ASISTENCIA",
    "CONVOCAR",
-   "CELULAR",
-   "OFICINA",
-   "CONTINUAR",
-   "AHORA"
+   "HABLAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1321,13 +1321,13 @@
  "CONTAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4086,
+  "similitud": 0.5191,
   "vecinas": [
-   "FUNCIONAR",
-   "AUMENTAR",
-   "COMPUTADORA",
-   "FACTURA",
-   "CONTINUAR"
+   "NARRAR",
+   "TESTIMONIO",
+   "ESCRIBIR",
+   "HABLAR",
+   "LLAMAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1337,14 +1337,14 @@
  },
  "CONTEMPLAR": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3035,
+  "titan": "Tiempo",
+  "similitud": 0.2441,
   "vecinas": [
-   "RECORDAR",
-   "FUNCIONAR",
-   "TIENDA",
-   "TRISTE",
-   "LO_SIENTO"
+   "GRATIS",
+   "LIBRE",
+   "LEY",
+   "ESTAR_DE_ACUERDO",
+   "SIEMPRE"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -1353,15 +1353,15 @@
   "fecha": "2026-09-27"
  },
  "CONTRA": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4303,
+  "zona": "Conceptos jurídicos",
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.2827,
   "vecinas": [
-   "7",
-   "2",
-   "6",
-   "4",
-   "3"
+   "INVESTIGACIÓN",
+   "TESTIMONIO",
+   "DIRECCIÓN",
+   "JEFE",
+   "NO_PUEDO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -1374,13 +1374,13 @@
  "CONTRATO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3213,
+  "similitud": 0.2622,
   "vecinas": [
-   "RESULTADO",
-   "ORGANIZAR",
-   "SEGUNDO",
-   "CONTINUAR",
-   "8"
+   "CERTIFICADO",
+   "ARREGLAR",
+   "CONVOCAR",
+   "DEVOLVER",
+   "CONTESTAR_DOS_VECES"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1392,13 +1392,13 @@
  "COPIA": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.334,
+  "similitud": 0.2782,
   "vecinas": [
-   "RECIBIR",
+   "NO_SABER",
    "FOTOCOPIA",
-   "MÍO",
-   "HIJA",
-   "ESCUELA_NOCTURNA"
+   "ENVIAR",
+   "CAMBIAR",
+   "CURAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1410,14 +1410,14 @@
  },
  "CORRESPONDER": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.3175,
+  "titan": "Acciones",
+  "similitud": 0.1966,
   "vecinas": [
-   "PEGAR",
-   "BUENOS_DÍAS",
-   "ATENDER",
-   "COMPAÑERO",
-   "CONTESTAR_DOS_VECES"
+   "BOLSA",
+   "DENTRO",
+   "FUTURO",
+   "VOLVER",
+   "DEVOLVER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1429,14 +1429,14 @@
  },
  "CORRESPONDIENTE": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4019,
+  "titan": "Instituciones",
+  "similitud": 0.4797,
   "vecinas": [
-   "OFICIAL",
-   "LUEGO",
-   "COMPAÑERO",
-   "NARRAR",
-   "RECIBIR"
+   "SEPDEP",
+   "CONVOCAR",
+   "SEPDAVI",
+   "OFICINA",
+   "HABLAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1448,14 +1448,14 @@
  },
  "COSAS": {
   "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.306,
+  "titan": "Respuesta",
+  "similitud": 0.296,
   "vecinas": [
-   "CERCA",
-   "COCHABAMBA",
-   "1",
-   "8",
-   "MOSTRAR"
+   "IGNORAR",
+   "NO_SABER",
+   "NO_PUEDO",
+   "NO_ESTAR_DE_ACUERDO",
+   "EXPLICAR"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -1465,14 +1465,14 @@
  },
  "COSTAR": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.2866,
+  "titan": "Documentos",
+  "similitud": 0.2927,
   "vecinas": [
-   "1",
-   "ADULTO",
+   "PÁGINA",
+   "FACTURA",
    "CARO",
-   "6",
-   "MOSTRAR"
+   "INTERNET",
+   "CAJA"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -1483,15 +1483,15 @@
   "fecha": "2026-09-27"
  },
  "COSTO": {
-  "zona": "Descripción",
-  "titan": "Descripción",
-  "similitud": 0.5102,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.2584,
   "vecinas": [
+   "TOTAL",
    "CARO",
-   "TEMPRANO",
-   "MUJER",
-   "FACTURA",
-   "DENTRO"
+   "EXPLICAR",
+   "HABLAR",
+   "BUSCAR"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -1501,15 +1501,15 @@
   "fecha": "2026-09-27"
  },
  "CUENTA": {
-  "zona": "Objetos",
-  "titan": "Objetos",
-  "similitud": 0.4611,
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.2163,
   "vecinas": [
-   "FACTURA",
-   "AUMENTAR",
-   "CAJA",
-   "8",
-   "COMPUTADORA"
+   "BANCO",
+   "PUEDO",
+   "LLEGAR",
+   "AYUDAR",
+   "TIENDA"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -1519,14 +1519,14 @@
  },
  "CUOTA": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.343,
+  "titan": "Acciones",
+  "similitud": 0.2536,
   "vecinas": [
-   "ELLA",
-   "HERMANA",
-   "FOTOS",
-   "SELLO",
-   "MUJER"
+   "CONVOCAR",
+   "CUÁNTOS",
+   "PEDIR",
+   "EMPEZAR",
+   "HABLAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1537,13 +1537,13 @@
  "CUOTAS": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4049,
+  "similitud": 0.2721,
   "vecinas": [
+   "DEVOLVER",
+   "PRESENTAR",
    "CUÁNTOS",
-   "FOTOS",
-   "MUJER",
-   "INSTITUCIÓN",
-   "FUNCIONAR"
+   "VOLVER",
+   "ARREGLAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1553,16 +1553,16 @@
  },
  "DATOS": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.6256,
+  "titan": "Acciones",
+  "similitud": 0.368,
   "vecinas": [
-   "1",
-   "2",
-   "7",
-   "9",
-   "6"
+   "AUMENTAR",
+   "RECORDAR",
+   "MOSTRAR",
+   "ENVIAR",
+   "ACOMPAÑAR"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Respuesta",
   "ejemplos": [
    "Registraremos los datos que usted pueda aportar.",
    "El reglamento exige validarlo con los datos de SERECI."
@@ -1570,15 +1570,15 @@
   "fecha": "2026-09-27"
  },
  "DE": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4646,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.2934,
   "vecinas": [
-   "2",
-   "1",
-   "6",
-   "9",
-   "7"
+   "PLAZA",
+   "INSTITUCIÓN",
+   "OFICINA",
+   "SEPDEP",
+   "DIRECCIÓN"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -1588,14 +1588,14 @@
  },
  "DEBER": {
   "zona": null,
-  "titan": "Respuesta",
-  "similitud": 0.3391,
+  "titan": "Acciones",
+  "similitud": 0.1857,
   "vecinas": [
-   "SABER",
-   "HIJO",
-   "DEJAR",
-   "GOBIERNO",
-   "2"
+   "FACTURA",
+   "VOLVER",
+   "AYUDAR",
+   "COMPUTADORA",
+   "PROTEGER"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -1607,14 +1607,14 @@
  },
  "DEBO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3509,
+  "titan": "Cortesía",
+  "similitud": 0.2557,
   "vecinas": [
-   "6",
-   "TESTIGO",
-   "NO_PUEDO",
-   "TESTIMONIO",
-   "GUARDAR"
+   "DE_NADA",
+   "NUEVO",
+   "NO",
+   "AÑO_PASADO",
+   "DEJAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1627,13 +1627,13 @@
  "DECIR": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4156,
+  "similitud": 0.2319,
   "vecinas": [
-   "DEJAR",
+   "NECESITAR",
+   "PROTEGER",
+   "PRESENTAR",
    "DECIDIR",
-   "SEGUNDO",
-   "DOCTOR",
-   "ESCONDER"
+   "PEDIR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1643,14 +1643,14 @@
  },
  "DEFENSA_PUBLICA": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3623,
+  "titan": "Lugares",
+  "similitud": 0.3469,
   "vecinas": [
+   "COCHABAMBA",
    "POLICÍA",
-   "SELLO",
-   "TEMPRANO",
-   "CHAMARRA",
-   "TARDE"
+   "CELULAR",
+   "PROHIBIDO",
+   "BOCA"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -1660,14 +1660,14 @@
  },
  "DEFENSORIA": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.3046,
+  "titan": "Acciones",
+  "similitud": 0.2528,
   "vecinas": [
-   "PEGAR",
-   "LISTA",
-   "POR_FAVOR",
-   "TESTIGO",
-   "NO_SABER"
+   "PROTEGER",
+   "AYUDAR",
+   "CONVOCAR",
+   "NECESITAR",
+   "URGENTE"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -1679,14 +1679,14 @@
  },
  "DEFUNCION": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.4033,
+  "titan": "Acciones",
+  "similitud": 0.1998,
   "vecinas": [
-   "FUNCIONAR",
-   "INSTITUCIÓN",
-   "HIJA",
-   "DISCRIMINACIÓN",
-   "MUJER"
+   "CARO",
+   "FUERA",
+   "PROTEGER",
+   "FRACTURA",
+   "GRATIS"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1698,14 +1698,14 @@
  },
  "DELITO": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.3672,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.4195,
   "vecinas": [
-   "TRÁMITE",
-   "LADRÓN",
-   "TESTIGO",
    "ROBAR",
-   "ESCUELA"
+   "ENGAÑAR",
+   "VIOLENCIA",
+   "ARRESTAR",
+   "ESCONDER"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -1716,13 +1716,13 @@
  "DENUNCIA": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3476,
+  "similitud": 0.3404,
   "vecinas": [
+   "ESCRIBIR",
+   "AYUDAR",
    "NARRAR",
-   "DE_NADA",
-   "MINUTO",
-   "NO_PUEDO",
-   "AVISAR"
+   "PROTEGER",
+   "TESTIMONIO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1734,14 +1734,14 @@
  },
  "DENUNCIADO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3963,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.3297,
   "vecinas": [
-   "ABUSAR",
-   "AVISAR",
+   "INVESTIGACIÓN",
    "NARRAR",
    "TESTIMONIO",
-   "ARRESTAR"
+   "PREOCUPAR",
+   "MÍO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1751,15 +1751,15 @@
   "fecha": "2026-09-27"
  },
  "DENUNCIAR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.4163,
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.333,
   "vecinas": [
-   "NARRAR",
-   "AVISAR",
-   "DAÑAR",
-   "NO_PUEDO",
-   "AMENAZAR"
+   "CELULAR",
+   "DEVOLVER",
+   "INVESTIGACIÓN",
+   "ROBAR",
+   "MIEDO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1770,17 +1770,17 @@
   "fecha": "2026-09-27"
  },
  "DEPENDER": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.3811,
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.2362,
   "vecinas": [
-   "ATENDER",
-   "PEGAR",
-   "ESCONDER",
-   "SABER",
-   "ANTEAYER"
+   "FECHA",
+   "SEPDEP",
+   "CONVOCAR",
+   "PEDIR",
+   "TAL_VEZ"
   ],
-  "bedrock": "Acciones",
+  "bedrock": "Respuesta",
   "ejemplos": [
    "La modalidad depende del señalamiento de su expediente."
   ],
@@ -1788,14 +1788,14 @@
  },
  "DEPERDER": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.3422,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2218,
   "vecinas": [
-   "SEPDEP",
-   "PERDER",
-   "GORDO",
-   "FILMAR",
-   "POSTERGAR"
+   "DIFÍCIL",
+   "JOVEN",
+   "MÁS_O_MENOS",
+   "CERCA",
+   "PERDER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -1804,15 +1804,15 @@
   "fecha": "2026-09-27"
  },
  "DERECHOS": {
-  "zona": "Conceptos jurídicos",
-  "titan": "Conceptos jurídicos",
-  "similitud": 0.3386,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.2329,
   "vecinas": [
-   "JUSTICIA",
-   "AL_LADO",
-   "FRACTURA",
-   "LEY",
-   "PUEDO"
+   "ABOGADO",
+   "ABUSAR",
+   "PROTEGER",
+   "TRAER",
+   "TRABAJADOR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -1823,13 +1823,13 @@
  "DERIVADO": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4136,
+  "similitud": 0.2539,
   "vecinas": [
    "DAR",
-   "HASTA_LUEGO",
-   "GUARDAR",
-   "DESPUÉS",
-   "PROTEGER"
+   "AUXILIO",
+   "OFICIAL",
+   "DEVOLVER",
+   "CONVOCAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1840,13 +1840,13 @@
  "DESCRIBIR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.427,
+  "similitud": 0.3653,
   "vecinas": [
-   "DIBUJAR",
-   "ABRIR",
    "NARRAR",
-   "IDENTIFICAR",
-   "EXPLICAR"
+   "EXPLICAR",
+   "ESCRIBIR",
+   "MOMENTO",
+   "AQUÍ"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1856,14 +1856,14 @@
  },
  "DESCUENTO": {
   "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.3754,
+  "titan": "Tiempo",
+  "similitud": 0.2423,
   "vecinas": [
-   "DENTRO",
-   "BAJO",
-   "LENTO",
-   "2",
-   "HASTA_MAÑANA"
+   "HOY",
+   "DECIDIR",
+   "AÚN",
+   "PASADO_MAÑANA",
+   "AHORA"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -1874,13 +1874,13 @@
  "DETERIORADO": {
   "zona": null,
   "titan": "Hechos y urgencia",
-  "similitud": 0.44,
+  "similitud": 0.3155,
   "vecinas": [
    "DAÑAR",
+   "DIFÍCIL",
    "PERDER",
-   "FLACO",
-   "HASTA_LUEGO",
-   "TARDE"
+   "FUERA",
+   "HERIDA"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -1890,14 +1890,14 @@
  },
  "DETERIORO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3245,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2975,
   "vecinas": [
-   "HASTA_LUEGO",
-   "DENTRO",
-   "PROTEGER",
-   "TARDE",
-   "DURANTE"
+   "PERDER",
+   "FUERA",
+   "ROBAR",
+   "SEPDEP",
+   "IR"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -1907,16 +1907,16 @@
  },
  "DEUDA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4084,
+  "titan": "Acciones",
+  "similitud": 0.2308,
   "vecinas": [
-   "DE_NADA",
-   "4",
-   "2",
-   "7",
-   "TÚ"
+   "BUSCAR",
+   "INSTITUCIÓN",
+   "CALLE",
+   "COMPRAR",
+   "BARRIO"
   ],
-  "bedrock": "Descripción",
+  "bedrock": "Documentos",
   "ejemplos": [
    "¿Busca deuda de inmueble o vehículo?",
    "Quiero revisar la deuda de mi casa.",
@@ -1925,15 +1925,15 @@
   "fecha": "2026-09-27"
  },
  "DICE": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4784,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2416,
   "vecinas": [
-   "9",
-   "2",
-   "6",
-   "4",
-   "8"
+   "PÁGINA",
+   "GRATIS",
+   "INTERNET",
+   "CARO",
+   "FACTURA"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -1942,15 +1942,15 @@
   "fecha": "2026-09-27"
  },
  "DIRECTAMENTE": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4553,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.3214,
   "vecinas": [
-   "LUEGO",
-   "AHORA",
-   "DIRECCIÓN",
-   "GUARDAR",
-   "MOMENTO"
+   "HABLAR",
+   "PRESENTAR",
+   "MÍO",
+   "ESCRIBIR",
+   "DIRECCIÓN"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -1960,14 +1960,14 @@
  },
  "DISCAPACIDAD": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.3325,
+  "titan": "Acciones",
+  "similitud": 0.3279,
   "vecinas": [
-   "POR_FAVOR",
-   "FELCC",
-   "NO_PUEDO",
-   "POLICÍA",
-   "PLAZA"
+   "IDENTIDAD",
+   "AYUDAR",
+   "DEVOLVER",
+   "CARPETA",
+   "CASA"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -1977,14 +1977,14 @@
  },
  "DISTANCIA": {
   "zona": null,
-  "titan": "Descripción",
-  "similitud": 0.4142,
+  "titan": "Acciones",
+  "similitud": 0.2669,
   "vecinas": [
+   "PROTEGER",
    "CERCA",
-   "DIFERENTE",
+   "AYUDAR",
    "LENTO",
-   "POCO",
-   "ESCONDER"
+   "ASISTENCIA"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -1993,15 +1993,15 @@
   "fecha": "2026-09-27"
  },
  "DOS": {
-  "zona": "Números",
-  "titan": "Números",
-  "similitud": 0.4836,
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.2544,
   "vecinas": [
-   "6",
+   "TESTIGO",
+   "ELLOS",
    "2",
-   "9",
-   "1",
-   "7"
+   "COMPAÑERO",
+   "IDENTIFICAR"
   ],
   "bedrock": "Números",
   "ejemplos": [
@@ -2012,13 +2012,13 @@
  "DUPLICADO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4072,
+  "similitud": 0.2677,
   "vecinas": [
-   "DIBUJAR",
-   "MAMÁ",
+   "VENDER",
+   "CERTIFICADO",
    "CONTESTAR_DOS_VECES",
-   "PERDER",
-   "DÓNDE"
+   "SEPDAVI",
+   "COMPRAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2029,15 +2029,15 @@
   "fecha": "2026-09-27"
  },
  "DÍAS": {
-  "zona": "Tiempo",
-  "titan": "Tiempo",
-  "similitud": 0.648,
+  "zona": null,
+  "titan": "Estado y emoción",
+  "similitud": 0.2639,
   "vecinas": [
-   "DÍA",
-   "CADA_DÍA",
+   "AMENAZAR",
+   "MIEDO",
    "TODOS_LOS_DÍAS",
-   "JUEVES",
-   "BUENOS_DÍAS"
+   "PREOCUPAR",
+   "PROTEGER"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -2048,13 +2048,13 @@
  "EDIFICIO": {
   "zona": "Lugares",
   "titan": "Lugares",
-  "similitud": 0.4022,
+  "similitud": 0.2589,
   "vecinas": [
-   "OFICINA",
+   "AQUÍ",
    "AL_LADO",
-   "TAL_VEZ",
-   "LUEGO",
-   "GOBIERNO"
+   "ALLÍ",
+   "ALLÁ",
+   "CERCA"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -2065,13 +2065,13 @@
  "ELEMENTOS": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3651,
+  "similitud": 0.215,
   "vecinas": [
-   "ÉL",
-   "ELLOS",
-   "5",
-   "NOMBRE",
-   "TAL_VEZ"
+   "GUARDAR",
+   "RECORDAR",
+   "INVESTIGACIÓN",
+   "LUEGO",
+   "CONTINUAR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -2082,13 +2082,13 @@
  "ENCONTRAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5853,
+  "similitud": 0.5058,
   "vecinas": [
    "ENCONTRARSE",
    "BUSCAR",
-   "HABLAR",
-   "MOSTRAR",
-   "LO_SIENTO"
+   "AYUDAR",
+   "TRAER",
+   "MOSTRAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2098,14 +2098,14 @@
  },
  "ENTENDER": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.5474,
+  "titan": "Acciones",
+  "similitud": 0.2574,
   "vecinas": [
-   "ATENDER",
-   "INTÉRPRETE",
-   "8",
-   "7",
-   "2"
+   "EXPLICAR",
+   "ACEPTAR",
+   "ESTAR_DE_ACUERDO",
+   "ENCONTRARSE",
+   "COMPRENDER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -2118,13 +2118,13 @@
  "ENTENDIDO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.5055,
+  "similitud": 0.5209,
   "vecinas": [
    "COMPRENDER",
    "ACEPTAR",
+   "CONOCER",
    "CREER",
-   "RECIBIR",
-   "TENER"
+   "RECIBIR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -2133,15 +2133,15 @@
   "fecha": "2026-09-27"
  },
  "ENTONCES": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.3432,
+  "zona": "Tiempo",
+  "titan": "Tiempo",
+  "similitud": 0.2208,
   "vecinas": [
-   "SEGUNDO",
-   "POCO",
-   "8",
-   "CONTESTAR_DOS_VECES",
-   "2"
+   "DESPUÉS",
+   "CUÁNDO",
+   "LUEGO",
+   "HASTA_LUEGO",
+   "ENGAÑAR"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -2152,13 +2152,13 @@
  "ENTREGAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5335,
+  "similitud": 0.3339,
   "vecinas": [
-   "DAR",
    "ENVIAR",
+   "DAR",
+   "DEVOLVER",
    "TRAER",
-   "GUARDAR",
-   "RECIBIR"
+   "MOSTRAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2167,15 +2167,15 @@
   "fecha": "2026-09-27"
  },
  "ENUMERAR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.4217,
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.2559,
   "vecinas": [
-   "VARIOS",
-   "FUNCIONAR",
-   "ANDAR",
-   "CÓMO",
-   "RESULTADO"
+   "IDENTIFICAR",
+   "TESTIGO",
+   "NOMBRE",
+   "PÁGINA",
+   "AUMENTAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2185,14 +2185,14 @@
  },
  "EQUIPO": {
   "zona": null,
-  "titan": "Descripción",
-  "similitud": 0.3916,
+  "titan": "Instituciones",
+  "similitud": 0.3054,
   "vecinas": [
-   "POCO",
-   "TRUFI",
-   "COMPRAR",
-   "ELLOS",
-   "COMPAÑERO"
+   "DIRECCIÓN",
+   "POLICÍA",
+   "ASISTENCIA",
+   "ANDAR",
+   "SEPDEP"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -2203,14 +2203,14 @@
  },
  "ES": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4853,
+  "titan": "Acciones",
+  "similitud": 0.4122,
   "vecinas": [
-   "1",
-   "8",
-   "6",
-   "2",
-   "SÍ"
+   "NO_SABER",
+   "CUÁL",
+   "QUIÉN",
+   "QUÉ",
+   "NO_PUEDO"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -2221,14 +2221,14 @@
  },
  "ESCRITO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4202,
+  "titan": "Acciones",
+  "similitud": 0.3065,
   "vecinas": [
-   "DESPUÉS",
-   "SEGUNDO",
-   "AHORA",
    "ESCRIBIR",
-   "LUEGO"
+   "ENVIAR",
+   "NARRAR",
+   "TRAER",
+   "PEDIR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2239,14 +2239,14 @@
  },
  "ESCRITURA": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4804,
+  "titan": "Lugares",
+  "similitud": 0.5245,
   "vecinas": [
    "ESCRIBIR",
-   "SELLO",
-   "IR",
-   "FRACTURA",
-   "PASADO_MAÑANA"
+   "AQUÍ",
+   "DIRECCIÓN",
+   "CASA",
+   "MÍO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2257,14 +2257,14 @@
  },
  "ESOS": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.3195,
+  "titan": "Acciones",
+  "similitud": 0.2746,
   "vecinas": [
-   "SÍ",
+   "IGNORAR",
    "ELLOS",
-   "HERMANO",
-   "ESPOSA",
-   "HOMBRE"
+   "NO_SABER",
+   "ATRÁS",
+   "RECHAZAR"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -2275,14 +2275,14 @@
  },
  "ESPACIOS": {
   "zona": null,
-  "titan": "Descripción",
-  "similitud": 0.417,
+  "titan": "Acciones",
+  "similitud": 0.2574,
   "vecinas": [
-   "LENTO",
-   "POCO",
-   "PLAZA",
-   "BARRIO",
-   "PLAZO"
+   "ESCRIBIR",
+   "DE_NADA",
+   "NO_SABER",
+   "ESCONDER",
+   "LENTO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2292,14 +2292,14 @@
  },
  "ESPECIALIZADO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3783,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2952,
   "vecinas": [
-   "AHORA",
+   "AUXILIO",
    "OFICIAL",
-   "RECIBIR",
-   "FUTURO",
-   "HASTA_LUEGO"
+   "CONVOCAR",
+   "VOLVER",
+   "URGENTE"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -2309,31 +2309,31 @@
  },
  "ESPECIFICO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3903,
+  "titan": "Documentos",
+  "similitud": 0.336,
   "vecinas": [
-   "PRÓXIMO",
-   "MÍO",
+   "CERTIFICADO",
+   "CARPETA",
    "OFICIAL",
-   "DESPUÉS",
-   "RECIBIR"
+   "SELLO",
+   "CONOCER"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Descripción",
   "ejemplos": [
    "La certificación de firmas tiene arancel publicado específico."
   ],
   "fecha": "2026-09-27"
  },
  "ESTAFA": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.3475,
+  "zona": "Hechos y urgencia",
+  "titan": "Hechos y urgencia",
+  "similitud": 0.4836,
   "vecinas": [
    "ENGAÑAR",
-   "BURLAR",
-   "9",
-   "SEPDAVI",
-   "5"
+   "ROBAR",
+   "ARRESTAR",
+   "VIOLENCIA",
+   "ESCONDER"
   ],
   "bedrock": "Hechos y urgencia",
   "ejemplos": [
@@ -2344,14 +2344,14 @@
  },
  "ESTAR": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4607,
+  "titan": "Lugares",
+  "similitud": 0.278,
   "vecinas": [
-   "7",
-   "2",
-   "1",
-   "3",
-   "0"
+   "AQUÍ",
+   "EDAD",
+   "DIRECCIÓN",
+   "IDENTIDAD",
+   "AHORA"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -2363,14 +2363,14 @@
  },
  "ESTE": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.453,
+  "titan": "Instituciones",
+  "similitud": 0.2968,
   "vecinas": [
-   "1",
-   "8",
-   "0",
-   "5",
-   "6"
+   "SEPDEP",
+   "ELLOS",
+   "AQUÍ",
+   "MOSTRAR",
+   "SEPDAVI"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -2380,14 +2380,14 @@
  },
  "EXACTO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3322,
+  "titan": "Acciones",
+  "similitud": 0.2539,
   "vecinas": [
-   "8",
-   "5",
-   "7",
-   "AHORA",
-   "AUMENTAR"
+   "TRÁMITE",
+   "PRÓXIMO",
+   "ARREGLAR",
+   "VERDAD",
+   "TRAER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -2398,13 +2398,13 @@
  "EXIGIR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4655,
+  "similitud": 0.2314,
   "vecinas": [
-   "PEDIR",
+   "VOLVER",
+   "PROTEGER",
    "NECESITAR",
-   "RECIBIR",
-   "ACEPTAR",
-   "POR_FAVOR"
+   "PEDIR",
+   "PERMISO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2414,14 +2414,14 @@
  },
  "EXISTIR": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4226,
+  "titan": "Instituciones",
+  "similitud": 0.3775,
   "vecinas": [
-   "TENER",
-   "MOSTRAR",
-   "ABRIR",
-   "AÚN",
-   "EMPEZAR"
+   "FELCV",
+   "FELCC",
+   "OFICINA",
+   "AQUÍ",
+   "CONTINUAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -2432,14 +2432,14 @@
  },
  "EXPEDIENTE": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.4071,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.1848,
   "vecinas": [
-   "PRÓXIMO",
-   "VIOLENCIA",
-   "ASISTENTE",
-   "URGENTE",
-   "LENTO"
+   "INVESTIGACIÓN",
+   "MIRAR",
+   "POR_FAVOR",
+   "VOLVER",
+   "CONVOCAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2450,15 +2450,15 @@
   "fecha": "2026-09-27"
  },
  "EXTRAVIO": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.2972,
+  "zona": "Hechos y urgencia",
+  "titan": "Hechos y urgencia",
+  "similitud": 0.259,
   "vecinas": [
-   "TAL_VEZ",
-   "HASTA_LUEGO",
-   "4",
-   "HASTA_MAÑANA",
-   "AHORA"
+   "ROBAR",
+   "FUERA",
+   "PERDER",
+   "ESCONDER",
+   "ATRÁS"
   ],
   "bedrock": "Hechos y urgencia",
   "ejemplos": [
@@ -2468,15 +2468,15 @@
   "fecha": "2026-09-27"
  },
  "FALLECIDO": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.497,
+  "zona": "Identificación",
+  "titan": "Identificación",
+  "similitud": 0.2612,
   "vecinas": [
-   "TERMINAR",
-   "PERDER",
-   "ÚLTIMO",
-   "RESULTADO",
-   "AL_LADO"
+   "TESTIGO",
+   "IDENTIFICAR",
+   "IDENTIDAD",
+   "AUMENTAR",
+   "NOMBRE"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -2486,14 +2486,14 @@
  },
  "FALTA": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.2932,
+  "titan": "Acciones",
+  "similitud": 0.2631,
   "vecinas": [
-   "FRACTURA",
-   "ELLA",
-   "PAREJA",
-   "BRAZO",
-   "ADULTO"
+   "AYUDAR",
+   "PAPEL",
+   "POR_FAVOR",
+   "ARREGLAR",
+   "NECESITAR"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -2503,32 +2503,32 @@
   "fecha": "2026-09-27"
  },
  "FALTAR": {
-  "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.3237,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2523,
   "vecinas": [
-   "FELCC",
-   "SEMANA",
-   "BUENO",
-   "FRACTURA",
-   "NO"
+   "PROTEGER",
+   "ARREGLAR",
+   "ENFRENTE",
+   "TRISTE",
+   "LEJOS"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Acciones",
   "ejemplos": [
    "Me falta el certificado catastral."
   ],
   "fecha": "2026-09-27"
  },
  "FAMILIA": {
-  "zona": "Identificación",
-  "titan": "Identificación",
-  "similitud": 0.4007,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.4449,
   "vecinas": [
-   "LISTA",
-   "ADULTO",
-   "DIFÍCIL",
-   "FILMAR",
-   "HERMANA"
+   "AYUDAR",
+   "HIJO",
+   "HERMANO",
+   "AUXILIO",
+   "NECESITAR"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -2539,13 +2539,13 @@
  "FAMILIAR": {
   "zona": null,
   "titan": "Lugares",
-  "similitud": 0.3423,
+  "similitud": 0.2413,
   "vecinas": [
-   "PARIENTE",
-   "BANCO",
-   "4",
-   "CONOCER",
-   "ENFRENTE"
+   "NO_SABER",
+   "DIRECCIÓN",
+   "IR",
+   "LEJOS",
+   "INVESTIGACIÓN"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -2557,16 +2557,16 @@
  },
  "FIGURA": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.3853,
+  "titan": "Acciones",
+  "similitud": 0.3426,
   "vecinas": [
-   "FRACTURA",
-   "IR",
-   "FUERA",
-   "7",
-   "JUEVES"
+   "NO_SABER",
+   "QUIÉN",
+   "NEGRO",
+   "SORDO",
+   "CONOCER"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Identificación",
   "ejemplos": [
    "No sé quién figura.",
    "El servicio para violencia familiar figura actualizado en 2026."
@@ -2575,14 +2575,14 @@
  },
  "FIRMA": {
   "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.3583,
+  "titan": "Acciones",
+  "similitud": 0.2403,
   "vecinas": [
-   "FACTURA",
-   "FUERA",
-   "FRACTURA",
-   "AQUÍ",
-   "INTERNET"
+   "CERTIFICADO",
+   "ARREGLAR",
+   "DEVOLVER",
+   "EXPLICAR",
+   "CONVOCAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2593,15 +2593,15 @@
   "fecha": "2026-09-27"
  },
  "FIRMAR": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.2735,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2869,
   "vecinas": [
-   "POSTERGAR",
-   "AQUÍ",
-   "6",
-   "0",
-   "1"
+   "COMPRAR",
+   "AHORA",
+   "VENDER",
+   "ESTAR_DE_ACUERDO",
+   "PUEDO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2610,15 +2610,15 @@
   "fecha": "2026-09-27"
  },
  "FISCAL": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4274,
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.3571,
   "vecinas": [
    "FISCALIA",
-   "3",
-   "1",
-   "FACTURA",
-   "5"
+   "OFICIAL",
+   "CONOCER",
+   "JEFE",
+   "INVESTIGACIÓN"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -2628,16 +2628,16 @@
  },
  "FISICA": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3664,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2224,
   "vecinas": [
-   "TEMPRANO",
-   "RESULTADO",
    "DOLOR",
-   "LENTO",
-   "ESCRIBIR"
+   "FACTURA",
+   "PROTEGER",
+   "CARO",
+   "INSTITUCIÓN"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Descripción",
   "ejemplos": [
    "¿Cuánto cuesta la cédula física?",
    "¿Cuesta lo mismo que la cédula física?"
@@ -2646,14 +2646,14 @@
  },
  "FOLIO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4071,
+  "titan": "Acciones",
+  "similitud": 0.2397,
   "vecinas": [
-   "AQUÍ",
-   "7",
-   "6",
-   "1",
-   "4"
+   "PAPEL",
+   "CELULAR",
+   "MIEDO",
+   "MOSTRAR",
+   "PRESENTAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2664,13 +2664,13 @@
  "FOLIO_REAL": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.374,
+  "similitud": 0.3006,
   "vecinas": [
-   "MOSTRAR",
-   "IR",
-   "AQUÍ",
-   "SELLO",
-   "PUEDO"
+   "PROTEGER",
+   "DEVOLVER",
+   "ARREGLAR",
+   "CASA",
+   "AUMENTAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2679,15 +2679,15 @@
   "fecha": "2026-09-27"
  },
  "FORMULARIO": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.6253,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2538,
   "vecinas": [
-   "1",
-   "2",
-   "7",
-   "9",
-   "6"
+   "PAPEL",
+   "CELULAR",
+   "EDAD",
+   "MOSTRAR",
+   "MIEDO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2698,14 +2698,14 @@
  },
  "FUE": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3516,
+  "titan": "Acciones",
+  "similitud": 0.3092,
   "vecinas": [
-   "IR",
-   "4",
-   "FOTOS",
-   "SEMANA",
-   "1"
+   "NO_SABER",
+   "CONOCER",
+   "QUIÉN",
+   "TRABAJADOR",
+   "SORDO"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -2715,14 +2715,14 @@
  },
  "FUI": {
   "zona": null,
-  "titan": "Objetos",
-  "similitud": 0.5555,
+  "titan": "Acciones",
+  "similitud": 0.3579,
   "vecinas": [
-   "IR",
-   "AQUÍ",
-   "TRUFI",
-   "8",
-   "CHAMARRA"
+   "ROBAR",
+   "AYUDAR",
+   "ABOGADO",
+   "PROTEGER",
+   "INVESTIGACIÓN"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -2733,13 +2733,13 @@
  "GARANTIZAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4149,
+  "similitud": 0.2145,
   "vecinas": [
-   "GUARDAR",
-   "CONFIANZA",
-   "ESTAR_DE_ACUERDO",
-   "MOSTRAR",
-   "DECIDIR"
+   "ATENDER",
+   "ASISTENCIA",
+   "HOSPITAL",
+   "HABLAR",
+   "AUXILIO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2749,14 +2749,14 @@
  },
  "GRADO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4021,
+  "titan": "Identificación",
+  "similitud": 0.2352,
   "vecinas": [
-   "SEGUNDO",
-   "BRAZO",
-   "LUEGO",
-   "BOCA",
-   "FLACO"
+   "JOVEN",
+   "ESCUELA",
+   "GORDO",
+   "DIFÍCIL",
+   "CERCA"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -2767,14 +2767,14 @@
  },
  "GUIONES": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.3336,
+  "titan": "Acciones",
+  "similitud": 0.2678,
   "vecinas": [
-   "BAJO",
-   "VIDEO",
-   "BUENOS_DÍAS",
-   "IR",
-   "FUERA"
+   "ESCRIBIR",
+   "DE_NADA",
+   "NO_SABER",
+   "FUERA",
+   "JAMÁS"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -2784,14 +2784,14 @@
  },
  "HACERLE": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.306,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.2981,
   "vecinas": [
-   "ROJO",
-   "RESOLUCIÓN",
-   "DURANTE",
-   "HACER",
-   "DESCANSO"
+   "INVESTIGACIÓN",
+   "PROTEGER",
+   "PREOCUPAR",
+   "TESTIMONIO",
+   "EXPLICAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2800,15 +2800,15 @@
   "fecha": "2026-09-27"
  },
  "HECHO": {
-  "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.4328,
+  "zona": "Hechos y urgencia",
+  "titan": "Hechos y urgencia",
+  "similitud": 0.4483,
   "vecinas": [
-   "AQUÍ",
-   "POCO",
-   "HACER",
-   "AL_LADO",
-   "ELLOS"
+   "ROBAR",
+   "ENGAÑAR",
+   "ARRESTAR",
+   "VIOLENCIA",
+   "DAÑAR"
   ],
   "bedrock": "Hechos y urgencia",
   "ejemplos": [
@@ -2820,14 +2820,14 @@
  },
  "HIPOTECA": {
   "zona": null,
-  "titan": "Objetos",
-  "similitud": 0.3209,
+  "titan": "Lugares",
+  "similitud": 0.2472,
   "vecinas": [
-   "BOLSA",
-   "FOTOS",
-   "AL_LADO",
-   "BANCO",
-   "GUARDAR"
+   "CASA",
+   "POCO",
+   "MIEDO",
+   "CONVOCAR",
+   "DENTRO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2837,14 +2837,14 @@
  },
  "IGUAL": {
   "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.3984,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2016,
   "vecinas": [
-   "TAL_VEZ",
-   "AMBOS",
-   "AQUÍ",
-   "SÍ",
-   "AL_LADO"
+   "CARO",
+   "PERDER",
+   "FRACTURA",
+   "POLICÍA",
+   "ASISTENCIA"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -2854,14 +2854,14 @@
  },
  "IMPUESTO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3763,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1684,
   "vecinas": [
-   "BRAZO",
-   "ARRESTAR",
-   "INTERNET",
-   "ESCUELA",
-   "CONOCER"
+   "FACTURA",
+   "ENGAÑAR",
+   "FISCALIA",
+   "JUEZ",
+   "PEGAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2870,15 +2870,15 @@
   "fecha": "2026-09-27"
  },
  "INCLUIR": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3866,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2864,
   "vecinas": [
-   "6",
-   "LUEGO",
-   "GRATIS",
-   "AQUÍ",
-   "DESPUÉS"
+   "AUMENTAR",
+   "RECORDAR",
+   "EXPLICAR",
+   "ESCRIBIR",
+   "CONVOCAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2891,13 +2891,13 @@
  "INCORPORAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.3627,
+  "similitud": 0.2163,
   "vecinas": [
-   "LUEGO",
-   "DÓNDE",
-   "CREER",
-   "DESPUÉS",
-   "CONTINUAR"
+   "AUMENTAR",
+   "NUEVO",
+   "INSTITUCIÓN",
+   "HASTA_MAÑANA",
+   "GRATIS"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2908,13 +2908,13 @@
  "INDICAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4513,
+  "similitud": 0.2577,
   "vecinas": [
-   "MOSTRAR",
-   "IDENTIFICAR",
    "AUMENTAR",
-   "CÓMO",
-   "CONVOCAR"
+   "AVISAR",
+   "CONVOCAR",
+   "ÓRGANO_JUDICIAL",
+   "IDENTIFICAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2926,13 +2926,13 @@
  "INDICARME": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4169,
+  "similitud": 0.2354,
   "vecinas": [
-   "CELULAR",
-   "ENVIAR",
-   "AVISAR",
    "IDENTIFICAR",
-   "AMENAZAR"
+   "MOSTRAR",
+   "DIRECCIÓN",
+   "AUMENTAR",
+   "CONOCER"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2943,13 +2943,13 @@
  "INFORMACION": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4616,
+  "similitud": 0.2656,
   "vecinas": [
    "AUMENTAR",
-   "1",
-   "AVISAR",
-   "AQUÍ",
-   "ELLA"
+   "CASA",
+   "OFICINA",
+   "PROTEGER",
+   "CONVOCAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -2960,15 +2960,15 @@
   "fecha": "2026-09-27"
  },
  "INFORMAR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.4631,
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.1716,
   "vecinas": [
-   "AVISAR",
-   "AUMENTAR",
-   "ENVIAR",
-   "CONTINUAR",
-   "IDENTIFICAR"
+   "DURANTE",
+   "PERMISO",
+   "TARDE",
+   "DISCRIMINACIÓN",
+   "HASTA_LUEGO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2981,13 +2981,13 @@
  "INGRESAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.58,
+  "similitud": 0.2399,
   "vecinas": [
+   "BANCO",
    "LLEGAR",
-   "VOLVER",
-   "ABRIR",
-   "DENTRO",
-   "LUEGO"
+   "PUEDO",
+   "CREER",
+   "MOSTRAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -2998,13 +2998,13 @@
  "INICIAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.6668,
+  "similitud": 0.4277,
   "vecinas": [
    "EMPEZAR",
-   "INSTITUCIÓN",
-   "PELEAR",
-   "CONTINUAR",
-   "PRIMERA_VEZ"
+   "PRESENTAR",
+   "HABLAR",
+   "DIRECCIÓN",
+   "PELEAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -3016,13 +3016,13 @@
  "INMUEBLE": {
   "zona": null,
   "titan": "Lugares",
-  "similitud": 0.3926,
+  "similitud": 0.265,
   "vecinas": [
+   "AUMENTAR",
+   "OFICINA",
+   "CASA",
    "INSTITUCIÓN",
-   "ÉL",
-   "6",
-   "AQUÍ",
-   "CASA"
+   "PROTEGER"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -3034,14 +3034,14 @@
  },
  "INSTRUCCION": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.4208,
+  "titan": "Acciones",
+  "similitud": 0.373,
   "vecinas": [
-   "INSTITUCIÓN",
-   "ESCUELA",
-   "DISCRIMINACIÓN",
-   "FRACTURA",
-   "TESTIGO"
+   "ESCRIBIR",
+   "DIRECCIÓN",
+   "EXPLICAR",
+   "DEVOLVER",
+   "ARREGLAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -3052,13 +3052,13 @@
  "INSTRUCCIONES": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3762,
+  "similitud": 0.2311,
   "vecinas": [
-   "DIRECCIÓN",
-   "EMPEZAR",
-   "TESTIGO",
-   "DISCRIMINACIÓN",
-   "ANDAR"
+   "GUARDAR",
+   "LUEGO",
+   "RECORDAR",
+   "INVESTIGACIÓN",
+   "DIRECCIÓN"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -3067,15 +3067,15 @@
   "fecha": "2026-09-27"
  },
  "INTEGRAL": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.3898,
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.3674,
   "vecinas": [
-   "TOTAL",
-   "4",
-   "6",
-   "3",
-   "1"
+   "SEPDAVI",
+   "SEPDEP",
+   "ASISTENTE",
+   "ASISTENCIA",
+   "FELCC"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3087,13 +3087,13 @@
  "INTERPRETAR": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.514,
+  "similitud": 0.2772,
   "vecinas": [
-   "COMPRENDER",
-   "EVALUAR",
-   "EXPLICAR",
-   "RECORDAR",
-   "ACEPTAR"
+   "GRATIS",
+   "LIBRE",
+   "LEY",
+   "PERMISO",
+   "INTÉRPRETE"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3104,14 +3104,14 @@
  },
  "INTERÉS": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3348,
+  "titan": "Tiempo",
+  "similitud": 0.1672,
   "vecinas": [
-   "INTERNET",
-   "MEJOR",
-   "1",
-   "TENER",
-   "GRATIS"
+   "TARDE",
+   "DURANTE",
+   "HASTA_LUEGO",
+   "RESOLUCIÓN",
+   "OYENTE"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -3122,13 +3122,13 @@
  "INVESTIGADOR": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4742,
+  "similitud": 0.2452,
   "vecinas": [
+   "GUARDAR",
    "INVESTIGACIÓN",
-   "TRABAJADOR",
-   "BUSCAR",
-   "DEVOLVER",
-   "INTÉRPRETE"
+   "RECORDAR",
+   "LUEGO",
+   "CONTINUAR"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3139,13 +3139,13 @@
  "JUDICIAL": {
   "zona": null,
   "titan": "Instituciones",
-  "similitud": 0.4865,
+  "similitud": 0.275,
   "vecinas": [
-   "JUEZ",
+   "INVESTIGACIÓN",
    "JUZGADO",
    "ÓRGANO_JUDICIAL",
-   "1",
-   "JUSTICIA"
+   "JUEZ",
+   "CONVOCAR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -3154,15 +3154,15 @@
   "fecha": "2026-09-27"
  },
  "LANZA": {
-  "zona": null,
-  "titan": "Preguntas",
-  "similitud": 0.2784,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.25,
   "vecinas": [
-   "ELLA",
-   "LENTES",
-   "5",
-   "FUNCIONAR",
-   "DESCANSO"
+   "ALLÍ",
+   "AL_LADO",
+   "CERCA",
+   "AQUÍ",
+   "ALLÁ"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -3172,14 +3172,14 @@
  },
  "LEGAL": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.5002,
+  "titan": "Acciones",
+  "similitud": 0.4869,
   "vecinas": [
-   "LEY",
-   "7",
-   "5",
-   "6",
-   "2"
+   "AYUDAR",
+   "PROTEGER",
+   "AUXILIO",
+   "INVESTIGACIÓN",
+   "DEVOLVER"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3191,14 +3191,14 @@
  },
  "LENGUA": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3952,
+  "titan": "Acciones",
+  "similitud": 0.4331,
   "vecinas": [
-   "LUEGO",
-   "RESULTADO",
-   "PRÓXIMO",
-   "DESPUÉS",
-   "VIDEO"
+   "HABLAR",
+   "ESCRIBIR",
+   "NARRAR",
+   "LLAMAR",
+   "NECESITAR"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3209,14 +3209,14 @@
  },
  "LINEA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3159,
+  "titan": "Lugares",
+  "similitud": 0.2599,
   "vecinas": [
-   "1",
-   "FOTOS",
-   "9",
-   "MUJER",
-   "AL_LADO"
+   "MERCADO",
+   "TIENDA",
+   "FACTURA",
+   "BANCO",
+   "PLAZO"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -3227,14 +3227,14 @@
  },
  "LOTE": {
   "zona": null,
-  "titan": "Preguntas",
-  "similitud": 0.345,
+  "titan": "Acciones",
+  "similitud": 0.2832,
   "vecinas": [
-   "VARIOS",
-   "LISTA",
-   "LENTO",
-   "ASISTENTE",
-   "DESCANSO"
+   "HERMANA",
+   "PROTEGER",
+   "DEVOLVER",
+   "CERTIFICADO",
+   "CONVOCAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -3244,15 +3244,15 @@
   "fecha": "2026-09-27"
  },
  "LSB": {
-  "zona": "Instituciones",
-  "titan": "Instituciones",
-  "similitud": 0.5521,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.3873,
   "vecinas": [
+   "HABLAR",
    "INTÉRPRETE",
-   "2",
-   "SELLO",
-   "ARREGLAR",
-   "BUSCAR"
+   "LLAMAR",
+   "ESCRIBIR",
+   "PROTEGER"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3263,13 +3263,13 @@
  "LUGAR": {
   "zona": "Lugares",
   "titan": "Lugares",
-  "similitud": 0.4547,
+  "similitud": 0.2211,
   "vecinas": [
    "AQUÍ",
-   "PROVINCIA",
-   "PLAZA",
-   "NO_PUEDO",
-   "JUZGADO"
+   "AHORA",
+   "PREOCUPAR",
+   "ESCONDER",
+   "ESCAPAR"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -3278,15 +3278,15 @@
   "fecha": "2026-09-27"
  },
  "LÍNEA": {
-  "zona": "Objetos",
-  "titan": "Objetos",
-  "similitud": 0.3056,
+  "zona": null,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.2326,
   "vecinas": [
-   "POLICÍA",
+   "INVESTIGACIÓN",
    "INTERNET",
-   "9",
-   "VIDEO",
-   "ESCONDER"
+   "LUNES",
+   "CONVOCAR",
+   "BUSCAR"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -3297,13 +3297,13 @@
  "MANTENER": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4082,
+  "similitud": 0.2966,
   "vecinas": [
-   "ATENDER",
-   "ANTEAYER",
-   "5",
-   "LENTO",
-   "ASISTENCIA"
+   "AÚN",
+   "RECORDAR",
+   "CONTINUAR",
+   "GUARDAR",
+   "EMPEZAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -3314,14 +3314,14 @@
  },
  "MAS": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.5059,
+  "titan": "Tiempo",
+  "similitud": 0.3085,
   "vecinas": [
-   "MES",
-   "6",
-   "1",
-   "9",
-   "2"
+   "LENTO",
+   "MÁS_O_MENOS",
+   "JAMÁS",
+   "DESPUÉS",
+   "FUERA"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -3330,15 +3330,15 @@
   "fecha": "2026-09-27"
  },
  "MATRIMONIO": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3554,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.229,
   "vecinas": [
-   "BRAZO",
-   "PAREJA",
+   "CERTIFICADO",
+   "CONTESTAR_DOS_VECES",
    "BARRIO",
-   "TESTIMONIO",
-   "MARZO"
+   "SEPARADOS",
+   "SEGUNDO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -3348,31 +3348,31 @@
  },
  "MECANISMO": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.3593,
+  "titan": "Tiempo",
+  "similitud": 0.1758,
   "vecinas": [
-   "TRÁMITE",
-   "MEDICINA",
-   "FUTURO",
-   "ASISTENTE",
-   "GOBIERNO"
+   "HASTA_MAÑANA",
+   "NUEVO",
+   "INSTITUCIÓN",
+   "LEY",
+   "CADA_DÍA"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Objetos",
   "ejemplos": [
    "La norma 2025 incorporó mecanismos de renovación automática."
   ],
   "fecha": "2026-09-27"
  },
  "MEDICO": {
-  "zona": "Instituciones",
-  "titan": "Instituciones",
-  "similitud": 0.5475,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.2849,
   "vecinas": [
-   "DOCTOR",
-   "MEDICINA",
-   "0",
-   "TESTIGO",
-   "SELLO"
+   "MOSTRAR",
+   "CONFIANZA",
+   "TESTIMONIO",
+   "IDENTIDAD",
+   "CERTIFICADO"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3383,13 +3383,13 @@
  "MEDIDA": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.3436,
+  "similitud": 0.2045,
   "vecinas": [
-   "MENTIRA",
-   "HERIDA",
-   "AUMENTAR",
-   "CAMBIAR",
-   "DECIDIR"
+   "POR_FAVOR",
+   "NECESITAR",
+   "ASISTENCIA",
+   "PRESENTAR",
+   "MUCHO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -3400,13 +3400,13 @@
  "MEMORIAL": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3352,
+  "similitud": 0.2635,
   "vecinas": [
-   "RECORDAR",
-   "CONTINUAR",
-   "1",
-   "2",
-   "GOBIERNO"
+   "CELULAR",
+   "NO_PUEDO",
+   "MIEDO",
+   "MOSTRAR",
+   "TRAER"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -3418,16 +3418,16 @@
  },
  "MENSAJE": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4962,
+  "titan": "Acciones",
+  "similitud": 0.187,
   "vecinas": [
-   "1",
-   "9",
-   "6",
-   "2",
-   "AMENAZAR"
+   "DE_NADA",
+   "DAÑAR",
+   "GUARDAR",
+   "ARRESTAR",
+   "AÚN"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Objetos",
   "ejemplos": [
    "No borre ni modifique mensajes relacionados al hecho.",
    "Sí. Me escribe mensajes constantemente.",
@@ -3436,17 +3436,17 @@
   "fecha": "2026-09-27"
  },
  "MESES": {
-  "zona": "Tiempo",
+  "zona": null,
   "titan": "Tiempo",
-  "similitud": 0.7027,
+  "similitud": 0.1823,
   "vecinas": [
    "MES",
-   "MÁS_O_MENOS",
-   "SÍ",
-   "NEGRO",
-   "VARIOS"
+   "6",
+   "MOMENTO",
+   "AHORA",
+   "COCHABAMBA"
   ],
-  "bedrock": "Tiempo",
+  "bedrock": "Números",
   "ejemplos": [
    "La renovación puede solicitarse desde seis meses antes."
   ],
@@ -3454,14 +3454,14 @@
  },
  "MINISTERIO": {
   "zona": null,
-  "titan": "Objetos",
-  "similitud": 0.3672,
+  "titan": "Tiempo",
+  "similitud": 0.2439,
   "vecinas": [
-   "GOBIERNO",
-   "MICRO",
-   "MINUTO",
-   "MEDICINA",
-   "TESTIGO"
+   "4",
+   "FECHA",
+   "SEMANA",
+   "DURANTE",
+   "BARRIO"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3474,13 +3474,13 @@
  "MISMO": {
   "zona": null,
   "titan": "Objetos",
-  "similitud": 0.3,
+  "similitud": 0.2583,
   "vecinas": [
-   "MÁS_O_MENOS",
-   "LUEGO",
-   "HASTA_LUEGO",
-   "MICRO",
-   "MEDICINA"
+   "CELULAR",
+   "AHORA",
+   "MÍO",
+   "EDAD",
+   "MÁS_O_MENOS"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -3490,17 +3490,17 @@
   "fecha": "2026-09-27"
  },
  "MODALIDAD": {
-  "zona": "Tiempo",
-  "titan": "Tiempo",
-  "similitud": 0.37,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.3458,
   "vecinas": [
-   "MOSTRAR",
-   "MÁS_O_MENOS",
-   "MAÑANA",
-   "AYER",
-   "AUMENTAR"
+   "FECHA",
+   "CUÁNDO",
+   "BUSCAR",
+   "POR_FAVOR",
+   "MIRAR"
   ],
-  "bedrock": "Tiempo",
+  "bedrock": "Descripción",
   "ejemplos": [
    "Quiero revisar fecha y modalidad."
   ],
@@ -3508,14 +3508,14 @@
  },
  "MODIFICAR": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4399,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.2433,
   "vecinas": [
-   "CADA_DÍA",
-   "HASTA_LUEGO",
-   "AHORA",
-   "DESPUÉS",
-   "MOSTRAR"
+   "PROHIBIDO",
+   "DE_NADA",
+   "ESCONDER",
+   "DAÑAR",
+   "VIDEO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -3525,14 +3525,14 @@
  },
  "MONTO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4007,
+  "titan": "Lugares",
+  "similitud": 0.2614,
   "vecinas": [
-   "5",
-   "7",
-   "1",
-   "2",
-   "MAL"
+   "MERCADO",
+   "TIENDA",
+   "FACTURA",
+   "MOMENTO",
+   "MINUTO"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -3543,15 +3543,15 @@
   "fecha": "2026-09-27"
  },
  "MOTO": {
-  "zona": "Objetos",
-  "titan": "Objetos",
-  "similitud": 0.4331,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.1769,
   "vecinas": [
-   "TRUFI",
-   "MINUTO",
-   "MOCHILA",
-   "MICRO",
-   "GRATIS"
+   "FACTURA",
+   "COMPUTADORA",
+   "PROTEGER",
+   "AYUDAR",
+   "SEPDEP"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -3560,15 +3560,15 @@
   "fecha": "2026-09-27"
  },
  "MULTA": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3766,
+  "zona": "Conceptos jurídicos",
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.1812,
   "vecinas": [
-   "MALTRATAR",
+   "MINUTO",
+   "RESOLUCIÓN",
+   "PERMISO",
    "GRATIS",
-   "MENTIRA",
-   "EMPEZAR",
-   "TEMPRANO"
+   "DISCRIMINACIÓN"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -3577,15 +3577,15 @@
   "fecha": "2026-09-27"
  },
  "MUNICIPAL": {
-  "zona": "Instituciones",
-  "titan": "Instituciones",
-  "similitud": 0.3571,
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.2343,
   "vecinas": [
+   "PÁGINA",
    "ALCALDÍA",
-   "TEMPRANO",
-   "GRATIS",
-   "OFICIAL",
-   "MÁS_O_MENOS"
+   "PLAZA",
+   "CONVOCAR",
+   "CALLE"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3594,14 +3594,14 @@
   "fecha": "2026-09-27"
  },
  "MUY": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.3899,
+  "zona": "Descripción",
+  "titan": "Descripción",
+  "similitud": 0.3433,
   "vecinas": [
-   "5",
-   "TAL_VEZ",
-   "FUTURO",
-   "SUYO",
+   "POCO",
+   "ESCRIBIR",
+   "LENTO",
+   "MUCHO",
    "MÍO"
   ],
   "bedrock": "Descripción",
@@ -3611,15 +3611,15 @@
   "fecha": "2026-09-27"
  },
  "NACIMIENTO": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3708,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2703,
   "vecinas": [
-   "NUEVO",
-   "JOVEN",
-   "LLEGAR",
-   "AYER",
-   "MARZO"
+   "CERTIFICADO",
+   "COMPUTADORA",
+   "CONVOCAR",
+   "IDENTIDAD",
+   "CADA_DÍA"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -3630,14 +3630,14 @@
  },
  "NACIONAL": {
   "zona": null,
-  "titan": "Preguntas",
-  "similitud": 0.376,
+  "titan": "Acciones",
+  "similitud": 0.2091,
   "vecinas": [
-   "NOSOTROS",
-   "OFICIAL",
-   "CASA",
-   "PASADO_MAÑANA",
-   "HIJO"
+   "INSTITUCIÓN",
+   "AÚN",
+   "RECORDAR",
+   "CONTINUAR",
+   "GUARDAR"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3648,13 +3648,13 @@
  "NECESIDAD": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.7759,
+  "similitud": 0.3787,
   "vecinas": [
    "NECESITAR",
-   "FELCC",
-   "CERCA",
    "ASISTENCIA",
-   "URGENTE"
+   "AUXILIO",
+   "HABLAR",
+   "ESCRIBIR"
   ],
   "bedrock": "Estado y emoción",
   "ejemplos": [
@@ -3665,13 +3665,13 @@
  "NECESITO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.7483,
+  "similitud": 0.3485,
   "vecinas": [
    "NECESITAR",
-   "PEDIR",
-   "FELCC",
-   "URGENTE",
-   "CONVOCAR"
+   "PROTEGER",
+   "AYUDAR",
+   "LENTO",
+   "CERCA"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -3681,14 +3681,14 @@
  },
  "NEGAR": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.2944,
+  "titan": "Acciones",
+  "similitud": 0.4016,
   "vecinas": [
-   "1",
-   "JAMÁS",
-   "FUNCIONAR",
-   "DE_NADA",
-   "POSTERGAR"
+   "IGNORAR",
+   "HABLAR",
+   "PROTEGER",
+   "RECHAZAR",
+   "AYUDAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -3697,15 +3697,15 @@
   "fecha": "2026-09-27"
  },
  "NIÑEZ": {
-  "zona": "Identificación",
-  "titan": "Identificación",
-  "similitud": 0.3707,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.2584,
   "vecinas": [
-   "ADULTO",
-   "JOVEN",
-   "QUIÉN",
-   "NUEVO",
-   "OYENTE"
+   "PROTEGER",
+   "AYUDAR",
+   "NECESITAR",
+   "URGENTE",
+   "CONVOCAR"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -3714,15 +3714,15 @@
   "fecha": "2026-09-27"
  },
  "NIÑO": {
-  "zona": "Identificación",
-  "titan": "Identificación",
-  "similitud": 0.4452,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.453,
   "vecinas": [
+   "AYUDAR",
+   "HERMANO",
    "HIJO",
-   "MÍO",
-   "ADULTO",
-   "POCO",
-   "IR"
+   "NECESITAR",
+   "ASISTENCIA"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -3732,14 +3732,14 @@
  },
  "NORMA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3055,
+  "titan": "Acciones",
+  "similitud": 0.2534,
   "vecinas": [
-   "DE_NADA",
-   "1",
-   "FUERA",
-   "DOCTOR",
-   "9"
+   "INSTITUCIÓN",
+   "CONTINUAR",
+   "AÚN",
+   "RECORDAR",
+   "AHORA"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -3750,15 +3750,15 @@
   "fecha": "2026-09-27"
  },
  "NOTARIA": {
-  "zona": "Instituciones",
-  "titan": "Instituciones",
-  "similitud": 0.3124,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.2599,
   "vecinas": [
-   "DOCTOR",
-   "HOSPITAL",
-   "CASA",
-   "GOBIERNO",
-   "AUXILIO"
+   "BUSCAR",
+   "OFICINA",
+   "OFICIAL",
+   "NECESITAR",
+   "FISCALIA"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3769,13 +3769,13 @@
  "NOTARIO": {
   "zona": "Instituciones",
   "titan": "Instituciones",
-  "similitud": 0.3499,
+  "similitud": 0.2879,
   "vecinas": [
-   "TESTIGO",
-   "OFICIAL",
-   "ABOGADO",
-   "AUXILIO",
-   "GRACIAS"
+   "BUSCAR",
+   "SEPDAVI",
+   "MARZO",
+   "SEPDEP",
+   "OFICINA"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -3784,15 +3784,15 @@
   "fecha": "2026-09-27"
  },
  "NUESTRAS": {
-  "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.3979,
+  "zona": "Preguntas",
+  "titan": "Preguntas",
+  "similitud": 0.2858,
   "vecinas": [
    "NOSOTROS",
-   "NUEVO",
-   "HERMANA",
-   "MUJER",
-   "HIJA"
+   "PRESENTAR",
+   "AHORA",
+   "POR_FAVOR",
+   "SELLO"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -3801,15 +3801,15 @@
   "fecha": "2026-09-27"
  },
  "NUMERO": {
-  "zona": "Números",
-  "titan": "Números",
-  "similitud": 0.5174,
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2002,
   "vecinas": [
-   "9",
-   "1",
-   "7",
-   "5",
-   "6"
+   "CERTIFICADO",
+   "BARRIO",
+   "CARPETA",
+   "CUÁNTOS",
+   "CAJA"
   ],
   "bedrock": "Números",
   "ejemplos": [
@@ -3820,15 +3820,15 @@
   "fecha": "2026-09-27"
  },
  "OCTUBRE": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.3891,
+  "zona": "Tiempo",
+  "titan": "Tiempo",
+  "similitud": 0.1898,
   "vecinas": [
-   "9",
-   "1",
-   "3",
-   "FUERA",
-   "INTERNET"
+   "HASTA_LUEGO",
+   "HASTA_MAÑANA",
+   "TARDE",
+   "AHORA",
+   "DURANTE"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -3838,14 +3838,14 @@
  },
  "OCURRIDO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4184,
+  "titan": "Acciones",
+  "similitud": 0.3961,
   "vecinas": [
-   "OCUPADO",
-   "OFICIAL",
-   "OBSERVAR",
-   "OSCURO",
-   "ÚLTIMO"
+   "NARRAR",
+   "INVESTIGACIÓN",
+   "TESTIMONIO",
+   "ARRESTAR",
+   "MIEDO"
   ],
   "bedrock": "Hechos y urgencia",
   "ejemplos": [
@@ -3856,14 +3856,14 @@
  },
  "OCURRIR": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4171,
+  "titan": "Acciones",
+  "similitud": 0.4708,
   "vecinas": [
-   "MEJOR",
-   "MARZO",
-   "OBSERVAR",
-   "CERCA",
-   "MOMENTO"
+   "ROBAR",
+   "ESCONDER",
+   "ARRESTAR",
+   "BURLAR",
+   "ESCAPAR"
   ],
   "bedrock": "Hechos y urgencia",
   "ejemplos": [
@@ -3874,15 +3874,15 @@
   "fecha": "2026-09-27"
  },
  "OFRECER": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.2964,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.344,
   "vecinas": [
-   "7",
-   "2",
-   "IR",
-   "OÍR",
-   "FELCC"
+   "BUSCAR",
+   "OFICINA",
+   "INTERNET",
+   "ENCONTRARSE",
+   "MARZO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -3894,13 +3894,13 @@
  "ORIENTACION": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5259,
+  "similitud": 0.3639,
   "vecinas": [
    "DIRECCIÓN",
-   "ORGANIZAR",
-   "OBSERVAR",
-   "ANDAR",
-   "AVENIDA"
+   "NARRAR",
+   "PROTEGER",
+   "VOLVER",
+   "AVISAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -3913,13 +3913,13 @@
  "ORIENTAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.48,
+  "similitud": 0.4143,
   "vecinas": [
    "DIRECCIÓN",
-   "ORGANIZAR",
-   "OBSERVAR",
-   "ANDAR",
-   "AVENIDA"
+   "ARREGLAR",
+   "PRESENTAR",
+   "PROTEGER",
+   "HABLAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -3930,15 +3930,15 @@
   "fecha": "2026-09-27"
  },
  "ORIGINAL": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.5053,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2754,
   "vecinas": [
-   "8",
-   "1",
-   "9",
-   "7",
-   "2"
+   "CERTIFICADO",
+   "COMPUTADORA",
+   "OFICIAL",
+   "CONVOCAR",
+   "IDENTIDAD"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -3949,14 +3949,14 @@
  },
  "OTRA": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.3384,
+  "titan": "Acciones",
+  "similitud": 0.2201,
   "vecinas": [
-   "FELCV",
-   "ANDAR",
-   "ATRÁS",
-   "POLICÍA",
-   "MALTRATAR"
+   "VENDER",
+   "SORDO",
+   "POCO",
+   "VIVIR",
+   "FUTURO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -3967,14 +3967,14 @@
  },
  "OTRAS": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3423,
+  "titan": "Lugares",
+  "similitud": 0.2275,
   "vecinas": [
-   "3",
-   "ATRÁS",
-   "ALLÁ",
-   "8",
-   "DAR"
+   "FUERA",
+   "ENFRENTE",
+   "ESCRIBIR",
+   "VARIOS",
+   "BURLAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -3984,14 +3984,14 @@
  },
  "OTRO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4718,
+  "titan": "Descripción",
+  "similitud": 0.2685,
   "vecinas": [
-   "ALTO",
-   "TRUFI",
-   "6",
-   "8",
-   "ATRÁS"
+   "SORDO",
+   "FUERA",
+   "PASADO",
+   "DIFERENTE",
+   "NUEVO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -4002,15 +4002,15 @@
   "fecha": "2026-09-27"
  },
  "PADRE": {
-  "zona": "Identificación",
-  "titan": "Identificación",
-  "similitud": 0.4139,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.252,
   "vecinas": [
-   "PARIENTE",
-   "DOCTOR",
-   "HIJO",
-   "IR",
-   "QUIÉN"
+   "PROTEGER",
+   "PERDER",
+   "AYUDAR",
+   "CERTIFICADO",
+   "DEVOLVER"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -4019,15 +4019,15 @@
   "fecha": "2026-09-27"
  },
  "PAGAR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.4497,
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.2581,
   "vecinas": [
-   "COMPRAR",
-   "CAJA",
-   "PÁGINA",
-   "GRATIS",
-   "PEGAR"
+   "HOY",
+   "AHORA",
+   "PASADO_MAÑANA",
+   "AÚN",
+   "DECIDIR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4038,15 +4038,15 @@
   "fecha": "2026-09-27"
  },
  "PAGO": {
-  "zona": "Documentos",
-  "titan": "Documentos",
-  "similitud": 0.3972,
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.2247,
   "vecinas": [
-   "PÁGINA",
-   "NEGRO",
-   "PASADO_MAÑANA",
-   "POR_FAVOR",
-   "PLAZO"
+   "PASADO",
+   "ATRÁS",
+   "PLAZA",
+   "BOLSA",
+   "BUSCAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4057,13 +4057,13 @@
  "PARTICIPAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4018,
+  "similitud": 0.3174,
   "vecinas": [
-   "ACOMPAÑAR",
-   "HASTA_LUEGO",
-   "COMPAÑERO",
-   "ELLA",
-   "FUNCIONAR"
+   "PRESENTAR",
+   "HABLAR",
+   "ESCRIBIR",
+   "DEVOLVER",
+   "MÍO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4073,14 +4073,14 @@
  },
  "PARTICULAR": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4271,
+  "titan": "Instituciones",
+  "similitud": 0.4206,
   "vecinas": [
-   "8",
-   "2",
-   "3",
-   "CONOCER",
-   "OFICIAL"
+   "ABOGADO",
+   "OFICIAL",
+   "JUEZ",
+   "ÓRGANO_JUDICIAL",
+   "CONOCER"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -4093,13 +4093,13 @@
  "PASAR": {
   "zona": null,
   "titan": "Identificación",
-  "similitud": 0.2661,
+  "similitud": 0.301,
   "vecinas": [
-   "COMPAÑERO",
-   "PELEAR",
-   "AQUÍ",
-   "ÚLTIMO",
-   "HOMBRE"
+   "JEFE",
+   "MÍO",
+   "NOMBRE",
+   "COMPRAR",
+   "BOLSA"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4110,14 +4110,14 @@
  },
  "PATROCINIO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3386,
+  "titan": "Instituciones",
+  "similitud": 0.3947,
   "vecinas": [
-   "GRATIS",
-   "DAR",
-   "LISTA",
-   "ASISTENCIA",
-   "SELLO"
+   "SEPDAVI",
+   "ASISTENTE",
+   "SEPDEP",
+   "FELCC",
+   "ASISTENCIA"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -4127,14 +4127,14 @@
  },
  "PENAL": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3635,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3392,
   "vecinas": [
-   "TOTAL",
-   "PALABRA",
-   "AÚN",
-   "LENTO",
-   "5"
+   "URGENTE",
+   "AUXILIO",
+   "HOSPITAL",
+   "CONVOCAR",
+   "OFICIAL"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -4145,13 +4145,13 @@
  "PERMITIDO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.6532,
+  "similitud": 0.4027,
   "vecinas": [
    "PERMISO",
-   "PROHIBIDO",
-   "PUEDO",
+   "IDENTIFICAR",
    "PEDIR",
-   "DECIDIR"
+   "CONOCER",
+   "ACEPTAR"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -4162,13 +4162,13 @@
  "PERMITIR": {
   "zona": null,
   "titan": "Cortesía",
-  "similitud": 0.6214,
+  "similitud": 0.3691,
   "vecinas": [
    "PERMISO",
+   "ASISTENCIA",
    "PEDIR",
-   "PROHIBIDO",
    "POR_FAVOR",
-   "MOSTRAR"
+   "NECESITAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4178,14 +4178,14 @@
  },
  "PERO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3692,
+  "titan": "Instituciones",
+  "similitud": 0.2893,
   "vecinas": [
-   "SELLO",
-   "VER",
-   "MIRAR",
-   "6",
-   "ESPOSA"
+   "CONFIANZA",
+   "FELCV",
+   "SEPDAVI",
+   "TRAER",
+   "PUEDO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -4194,15 +4194,15 @@
   "fecha": "2026-09-27"
  },
  "PERSONA": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4552,
+  "zona": "Identificación",
+  "titan": "Identificación",
+  "similitud": 0.2942,
   "vecinas": [
-   "1",
-   "9",
-   "CONOCER",
+   "COMPAÑERO",
+   "MUJER",
    "SORDO",
-   "8"
+   "QUIÉN",
+   "ADULTO"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -4213,15 +4213,15 @@
   "fecha": "2026-09-27"
  },
  "PERSONALMENTE": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.5023,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.3187,
   "vecinas": [
+   "VOLVER",
+   "HABLAR",
    "TESTIMONIO",
-   "SELLO",
-   "MÍO",
-   "TEMPRANO",
-   "MINUTO"
+   "PRESENTAR",
+   "LEER"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4232,13 +4232,13 @@
  "PERTENECER": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3385,
+  "similitud": 0.3647,
   "vecinas": [
-   "PROTEGER",
-   "PROHIBIDO",
-   "TRISTE",
-   "8",
-   "POR_FAVOR"
+   "HERMANA",
+   "HIJA",
+   "PRESENTAR",
+   "MÍO",
+   "DECIDIR"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -4248,14 +4248,14 @@
  },
  "PISO": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.3591,
+  "titan": "Lugares",
+  "similitud": 0.2402,
   "vecinas": [
-   "FRACTURA",
-   "TESTIGO",
-   "SELLO",
-   "TEMPRANO",
-   "PERMISO"
+   "OFICINA",
+   "PLAZA",
+   "INSTITUCIÓN",
+   "PÁGINA",
+   "AQUÍ"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -4265,14 +4265,14 @@
  },
  "PLACA": {
   "zona": null,
-  "titan": "Conceptos jurídicos",
-  "similitud": 0.348,
+  "titan": "Lugares",
+  "similitud": 0.2876,
   "vecinas": [
-   "PLAZO",
    "PLAZA",
-   "4",
-   "DOCTOR",
-   "FACTURA"
+   "PLAZO",
+   "PÁGINA",
+   "RAYOS_X",
+   "AHORA"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4282,14 +4282,14 @@
  },
  "PLAN": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4871,
+  "titan": "Acciones",
+  "similitud": 0.255,
   "vecinas": [
-   "7",
-   "9",
-   "6",
-   "4",
-   "1"
+   "CONVOCAR",
+   "PEDIR",
+   "CUÁNTOS",
+   "EMPEZAR",
+   "PROTEGER"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -4299,14 +4299,14 @@
  },
  "PLAZUELA_CONSTITUCION": {
   "zona": null,
-  "titan": "Conceptos jurídicos",
-  "similitud": 0.2987,
+  "titan": "Lugares",
+  "similitud": 0.3079,
   "vecinas": [
    "PLAZA",
    "INSTITUCIÓN",
-   "LEY",
-   "INVESTIGACIÓN",
-   "CÁMARA_FOTOGRÁFICA"
+   "CALLE",
+   "OFICINA",
+   "PLAZO"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -4316,14 +4316,14 @@
  },
  "POBLACION": {
   "zona": null,
-  "titan": "Conceptos jurídicos",
-  "similitud": 0.3468,
+  "titan": "Acciones",
+  "similitud": 0.3286,
   "vecinas": [
-   "RESOLUCIÓN",
-   "POLICÍA",
-   "OCUPADO",
-   "MERCADO",
-   "PROTEGER"
+   "PROTEGER",
+   "GUARDAR",
+   "ASISTENCIA",
+   "PAPEL",
+   "DISCRIMINACIÓN"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -4334,13 +4334,13 @@
  "PODER": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.3525,
+  "similitud": 0.3067,
   "vecinas": [
-   "VER",
-   "MIRAR",
-   "QUERER",
-   "COMPRAR",
-   "SABER"
+   "AUMENTAR",
+   "RECORDAR",
+   "DAR",
+   "MOSTRAR",
+   "ENVIAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4352,14 +4352,14 @@
  },
  "PODRÉ": {
   "zona": null,
-  "titan": "Identificación",
-  "similitud": 0.3074,
+  "titan": "Acciones",
+  "similitud": 0.3353,
   "vecinas": [
-   "GORRA",
-   "HIJO",
-   "INTÉRPRETE",
-   "HOMBRE",
-   "IR"
+   "NO_PUEDO",
+   "VOLVER",
+   "TRAER",
+   "PUEDO",
+   "ABRIR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -4368,15 +4368,15 @@
   "fecha": "2026-09-27"
  },
  "PONER": {
-  "zona": null,
-  "titan": "Objetos",
-  "similitud": 0.3231,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.3794,
   "vecinas": [
-   "POLERA",
-   "DE_NADA",
-   "2",
-   "TRABAJADOR",
-   "PELEAR"
+   "CASA",
+   "PRESENTAR",
+   "PUEDO",
+   "NOMBRE",
+   "MÍO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4387,13 +4387,13 @@
  "POR_CIENTO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.446,
+  "similitud": 0.2127,
   "vecinas": [
-   "OYENTE",
-   "DENTRO",
-   "VENDER",
-   "AUMENTAR",
-   "POCO"
+   "NECESITAR",
+   "PRESENTAR",
+   "PROTEGER",
+   "MOSTRAR",
+   "HERMANA"
   ],
   "bedrock": "Números",
   "ejemplos": [
@@ -4403,14 +4403,14 @@
  },
  "POSIBLE": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4841,
+  "titan": "Acciones",
+  "similitud": 0.2346,
   "vecinas": [
+   "ABOGADO",
+   "ABUSAR",
+   "PROTEGER",
    "TAL_VEZ",
-   "2",
-   "PUEDO",
-   "8",
-   "9"
+   "TRAER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -4420,14 +4420,14 @@
  },
  "PRECIO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4508,
+  "titan": "Acciones",
+  "similitud": 0.2164,
   "vecinas": [
-   "1",
-   "2",
-   "COMPRAR",
-   "5",
-   "6"
+   "DEVOLVER",
+   "EXPLICAR",
+   "SELLO",
+   "ARREGLAR",
+   "BUSCAR"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -4438,14 +4438,14 @@
  },
  "PREGUNTA": {
   "zona": null,
-  "titan": "Objetos",
-  "similitud": 0.3797,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.2657,
   "vecinas": [
-   "PUERTA",
-   "SEPARADOS",
-   "PEDIR",
-   "MAÑANA",
-   "CAJA"
+   "INVESTIGACIÓN",
+   "EXPLICAR",
+   "TODOS_LOS_DÍAS",
+   "COMPRENDER",
+   "PREOCUPAR"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -4456,13 +4456,13 @@
  "PREGUNTAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5023,
+  "similitud": 0.3156,
   "vecinas": [
-   "PEDIR",
-   "QUERER",
-   "CÓMO",
-   "QUÉ",
-   "EXPLICAR"
+   "INVESTIGACIÓN",
+   "PREOCUPAR",
+   "PROTEGER",
+   "EXPLICAR",
+   "PEDIR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4472,14 +4472,14 @@
  },
  "PRESENCIAL": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3274,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3936,
   "vecinas": [
-   "SELLO",
-   "NO",
-   "MÁS_O_MENOS",
-   "PRESENTAR",
-   "MOSTRAR"
+   "ENGAÑAR",
+   "INTERNET",
+   "OFICIAL",
+   "CAJA",
+   "ROBAR"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -4488,32 +4488,32 @@
   "fecha": "2026-09-27"
  },
  "PRESENCIALMENTE": {
-  "zona": "Tiempo",
+  "zona": null,
   "titan": "Tiempo",
-  "similitud": 0.47,
+  "similitud": 0.327,
   "vecinas": [
    "AHORA",
-   "TEMPRANO",
-   "MOMENTO",
-   "LENTO",
-   "AQUÍ"
+   "PRESENTAR",
+   "HOY",
+   "PUEDO",
+   "LLEGAR"
   ],
-  "bedrock": "Tiempo",
+  "bedrock": "Acciones",
   "ejemplos": [
    "¿Puede acudir presencialmente ahora?"
   ],
   "fecha": "2026-09-27"
  },
  "PRIMERO": {
-  "zona": "Tiempo",
-  "titan": "Tiempo",
-  "similitud": 0.5699,
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.188,
   "vecinas": [
-   "PRIMERA_VEZ",
-   "1",
-   "EMPEZAR",
-   "TEMPRANO",
-   "3"
+   "POR_FAVOR",
+   "CONTESTAR_DOS_VECES",
+   "MIEDO",
+   "AVISAR",
+   "URGENTE"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -4526,13 +4526,13 @@
  "PROCEDIMIENTO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3757,
+  "similitud": 0.2404,
   "vecinas": [
-   "FUNCIONAR",
-   "CONTINUAR",
-   "RESOLUCIÓN",
+   "ACEPTAR",
+   "TRÁMITE",
+   "NECESITAR",
    "PROTEGER",
-   "POLICÍA"
+   "TRAER"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -4541,15 +4541,15 @@
   "fecha": "2026-09-27"
  },
  "PROCESO": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3472,
+  "zona": "Conceptos jurídicos",
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.2371,
   "vecinas": [
-   "AYER",
-   "TEMPRANO",
-   "TRÁMITE",
-   "PASADO",
-   "FUNCIONAR"
+   "INVESTIGACIÓN",
+   "CONVOCAR",
+   "PEDIR",
+   "BUSCAR",
+   "PAPEL"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -4561,14 +4561,14 @@
  },
  "PROPIO": {
   "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.3112,
+  "titan": "Acciones",
+  "similitud": 0.392,
   "vecinas": [
-   "VARIOS",
-   "AQUÍ",
-   "POR_FAVOR",
-   "PROVINCIA",
-   "5"
+   "MÍO",
+   "TESTIMONIO",
+   "NARRAR",
+   "TESTIGO",
+   "NOSOTROS"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -4578,14 +4578,14 @@
  },
  "PSICOLOGICA": {
   "zona": null,
-  "titan": "Cortesía",
-  "similitud": 0.3439,
+  "titan": "Acciones",
+  "similitud": 0.4445,
   "vecinas": [
-   "HOLA",
+   "AYUDAR",
+   "PROTEGER",
+   "TESTIMONIO",
    "GORRA",
-   "HERIDA",
-   "SORDO",
-   "OSCURO"
+   "AUXILIO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -4595,15 +4595,15 @@
   "fecha": "2026-09-27"
  },
  "PUBLICADO": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.5065,
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.3348,
   "vecinas": [
-   "CADA_DÍA",
-   "HOY",
-   "MAÑANA",
-   "AQUÍ",
-   "AHORA"
+   "CERTIFICADO",
+   "CARPETA",
+   "ÓRGANO_JUDICIAL",
+   "OFICIAL",
+   "CONVOCAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4613,14 +4613,14 @@
  },
  "PUBLICAR": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4213,
+  "titan": "Acciones",
+  "similitud": 0.2372,
   "vecinas": [
-   "CADA_DÍA",
-   "HOY",
-   "AQUÍ",
-   "ABRIR",
-   "PÁGINA"
+   "ESCRIBIR",
+   "ENFRENTE",
+   "FUERA",
+   "AMENAZAR",
+   "ABRIR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4629,15 +4629,15 @@
   "fecha": "2026-09-27"
  },
  "QUEDA": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.4728,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.2714,
   "vecinas": [
-   "2",
-   "1",
-   "8",
-   "9",
-   "6"
+   "AQUÍ",
+   "AL_LADO",
+   "ALLÍ",
+   "ALLÁ",
+   "CERCA"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -4647,14 +4647,14 @@
  },
  "QUEDAR": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3864,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3302,
   "vecinas": [
-   "QUEJAR",
-   "QUERER",
-   "2",
-   "CUÁL",
-   "DÓNDE"
+   "ESCAPAR",
+   "ESCONDER",
+   "FUERA",
+   "ENVIAR",
+   "PERDER"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -4663,32 +4663,32 @@
   "fecha": "2026-09-27"
  },
  "QUITAR": {
-  "zona": null,
+  "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.3264,
+  "similitud": 0.3362,
   "vecinas": [
-   "QUEJAR",
-   "ESCAPAR",
-   "AHORA",
-   "PUERTA",
-   "TERMINAR"
+   "ROBAR",
+   "CELULAR",
+   "LLAMAR",
+   "ARRESTAR",
+   "GRITAR"
   ],
-  "bedrock": "Objetos",
+  "bedrock": "Acciones",
   "ejemplos": [
    "Fue robo. Me quitaron el celular."
   ],
   "fecha": "2026-09-27"
  },
  "RADICAR": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.3063,
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.5024,
   "vecinas": [
-   "6",
-   "8",
-   "MES",
-   "DISCRIMINACIÓN",
-   "3"
+   "COCHABAMBA",
+   "AVENIDA",
+   "CALLE",
+   "POLICÍA",
+   "AQUÍ"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -4699,13 +4699,13 @@
  "RECLAMO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4282,
+  "similitud": 0.4481,
   "vecinas": [
-   "LLAMAR",
-   "SUYO",
-   "LUEGO",
-   "ACEPTAR",
-   "ÚLTIMO"
+   "PRESENTAR",
+   "DEVOLVER",
+   "HABLAR",
+   "NARRAR",
+   "PREOCUPAR"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -4714,17 +4714,17 @@
   "fecha": "2026-09-27"
  },
  "RECOCNER": {
-  "zona": null,
-  "titan": "Números",
-  "similitud": 0.2974,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2445,
   "vecinas": [
-   "5",
-   "6",
-   "ANDAR",
-   "RECIBIR",
-   "7"
+   "PRESENTAR",
+   "NOSOTROS",
+   "CONVOCAR",
+   "AHORA",
+   "SELLO"
   ],
-  "bedrock": "Documentos",
+  "bedrock": "Acciones",
   "ejemplos": [
    "Sí. Queremos reconocer nuestras firmas."
   ],
@@ -4732,14 +4732,14 @@
  },
  "REEMPLAZAR": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3847,
+  "titan": "Acciones",
+  "similitud": 0.2616,
   "vecinas": [
-   "DESPUÉS",
-   "FUERA",
-   "ATRÁS",
-   "RECHAZAR",
-   "LUEGO"
+   "RECORDAR",
+   "AÚN",
+   "TRABAJADOR",
+   "CARPETA",
+   "INSTITUCIÓN"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4750,13 +4750,13 @@
  "REGISTRADO": {
   "zona": null,
   "titan": "Tiempo",
-  "similitud": 0.4991,
+  "similitud": 0.2988,
   "vecinas": [
+   "AQUÍ",
+   "AHORA",
    "GUARDAR",
-   "CERTIFICADO",
-   "DESPUÉS",
-   "LUEGO",
-   "OCUPADO"
+   "LLEGAR",
+   "HOY"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4767,14 +4767,14 @@
  },
  "REGISTRAR": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.3289,
+  "titan": "Identificación",
+  "similitud": 0.4587,
   "vecinas": [
-   "GOBIERNO",
-   "POSTERGAR",
-   "TESTIGO",
-   "TAL_VEZ",
-   "OFICIAL"
+   "CASA",
+   "MÍO",
+   "JEFE",
+   "ESPOSA",
+   "INVESTIGACIÓN"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4786,14 +4786,14 @@
  },
  "REGISTRO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.6257,
+  "titan": "Acciones",
+  "similitud": 0.2235,
   "vecinas": [
-   "1",
-   "2",
-   "7",
-   "9",
-   "6"
+   "INSTITUCIÓN",
+   "RECORDAR",
+   "CONTINUAR",
+   "AÚN",
+   "GUARDAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4803,14 +4803,14 @@
  },
  "REGLAMENTO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.4107,
+  "titan": "Identificación",
+  "similitud": 0.2204,
   "vecinas": [
-   "SEGUNDO",
-   "TRUFI",
-   "AL_LADO",
-   "DESPUÉS",
-   "MERCADO"
+   "TESTIGO",
+   "VOLVER",
+   "SELLO",
+   "TESTIMONIO",
+   "PERMISO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4820,14 +4820,14 @@
  },
  "RELACION": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3956,
+  "titan": "Acciones",
+  "similitud": 0.2961,
   "vecinas": [
-   "TAL_VEZ",
-   "LUEGO",
-   "RESULTADO",
-   "JUEVES",
-   "DESPUÉS"
+   "IDENTIFICAR",
+   "CONOCER",
+   "CREER",
+   "PAREJA",
+   "ACEPTAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4838,13 +4838,13 @@
  "RELACIONAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.3838,
+  "similitud": 0.2131,
   "vecinas": [
-   "ORGANIZAR",
-   "LUEGO",
-   "FUNCIONAR",
-   "EVALUAR",
-   "RECORDAR"
+   "DE_NADA",
+   "REUNIÓN",
+   "ESCONDER",
+   "NARRAR",
+   "DAÑAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4854,14 +4854,14 @@
  },
  "RELATO": {
   "zona": null,
-  "titan": "Conceptos jurídicos",
-  "similitud": 0.3706,
+  "titan": "Acciones",
+  "similitud": 0.4177,
   "vecinas": [
-   "RESULTADO",
-   "ATRÁS",
-   "MALTRATAR",
-   "MIEDO",
-   "HASTA_LUEGO"
+   "NARRAR",
+   "TESTIMONIO",
+   "INVESTIGACIÓN",
+   "ARRESTAR",
+   "TRAER"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -4871,14 +4871,14 @@
  },
  "RENOVACION": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3235,
+  "titan": "Tiempo",
+  "similitud": 0.2006,
   "vecinas": [
-   "5",
-   "INSTITUCIÓN",
-   "PROVINCIA",
-   "CONFIANZA",
-   "COMPUTADORA"
+   "HASTA_MAÑANA",
+   "MOMENTO",
+   "CONVOCAR",
+   "AHORA",
+   "CUÁNDO"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4888,15 +4888,15 @@
   "fecha": "2026-09-27"
  },
  "RENOVAR": {
-  "zona": null,
-  "titan": "Cortesía",
-  "similitud": 0.3137,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2919,
   "vecinas": [
-   "HASTA_LUEGO",
-   "DE_NADA",
-   "POLERA",
-   "VENIR",
-   "CONTINUAR"
+   "MOSTRAR",
+   "CONFIANZA",
+   "TRAER",
+   "PUEDO",
+   "DEVOLVER"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4906,14 +4906,14 @@
  },
  "REPOSICION": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.4014,
+  "titan": "Acciones",
+  "similitud": 0.3026,
   "vecinas": [
-   "MÁS_O_MENOS",
-   "DESPUÉS",
-   "MUJER",
-   "DÓNDE",
-   "AQUÍ"
+   "ARREGLAR",
+   "PUEDO",
+   "DECIDIR",
+   "VOLVER",
+   "DEVOLVER"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -4922,15 +4922,15 @@
   "fecha": "2026-09-27"
  },
  "REPRESENTACIÓN": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3986,
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.4286,
   "vecinas": [
-   "MOSTRAR",
-   "ELLA",
-   "AHORA",
-   "1",
-   "AYUDAR"
+   "FELCV",
+   "FELCC",
+   "OFICINA",
+   "PLAZA",
+   "TIENDA"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -4941,13 +4941,13 @@
  "REPRESENTAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.36,
+  "similitud": 0.2649,
   "vecinas": [
-   "RECORDAR",
-   "FUNCIONAR",
-   "TRABAJADOR",
-   "TERMINAR",
-   "ATRÁS"
+   "PRESENTAR",
+   "MOSTRAR",
+   "NO_ESTAR_DE_ACUERDO",
+   "PROTEGER",
+   "PREOCUPAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4958,13 +4958,13 @@
  "RESPONDER": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3979,
+  "similitud": 0.3718,
   "vecinas": [
-   "ATENDER",
-   "PEGAR",
+   "EXPLICAR",
+   "NO_SABER",
+   "IGNORAR",
    "CONTESTAR_DOS_VECES",
-   "ASISTENTE",
-   "7"
+   "NO_PUEDO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -4977,13 +4977,13 @@
  "REVISAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4123,
+  "similitud": 0.3131,
   "vecinas": [
-   "AVISAR",
-   "RESOLUCIÓN",
-   "OBSERVAR",
-   "EVALUAR",
-   "GUARDAR"
+   "DEVOLVER",
+   "VOLVER",
+   "CASA",
+   "ARREGLAR",
+   "AYUDAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -4995,14 +4995,14 @@
  },
  "RUTA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3797,
+  "titan": "Instituciones",
+  "similitud": 0.2871,
   "vecinas": [
-   "DE_NADA",
-   "9",
-   "1",
-   "3",
-   "LUEGO"
+   "VIOLENCIA",
+   "FELCV",
+   "VOLVER",
+   "CONVOCAR",
+   "FELCC"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -5013,17 +5013,17 @@
   "fecha": "2026-09-27"
  },
  "SACAR": {
-  "zona": "Acciones",
+  "zona": null,
   "titan": "Acciones",
-  "similitud": 0.2876,
+  "similitud": 0.2277,
   "vecinas": [
-   "CONOCER",
-   "MIEDO",
-   "DÓNDE",
-   "LENTO",
-   "CONTINUAR"
+   "PRIMERA_VEZ",
+   "DEVOLVER",
+   "PROTEGER",
+   "HABLAR",
+   "ESCRIBIR"
   ],
-  "bedrock": "Acciones",
+  "bedrock": "Documentos",
   "ejemplos": [
    "Necesito sacar mi cédula por primera vez.",
    "Quiero sacar mi carnet de discapacidad."
@@ -5031,15 +5031,15 @@
   "fecha": "2026-09-27"
  },
  "SALIR": {
-  "zona": null,
-  "titan": "Cortesía",
-  "similitud": 0.3249,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2421,
   "vecinas": [
-   "JAMÁS",
-   "TAL_VEZ",
-   "HASTA_LUEGO",
-   "AQUÍ",
-   "DE_NADA"
+   "DEJAR",
+   "ESTAR_DE_ACUERDO",
+   "DECIDIR",
+   "VOLVER",
+   "FUERA"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5050,13 +5050,13 @@
  "SEDE": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3639,
+  "similitud": 0.2312,
   "vecinas": [
-   "DEJAR",
-   "ENVIAR",
-   "AMBOS",
-   "DE_NADA",
-   "SEGUNDO"
+   "DIRECCIÓN",
+   "DECIDIR",
+   "PRESENTAR",
+   "OFICINA",
+   "ARREGLAR"
   ],
   "bedrock": "Lugares",
   "ejemplos": [
@@ -5067,14 +5067,14 @@
  },
  "SEGURO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.3554,
+  "titan": "Tiempo",
+  "similitud": 0.2535,
   "vecinas": [
-   "GUARDAR",
-   "6",
-   "ESCONDER",
-   "GRATIS",
-   "SELLO"
+   "AHORA",
+   "AQUÍ",
+   "MOMENTO",
+   "SEPDEP",
+   "PREOCUPAR"
   ],
   "bedrock": "Estado y emoción",
   "ejemplos": [
@@ -5083,15 +5083,15 @@
   "fecha": "2026-09-27"
  },
  "SERVICIO": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4992,
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.3073,
   "vecinas": [
+   "SEPDAVI",
+   "SEPDEP",
    "ASISTENCIA",
-   "OFICIAL",
-   "FUNCIONAR",
-   "POR_FAVOR",
-   "CONTINUAR"
+   "AUXILIO",
+   "INVESTIGACIÓN"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -5102,15 +5102,15 @@
   "fecha": "2026-09-27"
  },
  "SERVIR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.3634,
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.2809,
   "vecinas": [
-   "SABER",
-   "AQUÍ",
-   "DAR",
+   "NO_SABER",
    "ENVIAR",
-   "VENDER"
+   "AQUÍ",
+   "SABER",
+   "FOTOCOPIA"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5121,13 +5121,13 @@
  "SEÑALAMIENTO": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3906,
+  "similitud": 0.2297,
   "vecinas": [
-   "NARRAR",
-   "SEÑOR",
    "LLAMAR",
-   "AMENAZAR",
-   "MOMENTO"
+   "SEPDEP",
+   "CONVOCAR",
+   "PAPEL",
+   "PEDIR"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -5137,14 +5137,14 @@
  },
  "SEÑAS": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.3442,
+  "titan": "Acciones",
+  "similitud": 0.4166,
   "vecinas": [
-   "SÍ",
-   "TRAER",
-   "MÁS_O_MENOS",
-   "HASTA_LUEGO",
-   "AÚN"
+   "HABLAR",
+   "ESCRIBIR",
+   "NARRAR",
+   "NECESITAR",
+   "LLAMAR"
   ],
   "bedrock": null,
   "ejemplos": [
@@ -5154,15 +5154,15 @@
   "fecha": "2026-09-27"
  },
  "SIGA": {
-  "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3199,
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 0.2536,
   "vecinas": [
-   "9",
-   "SEMANA",
-   "LLEVAR",
-   "MOSTRAR",
-   "SÁBADO"
+   "GUARDAR",
+   "LUEGO",
+   "RECORDAR",
+   "CONTINUAR",
+   "INVESTIGACIÓN"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5171,15 +5171,15 @@
   "fecha": "2026-09-27"
  },
  "SIGUIR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.395,
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.3125,
   "vecinas": [
-   "LLEGAR",
-   "GUARDAR",
-   "VIVIR",
-   "VOLVER",
-   "LUEGO"
+   "TRÁMITE",
+   "CONTINUAR",
+   "LUEGO",
+   "SEPDEP",
+   "AHORA"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5190,16 +5190,16 @@
  },
  "SISTEMA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3733,
+  "titan": "Instituciones",
+  "similitud": 0.3041,
   "vecinas": [
-   "7",
+   "SEPDEP",
+   "TRÁMITE",
+   "CONTINUAR",
    "AÚN",
-   "DIFÍCIL",
-   "9",
-   "LUEGO"
+   "SEPDAVI"
   ],
-  "bedrock": null,
+  "bedrock": "Documentos",
   "ejemplos": [
    "¿El trámite sigue usando el sistema SIPRUNPCD?",
    "La norma 2025 mantiene el registro dentro del sistema nacional."
@@ -5209,13 +5209,13 @@
  "SITUACION": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.437,
+  "similitud": 0.3517,
   "vecinas": [
+   "PROTEGER",
+   "GUARDAR",
+   "ASISTENCIA",
    "INSTITUCIÓN",
-   "PLAZA",
-   "REUNIÓN",
-   "MOMENTO",
-   "FUNCIONAR"
+   "SELLO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -5226,14 +5226,14 @@
  },
  "SOBRINO": {
   "zona": null,
-  "titan": "Instituciones",
-  "similitud": 0.2415,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2562,
   "vecinas": [
-   "OFICIAL",
-   "MUJER",
-   "COCHABAMBA",
-   "TODOS_LOS_DÍAS",
-   "VIDEO"
+   "VIOLENCIA",
+   "TESTIMONIO",
+   "VENIR",
+   "HERMANO",
+   "POLERA"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -5244,13 +5244,13 @@
  "SOLICITAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5027,
+  "similitud": 0.4229,
   "vecinas": [
    "PEDIR",
    "CONVOCAR",
-   "AHORA",
-   "NECESITAR",
-   "ELLA"
+   "CERTIFICADO",
+   "PRESENTAR",
+   "DEVOLVER"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5263,13 +5263,13 @@
  "SOLICITUD": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.5715,
+  "similitud": 0.2535,
   "vecinas": [
+   "DEVOLVER",
    "PEDIR",
-   "CONVOCAR",
-   "LUEGO",
-   "CONTINUAR",
-   "OFICINA"
+   "PROTEGER",
+   "ARREGLAR",
+   "ESCRIBIR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -5279,14 +5279,14 @@
  },
  "SOLO": {
   "zona": null,
-  "titan": "Preguntas",
-  "similitud": 0.3603,
+  "titan": "Acciones",
+  "similitud": 0.2542,
   "vecinas": [
-   "ELLOS",
-   "SELLO",
-   "SUYO",
-   "ÚLTIMO",
-   "MÍO"
+   "CELULAR",
+   "MOSTRAR",
+   "TRAER",
+   "AÚN",
+   "NO_PUEDO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -5298,14 +5298,14 @@
  },
  "TAMBIEN": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.2691,
+  "titan": "Acciones",
+  "similitud": 0.3763,
   "vecinas": [
-   "PUEDO",
-   "3",
-   "MUJER",
-   "AHORA",
-   "0"
+   "ESCRIBIR",
+   "EXPLICAR",
+   "DIRECCIÓN",
+   "DEVOLVER",
+   "ARREGLAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -5318,13 +5318,13 @@
  "TARDAR": {
   "zona": "Tiempo",
   "titan": "Tiempo",
-  "similitud": 0.3321,
+  "similitud": 0.2707,
   "vecinas": [
-   "DISCRIMINACIÓN",
-   "POSTERGAR",
    "TARDE",
-   "LADRÓN",
-   "HIJA"
+   "LENTO",
+   "ATRÁS",
+   "POSTERGAR",
+   "LEJOS"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -5334,14 +5334,14 @@
  },
  "TEXTO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4123,
+  "titan": "Acciones",
+  "similitud": 0.4698,
   "vecinas": [
-   "1",
-   "HASTA_LUEGO",
-   "2",
-   "6",
-   "DESPUÉS"
+   "ESCRIBIR",
+   "LEER",
+   "HABLAR",
+   "BUSCAR",
+   "PEDIR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -5353,13 +5353,13 @@
  "TIEMPO": {
   "zona": "Tiempo",
   "titan": "Tiempo",
-  "similitud": 0.4944,
+  "similitud": 0.311,
   "vecinas": [
-   "HORA",
-   "TEMPRANO",
-   "MOMENTO",
-   "DESCANSO",
-   "PLAZO"
+   "LENTO",
+   "TARDE",
+   "FUERA",
+   "DESPUÉS",
+   "PERDER"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -5369,14 +5369,14 @@
  },
  "TIPO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4434,
+  "titan": "Acciones",
+  "similitud": 0.3951,
   "vecinas": [
-   "HASTA_LUEGO",
-   "1",
-   "3",
-   "8",
-   "4"
+   "AYUDAR",
+   "ASISTENCIA",
+   "PROTEGER",
+   "AUXILIO",
+   "NECESITAR"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -5385,15 +5385,15 @@
   "fecha": "2026-09-27"
  },
  "TITULAR": {
-  "zona": null,
-  "titan": "Lugares",
-  "similitud": 0.3666,
+  "zona": "Identificación",
+  "titan": "Identificación",
+  "similitud": 0.4043,
   "vecinas": [
-   "ALCALDÍA",
-   "INTERNET",
-   "TOTAL",
-   "DENTRO",
-   "AQUÍ"
+   "JEFE",
+   "MÍO",
+   "NOMBRE",
+   "DIRECCIÓN",
+   "TUYO"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -5404,13 +5404,13 @@
  "TODAS": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3631,
+  "similitud": 0.2433,
   "vecinas": [
-   "DAR",
-   "ALLÁ",
-   "AMBOS",
-   "FOTOS",
-   "HOLA"
+   "EXPLICAR",
+   "INVESTIGACIÓN",
+   "DEVOLVER",
+   "COMPRENDER",
+   "ARREGLAR"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -5421,13 +5421,13 @@
  "TODAVÍA": {
   "zona": "Tiempo",
   "titan": "Tiempo",
-  "similitud": 0.4994,
+  "similitud": 0.2479,
   "vecinas": [
-   "HASTA_LUEGO",
    "AÚN",
-   "HASTA_MAÑANA",
+   "HOY",
    "AHORA",
-   "CADA_DÍA"
+   "HASTA_MAÑANA",
+   "PASADO_MAÑANA"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -5437,14 +5437,14 @@
  },
  "TODO": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4666,
+  "titan": "Acciones",
+  "similitud": 0.3555,
   "vecinas": [
-   "2",
-   "6",
-   "AMBOS",
-   "HASTA_MAÑANA",
-   "HASTA_LUEGO"
+   "PUEDO",
+   "MÍO",
+   "TRAER",
+   "SIEMPRE",
+   "JEFE"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -5456,14 +5456,14 @@
  },
  "TODOS": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4831,
+  "titan": "Estado y emoción",
+  "similitud": 0.2635,
   "vecinas": [
-   "2",
-   "AMBOS",
-   "6",
-   "1",
-   "3"
+   "AMENAZAR",
+   "MIEDO",
+   "PREOCUPAR",
+   "PROTEGER",
+   "TODOS_LOS_DÍAS"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -5474,13 +5474,13 @@
  "TRAJE": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3846,
+  "similitud": 0.2505,
   "vecinas": [
-   "TRÁMITE",
+   "ESCRIBIR",
    "TRAER",
-   "BRAZO",
-   "DEJAR",
-   "TRABAJADOR"
+   "TARDE",
+   "AHORA",
+   "GRITAR"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -5491,13 +5491,13 @@
  "TRANSFERENCIA": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4055,
+  "similitud": 0.3242,
   "vecinas": [
-   "CAMBIAR",
-   "RECIBIR",
-   "DAR",
    "TRAER",
-   "HASTA_LUEGO"
+   "MOSTRAR",
+   "BOLSA",
+   "LLEGAR",
+   "CELULAR"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -5508,13 +5508,13 @@
  "TRIBUNAL": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3144,
+  "similitud": 0.1937,
   "vecinas": [
-   "TRÁMITE",
-   "1",
-   "TOTAL",
-   "CONTINUAR",
-   "ALCALDÍA"
+   "AUMENTAR",
+   "CONVOCAR",
+   "AVISAR",
+   "FELCC",
+   "PERMISO"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -5525,13 +5525,13 @@
  "TRIBUNAL_DEPARTAMENTAL": {
   "zona": "Instituciones",
   "titan": "Instituciones",
-  "similitud": 0.3196,
+  "similitud": 0.2376,
   "vecinas": [
-   "TRÁMITE",
-   "TEMPRANO",
-   "SÍ",
+   "JUZGADO",
+   "ÓRGANO_JUDICIAL",
    "SEPDEP",
-   "JUZGADO"
+   "OFICIAL",
+   "JUEZ"
   ],
   "bedrock": "Instituciones",
   "ejemplos": [
@@ -5541,14 +5541,14 @@
  },
  "URBANA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.3169,
+  "titan": "Tiempo",
+  "similitud": 0.2563,
   "vecinas": [
-   "5",
-   "TRUFI",
-   "FOTOCOPIA",
-   "MALTRATAR",
-   "TIENDA"
+   "4",
+   "FECHA",
+   "SEMANA",
+   "DESCANSO",
+   "BARRIO"
   ],
   "bedrock": "Descripción",
   "ejemplos": [
@@ -5559,13 +5559,13 @@
  "USANDO": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.4851,
+  "similitud": 0.4377,
   "vecinas": [
-   "ANDAR",
-   "NO_PUEDO",
-   "TRABAJADOR",
-   "AÚN",
-   "GUARDAR"
+   "HABLAR",
+   "ESCRIBIR",
+   "NARRAR",
+   "LLAMAR",
+   "NECESITAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5574,15 +5574,15 @@
   "fecha": "2026-09-27"
  },
  "USAR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.4228,
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.3384,
   "vecinas": [
-   "ANDAR",
-   "AVISAR",
-   "SUYO",
-   "TUYO",
-   "BURLAR"
+   "NO_PUEDO",
+   "NO_SABER",
+   "PUEDO",
+   "PROTEGER",
+   "BUSCAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5594,14 +5594,14 @@
  },
  "USTED": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4074,
+  "titan": "Identificación",
+  "similitud": 0.2895,
   "vecinas": [
-   "1",
-   "2",
-   "6",
-   "3",
-   "9"
+   "TESTIGO",
+   "ABUSAR",
+   "TESTIMONIO",
+   "OYENTE",
+   "CONVOCAR"
   ],
   "bedrock": "Preguntas",
   "ejemplos": [
@@ -5613,13 +5613,13 @@
  "VALIDAR": {
   "zona": "Acciones",
   "titan": "Acciones",
-  "similitud": 0.5185,
+  "similitud": 0.232,
   "vecinas": [
-   "EVALUAR",
-   "ACEPTAR",
-   "ÚLTIMO",
-   "SELLO",
-   "CERTIFICADO"
+   "VOLVER",
+   "PROTEGER",
+   "NECESITAR",
+   "CONTESTAR_DOS_VECES",
+   "PERMISO"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5629,14 +5629,14 @@
  },
  "VALIDO": {
   "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4357,
+  "titan": "Respuesta",
+  "similitud": 0.2797,
   "vecinas": [
-   "ÉL",
-   "SELLO",
-   "TRUFI",
-   "ACEPTAR",
-   "HASTA_LUEGO"
+   "NO_SABER",
+   "TAL_VEZ",
+   "NO_PUEDO",
+   "DIFÍCIL",
+   "NUEVO"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -5646,14 +5646,14 @@
  },
  "VEHICULO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.3753,
+  "titan": "Lugares",
+  "similitud": 0.2741,
   "vecinas": [
-   "JUEVES",
-   "JULIO",
-   "BARRIO",
-   "LLEGAR",
-   "HIJO"
+   "PLAZA",
+   "PÁGINA",
+   "PLAZO",
+   "RAYOS_X",
+   "BANCO"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -5665,14 +5665,14 @@
  },
  "VEHÍCULO": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.379,
+  "titan": "Lugares",
+  "similitud": 0.2013,
   "vecinas": [
-   "JUEVES",
-   "LLEGAR",
-   "HIJO",
-   "JULIO",
-   "BARRIO"
+   "INSTITUCIÓN",
+   "BARRIO",
+   "FACTURA",
+   "AVENIDA",
+   "TRAER"
   ],
   "bedrock": "Objetos",
   "ejemplos": [
@@ -5683,13 +5683,13 @@
  "VENCER": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4264,
+  "similitud": 0.2548,
   "vecinas": [
-   "VENIR",
-   "VER",
-   "MIRAR",
+   "PERDER",
    "VENDER",
-   "MOCHILA"
+   "CONTESTAR_DOS_VECES",
+   "VENIR",
+   "ENGAÑAR"
   ],
   "bedrock": "Estado y emoción",
   "ejemplos": [
@@ -5701,14 +5701,14 @@
  },
  "VENTA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4963,
+  "titan": "Acciones",
+  "similitud": 0.3049,
   "vecinas": [
    "VENDER",
-   "7",
-   "2",
-   "5",
-   "9"
+   "CERTIFICADO",
+   "CONTESTAR_DOS_VECES",
+   "COMPRAR",
+   "SEPDAVI"
   ],
   "bedrock": "Documentos",
   "ejemplos": [
@@ -5719,13 +5719,13 @@
  "VERBALMENTE": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.4168,
+  "similitud": 0.2642,
   "vecinas": [
-   "TESTIMONIO",
-   "MARZO",
-   "GUARDAR",
-   "AVISAR",
-   "SORDO"
+   "ESCRIBIR",
+   "NARRAR",
+   "TESTIGO",
+   "PEDIR",
+   "SELLO"
   ],
   "bedrock": "Respuesta",
   "ejemplos": [
@@ -5736,15 +5736,15 @@
   "fecha": "2026-09-27"
  },
  "VERIFICAR": {
-  "zona": "Acciones",
-  "titan": "Acciones",
-  "similitud": 0.4269,
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.2752,
   "vecinas": [
-   "VER",
+   "DESPUÉS",
+   "LUEGO",
+   "MOSTRAR",
    "MIRAR",
-   "EVALUAR",
-   "ACEPTAR",
-   "PUEDO"
+   "CONVOCAR"
   ],
   "bedrock": "Acciones",
   "ejemplos": [
@@ -5754,14 +5754,14 @@
  },
  "VICTIMA": {
   "zona": null,
-  "titan": "Tiempo",
-  "similitud": 0.2814,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3442,
   "vecinas": [
-   "DÍA",
-   "DAÑAR",
-   "VENIR",
+   "TESTIGO",
+   "ABUSAR",
    "VIOLENCIA",
-   "AÑO"
+   "TESTIMONIO",
+   "JUSTICIA"
   ],
   "bedrock": "Identificación",
   "ejemplos": [
@@ -5772,15 +5772,15 @@
   "fecha": "2026-09-27"
  },
  "VIENES": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.4577,
+  "zona": "Tiempo",
+  "titan": "Tiempo",
+  "similitud": 0.239,
   "vecinas": [
    "VENIR",
+   "PERDER",
    "VIERNES",
-   "VER",
-   "MIRAR",
-   "QUIÉN"
+   "LUEGO",
+   "FUERA"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -5789,15 +5789,15 @@
   "fecha": "2026-09-27"
  },
  "VIGENCIA": {
-  "zona": null,
-  "titan": "Acciones",
-  "similitud": 0.2968,
+  "zona": "Tiempo",
+  "titan": "Tiempo",
+  "similitud": 0.2271,
   "vecinas": [
-   "EMPEZAR",
-   "CONFIANZA",
-   "FELCV",
-   "MEDICINA",
-   "GRITAR"
+   "RESOLUCIÓN",
+   "RECORDAR",
+   "PASADO",
+   "AÚN",
+   "INSTITUCIÓN"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [
@@ -5808,15 +5808,15 @@
  "VIGENTE": {
   "zona": null,
   "titan": "Acciones",
-  "similitud": 0.3125,
+  "similitud": 0.276,
   "vecinas": [
-   "GRITAR",
-   "ALCALDÍA",
-   "MINUTO",
-   "GANAR_DINERO",
-   "MOCHILA"
+   "NO_SABER",
+   "VIVIR",
+   "GRATIS",
+   "URGENTE",
+   "DEVOLVER"
   ],
-  "bedrock": null,
+  "bedrock": "Conceptos jurídicos",
   "ejemplos": [
    "No sé si están vigentes.",
    "¿La dirección sigue vigente?"
@@ -5825,16 +5825,16 @@
  },
  "VIRTUAL": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4388,
+  "titan": "Respuesta",
+  "similitud": 0.1871,
   "vecinas": [
-   "5",
-   "6",
-   "8",
-   "7",
-   "9"
+   "NO_SABER",
+   "MENTIRA",
+   "CELULAR",
+   "OBSERVAR",
+   "NO_ESTAR_DE_ACUERDO"
   ],
-  "bedrock": "Instituciones",
+  "bedrock": "Conceptos jurídicos",
   "ejemplos": [
    "No sé si mi audiencia es virtual.",
    "Desde 2026 existe atención virtual en LSB."
@@ -5843,14 +5843,14 @@
  },
  "VULNERACION": {
   "zona": null,
-  "titan": "Hechos y urgencia",
-  "similitud": 0.3246,
+  "titan": "Acciones",
+  "similitud": 0.2231,
   "vecinas": [
-   "ESCAPAR",
-   "HERIDA",
-   "ROBAR",
-   "AHORA",
-   "ABRIR"
+   "ABOGADO",
+   "PROTEGER",
+   "ABUSAR",
+   "TRAER",
+   "OFICINA"
   ],
   "bedrock": "Conceptos jurídicos",
   "ejemplos": [
@@ -5860,14 +5860,14 @@
  },
  "YA": {
   "zona": null,
-  "titan": "Números",
-  "similitud": 0.4835,
+  "titan": "Acciones",
+  "similitud": 0.2694,
   "vecinas": [
-   "AÑO",
-   "9",
-   "YO",
-   "1",
-   "2"
+   "ESCRIBIR",
+   "AHORA",
+   "TRAER",
+   "OYENTE",
+   "YO"
   ],
   "bedrock": "Tiempo",
   "ejemplos": [

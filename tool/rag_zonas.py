@@ -7,8 +7,9 @@ Las zonas son las categorías del catálogo oficial (Tiempo, Lugares,
 Documentos, Objetos…; ver `aws/zonas_senas.json`). Una seña del catálogo ya
 tiene su zona. Una palabra sin seña (seña a incorporar) la recibe de la
 Lambda LSB→Texto/Audio (`action: "zonas"`, ver `aws/rag_zonas.py`): Titan y
-Bedrock eligen por separado y, si coinciden, esa es su zona. Si no, queda
-sin zona. Nadie aprueba nada a mano.
+Bedrock eligen por separado comparando con una definición escrita de cada
+zona y, si coinciden, esa es su zona; un verbo va a Acciones. Si no
+coinciden, queda sin zona. Nadie aprueba nada a mano.
 
 Escribe `docs/negocio/rag/zonas_palabras.json`.
 """
@@ -82,25 +83,9 @@ def main() -> int:
                     r = {"generated": False, "reason": str(e)}
                 if r.get("generated") is True:
                     break
-                if r.get("reason") == "indexando":
-                    continue  # la Lambda está guardando los vectores de señas
                 time.sleep(3 * 2 ** intento)
             return tanda, r
 
-        # Primero, que la Lambda tenga los vectores de todas las señas.
-        for _ in range(30):
-            try:
-                r = llamar(url, {"action": "zonas", "palabras": [
-                    {"palabra": pendientes[0],
-                     "ejemplos": palabras[pendientes[0]]}]})
-            except SystemExit as e:  # un corte (503) mientras se indexa
-                print(f"  reintento: {e}", flush=True)
-                time.sleep(10)
-                continue
-            if r.get("reason") != "indexando":
-                break
-            print(f"  vectores de señas: faltan {r.get('pending')}", flush=True)
-            time.sleep(3)
         tandas = [pendientes[i:i + TANDA]
                   for i in range(0, len(pendientes), TANDA)]
         hechas = 0
@@ -112,7 +97,7 @@ def main() -> int:
                 for p, res in zip(tanda, r["palabras"]):
                     zonas[p] = {"zona": res["zona"], "titan": res["titan"],
                                 "similitud": res["similitud"],
-                                "vecinas": res.get("vecinas", []),
+                                "regla": res.get("regla"),
                                 "bedrock": res["bedrock"],
                                 "ejemplos": palabras[p], "fecha": hoy}
                 hechas += len(tanda)

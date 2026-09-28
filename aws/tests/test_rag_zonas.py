@@ -54,45 +54,36 @@ class Catalogo(unittest.TestCase):
         self.assertIn("papel", descritas["Documentos"])
 
 
-SENAS = {"AYER": "Tiempo", "HOY": "Tiempo", "PAPEL": "Documentos",
-         "FACTURA": "Documentos", "CERTIFICADO": "Documentos"}
-TEXTOS = {"AYER": "ayer", "HOY": "hoy", "PAPEL": "papel",
-          "FACTURA": "factura papel", "CERTIFICADO": "certificado papel"}
-VECTORES = {g: embed(t) for g, t in TEXTOS.items()}
-
-
 class Clasificacion(unittest.TestCase):
     def test_con_las_dos_senales_de_acuerdo_hay_zona(self):
-        out = Z.clasificar([BOLETA, SEMANA], ZONAS, VECTORES, SENAS, embed,
+        out = Z.clasificar([BOLETA, SEMANA], ZONAS, embed,
                            modelo(["Documentos", "Tiempo"]))
         self.assertEqual([o["zona"] for o in out], ["Documentos", "Tiempo"])
-        self.assertIn("PAPEL", out[0]["vecinas"])
 
     def test_si_no_coinciden_no_hay_zona(self):
-        out = Z.clasificar([BOLETA], ZONAS, VECTORES, SENAS, embed,
-                           modelo(["Tiempo"]))
+        out = Z.clasificar([BOLETA], ZONAS, embed, modelo(["Tiempo"]))
         self.assertIsNone(out[0]["zona"])
         self.assertEqual((out[0]["titan"], out[0]["bedrock"]),
                          ("Documentos", "Tiempo"))
 
     def test_una_zona_que_no_existe_no_vale(self):
-        out = Z.clasificar([BOLETA], ZONAS, VECTORES, SENAS, embed,
-                           modelo(["Finanzas"]))
+        out = Z.clasificar([BOLETA], ZONAS, embed, modelo(["Finanzas"]))
         self.assertIsNone(out[0]["bedrock"])
         self.assertIsNone(out[0]["zona"])
 
-    def test_titan_ve_la_palabra_en_su_frase(self):
+    def test_un_verbo_va_a_acciones_sin_consultar(self):
+        zonas = {**ZONAS, "Acciones": ["pagar"]}
+        confirmar = {"palabra": "CONFIRMAR", "ejemplos": ["Confirmaré."]}
+        out = Z.clasificar([confirmar], zonas, embed, modelo(["Respuesta"]))
+        self.assertEqual(out[0]["zona"], "Acciones")
+        self.assertFalse(Z.es_verbo("LUGAR"))
+        self.assertFalse(Z.es_verbo("FOLIO_REAL"))
+
+    def test_titan_compara_con_la_definicion_de_la_zona(self):
+        self.assertIn("boleta", Z.DEFINICIONES["Documentos"])
+        self.assertIn("deuda", Z.DEFINICIONES["Objetos"])
         self.assertEqual(Z.texto_palabra(BOLETA),
                          "boleta: Sí tengo mi última boleta.")
-        self.assertEqual(Z.textos_senas({"PAPEL": "Documentos"},
-                                        {"PAPEL": ["Papel", "el documento"]}),
-                         {"PAPEL": "papel: Papel; el documento"})
-
-    def test_el_indice_de_senas_se_llena_por_tandas(self):
-        indice = Z.indexar_senas(TEXTOS, {}, embed, lote=2)
-        self.assertEqual(len(indice["vectores"]), 2)
-        indice = Z.indexar_senas(TEXTOS, indice, embed, lote=10)
-        self.assertEqual(len(indice["vectores"]), 5)
 
 
 class Accion(unittest.TestCase):
@@ -104,10 +95,8 @@ class Accion(unittest.TestCase):
         cuerpo = {"output": {"message": {"content": [
             {"text": json.dumps([{"n": 1, "zona": "Documentos"}])}]}}}
         with mock.patch.object(L, "ENABLE_BEDROCK", True), \
-                mock.patch.object(L, "_ZONAS_LSB",
-                                  (SENAS, ZONAS, TEXTOS, "clave")), \
-                mock.patch.object(L, "read_cache_json",
-                                  return_value={"vectores": VECTORES}), \
+                mock.patch.object(L, "_ZONAS_LSB", ZONAS), \
+                mock.patch.object(L, "_VECTORES_DEFINICION", {}), \
                 mock.patch.object(L.bedrock_runtime, "invoke_model",
                                   create=True, return_value={
                                       "body": io.BytesIO(

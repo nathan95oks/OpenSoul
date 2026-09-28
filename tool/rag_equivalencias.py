@@ -14,8 +14,8 @@ CRPVA), que en LSB se deletrean. Para cada una:
    pide al modelo una seña oficial equivalente en esas frases, o ninguna. La
    Lambda descarta cualquier glosa fuera del catálogo.
 3. **Confirmación automática**, sin revisión humana: una propuesta de
-   Bedrock se aprueba sola si además (a) Titan pone esa seña entre las 5
-   más parecidas a la palabra (sus vecinas, de `tool/rag_zonas.py`) y (b)
+   Bedrock se aprueba sola si además (a) la seña es de la misma zona que la
+   palabra (la que le dieron Titan y Bedrock en `tool/rag_zonas.py`) y (b)
    una frase real con la seña en lugar de la palabra dice lo mismo que la
    original (`action: "retrotraducir"`: no falta la palabra ni sobra la
    seña). Si falla una señal, se rechaza sola. Compartir la raíz no basta
@@ -187,18 +187,21 @@ def confirmar(url: str, salida: dict) -> None:
     from rag_zonas import DESTINO as ZONAS
     sys.path.insert(0, os.path.join(ROOT, "aws"))
     from rag_revision import conjugada  # noqa: E402
-    vecinas = {}
+    zona_de = {}
     if os.path.exists(ZONAS):
         with open(ZONAS, encoding="utf-8") as f:
-            vecinas = {p: d.get("vecinas") or [] for p, d in json.load(f).items()}
+            zona_de = {p: d.get("zona") for p, d in json.load(f).items()}
+    with open(os.path.join(ROOT, "aws", "zonas_senas.json"),
+              encoding="utf-8") as f:
+        zona_sena = {_norm(g): z for g, z in json.load(f).items()}
     frases = _frases_con_glosas()
     for palabra, e in sorted(salida.items()):
         if e.get("estado") != "propuesta" or e.get("revisado") or not e.get("sena"):
             continue
         sena = e["sena"]
         clave = palabra.replace(" ", "_")
-        cercanas = vecinas.get(clave, [])
-        titan = _norm(sena) in {_norm(v) for v in cercanas}
+        zona = zona_de.get(clave)
+        titan = bool(zona) and zona_sena.get(_norm(sena)) == zona
         # Una frase real con la seña en lugar de la palabra.
         vuelta, detalle = False, "sin frase con la palabra"
         marca = "SENA_PENDIENTE:" + clave
@@ -220,7 +223,8 @@ def confirmar(url: str, salida: dict) -> None:
             detalle = (f"«{texto}» → falta {res['faltan']} sobra "
                        f"{res['sobran']}")
             break
-        e["senales"] = {"bedrock": sena, "titan_vecinas": cercanas,
+        e["senales"] = {"bedrock": sena, "zona_palabra": zona,
+                        "zona_sena": zona_sena.get(_norm(sena)),
                         "titan": titan, "vuelta": vuelta,
                         "vuelta_detalle": detalle}
         e["estado"] = "aprobada" if titan and vuelta else "rechazada"
