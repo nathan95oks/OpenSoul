@@ -351,9 +351,19 @@ class GuidedFlow {
     return [
       for (final o in question.options)
         if (!hidden.contains(o.id) &&
-            o.conditions.every((c) => conditionHolds(session, c)))
+            o.conditions.every((c) => _optionConditionHolds(session, c)))
           o,
     ];
+  }
+
+  /// Una opción condicionada a una pregunta que esta sesión no hace (al
+  /// responder en Conversación solo está la pregunta del oyente) no se
+  /// puede descartar: «¿Quién escapó?» sin «¿Qué ocurrió?» delante sigue
+  /// ofreciendo «La persona que me robó».
+  bool _optionConditionHolds(GuidedSession session, GuidedCondition c) {
+    final id = c.questionId;
+    if (id != null && session.stepOf(id) == null) return true;
+    return conditionHolds(session, c);
   }
 
   /// Formulación visible del paso (un paso puede precisarla).
