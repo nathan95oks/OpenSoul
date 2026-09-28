@@ -462,6 +462,31 @@ void main() {
   );
 
   testWidgets(
+    'Trámites: la flecha de una institución vuelve a Trámites y de ahí al '
+    'menú',
+    (tester) async {
+      final (container, _) = await montar(tester);
+      container.read(contextProvider.notifier).clearContext();
+      await tester.pumpAndSettle();
+
+      await tocar(tester, find.text('Trámites'));
+      await tocar(tester, find.text('SERECI'));
+      expect(find.text('Registrar una defunción'), findsOneWidget);
+      expect(find.byKey(const Key('volver_a_secciones')), findsOneWidget);
+      expect(find.byKey(const Key('volver_a_familias')), findsNothing);
+
+      await tocar(tester, find.byKey(const Key('volver_a_secciones')));
+      expect(find.text('Registrar una defunción'), findsNothing);
+      expect(find.text('SEGIP'), findsOneWidget);
+      expect(find.byKey(const Key('volver_a_familias')), findsOneWidget);
+
+      await tocar(tester, find.byKey(const Key('volver_a_familias')));
+      expect(find.text('Denuncias'), findsOneWidget);
+      expect(find.text('SEGIP'), findsNothing);
+    },
+  );
+
+  testWidgets(
     'ir a la declaración la hace sonar sola, y el reproductor es una nota '
     'de voz sin copiar ni etiquetas de origen',
     (tester) async {

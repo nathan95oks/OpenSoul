@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 
 class ContextSelectionWidget extends ConsumerStatefulWidget {
@@ -64,6 +65,15 @@ class _ContextSelectionWidgetState
     },
   );
 
+  /// Una institución de Trámites: se abre como una familia más.
+  Widget _sectionButton(ContextFamily s, String? highlightedId) =>
+      _FamilyButton(
+        family: s,
+        highlighted:
+            highlightedId != null && s.contextIds.contains(highlightedId),
+        onTap: () => ref.read(openSectionProvider.notifier).open(s.id),
+      );
+
   void _abrir(ContextFamily? familia) {
     setState(() => _abierta = familia);
     final recordada = ref.read(openFamilyProvider.notifier);
@@ -84,8 +94,24 @@ class _ContextSelectionWidgetState
     final suggestion = pending?.suggestion;
     final highlightedId = pending?.proposedContextId;
     final familia = _abierta;
+    final seccion = familia == null
+        ? null
+        : RagTramites.sectionById(ref.watch(openSectionProvider));
+    // Trámites se ordena por institución: primero sus contextos propios
+    // (Identificación) y las instituciones; dentro de una, sus trámites.
+    final porSecciones = familia?.id == 'tramites';
     final desplegados = familia == null
         ? const <SemanticContext>[]
+        : seccion != null
+        ? [
+            for (final id in seccion.contextIds)
+              if (contextById(id) != null) contextById(id)!,
+          ]
+        : porSecciones
+        ? [
+            for (final id in familia.contextIds)
+              if (contextById(id) != null) contextById(id)!,
+          ]
         : contextsOfFamily(familia);
 
     return SingleChildScrollView(
@@ -100,7 +126,9 @@ class _ContextSelectionWidgetState
               const SizedBox(height: 20),
             ],
             Text(
-              pending != null
+              seccion != null
+                  ? seccion.name
+                  : pending != null
                   ? '¿Desde qué contexto respondes?'
                   : 'Selecciona el contexto',
               style: const TextStyle(
@@ -112,7 +140,9 @@ class _ContextSelectionWidgetState
             ),
             const SizedBox(height: 6),
             Text(
-              pending != null
+              seccion != null
+                  ? seccion.description
+                  : pending != null
                   ? 'Puedes aceptar el contexto propuesto o elegir otro.'
                   : '¿Qué necesitas hacer?',
               style: const TextStyle(
@@ -133,7 +163,7 @@ class _ContextSelectionWidgetState
             else ...[
               ...desplegados.indexed.map(
                 (e) => BubbleEntrance(
-                  key: ValueKey('${familia.id}_${e.$2.id}'),
+                  key: ValueKey('${seccion?.id ?? familia.id}_${e.$2.id}'),
                   index: e.$1,
                   child: _ContextButton(
                     context: e.$2,
@@ -144,6 +174,14 @@ class _ContextSelectionWidgetState
                   ),
                 ),
               ),
+              if (porSecciones && seccion == null)
+                ...RagTramites.sections.indexed.map(
+                  (e) => BubbleEntrance(
+                    key: ValueKey(e.$2.id),
+                    index: desplegados.length + e.$1,
+                    child: _sectionButton(e.$2, highlightedId),
+                  ),
+                ),
             ],
             const SizedBox(height: 16),
           ],

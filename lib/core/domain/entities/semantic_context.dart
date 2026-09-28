@@ -74,7 +74,7 @@ const contextFamilies = <ContextFamily>[
     id: 'tramites',
     name: 'Trámites',
     emoji: '🪪',
-    description: 'Identificación, datos de contacto y recepción de avisos',
+    description: 'Identificación, SEGIP, SERECI, Derechos Reales y más',
     contextIds: ['identificacion'],
   ),
   ContextFamily(
