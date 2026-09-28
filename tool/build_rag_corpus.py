@@ -60,6 +60,28 @@ EQUIVALENCIAS = os.path.join(RAG, "senas_equivalentes.json")
 # Glosas corregidas de frases que marcó la revisión (tool/rag_corregir_glosas.py):
 # mandan sobre las de la caché de traducción.
 CORRECCIONES = os.path.join(RAG, "glosas_correcciones.json")
+# Zonas de tarjetas: la de cada seña oficial (aws/zonas_senas.json), la de
+# cada seña a incorporar que Titan y Bedrock ubicaron de acuerdo
+# (tool/rag_zonas.py) y las formas en español de las señas.
+ZONAS_SENAS = os.path.join(ROOT, "aws", "zonas_senas.json")
+FORMAS_SENAS = os.path.join(ROOT, "aws", "catalogo_senas.json")
+ZONAS_PALABRAS = os.path.join(RAG, "zonas_palabras.json")
+# Zonas con las que se contesta un trámite juntando tarjetas: cosas y datos
+# («la boleta y el folio»). Los verbos (Acciones, donde el catálogo también
+# pone ¿Dónde? o ¿Cuál?), los adjetivos y las partículas no se juntan en una
+# lista: esas respuestas ya van en las frases documentadas.
+ZONAS_DE_RESPUESTA = {
+    "Documentos", "Objetos", "Lugares", "Tiempo", "Identificación",
+    "Instituciones", "Conceptos jurídicos", "Números",
+}
+MAX_TARJETAS = 8
+# Partículas de respuesta: ya van en las frases documentadas, no abren zona
+# ni son tarjeta (el diccionario pone SÍ en «Hechos y urgencia»).
+_PARTICULAS = {"si", "no", "no_saber", "tal_vez", "puedo", "no_puedo",
+               "verdad", "mentira", "estar_de_acuerdo", "no_estar_de_acuerdo",
+               # Adverbios de lugar: en una lista quedan «Casa y aquí».
+               "aqui", "alli", "alla", "cerca", "lejos", "dentro", "fuera",
+               "atras", "enfrente", "al_lado"}
 # La lista de vocabulario por crecer, para leer y compartir.
 SALIDA_VOCABULARIO = os.path.join(RAG, "senas_a_incorporar.md")
 
@@ -706,6 +728,74 @@ def _estado(texto: str) -> str:
     return "afirmado"
 
 
+def _leer(ruta: str) -> dict:
+    if not os.path.exists(ruta):
+        return {}
+    with open(ruta, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def datos_de_zonas() -> dict:
+    """Zona y forma en español de cada seña y seña a incorporar."""
+    senas = {_norm(g): (g, z) for g, z in _leer(ZONAS_SENAS).items()}
+    formas = {_norm(g): f for g, f in _leer(FORMAS_SENAS).items()}
+    palabras = {p: d["zona"] for p, d in _leer(ZONAS_PALABRAS).items()
+                if d.get("zona")}
+    return {"senas": senas, "formas": formas, "palabras": palabras}
+
+
+def _tarjeta(glosa: str, zonas: dict) -> tuple | None:
+    """(zona, etiqueta, frase) de una glosa, o None si no tiene zona."""
+    if glosa.startswith(SENA_PENDIENTE):
+        palabra = glosa[len(SENA_PENDIENTE):]
+        zona = zonas["palabras"].get(palabra)
+        legible = palabra.replace("_", " ").lower()
+        return (zona, legible.capitalize(), legible) if zona else None
+    clave = _norm(glosa)
+    if clave not in zonas["senas"] or len(glosa) <= 1 or clave in _PARTICULAS:
+        return None
+    _, zona = zonas["senas"][clave]
+    formas = zonas["formas"].get(clave) or [glosa.replace("_", " ").lower()]
+    # El significado de la seña («casa», «papel»), no el fragmento de oración
+    # del catálogo («mi nombre es», «debo volver»), que no se junta en lista.
+    return zona, formas[0], formas[0].lower()
+
+
+def tarjetas_de_zona(e: dict, respuestas: list, zonas: dict) -> list:
+    """Tarjetas sueltas para contestar una pregunta de un trámite.
+
+    Las zonas de la pregunta son las de sus respuestas documentadas (si se
+    respondió con PAPEL o BOLETA, abre Documentos). Las tarjetas son las
+    señas y señas a incorporar de ese trámite que están en esas zonas: se
+    combinan con la plantilla de la pregunta, como en Denuncias.
+    """
+    de_la_pregunta = set()
+    for r in respuestas:
+        for g in r.get("glosas") or []:
+            t = _tarjeta(g, zonas)
+            if t and t[0] in ZONAS_DE_RESPUESTA:
+                de_la_pregunta.add(t[0])
+    if not de_la_pregunta:
+        return []
+    tarjetas, vistas = [], set()
+    todas = e["turnos"] + [r for p in e["variantes"] for r in p["respuestas"]]
+    for t in todas:
+        for g in t.get("glosas") or []:
+            info = _tarjeta(g, zonas)
+            if not info or info[0] not in de_la_pregunta or _norm(g) in vistas:
+                continue
+            vistas.add(_norm(g))
+            zona, etiqueta, frase = info
+            tarjetas.append({
+                "estado": "afirmado", "etiqueta": etiqueta, "frase": frase,
+                "glosas": [g], "glosasPropias": True, "zona": zona,
+                "id": f"z{len(tarjetas) + 1}",
+            })
+            if len(tarjetas) >= MAX_TARJETAS:
+                return tarjetas
+    return tarjetas
+
+
 def banco_tramites(corpus: dict) -> dict:
     """Preguntas, recorridos y contextos de la familia «Trámites».
 
@@ -714,6 +804,7 @@ def banco_tramites(corpus: dict) -> dict:
     opción por respuesta documentada distinta. Un recorrido por trámite.
     """
     preguntas, recorridos, contextos = [], {}, []
+    zonas = datos_de_zonas()
     for e in corpus["escenarios"]:
         pasos = []
         for t in turnos_pregunta(e):
@@ -732,11 +823,21 @@ def banco_tramites(corpus: dict) -> dict:
                     "id": f"r{len(opciones) + 1}",
                 })
             glosas = t.get("glosas") or []
+            # Solo una pregunta abre zonas; una indicación («Escríbala sin
+            # espacios») se contesta con sus frases.
+            tarjetas = (tarjetas_de_zona(e, respuestas_de(e, t["n"]), zonas)
+                        if "?" in t["texto"] else [])
+            if tarjetas:
+                # Una frase documentada se elige sola; las tarjetas se juntan.
+                for o in opciones:
+                    o["salida"] = True
             preguntas.append({
                 "acto": "pregunta" if "?" in t["texto"] else "indicacion",
                 "campo": "tramite",
                 "campos": ["tramite"],
-                "control": "seleccion_unica",
+                **({"control": "seleccion_multiple", "maximo": len(tarjetas),
+                    "plantilla": "{items}."} if tarjetas
+                   else {"control": "seleccion_unica"}),
                 "dominio": "tramite",
                 "entidad": "Tramite",
                 "formulacion": t["texto"],
@@ -749,7 +850,7 @@ def banco_tramites(corpus: dict) -> dict:
                 "modo": "frase",
                 "noOfrecer": [],
                 "nodos": [],
-                "opciones": opciones,
+                "opciones": opciones + tarjetas,
                 "variantes": [],
             })
             pasos.append({"pregunta": qid})

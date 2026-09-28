@@ -12,10 +12,14 @@ CRPVA), que en LSB se deletrean. Para cada una:
    MÍO), queda aprobada: la evidencia es el propio catálogo, con su fuente.
 2. **Bedrock.** Si no, la Lambda LSB→Texto/Audio (`action: "equivalencias"`)
    pide al modelo una seña oficial equivalente en esas frases, o ninguna. La
-   Lambda descarta cualquier glosa fuera del catálogo. Lo que propone queda
-   «propuesta» hasta que una persona lo revise: compartir la raíz no basta
-   (FISCAL no es FISCALÍA, JUDICIAL no es ÓRGANO_JUDICIAL). `misma_raiz`
-   solo ayuda a revisar.
+   Lambda descarta cualquier glosa fuera del catálogo.
+3. **Confirmación automática**, sin revisión humana: una propuesta de
+   Bedrock se aprueba sola si además (a) la seña es de la misma zona que la
+   palabra (la que le dieron Titan y Bedrock en `tool/rag_zonas.py`) y (b)
+   una frase real con la seña en lugar de la palabra dice lo mismo que la
+   original (`action: "retrotraducir"`: no falta la palabra ni sobra la
+   seña). Si falla una señal, se rechaza sola. Compartir la raíz no basta
+   (FISCAL no es FISCALÍA): por eso hacen falta las tres.
 
 Escribe `docs/negocio/rag/senas_equivalentes.json`.
 
@@ -72,6 +76,16 @@ def actualizar_catalogo() -> int:
                   ensure_ascii=False, indent=1)
         f.write("\n")
     print(f"catálogo: {len(foto)} señas · {os.path.relpath(FOTO_CATALOGO, ROOT)}")
+    # La zona de cada seña: su categoría en el diccionario oficial.
+    with open(os.path.join(ROOT, "assets", "dictionary",
+                           "official_dictionary.json"), encoding="utf-8") as f:
+        zonas = {e["gloss"]: e["categoryId"] for e in json.load(f)["entries"]}
+    destino = os.path.join(ROOT, "aws", "zonas_senas.json")
+    with open(destino, "w", encoding="utf-8", newline="") as f:
+        json.dump({k: zonas[k] for k in sorted(zonas)}, f,
+                  ensure_ascii=False, indent=1)
+        f.write("\n")
+    print(f"zonas: {len(zonas)} señas · {os.path.relpath(destino, ROOT)}")
     return 0
 
 
@@ -153,6 +167,71 @@ def decidir(palabra: str, propuesta: dict, cat: dict) -> dict:
             "misma_raiz": comparte_raiz(palabra, sena, cat)}
 
 
+def _frases_con_glosas() -> dict:
+    """{frase: glosas} del corpus construido."""
+    from build_rag_corpus import SALIDA as CORPUS
+    with open(CORPUS, encoding="utf-8") as f:
+        corpus = json.load(f)
+    out = {}
+    for e in corpus["escenarios"]:
+        for t in e["turnos"] + [r for p in e["variantes"] for r in p["respuestas"]]:
+            if t.get("glosas"):
+                out.setdefault(t["texto"], t["glosas"])
+    return out
+
+
+def confirmar(url: str, salida: dict) -> None:
+    """Decide sola cada propuesta de Bedrock no revisada a mano: aprobada si
+    Titan y la vuelta al español la confirman, rechazada si no."""
+    from rag_indexar_embeddings import llamar
+    from rag_zonas import DESTINO as ZONAS
+    sys.path.insert(0, os.path.join(ROOT, "aws"))
+    from rag_revision import conjugada  # noqa: E402
+    zona_de = {}
+    if os.path.exists(ZONAS):
+        with open(ZONAS, encoding="utf-8") as f:
+            zona_de = {p: d.get("zona") for p, d in json.load(f).items()}
+    with open(os.path.join(ROOT, "aws", "zonas_senas.json"),
+              encoding="utf-8") as f:
+        zona_sena = {_norm(g): z for g, z in json.load(f).items()}
+    frases = _frases_con_glosas()
+    for palabra, e in sorted(salida.items()):
+        if e.get("estado") != "propuesta" or e.get("revisado") or not e.get("sena"):
+            continue
+        sena = e["sena"]
+        clave = palabra.replace(" ", "_")
+        zona = zona_de.get(clave)
+        titan = bool(zona) and zona_sena.get(_norm(sena)) == zona
+        # Una frase real con la seña en lugar de la palabra.
+        vuelta, detalle = False, "sin frase con la palabra"
+        marca = "SENA_PENDIENTE:" + clave
+        for texto in e.get("ejemplos") or []:
+            glosas = frases.get(texto)
+            if not glosas or marca not in glosas:
+                continue
+            nuevas = [sena if g == marca else g for g in glosas]
+            r = llamar(url, {"action": "retrotraducir", "items": [
+                {"texto": texto, "glosas": nuevas}]})
+            if r.get("generated") is not True:
+                detalle = f"sin respuesta: {r.get('reason')}"
+                break
+            res = r["items"][0]
+            falta = any(conjugada(w, [palabra]) or _norm(w) == _norm(palabra)
+                        for w in res["faltan"])
+            sobra = _norm(sena) in {_norm(s) for s in res["sobran"]}
+            vuelta = not falta and not sobra
+            detalle = (f"«{texto}» → falta {res['faltan']} sobra "
+                       f"{res['sobran']}")
+            break
+        e["senales"] = {"bedrock": sena, "zona_palabra": zona,
+                        "zona_sena": zona_sena.get(_norm(sena)),
+                        "titan": titan, "vuelta": vuelta,
+                        "vuelta_detalle": detalle}
+        e["estado"] = "aprobada" if titan and vuelta else "rechazada"
+        e["origen"] = "bedrock+titan+vuelta"
+        e["automatica"] = True
+
+
 def main() -> int:
     if "--actualizar-catalogo" in sys.argv:
         return actualizar_catalogo()
@@ -173,6 +252,10 @@ def main() -> int:
             salida[p] = {**evidencia, "ejemplos": frases, "fecha": hoy}
         elif p in previas and previas[p].get("origen", "").startswith("bedrock"):
             salida[p] = previas[p]
+            if previas[p].get("automatica") is None and previas[p].get("sena"):
+                # Decidida antes a mano o sin confirmar: se vuelve a decidir
+                # con las tres señales.
+                salida[p]["estado"] = "propuesta"
         else:
             faltan.append(p)
     if faltan and "--sin-red" not in sys.argv:
@@ -184,6 +267,8 @@ def main() -> int:
                 salida[p] = {**decidir(p, prop, cat), "ejemplos": palabras[p],
                              "fecha": hoy}
             print(f"  {min(i + TANDA, len(faltan))}/{len(faltan)}", flush=True)
+    if "--sin-red" not in sys.argv:
+        confirmar(endpoint(), salida)
     with open(SALIDA, "w", encoding="utf-8", newline="") as f:
         json.dump({k: salida[k] for k in sorted(salida)}, f,
                   ensure_ascii=False, indent=1)

@@ -25,6 +25,7 @@ from guided_composer import load_bank as load_guided_bank
 import rag_consulta as RAG
 import rag_equivalencias as EQUIV
 import rag_revision as REVISION
+import rag_zonas as ZONAS
 
 import boto3
 from botocore.exceptions import ClientError
@@ -3999,13 +4000,14 @@ def _rag_state():
     return _RAG_STATE or None
 
 
-def _titan_embed(texto: str) -> list:
+def _titan_embed(texto: str, dimensiones: int | None = None) -> list:
     respuesta = bedrock_runtime.invoke_model(
         modelId=RAG_EMBEDDING_MODEL,
         contentType="application/json",
         accept="application/json",
         body=json.dumps({"inputText": texto[:MAX_HEARING_TEXT],
-                         "dimensions": RAG_EMBEDDING_DIM, "normalize": True}),
+                         "dimensions": dimensiones or RAG_EMBEDDING_DIM,
+                         "normalize": True}),
     )
     return json.loads(respuesta["body"].read())["embedding"]
 
@@ -4190,6 +4192,54 @@ def rag_correct_glosses(body):
                                 "items": corregidas})
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# ZONA DE CADA PALABRA SIN SEÑA (action: "zonas")
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# Titan y Bedrock eligen por separado la zona de tarjetas de cada palabra;
+# si coinciden, entra a esa zona. Ver `rag_zonas.py`.
+
+_ZONAS_LSB = None
+_VECTORES_DEFINICION = {}
+
+
+def _embed_zonas(texto: str) -> list:
+    return _titan_embed(texto, ZONAS.DIMENSIONES)
+
+
+def rag_zones(body):
+    global _ZONAS_LSB
+    palabras, error = ZONAS.validar_pedido(body)
+    if error:
+        return build_response(400, {"error": "VALIDATION_ERROR", "message": error})
+    if not ENABLE_BEDROCK:
+        return build_response(200, {"generated": False,
+                                    "reason": "bedrock_desactivado"})
+    if _ZONAS_LSB is None:
+        _ZONAS_LSB = ZONAS.zonas_con_senas(ZONAS.cargar_zonas(),
+                                           EQUIV.cargar_formas())
+    if not _ZONAS_LSB:
+        return build_response(200, {"generated": False, "reason": "sin_zonas"})
+
+    def invocar(texto: str) -> str:
+        respuesta = bedrock_runtime.invoke_model(
+            modelId=BEDROCK_MODEL_ID, contentType="application/json",
+            accept="application/json",
+            body=json.dumps(_build_bedrock_request_body(
+                texto, max_tokens=ZONAS.MAX_TOKENS)))
+        return EQUIV.texto_de_respuesta(json.loads(respuesta["body"].read()))
+
+    try:
+        clasificadas = ZONAS.clasificar(palabras, _ZONAS_LSB, _embed_zonas,
+                                        invocar, _VECTORES_DEFINICION)
+    except Exception as e:  # noqa: BLE001 — Bedrock: nunca un 500
+        logger.warning("Zonas fallidas: %s", e)
+        return build_response(200, {"generated": False, "reason": "error_modelo"})
+    return build_response(200, {"generated": True, "model": BEDROCK_MODEL_ID,
+                                "embeddings": RAG_EMBEDDING_MODEL,
+                                "palabras": clasificadas})
+
+
 def lambda_handler(event, context):
     http_method = event.get("httpMethod", event.get("requestContext", {}).get("http", {}).get("method", "POST"))
     if http_method == "OPTIONS":
@@ -4219,6 +4269,8 @@ def lambda_handler(event, context):
         return rag_back_translate(body)
     if (body.get("action") or "").strip().lower() == "corregir":
         return rag_correct_glosses(body)
+    if (body.get("action") or "").strip().lower() == "zonas":
+        return rag_zones(body)
 
     is_valid, err = validate_request(body)
     if not is_valid:

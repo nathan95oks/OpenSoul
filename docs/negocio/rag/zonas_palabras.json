@@ -1,0 +1,3876 @@
+{
+ "ACCESIBILIDAD": {
+  "zona": null,
+  "titan": "Estado y emoción",
+  "similitud": 0.1421,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "¿Necesita una medida de accesibilidad para la audiencia?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACCESIBLE": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1954,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "La atención debe permitir comunicación accesible.",
+   "Registraremos su necesidad de comunicación accesible.",
+   "Debe garantizarse comunicación accesible durante la atención."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACCESO": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1472,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "¿Tiene acceso a su proceso en ROMA?",
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACREDITAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Debe acreditar la relación permitida y su identidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTIVAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Contacte SEPDEP para activar la atención correspondiente.",
+   "Para violencia corresponde activar la ruta de FELCV.",
+   "FELCV atiende hechos de violencia y activa la ruta correspondiente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTIVIDAD": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.3209,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Su deuda es de vehículo, inmueble o actividad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTUAL": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.0995,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿Tiene la placa actual del vehículo?",
+   "¿Cómo confirmo la atención actual?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTUALIZAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito un Folio Real actualizado de mi casa.",
+   "Consulte primero el monto actualizado antes de pagar.",
+   "El servicio para violencia familiar figura actualizado en 2026."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACTUALMENTE": {
+  "zona": null,
+  "titan": "Preguntas",
+  "similitud": 0.1399,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "¿Tiene actualmente abogado particular?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ACUDIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "SIREJ indica acudir a información del Tribunal.",
+   "Quiero que me indiquen dónde acudir.",
+   "¿Puede acudir presencialmente ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ADAPTARSE": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.2015,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "La atención debe adaptarse para que comprenda el trámite."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ADE_CUADA": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.2324,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Gracias. Esperaré la asistencia adecuada."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ADMINISTRACION": {
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.2419,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "La Ley 1658 incluye el ámbito de administración de justicia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ADOLESCENTE": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2136,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Vine por violencia contra mi sobrino adolescente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ALGUN": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3112,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "¿Trajo algún relato de lo ocurrido?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ALGUNAS": {
+  "zona": "Preguntas",
+  "titan": "Preguntas",
+  "similitud": 0.1995,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "Necesito hacerle algunas preguntas sobre la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ALY": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.149,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AMBITO": {
+  "zona": null,
+  "titan": "Instituciones",
+  "similitud": 0.2527,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "La Ley 1658 incluye el ámbito de administración de justicia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTERIOR": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.159,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Puede buscarlos en una boleta de pago anterior.",
+   "Sí. Perdimos la copia anterior."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTES": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.1035,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "Iré antes de esa hora.",
+   "Llamaré antes de ir.",
+   "¿Puedo llamar antes de ir?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTEZANA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1579,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTICRETICO": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2489,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Quiero hacer un documento de anticrético."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTICRETICOS": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1812,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ANTIGUO": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1551,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Tengo deuda antigua de mi casa."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APARECE": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.0887,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "No aparece."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APARECER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "¿El monto aparece en línea?",
+   "¿Qué número de juzgado aparece?",
+   "¿Ese número aparece en la página municipal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APLICABLE": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.138,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Depende de su grado y situación; revise la norma aplicable.",
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APLICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "La reposición aplica por extravío, robo o deterioro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APORTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Registraremos los datos que usted pueda aportar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "APOYO": {
+  "zona": null,
+  "titan": "Instituciones",
+  "similitud": 0.0876,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral.",
+   "¿Qué tipo de apoyo necesita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ARANCEL": {
+  "zona": null,
+  "titan": "Números",
+  "similitud": 0.2651,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Cuánto aparece en el arancel?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ARANCELE": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2413,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "La certificación de firmas tiene arancel publicado específico.",
+   "El arancel publicado incluye anticréticos entre otras escrituras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AREA": {
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.1705,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "El Ministerio informó cuatro días para el área urbana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ASUMIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "No asumiremos que el servicio dejó de funcionar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ATENCION": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1685,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero iniciar la atención.",
+   "La atención debe permitir comunicación accesible.",
+   "El equipo puede orientar su ruta de atención."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AUDIENCIA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1821,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Tengo audiencia familiar. No sé dónde ir.",
+   "¿Qué necesita saber sobre su audiencia?",
+   "No sé si mi audiencia es virtual."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AUTO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1137,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Compré un auto. Quiero pasarlo a mi nombre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AUTOMATICO": {
+  "zona": "Descripción",
+  "titan": "Descripción",
+  "similitud": 0.1727,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "La norma 2025 incorporó mecanismos de renovación automática."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "AYUDA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1925,
+  "regla": null,
+  "bedrock": "Cortesía",
+  "ejemplos": [
+   "Necesito ayuda para escribir mi denuncia.",
+   "¿Qué ayuda necesita?",
+   "Necesito ayuda legal y psicológica."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BEIJING": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1524,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Existe representación en Centro Integral FELCV, avenida Beijing."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BIEN": {
+  "zona": "Respuesta",
+  "titan": "Respuesta",
+  "similitud": 0.2381,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "No quiero responder sin comprender bien.",
+   "No entiendo bien explicaciones solo habladas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BOLETA": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1893,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Puede buscarlos en una boleta de pago anterior.",
+   "Sí tengo mi última boleta."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "BORRAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "No borre ni modifique mensajes relacionados al hecho."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CALIFICACION": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1203,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "Primero debe seguir el proceso de calificación correspondiente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CALIFICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Ya me calificaron.",
+   "¿Debo volver a calificarme?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CANAL": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1061,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Usaré un canal accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CAPTURA": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2283,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Tengo capturas y comprobante de transferencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CARATULA": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.1938,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Tiene la carátula del expediente?",
+   "No. No tengo ninguna carátula."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CASO": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1428,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Tengo el caso, pero no sé usarlo.",
+   "Quiero saber dónde puedo informar el caso.",
+   "Confirmaré mi caso antes de ir."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CATARSTRAL": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1079,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Me falta el certificado catastral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CATASTRAL": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.258,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "¿Tiene número de inmueble o código catastral?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CENTRAL": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.2754,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "¿Le queda mejor la oficina central o La Chimba?",
+   "La central."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CENTRO": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1829,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "Existe representación en Centro Integral FELCV, avenida Beijing.",
+   "Ocurrió ayer en una calle del centro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CENTRO_INTERNACIONAL_CONVENCIONES": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1491,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "Está en el Centro Internacional de Convenciones, piso uno."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CERRADO": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1969,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "Sí. La dirección que tenía estaba cerrada.",
+   "Estaba cerrada."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CERTIFICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": null,
+  "ejemplos": [
+   "Quiero certificar las firmas de este contrato."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CHIMBA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.2978,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "¿Le queda mejor la oficina central o La Chimba?",
+   "Estoy cerca de La Chimba.",
+   "La Chimba."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CITAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": null,
+  "ejemplos": [
+   "Sí. Me citaron y no tengo abogado."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CIUDAD": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.2069,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "¿Cuánto tarda en ciudad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CLARO": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.2248,
+  "regla": null,
+  "bedrock": null,
+  "ejemplos": [
+   "Quiero recibir instrucciones claras por escrito también."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CODIGO": {
+  "zona": "Números",
+  "titan": "Números",
+  "similitud": 0.2476,
+  "regla": null,
+  "bedrock": "Números",
+  "ejemplos": [
+   "¿Tiene número de inmueble o código catastral?",
+   "Sí. Tengo ambos códigos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMPETENTE": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2376,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Para víctimas, consulte SEPDAVI u otro servicio competente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMPROBANTE": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2954,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Tengo capturas y comprobante de transferencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMUNICACION": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1806,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "La atención debe permitir comunicación accesible.",
+   "Registraremos su necesidad de comunicación accesible.",
+   "Debe garantizarse comunicación accesible durante la atención."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMUNICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito comunicarme en Lengua de Señas Boliviana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COMUNICARSE": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1586,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito comunicarme usando lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONDONACIÓN": {
+  "zona": null,
+  "titan": "Números",
+  "similitud": 0.1817,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONFIRMAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Primero confirmaré el monto.",
+   "Primero confirmaré la sede.",
+   "¿Cómo confirmo la atención actual?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONFORME": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2255,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONMIGO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1382,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "Sí. La tengo conmigo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSERVE": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1769,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSTANTE": {
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.191,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "Sí. Me escribe mensajes constantemente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSULTA": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.0858,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Haré la consulta en línea.",
+   "¿Su consulta es urgente y penal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONSULTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Consulte primero el monto actualizado antes de pagar.",
+   "¿Qué necesita consultar de su proceso?",
+   "¿Quiere consultar un expediente judicial?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTACTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Contacte SEPDEP para activar la atención correspondiente.",
+   "¿Pueden indicarme cómo contactarla?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Cuente lo ocurrido con sus propias palabras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTEMPLAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "La Ley 1658 contempla interpretación gratuita en justicia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTRA": {
+  "zona": null,
+  "titan": "Conceptos jurídicos",
+  "similitud": 0.1474,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "El proceso es contra mí.",
+   "Debe ser derivado al servicio especializado contra la violencia.",
+   "Vine por violencia contra mi sobrino adolescente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CONTRATO": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.254,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Quiero certificar las firmas de este contrato.",
+   "¿Eso incluye todo el contrato?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COPIA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1256,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "No sé si sirve copia.",
+   "¿Trae copia del CRPVA y su cédula?",
+   "Quiero una copia de mi denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CORRESPONDER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Su deuda corresponde solamente a 2025?",
+   "Para violencia corresponde activar la ruta de FELCV.",
+   "No sé cuál me corresponde."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CORRESPONDIENTE": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1336,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Contacte SEPDEP para activar la atención correspondiente.",
+   "FELCV atiende hechos de violencia y activa la ruta correspondiente.",
+   "Primero debe seguir el proceso de calificación correspondiente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COSAS": {
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.195,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "No responderé cosas que no comprendo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COSTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Cuánto dice la página que cuesta?",
+   "¿Cuánto cuesta la cédula física?",
+   "¿Cuesta lo mismo que la cédula física?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "COSTO": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.156,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Quiero confirmar el costo total primero.",
+   "¿Cuánto cuesta actualmente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CUENTA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1028,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Puede ingresar a su cuenta?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CUOTA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1206,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Quiere solicitar un Plan Cuotas?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "CUOTAS": {
+  "zona": null,
+  "titan": "Números",
+  "similitud": 0.1899,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Sí. Quiero pagar en cuotas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DATOS": {
+  "zona": "Identificación",
+  "titan": "Identificación",
+  "similitud": 0.3429,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Registraremos los datos que usted pueda aportar.",
+   "El reglamento exige validarlo con los datos de SERECI."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DE": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.201,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Está en calle 16 de Julio 680, Plazuela Constitución."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEBER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Quiero saber cuánto debo de mi moto.",
+   "Debemos revisar la información de su expediente.",
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEBO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.127,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "No debo años anteriores.",
+   "¿Debo confirmar antes de salir?",
+   "¿Debo pagar por el nuevo carnet?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DECIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Le dijeron que necesita treinta por ciento?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEFENSA_PUBLICA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.2594,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "¿Dónde está Defensa Pública en Cochabamba?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEFENSORIA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1678,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Debe activarse la atención de la Defensoría de la Niñez.",
+   "Puede acudir a la Defensoría por posible vulneración de derechos.",
+   "¿Puede venir a la oficina de la Defensoría?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEFUNCION": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1746,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿El precio es igual al de defunción?",
+   "Necesito otro certificado de defunción de mi padre.",
+   "¿Viene a registrar una defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DELITO": {
+  "zona": "Hechos y urgencia",
+  "titan": "Hechos y urgencia",
+  "similitud": 0.352,
+  "regla": null,
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "¿El hecho fue robo, estafa u otro delito?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DENUNCIA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.216,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Necesito ayuda para escribir mi denuncia.",
+   "Quiero saber qué pasó con mi denuncia.",
+   "Quiero una copia de mi denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DENUNCIADO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1453,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Soy denunciado.",
+   "¿Usted está denunciado o es víctima?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DENUNCIAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero denunciar el robo de mi celular.",
+   "¿Desea denunciar verbalmente o trae escrito?",
+   "¿Viene a denunciar o necesita orientación?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEPENDER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "La modalidad depende del señalamiento de su expediente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEPERDER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Depende de su grado y situación; revise la norma aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DERECHOS": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2121,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Puede acudir a la Defensoría por posible vulneración de derechos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DERIVADO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1983,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Debe ser derivado al servicio especializado contra la violencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DESCRIBIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Describa cuándo y dónde ocurrió."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DESCUENTO": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.146,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Todavía hay descuento si pago hoy?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DETERIORADO": {
+  "zona": "Descripción",
+  "titan": "Descripción",
+  "similitud": 0.2053,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Está deteriorada."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DETERIORO": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.2134,
+  "regla": null,
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "La reposición aplica por extravío, robo o deterioro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DEUDA": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.2139,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Busca deuda de inmueble o vehículo?",
+   "Quiero revisar la deuda de mi casa.",
+   "¿Su deuda corresponde solamente a 2025?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DICE": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1242,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Cuánto dice la página que cuesta?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DIRECTAMENTE": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1319,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero participar directamente en mi audiencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DISCAPACIDAD": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.0999,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Quiero sacar mi carnet de discapacidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DISTANCIA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1152,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "No. Necesito atención a distancia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DOS": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.367,
+  "regla": null,
+  "bedrock": "Números",
+  "ejemplos": [
+   "También enumera identificación del fallecido y dos testigos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DUPLICADO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1727,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "SERECI ofrece venta de certificados duplicados.",
+   "¿Necesita certificado de matrimonio duplicado?",
+   "SERECI incluye ese servicio entre certificados duplicados."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "DÍAS": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1635,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "Mi expareja me amenaza todos los días."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EDIFICIO": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1665,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ELEMENTOS": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1553,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENCONTRAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Puede ayudarme a encontrarlo?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTENDER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Entiendo. Iré al servicio para víctimas.",
+   "No entiendo bien explicaciones solo habladas.",
+   "Quiero entender todas las preguntas de la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTENDIDO": {
+  "zona": "Respuesta",
+  "titan": "Respuesta",
+  "similitud": 0.2032,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Entendido."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTONCES": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1449,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Entonces no pago el impuesto?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENTREGAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Puedo entregarlos en la denuncia?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ENUMERAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "También enumera identificación del fallecido y dos testigos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EQUIPO": {
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.1274,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "El equipo puede orientar su ruta de atención.",
+   "Quiero hablar con el equipo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ES": {
+  "zona": null,
+  "titan": "Descripción",
+  "similitud": 0.2002,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "No sé cuál es.",
+   "Quiero saber quién es mi fiscal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESCRITO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1738,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Desea denunciar verbalmente o trae escrito?",
+   "Ya la traje escrita."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESCRITURA": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1609,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Sí. Aquí tengo la escritura.",
+   "El arancel publicado incluye anticréticos entre otras escrituras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESOS": {
+  "zona": null,
+  "titan": "Números",
+  "similitud": 0.1935,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "No recuerdo esos números.",
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESPACIOS": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1521,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Escríbala sin espacios ni guiones."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESPECIALIZADO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2063,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Debe ser derivado al servicio especializado contra la violencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESPECIFICO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2437,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "La certificación de firmas tiene arancel publicado específico."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESTAFA": {
+  "zona": "Hechos y urgencia",
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3268,
+  "regla": null,
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "¿El hecho fue robo, estafa u otro delito?",
+   "¿La estafa ocurrió por internet o presencialmente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Estado y emoción",
+  "ejemplos": [
+   "Sí, aquí está mi cédula.",
+   "No sé si están vigentes.",
+   "Quiero saber cómo está mi proceso."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ESTE": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2847,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "Sí. Los tengo en este documento."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXACTO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2033,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Entonces confirmaré el trámite exacto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXIGIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "El reglamento exige validarlo con los datos de SERECI."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXISTIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Existe representación en Centro Integral FELCV, avenida Beijing.",
+   "Desde 2026 existe atención virtual en LSB."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXPEDIENTE": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1939,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Debemos revisar la información de su expediente.",
+   "¿Quiere consultar un expediente judicial?",
+   "¿Tiene la carátula del expediente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "EXTRAVIO": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1967,
+  "regla": null,
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "La reposición aplica por extravío, robo o deterioro.",
+   "Fue extravío. No sé dónde quedó."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FALLECIDO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.3925,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "También enumera identificación del fallecido y dos testigos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FALTA": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2881,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Me falta un documento.",
+   "Falta más tiempo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FALTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Me falta el certificado catastral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FAMILIA": {
+  "zona": "Identificación",
+  "titan": "Identificación",
+  "similitud": 0.1347,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Necesito ayuda por un niño de mi familia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FAMILIAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Tengo audiencia familiar. No sé dónde ir.",
+   "El servicio para violencia familiar figura actualizado en 2026.",
+   "No soy familiar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FIGURA": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1649,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "No sé quién figura.",
+   "El servicio para violencia familiar figura actualizado en 2026."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FIRMA": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2438,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Quiero certificar las firmas de este contrato.",
+   "Sí. Queremos reconocer nuestras firmas.",
+   "La certificación de firmas tiene arancel publicado específico."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FIRMAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Sí. Ya firmamos la compra."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FISCAL": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1655,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Quiero saber quién es mi fiscal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FISICA": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1723,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿Cuánto cuesta la cédula física?",
+   "¿Cuesta lo mismo que la cédula física?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FOLIO": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2038,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Tengo cédula y Folio, pero no formulario."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FOLIO_REAL": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.0933,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Necesito un Folio Real actualizado de mi casa."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FORMULARIO": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2084,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Tengo cédula y Folio, pero no formulario.",
+   "No tengo el formulario."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FUE": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.2168,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "No sé quién fue la persona."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "FUI": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2197,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Fui víctima de robo. Necesito abogado gratuito."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "GARANTIZAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Debe garantizarse comunicación accesible durante la atención."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "GRADO": {
+  "zona": null,
+  "titan": "Estado y emoción",
+  "similitud": 0.1492,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Depende de su grado y situación; revise la norma aplicable.",
+   "No recuerdo el grado de mi carnet."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "GUIONES": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1243,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Escríbala sin espacios ni guiones."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "HACERLE": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1849,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito hacerle algunas preguntas sobre la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "HECHO": {
+  "zona": "Hechos y urgencia",
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3552,
+  "regla": null,
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "¿El hecho fue robo, estafa u otro delito?",
+   "No borre ni modifique mensajes relacionados al hecho.",
+   "¿Qué hecho quiere denunciar?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "HIPOTECA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.118,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Quiero saber si mi casa tiene hipoteca."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "IGUAL": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1666,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿El precio es igual al de defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "IMPUESTO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1284,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Entonces no pago el impuesto?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INCLUIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Incluya qué pasó, cuándo y dónde, si lo sabe.",
+   "¿Eso incluye todo el contrato?",
+   "El arancel publicado incluye anticréticos entre otras escrituras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INCORPORAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "La norma 2025 incorporó mecanismos de renovación automática."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INDICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "SIREJ indica acudir a información del Tribunal.",
+   "Quiero que me indiquen dónde acudir."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INDICARME": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1865,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Pueden indicarme cómo contactarla?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INFORMACION": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.2213,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Qué información necesita del inmueble?",
+   "Debemos revisar la información de su expediente.",
+   "SIREJ indica acudir a información del Tribunal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INFORMAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre.",
+   "Quiero saber dónde puedo informar el caso.",
+   "El Ministerio informó cuatro días para el área urbana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INGRESAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Puede ingresar a su cuenta?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INICIAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero iniciar la atención.",
+   "Quiero saber dónde iniciar en Cochabamba."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INMUEBLE": {
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.2245,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "¿Qué información necesita del inmueble?",
+   "¿Busca deuda de inmueble o vehículo?",
+   "¿Tiene número de inmueble o código catastral?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INSTRUCCION": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.2545,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Quiero recibir instrucciones claras por escrito también."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INSTRUCCIONES": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1658,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INTEGRAL": {
+  "zona": null,
+  "titan": "Instituciones",
+  "similitud": 0.0888,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral.",
+   "Existe representación en Centro Integral FELCV, avenida Beijing."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INTERPRETAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "La Ley 1658 contempla interpretación gratuita en justicia.",
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INTERÉS": {
+  "zona": null,
+  "titan": "Números",
+  "similitud": 0.1713,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "INVESTIGADOR": {
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.156,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "JUDICIAL": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2002,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Quiere consultar un expediente judicial?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LANZA": {
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.1469,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LEGAL": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2171,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Necesito ayuda legal y psicológica.",
+   "¿Necesita primero orientación legal o psicológica?",
+   "Solo legal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LENGUA": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1475,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito comunicarme usando lengua de señas.",
+   "Me negaron atención porque necesito lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LINEA": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.1783,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿El monto aparece en línea?",
+   "¿También tienen línea gratuita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LOTE": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.1531,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Necesito certificado del lote de mi hermana.",
+   "No. El lote pertenece a mi hermana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LSB": {
+  "zona": null,
+  "titan": "Descripción",
+  "similitud": 0.162,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito comunicarme en Lengua de Señas Boliviana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LUGAR": {
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.1938,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "¿Está en un lugar seguro ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "LÍNEA": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.0866,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Haré la consulta en línea."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MANTENER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "La reposición mantiene la vigencia del documento reemplazado.",
+   "La norma 2025 mantiene el registro dentro del sistema nacional."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MAS": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.1874,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "Falta más tiempo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MATRIMONIO": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.1468,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Necesita certificado de matrimonio duplicado?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MECANISMO": {
+  "zona": null,
+  "titan": "Descripción",
+  "similitud": 0.1839,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "La norma 2025 incorporó mecanismos de renovación automática."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MEDICO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1255,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Tengo el certificado médico original."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MEDIDA": {
+  "zona": null,
+  "titan": "Estado y emoción",
+  "similitud": 0.1604,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "¿Necesita una medida de accesibilidad para la audiencia?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MEMORIAL": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.1021,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "No tengo memorial. Solo traje mi cédula.",
+   "Volveré cuando tenga el memorial.",
+   "No sé qué memorial."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MENSAJE": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1991,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "No borre ni modifique mensajes relacionados al hecho.",
+   "Sí. Me escribe mensajes constantemente.",
+   "Tengo los mensajes guardados."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MESES": {
+  "zona": null,
+  "titan": "Descripción",
+  "similitud": 0.1017,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "La renovación puede solicitarse desde seis meses antes."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MINISTERIO": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1666,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "El Ministerio informó cuatro días para el área urbana.",
+   "El Ministerio informa que la carnetización es gratuita.",
+   "¿Cuánto informó el Ministerio?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MISMO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1992,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "¿Usa el mismo número de contacto?",
+   "¿Cuesta lo mismo que la cédula física?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MODALIDAD": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.2898,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Quiero revisar fecha y modalidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MODIFICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "No borre ni modifique mensajes relacionados al hecho."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MONTO": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.174,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿El monto aparece en línea?",
+   "Consulte primero el monto actualizado antes de pagar.",
+   "Primero confirmaré el monto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MOTO": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.1626,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Quiero saber cuánto debo de mi moto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MULTA": {
+  "zona": null,
+  "titan": "Números",
+  "similitud": 0.176,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MUNICIPAL": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1506,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "¿Ese número aparece en la página municipal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "MUY": {
+  "zona": "Respuesta",
+  "titan": "Respuesta",
+  "similitud": 0.2163,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Sí, pero escribí muy poco."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NACIMIENTO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1853,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Tiene certificado de nacimiento original computarizado?",
+   "Perdí mi certificado de nacimiento."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NACIONAL": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1459,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "La norma 2025 mantiene el registro dentro del sistema nacional."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NECESIDAD": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1221,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Registraremos su necesidad de comunicación accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NECESITO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1089,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "No. Necesito atención a distancia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NEGAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Me negaron atención porque necesito lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NIÑEZ": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1561,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Debe activarse la atención de la Defensoría de la Niñez."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NIÑO": {
+  "zona": "Identificación",
+  "titan": "Identificación",
+  "similitud": 0.1443,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Necesito ayuda por un niño de mi familia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NORMA": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1786,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "La norma 2025 mantiene el registro dentro del sistema nacional.",
+   "La norma 2025 incorporó mecanismos de renovación automática.",
+   "Depende de su grado y situación; revise la norma aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NOTARIA": {
+  "zona": null,
+  "titan": "Preguntas",
+  "similitud": 0.1444,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "¿Busca una notaría específica?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NOTARIO": {
+  "zona": null,
+  "titan": "Preguntas",
+  "similitud": 0.1332,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "DIRNOPLU ofrece un buscador de notarios."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NUESTRAS": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1619,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "Sí. Queremos reconocer nuestras firmas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "NUMERO": {
+  "zona": "Números",
+  "titan": "Números",
+  "similitud": 0.3239,
+  "regla": null,
+  "bedrock": "Números",
+  "ejemplos": [
+   "¿Tiene número de inmueble o código catastral?",
+   "No recuerdo esos números.",
+   "¿Qué número de juzgado aparece?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OCTUBRE": {
+  "zona": null,
+  "titan": "Números",
+  "similitud": 0.1834,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "Se informó condonación de multas e intereses hasta octubre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OCURRIDO": {
+  "zona": "Hechos y urgencia",
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3356,
+  "regla": null,
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "¿Trajo algún relato de lo ocurrido?",
+   "Cuente lo ocurrido con sus propias palabras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OCURRIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "¿Cuándo y dónde ocurrió el robo?",
+   "Describa cuándo y dónde ocurrió.",
+   "Ocurrió ayer en una calle del centro."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OFRECER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "DIRNOPLU ofrece un buscador de notarios.",
+   "SERECI ofrece venta de certificados duplicados."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ORIENTACION": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1647,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Viene a denunciar o necesita orientación?",
+   "Llamaré para pedir orientación.",
+   "¿Necesita primero orientación legal o psicológica?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ORIENTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero recibir orientación hoy.",
+   "El equipo puede orientar su ruta de atención.",
+   "Necesito orientación."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "ORIGINAL": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1886,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Tiene certificado de nacimiento original computarizado?",
+   "Tengo el certificado médico original."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OTRA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1553,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "No sé si la otra persona vendrá.",
+   "Perdí mi cédula. Necesito otra."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OTRAS": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1587,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "OTRO": {
+  "zona": "Preguntas",
+  "titan": "Preguntas",
+  "similitud": 0.2356,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "No, pertenece a otra persona.",
+   "Para víctimas, consulte SEPDAVI u otro servicio competente.",
+   "¿El hecho fue robo, estafa u otro delito?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PADRE": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2122,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Necesito otro certificado de defunción de mi padre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PAGAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Todavía hay descuento si pago hoy?",
+   "Consulte primero el monto actualizado antes de pagar.",
+   "¿Entonces no pago el impuesto?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PAGO": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1715,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Puede buscarlos en una boleta de pago anterior."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PARTICIPAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero participar directamente en mi audiencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PARTICULAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿Ya tiene abogado particular?",
+   "¿Tiene actualmente abogado particular?",
+   "¿Cuenta con abogado particular?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PASAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Compré un auto. Quiero pasarlo a mi nombre.",
+   "Quiero saber qué pasó con mi denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PATROCINIO": {
+  "zona": null,
+  "titan": "Instituciones",
+  "similitud": 0.1019,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "SEPDAVI evaluará su acceso al patrocinio y apoyo integral."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PENAL": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.3212,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "¿Su consulta es urgente y penal?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERMITIDO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.2672,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "Debe acreditar la relación permitida y su identidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERMITIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "La atención debe permitir comunicación accesible."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERO": {
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.1051,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Tengo cédula, pero no traje CRPVA."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERSONA": {
+  "zona": null,
+  "titan": "Preguntas",
+  "similitud": 0.2181,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "No, pertenece a otra persona.",
+   "No sé quién fue la persona.",
+   "¿Usted es la persona denunciada o la víctima?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERSONALMENTE": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.1154,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Sí. Quiero ir personalmente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PERTENECER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "No. El lote pertenece a mi hermana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PISO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1729,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Está en el Centro Internacional de Convenciones, piso uno."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PLACA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.0823,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "¿Tiene la placa actual del vehículo?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PLAN": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1355,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Quiere solicitar un Plan Cuotas?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PLAZUELA_CONSTITUCION": {
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.2012,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Está en calle 16 de Julio 680, Plazuela Constitución."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "POBLACION": {
+  "zona": "Identificación",
+  "titan": "Identificación",
+  "similitud": 0.2326,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "La DNA atiende situaciones de protección de esta población."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PODER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Registraremos los datos que usted pueda aportar.",
+   "La renovación puede solicitarse desde seis meses antes.",
+   "¿Puede venir a la oficina de la Defensoría?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PODRÉ": {
+  "zona": null,
+  "titan": "Preguntas",
+  "similitud": 0.1584,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "No sé cuándo podré ir."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PONER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Compré una casa. Quiero ponerla a mi nombre."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "POR_CIENTO": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.146,
+  "regla": null,
+  "bedrock": "Números",
+  "ejemplos": [
+   "¿Le dijeron que necesita treinta por ciento?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "POSIBLE": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1949,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Puede acudir a la Defensoría por posible vulneración de derechos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRECIO": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.1552,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Entonces quiero confirmar el precio primero.",
+   "¿El precio es igual al de defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PREGUNTA": {
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.1938,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "Quiero entender todas las preguntas de la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PREGUNTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito hacerle algunas preguntas sobre la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRESENCIAL": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1661,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿La estafa ocurrió por internet o presencialmente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRESENCIALMENTE": {
+  "zona": null,
+  "titan": "Preguntas",
+  "similitud": 0.1225,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "¿Puede acudir presencialmente ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PRIMERO": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1629,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "Consulte primero el monto actualizado antes de pagar.",
+   "Primero confirmaré el monto.",
+   "Primero confirmaré la sede."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PROCEDIMIENTO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2063,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PROCESO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2621,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "¿Qué necesita consultar de su proceso?",
+   "¿Tiene acceso a su proceso en ROMA?",
+   "Quiero saber cómo está mi proceso."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PROPIO": {
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.224,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "Cuente lo ocurrido con sus propias palabras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PSICOLOGICA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1982,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Necesito ayuda legal y psicológica.",
+   "¿Necesita primero orientación legal o psicológica?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PUBLICADO": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.2494,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "La certificación de firmas tiene arancel publicado específico."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "PUBLICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "El arancel publicado incluye anticréticos entre otras escrituras."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "QUEDA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.169,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Queda entre Antezana y Lanza, Edificio Aly."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "QUEDAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Hechos y urgencia",
+  "ejemplos": [
+   "Fue extravío. No sé dónde quedó."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "QUITAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "Fue robo. Me quitaron el celular."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RADICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "¿El vehículo está radicado en Cochabamba?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RECLAMO": {
+  "zona": null,
+  "titan": "Preguntas",
+  "similitud": 0.1471,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero presentar mi reclamo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RECOCNER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Sí. Queremos reconocer nuestras firmas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REEMPLAZAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "La reposición mantiene la vigencia del documento reemplazado."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGISTRADO": {
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.1345,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Sí. Está registrado aquí.",
+   "Sí. Está registrado en Cochabamba."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGISTRAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Sí. La casa está registrada a mi nombre.",
+   "¿Qué trámite viene a registrar?",
+   "Registraremos los datos que usted pueda aportar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGISTRO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.167,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "La norma 2025 mantiene el registro dentro del sistema nacional."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REGLAMENTO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1931,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "El reglamento exige validarlo con los datos de SERECI."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RELACION": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.2488,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Debe acreditar la relación permitida y su identidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RELACIONAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "No borre ni modifique mensajes relacionados al hecho."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RELATO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.293,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "¿Trajo algún relato de lo ocurrido?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RENOVACION": {
+  "zona": null,
+  "titan": "Descripción",
+  "similitud": 0.1079,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "La renovación puede solicitarse desde seis meses antes.",
+   "La norma 2025 incorporó mecanismos de renovación automática."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RENOVAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Entonces ya puedo renovarla."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REPOSICION": {
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.1309,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Haré la reposición."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REPRESENTACIÓN": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1635,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Existe representación en Centro Integral FELCV, avenida Beijing."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REPRESENTAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "No sé si sigue representándome."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RESPONDER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "No quiero responder sin comprender bien.",
+   "Puedo responder.",
+   "No responderé cosas que no comprendo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "REVISAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero revisar la deuda de mi casa.",
+   "Sí, pero no sé dónde revisar.",
+   "Debemos revisar la información de su expediente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "RUTA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2273,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Para violencia corresponde activar la ruta de FELCV.",
+   "FELCV atiende hechos de violencia y activa la ruta correspondiente.",
+   "El equipo puede orientar su ruta de atención."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SACAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Necesito sacar mi cédula por primera vez.",
+   "Quiero sacar mi carnet de discapacidad."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SALIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Debo confirmar antes de salir?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEDE": {
+  "zona": "Lugares",
+  "titan": "Lugares",
+  "similitud": 0.2003,
+  "regla": null,
+  "bedrock": "Lugares",
+  "ejemplos": [
+   "Primero confirmaré la sede.",
+   "Primero confirmaré la sede y horario."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEGURO": {
+  "zona": null,
+  "titan": "Estado y emoción",
+  "similitud": 0.197,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿Está en un lugar seguro ahora?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SERVICIO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2349,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "Para víctimas, consulte SEPDAVI u otro servicio competente.",
+   "Entiendo. Iré al servicio para víctimas.",
+   "El servicio para violencia familiar figura actualizado en 2026."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SERVIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "No sé si sirve copia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEÑALAMIENTO": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2529,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "La modalidad depende del señalamiento de su expediente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SEÑAS": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.17,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito comunicarme usando lengua de señas.",
+   "Me negaron atención porque necesito lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SIGA": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1509,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Conserve esos elementos y siga instrucciones del investigador."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SIGUIR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Entonces aquí no sigo el trámite?",
+   "¿El trámite sigue usando el sistema SIPRUNPCD?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SISTEMA": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1919,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "¿El trámite sigue usando el sistema SIPRUNPCD?",
+   "La norma 2025 mantiene el registro dentro del sistema nacional."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SITUACION": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1979,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "La DNA atiende situaciones de protección de esta población.",
+   "Depende de su grado y situación; revise la norma aplicable."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOBRINO": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1888,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Vine por violencia contra mi sobrino adolescente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOLICITAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Quiero solicitar ese certificado.",
+   "¿Quiere solicitar un Plan Cuotas?",
+   "La renovación puede solicitarse desde seis meses antes."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOLICITUD": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.1033,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Quiero que quede registrada mi solicitud."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "SOLO": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.1039,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "No tengo memorial. Solo traje mi cédula.",
+   "¿Su deuda corresponde solamente a 2025?",
+   "Solo legal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TAMBIEN": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.2305,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Quiero recibir instrucciones claras por escrito también.",
+   "¿Puedo verificar también el documento después?",
+   "¿También tienen línea gratuita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TARDAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "¿Cuánto tarda en ciudad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TEXTO": {
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.186,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Quiero texto.",
+   "Necesito texto e intérprete."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TIEMPO": {
+  "zona": null,
+  "titan": "Tiempo",
+  "similitud": 0.2424,
+  "regla": null,
+  "bedrock": "Tiempo",
+  "ejemplos": [
+   "Falta más tiempo."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TIPO": {
+  "zona": null,
+  "titan": "Identificación",
+  "similitud": 0.1641,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿Qué tipo de apoyo necesita?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TITULAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "Sí, soy titular."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TODAS": {
+  "zona": "Respuesta",
+  "titan": "Respuesta",
+  "similitud": 0.1717,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Quiero entender todas las preguntas de la denuncia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TODAVÍA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1388,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "¿Todavía hay descuento si pago hoy?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TODO": {
+  "zona": null,
+  "titan": "Objetos",
+  "similitud": 0.1507,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Sí, tengo todo.",
+   "Volveré cuando tenga todo.",
+   "No puedo pagar toda la deuda del auto."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TODOS": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1541,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "Mi expareja me amenaza todos los días."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRAJE": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1316,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Ya la traje escrita."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRANSFERENCIA": {
+  "zona": "Documentos",
+  "titan": "Documentos",
+  "similitud": 0.2155,
+  "regla": null,
+  "bedrock": "Documentos",
+  "ejemplos": [
+   "Tengo capturas y comprobante de transferencia."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRIBUNAL": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1372,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "SIREJ indica acudir a información del Tribunal."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "TRIBUNAL_DEPARTAMENTAL": {
+  "zona": "Instituciones",
+  "titan": "Instituciones",
+  "similitud": 0.2135,
+  "regla": null,
+  "bedrock": "Instituciones",
+  "ejemplos": [
+   "¿Dónde está el Tribunal Departamental?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "URBANA": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.1735,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "El Ministerio informó cuatro días para el área urbana."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "USANDO": {
+  "zona": null,
+  "titan": "Cortesía",
+  "similitud": 0.1808,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Necesito comunicarme usando lengua de señas."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "USAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "Tengo el caso, pero no sé usarlo.",
+   "No sé usarlo.",
+   "¿Usa el mismo número de contacto?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "USTED": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2331,
+  "regla": null,
+  "bedrock": "Preguntas",
+  "ejemplos": [
+   "¿Usted está denunciado o es víctima?",
+   "Registraremos los datos que usted pueda aportar."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VALIDAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "El reglamento exige validarlo con los datos de SERECI."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VALIDO": {
+  "zona": "Descripción",
+  "titan": "Descripción",
+  "similitud": 0.1618,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "No sé si es válido."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VEHICULO": {
+  "zona": null,
+  "titan": "Lugares",
+  "similitud": 0.0999,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Tiene la placa actual del vehículo?",
+   "¿Busca deuda de inmueble o vehículo?",
+   "¿El vehículo está radicado en Cochabamba?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VEHÍCULO": {
+  "zona": "Objetos",
+  "titan": "Objetos",
+  "similitud": 0.3029,
+  "regla": null,
+  "bedrock": "Objetos",
+  "ejemplos": [
+   "¿Su deuda es de vehículo, inmueble o actividad?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VENCER": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "¿Su cédula ya venció?",
+   "Está vencido.",
+   "No está vencido."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VENTA": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1491,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "SERECI ofrece venta de certificados duplicados."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VERBALMENTE": {
+  "zona": null,
+  "titan": "Acciones",
+  "similitud": 0.1611,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "¿Desea denunciar verbalmente o trae escrito?",
+   "Quiero hacerlo verbalmente.",
+   "Verbalmente."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VERIFICAR": {
+  "zona": "Acciones",
+  "titan": "Acciones",
+  "similitud": 1.0,
+  "regla": "verbo",
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Puedo verificar también el documento después?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VICTIMA": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2416,
+  "regla": null,
+  "bedrock": "Identificación",
+  "ejemplos": [
+   "¿Usted es la persona denunciada o la víctima?",
+   "Soy víctima.",
+   "Fui víctima de robo. Necesito abogado gratuito."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIENES": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.1795,
+  "regla": null,
+  "bedrock": "Acciones",
+  "ejemplos": [
+   "¿Viene a registrar una defunción?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIGENCIA": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1675,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "La reposición mantiene la vigencia del documento reemplazado."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIGENTE": {
+  "zona": null,
+  "titan": "Respuesta",
+  "similitud": 0.1561,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "No sé si están vigentes.",
+   "¿La dirección sigue vigente?"
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VIRTUAL": {
+  "zona": null,
+  "titan": "Estado y emoción",
+  "similitud": 0.1493,
+  "regla": null,
+  "bedrock": "Descripción",
+  "ejemplos": [
+   "No sé si mi audiencia es virtual.",
+   "Desde 2026 existe atención virtual en LSB."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "VULNERACION": {
+  "zona": null,
+  "titan": "Hechos y urgencia",
+  "similitud": 0.2162,
+  "regla": null,
+  "bedrock": "Conceptos jurídicos",
+  "ejemplos": [
+   "Puede acudir a la Defensoría por posible vulneración de derechos."
+  ],
+  "fecha": "2026-09-27"
+ },
+ "YA": {
+  "zona": null,
+  "titan": "Documentos",
+  "similitud": 0.1654,
+  "regla": null,
+  "bedrock": "Respuesta",
+  "ejemplos": [
+   "Ya la traje escrita.",
+   "¿Ya tiene abogado particular?",
+   "¿Su cédula ya venció?"
+  ],
+  "fecha": "2026-09-27"
+ }
+}
