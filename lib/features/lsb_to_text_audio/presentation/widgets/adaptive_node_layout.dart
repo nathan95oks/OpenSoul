@@ -25,6 +25,12 @@ class AdaptiveNodeLayout extends StatelessWidget {
   /// [SemanticNode.onPreview]). Sin él, las tarjetas solo responden al toque.
   final Future<void> Function(LsbCard)? onCardPreview;
 
+  /// Se empezó a mantener una tarjeta: preparar su vista previa.
+  final void Function(LsbCard)? onCardPreviewPrepare;
+
+  /// Se soltó antes de llenarse: descartar lo preparado.
+  final VoidCallback? onCardPreviewCancel;
+
   const AdaptiveNodeLayout({
     super.key,
     required this.cards,
@@ -32,6 +38,8 @@ class AdaptiveNodeLayout extends StatelessWidget {
     this.selectedGlosses = const {},
     this.selectedIds,
     this.onCardPreview,
+    this.onCardPreviewPrepare,
+    this.onCardPreviewCancel,
     this.requiresSelection = false,
   });
 
@@ -125,6 +133,10 @@ class AdaptiveNodeLayout extends StatelessWidget {
       requiresSelection: requiresSelection,
       onTap: () => onCardTap(card),
       onPreview: preview == null ? null : () => preview(card),
+      onPreviewPrepare: onCardPreviewPrepare == null
+          ? null
+          : () => onCardPreviewPrepare!(card),
+      onPreviewCancel: onCardPreviewCancel,
     );
   }
 }

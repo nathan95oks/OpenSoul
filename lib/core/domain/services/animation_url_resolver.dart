@@ -18,7 +18,7 @@ class AnimationUrlResolver {
   static const String compositeSeparator = '+';
 
   /// Senas horneadas en `avatar_test.glb`, tomadas del propio modelo: son los
-  /// 149 clips de su lista de animaciones, en su forma canonica.
+  /// 157 clips de su lista de animaciones (menos NEUTRO1..3, los movimientos de reposo, que no son señas), en su forma canonica.
   ///
   /// Las cuatro palabras con ene se hornearon con N (`DANAR`) y ademas se
   /// listan con su grafia de glosa (`DAÑAR`), que es la que llega aqui;
@@ -36,19 +36,23 @@ class AnimationUrlResolver {
     'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE',
     'OCHO', 'NUEVE', 'DIEZ',
     // Senas.
-    'ABOGADO', 'ACEPTAR', 'ACOMPANAR', 'ADENTRO', 'AHORA', 'ALLI',
+    'ABOGADO', 'ACEPTAR', 'ACOMPANAR', 'AHORA', 'ALLI', 'ASISTENCIA',
     'AMENAZAR', 'AQUI', 'ATENDER', 'AUN', 'AUTORIDAD', 'AVENIDA', 'AYER',
     'AYUDAR', 'BANCO', 'BILLETES', 'BUSCAR', 'CALLE', 'CARPETA', 'CASA',
     'CELULAR', 'CERCA', 'CERTIFICADO', 'COMO', 'COMO_ESTAS', 'COMPRENDER',
-    'CONTESTAR', 'CUAL', 'CUANDO', 'CUANTOS', 'DANAR', 'DAR', 'DONDE', 'EL',
+    'CONTESTAR', 'CUAL', 'CUANDO', 'CUANTOS', 'DANAR', 'DAR', 'DENTRO',
+    'DONDE', 'EL',
     'ELLA', 'ELLOS', 'ENGANAR', 'ENVIAR', 'ESCRIBIR', 'ESPERAR', 'EXPLICAR',
     'FACTURA', 'FECHA', 'FOTOCOPIA', 'FOTOS', 'GRACIAS', 'GUARDAR', 'HABLAR',
-    'HERIDA', 'HOLA', 'HOMBRE', 'HOY', 'IDENTIDAD', 'INTERPRETE',
+    'HERIDA', 'HOLA', 'HOMBRE', 'HORA', 'HOSPITAL', 'HOY', 'IDENTIDAD',
+    'INTERPRETE',
     'INVESTIGACION', 'JUEZ', 'JUSTICIA', 'LEER', 'LENTO', 'LO_SIENTO',
     'MANANA', 'MIEDO', 'MIO', 'MOSTRAR', 'MUCHO', 'MUJER', 'NECESITAR', 'NO',
     'NOMBRE', 'NOSOTROS', 'NO_PUEDO', 'NO_SABER', 'NUEVO', 'OBSERVAR',
     'OFICINA', 'PAPEL', 'PARA_QUE', 'PEDIR', 'PEGAR', 'PERDER', 'PERMISO',
-    'POR_FAVOR', 'POR_QUE', 'PRIMERA_VEZ', 'PROTEGER', 'QUE', 'QUEJAR',
+    'POLICIA',
+    'POR_FAVOR', 'POR_QUE', 'PRIMERA_VEZ', 'PROTEGER', 'PUEDO', 'QUE',
+    'QUEJAR',
     'QUERER', 'QUIEN', 'RECHAZAR', 'RECIBIR', 'RECORDAR', 'RESOLUCION',
     'ROBAR', 'SABER', 'SEMANA', 'SI', 'SORDO', 'TARDE', 'TENER', 'TESTIGO',
     'TESTIMONIO', 'TRAER', 'TRAMITE', 'TU', 'USTEDES', 'VENIR', 'VER',

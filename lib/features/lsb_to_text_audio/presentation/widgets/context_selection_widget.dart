@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/motion.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
@@ -21,8 +22,10 @@ class _ContextSelectionWidgetState
 
   /// La familia que pidió Conversation («¿Quiere denunciar algo?» abre
   /// Denuncias). La persona puede volver a la lista general igual.
-  static ContextFamily? _familiaDe(CardsFlowLaunch launch) {
-    final id = launch.focusedFamilyId;
+  static ContextFamily? _familiaDe(CardsFlowLaunch launch) =>
+      _familiaPorId(launch.focusedFamilyId);
+
+  static ContextFamily? _familiaPorId(String? id) {
     if (id == null) return null;
     for (final f in contextFamilies) {
       if (f.id == id) return f;
@@ -33,14 +36,45 @@ class _ContextSelectionWidgetState
   @override
   void initState() {
     super.initState();
-    _abierta = _familiaDe(ref.read(cardsFlowLaunchProvider));
+    // Al volver de un contexto con la flecha, la lista de su familia sigue
+    // abierta (Denuncias → Denunciar robo → ← vuelve a Denuncias).
+    _abierta =
+        _familiaPorId(ref.read(openFamilyProvider)) ??
+        _familiaDe(ref.read(cardsFlowLaunchProvider));
+    // La familia que abrió la conversación también cuenta como abierta (la
+    // barra superior oculta su flecha); se anota tras el primer cuadro.
+    final abierta = _abierta;
+    if (abierta != null && ref.read(openFamilyProvider) != abierta.id) {
+      Future.microtask(() {
+        if (mounted) ref.read(openFamilyProvider.notifier).open(abierta.id);
+      });
+    }
+  }
+
+  Widget _familyButton(ContextFamily f, String? highlightedId) => _FamilyButton(
+    family: f,
+    highlighted: highlightedId != null && f.contextIds.contains(highlightedId),
+    onTap: () {
+      final contextos = contextsOfFamily(f);
+      if (contextos.length == 1) {
+        ref.read(contextProvider.notifier).setContext(contextos.first);
+      } else {
+        _abrir(f);
+      }
+    },
+  );
+
+  void _abrir(ContextFamily? familia) {
+    setState(() => _abierta = familia);
+    final recordada = ref.read(openFamilyProvider.notifier);
+    familia == null ? recordada.clear() : recordada.open(familia.id);
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen(cardsFlowLaunchProvider, (anterior, launch) {
       if (anterior?.sameErrand(launch) ?? false) return;
-      setState(() => _abierta = _familiaDe(launch));
+      _abrir(_familiaDe(launch));
     });
     final pending = ref.watch(pendingReplyProvider);
     final suggestion = pending?.suggestion;
@@ -85,27 +119,16 @@ class _ContextSelectionWidgetState
             ),
             const SizedBox(height: 28),
             if (familia == null)
-              ...contextFamilies.map(
-                (f) => _FamilyButton(
-                  family: f,
-                  highlighted:
-                      highlightedId != null &&
-                      f.contextIds.contains(highlightedId),
-                  onTap: () {
-                    final contextos = contextsOfFamily(f);
-                    if (contextos.length == 1) {
-                      ref
-                          .read(contextProvider.notifier)
-                          .setContext(contextos.first);
-                    } else {
-                      setState(() => _abierta = f);
-                    }
-                  },
+              ...contextFamilies.indexed.map(
+                (e) => BubbleEntrance(
+                  key: ValueKey('menu_${e.$2.id}'),
+                  index: e.$1,
+                  child: _familyButton(e.$2, highlightedId),
                 ),
               )
             else ...[
               TextButton.icon(
-                onPressed: () => setState(() => _abierta = null),
+                onPressed: () => _abrir(null),
                 icon: const Icon(Icons.arrow_back, size: 18),
                 label: const Text('Volver'),
                 style: TextButton.styleFrom(
@@ -113,13 +136,17 @@ class _ContextSelectionWidgetState
                 ),
               ),
               const SizedBox(height: 8),
-              ...desplegados.map(
-                (ctx) => _ContextButton(
-                  context: ctx,
-                  highlighted: ctx.id == highlightedId,
-                  suggestion: ctx.id == suggestion?.contextId
-                      ? suggestion
-                      : null,
+              ...desplegados.indexed.map(
+                (e) => BubbleEntrance(
+                  key: ValueKey('${familia.id}_${e.$2.id}'),
+                  index: e.$1,
+                  child: _ContextButton(
+                    context: e.$2,
+                    highlighted: e.$2.id == highlightedId,
+                    suggestion: e.$2.id == suggestion?.contextId
+                        ? suggestion
+                        : null,
+                  ),
                 ),
               ),
             ],
@@ -152,52 +179,54 @@ class _FamilyButton extends StatelessWidget {
       excludeSemantics: true,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 12),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-            decoration: BoxDecoration(
-              color: AppTheme.lightSurface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: highlighted
-                    ? AppTheme.brandPrimary
-                    : AppTheme.lightBorder,
-                width: highlighted ? 2 : 1,
-              ),
-              boxShadow: AppTheme.cardShadow,
-            ),
-            child: Row(
-              children: [
-                Text(family.emoji, style: const TextStyle(fontSize: 30)),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        family.name,
-                        style: const TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w800,
-                          color: AppTheme.lightText,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        family.description,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: AppTheme.lightTextSub,
-                          height: 1.3,
-                        ),
-                      ),
-                    ],
-                  ),
+        child: BubblePress(
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+              decoration: BoxDecoration(
+                color: AppTheme.lightSurface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: highlighted
+                      ? AppTheme.brandPrimary
+                      : AppTheme.lightBorder,
+                  width: highlighted ? 2 : 1,
                 ),
-                const Icon(Icons.chevron_right, color: AppTheme.lightTextSub),
-              ],
+                boxShadow: AppTheme.cardShadow,
+              ),
+              child: Row(
+                children: [
+                  Text(family.emoji, style: const TextStyle(fontSize: 30)),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          family.name,
+                          style: const TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w800,
+                            color: AppTheme.lightText,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          family.description,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.lightTextSub,
+                            height: 1.3,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.chevron_right, color: AppTheme.lightTextSub),
+                ],
+              ),
             ),
           ),
         ),
@@ -307,101 +336,103 @@ class _ContextButtonState extends ConsumerState<_ContextButton> {
           if (evidence.isNotEmpty) 'Detectado: ${evidence.join(", ")}',
         ].join(' '),
         excludeSemantics: true,
-        child: GestureDetector(
-          onTapDown: (_) => setState(() => _hovered = true),
-          onTapUp: (_) {
-            setState(() => _hovered = false);
-            ref.read(contextProvider.notifier).setContext(widget.context);
-          },
-          onTapCancel: () => setState(() => _hovered = false),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 120),
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-            decoration: BoxDecoration(
-              color: AppTheme.lightSurface,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: active ? _orange : AppTheme.lightBorder,
-                width: active ? 2 : 1.5,
-              ),
-              boxShadow: AppTheme.cardShadow,
-            ),
-            child: Row(
-              children: [
-                Text(
-                  widget.context.emoji,
-                  style: const TextStyle(fontSize: 26),
+        child: BubblePress(
+          child: GestureDetector(
+            onTapDown: (_) => setState(() => _hovered = true),
+            onTapUp: (_) {
+              setState(() => _hovered = false);
+              ref.read(contextProvider.notifier).setContext(widget.context);
+            },
+            onTapCancel: () => setState(() => _hovered = false),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 120),
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              decoration: BoxDecoration(
+                color: AppTheme.lightSurface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: active ? _orange : AppTheme.lightBorder,
+                  width: active ? 2 : 1.5,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              widget.context.name,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: active ? _orange : AppTheme.lightText,
-                              ),
-                            ),
-                          ),
-                          if (badge != null) ...[
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 7,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _orange,
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                boxShadow: AppTheme.cardShadow,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    widget.context.emoji,
+                    style: const TextStyle(fontSize: 26),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
                               child: Text(
-                                badge,
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.6,
-                                  color: Colors.white,
+                                widget.context.name,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: active ? _orange : AppTheme.lightText,
                                 ),
                               ),
                             ),
+                            if (badge != null) ...[
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 7,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _orange,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  badge,
+                                  style: const TextStyle(
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.6,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        widget.context.description,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: AppTheme.lightTextSub,
                         ),
-                      ),
-                      if (evidence.isNotEmpty) ...[
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 2),
                         Text(
-                          'Detectado: ${evidence.join(" · ")}',
+                          widget.context.description,
                           style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.brandPrimary,
+                            fontSize: 13,
+                            color: AppTheme.lightTextSub,
                           ),
                         ),
+                        if (evidence.isNotEmpty) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            'Detectado: ${evidence.join(" · ")}',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: AppTheme.brandPrimary,
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 14,
-                  color: active ? _orange : AppTheme.lightTextSub,
-                ),
-              ],
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14,
+                    color: active ? _orange : AppTheme.lightTextSub,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

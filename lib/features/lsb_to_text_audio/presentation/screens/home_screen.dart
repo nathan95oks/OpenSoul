@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/core/presentation/widgets/motion.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
@@ -31,9 +32,18 @@ class HomeScreen extends ConsumerWidget {
       backgroundColor: AppTheme.lightBg,
       appBar: _buildAppBar(context, ref, contextState),
       body: SafeArea(
-        child: contextState == null
-            ? const ContextSelectionWidget()
-            : _buildUnifiedFlow(context, ref, contextState),
+        // Entrar a una sección, o volver, aparece como una burbuja en vez de
+        // cambiar de golpe.
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 320),
+          transitionBuilder: bubbleSwitcherTransition,
+          child: KeyedSubtree(
+            key: ValueKey(contextState?.id ?? 'seleccion'),
+            child: contextState == null
+                ? const ContextSelectionWidget()
+                : _buildUnifiedFlow(context, ref, contextState),
+          ),
+        ),
       ),
     );
   }
@@ -48,6 +58,10 @@ class HomeScreen extends ConsumerWidget {
         .purpose
         .servesConversation;
     final enSeleccionGlosas = contextState != null;
+    // Dentro de una familia (Denuncias, Trámites) se vuelve con su «Volver»:
+    // la flecha de arriba solo está en la primera pantalla.
+    final enFamilia =
+        !enSeleccionGlosas && ref.watch(openFamilyProvider) != null;
 
     final Widget? leadingWidget = enSeleccionGlosas
         ? IconButton(
@@ -56,7 +70,7 @@ class HomeScreen extends ConsumerWidget {
             tooltip: 'Volver a los contextos',
             onPressed: () => ref.read(cardsFlowSessionProvider).reset(),
           )
-        : (sirveConversacion
+        : (sirveConversacion && !enFamilia
               ? IconButton(
                   icon: const Icon(Icons.arrow_back, color: AppTheme.ink),
                   tooltip: 'Volver a la conversación',

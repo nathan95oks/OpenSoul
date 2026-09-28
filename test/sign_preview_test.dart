@@ -134,6 +134,16 @@ class _Arnes {
 
 const _relleno = Key('relleno_vista_previa');
 
+/// Si hay una vista previa a la vista (la preparada es invisible).
+bool _vistaPreviaVisible(WidgetTester tester) => tester
+    .widgetList<Opacity>(
+      find.descendant(
+        of: find.byType(SignPreviewOverlay),
+        matching: find.byType(Opacity),
+      ),
+    )
+    .any((o) => o.opacity > 0);
+
 Finder _tarjeta(String formulacion) => find.ancestor(
   of: find.text(formulacion),
   matching: find.byType(SemanticNode),
@@ -238,7 +248,11 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(elegida(arnes.container, 'ROBAR'), isTrue);
-      expect(find.byType(SignPreviewOverlay), findsNothing);
+      expect(
+        find.byType(SignPreviewOverlay),
+        findsNothing,
+        reason: 'un toque corto no prepara ni abre el avatar',
+      );
       expect(arnes.avatar.planes, isEmpty);
     });
 
@@ -290,7 +304,9 @@ void main() {
 
       await tester.pump(const Duration(milliseconds: 660));
       expect(progreso(tester, 'ROBAR'), closeTo(0.5, 0.02));
-      expect(find.byType(SignPreviewOverlay), findsNothing);
+      // El avatar ya se prepara, pero no se ve ni hace ninguna seña.
+      expect(_vistaPreviaVisible(tester), isFalse);
+      expect(arnes.avatar.planes.where((p) => p.glosses.isNotEmpty), isEmpty);
 
       await gesto.up();
       await tester.pumpAndSettle();
@@ -314,8 +330,10 @@ void main() {
       expect(progreso(tester, 'ROBAR'), isNull);
       await tester.pump(const Duration(seconds: 1));
 
+      // Lo preparado mientras se mantenía se descarta al soltar: no queda
+      // capa ni se hizo ninguna seña.
       expect(find.byType(SignPreviewOverlay), findsNothing);
-      expect(arnes.avatar.planes, isEmpty);
+      expect(arnes.avatar.planes.where((p) => p.glosses.isNotEmpty), isEmpty);
       expect(
         elegida(arnes.container, 'ROBAR'),
         isFalse,
@@ -907,8 +925,11 @@ void main() {
   test(
     'la lista del resolutor coincide con los clips del .glb empaquetado',
     () {
-      final clips = _clipsDelGlb('assets/models/avatar_test.glb');
-      expect(clips, hasLength(149));
+      // Los movimientos de reposo (NEUTRO1..3) no son señas.
+      final clips = _clipsDelGlb(
+        'assets/models/avatar_test.glb',
+      ).where((c) => !c.startsWith('NEUTRO')).toList();
+      expect(clips, hasLength(154));
       for (final clip in clips) {
         expect(
           AnimationUrlResolver.available3DGlosses,

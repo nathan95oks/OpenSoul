@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -421,6 +422,38 @@ void main() {
       expect(find.text('Expresión en LSB'), findsOneWidget);
       expect(find.text('OpenSoul'), findsNothing);
       expect(find.byKey(const Key('volver_a_contextos')), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'respondiendo: dentro de una familia no hay flecha arriba, solo «Volver»',
+    (tester) async {
+      final (container, _) = await montar(tester);
+      container
+          .read(cardsFlowLaunchProvider.notifier)
+          .start(
+            const CardsFlowLaunch.reply(
+              conversationId: 'c',
+              hearingTurnId: 't',
+              hearingText: 'hola',
+            ),
+          );
+      container.read(contextProvider.notifier).clearContext();
+      await tester.pumpAndSettle();
+
+      // Primera pantalla: la flecha lleva de vuelta a la conversación.
+      expect(find.byTooltip('Volver a la conversación'), findsOneWidget);
+
+      await tocar(tester, find.text('Denuncias'));
+      expect(find.text('Volver'), findsOneWidget);
+      expect(
+        find.byTooltip('Volver a la conversación'),
+        findsNothing,
+        reason: 'dentro de la familia se vuelve con «Volver»',
+      );
+
+      await tocar(tester, find.text('Volver'));
+      expect(find.byTooltip('Volver a la conversación'), findsOneWidget);
     },
   );
 }
