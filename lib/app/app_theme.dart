@@ -66,6 +66,12 @@ class AppTheme {
   static const Color lsbVioletDeep = Color(0xFF660066);
   static const Color lsbVioletLight = Color(0xFFC084FC);
 
+  // Tarjeta de glosa sin elegir: la versión suave del violeta de LSB, para
+  // que se distinga del fondo blanco sin competir con la elegida (violeta
+  // lleno). Antes era #F4F7FB sin borde y casi no se veía.
+  static const Color glossCardBg = Color(0xFFF3EEFF);
+  static const Color glossCardBorder = Color(0x387C3AED); // lsbViolet al 22 %
+
   // ---- Seña a incorporar -------------------------------------------------------
   // Una palabra sin seña en el catálogo: el azul del audio, no el violeta de
   // LSB, porque todavía no es una seña. Claro sobre la burbuja violeta.
