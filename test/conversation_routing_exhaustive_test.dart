@@ -239,8 +239,9 @@ void main() {
         'Q.PER.DESC.ESTATURA',
         'Q.PER.DESC.CONTEXTURA',
         'Q.PER.DESC.ROPA',
-        // Describir la ropa sin su color no es describirla.
-        'Q.PER.DESC.ROPA_COLOR',
+        // Describir la ropa sin su color no es describirla: cada prenda
+        // trae el suyo (solo se pregunta el de las prendas elegidas).
+        ..._coloresDeRopa,
       ];
       expect(route.pathQuestionIds, rasgos);
       // La puerta «¿Quiere describir a la persona?» no se responde por nadie.
@@ -260,7 +261,7 @@ void main() {
         ('Q.PER.DESC.ESTATURA', 'alto'),
         ('Q.PER.DESC.CONTEXTURA', 'gordo'),
         ('Q.PER.DESC.ROPA', 'chamarra'),
-        ('Q.PER.DESC.ROPA_COLOR', 'negro'),
+        ('Q.PER.DESC.ROPA_COLOR.CHAMARRA', 'negro'),
       ]) {
         expect(session.currentQuestionId, pregunta);
         vistas.add(pregunta);
@@ -274,7 +275,7 @@ void main() {
         final next = flow.nextQuestion(session);
         if (next != null) session = flow.goTo(session, next);
       }
-      expect(vistas, rasgos);
+      expect(vistas, [...rasgos.take(5), 'Q.PER.DESC.ROPA_COLOR.CHAMARRA']);
       expect(flow.canFinish(session), isTrue);
       expect(
         flow.glossesOf(session.toIntervention()),
@@ -321,10 +322,10 @@ void main() {
               (sinTema.type == ConversationRouteType.contextSelector ||
                   sinTema.type == ConversationRouteType.noSafeRoute),
       };
-      // Pedir la ropa abre la ropa y su color, no toda la descripción.
+      // Pedir la ropa abre la ropa y sus colores, no toda la descripción.
       if (question == 'Q.PER.DESC.ROPA' &&
           enTema.pathQuestionIds.join('+') !=
-              'Q.PER.DESC.ROPA+Q.PER.DESC.ROPA_COLOR') {
+              ['Q.PER.DESC.ROPA', ..._coloresDeRopa].join('+')) {
         fallas.add('«${c['texto']}» abre ${enTema.pathQuestionIds}');
       }
       if (!okEnTema) {
@@ -337,3 +338,13 @@ void main() {
     expect(fallas, isEmpty, reason: fallas.join('\n'));
   });
 }
+
+/// El color de cada prenda y, al final, el de «otra prenda».
+const _coloresDeRopa = [
+  'Q.PER.DESC.ROPA_COLOR.POLERA',
+  'Q.PER.DESC.ROPA_COLOR.PANTALON',
+  'Q.PER.DESC.ROPA_COLOR.CHAMARRA',
+  'Q.PER.DESC.ROPA_COLOR.GORRA',
+  'Q.PER.DESC.ROPA_COLOR.MOCHILA',
+  'Q.PER.DESC.ROPA_COLOR',
+];

@@ -8,9 +8,9 @@ Es el contrato que implementan la app (`lib/core/domain/guided/`) y la Lambda (`
 
 | Qué | Cantidad |
 |---|---:|
-| Preguntas del banco | 144 |
+| Preguntas del banco | 149 |
 | Recorridos (uno por contexto) | 8 |
-| Opciones de respuesta | 533 |
+| Opciones de respuesta | 558 |
 | Enunciados del funcionario con pregunta asignada | 98 |
 
 Leyenda: `[GLOSAS]` tarjetas del catálogo; `⟨editor⟩` valor escrito que se conserva literal; *(sin seña)* opción de texto sin glosa; *salida* = No sé / No recuerdo / Ninguno.
@@ -38,15 +38,20 @@ Leyenda: `[GLOSAS]` tarjetas del catálogo; `⟨editor⟩` valor escrito que se 
 | 17 | `Q.PER.DESC.ESTATURA` ¿Era alto o bajo? | Q.PER.DESCRIBIR ∈ {si} | no | Alta [ALTO] → «Era una persona alta.»<br>Baja [BAJO] → «Era una persona baja.»<br>No sé [NO_SABER] *salida* → «No recuerdo su estatura.» |
 | 18 | `Q.PER.DESC.CONTEXTURA` ¿Era delgado o de contextura gruesa? | Q.PER.DESCRIBIR ∈ {si} | no | Delgada [FLACO] → «Era una persona delgada.»<br>De contextura gruesa [GORDO] → «Era una persona de contextura gruesa.»<br>No sé [NO_SABER] *salida* → «No recuerdo su contextura.» |
 | 19 | `Q.PER.DESC.ROPA` ¿Qué ropa llevaba? | Q.PER.DESCRIBIR ∈ {si} | no | Polera [POLERA] → «una polera»<br>Pantalón [PANTALÓN] → «un pantalón»<br>Chamarra [CHAMARRA] → «una chamarra»<br>Gorra [GORRA] → «una gorra»<br>Mochila [MOCHILA] → «una mochila»<br>Otra prenda o color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo su ropa.» |
-| 20 | `Q.PER.DESC.ROPA_COLOR` ¿De qué color era su ropa? | Q.PER.DESC.ROPA ∈ {polera, pantalon, chamarra, gorra, mochila, otro} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de su ropa.» |
-| 21 | `Q.TES.EXISTE` ¿Hay testigos? | siempre | no | Sí [SÍ] → «Sí, hay {Q.TES.CANTIDAD\|testigos}.»<br>No [NO] → «No hay testigos.»<br>No sé [NO_SABER] → «No sé si hay testigos.» |
-| 22 | `Q.TES.CANTIDAD` ¿Cuántos testigos hay? | Q.TES.EXISTE ∈ {si} | no | Escribir cuántos ⟨entero⟩ → «{n} testigos»<br>No sé [NO_SABER] *salida* → «testigos, pero no sé cuántos» |
-| 23 | `Q.EVI.FACTURA` ¿Tiene la factura del celular? | Q.ROB.QUE ∈ {celular} | no | Sí [SÍ] → «Sí, tengo la factura.»<br>No [NO] → «No tengo la factura.»<br>No sé [NO_SABER] → «No sé si tengo la factura.» |
-| 24 | `Q.EVI.TRAE_COPIA` ¿La tiene aquí con usted? | Q.EVI.FACTURA ∈ {si} | no | Sí [SÍ] → «La tengo aquí.»<br>No [NO] → «No la tengo aquí.»<br>No sé [NO_SABER] → «No sé si la traje.» |
-| 25 | `Q.EVI.QUE_TIENE` ¿Tiene fotos, video u otra cosa que pueda mostrar? | siempre | no | Sí [SÍ] → «Sí, tengo {Q.EVI.TIPOS\|algo que puedo mostrar}.»<br>No [NO] → «No tengo fotos, video ni otra cosa para mostrar.»<br>No sé [NO_SABER] → «No sé si tengo algo para mostrar.» |
-| 26 | `Q.EVI.TIPOS` ¿Qué tiene? | Q.EVI.QUE_TIENE ∈ {si} | no | Fotos [FOTOS] → «fotos»<br>Video [VIDEO] → «un video»<br>Certificado [CERTIFICADO] → «un certificado»<br>Otra cosa (escribir) ⟨texto_detalle⟩ → ««{texto}»» |
-| 27 | `Q.DEN.INTENCION` ¿Desea presentar una denuncia? | siempre | no | Sí [SÍ] → «Sí, quiero presentar una denuncia.»<br>No [NO] → «Por ahora no quiero presentar una denuncia.»<br>No sé [NO_SABER] → «Todavía no sé si quiero presentar una denuncia.» |
-| 28 | `Q.DEN.AUTORIDAD` ¿Ante qué institución quiere presentarla? | Q.DEN.INTENCION ∈ {si}; sin perfil institucional | no | Policía [POLICÍA] → «Quiero presentarla ante la Policía.»<br>FELCC [FELCC] → «Quiero presentarla ante la FELCC.»<br>FELCV [FELCV] → «Quiero presentarla ante la FELCV.»<br>Fiscalía [FISCALIA] → «Quiero presentarla ante la Fiscalía.»<br>No sé [NO_SABER] *salida* → «No sé ante qué institución presentarla.» |
+| 20 | `Q.PER.DESC.ROPA_COLOR.POLERA` ¿De qué color era la polera? | Q.PER.DESC.ROPA ∈ {polera} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de la polera.» |
+| 21 | `Q.PER.DESC.ROPA_COLOR.PANTALON` ¿De qué color era el pantalón? | Q.PER.DESC.ROPA ∈ {pantalon} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de el pantalón.» |
+| 22 | `Q.PER.DESC.ROPA_COLOR.CHAMARRA` ¿De qué color era la chamarra? | Q.PER.DESC.ROPA ∈ {chamarra} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de la chamarra.» |
+| 23 | `Q.PER.DESC.ROPA_COLOR.GORRA` ¿De qué color era la gorra? | Q.PER.DESC.ROPA ∈ {gorra} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de la gorra.» |
+| 24 | `Q.PER.DESC.ROPA_COLOR.MOCHILA` ¿De qué color era la mochila? | Q.PER.DESC.ROPA ∈ {mochila} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de la mochila.» |
+| 25 | `Q.PER.DESC.ROPA_COLOR` ¿De qué color era su ropa? | Q.PER.DESC.ROPA ∈ {otro} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de su ropa.» |
+| 26 | `Q.TES.EXISTE` ¿Hay testigos? | siempre | no | Sí [SÍ] → «Sí, hay {Q.TES.CANTIDAD\|testigos}.»<br>No [NO] → «No hay testigos.»<br>No sé [NO_SABER] → «No sé si hay testigos.» |
+| 27 | `Q.TES.CANTIDAD` ¿Cuántos testigos hay? | Q.TES.EXISTE ∈ {si} | no | Escribir cuántos ⟨entero⟩ → «{n} testigos»<br>No sé [NO_SABER] *salida* → «testigos, pero no sé cuántos» |
+| 28 | `Q.EVI.FACTURA` ¿Tiene la factura del celular? | Q.ROB.QUE ∈ {celular} | no | Sí [SÍ] → «Sí, tengo la factura.»<br>No [NO] → «No tengo la factura.»<br>No sé [NO_SABER] → «No sé si tengo la factura.» |
+| 29 | `Q.EVI.TRAE_COPIA` ¿La tiene aquí con usted? | Q.EVI.FACTURA ∈ {si} | no | Sí [SÍ] → «La tengo aquí.»<br>No [NO] → «No la tengo aquí.»<br>No sé [NO_SABER] → «No sé si la traje.» |
+| 30 | `Q.EVI.QUE_TIENE` ¿Tiene fotos, video u otra cosa que pueda mostrar? | siempre | no | Sí [SÍ] → «Sí, tengo {Q.EVI.TIPOS\|algo que puedo mostrar}.»<br>No [NO] → «No tengo fotos, video ni otra cosa para mostrar.»<br>No sé [NO_SABER] → «No sé si tengo algo para mostrar.» |
+| 31 | `Q.EVI.TIPOS` ¿Qué tiene? | Q.EVI.QUE_TIENE ∈ {si} | no | Fotos [FOTOS] → «fotos»<br>Video [VIDEO] → «un video»<br>Certificado [CERTIFICADO] → «un certificado»<br>Otra cosa (escribir) ⟨texto_detalle⟩ → ««{texto}»» |
+| 32 | `Q.DEN.INTENCION` ¿Desea presentar una denuncia? | siempre | no | Sí [SÍ] → «Sí, quiero presentar una denuncia.»<br>No [NO] → «Por ahora no quiero presentar una denuncia.»<br>No sé [NO_SABER] → «Todavía no sé si quiero presentar una denuncia.» |
+| 33 | `Q.DEN.AUTORIDAD` ¿Ante qué institución quiere presentarla? | Q.DEN.INTENCION ∈ {si}; sin perfil institucional | no | Policía [POLICÍA] → «Quiero presentarla ante la Policía.»<br>FELCC [FELCC] → «Quiero presentarla ante la FELCC.»<br>FELCV [FELCV] → «Quiero presentarla ante la FELCV.»<br>Fiscalía [FISCALIA] → «Quiero presentarla ante la Fiscalía.»<br>No sé [NO_SABER] *salida* → «No sé ante qué institución presentarla.» |
 
 ## Recorrido `violencia` — Violencia o agresión
 
