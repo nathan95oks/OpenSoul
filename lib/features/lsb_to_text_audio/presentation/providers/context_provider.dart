@@ -27,11 +27,33 @@ class OpenFamilyNotifier extends Notifier<String?> {
   @override
   String? build() => null;
 
-  void open(String familyId) => state = familyId;
+  void open(String familyId) {
+    if (state != familyId) ref.read(openSectionProvider.notifier).clear();
+    state = familyId;
+  }
 
-  void clear() => state = null;
+  void clear() {
+    ref.read(openSectionProvider.notifier).clear();
+    state = null;
+  }
 }
 
 final openFamilyProvider = NotifierProvider<OpenFamilyNotifier, String?>(
   OpenFamilyNotifier.new,
+);
+
+/// La sección abierta dentro de una familia (en «Trámites», la institución:
+/// SEGIP, SERECI…). Como la familia, se recuerda al volver de uno de sus
+/// contextos; cerrar u olvidar la familia la cierra.
+class OpenSectionNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void open(String sectionId) => state = sectionId;
+
+  void clear() => state = null;
+}
+
+final openSectionProvider = NotifierProvider<OpenSectionNotifier, String?>(
+  OpenSectionNotifier.new,
 );
