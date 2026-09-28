@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/presentation/session/usage_mode_provider.dart';
@@ -39,6 +40,7 @@ class CounterSession {
     // lo anterior mientras se escribe en disco.
     ref.read(conversationProvider.notifier).startNew();
     await ref.read(cardsFlowSessionProvider).reset();
+    ref.read(openFamilyProvider.notifier).clear();
     ref
         .read(cardsFlowLaunchProvider.notifier)
         .start(const CardsFlowLaunch.standalone());
@@ -52,5 +54,4 @@ class CounterSession {
       ref.read(usageSessionProvider).institutionProfileId;
 }
 
-final counterSessionProvider =
-    Provider<CounterSession>(CounterSession.new);
+final counterSessionProvider = Provider<CounterSession>(CounterSession.new);

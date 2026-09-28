@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,7 +35,60 @@ class SignPreviewController {
 
   Route<void>? _active;
 
-  bool get isShowing => _active?.isActive ?? false;
+  /// La vista previa que se está preparando mientras se mantiene la tarjeta.
+  _Preparada? _prepared;
+
+  bool get isShowing =>
+      (_active?.isActive ?? false) || (_prepared?.visible.value ?? false);
+
+  /// Empieza a cargar el avatar de [glosses] sin mostrarlo: la persona está
+  /// manteniendo la tarjeta. Si la llena, [show] solo lo hace visible y la
+  /// seña empieza sin la espera de cargar el visor; si suelta antes,
+  /// [cancelPrepared] lo descarta sin que se note.
+  ///
+  /// Se carga en una capa superpuesta, no en una ruta: abrir una ruta cancela
+  /// los gestos en curso y cortaba la pulsación que se estaba manteniendo.
+  void prepare(BuildContext context, List<String> glosses) {
+    final plan = ref.read(signPreviewPlannerProvider).plan(glosses);
+    if (!plan.isPlayable) return;
+    cancelPrepared();
+    close();
+    final overlay = Overlay.maybeOf(context, rootOverlay: true);
+    if (overlay == null) return;
+    final player = ref.read(signPreviewPlayerProvider);
+    final preparada = _Preparada(
+      glosses.join('|'),
+      ModalRoute.of(context),
+      overlay,
+    );
+    preparada.entry = OverlayEntry(
+      builder: (_) => SignPreviewOverlay(
+        plan: plan,
+        player: player,
+        visible: preparada.visible,
+        onFinished: () => _cerrar(preparada),
+      ),
+    );
+    _prepared = preparada;
+    overlay.insert(preparada.entry!);
+  }
+
+  /// Descarta la vista previa preparada si no llegó a mostrarse.
+  void cancelPrepared() {
+    final preparada = _prepared;
+    if (preparada != null && !preparada.visible.value) _cerrar(preparada);
+  }
+
+  void _cerrar(_Preparada preparada) {
+    if (identical(_prepared, preparada)) _prepared = null;
+    // Si la pantalla entera se está cerrando, la capa ya se va con ella.
+    if (preparada.overlay.mounted) preparada.entry?.remove();
+    preparada.entry = null;
+    final historial = preparada.historial;
+    preparada.historial = null;
+    if (historial != null) preparada.route?.removeLocalHistoryEntry(historial);
+    if (!preparada.cerrada.isCompleted) preparada.cerrada.complete();
+  }
 
   /// Previsualiza [glosses] en su orden y termina cuando la capa se cierra.
   ///
@@ -41,6 +96,25 @@ class SignPreviewController {
   /// discreción y no abre nada. Una vista previa anterior se cierra antes de
   /// abrir esta.
   Future<void> show(BuildContext context, List<String> glosses) async {
+    final preparada = _prepared;
+    if (preparada != null &&
+        preparada.key == glosses.join('|') &&
+        preparada.entry != null) {
+      // Ya cargado mientras se mantenía la tarjeta: solo se muestra. El botón
+      // atrás del sistema la cierra, como a la vista previa de siempre.
+      preparada.visible.value = true;
+      final historial = LocalHistoryEntry(
+        onRemove: () {
+          preparada.historial = null;
+          _cerrar(preparada);
+        },
+      );
+      preparada.historial = historial;
+      preparada.route?.addLocalHistoryEntry(historial);
+      await preparada.cerrada.future;
+      return;
+    }
+    cancelPrepared();
     final plan = ref.read(signPreviewPlannerProvider).plan(glosses);
     if (!plan.isPlayable) {
       AppToastManager.showInfo(context, 'Seña no disponible');
@@ -66,6 +140,8 @@ class SignPreviewController {
 
   /// Cierra la vista previa abierta, si la hay.
   void close() {
+    final preparada = _prepared;
+    if (preparada != null) _cerrar(preparada);
     final route = _active;
     _active = null;
     if (route != null) _dismiss(route);
@@ -80,4 +156,17 @@ class SignPreviewController {
       navigator.removeRoute(route);
     }
   }
+}
+
+/// Una vista previa cargándose en una capa superpuesta.
+class _Preparada {
+  final String key;
+  final ModalRoute<Object?>? route;
+  final OverlayState overlay;
+  final ValueNotifier<bool> visible = ValueNotifier(false);
+  final Completer<void> cerrada = Completer<void>();
+  OverlayEntry? entry;
+  LocalHistoryEntry? historial;
+
+  _Preparada(this.key, this.route, this.overlay);
 }

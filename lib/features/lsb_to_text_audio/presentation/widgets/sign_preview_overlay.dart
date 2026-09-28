@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
@@ -48,6 +49,11 @@ class SignPreviewOverlay extends StatefulWidget {
   final SignPreviewPlayerBuilder player;
   final VoidCallback onFinished;
 
+  /// Si la capa se ve. Mientras es `false` el avatar se carga invisible y
+  /// sin enseñar nada (se está manteniendo la tarjeta); al pasar a `true`
+  /// aparece con su velo y hace la seña. Sin él, se ve desde el principio.
+  final ValueListenable<bool>? visible;
+
   /// Pausa entre el final de la seña y el cierre, para que el último gesto
   /// no se corte en seco.
   static const closeDelay = Duration(milliseconds: 450);
@@ -57,6 +63,7 @@ class SignPreviewOverlay extends StatefulWidget {
     required this.plan,
     required this.player,
     required this.onFinished,
+    this.visible,
   });
 
   @override
@@ -66,8 +73,11 @@ class SignPreviewOverlay extends StatefulWidget {
 class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
   Timer? _closeTimer;
 
+  bool get _visible => widget.visible?.value ?? true;
+
   void _playerFinished() {
-    if (_closeTimer != null) return;
+    // Mientras se prepara no hay seña que terminar.
+    if (!_visible || _closeTimer != null) return;
     _closeTimer = Timer(SignPreviewOverlay.closeDelay, () {
       if (mounted) widget.onFinished();
     });
@@ -79,9 +89,44 @@ class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
     super.dispose();
   }
 
+  static const _vacio = SignPreviewPlan(
+    glosses: [],
+    animationUrls: [],
+    animationGlosses: [],
+  );
+
   @override
   Widget build(BuildContext context) {
-    final secuencia = widget.plan.glosses
+    final visible = widget.visible;
+    if (visible == null) return _capa(context, widget.plan);
+    return ValueListenableBuilder<bool>(
+      valueListenable: visible,
+      builder: (context, seVe, _) => IgnorePointer(
+        ignoring: !seVe,
+        child: Opacity(
+          opacity: seVe ? 1 : 0,
+          child: Stack(
+            children: [
+              // El velo y el cierre al tocar fuera, como el de un diálogo.
+              if (seVe)
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: widget.onFinished,
+                    child: const ColoredBox(color: Colors.black54),
+                  ),
+                ),
+              // El mismo visor antes y después: carga invisible sin glosas y
+              // hace la seña al verse.
+              _capa(context, seVe ? widget.plan : _vacio),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _capa(BuildContext context, SignPreviewPlan plan) {
+    final secuencia = plan.glosses
         .map((g) => g.replaceAll('_', ' '))
         .join(' · ');
     return Center(
@@ -130,11 +175,7 @@ class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
                     Flexible(
                       child: SizedBox(
                         height: 460,
-                        child: widget.player(
-                          context,
-                          widget.plan,
-                          _playerFinished,
-                        ),
+                        child: widget.player(context, plan, _playerFinished),
                       ),
                     ),
                   ],
