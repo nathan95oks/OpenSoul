@@ -150,7 +150,12 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Center(
-            child: BubblePress(child: SizedBox(width: 80, height: 80)),
+            child: BubblePress(
+              child: ColoredBox(
+                color: Colors.black,
+                child: SizedBox(width: 80, height: 80),
+              ),
+            ),
           ),
         ),
       );
