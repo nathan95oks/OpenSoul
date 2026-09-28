@@ -349,6 +349,29 @@ class ConfirmacionAutomatica(unittest.TestCase):
         e = self.decidir("Documentos", ["boleta"], [])
         self.assertEqual(e["estado"], "rechazada")
 
+
+class ZonaPorUso(unittest.TestCase):
+    import rag_zonas as ZN  # noqa: E402
+
+    def test_solo_un_sustantivo_entra_a_una_zona_de_cosas(self):
+        self.assertEqual(self.ZN.zona_valida(
+            "EXPEDIENTE", "Documentos", ["Tengo el expediente."]), "Documentos")
+        self.assertEqual(self.ZN.zona_valida(
+            "BOLETA", "Documentos", ["Sí tengo mi última boleta."]),
+            "Documentos")
+        for palabra, ejemplo in (("QUEDA", "Queda entre Antezana y Lanza."),
+                                 ("ANTIGUO", "Tengo deuda antigua."),
+                                 ("TRAJE", "No la traje."),
+                                 ("CONTRA", "Violencia contra mi sobrino.")):
+            self.assertIsNone(self.ZN.zona_valida(palabra, "Documentos",
+                                                  [ejemplo]), palabra)
+
+    def test_un_verbo_conserva_acciones_y_un_nombre_compuesto_su_zona(self):
+        self.assertEqual(self.ZN.zona_valida("PAGAR", "Acciones", []),
+                         "Acciones")
+        self.assertEqual(self.ZN.zona_valida(
+            "TRIBUNAL_DEPARTAMENTAL", "Instituciones", []), "Instituciones")
+
 if __name__ == "__main__":
     unittest.main()
 

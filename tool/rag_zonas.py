@@ -20,6 +20,7 @@ import concurrent.futures
 import datetime
 import json
 import os
+import re
 import sys
 import time
 
@@ -50,6 +51,57 @@ def palabras_sin_sena() -> dict:
                     if len(ejemplos) < 3 and t["texto"] not in ejemplos:
                         ejemplos.append(t["texto"])
     return out
+
+
+# Zonas de cosas y datos (las que se ofrecen como tarjetas en un trámite).
+_ZONAS_DE_COSAS = {"Documentos", "Objetos", "Lugares", "Tiempo",
+                   "Identificación", "Instituciones", "Conceptos jurídicos",
+                   "Números"}
+# Lo que va antes de un sustantivo en la frase: «el expediente», «mi boleta».
+_DETERMINANTES = {
+    "el", "la", "los", "las", "un", "una", "unos", "unas", "su", "sus", "mi",
+    "mis", "tu", "tus", "del", "al", "este", "esta", "estos", "estas", "ese",
+    "esa", "esos", "esas", "otro", "otra", "cada", "ningun", "ninguna",
+    "algun", "alguna", "nuestro", "nuestra", "cualquier", "que", "sin", "por",
+    "con", "de", "en", "y", "o",
+}
+
+
+def es_sustantivo(palabra: str, ejemplos: list) -> bool:
+    """Si en alguna frase real la palabra va tras un determinante («el
+    expediente», «un duplicado», «mi boleta»). Un verbo («lo traje», «Queda
+    entre…») o un adjetivo («deuda antigua») no. Un nombre de varias
+    palabras (TRIBUNAL_DEPARTAMENTAL) cuenta como sustantivo."""
+    sys.path.insert(0, os.path.join(ROOT, "aws"))
+    from rag_revision import _IRREGULARES, _norm  # noqa: E402
+    if "_" in palabra:
+        return True
+    clave = _norm(palabra)
+    if any(clave in formas for formas in _IRREGULARES.values()):
+        return False  # «traje» es de traer
+    for e in ejemplos:
+        w = [_norm(x) for x in re.findall(r"[A-Za-zÁÉÍÓÚÑáéíóúñ0-9]+", e)]
+        for i, x in enumerate(w):
+            misma = x == clave or len(clave) > 4 and x[:5] == clave[:5]
+            # Tras un determinante, o con un adjetivo en medio («mi última
+            # boleta»).
+            if misma and (i > 0 and w[i - 1] in _DETERMINANTES
+                          or i > 1 and w[i - 2] in _DETERMINANTES):
+                return True
+    return False
+
+
+def zona_valida(palabra: str, zona: str | None,
+                ejemplos: list | None = None) -> str | None:
+    """La zona acordada, si la palabra encaja por su uso: en una zona de
+    cosas y datos solo entra un sustantivo (ver `es_sustantivo`), así que no
+    entran palabras de función (DE, CONTRA), verbos conjugados (QUEDA,
+    CONSERVE) ni adjetivos (ANTIGUO, JUDICIAL)."""
+    if not zona:
+        return None
+    if zona in _ZONAS_DE_COSAS and not es_sustantivo(palabra, ejemplos or []):
+        return None
+    return zona
 
 
 def guardar(zonas: dict) -> None:
@@ -95,7 +147,9 @@ def main() -> int:
                     print(f"  tanda sin clasificar: {r.get('reason') or r}")
                     continue
                 for p, res in zip(tanda, r["palabras"]):
-                    zonas[p] = {"zona": res["zona"], "titan": res["titan"],
+                    zonas[p] = {"zona": zona_valida(p, res["zona"],
+                                                    palabras[p]),
+                                "acordada": res["zona"], "titan": res["titan"],
                                 "similitud": res["similitud"],
                                 "regla": res.get("regla"),
                                 "bedrock": res["bedrock"],
@@ -103,6 +157,10 @@ def main() -> int:
                 hechas += len(tanda)
                 guardar(zonas)
                 print(f"  {hechas}/{len(pendientes)}", flush=True)
+    # Las reglas de forma se aplican también a lo ya clasificado.
+    for p, z in zonas.items():
+        z["zona"] = zona_valida(p, z.get("acordada", z["zona"]),
+                                z.get("ejemplos"))
     guardar(zonas)
     con_zona = sum(1 for z in zonas.values() if z["zona"])
     por_zona = {}
