@@ -22,6 +22,11 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   final int playbackRequestId;
   final bool isUserComposing;
 
+  /// Muestra las flechas de volver a escribir y de repetir la seña. La hoja
+  /// del avatar de Conversación las oculta: allí la seña se cierra sola al
+  /// terminar o deslizando la hoja. Voz a LSB y la vista previa las usan.
+  final bool showControls;
+
   /// Cuando es `false` el visor detiene la reproduccion y libera el WebView.
   /// Lo usan las superficies que quedan vivas en segundo plano (IndexedStack)
   /// para que el avatar no siga senando al cambiar de modulo.
@@ -39,6 +44,7 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
     this.onReturnToInput,
     this.playbackRequestId = 0,
     this.isUserComposing = false,
+    this.showControls = true,
   });
 
   @override
@@ -767,21 +773,26 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           right: 14,
           child: Row(
             children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-                tooltip: 'Volver a escribir',
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                onPressed: _returnToInput,
-              ),
-              const SizedBox(width: 18),
-              IconButton(
-                icon: const Icon(Icons.replay_rounded, color: Colors.white),
-                tooltip: 'Volver a hacer la seña',
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                onPressed: _replaySequence,
-              ),
+              if (widget.showControls) ...[
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: Colors.white,
+                  ),
+                  tooltip: 'Volver a escribir',
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: _returnToInput,
+                ),
+                const SizedBox(width: 18),
+                IconButton(
+                  icon: const Icon(Icons.replay_rounded, color: Colors.white),
+                  tooltip: 'Volver a hacer la seña',
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: _replaySequence,
+                ),
+              ],
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(

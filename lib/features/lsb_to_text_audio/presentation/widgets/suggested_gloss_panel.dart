@@ -35,6 +35,7 @@ class SuggestedGlossPanel extends ConsumerWidget {
     if (options.isEmpty) return const _EmptyState();
 
     final dictionary = ref.watch(allCardsProvider).asData?.value ?? const [];
+    final vistaPrevia = ref.read(signPreviewControllerProvider);
     final byGloss = {for (final c in dictionary) c.gloss: c};
 
     final cards = [
@@ -70,6 +71,14 @@ class SuggestedGlossPanel extends ConsumerWidget {
                 .read(signPreviewControllerProvider)
                 .show(context, option.hasSign ? option.glosses : const []);
           },
+          onCardPreviewPrepare: (card) {
+            final option = options.firstWhere((o) => o.id == card.id);
+            if (!option.hasSign) return;
+            vistaPrevia.prepare(context, option.glosses);
+          },
+          // El controlador se toma al construir: la tarjeta puede avisar que
+          // se soltó mientras el panel se desmonta.
+          onCardPreviewCancel: vistaPrevia.cancelPrepared,
         ),
       ],
     );

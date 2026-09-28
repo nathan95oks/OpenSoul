@@ -21,8 +21,10 @@ class _ContextSelectionWidgetState
 
   /// La familia que pidió Conversation («¿Quiere denunciar algo?» abre
   /// Denuncias). La persona puede volver a la lista general igual.
-  static ContextFamily? _familiaDe(CardsFlowLaunch launch) {
-    final id = launch.focusedFamilyId;
+  static ContextFamily? _familiaDe(CardsFlowLaunch launch) =>
+      _familiaPorId(launch.focusedFamilyId);
+
+  static ContextFamily? _familiaPorId(String? id) {
     if (id == null) return null;
     for (final f in contextFamilies) {
       if (f.id == id) return f;
@@ -33,14 +35,24 @@ class _ContextSelectionWidgetState
   @override
   void initState() {
     super.initState();
-    _abierta = _familiaDe(ref.read(cardsFlowLaunchProvider));
+    // Al volver de un contexto con la flecha, la lista de su familia sigue
+    // abierta (Denuncias → Denunciar robo → ← vuelve a Denuncias).
+    _abierta =
+        _familiaPorId(ref.read(openFamilyProvider)) ??
+        _familiaDe(ref.read(cardsFlowLaunchProvider));
+  }
+
+  void _abrir(ContextFamily? familia) {
+    setState(() => _abierta = familia);
+    final recordada = ref.read(openFamilyProvider.notifier);
+    familia == null ? recordada.clear() : recordada.open(familia.id);
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen(cardsFlowLaunchProvider, (anterior, launch) {
       if (anterior?.sameErrand(launch) ?? false) return;
-      setState(() => _abierta = _familiaDe(launch));
+      _abrir(_familiaDe(launch));
     });
     final pending = ref.watch(pendingReplyProvider);
     final suggestion = pending?.suggestion;
@@ -98,14 +110,14 @@ class _ContextSelectionWidgetState
                           .read(contextProvider.notifier)
                           .setContext(contextos.first);
                     } else {
-                      setState(() => _abierta = f);
+                      _abrir(f);
                     }
                   },
                 ),
               )
             else ...[
               TextButton.icon(
-                onPressed: () => setState(() => _abierta = null),
+                onPressed: () => _abrir(null),
                 icon: const Icon(Icons.arrow_back, size: 18),
                 label: const Text('Volver'),
                 style: TextButton.styleFrom(

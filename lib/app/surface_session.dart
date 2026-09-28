@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/core/presentation/session/flow_surface.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
@@ -26,6 +27,7 @@ class SurfaceSession {
     }
 
     await ref.read(cardsFlowSessionProvider).reset();
+    ref.read(openFamilyProvider.notifier).clear();
     ref.read(audioTranslationControllerProvider.notifier).reset();
   }
 }

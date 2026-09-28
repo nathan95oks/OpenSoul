@@ -28,6 +28,13 @@ class SemanticNode extends ConsumerStatefulWidget {
   /// Lo que hay que mantener la tarjeta para ver su seña.
   static const holdDuration = Duration(milliseconds: 1500);
 
+  /// La pulsación ya es «mantener» (pasó el umbral del toque): el avatar
+  /// puede ir cargándose para aparecer sin espera al llenarse la tarjeta.
+  final VoidCallback? onPreviewPrepare;
+
+  /// Se soltó antes de llenarse: lo preparado ya no hace falta.
+  final VoidCallback? onPreviewCancel;
+
   const SemanticNode({
     super.key,
     required this.card,
@@ -35,6 +42,8 @@ class SemanticNode extends ConsumerStatefulWidget {
     this.isSelected = false,
     this.requiresSelection = false,
     this.onPreview,
+    this.onPreviewPrepare,
+    this.onPreviewCancel,
   });
 
   @override
@@ -80,11 +89,26 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
     _fill = AnimationController(
       vsync: this,
       duration: SemanticNode.holdDuration,
-    );
+    )..addListener(_quizaPreparar);
+  }
+
+  /// Si el avatar ya se pidió preparar en esta pulsación.
+  bool _preparado = false;
+
+  /// Un toque rápido también empieza el relleno: solo cuando la pulsación
+  /// pasa el umbral del toque se prepara el avatar.
+  void _quizaPreparar() {
+    if (_preparado || _hold != _Hold.pressing) return;
+    if (_fill.value < _tapLimit) return;
+    _preparado = true;
+    widget.onPreviewPrepare?.call();
   }
 
   @override
   void dispose() {
+    // Lo preparado para una pulsación que ya no terminará se descarta.
+    if (_preparado && _hold == _Hold.pressing) widget.onPreviewCancel?.call();
+    _preparado = false;
     _ctrl.dispose();
     _fill.dispose();
     super.dispose();
@@ -106,6 +130,7 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
 
   void _holdDown(LongPressDownDetails _) {
     _hold = _Hold.pressing;
+    _preparado = false;
     _fill.forward(from: 0);
   }
 
@@ -114,6 +139,8 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
   void _holdCancelled() {
     if (_hold != _Hold.pressing) return;
     _hold = _fill.value < _tapLimit ? _Hold.none : _Hold.abandoned;
+    if (_preparado) widget.onPreviewCancel?.call();
+    _preparado = false;
     _drain();
   }
 
