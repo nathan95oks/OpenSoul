@@ -395,6 +395,24 @@ void main() {
           startsWith('Me robaron el celular. La persona que me robó escapó.'));
     });
 
+    test('respondiendo en Conversación, «¿Quién escapó?» ofrece al ladrón', () {
+      // Solo está la pregunta del oyente: «¿Qué ocurrió?» no se hizo aquí.
+      final s = flow.startJourney('denuncia_robo',
+          purpose: GuidedPurpose.reply,
+          requestedQuestionIds: ['Q.HEC.ESCAPE_ACTOR'],
+          onlySteps: ['Q.HEC.ESCAPE_ACTOR']);
+      expect(flow.offeredOptions(s, 'Q.HEC.ESCAPE_ACTOR').map((o) => o.id),
+          ['yo', 'autor', 'otra', 'no_sabe']);
+    });
+
+    test('en el recorrido completo, sin robo no hay «persona que me robó»', () {
+      var s = flow.startJourney('denuncia_robo');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'perder');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'escapar');
+      expect(flow.offeredOptions(s, 'Q.HEC.ESCAPE_ACTOR').map((o) => o.id),
+          isNot(contains('autor')));
+    });
+
     test('cada prenda pregunta su propio color', () {
       var s = flow.startJourney('denuncia_robo');
       s = pick(s, 'Q.HEC.QUE_OCURRIO', 'robar');
