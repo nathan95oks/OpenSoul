@@ -157,6 +157,9 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                                 state.status ==
                                     AudioTranslationStatus.processing,
                             expandToFit: immersive,
+                            // Al terminar la seña el campo de texto vuelve:
+                            // sin flecha, y repetir queda bajo la glosa.
+                            showBackButton: false,
                             onPlaybackStateChanged: _setPlaybackActive,
                             onReturnToInput: () => _returnToInitial(controller),
                             playbackRequestId: _playbackRequestId,

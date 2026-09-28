@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +28,11 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   /// terminar o deslizando la hoja. Voz a LSB y la vista previa las usan.
   final bool showControls;
 
+  /// Muestra la flecha de volver a escribir. Voz a LSB la quita (al terminar
+  /// la seña el campo de texto ya vuelve) y lleva el botón de repetir debajo
+  /// de la glosa de la esquina superior derecha.
+  final bool showBackButton;
+
   /// Cuando es `false` el visor detiene la reproduccion y libera el WebView.
   /// Lo usan las superficies que quedan vivas en segundo plano (IndexedStack)
   /// para que el avatar no siga senando al cambiar de modulo.
@@ -45,6 +51,7 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
     this.playbackRequestId = 0,
     this.isUserComposing = false,
     this.showControls = true,
+    this.showBackButton = true,
   });
 
   @override
@@ -105,7 +112,11 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// del .glb tampoco lo emite. Sin esto la secuencia se queda clavada.
   Timer? _placeholderTimer;
   Timer? _neutralTimer;
-  int _neutralIndex = 0;
+
+  /// El último movimiento de reposo: el siguiente se elige al azar entre
+  /// los demás, para que el avatar no repita el mismo gesto.
+  int _lastNeutral = -1;
+  final _random = math.Random();
 
   void _cancelPlaceholderTimer() {
     _placeholderTimer?.cancel();
@@ -141,7 +152,14 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (!_canPlayNeutral || !_modelLoaded) return;
     final controller = _controllerA;
     if (controller == null) return;
-    final preferred = _neutralIndex++;
+    // Al azar entre NEUTRO1..3, sin repetir el anterior.
+    var preferred = _random.nextInt(_neutralAnimations.length);
+    if (preferred == _lastNeutral) {
+      preferred =
+          (preferred + 1 + _random.nextInt(_neutralAnimations.length - 1)) %
+          _neutralAnimations.length;
+    }
+    _lastNeutral = preferred;
     try {
       controller
           .runJavaScript('''
@@ -151,13 +169,17 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           const candidates = ${_neutralAnimations.map((e) => "'$e'").toList()};
           const available = mv.availableAnimations || [];
           const neutrals = candidates.filter((name) => available.includes(name));
+          // El elegido si el modelo lo trae; si no, otro de los que tenga.
+          const wanted = candidates[$preferred];
           if (neutrals.length === 0) {
             if (window.ModelViewerChannel) {
               window.ModelViewerChannel.postMessage('neutral-unavailable');
             }
             return;
           }
-          const name = neutrals[$preferred % neutrals.length];
+          const name = neutrals.includes(wanted)
+            ? wanted
+            : neutrals[$preferred % neutrals.length];
           window.__lsbMode = 'neutral';
           mv.animationName = name;
           if (mv.updateComplete) await mv.updateComplete;
@@ -772,8 +794,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           left: 14,
           right: 14,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (widget.showControls) ...[
+              if (widget.showControls && widget.showBackButton) ...[
                 IconButton(
                   icon: const Icon(
                     Icons.arrow_back_rounded,
@@ -794,24 +817,43 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                 ),
               ],
               const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  currentGloss,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                    letterSpacing: 1,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      currentGloss,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        letterSpacing: 1,
+                      ),
+                    ),
                   ),
-                ),
+                  // Sin flecha de volver, repetir va debajo de la glosa.
+                  if (widget.showControls && !widget.showBackButton) ...[
+                    const SizedBox(height: 10),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.replay_rounded,
+                        color: Colors.white,
+                      ),
+                      tooltip: 'Volver a hacer la seña',
+                      constraints: const BoxConstraints(),
+                      padding: EdgeInsets.zero,
+                      onPressed: _replaySequence,
+                    ),
+                  ],
+                ],
               ),
             ],
           ),

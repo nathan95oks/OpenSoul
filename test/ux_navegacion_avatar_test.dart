@@ -16,7 +16,11 @@ void main() {
   WebViewPlatform.instance = FakeWebViewPlatform();
 
   group('avatar de Conversación', () {
-    Future<void> montar(WidgetTester tester, {required bool controles}) async {
+    Future<void> montar(
+      WidgetTester tester, {
+      required bool controles,
+      bool flecha = true,
+    }) async {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
@@ -24,6 +28,7 @@ void main() {
               body: Avatar3DViewer(
                 isProcessing: false,
                 showControls: controles,
+                showBackButton: flecha,
                 glosses: const ['HOLA'],
                 animationUrls: const [
                   '${AnimationUrlResolver.placeholderScheme}HOLA',
@@ -44,10 +49,23 @@ void main() {
       await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('Voz a LSB conserva los dos botones', (tester) async {
+    testWidgets('la vista previa conserva los dos botones', (tester) async {
       await montar(tester, controles: true);
       expect(find.byTooltip('Volver a escribir'), findsOneWidget);
       expect(find.byTooltip('Volver a hacer la seña'), findsOneWidget);
+      await tester.pump(const Duration(seconds: 1));
+    });
+
+    testWidgets('Voz a LSB: sin flecha y repetir bajo la glosa', (
+      tester,
+    ) async {
+      await montar(tester, controles: true, flecha: false);
+      expect(find.byTooltip('Volver a escribir'), findsNothing);
+      final repetir = tester.getTopLeft(
+        find.byTooltip('Volver a hacer la seña'),
+      );
+      final glosa = tester.getBottomLeft(find.text('HOLA'));
+      expect(repetir.dy, greaterThan(glosa.dy), reason: 'debajo de la glosa');
       await tester.pump(const Duration(seconds: 1));
     });
   });
