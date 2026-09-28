@@ -442,6 +442,8 @@ class _InputArea extends StatelessWidget {
             onSubmit: onHearingText,
             onSpeechSubmit: onHearingSpeech,
             focusNode: hearingFocus,
+            // Lo que el oyente dicta se envía en cuanto termina de hablar.
+            sendSpeechAutomatically: true,
           ),
         ],
       ),

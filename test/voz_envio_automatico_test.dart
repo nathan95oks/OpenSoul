@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -158,5 +159,45 @@ void main() {
     await delMotor(tester, 'notifyStatus', 'done');
     expect(enviados, ['su número de caso']);
     await cerrar(tester);
+  });
+
+  testWidgets('lo dictado llega como voz, no como texto escrito', (
+    tester,
+  ) async {
+    final escritos = <String>[];
+    final dictados = <String>[];
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: TextInputWidget(
+              onSubmit: escritos.add,
+              onSpeechSubmit: dictados.add,
+              sendSpeechAutomatically: true,
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.byTooltip('Grabar voz'));
+    await avanzar(tester);
+    await oir(tester, 'tome asiento por favor');
+    await delMotor(tester, 'notifyStatus', 'done');
+    expect(dictados, ['tome asiento por favor']);
+    expect(escritos, isEmpty);
+    await cerrar(tester);
+  });
+
+  test('Conversación y Texto/Audio → LSB envían solos lo dictado', () {
+    for (final pantalla in const [
+      'lib/features/conversation/presentation/screens/conversation_screen.dart',
+      'lib/features/audio_to_lsb/presentation/screens/audio_to_lsb_screen.dart',
+    ]) {
+      expect(
+        File(pantalla).readAsStringSync(),
+        contains('sendSpeechAutomatically: true'),
+        reason: pantalla,
+      );
+    }
   });
 }
