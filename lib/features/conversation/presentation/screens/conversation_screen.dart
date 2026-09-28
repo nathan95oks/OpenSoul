@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
@@ -18,8 +17,6 @@ import 'package:lsb_legal_app/features/conversation/presentation/providers/conve
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_handoff.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/avatar_playback_sheet.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/turn_bubble.dart';
-import 'package:lsb_legal_app/features/conversation/presentation/widgets/quick_reply_bar.dart';
-import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 class ConversationScreen extends ConsumerStatefulWidget {
   const ConversationScreen({super.key});
@@ -119,24 +116,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       state.conversation.pendingReply == null
       ? CardsFlowPurpose.conversationInitiative
       : CardsFlowPurpose.conversationReply;
-
-  ConversationTurn? _instruccionPendiente(ConversationState state) {
-    final pendiente = state.conversation.pendingReply;
-    if (pendiente == null) return null;
-    return pendiente.message.speechAct == SpeechAct.instruction
-        ? pendiente
-        : null;
-  }
-
-  Future<void> _enviarRespuestaRapida(List<String> glosses, String text) async {
-    ref
-        .read(conversationProvider.notifier)
-        .addDeafDeclaration(
-          result: TranslationResult(baseSentence: text, generatedText: text),
-          glosses: glosses,
-        );
-    await ref.read(audioOutputProvider).speak(text);
-  }
 
   Future<void> _handleHearingSend(
     String text, {
@@ -348,8 +327,8 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                   ),
                 ),
               ),
-              // Los avisos y las respuestas rápidas aparecen y se van
-              // deslizándose, sin que el resto salte de golpe.
+              // Los avisos aparecen y se van deslizándose, sin que el resto
+              // salte de golpe.
               AnimatedSize(
                 duration: const Duration(milliseconds: 220),
                 curve: Curves.easeOutCubic,
@@ -366,8 +345,6 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                           color: AppTheme.errorLight,
                         ),
                       ),
-                    if (_instruccionPendiente(state) != null)
-                      QuickReplyBar(onReply: _enviarRespuestaRapida),
                   ],
                 ),
               ),
