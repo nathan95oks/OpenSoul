@@ -8,6 +8,7 @@ import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(AQUI))
@@ -289,6 +290,87 @@ class Vocabulario(unittest.TestCase):
         self.assertIn("**2 palabras · 3 usos.**", md)
         self.assertLess(md.index("| COPIA | 2 |"), md.index("| ANTERIOR | 1 |"))
         self.assertNotIn("SENA_PENDIENTE", md)
+
+
+class ZonasDeTramite(unittest.TestCase):
+    ZONAS = {"senas": {"papel": ("PAPEL", "Documentos"), "si": ("SÍ", "Respuesta"),
+                       "casa": ("CASA", "Lugares")},
+             "formas": {"papel": ["Papel", "el documento"], "casa": ["Casa"]},
+             "palabras": {"BOLETA": "Documentos"}}
+    ESC = {"turnos": [
+        {"texto": "¿Qué trae?", "glosas": ["TRAER"]},
+        {"texto": "Traje la boleta.", "glosas": ["TRAER", "SENA_PENDIENTE:BOLETA"]},
+        {"texto": "Tengo el papel de la casa.", "glosas": ["PAPEL", "CASA"]},
+    ], "variantes": []}
+
+    def test_la_pregunta_abre_las_zonas_de_sus_respuestas(self):
+        respuestas = [{"glosas": ["SI", "SENA_PENDIENTE:BOLETA"]}]
+        tarjetas = B.tarjetas_de_zona(self.ESC, respuestas, self.ZONAS)
+        # Documentos (por BOLETA), no Lugares ni Respuesta.
+        self.assertEqual([(t["glosas"], t["frase"]) for t in tarjetas],
+                         [(["SENA_PENDIENTE:BOLETA"], "boleta"),
+                          (["PAPEL"], "papel")])
+
+    def test_sin_zona_de_respuesta_no_hay_tarjetas(self):
+        self.assertEqual(
+            B.tarjetas_de_zona(self.ESC, [{"glosas": ["SI"]}], self.ZONAS), [])
+
+
+class ConfirmacionAutomatica(unittest.TestCase):
+    """Una equivalencia de Bedrock se decide sola con Titan y la vuelta."""
+
+    def decidir(self, zona, faltan, sobran):
+        import rag_equivalencias as E
+        import rag_zonas as ZN
+        import rag_indexar_embeddings as RI
+        salida = {"BOLETA": {"sena": "FACTURA", "estado": "propuesta",
+                             "origen": "bedrock",
+                             "ejemplos": ["Tengo mi boleta."]}}
+        with tempfile.TemporaryDirectory() as d:
+            zonas = os.path.join(d, "zonas.json")
+            with open(zonas, "w", encoding="utf-8") as f:
+                json.dump({"BOLETA": {"zona": zona}}, f)
+            respuesta = {"generated": True, "items": [
+                {"faltan": faltan, "sobran": sobran}]}
+            with mock.patch.object(ZN, "DESTINO", zonas),                     mock.patch.object(RI, "llamar", return_value=respuesta),                     mock.patch.object(E, "_frases_con_glosas", return_value={
+                        "Tengo mi boleta.": ["TENER", "MÍO",
+                                             "SENA_PENDIENTE:BOLETA"]}):
+                E.confirmar("url", salida)
+        return salida["BOLETA"]
+
+    def test_con_las_tres_senales_se_aprueba_sola(self):
+        e = self.decidir("Documentos", [], [])
+        self.assertEqual((e["estado"], e["automatica"]), ("aprobada", True))
+
+    def test_si_la_sena_es_de_otra_zona_se_rechaza(self):
+        self.assertEqual(self.decidir("Lugares", [], [])["estado"], "rechazada")
+
+    def test_si_la_vuelta_pierde_la_palabra_se_rechaza(self):
+        e = self.decidir("Documentos", ["boleta"], [])
+        self.assertEqual(e["estado"], "rechazada")
+
+
+class ZonaPorUso(unittest.TestCase):
+    import rag_zonas as ZN  # noqa: E402
+
+    def test_solo_un_sustantivo_entra_a_una_zona_de_cosas(self):
+        self.assertEqual(self.ZN.zona_valida(
+            "EXPEDIENTE", "Documentos", ["Tengo el expediente."]), "Documentos")
+        self.assertEqual(self.ZN.zona_valida(
+            "BOLETA", "Documentos", ["Sí tengo mi última boleta."]),
+            "Documentos")
+        for palabra, ejemplo in (("QUEDA", "Queda entre Antezana y Lanza."),
+                                 ("ANTIGUO", "Tengo deuda antigua."),
+                                 ("TRAJE", "No la traje."),
+                                 ("CONTRA", "Violencia contra mi sobrino.")):
+            self.assertIsNone(self.ZN.zona_valida(palabra, "Documentos",
+                                                  [ejemplo]), palabra)
+
+    def test_un_verbo_conserva_acciones_y_un_nombre_compuesto_su_zona(self):
+        self.assertEqual(self.ZN.zona_valida("PAGAR", "Acciones", []),
+                         "Acciones")
+        self.assertEqual(self.ZN.zona_valida(
+            "TRIBUNAL_DEPARTAMENTAL", "Instituciones", []), "Instituciones")
 
 if __name__ == "__main__":
     unittest.main()
