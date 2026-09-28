@@ -319,7 +319,7 @@ class ZonasDeTramite(unittest.TestCase):
 class ConfirmacionAutomatica(unittest.TestCase):
     """Una equivalencia de Bedrock se decide sola con Titan y la vuelta."""
 
-    def decidir(self, vecinas, faltan, sobran):
+    def decidir(self, zona, faltan, sobran):
         import rag_equivalencias as E
         import rag_zonas as ZN
         import rag_indexar_embeddings as RI
@@ -329,7 +329,7 @@ class ConfirmacionAutomatica(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             zonas = os.path.join(d, "zonas.json")
             with open(zonas, "w", encoding="utf-8") as f:
-                json.dump({"BOLETA": {"vecinas": vecinas}}, f)
+                json.dump({"BOLETA": {"zona": zona}}, f)
             respuesta = {"generated": True, "items": [
                 {"faltan": faltan, "sobran": sobran}]}
             with mock.patch.object(ZN, "DESTINO", zonas),                     mock.patch.object(RI, "llamar", return_value=respuesta),                     mock.patch.object(E, "_frases_con_glosas", return_value={
@@ -339,14 +339,14 @@ class ConfirmacionAutomatica(unittest.TestCase):
         return salida["BOLETA"]
 
     def test_con_las_tres_senales_se_aprueba_sola(self):
-        e = self.decidir(["FACTURA", "PAPEL"], [], [])
+        e = self.decidir("Documentos", [], [])
         self.assertEqual((e["estado"], e["automatica"]), ("aprobada", True))
 
-    def test_si_titan_no_la_pone_cerca_se_rechaza(self):
-        self.assertEqual(self.decidir(["CASA"], [], [])["estado"], "rechazada")
+    def test_si_la_sena_es_de_otra_zona_se_rechaza(self):
+        self.assertEqual(self.decidir("Lugares", [], [])["estado"], "rechazada")
 
     def test_si_la_vuelta_pierde_la_palabra_se_rechaza(self):
-        e = self.decidir(["FACTURA"], ["boleta"], [])
+        e = self.decidir("Documentos", ["boleta"], [])
         self.assertEqual(e["estado"], "rechazada")
 
 if __name__ == "__main__":
