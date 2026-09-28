@@ -781,25 +781,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      currentGloss,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
+                  _buildGlossBadge(activeGlosses, _currentIndex),
                   // Sin flecha de volver, repetir va debajo de la glosa.
                   if (widget.showControls && !widget.showBackButton) ...[
                     const SizedBox(height: 10),
@@ -820,6 +802,120 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildGlossBadge(List<String>? activeGlosses, int currentIndex) {
+    if (activeGlosses == null ||
+        currentIndex < 0 ||
+        currentIndex >= activeGlosses.length) {
+      return const SizedBox.shrink();
+    }
+
+    final currentGloss = activeGlosses[currentIndex];
+
+    // Detectar si la glosa actual forma parte de una palabra deletreada (dactilologia)
+    if (currentGloss.length == 1) {
+      int start = currentIndex;
+      while (start > 0 && activeGlosses[start - 1].length == 1) {
+        start--;
+      }
+      int end = currentIndex;
+      while (end < activeGlosses.length - 1 &&
+          activeGlosses[end + 1].length == 1) {
+        end++;
+      }
+
+      if (end > start) {
+        final letters = activeGlosses.sublist(start, end + 1);
+        final activeLetterIdx = currentIndex - start;
+
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E1B4B).withValues(alpha: 0.92),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.deepPurpleAccent.withValues(alpha: 0.7),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.deepPurpleAccent.withValues(alpha: 0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(letters.length, (idx) {
+              final isCurrent = idx == activeLetterIdx;
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 7,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: isCurrent
+                      ? Colors.deepPurpleAccent
+                      : Colors.white.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: isCurrent
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.2),
+                    width: isCurrent ? 1.5 : 1,
+                  ),
+                  boxShadow: isCurrent
+                      ? [
+                          BoxShadow(
+                            color: Colors.deepPurpleAccent.withValues(
+                              alpha: 0.7,
+                            ),
+                            blurRadius: 6,
+                            spreadRadius: 1,
+                          ),
+                        ]
+                      : null,
+                ),
+                child: Text(
+                  letters[idx],
+                  style: TextStyle(
+                    color: isCurrent ? Colors.white : Colors.white60,
+                    fontWeight: isCurrent
+                        ? FontWeight.w900
+                        : FontWeight.w500,
+                    fontSize: isCurrent ? 14 : 12,
+                  ),
+                ),
+              );
+            }),
+          ),
+        );
+      }
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 6,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        currentGloss,
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+          letterSpacing: 1,
+        ),
+      ),
     );
   }
 
