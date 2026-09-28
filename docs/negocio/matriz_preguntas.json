@@ -6,9 +6,9 @@
  ],
  "fecha": "2026-09-25",
  "totales": {
-  "preguntas": 144,
+  "preguntas": 149,
   "recorridos": 8,
-  "opciones": 533
+  "opciones": 558
  },
  "preguntas": [
   {
@@ -1083,7 +1083,7 @@
     "institucion"
    ],
    "recorridos": [
-    "denuncia_robo#28",
+    "denuncia_robo#33",
     "violencia#21",
     "amenaza_digital#10",
     "engano_dinero#10"
@@ -1163,7 +1163,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#27",
+    "denuncia_robo#32",
     "violencia#20",
     "amenaza_digital#9",
     "engano_dinero#9"
@@ -3066,7 +3066,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#23"
+    "denuncia_robo#28"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3354,7 +3354,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#25",
+    "denuncia_robo#30",
     "violencia#16"
    ],
    "nodos": [],
@@ -3477,7 +3477,7 @@
     "documento"
    ],
    "recorridos": [
-    "denuncia_robo#26",
+    "denuncia_robo#31",
     "violencia#17"
    ],
    "nodos": [],
@@ -3542,7 +3542,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#24"
+    "denuncia_robo#29"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -4053,7 +4053,7 @@
     "ENGAÑAR": "tiene su propio contexto (engaño con dinero)"
    },
    "reglas": [
-    "Hasta dos hechos. El orden de pulsación no es orden temporal: la frase sigue el orden del banco.",
+    "Todos los hechos que ocurrieron (robo, pérdida, daño, huida). El orden de pulsación no es orden temporal: la frase sigue el orden del banco.",
     "PERDER y ESCAPAR no redactan nada por sí mismos: exigen su aclaración (Q.HEC.PERDIDA_TIPO, Q.HEC.ESCAPE_ACTOR)."
    ],
    "rutas": [
@@ -5744,6 +5744,401 @@
    "opcionesSinSena": []
   },
   {
+   "id": "Q.PER.DESC.ROPA_COLOR.POLERA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la polera?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_polera",
+   "control": "seleccion_multiple",
+   "modo": "frase",
+   "campos": [
+    "modificador"
+   ],
+   "recorridos": [
+    "denuncia_robo#20"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la polera."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "reglas": [
+    "Se abre cuando se elige «Polera» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La polera era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.PANTALON",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era el pantalón?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_pantalon",
+   "control": "seleccion_multiple",
+   "modo": "frase",
+   "campos": [
+    "modificador"
+   ],
+   "recorridos": [
+    "denuncia_robo#21"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de el pantalón."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "reglas": [
+    "Se abre cuando se elige «Pantalón» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «El pantalón era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la chamarra?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_chamarra",
+   "control": "seleccion_multiple",
+   "modo": "frase",
+   "campos": [
+    "modificador"
+   ],
+   "recorridos": [
+    "denuncia_robo#22"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la chamarra."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "reglas": [
+    "Se abre cuando se elige «Chamarra» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La chamarra era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.GORRA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la gorra?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_gorra",
+   "control": "seleccion_multiple",
+   "modo": "frase",
+   "campos": [
+    "modificador"
+   ],
+   "recorridos": [
+    "denuncia_robo#23"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la gorra."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "reglas": [
+    "Se abre cuando se elige «Gorra» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La gorra era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.MOCHILA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la mochila?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_mochila",
+   "control": "seleccion_multiple",
+   "modo": "frase",
+   "campos": [
+    "modificador"
+   ],
+   "recorridos": [
+    "denuncia_robo#24"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la mochila."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "reglas": [
+    "Se abre cuando se elige «Mochila» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La mochila era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
    "id": "Q.PER.DESC.ROPA_COLOR",
    "dominio": "descripcion",
    "formulacion": "¿De qué color era su ropa?",
@@ -5756,7 +6151,7 @@
     "modificador"
    ],
    "recorridos": [
-    "denuncia_robo#20"
+    "denuncia_robo#25"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -5813,7 +6208,7 @@
     "CUÁL": "formulacion"
    },
    "reglas": [
-    "Se abre siempre que se elige una prenda en «¿Qué ropa llevaba?»: una descripción de la ropa no queda sin color.",
+    "Se abre cuando se elige «Otra prenda o color (escribir)» en «¿Qué ropa llevaba?»; las prendas con tarjeta tienen su propia pregunta de color.",
     "Plantilla: «Su ropa era de color {colores}.»",
     "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
    ],
@@ -8932,7 +9327,7 @@
     "cantidad"
    ],
    "recorridos": [
-    "denuncia_robo#22"
+    "denuncia_robo#27"
    ],
    "nodos": [
     "n-s6-testigos_fotos_v-02"
@@ -8990,7 +9385,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#21"
+    "denuncia_robo#26"
    ],
    "nodos": [
     "n-s6-robo_hurto_y_obje-10",
