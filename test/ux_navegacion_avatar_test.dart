@@ -5,6 +5,7 @@ import 'package:webview_flutter_platform_interface/webview_flutter_platform_inte
 
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/motion.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/context_selection_widget.dart';
 
@@ -123,6 +124,46 @@ void main() {
       await entrarYVolver(tester);
       expect(find.text('Volver'), findsNothing);
       expect(find.text('Trámites'), findsOneWidget);
+    });
+  });
+
+  group('burbuja', () {
+    testWidgets('la sección entra creciendo y termina en su tamaño', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: BubbleEntrance(
+            index: 0,
+            child: SizedBox(width: 50, height: 50),
+          ),
+        ),
+      );
+      final escala = find.byType(ScaleTransition);
+      await tester.pump(const Duration(milliseconds: 40));
+      expect(tester.widget<ScaleTransition>(escala).scale.value, lessThan(1));
+      await tester.pumpAndSettle();
+      expect(tester.widget<ScaleTransition>(escala).scale.value, 1);
+    });
+
+    testWidgets('al tocar se hunde y al soltar vuelve', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Center(
+            child: BubblePress(child: SizedBox(width: 80, height: 80)),
+          ),
+        ),
+      );
+      double escala() =>
+          tester.widget<AnimatedScale>(find.byType(AnimatedScale)).scale;
+      final gesto = await tester.startGesture(
+        tester.getCenter(find.byType(BubblePress)),
+      );
+      await tester.pump();
+      expect(escala(), lessThan(1));
+      await gesto.up();
+      await tester.pumpAndSettle();
+      expect(escala(), 1);
     });
   });
 }
