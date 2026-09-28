@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/domain/repositories/translation_repository.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
@@ -53,16 +54,20 @@ class _Backend implements TranslationRepository {
 }
 
 class _NoopAudio implements AudioOutput {
+  final List<String> spoken = [];
+  int pauses = 0;
+  int resumes = 0;
+
   @override
   Future<void> playUrl(String url) async {}
   @override
-  Future<void> speak(String text) async {}
+  Future<void> speak(String text) async => spoken.add(text);
   @override
   Future<void> stop() async {}
   @override
-  Future<void> pause() async {}
+  Future<void> pause() async => pauses++;
   @override
-  Future<void> resume() async {}
+  Future<void> resume() async => resumes++;
   @override
   void setOnComplete(void Function() onComplete) {}
   @override
@@ -453,6 +458,56 @@ void main() {
 
       await tocar(tester, find.byKey(const Key('volver_a_familias')));
       expect(find.byTooltip('Volver a la conversación'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'ir a la declaración la hace sonar sola, y el reproductor es una nota '
+    'de voz sin copiar ni etiquetas de origen',
+    (tester) async {
+      final (container, _) = await montar(tester);
+      final audio = container.read(audioOutputProvider) as _NoopAudio;
+
+      await tocar(tester, find.text('ROBAR'));
+      await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
+      await tocar(tester, find.text('CELULAR'));
+      expect(audio.spoken, isEmpty, reason: 'nada suena antes de emitir');
+
+      await tocar(tester, find.byKey(const Key('terminar_aqui')));
+      expect(find.byType(DeclarationResultScreen), findsOneWidget);
+
+      // Suena una sola vez, la frase del resultado.
+      expect(audio.spoken, [
+        container.read(translationControllerProvider).value!.generatedText,
+      ]);
+      expect(container.read(audioPlaybackProvider), AudioPlaybackState.playing);
+
+      for (final quitado in const [
+        'Copiar al portapapeles',
+        'Refinado por IA',
+        'Motor local',
+        'Audio listo (Polly)',
+        'Audio listo (local)',
+      ]) {
+        expect(find.text(quitado), findsNothing, reason: quitado);
+      }
+      expect(find.byIcon(Icons.copy_outlined), findsNothing);
+
+      // Mientras suena, el botón redondo es pausa.
+      final boton = find.byKey(const Key('reproducir_declaracion'));
+      expect(boton, findsOneWidget);
+      expect(find.bySemanticsLabel('Pausar'), findsOneWidget);
+      expect(find.byIcon(Icons.pause_rounded), findsOneWidget);
+
+      await tocar(tester, boton);
+      expect(audio.pauses, 1);
+      expect(container.read(audioPlaybackProvider), AudioPlaybackState.paused);
+      expect(find.bySemanticsLabel('Reproducir'), findsOneWidget);
+      expect(find.byIcon(Icons.play_arrow_rounded), findsOneWidget);
+
+      // Reanudar sigue donde quedó (sin audio remoto, vuelve a decirla).
+      await tocar(tester, boton);
+      expect(container.read(audioPlaybackProvider), AudioPlaybackState.playing);
     },
   );
 }
