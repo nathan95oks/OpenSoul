@@ -77,6 +77,93 @@ abstract final class RagTramites {
       ),
   ];
 
+  /// Cómo se llama y qué abarca cada institución en la lista de «Trámites».
+  static const Map<String, (String, String, String)> _sectionInfo = {
+    'DDRR': (
+      'Derechos Reales',
+      '🏠',
+      'Certificado de gravámenes e inscripción de inmuebles',
+    ),
+    'IMP': (
+      'GAM Cochabamba',
+      '💰',
+      'Impuestos de motos, vehículos e inmuebles (RUAT)',
+    ),
+    'FIS': (
+      'Ministerio Público – Fiscalía',
+      '🔎',
+      'Denuncias ante la Fiscalía y su seguimiento',
+    ),
+    'OJ': ('Órgano Judicial', '⚖️', 'Causas, juzgados y audiencias'),
+    'SEPDEP': ('SEPDEP', '🧑‍⚖️', 'Defensa pública gratuita'),
+    'SEPDAVI': ('SEPDAVI', '🤝', 'Patrocinio y apoyo a víctimas de delitos'),
+    'FELCC': ('FELCC', '🚓', 'Denuncias de robos y estafas'),
+    'FELCV': ('FELCV', '🛡️', 'Denuncias de violencia familiar'),
+    'SLIM': (
+      'SLIM – Gobierno Autónomo Municipal Cbba',
+      '💜',
+      'Apoyo a mujeres en situación de violencia',
+    ),
+    'DNA': (
+      'DNA – Gobierno Autónomo Municipal Cbba',
+      '🧒',
+      'Defensa de niñas, niños y adolescentes',
+    ),
+    'NOT': (
+      'Notarías de Fe Pública DIRNOPLU',
+      '✍️',
+      'Contratos de alquiler, anticrético y notarías',
+    ),
+    'SEGIP': ('SEGIP', '🪪', 'Cédula de identidad'),
+    'SERECI': (
+      'SERECI',
+      '📜',
+      'Certificados de nacimiento, matrimonio y defunción',
+    ),
+    'DISC': (
+      'Registro y carnet de discapacidad',
+      '♿',
+      'Calificación y carnet de discapacidad',
+    ),
+    'LSB': (
+      'Derechos lingüísticos LSB',
+      '🤟',
+      'Intérprete y accesibilidad en LSB',
+    ),
+  };
+
+  static const sectionPrefix = 'tramites:';
+
+  /// Los trámites agrupados por institución, en el orden del corpus.
+  ///
+  /// Solo ordenan la lista que ve la persona: los contextos, sus preguntas y
+  /// el RAG no cambian, ni el grafo de conversación (que enruta por
+  /// [ContextFamily.contextIds]).
+  static final List<ContextFamily> sections = () {
+    final porArea = <String, List<RagTramite>>{};
+    for (final t in all) {
+      porArea.putIfAbsent(t.area, () => []).add(t);
+    }
+    return [
+      for (final MapEntry(key: area, value: tramites) in porArea.entries)
+        ContextFamily(
+          id: '$sectionPrefix$area',
+          name: _sectionInfo[area]?.$1 ?? tramites.first.institution,
+          emoji: _sectionInfo[area]?.$2 ?? tramites.first.emoji,
+          description: _sectionInfo[area]?.$3 ?? tramites.first.institution,
+          contextIds: [for (final t in tramites) t.contextId],
+        ),
+    ];
+  }();
+
+  /// La sección con id [id], o `null`.
+  static ContextFamily? sectionById(String? id) {
+    for (final s in sections) {
+      if (s.id == id) return s;
+    }
+    return null;
+  }
+
   /// Pregunta del banco del turno [turn] del funcionario en [scenarioId].
   static String questionId(String scenarioId, int turn) =>
       'R.$scenarioId.$turn';

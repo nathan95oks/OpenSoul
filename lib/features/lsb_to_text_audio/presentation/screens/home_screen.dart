@@ -61,6 +61,8 @@ class HomeScreen extends ConsumerWidget {
     // Dentro de una familia (Denuncias, Trámites) la flecha vuelve al menú.
     final enFamilia =
         !enSeleccionGlosas && ref.watch(openFamilyProvider) != null;
+    // Dentro de una institución de Trámites la flecha vuelve a Trámites.
+    final enSeccion = enFamilia && ref.watch(openSectionProvider) != null;
 
     // Una sola flecha, siempre arriba a la izquierda: desde las glosas
     // vuelve a la lista; desde la lista de una familia, al menú; desde el
@@ -71,6 +73,13 @@ class HomeScreen extends ConsumerWidget {
             icon: const Icon(Icons.arrow_back, color: AppTheme.ink),
             tooltip: 'Volver a los contextos',
             onPressed: () => ref.read(cardsFlowSessionProvider).reset(),
+          )
+        : enSeccion
+        ? IconButton(
+            key: const Key('volver_a_secciones'),
+            icon: const Icon(Icons.arrow_back, color: AppTheme.ink),
+            tooltip: 'Volver',
+            onPressed: () => ref.read(openSectionProvider.notifier).clear(),
           )
         : enFamilia
         ? IconButton(
