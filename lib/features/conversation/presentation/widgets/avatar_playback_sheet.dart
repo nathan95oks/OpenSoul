@@ -52,7 +52,9 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
       _playbackStartedAt = DateTime.now();
       _dismissTimer?.cancel();
     } else if (_playbackStartedAt != null && widget.autoDismissOnFinish) {
-      final elapsed = DateTime.now().difference(_playbackStartedAt!).inMilliseconds;
+      final elapsed = DateTime.now()
+          .difference(_playbackStartedAt!)
+          .inMilliseconds;
       // Solo auto-descartar si realmente se reprodujo la animación (al menos 1.8s)
       if (elapsed >= 1800) {
         _dismissTimer?.cancel();
@@ -88,11 +90,9 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
               padding: const EdgeInsets.fromLTRB(8, 8, 16, 4),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-                    tooltip: 'Atrás',
-                    onPressed: () => Navigator.of(context).maybePop(),
-                  ),
+                  // Sin flecha: la hoja se cierra deslizándola o al terminar
+                  // la seña. El hueco mantiene centrada la manija.
+                  const SizedBox(width: 48),
                   const Spacer(),
                   Container(
                     width: 44,
@@ -116,6 +116,7 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
                     color: AppTheme.darkSurface,
                     child: Avatar3DViewer(
                       key: const ValueKey('sheet_avatar_viewer'),
+                      showControls: false,
                       isActive: true,
                       isProcessing: false,
                       expandToFit: true,
@@ -130,8 +131,11 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
                       animationUrls: widget.animationUrls.isNotEmpty
                           ? widget.animationUrls
                           : widget.glosses
-                              .expand((g) => const AnimationUrlResolver().resolveAll(gloss: g))
-                              .toList(),
+                                .expand(
+                                  (g) => const AnimationUrlResolver()
+                                      .resolveAll(gloss: g),
+                                )
+                                .toList(),
                     ),
                   ),
                 ),

@@ -16,5 +16,22 @@ class ContextNotifier extends Notifier<SemanticContext?> {
   }
 }
 
-final contextProvider =
-    NotifierProvider<ContextNotifier, SemanticContext?>(ContextNotifier.new);
+final contextProvider = NotifierProvider<ContextNotifier, SemanticContext?>(
+  ContextNotifier.new,
+);
+
+/// La familia de contextos que la persona abrió en la selección (Denuncias,
+/// Trámites…). Al volver de uno de sus contextos con la flecha, la selección
+/// reabre esa lista en vez del menú principal. «Volver» de la lista la olvida.
+class OpenFamilyNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+
+  void open(String familyId) => state = familyId;
+
+  void clear() => state = null;
+}
+
+final openFamilyProvider = NotifierProvider<OpenFamilyNotifier, String?>(
+  OpenFamilyNotifier.new,
+);
