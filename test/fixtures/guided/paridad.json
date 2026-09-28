@@ -1046,6 +1046,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -1078,42 +1083,96 @@
      "pregunta": "Q.HEC.QUE_OCURRIO",
      "estado": "afirmado",
      "opciones": [
-      "escapar"
+      "escapar",
+      "perder",
+      "robar"
+     ]
+    },
+    {
+     "pregunta": "Q.ROB.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "chamarra"
+     ]
+    },
+    {
+     "pregunta": "Q.FALTA.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "celular",
+      "papel",
+      "chamarra"
+     ]
+    },
+    {
+     "pregunta": "Q.HEC.PERDIDA_TIPO",
+     "estado": "afirmado",
+     "opciones": [
+      "perdi"
      ]
     },
     {
      "pregunta": "Q.HEC.ESCAPE_ACTOR",
      "estado": "afirmado",
      "opciones": [
-      "yo"
+      "otra"
      ]
     },
     {
      "pregunta": "Q.TIE.CUANDO",
      "estado": "afirmado",
      "opciones": [
-      "anteayer"
+      "hace_h"
+     ],
+     "valores": {
+      "hace_h": {
+       "n": "5"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "casa"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "cerca"
+     ],
+     "valores": {
+      "cerca": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
      ]
     },
     {
      "pregunta": "Q.TES.EXISTE",
-     "estado": "negado",
+     "estado": "desconocido",
      "opciones": [
-      "no"
+      "no_sabe"
      ]
     },
     {
      "pregunta": "Q.EVI.QUE_TIENE",
-     "estado": "negado",
-     "opciones": [
-      "no"
-     ]
+     "estado": "omitido",
+     "opciones": []
     },
     {
      "pregunta": "Q.DEN.INTENCION",
-     "estado": "negado",
+     "estado": "desconocido",
      "opciones": [
-      "no"
+      "no_sabe"
      ]
     }
    ],
@@ -1137,6 +1196,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -1148,13 +1212,21 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Logré escapar. Ocurrió anteayer. No hay testigos. No tengo fotos, video ni otra cosa para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Me robaron la chamarra. Perdí el celular, la chamarra y un papel. Otra persona escapó. Ocurrió hace 5 horas. Ocurrió en mi casa. Fue cerca de este lugar: «el mercado 25 de Mayo». No sé si la conozco. No sé si hay testigos. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no",
-   "Q.EVI.QUE_TIENE#no",
-   "Q.HEC.ESCAPE_ACTOR#yo",
-   "Q.TES.EXISTE#no",
-   "Q.TIE.CUANDO#anteayer"
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.FALTA.QUE#celular",
+   "Q.FALTA.QUE#chamarra",
+   "Q.FALTA.QUE#papel",
+   "Q.HEC.ESCAPE_ACTOR#otra",
+   "Q.HEC.PERDIDA_TIPO#perdi",
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#casa",
+   "Q.LUG.RELACION#cerca",
+   "Q.PER.CONOCE#no_sabe",
+   "Q.ROB.QUE#chamarra",
+   "Q.TES.EXISTE#no_sabe",
+   "Q.TIE.CUANDO#hace_h"
   ]
  },
  {
@@ -1272,33 +1344,36 @@
      }
     },
     {
-     "pregunta": "Q.PER.DESC.ROPA_COLOR",
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.POLERA",
      "estado": "afirmado",
      "opciones": [
-      "negro"
+      "negro",
+      "otro"
      ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     },
      "padre": "Q.PER.DESC.ROPA"
     },
     {
-     "pregunta": "Q.TES.EXISTE",
-     "estado": "desconocido",
+     "pregunta": "Q.PER.DESC.ROPA_COLOR",
+     "estado": "afirmado",
      "opciones": [
-      "no_sabe"
-     ]
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     },
+     "padre": "Q.PER.DESC.ROPA"
     },
     {
      "pregunta": "Q.EVI.FACTURA",
-     "estado": "afirmado",
-     "opciones": [
-      "si"
-     ]
-    },
-    {
-     "pregunta": "Q.EVI.TRAE_COPIA",
-     "estado": "afirmado",
-     "opciones": [
-      "si"
-     ]
+     "estado": "omitido",
+     "opciones": []
     },
     {
      "pregunta": "Q.EVI.QUE_TIENE",
@@ -1311,6 +1386,7 @@
      "pregunta": "Q.EVI.TIPOS",
      "estado": "afirmado",
      "opciones": [
+      "fotos",
       "video"
      ]
     },
@@ -1342,6 +1418,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -1353,13 +1434,12 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron el celular, la bolsa, la chamarra y «un recibo firmado». Ocurrió en la plaza Heroínas. Fue lejos de este lugar: «el mercado 25 de Mayo». No sé si era hombre o mujer. Tenía 50 años. Era una persona baja. Era una persona delgada. Llevaba una polera y «un recibo firmado». Su ropa era de color negro. No sé si hay testigos. Sí, tengo la factura. La tengo aquí. Sí, tengo un video. Sí, quiero presentar una denuncia.",
+  "texto": "Me robaron el celular, la bolsa, la chamarra y «un recibo firmado». Ocurrió en la plaza Heroínas. Fue lejos de este lugar: «el mercado 25 de Mayo». No sé si era hombre o mujer. Tenía 50 años. Era una persona baja. Era una persona delgada. Llevaba una polera y «un recibo firmado». La polera era de color negro y «un recibo firmado». Su ropa era de color «un recibo firmado». Sí, tengo fotos y un video. Sí, quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#si",
-   "Q.EVI.FACTURA#si",
    "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#fotos",
    "Q.EVI.TIPOS#video",
-   "Q.EVI.TRAE_COPIA#si",
    "Q.HEC.QUE_OCURRIO#robar",
    "Q.LUG.DONDE#plaza",
    "Q.LUG.RELACION#lejos",
@@ -1368,13 +1448,14 @@
    "Q.PER.DESC.ESTATURA#bajo",
    "Q.PER.DESC.ROPA#otro",
    "Q.PER.DESC.ROPA#polera",
-   "Q.PER.DESC.ROPA_COLOR#negro",
+   "Q.PER.DESC.ROPA_COLOR#otro",
+   "Q.PER.DESC.ROPA_COLOR.POLERA#negro",
+   "Q.PER.DESC.ROPA_COLOR.POLERA#otro",
    "Q.PER.DESC.SEXO#no_sabe",
    "Q.ROB.QUE#bolsa",
    "Q.ROB.QUE#celular",
    "Q.ROB.QUE#chamarra",
-   "Q.ROB.QUE#otro",
-   "Q.TES.EXISTE#no_sabe"
+   "Q.ROB.QUE#otro"
   ]
  },
  {
@@ -1386,51 +1467,142 @@
      "pregunta": "Q.HEC.QUE_OCURRIO",
      "estado": "afirmado",
      "opciones": [
-      "escapar"
+      "escapar",
+      "robar"
+     ]
+    },
+    {
+     "pregunta": "Q.ROB.QUE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
      ]
     },
     {
      "pregunta": "Q.HEC.ESCAPE_ACTOR",
-     "estado": "afirmado",
+     "estado": "desconocido",
      "opciones": [
-      "yo"
+      "no_sabe"
      ]
     },
     {
      "pregunta": "Q.TIE.CUANDO",
-     "estado": "desconocido",
+     "estado": "afirmado",
      "opciones": [
-      "no_recuerda"
-     ]
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "6"
+      }
+     }
     },
     {
      "pregunta": "Q.LUG.DONDE",
      "estado": "afirmado",
      "opciones": [
-      "casa"
+      "micro"
      ]
     },
     {
      "pregunta": "Q.LUG.RELACION",
      "estado": "afirmado",
      "opciones": [
-      "lejos"
+      "cerca"
      ],
      "valores": {
-      "lejos": {
+      "cerca": {
        "referencia": "el mercado 25 de Mayo"
       }
      }
     },
     {
-     "pregunta": "Q.TES.EXISTE",
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.VINCULO",
+     "estado": "afirmado",
+     "opciones": [
+      "amigo"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.NOMBRE_TERCERO",
      "estado": "omitido",
      "opciones": []
     },
     {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.SEXO",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ESTATURA",
+     "estado": "afirmado",
+     "opciones": [
+      "bajo"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.CONTEXTURA",
+     "estado": "afirmado",
+     "opciones": [
+      "gordo"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
      "pregunta": "Q.EVI.QUE_TIENE",
-     "estado": "omitido",
-     "opciones": []
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "afirmado",
+     "opciones": [
+      "otro",
+      "fotos"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
+     ]
     }
    ],
    "pasos": [
@@ -1453,6 +1625,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -1464,12 +1641,25 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Logré escapar. No recuerdo cuándo ocurrió. Ocurrió en mi casa. Fue lejos de este lugar: «el mercado 25 de Mayo».",
+  "texto": "Me robaron algo que no sé precisar. Alguien escapó, pero no sé quién. Ocurrió hace 6 meses. Ocurrió dentro de un micro. Fue cerca de este lugar: «el mercado 25 de Mayo». Conozco a esa persona. Es un amigo. Era un hombre. Era una persona baja. Era una persona de contextura gruesa. No hay testigos. Tengo fotos y «un recibo firmado». Quiero presentar una denuncia. Quiero presentarla ante la FELCV.",
   "representadas": [
-   "Q.HEC.ESCAPE_ACTOR#yo",
-   "Q.LUG.DONDE#casa",
-   "Q.LUG.RELACION#lejos",
-   "Q.TIE.CUANDO#no_recuerda"
+   "Q.DEN.AUTORIDAD#felcv",
+   "Q.DEN.INTENCION#si",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#fotos",
+   "Q.EVI.TIPOS#otro",
+   "Q.HEC.ESCAPE_ACTOR#no_sabe",
+   "Q.HEC.QUE_OCURRIO#robar",
+   "Q.LUG.DONDE#micro",
+   "Q.LUG.RELACION#cerca",
+   "Q.PER.CONOCE#si",
+   "Q.PER.DESC.CONTEXTURA#gordo",
+   "Q.PER.DESC.ESTATURA#bajo",
+   "Q.PER.DESC.SEXO#hombre",
+   "Q.PER.VINCULO#amigo",
+   "Q.ROB.QUE#no_sabe",
+   "Q.TES.EXISTE#no",
+   "Q.TIE.CUANDO#hace_m"
   ]
  },
  {
@@ -1602,6 +1792,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -1640,15 +1835,14 @@
      "pregunta": "Q.HEC.QUE_OCURRIO",
      "estado": "afirmado",
      "opciones": [
-      "perder"
+      "perder",
+      "escapar"
      ]
     },
     {
      "pregunta": "Q.FALTA.QUE",
-     "estado": "afirmado",
-     "opciones": [
-      "gorra"
-     ]
+     "estado": "omitido",
+     "opciones": []
     },
     {
      "pregunta": "Q.HEC.PERDIDA_TIPO",
@@ -1658,23 +1852,37 @@
      ]
     },
     {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "estado": "afirmado",
+     "opciones": [
+      "otra"
+     ]
+    },
+    {
      "pregunta": "Q.TIE.CUANDO",
      "estado": "afirmado",
      "opciones": [
-      "hace_s"
-     ],
-     "valores": {
-      "hace_s": {
-       "n": "12"
-      }
-     }
+      "tarde"
+     ]
     },
     {
      "pregunta": "Q.LUG.DONDE",
-     "estado": "desconocido",
+     "estado": "afirmado",
      "opciones": [
-      "no_sabe"
+      "mercado"
      ]
+    },
+    {
+     "pregunta": "Q.LUG.RELACION",
+     "estado": "afirmado",
+     "opciones": [
+      "al_lado"
+     ],
+     "valores": {
+      "al_lado": {
+       "referencia": "el mercado 25 de Mayo"
+      }
+     }
     },
     {
      "pregunta": "Q.TES.EXISTE",
@@ -1685,9 +1893,9 @@
     },
     {
      "pregunta": "Q.EVI.QUE_TIENE",
-     "estado": "negado",
+     "estado": "desconocido",
      "opciones": [
-      "no"
+      "no_sabe"
      ]
     },
     {
@@ -1718,6 +1926,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -1729,15 +1942,16 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me falta la gorra; creo que fue un robo, pero no estoy seguro. Ocurrió hace 12 semanas. No sé exactamente dónde ocurrió. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Me falta algo; creo que fue un robo, pero no estoy seguro. Otra persona escapó. Ocurrió por la tarde. Ocurrió en el mercado. Fue al lado de este lugar: «el mercado 25 de Mayo». No sé si hay testigos. No sé si tengo algo para mostrar. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#no_sabe",
-   "Q.EVI.QUE_TIENE#no",
-   "Q.FALTA.QUE#gorra",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HEC.ESCAPE_ACTOR#otra",
    "Q.HEC.PERDIDA_TIPO#robo_creo",
-   "Q.LUG.DONDE#no_sabe",
+   "Q.LUG.DONDE#mercado",
+   "Q.LUG.RELACION#al_lado",
    "Q.TES.EXISTE#no_sabe",
-   "Q.TIE.CUANDO#hace_s"
+   "Q.TIE.CUANDO#tarde"
   ]
  },
  {
@@ -1849,32 +2063,41 @@
      }
     },
     {
-     "pregunta": "Q.PER.DESC.ROPA_COLOR",
-     "estado": "desconocido",
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.PANTALON",
+     "estado": "afirmado",
      "opciones": [
-      "no_recuerda"
+      "rojo"
+     ],
+     "padre": "Q.PER.DESC.ROPA"
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.MOCHILA",
+     "estado": "afirmado",
+     "opciones": [
+      "rojo"
+     ],
+     "padre": "Q.PER.DESC.ROPA"
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR",
+     "estado": "afirmado",
+     "opciones": [
+      "negro"
      ],
      "padre": "Q.PER.DESC.ROPA"
     },
     {
      "pregunta": "Q.TES.EXISTE",
-     "estado": "desconocido",
+     "estado": "negado",
      "opciones": [
-      "no_sabe"
-     ]
-    },
-    {
-     "pregunta": "Q.EVI.QUE_TIENE",
-     "estado": "desconocido",
-     "opciones": [
-      "no_sabe"
+      "no"
      ]
     },
     {
      "pregunta": "Q.DEN.INTENCION",
-     "estado": "negado",
+     "estado": "desconocido",
      "opciones": [
-      "no"
+      "no_sabe"
      ]
     }
    ],
@@ -1898,6 +2121,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -1909,10 +2137,9 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Dañaron algo mío. Otra persona escapó. Ocurrió hace 11 meses. Ocurrió dentro de un micro. Fue cerca de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Era una persona adulta. No recuerdo su contextura. Llevaba un pantalón, una mochila y «un recibo firmado». No recuerdo el color de su ropa. No sé si hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Dañaron algo mío. Otra persona escapó. Ocurrió hace 11 meses. Ocurrió dentro de un micro. Fue cerca de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Era una persona adulta. No recuerdo su contextura. Llevaba un pantalón, una mochila y «un recibo firmado». El pantalón era de color rojo. La mochila era de color rojo. Su ropa era de color negro. No hay testigos. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no",
-   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.DEN.INTENCION#no_sabe",
    "Q.HEC.ESCAPE_ACTOR#otra",
    "Q.HEC.QUE_OCURRIO#danar",
    "Q.LUG.DONDE#micro",
@@ -1923,8 +2150,10 @@
    "Q.PER.DESC.ROPA#mochila",
    "Q.PER.DESC.ROPA#otro",
    "Q.PER.DESC.ROPA#pantalon",
-   "Q.PER.DESC.ROPA_COLOR#no_recuerda",
-   "Q.TES.EXISTE#no_sabe",
+   "Q.PER.DESC.ROPA_COLOR#negro",
+   "Q.PER.DESC.ROPA_COLOR.MOCHILA#rojo",
+   "Q.PER.DESC.ROPA_COLOR.PANTALON#rojo",
+   "Q.TES.EXISTE#no",
    "Q.TIE.CUANDO#hace_m"
   ]
  },
@@ -1937,21 +2166,18 @@
      "pregunta": "Q.HEC.QUE_OCURRIO",
      "estado": "afirmado",
      "opciones": [
-      "perder"
+      "perder",
+      "danar"
      ]
     },
     {
      "pregunta": "Q.FALTA.QUE",
      "estado": "afirmado",
      "opciones": [
-      "otro",
-      "carnet"
-     ],
-     "valores": {
-      "otro": {
-       "texto": "un recibo firmado"
-      }
-     }
+      "papel",
+      "carnet",
+      "lentes"
+     ]
     },
     {
      "pregunta": "Q.HEC.PERDIDA_TIPO",
@@ -1961,23 +2187,35 @@
      ]
     },
     {
+     "pregunta": "Q.DAN.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
      "pregunta": "Q.TIE.CUANDO",
      "estado": "afirmado",
      "opciones": [
-      "tarde"
-     ]
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "21"
+      }
+     }
     },
     {
      "pregunta": "Q.LUG.DONDE",
      "estado": "afirmado",
      "opciones": [
-      "mercado"
-     ],
-     "valores": {
-      "mercado": {
-       "nombre": "Heroínas"
-      }
-     }
+      "trufi"
+     ]
     },
     {
      "pregunta": "Q.LUG.RELACION",
@@ -1992,6 +2230,60 @@
      }
     },
     {
+     "pregunta": "Q.PER.CONOCE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.SEXO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.EDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "numero"
+     ],
+     "valores": {
+      "numero": {
+       "n": "100"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.DESC.ESTATURA",
+     "estado": "afirmado",
+     "opciones": [
+      "bajo"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.CONTEXTURA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
      "pregunta": "Q.TES.EXISTE",
      "estado": "afirmado",
      "opciones": [
@@ -2000,16 +2292,23 @@
     },
     {
      "pregunta": "Q.EVI.QUE_TIENE",
-     "estado": "desconocido",
+     "estado": "negado",
      "opciones": [
-      "no_sabe"
+      "no"
      ]
     },
     {
      "pregunta": "Q.DEN.INTENCION",
-     "estado": "negado",
+     "estado": "afirmado",
      "opciones": [
-      "no"
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcc"
      ]
     }
    ],
@@ -2033,6 +2332,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -2044,17 +2348,27 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me falta mi carnet de identidad y «un recibo firmado»; creo que fue un robo, pero no estoy seguro. Ocurrió por la tarde. Ocurrió en el mercado Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». Hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Dañaron «un recibo firmado». Me falta los lentes, mi carnet de identidad y un papel; creo que fue un robo, pero no estoy seguro. Ocurrió hace 21 meses. Ocurrió dentro de un trufi. Fue al lado de este lugar: «el mercado 25 de Mayo». No sé si la conozco. No sé si era hombre o mujer. Tenía 100 años. Era una persona baja. No recuerdo su contextura. No recuerdo su ropa. Hay testigos. No tengo fotos, video ni otra cosa para mostrar. Quiero presentar una denuncia. Quiero presentarla ante la FELCC.",
   "representadas": [
-   "Q.DEN.INTENCION#no",
-   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.DAN.QUE#otro",
+   "Q.DEN.AUTORIDAD#felcc",
+   "Q.DEN.INTENCION#si",
+   "Q.EVI.QUE_TIENE#no",
    "Q.FALTA.QUE#carnet",
-   "Q.FALTA.QUE#otro",
+   "Q.FALTA.QUE#lentes",
+   "Q.FALTA.QUE#papel",
    "Q.HEC.PERDIDA_TIPO#robo_creo",
-   "Q.LUG.DONDE#mercado",
+   "Q.HEC.QUE_OCURRIO#danar",
+   "Q.LUG.DONDE#trufi",
    "Q.LUG.RELACION#al_lado",
+   "Q.PER.CONOCE#no_sabe",
+   "Q.PER.DESC.CONTEXTURA#no_sabe",
+   "Q.PER.DESC.EDAD#numero",
+   "Q.PER.DESC.ESTATURA#bajo",
+   "Q.PER.DESC.ROPA#no_recuerda",
+   "Q.PER.DESC.SEXO#no_sabe",
    "Q.TES.EXISTE#si",
-   "Q.TIE.CUANDO#tarde"
+   "Q.TIE.CUANDO#hace_m"
   ]
  },
  {
@@ -2131,7 +2445,7 @@
      ]
     },
     {
-     "pregunta": "Q.PER.DESC.ROPA_COLOR",
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.PANTALON",
      "estado": "afirmado",
      "opciones": [
       "otro"
@@ -2145,15 +2459,17 @@
     },
     {
      "pregunta": "Q.TES.EXISTE",
-     "estado": "negado",
+     "estado": "afirmado",
      "opciones": [
-      "no"
+      "si"
      ]
     },
     {
-     "pregunta": "Q.EVI.QUE_TIENE",
-     "estado": "omitido",
-     "opciones": []
+     "pregunta": "Q.TES.CANTIDAD",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
     },
     {
      "pregunta": "Q.DEN.INTENCION",
@@ -2183,6 +2499,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -2194,7 +2515,7 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron algo. No sé exactamente dónde ocurrió. No sé si la conozco. Era un hombre. Era una persona adulta. Era una persona alta. Era una persona delgada. Llevaba un pantalón. Su ropa era de color «un recibo firmado». No hay testigos. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Me robaron algo. No sé exactamente dónde ocurrió. No sé si la conozco. Era un hombre. Era una persona adulta. Era una persona alta. Era una persona delgada. Llevaba un pantalón. El pantalón era de color «un recibo firmado». Sí, hay testigos, pero no sé cuántos. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#no_sabe",
    "Q.HEC.QUE_OCURRIO#robar",
@@ -2204,9 +2525,10 @@
    "Q.PER.DESC.EDAD#adulto",
    "Q.PER.DESC.ESTATURA#alto",
    "Q.PER.DESC.ROPA#pantalon",
-   "Q.PER.DESC.ROPA_COLOR#otro",
+   "Q.PER.DESC.ROPA_COLOR.PANTALON#otro",
    "Q.PER.DESC.SEXO#hombre",
-   "Q.TES.EXISTE#no"
+   "Q.TES.CANTIDAD#no_sabe",
+   "Q.TES.EXISTE#si"
   ]
  },
  {
@@ -2323,6 +2645,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -2365,82 +2692,102 @@
     },
     {
      "pregunta": "Q.ROB.QUE",
+     "estado": "afirmado",
+     "opciones": [
+      "lentes"
+     ]
+    },
+    {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
      ]
     },
     {
-     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "pregunta": "Q.TIE.CUANDO",
      "estado": "afirmado",
      "opciones": [
-      "otra"
-     ]
-    },
-    {
-     "pregunta": "Q.TIE.CUANDO",
-     "estado": "omitido",
-     "opciones": []
+      "hace_d"
+     ],
+     "valores": {
+      "hace_d": {
+       "n": "34"
+      }
+     }
     },
     {
      "pregunta": "Q.LUG.DONDE",
      "estado": "afirmado",
      "opciones": [
-      "micro"
+      "trufi"
      ]
     },
     {
      "pregunta": "Q.LUG.RELACION",
      "estado": "afirmado",
      "opciones": [
-      "lejos"
+      "cerca"
      ],
      "valores": {
-      "lejos": {
+      "cerca": {
        "referencia": "el mercado 25 de Mayo"
       }
      }
     },
     {
      "pregunta": "Q.PER.CONOCE",
-     "estado": "negado",
-     "opciones": [
-      "no"
-     ]
-    },
-    {
-     "pregunta": "Q.PER.DESCRIBIR",
-     "estado": "negado",
-     "opciones": [
-      "no"
-     ]
-    },
-    {
-     "pregunta": "Q.TES.EXISTE",
-     "estado": "negado",
-     "opciones": [
-      "no"
-     ]
-    },
-    {
-     "pregunta": "Q.EVI.QUE_TIENE",
-     "estado": "desconocido",
-     "opciones": [
-      "no_sabe"
-     ]
-    },
-    {
-     "pregunta": "Q.DEN.INTENCION",
      "estado": "afirmado",
      "opciones": [
       "si"
      ]
     },
     {
-     "pregunta": "Q.DEN.AUTORIDAD",
+     "pregunta": "Q.PER.VINCULO",
      "estado": "afirmado",
      "opciones": [
-      "policia"
+      "hermano"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.NOMBRE_TERCERO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.DESCRIBIR",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.CANTIDAD",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "afirmado",
+     "opciones": [
+      "video",
+      "certificado"
      ]
     }
    ],
@@ -2464,6 +2811,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -2475,18 +2827,22 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron algo que no sé precisar. Otra persona escapó. Ocurrió dentro de un micro. Fue lejos de este lugar: «el mercado 25 de Mayo». No conozco a esa persona. No hay testigos. No sé si tengo algo para mostrar. Quiero presentar una denuncia. Quiero presentarla ante la Policía.",
+  "texto": "Me robaron los lentes. Alguien escapó, pero no sé quién. Ocurrió hace 34 días. Ocurrió dentro de un trufi. Fue cerca de este lugar: «el mercado 25 de Mayo». Conozco a esa persona. Es mi hermano. No sé cómo se llama. Hay testigos, pero no sé cuántos. Tengo un video y un certificado.",
   "representadas": [
-   "Q.DEN.AUTORIDAD#policia",
-   "Q.DEN.INTENCION#si",
-   "Q.EVI.QUE_TIENE#no_sabe",
-   "Q.HEC.ESCAPE_ACTOR#otra",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#certificado",
+   "Q.EVI.TIPOS#video",
+   "Q.HEC.ESCAPE_ACTOR#no_sabe",
    "Q.HEC.QUE_OCURRIO#robar",
-   "Q.LUG.DONDE#micro",
-   "Q.LUG.RELACION#lejos",
-   "Q.PER.CONOCE#no",
-   "Q.ROB.QUE#no_sabe",
-   "Q.TES.EXISTE#no"
+   "Q.LUG.DONDE#trufi",
+   "Q.LUG.RELACION#cerca",
+   "Q.PER.CONOCE#si",
+   "Q.PER.NOMBRE_TERCERO#no_sabe",
+   "Q.PER.VINCULO#hermano",
+   "Q.ROB.QUE#lentes",
+   "Q.TES.CANTIDAD#no_sabe",
+   "Q.TES.EXISTE#si",
+   "Q.TIE.CUANDO#hace_d"
   ]
  },
  {
@@ -2578,11 +2934,10 @@
      ]
     },
     {
-     "pregunta": "Q.PER.DESC.ROPA_COLOR",
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
      "estado": "afirmado",
      "opciones": [
-      "otro",
-      "rojo"
+      "otro"
      ],
      "valores": {
       "otro": {
@@ -2593,9 +2948,9 @@
     },
     {
      "pregunta": "Q.TES.EXISTE",
-     "estado": "negado",
+     "estado": "desconocido",
      "opciones": [
-      "no"
+      "no_sabe"
      ]
     },
     {
@@ -2607,15 +2962,10 @@
     },
     {
      "pregunta": "Q.DEN.INTENCION",
-     "estado": "afirmado",
+     "estado": "negado",
      "opciones": [
-      "si"
+      "no"
      ]
-    },
-    {
-     "pregunta": "Q.DEN.AUTORIDAD",
-     "estado": "omitido",
-     "opciones": []
     }
    ],
    "pasos": [
@@ -2638,6 +2988,11 @@
     "Q.PER.DESC.ESTATURA",
     "Q.PER.DESC.CONTEXTURA",
     "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
@@ -2649,9 +3004,9 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron algo. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». Era una mujer. Era una persona adulta. Era una persona baja. Era una persona delgada. Llevaba una chamarra. Su ropa era de color rojo y «un recibo firmado». No hay testigos. No sé si tengo algo para mostrar. Sí, quiero presentar una denuncia.",
+  "texto": "Me robaron algo. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». Era una mujer. Era una persona adulta. Era una persona baja. Era una persona delgada. Llevaba una chamarra. La chamarra era de color «un recibo firmado». No sé si hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#si",
+   "Q.DEN.INTENCION#no",
    "Q.EVI.QUE_TIENE#no_sabe",
    "Q.HEC.QUE_OCURRIO#robar",
    "Q.LUG.DONDE#barrio",
@@ -2660,10 +3015,9 @@
    "Q.PER.DESC.EDAD#adulto",
    "Q.PER.DESC.ESTATURA#bajo",
    "Q.PER.DESC.ROPA#chamarra",
-   "Q.PER.DESC.ROPA_COLOR#otro",
-   "Q.PER.DESC.ROPA_COLOR#rojo",
+   "Q.PER.DESC.ROPA_COLOR.CHAMARRA#otro",
    "Q.PER.DESC.SEXO#mujer",
-   "Q.TES.EXISTE#no"
+   "Q.TES.EXISTE#no_sabe"
   ]
  },
  {

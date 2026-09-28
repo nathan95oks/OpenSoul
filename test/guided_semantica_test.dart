@@ -334,12 +334,70 @@ void main() {
   group('máximos y estados en el dominio', () {
     test('superar el máximo se rechaza, no reemplaza en silencio', () {
       var s = flow.startJourney('denuncia_robo');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'danar');
+      s = pick(s, 'Q.DAN.QUE', 'puerta');
+      s = pick(s, 'Q.DAN.QUE', 'celular');
+      s = pick(s, 'Q.DAN.QUE', 'casa');
+      final r = flow.select(s, 'Q.DAN.QUE', 'tienda');
+      expect(r.rejection, SelectionRejection.maxReached);
+      expect(r.session.answerOf('Q.DAN.QUE')!.optionIds,
+          ['puerta', 'celular', 'casa']);
+    });
+
+    test('una denuncia admite todos sus hechos a la vez', () {
+      var s = flow.startJourney('denuncia_robo');
+      for (final hecho in const ['robar', 'perder', 'danar', 'escapar']) {
+        s = pick(s, 'Q.HEC.QUE_OCURRIO', hecho);
+      }
+      expect(s.answerOf('Q.HEC.QUE_OCURRIO')!.optionIds,
+          ['robar', 'perder', 'danar', 'escapar']);
+    });
+
+    test('robo, daño y huida: cada hecho con lo suyo en la frase', () {
+      var s = flow.startJourney('denuncia_robo');
       s = pick(s, 'Q.HEC.QUE_OCURRIO', 'robar');
       s = pick(s, 'Q.HEC.QUE_OCURRIO', 'danar');
-      final r = flow.select(s, 'Q.HEC.QUE_OCURRIO', 'escapar');
-      expect(r.rejection, SelectionRejection.maxReached);
-      expect(r.session.answerOf('Q.HEC.QUE_OCURRIO')!.optionIds,
-          ['robar', 'danar']);
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'escapar');
+      s = pick(s, 'Q.ROB.QUE', 'dinero');
+      s = pick(s, 'Q.DAN.QUE', 'celular');
+      s = pick(s, 'Q.HEC.ESCAPE_ACTOR', 'autor');
+      expect(
+        text(s),
+        startsWith('Me robaron dinero. Dañaron el celular. '
+            'La persona que me robó escapó.'),
+      );
+    });
+
+    test('cada prenda pregunta su propio color', () {
+      var s = flow.startJourney('denuncia_robo');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'robar');
+      s = pick(s, 'Q.PER.DESCRIBIR', 'si');
+      for (final prenda in const ['polera', 'pantalon', 'chamarra', 'gorra']) {
+        s = pick(s, 'Q.PER.DESC.ROPA', prenda);
+      }
+      final colores = [
+        for (final p in const ['POLERA', 'PANTALON', 'CHAMARRA', 'GORRA'])
+          'Q.PER.DESC.ROPA_COLOR.$p',
+      ];
+      final faltan = flow.missingRequired(s);
+      expect(faltan, containsAll(colores));
+      // Ni la de «otra prenda» ni la de una prenda que no se eligió.
+      expect(faltan, isNot(contains('Q.PER.DESC.ROPA_COLOR')));
+      expect(faltan, isNot(contains('Q.PER.DESC.ROPA_COLOR.MOCHILA')));
+      expect(flow.canFinish(s), isFalse, reason: 'falta el color de cada una');
+
+      s = pick(s, colores[0], 'negro');
+      s = pick(s, colores[1], 'azul');
+      s = pick(s, colores[2], 'rojo');
+      s = pick(s, colores[3], 'no_recuerda');
+      expect(flow.canFinish(s), isTrue);
+      expect(
+        text(s),
+        contains('Llevaba una polera, un pantalón, una chamarra y una gorra. '
+            'La polera era de color negro. El pantalón era de color azul. '
+            'La chamarra era de color rojo. '
+            'No recuerdo el color de la gorra.'),
+      );
     });
 
     test('«No sé» excluye al resto en una selección múltiple', () {
