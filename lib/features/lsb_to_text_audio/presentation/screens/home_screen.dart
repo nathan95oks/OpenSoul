@@ -58,11 +58,13 @@ class HomeScreen extends ConsumerWidget {
         .purpose
         .servesConversation;
     final enSeleccionGlosas = contextState != null;
-    // Dentro de una familia (Denuncias, Trámites) se vuelve con su «Volver»:
-    // la flecha de arriba solo está en la primera pantalla.
+    // Dentro de una familia (Denuncias, Trámites) la flecha vuelve al menú.
     final enFamilia =
         !enSeleccionGlosas && ref.watch(openFamilyProvider) != null;
 
+    // Una sola flecha, siempre arriba a la izquierda: desde las glosas
+    // vuelve a la lista; desde la lista de una familia, al menú; desde el
+    // menú, si se respondía al chat, a la conversación.
     final Widget? leadingWidget = enSeleccionGlosas
         ? IconButton(
             key: const Key('volver_a_contextos'),
@@ -70,7 +72,14 @@ class HomeScreen extends ConsumerWidget {
             tooltip: 'Volver a los contextos',
             onPressed: () => ref.read(cardsFlowSessionProvider).reset(),
           )
-        : (sirveConversacion && !enFamilia
+        : enFamilia
+        ? IconButton(
+            key: const Key('volver_a_familias'),
+            icon: const Icon(Icons.arrow_back, color: AppTheme.ink),
+            tooltip: 'Volver',
+            onPressed: () => ref.read(openFamilyProvider.notifier).clear(),
+          )
+        : (sirveConversacion
               ? IconButton(
                   icon: const Icon(Icons.arrow_back, color: AppTheme.ink),
                   tooltip: 'Volver a la conversación',

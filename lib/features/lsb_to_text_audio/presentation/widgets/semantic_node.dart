@@ -223,15 +223,16 @@ class _SemanticNodeState extends ConsumerState<SemanticNode>
                     end: Alignment.bottomRight,
                   )
                 : null,
-            // Plana y sin borde: la glosa es lo único que se ve.
-            color: selected ? null : AppTheme.lightSurface,
+            // Lavanda suave con borde fino violeta: se distingue del fondo
+            // blanco y la elegida pasa a violeta lleno.
+            color: selected ? null : AppTheme.glossCardBg,
             borderRadius: BorderRadius.circular(_radio),
             border: Border.all(
               color: selected
                   ? const Color(0xFFC084FC)
                   : widget.requiresSelection
                   ? SemanticNode.requiredSelectionColor
-                  : Colors.transparent,
+                  : AppTheme.glossCardBorder,
               width: selected || widget.requiresSelection ? 2 : 1.2,
             ),
             boxShadow: selected

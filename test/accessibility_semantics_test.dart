@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/home_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/context_selection_widget.dart';
 
 /// Pruebas de accesibilidad (A11Y-01): los elementos interactivos exponen
@@ -59,10 +60,15 @@ void main() {
   });
 
   testWidgets('se puede volver de una familia desplegada', (tester) async {
-    await abrir(tester);
+    // La flecha para volver está en la barra superior de la pantalla, con
+    // su etiqueta para el lector de pantalla.
+    await tester.pumpWidget(
+      const ProviderScope(child: MaterialApp(home: HomeScreen())),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.bySemanticsLabel(RegExp('Denuncias')));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Volver'));
+    await tester.tap(find.byTooltip('Volver'));
     await tester.pumpAndSettle();
 
     expect(find.bySemanticsLabel(RegExp('Preguntas')), findsOneWidget);
