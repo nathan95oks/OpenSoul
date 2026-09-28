@@ -23,6 +23,11 @@ class TextInputWidget extends ConsumerStatefulWidget {
   final FocusNode? focusNode;
   final ValueChanged<bool>? onComposingChanged;
 
+  /// `true`: lo dictado se envía solo en cuanto el micrófono termina de
+  /// escuchar, sin esperar al botón de enviar (Texto/Audio → LSB). Con
+  /// `false` queda en el campo para revisarlo y enviarlo a mano.
+  final bool sendSpeechAutomatically;
+
   const TextInputWidget({
     super.key,
     required this.onSubmit,
@@ -31,6 +36,7 @@ class TextInputWidget extends ConsumerStatefulWidget {
     this.isActive = true,
     this.focusNode,
     this.onComposingChanged,
+    this.sendSpeechAutomatically = false,
   });
 
   @override
@@ -128,17 +134,15 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
     try {
       FocusScope.of(context).unfocus();
       bool available = await _speechToText.initialize(
-        onStatus: (status) {
-          if (status == 'done' || status == 'notListening') {
-            if (_isRecording) {
-              _stopRecording();
-            }
-          }
-        },
-        onError: (error) {
-          if (_isRecording) _stopRecording(porError: true);
-        },
+        onStatus: _onSpeechStatus,
+        onError: _onSpeechError,
       );
+      // El motor es uno solo para toda la app y `initialize` solo registra
+      // los avisos la primera vez: sin esto, tras dictar en otro módulo,
+      // «terminé de oír» le llegaría a ese otro campo y este seguiría
+      // esperando.
+      _speechToText.statusListener = _onSpeechStatus;
+      _speechToText.errorListener = _onSpeechError;
 
       if (available) {
         setState(() {
@@ -180,6 +184,16 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
     }
   }
 
+  void _onSpeechStatus(String status) {
+    if ((status == 'done' || status == 'notListening') && _isRecording) {
+      _stopRecording();
+    }
+  }
+
+  void _onSpeechError(Object _) {
+    if (_isRecording) _stopRecording(porError: true);
+  }
+
   void _warn(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(
@@ -189,15 +203,12 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
 
   String _lastRecognizedWords = '';
 
-  /// Detiene el dictado SIN enviar la traducción. Antes, terminar de grabar
-  /// —por el botón, porque el motor decidió que ya terminó ("done"/
-  /// "notListening"), o por un error de reconocimiento— confirmaba y enviaba
-  /// el texto reconocido directamente, sin darle a la persona oportunidad de
-  /// revisarlo o corregirlo; un error de reconocimiento podía así enviar una
-  /// transcripción incorrecta como si fuera lo que se dijo (sección 10 del
-  /// encargo "Audio/Texto -> LSB"). Ahora el texto reconocido queda en el
-  /// campo, editable, y hace falta el botón de enviar para traducirlo — igual
-  /// que si se hubiera escrito a mano.
+  /// Detiene el dictado. Terminar de grabar —por el botón o porque el motor
+  /// decidió que ya terminó ("done"/"notListening")— envía lo reconocido si
+  /// [TextInputWidget.sendSpeechAutomatically]; si no, queda en el campo,
+  /// editable, hasta el botón de enviar. Un error de reconocimiento nunca
+  /// envía solo: una transcripción cortada o equivocada no puede pasar por lo
+  /// que se dijo, así que queda en el campo para revisarla.
   Future<void> _stopRecording({bool porError = false}) async {
     if (!_isRecording) return;
     try {
@@ -236,9 +247,13 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
       _warn(
         'Revisa el texto reconocido antes de enviarlo: puede tener errores.',
       );
+    } else if (widget.sendSpeechAutomatically && mounted) {
+      _controller.clear();
+      _notifyComposing();
+      (widget.onSpeechSubmit ?? widget.onSubmit)(text);
     }
-    // Sin error y con texto: se deja tal cual en el campo para que la
-    // persona lo revise y confirme con el botón de enviar.
+    // Sin envío automático: se deja tal cual en el campo para que la persona
+    // lo revise y confirme con el botón de enviar.
   }
 
   void _submit() {

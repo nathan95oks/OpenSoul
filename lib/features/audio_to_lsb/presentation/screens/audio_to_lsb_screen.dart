@@ -302,6 +302,8 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                         isActive: widget.isActive,
                         onSubmit: (text) => _submit(context, controller, text),
                         onComposingChanged: _setUserComposing,
+                        // Lo dictado se traduce en cuanto termina de oírse.
+                        sendSpeechAutomatically: true,
                       ),
                     ),
                 ],
