@@ -91,12 +91,6 @@ class TranslationController extends AsyncNotifier<TranslationResult?> {
     await replayAudio(fallbackText: fallbackText);
   }
 
-  /// Genera la declaración a partir de las glosas elegidas.
-  ///
-  /// No reproduce el audio automáticamente: la persona debe poder leer o
-  /// revisar el resultado antes de que algo se diga en su nombre ante la
-  /// institución. La reproducción queda a un toque explícito en
-  /// "Reproducir" (ver [replayAudio]).
   /// Las señales de negocio del momento.
   ///
   /// Van al backend para desambiguar y ordenar. **No son contenido**: el

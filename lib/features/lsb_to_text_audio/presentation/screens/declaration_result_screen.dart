@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -89,14 +88,7 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 18),
 
-                    Row(
-                      children: [
-                        const Expanded(
-                          child: _Label('Texto formal para autoridades:'),
-                        ),
-                        _OriginChip(bedrockUsed: result?.bedrockUsed ?? false),
-                      ],
-                    ),
+                    const _Label('Texto formal para autoridades:'),
                     const SizedBox(height: 8),
 
                     // Tarjeta Principal con la Declaración Formal Consolidada
@@ -127,30 +119,18 @@ class DeclarationResultScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // Botón Copiar al Portapapeles
-                    _FullWidthBtn(
-                      label: 'Copiar al portapapeles',
-                      icon: Icons.copy_outlined,
-                      filled: false,
-                      onTap: () => _copyTextToClipboard(context, displayText),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Reproductor de Audio TTS (Polly / Flutter TTS local)
-                    _AudioControls(
+                    // Reproductor de la declaración, como una nota de voz.
+                    _VoiceNotePlayer(
                       playback: playback,
-                      hasRemoteAudio:
-                          result?.audioUrl != null &&
-                          result!.audioUrl!.isNotEmpty,
+                      text: displayText,
                       onPlay: () {
+                        final controller = ref.read(
+                          translationControllerProvider.notifier,
+                        );
                         if (playback == AudioPlaybackState.paused) {
-                          ref
-                              .read(translationControllerProvider.notifier)
-                              .resumeAudio(fallbackText: displayText);
+                          controller.resumeAudio(fallbackText: displayText);
                         } else {
-                          ref
-                              .read(translationControllerProvider.notifier)
-                              .replayAudio(fallbackText: displayText);
+                          controller.replayAudio(fallbackText: displayText);
                         }
                       },
                       onPause: () => ref
@@ -205,20 +185,6 @@ class DeclarationResultScreen extends ConsumerWidget {
               ),
       ),
     );
-  }
-
-  Future<void> _copyTextToClipboard(BuildContext context, String text) async {
-    await Clipboard.setData(ClipboardData(text: text));
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        const SnackBar(
-          content: Text('Declaración copiada al portapapeles'),
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
   }
 
   Future<void> _sendToConversation(
@@ -279,48 +245,6 @@ class DeclarationResultScreen extends ConsumerWidget {
   }
 }
 
-class _OriginChip extends StatelessWidget {
-  final bool bedrockUsed;
-  const _OriginChip({required this.bedrockUsed});
-
-  static const _orange = AppTheme.brandPrimary;
-
-  @override
-  Widget build(BuildContext context) {
-    final (icon, label, color) = bedrockUsed
-        ? (Icons.auto_awesome, 'Refinado por IA', _orange)
-        : (Icons.offline_bolt_outlined, 'Motor local', AppTheme.lightTextSub);
-    return Semantics(
-      label: bedrockUsed
-          ? 'Declaración refinada por inteligencia artificial'
-          : 'Declaración generada por el motor local sin conexión',
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: color.withValues(alpha: 0.35)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 13, color: color),
-            const SizedBox(width: 5),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: color,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _Label extends StatelessWidget {
   final String text;
   const _Label(this.text);
@@ -339,83 +263,248 @@ class _Label extends StatelessWidget {
   }
 }
 
-class _AudioControls extends StatelessWidget {
+/// Reproductor de la declaración al estilo de una nota de voz: un botón
+/// redondo que pasa de play a pausa y una onda que se va llenando mientras
+/// suena.
+///
+/// El audio no informa su posición, así que el llenado sigue una duración
+/// estimada por la cantidad de palabras; si el audio termina antes, la onda
+/// vuelve a empezar, y si dura más, espera llena hasta que termine.
+class _VoiceNotePlayer extends StatefulWidget {
   final AudioPlaybackState playback;
-  final bool hasRemoteAudio;
+  final String text;
   final VoidCallback onPlay;
   final VoidCallback onPause;
 
-  const _AudioControls({
+  const _VoiceNotePlayer({
     required this.playback,
-    required this.hasRemoteAudio,
+    required this.text,
     required this.onPlay,
     required this.onPause,
   });
 
+  @override
+  State<_VoiceNotePlayer> createState() => _VoiceNotePlayerState();
+}
+
+class _VoiceNotePlayerState extends State<_VoiceNotePlayer>
+    with TickerProviderStateMixin {
   static const _orange = AppTheme.brandPrimary;
+  static const _barras = 28;
+
+  late final AnimationController _progreso = AnimationController(
+    vsync: this,
+    duration: _duracionEstimada(widget.text),
+  );
+  late final AnimationController _pulso = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 260),
+  );
+
+  /// Alturas fijas de la onda (entre 0.3 y 1), derivadas del texto para que
+  /// cada declaración tenga su propio dibujo.
+  late List<double> _alturas = _ondaDe(widget.text);
+
+  bool get _sonando => widget.playback == AudioPlaybackState.playing;
+
+  static Duration _duracionEstimada(String text) {
+    final palabras = text.trim().split(RegExp(r'\s+')).length;
+    // Unas 2,5 palabras por segundo, como habla Polly.
+    final ms = (palabras / 2.5 * 1000).round().clamp(1500, 60000);
+    return Duration(milliseconds: ms);
+  }
+
+  static List<double> _ondaDe(String text) {
+    var semilla = text.hashCode & 0x7fffffff;
+    return List.generate(_barras, (i) {
+      semilla = (semilla * 1103515245 + 12345) & 0x7fffffff;
+      final base = 0.3 + (semilla % 1000) / 1000 * 0.7;
+      // Los extremos más bajos, como el inicio y el final de una frase.
+      final borde = (i < 3 || i >= _barras - 3) ? 0.6 : 1.0;
+      return (base * borde).clamp(0.3, 1.0);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (_sonando) _progreso.forward();
+  }
+
+  @override
+  void didUpdateWidget(covariant _VoiceNotePlayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.text != widget.text) {
+      _progreso.duration = _duracionEstimada(widget.text);
+      _alturas = _ondaDe(widget.text);
+      _progreso.value = 0;
+    }
+    if (oldWidget.playback == widget.playback) return;
+    switch (widget.playback) {
+      case AudioPlaybackState.playing:
+        if (oldWidget.playback == AudioPlaybackState.idle) _progreso.value = 0;
+        _progreso.forward();
+        _pulso.forward(from: 0);
+      case AudioPlaybackState.paused:
+        _progreso.stop();
+      case AudioPlaybackState.idle:
+        _progreso.value = 0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _progreso.dispose();
+    _pulso.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isPlaying = playback == AudioPlaybackState.playing;
-
-    final (indicatorIcon, indicatorText) = switch (playback) {
-      AudioPlaybackState.playing => (Icons.graphic_eq, 'Reproduciendo…'),
-      AudioPlaybackState.paused => (Icons.pause_circle_outline, 'En pausa'),
-      AudioPlaybackState.idle => (
-        Icons.volume_up_outlined,
-        hasRemoteAudio ? 'Audio listo (Polly)' : 'Audio listo (local)',
-      ),
+    final etiqueta = switch (widget.playback) {
+      AudioPlaybackState.playing => 'Reproduciendo…',
+      AudioPlaybackState.paused => 'En pausa',
+      AudioPlaybackState.idle => 'Reproducir',
     };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-          decoration: BoxDecoration(
-            color: _orange.withValues(alpha: 0.10),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: _orange.withValues(alpha: 0.35)),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(indicatorIcon, size: 15, color: _orange),
-              const SizedBox(width: 6),
-              Text(
-                indicatorText,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: _orange,
+    return Semantics(
+      button: true,
+      label: _sonando ? 'Pausar' : 'Reproducir',
+      excludeSemantics: true,
+      child: Material(
+        color: AppTheme.lightSurface,
+        borderRadius: BorderRadius.circular(32),
+        child: InkWell(
+          key: const Key('reproducir_declaracion'),
+          borderRadius: BorderRadius.circular(32),
+          onTap: _sonando ? widget.onPause : widget.onPlay,
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(8, 8, 18, 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(32),
+              border: Border.all(color: AppTheme.lightBorder, width: 1.5),
+            ),
+            child: Row(
+              children: [
+                _boton(),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 30, child: _onda()),
+                      const SizedBox(height: 4),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: Text(
+                          etiqueta,
+                          key: ValueKey(etiqueta),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppTheme.lightTextSub,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: _FullWidthBtn(
-                label: 'Reproducir',
-                icon: Icons.play_arrow_rounded,
-                filled: !isPlaying,
-                onTap: isPlaying ? null : onPlay,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _FullWidthBtn(
-                label: 'Pausar',
-                icon: Icons.pause_rounded,
-                filled: isPlaying,
-                onTap: isPlaying ? onPause : null,
-              ),
+      ),
+    );
+  }
+
+  /// Botón redondo: al tocarlo late una vez y el ícono gira de play a pausa.
+  Widget _boton() {
+    return AnimatedBuilder(
+      animation: _pulso,
+      builder: (context, child) {
+        // Crece y vuelve, como la burbuja de WhatsApp al tocar play.
+        final t = Curves.easeOut.transform(_pulso.value);
+        final escala = 1 + 0.12 * (1 - (2 * t - 1).abs());
+        return Transform.scale(scale: escala, child: child);
+      },
+      child: Container(
+        width: 48,
+        height: 48,
+        decoration: BoxDecoration(
+          color: _orange,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: _orange.withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
-      ],
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 220),
+          transitionBuilder: (child, animation) => RotationTransition(
+            turns: Tween<double>(begin: 0.75, end: 1).animate(animation),
+            child: ScaleTransition(scale: animation, child: child),
+          ),
+          child: Icon(
+            _sonando ? Icons.pause_rounded : Icons.play_arrow_rounded,
+            key: ValueKey(_sonando),
+            color: Colors.white,
+            size: 28,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// La onda: las barras ya escuchadas se pintan del color de la marca y un
+  /// punto recorre la línea marcando por dónde va.
+  Widget _onda() {
+    return AnimatedBuilder(
+      animation: _progreso,
+      builder: (context, _) {
+        final avance = _progreso.value;
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final ancho = constraints.maxWidth;
+            return Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.centerLeft,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    for (var i = 0; i < _barras; i++)
+                      Container(
+                        width: 3,
+                        height: 30 * _alturas[i],
+                        decoration: BoxDecoration(
+                          color: (i + 0.5) / _barras <= avance
+                              ? _orange
+                              : AppTheme.lightTextSub.withValues(alpha: 0.35),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                  ],
+                ),
+                Positioned(
+                  left: (ancho - 12) * avance,
+                  child: Container(
+                    width: 12,
+                    height: 12,
+                    decoration: const BoxDecoration(
+                      color: _orange,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 }

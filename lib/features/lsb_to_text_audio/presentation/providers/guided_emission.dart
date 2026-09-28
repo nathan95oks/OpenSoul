@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
@@ -99,11 +101,23 @@ class GuidedEmission {
     final delivered = await ref
         .read(conversationReturnProvider)
         .deliver(result, intervention: intervention);
-    return GuidedEmissionOutcome(switch (delivered) {
+    final status = switch (delivered) {
       null => GuidedEmissionStatus.shownResult,
       SubmitOutcome.sent => GuidedEmissionStatus.returnedToConversation,
       _ => GuidedEmissionStatus.staleConversation,
-    });
+    };
+    // Si la declaración queda en pantalla, se escucha sola al llegar; si
+    // volvió al chat, suena allí.
+    if (status != GuidedEmissionStatus.returnedToConversation &&
+        ref.read(resultVisibleProvider)) {
+      unawaited(
+        ref
+            .read(translationControllerProvider.notifier)
+            .replayAudio(fallbackText: result.generatedText)
+            .catchError((_) {}),
+      );
+    }
+    return GuidedEmissionOutcome(status);
   }
 }
 
