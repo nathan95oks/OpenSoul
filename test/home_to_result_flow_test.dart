@@ -493,6 +493,12 @@ void main() {
       }
       expect(find.byIcon(Icons.copy_outlined), findsNothing);
 
+      // La caja de la declaración es morada: no se confunde con un botón.
+      final caja = tester.widget<Container>(
+        find.byKey(const Key('tarjeta_declaracion')),
+      );
+      expect((caja.decoration! as BoxDecoration).color, AppTheme.lsbViolet);
+
       // Mientras suena, el botón redondo es pausa.
       final boton = find.byKey(const Key('reproducir_declaracion'));
       expect(boton, findsOneWidget);
