@@ -4451,7 +4451,7 @@
    "entidad": "Hecho",
    "campo": "accion",
    "control": "seleccion_multiple",
-   "maximo": 2,
+   "maximo": 4,
    "siguiente": [
     {
      "si": "robar|perder|danar",
@@ -4484,7 +4484,7 @@
     "ENGAÑAR": "tiene su propio contexto (engaño con dinero)"
    },
    "reglas": [
-    "Hasta dos hechos. El orden de pulsación no es orden temporal: la frase sigue el orden del banco.",
+    "Todos los hechos que ocurrieron (robo, pérdida, daño, huida). El orden de pulsación no es orden temporal: la frase sigue el orden del banco.",
     "PERDER y ESCAPAR no redactan nada por sí mismos: exigen su aclaración (Q.HEC.PERDIDA_TIPO, Q.HEC.ESCAPE_ACTOR)."
    ],
    "nodos": [
@@ -6381,6 +6381,466 @@
    ]
   },
   {
+   "id": "Q.PER.DESC.ROPA_COLOR.POLERA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la polera?",
+   "gramaticaLsb": {
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "POLERA",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "COLOR",
+      "posicion": 1
+     }
+    ],
+    "regla": "R10 con el patrón del corpus para el color: SUSTANTIVO · COLOR · ¿CUÁL?; la prenda se signa con su glosa (POLERA)",
+    "evidencia": "corpus §6 «¿Qué color de cabello recuerda?» → CABELLO · COLOR · ¿CUÁL?"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_polera",
+   "control": "seleccion_multiple",
+   "maximo": 2,
+   "reglas": [
+    "Se abre cuando se elige «Polera» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La polera era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "condicion": "Solo si se eligió la polera en «¿Qué ropa llevaba?».",
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la polera."
+    }
+   ],
+   "variantes": [],
+   "plantilla": "La polera era de color {items}.",
+   "campos": [
+    "modificador"
+   ]
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.PANTALON",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era el pantalón?",
+   "gramaticaLsb": {
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "PANTALÓN",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "COLOR",
+      "posicion": 1
+     }
+    ],
+    "regla": "R10 con el patrón del corpus para el color: SUSTANTIVO · COLOR · ¿CUÁL?; la prenda se signa con su glosa (PANTALÓN)",
+    "evidencia": "corpus §6 «¿Qué color de cabello recuerda?» → CABELLO · COLOR · ¿CUÁL?"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_pantalon",
+   "control": "seleccion_multiple",
+   "maximo": 2,
+   "reglas": [
+    "Se abre cuando se elige «Pantalón» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «El pantalón era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "condicion": "Solo si se eligió el pantalón en «¿Qué ropa llevaba?».",
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de el pantalón."
+    }
+   ],
+   "variantes": [],
+   "plantilla": "El pantalón era de color {items}.",
+   "campos": [
+    "modificador"
+   ]
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la chamarra?",
+   "gramaticaLsb": {
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "CHAMARRA",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "COLOR",
+      "posicion": 1
+     }
+    ],
+    "regla": "R10 con el patrón del corpus para el color: SUSTANTIVO · COLOR · ¿CUÁL?; la prenda se signa con su glosa (CHAMARRA)",
+    "evidencia": "corpus §6 «¿Qué color de cabello recuerda?» → CABELLO · COLOR · ¿CUÁL?"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_chamarra",
+   "control": "seleccion_multiple",
+   "maximo": 2,
+   "reglas": [
+    "Se abre cuando se elige «Chamarra» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La chamarra era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "condicion": "Solo si se eligió la chamarra en «¿Qué ropa llevaba?».",
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la chamarra."
+    }
+   ],
+   "variantes": [],
+   "plantilla": "La chamarra era de color {items}.",
+   "campos": [
+    "modificador"
+   ]
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.GORRA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la gorra?",
+   "gramaticaLsb": {
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "GORRA",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "COLOR",
+      "posicion": 1
+     }
+    ],
+    "regla": "R10 con el patrón del corpus para el color: SUSTANTIVO · COLOR · ¿CUÁL?; la prenda se signa con su glosa (GORRA)",
+    "evidencia": "corpus §6 «¿Qué color de cabello recuerda?» → CABELLO · COLOR · ¿CUÁL?"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_gorra",
+   "control": "seleccion_multiple",
+   "maximo": 2,
+   "reglas": [
+    "Se abre cuando se elige «Gorra» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La gorra era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "condicion": "Solo si se eligió la gorra en «¿Qué ropa llevaba?».",
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la gorra."
+    }
+   ],
+   "variantes": [],
+   "plantilla": "La gorra era de color {items}.",
+   "campos": [
+    "modificador"
+   ]
+  },
+  {
+   "id": "Q.PER.DESC.ROPA_COLOR.MOCHILA",
+   "dominio": "descripcion",
+   "formulacion": "¿De qué color era la mochila?",
+   "gramaticaLsb": {
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "MOCHILA",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "huecos": [
+     {
+      "concepto": "COLOR",
+      "posicion": 1
+     }
+    ],
+    "regla": "R10 con el patrón del corpus para el color: SUSTANTIVO · COLOR · ¿CUÁL?; la prenda se signa con su glosa (MOCHILA)",
+    "evidencia": "corpus §6 «¿Qué color de cabello recuerda?» → CABELLO · COLOR · ¿CUÁL?"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona",
+   "campo": "ropa_color_mochila",
+   "control": "seleccion_multiple",
+   "maximo": 2,
+   "reglas": [
+    "Se abre cuando se elige «Mochila» en «¿Qué ropa llevaba?»: cada prenda lleva su propio color.",
+    "Plantilla: «La mochila era de color {colores}.»",
+    "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
+   ],
+   "condicion": "Solo si se eligió la mochila en «¿Qué ropa llevaba?».",
+   "noOfrecer": {
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "negro",
+     "etiqueta": "Negro",
+     "glosas": [
+      "NEGRO"
+     ],
+     "estado": "afirmado",
+     "frase": "negro"
+    },
+    {
+     "id": "azul",
+     "etiqueta": "Azul",
+     "glosas": [
+      "AZUL"
+     ],
+     "estado": "afirmado",
+     "frase": "azul"
+    },
+    {
+     "id": "rojo",
+     "etiqueta": "Rojo",
+     "glosas": [
+      "ROJO"
+     ],
+     "estado": "afirmado",
+     "frase": "rojo"
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otro color (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "«{texto}»",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_recuerda",
+     "etiqueta": "No recuerdo",
+     "glosas": [
+      "RECORDAR",
+      "NO"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No recuerdo el color de la mochila."
+    }
+   ],
+   "variantes": [],
+   "plantilla": "La mochila era de color {items}.",
+   "campos": [
+    "modificador"
+   ]
+  },
+  {
    "id": "Q.PER.DESC.ROPA_COLOR",
    "dominio": "descripcion",
    "formulacion": "¿De qué color era su ropa?",
@@ -6410,11 +6870,11 @@
    "control": "seleccion_multiple",
    "maximo": 3,
    "reglas": [
-    "Se abre siempre que se elige una prenda en «¿Qué ropa llevaba?»: una descripción de la ropa no queda sin color.",
+    "Se abre cuando se elige «Otra prenda o color (escribir)» en «¿Qué ropa llevaba?»; las prendas con tarjeta tienen su propia pregunta de color.",
     "Plantilla: «Su ropa era de color {colores}.»",
     "NEGRO, AZUL y ROJO tienen glosa; los demás colores se escriben como texto literal declarado."
    ],
-   "condicion": "Solo si se eligió alguna prenda.",
+   "condicion": "Solo si se eligió otra prenda.",
    "noOfrecer": {
     "CUÁL": "formulacion"
    },
@@ -11173,16 +11633,76 @@
      ]
     },
     {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.POLERA",
+     "cuando": [
+      {
+       "pregunta": "Q.PER.DESC.ROPA",
+       "opciones": [
+        "polera"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.PER.DESC.ROPA"
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.PANTALON",
+     "cuando": [
+      {
+       "pregunta": "Q.PER.DESC.ROPA",
+       "opciones": [
+        "pantalon"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.PER.DESC.ROPA"
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+     "cuando": [
+      {
+       "pregunta": "Q.PER.DESC.ROPA",
+       "opciones": [
+        "chamarra"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.PER.DESC.ROPA"
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.GORRA",
+     "cuando": [
+      {
+       "pregunta": "Q.PER.DESC.ROPA",
+       "opciones": [
+        "gorra"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.PER.DESC.ROPA"
+    },
+    {
+     "pregunta": "Q.PER.DESC.ROPA_COLOR.MOCHILA",
+     "cuando": [
+      {
+       "pregunta": "Q.PER.DESC.ROPA",
+       "opciones": [
+        "mochila"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.PER.DESC.ROPA"
+    },
+    {
      "pregunta": "Q.PER.DESC.ROPA_COLOR",
      "cuando": [
       {
        "pregunta": "Q.PER.DESC.ROPA",
        "opciones": [
-        "polera",
-        "pantalon",
-        "chamarra",
-        "gorra",
-        "mochila",
         "otro"
        ]
       }

@@ -184,8 +184,20 @@ class ValidacionDelContratoGuiado(unittest.TestCase):
             answer("Q.ROB.QUE", ["celular", "no_sabe"]))))
 
     def test_supera_el_maximo(self):
-        self.rechaza(self.mutado(lambda g: g["respuestas"][0].update(
-            opciones=["robar", "danar", "escapar"])))
+        # «¿Qué dañaron?» admite tres cosas.
+        self.rechaza(self.mutado(lambda g: g["respuestas"].append(
+            answer("Q.DAN.QUE", ["puerta", "celular", "casa", "tienda"]))),
+            cards=("ROBAR", "DAÑAR"))
+
+    def test_una_denuncia_lleva_todos_sus_hechos(self):
+        g = self.mutado(lambda g: g["respuestas"][0].update(
+            opciones=["robar", "perder", "danar", "escapar"]))
+        g["respuestas"] += [
+            answer("Q.HEC.PERDIDA_TIPO", ["perdi"]),
+            answer("Q.HEC.ESCAPE_ACTOR", ["autor"]),
+        ]
+        status, payload = invoke(request(g, cards=("ROBAR", "DAÑAR")))
+        self.assertEqual(200, status, payload)
 
     def test_estado_que_no_corresponde(self):
         self.rechaza(self.mutado(lambda g: g["respuestas"][1].update(

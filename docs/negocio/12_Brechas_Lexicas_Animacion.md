@@ -55,7 +55,7 @@ El valor escrito se guarda y se redacta tal cual; no se convierte en glosas.
 | `monto` | 3 |
 | `referencia` | 3 |
 | `telefono` | 5 |
-| `texto_detalle` | 21 |
+| `texto_detalle` | 26 |
 | `texto_nombre` | 5 |
 
 ## Animación de las glosas del banco
@@ -63,5 +63,5 @@ El valor escrito se guarda y se redacta tal cual; no se convierte en glosas.
 Solo cuenta para mostrar una frase en el avatar (texto/voz → LSB). La salida de las tarjetas es texto y audio en español.
 
 - Glosas distintas en respuestas del banco: **147**.
-- Con clip declarado en `available3DGlosses` (árbol de trabajo al generar): **69** — CUÁNDO, VOLVER, ESPERAR, CUÁNTOS, DÓNDE, OFICINA, QUIÉN, QUÉ, JUEZ, ABOGADO, INTÉRPRETE, HABLAR, AUTORIDAD, FACTURA, TRAER, NECESITAR, FOTOCOPIA, CERTIFICADO, CELULAR, BUSCAR, FOTOS, DAR, VIDEO, MAÑANA, PAPEL, RECIBIR, INVESTIGACIÓN, SÍ, NO, COMPRENDER, LENTO, EXPLICAR, POR_FAVOR, NO_SABER, LEER, CASA, 1, AMENAZAR, HOMBRE, MUJER, BANCO, ENGAÑAR, BILLETES, ENVIAR, RECORDAR, IDENTIDAD, RESOLUCIÓN, YO, ÉL, PERDER, ROBAR, DAÑAR, ACOMPAÑAR, CALLE, AVENIDA, CERCA, SEMANA, AYER, HOY, FECHA, SABER, QUERER, PEDIR, VER, PEGAR, AHORA, TARDE, PRIMERA_VEZ, VIOLENCIA.
+- Con clip declarado en `available3DGlosses` (árbol de trabajo al generar): **74** — CUÁNDO, VOLVER, ESPERAR, CUÁNTOS, HORA, DÓNDE, POLICÍA, OFICINA, QUIÉN, QUÉ, JUEZ, ABOGADO, INTÉRPRETE, HABLAR, PUEDO, AUTORIDAD, FACTURA, TRAER, NECESITAR, FOTOCOPIA, CERTIFICADO, CELULAR, BUSCAR, FOTOS, DAR, VIDEO, MAÑANA, PAPEL, RECIBIR, INVESTIGACIÓN, SÍ, NO, COMPRENDER, LENTO, EXPLICAR, POR_FAVOR, NO_SABER, LEER, ASISTENCIA, CASA, 1, AMENAZAR, HOMBRE, MUJER, BANCO, ENGAÑAR, BILLETES, ENVIAR, RECORDAR, IDENTIDAD, RESOLUCIÓN, YO, ÉL, PERDER, ROBAR, DAÑAR, ACOMPAÑAR, DENTRO, CALLE, AVENIDA, CERCA, SEMANA, AYER, HOY, FECHA, SABER, QUERER, PEDIR, VER, PEGAR, AHORA, TARDE, PRIMERA_VEZ, VIOLENCIA.
 - El resto se deletrea o queda como marcador en el avatar. La lista real de clips vive en el `.glb` de S3, que no está en el repositorio: **no se ha verificado en dispositivo**.
