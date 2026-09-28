@@ -96,16 +96,19 @@ void main() {
       await seleccion(tester);
     }
 
-    for (final familia in ['Denuncias', 'Trámites']) {
+    // Qué sección muestra la lista abierta de cada familia.
+    const seccion = {'Denuncias': 'Denunciar robo', 'Trámites': 'Mis datos'};
+
+    for (final familia in seccion.keys) {
       testWidgets('la flecha vuelve a la lista de $familia', (tester) async {
         await seleccion(tester);
         await tester.tap(find.text(familia));
         await tester.pumpAndSettle();
-        expect(find.text('Volver'), findsOneWidget);
+        expect(find.text(seccion[familia]!), findsOneWidget);
 
         await entrarYVolver(tester);
         expect(
-          find.text('Volver'),
+          find.text(seccion[familia]!),
           findsOneWidget,
           reason: 'sigue en la lista de $familia, no en el menú principal',
         );
@@ -113,16 +116,21 @@ void main() {
       });
     }
 
-    testWidgets('«Volver» de la lista lleva al menú principal', (tester) async {
+    testWidgets('la lista no tiene su propio «Volver»: está arriba', (
+      tester,
+    ) async {
       await seleccion(tester);
       await tester.tap(find.text('Denuncias'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Volver'));
-      await tester.pumpAndSettle();
       expect(find.text('Volver'), findsNothing);
 
+      // La flecha de arriba cierra la familia y vuelve al menú.
+      container.read(openFamilyProvider.notifier).clear();
+      await tester.pumpAndSettle();
+      expect(find.text('Denunciar robo'), findsNothing);
+      expect(find.text('Trámites'), findsOneWidget);
+
       await entrarYVolver(tester);
-      expect(find.text('Volver'), findsNothing);
       expect(find.text('Trámites'), findsOneWidget);
     });
   });
