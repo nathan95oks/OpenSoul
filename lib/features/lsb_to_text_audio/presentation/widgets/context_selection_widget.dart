@@ -40,6 +40,14 @@ class _ContextSelectionWidgetState
     _abierta =
         _familiaPorId(ref.read(openFamilyProvider)) ??
         _familiaDe(ref.read(cardsFlowLaunchProvider));
+    // La familia que abrió la conversación también cuenta como abierta (la
+    // barra superior oculta su flecha); se anota tras el primer cuadro.
+    final abierta = _abierta;
+    if (abierta != null && ref.read(openFamilyProvider) != abierta.id) {
+      Future.microtask(() {
+        if (mounted) ref.read(openFamilyProvider.notifier).open(abierta.id);
+      });
+    }
   }
 
   void _abrir(ContextFamily? familia) {

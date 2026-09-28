@@ -35,7 +35,11 @@ import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 /// nadie.
 class _StubSignRepository implements AudioTranslationRepository {
   @override
-  Future<LsbTranslation> translateText(String text, {String? situation, Map<String, String>? resolvedSenses}) async {
+  Future<LsbTranslation> translateText(
+    String text, {
+    String? situation,
+    Map<String, String>? resolvedSenses,
+  }) async {
     return LsbTranslation(
       glosses: const ['TU', 'CELULAR', 'ROBAR'],
       animationUrl: '',
@@ -54,21 +58,22 @@ class _StubDeclarationRepository implements TranslationRepository {
     String? replyToId,
     BusinessSignals? business,
     Map<String, dynamic>? guided,
-  }) async =>
-      TranslationResult(
-        baseSentence: 'Me robaron el celular.',
-        generatedText: 'Me robaron el celular.',
-      );
+  }) async => TranslationResult(
+    baseSentence: 'Me robaron el celular.',
+    generatedText: 'Me robaron el celular.',
+  );
 }
 
 ProviderContainer _appContainer() {
   final container = ProviderContainer(
     overrides: [
       lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-      audioTranslationRepositoryProvider
-          .overrideWithValue(_StubSignRepository()),
-      translationRepositoryProvider
-          .overrideWithValue(_StubDeclarationRepository()),
+      audioTranslationRepositoryProvider.overrideWithValue(
+        _StubSignRepository(),
+      ),
+      translationRepositoryProvider.overrideWithValue(
+        _StubDeclarationRepository(),
+      ),
       audioOutputProvider.overrideWithValue(FakeAudioOutput()),
       // Misma composición que `main.dart`: es la app real la que se audita.
       ...conversationOverrides(),
@@ -87,9 +92,9 @@ Future<void> _conversationInProgress(ProviderContainer c) async {
   await c
       .read(conversationProvider.notifier)
       .sendHearingMessage('¿Le robaron su celular?');
-  c.read(conversationHandoffProvider).openCards(
-        c.read(conversationHandoffProvider).nextDeafLaunch(),
-      );
+  c
+      .read(conversationHandoffProvider)
+      .openCards(c.read(conversationHandoffProvider).nextDeafLaunch());
   c.read(contextProvider.notifier).setContext(contextById('denuncia_robo')!);
   c.read(sentenceProvider.notifier).setWords(['CELULAR', 'ROBAR']);
 }
@@ -112,11 +117,18 @@ void main() {
           .read(surfaceSessionProvider)
           .enter(FlowSurface.standaloneCards);
 
-      expect(container.read(sentenceProvider), isEmpty,
-          reason: 'La declaración a medias de la conversación reaparece en el '
-              'módulo autónomo.');
-      expect(container.read(contextProvider), isNull,
-          reason: 'El módulo autónomo debe volver a preguntar el contexto.');
+      expect(
+        container.read(sentenceProvider),
+        isEmpty,
+        reason:
+            'La declaración a medias de la conversación reaparece en el '
+            'módulo autónomo.',
+      );
+      expect(
+        container.read(contextProvider),
+        isNull,
+        reason: 'El módulo autónomo debe volver a preguntar el contexto.',
+      );
       expect(container.read(semanticZonesProvider).activeZoneId, isNull);
       expect(container.read(translationControllerProvider).value, isNull);
     });
@@ -132,9 +144,13 @@ void main() {
           .read(surfaceSessionProvider)
           .enter(FlowSurface.standaloneCards);
 
-      expect(container.read(pendingReplyProvider), isNull,
-          reason: 'En uso autónomo el flujo no responde a nadie: mostrar la '
-              'pregunta del oyente enruta un recorrido que nadie pidió.');
+      expect(
+        container.read(pendingReplyProvider),
+        isNull,
+        reason:
+            'En uso autónomo el flujo no responde a nadie: mostrar la '
+            'pregunta del oyente enruta un recorrido que nadie pidió.',
+      );
     });
 
     test('la conversación conserva su historial intacto', () async {
@@ -153,38 +169,78 @@ void main() {
   });
 
   group('la fuga tampoco ocurre al revés', () {
-    test('lo construido en la pestaña autónoma no llega a la conversación',
-        () async {
-      final container = _appContainer();
-      await _conversationInProgress(container);
+    test(
+      'lo construido en la pestaña autónoma no llega a la conversación',
+      () async {
+        final container = _appContainer();
+        await _conversationInProgress(container);
 
+        await container
+            .read(surfaceSessionProvider)
+            .enter(FlowSurface.standaloneCards);
+        // Trabajo hecho como herramienta suelta, ajeno al diálogo.
+        container
+            .read(contextProvider.notifier)
+            .setContext(contextById('otro')!);
+        container.read(sentenceProvider.notifier).setWords(['HOMBRE', 'PEGAR']);
+
+        await container
+            .read(surfaceSessionProvider)
+            .enter(FlowSurface.conversation);
+
+        // Ir al chat no convierte la declaración propia en respuesta…
+        expect(container.read(pendingReplyProvider), isNull);
+        // …y responder abre un encargo nuevo, sin lo armado aparte (la
+        // pantalla pregunta antes de descartarlo).
+        final handoff = container.read(conversationHandoffProvider);
+        handoff.openCards(handoff.nextDeafLaunch());
+        expect(
+          container.read(sentenceProvider),
+          isEmpty,
+          reason:
+              'Una declaración construida fuera del diálogo no puede '
+              'reaparecer como respuesta de un turno.',
+        );
+        expect(container.read(contextProvider)?.id, isNot('otro'));
+      },
+    );
+
+    test('ir al chat y volver no borra la declaración propia', () async {
+      final container = _appContainer();
+      await container.read(lexiconEntriesProvider.future);
       await container
           .read(surfaceSessionProvider)
           .enter(FlowSurface.standaloneCards);
-      // Trabajo hecho como herramienta suelta, ajeno al diálogo.
-      container.read(contextProvider.notifier).setContext(contextById('otro')!);
-      container.read(sentenceProvider.notifier).setWords(['HOMBRE', 'PEGAR']);
+      container
+          .read(contextProvider.notifier)
+          .setContext(contextById('denuncia_robo')!);
+      container.read(sentenceProvider.notifier).setWords(['CELULAR', 'ROBAR']);
 
       await container
           .read(surfaceSessionProvider)
           .enter(FlowSurface.conversation);
+      await container
+          .read(surfaceSessionProvider)
+          .enter(FlowSurface.standaloneCards);
 
-      expect(container.read(sentenceProvider), isEmpty,
-          reason: 'Una declaración construida fuera del diálogo no puede '
-              'reaparecer como respuesta de un turno.');
-      expect(container.read(contextProvider), isNull);
+      expect(container.read(sentenceProvider), ['CELULAR', 'ROBAR']);
+      expect(container.read(contextProvider)?.id, 'denuncia_robo');
     });
   });
 
   group('la pestaña del avatar se abre limpia', () {
     test('descarta la traducción anterior', () async {
       final container = _appContainer();
-      final avatar = container.read(audioTranslationControllerProvider.notifier);
+      final avatar = container.read(
+        audioTranslationControllerProvider.notifier,
+      );
 
       avatar.processText('Yo llamo al policía');
       await _settle();
-      expect(container.read(audioTranslationControllerProvider).recognizedText,
-          isNotEmpty);
+      expect(
+        container.read(audioTranslationControllerProvider).recognizedText,
+        isNotEmpty,
+      );
 
       await container
           .read(surfaceSessionProvider)
@@ -198,38 +254,40 @@ void main() {
   });
 
   group('volver a la conversación la reanuda donde estaba', () {
-    test('el chat conserva la pregunta, pero responder se vuelve a pedir',
-        () async {
-      final container = _appContainer();
-      await _conversationInProgress(container);
+    test(
+      'el chat conserva la pregunta, pero responder se vuelve a pedir',
+      () async {
+        final container = _appContainer();
+        await _conversationInProgress(container);
 
-      await container
-          .read(surfaceSessionProvider)
-          .enter(FlowSurface.standaloneCards);
-      expect(container.read(pendingReplyProvider), isNull);
+        await container
+            .read(surfaceSessionProvider)
+            .enter(FlowSurface.standaloneCards);
+        expect(container.read(pendingReplyProvider), isNull);
 
-      await container
-          .read(surfaceSessionProvider)
-          .enter(FlowSurface.conversation);
+        await container
+            .read(surfaceSessionProvider)
+            .enter(FlowSurface.conversation);
 
-      // Volver a la pestaña del chat no rearma sola la respuesta: salir al
-      // módulo autónomo descartó el borrador, y reanudar en silencio dejaría
-      // a la persona sorda escribiendo bajo una pregunta que ya no tiene
-      // delante. El chat sí conserva el turno pendiente.
-      expect(container.read(pendingReplyProvider), isNull);
-      expect(
-        container.read(conversationProvider).conversation.pendingReply,
-        isNotNull,
-      );
+        // Volver a la pestaña del chat no rearma sola la respuesta: salir al
+        // módulo autónomo descartó el borrador, y reanudar en silencio dejaría
+        // a la persona sorda escribiendo bajo una pregunta que ya no tiene
+        // delante. El chat sí conserva el turno pendiente.
+        expect(container.read(pendingReplyProvider), isNull);
+        expect(
+          container.read(conversationProvider).conversation.pendingReply,
+          isNotNull,
+        );
 
-      // Al pulsar "Responder con tarjetas LSB" vuelve la pregunta exacta.
-      final handoff = container.read(conversationHandoffProvider);
-      handoff.openCards(handoff.nextDeafLaunch());
+        // Al pulsar "Responder con tarjetas LSB" vuelve la pregunta exacta.
+        final handoff = container.read(conversationHandoffProvider);
+        handoff.openCards(handoff.nextDeafLaunch());
 
-      final pending = container.read(pendingReplyProvider);
-      expect(pending, isNotNull);
-      expect(pending!.question, '¿Le robaron su celular?');
-    });
+        final pending = container.read(pendingReplyProvider);
+        expect(pending, isNotNull);
+        expect(pending!.question, '¿Le robaron su celular?');
+      },
+    );
   });
 
   group('sin conversación, entrar al módulo autónomo no rompe nada', () {
