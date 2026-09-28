@@ -17,8 +17,6 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 class DeclarationResultScreen extends ConsumerWidget {
   const DeclarationResultScreen({super.key});
 
-  static const _orange = AppTheme.brandPrimary;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final translationState = ref.watch(translationControllerProvider);
@@ -91,17 +89,20 @@ class DeclarationResultScreen extends ConsumerWidget {
                     const _Label('Texto formal para autoridades:'),
                     const SizedBox(height: 8),
 
-                    // Tarjeta Principal con la Declaración Formal Consolidada
+                    // Tarjeta Principal con la Declaración Formal Consolidada.
+                    // Morada, el color de LSB, para que no se confunda con
+                    // los botones (oscuros).
                     Container(
+                      key: const Key('tarjeta_declaracion'),
                       width: double.infinity,
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: _orange,
+                        color: AppTheme.lsbViolet,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: _orange, width: 2),
+                        border: Border.all(color: AppTheme.lsbViolet, width: 2),
                         boxShadow: [
                           BoxShadow(
-                            color: _orange.withValues(alpha: 0.3),
+                            color: AppTheme.lsbViolet.withValues(alpha: 0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
