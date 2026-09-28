@@ -2941,6 +2941,31 @@
    }
   },
   {
+   "id": "banco:Q.HEC.ESCAPE_ACTOR@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿Quién escapó?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.HEC.ESCAPE_ACTOR",
+   "glosasModelo": [
+    "QUIÉN",
+    "ESCAPAR"
+   ],
+   "glosas": [
+    "QUIEN",
+    "ESCAPAR"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askInformation",
+    "requestedSlots": [
+     "person"
+    ],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.9
+   }
+  },
+  {
    "id": "banco:Q.ROB.QUE@denuncia_robo",
    "origen": "banco",
    "texto": "¿Qué le robaron?",
@@ -2999,7 +3024,7 @@
   {
    "id": "banco:Q.FALTA.QUE@denuncia_robo",
    "origen": "banco",
-   "texto": "¿Qué le falta?",
+   "texto": "¿Qué perdió?",
    "contexto": "denuncia_robo",
    "preguntaEsperada": "Q.FALTA.QUE",
    "glosasModelo": [
@@ -3017,38 +3042,6 @@
     "mentionedContexts": [],
     "negations": [],
     "confidence": 0.6
-   }
-  },
-  {
-   "id": "banco:Q.HEC.PERDIDA_TIPO@denuncia_robo",
-   "origen": "banco",
-   "texto": "¿Lo perdió usted o cree que se lo quitaron?",
-   "contexto": "denuncia_robo",
-   "preguntaEsperada": "Q.HEC.PERDIDA_TIPO",
-   "glosasModelo": [
-    "PERDER",
-    "ROBAR",
-    "CUÁL"
-   ],
-   "glosas": [
-    "PERDER",
-    "ROBAR",
-    "CUAL"
-   ],
-   "semanticTurn": {
-    "version": 1,
-    "intent": "mentionContext",
-    "requestedSlots": [],
-    "mentionedContexts": [
-     {
-      "id": "denuncia_robo",
-      "evidence": [
-       "ROBAR"
-      ]
-     }
-    ],
-    "negations": [],
-    "confidence": 0.8
    }
   },
   {
@@ -3072,31 +3065,6 @@
     "mentionedContexts": [],
     "negations": [],
     "confidence": 0.6
-   }
-  },
-  {
-   "id": "banco:Q.HEC.ESCAPE_ACTOR@denuncia_robo",
-   "origen": "banco",
-   "texto": "¿Quién escapó?",
-   "contexto": "denuncia_robo",
-   "preguntaEsperada": "Q.HEC.ESCAPE_ACTOR",
-   "glosasModelo": [
-    "QUIÉN",
-    "ESCAPAR"
-   ],
-   "glosas": [
-    "QUIEN",
-    "ESCAPAR"
-   ],
-   "semanticTurn": {
-    "version": 1,
-    "intent": "askInformation",
-    "requestedSlots": [
-     "person"
-    ],
-    "mentionedContexts": [],
-    "negations": [],
-    "confidence": 0.9
    }
   },
   {
@@ -3430,6 +3398,121 @@
     "mentionedContexts": [],
     "negations": [],
     "confidence": 0.9
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.ROPA_COLOR.POLERA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿De qué color era la polera?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR.POLERA",
+   "glosasModelo": [
+    "POLERA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "POLERA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.ROPA_COLOR.PANTALON@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿De qué color era el pantalón?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR.PANTALON",
+   "glosasModelo": [
+    "PANTALÓN",
+    "CUÁL"
+   ],
+   "glosas": [
+    "PANTALON",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.ROPA_COLOR.CHAMARRA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿De qué color era la chamarra?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+   "glosasModelo": [
+    "CHAMARRA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "CHAMARRA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.ROPA_COLOR.GORRA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿De qué color era la gorra?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR.GORRA",
+   "glosasModelo": [
+    "GORRA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "GORRA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "banco:Q.PER.DESC.ROPA_COLOR.MOCHILA@denuncia_robo",
+   "origen": "banco",
+   "texto": "¿De qué color era la mochila?",
+   "contexto": "denuncia_robo",
+   "preguntaEsperada": "Q.PER.DESC.ROPA_COLOR.MOCHILA",
+   "glosasModelo": [
+    "MOCHILA",
+    "CUÁL"
+   ],
+   "glosas": [
+    "MOCHILA",
+    "CUAL"
+   ],
+   "semanticTurn": {
+    "version": 1,
+    "intent": "askPurpose",
+    "requestedSlots": [],
+    "mentionedContexts": [],
+    "negations": [],
+    "confidence": 0.6
    }
   },
   {

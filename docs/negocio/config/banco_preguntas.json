@@ -4084,7 +4084,7 @@
    "variantes": [],
    "nodos": [],
    "dominio": "robo",
-   "formulacion": "¿Qué le falta?",
+   "formulacion": "¿Qué perdió?",
    "gramaticaLsb": {
     "estado": "GRAMMAR_PROVISIONAL",
     "secuencia": [
@@ -4103,7 +4103,7 @@
    "control": "seleccion_multiple",
    "maximo": 4,
    "modo": "fragmento",
-   "fraseSuelta": "Me falta {frag}.",
+   "fraseSuelta": "Perdí {frag}.",
    "campos": [
     "objeto",
     "documento",
@@ -4365,72 +4365,6 @@
    "nodos": []
   },
   {
-   "id": "Q.HEC.PERDIDA_TIPO",
-   "dominio": "relato",
-   "formulacion": "¿Lo perdió usted o cree que se lo quitaron?",
-   "gramaticaLsb": {
-    "estado": "GRAMMAR_PROVISIONAL",
-    "secuencia": [
-     "PERDER",
-     "ROBAR",
-     "CUÁL"
-    ],
-    "tipo": "disyuntiva",
-    "interrogativo": "CUÁL",
-    "noManuales": "marca de alternativa y de pregunta: no documentada ni modelada",
-    "regla": "R8: elección entre alternativas = alternativas · ¿CUÁL? en 9 de 9 filas §6 (ALTO · BAJO · ¿CUÁL?, HOMBRE · MUJER · ¿CUÁL?, POLERA · PANTALÓN · CHAMARRA · ¿CUÁL?)",
-    "evidencia": "§6 ALTO · BAJO · ¿CUÁL?; MOCHILA · BOLSA · ¿CUÁL?"
-   },
-   "acto": "pregunta_alternativa",
-   "entidad": "Hecho[PERDER]",
-   "campo": "tipo_sustraccion",
-   "control": "alternativa",
-   "reglas": [
-    "«No sé» nunca crea un hecho de robo afirmado."
-   ],
-   "modo": "frase",
-   "opciones": [
-    {
-     "id": "perdi",
-     "etiqueta": "Lo perdí",
-     "glosas": [
-      "PERDER"
-     ],
-     "estado": "afirmado",
-     "frase": "Perdí {Q.FALTA.QUE|algo}.",
-     "accion": "PERDER",
-     "tipoPerdida": "loss"
-    },
-    {
-     "id": "robo_creo",
-     "etiqueta": "Creo que me lo robaron",
-     "glosas": [
-      "ROBAR"
-     ],
-     "estado": "afirmado",
-     "frase": "Me falta {Q.FALTA.QUE|algo}; creo que fue un robo, pero no estoy seguro.",
-     "accion": "ROBAR",
-     "tipoPerdida": "theft",
-     "certeza": "uncertain"
-    },
-    {
-     "id": "no_sabe",
-     "etiqueta": "No sé",
-     "glosas": [
-      "NO_SABER"
-     ],
-     "estado": "desconocido",
-     "salida": true,
-     "frase": "Me falta {Q.FALTA.QUE|algo} y no sé si fue una pérdida o un robo."
-    }
-   ],
-   "variantes": [],
-   "campos": [
-    "hecho"
-   ],
-   "nodos": []
-  },
-  {
    "id": "Q.HEC.QUE_OCURRIO",
    "dominio": "relato",
    "formulacion": "¿Qué ocurrió?",
@@ -4460,12 +4394,6 @@
      ]
     },
     {
-     "si": "perder",
-     "abrir": [
-      "Q.HEC.PERDIDA_TIPO"
-     ]
-    },
-    {
      "si": "escapar",
      "abrir": [
       "Q.HEC.ESCAPE_ACTOR"
@@ -4485,7 +4413,8 @@
    },
    "reglas": [
     "Todos los hechos que ocurrieron (robo, pérdida, daño, huida). El orden de pulsación no es orden temporal: la frase sigue el orden del banco.",
-    "PERDER y ESCAPAR no redactan nada por sí mismos: exigen su aclaración (Q.HEC.PERDIDA_TIPO, Q.HEC.ESCAPE_ACTOR)."
+    "ESCAPAR no redacta nada por sí mismo: exige su aclaración (Q.HEC.ESCAPE_ACTOR), que se pregunta enseguida.",
+    "PERDER es «Perdí algo»: si la persona cree que se lo quitaron, elige ROBAR. Así ROBAR y PERDER pueden ir juntos sin volver a preguntar."
    ],
    "nodos": [
     "n-s6-inicio_de_denuncia-02"
@@ -4505,12 +4434,12 @@
     },
     {
      "id": "perder",
-     "etiqueta": "Me falta algo (lo perdí o no sé)",
+     "etiqueta": "Perdí algo",
      "glosas": [
       "PERDER"
      ],
      "estado": "afirmado",
-     "frase": "",
+     "frase": "Perdí {Q.FALTA.QUE|algo}.",
      "accion": "PERDER"
     },
     {
@@ -11442,6 +11371,18 @@
      "obligatoria": true
     },
     {
+     "pregunta": "Q.HEC.ESCAPE_ACTOR",
+     "cuando": [
+      {
+       "pregunta": "Q.HEC.QUE_OCURRIO",
+       "opciones": [
+        "escapar"
+       ]
+      }
+     ],
+     "obligatoria": true
+    },
+    {
      "pregunta": "Q.ROB.QUE",
      "cuando": [
       {
@@ -11480,18 +11421,6 @@
      ]
     },
     {
-     "pregunta": "Q.HEC.PERDIDA_TIPO",
-     "cuando": [
-      {
-       "pregunta": "Q.HEC.QUE_OCURRIO",
-       "opciones": [
-        "perder"
-       ]
-      }
-     ],
-     "obligatoria": true
-    },
-    {
      "pregunta": "Q.DAN.QUE",
      "cuando": [
       {
@@ -11501,18 +11430,6 @@
        ]
       }
      ]
-    },
-    {
-     "pregunta": "Q.HEC.ESCAPE_ACTOR",
-     "cuando": [
-      {
-       "pregunta": "Q.HEC.QUE_OCURRIO",
-       "opciones": [
-        "escapar"
-       ]
-      }
-     ],
-     "obligatoria": true
     },
     {
      "pregunta": "Q.TIE.CUANDO"
@@ -11778,6 +11695,40 @@
       }
      ]
     }
+   ],
+   "ordenRedaccion": [
+    "Q.HEC.QUE_OCURRIO",
+    "Q.ROB.QUE",
+    "Q.DOC.ACLARAR",
+    "Q.FALTA.QUE",
+    "Q.DAN.QUE",
+    "Q.HEC.ESCAPE_ACTOR",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.LUG.RELACION",
+    "Q.PER.CONOCE",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.PER.DESCRIBIR",
+    "Q.PER.DESC.SEXO",
+    "Q.PER.DESC.EDAD",
+    "Q.PER.DESC.ESTATURA",
+    "Q.PER.DESC.CONTEXTURA",
+    "Q.PER.DESC.ROPA",
+    "Q.PER.DESC.ROPA_COLOR.POLERA",
+    "Q.PER.DESC.ROPA_COLOR.PANTALON",
+    "Q.PER.DESC.ROPA_COLOR.CHAMARRA",
+    "Q.PER.DESC.ROPA_COLOR.GORRA",
+    "Q.PER.DESC.ROPA_COLOR.MOCHILA",
+    "Q.PER.DESC.ROPA_COLOR",
+    "Q.TES.EXISTE",
+    "Q.TES.CANTIDAD",
+    "Q.EVI.FACTURA",
+    "Q.EVI.TRAE_COPIA",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
    ]
   },
   "violencia": {

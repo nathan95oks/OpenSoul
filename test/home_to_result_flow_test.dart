@@ -175,7 +175,7 @@ void main() {
 
       for (final spanish in const [
         'Me robaron',
-        'Me falta algo (lo perdí o no sé)',
+        'Perdí algo',
         'Dañaron algo mío',
         'Alguien escapó',
       ]) {

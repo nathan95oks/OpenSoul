@@ -368,6 +368,33 @@ void main() {
       );
     });
 
+    test('robar y perder juntos: sin volver a preguntar cuál fue', () {
+      var s = flow.startJourney('denuncia_robo');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'robar');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'perder');
+      expect(bank.question('Q.HEC.PERDIDA_TIPO'), isNull);
+      s = pick(s, 'Q.ROB.QUE', 'dinero');
+      s = pick(s, 'Q.FALTA.QUE', 'celular');
+      expect(flow.canFinish(s), isTrue);
+      expect(text(s), startsWith('Me robaron dinero. Perdí el celular.'));
+    });
+
+    test('«¿Quién escapó?» se pregunta apenas se elige ESCAPAR', () {
+      var s = flow.startJourney('denuncia_robo');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'robar');
+      s = pick(s, 'Q.HEC.QUE_OCURRIO', 'escapar');
+      s = flow.goTo(s, 'Q.HEC.QUE_OCURRIO');
+      expect(flow.nextQuestion(s), 'Q.HEC.ESCAPE_ACTOR');
+      // No solo «yo»: también el ladrón u otra persona.
+      expect(flow.offeredOptions(s, 'Q.HEC.ESCAPE_ACTOR').map((o) => o.id),
+          ['yo', 'autor', 'otra', 'no_sabe']);
+      // Y la frase sigue contando primero lo robado.
+      s = pick(s, 'Q.HEC.ESCAPE_ACTOR', 'autor');
+      s = pick(s, 'Q.ROB.QUE', 'celular');
+      expect(text(s),
+          startsWith('Me robaron el celular. La persona que me robó escapó.'));
+    });
+
     test('cada prenda pregunta su propio color', () {
       var s = flow.startJourney('denuncia_robo');
       s = pick(s, 'Q.HEC.QUE_OCURRIO', 'robar');
