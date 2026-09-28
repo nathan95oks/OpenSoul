@@ -426,7 +426,7 @@ void main() {
   );
 
   testWidgets(
-    'respondiendo: dentro de una familia no hay flecha arriba, solo «Volver»',
+    'respondiendo: la flecha siempre arriba a la izquierda, una por pantalla',
     (tester) async {
       final (container, _) = await montar(tester);
       container
@@ -445,14 +445,13 @@ void main() {
       expect(find.byTooltip('Volver a la conversación'), findsOneWidget);
 
       await tocar(tester, find.text('Denuncias'));
-      expect(find.text('Volver'), findsOneWidget);
-      expect(
-        find.byTooltip('Volver a la conversación'),
-        findsNothing,
-        reason: 'dentro de la familia se vuelve con «Volver»',
-      );
+      // Dentro de la familia: la flecha de arriba vuelve al menú, y no hay
+      // otro «Volver» en la pantalla.
+      expect(find.byKey(const Key('volver_a_familias')), findsOneWidget);
+      expect(find.text('Volver'), findsNothing);
+      expect(find.byTooltip('Volver a la conversación'), findsNothing);
 
-      await tocar(tester, find.text('Volver'));
+      await tocar(tester, find.byKey(const Key('volver_a_familias')));
       expect(find.byTooltip('Volver a la conversación'), findsOneWidget);
     },
   );

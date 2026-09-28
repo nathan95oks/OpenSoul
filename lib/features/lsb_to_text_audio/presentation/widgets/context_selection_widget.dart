@@ -72,6 +72,10 @@ class _ContextSelectionWidgetState
 
   @override
   Widget build(BuildContext context) {
+    // La flecha de la barra superior cierra la familia abierta.
+    ref.listen(openFamilyProvider, (_, id) {
+      if (id == null && _abierta != null) setState(() => _abierta = null);
+    });
     ref.listen(cardsFlowLaunchProvider, (anterior, launch) {
       if (anterior?.sameErrand(launch) ?? false) return;
       _abrir(_familiaDe(launch));
@@ -127,15 +131,6 @@ class _ContextSelectionWidgetState
                 ),
               )
             else ...[
-              TextButton.icon(
-                onPressed: () => _abrir(null),
-                icon: const Icon(Icons.arrow_back, size: 18),
-                label: const Text('Volver'),
-                style: TextButton.styleFrom(
-                  foregroundColor: AppTheme.brandLight,
-                ),
-              ),
-              const SizedBox(height: 8),
               ...desplegados.indexed.map(
                 (e) => BubbleEntrance(
                   key: ValueKey('${familia.id}_${e.$2.id}'),
