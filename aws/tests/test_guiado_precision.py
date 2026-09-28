@@ -193,8 +193,8 @@ class ValidacionDelContratoGuiado(unittest.TestCase):
         g = self.mutado(lambda g: g["respuestas"][0].update(
             opciones=["robar", "perder", "danar", "escapar"]))
         g["respuestas"] += [
-            answer("Q.HEC.PERDIDA_TIPO", ["perdi"]),
             answer("Q.HEC.ESCAPE_ACTOR", ["autor"]),
+            answer("Q.FALTA.QUE", ["celular"]),
         ]
         status, payload = invoke(request(g, cards=("ROBAR", "DAÑAR")))
         self.assertEqual(200, status, payload)

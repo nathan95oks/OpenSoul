@@ -32,9 +32,11 @@ import corpus_dialogue as CD  # noqa: E402
 # (antes de esta fase) y actualizada el 2026-09-27 al añadir
 # Q.PER.DESC.ROPA_COLOR («¿De qué color era su ropa?»), y el 2026-09-28 al
 # añadir el color de cada prenda (Q.PER.DESC.ROPA_COLOR.*) y permitir todos
-# los hechos en «¿Qué ocurrió?». Si cambia, algo distinto de la formulación cambió:
+# los hechos en «¿Qué ocurrió?»; luego, el mismo día, al quitar
+# Q.HEC.PERDIDA_TIPO (PERDER es «Perdí algo») y preguntar «¿Quién escapó?»
+# enseguida. Si cambia, algo distinto de la formulación cambió:
 # preguntas, opciones, estados, frases o recorridos.
-HUELLA_SIN_FORMULACION = "87dee0ec3a48446adcc97ea56daebcc22ffff5e7102a89848d43193fc7ec1626"
+HUELLA_SIN_FORMULACION = "5796c252e5a24225f875d9f98c8413fe1ab6c004bbe99534eaab25527838fbe1"
 
 
 class GramaticaLsb(unittest.TestCase):
@@ -134,7 +136,7 @@ class GramaticaLsb(unittest.TestCase):
             q["id"]: B.formulacion_lsb_utilizable(q)
             for q in self.banco["preguntas"]
         }
-        self.assertEqual(134, sum(decisiones.values()))
+        self.assertEqual(133, sum(decisiones.values()))
         self.assertEqual(15, len(decisiones) - sum(decisiones.values()))
         self.assertTrue(decisiones["Q.HEC.QUE_OCURRIO"])
         self.assertFalse(decisiones["I.PREG.CUANDO"])

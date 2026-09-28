@@ -6,9 +6,9 @@
  ],
  "fecha": "2026-09-25",
  "totales": {
-  "preguntas": 149,
+  "preguntas": 148,
   "recorridos": 8,
-  "opciones": 558
+  "opciones": 555
  },
  "preguntas": [
   {
@@ -1083,7 +1083,7 @@
     "institucion"
    ],
    "recorridos": [
-    "denuncia_robo#33",
+    "denuncia_robo#32",
     "violencia#21",
     "amenaza_digital#10",
     "engano_dinero#10"
@@ -1163,7 +1163,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#32",
+    "denuncia_robo#31",
     "violencia#20",
     "amenaza_digital#9",
     "engano_dinero#9"
@@ -2771,7 +2771,7 @@
     "evidencia"
    ],
    "recorridos": [
-    "denuncia_robo#3",
+    "denuncia_robo#4",
     "engano_dinero#6"
    ],
    "nodos": [],
@@ -3066,7 +3066,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#28"
+    "denuncia_robo#27"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3354,7 +3354,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#30",
+    "denuncia_robo#29",
     "violencia#16"
    ],
    "nodos": [],
@@ -3477,7 +3477,7 @@
     "documento"
    ],
    "recorridos": [
-    "denuncia_robo#31",
+    "denuncia_robo#30",
     "violencia#17"
    ],
    "nodos": [],
@@ -3542,7 +3542,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#29"
+    "denuncia_robo#28"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3651,7 +3651,7 @@
   {
    "id": "Q.FALTA.QUE",
    "dominio": "robo",
-   "formulacion": "¿Qué le falta?",
+   "formulacion": "¿Qué perdió?",
    "acto": "pregunta_abierta",
    "entidad": "Hecho[PERDER].objetos",
    "campo": "objetos",
@@ -3663,7 +3663,7 @@
     "prenda"
    ],
    "recorridos": [
-    "denuncia_robo#4"
+    "denuncia_robo#5"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3846,7 +3846,7 @@
     "persona"
    ],
    "recorridos": [
-    "denuncia_robo#7"
+    "denuncia_robo#2"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3914,68 +3914,6 @@
    "opcionesSinSena": []
   },
   {
-   "id": "Q.HEC.PERDIDA_TIPO",
-   "dominio": "relato",
-   "formulacion": "¿Lo perdió usted o cree que se lo quitaron?",
-   "acto": "pregunta_alternativa",
-   "entidad": "Hecho[PERDER]",
-   "campo": "tipo_sustraccion",
-   "control": "alternativa",
-   "modo": "frase",
-   "campos": [
-    "hecho"
-   ],
-   "recorridos": [
-    "denuncia_robo#5"
-   ],
-   "nodos": [],
-   "enunciadosFuncionario": [],
-   "opciones": [
-    {
-     "id": "perdi",
-     "etiqueta": "Lo perdí",
-     "glosas": [
-      "PERDER"
-     ],
-     "estado": "afirmado",
-     "frase": "Perdí {Q.FALTA.QUE|algo}.",
-     "accion": "PERDER",
-     "tipoPerdida": "loss"
-    },
-    {
-     "id": "robo_creo",
-     "etiqueta": "Creo que me lo robaron",
-     "glosas": [
-      "ROBAR"
-     ],
-     "estado": "afirmado",
-     "frase": "Me falta {Q.FALTA.QUE|algo}; creo que fue un robo, pero no estoy seguro.",
-     "accion": "ROBAR",
-     "tipoPerdida": "theft",
-     "certeza": "uncertain"
-    },
-    {
-     "id": "no_sabe",
-     "etiqueta": "No sé",
-     "glosas": [
-      "NO_SABER"
-     ],
-     "estado": "desconocido",
-     "salida": true,
-     "frase": "Me falta {Q.FALTA.QUE|algo} y no sé si fue una pérdida o un robo."
-    }
-   ],
-   "pasosRespuesta": [],
-   "noOfrecer": {},
-   "reglas": [
-    "«No sé» nunca crea un hecho de robo afirmado."
-   ],
-   "rutas": [
-    "recorrido"
-   ],
-   "opcionesSinSena": []
-  },
-  {
    "id": "Q.HEC.QUE_OCURRIO",
    "dominio": "relato",
    "formulacion": "¿Qué ocurrió?",
@@ -4010,12 +3948,12 @@
     },
     {
      "id": "perder",
-     "etiqueta": "Me falta algo (lo perdí o no sé)",
+     "etiqueta": "Perdí algo",
      "glosas": [
       "PERDER"
      ],
      "estado": "afirmado",
-     "frase": "",
+     "frase": "Perdí {Q.FALTA.QUE|algo}.",
      "accion": "PERDER"
     },
     {
@@ -4054,7 +3992,8 @@
    },
    "reglas": [
     "Todos los hechos que ocurrieron (robo, pérdida, daño, huida). El orden de pulsación no es orden temporal: la frase sigue el orden del banco.",
-    "PERDER y ESCAPAR no redactan nada por sí mismos: exigen su aclaración (Q.HEC.PERDIDA_TIPO, Q.HEC.ESCAPE_ACTOR)."
+    "ESCAPAR no redacta nada por sí mismo: exige su aclaración (Q.HEC.ESCAPE_ACTOR), que se pregunta enseguida.",
+    "PERDER es «Perdí algo»: si la persona cree que se lo quitaron, elige ROBAR. Así ROBAR y PERDER pueden ir juntos sin volver a preguntar."
    ],
    "rutas": [
     "recorrido",
@@ -4810,7 +4749,7 @@
     "lugar"
    ],
    "recorridos": [
-    "denuncia_robo#9",
+    "denuncia_robo#8",
     "violencia#8",
     "otro#4"
    ],
@@ -4963,7 +4902,7 @@
     "lugar"
    ],
    "recorridos": [
-    "denuncia_robo#10"
+    "denuncia_robo#9"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -5082,7 +5021,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#11"
+    "denuncia_robo#10"
    ],
    "nodos": [
     "n-s6-inicio_de_denuncia-09"
@@ -5206,7 +5145,7 @@
     "rasgo"
    ],
    "recorridos": [
-    "denuncia_robo#18"
+    "denuncia_robo#17"
    ],
    "nodos": [
     "n-s6-descripcion_de_per-04"
@@ -5268,7 +5207,7 @@
     "edad"
    ],
    "recorridos": [
-    "denuncia_robo#16"
+    "denuncia_robo#15"
    ],
    "nodos": [
     "n-s6-descripcion_de_per-02"
@@ -5347,7 +5286,7 @@
     "rasgo"
    ],
    "recorridos": [
-    "denuncia_robo#17"
+    "denuncia_robo#16"
    ],
    "nodos": [
     "n-s6-descripcion_de_per-03"
@@ -5655,7 +5594,7 @@
     "prenda"
    ],
    "recorridos": [
-    "denuncia_robo#19"
+    "denuncia_robo#18"
    ],
    "nodos": [
     "n-s6-descripcion_de_per-06"
@@ -5756,7 +5695,7 @@
     "modificador"
    ],
    "recorridos": [
-    "denuncia_robo#20"
+    "denuncia_robo#19"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -5835,7 +5774,7 @@
     "modificador"
    ],
    "recorridos": [
-    "denuncia_robo#21"
+    "denuncia_robo#20"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -5914,7 +5853,7 @@
     "modificador"
    ],
    "recorridos": [
-    "denuncia_robo#22"
+    "denuncia_robo#21"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -5993,7 +5932,7 @@
     "modificador"
    ],
    "recorridos": [
-    "denuncia_robo#23"
+    "denuncia_robo#22"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -6072,7 +6011,7 @@
     "modificador"
    ],
    "recorridos": [
-    "denuncia_robo#24"
+    "denuncia_robo#23"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -6151,7 +6090,7 @@
     "modificador"
    ],
    "recorridos": [
-    "denuncia_robo#25"
+    "denuncia_robo#24"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -6230,7 +6169,7 @@
     "persona"
    ],
    "recorridos": [
-    "denuncia_robo#15"
+    "denuncia_robo#14"
    ],
    "nodos": [
     "n-s6-descripcion_de_per-01"
@@ -6292,7 +6231,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#14"
+    "denuncia_robo#13"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -6343,7 +6282,7 @@
     "nombre"
    ],
    "recorridos": [
-    "denuncia_robo#13",
+    "denuncia_robo#12",
     "violencia#5",
     "amenaza_digital#5"
    ],
@@ -6596,7 +6535,7 @@
     "persona"
    ],
    "recorridos": [
-    "denuncia_robo#12",
+    "denuncia_robo#11",
     "violencia#4",
     "amenaza_digital#4"
    ],
@@ -7425,7 +7364,7 @@
     "prenda"
    ],
    "recorridos": [
-    "denuncia_robo#2"
+    "denuncia_robo#3"
    ],
    "nodos": [
     "n-s6-robo_hurto_y_obje-02"
@@ -9327,7 +9266,7 @@
     "cantidad"
    ],
    "recorridos": [
-    "denuncia_robo#27"
+    "denuncia_robo#26"
    ],
    "nodos": [
     "n-s6-testigos_fotos_v-02"
@@ -9385,7 +9324,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#26"
+    "denuncia_robo#25"
    ],
    "nodos": [
     "n-s6-robo_hurto_y_obje-10",
@@ -9804,7 +9743,7 @@
     "tiempo"
    ],
    "recorridos": [
-    "denuncia_robo#8",
+    "denuncia_robo#7",
     "violencia#6",
     "otro#3"
    ],

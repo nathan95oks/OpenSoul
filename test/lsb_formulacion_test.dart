@@ -13,11 +13,11 @@ void main() {
   final bank = QuestionBank.generated();
   LsbFormulation lsb(String id) => bank.question(id)!.lsb;
 
-  test('las 149 preguntas tienen exactamente una representación elegida', () {
-    expect(bank.allQuestions, hasLength(149));
+  test('las 148 preguntas tienen exactamente una representación elegida', () {
+    expect(bank.allQuestions, hasLength(148));
     final estados = {for (final q in bank.allQuestions) q.lsb.status};
     expect(estados, isNot(contains('GRAMMAR_VALIDATED')));
-    expect(bank.allQuestions.where((q) => q.lsb.hasUsableLsb), hasLength(134));
+    expect(bank.allQuestions.where((q) => q.lsb.hasUsableLsb), hasLength(133));
     expect(bank.allQuestions.where((q) => !q.lsb.hasUsableLsb), hasLength(15));
     for (final q in bank.allQuestions) {
       expect(q.lsb.hasUsableLsb || q.formulation.trim().isNotEmpty, isTrue,
