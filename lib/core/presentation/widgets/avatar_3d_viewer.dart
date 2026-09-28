@@ -604,46 +604,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 
   Widget _buildProcessingState() {
-    const title = 'Analizando con IA...';
-    const subtitle = 'Desambiguando contexto LSB';
-
-    return Container(
-      key: const ValueKey('processing'),
-      color: const Color(0xFF1A1A2E).withValues(alpha: 0.92),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 60,
-            height: 60,
-            child: CircularProgressIndicator(
-              strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Colors.deepPurpleAccent.shade200,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.5,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            subtitle,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.4),
-              fontSize: 12,
-            ),
-          ),
-        ],
-      ),
-    );
+    return const SizedBox.shrink(key: ValueKey('processing'));
   }
 
   /// El visor 3D, montado una sola vez y compartido por todos los estados.
