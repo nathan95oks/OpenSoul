@@ -5,6 +5,7 @@ import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_composer.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_proposal.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_session.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
@@ -26,34 +27,6 @@ final guidedComposerProvider = Provider<GuidedComposer>(
 final guidedFlowRulesProvider = Provider<GuidedFlow>(
   (ref) => GuidedFlow(ref.watch(questionBankProvider)),
 );
-
-/// Pregunta del banco que corresponde a cada campo que el oyente puede haber
-/// preguntado, en orden de preferencia.
-///
-/// Es la misma inferencia que ya hacía el módulo al abrirse para responder
-/// (`ZoneInferenceEngine`), dirigida ahora a las preguntas del banco en vez
-/// de a las zonas. No interpreta nada nuevo del turno del oyente.
-const Map<String, List<String>> _questionsForZone = {
-  'tiempo': ['Q.TIE.CUANDO', 'Q.SEG.FECHA_PROGRAMADA'],
-  'lugar': ['Q.LUG.DONDE'],
-  'conocimiento': ['Q.PER.CONOCE'],
-  'persona': [
-    'Q.PER.DESCRIBIR',
-    'Q.VIO.AGRESOR',
-    'Q.DIG.REMITENTE',
-    'Q.DIN.RECEPTOR',
-    'Q.PER.OBSERVADA',
-  ],
-  'objetos': ['Q.ROB.QUE'],
-  'testigos': ['Q.TES.EXISTE'],
-  'evidencia': ['Q.EVI.QUE_TIENE', 'Q.DIG.GUARDO', 'Q.DIN.COMPROBANTE'],
-  'emergencia': ['Q.SAL.HERIDO'],
-  'denuncia': ['Q.DEN.INTENCION'],
-  'apoyo_legal': ['Q.VIO.ASISTENCIA_ESPECIALIZADA'],
-  'institucion_autoridad': ['Q.DEN.AUTORIDAD', 'Q.SEG.AUTORIDAD'],
-  'identidad': ['Q.ID.NOMBRE'],
-  'edad': ['Q.ID.EDAD_PROPIA'],
-};
 
 /// Estado del flujo guiado del módulo LSB → texto/audio.
 class GuidedFlowState {
@@ -148,7 +121,9 @@ class GuidedFlowNotifier extends Notifier<GuidedFlowState> {
       context: context,
       text: text,
     )) {
-      final candidates = _questionsForZone[zone] ?? const <String>[];
+      // Qué preguntas responden cada zona es configuración del banco
+      // (`zonasOyente`), en orden de preferencia.
+      final candidates = _bank.listenerZoneQuestions[zone] ?? const <String>[];
       final chosen =
           candidates.where(inJourney.contains).firstOrNull ??
           candidates.firstOrNull;
@@ -291,6 +266,34 @@ final guidedFlowProvider =
     NotifierProvider<GuidedFlowNotifier, GuidedFlowState>(
       GuidedFlowNotifier.new,
     );
+
+/// Respuestas que propone una fuente externa (p. ej. un clasificador), ya en
+/// identificadores del banco. Vacío por defecto: aquí se conecta un modelo
+/// sin tocar el flujo, y sus propuestas pasan por el mismo validador.
+final externalGuidedProposalsProvider = Provider<List<GuidedProposal>>(
+  (ref) => const [],
+);
+
+final guidedProposalsProvider = Provider<GuidedProposals>(
+  (ref) => GuidedProposals(ref.watch(guidedFlowRulesProvider)),
+);
+
+/// Sugerencias para el recorrido en curso: lo que el oyente nombró (si se
+/// responde a un turno) y lo que proponga una fuente externa, validado
+/// contra el banco. Nunca elige nada: la persona sorda confirma tocando.
+final guidedSuggestionsProvider = Provider<ProposalReview>((ref) {
+  final session = ref.watch(guidedFlowProvider).session;
+  if (session == null) return ProposalReview.empty;
+  final launch = ref.watch(cardsFlowLaunchProvider);
+  final proposals = ref.watch(guidedProposalsProvider);
+  final hearing = launch.purpose == CardsFlowPurpose.conversationReply
+      ? launch.hearingText
+      : null;
+  return proposals.review(session, [
+    if (hearing != null) ...proposals.fromHearingText(session, hearing),
+    ...ref.watch(externalGuidedProposalsProvider),
+  ]);
+});
 
 /// Texto de la vista previa: la redacción determinista del banco.
 ///

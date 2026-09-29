@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_preview_planner.dart';
 
@@ -30,6 +31,9 @@ Widget avatarSignPreviewPlayer(
     key: const ValueKey('sign_preview_avatar'),
     isProcessing: false,
     expandToFit: true,
+    // Sin volver ni repetir: la vista previa se cierra con su cruz, tocando
+    // fuera o sola al terminar la seña.
+    showControls: false,
     playbackRequestId: 1,
     glosses: plan.animationGlosses,
     animationUrls: plan.animationUrls,
@@ -125,10 +129,12 @@ class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
     );
   }
 
+  static String _legible(String gloss) => PendingSign.isPending(gloss)
+      ? PendingSign.wordOf(gloss)
+      : gloss.replaceAll('_', ' ');
+
   Widget _capa(BuildContext context, SignPreviewPlan plan) {
-    final secuencia = plan.glosses
-        .map((g) => g.replaceAll('_', ' '))
-        .join(' · ');
+    final secuencia = plan.glosses.map(_legible).join(' · ');
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -169,8 +175,32 @@ class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
                             ),
                           ),
                         ),
+                        // Cerrar a la vista, además de tocar fuera o Atrás.
+                        IconButton(
+                          key: const Key('cerrar_vista_previa'),
+                          tooltip: 'Cerrar vista previa',
+                          onPressed: widget.onFinished,
+                          icon: const Icon(
+                            Icons.close_rounded,
+                            color: AppTheme.darkText,
+                          ),
+                        ),
                       ],
                     ),
+                    if (plan.missingGlosses.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          'Sin animación en el avatar: '
+                          '${plan.missingGlosses.map(_legible).join(', ')}',
+                          key: const Key('vista_previa_sin_animacion'),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: AppTheme.darkTextSub,
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 10),
                     Flexible(
                       child: SizedBox(

@@ -5957,6 +5957,9 @@
      "polar": true
     }
    ],
+   "ranuras": [
+    "person"
+   ],
    "variantes": []
   },
   {
@@ -7219,6 +7222,9 @@
      "soloControl": "Solo cierra las preguntas de descripción."
     }
    ],
+   "ranuras": [
+    "description"
+   ],
    "reglas": [
     "Solo abre las preguntas de descripción; no añade frase."
    ],
@@ -7490,6 +7496,9 @@
      "id": "no_sabe",
      "polar": true
     }
+   ],
+   "ranuras": [
+    "person"
    ],
    "variantes": []
   },
@@ -8559,6 +8568,9 @@
      "id": "no_sabe",
      "polar": true
     }
+   ],
+   "ranuras": [
+    "person"
    ],
    "variantes": []
   },
@@ -11197,6 +11209,9 @@
      "salida": true
     }
    ],
+   "ranuras": [
+    "person"
+   ],
    "variantes": []
   },
   {
@@ -12367,5 +12382,54 @@
    ]
   }
  },
- "version": 2
+ "version": 2,
+ "zonasOyente": {
+  "apoyo_legal": [
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA"
+  ],
+  "conocimiento": [
+   "Q.PER.CONOCE"
+  ],
+  "denuncia": [
+   "Q.DEN.INTENCION"
+  ],
+  "edad": [
+   "Q.ID.EDAD_PROPIA"
+  ],
+  "emergencia": [
+   "Q.SAL.HERIDO"
+  ],
+  "evidencia": [
+   "Q.EVI.QUE_TIENE",
+   "Q.DIG.GUARDO",
+   "Q.DIN.COMPROBANTE"
+  ],
+  "identidad": [
+   "Q.ID.NOMBRE"
+  ],
+  "institucion_autoridad": [
+   "Q.DEN.AUTORIDAD",
+   "Q.SEG.AUTORIDAD"
+  ],
+  "lugar": [
+   "Q.LUG.DONDE"
+  ],
+  "objetos": [
+   "Q.ROB.QUE"
+  ],
+  "persona": [
+   "Q.PER.DESCRIBIR",
+   "Q.VIO.AGRESOR",
+   "Q.DIG.REMITENTE",
+   "Q.DIN.RECEPTOR",
+   "Q.PER.OBSERVADA"
+  ],
+  "testigos": [
+   "Q.TES.EXISTE"
+  ],
+  "tiempo": [
+   "Q.TIE.CUANDO",
+   "Q.SEG.FECHA_PROGRAMADA"
+  ]
+ }
 }

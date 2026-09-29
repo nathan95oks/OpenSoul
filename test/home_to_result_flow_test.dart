@@ -16,7 +16,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/declaration_result_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/home_screen.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/lsb_flow_screen.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/semantic_node.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gloss_row.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 
 import 'helpers/official_dictionary.dart';
@@ -142,6 +142,21 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  /// Elige la opción que se ve como [texto] tocando su fila.
+  Future<void> elegir(WidgetTester tester, String texto) async {
+    final fila = find.ancestor(
+      of: find.text(texto),
+      matching: find.byType(GlossRow),
+    );
+    await tester.ensureVisible(fila);
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(of: fila, matching: find.text(texto)));
+    await tester.pumpAndSettle();
+  }
+
+  Finder enFilas(String texto) =>
+      find.descendant(of: find.byType(GlossRow), matching: find.text(texto));
+
   String vistaPrevia(ProviderContainer container) =>
       container.read(guidedPreviewProvider);
 
@@ -185,7 +200,7 @@ void main() {
         expect(find.text(option), findsOneWidget);
       }
 
-      await tocar(tester, find.text('ROBAR'));
+      await elegir(tester, 'ROBAR');
       expect(vistaPrevia(container), 'Me robaron algo.');
       expect(
         container.read(sentenceProvider),
@@ -201,7 +216,7 @@ void main() {
           findsOneWidget,
         );
       }
-      await tocar(tester, find.text('CELULAR'));
+      await elegir(tester, 'CELULAR');
       expect(vistaPrevia(container), 'Me robaron el celular.');
 
       // Suficiencia: ya se puede terminar sin recorrer lo opcional.
@@ -233,7 +248,18 @@ void main() {
       // «Volver a editar» regresa al lienzo conservando las glosas y respuestas
       await tocar(tester, find.bySemanticsLabel('Volver a editar'));
       expect(pasoVisible(), 0);
-      expect(find.text('CELULAR'), findsOneWidget);
+      expect(enFilas('CELULAR'), findsOneWidget);
+      // Lo elegido sigue marcado en su fila.
+      expect(
+        find.descendant(
+          of: find.ancestor(
+            of: find.text('CELULAR'),
+            matching: find.byType(GlossRow),
+          ),
+          matching: find.byKey(const Key('fila_elegida')),
+        ),
+        findsOneWidget,
+      );
 
       // Volver a emitir para quedar en el resultado
       await tocar(tester, find.byKey(const Key('terminar_aqui')));
@@ -257,7 +283,7 @@ void main() {
   ) async {
     final (container, _) = await montar(tester);
 
-    await tocar(tester, find.text('ESCAPAR'));
+    await elegir(tester, 'ESCAPAR');
     await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
     final escapeLsb = find.byKey(const Key('formulacion_lsb'));
     for (final pieza in const ['¿QUIÉN?', 'ESCAPAR']) {
@@ -279,24 +305,23 @@ void main() {
     final hint = find.byKey(const Key('seleccion_obligatoria'));
     expect(hint, findsOneWidget);
     expect(find.text('Selecciona una opción'), findsOneWidget);
-    final tarjetaYo = tester.widget<AnimatedContainer>(
+    final marcaYo = tester.widget<Container>(
       find.descendant(
         of: find.ancestor(
           of: find.text('YO · ESCAPAR'),
-          matching: find.byType(SemanticNode),
+          matching: find.byType(GlossRow),
         ),
-        matching: find.byType(AnimatedContainer),
+        matching: find.byKey(const Key('marca_fila')),
       ),
     );
-    final decoracion = tarjetaYo.decoration as BoxDecoration;
     expect(
-      decoracion.border!.top.color,
-      SemanticNode.requiredSelectionColor,
-      reason: 'la tarjeta se resalta en vez de mostrar un aviso aparte',
+      marcaYo.color,
+      GlossRow.requiredSelectionColor,
+      reason: 'la fila se resalta en vez de mostrar un aviso aparte',
     );
     expect(find.byKey(const Key('omitir_pregunta')), findsNothing);
 
-    await tocar(tester, find.text('YO · ESCAPAR'));
+    await elegir(tester, 'YO · ESCAPAR');
     expect(vistaPrevia(container), 'Logré escapar.');
     expect(
       container
@@ -315,7 +340,7 @@ void main() {
     (tester) async {
       final (container, _) = await montar(tester);
 
-      await tocar(tester, find.text('ROBAR'));
+      await elegir(tester, 'ROBAR');
       await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
       container.read(guidedFlowProvider.notifier).omit('Q.ROB.QUE');
       await tester.pumpAndSettle();
@@ -331,9 +356,9 @@ void main() {
   ) async {
     final (container, _) = await montar(tester);
 
-    await tocar(tester, find.text('ROBAR'));
+    await elegir(tester, 'ROBAR');
     await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
-    await tocar(tester, find.text('BILLETES'));
+    await elegir(tester, 'BILLETES');
 
     // Editor opcional: la opción ya está elegida y se puede precisar.
     expect(find.byKey(const Key('editor_confirmar')), findsOneWidget);
@@ -352,7 +377,7 @@ void main() {
     await tocar(tester, find.byKey(const Key('editor_confirmar')));
 
     expect(vistaPrevia(container), 'Me robaron Bs 500.');
-    expect(find.text('BILLETES: Bs 500'), findsOneWidget);
+    expect(enFilas('BILLETES: Bs 500'), findsOneWidget);
   });
 
   testWidgets('la cabecera permanece visible, respeta SafeArea y no se mueve', (
@@ -362,7 +387,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await montar(tester);
-    await tocar(tester, find.text('ROBAR'));
+    await elegir(tester, 'ROBAR');
     await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
 
     final header = find.byKey(const Key('guided_question_header'));
@@ -493,9 +518,9 @@ void main() {
       final (container, _) = await montar(tester);
       final audio = container.read(audioOutputProvider) as _NoopAudio;
 
-      await tocar(tester, find.text('ROBAR'));
+      await elegir(tester, 'ROBAR');
       await tocar(tester, find.byKey(const Key('siguiente_pregunta')));
-      await tocar(tester, find.text('CELULAR'));
+      await elegir(tester, 'CELULAR');
       expect(audio.spoken, isEmpty, reason: 'nada suena antes de emitir');
 
       await tocar(tester, find.byKey(const Key('terminar_aqui')));

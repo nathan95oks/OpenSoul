@@ -1476,64 +1476,51 @@ def attach_animation_plan(result: dict) -> dict:
 
 SEMANTIC_TURN_VERSION = 1
 
-# Dato que pide cada interrogativo del catálogo (ranuras del grafo).
+# >>> GENERADO por tool/build_semantica_lsb.py
+# desde docs/negocio/config/semantica_lsb.json: no editar a mano. Son las
+# mismas clases cerradas que usa la app (lsb_gloss_semantics_data.g.dart):
+# interrogativos y núcleos que dicen qué dato se pide, negadores, raíces que
+# piden describir a alguien (DESCRIBIR no tiene seña y la traducción lo
+# deletrea, así que solo el texto lo conserva), verbos y palabras de llevar
+# puesto («¿qué ropa llevaba?» pide la ropa; «¿qué ropa le robaron?», el
+# objeto) y CÓMO + ser/lucir en pasado («¿cómo era?»).
 _SLOT_POR_INTERROGATIVO = {
     "DONDE": "place",
     "CUANDO": "time",
     "QUIEN": "person",
     "CUANTOS": "amount",
 }
-_INTERROGATIVOS_ABIERTOS = {"QUE", "CUAL", "COMO", "POR_QUE", "PARA_QUE"}
-# Núcleos que convierten una pregunta en la pregunta por un dato: «¿a qué
-# hora?», «¿qué día?», «¿en qué lugar?». Las glosas del catálogo y, para lo
-# que el catálogo no tiene seña propia, la palabra reconocida.
 _SLOT_POR_NUCLEO = {
-    "HORA": "time",
-    "FECHA": "time",
     "DIA": "time",
-    "MOMENTO": "time",
     "DIRECCION": "place",
+    "FECHA": "time",
+    "HORA": "time",
+    "MOMENTO": "time",
 }
-_SLOT_POR_PALABRA = {"LUGAR": "place", "SITIO": "place"}
-_NEGADORES = {"NO", "JAMAS", "NUNCA", "NADA", "NADIE", "NINGUNO"}
-
-# El interrogativo del texto dice qué dato pide el oyente aunque la traducción
-# no conserve su glosa: «¿Cuándo te robaron el celular?» pide la fecha, no
-# confirmar el robo. Son clases cerradas del español, compartidas con el
-# cliente (tests/lsb_gloss_semantics.json). Con tilde son interrogativos en
-# cualquier parte de la pregunta; sin tilde también son conjunción («cuando
-# llegué…»), así que solo cuentan al abrir la cláusula, detrás de una
-# preposición como mucho («¿a donde fue?»).
 _SLOT_POR_INTERROGATIVO_HABLADO = {
-    "CUANDO": "time",
-    "DONDE": "place",
     "ADONDE": "place",
+    "CUANDO": "time",
+    "CUANTA": "amount",
+    "CUANTAS": "amount",
+    "CUANTO": "amount",
+    "CUANTOS": "amount",
+    "DONDE": "place",
     "QUIEN": "person",
     "QUIENES": "person",
-    "CUANTO": "amount",
-    "CUANTA": "amount",
-    "CUANTOS": "amount",
-    "CUANTAS": "amount",
 }
-_INTERROGATIVOS_ABIERTOS_HABLADOS = {"QUE", "CUAL", "CUALES", "COMO"}
-# «¿A qué hora…?», «¿qué día…?», «¿en qué lugar…?»: el núcleo que sigue al
-# interrogativo abierto dice el dato.
 _SLOT_POR_NUCLEO_HABLADO = {
-    "HORA": "time",
     "DIA": "time",
+    "DIRECCION": "place",
     "FECHA": "time",
+    "HORA": "time",
+    "LUGAR": "place",
     "MOMENTO": "time",
+    "SITIO": "place",
+}
+_SLOT_POR_PALABRA = {
     "LUGAR": "place",
     "SITIO": "place",
-    "DIRECCION": "place",
 }
-_PREPOSICIONES_INTERROGATIVAS = {"A", "EN", "DE", "DESDE", "HASTA", "CON",
-                                 "POR", "PARA", "HACIA"}
-# Pedir que se describa a alguien pide sus rasgos, no confirmar un hecho:
-# «¿Puede describir a los agresores?», «descríbalo», «¿qué características
-# tenía?». Raíces cerradas del español, en cualquier parte del turno: DESCRIBIR
-# no tiene seña en el catálogo y la traducción lo deletrea, así que solo el
-# texto conserva lo que se pide.
 _SLOT_POR_RAIZ_HABLADA = {
     "DESCRIB": "description",
     "DESCRIPCION": "description",
@@ -1543,21 +1530,63 @@ _SLOT_POR_RAIZ_HABLADA = {
     "FISICAMENTE": "description",
     "VESTI": "description",
 }
-# «¿Qué ropa llevaba?», «¿qué llevaba puesto?»: un verbo de llevar puesto con
-# la prenda (o «puesto») pide la ropa. Sin el verbo, «¿qué ropa le robaron?»
-# pregunta por el objeto robado.
-_VERBOS_DE_VESTIR = {"LLEVABA", "LLEVABAN", "USABA", "USABAN", "TENIA",
-                     "TENIAN"}
-_PALABRAS_DE_VESTIR = {"ROPA", "PRENDA", "PRENDAS", "PUESTO", "PUESTA",
-                       "PUESTOS", "PUESTAS"}
-# «¿Cómo era?», «¿cómo eran los ladrones?», «¿cómo lucía?»: CÓMO seguido de
-# ser/lucir en pasado pide la descripción de alguien ya mencionado.
 _SLOT_TRAS_COMO_HABLADO = {
     "ERA": "description",
     "ERAN": "description",
     "LUCIA": "description",
     "LUCIAN": "description",
 }
+_INTERROGATIVOS_ABIERTOS = {
+    "COMO",
+    "CUAL",
+    "PARA_QUE",
+    "POR_QUE",
+    "QUE",
+}
+_NEGADORES = {
+    "JAMAS",
+    "NADA",
+    "NADIE",
+    "NINGUNO",
+    "NO",
+    "NUNCA",
+}
+_INTERROGATIVOS_ABIERTOS_HABLADOS = {
+    "COMO",
+    "CUAL",
+    "CUALES",
+    "QUE",
+}
+_PREPOSICIONES_INTERROGATIVAS = {
+    "A",
+    "CON",
+    "DE",
+    "DESDE",
+    "EN",
+    "HACIA",
+    "HASTA",
+    "PARA",
+    "POR",
+}
+_VERBOS_DE_VESTIR = {
+    "LLEVABA",
+    "LLEVABAN",
+    "USABA",
+    "USABAN",
+    "TENIA",
+    "TENIAN",
+}
+_PALABRAS_DE_VESTIR = {
+    "ROPA",
+    "PRENDA",
+    "PRENDAS",
+    "PUESTO",
+    "PUESTA",
+    "PUESTOS",
+    "PUESTAS",
+}
+_SLOT_DE_VESTIR = "description"
+# <<< GENERADO por tool/build_semantica_lsb.py
 
 _GLOSA_INTERROGATIVA_POR_SLOT = {
     "place": "DONDE",
@@ -1702,8 +1731,8 @@ def _ranuras_por_raiz(palabras: list) -> list:
                 ranuras.append(slot)
     claves = set(palabras)
     if (claves & _VERBOS_DE_VESTIR and claves & _PALABRAS_DE_VESTIR
-            and "description" not in ranuras):
-        ranuras.append("description")
+            and _SLOT_DE_VESTIR not in ranuras):
+        ranuras.append(_SLOT_DE_VESTIR)
     return ranuras
 
 

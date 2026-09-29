@@ -2,6 +2,7 @@ import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart'
     show DeclarationDraftLimits;
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
+import 'package:lsb_legal_app/core/domain/guided/bank_contexts.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart'
     show kEvidenceMarker;
@@ -1016,6 +1017,8 @@ final allSelectableContexts = <SemanticContext>[
   preguntasContext,
   // Trámites documentados de Cochabamba (RAG), dentro de «Trámites».
   ...RagTramites.contexts,
+  // Escenarios que el banco declara con datos (`contexto` del recorrido).
+  ...BankContexts.contexts,
 ];
 
 /// Lista por defecto para el catálogo

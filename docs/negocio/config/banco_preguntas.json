@@ -138,6 +138,55 @@
    ]
   }
  ],
+ "zonasOyente": {
+  "tiempo": [
+   "Q.TIE.CUANDO",
+   "Q.SEG.FECHA_PROGRAMADA"
+  ],
+  "lugar": [
+   "Q.LUG.DONDE"
+  ],
+  "conocimiento": [
+   "Q.PER.CONOCE"
+  ],
+  "persona": [
+   "Q.PER.DESCRIBIR",
+   "Q.VIO.AGRESOR",
+   "Q.DIG.REMITENTE",
+   "Q.DIN.RECEPTOR",
+   "Q.PER.OBSERVADA"
+  ],
+  "objetos": [
+   "Q.ROB.QUE"
+  ],
+  "testigos": [
+   "Q.TES.EXISTE"
+  ],
+  "evidencia": [
+   "Q.EVI.QUE_TIENE",
+   "Q.DIG.GUARDO",
+   "Q.DIN.COMPROBANTE"
+  ],
+  "emergencia": [
+   "Q.SAL.HERIDO"
+  ],
+  "denuncia": [
+   "Q.DEN.INTENCION"
+  ],
+  "apoyo_legal": [
+   "Q.VIO.ASISTENCIA_ESPECIALIZADA"
+  ],
+  "institucion_autoridad": [
+   "Q.DEN.AUTORIDAD",
+   "Q.SEG.AUTORIDAD"
+  ],
+  "identidad": [
+   "Q.ID.NOMBRE"
+  ],
+  "edad": [
+   "Q.ID.EDAD_PROPIA"
+  ]
+ },
  "preguntas": [
   {
    "id": "I.PREG.CUANDO",
@@ -5662,6 +5711,9 @@
    "variantes": [],
    "campos": [
     "polaridad"
+   ],
+   "ranuras": [
+    "person"
    ]
   },
   {
@@ -6952,6 +7004,9 @@
    "campos": [
     "polaridad"
    ],
+   "ranuras": [
+    "description"
+   ],
    "opciones": [
     {
      "id": "si",
@@ -7260,6 +7315,9 @@
    "variantes": [],
    "campos": [
     "polaridad"
+   ],
+   "ranuras": [
+    "person"
    ]
   },
   {
@@ -8385,6 +8443,9 @@
    "variantes": [],
    "campos": [
     "polaridad"
+   ],
+   "ranuras": [
+    "person"
    ]
   },
   {
@@ -11124,6 +11185,9 @@
    "variantes": [],
    "campos": [
     "persona"
+   ],
+   "ranuras": [
+    "person"
    ],
    "nodos": []
   },

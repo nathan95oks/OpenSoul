@@ -1,5 +1,17 @@
 {
-  "version": 4,
+  "version": 5,
+  "nota": "Fuente única de las clases cerradas de lectura semántica. tool/build_semantica_lsb.py genera con ella la app (Dart) y la Lambda de texto a LSB (Python). No editar las copias generadas.",
+  "slotVocabulary": [
+    "time",
+    "place",
+    "person",
+    "object",
+    "amount",
+    "evidence",
+    "polarity",
+    "free_text",
+    "description"
+  ],
   "interrogativeSlots": {
     "DONDE": "place",
     "CUANDO": "time",

@@ -12,10 +12,16 @@ class SignPreviewPlan {
   final List<String> animationUrls;
   final List<String> animationGlosses;
 
+  /// Glosas de la secuencia que el avatar no sabe hacer: todos sus pasos
+  /// son marcadores de posición (o una seña a incorporar). Se reproducen con
+  /// el respaldo de siempre y la vista previa lo dice.
+  final List<String> missingGlosses;
+
   const SignPreviewPlan({
     required this.glosses,
     required this.animationUrls,
     required this.animationGlosses,
+    this.missingGlosses = const [],
   });
 
   /// Hay al menos una seña que el avatar sabe hacer. Una secuencia hecha solo
@@ -43,10 +49,16 @@ class SignPreviewPlanner {
   SignPreviewPlan plan(List<String> glosses) {
     final urls = <String>[];
     final steps = <String>[];
+    final missing = <String>[];
     for (final gloss in glosses) {
       final resolved = resolver.resolveAll(gloss: gloss);
       final letters = AnimationUrlResolver.spelledLetters(gloss);
       urls.addAll(resolved);
+      if (resolved.every(
+        (url) => url.startsWith(AnimationUrlResolver.placeholderScheme),
+      )) {
+        missing.add(gloss);
+      }
       // Un rótulo por animación: si no casaran, el avatar rotularía una
       // glosa mientras hace otra.
       steps.addAll(
@@ -59,6 +71,7 @@ class SignPreviewPlanner {
       glosses: List.unmodifiable(glosses),
       animationUrls: List.unmodifiable(urls),
       animationGlosses: List.unmodifiable(steps),
+      missingGlosses: List.unmodifiable(missing),
     );
   }
 }

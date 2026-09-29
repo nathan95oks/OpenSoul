@@ -4,9 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/adaptive_node_layout.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gloss_row.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/node_flow_canvas.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/semantic_node.dart';
 
 class _ImagesOff extends SignImagesNotifier {
   @override
@@ -54,8 +53,10 @@ Future<void> _pump(
 }
 
 void main() {
+  Future<bool> sinElegir(LsbCard _) async => false;
+
   testWidgets(
-    'las tarjetas miden según su contenido: ninguna fila pisa a la siguiente',
+    'las filas miden según su contenido: ninguna pisa a la siguiente',
     (tester) async {
       final cards = [
         for (var i = 0; i < 5; i++)
@@ -66,7 +67,7 @@ void main() {
       ];
       await _pump(
         tester,
-        AdaptiveNodeLayout(cards: cards, onCardTap: (_) {}),
+        GlossRowList(cards: cards, onToggle: sinElegir),
         textScale: 2.0,
       );
       expect(tester.takeException(), isNull);
@@ -74,120 +75,119 @@ void main() {
       final rects = [
         for (final c in cards) tester.getRect(find.byKey(ValueKey(c.id))),
       ];
-      for (var i = 0; i + 2 < rects.length; i += 2) {
-        final bottomOfRow = rects[i].bottom > rects[i + 1].bottom
-            ? rects[i].bottom
-            : rects[i + 1].bottom;
+      for (var i = 0; i + 1 < rects.length; i++) {
         expect(
-          rects[i + 2].top,
-          greaterThan(bottomOfRow),
-          reason: 'la fila ${i ~/ 2 + 1} no puede montarse sobre la siguiente',
+          rects[i + 1].top,
+          greaterThanOrEqualTo(rects[i].bottom),
+          reason: 'la fila ${i + 1} no puede montarse sobre la siguiente',
         );
+        // Una debajo de otra, a todo el ancho: ya no hay columnas.
+        expect(rects[i + 1].left, rects[i].left);
+        expect(rects[i + 1].width, rects[i].width);
       }
       for (final c in cards) {
-        final card = tester.getRect(find.byKey(ValueKey(c.id)));
+        final row = tester.getRect(find.byKey(ValueKey(c.id)));
         final label = tester.getRect(
           find.descendant(
             of: find.byKey(ValueKey(c.id)),
-            matching: find.byType(Text),
+            matching: find.text(c.displayText),
           ),
         );
         expect(
-          card.top <= label.top && label.bottom <= card.bottom,
+          row.top <= label.top && label.bottom <= row.bottom,
           isTrue,
-          reason: 'la etiqueta de ${c.id} debe quedar dentro de su tarjeta',
+          reason: 'la etiqueta de ${c.id} debe quedar dentro de su fila',
         );
       }
-      // Las dos tarjetas de una fila igualan la altura de la más alta.
-      expect(rects[0].height, rects[1].height);
-      expect(find.byType(SemanticNode), findsNWidgets(5));
+      expect(find.byType(GlossRow), findsNWidgets(5));
     },
   );
 
-  testWidgets('la grilla usa una, dos o tres columnas según el ancho', (
+  testWidgets('las filas son compactas y van separadas por líneas finas', (
     tester,
   ) async {
     final cards = [for (var i = 0; i < 6; i++) _card('r$i', 'GLOSA $i')];
-
-    await _pump(
-      tester,
-      AdaptiveNodeLayout(cards: cards, onCardTap: (_) {}),
-      size: const Size(280, 640),
-    );
-    var rects = [
-      for (final card in cards) tester.getRect(find.byKey(ValueKey(card.id))),
-    ];
-    expect(rects[1].top, greaterThan(rects[0].bottom));
-    expect(rects[1].left, rects[0].left);
-
-    await _pump(
-      tester,
-      AdaptiveNodeLayout(cards: cards, onCardTap: (_) {}),
-      size: const Size(360, 640),
-    );
-    rects = [
-      for (final card in cards) tester.getRect(find.byKey(ValueKey(card.id))),
-    ];
-    expect(rects[1].top, rects[0].top);
-    expect(rects[2].top, greaterThan(rects[0].bottom));
-
-    await _pump(
-      tester,
-      AdaptiveNodeLayout(cards: cards, onCardTap: (_) {}),
-      size: const Size(800, 640),
-    );
-    rects = [
-      for (final card in cards) tester.getRect(find.byKey(ValueKey(card.id))),
-    ];
-    expect(rects[1].top, rects[0].top);
-    expect(rects[2].top, rects[0].top);
-    expect(rects[3].top, greaterThan(rects[0].bottom));
+    for (final ancho in const [280.0, 360.0, 800.0]) {
+      await _pump(
+        tester,
+        GlossRowList(cards: cards, onToggle: sinElegir),
+        size: Size(ancho, 640),
+      );
+      final rects = [
+        for (final card in cards) tester.getRect(find.byKey(ValueKey(card.id))),
+      ];
+      for (final r in rects) {
+        expect(r.width, ancho, reason: 'fila a todo el ancho ($ancho)');
+        expect(
+          r.height,
+          lessThan(72),
+          reason: 'una fila de una línea no es un bloque grande ($ancho)',
+        );
+        expect(r.height, greaterThanOrEqualTo(48), reason: 'área táctil');
+      }
+      expect(find.byType(Divider), findsNWidgets(cards.length - 1));
+    }
   });
 
-  testWidgets('la selección es visible y las etiquetas no se truncan', (
+  testWidgets('la elegida se marca sin pintarse entera y nada se trunca', (
     tester,
   ) async {
     final cards = [
       _card('selected', 'UNA GLOSA SELECCIONADA DE VARIAS PALABRAS'),
       _card('plain', 'OTRA GLOSA EXTENSA QUE DEBE VERSE COMPLETA'),
     ];
-    String? tapped;
+    final elegidas = <String>[];
+    final vistas = <String>[];
     await _pump(
       tester,
-      AdaptiveNodeLayout(
+      GlossRowList(
         cards: cards,
         selectedIds: const {'selected'},
-        onCardTap: (card) => tapped = card.id,
+        onToggle: (card) async {
+          elegidas.add(card.id);
+          return true;
+        },
+        onPreview: (card) => vistas.add(card.id),
       ),
     );
 
-    BoxDecoration decorationOf(String id) =>
-        tester
-                .widget<AnimatedContainer>(
-                  find.descendant(
-                    of: find.byKey(ValueKey(id)),
-                    matching: find.byType(AnimatedContainer),
-                  ),
-                )
-                .decoration
-            as BoxDecoration;
+    Finder dentro(String id, Finder f) =>
+        find.descendant(of: find.byKey(ValueKey(id)), matching: f);
 
-    expect(decorationOf('selected').gradient, isNotNull);
-    expect(decorationOf('plain').gradient, isNull);
+    expect(
+      dentro('selected', find.byKey(const Key('fila_elegida'))),
+      findsOneWidget,
+    );
+    expect(
+      dentro('plain', find.byKey(const Key('fila_elegida'))),
+      findsNothing,
+    );
+    Color marca(String id) => tester
+        .widget<Container>(dentro(id, find.byKey(const Key('marca_fila'))))
+        .color!;
+    expect(marca('selected'), isNot(Colors.transparent));
+    expect(marca('plain'), Colors.transparent);
+    // Fondo blanco también en la elegida: se marca, no se rellena.
     for (final id in ['selected', 'plain']) {
-      final label = tester.widget<Text>(
-        find.descendant(
-          of: find.byKey(ValueKey(id)),
-          matching: find.byType(Text),
-        ),
-      );
+      final fondo = tester
+          .widgetList<ColoredBox>(dentro(id, find.byType(ColoredBox)))
+          .map((b) => b.color)
+          .toList();
+      expect(fondo, contains(Colors.white), reason: id);
+      final label = tester.widget<Text>(dentro(id, find.byType(Text)).first);
       expect(label.maxLines, isNull);
       expect(label.data, contains('GLOSA'));
     }
 
-    await tester.tap(find.byKey(const ValueKey('plain')));
+    await tester.tap(find.text(cards[1].displayText));
     await tester.pumpAndSettle();
-    expect(tapped, 'plain');
+    expect(elegidas, ['plain'], reason: 'tocar la fila la elige');
+    expect(vistas, isEmpty, reason: 'tocar la fila no abre el avatar');
+
+    await tester.tap(dentro('plain', find.byTooltip('Ver en avatar 3D')));
+    await tester.pumpAndSettle();
+    expect(vistas, ['plain'], reason: 'la flecha abre el avatar');
+    expect(elegidas, ['plain'], reason: 'la flecha no elige');
   });
 
   testWidgets('la formulación superior es compacta en las 148 preguntas', (

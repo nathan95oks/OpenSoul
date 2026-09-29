@@ -1,6 +1,7 @@
 import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/domain/entities/dialogue_node.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/guided/bank_contexts.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/domain/services/context_catalog.dart';
 import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
@@ -33,9 +34,22 @@ class ConversationGraphCatalog {
   }) : families = families ?? contextFamilies,
        contexts = contexts ?? allSelectableContexts;
 
+  /// Los contextos con recorrido: los del catálogo y los que el propio
+  /// banco declara con datos (`contexto`), sin escribirlos en Dart.
   late final Map<String, SemanticContext> _contexts = {
-    for (final c in contexts)
+    for (final c in [...contexts, ...BankContexts.fromBank(bank)])
       if (bank.journey(c.id) != null) c.id: c,
+  };
+
+  /// Contextos de cada familia: los que la familia enumera y los que el
+  /// banco declara en ella.
+  late final Map<String, List<String>> _familyContexts = {
+    for (final f in families)
+      f.id: [
+        ...f.contextIds,
+        for (final id in BankContexts.idsOfFamily(bank, f.id))
+          if (!f.contextIds.contains(id)) id,
+      ],
   };
 
   late final Map<String, ContextFamily> _families = {
@@ -118,25 +132,11 @@ class ConversationGraphCatalog {
         if (entry.questionId == questionId)
           ...LsbGlossSemantics.spokenSlotsOf(entry.phrase),
     };
-    final question = bank.question(questionId);
-    if (question?.entity.toLowerCase() == 'persona[autor]') {
-      return {...direct, 'person'};
-    }
-    // Una pregunta de control («¿Quiere describir a la persona?») es la
-    // puerta del dato de su dominio: abre las preguntas que lo recogen.
-    final gateSlot = _slotByDomain[domainOf(questionId)];
-    if (gateSlot != null && isControlGate(questionId)) {
-      return {...direct, gateSlot};
-    }
-    return direct;
+    // Lo que la formulación no dice con un interrogativo lo declara el banco
+    // (`ranuras`): «¿Conoce a la persona?» lleva a quién fue, y la puerta
+    // «¿Quiere describir a la persona?» abre las preguntas de descripción.
+    return {...direct, ...?bank.question(questionId)?.slots};
   }
-
-  /// Dato que recoge cada dominio del banco cuando no hay un interrogativo
-  /// que lo diga (las preguntas de descripción son disyuntivas: «¿Era alto o
-  /// bajo?»).
-  static const Map<String, String> _slotByDomain = {
-    'descripcion': 'description',
-  };
 
   /// Dominio de la pregunta en el banco (`dominio`).
   String? domainOf(String questionId) =>
@@ -222,13 +222,13 @@ class ConversationGraphCatalog {
 
   /// Contextos de [familyId] que tienen recorrido guiado.
   List<String> contextsOfFamily(String familyId) => [
-    for (final id in _families[familyId]?.contextIds ?? const <String>[])
+    for (final id in _familyContexts[familyId] ?? const <String>[])
       if (hasContext(id)) id,
   ];
 
   String? familyOf(String contextId) {
-    for (final f in families) {
-      if (f.contextIds.contains(contextId)) return f.id;
+    for (final e in _familyContexts.entries) {
+      if (e.value.contains(contextId)) return e.key;
     }
     return null;
   }

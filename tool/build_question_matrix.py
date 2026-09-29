@@ -58,6 +58,8 @@ P_CATALOGO = os.path.join(ROOT, "assets", "dictionary", "official_dictionary.jso
 P_GRAFO = os.path.join(ROOT, "assets", "dialogue", "dialogue_graph.json")
 P_CONTEXTOS = os.path.join(ROOT, "lib", "core", "domain", "services", "context_catalog.dart")
 P_RESOLVER = os.path.join(ROOT, "lib", "core", "domain", "services", "animation_url_resolver.dart")
+P_FAMILIAS = os.path.join(ROOT, "lib", "core", "domain", "entities", "semantic_context.dart")
+P_SEMANTICA = os.path.join(NEG, "config", "semantica_lsb.json")
 
 OUT_DART = os.path.join(ROOT, "lib", "core", "domain", "guided", "question_bank_data.g.dart")
 OUT_AWS = os.path.join(ROOT, "aws", "question_bank.json")
@@ -86,7 +88,13 @@ CAMPOS_OPCION = ("id", "etiqueta", "glosas", "estado", "salida", "polar", "edito
                  "tipoPerdida", "certeza", "soloControl")
 CAMPOS_PREGUNTA = ("id", "dominio", "formulacion", "acto", "entidad", "campo", "control", "modo",
                    "campos", "maximo", "plantilla", "unir", "fraseSuelta", "requiereMencion",
-                   "pasosRespuesta", "variantes", "nodos", "reglas")
+                   "pasosRespuesta", "variantes", "nodos", "reglas", "ranuras")
+
+# Lo que un recorrido puede declarar de su contexto cuando no está escrito a
+# mano en context_catalog.dart: con esto basta para que la app lo liste en su
+# familia y el grafo de conversación lo pueda abrir.
+CAMPOS_CONTEXTO = {"nombre", "familia", "descripcion", "emoji", "icono"}
+CAMPOS_CONTEXTO_OBLIGATORIOS = ("nombre", "familia", "descripcion", "emoji")
 
 
 def leer(path):
@@ -105,6 +113,51 @@ def cargar():
     return banco, acep, catalogo, grafo, contextos, horneadas
 
 
+def cargar_repositorio():
+    """Vocabulario del repositorio contra el que se validan los datos nuevos:
+    familias de contextos, zonas del turno del oyente y ranuras."""
+    familias = set(re.findall(r"ContextFamily\(\s*id:\s*'(\w+)'", leer(P_FAMILIAS)))
+    zonas = set(re.findall(r"SemanticZone\(\s*id:\s*'(\w+)'", leer(P_CONTEXTOS)))
+    ranuras = set(json.loads(leer(P_SEMANTICA))["slotVocabulary"])
+    grafo = json.loads(leer(P_GRAFO))
+    for n in grafo["nodes"]:
+        ranuras.update(n.get("slots") or [])
+    return {"familias": familias, "zonas": zonas, "ranuras": ranuras}
+
+
+def validar_contexto(cid, ctx, repo, errores):
+    if not isinstance(ctx, dict):
+        errores.append(f"recorrido {cid}: «contexto» debe ser un objeto")
+        return
+    for k in sorted(set(ctx) - CAMPOS_CONTEXTO):
+        errores.append(f"recorrido {cid}: campo de contexto desconocido «{k}»")
+    for k in CAMPOS_CONTEXTO_OBLIGATORIOS:
+        if not str(ctx.get(k) or "").strip():
+            errores.append(f"recorrido {cid}: al contexto le falta «{k}»")
+    familia = ctx.get("familia")
+    if familia and familia not in repo["familias"]:
+        errores.append(f"recorrido {cid}: familia desconocida «{familia}» "
+                       f"(existen {sorted(repo['familias'])})")
+
+
+def validar_zonas_oyente(zonas, Q, repo, errores):
+    if not isinstance(zonas, dict):
+        errores.append("zonasOyente debe ser un objeto")
+        return
+    for zona, preguntas in zonas.items():
+        if zona not in repo["zonas"]:
+            errores.append(f"zonasOyente: zona desconocida «{zona}»")
+        if not isinstance(preguntas, list) or not preguntas:
+            errores.append(f"zonasOyente/{zona}: sin preguntas")
+            continue
+        for qid in preguntas:
+            if qid not in Q:
+                errores.append(f"zonasOyente/{zona}: pregunta inexistente {qid}")
+        for qid, c in Counter(preguntas).items():
+            if c > 1:
+                errores.append(f"zonasOyente/{zona}: {qid} repetida")
+
+
 def tokens(plantilla):
     return re.findall(r"\{([^{}]+)\}", plantilla or "")
 
@@ -113,7 +166,8 @@ def tokens(plantilla):
 # Validación
 # --------------------------------------------------------------------------
 
-def validar(banco, acep, catalogo, grafo, contextos):
+def validar(banco, acep, catalogo, grafo, contextos, repo=None):
+    repo = repo or cargar_repositorio()
     errores, avisos = [], []
     Q = {}
     for q in banco["preguntas"]:
@@ -148,6 +202,16 @@ def validar(banco, acep, catalogo, grafo, contextos):
                 errores.append(f"{qid}: campo desconocido {c}")
         if not q.get("campos") and q.get("opciones"):
             errores.append(f"{qid}: sin campos declarados")
+        # Dato que recoge la pregunta cuando su formulación LSB no lo dice con
+        # un interrogativo (una puerta «¿Conoce a la persona?» lleva a quién).
+        if "ranuras" in q:
+            ranuras = q["ranuras"]
+            if not isinstance(ranuras, list) or not ranuras:
+                errores.append(f"{qid}: ranuras vacías")
+            else:
+                for r in ranuras:
+                    if r not in repo["ranuras"]:
+                        errores.append(f"{qid}: ranura desconocida «{r}»")
         if not q.get("opciones") and not q.get("pasosRespuesta"):
             errores.append(f"{qid}: sin opciones ni pasos de respuesta")
         ids = [o["id"] for o in q.get("opciones", [])]
@@ -241,8 +305,16 @@ def validar(banco, acep, catalogo, grafo, contextos):
         if c not in recorridos:
             errores.append(f"el contexto {c} de context_catalog.dart no tiene recorrido")
     for cid, r in recorridos.items():
-        if cid not in contextos:
-            errores.append(f"recorrido {cid} sin contexto en context_catalog.dart")
+        # Un recorrido nuevo declara su contexto en el banco; los de siempre
+        # siguen en context_catalog.dart. Nunca los dos a la vez.
+        if "contexto" in r:
+            if cid in contextos:
+                errores.append(f"recorrido {cid}: declara «contexto» y ya está en "
+                               "context_catalog.dart")
+            validar_contexto(cid, r["contexto"], repo, errores)
+        elif cid not in contextos:
+            errores.append(f"recorrido {cid} sin contexto: declara «contexto» en el "
+                           "banco o añádelo a context_catalog.dart")
         vistos = set()
         for paso in r["pasos"]:
             p = paso["pregunta"]
@@ -280,6 +352,8 @@ def validar(banco, acep, catalogo, grafo, contextos):
                 if not abre:
                     errores.append(
                         f"{cid}/{p}/{o['id']}: no redacta nada ni abre una pregunta obligatoria")
+
+    validar_zonas_oyente(banco.get("zonasOyente", {}), Q, repo, errores)
 
     # Nodos del funcionario
     nodos = {n["id"]: n for n in grafo["nodes"]}
@@ -653,6 +727,7 @@ def banco_ejecucion(banco, acep):
         "preguntas": preguntas,
         "recorridos": banco["recorridos"],
         "mencionables": banco.get("mencionables", []),
+        "zonasOyente": banco.get("zonasOyente", {}),
         "acepciones": {g: sorted({a["campo"] for a in v}) for g, v in sorted(acep["glosas"].items())},
     }
 
