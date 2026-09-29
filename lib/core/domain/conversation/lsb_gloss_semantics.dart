@@ -1,3 +1,4 @@
+import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics_data.g.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
 
 /// Qué dato pide una glosa canónica, para leer preguntas en LSB.
@@ -8,46 +9,21 @@ import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
 /// un backend antiguo no envía la lectura.
 ///
 /// Solo contiene clases cerradas: interrogativos, núcleos de tiempo y lugar y
-/// glosas de función. Nada de frases del español.
+/// glosas de función. Nada de frases del español. Las tablas que comparte con
+/// la Lambda salen de `docs/negocio/config/semantica_lsb.json`
+/// (`tool/build_semantica_lsb.py`): una señal nueva se añade allí, no aquí.
 class LsbGlossSemantics {
   const LsbGlossSemantics._();
 
   /// Ranuras del grafo de diálogo: el vocabulario común de lo que se pide.
-  static const Set<String> slotVocabulary = {
-    'time',
-    'place',
-    'person',
-    'object',
-    'amount',
-    'evidence',
-    'polarity',
-    'free_text',
-    'description',
-  };
+  static final Set<String> slotVocabulary = kSlotVocabulary.toSet();
 
-  static const Map<String, String> interrogativeSlots = {
-    'DONDE': 'place',
-    'CUANDO': 'time',
-    'QUIEN': 'person',
-    'CUANTOS': 'amount',
-  };
+  static const Map<String, String> interrogativeSlots = kInterrogativeSlots;
 
-  static const Set<String> openInterrogatives = {
-    'QUE',
-    'CUAL',
-    'COMO',
-    'POR_QUE',
-    'PARA_QUE',
-  };
+  static const Set<String> openInterrogatives = kOpenInterrogatives;
 
   /// «¿A qué hora?», «¿qué día?»: el núcleo dice el dato.
-  static const Map<String, String> headSlots = {
-    'HORA': 'time',
-    'FECHA': 'time',
-    'DIA': 'time',
-    'MOMENTO': 'time',
-    'DIRECCION': 'place',
-  };
+  static const Map<String, String> headSlots = kHeadSlots;
 
   /// Pronombres y atenuadores: no dicen de qué trata la pregunta.
   static const Set<String> functionGlosses = {
@@ -65,112 +41,42 @@ class LsbGlossSemantics {
     'MAS_O_MENOS',
   };
 
-  static const Set<String> negators = {
-    'NO',
-    'JAMAS',
-    'NUNCA',
-    'NADA',
-    'NADIE',
-    'NINGUNO',
-  };
+  static const Set<String> negators = kNegators;
 
   // ---- El texto del oyente ---------------------------------------------------
   //
   // El interrogativo escrito dice qué dato se pide aunque la traducción no
   // conserve su glosa. Mismas clases cerradas que `build_semantic_turn`
-  // (contrato en `aws/tests/lsb_gloss_semantics.json`).
+  // (fuente única en `docs/negocio/config/semantica_lsb.json`).
 
-  static const Map<String, String> spokenInterrogativeSlots = {
-    'CUANDO': 'time',
-    'DONDE': 'place',
-    'ADONDE': 'place',
-    'QUIEN': 'person',
-    'QUIENES': 'person',
-    'CUANTO': 'amount',
-    'CUANTA': 'amount',
-    'CUANTOS': 'amount',
-    'CUANTAS': 'amount',
-  };
+  static const Map<String, String> spokenInterrogativeSlots =
+      kSpokenInterrogativeSlots;
 
-  static const Set<String> spokenOpenInterrogatives = {
-    'QUE',
-    'CUAL',
-    'CUALES',
-    'COMO',
-  };
+  static const Set<String> spokenOpenInterrogatives = kSpokenOpenInterrogatives;
 
   /// El núcleo tras un interrogativo abierto: «¿a qué hora?», «¿en qué
   /// lugar?».
-  static const Map<String, String> spokenHeadSlots = {
-    'HORA': 'time',
-    'DIA': 'time',
-    'FECHA': 'time',
-    'MOMENTO': 'time',
-    'LUGAR': 'place',
-    'SITIO': 'place',
-    'DIRECCION': 'place',
-  };
+  static const Map<String, String> spokenHeadSlots = kSpokenHeadSlots;
 
   /// Palabras que piden un lugar en cualquier parte de la pregunta.
-  static const Map<String, String> spokenWordSlots = {
-    'LUGAR': 'place',
-    'SITIO': 'place',
-  };
+  static const Map<String, String> spokenWordSlots = kSpokenWordSlots;
 
   /// Raíces que piden describir a alguien en cualquier parte del turno, aun
   /// sin signos de pregunta («describa al agresor»). DESCRIBIR no tiene seña:
   /// la traducción lo deletrea y solo el texto conserva lo que se pide.
-  static const Map<String, String> spokenStemSlots = {
-    'DESCRIB': 'description',
-    'DESCRIPCION': 'description',
-    'CARACTERISTICA': 'description',
-    'APARIENCIA': 'description',
-    'RASGO': 'description',
-    'FISICAMENTE': 'description',
-    'VESTI': 'description',
-  };
+  static const Map<String, String> spokenStemSlots = kSpokenStemSlots;
 
   /// «¿Qué ropa llevaba?», «¿qué llevaba puesto?»: un verbo de llevar puesto
   /// junto a la prenda (o «puesto») pide la ropa. Sin el verbo, «¿qué ropa le
   /// robaron?» pregunta por el objeto robado.
-  static const Set<String> spokenWearVerbs = {
-    'LLEVABA',
-    'LLEVABAN',
-    'USABA',
-    'USABAN',
-    'TENIA',
-    'TENIAN',
-  };
+  static const Set<String> spokenWearVerbs = kSpokenWearVerbs;
 
-  static const Set<String> spokenWearWords = {
-    'ROPA',
-    'PRENDA',
-    'PRENDAS',
-    'PUESTO',
-    'PUESTA',
-    'PUESTOS',
-    'PUESTAS',
-  };
+  static const Set<String> spokenWearWords = kSpokenWearWords;
 
   /// «¿Cómo era?», «¿cómo lucían?»: CÓMO + ser/lucir en pasado.
-  static const Map<String, String> spokenAfterHowSlots = {
-    'ERA': 'description',
-    'ERAN': 'description',
-    'LUCIA': 'description',
-    'LUCIAN': 'description',
-  };
+  static const Map<String, String> spokenAfterHowSlots = kSpokenAfterHowSlots;
 
-  static const Set<String> questionPrepositions = {
-    'A',
-    'EN',
-    'DE',
-    'DESDE',
-    'HASTA',
-    'CON',
-    'POR',
-    'PARA',
-    'HACIA',
-  };
+  static const Set<String> questionPrepositions = kQuestionPrepositions;
 
   /// Glosa interrogativa que preserva cada dato pedido en el texto.
   static const Map<String, String> questionGlossBySlot = {
@@ -293,8 +199,8 @@ class LsbGlossSemantics {
     }
     if (keys.any(spokenWearVerbs.contains) &&
         keys.any(spokenWearWords.contains) &&
-        !out.contains('description')) {
-      out.add('description');
+        !out.contains(kSpokenWearSlot)) {
+      out.add(kSpokenWearSlot);
     }
     return out;
   }

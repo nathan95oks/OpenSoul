@@ -34,9 +34,11 @@ import corpus_dialogue as CD  # noqa: E402
 # añadir el color de cada prenda (Q.PER.DESC.ROPA_COLOR.*) y permitir todos
 # los hechos en «¿Qué ocurrió?»; luego, el mismo día, al quitar
 # Q.HEC.PERDIDA_TIPO (PERDER es «Perdí algo») y preguntar «¿Quién escapó?»
-# enseguida. Si cambia, algo distinto de la formulación cambió:
+# enseguida; y el 2026-09-29 al declarar como datos del banco las `ranuras`
+# de cinco puertas y la tabla `zonasOyente` (sin ellas la huella es la
+# anterior, 5796c252…). Si cambia, algo distinto de la formulación cambió:
 # preguntas, opciones, estados, frases o recorridos.
-HUELLA_SIN_FORMULACION = "5796c252e5a24225f875d9f98c8413fe1ab6c004bbe99534eaab25527838fbe1"
+HUELLA_SIN_FORMULACION = "f3c8df3e2eb2052ffbfeba7d90ae78cda3193808f18870cb24af0c97a9be3d40"
 
 
 class GramaticaLsb(unittest.TestCase):

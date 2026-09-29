@@ -16,8 +16,15 @@ sys.path.insert(0, os.path.join(TESTS_DIR, ".."))
 import lambda_text_to_lsb as t2l  # noqa: E402
 
 
-with open(os.path.join(TESTS_DIR, "lsb_gloss_semantics.json"), encoding="utf-8") as f:
+ROOT = os.path.dirname(os.path.dirname(TESTS_DIR))
+# Fuente única: la app y esta Lambda se generan desde ella
+# (tool/build_semantica_lsb.py).
+SEMANTICA = os.path.join(ROOT, "docs", "negocio", "config", "semantica_lsb.json")
+with open(SEMANTICA, encoding="utf-8") as f:
     CONTRACT = json.load(f)
+
+sys.path.insert(0, os.path.join(ROOT, "tool"))
+import build_semantica_lsb as generador  # noqa: E402
 
 
 class GlossSemanticsParity(unittest.TestCase):
@@ -45,6 +52,24 @@ class GlossSemanticsParity(unittest.TestCase):
                          t2l._PALABRAS_DE_VESTIR)
         self.assertEqual(set(CONTRACT["questionPrepositions"]),
                          t2l._PREPOSICIONES_INTERROGATIVAS)
+
+
+class GeneratedFromSingleSource(unittest.TestCase):
+    def test_la_fuente_es_valida(self):
+        self.assertEqual([], generador.validar(generador.cargar()))
+
+    def test_app_y_lambda_estan_al_dia(self):
+        """Editar el JSON sin regenerar deja a la app y a la Lambda leyendo
+        distinto: se detecta aquí, antes de empaquetar."""
+        for ruta, esperado in generador.salidas(generador.cargar()).items():
+            with self.subTest(ruta=os.path.relpath(ruta, ROOT)):
+                with open(ruta, encoding="utf-8") as f:
+                    self.assertEqual(esperado.replace(chr(13), ""), f.read())
+
+    def test_una_ranura_desconocida_se_rechaza(self):
+        d = generador.cargar()
+        d["spokenStemSlots"]["TATUAJ"] = "tatuaje"
+        self.assertTrue(any("tatuaje" in e for e in generador.validar(d)))
 
 
 class SituationCuesConfiguration(unittest.TestCase):

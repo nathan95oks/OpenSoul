@@ -10,7 +10,7 @@ import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/gloss_line.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/semantic_node.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gloss_row.dart';
 
 class _SinImagenes extends SignImagesNotifier {
   @override
@@ -111,7 +111,7 @@ void main() {
         overrides: [signImagesEnabledProvider.overrideWith(_SinImagenes.new)],
         child: MaterialApp(
           home: Scaffold(
-            body: SemanticNode(
+            body: GlossRow(
               card: LsbCard(
                 id: 'r1',
                 gloss: 'SI',
@@ -126,7 +126,7 @@ void main() {
                 isFrequent: false,
                 isEmergency: false,
               ),
-              onTap: () {},
+              onToggle: () async => false,
             ),
           ),
         ),
@@ -139,7 +139,7 @@ void main() {
         .widget<RichText>(
           find
               .descendant(
-                of: find.byType(SemanticNode),
+                of: find.byType(GlossRow),
                 matching: find.byType(RichText),
               )
               .first,

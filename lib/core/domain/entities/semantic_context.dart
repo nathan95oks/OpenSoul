@@ -1,4 +1,5 @@
 import 'package:lsb_legal_app/core/domain/entities/semantic_zone.dart';
+import 'package:lsb_legal_app/core/domain/guided/bank_contexts.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/domain/services/context_catalog.dart'
     show contextById;
@@ -91,11 +92,13 @@ const contextFamilies = <ContextFamily>[
 ///
 /// «Trámites» suma los trámites documentados de Cochabamba (RAG). Solo aquí:
 /// [ContextFamily.contextIds] es lo que usa el grafo de conversación para
-/// enrutar, y no cambia.
+/// enrutar, y no cambia. Los escenarios que el banco declara con datos
+/// (`contexto` de un recorrido) se suman a la familia que declaran.
 List<SemanticContext> contextsOfFamily(ContextFamily family) {
   return [
     for (final id in family.contextIds)
       if (contextById(id) != null) contextById(id)!,
     if (family.id == 'tramites') ...RagTramites.contexts,
+    ...BankContexts.ofFamily(family.id),
   ];
 }

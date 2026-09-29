@@ -51,6 +51,20 @@ class QuestionBank {
 
   BankJourney? journey(String id) => journeys[id];
 
+  /// Zona del turno del oyente → preguntas del banco que la responden, en
+  /// orden de preferencia (`zonasOyente`). Es configuración del banco, no
+  /// código: una zona nueva se declara allí.
+  late final Map<String, List<String>> listenerZoneQuestions = {
+    for (final e
+        in (data['zonasOyente'] as Map<String, dynamic>? ?? const {}).entries)
+      e.key: _strings(e.value),
+  };
+
+  /// Recorridos que declaran su propio contexto (`contexto`): escenarios que
+  /// se añaden con datos, sin escribir un contexto en Dart.
+  Iterable<BankJourney> get journeysWithContext =>
+      journeys.values.where((j) => j.context != null);
+
   Iterable<BankQuestion> get allQuestions => _typed.values;
 }
 
@@ -115,10 +129,42 @@ class JourneyStep {
   );
 }
 
+/// Cómo se presenta un recorrido que declara su contexto en el banco.
+class BankJourneyContext {
+  final String name;
+  final String familyId;
+  final String description;
+  final String emoji;
+  final String icon;
+
+  const BankJourneyContext({
+    required this.name,
+    required this.familyId,
+    required this.description,
+    required this.emoji,
+    this.icon = 'description',
+  });
+
+  static BankJourneyContext? fromJson(Object? json) {
+    if (json is! Map<String, dynamic>) return null;
+    return BankJourneyContext(
+      name: (json['nombre'] ?? '').toString(),
+      familyId: (json['familia'] ?? '').toString(),
+      description: (json['descripcion'] ?? '').toString(),
+      emoji: (json['emoji'] ?? '').toString(),
+      icon: (json['icono'] ?? 'description').toString(),
+    );
+  }
+}
+
 class BankJourney {
   final String id;
   final String name;
   final List<JourneyStep> steps;
+
+  /// Contexto declarado en el banco, o `null` si el recorrido tiene su
+  /// contexto escrito en `context_catalog.dart`.
+  final BankJourneyContext? context;
 
   /// Orden de redacción, cuando difiere del orden de las preguntas.
   final List<String> writingOrder;
@@ -128,6 +174,7 @@ class BankJourney {
     required this.name,
     required this.steps,
     this.writingOrder = const [],
+    this.context,
   });
 
   factory BankJourney.fromJson(String id, Map<String, dynamic> json) =>
@@ -139,6 +186,7 @@ class BankJourney {
             JourneyStep.fromJson(s as Map<String, dynamic>),
         ],
         writingOrder: _strings(json['ordenRedaccion']),
+        context: BankJourneyContext.fromJson(json['contexto']),
       );
 }
 
@@ -161,6 +209,10 @@ class BankQuestion {
   /// Plantilla de la frase suelta de una pregunta en modo `fragmento`.
   final String? looseSentence;
 
+  /// Datos que recoge la pregunta cuando su formulación LSB no lo dice con un
+  /// interrogativo (`ranuras`): «¿Conoce a la persona?» lleva a quién fue.
+  final List<String> slots;
+
   const BankQuestion({
     required this.id,
     required this.formulation,
@@ -172,6 +224,7 @@ class BankQuestion {
     this.notOfferedGlosses = const [],
     this.lsb = LsbFormulation.none,
     this.looseSentence,
+    this.slots = const [],
   });
 
   factory BankQuestion.fromJson(Map<String, dynamic> json) => BankQuestion(
@@ -188,6 +241,7 @@ class BankQuestion {
     notOfferedGlosses: _strings(json['noOfrecer']),
     lsb: LsbFormulation.fromJson(json['formulacionLsb']),
     looseSentence: json['fraseSuelta'] as String?,
+    slots: _strings(json['ranuras']),
   );
 
   bool get isPolar => control == 'polar2' || control == 'polar3';

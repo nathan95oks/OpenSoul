@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_emission.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gloss_row.dart';
 
-/// Panel de vista previa en tiempo real.
+/// Panel inferior del flujo guiado.
 ///
-/// Muestra la redacción del banco guiado a medida que la persona responde:
-/// es exactamente la frase que tendrá el resultado y la que redacta la
-/// Lambda con el mismo banco. Debajo, la navegación entre preguntas.
+/// Arriba, cómo se usan las filas (presionar para elegir, deslizar para el
+/// avatar 3D); debajo, la navegación entre preguntas y la emisión.
 class LiveDeclarationPreviewPanel extends ConsumerStatefulWidget {
   const LiveDeclarationPreviewPanel({super.key});
 
@@ -55,59 +56,91 @@ class _LiveDeclarationPreviewPanelState
       padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
       child: SafeArea(
         top: false,
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: _NavIconButton(
-                key: const Key('anterior_pregunta'),
-                icon: Icons.arrow_back_rounded,
-                label: 'Anterior',
-                enabled: canGoBack && !isLoading,
-                onTap: () => ref.read(guidedFlowProvider.notifier).goPrevious(),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _NavIconButton(
-                key: const Key('terminar_aqui'),
-                icon: Icons.volume_up_rounded,
-                label: 'Traducir ahora',
-                enabled: canFinishEarly && !isLoading,
-                onTap: () => _ejecutarTraduccionFinal(context, ref),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _NavIconButton(
-                key: const Key('siguiente_pregunta'),
-                icon: isLastStep ? Icons.gavel : Icons.arrow_forward_rounded,
-                label: isLastStep ? 'Emitir declaración' : 'Siguiente',
-                enabled: !isLoading && hasContent,
-                loading: isLoading,
-                onTap: () async {
-                  final actual = session;
-                  final pendiente = actual?.currentQuestionId;
-                  if (actual != null &&
-                      pendiente != null &&
-                      rules.isRequiredAndMissing(actual, pendiente)) {
-                    // Sin esta respuesta la anterior no se puede redactar
-                    // («Alguien escapó» exige «¿quién?»).
-                    ref
-                        .read(guidedFlowProvider.notifier)
-                        .requireSelection(pendiente);
-                    return;
-                  }
-                  if (!isLastStep) {
-                    ref.read(guidedFlowProvider.notifier).goNext();
-                  } else {
-                    await _ejecutarTraduccionFinal(context, ref);
-                  }
-                },
-              ),
+            if (session != null) ...[
+              const GlossGestureHints(),
+              const SizedBox(height: 12),
+            ],
+            _botones(
+              context,
+              canGoBack,
+              canFinishEarly,
+              isLastStep,
+              isLoading,
+              hasContent,
+              session,
+              rules,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _botones(
+    BuildContext context,
+    bool canGoBack,
+    bool canFinishEarly,
+    bool isLastStep,
+    bool isLoading,
+    bool hasContent,
+    GuidedSession? session,
+    GuidedFlow rules,
+  ) {
+    return Row(
+      children: [
+        Expanded(
+          child: _NavIconButton(
+            key: const Key('anterior_pregunta'),
+            icon: Icons.arrow_back_rounded,
+            label: 'Anterior',
+            enabled: canGoBack && !isLoading,
+            onTap: () => ref.read(guidedFlowProvider.notifier).goPrevious(),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _NavIconButton(
+            key: const Key('terminar_aqui'),
+            icon: Icons.volume_up_rounded,
+            label: 'Traducir ahora',
+            enabled: canFinishEarly && !isLoading,
+            onTap: () => _ejecutarTraduccionFinal(context, ref),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _NavIconButton(
+            key: const Key('siguiente_pregunta'),
+            icon: isLastStep ? Icons.gavel : Icons.arrow_forward_rounded,
+            label: isLastStep ? 'Emitir declaración' : 'Siguiente',
+            enabled: !isLoading && hasContent,
+            loading: isLoading,
+            onTap: () async {
+              final actual = session;
+              final pendiente = actual?.currentQuestionId;
+              if (actual != null &&
+                  pendiente != null &&
+                  rules.isRequiredAndMissing(actual, pendiente)) {
+                // Sin esta respuesta la anterior no se puede redactar
+                // («Alguien escapó» exige «¿quién?»).
+                ref
+                    .read(guidedFlowProvider.notifier)
+                    .requireSelection(pendiente);
+                return;
+              }
+              if (!isLastStep) {
+                ref.read(guidedFlowProvider.notifier).goNext();
+              } else {
+                await _ejecutarTraduccionFinal(context, ref);
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 

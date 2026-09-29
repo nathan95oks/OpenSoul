@@ -14,7 +14,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/su
 ///
 /// 1. Tarjeta de la pregunta activa del banco: su formulación completa en LSB
 ///    o, cuando no existe, el español de fallback.
-/// 2. Grilla de tarjetas con las respuestas que admite esa pregunta.
+/// 2. Lista de filas con las respuestas que admite esa pregunta.
 class NodeFlowCanvas extends ConsumerWidget {
   const NodeFlowCanvas({super.key});
 
@@ -40,8 +40,8 @@ class NodeFlowCanvas extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Cabecera fija: solo la pregunta activa. No va dentro del scroll
-        // de la grilla para que no desaparezca al desplazarse por muchas
-        // tarjetas.
+        // de la lista para que no desaparezca al desplazarse por muchas
+        // respuestas.
         SafeArea(
           key: const Key('guided_question_header'),
           bottom: false,
@@ -60,7 +60,7 @@ class NodeFlowCanvas extends ConsumerWidget {
           ),
         ),
 
-        // Única parte que se desplaza: la grilla de tarjetas de la pregunta
+        // Única parte que se desplaza: las filas de respuesta de la pregunta
         // activa.
         Expanded(
           child: SingleChildScrollView(
