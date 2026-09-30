@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
-import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_preview_planner.dart';
 
 /// Construye el reproductor de la vista previa. Llama a `onFinished` cuando
@@ -17,33 +17,34 @@ typedef SignPreviewPlayerBuilder =
       VoidCallback onFinished,
     );
 
-/// El avatar de siempre haciendo el plan una sola vez.
+/// El avatar compartido de la app haciendo el plan una sola vez.
 ///
-/// [Avatar3DViewer] avisa del fin con `onPlaybackStateChanged(false)`, tanto
-/// al acabar la secuencia como si no llega a arrancar; su reloj de seguridad
-/// por paso garantiza que ese aviso llegue aunque el modelo no cargue.
+/// El visor avisa del fin con `onPlaybackStateChanged(false)`, tanto al
+/// acabar la secuencia como si no llega a arrancar; su reloj de seguridad
+/// garantiza que ese aviso llegue aunque el modelo no cargue. Sin seña (la
+/// capa está escondida) no pide el avatar.
 Widget avatarSignPreviewPlayer(
   BuildContext context,
   SignPreviewPlan plan,
   VoidCallback onFinished,
 ) {
-  return Avatar3DViewer(
+  return SharedAvatarSlot(
     key: const ValueKey('sign_preview_avatar'),
-    isProcessing: false,
     expandToFit: true,
-    // Sin volver ni repetir: la vista previa se cierra con su cruz, tocando
-    // fuera o sola al terminar la seña.
-    showControls: false,
-    playbackRequestId: 1,
-    // Escondido y sin seña, el avatar no hace sus movimientos de reposo: se
-    // queda cargado y quieto hasta la próxima vista previa.
-    isUserComposing: plan.glosses.isEmpty,
-    glosses: plan.animationGlosses,
-    animationUrls: plan.animationUrls,
-    onPlaybackStateChanged: (playing) {
-      if (!playing) onFinished();
-    },
-    onReturnToInput: onFinished,
+    active: plan.glosses.isNotEmpty,
+    request: AvatarRequest(
+      // Sin volver ni repetir: la vista previa se cierra con su cruz,
+      // tocando fuera o sola al terminar la seña.
+      showControls: false,
+      playbackRequestId: 1,
+      isUserComposing: plan.glosses.isEmpty,
+      glosses: plan.animationGlosses,
+      animationUrls: plan.animationUrls,
+      onPlaybackStateChanged: (playing) {
+        if (!playing) onFinished();
+      },
+      onReturnToInput: onFinished,
+    ),
   );
 }
 

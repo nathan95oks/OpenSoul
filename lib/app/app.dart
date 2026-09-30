@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lsb_legal_app/app/app_router.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/app/conversation_restoration.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
 
 class AppScope extends StatefulWidget {
   const AppScope({super.key, this.showSplash = true});
@@ -33,8 +34,11 @@ class _AppScopeState extends State<AppScope> {
       // que Android mate el proceso en segundo plano (ver
       // [ConversationRestoration]).
       restorationScopeId: 'app',
-      builder: (context, child) =>
-          ConversationRestoration(child: child ?? const SizedBox.shrink()),
+      // El único avatar 3D de la app vive aquí, cargado desde el arranque;
+      // cada pantalla solo marca dónde va (SharedAvatarSlot).
+      builder: (context, child) => SharedAvatarHost(
+        child: ConversationRestoration(child: child ?? const SizedBox.shrink()),
+      ),
     );
   }
 }

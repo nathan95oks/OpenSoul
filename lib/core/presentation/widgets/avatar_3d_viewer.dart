@@ -68,6 +68,19 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
 /// tarde de mas antes que quitarle tiempo a una sena que se esta viendo bien.
 const _stepWatchdog = Duration(seconds: 6);
 
+/// Lo que una sena espera a que el modelo termine de cargar antes de darse
+/// por perdida. Mientras el modelo no esta, el reloj de [_stepWatchdog] no
+/// corre: se cortaba la primera sena en un telefono que tarda en cargar el
+/// .glb y la persona veia el visor sin ninguna animacion. En cuanto carga, la
+/// sena se reproduce con su reloj normal.
+const _loadWatchdog = Duration(seconds: 25);
+
+/// Pixeles por punto con que se dibuja el avatar. Un telefono de densidad
+/// alta (2,75 en un Redmi Note 8) hacia que el visor dibujara casi el triple
+/// de pixeles de los que se notan en un recuadro pequeno, en cada fotograma.
+/// Con 1,5 se dibuja ~70 % menos y el avatar sigue viendose nitido.
+const _maxRenderPixelRatio = 1.5;
+
 /// Suelo por debajo del cual un aviso de fin no es creible. Protege del caso
 /// en que el visor arranca una sena ya terminada y avisa en el acto.
 const _minStepDuration = Duration(milliseconds: 300);
@@ -444,7 +457,8 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   void _handleLoaded(String viewerId) {
     if (!mounted) return;
-    _modelLoaded = true;
+    // Con setState: se quita el aviso de «Cargando avatar…».
+    setState(() => _modelLoaded = true);
     // El WebView acaba de existir. Si el paso en curso quedo sin reproducir
     // por no haber controller todavia, este es el momento de lanzarlo.
     _playCurrentStep();
@@ -497,11 +511,15 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
     // El reloj se arma siempre, tambien cuando no hay controller: el WebView
     // puede tardar en existir o no cargar, y la secuencia no puede depender
-    // de que 'finished' llegue.
-    _placeholderTimer = Timer(_stepWatchdog, _finishCurrentStep);
-
+    // de que 'finished' llegue. Sin modelo todavia, la sena espera a que
+    // cargue (con un limite mas largo) en vez de darse por perdida: al
+    // cargar, [_handleLoaded] vuelve a llamar aqui y arma el reloj normal.
     final controller = _controllerA;
-    if (controller == null || !_modelLoaded) return;
+    if (controller == null || !_modelLoaded) {
+      _placeholderTimer = Timer(_loadWatchdog, _finishCurrentStep);
+      return;
+    }
+    _placeholderTimer = Timer(_stepWatchdog, _finishCurrentStep);
 
     // El paquete construye el HTML una sola vez y no reacciona a cambios de
     // props, asi que cambiar `animationName` en el widget no llega al visor
@@ -639,6 +657,18 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         ),
       },
       relatedJs: '''
+        // Antes de que arranque model-viewer (su modulo se ejecuta despues de
+        // este script): menos pixeles por fotograma.
+        (() => {
+          const tope = Math.min(window.devicePixelRatio || 1, $_maxRenderPixelRatio);
+          try {
+            Object.defineProperty(window, 'devicePixelRatio', {
+              get: () => tope,
+              configurable: true,
+            });
+          } catch (e) {}
+        })();
+
         const modelViewer = document.querySelector('model-viewer');
 
         modelViewer.addEventListener('load', () => {
@@ -681,6 +711,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     return Stack(
       key: const ValueKey('playing'),
       children: [
+        // La sena espera al modelo: se dice, en vez de un visor vacio.
+        if (!isPlaceholder && !_modelLoaded)
+          Positioned.fill(child: _LoadingAvatarNotice(gloss: currentGloss)),
         if (isPlaceholder && PendingSign.isPending(currentGloss))
           Positioned.fill(child: _PendingSignNotice(gloss: currentGloss))
         else if (isPlaceholder)
@@ -1066,6 +1099,57 @@ class _PendingSignNotice extends StatelessWidget {
               style: TextStyle(color: Colors.white70, fontSize: 14),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// El modelo del avatar todavia se esta cargando: la sena empieza en cuanto
+/// este listo.
+class _LoadingAvatarNotice extends StatelessWidget {
+  final String gloss;
+
+  const _LoadingAvatarNotice({required this.gloss});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      key: const Key('avatar_cargando'),
+      liveRegion: true,
+      label: 'Cargando avatar',
+      child: Container(
+        color: const Color(0xFF1E1E2F).withValues(alpha: 0.85),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                width: 36,
+                height: 36,
+                child: CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: Colors.deepPurpleAccent,
+                ),
+              ),
+              const SizedBox(height: 14),
+              const Text(
+                'Cargando avatar…',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              if (gloss.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text(
+                  gloss.replaceAll('_', ' '),
+                  style: const TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );

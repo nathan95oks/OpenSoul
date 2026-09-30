@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
-import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
@@ -22,11 +21,11 @@ import 'package:lsb_legal_app/core/domain/repositories/translation_repository.da
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_preview_planner.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_preview_provider.dart';
@@ -177,7 +176,6 @@ void main() {
     WidgetTester tester, {
     bool avatarReal = false,
     Size? tamano,
-    bool pestanaTarjetas = false,
   }) async {
     if (tamano != null) {
       tester.view.physicalSize = tamano;
@@ -208,11 +206,6 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    // Con la pestaña de tarjetas a la vista, la sección deja el avatar
-    // cargado. Sin ella (lo de por defecto aquí), se carga al deslizar.
-    if (pestanaTarjetas) {
-      container.read(selectedTabProvider.notifier).select(AppTabId.cards);
-    }
     container
         .read(contextProvider.notifier)
         .setContext(
@@ -224,6 +217,10 @@ void main() {
         child: MaterialApp.router(
           theme: AppTheme.lightTheme,
           routerConfig: router,
+          // Con el avatar real, como en la app: uno solo, en la raíz.
+          builder: avatarReal
+              ? (context, child) => SharedAvatarHost(child: child!)
+              : null,
         ),
       ),
     );
@@ -288,6 +285,17 @@ void main() {
     final gesto = await arrastrar(tester, formulacion, fraccion);
     await gesto.up();
     await tester.pumpAndSettle();
+  }
+
+  /// Desliza la fila sin esperar a que todo se quede quieto: con el avatar
+  /// real, «Cargando avatar…» gira hasta que el modelo carga.
+  Future<void> verConAvatarReal(WidgetTester tester, String formulacion) async {
+    await tester.ensureVisible(_fila(formulacion));
+    await tester.pumpAndSettle();
+    final gesto = await arrastrar(tester, formulacion, 0.6);
+    await gesto.up();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
   }
 
   Future<void> cerrarAlTerminar(
@@ -647,7 +655,7 @@ void main() {
       tester,
     ) async {
       final arnes = await montar(tester, avatarReal: true);
-      await ver(tester, 'ROBAR');
+      await verConAvatarReal(tester, 'ROBAR');
 
       final visor = tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
       expect(visor.glosses, ['ROBAR']);
@@ -657,9 +665,16 @@ void main() {
             '${AnimationUrlResolver.bundledModelFileName}',
       ]);
 
-      // Sin WebView real no llega 'finished': cierra el reloj de seguridad
-      // del propio visor, como en un equipo donde el modelo no cargara.
+      // Sin WebView real el modelo nunca termina de cargar: la seña espera
+      // diciéndolo, en vez de perderse a los 6 s con el visor vacío.
+      await tester.pump();
+      expect(find.text('Cargando avatar…'), findsOneWidget);
       await tester.pump(const Duration(seconds: 7));
+      expect(_vistaPreviaVisible(tester), isTrue, reason: 'la seña espera');
+      expect(find.text('Cargando avatar…'), findsOneWidget);
+
+      // Si no carga nunca (un equipo sin WebView), el reloj de carga cierra.
+      await tester.pump(const Duration(seconds: 19));
       await tester.pump(SignPreviewOverlay.closeDelay);
       await tester.pumpAndSettle();
 
@@ -766,102 +781,129 @@ void main() {
     });
   });
 
-  group('avatar listo en la sección', () {
-    Element visor(WidgetTester tester) =>
-        tester.element(find.byKey(const Key('avatar_falso')));
+  group('avatar compartido', () {
+    Avatar3DViewer visor(WidgetTester tester) =>
+        tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
 
-    testWidgets('al entrar a la sección el avatar ya se carga, invisible y '
-        'sin hacer ninguna seña', (tester) async {
-      final arnes = await montar(tester, pestanaTarjetas: true);
-      expect(find.byType(SignPreviewOverlay), findsOneWidget);
-      expect(_vistaPreviaVisible(tester), isFalse);
-      expect(arnes.avatar.cargas, greaterThan(0));
-      expect(arnes.avatar.planes, isEmpty);
-      final vistaPrevia = arnes.container.read(signPreviewControllerProvider);
-      expect(vistaPrevia.isLoaded, isTrue);
-      expect(vistaPrevia.isShowing, isFalse);
+    testWidgets('hay un solo avatar en toda la app, cargado desde el '
+        'principio y quieto mientras nadie lo usa', (tester) async {
+      await montar(tester, avatarReal: true);
+      expect(find.byType(Avatar3DViewer), findsOneWidget);
+      expect(visor(tester).glosses, isNull);
+      expect(visor(tester).isUserComposing, isTrue, reason: 'sin reposo');
     });
 
-    testWidgets('el mismo avatar hace cada seña, en esta pantalla y en la '
-        'siguiente, y entre una y otra vuelve a esconderse cargado', (
-      tester,
-    ) async {
-      final arnes = await montar(tester, pestanaTarjetas: true);
-      final cargado = visor(tester);
+    testWidgets('cada vista previa usa ese mismo avatar, en esta pantalla y '
+        'en la siguiente, sin volver a cargarlo', (tester) async {
+      final arnes = await montar(tester, avatarReal: true);
+      final cargado = tester.element(find.byType(Avatar3DViewer));
 
-      await ver(tester, 'ROBAR');
-      expect(_vistaPreviaVisible(tester), isTrue);
-      expect(visor(tester), same(cargado), reason: 'no se vuelve a cargar');
-      expect(arnes.avatar.planes.last.glosses, ['ROBAR']);
-      await cerrarAlTerminar(tester, arnes.avatar);
-      // Escondido, pero sigue cargado.
-      expect(find.byType(SignPreviewOverlay), findsOneWidget);
-      expect(_vistaPreviaVisible(tester), isFalse);
-      expect(visor(tester), same(cargado));
+      await verConAvatarReal(tester, 'ROBAR');
+      expect(visor(tester).glosses, ['ROBAR']);
+      expect(visor(tester).isUserComposing, isFalse);
+      expect(visor(tester).showControls, isFalse);
+      expect(find.byType(Avatar3DViewer), findsOneWidget);
+      expect(tester.element(find.byType(Avatar3DViewer)), same(cargado));
 
-      await tocar(tester, 'ROBAR');
-      await tester.tap(find.byKey(const Key('siguiente_pregunta')));
-      await tester.pumpAndSettle();
-      await ver(tester, 'CELULAR');
-      expect(_vistaPreviaVisible(tester), isTrue);
-      expect(visor(tester), same(cargado), reason: 'otra pantalla, mismo');
-      expect(arnes.avatar.planes.last.glosses, ['CELULAR']);
-
-      // La cruz también lo esconde sin soltarlo.
       await tester.tap(find.byKey(const Key('cerrar_vista_previa')));
-      await tester.pumpAndSettle();
-      expect(_vistaPreviaVisible(tester), isFalse);
-      expect(visor(tester), same(cargado));
-      expect(elegida(arnes.container, 'CELULAR'), isFalse);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(visor(tester).glosses, isNull, reason: 'escondido otra vez');
+      expect(tester.element(find.byType(Avatar3DViewer)), same(cargado));
+
+      arnes.container
+        ..read(guidedFlowProvider.notifier).select('Q.HEC.QUE_OCURRIO', 'robar')
+        ..read(guidedFlowProvider.notifier).goNext();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await verConAvatarReal(tester, 'CELULAR');
+      expect(visor(tester).glosses, ['CELULAR']);
+      expect(tester.element(find.byType(Avatar3DViewer)), same(cargado));
     });
 
-    testWidgets('cambiar de pestaña, abrir el resultado o salir de la '
-        'sección lo sueltan', (tester) async {
-      final arnes = await montar(tester, pestanaTarjetas: true);
-      final c = arnes.container;
-      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+    testWidgets('el avatar sigue a su lugar y lo tiene el último lugar '
+        'visible', (tester) async {
+      final pedidos = <String>[];
+      Widget lugar(String nombre, {bool activo = true}) => SizedBox(
+        width: 200,
+        height: 150,
+        child: SharedAvatarSlot(
+          key: ValueKey(nombre),
+          active: activo,
+          expandToFit: true,
+          request: AvatarRequest(
+            glosses: [nombre],
+            animationUrls: ['${AnimationUrlResolver.placeholderScheme}$nombre'],
+            onPlaybackStateChanged: (p) => pedidos.add('$nombre:$p'),
+          ),
+        ),
+      );
+      Future<void> pintar(Widget cuerpo) async {
+        await tester.pumpWidget(
+          ProviderScope(
+            child: MaterialApp(
+              builder: (context, child) => SharedAvatarHost(child: child!),
+              home: Scaffold(body: cuerpo),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+      }
 
-      c.read(selectedTabProvider.notifier).select(AppTabId.conversation);
-      await tester.pumpAndSettle();
-      expect(find.byType(SignPreviewOverlay), findsNothing);
-      c.read(selectedTabProvider.notifier).select(AppTabId.cards);
-      await tester.pumpAndSettle();
-      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      await pintar(Column(children: [lugar('UNO'), lugar('DOS')]));
+      expect(visor(tester).glosses, ['DOS'], reason: 'el último visible');
+      // El avatar se dibuja encima de su lugar, con su tamaño.
+      expect(
+        tester.getTopLeft(find.byType(Avatar3DViewer)),
+        tester.getTopLeft(find.byKey(const ValueKey('DOS'))),
+      );
+      expect(tester.getSize(find.byType(Avatar3DViewer)), const Size(200, 150));
 
-      c.read(resultVisibleProvider.notifier).show();
-      await tester.pumpAndSettle();
-      expect(find.byType(SignPreviewOverlay), findsNothing);
-      c.read(resultVisibleProvider.notifier).hide();
-      await tester.pumpAndSettle();
-      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      // Si DOS deja de estar a la vista, UNO lo recupera.
+      await pintar(
+        Column(children: [lugar('UNO'), lugar('DOS', activo: false)]),
+      );
+      expect(visor(tester).glosses, ['UNO']);
+      expect(
+        tester.getTopLeft(find.byType(Avatar3DViewer)),
+        tester.getTopLeft(find.byKey(const ValueKey('UNO'))),
+      );
 
-      await tester.tap(find.byKey(const Key('volver_a_contextos')));
-      await tester.pumpAndSettle();
-      expect(find.byType(SignPreviewOverlay), findsNothing);
-      expect(c.read(signPreviewControllerProvider).isLoaded, isFalse);
+      // Una pestaña oculta de un IndexedStack no lo pide.
+      await pintar(
+        IndexedStack(
+          index: 0,
+          children: [lugar('UNO', activo: false), lugar('DOS')],
+        ),
+      );
+      expect(visor(tester).glosses, isNull);
+      await tester.pump(const Duration(seconds: 1));
     });
 
-    testWidgets('escondido, el avatar real no hace movimientos de reposo', (
+    testWidgets('sin anfitrión en la app, el lugar dibuja su propio avatar', (
       tester,
     ) async {
-      await montar(tester, pestanaTarjetas: true, avatarReal: true);
-      var real = tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
-      expect(real.glosses, isEmpty);
-      expect(real.isUserComposing, isTrue, reason: 'quieto mientras espera');
-
-      await ver(tester, 'ROBAR');
-      real = tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
-      expect(real.glosses, ['ROBAR']);
-      expect(real.isUserComposing, isFalse);
-      expect(real.showControls, isFalse);
-
-      // Sin WebView real, cierra el reloj de seguridad del visor.
-      await tester.pump(const Duration(seconds: 7));
-      await tester.pump(SignPreviewOverlay.closeDelay);
-      await tester.pumpAndSettle();
-      real = tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
-      expect(real.glosses, isEmpty, reason: 'escondido otra vez, cargado');
-      expect(real.isUserComposing, isTrue);
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: SharedAvatarSlot(
+                request: AvatarRequest(
+                  glosses: const ['HOLA'],
+                  animationUrls: const [
+                    '${AnimationUrlResolver.placeholderScheme}HOLA',
+                  ],
+                  animationDuration: const Duration(milliseconds: 1),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      expect(visor(tester).glosses, ['HOLA']);
+      await tester.pump(const Duration(seconds: 1));
     });
   });
 
