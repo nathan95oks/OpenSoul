@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
-import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
 
 class AudioToLsbScreen extends ConsumerStatefulWidget {
   /// `false` cuando la pantalla sigue montada pero el usuario esta en otro
@@ -150,36 +150,40 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(30),
-                          child: Avatar3DViewer(
-                            isActive: widget.isActive,
-                            isProcessing:
-                                widget.isActive &&
-                                state.status ==
-                                    AudioTranslationStatus.processing,
+                          // El avatar compartido de la app, ya cargado.
+                          child: SharedAvatarSlot(
+                            active: widget.isActive,
                             expandToFit: immersive,
-                            // Al terminar la seña el campo de texto vuelve:
-                            // sin flecha, y repetir queda bajo la glosa.
-                            showBackButton: false,
-                            onPlaybackStateChanged: _setPlaybackActive,
-                            onReturnToInput: () => _returnToInitial(controller),
-                            playbackRequestId: _playbackRequestId,
-                            isUserComposing: _userComposing,
-                            glosses:
-                                state.status == AudioTranslationStatus.success
-                                ? (state
+                            request: AvatarRequest(
+                              isProcessing:
+                                  widget.isActive &&
+                                  state.status ==
+                                      AudioTranslationStatus.processing,
+                              // Al terminar la seña el campo de texto vuelve:
+                              // sin flecha, y repetir queda bajo la glosa.
+                              showBackButton: false,
+                              onPlaybackStateChanged: _setPlaybackActive,
+                              onReturnToInput: () =>
+                                  _returnToInitial(controller),
+                              playbackRequestId: _playbackRequestId,
+                              isUserComposing: _userComposing,
+                              glosses:
+                                  state.status == AudioTranslationStatus.success
+                                  ? (state
+                                                .translationResult
+                                                ?.animationGlosses
+                                                .isNotEmpty ==
+                                            true
+                                        ? state
                                               .translationResult
                                               ?.animationGlosses
-                                              .isNotEmpty ==
-                                          true
-                                      ? state
-                                            .translationResult
-                                            ?.animationGlosses
-                                      : state.translationResult?.glosses)
-                                : null,
-                            animationUrls:
-                                state.status == AudioTranslationStatus.success
-                                ? state.translationResult?.animationUrls
-                                : null,
+                                        : state.translationResult?.glosses)
+                                  : null,
+                              animationUrls:
+                                  state.status == AudioTranslationStatus.success
+                                  ? state.translationResult?.animationUrls
+                                  : null,
+                            ),
                           ),
                         ),
                       ),

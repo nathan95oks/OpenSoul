@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
-import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
 
 class AvatarPlaybackSheet extends StatefulWidget {
   final List<String> glosses;
@@ -46,6 +46,17 @@ class AvatarPlaybackSheet extends StatefulWidget {
 class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
   DateTime? _playbackStartedAt;
   Timer? _dismissTimer;
+
+  // Calculadas una vez: el avatar compartido reinicia la seña si cambia la
+  // lista (no su contenido), y la hoja se reconstruye mientras se desliza.
+  late final List<String> _glosses = widget.animationGlosses?.isNotEmpty == true
+      ? widget.animationGlosses!
+      : widget.glosses;
+  late final List<String> _animationUrls = widget.animationUrls.isNotEmpty
+      ? widget.animationUrls
+      : widget.glosses
+            .expand((g) => const AnimationUrlResolver().resolveAll(gloss: g))
+            .toList();
 
   void _onPlaybackStateChanged(bool playing) {
     if (playing) {
@@ -114,28 +125,21 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
                   borderRadius: BorderRadius.circular(24),
                   child: Container(
                     color: AppTheme.darkSurface,
-                    child: Avatar3DViewer(
+                    // El avatar compartido de la app: ya está cargado, no
+                    // se vuelve a cargar el modelo cada vez que se abre.
+                    child: SharedAvatarSlot(
                       key: const ValueKey('sheet_avatar_viewer'),
-                      showControls: false,
-                      isActive: true,
-                      isProcessing: false,
                       expandToFit: true,
-                      playbackRequestId: 1,
-                      onPlaybackStateChanged: _onPlaybackStateChanged,
-                      onReturnToInput: () {
-                        if (mounted) Navigator.of(context).maybePop();
-                      },
-                      glosses: widget.animationGlosses?.isNotEmpty == true
-                          ? widget.animationGlosses
-                          : widget.glosses,
-                      animationUrls: widget.animationUrls.isNotEmpty
-                          ? widget.animationUrls
-                          : widget.glosses
-                                .expand(
-                                  (g) => const AnimationUrlResolver()
-                                      .resolveAll(gloss: g),
-                                )
-                                .toList(),
+                      request: AvatarRequest(
+                        showControls: false,
+                        playbackRequestId: 1,
+                        onPlaybackStateChanged: _onPlaybackStateChanged,
+                        onReturnToInput: () {
+                          if (mounted) Navigator.of(context).maybePop();
+                        },
+                        glosses: _glosses,
+                        animationUrls: _animationUrls,
+                      ),
                     ),
                   ),
                 ),
