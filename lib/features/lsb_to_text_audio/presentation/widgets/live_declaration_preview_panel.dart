@@ -10,8 +10,9 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gl
 
 /// Panel inferior del flujo guiado.
 ///
-/// Arriba, cómo se usan las filas (presionar para elegir, deslizar para el
-/// avatar 3D); debajo, la navegación entre preguntas y la emisión.
+/// Arriba, solo en la primera pantalla con glosas de cada declaración,
+/// cómo se usan las filas (presionar para elegir, deslizar para el avatar
+/// 3D); debajo, la navegación entre preguntas y la emisión.
 class LiveDeclarationPreviewPanel extends ConsumerStatefulWidget {
   const LiveDeclarationPreviewPanel({super.key});
 
@@ -60,7 +61,7 @@ class _LiveDeclarationPreviewPanelState
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (session != null) ...[
+            if (session != null && _esPrimeraPantalla(session, rules)) ...[
               const GlossGestureHints(),
               const SizedBox(height: 12),
             ],
@@ -142,6 +143,17 @@ class _LiveDeclarationPreviewPanelState
         ),
       ],
     );
+  }
+
+  /// La primera pantalla con glosas de esta declaración: la primera
+  /// pregunta del recorrido (o de la respuesta al oyente) que ofrece
+  /// opciones. Las indicaciones se enseñan ahí y en ninguna otra.
+  static bool _esPrimeraPantalla(GuidedSession session, GuidedFlow rules) {
+    for (final step in rules.reachableSteps(session)) {
+      if (rules.offeredOptions(session, step.questionId).isEmpty) continue;
+      return step.questionId == session.currentQuestionId;
+    }
+    return false;
   }
 
   /// Emite la declaración: la misma intervención que se ve en la vista

@@ -27,8 +27,15 @@ class GlossRowList extends StatelessWidget {
   /// Elegir o quitar la opción (tocar la fila). Devuelve si quedó elegida.
   final Future<bool> Function(LsbCard card) onToggle;
 
-  /// Ver la seña en el avatar 3D (deslizar la fila o su flecha). No elige.
+  /// Ver la seña en el avatar 3D (deslizar la fila). No elige.
   final void Function(LsbCard card)? onPreview;
+
+  /// Empezó a deslizarse una fila: cargar su avatar sin mostrarlo, para que
+  /// aparezca con la seña al pasar el umbral.
+  final void Function(LsbCard card)? onPreviewPrepare;
+
+  /// Se soltó antes del umbral: descartar lo cargado.
+  final VoidCallback? onPreviewCancel;
 
   /// Opciones cuya seña el avatar todavía no sabe hacer.
   final Set<String> unavailableAnimationIds;
@@ -42,6 +49,8 @@ class GlossRowList extends StatelessWidget {
     required this.cards,
     required this.onToggle,
     this.onPreview,
+    this.onPreviewPrepare,
+    this.onPreviewCancel,
     this.selectedIds = const {},
     this.requiresSelection = false,
     this.unavailableAnimationIds = const {},
@@ -52,6 +61,7 @@ class GlossRowList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (cards.isEmpty) return const SizedBox.shrink();
     final preview = onPreview;
+    final prepare = onPreviewPrepare;
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: AppTheme.pageBg,
@@ -80,6 +90,8 @@ class GlossRowList extends StatelessWidget {
               suggestionLabel: suggestionLabels[card.id],
               onToggle: () => onToggle(card),
               onPreview: preview == null ? null : () => preview(card),
+              onPreviewPrepare: prepare == null ? null : () => prepare(card),
+              onPreviewCancel: onPreviewCancel,
             ),
           ],
         ],
@@ -88,15 +100,16 @@ class GlossRowList extends StatelessWidget {
   }
 }
 
-/// Una respuesta como fila horizontal: recurso visual, glosa y flecha.
+/// Una respuesta como fila horizontal: recurso visual y glosa.
 ///
-/// Tres gestos que no se confunden:
+/// Dos gestos que no se confunden:
 ///   * **tocar** la fila la elige; tocarla otra vez, ya elegida, la quita;
 ///   * **deslizarla a la derecha** más allá de [previewThreshold] y soltar
 ///     muestra al avatar 3D haciendo la seña; soltar antes la devuelve a su
-///     sitio sin abrir nada. Deslizar nunca elige ni quita;
-///   * la **flecha** abre también el avatar, sin deslizar (lector de
-///     pantalla, teclado, o quien no pueda arrastrar).
+///     sitio sin abrir nada. Deslizar nunca elige ni quita.
+///
+/// Sin botón aparte: el lector de pantalla ofrece la acción «Ver en avatar
+/// 3D».
 ///
 /// Desplazar la lista en vertical no hace ninguna de las tres: el
 /// desplazamiento se queda el gesto y el toque y el arrastre se retiran.
@@ -122,6 +135,13 @@ class GlossRow extends ConsumerStatefulWidget {
   /// Ver la seña en el avatar 3D. Sin él, deslizar no hace nada.
   final VoidCallback? onPreview;
 
+  /// Al empezar a deslizar: el avatar se carga invisible mientras dura el
+  /// gesto (cargarlo al soltar tardaba y la seña no llegaba a verse).
+  final VoidCallback? onPreviewPrepare;
+
+  /// El deslizamiento no llegó al umbral: se descarta lo cargado.
+  final VoidCallback? onPreviewCancel;
+
   /// Fracción del ancho que hay que deslizar para abrir el avatar.
   static const previewThreshold = 0.35;
 
@@ -137,6 +157,8 @@ class GlossRow extends ConsumerStatefulWidget {
     required this.card,
     required this.onToggle,
     this.onPreview,
+    this.onPreviewPrepare,
+    this.onPreviewCancel,
     this.isSelected = false,
     this.requiresSelection = false,
     this.animationUnavailable = false,
@@ -177,8 +199,12 @@ class _GlossRowState extends ConsumerState<GlossRow>
     );
   }
 
+  /// Hay un avatar cargándose para el deslizamiento en curso.
+  bool _preparado = false;
+
   @override
   void dispose() {
+    if (_preparado) widget.onPreviewCancel?.call();
     _slide.dispose();
     _confirm.dispose();
     super.dispose();
@@ -189,6 +215,8 @@ class _GlossRowState extends ConsumerState<GlossRow>
     if (_width <= 0) _width = 1;
     _slide.stop();
     _armed = false;
+    _preparado = true;
+    widget.onPreviewPrepare?.call();
   }
 
   void _dragUpdate(DragUpdateDetails details) {
@@ -207,10 +235,19 @@ class _GlossRowState extends ConsumerState<GlossRow>
   void _dragEnd(DragEndDetails _) {
     final abrir = _armed;
     _release();
-    if (abrir) widget.onPreview?.call();
+    _preparado = false;
+    if (abrir) {
+      widget.onPreview?.call();
+    } else {
+      widget.onPreviewCancel?.call();
+    }
   }
 
-  void _dragCancel() => _release();
+  void _dragCancel() {
+    _release();
+    if (_preparado) widget.onPreviewCancel?.call();
+    _preparado = false;
+  }
 
   /// La fila vuelve a su sitio, se abra o no el avatar.
   void _release() {
@@ -267,7 +304,7 @@ class _GlossRowState extends ConsumerState<GlossRow>
               ),
       },
       // Solo el toque llega al lector de pantalla como acción de la fila;
-      // deslizar se ofrece como la acción «Ver en avatar 3D» y con la flecha.
+      // deslizar se ofrece como la acción «Ver en avatar 3D».
       semantics: _TapOnlySemantics(_toggle),
       child: Stack(
         children: [
@@ -451,35 +488,8 @@ class _GlossRowState extends ConsumerState<GlossRow>
                     color: AppTheme.lsbViolet,
                   ),
                 ),
-              if (widget.onPreview != null) _flecha(),
-              if (widget.onPreview == null) const SizedBox(width: 12),
+              const SizedBox(width: 16),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// La flecha abre el avatar sin deslizar. Un círculo violeta con la flecha
-  /// en blanco: se distingue del texto y apunta hacia donde se desliza.
-  Widget _flecha() {
-    return Center(
-      child: IconButton(
-        key: ValueKey('avatar_${widget.card.id}'),
-        tooltip: 'Ver en avatar 3D',
-        onPressed: widget.onPreview,
-        icon: Container(
-          width: 32,
-          height: 32,
-          decoration: const BoxDecoration(
-            color: AppTheme.lsbViolet,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.arrow_forward_rounded,
-            key: Key('flecha_avatar'),
-            color: Colors.white,
-            size: 20,
           ),
         ),
       ),

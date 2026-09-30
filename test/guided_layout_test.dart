@@ -184,10 +184,16 @@ void main() {
     expect(elegidas, ['plain'], reason: 'tocar la fila la elige');
     expect(vistas, isEmpty, reason: 'tocar la fila no abre el avatar');
 
-    await tester.tap(dentro('plain', find.byTooltip('Ver en avatar 3D')));
+    // Sin botón de flecha: el avatar se abre deslizando la fila.
+    expect(dentro('plain', find.byType(IconButton)), findsNothing);
+    final fila = tester.getRect(find.byKey(const ValueKey('plain')));
+    await tester.dragFrom(
+      Offset(fila.left + 40, fila.center.dy),
+      Offset(fila.width * 0.6, 0),
+    );
     await tester.pumpAndSettle();
-    expect(vistas, ['plain'], reason: 'la flecha abre el avatar');
-    expect(elegidas, ['plain'], reason: 'la flecha no elige');
+    expect(vistas, ['plain'], reason: 'deslizar abre el avatar');
+    expect(elegidas, ['plain'], reason: 'deslizar no elige');
   });
 
   testWidgets('la formulación superior es compacta en las 148 preguntas', (

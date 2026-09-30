@@ -8,6 +8,8 @@ import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_flow_session.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_preview_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/context_selection_widget.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/live_declaration_preview_panel.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/node_flow_canvas.dart';
@@ -162,8 +164,59 @@ class HomeScreen extends ConsumerWidget {
           const _InitiativeStrip(),
         const Expanded(child: NodeFlowCanvas()),
         const LiveDeclarationPreviewPanel(),
+        const _AvatarListo(),
       ],
     );
+  }
+}
+
+/// Carga el avatar de la vista previa al entrar a una sección y lo deja
+/// listo, invisible, mientras se eligen glosas pantalla tras pantalla: así
+/// deslizar una fila enseña la seña sin esperar a que cargue el modelo.
+///
+/// Solo mientras las glosas están a la vista: al salir de la sección, al
+/// abrir el resultado o al cambiar de pestaña se suelta, para no tener un
+/// segundo visor 3D vivo junto al de Conversación o Voz a LSB.
+class _AvatarListo extends ConsumerStatefulWidget {
+  const _AvatarListo();
+
+  @override
+  ConsumerState<_AvatarListo> createState() => _AvatarListoState();
+}
+
+class _AvatarListoState extends ConsumerState<_AvatarListo> {
+  late final SignPreviewController _vistaPrevia = ref.read(
+    signPreviewControllerProvider,
+  );
+  bool _listo = false;
+
+  void _ajustar(bool aLaVista) {
+    if (aLaVista == _listo) return;
+    _listo = aLaVista;
+    // Tras el cuadro: la capa se inserta en el overlay, no durante un build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _listo != aLaVista) return;
+      if (aLaVista) {
+        _vistaPrevia.warmUp(context);
+      } else {
+        _vistaPrevia.release();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    if (_listo) _vistaPrevia.release();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final aLaVista =
+        ref.watch(selectedTabProvider) == AppTabId.cards &&
+        !ref.watch(resultVisibleProvider);
+    _ajustar(aLaVista);
+    return const SizedBox.shrink();
   }
 }
 

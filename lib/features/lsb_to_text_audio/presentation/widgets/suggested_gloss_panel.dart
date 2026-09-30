@@ -22,7 +22,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gu
 /// seña (un valor escrito) se muestra con un icono, sin fingir una seña.
 ///
 /// Tocar una fila la elige y tocarla otra vez la quita; deslizarla a la
-/// derecha o pulsar su flecha enseña su seña en el avatar 3D. Elegir nunca
+/// derecha enseña su seña en el avatar 3D. Elegir nunca
 /// avanza de pregunta ni emite: eso sigue siendo de los botones de abajo.
 class SuggestedGlossPanel extends ConsumerWidget {
   const SuggestedGlossPanel({super.key});
@@ -41,6 +41,7 @@ class SuggestedGlossPanel extends ConsumerWidget {
     final dictionary = ref.watch(allCardsProvider).asData?.value ?? const [];
     final byGloss = {for (final c in dictionary) c.gloss: c};
     final planner = ref.watch(signPreviewPlannerProvider);
+    final vistaPrevia = ref.read(signPreviewControllerProvider);
 
     final cards = [
       for (final o in options)
@@ -105,6 +106,14 @@ class SuggestedGlossPanel extends ConsumerWidget {
                 .read(signPreviewControllerProvider)
                 .show(context, option.hasSign ? option.glosses : const []);
           },
+          onPreviewPrepare: (card) {
+            final option = optionOf(card);
+            if (!option.hasSign) return;
+            vistaPrevia.prepare(context, option.glosses);
+          },
+          // El controlador se toma al construir: la fila puede avisar que se
+          // soltó mientras el panel se desmonta.
+          onPreviewCancel: vistaPrevia.cancelPrepared,
         ),
       ],
     );

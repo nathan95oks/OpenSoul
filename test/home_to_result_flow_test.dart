@@ -4,6 +4,7 @@ import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
@@ -20,6 +21,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gl
 import 'package:lsb_legal_app/core/di/injection.dart';
 
 import 'helpers/official_dictionary.dart';
+import 'support/fake_webview_platform.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 
 /// Flujo completo del módulo LSB → texto/audio sobre la interfaz real:
@@ -80,6 +82,9 @@ class _SinImagenes extends SignImagesNotifier {
 }
 
 void main() {
+  // Con la pestaña de tarjetas a la vista, la sección carga el avatar de la
+  // vista previa: hace falta un WebView, aunque sea de prueba.
+  WebViewPlatform.instance = FakeWebViewPlatform();
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   Future<(ProviderContainer, _Backend)> montar(
