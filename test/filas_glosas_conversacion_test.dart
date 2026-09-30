@@ -32,7 +32,7 @@ import 'helpers/official_dictionary.dart';
 /// turno del oyente).
 ///
 /// Es el mismo módulo que fuera del chat: tocar elige y tocar otra vez
-/// quita; deslizar (o la flecha) enseña la seña en el avatar 3D. Elegir no envía nada al chat; lo compuesto solo
+/// quita; deslizar enseña la seña en el avatar 3D. Elegir no envía nada al chat; lo compuesto solo
 /// vuelve al turno al emitir, enlazado a la pregunta que se estaba leyendo.
 class _SignRepo implements AudioTranslationRepository {
   @override
@@ -146,8 +146,10 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // Se responde a esa frase, con las mismas filas que fuera del chat.
+    // Se responde a esa frase, con las mismas filas que fuera del chat, y
+    // las indicaciones en la primera pantalla con glosas.
     expect(find.text('«$pregunta»'), findsOneWidget);
+    expect(find.byKey(const Key('indicaciones_filas')), findsOneWidget);
     final session = container.read(guidedFlowProvider).session!;
     expect(session.purpose, GuidedPurpose.reply);
     expect(session.hearingTurnId, turno.id);
@@ -177,6 +179,7 @@ void main() {
     await tocar('ROBAR');
     await tester.tap(find.byKey(const Key('siguiente_pregunta')));
     await tester.pumpAndSettle();
+    expect(find.byKey(const Key('indicaciones_filas')), findsNothing);
     await tocar('CELULAR');
     await tocar('MOCHILA');
 
@@ -188,8 +191,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(SignPreviewOverlay), findsNothing);
 
-    // GORRA no tiene animación en el avatar: la fila lo dice y su flecha da
-    // el aviso de respaldo, sin visor y sin elegirla.
+    // GORRA no tiene animación en el avatar: la fila lo dice y deslizarla
+    // da el aviso de respaldo, sin visor y sin elegirla.
     expect(
       find.descendant(
         of: _fila('GORRA'),
@@ -197,15 +200,7 @@ void main() {
       ),
       findsOneWidget,
     );
-    await tester.ensureVisible(_fila('GORRA'));
-    await tester.pumpAndSettle();
-    await tester.tap(
-      find.descendant(
-        of: _fila('GORRA'),
-        matching: find.byTooltip('Ver en avatar 3D'),
-      ),
-    );
-    await tester.pumpAndSettle();
+    await deslizar('GORRA');
     expect(find.byType(SignPreviewOverlay), findsNothing);
     expect(find.text('Seña no disponible'), findsOneWidget);
     await tester.pump(const Duration(seconds: 4));

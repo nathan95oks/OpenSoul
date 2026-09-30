@@ -35,6 +35,9 @@ Widget avatarSignPreviewPlayer(
     // fuera o sola al terminar la seña.
     showControls: false,
     playbackRequestId: 1,
+    // Escondido y sin seña, el avatar no hace sus movimientos de reposo: se
+    // queda cargado y quieto hasta la próxima vista previa.
+    isUserComposing: plan.glosses.isEmpty,
     glosses: plan.animationGlosses,
     animationUrls: plan.animationUrls,
     onPlaybackStateChanged: (playing) {
@@ -53,10 +56,17 @@ class SignPreviewOverlay extends StatefulWidget {
   final SignPreviewPlayerBuilder player;
   final VoidCallback onFinished;
 
-  /// Si la capa se ve. Mientras es `false` el avatar se carga invisible y
-  /// sin enseñar nada (se está manteniendo la tarjeta); al pasar a `true`
-  /// aparece con su velo y hace la seña. Sin él, se ve desde el principio.
+  /// Si la capa se ve. Mientras es `false` el avatar está cargado e
+  /// invisible, sin enseñar nada; al pasar a `true` aparece con su velo y
+  /// hace la seña de [plan]. Sin él, se ve desde el principio.
   final ValueListenable<bool>? visible;
+
+  /// El plan de un visor que está cargado pero no enseña nada.
+  static const emptyPlan = SignPreviewPlan(
+    glosses: [],
+    animationUrls: [],
+    animationGlosses: [],
+  );
 
   /// Pausa entre el final de la seña y el cierre, para que el último gesto
   /// no se corte en seco.
@@ -79,6 +89,30 @@ class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
 
   bool get _visible => widget.visible?.value ?? true;
 
+  @override
+  void initState() {
+    super.initState();
+    widget.visible?.addListener(_nuevaVista);
+  }
+
+  @override
+  void didUpdateWidget(SignPreviewOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.visible, widget.visible)) {
+      oldWidget.visible?.removeListener(_nuevaVista);
+      widget.visible?.addListener(_nuevaVista);
+    }
+    // El mismo visor enseña otra seña: su cierre es otro.
+    if (!identical(oldWidget.plan, widget.plan)) _nuevaVista();
+  }
+
+  /// Cada vez que se muestra o se esconde, el cierre de la anterior ya no
+  /// cuenta.
+  void _nuevaVista() {
+    _closeTimer?.cancel();
+    _closeTimer = null;
+  }
+
   void _playerFinished() {
     // Mientras se prepara no hay seña que terminar.
     if (!_visible || _closeTimer != null) return;
@@ -89,15 +123,10 @@ class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
 
   @override
   void dispose() {
+    widget.visible?.removeListener(_nuevaVista);
     _closeTimer?.cancel();
     super.dispose();
   }
-
-  static const _vacio = SignPreviewPlan(
-    glosses: [],
-    animationUrls: [],
-    animationGlosses: [],
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +150,7 @@ class _SignPreviewOverlayState extends State<SignPreviewOverlay> {
                 ),
               // El mismo visor antes y después: carga invisible sin glosas y
               // hace la seña al verse.
-              _capa(context, seVe ? widget.plan : _vacio),
+              _capa(context, seVe ? widget.plan : SignPreviewOverlay.emptyPlan),
             ],
           ),
         ),

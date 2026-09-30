@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
@@ -25,6 +26,7 @@ import 'package:lsb_legal_app/features/conversation/presentation/providers/conve
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_preview_planner.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_preview_provider.dart';
@@ -37,19 +39,21 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/si
 import 'helpers/official_dictionary.dart';
 import 'support/fake_webview_platform.dart';
 
-/// Filas de respuesta del módulo LSB → texto/audio: tocar, deslizar, flecha.
+/// Filas de respuesta del módulo LSB → texto/audio: tocar y deslizar.
 ///
 /// Tocar una fila la elige con la lógica de siempre y tocarla otra vez la
 /// quita. Deslizarla a la derecha más allá del umbral y soltar enseña al
-/// avatar 3D haciendo su seña, sin elegir; la flecha hace lo mismo sin
-/// deslizar. Un gesto incompleto no abre nada y desplazar la lista no hace
+/// avatar 3D haciendo su seña, sin elegir; no hay botón aparte. Un gesto incompleto no abre nada y desplazar la lista no hace
 /// nada. Encima de los botones hay dos indicaciones animadas, no lo elegido.
 /// Nada de esto avanza de pregunta, emite ni toca la red.
 
 /// Doble del avatar: registra lo que se le pide y termina cuando la prueba lo
 /// decide, sin WebView ni modelo 3D.
 class _AvatarFalso {
+  /// Las señas que se le pidieron. Cargarse invisible (plan vacío mientras
+  /// se desliza la fila) no es hacer una seña.
   final planes = <SignPreviewPlan>[];
+  int cargas = 0;
   VoidCallback? _terminar;
 
   Widget build(
@@ -57,7 +61,11 @@ class _AvatarFalso {
     SignPreviewPlan plan,
     VoidCallback onFinished,
   ) {
-    if (planes.isEmpty || !identical(planes.last, plan)) planes.add(plan);
+    cargas++;
+    if (plan.glosses.isNotEmpty &&
+        (planes.isEmpty || !identical(planes.last, plan))) {
+      planes.add(plan);
+    }
     _terminar = onFinished;
     return const ColoredBox(
       key: Key('avatar_falso'),
@@ -136,6 +144,17 @@ class _Arnes {
   _Arnes(this.container, this.avatar, this.backend, this.red);
 }
 
+/// Si hay una vista previa a la vista (la que se carga mientras se desliza
+/// es invisible).
+bool _vistaPreviaVisible(WidgetTester tester) => tester
+    .widgetList<Opacity>(
+      find.descendant(
+        of: find.byType(SignPreviewOverlay),
+        matching: find.byType(Opacity),
+      ),
+    )
+    .any((o) => o.opacity > 0);
+
 Finder _fila(String formulacion) =>
     find.ancestor(of: find.text(formulacion), matching: find.byType(GlossRow));
 
@@ -158,6 +177,7 @@ void main() {
     WidgetTester tester, {
     bool avatarReal = false,
     Size? tamano,
+    bool pestanaTarjetas = false,
   }) async {
     if (tamano != null) {
       tester.view.physicalSize = tamano;
@@ -188,6 +208,11 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
+    // Con la pestaña de tarjetas a la vista, la sección deja el avatar
+    // cargado. Sin ella (lo de por defecto aquí), se carga al deslizar.
+    if (pestanaTarjetas) {
+      container.read(selectedTabProvider.notifier).select(AppTabId.cards);
+    }
     container
         .read(contextProvider.notifier)
         .setContext(
@@ -222,21 +247,13 @@ void main() {
   String? preguntaActual(ProviderContainer c) =>
       c.read(guidedFlowProvider).session!.currentQuestionId;
 
-  /// Toca la fila (no la flecha): elige o quita.
+  /// Toca la fila: elige o quita.
   Future<void> tocar(WidgetTester tester, String formulacion) async {
     await tester.ensureVisible(_fila(formulacion));
     await tester.pumpAndSettle();
     await tester.tap(
       find.descendant(of: _fila(formulacion), matching: find.text(formulacion)),
     );
-    await tester.pumpAndSettle();
-  }
-
-  /// La flecha: el avatar sin deslizar.
-  Future<void> conFlecha(WidgetTester tester, String formulacion) async {
-    await tester.ensureVisible(_fila(formulacion));
-    await tester.pumpAndSettle();
-    await tester.tap(_enFila(formulacion, find.byTooltip('Ver en avatar 3D')));
     await tester.pumpAndSettle();
   }
 
@@ -296,11 +313,9 @@ void main() {
       );
       expect(find.byType(SignPreviewOverlay), findsNothing);
       expect(arnes.avatar.planes, isEmpty);
-      // La flecha sigue a la vista para abrir el avatar.
-      expect(
-        _enFila('ROBAR', find.byTooltip('Ver en avatar 3D')),
-        findsOneWidget,
-      );
+      // Sin botón de flecha en la fila: el avatar se abre deslizando.
+      expect(_enFila('ROBAR', find.byType(IconButton)), findsNothing);
+      expect(find.byKey(const Key('flecha_avatar')), findsNothing);
     });
 
     testWidgets('tocar otra vez una fila elegida la quita', (tester) async {
@@ -464,7 +479,7 @@ void main() {
       expect(_desplazamiento(tester, 'ROBAR'), greaterThan(0.35));
       expect(find.byKey(const Key('pista_avatar')), findsOneWidget);
       expect(find.text('Suelta para ver el avatar'), findsOneWidget);
-      expect(find.byType(SignPreviewOverlay), findsNothing, reason: 'aún no');
+      expect(_vistaPreviaVisible(tester), isFalse, reason: 'aún no se ve');
 
       await gesto.up();
       await tester.pumpAndSettle();
@@ -477,6 +492,65 @@ void main() {
       expect(_desplazamiento(tester, 'ROBAR'), 0);
       expect(tester.getRect(_fila('ROBAR')), antes);
       expect(find.byKey(const Key('pista_avatar')), findsNothing);
+    });
+
+    testWidgets('al empezar a deslizar el avatar se carga invisible y, al '
+        'pasar el umbral, es ese mismo el que hace la seña', (tester) async {
+      final arnes = await montar(tester);
+      final gesto = await arrastrar(tester, 'ROBAR', 0.2);
+      // Cargándose, sin verse ni hacer ninguna seña.
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      expect(_vistaPreviaVisible(tester), isFalse);
+      expect(arnes.avatar.planes, isEmpty);
+      expect(arnes.avatar.cargas, greaterThan(0));
+      final visor = tester.element(find.byKey(const Key('avatar_falso')));
+
+      final rect = tester.getRect(_fila('ROBAR'));
+      for (var i = 0; i < 6; i++) {
+        await gesto.moveBy(Offset(rect.width * 0.05, 0));
+        await tester.pump(const Duration(milliseconds: 16));
+      }
+      await gesto.up();
+      await tester.pumpAndSettle();
+
+      expect(_vistaPreviaVisible(tester), isTrue);
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      expect(arnes.avatar.planes.single.glosses, ['ROBAR']);
+      expect(
+        tester.element(find.byKey(const Key('avatar_falso'))),
+        same(visor),
+        reason: 'no se vuelve a crear el visor: ya estaba cargado',
+      );
+      expect(elegida(arnes.container, 'ROBAR'), isFalse);
+    });
+
+    testWidgets('soltar antes del umbral descarta lo que se estaba cargando', (
+      tester,
+    ) async {
+      final arnes = await montar(tester);
+      final gesto = await arrastrar(tester, 'PERDER', 0.2);
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      await gesto.up();
+      await tester.pumpAndSettle();
+      expect(find.byType(SignPreviewOverlay), findsNothing);
+      expect(arnes.avatar.planes, isEmpty);
+      expect(
+        arnes.container.read(signPreviewControllerProvider).isShowing,
+        isFalse,
+      );
+    });
+
+    testWidgets('desplazar la lista mientras se cargaba descarta la carga', (
+      tester,
+    ) async {
+      final arnes = await montar(tester);
+      final gesto = await arrastrar(tester, 'PERDER', 0.2);
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      await tester.pumpWidget(const SizedBox());
+      await tester.pump(const Duration(seconds: 1));
+      expect(tester.takeException(), isNull);
+      await gesto.up();
+      expect(arnes.avatar.planes, isEmpty);
     });
 
     testWidgets('un deslizamiento incompleto no abre nada', (tester) async {
@@ -528,16 +602,6 @@ void main() {
       expect(find.byType(SignPreviewOverlay), findsOneWidget);
       await cerrarAlTerminar(tester, arnes.avatar);
       expect(elegida(arnes.container, 'ROBAR'), isTrue);
-    });
-
-    testWidgets('la flecha abre el avatar sin deslizar y no elige', (
-      tester,
-    ) async {
-      final arnes = await montar(tester);
-      await conFlecha(tester, 'PERDER');
-      expect(find.byType(SignPreviewOverlay), findsOneWidget);
-      expect(arnes.avatar.planes.single.glosses, ['PERDER']);
-      expect(elegida(arnes.container, 'PERDER'), isFalse);
     });
 
     testWidgets('la cruz cierra la vista previa sin elegir', (tester) async {
@@ -702,6 +766,105 @@ void main() {
     });
   });
 
+  group('avatar listo en la sección', () {
+    Element visor(WidgetTester tester) =>
+        tester.element(find.byKey(const Key('avatar_falso')));
+
+    testWidgets('al entrar a la sección el avatar ya se carga, invisible y '
+        'sin hacer ninguna seña', (tester) async {
+      final arnes = await montar(tester, pestanaTarjetas: true);
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      expect(_vistaPreviaVisible(tester), isFalse);
+      expect(arnes.avatar.cargas, greaterThan(0));
+      expect(arnes.avatar.planes, isEmpty);
+      final vistaPrevia = arnes.container.read(signPreviewControllerProvider);
+      expect(vistaPrevia.isLoaded, isTrue);
+      expect(vistaPrevia.isShowing, isFalse);
+    });
+
+    testWidgets('el mismo avatar hace cada seña, en esta pantalla y en la '
+        'siguiente, y entre una y otra vuelve a esconderse cargado', (
+      tester,
+    ) async {
+      final arnes = await montar(tester, pestanaTarjetas: true);
+      final cargado = visor(tester);
+
+      await ver(tester, 'ROBAR');
+      expect(_vistaPreviaVisible(tester), isTrue);
+      expect(visor(tester), same(cargado), reason: 'no se vuelve a cargar');
+      expect(arnes.avatar.planes.last.glosses, ['ROBAR']);
+      await cerrarAlTerminar(tester, arnes.avatar);
+      // Escondido, pero sigue cargado.
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+      expect(_vistaPreviaVisible(tester), isFalse);
+      expect(visor(tester), same(cargado));
+
+      await tocar(tester, 'ROBAR');
+      await tester.tap(find.byKey(const Key('siguiente_pregunta')));
+      await tester.pumpAndSettle();
+      await ver(tester, 'CELULAR');
+      expect(_vistaPreviaVisible(tester), isTrue);
+      expect(visor(tester), same(cargado), reason: 'otra pantalla, mismo');
+      expect(arnes.avatar.planes.last.glosses, ['CELULAR']);
+
+      // La cruz también lo esconde sin soltarlo.
+      await tester.tap(find.byKey(const Key('cerrar_vista_previa')));
+      await tester.pumpAndSettle();
+      expect(_vistaPreviaVisible(tester), isFalse);
+      expect(visor(tester), same(cargado));
+      expect(elegida(arnes.container, 'CELULAR'), isFalse);
+    });
+
+    testWidgets('cambiar de pestaña, abrir el resultado o salir de la '
+        'sección lo sueltan', (tester) async {
+      final arnes = await montar(tester, pestanaTarjetas: true);
+      final c = arnes.container;
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+
+      c.read(selectedTabProvider.notifier).select(AppTabId.conversation);
+      await tester.pumpAndSettle();
+      expect(find.byType(SignPreviewOverlay), findsNothing);
+      c.read(selectedTabProvider.notifier).select(AppTabId.cards);
+      await tester.pumpAndSettle();
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+
+      c.read(resultVisibleProvider.notifier).show();
+      await tester.pumpAndSettle();
+      expect(find.byType(SignPreviewOverlay), findsNothing);
+      c.read(resultVisibleProvider.notifier).hide();
+      await tester.pumpAndSettle();
+      expect(find.byType(SignPreviewOverlay), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('volver_a_contextos')));
+      await tester.pumpAndSettle();
+      expect(find.byType(SignPreviewOverlay), findsNothing);
+      expect(c.read(signPreviewControllerProvider).isLoaded, isFalse);
+    });
+
+    testWidgets('escondido, el avatar real no hace movimientos de reposo', (
+      tester,
+    ) async {
+      await montar(tester, pestanaTarjetas: true, avatarReal: true);
+      var real = tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
+      expect(real.glosses, isEmpty);
+      expect(real.isUserComposing, isTrue, reason: 'quieto mientras espera');
+
+      await ver(tester, 'ROBAR');
+      real = tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
+      expect(real.glosses, ['ROBAR']);
+      expect(real.isUserComposing, isFalse);
+      expect(real.showControls, isFalse);
+
+      // Sin WebView real, cierra el reloj de seguridad del visor.
+      await tester.pump(const Duration(seconds: 7));
+      await tester.pump(SignPreviewOverlay.closeDelay);
+      await tester.pumpAndSettle();
+      real = tester.widget<Avatar3DViewer>(find.byType(Avatar3DViewer));
+      expect(real.glosses, isEmpty, reason: 'escondido otra vez, cargado');
+      expect(real.isUserComposing, isTrue);
+    });
+  });
+
   group('indicaciones sobre los botones', () {
     testWidgets('en lugar de lo elegido, dos indicaciones animadas', (
       tester,
@@ -728,6 +891,30 @@ void main() {
         find.byKey(const Key('siguiente_pregunta')),
       );
       expect(indicaciones.bottom, lessThanOrEqualTo(siguiente.top));
+    });
+
+    testWidgets('solo en la primera pantalla con glosas de la declaración', (
+      tester,
+    ) async {
+      final arnes = await montar(tester);
+      final indicaciones = find.byKey(const Key('indicaciones_filas'));
+      expect(indicaciones, findsOneWidget, reason: 'primera pantalla');
+
+      await tocar(tester, 'ROBAR');
+      await tester.tap(find.byKey(const Key('siguiente_pregunta')));
+      await tester.pumpAndSettle();
+      expect(preguntaActual(arnes.container), 'Q.ROB.QUE');
+      expect(indicaciones, findsNothing, reason: 'segunda pantalla');
+
+      await tocar(tester, 'CELULAR');
+      await tester.tap(find.byKey(const Key('siguiente_pregunta')));
+      await tester.pumpAndSettle();
+      expect(indicaciones, findsNothing, reason: 'tercera pantalla');
+
+      // Una declaración nueva vuelve a enseñarlas en su primera pantalla.
+      arnes.container.read(guidedFlowProvider.notifier).reset();
+      await tester.pumpAndSettle();
+      expect(indicaciones, findsOneWidget);
     });
   });
 
