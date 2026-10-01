@@ -12,6 +12,7 @@ import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_answer.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_composer.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_session.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
@@ -133,41 +134,35 @@ void main() {
       expect(
         {for (final o in q.options) o.label: o.glosses},
         containsPair('Sí. Perdimos la copia anterior.', [
-          'SI',
+          'SÍ',
           'SENA_PENDIENTE:COPIA',
           'SENA_PENDIENTE:ANTERIOR',
           'PERDER',
         ]),
       );
-      // Las frases documentadas se eligen solas…
-      expect(q.options.where((o) => o.isExit).map((o) => o.label), [
-        'Sí. Perdimos la copia anterior.',
-        'Sí.',
-        'No.',
-        'No sé cuál certificado.',
+      // Una pregunta de sí o no se contesta con sus frases documentadas,
+      // una sola a la vez: no con tarjetas sueltas de todo el escenario.
+      expect(q.isMultiple, isFalse);
+      // Primero las unidades SÍ, NO y NO SÉ (las documentó el escenario);
+      // después las respuestas documentadas que dicen algo más.
+      expect(q.isPolar, isTrue);
+      expect(q.options.map((o) => '${o.id}:${o.label}:${o.state.wireName}'), [
+        'si:Sí:afirmado',
+        'no:No:negado',
+        'no_se:No sé:desconocido',
+        'r1:Sí. Perdimos la copia anterior.:afirmado',
+        'r4:No sé cuál certificado.:desconocido',
       ]);
-      // …y la zona de sus respuestas (Documentos) ofrece tarjetas sueltas.
-      expect(q.isMultiple, isTrue);
-      expect(
-        q.options.where((o) => !o.isExit).map((o) => o.glosses.single),
-        contains('CERTIFICADO'),
-      );
     });
 
-    test('las tarjetas de zona se juntan en una respuesta', () {
+    test('elegir otra respuesta reemplaza la anterior', () {
       final bank = RagTramites.bankWithTramites();
       final rules = GuidedFlow(bank);
-      final q = bank.question(pregunta)!;
       var s = rules.startJourney('tramite_sereci_02');
-      final tarjeta = q.options.firstWhere((o) => !o.isExit);
-      s = rules.select(s, pregunta, tarjeta.id).session;
-      expect(GuidedComposer(bank).compose(s.toIntervention()), 'Certificado.');
-      // Una frase documentada reemplaza a las tarjetas y va sola.
       s = rules.select(s, pregunta, 'r1').session;
-      expect(
-        GuidedComposer(bank).compose(s.toIntervention()),
-        'Sí. Perdimos la copia anterior.',
-      );
+      s = rules.select(s, pregunta, 'no').session;
+      expect(s.answers[pregunta]!.optionIds, ['no']);
+      expect(GuidedComposer(bank).compose(s.toIntervention()), 'No.');
     });
   });
 
@@ -190,6 +185,44 @@ void main() {
       expect(respuesta.message.speaker, SpeakerRole.deaf);
       expect(respuesta.message.text, 'Sí. Perdimos la copia anterior.');
       expect(respuesta.message.replyToId, launch.hearingTurnId);
+    });
+
+    test('responder con la unidad NO: lo elegido, el avatar y lo enviado '
+        'coinciden', () async {
+      final c = app();
+      await oyente(c, matrimonio);
+      final launch = c.read(conversationHandoffProvider).nextDeafLaunch();
+      c.read(conversationHandoffProvider).openCards(launch);
+      final rules = c.read(guidedFlowRulesProvider);
+      c.read(guidedFlowProvider.notifier).select(pregunta, 'no');
+      final inter = c.read(guidedFlowProvider.notifier).intervention!;
+      expect(rules.glossesOf(inter), ['NO']);
+      expect(c.read(guidedComposerProvider).compose(inter), 'No.');
+      await c.read(guidedEmissionProvider).emit();
+      final respuesta = c.read(conversationProvider).conversation.lastTurn!;
+      expect(respuesta.message.text, 'No.');
+      expect(respuesta.message.replyToId, launch.hearingTurnId);
+    });
+
+    test('en Derechos Reales, «¿Trajo su cédula?» no abre otra '
+        'institución', () async {
+      // Auditoría H1: antes abría «Solicitar patrocinio como víctima de
+      // delito» (SEPDAVI).
+      final c = app();
+      await oyente(c, '¿Usted figura como titular del inmueble?');
+      await oyente(c, '¿Trajo su cédula de identidad?');
+      final launch = c.read(conversationHandoffProvider).nextDeafLaunch();
+      expect(launch.route?.targetContextId, isNot('tramite_sepdavi_01'));
+      expect(launch.route?.reason ?? '', isNot(contains('SEPDAVI')));
+    });
+
+    test('una pregunta negativa no se responde como la afirmativa', () async {
+      // Auditoría H2: «¿No trajo su cédula?» abría «¿Tiene su cédula de
+      // identidad?», donde «Sí.» significa otra cosa.
+      final c = app();
+      await oyente(c, '¿No trajo su cédula?');
+      final launch = c.read(conversationHandoffProvider).nextDeafLaunch();
+      expect(launch.route?.reason ?? '', isNot(startsWith('rag:')));
     });
 
     test(

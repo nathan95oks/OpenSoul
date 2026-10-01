@@ -198,8 +198,13 @@ class BancoTramites(unittest.TestCase):
                          [{"pregunta": "R.ESC-SERECI-02.1"}])
         q = banco["preguntas"][0]
         self.assertEqual(q["formulacionLsb"]["glosas"], ["NECESITAR"])
-        self.assertEqual([(o["etiqueta"], o["estado"]) for o in q["opciones"]],
-                         [("Sí.", "afirmado"), ("No sé cuál.", "desconocido")])
+        # Primero las unidades SÍ y NO SÉ (fundadas en «Sí.» y «No sé
+        # cuál.»); «Sí.» ya es la unidad y no se repite.
+        self.assertEqual(
+            [(o["id"], o["frase"], o["estado"], o["glosas"]) for o in q["opciones"]],
+            [("si", "Sí.", "afirmado", ["SÍ"]),
+             ("no_se", "No sé.", "desconocido", ["NO_SABER"]),
+             ("r2", "No sé cuál.", "desconocido", ["NO_SABER"])])
 
 
 class Equivalencias(unittest.TestCase):
@@ -294,26 +299,40 @@ class Vocabulario(unittest.TestCase):
 
 class ZonasDeTramite(unittest.TestCase):
     ZONAS = {"senas": {"papel": ("PAPEL", "Documentos"), "si": ("SÍ", "Respuesta"),
-                       "casa": ("CASA", "Lugares")},
-             "formas": {"papel": ["Papel", "el documento"], "casa": ["Casa"]},
+                       "casa": ("CASA", "Lugares"),
+                       "fotocopia": ("FOTOCOPIA", "Documentos")},
+             "formas": {"papel": ["Papel", "el documento"], "casa": ["Casa"],
+                        "fotocopia": ["Fotocopia", "una fotocopia"]},
              "palabras": {"BOLETA": "Documentos"}}
-    ESC = {"turnos": [
-        {"texto": "¿Qué trae?", "glosas": ["TRAER"]},
-        {"texto": "Traje la boleta.", "glosas": ["TRAER", "SENA_PENDIENTE:BOLETA"]},
-        {"texto": "Tengo el papel de la casa.", "glosas": ["PAPEL", "CASA"]},
-    ], "variantes": []}
 
-    def test_la_pregunta_abre_las_zonas_de_sus_respuestas(self):
-        respuestas = [{"glosas": ["SI", "SENA_PENDIENTE:BOLETA"]}]
-        tarjetas = B.tarjetas_de_zona(self.ESC, respuestas, self.ZONAS)
-        # Documentos (por BOLETA), no Lugares ni Respuesta.
-        self.assertEqual([(t["glosas"], t["frase"]) for t in tarjetas],
-                         [(["SENA_PENDIENTE:BOLETA"], "boleta"),
-                          (["PAPEL"], "papel")])
+    def test_la_pregunta_junta_lo_que_dicen_sus_respuestas_afirmativas(self):
+        respuestas = [
+            {"texto": "Sí, traje la boleta.", "glosas": ["SI", "SENA_PENDIENTE:BOLETA"]},
+            {"texto": "Tengo el papel de la casa.", "glosas": ["PAPEL", "CASA"]},
+            # Una respuesta negativa no da tarjetas que afirmen lo contrario.
+            {"texto": "No traje la fotocopia.", "glosas": ["FOTOCOPIA", "NO"]},
+        ]
+        tarjetas = B.tarjetas_de_zona(respuestas, self.ZONAS)
+        # Documentos; no Lugares (CASA) ni la partícula SÍ.
+        self.assertEqual([(t["id"], t["glosas"], t["frase"]) for t in tarjetas],
+                         [("z1", ["SENA_PENDIENTE:BOLETA"], "boleta"),
+                          ("z2", ["PAPEL"], "papel")])
+
+    def test_la_forma_con_articulo_del_catalogo_se_usa_al_juntar(self):
+        respuestas = [{"texto": "Traje la fotocopia y la boleta.",
+                       "glosas": ["FOTOCOPIA", "SENA_PENDIENTE:BOLETA"]}]
+        self.assertEqual([t["frase"] for t in
+                          B.tarjetas_de_zona(respuestas, self.ZONAS)],
+                         ["una fotocopia", "boleta"])
+
+    def test_con_una_sola_tarjeta_no_hay_nada_que_juntar(self):
+        self.assertEqual(B.tarjetas_de_zona(
+            [{"texto": "Sí, la boleta.", "glosas": ["SI", "SENA_PENDIENTE:BOLETA"]}],
+            self.ZONAS), [])
 
     def test_sin_zona_de_respuesta_no_hay_tarjetas(self):
         self.assertEqual(
-            B.tarjetas_de_zona(self.ESC, [{"glosas": ["SI"]}], self.ZONAS), [])
+            B.tarjetas_de_zona([{"texto": "Sí.", "glosas": ["SI"]}], self.ZONAS), [])
 
 
 class ConfirmacionAutomatica(unittest.TestCase):
