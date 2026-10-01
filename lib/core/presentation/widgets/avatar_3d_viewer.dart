@@ -140,7 +140,10 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       widget.isActive &&
       !widget.isProcessing &&
       !widget.isUserComposing &&
-      !_isPlayingSequence;
+      !_isPlayingSequence &&
+      // Entre el envio y el primer paso la secuencia aun se descarga
+      // (`_isPlayingSequence` es false): el reposo pisaba la primera sena.
+      !_reportedPlaying;
 
   void _cancelNeutral({bool pause = true}) {
     _neutralTimer?.cancel();
@@ -196,6 +199,8 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           window.__lsbMode = 'neutral';
           mv.animationName = name;
           if (mv.updateComplete) await mv.updateComplete;
+          // Si arranco una sena mientras tanto, el reposo no la pisa.
+          if (window.__lsbMode !== 'neutral') return;
           const duration = mv.duration;
           if (!duration || duration <= 0) return;
           mv.currentTime = 0;
