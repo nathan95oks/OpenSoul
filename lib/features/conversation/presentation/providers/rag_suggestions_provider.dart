@@ -119,6 +119,9 @@ ConversationRoute? ragTramiteRoute(
     targetFamilyId: 'tramites',
     targetContextId: tramite.contextId,
     targetQuestionIds: [questionId],
+    // La hizo el oyente: se responde aunque en el recorrido dependa de una
+    // respuesta anterior (una ramificación del escenario).
+    presupposedQuestionIds: [questionId],
     pathQuestionIds: [questionId],
     confidence: best.score,
     reason: 'rag:${best.scenarioId}#$turn',

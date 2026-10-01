@@ -54,19 +54,20 @@ def endpoint() -> str:
 
 def frases() -> list:
     """Frases que pueden mostrarse en LSB, sin repetir: las del usuario sordo
-    y las preguntas del funcionario que abren un paso de un trámite."""
+    y las preguntas del funcionario que abren un paso de un trámite.
+
+    Incluye las preguntas de un escenario recién incorporado, aunque sus
+    respuestas aún no tengan glosas: así una sola pasada de
+    `tool/rag_actualizar.py` traduce preguntas **y** respuestas."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from build_rag_corpus import turnos_pregunta  # noqa: E402
+    from build_rag_corpus import frases_a_traducir  # noqa: E402
 
     with open(CORPUS, encoding="utf-8") as f:
         corpus = json.load(f)
     vistas = []
     for e in corpus["escenarios"]:
-        candidatas = [t for t in e["turnos"] if t["rol"] == "sordo"]
-        candidatas += [r for p in e["variantes"] for r in p["respuestas"]]
-        candidatas += turnos_pregunta(e)
-        for t in candidatas:
-            if t["mostrable"] and t["texto"] not in vistas:
+        for t in frases_a_traducir(e):
+            if t["texto"] not in vistas:
                 vistas.append(t["texto"])
     return vistas
 
@@ -108,11 +109,21 @@ def guardar(cache: dict) -> None:
         f.write("\n")
 
 
+def leer_cache() -> dict:
+    if not os.path.exists(CACHE):
+        return {}
+    with open(CACHE, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def sin_traducir() -> list:
+    """Frases del corpus generado que aún no están en la caché."""
+    cache = leer_cache()
+    return [t for t in frases() if t not in cache]
+
+
 def main() -> int:
-    cache = {}
-    if os.path.exists(CACHE) and "--todo" not in sys.argv:
-        with open(CACHE, encoding="utf-8") as f:
-            cache = json.load(f)
+    cache = {} if "--todo" in sys.argv else leer_cache()
     pendientes = [t for t in frases() if t not in cache]
     total = len(frases())
     print(f"frases: {total} · ya traducidas: {total - len(pendientes)} · "

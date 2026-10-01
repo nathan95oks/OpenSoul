@@ -134,7 +134,7 @@ class RagRetriever {
         if (t.speaker != RagSpeaker.official || !t.showable) continue;
         final replies = repliesAfter(t.n);
         if (replies.isEmpty) continue;
-        out.add(_Entry(s, DialogueGraph.tokensOf(t.text), replies, t.n));
+        out.add(_Entry.of(s, t.text, replies, t.n));
       }
       for (final v in s.variants) {
         final replies = [
@@ -143,7 +143,7 @@ class RagRetriever {
         ];
         if (replies.isEmpty) continue;
         for (final q in v.questions) {
-          out.add(_Entry(s, DialogueGraph.tokensOf(q), replies, v.turn));
+          out.add(_Entry.of(s, q, replies, v.turn));
         }
       }
     }
@@ -192,6 +192,16 @@ class RagRetriever {
   double _score(Set<String> said, _Entry e) {
     final shared = said.intersection(e.tokens);
     if (shared.isEmpty) return 0;
+    // Si el oyente no dijo toda una pregunta de sí o no, sus respuestas no
+    // pueden hablar de lo que le falta: «¿El inmueble tiene hipoteca?» no
+    // es «¿Tiene la matrícula del inmueble de la hipoteca?», que se responde
+    // «Sí, conozco la matrícula…». (Las respuestas a una pregunta abierta sí
+    // aportan contenido propio: «¿Qué número de juzgado aparece?» → «No
+    // aparece.»)
+    final missing = e.tokens.difference(said).difference(_generic);
+    if (e.kind == _Kind.polar && missing.any(e.replyTokens.contains)) {
+      return 0;
+    }
     final sharedWeight = _weightOf(shared);
     final recall = sharedWeight / _weightOf(e.tokens);
     final unknown = said.where((t) => _weight(t) == 0).length;
@@ -227,14 +237,43 @@ class RagRetriever {
   /// Las oraciones de lo dicho: un saludo antes de la pregunta («Buenos
   /// días, bienvenido. ¿Trae su matrícula?») no la diluye, y dos preguntas
   /// en un mensaje se buscan cada una.
-  static List<Set<String>> _sentences(String text) {
+  static List<_Said> _sentences(String text) {
     final sentences = [
       // «;» y «:» no separan preguntas: siguen dentro de la misma oración.
-      for (final s in text.split(RegExp(r'[.?!¿¡]+')))
-        if (DialogueGraph.tokensOf(s).isNotEmpty) DialogueGraph.tokensOf(s),
+      for (final m in RegExp(r'[^.?!]+[.?!]*').allMatches(text))
+        if (DialogueGraph.tokensOf(m.group(0)!).isNotEmpty)
+          _Said.of(m.group(0)!),
     ];
-    return sentences.isEmpty ? [DialogueGraph.tokensOf(text)] : sentences;
+    return sentences.isEmpty ? [_Said.of(text)] : sentences;
   }
+
+  static final RegExp _openQuestion = RegExp(
+    r'^[\s¿¡]*(?:(?:a|de|en|con|para|por|desde|hasta)\s+)?'
+    r'(?:qu[eé]|cu[aá]l(?:es)?|cu[aá]nt[oa]s?|d[oó]nde|ad[oó]nde|'
+    r'cu[aá]ndo|c[oó]mo|qui[eé]n(?:es)?)(?=$|[^a-záéíóúüñ])',
+    caseSensitive: false,
+  );
+
+  /// Tipo de una oración: no es pregunta, pregunta abierta («¿Qué trámite
+  /// viene a registrar?») o de sí o no («¿Su trámite fue observado?»). Sus
+  /// respuestas no se intercambian.
+  static _Kind _kindOf(String sentence) {
+    final t = sentence.trim();
+    if (!t.contains('?') && !t.startsWith('¿')) return _Kind.statement;
+    return _openQuestion.hasMatch(t) ? _Kind.open : _Kind.polar;
+  }
+
+  static final RegExp _negation = RegExp(
+    r'(^|[^a-záéíóúüñ])(no|nunca|tampoco|ningun|ninguna|ninguno|ningún|nada)'
+    r'(?=$|[^a-záéíóúüñ])',
+    caseSensitive: false,
+  );
+
+  /// Si la oración niega («¿No trajo su cédula?»). Las palabras cortas no
+  /// cuentan al comparar, así que la negación se mira aparte: a una pregunta
+  /// negativa no se le ofrecen las respuestas de la afirmativa, donde «Sí.»
+  /// significaría otra cosa.
+  static bool isNegated(String text) => _negation.hasMatch(text);
 
   /// Respuestas documentadas para [hearingText], de la situación más
   /// parecida primero. Vacío si nada se parece lo suficiente.
@@ -251,19 +290,39 @@ class RagRetriever {
 
     // Por oración: sus coincidencias casi tan buenas como su mejor.
     final groups = <List<(_Entry, double)>>[];
-    for (final said in _sentences(hearingText)) {
+    for (final sentence in _sentences(hearingText)) {
+      final said = sentence.tokens;
       if (said.isEmpty) continue;
-      final ranked = [
+      var ranked = [
         for (final e in _entries)
-          if (_score(said, e) case final score when score >= minScore)
-            (e, score),
+          if (e.negated == sentence.negated && sentence.compatibleWith(e.kind))
+            if (_score(said, e) case final score when score >= minScore)
+              (e, score),
       ]..sort((a, b) => ranking(b).compareTo(ranking(a)));
       if (ranked.isEmpty) continue;
-      if (preferArea != null &&
-          !ranked.any((r) => r.$1.scenario.area == preferArea) &&
-          !_retrievalSwitchCues.values.any(
-            (cues) => said.intersection(cues).isNotEmpty,
-          )) {
+      // El oyente nombra otra institución («¿Ya fue a la FELCC?»).
+      final otherNamed = _retrievalSwitchCues.entries.any(
+        (cues) =>
+            cues.key != preferArea && said.intersection(cues.value).isNotEmpty,
+      );
+      if (preferArea != null && !otherNamed) {
+        // Se sigue en la institución de la que se viene hablando: una
+        // pregunta que vale en muchos trámites («¿Trajo su cédula?») no
+        // cambia de institución por una coincidencia algo mejor en otra.
+        final same = [
+          for (final r in ranked)
+            if (r.$1.scenario.area == preferArea) r,
+        ];
+        if (same.isEmpty) continue;
+        // Si otra institución encaja claramente mejor («¿Su cédula ya
+        // venció?» es de SEGIP, no el «¿Tiene su cédula?» de Derechos
+        // Reales), la pregunta no es de este trámite: ni se cambia de
+        // institución ni se responde otra cosa.
+        if (ranked.first.$2 - same.first.$2 > margin) continue;
+        ranked = same;
+      } else if (preferArea == null && !_identifies(said, ranked)) {
+        // Sin tema previo, una pregunta que vale en varias instituciones
+        // («¿Trajo su cédula?», «¿Tiene algún documento?») no elige una.
         continue;
       }
       final best = ranking(ranked.first);
@@ -301,6 +360,48 @@ class RagRetriever {
     return out;
   }
 
+  /// Áreas en cuyas preguntas aparece cada palabra.
+  late final Map<String, Set<String>> _areasOfToken = () {
+    final out = <String, Set<String>>{};
+    for (final e in _entries) {
+      for (final t in e.tokens) {
+        out.putIfAbsent(t, () => <String>{}).add(e.scenario.area);
+      }
+    }
+    return out;
+  }();
+
+  /// Palabras que no identifican un trámite aunque hoy solo una institución
+  /// las use: cuantificadores, demostrativos y verbos de cualquier
+  /// ventanilla.
+  static final Set<String> _generic = DialogueGraph.tokensOf(
+    'algún alguna alguno algo otro otra este esta ese esa usted ahora '
+    'actualmente puede quiere necesita tiene trajo trae',
+  );
+
+  /// Si lo dicho identifica la institución de la mejor coincidencia: solo
+  /// esa institución tiene preguntas parecidas, o es exactamente una
+  /// pregunta documentada solo en ella, o comparte con ella una palabra que
+  /// solo esa institución usa.
+  bool _identifies(Set<String> said, List<(_Entry, double)> ranked) {
+    final best = ranked.first.$1;
+    final area = best.scenario.area;
+    if (ranked.every((r) => r.$1.scenario.area == area)) return true;
+    final exact = [
+      for (final r in ranked)
+        if (said.containsAll(r.$1.tokens) && r.$1.tokens.containsAll(said))
+          r.$1.scenario.area,
+    ];
+    if (exact.isNotEmpty) return exact.every((a) => a == area);
+    return said
+        .intersection(best.tokens)
+        .any(
+          (t) =>
+              !_generic.contains(t) &&
+              (_areasOfToken[t] ?? const <String>{}).length == 1,
+        );
+  }
+
   /// Instituciones ordenadas por parecido con lo que dijo la persona sorda.
   List<RagAreaScore> rankAreas(
     String text, {
@@ -336,6 +437,28 @@ class RagRetriever {
   }
 }
 
+enum _Kind { statement, open, polar }
+
+/// Una oración del oyente.
+class _Said {
+  final Set<String> tokens;
+  final bool negated;
+  final _Kind kind;
+
+  const _Said(this.tokens, this.negated, this.kind);
+
+  factory _Said.of(String text) => _Said(
+    DialogueGraph.tokensOf(text),
+    RagRetriever.isNegated(text),
+    RagRetriever._kindOf(text),
+  );
+
+  /// Una pregunta abierta no se responde con lo de una de sí o no, ni al
+  /// revés. Lo que no es pregunta se compara con todo.
+  bool compatibleWith(_Kind other) =>
+      kind == _Kind.statement || other == _Kind.statement || kind == other;
+}
+
 class _Entry {
   final RagScenario scenario;
   final Set<String> tokens;
@@ -344,7 +467,38 @@ class _Entry {
   /// Turno del funcionario al que responden [replies].
   final int turn;
 
-  _Entry(this.scenario, this.tokens, this.replies, this.turn);
+  /// Si la pregunta documentada niega.
+  final bool negated;
+
+  /// Palabras de las respuestas documentadas.
+  final Set<String> replyTokens;
+
+  final _Kind kind;
+
+  _Entry(
+    this.scenario,
+    this.tokens,
+    this.replies,
+    this.turn, {
+    this.negated = false,
+    this.replyTokens = const {},
+    this.kind = _Kind.statement,
+  });
+
+  factory _Entry.of(
+    RagScenario scenario,
+    String question,
+    List<RagTurn> replies,
+    int turn,
+  ) => _Entry(
+    scenario,
+    DialogueGraph.tokensOf(question),
+    replies,
+    turn,
+    negated: RagRetriever.isNegated(question),
+    replyTokens: {for (final r in replies) ...DialogueGraph.tokensOf(r.text)},
+    kind: RagRetriever._kindOf(question),
+  );
 }
 
 class _TopicEntry {

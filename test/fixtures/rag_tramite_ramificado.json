@@ -1,0 +1,438 @@
+{
+ "contextos": [
+  {
+   "area": "DDRR",
+   "emoji": "🏠",
+   "escenario": "ESC-DDRR-90",
+   "id": "tramite_ddrr_90",
+   "institucion": "Derechos Reales – Cochabamba",
+   "nombre": "Prueba de ramificaciones"
+  }
+ ],
+ "preguntas": [
+  {
+   "acto": "pregunta",
+   "campo": "tramite",
+   "campos": [
+    "tramite"
+   ],
+   "control": "polar3",
+   "dominio": "tramite",
+   "entidad": "Tramite",
+   "formulacion": "¿Trajo su cédula de identidad?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "IDENTIDAD",
+     "TRAER"
+    ],
+    "utilizable": true
+   },
+   "id": "R.ESC-DDRR-90.1",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí.",
+     "glosas": [
+      "SÍ"
+     ],
+     "glosasPropias": true,
+     "id": "si",
+     "origen": "unidad SÍ, fundada en «Sí, traje mi cédula.»",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No.",
+     "glosas": [
+      "NO"
+     ],
+     "glosasPropias": true,
+     "id": "no",
+     "origen": "unidad NO, fundada en «No, no traje mi cédula.»",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "glosasPropias": true,
+     "id": "no_se",
+     "origen": "unidad NO_SABER, fundada en «No sé si la traje.»",
+     "polar": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, traje mi cédula.",
+     "frase": "Sí, traje mi cédula.",
+     "glosas": [
+      "SÍ",
+      "IDENTIDAD",
+      "TRAER"
+     ],
+     "glosasPropias": true,
+     "id": "r1",
+     "origen": "turno 2"
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No, no traje mi cédula.",
+     "frase": "No, no traje mi cédula.",
+     "glosas": [
+      "IDENTIDAD",
+      "TRAER",
+      "NO"
+     ],
+     "glosasPropias": true,
+     "id": "r2",
+     "origen": "respuestas del turno 1"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé si la traje.",
+     "frase": "No sé si la traje.",
+     "glosas": [
+      "NO_SABER",
+      "TRAER"
+     ],
+     "glosasPropias": true,
+     "id": "r3",
+     "origen": "respuestas del turno 1"
+    }
+   ],
+   "origen": {
+    "archivo": "tool/tests/fixtures/escenario_ramificado.md",
+    "escenario": "ESC-DDRR-90",
+    "fuentes": [],
+    "turno": 1
+   },
+   "variantes": []
+  },
+  {
+   "acto": "pregunta",
+   "campo": "tramite",
+   "campos": [
+    "tramite"
+   ],
+   "control": "seleccion_multiple",
+   "dominio": "tramite",
+   "entidad": "Tramite",
+   "formulacion": "¿Qué documentos trajo?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "PAPEL",
+     "TRAER",
+     "QUÉ"
+    ],
+    "utilizable": true
+   },
+   "id": "R.ESC-DDRR-90.3",
+   "maximo": 3,
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Traje el certificado y la fotocopia.",
+     "frase": "Traje el certificado y la fotocopia.",
+     "glosas": [
+      "CERTIFICADO",
+      "FOTOCOPIA",
+      "TRAER"
+     ],
+     "glosasPropias": true,
+     "id": "r1",
+     "origen": "turno 4",
+     "salida": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Traje la factura.",
+     "frase": "Traje la factura.",
+     "glosas": [
+      "FACTURA",
+      "TRAER"
+     ],
+     "glosasPropias": true,
+     "id": "r2",
+     "origen": "respuestas del turno 3",
+     "salida": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No traje documentos.",
+     "frase": "No traje documentos.",
+     "glosas": [
+      "PAPEL",
+      "TRAER",
+      "NO"
+     ],
+     "glosasPropias": true,
+     "id": "r3",
+     "origen": "respuestas del turno 3",
+     "salida": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Certificado",
+     "frase": "un certificado",
+     "glosas": [
+      "CERTIFICADO"
+     ],
+     "glosasPropias": true,
+     "id": "z1",
+     "zona": "Documentos"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Fotocopia",
+     "frase": "una fotocopia",
+     "glosas": [
+      "FOTOCOPIA"
+     ],
+     "glosasPropias": true,
+     "id": "z2",
+     "zona": "Documentos"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Factura",
+     "frase": "la factura",
+     "glosas": [
+      "FACTURA"
+     ],
+     "glosasPropias": true,
+     "id": "z3",
+     "zona": "Documentos"
+    }
+   ],
+   "origen": {
+    "archivo": "tool/tests/fixtures/escenario_ramificado.md",
+    "escenario": "ESC-DDRR-90",
+    "fuentes": [],
+    "turno": 3
+   },
+   "plantilla": "Traje {items}.",
+   "variantes": []
+  },
+  {
+   "acto": "pregunta",
+   "campo": "tramite",
+   "campos": [
+    "tramite"
+   ],
+   "control": "polar2",
+   "dominio": "tramite",
+   "entidad": "Tramite",
+   "formulacion": "¿Tiene una fotocopia de la cédula?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "FOTOCOPIA",
+     "IDENTIDAD",
+     "TENER"
+    ],
+    "utilizable": true
+   },
+   "id": "R.ESC-DDRR-90.5",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí.",
+     "glosas": [
+      "SÍ"
+     ],
+     "glosasPropias": true,
+     "id": "si",
+     "origen": "unidad SÍ, fundada en «Sí, tengo fotocopia.»",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No.",
+     "glosas": [
+      "NO"
+     ],
+     "glosasPropias": true,
+     "id": "no",
+     "origen": "unidad NO, fundada en «No, no tengo fotocopia.»",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No, no tengo fotocopia.",
+     "frase": "No, no tengo fotocopia.",
+     "glosas": [
+      "FOTOCOPIA",
+      "TENER",
+      "NO"
+     ],
+     "glosasPropias": true,
+     "id": "r1",
+     "origen": "turno 6"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, tengo fotocopia.",
+     "frase": "Sí, tengo fotocopia.",
+     "glosas": [
+      "SÍ",
+      "FOTOCOPIA",
+      "TENER"
+     ],
+     "glosasPropias": true,
+     "id": "r2",
+     "origen": "respuestas del turno 5"
+    }
+   ],
+   "origen": {
+    "archivo": "tool/tests/fixtures/escenario_ramificado.md",
+    "escenario": "ESC-DDRR-90",
+    "fuentes": [],
+    "turno": 5
+   },
+   "variantes": []
+  },
+  {
+   "acto": "pregunta",
+   "campo": "tramite",
+   "campos": [
+    "tramite"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "tramite",
+   "entidad": "Tramite",
+   "formulacion": "¿Sabe dónde está su cédula?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "IDENTIDAD",
+     "DÓNDE"
+    ],
+    "utilizable": true
+   },
+   "id": "R.ESC-DDRR-90.7",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí",
+     "frase": "Sí.",
+     "glosas": [
+      "SÍ"
+     ],
+     "glosasPropias": true,
+     "id": "si",
+     "origen": "unidad SÍ, fundada en «Sí, está en mi casa.»",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "glosasPropias": true,
+     "id": "no_se",
+     "origen": "unidad NO_SABER, fundada en «No sé dónde está.»",
+     "polar": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé dónde está.",
+     "frase": "No sé dónde está.",
+     "glosas": [
+      "NO_SABER",
+      "DÓNDE"
+     ],
+     "glosasPropias": true,
+     "id": "r1",
+     "origen": "turno 8"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Sí, está en mi casa.",
+     "frase": "Sí, está en mi casa.",
+     "glosas": [
+      "SÍ",
+      "CASA"
+     ],
+     "glosasPropias": true,
+     "id": "r2",
+     "origen": "respuestas del turno 7"
+    }
+   ],
+   "origen": {
+    "archivo": "tool/tests/fixtures/escenario_ramificado.md",
+    "escenario": "ESC-DDRR-90",
+    "fuentes": [],
+    "turno": 7
+   },
+   "variantes": []
+  }
+ ],
+ "recorridos": {
+  "tramite_ddrr_90": {
+   "nombre": "Prueba de ramificaciones",
+   "pasos": [
+    {
+     "pregunta": "R.ESC-DDRR-90.1"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "afirmado"
+       ],
+       "pregunta": "R.ESC-DDRR-90.1"
+      }
+     ],
+     "padre": "R.ESC-DDRR-90.1",
+     "pregunta": "R.ESC-DDRR-90.3"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "negado"
+       ],
+       "pregunta": "R.ESC-DDRR-90.1"
+      }
+     ],
+     "padre": "R.ESC-DDRR-90.1",
+     "pregunta": "R.ESC-DDRR-90.5"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "r3"
+       ],
+       "pregunta": "R.ESC-DDRR-90.1"
+      }
+     ],
+     "padre": "R.ESC-DDRR-90.1",
+     "pregunta": "R.ESC-DDRR-90.7"
+    }
+   ]
+  }
+ }
+}

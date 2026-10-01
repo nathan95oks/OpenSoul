@@ -1,0 +1,189 @@
+import 'dart:io';
+
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
+import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
+import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
+import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
+
+/// Regresiones de la auditoría RAG ↔ glosas del 2026-10-01
+/// (`docs/negocio/rag/auditoria_rag_glosas_2026-10-01.md`). Cada caso es una
+/// entrada que antes llevaba a una respuesta o a un trámite equivocados.
+void main() {
+  final corpus = RagCorpus.fromJsonString(
+    File('assets/rag/escenarios_cbba.json').readAsStringSync(),
+  );
+  final retriever = RagRetriever(corpus);
+
+  Set<String> areas(List<RagSuggestion> found) => {
+    for (final s in found) s.scenarioId.split('-')[1],
+  };
+
+  group('H1 · no se cambia de institución sin que el oyente la nombre', () {
+    test('«¿Trajo su cédula?» en Derechos Reales no abre SEPDAVI', () {
+      final found = retriever.suggest(
+        '¿Trajo su cédula de identidad?',
+        preferArea: 'DDRR',
+      );
+      expect(areas(found), isNot(contains('SEPDAVI')));
+      expect(areas(found), everyElement('DDRR'));
+    });
+
+    test('si otra institución encaja claramente mejor, tampoco se responde '
+        'con la del tema', () {
+      // «¿Su cédula ya venció?» es de SEGIP; el «¿Tiene su cédula?» de
+      // Derechos Reales respondería «Sí, la tengo.», que no es lo preguntado.
+      expect(
+        retriever.suggest('¿Su cédula ya venció?', preferArea: 'DDRR'),
+        isEmpty,
+      );
+    });
+
+    test('nombrar la institución sí cambia', () {
+      final found = retriever.suggest(
+        '¿Tiene el número de NUREJ y el WebID?',
+        preferArea: 'DDRR',
+      );
+      expect(found.first.scenarioId, startsWith('ESC-OJ-'));
+    });
+  });
+
+  group('H2 · la negación cuenta', () {
+    test('«¿No trajo su cédula?» no recibe las respuestas de «¿Trajo…?»', () {
+      expect(retriever.suggest('¿No trajo su cédula?'), isEmpty);
+      expect(
+        retriever.suggest('¿No trajo su cédula?', preferArea: 'SEPDAVI'),
+        isEmpty,
+      );
+    });
+
+    test('una pregunta negativa documentada sí se encuentra', () {
+      final mini = RagRetriever(_mini());
+      final found = mini.suggest('¿No tiene la boleta de pago?');
+      expect(found.map((s) => s.text), contains('No, no la traje.'));
+      expect(mini.suggest('¿Tiene la boleta de pago?'), isEmpty);
+    });
+  });
+
+  group('H3 · respuestas de la misma pregunta, no de otra', () {
+    test('una pregunta de sí o no no recibe las respuestas de una abierta', () {
+      // Antes: «¿Su trámite fue observado?» → «Compré una casa. Quiero
+      // ponerla a mi nombre.» (respuesta a «¿Qué trámite viene a
+      // registrar?»).
+      final found = retriever.suggest('¿Su trámite fue observado?');
+      expect(found.map((s) => s.text), isNot(contains(startsWith('Compré'))));
+    });
+
+    test('las respuestas no hablan de lo que el oyente no preguntó', () {
+      final mini = RagRetriever(_mini());
+      // «¿Tiene la matrícula del inmueble de la hipoteca?» → «Sí, conozco
+      // la matrícula…» no responde si el inmueble tiene hipoteca.
+      expect(mini.suggest('¿El inmueble tiene hipoteca?'), isEmpty);
+      // Lo que sí pregunta por la matrícula la encuentra.
+      expect(
+        mini.suggest('¿Tiene la matrícula del inmueble?').map((s) => s.text),
+        contains('Sí, conozco la matrícula de ese inmueble.'),
+      );
+    });
+
+    test('en una pregunta abierta las respuestas aportan contenido', () {
+      final found = retriever.suggest('¿Qué número de Juzgado de Familia es?');
+      expect(found.first.scenarioId, 'ESC-OJ-03');
+    });
+  });
+
+  group('H4 · sin tema, una pregunta genérica no elige institución', () {
+    test('«¿Trajo su cédula?» y «¿Tiene algún documento?»', () {
+      expect(retriever.suggest('¿Trajo su cédula de identidad?'), isEmpty);
+      expect(retriever.suggest('¿Tiene algún documento?'), isEmpty);
+    });
+
+    test('lo que identifica un trámite se sigue encontrando', () {
+      expect(
+        retriever.suggest('¿Tiene la placa de su moto?').first.scenarioId,
+        'ESC-IMP-01',
+      );
+      expect(
+        retriever.suggest('¿Está en un lugar seguro?').first.scenarioId,
+        'ESC-FELCV-01',
+      );
+      expect(
+        retriever
+            .suggest('¿Usted es el denunciado o acusado en el caso?')
+            .first
+            .scenarioId,
+        startsWith('ESC-SEPDEP-'),
+      );
+    });
+  });
+
+  test('H5 · la pregunta que encontró el RAG va presupuesta', () {
+    const texto = '¿Necesita un duplicado del certificado de matrimonio?';
+    final conversation = Conversation(
+      id: 'c',
+      startedAt: DateTime(2026, 10, 1),
+      turns: [
+        ConversationTurn(
+          route: const ConversationRoute.noSafeRoute(),
+          message: SemanticMessage(
+            id: 't1',
+            speaker: SpeakerRole.hearing,
+            source: MessageSource.text,
+            glosses: const [],
+            text: texto,
+          ),
+          outputs: GeneratedOutputs(text: texto),
+        ),
+      ],
+    );
+    final route = ragTramiteRoute(
+      conversation,
+      conversation.turns.single,
+      const ConversationRoute.noSafeRoute(),
+      retriever,
+    )!;
+    expect(route.pathQuestionIds, ['R.ESC-SERECI-02.1']);
+    // Aunque en el recorrido dependiera de otra respuesta, se puede
+    // contestar: el oyente ya la hizo.
+    expect(route.presupposedQuestionIds, route.pathQuestionIds);
+  });
+}
+
+/// Un corpus mínimo para casos que el corpus activo no tiene.
+RagCorpus _mini() => RagCorpus.fromJson({
+  'escenarios': [
+    _escenario('ESC-DDRR-97', [
+      ('funcionario', '¿Tiene la matrícula del inmueble de la hipoteca?'),
+      ('sordo', 'Sí, conozco la matrícula de ese inmueble.'),
+    ]),
+    _escenario('ESC-IMP-97', [
+      ('funcionario', '¿No tiene la boleta de pago?'),
+      ('sordo', 'No, no la traje.'),
+    ]),
+    _escenario('ESC-SEGIP-97', [
+      ('funcionario', '¿Trae su cédula vigente?'),
+      ('sordo', 'Sí, aquí está.'),
+    ]),
+  ],
+});
+
+Map<String, dynamic> _escenario(String id, List<(String, String)> turnos) => {
+  'id': id,
+  'titulo': id,
+  'institucion': id,
+  'tramite': id,
+  'turnos': [
+    for (final (i, (rol, texto)) in turnos.indexed)
+      {
+        'n': i + 1,
+        'rol': rol,
+        'texto': texto,
+        'mostrable': true,
+        'glosas': ['PRUEBA'],
+      },
+  ],
+  'variantes': const [],
+};

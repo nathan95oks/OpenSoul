@@ -131,7 +131,22 @@ void main() {
         for (final v in s.variants) {
           if (!v.replies.any((r) => r.isOfferableReply)) continue;
           for (final q in v.questions) {
-            if (retriever.suggest(q).isEmpty) fallas.add('${s.id}: «$q»');
+            // La misma pregunta en dos instituciones («¿Necesita el
+            // horario?» en SEPDAVI y en SLIM) solo se decide con el tema de
+            // la conversación: sin él, el RAG no elige una al azar.
+            final enOtra = corpus.scenarios.any(
+              (o) =>
+                  o.area != s.area &&
+                  o.variants.any((ov) => ov.questions.contains(q)),
+            );
+            final found = retriever.suggest(
+              q,
+              preferArea: enOtra ? s.area : null,
+            );
+            if (found.isEmpty) fallas.add('${s.id}: «$q»');
+            if (enOtra && retriever.suggest(q).isNotEmpty) {
+              fallas.add('${s.id}: «$q» elige institución sin contexto');
+            }
           }
         }
       }
@@ -210,12 +225,24 @@ void main() {
 
     test('dos preguntas en un mensaje: respuestas para cada una', () {
       final found = retriever.suggest(
+        '¿Ya tiene abogado particular? ¿Usted es la persona denunciada o la '
+        'víctima?',
+        limit: 12,
+      );
+      expect({for (final s in found) s.questionTurn}, {5, 2});
+      expect({for (final s in found) s.scenarioId}, {'ESC-SEPDEP-01'});
+    });
+
+    test('una pregunta genérica en el mismo mensaje no salta de '
+        'institución', () {
+      // «¿Y trajo su cédula?» vale en SEPDAVI, SEGIP o Derechos Reales: sin
+      // una institución que la identifique, no trae respuestas de otra.
+      final found = retriever.suggest(
         '¿Ya tiene abogado particular? ¿Y trajo su cédula de identidad?',
         limit: 12,
       );
       final areas = {for (final s in found) s.scenarioId.split('-')[1]};
-      expect(areas, contains('SEPDEP'));
-      expect(areas.length, greaterThan(1), reason: '$areas');
+      expect(areas, {'SEPDEP'});
     });
 
     test('una pregunta genérica no salta a otra institución', () {
