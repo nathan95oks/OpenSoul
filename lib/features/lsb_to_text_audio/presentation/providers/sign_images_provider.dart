@@ -1,26 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-const _clavePreferencia = 'lsb.mostrarImagenesDeSenas';
-
+/// Las imágenes de señas (S3) están desactivadas: las tarjetas muestran
+/// su emoji/icono semántico. Nada vuelve a activarlas.
 class SignImagesNotifier extends Notifier<bool> {
   @override
-  bool build() {
-    _restaurar();
-    return true;
-  }
+  bool build() => false;
 
-  Future<void> _restaurar() async {
-    final prefs = await SharedPreferences.getInstance();
-    final guardada = prefs.getBool(_clavePreferencia);
-    if (guardada != null && guardada != state) state = guardada;
-  }
-
-  Future<void> alternar() async {
-    state = !state;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_clavePreferencia, state);
-  }
+  Future<void> alternar() async {}
 }
 
 final signImagesEnabledProvider =
