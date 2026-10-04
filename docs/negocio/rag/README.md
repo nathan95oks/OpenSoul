@@ -72,6 +72,40 @@ preparar escenarios → validar → actualizar corpus y glosas.
 El script devuelve 1 si algún documento no se pudo usar; el corpus activo no
 cambia.
 
+## Solo señas del léxico LSB (M1–M4 y diccionarios)
+
+Las fuentes y el formato están en `docs/lsb_fuentes/README.md`. En resumen:
+
+- `aws/lexico_lsb.json` (de `python tool/build_lexico_lsb.py`) es la lista
+  de señas válidas: M1–M4, los diccionarios y el catálogo, con módulo, tema
+  y página de cada una. Va empaquetado en la Lambda.
+- Una palabra que la traducción deja sin seña entra de dos formas, ambas
+  por `tool/rag_equivalencias.py` y confirmadas antes de usarse:
+  1. **existe** en el léxico: Bedrock confirma que el sentido es el del tema
+     de la seña (no basta con que se escriba igual);
+  2. **no existe**: un sinónimo o una combinación de hasta 3 señas del
+     léxico, confirmada con la vuelta al español.
+- **Las tarjetas de la persona sorda son siempre una sola seña del léxico**
+  (en todos los archivos), cada una contestando su pregunta:
+  - sí o no → SÍ · NO · NO SÉ; al elegirla se dice la respuesta documentada
+    de ese estado («Sí, traje mi cédula.») o la partícula si no hay;
+  - ¿cuándo?, ¿dónde?, ¿qué documentos?… → señas de la zona que contesta esa
+    palabra interrogativa, sacadas de las respuestas documentadas a esa
+    misma pregunta; «¿Cuándo y dónde…?» son dos preguntas; nunca lo que ya
+    dice la pregunta; más NO SÉ;
+  - disyuntiva («¿Por internet o presencialmente?») → sus alternativas, si
+    todas tienen seña;
+  - indicación del funcionario → ENTENDIDO · NO ENTIENDO.
+  Una pregunta que no se puede contestar así no se ofrece (el constructor
+  avisa por qué).
+- La pregunta del funcionario se muestra aunque tenga palabras sin seña
+  (marcadas «seña a incorporar»; el avatar las deletrea). Un archivo con
+  `<!-- lexico: estricto -->` (los borradores de la ingesta la llevan) avisa
+  cuántas preguntas están así.
+
+`python tool/rag_actualizar.py` comprueba el léxico, traduce, busca las
+equivalencias y regenera el corpus en una sola pasada.
+
 ## Ramificaciones y composición (opcional, en el escenario)
 
 Los pasos de un trámite van en el orden del diálogo y no dependen unos de
@@ -133,7 +167,9 @@ Mientras tanto, la app sigue con la búsqueda por palabras.
 ## Pruebas
 
 ```bash
-python -m pytest tool/tests -q                 # constructor, ingesta, ramas (sin red)
+pip install -r tool/requirements.txt           # pypdf y pytest
+python -m pytest tool/tests -q                 # constructor, ingesta, ramas, léxico (sin red)
+python -m pytest aws/tests -q                  # Lambda (por separado: comparten nombres de módulo)
 python tool/build_rag_corpus.py --check        # corpus al día
 flutter test test/rag_corpus_test.dart test/rag_retriever_test.dart test/rag_topics_test.dart   test/rag_tramites_test.dart test/rag_ramificaciones_test.dart
 ```

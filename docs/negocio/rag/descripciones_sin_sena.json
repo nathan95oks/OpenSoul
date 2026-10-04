@@ -1,0 +1,1811 @@
+{
+ "_nota": "Descripciones de las palabras sin seña propia en M1–M4 ni en el II Diccionario 2024. Borrador redactado con IA (Claude) según la frase del trámite donde aparece la palabra; «revisada»: true cuando una persona lo confirme. «ver» remite a otra entrada (error de la traducción automática o forma conjugada).",
+ "palabras": {
+  "ACCESIBLE": {
+   "descripcion": "Que todas las personas pueden usar o entender, también las personas sordas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ACCESO": {
+   "descripcion": "Poder entrar a un lugar o ver una información. Ej.: ver su proceso en internet.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ACREDITAR": {
+   "descripcion": "Demostrar con un documento que algo es verdad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ACTIVAR": {
+   "descripcion": "Hacer que un servicio o trámite empiece a funcionar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ACTUAL": {
+   "descripcion": "El que vale ahora, el de hoy.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ACTUALIZADO": {
+   "descripcion": "Con los datos de hoy, renovado.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ACTUALMENTE": {
+   "descripcion": "Ahora, en este momento.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ACUDIR": {
+   "descripcion": "Ir a un lugar para pedir ayuda o hacer un trámite.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ADAPTARSE": {
+   "descripcion": "Cambiar para que algo sirva a una persona. Ej.: la atención se adapta a la persona sorda.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ADECUADA": {
+   "descripcion": "La que sirve bien para lo que se necesita.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ADE_CUADA": {
+   "ver": "ADECUADA"
+  },
+  "ADMINISTRACION": {
+   "descripcion": "Organizar y dirigir algo. «Administración de justicia»: el trabajo de jueces y tribunales.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ADOLESCENTE": {
+   "descripcion": "Persona joven, entre niño y adulto (más o menos de 12 a 18 años).",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ADQUIRIR": {
+   "descripcion": "Conseguir algo para que sea suyo, por ejemplo comprando una casa.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ADQUISICION": {
+   "descripcion": "Cuando alguien consigue algo para que sea suyo. «Escritura de adquisición»: documento de la compra.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ALCANCE": {
+   "descripcion": "Hasta dónde llega o vale algo. Un certificado puede valer en un departamento o en todo el país.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ALGUN": {
+   "descripcion": "Uno, cualquiera, sin decir cuál.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "ALGUNAS": {
+   "ver": "ALGUN"
+  },
+  "ALGUNO": {
+   "ver": "ALGUN"
+  },
+  "ALODIAL": {
+   "descripcion": "«Certificado alodial»: dice qué propiedades tiene una persona y si tienen deudas o hipotecas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ALY": {
+   "descripcion": "Nombre de un edificio en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "AMBITO": {
+   "descripcion": "El área o espacio donde vale algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANOTACION": {
+   "descripcion": "Algo que se escribe en un registro para dejar constancia.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANOTACION_PREVENTIVA": {
+   "descripcion": "Aviso que se escribe en el registro de una propiedad mientras hay un juicio, para proteger un derecho.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANTERIOR": {
+   "descripcion": "El que estaba antes, el viejo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANTES": {
+   "descripcion": "En un tiempo que ya pasó, primero.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANTEZANA": {
+   "descripcion": "Nombre de una calle en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "ANTICIPO": {
+   "descripcion": "Dar algo antes del tiempo normal. «Anticipo de legítima»: dar a un hijo parte de su herencia en vida.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANTICRESIS": {
+   "descripcion": "Contrato: una persona usa una casa a cambio de prestar dinero al dueño; al devolver el dinero, deja la casa.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANTICRETICOS": {
+   "ver": "ANTICRESIS"
+  },
+  "ANTIGUA": {
+   "descripcion": "Vieja, de hace mucho tiempo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANTIGUO": {
+   "ver": "ANTIGUA"
+  },
+  "APLICABLE": {
+   "descripcion": "Que corresponde usar en ese caso.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "APLICAR": {
+   "descripcion": "Usar una regla en un caso. Ej.: la reposición se usa si la cédula se perdió.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "APORTAR": {
+   "descripcion": "Dar o llevar algo que sirve, por ejemplo datos o pruebas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "APOYO": {
+   "descripcion": "Ayuda que se da a una persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "AQUELLA": {
+   "descripcion": "Señala algo que está lejos o que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "ARANCEL": {
+   "descripcion": "Lo que se paga por un trámite, según una lista oficial de precios.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ARANCELE": {
+   "ver": "ARANCEL"
+  },
+  "ARCHIVAR": {
+   "descripcion": "Guardar documentos en un archivo porque el trámite terminó o se paró.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ASUMIR": {
+   "descripcion": "Pensar que algo es verdad sin comprobarlo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ATENCION": {
+   "descripcion": "El servicio que da una oficina a la persona que llega.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "AUDIENCIA": {
+   "descripcion": "Reunión con el juez donde se habla de un caso.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "AUTO": {
+   "descripcion": "Vehículo para personas; carro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "AUTOMATICO": {
+   "descripcion": "Que pasa solo, sin hacer un trámite nuevo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "AYUDA": {
+   "descripcion": "Lo que una persona da a otra para resolver algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "BEIJING": {
+   "descripcion": "Nombre de una avenida en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "BENEFICIARIO": {
+   "descripcion": "Persona que recibe algo, por ejemplo una propiedad o un pago.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "BIEN": {
+   "descripcion": "Correcto, sin error.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "BOLETA": {
+   "descripcion": "Papel que muestra que algo se pagó o se observó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "BORRAR": {
+   "descripcion": "Quitar algo para que ya no exista, por ejemplo un mensaje.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CALIFICAR": {
+   "descripcion": "Evaluar a una persona y darle un resultado. Ej.: el grado de discapacidad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CANAL": {
+   "descripcion": "Medio para comunicarse: en persona, por teléfono, por internet.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CANCELACION": {
+   "descripcion": "Cuando algo termina o se borra del registro, por ejemplo una hipoteca pagada.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CANCELAR": {
+   "descripcion": "Terminar o borrar algo. «Cancelar una hipoteca»: quitarla del registro cuando la deuda se pagó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CAPTURA": {
+   "descripcion": "Foto de la pantalla del celular o la computadora.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CASO": {
+   "descripcion": "Un asunto o problema que se está tratando.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CATARSTRAL": {
+   "ver": "CATASTRAL"
+  },
+  "CATASTRAL": {
+   "descripcion": "Del catastro: el registro de la municipalidad con el tamaño y la ubicación de terrenos y casas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CENTRAL": {
+   "descripcion": "La oficina principal.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CENTRO": {
+   "descripcion": "Lugar o edificio donde se da un servicio.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CENTRO_INTERNACIONAL_CONVENCIONES": {
+   "descripcion": "Edificio de Cochabamba donde funcionan oficinas públicas. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "CERRADO": {
+   "descripcion": "Que no atiende, no se puede entrar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CERTIFICAR": {
+   "descripcion": "Dar un documento oficial que dice que algo es verdad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CHIMBA": {
+   "descripcion": "La Chimba: zona de Cochabamba donde hay una oficina. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "CITAR": {
+   "descripcion": "Llamar a una persona para que vaya a un lugar un día y hora, por ejemplo al juzgado.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CODIGO": {
+   "descripcion": "Número o letras que identifican algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COECHABAMBA": {
+   "descripcion": "Cochabamba: la ciudad y el departamento. Tiene seña: COCHABAMBA.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "COINCIDIR": {
+   "descripcion": "Ser igual, decir lo mismo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COMPETENTE": {
+   "descripcion": "La oficina que tiene la tarea de atender ese caso.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COMPRA": {
+   "descripcion": "Cuando una persona paga para que algo sea suyo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COMPRA_VENTA": {
+   "descripcion": "Contrato en que una persona vende y otra compra, por ejemplo una casa.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COMPROBANTE": {
+   "descripcion": "Papel que demuestra que algo se hizo o se pagó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COMUNICACION": {
+   "descripcion": "Entenderse con otra persona, en señas, por escrito o hablando.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COMUNICARSE": {
+   "ver": "COMUNICACION"
+  },
+  "CONCEPTO": {
+   "descripcion": "El motivo de un pago: lo que se está pagando.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONDONACIÓN": {
+   "descripcion": "Cuando una deuda o una multa se perdona y ya no hay que pagarla.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONFIRMAR": {
+   "descripcion": "Comprobar que algo es correcto o seguro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONFORME": {
+   "descripcion": "Según, de acuerdo con una regla.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONMIGO": {
+   "descripcion": "Con la persona que habla: «la tengo conmigo» es «la tengo yo, aquí».",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "CONSERVAR": {
+   "descripcion": "Guardar algo y no perderlo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONSERVE": {
+   "ver": "CONSERVAR"
+  },
+  "CONSTANTE": {
+   "descripcion": "Que pasa muchas veces, sin parar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONSULTA": {
+   "descripcion": "Pregunta que se hace para saber algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONSULTAR": {
+   "descripcion": "Preguntar o buscar información.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONTAR": {
+   "descripcion": "Explicar lo que pasó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONTEMPLAR": {
+   "descripcion": "Una ley contempla algo cuando lo incluye o lo permite.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONTENER": {
+   "descripcion": "Tener algo dentro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COPIA": {
+   "descripcion": "Otro papel igual al original.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CORREGIR": {
+   "descripcion": "Arreglar un error.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CORRESPONDER": {
+   "descripcion": "Ser el que toca o el que es; estar relacionado. Ej.: esa matrícula es de esa casa.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CORRESPONDIENTE": {
+   "ver": "CORRESPONDER"
+  },
+  "COSTAR": {
+   "descripcion": "Tener un precio.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "COSTO": {
+   "descripcion": "Lo que hay que pagar; el precio.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CUENTA": {
+   "descripcion": "Usuario personal para entrar a una página o sistema de internet.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CUOTA": {
+   "descripcion": "Una parte de un pago. «Pagar en cuotas»: pagar de a poco.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CUOTAS": {
+   "ver": "CUOTA"
+  },
+  "DATO": {
+   "descripcion": "Una información: nombre, número, fecha.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DATOS": {
+   "ver": "DATO"
+  },
+  "DEBER": {
+   "descripcion": "Tener que hacer algo, o tener una deuda.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DEBO": {
+   "ver": "DEBER"
+  },
+  "DECIR": {
+   "descripcion": "Comunicar algo a otra persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DEFENSA_PUBLICA": {
+   "descripcion": "Servicio del Estado que da abogado gratis a quien lo necesita en un proceso penal.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "DEFENSORIA": {
+   "descripcion": "Oficina que protege derechos. «Defensoría de la Niñez»: protege a niños, niñas y adolescentes.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DEFUNCION": {
+   "descripcion": "La muerte de una persona. «Certificado de defunción»: documento que dice que murió.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DELITO": {
+   "descripcion": "Acción prohibida por la ley y castigada, por ejemplo robar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DENUNCIA": {
+   "descripcion": "Avisar a la policía o la fiscalía de un delito para que lo investiguen.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DENUNCIADO": {
+   "descripcion": "Persona acusada en una denuncia.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DENUNCIAR": {
+   "ver": "DENUNCIA"
+  },
+  "DEPARTAMENTO": {
+   "descripcion": "Cada una de las 9 regiones de Bolivia, como Cochabamba. También: vivienda dentro de un edificio.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DEPENDER": {
+   "descripcion": "Cambiar según otra cosa. Ej.: el precio depende del trámite.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DEPERDER": {
+   "ver": "DEPENDER"
+  },
+  "DERECHOS": {
+   "descripcion": "Lo que la ley protege para cada persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DERECHOS_REALES": {
+   "descripcion": "Oficina que registra quién es dueño de casas y terrenos, y sus hipotecas.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "DERIVADO": {
+   "descripcion": "Enviado a otra oficina que debe atender el caso.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DESARCHIVO": {
+   "descripcion": "Sacar documentos del archivo para continuar un trámite.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DESCRIBIR": {
+   "descripcion": "Decir cómo es algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DESCUENTO": {
+   "descripcion": "Pagar menos de lo normal.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DETERIORADO": {
+   "descripcion": "Dañado, roto o gastado.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DETERIORO": {
+   "ver": "DETERIORADO"
+  },
+  "DICE": {
+   "ver": "DECIR"
+  },
+  "DIRECTAMENTE": {
+   "descripcion": "Sin otra persona en el medio; uno mismo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DISCAPACIDAD": {
+   "descripcion": "Condición de una persona que tiene limitaciones; las personas sordas pueden tener carnet de discapacidad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DISPONIBLE": {
+   "descripcion": "Que se puede usar ahora.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DIVISION": {
+   "descripcion": "Separar algo en partes, por ejemplo un terreno entre varios dueños.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DOCUMENTACION": {
+   "descripcion": "Conjunto de papeles o documentos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DONACION": {
+   "descripcion": "Dar algo gratis a otra persona, por ejemplo una casa.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DOS": {
+   "descripcion": "El número 2.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DUDAR": {
+   "descripcion": "No estar seguro de algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DUPLICADO": {
+   "descripcion": "Otra copia oficial de un documento.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DÍAS": {
+   "descripcion": "Días: cada uno de los días del calendario.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "EDIFICIO": {
+   "descripcion": "Construcción grande con varios pisos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ELEMENTOS": {
+   "descripcion": "Cosas, objetos o pruebas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "EMITIR": {
+   "descripcion": "Hacer y entregar un documento oficial.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "EMITIRSE": {
+   "ver": "EMITIR"
+  },
+  "ENCONTRAR": {
+   "descripcion": "Hallar algo que se buscaba.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ENTENDER": {
+   "descripcion": "Comprender. Tiene seña: COMPRENDER.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ENTENDIDO": {
+   "ver": "ENTENDER"
+  },
+  "ENTONCES": {
+   "descripcion": "Une una idea con lo que se dijo antes: «por eso», «en ese caso».",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "ENTREGA": {
+   "descripcion": "Cuando se da algo a la persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ENTREGAR": {
+   "ver": "ENTREGA"
+  },
+  "ENUMERAR": {
+   "descripcion": "Nombrar cosas una por una, en lista.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ERROR": {
+   "descripcion": "Algo que está mal o equivocado.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ESA": {
+   "descripcion": "Señala algo que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "ESCRITO": {
+   "descripcion": "Que está en un papel, no hablado ni señado.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ESCRITURA": {
+   "descripcion": "Documento hecho ante notario que demuestra una compra, venta o herencia de una propiedad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ESCRITURA_PUBLICA": {
+   "ver": "ESCRITURA"
+  },
+  "ESE": {
+   "ver": "ESA"
+  },
+  "ESO": {
+   "ver": "ESA"
+  },
+  "ESOS": {
+   "ver": "ESA"
+  },
+  "ESPACIOS": {
+   "descripcion": "Lugares vacíos entre letras o números.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ESPECIALIZADO": {
+   "descripcion": "Que se ocupa solo de un tipo de casos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ESPECIFICO": {
+   "descripcion": "Propio de una sola cosa; uno exacto.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ESTA": {
+   "ver": "ESA"
+  },
+  "ESTAFA": {
+   "descripcion": "Delito: engañar a una persona para quitarle dinero o cosas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ESTE": {
+   "ver": "ESA"
+  },
+  "EXACTO": {
+   "descripcion": "Justo, sin error.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "EXISTIR": {
+   "descripcion": "Haber, estar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "EXPEDIENTE": {
+   "descripcion": "Todos los documentos de un caso o trámite, juntos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "EXTRAVIO": {
+   "descripcion": "Pérdida: no saber dónde está algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FALLECIDO": {
+   "descripcion": "Persona que murió.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FALTAR": {
+   "descripcion": "No estar algo que se necesita.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FAMILIA": {
+   "descripcion": "Padres, hijos, hermanos y demás parientes.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FAMILIAR": {
+   "descripcion": "De la familia. «Audiencia familiar»: en un juzgado de familia.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FIGURA": {
+   "descripcion": "Aparecer escrito en un documento o registro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FIGURAR": {
+   "ver": "FIGURA"
+  },
+  "FIRMA": {
+   "descripcion": "Nombre escrito a mano de una persona, que muestra que está de acuerdo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FIRMAR": {
+   "ver": "FIRMA"
+  },
+  "FISCAL": {
+   "descripcion": "Persona del Ministerio Público que investiga los delitos y acusa ante el juez.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FISICA": {
+   "descripcion": "En papel o en material, no digital. «Cédula física»: la tarjeta de la cédula.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FOLIO": {
+   "descripcion": "Hoja de un registro. Ver «Folio Real».",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FOLIO_REAL": {
+   "descripcion": "Documento de Derechos Reales con los datos de una propiedad: dueño, ubicación, hipotecas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FORMALIZAR": {
+   "descripcion": "Hacer algo oficial, con documentos legales.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "FUI": {
+   "descripcion": "Forma de «ser» o «ir» en pasado. «Fui víctima»: era la víctima.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "GARANTIZAR": {
+   "descripcion": "Asegurar que algo se cumpla.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "GESTION": {
+   "descripcion": "Trámite o tarea que se hace. También: año de impuestos («gestión 2023»).",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "GRADO": {
+   "descripcion": "Nivel o medida. Ej.: el grado de discapacidad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "GRAVAMEN": {
+   "descripcion": "Carga o deuda que tiene una propiedad, por ejemplo una hipoteca.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "GRAVAMENES": {
+   "ver": "GRAVAMEN"
+  },
+  "GUIONES": {
+   "descripcion": "La raya corta «-» que separa números o letras.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "HACERLE": {
+   "descripcion": "«Hacerle preguntas»: preguntarle a usted.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "HECHO": {
+   "descripcion": "Lo que pasó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "HEREDAR": {
+   "descripcion": "Recibir los bienes de una persona que murió.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "HEREDERO": {
+   "descripcion": "Persona que recibe los bienes de alguien que murió.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "HIPOTECA": {
+   "descripcion": "Préstamo de dinero en que una casa queda como garantía; si no se paga, el banco puede quedarse con la casa.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "HIPOTECAR": {
+   "ver": "HIPOTECA"
+  },
+  "INCLUIR": {
+   "descripcion": "Poner o tener algo dentro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INCORPORAR": {
+   "descripcion": "Agregar algo nuevo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INCORRECTO": {
+   "descripcion": "Que tiene error, que está mal.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INDEPENDIENTE": {
+   "descripcion": "Separado, solo, que no depende de otro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INDICAR": {
+   "descripcion": "Decir o mostrar algo a otra persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INDICARME": {
+   "ver": "INDICAR"
+  },
+  "INFORMACION": {
+   "descripcion": "Datos o noticias sobre algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INFORMACION_RAPIDA": {
+   "descripcion": "Servicio de Derechos Reales para consultar rápido los datos de una propiedad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INFORMAR": {
+   "descripcion": "Dar a conocer una información.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INGRESAR": {
+   "descripcion": "Entrar; también presentar un trámite en una oficina.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INGRESO": {
+   "descripcion": "Cuando un trámite se presenta y se registra en la oficina.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INICIAR": {
+   "descripcion": "Empezar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INMUEBLE": {
+   "descripcion": "Casa, departamento o terreno: propiedad que no se puede mover.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INSCRIPCION": {
+   "descripcion": "Escribir algo en un registro oficial, por ejemplo una compra.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INSTRUCCION": {
+   "descripcion": "Explicación de lo que hay que hacer.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INSTRUCCIONES": {
+   "ver": "INSTRUCCION"
+  },
+  "INTEGRAL": {
+   "descripcion": "Completo, que atiende todo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INTENCION": {
+   "descripcion": "Lo que una persona quiere hacer.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INTERPRETAR": {
+   "descripcion": "Pasar lo que se dice de una lengua a otra, por ejemplo de español a LSB.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INTERÉS": {
+   "descripcion": "Dinero extra que se paga por una deuda o por pagar tarde.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INVESTIGADOR": {
+   "descripcion": "Policía que busca pruebas sobre un delito.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "JUDICIAL": {
+   "descripcion": "Del juez o del juzgado.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "LANZA": {
+   "descripcion": "Nombre de una calle en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "LE": {
+   "descripcion": "A usted, a él o a ella.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "LEGAL": {
+   "descripcion": "De la ley; también: con abogado («ayuda legal»).",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "LEGITIMA": {
+   "descripcion": "Parte de la herencia que la ley guarda para los hijos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "LENGUA": {
+   "descripcion": "Idioma. «Lengua de señas»: la lengua de las personas sordas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "LOCALIZAR": {
+   "descripcion": "Encontrar dónde está algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "LSB": {
+   "descripcion": "Lengua de Señas Boliviana. Se deletrea L-S-B.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "LUGAR": {
+   "descripcion": "Sitio, espacio.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MANTENER": {
+   "descripcion": "Seguir igual, no cambiar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MARGINAL": {
+   "descripcion": "«Nota marginal»: algo escrito al costado de un registro para corregirlo o agregar datos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MAS": {
+   "descripcion": "Mayor cantidad.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "MATRICULA": {
+   "descripcion": "Número con que Derechos Reales registra una propiedad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MATRICULACION": {
+   "descripcion": "Darle número de matrícula a una propiedad con registro antiguo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MATRICULAR": {
+   "ver": "MATRICULACION"
+  },
+  "MECANISMO": {
+   "descripcion": "Forma o manera de hacer algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MEDICO": {
+   "descripcion": "Del médico. «Certificado médico»: documento del médico sobre la salud.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MEDIDA": {
+   "descripcion": "Acción para ayudar o proteger. Ej.: intérprete en la audiencia.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MEMORIAL": {
+   "descripcion": "Carta formal, normalmente con abogado, para pedir algo a un juzgado u oficina.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MENCION": {
+   "descripcion": "Cuando un documento nombra algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MENCIONAR": {
+   "ver": "MENCION"
+  },
+  "MENSAJE": {
+   "descripcion": "Texto que se envía, por ejemplo por celular.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MESES": {
+   "descripcion": "Meses del año.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MINISTERIO": {
+   "descripcion": "Parte del gobierno que se ocupa de un tema, por ejemplo Ministerio de Salud.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MIYO": {
+   "descripcion": "«Mi»: de la persona que habla. Tiene seña: MÍO.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "MODALIDAD": {
+   "descripcion": "Forma de hacer algo: en persona o virtual.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MODIFICAR": {
+   "descripcion": "Cambiar algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MONTO": {
+   "descripcion": "Cantidad de dinero.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MOTO": {
+   "descripcion": "Motocicleta: vehículo de dos ruedas con motor.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MULTA": {
+   "descripcion": "Dinero que se paga como castigo, por ejemplo por pagar tarde un impuesto.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MUY": {
+   "descripcion": "Mucho, bastante.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "NACIMIENTO": {
+   "descripcion": "Cuando una persona nace. «Certificado de nacimiento»: documento que dice dónde y cuándo nació.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NECESIDAD": {
+   "descripcion": "Lo que una persona necesita.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NECESITO": {
+   "descripcion": "Necesitar. Tiene seña: NECESITAR.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NEGAR": {
+   "descripcion": "Decir que no; no dar algo. Ej.: no dar atención.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NIÑEZ": {
+   "descripcion": "Edad de los niños y niñas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NOTA": {
+   "descripcion": "Algo escrito corto. Ver «nota marginal».",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NOTARIA": {
+   "descripcion": "Oficina del notario.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NOTARIO": {
+   "descripcion": "Persona autorizada para hacer escrituras y certificar firmas y documentos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NUESTRAS": {
+   "descripcion": "De nosotros.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "NUMERO": {
+   "descripcion": "Número.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "OBSERVACION": {
+   "descripcion": "Problema que la oficina encuentra en un trámite y que hay que corregir.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "OCURRIDO": {
+   "ver": "OCURRIR"
+  },
+  "OCURRIR": {
+   "descripcion": "Pasar, suceder.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "OFRECER": {
+   "descripcion": "Dar o poner algo a disposición.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ORIENTACION": {
+   "descripcion": "Explicación de qué hacer y a dónde ir.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ORIENTAR": {
+   "ver": "ORIENTACION"
+  },
+  "ORIGINAL": {
+   "descripcion": "El documento verdadero, no una copia.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "OTRA": {
+   "descripcion": "Una distinta.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "OTRAS": {
+   "ver": "OTRA"
+  },
+  "OTRO": {
+   "ver": "OTRA"
+  },
+  "OTROS": {
+   "ver": "OTRA"
+  },
+  "PADRE": {
+   "descripcion": "Papá.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PAGAR": {
+   "descripcion": "Dar dinero por algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PAGO": {
+   "ver": "PAGAR"
+  },
+  "PARTICION": {
+   "descripcion": "Dividir una propiedad o herencia en partes, una para cada dueño.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PARTICIONAR": {
+   "ver": "PARTICION"
+  },
+  "PARTIDA": {
+   "descripcion": "Número de registro antiguo de una propiedad en Derechos Reales.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PASAR": {
+   "descripcion": "Cambiar algo de lugar o de dueño. «Pasar a mi nombre»: registrarlo como mío.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PASO": {
+   "descripcion": "Cada parte de un trámite.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PATROCINIO": {
+   "descripcion": "Que un abogado lleve y defienda el caso de una persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PENAL": {
+   "descripcion": "Sobre delitos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PERMITIDO": {
+   "descripcion": "Que la ley deja hacer.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PERMITIR": {
+   "ver": "PERMITIDO"
+  },
+  "PERSONA": {
+   "descripcion": "Un hombre, una mujer, alguien.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PERSONALMENTE": {
+   "descripcion": "Uno mismo, en persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PERTENECER": {
+   "descripcion": "Ser de alguien.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PISO": {
+   "descripcion": "Cada nivel de un edificio.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PLACA": {
+   "descripcion": "Chapa con el número de un vehículo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PLAN": {
+   "descripcion": "Forma organizada de hacer algo. «Plan de cuotas»: pagar de a poco.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PLANO": {
+   "descripcion": "Dibujo de un terreno o casa con sus medidas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PLAZUELA_CONSTITUCION": {
+   "descripcion": "Plaza de Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "POBLACION": {
+   "descripcion": "Grupo de personas, por ejemplo los niños de un lugar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PODER": {
+   "descripcion": "Poder hacer algo. También: documento para que otra persona haga trámites por uno.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PODRÉ": {
+   "ver": "PODER"
+  },
+  "PONER": {
+   "descripcion": "Colocar. «Ponerla a mi nombre»: registrar la propiedad como mía.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "POR_CIENTO": {
+   "descripcion": "Parte de cada cien (%).",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PRECIO": {
+   "descripcion": "Lo que cuesta algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PREFERIR": {
+   "descripcion": "Querer una cosa más que otra.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PREFIERES": {
+   "ver": "PREFERIR"
+  },
+  "PREGUNTA": {
+   "descripcion": "Lo que se dice para saber algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PREGUNTAR": {
+   "ver": "PREGUNTA"
+  },
+  "PRESENCIAL": {
+   "descripcion": "En persona, yendo al lugar.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PRESENCIALMENTE": {
+   "ver": "PRESENCIAL"
+  },
+  "PREVENTIVA": {
+   "descripcion": "Para prevenir o proteger mientras se decide algo. Ver «anotación preventiva».",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PRIMERO": {
+   "descripcion": "Antes que lo demás.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PRIVADO": {
+   "descripcion": "Hecho entre personas, sin notario. «Contrato privado».",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PROCEDIMIENTO": {
+   "descripcion": "Pasos que hay que seguir.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PROCESO": {
+   "descripcion": "Caso que se lleva ante un juez o la fiscalía.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PROPIEDAD": {
+   "descripcion": "Lo que es de una persona, por ejemplo una casa o un terreno.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PROPIEDAD_HORIZONTAL": {
+   "descripcion": "Forma de ser dueño de un departamento dentro de un edificio que tiene partes comunes.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PROPIETARIO": {
+   "descripcion": "Dueño.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PROPIO": {
+   "descripcion": "De uno mismo. «Con sus propias palabras»: como usted lo diga.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PSICOLOGICA": {
+   "descripcion": "De la mente y las emociones. «Ayuda psicológica»: apoyo de un psicólogo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PUBLICA": {
+   "descripcion": "Del Estado o para todos. «Escritura pública»: hecha ante notario.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PUBLICADO": {
+   "descripcion": "Que se puede ver por todos, por ejemplo en una página oficial.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PUBLICAR": {
+   "ver": "PUBLICADO"
+  },
+  "QUEDA": {
+   "descripcion": "Estar ubicado. «Queda entre…»: está entre…",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "QUITAR": {
+   "descripcion": "Sacar algo a alguien. En un robo: le quitaron el celular.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RADICAR": {
+   "descripcion": "Estar registrado en un lugar. «Vehículo radicado en Cochabamba».",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REALIZAR": {
+   "descripcion": "Hacer.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RECLAMO": {
+   "descripcion": "Queja formal por un mal servicio o un error.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RECOCNER": {
+   "ver": "RECONOCER"
+  },
+  "RECONOCER": {
+   "descripcion": "Aceptar como propio. «Reconocer firmas»: confirmar ante notario que la firma es suya.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REEMPLAZAR": {
+   "descripcion": "Poner uno nuevo en lugar del anterior.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REFERIR": {
+   "descripcion": "Hablar de algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REGIMEN": {
+   "descripcion": "Conjunto de reglas para algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REGISTRADO": {
+   "ver": "REGISTRO"
+  },
+  "REGISTRAL": {
+   "ver": "REGISTRO"
+  },
+  "REGISTRAR": {
+   "ver": "REGISTRO"
+  },
+  "REGISTRO": {
+   "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REGULARIZACION": {
+   "descripcion": "Arreglar los papeles de una propiedad para que estén según la ley.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REGULARIZAR": {
+   "ver": "REGULARIZACION"
+  },
+  "RELACION": {
+   "descripcion": "Unión entre personas, por ejemplo parentesco.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RELACIONAR": {
+   "descripcion": "Que tiene que ver con algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RELATO": {
+   "descripcion": "Explicación escrita o señada de lo que pasó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RENOVACION": {
+   "descripcion": "Hacer un documento nuevo cuando el anterior vence.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RENOVAR": {
+   "ver": "RENOVACION"
+  },
+  "REPOSICION": {
+   "descripcion": "Sacar un documento nuevo porque el anterior se perdió, se robó o se dañó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REPRESENTACIÓN": {
+   "descripcion": "Oficina que atiende en nombre de otra institución.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REPRESENTAR": {
+   "descripcion": "Hacer algo en nombre de otra persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RESELLADO": {
+   "descripcion": "Volver a sellar un documento para confirmar o actualizar un registro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RESSELLADO": {
+   "ver": "RESELLADO"
+  },
+  "REVISAR": {
+   "descripcion": "Mirar con cuidado para ver si algo está bien.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REVISION": {
+   "ver": "REVISAR"
+  },
+  "RUTA": {
+   "descripcion": "Camino o pasos que se siguen. «Ruta de atención»: las oficinas que atienden un caso.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SACAR": {
+   "descripcion": "Obtener, por ejemplo un documento.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SALIR": {
+   "descripcion": "Ir afuera, irse.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SEDE": {
+   "descripcion": "Oficina o lugar donde atiende una institución.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SEGUIR": {
+   "descripcion": "Continuar; también hacer lo que dicen. «Seguir instrucciones».",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SEGURO": {
+   "descripcion": "Sin peligro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SERVICIO": {
+   "descripcion": "Atención o ayuda que da una institución.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SERVIR": {
+   "descripcion": "Ser útil, valer para algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SEÑALAMIENTO": {
+   "descripcion": "Fecha y hora que fija el juzgado para una audiencia.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SEÑAS": {
+   "descripcion": "Señas: la forma de comunicarse de las personas sordas, con manos, cara y cuerpo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SIGA": {
+   "ver": "SEGUIR"
+  },
+  "SIGNIFICAR": {
+   "descripcion": "Querer decir.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SIGUIENTE": {
+   "descripcion": "El que viene después.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SIGUIR": {
+   "ver": "SEGUIR"
+  },
+  "SISTEMA": {
+   "descripcion": "Programa o página de computadora que usa una oficina.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SOLICITANTE": {
+   "descripcion": "Persona que pide algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SOLICITAR": {
+   "descripcion": "Pedir, sobre todo en un trámite.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SOLICITUD": {
+   "ver": "SOLICITAR"
+  },
+  "SOLO": {
+   "descripcion": "Únicamente, nada más.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "SUBSANAR": {
+   "descripcion": "Corregir un error o un problema del trámite.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SUPERFICIE": {
+   "descripcion": "Tamaño de un terreno o casa, en metros cuadrados.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TAMBIEN": {
+   "descripcion": "Además, igual.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "TARDAR": {
+   "descripcion": "Demorar, necesitar tiempo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TENGO": {
+   "descripcion": "Tener. Tiene seña: TENER.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TIEMPO": {
+   "descripcion": "Horas, días o meses.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TIPO": {
+   "descripcion": "Clase o forma.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TITULAR": {
+   "descripcion": "La persona a cuyo nombre está algo, el dueño registrado.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TODAS": {
+   "descripcion": "Sin que falte ninguna.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "TODAVIA": {
+   "descripcion": "Aún; hasta ahora.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "TODAVÍA": {
+   "ver": "TODAVIA"
+  },
+  "TODO": {
+   "ver": "TODAS"
+  },
+  "TODOS": {
+   "ver": "TODAS"
+  },
+  "TRAJE": {
+   "descripcion": "Traer en pasado. Tiene seña: TRAER.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TRANSFERENCIA": {
+   "descripcion": "Pasar algo de una persona a otra: dinero, o una propiedad al venderla.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TRIBUNAL": {
+   "descripcion": "Oficina de jueces.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "TRIBUNAL_DEPARTAMENTAL": {
+   "descripcion": "Tribunal Departamental de Justicia: oficina principal de los jueces de Cochabamba.",
+   "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "UBICACION": {
+   "descripcion": "Dónde está algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "URBANA": {
+   "descripcion": "De la ciudad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "USUCAPION": {
+   "descripcion": "Ser dueño de una propiedad por haber vivido en ella muchos años, cuando un juez lo reconoce.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VALIDAR": {
+   "descripcion": "Comprobar que algo es correcto y vale.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VALIDO": {
+   "descripcion": "Que sirve, que vale.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VEHICULO": {
+   "descripcion": "Auto, moto o camión.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VEHÍCULO": {
+   "ver": "VEHICULO"
+  },
+  "VENCER": {
+   "descripcion": "Terminar el tiempo en que vale un documento.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VENTA": {
+   "descripcion": "Cuando una persona da algo a cambio de dinero.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VERBALMENTE": {
+   "descripcion": "Diciéndolo, no por escrito. Para una persona sorda: en señas, con intérprete.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VERIFICAR": {
+   "descripcion": "Comprobar que algo es verdad.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VIA": {
+   "descripcion": "Camino o forma de hacer algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VICTIMA": {
+   "descripcion": "Persona que sufrió un delito.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VIENES": {
+   "descripcion": "Venir. Tiene seña: VENIR.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VIGENCIA": {
+   "descripcion": "Tiempo en que un documento vale.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VIGENTE": {
+   "descripcion": "Que todavía vale, que no venció.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VULNERACION": {
+   "descripcion": "Cuando no se respeta un derecho.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "YA": {
+   "descripcion": "En este momento o antes; algo que ya pasó.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  }
+ }
+}

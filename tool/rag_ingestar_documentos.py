@@ -85,8 +85,14 @@ def paginas(ruta: str, formato: dict | None = None) -> list:
     nombre = os.path.basename(ruta)
     tipo = formato["formato"]
     if tipo == "pdf":
-        from pypdf import PdfReader
-        from pypdf.errors import PdfReadError
+        try:
+            from pypdf import PdfReader
+            from pypdf.errors import PdfReadError
+        except ImportError as e:
+            raise DocumentoInutilizable(
+                f"{nombre}: falta pypdf para leer PDFs. Instálalo en el Python "
+                f"con que ejecutas esto: {sys.executable} -m pip install -r "
+                "tool/requirements.txt") from e
         try:
             lector = PdfReader(ruta)
             if lector.is_encrypted and not lector.decrypt(""):
@@ -216,6 +222,10 @@ otras fuentes: si el documento no dice un dato, escribe `[VERIFICAR]`.
 - Cita el documento como fuente con la URL exacta
   `documentos/{nombre}#p=<página>` (la página de donde sale el dato) y fecha
   de consulta de hoy.
+- La **primera línea** de tu respuesta es exactamente
+  `{B.MARCA_ESTRICTA}`: el archivo solo admite señas del léxico LSB
+  (M1–M4 y diccionarios), y las respuestas que usen otras palabras no se
+  ofrecen hasta tener una seña equivalente.
 - Usa el código de área que corresponda. Si el documento es de una
   institución nueva, crea un código nuevo en mayúsculas (3 a 6 letras).
 - **No reutilices identificadores.** Empieza en los siguientes libres:
@@ -244,12 +254,30 @@ Para un área nueva, empieza en 01.
 """
 
 
+def incorporado_en(marca: str) -> str | None:
+    """El archivo de escenarios/ que ya incorpora el documento de huella
+    [marca] (su borrador revisado y movido), o None."""
+    for ruta in sorted(glob.glob(os.path.join(B.ESCENARIOS, "*.md"))):
+        with open(ruta, encoding="utf-8") as f:
+            if f"huella: {marca}" in f.read(4000):
+                return B._rel(ruta)
+    return None
+
+
 def procesar(ruta: str, ids: dict) -> list:
     nombre = os.path.basename(ruta)
     s = slug(nombre)
     marca = huella(ruta)
     extraido = os.path.join(EXTRAIDO, f"{s}.md")
-    if os.path.exists(extraido):
+    ya = incorporado_en(marca)
+    if ya:
+        return [f"ya incorporado: {nombre} → {ya}"]
+    prompts = glob.glob(os.path.join(PENDIENTES, f"{s}_prompt*.md"))
+    if os.path.exists(extraido) and prompts:
+        # Solo un documento oficial con su prompt ya escrito se salta. Un
+        # documento de escenarios se vuelve a convertir y validar siempre:
+        # su validación depende del corpus y del léxico, que cambian, y un
+        # borrador que falló no puede quedar escondido tras «sin cambios».
         with open(extraido, encoding="utf-8") as f:
             if f"huella: {marca}" in f.read(2000):
                 return [f"sin cambios: {nombre}"]

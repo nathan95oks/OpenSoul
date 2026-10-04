@@ -320,7 +320,8 @@ class RagRetriever {
         // institución ni se responde otra cosa.
         if (ranked.first.$2 - same.first.$2 > margin) continue;
         ranked = same;
-      } else if (preferArea == null && !_identifies(said, ranked)) {
+      } else if (preferArea == null &&
+          (!_identifies(said, ranked) || !_sharesContent(said, ranked.first))) {
         // Sin tema previo, una pregunta que vale en varias instituciones
         // («¿Trajo su cédula?», «¿Tiene algún documento?») no elige una.
         continue;
@@ -376,8 +377,24 @@ class RagRetriever {
   /// ventanilla.
   static final Set<String> _generic = DialogueGraph.tokensOf(
     'algún alguna alguno algo otro otra este esta ese esa usted ahora '
-    'actualmente puede quiere necesita tiene trajo trae',
+    'actualmente puede quiere necesita tiene trajo trae '
+    'uno dos tres cuatro cinco',
   );
+
+  /// Lo que se pide en cualquier ventanilla. No cambia el parecido; solo
+  /// impide que una pregunta hecha de estas palabras identifique una
+  /// institución por estar escrita tal cual en una sola.
+  static final Set<String> _anyCounter = DialogueGraph.tokensOf(
+    'cédula identidad documento',
+  );
+
+  /// Si lo dicho comparte con la mejor coincidencia algo más que palabras de
+  /// cualquier ventanilla. «¿Tiene algún documento?» o «Pase a la ventanilla
+  /// tres» no comparten contenido con «¿Tiene los tres documentos
+  /// publicados?»: sin tema previo, eso no elige una institución.
+  bool _sharesContent(Set<String> said, (_Entry, double) best) => said
+      .intersection(best.$1.tokens)
+      .any((t) => !_generic.contains(t) && !_anyCounter.contains(t));
 
   /// Si lo dicho identifica la institución de la mejor coincidencia: solo
   /// esa institución tiene preguntas parecidas, o es exactamente una
@@ -392,7 +409,13 @@ class RagRetriever {
         if (said.containsAll(r.$1.tokens) && r.$1.tokens.containsAll(said))
           r.$1.scenario.area,
     ];
-    if (exact.isNotEmpty) return exact.every((a) => a == area);
+    // Documentada tal cual en una sola institución, salvo que solo tenga
+    // palabras de cualquier ventanilla: «¿Trajo su cédula de identidad?»
+    // está literal en Derechos Reales, pero vale igual en SEPDAVI o SEGIP.
+    if (exact.isNotEmpty) {
+      return exact.every((a) => a == area) &&
+          said.any((t) => !_generic.contains(t) && !_anyCounter.contains(t));
+    }
     return said
         .intersection(best.tokens)
         .any(

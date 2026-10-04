@@ -168,6 +168,18 @@ abstract final class RagTramites {
   static String questionId(String scenarioId, int turn) =>
       'R.$scenarioId.$turn';
 
+  /// Las preguntas del banco del turno [turn]: la suya y, si el funcionario
+  /// preguntó varias cosas a la vez («¿Cuándo y dónde ocurrió?»), una por
+  /// cada una (`R.<escenario>.<turno>.donde`), en el orden de la frase.
+  static List<String> questionIdsOfTurn(String scenarioId, int turn) {
+    final base = questionId(scenarioId, turn);
+    return [
+      for (final raw in _data['preguntas'] as List<dynamic>)
+        if (raw['id'] == base || (raw['id'] as String).startsWith('$base.'))
+          raw['id'] as String,
+    ];
+  }
+
   /// El trámite de un escenario del corpus, o `null` si no tiene preguntas
   /// que se respondan con tarjetas.
   static RagTramite? ofScenario(String scenarioId) => _byScenario[scenarioId];

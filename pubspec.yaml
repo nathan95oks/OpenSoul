@@ -83,6 +83,8 @@ flutter:
     # aplicacion para que la primera sena no dependa de una descarga de red.
     - assets/models/avatar_test.glb
     - assets/dictionary/official_dictionary.json
+    # Qué es cada palabra sin seña propia (tool/build_rag_corpus.py).
+    - assets/dictionary/senas_sin_sena.json
     - assets/dialogue/dialogue_graph.json
     - assets/business/institution_profiles.json
     # Corpus RAG de trámites de Cochabamba (tool/build_rag_corpus.py).
