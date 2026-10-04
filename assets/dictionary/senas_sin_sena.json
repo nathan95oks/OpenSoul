@@ -1,0 +1,2297 @@
+{
+ "_nota": "GENERADO por tool/build_rag_corpus.py desde docs/negocio/rag/descripciones_sin_sena.json. No editar a mano.",
+ "palabras": {
+  "ACCESIBLE": {
+   "descripcion": "Que todas las personas pueden usar o entender, también las personas sordas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La atención debe permitir comunicación accesible."
+  },
+  "ACCESO": {
+   "descripcion": "Poder entrar a un lugar o ver una información. Ej.: ver su proceso en internet.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene acceso a su proceso en ROMA?"
+  },
+  "ACREDITAR": {
+   "descripcion": "Demostrar con un documento que algo es verdad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si este documento acredita la aceptación."
+  },
+  "ACTIVAR": {
+   "descripcion": "Hacer que un servicio o trámite empiece a funcionar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Contacte SEPDEP para activar la atención correspondiente."
+  },
+  "ACTUAL": {
+   "descripcion": "El que vale ahora, el de hoy.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene la placa actual del vehículo?"
+  },
+  "ACTUALIZADO": {
+   "descripcion": "Con los datos de hoy, renovado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Puedo solicitar el Folio Real actualizado de mi casa?"
+  },
+  "ACTUALMENTE": {
+   "descripcion": "Ahora, en este momento.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene actualmente abogado particular?"
+  },
+  "ACUDIR": {
+   "descripcion": "Ir a un lugar para pedir ayuda o hacer un trámite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "SIREJ indica acudir a información del Tribunal."
+  },
+  "ADAPTARSE": {
+   "descripcion": "Cambiar para que algo sirva a una persona. Ej.: la atención se adapta a la persona sorda.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La atención debe adaptarse para que comprenda el trámite."
+  },
+  "ADE_CUADA": {
+   "descripcion": "La que sirve bien para lo que se necesita.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Gracias. Esperaré la asistencia adecuada."
+  },
+  "ADMINISTRACION": {
+   "descripcion": "Organizar y dirigir algo. «Administración de justicia»: el trabajo de jueces y tribunales.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La Ley 1658 incluye el ámbito de administración de justicia."
+  },
+  "ADOLESCENTE": {
+   "descripcion": "Persona joven, entre niño y adulto (más o menos de 12 a 18 años).",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Vine por violencia contra mi sobrino adolescente."
+  },
+  "ADQUIRIR": {
+   "descripcion": "Conseguir algo para que sea suyo, por ejemplo comprando una casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene la escritura con la que adquirió el inmueble?"
+  },
+  "ADQUISICION": {
+   "descripcion": "Cuando alguien consigue algo para que sea suyo. «Escritura de adquisición»: documento de la compra.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, tengo la escritura de adquisición."
+  },
+  "ALCANCE": {
+   "descripcion": "Hasta dónde llega o vale algo. Un certificado puede valer en un departamento o en todo el país.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé qué alcance debe tener el certificado."
+  },
+  "ALGUN": {
+   "descripcion": "Uno, cualquiera, sin decir cuál.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Trajo algún relato de lo ocurrido?"
+  },
+  "ALGUNAS": {
+   "descripcion": "Uno, cualquiera, sin decir cuál.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Necesito hacerle algunas preguntas sobre la denuncia."
+  },
+  "ALGUNO": {
+   "descripcion": "Uno, cualquiera, sin decir cuál.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Tiene algún Folio Real anterior del inmueble?"
+  },
+  "ALODIAL": {
+   "descripcion": "«Certificado alodial»: dice qué propiedades tiene una persona y si tienen deudas o hipotecas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo solicito el certificado alodial de mi casa?"
+  },
+  "ALY": {
+   "descripcion": "Nombre de un edificio en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "Queda entre Antezana y Lanza, Edificio Aly."
+  },
+  "AMBITO": {
+   "descripcion": "El área o espacio donde vale algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La Ley 1658 incluye el ámbito de administración de justicia."
+  },
+  "ANOTACION": {
+   "descripcion": "Algo que se escribe en un registro para dejar constancia.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un documento judicial de anotación preventiva?"
+  },
+  "ANOTACION_PREVENTIVA": {
+   "descripcion": "Aviso que se escribe en el registro de una propiedad mientras hay un juicio, para proteger un derecho.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué falta para presentar la anotación preventiva?"
+  },
+  "ANTERIOR": {
+   "descripcion": "El que estaba antes, el viejo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene algún Folio Real anterior del inmueble?"
+  },
+  "ANTES": {
+   "descripcion": "En un tiempo que ya pasó, primero.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Iré antes de esa hora."
+  },
+  "ANTEZANA": {
+   "descripcion": "Nombre de una calle en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "Queda entre Antezana y Lanza, Edificio Aly."
+  },
+  "ANTICIPO": {
+   "descripcion": "Dar algo antes del tiempo normal. «Anticipo de legítima»: dar a un hijo parte de su herencia en vida.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La escritura indica que es un anticipo de legítima?"
+  },
+  "ANTICRESIS": {
+   "descripcion": "Contrato: una persona usa una casa a cambio de prestar dinero al dueño; al devolver el dinero, deja la casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, quiero consultar una posible anticresis."
+  },
+  "ANTICRETICOS": {
+   "descripcion": "Contrato: una persona usa una casa a cambio de prestar dinero al dueño; al devolver el dinero, deja la casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "El arancel publicado incluye anticréticos entre otras escrituras."
+  },
+  "ANTIGUA": {
+   "descripcion": "Vieja, de hace mucho tiempo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, mi documento tiene una partida antigua."
+  },
+  "ANTIGUO": {
+   "descripcion": "Vieja, de hace mucho tiempo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Su documento tiene una partida de registro antiguo?"
+  },
+  "APLICABLE": {
+   "descripcion": "Que corresponde usar en ese caso.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Depende de su grado y situación; revise la norma aplicable."
+  },
+  "APLICAR": {
+   "descripcion": "Usar una regla en un caso. Ej.: la reposición se usa si la cédula se perdió.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La reposición aplica por extravío, robo o deterioro."
+  },
+  "APORTAR": {
+   "descripcion": "Dar o llevar algo que sirve, por ejemplo datos o pruebas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Registraremos los datos que usted pueda aportar."
+  },
+  "APOYO": {
+   "descripcion": "Ayuda que se da a una persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Necesita apoyo de interpretación en LSB?"
+  },
+  "AQUELLA": {
+   "descripcion": "Señala algo que está lejos o que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé si el documento corresponde a esa casa."
+  },
+  "ARANCEL": {
+   "descripcion": "Lo que se paga por un trámite, según una lista oficial de precios.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Dónde pago el arancel de este trámite?"
+  },
+  "ARANCELE": {
+   "descripcion": "Lo que se paga por un trámite, según una lista oficial de precios.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La certificación de firmas tiene arancel publicado específico."
+  },
+  "ARCHIVAR": {
+   "descripcion": "Guardar documentos en un archivo porque el trámite terminó o se paró.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Le indicaron que los documentos del trámite están archivados?"
+  },
+  "ASUMIR": {
+   "descripcion": "Pensar que algo es verdad sin comprobarlo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No asumiremos que el servicio dejó de funcionar."
+  },
+  "ATENCION": {
+   "descripcion": "El servicio que da una oficina a la persona que llega.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero iniciar la atención."
+  },
+  "AUDIENCIA": {
+   "descripcion": "Reunión con el juez donde se habla de un caso.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Tengo audiencia familiar. No sé dónde ir."
+  },
+  "AUTO": {
+   "descripcion": "Vehículo para personas; carro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Compré un auto. Quiero pasarlo a mi nombre."
+  },
+  "AUTOMATICO": {
+   "descripcion": "Que pasa solo, sin hacer un trámite nuevo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La norma 2025 incorporó mecanismos de renovación automática."
+  },
+  "AYUDA": {
+   "descripcion": "Lo que una persona da a otra para resolver algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito ayuda para escribir mi denuncia."
+  },
+  "BEIJING": {
+   "descripcion": "Nombre de una avenida en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "Existe representación en Centro Integral FELCV, avenida Beijing."
+  },
+  "BENEFICIARIO": {
+   "descripcion": "Persona que recibe algo, por ejemplo una propiedad o un pago.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Usted aparece como beneficiario en la escritura?"
+  },
+  "BIEN": {
+   "descripcion": "Correcto, sin error.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Su cédula muestra el dato de identidad correcto?"
+  },
+  "BOLETA": {
+   "descripcion": "Papel que muestra que algo se pagó o se observó.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, tengo la boleta de observación."
+  },
+  "BORRAR": {
+   "descripcion": "Quitar algo para que ya no exista, por ejemplo un mensaje.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No borre ni modifique mensajes relacionados al hecho."
+  },
+  "CALIFICAR": {
+   "descripcion": "Evaluar a una persona y darle un resultado. Ej.: el grado de discapacidad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Ya me calificaron."
+  },
+  "CANAL": {
+   "descripcion": "Medio para comunicarse: en persona, por teléfono, por internet.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Usaré un canal accesible."
+  },
+  "CANCELACION": {
+   "descripcion": "Cuando algo termina o se borra del registro, por ejemplo una hipoteca pagada.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si corresponde inscripción o cancelación."
+  },
+  "CANCELAR": {
+   "descripcion": "Terminar o borrar algo. «Cancelar una hipoteca»: quitarla del registro cuando la deuda se pagó.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, quiero cancelar una hipoteca registrada."
+  },
+  "CAPTURA": {
+   "descripcion": "Foto de la pantalla del celular o la computadora.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Tengo capturas y comprobante de transferencia."
+  },
+  "CASO": {
+   "descripcion": "Un asunto o problema que se está tratando.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene el número de matrícula de la casa?"
+  },
+  "CATARSTRAL": {
+   "descripcion": "Del catastro: el registro de la municipalidad con el tamaño y la ubicación de terrenos y casas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, no tengo un documento catastral de la casa."
+  },
+  "CATASTRAL": {
+   "descripcion": "Del catastro: el registro de la municipalidad con el tamaño y la ubicación de terrenos y casas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un documento catastral de la casa?"
+  },
+  "CENTRAL": {
+   "descripcion": "La oficina principal.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Le queda mejor la oficina central o La Chimba?"
+  },
+  "CENTRO": {
+   "descripcion": "Lugar o edificio donde se da un servicio.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Existe representación en Centro Integral FELCV, avenida Beijing."
+  },
+  "CENTRO_INTERNACIONAL_CONVENCIONES": {
+   "descripcion": "Edificio de Cochabamba donde funcionan oficinas públicas. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "Está en el Centro Internacional de Convenciones, piso uno."
+  },
+  "CERRADO": {
+   "descripcion": "Que no atiende, no se puede entrar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí. La dirección que tenía estaba cerrada."
+  },
+  "CERTIFICAR": {
+   "descripcion": "Dar un documento oficial que dice que algo es verdad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un documento del inmueble que debe certificarse?"
+  },
+  "CHIMBA": {
+   "descripcion": "La Chimba: zona de Cochabamba donde hay una oficina. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "¿Le queda mejor la oficina central o La Chimba?"
+  },
+  "CITAR": {
+   "descripcion": "Llamar a una persona para que vaya a un lugar un día y hora, por ejemplo al juzgado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí. Me citaron y no tengo abogado."
+  },
+  "CODIGO": {
+   "descripcion": "Número o letras que identifican algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene número de inmueble o código catastral?"
+  },
+  "COECHABAMBA": {
+   "descripcion": "Cochabamba: la ciudad y el departamento. Tiene seña: COCHABAMBA.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "¿Necesita el certificado de no propiedad de Cochabamba?"
+  },
+  "COINCIDIR": {
+   "descripcion": "Ser igual, decir lo mismo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si ambos documentos corresponden al mismo inmueble."
+  },
+  "COMPETENTE": {
+   "descripcion": "La oficina que tiene la tarea de atender ese caso.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Para víctimas, consulte SEPDAVI u otro servicio competente."
+  },
+  "COMPRA": {
+   "descripcion": "Cuando una persona paga para que algo sea suyo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene la escritura pública de compra venta?"
+  },
+  "COMPRA_VENTA": {
+   "descripcion": "Contrato en que una persona vende y otra compra, por ejemplo una casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué documento me falta para registrar la compra venta?"
+  },
+  "COMPROBANTE": {
+   "descripcion": "Papel que demuestra que algo se hizo o se pagó.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, tengo el comprobante del impuesto a la transferencia."
+  },
+  "COMUNICACION": {
+   "descripcion": "Entenderse con otra persona, en señas, por escrito o hablando.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La atención debe permitir comunicación accesible."
+  },
+  "COMUNICARSE": {
+   "descripcion": "Entenderse con otra persona, en señas, por escrito o hablando.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo solicito apoyo para comunicarme en LSB?"
+  },
+  "CONCEPTO": {
+   "descripcion": "El motivo de un pago: lo que se está pagando.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene una boleta con el concepto de pago?"
+  },
+  "CONDONACIÓN": {
+   "descripcion": "Cuando una deuda o una multa se perdona y ya no hay que pagarla.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Se informó condonación de multas e intereses hasta octubre."
+  },
+  "CONFIRMAR": {
+   "descripcion": "Comprobar que algo es correcto o seguro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Dónde puedo confirmar si mi trámite ya está listo?"
+  },
+  "CONFORME": {
+   "descripcion": "Según, de acuerdo con una regla.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  },
+  "CONMIGO": {
+   "descripcion": "Con la persona que habla: «la tengo conmigo» es «la tengo yo, aquí».",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Sí. La tengo conmigo."
+  },
+  "CONSERVAR": {
+   "descripcion": "Guardar algo y no perderlo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, no conservo un Folio Real anterior."
+  },
+  "CONSERVE": {
+   "descripcion": "Guardar algo y no perderlo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+  },
+  "CONSTANTE": {
+   "descripcion": "Que pasa muchas veces, sin parar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí. Me escribe mensajes constantemente."
+  },
+  "CONSULTA": {
+   "descripcion": "Pregunta que se hace para saber algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene la matrícula del inmueble para esta consulta?"
+  },
+  "CONSULTAR": {
+   "descripcion": "Preguntar o buscar información.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, quiero consultar antes de comprar la casa."
+  },
+  "CONTAR": {
+   "descripcion": "Explicar lo que pasó.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Cuente lo ocurrido con sus propias palabras."
+  },
+  "CONTEMPLAR": {
+   "descripcion": "Una ley contempla algo cuando lo incluye o lo permite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La Ley 1658 contempla interpretación gratuita en justicia."
+  },
+  "CONTENER": {
+   "descripcion": "Tener algo dentro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé cuál documento contiene la observación."
+  },
+  "COPIA": {
+   "descripcion": "Otro papel igual al original.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si esta copia de mi cédula sirve."
+  },
+  "CORREGIR": {
+   "descripcion": "Arreglar un error.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo corrijo mi nombre en el Folio Real?"
+  },
+  "CORRESPONDER": {
+   "descripcion": "Ser el que toca o el que es; estar relacionado. Ej.: esa matrícula es de esa casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si esta matrícula corresponde al inmueble."
+  },
+  "CORRESPONDIENTE": {
+   "descripcion": "Ser el que toca o el que es; estar relacionado. Ej.: esa matrícula es de esa casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Contacte SEPDEP para activar la atención correspondiente."
+  },
+  "COSTAR": {
+   "descripcion": "Tener un precio.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cuánto dice la página que cuesta?"
+  },
+  "COSTO": {
+   "descripcion": "Lo que hay que pagar; el precio.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cuánto cuesta el trámite que voy a solicitar?"
+  },
+  "CUENTA": {
+   "descripcion": "Usuario personal para entrar a una página o sistema de internet.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Puede ingresar a su cuenta?"
+  },
+  "CUOTA": {
+   "descripcion": "Una parte de un pago. «Pagar en cuotas»: pagar de a poco.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Quiere solicitar un Plan Cuotas?"
+  },
+  "CUOTAS": {
+   "descripcion": "Una parte de un pago. «Pagar en cuotas»: pagar de a poco.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí. Quiero pagar en cuotas."
+  },
+  "DATO": {
+   "descripcion": "Una información: nombre, número, fecha.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué datos puedo consultar con la información rápida?"
+  },
+  "DATOS": {
+   "descripcion": "Una información: nombre, número, fecha.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé cuál dato de identidad está incorrecto."
+  },
+  "DEBER": {
+   "descripcion": "Tener que hacer algo, o tener una deuda.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé qué alcance debe tener el certificado."
+  },
+  "DEBO": {
+   "descripcion": "Tener que hacer algo, o tener una deuda.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué documentos debo presentar para solicitar el certificado alodial?"
+  },
+  "DECIR": {
+   "descripcion": "Comunicar algo a otra persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Le dijeron que necesita treinta por ciento?"
+  },
+  "DEFENSA_PUBLICA": {
+   "descripcion": "Servicio del Estado que da abogado gratis a quien lo necesita en un proceso penal.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "¿Dónde está Defensa Pública en Cochabamba?"
+  },
+  "DEFENSORIA": {
+   "descripcion": "Oficina que protege derechos. «Defensoría de la Niñez»: protege a niños, niñas y adolescentes.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe activarse la atención de la Defensoría de la Niñez."
+  },
+  "DEFUNCION": {
+   "descripcion": "La muerte de una persona. «Certificado de defunción»: documento que dice que murió.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El precio es igual al de defunción?"
+  },
+  "DELITO": {
+   "descripcion": "Acción prohibida por la ley y castigada, por ejemplo robar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El hecho fue robo, estafa u otro delito?"
+  },
+  "DENUNCIA": {
+   "descripcion": "Avisar a la policía o la fiscalía de un delito para que lo investiguen.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito ayuda para escribir mi denuncia."
+  },
+  "DENUNCIADO": {
+   "descripcion": "Persona acusada en una denuncia.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Soy denunciado."
+  },
+  "DENUNCIAR": {
+   "descripcion": "Avisar a la policía o la fiscalía de un delito para que lo investiguen.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero denunciar el robo de mi celular."
+  },
+  "DEPARTAMENTO": {
+   "descripcion": "Cada una de las 9 regiones de Bolivia, como Cochabamba. También: vivienda dentro de un edificio.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, me pidieron el certificado departamental."
+  },
+  "DEPERDER": {
+   "descripcion": "Cambiar según otra cosa. Ej.: el precio depende del trámite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Depende de su grado y situación; revise la norma aplicable."
+  },
+  "DERECHOS": {
+   "descripcion": "Lo que la ley protege para cada persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Puede acudir a la Defensoría por posible vulneración de derechos."
+  },
+  "DERECHOS_REALES": {
+   "descripcion": "Oficina que registra quién es dueño de casas y terrenos, y sus hipotecas.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "¿El comprobante corresponde a esta oficina de Derechos Reales?"
+  },
+  "DERIVADO": {
+   "descripcion": "Enviado a otra oficina que debe atender el caso.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe ser derivado al servicio especializado contra la violencia."
+  },
+  "DESARCHIVO": {
+   "descripcion": "Sacar documentos del archivo para continuar un trámite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo solicito el desarchivo de mis documentos?"
+  },
+  "DESCRIBIR": {
+   "descripcion": "Decir cómo es algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si ambos documentos describen el mismo inmueble."
+  },
+  "DESCUENTO": {
+   "descripcion": "Pagar menos de lo normal.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Todavía hay descuento si pago hoy?"
+  },
+  "DETERIORADO": {
+   "descripcion": "Dañado, roto o gastado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Está deteriorada."
+  },
+  "DETERIORO": {
+   "descripcion": "Dañado, roto o gastado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La reposición aplica por extravío, robo o deterioro."
+  },
+  "DICE": {
+   "descripcion": "Comunicar algo a otra persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cuánto dice la página que cuesta?"
+  },
+  "DIRECTAMENTE": {
+   "descripcion": "Sin otra persona en el medio; uno mismo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero participar directamente en mi audiencia."
+  },
+  "DISCAPACIDAD": {
+   "descripcion": "Condición de una persona que tiene limitaciones; las personas sordas pueden tener carnet de discapacidad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero sacar mi carnet de discapacidad."
+  },
+  "DISPONIBLE": {
+   "descripcion": "Que se puede usar ahora.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si hay apoyo de interpretación disponible."
+  },
+  "DIVISION": {
+   "descripcion": "Separar algo en partes, por ejemplo un terreno entre varios dueños.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo registro la división y partición de un inmueble?"
+  },
+  "DOCUMENTACION": {
+   "descripcion": "Conjunto de papeles o documentos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo documentación del pago del impuesto a la transferencia?"
+  },
+  "DONACION": {
+   "descripcion": "Dar algo gratis a otra persona, por ejemplo una casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo registro una casa que recibí por donación?"
+  },
+  "DOS": {
+   "descripcion": "El número 2.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "También enumera identificación del fallecido y dos testigos."
+  },
+  "DUDAR": {
+   "descripcion": "No estar seguro de algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, mi duda es sobre el paso siguiente."
+  },
+  "DUPLICADO": {
+   "descripcion": "Otra copia oficial de un documento.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "SERECI ofrece venta de certificados duplicados."
+  },
+  "DÍAS": {
+   "descripcion": "Días: cada uno de los días del calendario.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Mi expareja me amenaza todos los días."
+  },
+  "EDIFICIO": {
+   "descripcion": "Construcción grande con varios pisos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Queda entre Antezana y Lanza, Edificio Aly."
+  },
+  "ELEMENTOS": {
+   "descripcion": "Cosas, objetos o pruebas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+  },
+  "EMITIR": {
+   "descripcion": "Hacer y entregar un documento oficial.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El certificado será emitido a su nombre?"
+  },
+  "EMITIRSE": {
+   "descripcion": "Hacer y entregar un documento oficial.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé a nombre de quién debe emitirse."
+  },
+  "ENCONTRAR": {
+   "descripcion": "Hallar algo que se buscaba.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé dónde encontrar la matrícula."
+  },
+  "ENTENDER": {
+   "descripcion": "Comprender. Tiene seña: COMPRENDER.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La parte que no entiende está en el documento registral?"
+  },
+  "ENTENDIDO": {
+   "descripcion": "Comprender. Tiene seña: COMPRENDER.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Entendido."
+  },
+  "ENTONCES": {
+   "descripcion": "Une una idea con lo que se dijo antes: «por eso», «en ese caso».",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Entonces no pago el impuesto?"
+  },
+  "ENTREGA": {
+   "descripcion": "Cuando se da algo a la persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, todavía no recibí un aviso de entrega."
+  },
+  "ENTREGAR": {
+   "descripcion": "Cuando se da algo a la persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé qué testimonio me entregaron."
+  },
+  "ENUMERAR": {
+   "descripcion": "Nombrar cosas una por una, en lista.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "También enumera identificación del fallecido y dos testigos."
+  },
+  "ERROR": {
+   "descripcion": "Algo que está mal o equivocado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El error está en el nombre del titular?"
+  },
+  "ESA": {
+   "descripcion": "Señala algo que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No, no tengo documentos de esa casa."
+  },
+  "ESCRITO": {
+   "descripcion": "Que está en un papel, no hablado ni señado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene una solicitud escrita del certificado alodial?"
+  },
+  "ESCRITURA": {
+   "descripcion": "Documento hecho ante notario que demuestra una compra, venta o herencia de una propiedad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo la escritura pública del inmueble?"
+  },
+  "ESCRITURA_PUBLICA": {
+   "descripcion": "Documento hecho ante notario que demuestra una compra, venta o herencia de una propiedad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si este contrato es una escritura pública."
+  },
+  "ESE": {
+   "descripcion": "Señala algo que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿El documento de herencia identifica ese inmueble?"
+  },
+  "ESO": {
+   "descripcion": "Señala algo que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé si esa matrícula corresponde al inmueble."
+  },
+  "ESOS": {
+   "descripcion": "Señala algo que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé cuál de esos documentos me pidieron."
+  },
+  "ESPACIOS": {
+   "descripcion": "Lugares vacíos entre letras o números.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Escríbala sin espacios ni guiones."
+  },
+  "ESPECIALIZADO": {
+   "descripcion": "Que se ocupa solo de un tipo de casos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe ser derivado al servicio especializado contra la violencia."
+  },
+  "ESPECIFICO": {
+   "descripcion": "Propio de una sola cosa; uno exacto.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La certificación de firmas tiene arancel publicado específico."
+  },
+  "ESTA": {
+   "descripcion": "Señala algo que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé si esta copia de mi cédula sirve."
+  },
+  "ESTAFA": {
+   "descripcion": "Delito: engañar a una persona para quitarle dinero o cosas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El hecho fue robo, estafa u otro delito?"
+  },
+  "ESTE": {
+   "descripcion": "Señala algo que ya se mencionó. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé si este número es la matrícula."
+  },
+  "EXACTO": {
+   "descripcion": "Justo, sin error.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Entonces confirmaré el trámite exacto."
+  },
+  "EXISTIR": {
+   "descripcion": "Haber, estar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Existe representación en Centro Integral FELCV, avenida Beijing."
+  },
+  "EXPEDIENTE": {
+   "descripcion": "Todos los documentos de un caso o trámite, juntos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debemos revisar la información de su expediente."
+  },
+  "EXTRAVIO": {
+   "descripcion": "Pérdida: no saber dónde está algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La reposición aplica por extravío, robo o deterioro."
+  },
+  "FALLECIDO": {
+   "descripcion": "Persona que murió.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "También enumera identificación del fallecido y dos testigos."
+  },
+  "FALTAR": {
+   "descripcion": "No estar algo que se necesita.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué documento me falta para solicitar el Folio Real?"
+  },
+  "FAMILIA": {
+   "descripcion": "Padres, hijos, hermanos y demás parientes.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito ayuda por un niño de mi familia."
+  },
+  "FAMILIAR": {
+   "descripcion": "De la familia. «Audiencia familiar»: en un juzgado de familia.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Tengo audiencia familiar. No sé dónde ir."
+  },
+  "FIGURA": {
+   "descripcion": "Aparecer escrito en un documento o registro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Usted figura como titular en el documento?"
+  },
+  "FIGURAR": {
+   "descripcion": "Aparecer escrito en un documento o registro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé quién figura como titular."
+  },
+  "FIRMA": {
+   "descripcion": "Nombre escrito a mano de una persona, que muestra que está de acuerdo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero certificar las firmas de este contrato."
+  },
+  "FIRMAR": {
+   "descripcion": "Nombre escrito a mano de una persona, que muestra que está de acuerdo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí. Ya firmamos la compra."
+  },
+  "FISCAL": {
+   "descripcion": "Persona del Ministerio Público que investiga los delitos y acusa ante el juez.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero saber quién es mi fiscal."
+  },
+  "FISICA": {
+   "descripcion": "En papel o en material, no digital. «Cédula física»: la tarjeta de la cédula.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cuánto cuesta la cédula física?"
+  },
+  "FOLIO": {
+   "descripcion": "Hoja de un registro. Ver «Folio Real».",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Tengo cédula y Folio, pero no formulario."
+  },
+  "FOLIO_REAL": {
+   "descripcion": "Documento de Derechos Reales con los datos de una propiedad: dueño, ubicación, hipotecas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Puedo solicitar el Folio Real actualizado de mi casa?"
+  },
+  "FORMALIZAR": {
+   "descripcion": "Hacer algo oficial, con documentos legales.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si este documento formaliza la división."
+  },
+  "FUI": {
+   "descripcion": "Forma de «ser» o «ir» en pasado. «Fui víctima»: era la víctima.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Fui víctima de robo. Necesito abogado gratuito."
+  },
+  "GARANTIZAR": {
+   "descripcion": "Asegurar que algo se cumpla.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe garantizarse comunicación accesible durante la atención."
+  },
+  "GESTION": {
+   "descripcion": "Trámite o tarea que se hace. También: año de impuestos («gestión 2023»).",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, el poder menciona esta gestión."
+  },
+  "GRADO": {
+   "descripcion": "Nivel o medida. Ej.: el grado de discapacidad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Depende de su grado y situación; revise la norma aplicable."
+  },
+  "GRAVAMEN": {
+   "descripcion": "Carga o deuda que tiene una propiedad, por ejemplo una hipoteca.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé qué gravamen podría tener la casa."
+  },
+  "GRAVAMENES": {
+   "descripcion": "Carga o deuda que tiene una propiedad, por ejemplo una hipoteca.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo solicito el certificado de gravámenes de mi casa?"
+  },
+  "GUIONES": {
+   "descripcion": "La raya corta «-» que separa números o letras.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Escríbala sin espacios ni guiones."
+  },
+  "HACERLE": {
+   "descripcion": "«Hacerle preguntas»: preguntarle a usted.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Necesito hacerle algunas preguntas sobre la denuncia."
+  },
+  "HECHO": {
+   "descripcion": "Lo que pasó.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El hecho fue robo, estafa u otro delito?"
+  },
+  "HEREDAR": {
+   "descripcion": "Recibir los bienes de una persona que murió.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, el documento identifica el inmueble heredado."
+  },
+  "HEREDERO": {
+   "descripcion": "Persona que recibe los bienes de alguien que murió.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La herencia corresponde a varios herederos?"
+  },
+  "HIPOTECA": {
+   "descripcion": "Préstamo de dinero en que una casa queda como garantía; si no se paga, el banco puede quedarse con la casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Quiere consultar una posible hipoteca de la casa?"
+  },
+  "HIPOTECAR": {
+   "descripcion": "Préstamo de dinero en que una casa queda como garantía; si no se paga, el banco puede quedarse con la casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Conoce la matrícula del inmueble que se hipotecará?"
+  },
+  "INCLUIR": {
+   "descripcion": "Poner o tener algo dentro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si el documento incluye ese inmueble."
+  },
+  "INCORPORAR": {
+   "descripcion": "Agregar algo nuevo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La norma 2025 incorporó mecanismos de renovación automática."
+  },
+  "INCORRECTO": {
+   "descripcion": "Que tiene error, que está mal.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, mi nombre está escrito incorrectamente."
+  },
+  "INDEPENDIENTE": {
+   "descripcion": "Separado, solo, que no depende de otro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, consulto una casa independiente."
+  },
+  "INDICAR": {
+   "descripcion": "Decir o mostrar algo a otra persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Le indicaron que el alcance debe ser departamental?"
+  },
+  "INDICARME": {
+   "descripcion": "Decir o mostrar algo a otra persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Pueden indicarme cómo contactarla?"
+  },
+  "INFORMACION": {
+   "descripcion": "Datos o noticias sobre algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Puedo pedir información rápida de esta casa?"
+  },
+  "INFORMACION_RAPIDA": {
+   "descripcion": "Servicio de Derechos Reales para consultar rápido los datos de una propiedad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué datos puedo consultar con la información rápida?"
+  },
+  "INFORMAR": {
+   "descripcion": "Dar a conocer una información.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Se informó condonación de multas e intereses hasta octubre."
+  },
+  "INGRESAR": {
+   "descripcion": "Entrar; también presentar un trámite en una oficina.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé en qué oficina ingresaron el trámite."
+  },
+  "INGRESO": {
+   "descripcion": "Cuando un trámite se presenta y se registra en la oficina.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene el comprobante de ingreso del trámite anterior?"
+  },
+  "INICIAR": {
+   "descripcion": "Empezar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero iniciar la atención."
+  },
+  "INMUEBLE": {
+   "descripcion": "Casa, departamento o terreno: propiedad que no se puede mover.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene algún Folio Real anterior del inmueble?"
+  },
+  "INSCRIPCION": {
+   "descripcion": "Escribir algo en un registro oficial, por ejemplo una compra.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo solicito la inscripción de una hipoteca?"
+  },
+  "INSTRUCCION": {
+   "descripcion": "Explicación de lo que hay que hacer.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero recibir instrucciones claras por escrito también."
+  },
+  "INSTRUCCIONES": {
+   "descripcion": "Explicación de lo que hay que hacer.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+  },
+  "INTEGRAL": {
+   "descripcion": "Completo, que atiende todo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "SEPDAVI evaluará su acceso al patrocinio y apoyo integral."
+  },
+  "INTENCION": {
+   "descripcion": "Lo que una persona quiere hacer.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, solo tengo la intención de dividir el inmueble."
+  },
+  "INTERPRETAR": {
+   "descripcion": "Pasar lo que se dice de una lengua a otra, por ejemplo de español a LSB.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La Ley 1658 contempla interpretación gratuita en justicia."
+  },
+  "INTERÉS": {
+   "descripcion": "Dinero extra que se paga por una deuda o por pagar tarde.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Se informó condonación de multas e intereses hasta octubre."
+  },
+  "INVESTIGADOR": {
+   "descripcion": "Policía que busca pruebas sobre un delito.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+  },
+  "JUDICIAL": {
+   "descripcion": "Del juez o del juzgado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un documento judicial de anotación preventiva?"
+  },
+  "LANZA": {
+   "descripcion": "Nombre de una calle en Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "Queda entre Antezana y Lanza, Edificio Aly."
+  },
+  "LE": {
+   "descripcion": "A usted, a él o a ella.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Le indicaron que los documentos del trámite están archivados?"
+  },
+  "LEGAL": {
+   "descripcion": "De la ley; también: con abogado («ayuda legal»).",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito ayuda legal y psicológica."
+  },
+  "LEGITIMA": {
+   "descripcion": "Parte de la herencia que la ley guarda para los hijos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La escritura indica que es un anticipo de legítima?"
+  },
+  "LENGUA": {
+   "descripcion": "Idioma. «Lengua de señas»: la lengua de las personas sordas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito comunicarme usando lengua de señas."
+  },
+  "LOCALIZAR": {
+   "descripcion": "Encontrar dónde está algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué documento puedo mostrar para localizar la matrícula?"
+  },
+  "LSB": {
+   "descripcion": "Lengua de Señas Boliviana. Se deletrea L-S-B.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "Necesito comunicarme en Lengua de Señas Boliviana."
+  },
+  "LUGAR": {
+   "descripcion": "Sitio, espacio.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Está en un lugar seguro ahora?"
+  },
+  "MANTENER": {
+   "descripcion": "Seguir igual, no cambiar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La reposición mantiene la vigencia del documento reemplazado."
+  },
+  "MARGINAL": {
+   "descripcion": "«Nota marginal»: algo escrito al costado de un registro para corregirlo o agregar datos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene una solicitud escrita de resellado de nota marginal?"
+  },
+  "MAS": {
+   "descripcion": "Mayor cantidad.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé qué forma de explicación me ayudará más."
+  },
+  "MATRICULA": {
+   "descripcion": "Número con que Derechos Reales registra una propiedad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene el número de matrícula de la casa?"
+  },
+  "MATRICULACION": {
+   "descripcion": "Darle número de matrícula a una propiedad con registro antiguo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo consulto la matriculación de un registro antiguo?"
+  },
+  "MATRICULAR": {
+   "descripcion": "Darle número de matrícula a una propiedad con registro antiguo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué documentos debo presentar para consultar la matriculación?"
+  },
+  "MECANISMO": {
+   "descripcion": "Forma o manera de hacer algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La norma 2025 incorporó mecanismos de renovación automática."
+  },
+  "MEDICO": {
+   "descripcion": "Del médico. «Certificado médico»: documento del médico sobre la salud.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Tengo el certificado médico original."
+  },
+  "MEDIDA": {
+   "descripcion": "Acción para ayudar o proteger. Ej.: intérprete en la audiencia.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Necesita una medida de accesibilidad para la audiencia?"
+  },
+  "MEMORIAL": {
+   "descripcion": "Carta formal, normalmente con abogado, para pedir algo a un juzgado u oficina.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No tengo memorial. Solo traje mi cédula."
+  },
+  "MENCION": {
+   "descripcion": "Cuando un documento nombra algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, el documento menciona otro inmueble."
+  },
+  "MENCIONAR": {
+   "descripcion": "Cuando un documento nombra algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, el documento solo me menciona a mí."
+  },
+  "MENSAJE": {
+   "descripcion": "Texto que se envía, por ejemplo por celular.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No borre ni modifique mensajes relacionados al hecho."
+  },
+  "MESES": {
+   "descripcion": "Meses del año.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La renovación puede solicitarse desde seis meses antes."
+  },
+  "MINISTERIO": {
+   "descripcion": "Parte del gobierno que se ocupa de un tema, por ejemplo Ministerio de Salud.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "El Ministerio informó cuatro días para el área urbana."
+  },
+  "MIYO": {
+   "descripcion": "«Mi»: de la persona que habla. Tiene seña: MÍO.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Cómo consulto un error en los datos de mi inmueble?"
+  },
+  "MODALIDAD": {
+   "descripcion": "Forma de hacer algo: en persona o virtual.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero revisar fecha y modalidad."
+  },
+  "MODIFICAR": {
+   "descripcion": "Cambiar algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No borre ni modifique mensajes relacionados al hecho."
+  },
+  "MONTO": {
+   "descripcion": "Cantidad de dinero.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El monto aparece en línea?"
+  },
+  "MOTO": {
+   "descripcion": "Motocicleta: vehículo de dos ruedas con motor.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero saber cuánto debo de mi moto."
+  },
+  "MULTA": {
+   "descripcion": "Dinero que se paga como castigo, por ejemplo por pagar tarde un impuesto.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Se informó condonación de multas e intereses hasta octubre."
+  },
+  "MUY": {
+   "descripcion": "Mucho, bastante.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Sí, pero escribí muy poco."
+  },
+  "NACIMIENTO": {
+   "descripcion": "Cuando una persona nace. «Certificado de nacimiento»: documento que dice dónde y cuándo nació.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene certificado de nacimiento original computarizado?"
+  },
+  "NECESIDAD": {
+   "descripcion": "Lo que una persona necesita.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Registraremos su necesidad de comunicación accesible."
+  },
+  "NECESITO": {
+   "descripcion": "Necesitar. Tiene seña: NECESITAR.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No. Necesito atención a distancia."
+  },
+  "NEGAR": {
+   "descripcion": "Decir que no; no dar algo. Ej.: no dar atención.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Me negaron atención porque necesito lengua de señas."
+  },
+  "NIÑEZ": {
+   "descripcion": "Edad de los niños y niñas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe activarse la atención de la Defensoría de la Niñez."
+  },
+  "NOTA": {
+   "descripcion": "Algo escrito corto. Ver «nota marginal».",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene una solicitud escrita de resellado de nota marginal?"
+  },
+  "NOTARIA": {
+   "descripcion": "Oficina del notario.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Busca una notaría específica?"
+  },
+  "NOTARIO": {
+   "descripcion": "Persona autorizada para hacer escrituras y certificar firmas y documentos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "DIRNOPLU ofrece un buscador de notarios."
+  },
+  "NUESTRAS": {
+   "descripcion": "De nosotros.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Sí. Queremos reconocer nuestras firmas."
+  },
+  "NUMERO": {
+   "descripcion": "Número.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene el número de matrícula de la casa?"
+  },
+  "OBSERVACION": {
+   "descripcion": "Problema que la oficina encuentra en un trámite y que hay que corregir.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé cuál documento contiene la observación."
+  },
+  "OCURRIDO": {
+   "descripcion": "Pasar, suceder.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo algún relato de lo ocurrido?"
+  },
+  "OCURRIR": {
+   "descripcion": "Pasar, suceder.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cuándo y dónde ocurrió el robo?"
+  },
+  "OFRECER": {
+   "descripcion": "Dar o poner algo a disposición.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "DIRNOPLU ofrece un buscador de notarios."
+  },
+  "ORIENTACION": {
+   "descripcion": "Explicación de qué hacer y a dónde ir.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Viene a denunciar o necesita orientación?"
+  },
+  "ORIENTAR": {
+   "descripcion": "Explicación de qué hacer y a dónde ir.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero recibir orientación hoy."
+  },
+  "ORIGINAL": {
+   "descripcion": "El documento verdadero, no una copia.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene certificado de nacimiento original computarizado?"
+  },
+  "OTRA": {
+   "descripcion": "Una distinta.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No, el beneficiario indicado es otra persona."
+  },
+  "OTRAS": {
+   "descripcion": "Una distinta.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "El arancel publicado incluye anticréticos entre otras escrituras."
+  },
+  "OTRO": {
+   "descripcion": "Una distinta.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No, la casa está registrada a otro nombre."
+  },
+  "OTROS": {
+   "descripcion": "Una distinta.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Sí, hay otros herederos en el documento."
+  },
+  "PADRE": {
+   "descripcion": "Papá.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito otro certificado de defunción de mi padre."
+  },
+  "PAGAR": {
+   "descripcion": "Dar dinero por algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Ya le indicaron el nombre del trámite que pagará?"
+  },
+  "PAGO": {
+   "descripcion": "Dar dinero por algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo documentación del pago del impuesto a la transferencia?"
+  },
+  "PARTICION": {
+   "descripcion": "Dividir una propiedad o herencia en partes, una para cada dueño.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo registro la división y partición de un inmueble?"
+  },
+  "PARTICIONAR": {
+   "descripcion": "Dividir una propiedad o herencia en partes, una para cada dueño.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un documento de división y partición del inmueble?"
+  },
+  "PARTIDA": {
+   "descripcion": "Número de registro antiguo de una propiedad en Derechos Reales.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, mi documento tiene una partida antigua."
+  },
+  "PASAR": {
+   "descripcion": "Cambiar algo de lugar o de dueño. «Pasar a mi nombre»: registrarlo como mío.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Compré un auto. Quiero pasarlo a mi nombre."
+  },
+  "PASO": {
+   "descripcion": "Cada parte de un trámite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, mi duda es sobre el paso siguiente."
+  },
+  "PATROCINIO": {
+   "descripcion": "Que un abogado lleve y defienda el caso de una persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "SEPDAVI evaluará su acceso al patrocinio y apoyo integral."
+  },
+  "PENAL": {
+   "descripcion": "Sobre delitos.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Su consulta es urgente y penal?"
+  },
+  "PERMITIDO": {
+   "descripcion": "Que la ley deja hacer.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe acreditar la relación permitida y su identidad."
+  },
+  "PERMITIR": {
+   "descripcion": "Que la ley deja hacer.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La atención debe permitir comunicación accesible."
+  },
+  "PERSONA": {
+   "descripcion": "Un hombre, una mujer, alguien.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, el certificado será para otra persona."
+  },
+  "PERSONALMENTE": {
+   "descripcion": "Uno mismo, en persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí. Quiero ir personalmente."
+  },
+  "PERTENECER": {
+   "descripcion": "Ser de alguien.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No. El lote pertenece a mi hermana."
+  },
+  "PISO": {
+   "descripcion": "Cada nivel de un edificio.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Está en el Centro Internacional de Convenciones, piso uno."
+  },
+  "PLACA": {
+   "descripcion": "Chapa con el número de un vehículo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene la placa actual del vehículo?"
+  },
+  "PLAN": {
+   "descripcion": "Forma organizada de hacer algo. «Plan de cuotas»: pagar de a poco.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Quiere solicitar un Plan Cuotas?"
+  },
+  "PLANO": {
+   "descripcion": "Dibujo de un terreno o casa con sus medidas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un plano de la división del inmueble?"
+  },
+  "PLAZUELA_CONSTITUCION": {
+   "descripcion": "Plaza de Cochabamba. Se deletrea.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "Está en calle 16 de Julio 680, Plazuela Constitución."
+  },
+  "POBLACION": {
+   "descripcion": "Grupo de personas, por ejemplo los niños de un lugar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La DNA atiende situaciones de protección de esta población."
+  },
+  "PODER": {
+   "descripcion": "Poder hacer algo. También: documento para que otra persona haga trámites por uno.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé qué gravamen podría tener la casa."
+  },
+  "PODRÉ": {
+   "descripcion": "Poder hacer algo. También: documento para que otra persona haga trámites por uno.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé cuándo podré ir."
+  },
+  "PONER": {
+   "descripcion": "Colocar. «Ponerla a mi nombre»: registrar la propiedad como mía.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Compré una casa. Quiero ponerla a mi nombre."
+  },
+  "POR_CIENTO": {
+   "descripcion": "Parte de cada cien (%).",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Le dijeron que necesita treinta por ciento?"
+  },
+  "PRECIO": {
+   "descripcion": "Lo que cuesta algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Entonces quiero confirmar el precio primero."
+  },
+  "PREFERIR": {
+   "descripcion": "Querer una cosa más que otra.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, prefiero la explicación por escrito."
+  },
+  "PREFIERES": {
+   "descripcion": "Querer una cosa más que otra.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Prefiere que escriba la explicación del trámite?"
+  },
+  "PREGUNTA": {
+   "descripcion": "Lo que se dice para saber algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero entender todas las preguntas de la denuncia."
+  },
+  "PREGUNTAR": {
+   "descripcion": "Lo que se dice para saber algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué documento me falta para solicitar el Folio Real?"
+  },
+  "PRESENCIAL": {
+   "descripcion": "En persona, yendo al lugar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La estafa ocurrió por internet o presencialmente?"
+  },
+  "PRESENCIALMENTE": {
+   "descripcion": "En persona, yendo al lugar.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Puede acudir presencialmente ahora?"
+  },
+  "PREVENTIVA": {
+   "descripcion": "Para prevenir o proteger mientras se decide algo. Ver «anotación preventiva».",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un documento judicial de anotación preventiva?"
+  },
+  "PRIMERO": {
+   "descripcion": "Antes que lo demás.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Consulte primero el monto actualizado antes de pagar."
+  },
+  "PRIVADO": {
+   "descripcion": "Hecho entre personas, sin notario. «Contrato privado».",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, solo tengo un contrato privado."
+  },
+  "PROCEDIMIENTO": {
+   "descripcion": "Pasos que hay que seguir.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  },
+  "PROCESO": {
+   "descripcion": "Caso que se lleva ante un juez o la fiscalía.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué necesita consultar de su proceso?"
+  },
+  "PROPIEDAD": {
+   "descripcion": "Lo que es de una persona, por ejemplo una casa o un terreno.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Le solicitaron un certificado de no propiedad nacional?"
+  },
+  "PROPIEDAD_HORIZONTAL": {
+   "descripcion": "Forma de ser dueño de un departamento dentro de un edificio que tiene partes comunes.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Su consulta es sobre un departamento en propiedad horizontal?"
+  },
+  "PROPIETARIO": {
+   "descripcion": "Dueño.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La división incluye a varios propietarios?"
+  },
+  "PROPIO": {
+   "descripcion": "De uno mismo. «Con sus propias palabras»: como usted lo diga.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Cuente lo ocurrido con sus propias palabras."
+  },
+  "PSICOLOGICA": {
+   "descripcion": "De la mente y las emociones. «Ayuda psicológica»: apoyo de un psicólogo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito ayuda legal y psicológica."
+  },
+  "PUBLICA": {
+   "descripcion": "Del Estado o para todos. «Escritura pública»: hecha ante notario.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo la escritura pública del inmueble?"
+  },
+  "PUBLICADO": {
+   "descripcion": "Que se puede ver por todos, por ejemplo en una página oficial.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La certificación de firmas tiene arancel publicado específico."
+  },
+  "PUBLICAR": {
+   "descripcion": "Que se puede ver por todos, por ejemplo en una página oficial.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "El arancel publicado incluye anticréticos entre otras escrituras."
+  },
+  "QUEDA": {
+   "descripcion": "Estar ubicado. «Queda entre…»: está entre…",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Queda entre Antezana y Lanza, Edificio Aly."
+  },
+  "QUITAR": {
+   "descripcion": "Sacar algo a alguien. En un robo: le quitaron el celular.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Fue robo. Me quitaron el celular."
+  },
+  "RADICAR": {
+   "descripcion": "Estar registrado en un lugar. «Vehículo radicado en Cochabamba».",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El vehículo está radicado en Cochabamba?"
+  },
+  "REALIZAR": {
+   "descripcion": "Hacer.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Ya realizó el pago de ese trámite?"
+  },
+  "RECLAMO": {
+   "descripcion": "Queja formal por un mal servicio o un error.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero presentar mi reclamo."
+  },
+  "RECOCNER": {
+   "descripcion": "Aceptar como propio. «Reconocer firmas»: confirmar ante notario que la firma es suya.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí. Queremos reconocer nuestras firmas."
+  },
+  "REEMPLAZAR": {
+   "descripcion": "Poner uno nuevo en lugar del anterior.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La reposición mantiene la vigencia del documento reemplazado."
+  },
+  "REFERIR": {
+   "descripcion": "Hablar de algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si ambos documentos se refieren a lo mismo."
+  },
+  "REGIMEN": {
+   "descripcion": "Conjunto de reglas para algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si mi departamento tiene ese régimen."
+  },
+  "REGISTRADO": {
+   "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La casa está registrada a su nombre?"
+  },
+  "REGISTRAL": {
+   "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La parte que no entiende está en el documento registral?"
+  },
+  "REGISTRAR": {
+   "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, la casa está registrada a mi nombre."
+  },
+  "REGISTRO": {
+   "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo registro la compra de mi casa?"
+  },
+  "REGULARIZACION": {
+   "descripcion": "Arreglar los papeles de una propiedad para que estén según la ley.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cómo consulto el registro de mi regularización de propiedad?"
+  },
+  "REGULARIZAR": {
+   "descripcion": "Arreglar los papeles de una propiedad para que estén según la ley.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, mi documento indica otra vía de regularización."
+  },
+  "RELACION": {
+   "descripcion": "Unión entre personas, por ejemplo parentesco.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Debe acreditar la relación permitida y su identidad."
+  },
+  "RELACIONAR": {
+   "descripcion": "Que tiene que ver con algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No borre ni modifique mensajes relacionados al hecho."
+  },
+  "RELATO": {
+   "descripcion": "Explicación escrita o señada de lo que pasó.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo algún relato de lo ocurrido?"
+  },
+  "RENOVACION": {
+   "descripcion": "Hacer un documento nuevo cuando el anterior vence.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La renovación puede solicitarse desde seis meses antes."
+  },
+  "RENOVAR": {
+   "descripcion": "Hacer un documento nuevo cuando el anterior vence.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Entonces ya puedo renovarla."
+  },
+  "REPOSICION": {
+   "descripcion": "Sacar un documento nuevo porque el anterior se perdió, se robó o se dañó.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Haré la reposición."
+  },
+  "REPRESENTACIÓN": {
+   "descripcion": "Oficina que atiende en nombre de otra institución.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Existe representación en Centro Integral FELCV, avenida Beijing."
+  },
+  "REPRESENTAR": {
+   "descripcion": "Hacer algo en nombre de otra persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un poder para representar a esa persona?"
+  },
+  "RESELLADO": {
+   "descripcion": "Volver a sellar un documento para confirmar o actualizar un registro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, tengo la solicitud escrita de resellado."
+  },
+  "RESSELLADO": {
+   "descripcion": "Volver a sellar un documento para confirmar o actualizar un registro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene una solicitud escrita de resellado de nota marginal?"
+  },
+  "REVISAR": {
+   "descripcion": "Mirar con cuidado para ver si algo está bien.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Qué documento debo presentar para revisar los datos del inmueble?"
+  },
+  "REVISION": {
+   "descripcion": "Mirar con cuidado para ver si algo está bien.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo el Folio Real del inmueble que quiere revisar?"
+  },
+  "RUTA": {
+   "descripcion": "Camino o pasos que se siguen. «Ruta de atención»: las oficinas que atienden un caso.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Para violencia corresponde activar la ruta de FELCV."
+  },
+  "SACAR": {
+   "descripcion": "Obtener, por ejemplo un documento.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito sacar mi cédula por primera vez."
+  },
+  "SALIR": {
+   "descripcion": "Ir afuera, irse.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Debo confirmar antes de salir?"
+  },
+  "SEDE": {
+   "descripcion": "Oficina o lugar donde atiende una institución.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Primero confirmaré la sede."
+  },
+  "SEGURO": {
+   "descripcion": "Sin peligro.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Está en un lugar seguro ahora?"
+  },
+  "SERVICIO": {
+   "descripcion": "Atención o ayuda que da una institución.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Para víctimas, consulte SEPDAVI u otro servicio competente."
+  },
+  "SERVIR": {
+   "descripcion": "Ser útil, valer para algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si esta copia de mi cédula sirve."
+  },
+  "SEÑALAMIENTO": {
+   "descripcion": "Fecha y hora que fija el juzgado para una audiencia.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La modalidad depende del señalamiento de su expediente."
+  },
+  "SEÑAS": {
+   "descripcion": "Señas: la forma de comunicarse de las personas sordas, con manos, cara y cuerpo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Necesito comunicarme usando lengua de señas."
+  },
+  "SIGA": {
+   "descripcion": "Continuar; también hacer lo que dicen. «Seguir instrucciones».",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+  },
+  "SIGNIFICAR": {
+   "descripcion": "Querer decir.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé qué significa el nombre de este documento."
+  },
+  "SIGUIENTE": {
+   "descripcion": "El que viene después.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, mi duda es sobre el paso siguiente."
+  },
+  "SIGUIR": {
+   "descripcion": "Continuar; también hacer lo que dicen. «Seguir instrucciones».",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si la hipoteca sigue registrada."
+  },
+  "SISTEMA": {
+   "descripcion": "Programa o página de computadora que usa una oficina.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿El trámite sigue usando el sistema SIPRUNPCD?"
+  },
+  "SOLICITANTE": {
+   "descripcion": "Persona que pide algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé quién figura como solicitante."
+  },
+  "SOLICITAR": {
+   "descripcion": "Pedir, sobre todo en un trámite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Puedo solicitar el Folio Real actualizado de mi casa?"
+  },
+  "SOLICITUD": {
+   "descripcion": "Pedir, sobre todo en un trámite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo su cédula para identificar la solicitud?"
+  },
+  "SOLO": {
+   "descripcion": "Únicamente, nada más.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No tengo memorial. Solo traje mi cédula."
+  },
+  "SUBSANAR": {
+   "descripcion": "Corregir un error o un problema del trámite.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo un documento para subsanar la observación?"
+  },
+  "SUPERFICIE": {
+   "descripcion": "Tamaño de un terreno o casa, en metros cuadrados.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La diferencia está en la superficie del inmueble?"
+  },
+  "TAMBIEN": {
+   "descripcion": "Además, igual.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No, mi cédula también tiene un error."
+  },
+  "TARDAR": {
+   "descripcion": "Demorar, necesitar tiempo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Cuánto tarda en ciudad?"
+  },
+  "TENGO": {
+   "descripcion": "Tener. Tiene seña: TENER.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sí, tengo la escritura pública de compra venta."
+  },
+  "TIEMPO": {
+   "descripcion": "Horas, días o meses.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Falta más tiempo."
+  },
+  "TIPO": {
+   "descripcion": "Clase o forma.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé qué tipo de transferencia hicieron."
+  },
+  "TITULAR": {
+   "descripcion": "La persona a cuyo nombre está algo, el dueño registrado.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Conoce el nombre del titular registrado?"
+  },
+  "TODAS": {
+   "descripcion": "Sin que falte ninguna.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Quiero entender todas las preguntas de la denuncia."
+  },
+  "TODAVIA": {
+   "descripcion": "Aún; hasta ahora.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé si compraré la casa todavía."
+  },
+  "TODAVÍA": {
+   "descripcion": "Aún; hasta ahora.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Todavía hay descuento si pago hoy?"
+  },
+  "TODO": {
+   "descripcion": "Sin que falte ninguna.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Sí, tengo todo."
+  },
+  "TODOS": {
+   "descripcion": "Sin que falte ninguna.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "Mi expareja me amenaza todos los días."
+  },
+  "TRAJE": {
+   "descripcion": "Traer en pasado. Tiene seña: TRAER.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Ya la traje escrita."
+  },
+  "TRANSFERENCIA": {
+   "descripcion": "Pasar algo de una persona a otra: dinero, o una propiedad al venderla.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Trajo documentación del pago del impuesto a la transferencia?"
+  },
+  "TRIBUNAL": {
+   "descripcion": "Oficina de jueces.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "SIREJ indica acudir a información del Tribunal."
+  },
+  "TRIBUNAL_DEPARTAMENTAL": {
+   "descripcion": "Tribunal Departamental de Justicia: oficina principal de los jueces de Cochabamba.",
+   "tipo": "nombre_propio",
+   "revisada": false,
+   "ejemplo": "¿Dónde está el Tribunal Departamental?"
+  },
+  "UBICACION": {
+   "descripcion": "Dónde está algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, la diferencia está en la ubicación."
+  },
+  "URBANA": {
+   "descripcion": "De la ciudad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "El Ministerio informó cuatro días para el área urbana."
+  },
+  "USUCAPION": {
+   "descripcion": "Ser dueño de una propiedad por haber vivido en ella muchos años, cuando un juez lo reconoce.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene un documento judicial referido a una usucapión?"
+  },
+  "VALIDAR": {
+   "descripcion": "Comprobar que algo es correcto y vale.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "El reglamento exige validarlo con los datos de SERECI."
+  },
+  "VALIDO": {
+   "descripcion": "Que sirve, que vale.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si es válido."
+  },
+  "VEHICULO": {
+   "descripcion": "Auto, moto o camión.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene la placa actual del vehículo?"
+  },
+  "VEHÍCULO": {
+   "descripcion": "Auto, moto o camión.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Su deuda es de vehículo, inmueble o actividad?"
+  },
+  "VENCER": {
+   "descripcion": "Terminar el tiempo en que vale un documento.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Su cédula ya venció?"
+  },
+  "VENTA": {
+   "descripcion": "Cuando una persona da algo a cambio de dinero.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Tiene la escritura pública de compra venta?"
+  },
+  "VERBALMENTE": {
+   "descripcion": "Diciéndolo, no por escrito. Para una persona sorda: en señas, con intérprete.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Desea denunciar verbalmente o trae escrito?"
+  },
+  "VERIFICAR": {
+   "descripcion": "Comprobar que algo es verdad.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Puedo verificar también el documento después?"
+  },
+  "VIA": {
+   "descripcion": "Camino o forma de hacer algo.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No, mi documento indica otra vía de regularización."
+  },
+  "VICTIMA": {
+   "descripcion": "Persona que sufrió un delito.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Usted es la persona denunciada o la víctima?"
+  },
+  "VIENES": {
+   "descripcion": "Venir. Tiene seña: VENIR.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Viene a registrar una defunción?"
+  },
+  "VIGENCIA": {
+   "descripcion": "Tiempo en que un documento vale.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La reposición mantiene la vigencia del documento reemplazado."
+  },
+  "VIGENTE": {
+   "descripcion": "Que todavía vale, que no venció.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si mi documento está vigente."
+  },
+  "VULNERACION": {
+   "descripcion": "Cuando no se respeta un derecho.",
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Puede acudir a la Defensoría por posible vulneración de derechos."
+  },
+  "YA": {
+   "descripcion": "En este momento o antes; algo que ya pasó.",
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No, mi documento ya tiene una matrícula."
+  }
+ }
+}

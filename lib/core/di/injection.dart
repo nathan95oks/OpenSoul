@@ -9,6 +9,7 @@ import 'package:lsb_legal_app/core/data/datasources/remote_lexicon_datasource.da
 import 'package:lsb_legal_app/core/data/datasources/remote_suggestion_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_translation_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/dialogue_graph_datasource.dart';
+import 'package:lsb_legal_app/core/data/datasources/pending_sign_info_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/rag_corpus_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_rag_datasource.dart';
 import 'package:lsb_legal_app/core/data/datasources/business_catalog_datasource.dart';
@@ -38,6 +39,7 @@ import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart
 import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_engine.dart';
 import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart';
 export 'package:lsb_legal_app/core/presentation/session/active_need_provider.dart'
@@ -224,6 +226,11 @@ final graphRouteModelProvider = Provider<GraphRouteModel?>((ref) {
   );
   return remote.isConfigured ? remote : null;
 });
+
+/// Qué es cada palabra sin seña propia (asset local).
+final pendingSignCatalogProvider = FutureProvider<PendingSignCatalog>(
+  (ref) => PendingSignInfoDataSource().load(),
+);
 
 /// Corpus RAG de trámites de Cochabamba (asset local).
 final ragCorpusProvider = FutureProvider<RagCorpus>(

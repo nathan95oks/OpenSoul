@@ -103,7 +103,8 @@ entorno de Lambda ya provee. Pero el paquete **no** es un único archivo:
 `lambda_function.py` importa `guided_composer.py` (que lee
 `question_bank.json`), `rag_consulta.py` (que lee
 `rag_escenarios_cbba.json`), `rag_equivalencias.py` (que lee
-`catalogo_senas.json`) y `rag_revision.py`. `build_package.py` los mete en
+`catalogo_senas.json` y `lexico_lsb.json`, el léxico de M1–M4 y los
+diccionarios de `tool/build_lexico_lsb.py`) y `rag_revision.py`. `build_package.py` los mete en
 el ZIP; si
 alguno falta, la Lambda no arranca, certifica redacciones que ya no
 coinciden con el banco o no puede consultar el RAG.

@@ -115,7 +115,13 @@ void main() {
                     v.turn == t.n && v.replies.any((r) => r.isOfferableReply),
               );
           if (!hasReply) continue;
-          final found = retriever.suggest(t.text, limit: 12);
+          var found = retriever.suggest(t.text, limit: 12);
+          // Una pregunta de cualquier ventanilla («¿Tiene su cédula de
+          // identidad?», en SEPDAVI y en Derechos Reales) no elige
+          // institución sin tema: se responde con el de la conversación.
+          if (found.isEmpty) {
+            found = retriever.suggest(t.text, limit: 12, preferArea: s.area);
+          }
           // Otra situación con la misma pregunta literal empata: vale igual.
           if (found.isEmpty || found.first.score < 0.99) {
             fallas.add('${s.id} turno ${t.n}: «${t.text}»');
@@ -139,10 +145,15 @@ void main() {
                   o.area != s.area &&
                   o.variants.any((ov) => ov.questions.contains(q)),
             );
-            final found = retriever.suggest(
+            var found = retriever.suggest(
               q,
               preferArea: enOtra ? s.area : null,
             );
+            // Una pregunta de cualquier ventanilla («¿Tiene su cédula?»)
+            // tampoco elige institución sin tema.
+            if (found.isEmpty && !enOtra) {
+              found = retriever.suggest(q, preferArea: s.area);
+            }
             if (found.isEmpty) fallas.add('${s.id}: «$q»');
             if (enOtra && retriever.suggest(q).isNotEmpty) {
               fallas.add('${s.id}: «$q» elige institución sin contexto');
@@ -246,11 +257,18 @@ void main() {
     });
 
     test('una pregunta genérica no salta a otra institución', () {
+      // Derechos Reales documenta «¿Trajo su cédula de identidad?»: se
+      // responde ahí, nunca con lo de SEPDAVI o SEGIP.
       final found = retriever.suggest(
         '¿Trae también su cédula de identidad?',
         preferArea: 'DDRR',
       );
-      expect(found, isEmpty);
+      expect({for (final s in found) s.scenarioId.split('-')[1]}, {'DDRR'});
+      // Sin tema previo, no elige ninguna.
+      expect(
+        retriever.suggest('¿Trae también su cédula de identidad?'),
+        isEmpty,
+      );
     });
 
     test('el tema no se impone a una coincidencia claramente mejor', () {
@@ -365,8 +383,12 @@ void main() {
             ),
         ],
       );
+      // Derechos Reales documenta la pregunta de la cédula: se responde
+      // ahí, sin traer respuestas de otra institución.
       final found = ragSuggestionsFor(conversation, retriever);
-      expect(found, isEmpty);
+      expect({
+        for (final s in found) s.scenarioId.split('-')[1],
+      }, anyOf(isEmpty, {'DDRR'}));
     });
 
     test('mientras se traduce, sin ruta todavía o sin corpus: nada', () {

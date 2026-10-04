@@ -69,6 +69,9 @@ CORRECCIONES = os.path.join(RAG, "glosas_correcciones.json")
 ZONAS_SENAS = os.path.join(ROOT, "aws", "zonas_senas.json")
 FORMAS_SENAS = os.path.join(ROOT, "aws", "catalogo_senas.json")
 ZONAS_PALABRAS = os.path.join(RAG, "zonas_palabras.json")
+# Léxico LSB válido: M1–M4, los diccionarios y el catálogo
+# (tool/build_lexico_lsb.py). Solo valen glosas que estén aquí.
+LEXICO = os.path.join(ROOT, "aws", "lexico_lsb.json")
 # Zonas con las que se contesta un trámite juntando tarjetas: cosas y datos
 # («la boleta y el folio»). Los verbos (Acciones, donde el catálogo también
 # pone ¿Dónde? o ¿Cuál?), los adjetivos y las partículas no se juntan en una
@@ -87,6 +90,10 @@ _PARTICULAS = {"si", "no", "no_saber", "tal_vez", "puedo", "no_puedo",
                "atras", "enfrente", "al_lado"}
 # La lista de vocabulario por crecer, para leer y compartir.
 SALIDA_VOCABULARIO = os.path.join(RAG, "senas_a_incorporar.md")
+# Qué es cada palabra sin seña propia (descripciones_sin_sena.json, editable):
+# la app lo muestra al deslizar o tocar esa palabra.
+DESCRIPCIONES = os.path.join(RAG, "descripciones_sin_sena.json")
+SALIDA_SIN_SENA = os.path.join(ROOT, "assets", "dictionary", "senas_sin_sena.json")
 
 # Un hecho con plazo («hasta el 2026-10-05») deja de valer al pasar la fecha.
 _HASTA = re.compile(r"hasta\s+(?:el\s+)?(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
@@ -737,13 +744,78 @@ def _mayuscula_interior(palabra: str, texto: str) -> bool:
 
 
 def cargar_equivalencias(ruta: str = EQUIVALENCIAS) -> dict:
-    """{palabra normalizada: seña} de las equivalencias aprobadas."""
+    """{palabra normalizada: seña o [señas]} de las equivalencias aprobadas.
+
+    Una equivalencia es una seña (`sena`) o una combinación de señas del
+    léxico que explican la palabra (`senas`: «FISCALÍA» → OFICINA + FISCAL).
+    """
     if not os.path.exists(ruta):
         return {}
     with open(ruta, encoding="utf-8") as f:
         datos = json.load(f)
-    return {_norm(p.replace("_", " ")): e["sena"] for p, e in datos.items()
-            if e.get("estado") == "aprobada" and e.get("sena")}
+    out = {}
+    for p, e in datos.items():
+        if e.get("estado") != "aprobada":
+            continue
+        valor = e.get("senas") or e.get("sena")
+        if valor:
+            out[_norm(p.replace("_", " "))] = valor
+    return out
+
+
+_lexico = None
+
+
+def cargar_lexico(ruta: str = LEXICO) -> dict:
+    """El léxico LSB generado, o {} si no existe."""
+    global _lexico
+    if ruta != LEXICO:
+        if not os.path.exists(ruta):
+            return {}
+        with open(ruta, encoding="utf-8") as f:
+            return json.load(f)
+    if _lexico is None:
+        _lexico = {}
+        if os.path.exists(ruta):
+            with open(ruta, encoding="utf-8") as f:
+                _lexico = json.load(f)
+    return _lexico
+
+
+def lexico_directo(lexico: dict | None = None) -> dict:
+    """{palabra normalizada: glosa} de las palabras que ya son una seña del
+    léxico (forma 1: existe en M1–M4 o en un diccionario). Una forma que
+    nombra varias señas no está. Son candidatas: su sentido lo confirma
+    tool/rag_equivalencias.py antes de usarlas."""
+    lexico = cargar_lexico() if lexico is None else lexico
+    ambiguas = set(lexico.get("ambiguas") or {})
+    out = {}
+    for g, d in (lexico.get("glosas") or {}).items():
+        for f in d.get("formas") or []:
+            clave = _norm(f)
+            if clave and clave not in ambiguas:
+                out.setdefault(clave, g)
+    return out
+
+
+def _senas(valor) -> list:
+    """Una equivalencia como lista de señas."""
+    return list(valor) if isinstance(valor, (list, tuple)) else [valor]
+
+
+# Lo que la traducción deja deletreado pero LSB no seña, o seña con otra: la
+# cópula ser/estar (LSB no la seña: «Yo soy abogado» → YO ABOGADO, la misma
+# regla que el prompt de la Lambda) y «usted», que se seña TÚ. «Esta» no
+# está: sin tilde también es el demostrativo («esta casa»).
+_COPULA = frozenset("es ser son soy eres somos era eran fue fueron sea estar "
+                    "estoy estan estamos estaba estaban".split())
+# Palabras función que LSB tampoco seña: artículos, preposiciones y
+# conjunciones sin carga semántica (la lista de la regla 1 del prompt de la
+# Lambda Texto→LSB). «Sin», «ni» y «contra» no están: dicen algo.
+_FUNCION = frozenset("a al de del en con para por pero y e o u que el la los "
+                     "las un una unos unas".split())
+_OMITIDAS = _COPULA | _FUNCION
+_TRATAMIENTO = {"usted": "TÚ"}
 
 
 def marcar_senas_pendientes(glosas: list | None, correcciones: list,
@@ -785,19 +857,26 @@ def marcar_senas_pendientes(glosas: list | None, correcciones: list,
         letras = letras_de(palabra)
         palabras.remove(palabra)
         equivalente = (equivalencias or {}).get(_norm(palabra.replace("_", " ")))
-        if _norm(palabra) == "pregunta" and "pregunt" not in _norm(texto):
+        if _norm(palabra) in _TRATAMIENTO:
+            equivalente = _TRATAMIENTO[_norm(palabra)]
+        if _norm(palabra) in _OMITIDAS:
+            pass
+        elif _norm(palabra) == "pregunta" and "pregunt" not in _norm(texto):
             # La marca de interrogación que añade el modelo: en LSB la
             # pregunta va en la cara (cejas, cabeza), no es una seña que falte.
             pass
         elif _es_sigla(palabra, texto):
             salida.extend(glosas[i:i + len(letras)])
         elif equivalente and not _mayuscula_interior(palabra, texto):
-            # Una seña oficial que significa lo mismo (revisada o con
-            # evidencia del catálogo): se hace la seña, no se espera. Si la
-            # frase ya la tiene («CUANTOS … C-U-A-N-T-O»), no se repite.
-            if _norm(equivalente) not in {_norm(g) for g in glosas
-                                          if not _es_letra(g)}:
-                salida.append(equivalente)
+            # Una seña del léxico que es la palabra (forma 1) o que la
+            # explica, sola o combinada (forma 2, revisada): se hace la seña,
+            # no se espera. Si la frase ya la tiene («CUANTOS … C-U-A-N-T-O»),
+            # no se repite.
+            presentes = {_norm(g) for g in salida + glosas if not _es_letra(g)}
+            for sena in _senas(equivalente):
+                if _norm(sena) not in presentes:
+                    salida.append(sena)
+                    presentes.add(_norm(sena))
         else:
             nombre = palabra.upper().replace(" ", "_")
             anterior = salida[-1] if salida else ""
@@ -900,6 +979,41 @@ def vocabulario_md(corpus: dict) -> str:
     return "\n".join(lineas) + "\n"
 
 
+def info_sin_sena(corpus: dict, avisos: list) -> dict:
+    """Lo que la app muestra de cada palabra sin seña propia del corpus: qué
+    es (descripciones_sin_sena.json) y una frase del trámite donde aparece.
+    Una palabra sin descripción se avisa: la app dirá solo que no tiene
+    seña."""
+    datos = _leer(DESCRIPCIONES).get("palabras", {})
+    ejemplos = {}
+    for e in corpus["escenarios"]:
+        for t in e["turnos"] + [r for p in e["variantes"] for r in p["respuestas"]]:
+            for g in t.get("glosas") or []:
+                if g.startswith(SENA_PENDIENTE):
+                    ejemplos.setdefault(g[len(SENA_PENDIENTE):], t["texto"])
+    salida, faltan = {}, []
+    for palabra in sorted(ejemplos):
+        dato, vistas = datos.get(palabra), set()
+        while dato and "ver" in dato and dato["ver"] not in vistas:
+            vistas.add(dato["ver"])
+            dato = datos.get(dato["ver"])
+        if not dato or not dato.get("descripcion"):
+            faltan.append(palabra)
+            dato = {}
+        salida[palabra] = {
+            "descripcion": dato.get("descripcion", ""),
+            "tipo": dato.get("tipo", "concepto"),
+            "revisada": bool(dato.get("revisada")),
+            "ejemplo": ejemplos[palabra],
+        }
+    if faltan:
+        avisos.append(f"{len(faltan)} palabras sin seña no tienen descripción en "
+                      f"{_rel(DESCRIPCIONES)} (p. ej. {', '.join(faltan[:5])})")
+    return {"_nota": "GENERADO por tool/build_rag_corpus.py desde "
+                     f"{_rel(DESCRIPCIONES)}. No editar a mano.",
+            "palabras": salida}
+
+
 def _ofrecible(t: dict) -> bool:
     """Una respuesta de la persona sorda que se puede ofrecer como tarjeta."""
     return (t.get("rol", "sordo") == "sordo" and t["mostrable"]
@@ -985,6 +1099,17 @@ def datos_de_zonas() -> dict:
     formas = {_norm(g): f for g, f in _leer(FORMAS_SENAS).items()}
     palabras = {p: d["zona"] for p, d in _leer(ZONAS_PALABRAS).items()
                 if d.get("zona")}
+    # Señas del léxico LSB fuera del catálogo (M1–M4, diccionario): su zona
+    # es la que Titan y Bedrock acordaron para esa palabra (tool/rag_zonas.py)
+    # y su forma, la del léxico.
+    lexico = cargar_lexico().get("glosas") or {}
+    por_palabra = {_norm(p.replace("_", " ")): z for p, z in palabras.items()}
+    for g, d in lexico.items():
+        clave = _norm(g)
+        zona = por_palabra.get(_norm(g.replace("_", " ")))
+        if clave not in senas and zona:
+            senas[clave] = (g, zona)
+            formas.setdefault(clave, d.get("formas") or [])
     return {"senas": senas, "formas": formas, "palabras": palabras}
 
 
@@ -1026,7 +1151,75 @@ def es_pregunta_abierta(texto: str) -> bool:
     return bool(_PREGUNTA_ABIERTA.search(texto))
 
 
-def tarjetas_de_zona(respuestas: list, zonas: dict) -> list:
+# Qué contesta cada palabra interrogativa: ¿cuándo? solo se contesta con un
+# tiempo, ¿dónde? con un lugar. Así una tarjeta contesta la pregunta, no solo
+# sale de la misma respuesta («¿Qué hecho quiere denunciar?» no se contesta
+# con PAREJA).
+_INTERROGATIVOS = {
+    "cuando": ("Cuándo", {"Tiempo"}),
+    "donde": ("Dónde", {"Lugares", "Instituciones"}),
+    "adonde": ("Adónde", {"Lugares", "Instituciones"}),
+    "quien": ("Quién", {"Identificación"}),
+    "quienes": ("Quiénes", {"Identificación"}),
+    "cuanto": ("Cuánto", {"Números"}),
+    "cuanta": ("Cuánta", {"Números"}),
+    "cuantos": ("Cuántos", {"Números"}),
+    "cuantas": ("Cuántas", {"Números"}),
+}
+# ¿Qué/cuál + sustantivo? se contesta con la zona de ese sustantivo
+# («¿Qué documento trajo?» → Documentos).
+_QUE_CUAL = {"que", "cual", "cuales"}
+
+
+def interrogativos(texto: str, zonas: dict) -> list:
+    """[(clave, etiqueta, zonas que lo contestan)] de cada palabra
+    interrogativa de [texto], en orden. Un «¿qué…?» cuyo sustantivo no tiene
+    zona conocida no está: no se sabe qué lo contesta."""
+    palabras = re.findall(r"[\wáéíóúüñÁÉÍÓÚÜÑ]+", texto)
+    formas = {}
+    for clave, (g, z) in zonas["senas"].items():
+        for f in (zonas["formas"].get(clave) or []) + [g.replace("_", " ")]:
+            # «el documento» → documento: el sustantivo, sin su artículo.
+            f = re.sub(r"^(?:el|la|los|las|un|una|unos|unas|mi|mis)\s+", "",
+                       _norm(f))
+            formas.setdefault(f, z)
+
+    def zona_de(palabra: str) -> str | None:
+        n = _norm(palabra)
+        # «documentos» → documento; «certificados», «papeles» → papel.
+        for candidata in (n, n[:-1] if n.endswith("s") else None,
+                          n[:-2] if n.endswith("es") else None):
+            if candidata and candidata in formas:
+                return formas[candidata]
+        return None
+
+    out = []
+    for i, w in enumerate(palabras):
+        n = _norm(w)
+        if n in _INTERROGATIVOS:
+            etiqueta, zs = _INTERROGATIVOS[n]
+            out.append((n, etiqueta, zs))
+        elif n in _QUE_CUAL and i + 1 < len(palabras):
+            zona = zona_de(palabras[i + 1])
+            if zona in ZONAS_DE_RESPUESTA:
+                out.append((n, w.capitalize(), {zona}))
+    return out
+
+
+def subformulacion(texto: str, etiqueta: str) -> str:
+    """«¿Cuándo y dónde ocurrió el robo?» → «¿Cuándo ocurrió el robo?»: la
+    palabra interrogativa con lo que sigue a la última, hasta la primera
+    coma o punto («Describa cuándo y dónde ocurrió.» → «¿Cuándo ocurrió?»)."""
+    claves = [m for m in re.finditer(r"[\wáéíóúüñÁÉÍÓÚÜÑ]+", texto)
+              if _norm(m.group()) in _INTERROGATIVOS or _norm(m.group()) in _QUE_CUAL]
+    resto = texto[claves[-1].end():] if claves else ""
+    resto = re.split(r"[,.;:?!]", resto)[0].strip()
+    return f"¿{etiqueta}{' ' + resto if resto else ''}?"
+
+
+def tarjetas_de_zona(respuestas: list, zonas: dict,
+                     esperadas: set | None = None,
+                     pregunta: list | None = None) -> list:
     """Tarjetas sueltas para contestar una pregunta de un trámite.
 
     Salen solo de las respuestas **afirmativas** documentadas para esa
@@ -1036,27 +1229,35 @@ def tarjetas_de_zona(respuestas: list, zonas: dict) -> list:
     tarjetas. Solo cuentan las señas de cosas y datos
     ([ZONAS_DE_RESPUESTA]); una partícula o un sujeto suelto no es una
     respuesta. Se juntan cosas de una misma zona («la boleta y el papel»),
-    no «ayer y casa». Con menos de dos no hay nada que juntar: la frase
-    documentada ya lo dice.
+    no «ayer y casa». Cada tarjeta es una sola seña; una respuesta a la que
+    le falta alguna seña no da tarjetas.
     """
     por_zona, vistas = {}, set()
     for r in respuestas:
         if _estado(r["texto"]) != "afirmado":
             continue
-        for g in r.get("glosas") or []:
+        glosas = r.get("glosas") or []
+        if any(g.startswith(SENA_PENDIENTE) for g in glosas):
+            # Si a la respuesta le falta una seña, lo que falta puede ser
+            # justo lo que contesta («Quiero saber si mi casa tiene
+            # HIPOTECA»): sus otras señas (CASA) no son la respuesta.
+            continue
+        for g in glosas:
             info = _tarjeta(g, zonas)
-            if (not info or info[0] not in ZONAS_DE_RESPUESTA
-                    or _norm(g) in vistas):
+            if (not info or info[0] not in (esperadas or ZONAS_DE_RESPUESTA)
+                    or _norm(g) in vistas or g.startswith(SENA_PENDIENTE)
+                    # Lo que ya dice la pregunta no la contesta: a «¿De qué
+                    # años son las deudas?» no se responde DEUDA ni AÑO.
+                    or _norm(g) in {_norm(x) for x in pregunta or []}):
                 continue
             vistas.add(_norm(g))
             zona, etiqueta, frase = info
+            etiqueta = etiqueta[:1].upper() + etiqueta[1:]
             por_zona.setdefault(zona, []).append({
                 "estado": "afirmado", "etiqueta": etiqueta, "frase": frase,
                 "glosas": [g], "glosasPropias": True, "zona": zona,
             })
     grupo = max(por_zona.values(), key=len, default=[])
-    if len(grupo) < 2:
-        return []
     return [{**t, "id": f"z{i}"} for i, t in enumerate(grupo[:MAX_TARJETAS], 1)]
 
 
@@ -1105,6 +1306,67 @@ def unidades_polares(opciones: list) -> list:
             "origen": f"unidad {glosa}, fundada en «{fundadas[0]['frase']}»",
         })
     return unidades
+
+
+# Una indicación del funcionario («Complete el formulario antes de…») se
+# contesta diciendo si se entendió. En LSB la negación va al final.
+UNIDADES_INDICACION = (
+    ("afirmado", "entendido", ["COMPRENDER"], "Entendido", "Entendido."),
+    ("negado", "no_entiendo", ["COMPRENDER", "NO"], "No entiendo",
+     "No entiendo."),
+)
+_EMPIEZA_POLAR = re.compile(r"(?:si|no|no se|no recuerdo)\b")
+
+
+def _documentadas_sordo(e: dict, n: int) -> list:
+    """Respuestas documentadas de la persona sorda al turno [n] que se pueden
+    poner en su boca: sin dato de ejemplo, sin dato por verificar."""
+    return [r for r in _documentadas(e, n)
+            if r.get("rol", "sordo") == "sordo" and r["mostrable"]]
+
+
+def responde_si_o_no(e: dict, t: dict) -> bool:
+    """Una pregunta de sí o no, o una que el escenario contesta así aunque
+    no lo parezca («¿Tiene número de inmueble o código catastral?» → «Sí, lo
+    tengo.» · «No lo tengo.» · «No recuerdo esos números.»)."""
+    if es_pregunta_polar(t["texto"]):
+        return True
+    if es_pregunta_abierta(t["texto"]):
+        return False
+    docs = _documentadas_sordo(e, t["n"])
+    return bool(docs) and all(_EMPIEZA_POLAR.match(_norm(r["texto"]))
+                              for r in docs)
+
+
+def unidades_si_no(e: dict, n: int) -> list:
+    """SÍ, NO y NO SÉ, siempre las tres, una seña cada una.
+
+    Lo que se dice al elegirla es la respuesta documentada de ese estado
+    («Sí, traje mi cédula de identidad.»): una frase completa que se entiende
+    sola en la conversación. Si el escenario no documenta ese estado, la
+    partícula sola («No.»): no se inventa una frase."""
+    docs = _documentadas_sordo(e, n)
+    unidades = []
+    for estado, uid, glosa, etiqueta, patron in UNIDADES_POLARES:
+        del_estado = [r for r in docs if _estado(r["texto"]) == estado]
+        elegida = next((r for r in del_estado if patron.match(_norm(r["texto"]))),
+                       del_estado[0] if del_estado else None)
+        unidades.append({
+            "estado": estado, "etiqueta": etiqueta,
+            "frase": elegida["texto"] if elegida else f"{etiqueta}.",
+            "glosas": [glosa], "glosasPropias": True, "id": uid,
+            "polar": True,
+            "origen": (f"respuesta documentada «{elegida['texto']}»" if elegida
+                       else "partícula: el escenario no documenta este estado"),
+        })
+    return unidades
+
+
+def unidades_indicacion() -> list:
+    return [{"estado": estado, "etiqueta": etiqueta, "frase": frase,
+             "glosas": list(glosas), "glosasPropias": True, "id": uid,
+             "origen": "respuesta a una indicación"}
+            for estado, uid, glosas, etiqueta, frase in UNIDADES_INDICACION]
 
 
 def glosas_canonicas(glosas: list) -> list:
@@ -1164,15 +1426,17 @@ def _condiciones(e: dict, rama: dict, preguntas: dict, avisos: list) -> list | N
                 return None
             cuando.append({"pregunta": qid, "estados": estados})
         else:
-            ids = [o["id"] for o in opciones
-                   if not o.get("zona") and o["frase"] in c["respuestas"]]
-            if len(ids) < len(c["respuestas"]):
-                avisos.append(f"{e['id']} turno {rama['turno']}: alguna respuesta "
-                              f"de la que depende no se ofrece en el turno "
-                              f"{c['turno']}")
-            if not ids:
+            # Las respuestas ya no son frases que se eligen: una condición
+            # sobre «Sí, traje mi cédula.» es una condición sobre su estado.
+            presentes = {o["estado"] for o in opciones}
+            estados = sorted({_estado(r) for r in c["respuestas"]} & presentes)
+            if not estados:
+                avisos.append(f"{e['id']} turno {rama['turno']}: ninguna "
+                              f"respuesta ofrecida del turno {c['turno']} tiene "
+                              "el estado de la respuesta de la que depende; no "
+                              "entra en el recorrido")
                 return None
-            cuando.append({"pregunta": qid, "opciones": ids})
+            cuando.append({"pregunta": qid, "estados": estados})
     return cuando
 
 
@@ -1197,76 +1461,134 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
         ofrecidas = {}
         for t in turnos_pregunta(e):
             qid = f"R.{e['id']}.{t['n']}"
-            siguiente = next((x for x in e["turnos"] if x["n"] == t["n"] + 1), None)
-            opciones, vistas = [], set()
-            for r in respuestas_de(e, t["n"]):
-                if r["texto"] in vistas:
-                    continue
-                vistas.add(r["texto"])
-                opciones.append({
-                    "estado": _estado(r["texto"]),
-                    "etiqueta": r["texto"],
-                    "frase": r["texto"],
-                    "glosas": glosas_canonicas(r["glosas"]),
-                    "glosasPropias": True,
-                    "id": f"r{len(opciones) + 1}",
-                    "origen": (f"turno {t['n'] + 1}" if r is siguiente
-                               else f"respuestas del turno {t['n']}"),
-                })
             glosas = glosas_canonicas(t.get("glosas") or [])
-            # Una pregunta de sí o no se contesta primero con SÍ, NO o NO SÉ;
-            # las respuestas documentadas más largas siguen como alternativas.
-            unidades = (unidades_polares(opciones)
-                        if es_pregunta_polar(t["texto"]) else [])
-            # Las tarjetas sueltas: solo en una pregunta abierta, o donde el
-            # escenario declara cómo se juntan.
-            tarjetas = [
-                {**z, "glosas": glosas_canonicas(z["glosas"])}
-                for z in (tarjetas_de_zona(respuestas_de(e, t["n"]), zonas)
-                          if t["n"] in plantillas
-                          or es_pregunta_abierta(t["texto"]) else [])]
-            if t["n"] in plantillas and not tarjetas:
-                avisos.append(f"{e['id']} turno {t['n']}: la composición no tiene "
-                              "tarjetas que juntar; se responde con sus frases")
-            if tarjetas:
-                # Una frase documentada se elige sola; las tarjetas se juntan.
-                for o in opciones:
-                    o["salida"] = True
-            preguntas.append({
-                "acto": "pregunta" if "?" in t["texto"] else "indicacion",
-                "campo": "tramite",
-                "campos": ["tramite"],
-                **({"control": "seleccion_multiple", "maximo": len(tarjetas),
-                    "plantilla": plantillas.get(t["n"], "{items}.")} if tarjetas
-                   else {"control": "polar3"} if len(unidades) == 3
-                   else {"control": "polar2"}
-                   if [u["id"] for u in unidades] == ["si", "no"]
-                   else {"control": "seleccion_unica"}),
-                "dominio": "tramite",
-                "entidad": "Tramite",
-                "formulacion": t["texto"],
-                "formulacionLsb": {
-                    "estado": "GRAMMAR_PROVISIONAL",
-                    "glosas": glosas,
-                    "utilizable": bool(glosas),
-                },
-                "id": qid,
-                "modo": "frase",
-                "noOfrecer": [],
-                "nodos": [],
-                "opciones": unidades + opciones + tarjetas,
-                "origen": _origen(corpus, e, t),
-                "variantes": [],
-            })
-            paso = {"pregunta": qid}
+            # Cada tarjeta es UNA seña que contesta ESA pregunta (nunca una
+            # frase entera):
+            # * sí o no → SÍ · NO · NO SÉ; se dice la respuesta documentada;
+            # * abierta o disyuntiva → las señas de sus respuestas
+            #   documentadas, si se pueden decir todas en LSB;
+            # * indicación → ENTENDIDO · NO ENTIENDO.
+            preguntas_turno = []  # [(id, formulación, glosas, opciones, control)]
+            pregs = interrogativos(t["texto"], zonas)
+            if responde_si_o_no(e, t):
+                preguntas_turno.append((qid, t["texto"], glosas,
+                                        unidades_si_no(e, t["n"]),
+                                        {"control": "polar3"}))
+            elif pregs:
+                # Una pregunta por palabra interrogativa: «¿Cuándo y dónde…?»
+                # son dos, cada una con sus tarjetas.
+                otras = {_norm(x) for x in ("CUÁNDO", "DÓNDE", "QUIÉN",
+                                            "CUÁNTOS", "QUÉ", "CUÁL")}
+                for i, (clave, etiqueta, esperadas) in enumerate(pregs):
+                    tarjetas = tarjetas_de_zona(respuestas_de(e, t["n"]), zonas,
+                                                esperadas, glosas)
+                    if not tarjetas:
+                        avisos.append(f"{e['id']} turno {t['n']}: ninguna "
+                                      f"respuesta documentada contesta "
+                                      f"«{etiqueta}» con señas del léxico; esa "
+                                      "pregunta no se ofrece")
+                        continue
+                    multiple = (len(tarjetas) > 1 and
+                                esperadas & {"Documentos", "Objetos"})
+                    for z in tarjetas:
+                        z["glosas"] = glosas_canonicas(z["glosas"])
+                        if not multiple:
+                            # Elegida sola, es la respuesta entera: «Ayer.»
+                            z["frase"] = z["frase"][:1].upper() + z["frase"][1:] + "."
+                    if not multiple:
+                        # «No sé» contesta con honestidad cualquier pregunta.
+                        tarjetas.append({
+                            "estado": "desconocido", "etiqueta": "No sé",
+                            "frase": "No sé.", "glosas": ["NO_SABER"],
+                            "glosasPropias": True, "id": "no_se"})
+                    propia = [g for g in glosas
+                              if _norm(g) not in otras or _norm(g) == clave]
+                    preguntas_turno.append((
+                        qid if not preguntas_turno else f"{qid}.{clave}",
+                        t["texto"] if len(pregs) == 1 and "?" in t["texto"]
+                        else subformulacion(t["texto"], etiqueta),
+                        propia, tarjetas,
+                        {"control": "seleccion_multiple", "maximo": len(tarjetas),
+                         "plantilla": plantillas.get(t["n"], "{items}.")}
+                        if multiple else {"control": "seleccion_unica"}))
+            elif es_pregunta_abierta(t["texto"]) or not re.search(
+                    r"\s(?:o|u)\s", t["texto"]):
+                if "?" not in t["texto"] and not es_pregunta_abierta(t["texto"]):
+                    preguntas_turno.append((qid, t["texto"], glosas,
+                                            unidades_indicacion(),
+                                            {"control": "seleccion_unica"}))
+                else:
+                    avisos.append(f"{e['id']} turno {t['n']}: no se sabe qué "
+                                  "zona de señas contesta la pregunta; no se "
+                                  "ofrece")
+            else:
+                # Disyuntiva («¿Por internet o presencialmente?»): se contesta
+                # con una de las alternativas que nombra la propia pregunta, si
+                # todas tienen seña.
+                # La última palabra de cada parte separada por «o» o coma
+                # («de vehículo, inmueble o actividad»), con su seña.
+                partes = re.split(r"\s+[ou]\s+|,\s*", t["texto"].strip("¿?. "))
+                finales = [re.findall(r"[\wáéíóúüñÁÉÍÓÚÜÑ]+", p)[-1:] for p in partes]
+                por_forma = {}
+                for g in glosas:
+                    if g.startswith(SENA_PENDIENTE):
+                        continue
+                    info = _tarjeta(g, zonas)
+                    for f in (zonas["formas"].get(_norm(g)) or []) + [g.replace("_", " ")]:
+                        por_forma.setdefault(_norm(f), g if info else None)
+                alternativas = [por_forma.get(_norm(f[0])) if f else None
+                                for f in finales]
+                if len(alternativas) < 2 or not all(alternativas):
+                    avisos.append(f"{e['id']} turno {t['n']}: no todas las "
+                                  "alternativas de la pregunta tienen seña; no "
+                                  "se ofrece")
+                    continue
+                tarjetas = []
+                for i, g in enumerate(alternativas, 1):
+                    zona, etiqueta, frase = _tarjeta(g, zonas)
+                    tarjetas.append({"estado": "afirmado", "etiqueta": etiqueta,
+                                     "frase": frase[:1].upper() + frase[1:] + ".",
+                                     "glosas": glosas_canonicas([g]),
+                                     "glosasPropias": True, "zona": zona,
+                                     "id": f"z{i}"})
+                preguntas_turno.append((qid, t["texto"], glosas, tarjetas,
+                                        {"control": "seleccion_unica"}))
+            if not preguntas_turno:
+                continue
+            cuando = None
             if t["n"] in ramas:
                 cuando = _condiciones(e, ramas[t["n"]], ofrecidas, avisos)
                 if cuando is None:
                     continue
-                paso["cuando"] = cuando
-                paso["padre"] = cuando[0]["pregunta"]
-            ofrecidas[t["n"]] = (qid, unidades + opciones + tarjetas)
-            pasos.append(paso)
+            for pid, formulacion, glosas_p, opciones, control in preguntas_turno:
+                preguntas.append({
+                    "acto": "pregunta" if "?" in formulacion else "indicacion",
+                    "campo": "tramite",
+                    "campos": ["tramite"],
+                    **control,
+                    "dominio": "tramite",
+                    "entidad": "Tramite",
+                    "formulacion": formulacion,
+                    "formulacionLsb": {
+                        "estado": "GRAMMAR_PROVISIONAL",
+                        "glosas": glosas_p,
+                        "utilizable": bool(glosas_p),
+                    },
+                    "id": pid,
+                    "modo": "frase",
+                    "noOfrecer": [],
+                    "nodos": [],
+                    "opciones": opciones,
+                    "origen": _origen(corpus, e, t),
+                    "variantes": [],
+                })
+                paso = {"pregunta": pid}
+                if cuando:
+                    paso["cuando"] = cuando
+                    paso["padre"] = cuando[0]["pregunta"]
+                pasos.append(paso)
+            # Una rama que dependa de este turno mira su primera pregunta.
+            ofrecidas[t["n"]] = (preguntas_turno[0][0], preguntas_turno[0][3])
         if not pasos:
             continue
         area = e["id"].split("-")[1]
@@ -1307,12 +1629,17 @@ def aplicar_equivalencias(glosas: list, texto: str,
     salida = []
     for g in glosas:
         palabra = g[len(SENA_PENDIENTE):] if g.startswith(SENA_PENDIENTE) else None
+        if palabra and _norm(palabra) in _OMITIDAS:
+            continue
         equivalente = (equivalencias.get(_norm(palabra.replace("_", " ")))
                        if palabra else None)
+        if palabra and _norm(palabra) in _TRATAMIENTO:
+            equivalente = _TRATAMIENTO[_norm(palabra)]
         if equivalente and not _mayuscula_interior(palabra, texto):
-            if _norm(equivalente) not in presentes:
-                salida.append(equivalente)
-                presentes.add(_norm(equivalente))
+            for sena in _senas(equivalente):
+                if _norm(sena) not in presentes:
+                    salida.append(sena)
+                    presentes.add(_norm(sena))
         else:
             salida.append(g)
     return salida
@@ -1340,6 +1667,8 @@ def glosas_conocidas() -> set | None:
                 conocidas |= {_norm(g) for g in
                               re.findall(r'^    "([A-Z_]+)": \{', m.group(1),
                                          re.MULTILINE)}
+        conocidas |= {_norm(g) for g in
+                      (cargar_lexico().get("glosas") or {})}
         _validas = conocidas
     return _validas
 
@@ -1364,18 +1693,38 @@ def glosas_invalidas(glosas: list | None) -> list:
     return malas
 
 
+# Un archivo de escenarios con esta marca solo admite palabras del léxico LSB.
+# La ingesta la pone en todo borrador que sale de un documento.
+MARCA_ESTRICTA = "<!-- lexico: estricto -->"
+
+
+def es_estricto(archivo: str) -> bool:
+    """Si el archivo de escenarios [archivo] (ruta relativa a la raíz) pide el
+    léxico estricto."""
+    ruta = os.path.join(ROOT, archivo)
+    if not os.path.exists(ruta):
+        return False
+    with open(ruta, encoding="utf-8") as f:
+        return MARCA_ESTRICTA in f.read(4000)
+
+
 def poner_glosas(corpus: dict, avisos: list) -> None:
     """Glosas precalculadas en cada tarjeta del usuario sordo que se muestra."""
     cache = {}
     if os.path.exists(GLOSAS):
         with open(GLOSAS, encoding="utf-8") as f:
             cache = json.load(f)
+    # Una palabra del léxico no se cambia por su seña solo porque se escribe
+    # igual: «mi fiscal» no es FISCAL de «escuela fiscal» (M3, Escuela). Toda
+    # seña que reemplaza a una palabra deletreada pasa por
+    # tool/rag_equivalencias.py, que confirma su sentido.
     equivalencias = cargar_equivalencias()
     corregidas = {}
     if os.path.exists(CORRECCIONES):
         with open(CORRECCIONES, encoding="utf-8") as f:
             corregidas = json.load(f)
-    faltan = 0
+    faltan = bloqueadas = 0
+    estrictos = {a for a in corpus.get("archivos") or [] if es_estricto(a)}
     for e in corpus["escenarios"]:
         tarjetas = [t for t in e["turnos"] if t["rol"] == "sordo"]
         tarjetas += [r for p in e["variantes"] for r in p["respuestas"]]
@@ -1405,9 +1754,24 @@ def poner_glosas(corpus: dict, avisos: list) -> None:
                               f"no son glosas ({', '.join(malas)}); no se ofrece "
                               "hasta corregirlo (tool/rag_corregir_glosas.py)")
                 t["glosas"] = None
+        if e.get("archivo") in estrictos:
+            # Lo que dice la persona sorda (las tarjetas) solo lleva señas del
+            # léxico: tarjetas_de_zona descarta cada seña pendiente. La
+            # pregunta es lo que dijo el funcionario: se sigue mostrando, con
+            # sus palabras sin seña marcadas como «seña a incorporar» (el
+            # avatar las deletrea), para que el trámite se pueda responder.
+            for t in turnos_pregunta(e):
+                fuera = [g[len(SENA_PENDIENTE):] for g in t.get("glosas") or []
+                         if g.startswith(SENA_PENDIENTE)]
+                if fuera:
+                    bloqueadas += 1
     if faltan:
         avisos.append(f"{faltan} tarjetas sin glosas: ejecuta "
                       "tool/rag_precalcular_glosas.py")
+    if bloqueadas:
+        avisos.append(f"{bloqueadas} preguntas de archivos con «lexico: "
+                      "estricto» se muestran con señas a incorporar; sus "
+                      "tarjetas de respuesta solo llevan señas del léxico")
 
 
 def resumen(corpus: dict) -> list:
@@ -1446,10 +1810,15 @@ def _linea_pendientes(cuenta: dict) -> str:
 
 def main() -> int:
     fuentes, hechos, escenarios, errores, avisos, archivos = leer_todos()
+    if not cargar_lexico() and any(es_estricto(a) for a in archivos):
+        errores.append(f"falta {_rel(LEXICO)}: los archivos con el léxico "
+                       "estricto no se pueden validar. Ejecuta: python "
+                       "tool/build_lexico_lsb.py")
     corpus = construir(fuentes, hechos, escenarios, errores, avisos,
                        archivos=archivos)
     poner_glosas(corpus, avisos)
     banco = banco_tramites(corpus, avisos) if not errores else None
+    sin_sena = info_sin_sena(corpus, avisos)
     for a in avisos:
         print(f"aviso: {a}")
     if errores:
@@ -1460,7 +1829,9 @@ def main() -> int:
         return 1
     texto = json.dumps(corpus, ensure_ascii=False, indent=1) + "\n"
     salidas = {SALIDA: texto, SALIDA_TRAMITES: dart_tramites(banco),
-               SALIDA_VOCABULARIO: vocabulario_md(corpus)}
+               SALIDA_VOCABULARIO: vocabulario_md(corpus),
+               SALIDA_SIN_SENA: json.dumps(sin_sena, ensure_ascii=False,
+                                           indent=1) + "\n"}
     for linea in resumen(corpus):
         print(linea)
     print(f"trámites: {len(banco['contextos'])} recorridos · "
