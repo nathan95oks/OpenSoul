@@ -126,40 +126,35 @@ void main() {
       expect(tramites.contextIds, ['identificacion']);
     });
 
-    test('cada paso: la pregunta en LSB y las respuestas documentadas', () {
+    test('cada paso: la pregunta en LSB y una seña por tarjeta', () {
       final q = RagTramites.bankWithTramites().question(pregunta)!;
       expect(q.formulation, '¿Necesita certificado de matrimonio duplicado?');
       expect(q.lsb.glosses, contains('CERTIFICADO'));
+      // La pregunta del funcionario puede tener señas a incorporar; las
+      // tarjetas de la persona sorda, nunca.
       expect(q.lsb.glosses.where(PendingSign.isPending), isNotEmpty);
-      expect(
-        {for (final o in q.options) o.label: o.glosses},
-        containsPair('Sí. Perdimos la copia anterior.', [
-          'SÍ',
-          'SENA_PENDIENTE:COPIA',
-          'SENA_PENDIENTE:ANTERIOR',
-          'PERDER',
-        ]),
-      );
-      // Una pregunta de sí o no se contesta con sus frases documentadas,
-      // una sola a la vez: no con tarjetas sueltas de todo el escenario.
       expect(q.isMultiple, isFalse);
-      // Primero las unidades SÍ, NO y NO SÉ (las documentó el escenario);
-      // después las respuestas documentadas que dicen algo más.
       expect(q.isPolar, isTrue);
-      expect(q.options.map((o) => '${o.id}:${o.label}:${o.state.wireName}'), [
-        'si:Sí:afirmado',
-        'no:No:negado',
-        'no_se:No sé:desconocido',
-        'r1:Sí. Perdimos la copia anterior.:afirmado',
-        'r4:No sé cuál certificado.:desconocido',
-      ]);
+      // SÍ, NO y NO SÉ, una seña cada una; al elegirla se dice la respuesta
+      // documentada de ese estado.
+      expect(
+        q.options.map(
+          (o) =>
+              '${o.id}:${o.glosses.join('+')}:${o.phrase}:${o.state.wireName}',
+        ),
+        [
+          'si:SÍ:Sí. Perdimos la copia anterior.:afirmado',
+          'no:NO:No.:negado',
+          'no_se:NO_SABER:No sé cuál certificado.:desconocido',
+        ],
+      );
     });
 
     test('elegir otra respuesta reemplaza la anterior', () {
       final bank = RagTramites.bankWithTramites();
       final rules = GuidedFlow(bank);
       var s = rules.startJourney('tramite_sereci_02');
-      s = rules.select(s, pregunta, 'r1').session;
+      s = rules.select(s, pregunta, 'si').session;
       s = rules.select(s, pregunta, 'no').session;
       expect(s.answers[pregunta]!.optionIds, ['no']);
       expect(GuidedComposer(bank).compose(s.toIntervention()), 'No.');
@@ -179,7 +174,7 @@ void main() {
       final session = c.read(guidedFlowProvider).session!;
       expect(session.currentQuestionId, pregunta);
 
-      c.read(guidedFlowProvider.notifier).select(pregunta, 'r1');
+      c.read(guidedFlowProvider.notifier).select(pregunta, 'si');
       await c.read(guidedEmissionProvider).emit();
       final respuesta = c.read(conversationProvider).conversation.lastTurn!;
       expect(respuesta.message.speaker, SpeakerRole.deaf);

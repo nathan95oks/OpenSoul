@@ -14,6 +14,18 @@ Semántico» (PAGAR, DENUNCIAR) son reglas del ensamblador de texto, sin seña
 detrás, y no están. Se regenera con
 `python tool/rag_equivalencias.py --actualizar-catalogo`.
 
+Si está empaquetado el léxico LSB (`lexico_lsb.json`, de
+`tool/build_lexico_lsb.py`: M1–M4, los diccionarios y el catálogo), se
+propone con él y no solo con el catálogo:
+
+* **Forma 1.** La palabra ya es una seña del léxico, pero solo por cómo se
+  escribe: el modelo confirma que el sentido de la frase es el de esa seña
+  (`candidata`, con su módulo y tema). «Mi fiscal» no es FISCAL de «escuela
+  fiscal» (M3, Escuela).
+* **Forma 2.** La palabra no está: el modelo propone una seña sinónima o
+  una combinación de hasta tres señas del léxico que la explican
+  (`senas`), o ninguna.
+
 Lo que se propone aquí no se aplica solo: `tool/rag_equivalencias.py` lo
 guarda para revisar y decide qué se aprueba.
 """
@@ -27,10 +39,15 @@ import unicodedata
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 CATALOGO_PATH = os.path.join(AQUI, "catalogo_senas.json")
+LEXICO_PATH = os.path.join(AQUI, "lexico_lsb.json")
 
 MAX_PALABRAS = 10
 MAX_EJEMPLOS = 3
-MAX_TOKENS = 900
+# Diez palabras con combinaciones de hasta tres señas y su razón.
+MAX_TOKENS = 1400
+# Una combinación más larga ya no explica una palabra: la reemplaza por una
+# frase.
+MAX_SENAS = 3
 
 
 def _norm(texto: str) -> str:
@@ -52,8 +69,38 @@ def cargar_catalogo(ruta: str | None = None) -> dict:
     return {g: "; ".join(f) for g, f in cargar_formas(ruta).items()}
 
 
+def _describir(dato: dict) -> str:
+    """«Fiscal [M3 · Escuela]»: las formas y de dónde sale la seña."""
+    formas = "; ".join(dato.get("formas") or [])
+    temas = []
+    for f in dato.get("fuentes") or []:
+        if f.get("fuente") == "catalogo":
+            continue
+        if f.get("tema"):
+            tema = f"{f.get('fuente')} · {f.get('tema')}"
+        elif f.get("definicion"):
+            # Un diccionario: su definición dice el sentido de la seña.
+            tema = f"{f.get('fuente')} · {f.get('definicion')}"
+        else:
+            tema = str(f.get("fuente"))
+        if tema not in temas:
+            temas.append(tema)
+    return f"{formas} [{'; '.join(temas)}]" if temas else formas
+
+
+def cargar_lexico(ruta: str | None = None) -> dict:
+    """{glosa: descripción con su tema} del léxico LSB; sin léxico, el
+    catálogo."""
+    ruta = ruta or LEXICO_PATH
+    if not os.path.exists(ruta):
+        return cargar_catalogo()
+    with open(ruta, encoding="utf-8") as f:
+        glosas = json.load(f).get("glosas") or {}
+    return {g: _describir(d) for g, d in glosas.items()}
+
+
 def validar_pedido(body: dict) -> tuple:
-    """(palabras, error). Cada palabra: {palabra, ejemplos}."""
+    """(palabras, error). Cada palabra: {palabra, ejemplos, candidata?}."""
     palabras = body.get("palabras")
     if not isinstance(palabras, list) or not 1 <= len(palabras) <= MAX_PALABRAS:
         return None, f"palabras: entre 1 y {MAX_PALABRAS}."
@@ -67,36 +114,55 @@ def validar_pedido(body: dict) -> tuple:
             return None, "palabra inválida."
         ejemplos = [e for e in (p.get("ejemplos") or [])
                     if isinstance(e, str) and 0 < len(e) <= 300]
-        limpias.append({"palabra": palabra.strip(),
-                        "ejemplos": ejemplos[:MAX_EJEMPLOS]})
+        limpia = {"palabra": palabra.strip(),
+                  "ejemplos": ejemplos[:MAX_EJEMPLOS]}
+        candidata = p.get("candidata")
+        if candidata is not None:
+            if not isinstance(candidata, str) or not re.fullmatch(
+                    r"[A-ZÁÉÍÓÚÜÑ0-9_]{1,60}", candidata):
+                return None, "candidata inválida."
+            limpia["candidata"] = candidata
+        limpias.append(limpia)
     return limpias, None
 
 
 def prompt(palabras: list, catalogo: dict) -> str:
     lista = "\n".join(f"- {g}: {s}" for g, s in sorted(catalogo.items()))
-    pedidas = "\n".join(
-        f"- {p['palabra']}: " + " | ".join(f"«{e}»" for e in p["ejemplos"])
-        for p in palabras)
+
+    def pedida(p: dict) -> str:
+        linea = f"- {p['palabra']}: " + " | ".join(f"«{e}»" for e in p["ejemplos"])
+        if p.get("candidata"):
+            linea += (f"\n  candidata: {p['candidata']} "
+                      f"({catalogo.get(p['candidata'], 'sin descripción')})")
+        return linea
+
+    pedidas = "\n".join(pedida(p) for p in palabras)
     return f"""Eres un asistente de Lengua de Señas Boliviana (LSB).
 
-Estas palabras del español no tienen seña propia en el catálogo. Para cada
-una, junto a las frases donde aparece, decide si ALGUNA seña del catálogo
-significa exactamente lo mismo en esas frases.
+Estas palabras del español no tienen seña confirmada. Para cada una, junto a
+las frases donde aparece, decide qué señas de la lista la expresan en ESAS
+frases.
 
 Reglas:
-- Solo puedes elegir glosas de la lista del catálogo, escritas igual.
-- Solo una seña EQUIVALENTE: mismo significado en esas frases. Si solo es
-  parecida, relacionada o más general, responde null.
+- Solo puedes elegir glosas de la lista, escritas igual.
+- Una seña EQUIVALENTE (mismo significado en esas frases), o una
+  combinación de hasta {MAX_SENAS} señas de la lista que juntas explican la
+  palabra («FISCALÍA» → OFICINA + FISCAL). Nunca una seña solo parecida,
+  relacionada o más general.
+- Cada seña lleva entre corchetes el módulo y el tema donde se enseña. Una
+  «candidata» se escribe igual que la palabra: acéptala solo si su tema
+  corresponde al sentido de la frase («escuela fiscal», tema Escuela, no es
+  «mi fiscal» del Ministerio Público).
 - Ante la duda, null. Una seña equivocada es peor que ninguna.
 
-Catálogo (glosa: significado en español):
+Señas (glosa: formas en español [módulo · tema]):
 {lista}
 
 Palabras sin seña:
 {pedidas}
 
 Responde SOLO con JSON, una entrada por palabra:
-[{{"palabra": "...", "sena": "GLOSA o null", "razon": "una frase"}}]"""
+[{{"palabra": "...", "senas": ["GLOSA", ...] o null, "razon": "una frase"}}]"""
 
 
 def texto_de_respuesta(respuesta: dict) -> str:
@@ -112,7 +178,8 @@ def texto_de_respuesta(respuesta: dict) -> str:
 
 
 def validar(texto: str, palabras: list, catalogo: dict) -> list:
-    """Una propuesta por palabra pedida; `sena` solo si está en el catálogo."""
+    """Una propuesta por palabra pedida; `senas` solo si todas están en la
+    lista (léxico o catálogo). `sena` es la seña cuando es una sola."""
     por_norma = {_norm(g): g for g in catalogo}
     try:
         inicio, fin = texto.index("["), texto.rindex("]") + 1
@@ -126,19 +193,27 @@ def validar(texto: str, palabras: list, catalogo: dict) -> list:
     salida = []
     for p in palabras:
         r = respuestas.get(_norm(p["palabra"]), {})
-        propuesta = r.get("sena")
-        sena = (por_norma.get(_norm(propuesta))
-                if isinstance(propuesta, str) else None)
+        crudas = r.get("senas")
+        if crudas is None and isinstance(r.get("sena"), str):
+            crudas = [r["sena"]]
+        if isinstance(crudas, str):
+            crudas = [crudas]
+        if not isinstance(crudas, list):
+            crudas = []
+        crudas = [c for c in crudas
+                  if isinstance(c, str) and c.strip().lower() != "null"]
+        senas = [por_norma.get(_norm(c)) for c in crudas]
+        valida = (0 < len(senas) <= MAX_SENAS and all(senas)
+                  and len(set(senas)) == len(senas))
         salida.append({
             "palabra": p["palabra"],
-            "sena": sena,
+            "sena": senas[0] if valida and len(senas) == 1 else None,
+            "senas": senas if valida else None,
             "razon": str(r.get("razon") or "")[:300],
-            # Lo que dijo el modelo si no era del catálogo: se registra, no
-            # se usa.
-            "descartada": propuesta if (isinstance(propuesta, str)
-                                        and sena is None
-                                        and propuesta.lower() != "null")
-            else None,
+            # Lo que dijo el modelo si no valía (una glosa fuera de la
+            # lista, o más de MAX_SENAS): se registra, no se usa. Una
+            # combinación con una sola glosa inventada se descarta entera.
+            "descartada": " + ".join(crudas) if crudas and not valida else None,
         })
     return salida
 

@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/pending_sign_info_sheet.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_preview_planner.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/sign_preview_overlay.dart';
@@ -81,8 +85,23 @@ class SignPreviewController {
   ///
   /// Si ninguna glosa tiene seña ni deletreo en el avatar, avisa con
   /// discreción y no abre nada. Una vista previa anterior se cierra antes.
+  ///
+  /// Una palabra sin seña propia en los módulos ni en el diccionario no se
+  /// hace en el avatar: se explica qué es ([showPendingSignInfo]).
   Future<void> show(BuildContext context, List<String> glosses) async {
     final plan = ref.read(signPreviewPlannerProvider).plan(glosses);
+    final conSena = plan.animationUrls.any(
+      (url) => !url.startsWith(AnimationUrlResolver.placeholderScheme),
+    );
+    if (!conSena && glosses.any(PendingSign.isPending)) {
+      cancelPrepared();
+      await showPendingSignInfo(
+        context,
+        ref.read(pendingSignCatalogProvider.future),
+        glosses,
+      );
+      return;
+    }
     if (!plan.isPlayable) {
       cancelPrepared();
       AppToastManager.showInfo(context, 'Seña no disponible');

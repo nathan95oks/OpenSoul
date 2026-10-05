@@ -57,7 +57,8 @@ class Validacion(unittest.TestCase):
     def test_una_respuesta_rota_no_propone_nada(self):
         out = EQ.validar("no sé", [DOCUMENTO], self.cat)
         self.assertEqual(out, [{"palabra": "DOCUMENTO", "sena": None,
-                                "razon": "", "descartada": None}])
+                                "senas": None, "razon": "",
+                                "descartada": None}])
 
     def test_una_palabra_sin_respuesta_queda_sin_sena(self):
         out = EQ.validar('[{"palabra": "OTRA", "sena": "CASA"}]',
@@ -71,6 +72,53 @@ class Validacion(unittest.TestCase):
         palabras, error = EQ.validar_pedido({"palabras": [DOCUMENTO]})
         self.assertIsNone(error)
         self.assertEqual(palabras, [DOCUMENTO])
+
+
+class Lexico(unittest.TestCase):
+    """M1–M4 y los diccionarios: forma 1 (candidata) y forma 2 (combinación)."""
+
+    lex = {"OFICINA": "Oficina [M3 · Lugares II]",
+           "FISCAL": "Fiscal [M3 · Escuela]", "CASA": "Casa"}
+    FISCALIA = {"palabra": "FISCALIA", "ejemplos": ["Voy a la fiscalía."]}
+
+    def test_el_lexico_empaquetado_lleva_el_catalogo_y_los_modulos(self):
+        lex = EQ.cargar_lexico()
+        self.assertGreater(len(lex), 346)
+        self.assertIn("el documento", lex["PAPEL"])
+        self.assertIn("M3 · Escuela", lex["FISCAL"])
+
+    def test_sin_lexico_usa_el_catalogo(self):
+        self.assertEqual(EQ.cargar_lexico("/no/existe.json"),
+                         EQ.cargar_catalogo())
+
+    def test_una_combinacion_del_lexico_vale(self):
+        out = EQ.validar(json.dumps([{"palabra": "FISCALIA",
+                                      "senas": ["oficina", "FISCAL"]}]),
+                         [self.FISCALIA], self.lex)
+        self.assertEqual(out[0]["senas"], ["OFICINA", "FISCAL"])
+        self.assertIsNone(out[0]["sena"])
+
+    def test_una_combinacion_con_una_glosa_inventada_se_descarta_entera(self):
+        out = EQ.validar(json.dumps([{"palabra": "FISCALIA",
+                                      "senas": ["OFICINA", "FISCALIA"]}]),
+                         [self.FISCALIA], self.lex)
+        self.assertIsNone(out[0]["senas"])
+        self.assertEqual(out[0]["descartada"], "OFICINA + FISCALIA")
+
+    def test_mas_de_tres_senas_no_explican_una_palabra(self):
+        out = EQ.validar(json.dumps([{"palabra": "FISCALIA", "senas": [
+            "OFICINA", "FISCAL", "CASA", "OFICINA"]}]), [self.FISCALIA], self.lex)
+        self.assertIsNone(out[0]["senas"])
+
+    def test_la_candidata_va_con_su_tema(self):
+        pedido = {**self.FISCALIA, "palabra": "FISCAL", "candidata": "FISCAL"}
+        texto = EQ.prompt([pedido], self.lex)
+        self.assertIn("candidata: FISCAL (Fiscal [M3 · Escuela])", texto)
+
+    def test_una_candidata_invalida_se_rechaza(self):
+        _, error = EQ.validar_pedido({"palabras": [
+            {**self.FISCALIA, "candidata": "x; DROP"}]})
+        self.assertIsNotNone(error)
 
 
 class Accion(unittest.TestCase):

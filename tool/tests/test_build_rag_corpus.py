@@ -198,13 +198,14 @@ class BancoTramites(unittest.TestCase):
                          [{"pregunta": "R.ESC-SERECI-02.1"}])
         q = banco["preguntas"][0]
         self.assertEqual(q["formulacionLsb"]["glosas"], ["NECESITAR"])
-        # Primero las unidades SÍ y NO SÉ (fundadas en «Sí.» y «No sé
-        # cuál.»); «Sí.» ya es la unidad y no se repite.
+        # Siempre SÍ, NO y NO SÉ, una seña cada una; lo que se dice es la
+        # respuesta documentada de ese estado, o la partícula si no hay.
+        self.assertEqual(q["control"], "polar3")
         self.assertEqual(
             [(o["id"], o["frase"], o["estado"], o["glosas"]) for o in q["opciones"]],
             [("si", "Sí.", "afirmado", ["SÍ"]),
-             ("no_se", "No sé.", "desconocido", ["NO_SABER"]),
-             ("r2", "No sé cuál.", "desconocido", ["NO_SABER"])])
+             ("no", "No.", "negado", ["NO"]),
+             ("no_se", "No sé cuál.", "desconocido", ["NO_SABER"])])
 
 
 class Equivalencias(unittest.TestCase):
@@ -245,6 +246,37 @@ class Equivalencias(unittest.TestCase):
         salida = B.marcar_senas_pendientes(
             [*"REAL"], self.CORR[1:], "Necesito el Folio Real.", self.EQ)
         self.assertEqual(salida, ["SENA_PENDIENTE:REAL"])
+
+    def test_una_combinacion_aprobada_son_sus_senas_en_orden(self):
+        corr = [{"palabra": "FISCALIA", "accion": "concepto_sin_catalogo"}]
+        salida = B.marcar_senas_pendientes(
+            ["YO", "IR", *"FISCALIA"], corr, "Voy a la fiscalía.",
+            {"fiscalia": ["OFICINA", "FISCAL"]})
+        self.assertEqual(salida, ["YO", "IR", "OFICINA", "FISCAL"])
+        self.assertEqual(
+            B.aplicar_equivalencias(["SENA_PENDIENTE:FISCALIA", "IR"],
+                                    "Ir a la fiscalía.",
+                                    {"fiscalia": ["OFICINA", "FISCAL"]}),
+            ["OFICINA", "FISCAL", "IR"])
+
+    def test_las_palabras_funcion_se_omiten_y_no_son_senas(self):
+        corr = [{"palabra": p, "accion": "concepto_sin_catalogo"}
+                for p in ("DE", "EN", "ES", "USTED")]
+        salida = B.marcar_senas_pendientes(
+            ["CERTIFICADO", *"DE", *"ES", "CASA", *"EN", *"USTED"], corr,
+            "El certificado de la casa es en usted.",
+            # Aunque una equivalencia vieja las tuviera aprobadas.
+            {"de": "DE", "en": "EN"})
+        self.assertEqual(salida, ["CERTIFICADO", "CASA", "TÚ"])
+
+    def test_una_combinacion_se_carga_como_lista(self):
+        with tempfile.TemporaryDirectory() as d:
+            ruta = os.path.join(d, "eq.json")
+            with open(ruta, "w", encoding="utf-8") as f:
+                json.dump({"FISCALIA": {"sena": None, "senas": ["OFICINA", "FISCAL"],
+                                        "estado": "aprobada"}}, f)
+            self.assertEqual(B.cargar_equivalencias(ruta),
+                             {"fiscalia": ["OFICINA", "FISCAL"]})
 
     def test_solo_se_cargan_las_aprobadas(self):
         with tempfile.TemporaryDirectory() as d:
@@ -305,30 +337,55 @@ class ZonasDeTramite(unittest.TestCase):
                         "fotocopia": ["Fotocopia", "una fotocopia"]},
              "palabras": {"BOLETA": "Documentos"}}
 
-    def test_la_pregunta_junta_lo_que_dicen_sus_respuestas_afirmativas(self):
+    def test_cada_tarjeta_es_una_sena_de_las_respuestas_afirmativas(self):
         respuestas = [
+            # Le falta una seña: lo que falta puede ser justo la respuesta.
             {"texto": "Sí, traje la boleta.", "glosas": ["SI", "SENA_PENDIENTE:BOLETA"]},
             {"texto": "Tengo el papel de la casa.", "glosas": ["PAPEL", "CASA"]},
             # Una respuesta negativa no da tarjetas que afirmen lo contrario.
             {"texto": "No traje la fotocopia.", "glosas": ["FOTOCOPIA", "NO"]},
         ]
         tarjetas = B.tarjetas_de_zona(respuestas, self.ZONAS)
-        # Documentos; no Lugares (CASA) ni la partícula SÍ.
+        # Documentos; no Lugares (CASA), la partícula SÍ ni BOLETA.
         self.assertEqual([(t["id"], t["glosas"], t["frase"]) for t in tarjetas],
-                         [("z1", ["SENA_PENDIENTE:BOLETA"], "boleta"),
-                          ("z2", ["PAPEL"], "papel")])
+                         [("z1", ["PAPEL"], "papel")])
 
     def test_la_forma_con_articulo_del_catalogo_se_usa_al_juntar(self):
-        respuestas = [{"texto": "Traje la fotocopia y la boleta.",
-                       "glosas": ["FOTOCOPIA", "SENA_PENDIENTE:BOLETA"]}]
+        respuestas = [{"texto": "Traje la fotocopia y el papel.",
+                       "glosas": ["FOTOCOPIA", "PAPEL"]}]
         self.assertEqual([t["frase"] for t in
                           B.tarjetas_de_zona(respuestas, self.ZONAS)],
-                         ["una fotocopia", "boleta"])
+                         ["una fotocopia", "papel"])
 
-    def test_con_una_sola_tarjeta_no_hay_nada_que_juntar(self):
-        self.assertEqual(B.tarjetas_de_zona(
-            [{"texto": "Sí, la boleta.", "glosas": ["SI", "SENA_PENDIENTE:BOLETA"]}],
-            self.ZONAS), [])
+    def test_una_sola_tarjeta_tambien_contesta(self):
+        self.assertEqual([t["glosas"] for t in B.tarjetas_de_zona(
+            [{"texto": "Traje la fotocopia.", "glosas": ["FOTOCOPIA"]}],
+            self.ZONAS)], [["FOTOCOPIA"]])
+
+    def test_lo_que_ya_dice_la_pregunta_no_la_contesta(self):
+        respuestas = [{"texto": "Traje el papel y la fotocopia.",
+                       "glosas": ["PAPEL", "FOTOCOPIA"]}]
+        self.assertEqual([t["glosas"] for t in B.tarjetas_de_zona(
+            respuestas, self.ZONAS, pregunta=["PAPEL", "TRAER", "QUÉ"])],
+            [["FOTOCOPIA"]])
+
+    def test_la_palabra_interrogativa_dice_que_zona_contesta(self):
+        respuestas = [{"texto": "Ayer, en mi casa.", "glosas": ["AYER", "CASA"]}]
+        zonas = {**self.ZONAS, "senas": {**self.ZONAS["senas"],
+                                         "ayer": ("AYER", "Tiempo")}}
+        self.assertEqual([t["glosas"] for t in B.tarjetas_de_zona(
+            respuestas, zonas, {"Tiempo"})], [["AYER"]])
+        self.assertEqual([t["glosas"] for t in B.tarjetas_de_zona(
+            respuestas, zonas, {"Lugares"})], [["CASA"]])
+        self.assertEqual([(c, z) for c, _, z in B.interrogativos(
+            "¿Cuándo y dónde ocurrió?", zonas)],
+            [("cuando", {"Tiempo"}), ("donde", {"Lugares", "Instituciones"})])
+        self.assertEqual([z for *_, z in B.interrogativos(
+            "¿Qué documentos trajo?", zonas)], [{"Documentos"}])
+        self.assertEqual(B.subformulacion("¿Cuándo y dónde ocurrió el robo?",
+                                          "Dónde"), "¿Dónde ocurrió el robo?")
+        self.assertEqual(B.subformulacion("Describa cuándo y dónde ocurrió.",
+                                          "Cuándo"), "¿Cuándo ocurrió?")
 
     def test_sin_zona_de_respuesta_no_hay_tarjetas(self):
         self.assertEqual(
@@ -448,3 +505,70 @@ class IngestaDocumentos(unittest.TestCase):
         salida = self.I.procesar(ruta, self.I.siguientes_ids())
         self.assertTrue(any("OCR" in s for s in salida), salida)
         self.assertFalse(os.path.exists(self.I.PENDIENTES))
+
+
+class LexicoEstricto(unittest.TestCase):
+    """Un archivo con «lexico: estricto» solo ofrece señas del léxico."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        cache = os.path.join(self.tmp.name, "cache.json")
+        with open(cache, "w", encoding="utf-8") as f:
+            json.dump({
+                "¿Trajo su folio?": {"glosas": ["TÚ", "TRAER", *"FOLIO"],
+                                     "correcciones": [{"palabra": "FOLIO",
+                                                       "accion": "concepto_sin_catalogo"}]},
+                "Sí, traje mi folio.": {"glosas": ["SÍ", "TRAER", *"FOLIO"],
+                                        "correcciones": [{"palabra": "FOLIO",
+                                                          "accion": "concepto_sin_catalogo"}]},
+            }, f)
+        nada = os.path.join(self.tmp.name, "no_existe.json")
+        self.parches = [mock.patch.object(B, "GLOSAS", cache),
+                        mock.patch.object(B, "CORRECCIONES", nada),
+                        mock.patch.object(B, "EQUIVALENCIAS", nada)]
+        for p in self.parches:
+            p.start()
+
+    def tearDown(self):
+        for p in self.parches:
+            p.stop()
+        self.tmp.cleanup()
+
+    def corpus(self):
+        return {"archivos": ["x.md"], "escenarios": [{
+            "id": "ESC-X-01", "archivo": "x.md", "variantes": [],
+            "turnos": [
+                {"n": 1, "rol": "funcionario", "texto": "¿Trajo su folio?",
+                 "mostrable": True, "motivos": []},
+                {"n": 2, "rol": "sordo", "texto": "Sí, traje mi folio.",
+                 "mostrable": True, "motivos": []}]}]}
+
+    def test_sin_la_marca_la_palabra_queda_como_sena_a_incorporar(self):
+        corpus, avisos = self.corpus(), []
+        with mock.patch.object(B, "es_estricto", return_value=False):
+            B.poner_glosas(corpus, avisos)
+        self.assertEqual(corpus["escenarios"][0]["turnos"][1]["glosas"],
+                         ["SÍ", "TRAER", "SENA_PENDIENTE:FOLIO"])
+
+    def test_con_la_marca_la_pregunta_se_muestra_y_se_avisa(self):
+        corpus, avisos = self.corpus(), []
+        with mock.patch.object(B, "es_estricto", return_value=True):
+            B.poner_glosas(corpus, avisos)
+        pregunta, respuesta = corpus["escenarios"][0]["turnos"]
+        # Lo que dijo el funcionario se sigue mostrando (el avatar deletrea
+        # lo que no tiene seña): sin ella el trámite no se podría responder.
+        self.assertTrue(pregunta["mostrable"])
+        self.assertIn("SENA_PENDIENTE:FOLIO", pregunta["glosas"])
+        self.assertTrue(any("se muestran con señas a incorporar" in a
+                            for a in avisos), avisos)
+        # Lo que dice la persona sorda nunca lleva una seña pendiente: las
+        # tarjetas se arman seña a seña (ZonasDeTramite).
+        self.assertTrue(respuesta["mostrable"])
+
+    def test_la_marca_se_lee_del_archivo(self):
+        ruta = os.path.join(self.tmp.name, "e.md")
+        with open(ruta, "w", encoding="utf-8") as f:
+            f.write(B.MARCA_ESTRICTA + "\n# Escenarios\n")
+        self.assertTrue(B.es_estricto(os.path.relpath(ruta, B.ROOT)))
+        self.assertFalse(B.es_estricto("no/existe.md"))
+
