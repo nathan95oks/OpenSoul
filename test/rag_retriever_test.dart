@@ -176,10 +176,16 @@ void main() {
             'OJ',
         '¿Usted es el denunciado o acusado en el caso?': 'SEPDEP',
       };
+      // En la ventanilla se sabe en qué institución se está: con ese tema,
+      // cada pregunta encuentra su trámite. Sin él, lo que se pregunta en
+      // varias instituciones («¿Está en peligro?») no elige ninguna.
       casos.forEach((texto, area) {
-        final found = retriever.suggest(texto);
+        final found = retriever.suggest(texto, preferArea: area);
         expect(found, isNotEmpty, reason: texto);
         expect(found.first.scenarioId, startsWith('ESC-$area-'), reason: texto);
+        for (final s in retriever.suggest(texto)) {
+          expect(s.scenarioId, startsWith('ESC-$area-'), reason: texto);
+        }
       });
     });
 
@@ -317,10 +323,30 @@ void main() {
     const pregunta = '¿Usted es el denunciado o acusado en el caso?';
 
     test('sin ruta segura: situaciones parecidas', () {
-      final found = ragSuggestionsFor(
-        withHearing(pregunta, route: const ConversationRoute.noSafeRoute()),
-        retriever,
+      // La conversación ya está en SEPDEP: la misma pregunta también se hace
+      // en Fiscalía y en SEPDAVI.
+      final conversacion = withHearing(
+        pregunta,
+        route: const ConversationRoute.noSafeRoute(),
       );
+      final enSepdep = Conversation(
+        id: conversacion.id,
+        startedAt: conversacion.startedAt,
+        turns: [
+          ConversationTurn(
+            message: SemanticMessage(
+              id: 't0',
+              speaker: SpeakerRole.hearing,
+              source: MessageSource.text,
+              glosses: const [],
+              text: 'Bienvenido al SEPDEP.',
+            ),
+            outputs: GeneratedOutputs(text: 'Bienvenido al SEPDEP.'),
+          ),
+          ...conversacion.turns,
+        ],
+      );
+      final found = ragSuggestionsFor(enSepdep, retriever);
       expect(found.map((s) => s.text), contains('Soy denunciado.'));
     });
 

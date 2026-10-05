@@ -13,6 +13,7 @@ void main() {
   const instituciones = [
     'Derechos Reales',
     'GAM Cochabamba',
+    'Trámites municipales – GAM Cochabamba',
     'Ministerio Público – Fiscalía',
     'Órgano Judicial',
     'SEPDEP',

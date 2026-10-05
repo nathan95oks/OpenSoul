@@ -1208,7 +1208,7 @@ def turnos_pregunta(e: dict) -> list:
 
 _EMOJI_AREA = {
     "SEGIP": "🪪", "SERECI": "📜", "FELCC": "🚓", "FELCV": "🛡️", "FIS": "⚖️",
-    "OJ": "🏛️", "SEPDEP": "🧑‍⚖️", "SEPDAVI": "🧑‍⚖️", "IMP": "💰",
+    "OJ": "🏛️", "SEPDEP": "🧑‍⚖️", "SEPDAVI": "🧑‍⚖️", "IMP": "💰", "GAM": "🏢",
     "DDRR": "🏠", "NOT": "✍️", "SLIM": "🤝", "DNA": "🧒", "DISC": "♿",
     "LSB": "🤟",
 }
@@ -1739,6 +1739,15 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
             "emoji": _EMOJI_AREA.get(area, "📄"),
             "escenario": e["id"],
         })
+    # Dos trámites con el mismo nombre en una institución se ven iguales en
+    # la lista: la persona no sabe cuál abrir.
+    nombres = {}
+    for c in contextos:
+        nombres.setdefault((c["area"], _norm(c["nombre"])), []).append(c["escenario"])
+    for (area, _), ids in sorted(nombres.items()):
+        if len(ids) > 1:
+            avisos.append(f"{area}: {', '.join(ids)} tienen el mismo nombre de "
+                          "trámite; en la lista se ven iguales")
     return {"preguntas": preguntas, "recorridos": recorridos,
             "contextos": contextos}
 

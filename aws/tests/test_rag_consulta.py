@@ -90,17 +90,25 @@ class ModuloRag(unittest.TestCase):
             RAG.indexar(LISTA, indice, falso_embed)
 
     def test_encuentra_por_significado_lo_que_las_palabras_no(self):
+        # «¿Está en peligro?» se pregunta en FELCV, Fiscalía, SLIM, DNA…: con
+        # el tema de la conversación se queda en su institución.
         found = RAG.consultar("¿Usted está en peligro ahorita?", LISTA,
-                              indice_completo(), falso_embed)
+                              indice_completo(), falso_embed,
+                              prefer_area="FELCV")
         self.assertTrue(found)
-        self.assertTrue(found[0]["scenarioId"].startswith("ESC-FELCV-"), found)
+        self.assertTrue(all(s["scenarioId"].startswith("ESC-FELCV-")
+                            for s in found), found)
         for s in found:
             self.assertTrue(s["glosses"])
+
+    def test_sin_tema_una_pregunta_de_cualquier_ventanilla_no_elige(self):
+        self.assertEqual(RAG.consultar("¿Usted está en peligro ahorita?", LISTA,
+                                       indice_completo(), falso_embed), [])
 
     def test_no_mezcla_instituciones(self):
         found = RAG.consultar("¿Usted está en peligro ahorita?", LISTA,
                               indice_completo(), falso_embed, minimo=0.3,
-                              limite=8)
+                              limite=8, prefer_area="FELCV")
         self.assertTrue(found)
         areas = {s["scenarioId"].split("-")[1] for s in found}
         self.assertEqual(1, len(areas), found)
@@ -160,6 +168,7 @@ class AccionesLambda(unittest.TestCase):
 
         status, body = self.llamar({"action": "consulta",
                                     "text": "¿Usted está en peligro ahorita?",
+                                    "preferArea": "FELCV",
                                     "limit": 3})
         self.assertEqual(200, status)
         self.assertTrue(body["generated"])

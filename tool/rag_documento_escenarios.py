@@ -9,7 +9,9 @@ dice: no añade hechos, requisitos, precios ni condiciones.
 
 * Las respuestas «Sí / No / No sé» quedan como respuestas documentadas.
 * «Escenarios posibles» es una descripción narrativa: se copia como nota y
-  **no** crea ramificaciones. Una dependencia entre preguntas se declara a
+  **no** crea ramificaciones. Solo una línea declarada con el formato
+  «Condiciones: Turno 4: si Turno 2 es negado o desconocido; Turno 6: si
+  Turno 2 = «…»» pasa a `### Ramificaciones`, tal cual. Una dependencia entre preguntas se declara a
   mano en `### Ramificaciones` (ver `docs/negocio/rag/README.md`).
 * Cada escenario cita la página del PDF de donde sale
   (`- **Documento:** documentos/<archivo>#p=N`).
@@ -140,7 +142,15 @@ def _escenario(n_pagina: int, lineas: list, errores: list) -> dict | None:
                           _partes(_unir(b["respuestas"]))))
 
     narrativa, referencia, tipo = [], "", ""
+    condiciones, en_condiciones = [], False
     for l in lineas[i_pos + 1:]:
+        if re.match(r"Condiciones(?: del MD)?:", l):
+            en_condiciones = True
+            condiciones.append(l.split(":", 1)[1])
+            continue
+        if en_condiciones and not l.startswith("Referencia temática:"):
+            condiciones.append(l)
+            continue
         if l.startswith("Referencia temática:"):
             resto = _unir([l] + lineas[lineas.index(l) + 1:])
             mr = re.search(r"Referencia temática:\s*([^·]+)", resto)
@@ -149,10 +159,32 @@ def _escenario(n_pagina: int, lineas: list, errores: list) -> dict | None:
             tipo = mt.group(1) if mt else ""
             break
         narrativa.append(l)
+    ramas = _ramas(_unir(condiciones), donde, errores) if condiciones else {}
     return {"id": eid, "categoria": m.group(2).strip(), "titulo": titulo,
             "situacion": situacion, "turnos": turnos, "variantes": variantes,
             "narrativa": _unir(narrativa), "referencia": referencia,
-            "tipo": tipo, "pagina": n_pagina}
+            "tipo": tipo, "pagina": n_pagina, "ramificaciones": ramas}
+
+
+def _ramas(texto: str, donde: str, errores: list) -> dict:
+    """{turno: «si Turno M es …; si Turno K = «…»»} de una línea
+    «Turno 4: si Turno 2 es afirmado; Turno 6: si Turno 2 es negado o
+    desconocido.». Cada condición se copia tal cual; el constructor la valida
+    contra el diálogo."""
+    ramas = {}
+    for parte in [p.strip().rstrip(".") for p in texto.split(";") if p.strip()]:
+        m = re.fullmatch(r"(?:Turno\s+(\d+)\s*:\s*)?(si\s+Turno\s+\d+\s+(?:es|=)\s+.+)",
+                         parte, re.IGNORECASE)
+        if not m:
+            errores.append(f"{donde}: condición ilegible «{parte}»")
+            continue
+        if m.group(1):
+            actual = int(m.group(1))
+        elif not ramas:
+            errores.append(f"{donde}: la condición «{parte}» no dice a qué turno se aplica")
+            continue
+        ramas.setdefault(actual, []).append(m.group(2))
+    return {n: "; ".join(c) for n, c in ramas.items()}
 
 
 def _norm_rol(partes: list) -> str:
@@ -217,7 +249,8 @@ def convertir(nombre: str, paginas: list, huella: str,
         f"documentos/{nombre} (huella: {huella}). Revísalo y muévelo a "
         "escenarios/ para incorporarlo; después ejecuta "
         "tool/rag_actualizar.py. «Escenarios posibles» es una nota narrativa: "
-        "no crea ramificaciones; decláralas en «### Ramificaciones». -->",
+        "no crea ramificaciones; las de «### Ramificaciones» vienen de las "
+        "líneas «Condiciones» del documento. -->",
         f"# Escenarios desde {nombre}",
         "",
         "## Fuentes",
@@ -256,6 +289,10 @@ def convertir(nombre: str, paginas: list, huella: str,
                           + " · ".join(f"«{p}»" for p in preguntas))
                 md.append("- **Respuestas:** "
                           + " · ".join(f"«{r}»" for r in respuestas))
+        if e["ramificaciones"]:
+            md += ["", "### Ramificaciones", ""]
+            for n, condicion in sorted(e["ramificaciones"].items()):
+                md.append(f"- **Turno {n}:** {condicion}")
         if e["narrativa"]:
             md += ["", "### Escenarios posibles", "",
                    "Nota narrativa del documento (no crea ramificaciones): "

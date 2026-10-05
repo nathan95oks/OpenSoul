@@ -172,12 +172,25 @@ def consultar(texto: str, lista: list, indice: dict, embed, *,
     )
     if not puntuadas:
         return []
-    if prefer_area and not any(e["area"] == prefer_area
-                               for _, _, e in puntuadas):
-        palabras = set("".join(
-            c for c in texto.lower()
-            if c.isalnum() or c.isspace()).split())
-        if not palabras.intersection(_SWITCH_CUES):
+    palabras = set("".join(
+        c for c in texto.lower()
+        if c.isalnum() or c.isspace()).split())
+    nombra_otra = bool(palabras.intersection(_SWITCH_CUES))
+    if prefer_area and not nombra_otra:
+        # Se sigue en la institución de la que se viene hablando, como en la
+        # búsqueda por palabras de la app: una pregunta de cualquier
+        # ventanilla («¿Está en peligro?») no cambia de institución; y si
+        # otra encaja claramente mejor, la pregunta no es de este trámite.
+        propias = [x for x in puntuadas if x[2]["area"] == prefer_area]
+        if not propias or puntuadas[0][1] - propias[0][1] > MARGIN:
+            return []
+        puntuadas = propias
+    elif not prefer_area:
+        # Sin tema, si instituciones distintas encajan casi igual la pregunta
+        # es de cualquier ventanilla: no se elige una al azar.
+        cerca = {e["area"] for orden, _, e in puntuadas
+                 if orden >= puntuadas[0][0] - MARGIN}
+        if len(cerca) > 1:
             return []
     mejor = puntuadas[0][0]
     # Solo la institución de la mejor coincidencia: las similitudes por

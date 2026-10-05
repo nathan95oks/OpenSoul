@@ -539,9 +539,15 @@ class CorpusActual(unittest.TestCase):
         banco = B.banco_tramites(corpus, avisos)
         self.assertEqual(errores, [])
         self.assertGreater(len(banco["recorridos"]), 40)
+        # Solo hay condiciones donde el escenario las declara
+        # («### Ramificaciones»), nunca deducidas de su narrativa.
+        declaradas = {
+            f"R.{e['id']}.{r['turno']}"
+            for e in corpus["escenarios"] for r in e.get("ramificaciones", [])}
         for recorrido in banco["recorridos"].values():
             for paso in recorrido["pasos"]:
-                self.assertNotIn("cuando", paso)
+                if "cuando" in paso:
+                    self.assertIn(paso["pregunta"], declaradas)
         for q in banco["preguntas"]:
             for o in q["opciones"]:
                 self.assertEqual(B.glosas_invalidas(o["glosas"]), [], o)
@@ -587,3 +593,51 @@ class DescripcionesEnLsb(unittest.TestCase):
         self.assertIn("(usa CANCELAR)", B.descripcion_fundada(
             "Terminar algo. «Cancelar una deuda».",
             ["TERMINAR", "SENA_PENDIENTE:CANCELAR", "DEUDA"], "CANCELAR"))
+
+
+class CondicionesDeUnDocumento(unittest.TestCase):
+    """Las ramificaciones de un PDF de escenarios salen solo de sus líneas
+    «Condiciones» declaradas; la narrativa no crea ninguna."""
+
+    PAGINA = (
+        "ESC-FIS-191 / FIS\nCitación de prueba\n"
+        "Situación: Prueba.\n"
+        "PREGUNTAS EN UNA SECUENCIA POSIBLE\n"
+        "1\nFuncionario\n¿Recibió una notificación?\n"
+        "2\nPersona usuaria\nSí, recibí una notificación.\n"
+        "3\nFuncionario\n¿La denuncia es contra usted?\n"
+        "4\nPersona usuaria\nSí, me denunciaron.\n"
+        "5\nFuncionario\n¿Usted fue afectado por el hecho?\n"
+        "6\nPersona usuaria\nSí, fui afectado.\n"
+        "VARIANTES Y RESPUESTAS POSIBLES\n"
+        "P1. ¿Recibió una notificación?\nVariantes: ¿Le entregaron una notificación?\n"
+        "Respuestas: Sí, recibí una notificación. / No, no recibí una notificación. / "
+        "No sé si es una notificación.\n"
+        "ESCENARIOS POSIBLES\n"
+        "Persona denunciada sin defensa: SEPDEP. Víctima: SEPDAVI.\n"
+        "Condiciones del MD: Turno 3: si Turno 1 es afirmado; Turno 5: si Turno 1\n"
+        "es negado o desconocido.\n"
+        "Referencia temática: F-FIS-191 · Tipo: mixto")
+
+    def test_las_condiciones_declaradas_pasan_a_ramificaciones(self):
+        errores = []
+        e = D._escenario(9, D._lineas(self.PAGINA), errores)
+        self.assertEqual(errores, [])
+        self.assertEqual(e["ramificaciones"], {
+            3: "si Turno 1 es afirmado",
+            5: "si Turno 1 es negado o desconocido"})
+        # La narrativa queda como nota, sin las condiciones.
+        self.assertIn("SEPDEP", e["narrativa"])
+        self.assertNotIn("Turno", e["narrativa"])
+
+    def test_sin_linea_de_condiciones_no_hay_ramificaciones(self):
+        pagina = self.PAGINA.replace(
+            "Condiciones del MD: Turno 3: si Turno 1 es afirmado; Turno 5: si Turno 1\n"
+            "es negado o desconocido.\n", "")
+        e = D._escenario(9, D._lineas(pagina), [])
+        self.assertEqual(e["ramificaciones"], {})
+
+    def test_una_condicion_ilegible_se_informa(self):
+        errores = []
+        D._ramas("Turno 3: cuando haga falta", "página 9", errores)
+        self.assertTrue(any("condición ilegible" in e for e in errores), errores)

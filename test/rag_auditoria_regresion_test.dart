@@ -104,18 +104,34 @@ void main() {
     test('lo que identifica un trámite se sigue encontrando', () {
       expect(
         retriever.suggest('¿Tiene la placa de su moto?').first.scenarioId,
-        'ESC-IMP-01',
+        startsWith('ESC-IMP-'),
       );
       expect(
         retriever.suggest('¿Está en un lugar seguro?').first.scenarioId,
         'ESC-FELCV-01',
       );
+    });
+
+    test('lo que se pregunta en varias instituciones necesita el tema', () {
+      // «¿Usted es la persona denunciada?» se pregunta en Fiscalía, SEPDEP y
+      // SEPDAVI: sin saber dónde se está, no se elige; en SEPDEP, sí.
+      const texto = '¿Usted es el denunciado o acusado en el caso?';
+      expect(retriever.suggest(texto), isEmpty);
+      expect(
+        retriever.suggest(texto, preferArea: 'SEPDEP').first.scenarioId,
+        startsWith('ESC-SEPDEP-'),
+      );
+    });
+
+    test('la misma palabra con otro complemento es otra cosa', () {
+      // «licencia de conducir» no es la «licencia de funcionamiento» de GAM.
+      expect(retriever.suggest('¿Tiene su licencia de conducir?'), isEmpty);
       expect(
         retriever
-            .suggest('¿Usted es el denunciado o acusado en el caso?')
+            .suggest('¿Tiene una licencia de funcionamiento anterior?')
             .first
             .scenarioId,
-        startsWith('ESC-SEPDEP-'),
+        startsWith('ESC-GAM-'),
       );
     });
   });

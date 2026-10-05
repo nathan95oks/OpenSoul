@@ -74,6 +74,19 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "AFECTADO": {
+   "ver": "AFECTAR"
+  },
+  "AFECTAR": {
+   "descripcion": "Hacer daño o causar un problema a alguien. «Persona afectada»: la que sufrió el hecho.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "AGREDIR": {
+   "descripcion": "Atacar o hacer daño a otra persona, con golpes o con palabras.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "ALCANCE": {
    "descripcion": "Hasta dónde llega o vale algo. Un certificado puede valer en un departamento o en todo el país.",
    "tipo": "concepto",
@@ -112,6 +125,11 @@
   },
   "ANOTACION_PREVENTIVA": {
    "descripcion": "Aviso que se escribe en el registro de una propiedad mientras hay un juicio, para proteger un derecho.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ANTECEDENTES": {
+   "descripcion": "Lo que pasó antes. «Antecedentes penales»: registro de si una persona tuvo procesos penales.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -317,6 +335,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "CIVIL": {
+   "descripcion": "De la vida de las personas como ciudadanos. «Estado civil»: si una persona es soltera, casada, divorciada o viuda.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "CODIGO": {
    "descripcion": "Número o letras que identifican algo.",
    "tipo": "concepto",
@@ -393,6 +416,11 @@
   "CONSERVE": {
    "ver": "CONSERVAR"
   },
+  "CONSTANCIA": {
+   "descripcion": "Papel que demuestra que algo pasó. Ej.: que una oficina recibió sus documentos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "CONSTANTE": {
    "descripcion": "Que pasa muchas veces, sin parar.",
    "tipo": "concepto",
@@ -405,6 +433,11 @@
   },
   "CONSULTAR": {
    "descripcion": "Preguntar o buscar información.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "CONTACTO": {
+   "descripcion": "Forma de comunicarse con una persona: un teléfono, un correo o un lugar.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -485,9 +518,19 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "DEFENSA": {
+   "descripcion": "Ayuda de un abogado para una persona denunciada o acusada en un proceso.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "DEFENSA_PUBLICA": {
    "descripcion": "Servicio del Estado que da abogado gratis a quien lo necesita en un proceso penal.",
    "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "DEFENSOR": {
+   "descripcion": "Abogado que defiende a una persona en un proceso.",
+   "tipo": "concepto",
    "revisada": false
   },
   "DEFENSORIA": {
@@ -546,6 +589,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "DESAPARECIDO": {
+   "descripcion": "Persona que no está y nadie sabe dónde está.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "DESARCHIVO": {
    "descripcion": "Sacar documentos del archivo para continuar un trámite.",
    "tipo": "concepto",
@@ -558,6 +606,16 @@
   },
   "DESCUENTO": {
    "descripcion": "Pagar menos de lo normal.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DESEA": {
+   "descripcion": "Querer algo. «¿Desea…?» es «¿Quiere…?».",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "DETENIDO": {
+   "descripcion": "Persona a la que la policía no deja irse, por una investigación.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -671,6 +729,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "EQUIVOCADO": {
+   "descripcion": "Que no es correcto; que tiene un error.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "ERROR": {
    "descripcion": "Algo que está mal o equivocado.",
    "tipo": "concepto",
@@ -726,8 +789,23 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "ESTAFAR": {
+   "descripcion": "Engañar a una persona para quitarle dinero o cosas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "ESTE": {
    "ver": "ESA"
+  },
+  "ESTOS": {
+   "descripcion": "Señala cosas que están cerca o de las que se habla. En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
+  "EVALUACION": {
+   "descripcion": "Revisión que hace un equipo para conocer cómo está una persona o una situación.",
+   "tipo": "concepto",
+   "revisada": false
   },
   "EXACTO": {
    "descripcion": "Justo, sin error.",
@@ -741,6 +819,11 @@
   },
   "EXPEDIENTE": {
    "descripcion": "Todos los documentos de un caso o trámite, juntos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "EXPLICACION": {
+   "descripcion": "Lo que se dice o se escribe para que alguien entienda algo.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -848,6 +931,11 @@
    "tipo": "palabra_funcion",
    "revisada": false
   },
+  "HAY": {
+   "descripcion": "Que algo o alguien existe o está. «¿Hay un niño?»: «¿Existe un niño?».",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
   "HECHO": {
    "descripcion": "Lo que pasó.",
    "tipo": "concepto",
@@ -871,6 +959,11 @@
   "HIPOTECAR": {
    "ver": "HIPOTECA"
   },
+  "HUBO": {
+   "descripcion": "Que algo pasó o existió antes. «¿Hubo violencia?»: «¿Pasó violencia?».",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
   "INCLUIR": {
    "descripcion": "Poner o tener algo dentro.",
    "tipo": "concepto",
@@ -883,6 +976,16 @@
   },
   "INCORRECTO": {
    "descripcion": "Que tiene error, que está mal.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INCUMPLIMIENTO": {
+   "descripcion": "Cuando alguien no hace lo que una orden o un acuerdo obliga a hacer.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INCUMPLIR": {
+   "descripcion": "No hacer lo que una orden o un acuerdo obliga a hacer.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -911,6 +1014,11 @@
   },
   "INFORMAR": {
    "descripcion": "Dar a conocer una información.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "INFORME": {
+   "descripcion": "Documento que explica algo. «Informe médico»: documento del médico sobre la salud.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1002,6 +1110,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "LO": {
+   "descripcion": "Reemplaza a algo que ya se nombró: «lo perdí» es «perdí eso». En LSB se indica señalando.",
+   "tipo": "palabra_funcion",
+   "revisada": false
+  },
   "LOCALIZAR": {
    "descripcion": "Encontrar dónde está algo.",
    "tipo": "concepto",
@@ -1047,6 +1160,11 @@
   },
   "MECANISMO": {
    "descripcion": "Forma o manera de hacer algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "MEDICA": {
+   "descripcion": "De la salud o del médico. «Atención médica»: que un médico la revise.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1158,8 +1276,18 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "NOTARIAL": {
+   "descripcion": "De la notaría. «Documento notarial»: documento hecho ante un notario.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "NOTARIO": {
    "descripcion": "Persona autorizada para hacer escrituras y certificar firmas y documentos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "NOTIFICACION": {
+   "descripcion": "Aviso oficial escrito de una institución sobre un trámite o un proceso.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1178,6 +1306,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "OBTENER": {
+   "descripcion": "Conseguir algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "OCURRIDO": {
    "ver": "OCURRIR"
   },
@@ -1191,8 +1324,18 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "OPCION": {
+   "descripcion": "Una de las posibilidades para elegir.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "ORIENTACION": {
    "descripcion": "Explicación de qué hacer y a dónde ir.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "ORIENTACION_SOCIAL": {
+   "descripcion": "Ayuda de una trabajadora social para saber qué hacer y a dónde ir.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1231,6 +1374,16 @@
   "PAGO": {
    "ver": "PAGAR"
   },
+  "PARADERO": {
+   "descripcion": "El lugar donde está una persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PARENTESCO": {
+   "descripcion": "Relación de familia entre personas: madre, hijo, hermano, tío.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "PARTICION": {
    "descripcion": "Dividir una propiedad o herencia en partes, una para cada dueño.",
    "tipo": "concepto",
@@ -1261,6 +1414,11 @@
   },
   "PENAL": {
    "descripcion": "Sobre delitos.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PENDIENTE": {
+   "descripcion": "Que falta hacer o pagar.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1304,6 +1462,11 @@
   },
   "PLANO": {
    "descripcion": "Dibujo de un terreno o casa con sus medidas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PLANOS": {
+   "descripcion": "Dibujos de una casa o un terreno, con sus medidas.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1409,8 +1572,18 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "PROTECCION": {
+   "descripcion": "Cuidado para que una persona no sufra daño. «Medidas de protección»: órdenes de una autoridad para cuidar a una persona.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "PSICOLOGICA": {
    "descripcion": "De la mente y las emociones. «Ayuda psicológica»: apoyo de un psicólogo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "PSICOLOGICO": {
+   "descripcion": "De la mente y los sentimientos. «Apoyo psicológico»: ayuda de un psicólogo.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1447,6 +1620,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "RECEPCION": {
+   "descripcion": "Cuando una oficina recibe documentos o atiende a las personas.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "RECLAMO": {
    "descripcion": "Queja formal por un mal servicio o un error.",
    "tipo": "concepto",
@@ -1457,6 +1635,11 @@
   },
   "RECONOCER": {
    "descripcion": "Aceptar como propio. «Reconocer firmas»: confirmar ante notario que la firma es suya.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "RECONOCIMIENTO": {
+   "descripcion": "«Reconocimiento de firmas»: el notario confirma que una firma es de esa persona.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1502,6 +1685,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "RELACIONADO": {
+   "descripcion": "Que tiene que ver con algo.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "RELACIONAR": {
    "descripcion": "Que tiene que ver con algo.",
    "tipo": "concepto",
@@ -1522,6 +1710,11 @@
   },
   "REPOSICION": {
    "descripcion": "Sacar un documento nuevo porque el anterior se perdió, se robó o se dañó.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "REPRESENTACION": {
+   "descripcion": "Actuar en nombre de otra persona, con su permiso.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1576,6 +1769,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "SEGURIDAD": {
+   "descripcion": "Estar sin peligro.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "SEGURO": {
    "descripcion": "Sin peligro.",
    "tipo": "concepto",
@@ -1591,8 +1789,21 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "SEXUAL": {
+   "descripcion": "Del cuerpo y la intimidad de una persona. «Violencia sexual»: obligar a alguien a algo íntimo sin que quiera.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SEÑALADA": {
+   "ver": "SEÑALAR"
+  },
   "SEÑALAMIENTO": {
    "descripcion": "Fecha y hora que fija el juzgado para una audiencia.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SEÑALAR": {
+   "descripcion": "Fijar. «Audiencia señalada»: audiencia con fecha y hora fijadas por el juzgado.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1619,6 +1830,11 @@
   },
   "SISTEMA": {
    "descripcion": "Programa o página de computadora que usa una oficina.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "SOCIAL": {
+   "descripcion": "De la sociedad o de la ayuda a las personas. «Trabajo social»: profesionales que orientan y ayudan.",
    "tipo": "concepto",
    "revisada": false
   },
@@ -1699,6 +1915,11 @@
   "TODOS": {
    "ver": "TODAS"
   },
+  "TRABAJO": {
+   "descripcion": "Lugar donde una persona trabaja, o lo que hace para ganar dinero.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "TRAJE": {
    "descripcion": "Traer en pasado. Tiene seña: TRAER.",
    "tipo": "concepto",
@@ -1777,6 +1998,11 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "VIAJE": {
+   "descripcion": "Ir de un lugar a otro lejano.",
+   "tipo": "concepto",
+   "revisada": false
+  },
   "VICTIMA": {
    "descripcion": "Persona que sufrió un delito.",
    "tipo": "concepto",
@@ -1794,6 +2020,11 @@
   },
   "VIGENTE": {
    "descripcion": "Que todavía vale, que no venció.",
+   "tipo": "concepto",
+   "revisada": false
+  },
+  "VIVIENDA": {
+   "descripcion": "Casa o lugar donde vive una persona.",
    "tipo": "concepto",
    "revisada": false
   },
