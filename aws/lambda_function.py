@@ -4096,19 +4096,22 @@ def rag_index_batch():
 # Solo lo usa `tool/rag_equivalencias.py`; la app no lo llama.
 
 _CATALOGO_LSB = None
+_LEXICO_LSB = None
 
 
 def rag_equivalences(body):
-    global _CATALOGO_LSB
+    global _LEXICO_LSB
     palabras, error = EQUIV.validar_pedido(body)
     if error:
         return build_response(400, {"error": "VALIDATION_ERROR", "message": error})
     if not ENABLE_BEDROCK:
         return build_response(200, {"generated": False,
                                     "reason": "bedrock_desactivado"})
-    if _CATALOGO_LSB is None:
-        _CATALOGO_LSB = EQUIV.cargar_catalogo()
-    if not _CATALOGO_LSB:
+    if _LEXICO_LSB is None:
+        # M1–M4, los diccionarios y el catálogo (lexico_lsb.json); sin él,
+        # solo el catálogo.
+        _LEXICO_LSB = EQUIV.cargar_lexico()
+    if not _LEXICO_LSB:
         return build_response(200, {"generated": False, "reason": "sin_catalogo"})
 
     def invocar(texto: str) -> str:
@@ -4120,7 +4123,7 @@ def rag_equivalences(body):
         return EQUIV.texto_de_respuesta(json.loads(respuesta["body"].read()))
 
     try:
-        propuestas = EQUIV.proponer(palabras, _CATALOGO_LSB, invocar)
+        propuestas = EQUIV.proponer(palabras, _LEXICO_LSB, invocar)
     except Exception as e:  # noqa: BLE001 — Bedrock: nunca un 500
         logger.warning("Equivalencias fallidas: %s", e)
         return build_response(200, {"generated": False, "reason": "error_modelo"})

@@ -210,6 +210,9 @@ def convertir(nombre: str, paginas: list, huella: str,
         return (par[1] if de_fuente else par[0]) if par else "[VERIFICAR]"
 
     md = [
+        # Lo que entra desde un documento solo admite señas del léxico LSB
+        # (tool/build_rag_corpus.py, MARCA_ESTRICTA).
+        "<!-- lexico: estricto -->",
         f"<!-- Borrador generado por tool/rag_ingestar_documentos.py desde "
         f"documentos/{nombre} (huella: {huella}). Revísalo y muévelo a "
         "escenarios/ para incorporarlo; después ejecuta "

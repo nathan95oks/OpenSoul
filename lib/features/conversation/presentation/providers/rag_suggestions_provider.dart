@@ -114,15 +114,17 @@ ConversationRoute? ragTramiteRoute(
   if (turn == null || tramite == null) return null;
   final questionId = RagTramites.questionId(best.scenarioId, turn);
   if (RagTramites.bankWithTramites().question(questionId) == null) return null;
+  // «¿Cuándo y dónde ocurrió?» son dos preguntas, cada una con sus tarjetas.
+  final questionIds = RagTramites.questionIdsOfTurn(best.scenarioId, turn);
   return ConversationRoute(
     type: ConversationRouteType.directQuestion,
     targetFamilyId: 'tramites',
     targetContextId: tramite.contextId,
-    targetQuestionIds: [questionId],
+    targetQuestionIds: questionIds,
     // La hizo el oyente: se responde aunque en el recorrido dependa de una
     // respuesta anterior (una ramificación del escenario).
-    presupposedQuestionIds: [questionId],
-    pathQuestionIds: [questionId],
+    presupposedQuestionIds: questionIds,
+    pathQuestionIds: questionIds,
     confidence: best.score,
     reason: 'rag:${best.scenarioId}#$turn',
   );

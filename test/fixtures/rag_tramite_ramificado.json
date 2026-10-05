@@ -36,76 +36,38 @@
     {
      "estado": "afirmado",
      "etiqueta": "Sí",
-     "frase": "Sí.",
+     "frase": "Sí, traje mi cédula.",
      "glosas": [
       "SÍ"
      ],
      "glosasPropias": true,
      "id": "si",
-     "origen": "unidad SÍ, fundada en «Sí, traje mi cédula.»",
+     "origen": "respuesta documentada «Sí, traje mi cédula.»",
      "polar": true
     },
     {
      "estado": "negado",
      "etiqueta": "No",
-     "frase": "No.",
+     "frase": "No, no traje mi cédula.",
      "glosas": [
       "NO"
      ],
      "glosasPropias": true,
      "id": "no",
-     "origen": "unidad NO, fundada en «No, no traje mi cédula.»",
+     "origen": "respuesta documentada «No, no traje mi cédula.»",
      "polar": true
     },
     {
      "estado": "desconocido",
      "etiqueta": "No sé",
-     "frase": "No sé.",
+     "frase": "No sé si la traje.",
      "glosas": [
       "NO_SABER"
      ],
      "glosasPropias": true,
      "id": "no_se",
-     "origen": "unidad NO_SABER, fundada en «No sé si la traje.»",
+     "origen": "respuesta documentada «No sé si la traje.»",
      "polar": true
-    },
-    {
-     "estado": "afirmado",
-     "etiqueta": "Sí, traje mi cédula.",
-     "frase": "Sí, traje mi cédula.",
-     "glosas": [
-      "SÍ",
-      "IDENTIDAD",
-      "TRAER"
-     ],
-     "glosasPropias": true,
-     "id": "r1",
-     "origen": "turno 2"
-    },
-    {
-     "estado": "negado",
-     "etiqueta": "No, no traje mi cédula.",
-     "frase": "No, no traje mi cédula.",
-     "glosas": [
-      "IDENTIDAD",
-      "TRAER",
-      "NO"
-     ],
-     "glosasPropias": true,
-     "id": "r2",
-     "origen": "respuestas del turno 1"
-    },
-    {
-     "estado": "desconocido",
-     "etiqueta": "No sé si la traje.",
-     "frase": "No sé si la traje.",
-     "glosas": [
-      "NO_SABER",
-      "TRAER"
-     ],
-     "glosasPropias": true,
-     "id": "r3",
-     "origen": "respuestas del turno 1"
     }
    ],
    "origen": {
@@ -141,47 +103,6 @@
    "noOfrecer": [],
    "nodos": [],
    "opciones": [
-    {
-     "estado": "afirmado",
-     "etiqueta": "Traje el certificado y la fotocopia.",
-     "frase": "Traje el certificado y la fotocopia.",
-     "glosas": [
-      "CERTIFICADO",
-      "FOTOCOPIA",
-      "TRAER"
-     ],
-     "glosasPropias": true,
-     "id": "r1",
-     "origen": "turno 4",
-     "salida": true
-    },
-    {
-     "estado": "afirmado",
-     "etiqueta": "Traje la factura.",
-     "frase": "Traje la factura.",
-     "glosas": [
-      "FACTURA",
-      "TRAER"
-     ],
-     "glosasPropias": true,
-     "id": "r2",
-     "origen": "respuestas del turno 3",
-     "salida": true
-    },
-    {
-     "estado": "negado",
-     "etiqueta": "No traje documentos.",
-     "frase": "No traje documentos.",
-     "glosas": [
-      "PAPEL",
-      "TRAER",
-      "NO"
-     ],
-     "glosasPropias": true,
-     "id": "r3",
-     "origen": "respuestas del turno 3",
-     "salida": true
-    },
     {
      "estado": "afirmado",
      "etiqueta": "Certificado",
@@ -231,7 +152,7 @@
    "campos": [
     "tramite"
    ],
-   "control": "polar2",
+   "control": "polar3",
    "dominio": "tramite",
    "entidad": "Tramite",
    "formulacion": "¿Tiene una fotocopia de la cédula?",
@@ -252,52 +173,38 @@
     {
      "estado": "afirmado",
      "etiqueta": "Sí",
-     "frase": "Sí.",
+     "frase": "Sí, tengo fotocopia.",
      "glosas": [
       "SÍ"
      ],
      "glosasPropias": true,
      "id": "si",
-     "origen": "unidad SÍ, fundada en «Sí, tengo fotocopia.»",
+     "origen": "respuesta documentada «Sí, tengo fotocopia.»",
      "polar": true
     },
     {
      "estado": "negado",
      "etiqueta": "No",
-     "frase": "No.",
+     "frase": "No, no tengo fotocopia.",
      "glosas": [
       "NO"
      ],
      "glosasPropias": true,
      "id": "no",
-     "origen": "unidad NO, fundada en «No, no tengo fotocopia.»",
+     "origen": "respuesta documentada «No, no tengo fotocopia.»",
      "polar": true
     },
     {
-     "estado": "negado",
-     "etiqueta": "No, no tengo fotocopia.",
-     "frase": "No, no tengo fotocopia.",
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé.",
      "glosas": [
-      "FOTOCOPIA",
-      "TENER",
-      "NO"
+      "NO_SABER"
      ],
      "glosasPropias": true,
-     "id": "r1",
-     "origen": "turno 6"
-    },
-    {
-     "estado": "afirmado",
-     "etiqueta": "Sí, tengo fotocopia.",
-     "frase": "Sí, tengo fotocopia.",
-     "glosas": [
-      "SÍ",
-      "FOTOCOPIA",
-      "TENER"
-     ],
-     "glosasPropias": true,
-     "id": "r2",
-     "origen": "respuestas del turno 5"
+     "id": "no_se",
+     "origen": "partícula: el escenario no documenta este estado",
+     "polar": true
     }
    ],
    "origen": {
@@ -314,7 +221,7 @@
    "campos": [
     "tramite"
    ],
-   "control": "seleccion_unica",
+   "control": "polar3",
    "dominio": "tramite",
    "entidad": "Tramite",
    "formulacion": "¿Sabe dónde está su cédula?",
@@ -334,50 +241,38 @@
     {
      "estado": "afirmado",
      "etiqueta": "Sí",
-     "frase": "Sí.",
+     "frase": "Sí, está en mi casa.",
      "glosas": [
       "SÍ"
      ],
      "glosasPropias": true,
      "id": "si",
-     "origen": "unidad SÍ, fundada en «Sí, está en mi casa.»",
+     "origen": "respuesta documentada «Sí, está en mi casa.»",
+     "polar": true
+    },
+    {
+     "estado": "negado",
+     "etiqueta": "No",
+     "frase": "No.",
+     "glosas": [
+      "NO"
+     ],
+     "glosasPropias": true,
+     "id": "no",
+     "origen": "partícula: el escenario no documenta este estado",
      "polar": true
     },
     {
      "estado": "desconocido",
      "etiqueta": "No sé",
-     "frase": "No sé.",
+     "frase": "No sé dónde está.",
      "glosas": [
       "NO_SABER"
      ],
      "glosasPropias": true,
      "id": "no_se",
-     "origen": "unidad NO_SABER, fundada en «No sé dónde está.»",
+     "origen": "respuesta documentada «No sé dónde está.»",
      "polar": true
-    },
-    {
-     "estado": "desconocido",
-     "etiqueta": "No sé dónde está.",
-     "frase": "No sé dónde está.",
-     "glosas": [
-      "NO_SABER",
-      "DÓNDE"
-     ],
-     "glosasPropias": true,
-     "id": "r1",
-     "origen": "turno 8"
-    },
-    {
-     "estado": "afirmado",
-     "etiqueta": "Sí, está en mi casa.",
-     "frase": "Sí, está en mi casa.",
-     "glosas": [
-      "SÍ",
-      "CASA"
-     ],
-     "glosasPropias": true,
-     "id": "r2",
-     "origen": "respuestas del turno 7"
     }
    ],
    "origen": {
@@ -423,8 +318,8 @@
     {
      "cuando": [
       {
-       "opciones": [
-        "r3"
+       "estados": [
+        "desconocido"
        ],
        "pregunta": "R.ESC-DDRR-90.1"
       }

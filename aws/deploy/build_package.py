@@ -40,6 +40,8 @@ FUENTES = [
     os.path.join(AWS, "rag_equivalencias.py"),
     os.path.join(AWS, "rag_revision.py"),
     os.path.join(AWS, "catalogo_senas.json"),
+    # Léxico LSB (M1–M4, diccionarios y catálogo) de tool/build_lexico_lsb.py.
+    os.path.join(AWS, "lexico_lsb.json"),
     os.path.join(AWS, "rag_zonas.py"),
     os.path.join(AWS, "zonas_senas.json"),
 ]

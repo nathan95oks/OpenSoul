@@ -13,13 +13,20 @@ CRPVA), que en LSB se deletrean. Para cada una:
 2. **Bedrock.** Si no, la Lambda LSB→Texto/Audio (`action: "equivalencias"`)
    pide al modelo una seña oficial equivalente en esas frases, o ninguna. La
    Lambda descarta cualquier glosa fuera del catálogo.
+   Con el léxico LSB (`aws/lexico_lsb.json`: M1–M4 y diccionarios) hay
+   dos formas de entrar:
+   * **forma 1**: la palabra se escribe igual que una seña del léxico. Va
+     como `candidata` con su módulo y tema, y el modelo confirma que es el
+     mismo sentido («mi fiscal» no es FISCAL de «escuela fiscal», M3);
+   * **forma 2**: no está; el modelo propone una seña sinónima o una
+     combinación de hasta tres señas del léxico (`senas`).
 3. **Confirmación automática**, sin revisión humana: una propuesta de
    Bedrock se aprueba sola si además (a) la seña es de la misma zona que la
-   palabra (la que le dieron Titan y Bedrock en `tool/rag_zonas.py`) y (b)
-   una frase real con la seña en lugar de la palabra dice lo mismo que la
-   original (`action: "retrotraducir"`: no falta la palabra ni sobra la
-   seña). Si falla una señal, se rechaza sola. Compartir la raíz no basta
-   (FISCAL no es FISCALÍA): por eso hacen falta las tres.
+   palabra (la que le dieron Titan y Bedrock en `tool/rag_zonas.py`), cuando
+   es una sola seña con zona, y (b) una frase real con las señas en lugar de
+   la palabra dice lo mismo que la original (`action: "retrotraducir"`: no
+   falta la palabra ni sobra ninguna seña). Si falla una señal, se rechaza
+   sola. Compartir la raíz no basta (FISCAL no es FISCALÍA).
 
 Escribe `docs/negocio/rag/senas_equivalentes.json`.
 
@@ -45,7 +52,8 @@ import sys
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, AQUI)
 
-from build_rag_corpus import GLOSAS, ROOT, _es_sigla, _norm  # noqa: E402
+from build_rag_corpus import (GLOSAS, ROOT, _OMITIDAS,  # noqa: E402
+                              _es_sigla, _norm, cargar_lexico, lexico_directo)
 
 CSV_CATALOGO = os.path.join(ROOT, "assets", "dictionary", "glosas_opensoul.csv")
 FOTO_CATALOGO = os.path.join(ROOT, "aws", "catalogo_senas.json")
@@ -134,13 +142,23 @@ def palabras_sin_sena() -> dict:
         for c in v.get("correcciones") or []:
             p = c.get("palabra")
             if (c.get("accion") != "concepto_sin_catalogo" or not p
-                    or _es_sigla(p, texto)
+                    or _norm(p) in _OMITIDAS or _es_sigla(p, texto)
                     or not re.fullmatch(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ_ ]+", p)):
                 continue
             out.setdefault(p.upper(), [])
             if len(out[p.upper()]) < 3 and texto not in out[p.upper()]:
                 out[p.upper()].append(texto)
     return out
+
+
+def version_lexico() -> str | None:
+    """Huella corta del léxico con que se decide, o None sin léxico."""
+    from build_rag_corpus import LEXICO
+    if not os.path.exists(LEXICO):
+        return None
+    import hashlib
+    with open(LEXICO, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()[:12]
 
 
 def endpoint() -> str:
@@ -156,27 +174,51 @@ def pedir_bedrock(url: str, tanda: list) -> list:
     return r["propuestas"]
 
 
-def decidir(palabra: str, propuesta: dict, cat: dict) -> dict:
-    sena = propuesta.get("sena")
-    base = {"razon": propuesta.get("razon", ""), "origen": "bedrock"}
+def decidir(palabra: str, propuesta: dict, cat: dict,
+            candidata: str | None = None) -> dict:
+    """La propuesta de Bedrock como entrada de senas_equivalentes.json. Una
+    combinación va en `senas`; una sola seña, también en `sena`."""
+    senas = propuesta.get("senas") or (
+        [propuesta["sena"]] if propuesta.get("sena") else [])
+    base = {"razon": propuesta.get("razon", ""),
+            "origen": "lexico+bedrock" if candidata else "bedrock"}
+    if candidata:
+        base["candidata"] = candidata
     if propuesta.get("descartada"):
         base["descartada"] = propuesta["descartada"]
-    if not sena:
+    if not senas:
         return {**base, "sena": None, "estado": "sin_equivalente"}
-    return {**base, "sena": sena, "estado": "propuesta",
-            "misma_raiz": comparte_raiz(palabra, sena, cat)}
+    if len(senas) > 1:
+        return {**base, "sena": None, "senas": senas, "estado": "propuesta"}
+    return {**base, "sena": senas[0], "estado": "propuesta",
+            "misma_raiz": comparte_raiz(palabra, senas[0], cat)}
 
 
 def _frases_con_glosas() -> dict:
-    """{frase: glosas} del corpus construido."""
-    from build_rag_corpus import SALIDA as CORPUS
-    with open(CORPUS, encoding="utf-8") as f:
-        corpus = json.load(f)
+    """{frase: glosas con sus señas pendientes marcadas}, de la caché de
+    traducción y no del corpus: en un archivo con el léxico estricto, una
+    tarjeta con una palabra sin seña no lleva glosas en el corpus, y es
+    justo la frase con que se confirma su equivalencia."""
+    from build_rag_corpus import (CORRECCIONES, aplicar_equivalencias,
+                                  cargar_equivalencias, marcar_senas_pendientes)
+    with open(GLOSAS, encoding="utf-8") as f:
+        cache = json.load(f)
+    corregidas = {}
+    if os.path.exists(CORRECCIONES):
+        with open(CORRECCIONES, encoding="utf-8") as f:
+            corregidas = json.load(f)
+    equivalencias = cargar_equivalencias()
     out = {}
-    for e in corpus["escenarios"]:
-        for t in e["turnos"] + [r for p in e["variantes"] for r in p["respuestas"]]:
-            if t.get("glosas"):
-                out.setdefault(t["texto"], t["glosas"])
+    for texto, v in cache.items():
+        if texto in corregidas:
+            glosas = aplicar_equivalencias(corregidas[texto]["glosas"], texto,
+                                           equivalencias)
+        else:
+            glosas = marcar_senas_pendientes(
+                v.get("glosas"), v.get("correcciones") or [], texto,
+                equivalencias)
+        if glosas:
+            out[texto] = glosas
     return out
 
 
@@ -196,12 +238,17 @@ def confirmar(url: str, salida: dict) -> None:
         zona_sena = {_norm(g): z for g, z in json.load(f).items()}
     frases = _frases_con_glosas()
     for palabra, e in sorted(salida.items()):
-        if e.get("estado") != "propuesta" or e.get("revisado") or not e.get("sena"):
+        senas = e.get("senas") or ([e["sena"]] if e.get("sena") else [])
+        if e.get("estado") != "propuesta" or e.get("revisado") or not senas:
             continue
-        sena = e["sena"]
         clave = palabra.replace(" ", "_")
         zona = zona_de.get(clave)
-        titan = bool(zona) and zona_sena.get(_norm(sena)) == zona
+        # La zona solo se puede comparar con una seña sola que tenga zona (las
+        # del catálogo). Una combinación o una seña de M1–M4 sin zona depende
+        # del sentido que confirmó el modelo y de la vuelta al español.
+        con_zona = len(senas) == 1 and _norm(senas[0]) in zona_sena
+        titan = (bool(zona) and zona_sena.get(_norm(senas[0])) == zona
+                 if con_zona else None)
         # Una frase real con la seña en lugar de la palabra.
         vuelta, detalle = False, "sin frase con la palabra"
         marca = "SENA_PENDIENTE:" + clave
@@ -209,7 +256,9 @@ def confirmar(url: str, salida: dict) -> None:
             glosas = frases.get(texto)
             if not glosas or marca not in glosas:
                 continue
-            nuevas = [sena if g == marca else g for g in glosas]
+            nuevas = []
+            for g in glosas:
+                nuevas += senas if g == marca else [g]
             r = llamar(url, {"action": "retrotraducir", "items": [
                 {"texto": texto, "glosas": nuevas}]})
             if r.get("generated") is not True:
@@ -218,16 +267,19 @@ def confirmar(url: str, salida: dict) -> None:
             res = r["items"][0]
             falta = any(conjugada(w, [palabra]) or _norm(w) == _norm(palabra)
                         for w in res["faltan"])
-            sobra = _norm(sena) in {_norm(s) for s in res["sobran"]}
+            sobra = bool({_norm(s) for s in senas}
+                         & {_norm(s) for s in res["sobran"]})
             vuelta = not falta and not sobra
             detalle = (f"«{texto}» → falta {res['faltan']} sobra "
                        f"{res['sobran']}")
             break
-        e["senales"] = {"bedrock": sena, "zona_palabra": zona,
-                        "zona_sena": zona_sena.get(_norm(sena)),
+        e["senales"] = {"bedrock": senas, "zona_palabra": zona,
+                        "zona_sena": (zona_sena.get(_norm(senas[0]))
+                                      if con_zona else None),
                         "titan": titan, "vuelta": vuelta,
                         "vuelta_detalle": detalle}
-        e["estado"] = "aprobada" if titan and vuelta else "rechazada"
+        e["estado"] = ("aprobada" if vuelta and titan is not False
+                       else "rechazada")
         e["origen"] = "bedrock+titan+vuelta"
         e["automatica"] = True
 
@@ -241,7 +293,15 @@ def main() -> int:
         with open(SALIDA, encoding="utf-8") as f:
             previas = json.load(f)
     palabras = palabras_sin_sena()
+    # Forma 1: palabras que se escriben como una seña del léxico (M1–M4,
+    # diccionarios). No se aprueban por cómo se escriben: van a Bedrock como
+    # candidatas, con su tema, para confirmar el sentido.
+    candidatas = lexico_directo()
+    if not cargar_lexico():
+        print("aviso: falta aws/lexico_lsb.json (python "
+              "tool/build_lexico_lsb.py): solo se busca en el catálogo")
     hoy = datetime.date.today().isoformat()
+    version = version_lexico()
     salida = {p: e for p, e in previas.items() if e.get("revisado")}
     faltan = []
     for p, frases in sorted(palabras.items()):
@@ -250,7 +310,13 @@ def main() -> int:
         evidencia = por_catalogo(p, cat)
         if evidencia:
             salida[p] = {**evidencia, "ejemplos": frases, "fecha": hoy}
-        elif p in previas and previas[p].get("origen", "").startswith("bedrock"):
+        elif (p in previas and "bedrock" in previas[p].get("origen", "")
+              and (previas[p].get("estado") == "aprobada"
+                   or previas[p].get("lexico") == version)):
+            # Una decisión de Bedrock se reutiliza mientras el léxico con que
+            # se tomó no cambie; una aprobada, siempre. Una «sin
+            # equivalente» de antes del léxico se vuelve a pedir: ahora hay
+            # señas de M1–M4 y diccionarios que antes no estaban.
             salida[p] = previas[p]
             if previas[p].get("automatica") is None and previas[p].get("sena"):
                 # Decidida antes a mano o sin confirmar: se vuelve a decidir
@@ -261,11 +327,18 @@ def main() -> int:
     if faltan and "--sin-red" not in sys.argv:
         url = endpoint()
         for i in range(0, len(faltan), TANDA):
-            tanda = [{"palabra": p, "ejemplos": palabras[p]}
-                     for p in faltan[i:i + TANDA]]
-            for p, prop in zip(faltan[i:i + TANDA], pedir_bedrock(url, tanda)):
-                salida[p] = {**decidir(p, prop, cat), "ejemplos": palabras[p],
-                             "fecha": hoy}
+            tanda = []
+            for p in faltan[i:i + TANDA]:
+                pedido = {"palabra": p, "ejemplos": palabras[p]}
+                candidata = candidatas.get(_norm(p.replace("_", " ")))
+                if candidata:
+                    pedido["candidata"] = candidata
+                tanda.append(pedido)
+            for pedido, prop in zip(tanda, pedir_bedrock(url, tanda)):
+                p = pedido["palabra"]
+                salida[p] = {**decidir(p, prop, cat, pedido.get("candidata")),
+                             "ejemplos": palabras[p], "fecha": hoy,
+                             "lexico": version}
             print(f"  {min(i + TANDA, len(faltan))}/{len(faltan)}", flush=True)
     if "--sin-red" not in sys.argv:
         confirmar(endpoint(), salida)

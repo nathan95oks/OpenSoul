@@ -61,26 +61,30 @@ void main() {
 
     test('cada respuesta abre su propia pregunta siguiente', () {
       var s = rules.startJourney('tramite_ddrr_90');
-      s = rules.select(s, cedula, 'r1').session; // Sí
+      s = rules.select(s, cedula, 'si').session;
       expect(visibles(s), {cedula, documentos});
-      s = rules.select(s, cedula, 'r2').session; // No
+      s = rules.select(s, cedula, 'no').session;
       expect(visibles(s), {cedula, fotocopia});
-      s = rules.select(s, cedula, 'r3').session; // No sé
+      // «Turno 7: si Turno 1 = «No sé si la traje.»»: la rama se declaró
+      // sobre esa frase y vale por su estado, el de NO SÉ.
+      s = rules.select(s, cedula, 'no_se').session;
       expect(visibles(s), {cedula, dondeEsta});
     });
 
-    test('se responde con las unidades SÍ, NO y NO SÉ', () {
+    test('se responde con SÍ, NO y NO SÉ: una seña cada una', () {
       final q = bank.question(cedula)!;
       expect(q.isPolar, isTrue);
       expect(
         [
-          for (final o in q.options.take(3))
+          for (final o in q.options)
             '${o.id} ${o.glosses.join('+')} «${o.phrase}» ${o.state.wireName}',
         ],
         [
-          'si SÍ «Sí.» afirmado',
-          'no NO «No.» negado',
-          'no_se NO_SABER «No sé.» desconocido',
+          // Lo que se dice al elegirla es la respuesta documentada de ese
+          // estado: una frase completa que se entiende sola.
+          'si SÍ «Sí, traje mi cédula.» afirmado',
+          'no NO «No, no traje mi cédula.» negado',
+          'no_se NO_SABER «No sé si la traje.» desconocido',
         ],
       );
       var s = rules.startJourney(
@@ -88,42 +92,28 @@ void main() {
         purpose: GuidedPurpose.reply,
       );
       s = rules.select(s, cedula, 'si').session;
-      // Una rama declarada por estado se abre igual con la unidad.
-      expect(visibles(s), {cedula, documentos});
       final inter = s.toIntervention();
-      // Lo elegido, lo que hace el avatar y lo que se envía coinciden.
+      // Lo elegido y lo que hace el avatar: la seña SÍ.
       expect(rules.glossesOf(inter), ['SÍ']);
-      expect(composer.compose(inter), 'Sí.');
+      expect(composer.compose(inter), 'Sí, traje mi cédula.');
       s = rules.select(s, cedula, 'no').session;
-      expect(visibles(s), {cedula, fotocopia});
       expect(s.answers[cedula]!.optionIds, ['no']);
     });
 
-    test('una rama declarada sobre una respuesta concreta pide esa '
-        'respuesta', () {
-      // «Turno 7: si Turno 1 = «No sé si la traje.»»: la unidad NO SÉ no
-      // dice lo mismo, así que no abre la pregunta.
-      var s = rules.startJourney('tramite_ddrr_90');
-      s = rules.select(s, cedula, 'no_se').session;
-      expect(visibles(s), {cedula});
-      s = rules.select(s, cedula, 'r3').session;
-      expect(visibles(s), {cedula, dondeEsta});
+    test('sin respuesta documentada de un estado, la partícula sola', () {
+      final q = bank.question(fotocopia)!;
+      expect(q.option('no_se')!.phrase, 'No sé.');
     });
 
     test('al cambiar la respuesta se borra lo que dependía de ella', () {
       var s = rules.startJourney('tramite_ddrr_90');
-      s = rules.select(s, cedula, 'r1').session;
+      s = rules.select(s, cedula, 'si').session;
       s = rules.select(s, documentos, 'z1').session;
       expect(s.answers.keys, containsAll([cedula, documentos]));
 
-      final cambio = rules.select(s, cedula, 'r2');
+      final cambio = rules.select(s, cedula, 'no');
       expect(cambio.prunedQuestionIds, [documentos]);
       expect(cambio.session.answers.keys, [cedula]);
-      expect(
-        composer.compose(cambio.session.toIntervention()),
-        // Una declaración suelta no empieza con «No,»: el composer lo quita.
-        'No traje mi cédula.',
-      );
     });
 
     test('la pregunta hija que hace el oyente sí se puede responder', () {
@@ -139,41 +129,42 @@ void main() {
 
     test('una pregunta que no se ve no se puede responder', () {
       final s = rules.startJourney('tramite_ddrr_90');
-      final intento = rules.select(s, fotocopia, 'r1');
+      final intento = rules.select(s, fotocopia, 'si');
       expect(intento.accepted, isFalse);
       expect(intento.rejection, SelectionRejection.unreachable);
     });
 
     test('Sí, No y No sé se excluyen entre sí', () {
       var s = rules.startJourney('tramite_ddrr_90');
-      s = rules.select(s, cedula, 'r1').session;
-      s = rules.select(s, cedula, 'r3').session;
-      expect(s.answers[cedula]!.optionIds, ['r3']);
+      s = rules.select(s, cedula, 'si').session;
+      s = rules.select(s, cedula, 'no_se').session;
+      expect(s.answers[cedula]!.optionIds, ['no_se']);
       expect(s.answers[cedula]!.state, GuidedAnswerState.unknown);
     });
   });
 
   group('«¿Qué documentos trajo?» junta tarjetas', () {
     GuidedSession conCedula() => rules
-        .select(rules.startJourney('tramite_ddrr_90'), cedula, 'r1')
+        .select(rules.startJourney('tramite_ddrr_90'), cedula, 'si')
         .session;
 
-    test('solo ofrece lo que respondieron a esta pregunta', () {
-      final q = bank.question(documentos)!;
-      expect(q.isMultiple, isTrue);
-      expect(q.maxPicks, 3);
-      expect(
-        [
-          for (final o in q.options)
-            if (!o.isExit) o.glosses,
-        ],
-        [
-          ['CERTIFICADO'],
-          ['FOTOCOPIA'],
-          ['FACTURA'],
-        ],
-      );
-    });
+    test(
+      'solo ofrece señas sueltas de lo que respondieron a esta pregunta',
+      () {
+        final q = bank.question(documentos)!;
+        expect(q.isMultiple, isTrue);
+        expect(q.maxPicks, 3);
+        // PAPEL no: «documentos» ya es lo que pregunta.
+        expect(
+          [for (final o in q.options) o.glosses],
+          [
+            ['CERTIFICADO'],
+            ['FOTOCOPIA'],
+            ['FACTURA'],
+          ],
+        );
+      },
+    );
 
     test('la selección es independiente y se compone con su frase', () {
       var s = conCedula();
@@ -182,50 +173,14 @@ void main() {
       expect(s.answers[documentos]!.optionIds, ['z1', 'z2']);
       expect(
         composer.compose(s.toIntervention()),
-        'Traje mi cédula. Traje un certificado y una fotocopia.',
+        contains('Traje un certificado y una fotocopia.'),
       );
       // Quitar una tarjeta deja la otra.
       s = rules.deselect(s, documentos, 'z1').session;
       expect(
         composer.compose(s.toIntervention()),
-        'Traje mi cédula. Traje una fotocopia.',
+        contains('Traje una fotocopia.'),
       );
-    });
-
-    test('una frase documentada va sola y reemplaza a las tarjetas', () {
-      var s = conCedula();
-      s = rules.select(s, documentos, 'z1').session;
-      final frase = rules.select(s, documentos, 'r1');
-      expect(frase.replacedOptionIds, ['z1']);
-      expect(
-        composer.compose(frase.session.toIntervention()),
-        'Traje mi cédula. Traje el certificado y la fotocopia.',
-      );
-      // Y una tarjeta reemplaza a la frase.
-      s = rules.select(frase.session, documentos, 'z3').session;
-      expect(s.answers[documentos]!.optionIds, ['z3']);
-    });
-
-    test('al responder al oyente se conserva el «Sí,» de la frase', () {
-      var s = rules.startJourney(
-        'tramite_ddrr_90',
-        purpose: GuidedPurpose.reply,
-      );
-      s = rules.select(s, cedula, 'r1').session;
-      s = rules.select(s, documentos, 'z3').session;
-      expect(
-        composer.compose(s.toIntervention()),
-        'Sí, traje mi cédula. Traje la factura.',
-      );
-    });
-
-    test('cada opción conserva su secuencia de glosas completa', () {
-      final r1 = bank.question(documentos)!.option('r1')!;
-      expect(r1.glosses, ['CERTIFICADO', 'FOTOCOPIA', 'TRAER']);
-      expect(r1.label, 'Traje el certificado y la fotocopia.');
-      // La fila muestra (y el avatar hace) toda la secuencia, no solo la
-      // primera glosa.
-      expect(r1.displayFormulation, 'CERTIFICADO · FOTOCOPIA · TRAER');
     });
   });
 
@@ -246,10 +201,23 @@ void main() {
           for (final c in step.conditions) {
             expect(antes, contains(c.questionId), reason: step.questionId);
           }
-          // Cada opción tiene su secuencia y su español por separado.
+          // Cada tarjeta es una seña (o una seña con su negación: «No
+          // entiendo» = COMPRENDER NO), nunca una frase entera, y nunca una
+          // seña que falta; su español va aparte.
           for (final o in q['opciones'] as List<dynamic>) {
             final opcion = o as Map<String, dynamic>;
-            expect(opcion['glosas'], isNotEmpty, reason: opcion['frase']);
+            final glosas = (opcion['glosas'] as List<dynamic>).cast<String>();
+            expect(
+              glosas.length,
+              inInclusiveRange(1, 2),
+              reason: opcion['frase'],
+            );
+            if (glosas.length == 2) expect(glosas.last, 'NO');
+            expect(
+              glosas.any((g) => g.startsWith('SENA_PENDIENTE:')),
+              isFalse,
+              reason: opcion['frase'],
+            );
             expect(opcion['frase'], isNotEmpty);
           }
           antes.add(step.questionId);

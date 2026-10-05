@@ -1,3 +1,4 @@
+<!-- lexico: estricto -->
 <!-- Borrador generado por tool/rag_ingestar_documentos.py desde documentos/Derechos_Reales.pdf (huella: 9ebcaddc7f9150009c01b49e2cb7d4092fbcedad9ecdb7944f255e96a453e20c). Revísalo y muévelo a escenarios/ para incorporarlo; después ejecuta tool/rag_actualizar.py. «Escenarios posibles» es una nota narrativa: no crea ramificaciones; decláralas en «### Ramificaciones». -->
 # Escenarios desde Derechos_Reales.pdf
 

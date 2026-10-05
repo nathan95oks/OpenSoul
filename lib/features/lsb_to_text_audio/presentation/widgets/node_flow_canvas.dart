@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lsb_legal_app/core/di/injection.dart'
+    show pendingSignCatalogProvider;
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/pending_sign_info_sheet.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/di/injection.dart';
@@ -186,7 +189,7 @@ class LsbFormulationStrip extends ConsumerWidget {
   }
 }
 
-class _LsbPiece extends StatelessWidget {
+class _LsbPiece extends ConsumerWidget {
   final LsbFormulationSegment segment;
   final bool withImage;
 
@@ -195,7 +198,28 @@ class _LsbPiece extends StatelessWidget {
   static const _imageSize = 20.0;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pieza = _pieza(context);
+    if (!PendingSign.isPending(segment.label)) return pieza;
+    // Sin seña propia: tocarla o deslizarla explica qué es.
+    Future<void> explicar() => showPendingSignInfo(
+      context,
+      ref.read(pendingSignCatalogProvider.future),
+      [segment.label],
+    );
+    return Semantics(
+      button: true,
+      label: '${PendingSign.wordOf(segment.label)}: sin seña, ver qué es',
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: explicar,
+        onHorizontalDragEnd: (_) => explicar(),
+        child: pieza,
+      ),
+    );
+  }
+
+  Widget _pieza(BuildContext context) {
     final esSena =
         segment.kind == LsbSegmentKind.sign ||
         segment.kind == LsbSegmentKind.compound;

@@ -7,9 +7,14 @@ import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/di/injection.dart'
+    show pendingSignCatalogProvider;
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/gloss_line.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_preview_planner.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_preview_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/gloss_row.dart';
 
 class _SinImagenes extends SignImagesNotifier {
@@ -81,26 +86,153 @@ void main() {
   ) async {
     const azul = Color(0xFF2563EB);
     await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: GlossLine(
-            glosses: ['YO', 'NECESITAR', 'SENA_PENDIENTE:FOLIO_REAL'],
-            style: TextStyle(color: Colors.black),
-            pendingColor: azul,
+      const ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: GlossLine(
+              glosses: ['YO', 'NECESITAR', 'SENA_PENDIENTE:FOLIO_REAL'],
+              style: TextStyle(color: Colors.black),
+              pendingColor: azul,
+            ),
           ),
         ),
       ),
     );
-    final linea = tester.widget<RichText>(find.byType(RichText).first);
-    final spans = <TextSpan>[];
-    linea.text.visitChildren((s) {
-      if (s is TextSpan && s.text != null) spans.add(s);
-      return true;
-    });
-    final folio = spans.firstWhere((s) => s.text == 'FOLIO REAL');
+    final folio = tester.widget<Text>(find.text('FOLIO REAL'));
     expect(folio.style?.color, azul);
-    expect(spans.any((s) => s.text!.contains('SENA_PENDIENTE')), isFalse);
-    expect(find.text('En azul: seña a incorporar'), findsOneWidget);
+    expect(find.textContaining('SENA_PENDIENTE'), findsNothing);
+    expect(
+      find.text('En azul: seña a incorporar (tóquela para ver qué es)'),
+      findsOneWidget,
+    );
+  });
+
+  group('qué es una palabra sin seña', () {
+    final catalog = PendingSignCatalog.fromJsonString(
+      File('assets/dictionary/senas_sin_sena.json').readAsStringSync(),
+    );
+
+    testWidgets('tocarla abre su descripción en lugar de una seña', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            pendingSignCatalogProvider.overrideWith((ref) async => catalog),
+          ],
+          child: const MaterialApp(
+            home: Scaffold(
+              body: GlossLine(
+                glosses: ['YO', 'SENA_PENDIENTE:INMUEBLE', 'TENER'],
+                style: TextStyle(color: Colors.black),
+                pendingColor: Colors.blue,
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.tap(find.text('INMUEBLE'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('info_sin_sena')), findsOneWidget);
+      expect(
+        find.textContaining('No tiene seña propia en los módulos M1–M4'),
+        findsOneWidget,
+      );
+      expect(
+        find.text(
+          'Casa, departamento o terreno: propiedad que no se puede mover.',
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.text('Descripción provisional, por revisar.'),
+        findsOneWidget,
+      );
+    });
+
+    test('una errata de la traducción remite a su palabra', () {
+      expect(
+        catalog.infoOf('SENA_PENDIENTE:CATARSTRAL').description,
+        catalog.infoOf('SENA_PENDIENTE:CATASTRAL').description,
+      );
+      expect(catalog.infoOf('SENA_PENDIENTE:ANTEZANA').isProperName, isTrue);
+    });
+
+    test('sin descripción, al menos su nombre', () {
+      final info = catalog.infoOf('SENA_PENDIENTE:PALABRA_NUEVA');
+      expect(info.word, 'PALABRA NUEVA');
+      expect(info.description, isEmpty);
+    });
+
+    Future<List<SignPreviewPlan>> deslizar(
+      WidgetTester tester,
+      List<String> glosas,
+    ) async {
+      final planes = <SignPreviewPlan>[];
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            pendingSignCatalogProvider.overrideWith((ref) async => catalog),
+            signPreviewPlayerProvider.overrideWithValue((_, plan, _) {
+              if (plan.glosses.isNotEmpty) planes.add(plan);
+              return const SizedBox.shrink();
+            }),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: Consumer(
+                builder: (context, ref, _) => TextButton(
+                  // Lo que hace la fila al deslizarse más allá del umbral.
+                  onPressed: () => ref
+                      .read(signPreviewControllerProvider)
+                      .show(context, glosas),
+                  child: const Text('deslizar'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('deslizar'));
+      await tester.pumpAndSettle();
+      return planes;
+    }
+
+    testWidgets('deslizar una glosa sin seña propia explica qué es', (
+      tester,
+    ) async {
+      final planes = await deslizar(tester, ['SENA_PENDIENTE:HIPOTECA']);
+      expect(planes, isEmpty, reason: 'no se inventa una seña');
+      expect(find.byKey(const Key('info_sin_sena')), findsOneWidget);
+      expect(find.text('HIPOTECA'), findsOneWidget);
+    });
+
+    testWidgets('deslizar una glosa con seña la hace en el avatar', (
+      tester,
+    ) async {
+      final planes = await deslizar(tester, ['ROBAR']);
+      expect(planes.single.glosses, ['ROBAR']);
+      expect(find.byKey(const Key('info_sin_sena')), findsNothing);
+    });
+
+    test('toda palabra sin seña del corpus tiene descripción', () {
+      final corpus = RagCorpus.fromJsonString(
+        File('assets/rag/escenarios_cbba.json').readAsStringSync(),
+      );
+      final sinDescripcion = <String>{};
+      for (final s in corpus.scenarios) {
+        for (final t in [
+          ...s.turns,
+          for (final v in s.variants) ...v.replies,
+        ]) {
+          for (final g in t.glosses.where(PendingSign.isPending)) {
+            if (catalog.infoOf(g).description.isEmpty) sinDescripcion.add(g);
+          }
+        }
+      }
+      expect(sinDescripcion, isEmpty);
+    });
   });
 
   testWidgets('la tarjeta del trámite pinta en azul la palabra sin seña', (

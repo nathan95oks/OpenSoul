@@ -272,6 +272,58 @@ class Ingesta(CarpetasTemporales):
         # El corpus activo no cambió: el borrador espera revisión.
         self.assertEqual(os.listdir(B.ESCENARIOS), ["a.md"])
 
+    def documento_de_escenarios(self, nombre="Escenarios DDRR.pdf", eid="91"):
+        paginas = [
+            f"ESC-DDRR-{eid} / CERTIFICADOS\nFolio Real de prueba\n"
+            "Situación: La persona pide un Folio Real.\n"
+            "PREGUNTAS EN UNA SECUENCIA POSIBLE\n"
+            "01\nFuncionario\n¿Trajo su cédula?\n"
+            "02\nPersona\nusuaria\nSí, traje mi cédula.\n"
+            "VARIANTES Y RESPUESTAS POSIBLES\n"
+            "P1. ¿Trajo su cédula?\n"
+            "Variantes: ¿Tiene su cédula?\n"
+            "Respuestas: Sí, traje mi cédula. / No sé.\n",
+            "Fuentes y trazabilidad\nConsultadas el 2026-10-01.\n"
+            f"F-DDRR-{eid} · Folio Real - requisitos\n"
+            "https://cm.organojudicial.gob.bo/consejo/requisitosddrr/42.html",
+        ]
+        self.escribir(B.DOCUMENTOS, nombre, pdf_con_texto(paginas))
+
+    def test_el_borrador_de_un_documento_pide_el_lexico_estricto(self):
+        self.documento_de_escenarios()
+        self.procesar("Escenarios DDRR.pdf")
+        ruta = os.path.join(I.PENDIENTES, "escenarios_ddrr_escenarios.md")
+        with open(ruta, encoding="utf-8") as f:
+            self.assertEqual(f.readline().strip(), B.MARCA_ESTRICTA)
+
+    def test_un_borrador_que_fallo_no_se_esconde_al_repetir(self):
+        # Antes: el texto extraído quedaba escrito, el borrador fallaba y la
+        # siguiente ejecución decía «sin cambios» y terminaba bien.
+        # ESC-DDRR-90 ya está en el corpus de prueba (a.md): el borrador no
+        # pasa la validación.
+        self.documento_de_escenarios(eid="90")
+        primera = self.procesar("Escenarios DDRR.pdf")
+        self.assertTrue(any(s.startswith("ERROR") for s in primera), primera)
+        segunda = self.procesar("Escenarios DDRR.pdf")
+        self.assertNotIn("sin cambios: Escenarios DDRR.pdf", segunda)
+        self.assertEqual([s.startswith("ERROR") for s in primera],
+                         [s.startswith("ERROR") for s in segunda])
+
+    def test_un_documento_ya_movido_a_escenarios_no_se_vuelve_a_proponer(self):
+        self.documento_de_escenarios()
+        self.procesar("Escenarios DDRR.pdf")
+        borrador = os.path.join(I.PENDIENTES, "escenarios_ddrr_escenarios.md")
+        os.replace(borrador, os.path.join(B.ESCENARIOS, "ddrr.md"))
+        salida = self.procesar("Escenarios DDRR.pdf")
+        self.assertEqual(len(salida), 1)
+        self.assertTrue(salida[0].startswith("ya incorporado:"), salida)
+
+    def test_sin_pypdf_un_pdf_da_un_mensaje_y_no_una_traza(self):
+        self.documento_de_escenarios()
+        with mock.patch.dict(sys.modules, {"pypdf": None}):
+            salida = self.procesar("Escenarios DDRR.pdf")
+        self.assertTrue(any("falta pypdf" in s for s in salida), salida)
+
     def test_el_corpus_rechaza_un_pdf_o_su_copia_en_escenarios(self):
         self.escribir(B.ESCENARIOS, "Derechos_Reales.pdf", pdf_con_texto(["x"]))
         self.escribir(B.ESCENARIOS, "copia.md", COPIA_TEXTUAL)
@@ -310,21 +362,27 @@ class Glosas(unittest.TestCase):
             ["SÍ, LA TRAJE", "si", "TRAJE MI CÉDULA", "SEÑA_INVENTADA",
              "SENA_PENDIENTE:folio real"])
 
-    def test_una_frase_guardada_como_glosa_no_se_ofrece(self):
+    def test_una_frase_guardada_como_glosa_no_llega_a_ninguna_tarjeta(self):
         cache = {**GLOSAS_DE_PRUEBA, "Sí, traje mi cédula.": ["SÍ, TRAJE MI CÉDULA"]}
         _, banco, _, avisos = construir_fixture(cache)
-        q = next(q for q in banco["preguntas"] if q["id"] == "R.ESC-DDRR-90.1")
-        self.assertNotIn("Sí, traje mi cédula.", [o["frase"] for o in q["opciones"]])
+        glosas = [g for q in banco["preguntas"] for o in q["opciones"]
+                  for g in o["glosas"]]
+        self.assertEqual(B.glosas_invalidas(glosas), [])
         self.assertTrue(any("no son glosas (SÍ, TRAJE MI CÉDULA)" in a
                             for a in avisos), avisos)
 
-    def test_cada_opcion_lleva_su_secuencia_completa_y_su_espanol_aparte(self):
+    def test_cada_tarjeta_es_una_sena_y_su_espanol_va_aparte(self):
         _, banco, _, _ = construir_fixture()
         q = next(q for q in banco["preguntas"] if q["id"] == "R.ESC-DDRR-90.3")
-        r1 = q["opciones"][0]
-        self.assertEqual(r1["frase"], "Traje el certificado y la fotocopia.")
-        self.assertEqual(r1["glosas"], ["CERTIFICADO", "FOTOCOPIA", "TRAER"])
-        self.assertEqual(r1["origen"], "turno 4")
+        self.assertEqual(q["control"], "seleccion_multiple")
+        self.assertEqual(q["plantilla"], "Traje {items}.")
+        # PAPEL no: ya es lo que pregunta («¿Qué documentos…?»).
+        self.assertEqual([(o["glosas"], o["frase"]) for o in q["opciones"]],
+                         [(["CERTIFICADO"], "un certificado"),
+                          (["FOTOCOPIA"], "una fotocopia"),
+                          (["FACTURA"], "la factura")])
+        todas = [o for q in banco["preguntas"] for o in q["opciones"]]
+        self.assertTrue(all(len(o["glosas"]) == 1 for o in todas))
 
     def test_las_preguntas_nuevas_se_traducen_en_la_misma_pasada(self):
         corpus, _, _, _ = construir_fixture(cache={})
@@ -353,8 +411,10 @@ class Ramificaciones(unittest.TestCase):
              "cuando": [{"pregunta": q1, "estados": ["afirmado"]}]},
             {"pregunta": "R.ESC-DDRR-90.5", "padre": q1,
              "cuando": [{"pregunta": q1, "estados": ["negado"]}]},
+            # «si Turno 1 = «No sé si la traje.»»: las respuestas ya no son
+            # frases que se eligen; cuenta su estado.
             {"pregunta": "R.ESC-DDRR-90.7", "padre": q1,
-             "cuando": [{"pregunta": q1, "opciones": ["r3"]}]},
+             "cuando": [{"pregunta": q1, "estados": ["desconocido"]}]},
         ])
 
     def test_la_pregunta_polar_se_responde_con_si_no_y_no_se(self):
@@ -363,26 +423,23 @@ class Ramificaciones(unittest.TestCase):
         self.assertEqual(
             [(o["id"], o["frase"], o["estado"], o["glosas"]) for o in q["opciones"]],
             [
-                # Las unidades del catálogo, con la partícula como frase: no
-                # se atribuye nada que la persona no señó…
-                ("si", "Sí.", "afirmado", ["SÍ"]),
-                ("no", "No.", "negado", ["NO"]),
-                ("no_se", "No sé.", "desconocido", ["NO_SABER"]),
-                # …y las respuestas documentadas como alternativas.
-                ("r1", "Sí, traje mi cédula.", "afirmado",
-                 ["SÍ", "IDENTIDAD", "TRAER"]),
-                ("r2", "No, no traje mi cédula.", "negado",
-                 ["IDENTIDAD", "TRAER", "NO"]),
-                ("r3", "No sé si la traje.", "desconocido", ["NO_SABER", "TRAER"]),
+                # Una seña por tarjeta; al elegirla se dice la respuesta
+                # documentada de ese estado, una frase completa.
+                ("si", "Sí, traje mi cédula.", "afirmado", ["SÍ"]),
+                ("no", "No, no traje mi cédula.", "negado", ["NO"]),
+                ("no_se", "No sé si la traje.", "desconocido", ["NO_SABER"]),
             ])
-        self.assertTrue(all(o["polar"] for o in q["opciones"][:3]))
+        self.assertTrue(all(o["polar"] for o in q["opciones"]))
 
-    def test_una_unidad_solo_si_el_escenario_documenta_ese_estado(self):
-        # «¿Tiene una fotocopia de la cédula?»: «Sí, tengo fotocopia.» y
-        # «No, no tengo fotocopia.»; ninguna respuesta «No sé».
+    def test_siempre_si_no_y_no_se_y_sin_respuesta_la_particula(self):
+        # «¿Tiene una fotocopia de la cédula?»: no hay respuesta «No sé»
+        # documentada; NO SÉ se ofrece igual y dice solo «No sé.».
         q = self.pregunta(5)
-        self.assertEqual(q["control"], "polar2")
-        self.assertEqual([o["id"] for o in q["opciones"]], ["si", "no", "r1", "r2"])
+        self.assertEqual(q["control"], "polar3")
+        self.assertEqual([(o["id"], o["frase"]) for o in q["opciones"]],
+                         [("si", "Sí, tengo fotocopia."),
+                          ("no", "No, no tengo fotocopia."),
+                          ("no_se", "No sé.")])
 
     def test_una_disyuntiva_no_se_responde_con_si_o_no(self):
         self.assertFalse(B.es_pregunta_polar("¿Es víctima o persona denunciada?"))
