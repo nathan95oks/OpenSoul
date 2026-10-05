@@ -189,7 +189,11 @@ class RagRetriever {
   /// «¿Tiene mascota?» habla de algo que ningún trámite cubre, no es «¿La
   /// tiene?». Entera también descartaría paráfrasis con una palabra nueva
   /// («¿Me dice la placa de su moto?»).
-  double _score(Set<String> said, _Entry e) {
+  double _score(
+    Set<String> said,
+    _Entry e, [
+    Map<String, String> saidComplements = const {},
+  ]) {
     final shared = said.intersection(e.tokens);
     if (shared.isEmpty) return 0;
     // Si el oyente no dijo toda una pregunta de sí o no, sus respuestas no
@@ -202,12 +206,49 @@ class RagRetriever {
     if (e.kind == _Kind.polar && missing.any(e.replyTokens.contains)) {
       return 0;
     }
+    // La misma palabra con otro complemento es otra cosa: «licencia de
+    // conducir» no es «licencia de funcionamiento», ni «certificado de
+    // nacimiento» es «certificado de matrimonio».
+    if (_otroComplemento(saidComplements, e.complements)) return 0;
     final sharedWeight = _weightOf(shared);
     final recall = sharedWeight / _weightOf(e.tokens);
     final unknown = said.where((t) => _weight(t) == 0).length;
     final precision =
         sharedWeight / (_weightOf(said) + unknown * _unknownWeight);
     return 2 * precision * recall / (precision + recall);
+  }
+
+  static final RegExp _complemento = RegExp(
+    r'([a-zñ]+)\s+del?\s+(?:(?:la|el|los|las|su|sus|mi|mis|un|una)\s+)?([a-zñ]+)',
+  );
+
+  /// «palabra de complemento» de una frase, por raíz: {licenci: conduc}.
+  static Map<String, String> complementsOf(String text) {
+    final out = <String, String>{};
+    final limpio = _sinTildes(text.toLowerCase());
+    for (final m in _complemento.allMatches(limpio)) {
+      final nucleo = DialogueGraph.tokensOf(m.group(1)!);
+      final comp = DialogueGraph.tokensOf(m.group(2)!);
+      if (nucleo.length == 1 && comp.length == 1) {
+        out[nucleo.single] = comp.single;
+      }
+    }
+    return out;
+  }
+
+  static String _sinTildes(String s) => s
+      .replaceAll(RegExp('[áà]'), 'a')
+      .replaceAll(RegExp('[éè]'), 'e')
+      .replaceAll(RegExp('[íì]'), 'i')
+      .replaceAll(RegExp('[óò]'), 'o')
+      .replaceAll(RegExp('[úùü]'), 'u');
+
+  static bool _otroComplemento(Map<String, String> a, Map<String, String> b) {
+    for (final MapEntry(key: nucleo, value: comp) in a.entries) {
+      final otro = b[nucleo];
+      if (otro != null && otro != comp) return true;
+    }
+    return false;
   }
 
   late final double _unknownWeight =
@@ -296,7 +337,8 @@ class RagRetriever {
       var ranked = [
         for (final e in _entries)
           if (e.negated == sentence.negated && sentence.compatibleWith(e.kind))
-            if (_score(said, e) case final score when score >= minScore)
+            if (_score(said, e, sentence.complements) case final score
+                when score >= minScore)
               (e, score),
       ]..sort((a, b) => ranking(b).compareTo(ranking(a)));
       if (ranked.isEmpty) continue;
@@ -467,13 +509,15 @@ class _Said {
   final Set<String> tokens;
   final bool negated;
   final _Kind kind;
+  final Map<String, String> complements;
 
-  const _Said(this.tokens, this.negated, this.kind);
+  const _Said(this.tokens, this.negated, this.kind, this.complements);
 
   factory _Said.of(String text) => _Said(
     DialogueGraph.tokensOf(text),
     RagRetriever.isNegated(text),
     RagRetriever._kindOf(text),
+    RagRetriever.complementsOf(text),
   );
 
   /// Una pregunta abierta no se responde con lo de una de sí o no, ni al
@@ -498,6 +542,9 @@ class _Entry {
 
   final _Kind kind;
 
+  /// «palabra de complemento» de la pregunta documentada.
+  final Map<String, String> complements;
+
   _Entry(
     this.scenario,
     this.tokens,
@@ -506,6 +553,7 @@ class _Entry {
     this.negated = false,
     this.replyTokens = const {},
     this.kind = _Kind.statement,
+    this.complements = const {},
   });
 
   factory _Entry.of(
@@ -521,6 +569,7 @@ class _Entry {
     negated: RagRetriever.isNegated(question),
     replyTokens: {for (final r in replies) ...DialogueGraph.tokensOf(r.text)},
     kind: RagRetriever._kindOf(question),
+    complements: RagRetriever.complementsOf(question),
   );
 }
 

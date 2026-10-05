@@ -9,6 +9,49 @@
   "correcciones": [],
   "traducido": "2026-10-04"
  },
+ "Abogado que defiende a una persona en un proceso.": {
+  "glosas": [
+   "ABOGADO",
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "D",
+   "E",
+   "R",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DEFENDER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Acción para ayudar o proteger. Ej.: intérprete en la audiencia.": {
   "glosas": [
    "AYUDAR",
@@ -48,6 +91,43 @@
   ],
   "estado": "partial",
   "correcciones": [],
+  "traducido": "2026-10-04"
+ },
+ "Actuar en nombre de otra persona, con su permiso.": {
+  "glosas": [
+   "O",
+   "T",
+   "R",
+   "A",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "NOMBRE",
+   "PERMISO",
+   "C",
+   "O",
+   "N",
+   "HACER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "OTRA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CON",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
   "traducido": "2026-10-04"
  },
  "Además, igual.": {
@@ -359,6 +439,52 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Atacar o hacer daño a otra persona, con golpes o con palabras.": {
+  "glosas": [
+   "O",
+   "T",
+   "R",
+   "A",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "DAÑAR",
+   "HACER",
+   "PALABRA",
+   "G",
+   "O",
+   "L",
+   "P",
+   "E",
+   "C",
+   "O",
+   "N"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "OTRA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "GOLPE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CON",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Atención o ayuda que da una institución.": {
   "glosas": [
    "INSTITUCION",
@@ -417,6 +543,31 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Aviso oficial escrito de una institución sobre un trámite o un proceso.": {
+  "glosas": [
+   "INSTITUCION",
+   "TRAMITE",
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O",
+   "AVISAR",
+   "OFICIAL",
+   "PAPEL",
+   "ESCRIBIR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Aviso que se escribe en el registro de una propiedad mientras hay un juicio, para proteger un derecho.": {
   "glosas": [
    "R",
@@ -467,6 +618,85 @@
    },
    {
     "palabra": "DERECHO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Ayuda de un abogado para una persona denunciada o acusada en un proceso.": {
+  "glosas": [
+   "AYUDAR",
+   "ABOGADO",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "A",
+   "C",
+   "U",
+   "S",
+   "A",
+   "R",
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUSAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Ayuda de una trabajadora social para saber qué hacer y a dónde ir.": {
+  "glosas": [
+   "AYUDAR",
+   "TRABAJADOR",
+   "S",
+   "O",
+   "C",
+   "I",
+   "A",
+   "L",
+   "SABER",
+   "HACER",
+   "DONDE",
+   "IR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "SOCIAL",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -952,6 +1182,24 @@
    },
    {
     "palabra": "ALGO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Casa o lugar donde vive una persona.": {
+  "glosas": [
+   "VIVIR",
+   "L",
+   "U",
+   "G",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "LUGAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -1481,6 +1729,27 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Conseguir algo.": {
+  "glosas": [
+   "C",
+   "O",
+   "N",
+   "S",
+   "E",
+   "G",
+   "U",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CONSEGUIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Construcción grande con varios pisos.": {
   "glosas": [
    "C",
@@ -1914,6 +2183,47 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Cuando alguien no hace lo que una orden o un acuerdo obliga a hacer.": {
+  "glosas": [
+   "O",
+   "R",
+   "D",
+   "E",
+   "N",
+   "A",
+   "C",
+   "U",
+   "E",
+   "R",
+   "D",
+   "O",
+   "O",
+   "B",
+   "L",
+   "I",
+   "G",
+   "A",
+   "R",
+   "HACER",
+   "NO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ORDEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUERDO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OBLIGAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Cuando no se respeta un derecho.": {
   "glosas": [
    "D",
@@ -2080,6 +2390,41 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Cuando una oficina recibe documentos o atiende a las personas.": {
+  "glosas": [
+   "OFICINA",
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "RECIBIR",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "ATENDER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Cuando una persona da algo a cambio de dinero.": {
   "glosas": [
    "P",
@@ -2185,6 +2530,93 @@
    },
    {
     "palabra": "PROPIEDAD",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Cuidado para que una persona no sufra daño. «Medidas de protección»: órdenes de una autoridad para cuidar a una persona.": {
+  "glosas": [
+   "C",
+   "U",
+   "I",
+   "D",
+   "A",
+   "R",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "DAÑAR",
+   "NO",
+   "M",
+   "E",
+   "D",
+   "I",
+   "D",
+   "A",
+   "P",
+   "R",
+   "O",
+   "T",
+   "E",
+   "C",
+   "C",
+   "I",
+   "O",
+   "N",
+   "O",
+   "R",
+   "D",
+   "E",
+   "N",
+   "AUTORIDAD",
+   "C",
+   "U",
+   "I",
+   "D",
+   "A",
+   "R",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "PARA_QUE"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CUIDAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MEDIDA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PROTECCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ORDEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CUIDAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -2671,6 +3103,277 @@
   ],
   "traducido": "2026-10-04"
  },
+ "De la mente y los sentimientos. «Apoyo psicológico»: ayuda de un psicólogo.": {
+  "glosas": [
+   "M",
+   "E",
+   "N",
+   "T",
+   "E",
+   "S",
+   "E",
+   "N",
+   "T",
+   "I",
+   "M",
+   "I",
+   "E",
+   "N",
+   "T",
+   "O",
+   "A",
+   "Y",
+   "U",
+   "D",
+   "A",
+   "P",
+   "S",
+   "I",
+   "C",
+   "O",
+   "L",
+   "O",
+   "G",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SENTIMIENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "AYUDA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PSICOLOGO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "De la notaría. «Documento notarial»: documento hecho ante un notario.": {
+  "glosas": [
+   "N",
+   "O",
+   "T",
+   "A",
+   "R",
+   "I",
+   "A",
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "N",
+   "O",
+   "T",
+   "A",
+   "R",
+   "I",
+   "A",
+   "L"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NOTARIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NOTARIAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "De la salud o del médico. «Atención médica»: que un médico la revise.": {
+  "glosas": [
+   "MEDICINA",
+   "ATENDER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-04"
+ },
+ "De la sociedad o de la ayuda a las personas. «Trabajo social»: profesionales que orientan y ayudan.": {
+  "glosas": [
+   "S",
+   "O",
+   "C",
+   "I",
+   "E",
+   "D",
+   "A",
+   "D",
+   "A",
+   "Y",
+   "U",
+   "D",
+   "A",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "T",
+   "R",
+   "A",
+   "B",
+   "A",
+   "J",
+   "A",
+   "D",
+   "O",
+   "R",
+   "S",
+   "O",
+   "C",
+   "I",
+   "A",
+   "L",
+   "O",
+   "R",
+   "I",
+   "E",
+   "N",
+   "T",
+   "A",
+   "R",
+   "AYUDAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "SOCIEDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "AYUDA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TRABAJADOR_SOCIAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ORIENTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "De la vida de las personas como ciudadanos. «Estado civil»: si una persona es soltera, casada, divorciada o viuda.": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "C",
+   "I",
+   "U",
+   "D",
+   "A",
+   "D",
+   "A",
+   "N",
+   "O",
+   "E",
+   "S",
+   "T",
+   "A",
+   "D",
+   "O",
+   "C",
+   "I",
+   "V",
+   "I",
+   "L",
+   "S",
+   "O",
+   "L",
+   "T",
+   "E",
+   "R",
+   "O",
+   "C",
+   "A",
+   "S",
+   "A",
+   "D",
+   "O",
+   "D",
+   "I",
+   "V",
+   "O",
+   "R",
+   "C",
+   "I",
+   "A",
+   "D",
+   "O",
+   "V",
+   "I",
+   "U",
+   "D",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CIUDADANO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTADO_CIVIL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SOLTERO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CASADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DIVORCIADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VIUDA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "De nosotros.": {
   "glosas": [
    "NOSOTROS"
@@ -2940,6 +3643,112 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Del cuerpo y la intimidad de una persona. «Violencia sexual»: obligar a alguien a algo íntimo sin que quiera.": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "C",
+   "U",
+   "E",
+   "R",
+   "P",
+   "O",
+   "I",
+   "N",
+   "T",
+   "I",
+   "M",
+   "I",
+   "D",
+   "A",
+   "D",
+   "V",
+   "I",
+   "O",
+   "L",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A",
+   "S",
+   "E",
+   "X",
+   "U",
+   "A",
+   "L",
+   "O",
+   "B",
+   "L",
+   "I",
+   "G",
+   "A",
+   "R",
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N",
+   "A",
+   "L",
+   "G",
+   "O",
+   "I",
+   "N",
+   "T",
+   "I",
+   "M",
+   "I",
+   "D",
+   "A",
+   "D",
+   "NO",
+   "QUERER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CUERPO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INTIMIDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VIOLENCIA_SEXUAL",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OBLIGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ALGO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INTIMIDAD",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Del juez o del juzgado.": {
   "glosas": [
    "JUEZ",
@@ -3134,6 +3943,37 @@
    "N",
    "O",
    "CASA",
+   "M",
+   "E",
+   "D",
+   "I",
+   "D",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "TERRENO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MEDIDA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Dibujos de una casa o un terreno, con sus medidas.": {
+  "glosas": [
+   "DIBUJAR",
+   "CASA",
+   "T",
+   "E",
+   "R",
+   "R",
+   "E",
+   "N",
+   "O",
    "M",
    "E",
    "D",
@@ -3527,6 +4367,89 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Documento que explica algo. «Informe médico»: documento del médico sobre la salud.": {
+  "glosas": [
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "EXPLICAR",
+   "A",
+   "L",
+   "G",
+   "O",
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "E",
+   "M",
+   "E",
+   "D",
+   "I",
+   "C",
+   "O",
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "M",
+   "E",
+   "D",
+   "I",
+   "C",
+   "O",
+   "S",
+   "A",
+   "L",
+   "U",
+   "D"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ALGO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INFORME",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MEDICO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MEDICO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SALUD",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Dueño.": {
   "glosas": [
    "P",
@@ -3678,6 +4601,43 @@
    },
    {
     "palabra": "COPIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "El lugar donde está una persona.": {
+  "glosas": [
+   "L",
+   "U",
+   "G",
+   "A",
+   "R",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "LUGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -4016,6 +4976,46 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Engañar a una persona para quitarle dinero o cosas.": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "ENGAÑAR",
+   "BILLETES",
+   "C",
+   "O",
+   "S",
+   "A",
+   "S",
+   "Q",
+   "U",
+   "I",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COSAS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "QUITAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Entenderse con otra persona, en señas, por escrito o hablando.": {
   "glosas": [
    "COMPRENDER",
@@ -4163,6 +5163,28 @@
    },
    {
     "palabra": "VEHICULO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Estar sin peligro.": {
+  "glosas": [
+   "S",
+   "E",
+   "G",
+   "U",
+   "R",
+   "I",
+   "D",
+   "A",
+   "D",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "SEGURIDAD",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -4335,6 +5357,93 @@
    },
    {
     "palabra": "FIJAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Fijar. «Audiencia señalada»: audiencia con fecha y hora fijadas por el juzgado.": {
+  "glosas": [
+   "JUZGADO",
+   "A",
+   "U",
+   "D",
+   "I",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A",
+   "FECHA",
+   "HORA",
+   "F",
+   "I",
+   "J",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "AUDIENCIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "FIJAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Forma de comunicarse con una persona: un teléfono, un correo o un lugar.": {
+  "glosas": [
+   "C",
+   "O",
+   "M",
+   "U",
+   "N",
+   "I",
+   "C",
+   "A",
+   "R",
+   "S",
+   "E",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "CELULAR",
+   "C",
+   "O",
+   "R",
+   "R",
+   "E",
+   "O",
+   "L",
+   "U",
+   "G",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "COMUNICARSE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CORREO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "LUGAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -4725,6 +5834,39 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Hacer daño o causar un problema a alguien. «Persona afectada»: la que sufrió el hecho.": {
+  "glosas": [
+   "HACER",
+   "DAÑAR",
+   "P",
+   "R",
+   "O",
+   "B",
+   "L",
+   "E",
+   "M",
+   "A",
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PROBLEMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Hacer que un servicio o trámite empiece a funcionar.": {
   "glosas": [
    "HACER",
@@ -5073,6 +6215,33 @@
   ],
   "estado": "partial",
   "correcciones": [],
+  "traducido": "2026-10-04"
+ },
+ "Ir de un lugar a otro lejano.": {
+  "glosas": [
+   "IR",
+   "L",
+   "U",
+   "G",
+   "A",
+   "R",
+   "O",
+   "T",
+   "R",
+   "O",
+   "LEJOS"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "LUGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
   "traducido": "2026-10-04"
  },
  "Justo, sin error.": {
@@ -5542,6 +6711,59 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Lo que pasó antes. «Antecedentes penales»: registro de si una persona tuvo procesos penales.": {
+  "glosas": [
+   "PASADO",
+   "R",
+   "E",
+   "G",
+   "I",
+   "S",
+   "T",
+   "R",
+   "O",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "P",
+   "R",
+   "O",
+   "C",
+   "E",
+   "S",
+   "O",
+   "P",
+   "E",
+   "N",
+   "A",
+   "L",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "REGISTRO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PROCESO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PENAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Lo que pasó.": {
   "glosas": [
    "PASADO",
@@ -5557,6 +6779,28 @@
   "correcciones": [
    {
     "palabra": "SUCEDER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Lo que se dice o se escribe para que alguien entienda algo.": {
+  "glosas": [
+   "EXPLICAR",
+   "E",
+   "N",
+   "T",
+   "E",
+   "N",
+   "D",
+   "E",
+   "R",
+   "PARA_QUE"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ENTENDER",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -5677,6 +6921,36 @@
   "correcciones": [
    {
     "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Lugar donde una persona trabaja, o lo que hace para ganar dinero.": {
+  "glosas": [
+   "L",
+   "U",
+   "G",
+   "A",
+   "R",
+   "T",
+   "R",
+   "A",
+   "B",
+   "A",
+   "J",
+   "A",
+   "R",
+   "GANAR_DINERO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "LUGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TRABAJAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -6017,6 +7291,47 @@
   "correcciones": [
    {
     "palabra": "SEGURIDAD",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "No hacer lo que una orden o un acuerdo obliga a hacer.": {
+  "glosas": [
+   "NO",
+   "HACER",
+   "O",
+   "R",
+   "D",
+   "E",
+   "N",
+   "A",
+   "C",
+   "U",
+   "E",
+   "R",
+   "D",
+   "O",
+   "O",
+   "B",
+   "L",
+   "I",
+   "G",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ORDEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUERDO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OBLIGAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -6671,6 +7986,44 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Papel que demuestra que algo pasó. Ej.: que una oficina recibió sus documentos.": {
+  "glosas": [
+   "PAPEL",
+   "D",
+   "E",
+   "M",
+   "O",
+   "S",
+   "T",
+   "R",
+   "A",
+   "R",
+   "PASADO",
+   "OFICINA",
+   "RECIBIR",
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "DEMOSTRAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Papel que demuestra que algo se hizo o se pagó.": {
   "glosas": [
    "PAPEL",
@@ -7066,6 +8419,17 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Persona a la que la policía no deja irse, por una investigación.": {
+  "glosas": [
+   "POLICIA",
+   "IR",
+   "NO",
+   "DEJAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-04"
+ },
  "Persona acusada en una denuncia.": {
   "glosas": [
    "P",
@@ -7290,6 +8654,55 @@
    },
    {
     "palabra": "MORIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Persona que no está y nadie sabe dónde está.": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "NO",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "N",
+   "A",
+   "D",
+   "I",
+   "E",
+   "SABER",
+   "DONDE",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NADIE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -7796,6 +9209,64 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Que algo o alguien existe o está. «¿Hay un niño?»: «¿Existe un niño?».": {
+  "glosas": [
+   "E",
+   "X",
+   "I",
+   "S",
+   "T",
+   "I",
+   "R",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "EXISTIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Que algo pasó o existió antes. «¿Hubo violencia?»: «¿Pasó violencia?».": {
+  "glosas": [
+   "VIOLENCIA",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R",
+   "DONDE"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Que corresponde usar en ese caso.": {
   "glosas": [
    "C",
@@ -7849,6 +9320,33 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Que falta hacer o pagar.": {
+  "glosas": [
+   "F",
+   "A",
+   "L",
+   "T",
+   "A",
+   "HACER",
+   "P",
+   "A",
+   "G",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "FALTA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PAGAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Que la ley deja hacer.": {
   "glosas": [
    "LEY",
@@ -7875,6 +9373,37 @@
   "correcciones": [
    {
     "palabra": "ENTRAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Que no es correcto; que tiene un error.": {
+  "glosas": [
+   "NO",
+   "C",
+   "O",
+   "R",
+   "R",
+   "E",
+   "C",
+   "T",
+   "O",
+   "E",
+   "R",
+   "R",
+   "O",
+   "R",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CORRECTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ERROR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -8228,6 +9757,16 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Querer algo. «¿Desea…?» es «¿Quiere…?».": {
+  "glosas": [
+   "QUERER",
+   "QUE",
+   "QUIEN"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-04"
+ },
  "Querer decir.": {
   "glosas": [
    "QUERER",
@@ -8350,6 +9889,59 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Reemplaza a algo que ya se nombró: «lo perdí» es «perdí eso». En LSB se indica señalando.": {
+  "glosas": [
+   "PERDER",
+   "E",
+   "S",
+   "O"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Relación de familia entre personas: madre, hijo, hermano, tío.": {
+  "glosas": [
+   "F",
+   "A",
+   "M",
+   "I",
+   "L",
+   "I",
+   "A",
+   "M",
+   "A",
+   "D",
+   "R",
+   "E",
+   "HIJO",
+   "HERMANO",
+   "T",
+   "I",
+   "O"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "FAMILIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MADRE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Reunión con el juez donde se habla de un caso.": {
   "glosas": [
    "REUNION",
@@ -8364,6 +9956,50 @@
   "correcciones": [
    {
     "palabra": "CASO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Revisión que hace un equipo para conocer cómo está una persona o una situación.": {
+  "glosas": [
+   "E",
+   "Q",
+   "U",
+   "I",
+   "P",
+   "O",
+   "CONOCER",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "S",
+   "I",
+   "T",
+   "U",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "COMO_ESTAS"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "EQUIPO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SITUACION",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -8929,6 +10565,36 @@
    },
    {
     "palabra": "MENCION",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "Señala cosas que están cerca o de las que se habla. En LSB se indica señalando.": {
+  "glosas": [
+   "CERCA",
+   "C",
+   "O",
+   "S",
+   "A",
+   "S",
+   "HABLAR",
+   "I",
+   "N",
+   "D",
+   "I",
+   "C",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "COSAS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INDICAR",
     "accion": "concepto_sin_catalogo"
    }
   ],
@@ -9671,6 +11337,39 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Una de las posibilidades para elegir.": {
+  "glosas": [
+   "P",
+   "O",
+   "S",
+   "I",
+   "B",
+   "I",
+   "L",
+   "I",
+   "D",
+   "A",
+   "D",
+   "E",
+   "L",
+   "E",
+   "G",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "POSIBILIDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ELEGIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
  "Una distinta.": {
   "glosas": [
    "DIFERENTE"
@@ -10253,6 +11952,47 @@
    },
    {
     "palabra": "DATOS",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-04"
+ },
+ "«Reconocimiento de firmas»: el notario confirma que una firma es de esa persona.": {
+  "glosas": [
+   "C",
+   "O",
+   "N",
+   "F",
+   "I",
+   "R",
+   "M",
+   "A",
+   "R",
+   "F",
+   "I",
+   "R",
+   "M",
+   "A",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CONFIRMAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "FIRMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
     "accion": "concepto_sin_catalogo"
    }
   ],

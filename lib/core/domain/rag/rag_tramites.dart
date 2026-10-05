@@ -89,6 +89,11 @@ abstract final class RagTramites {
       '💰',
       'Impuestos de motos, vehículos e inmuebles (RUAT)',
     ),
+    'GAM': (
+      'Trámites municipales – GAM Cochabamba',
+      '🏢',
+      'Licencias, catastro, planos y seguimiento de trámites municipales',
+    ),
     'FIS': (
       'Ministerio Público – Fiscalía',
       '🔎',
@@ -144,15 +149,27 @@ abstract final class RagTramites {
     for (final t in all) {
       porArea.putIfAbsent(t.area, () => []).add(t);
     }
+    // El orden de [_sectionInfo], no el de los archivos del corpus: añadir
+    // un archivo de escenarios no reordena la lista. Un área sin entrada va
+    // al final.
+    final orden = _sectionInfo.keys.toList();
+    int lugar(String area) {
+      final i = orden.indexOf(area);
+      return i < 0 ? orden.length : i;
+    }
+
+    final areas = porArea.keys.toList()
+      ..sort((a, b) => lugar(a).compareTo(lugar(b)));
     return [
-      for (final MapEntry(key: area, value: tramites) in porArea.entries)
-        ContextFamily(
-          id: '$sectionPrefix$area',
-          name: _sectionInfo[area]?.$1 ?? tramites.first.institution,
-          emoji: _sectionInfo[area]?.$2 ?? tramites.first.emoji,
-          description: _sectionInfo[area]?.$3 ?? tramites.first.institution,
-          contextIds: [for (final t in tramites) t.contextId],
-        ),
+      for (final area in areas)
+        if (porArea[area] case final tramites?)
+          ContextFamily(
+            id: '$sectionPrefix$area',
+            name: _sectionInfo[area]?.$1 ?? tramites.first.institution,
+            emoji: _sectionInfo[area]?.$2 ?? tramites.first.emoji,
+            description: _sectionInfo[area]?.$3 ?? tramites.first.institution,
+            contextIds: [for (final t in tramites) t.contextId],
+          ),
     ];
   }();
 

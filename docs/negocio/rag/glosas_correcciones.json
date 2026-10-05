@@ -1692,5 +1692,28 @@
   "faltan": [],
   "sobran": [],
   "fecha": "2026-09-27"
+ },
+ "Sí, ya fui evaluado.": {
+  "glosas": [
+   "SÍ",
+   "EVALUAR",
+   "YO",
+   "PASADO"
+  ],
+  "antes": [
+   "SI",
+   "EVALUAR",
+   "YO",
+   "P",
+   "A",
+   "S",
+   "T"
+  ],
+  "faltan": [],
+  "sobran": [
+   "PAST"
+  ],
+  "motivo": "La traducción puso la marca de tiempo inglesa PAST deletreada; la seña del catálogo es PASADO.",
+  "fecha": "2026-10-04"
  }
 }
