@@ -11,6 +11,7 @@ import 'package:lsb_legal_app/core/di/injection.dart'
     show pendingSignCatalogProvider;
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/pending_sign_info_sheet.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/gloss_line.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/sign_preview_planner.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sign_images_provider.dart';
@@ -149,6 +150,49 @@ void main() {
         find.text('Descripción provisional, por revisar.'),
         findsOneWidget,
       );
+    });
+
+    testWidgets('con el tema oscuro se lee: texto oscuro sobre la hoja '
+        'blanca, y la descripción va en LSB', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData.dark(),
+          home: const Scaffold(
+            backgroundColor: AppTheme.pageBg,
+            body: PendingSignInfoSheet(
+              infos: [
+                PendingSignInfo(
+                  word: 'INMUEBLE',
+                  description: 'Casa o terreno que no se puede mover.',
+                  lsbDescription: [
+                    'CASA',
+                    'SENA_PENDIENTE:TERRENO',
+                    'MOVER',
+                    'NO_PUEDO',
+                  ],
+                  example: '¿Tiene la matrícula del inmueble?',
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+      final lsb = tester.widget<Text>(find.byKey(const Key('descripcion_lsb')));
+      expect(lsb.textSpan!.toPlainText(), 'CASA · TERRENO · MOVER · NO PUEDO');
+      expect(lsb.style!.color, AppTheme.lightText);
+      final spans = <TextSpan>[];
+      lsb.textSpan!.visitChildren((s) {
+        if (s is TextSpan && s.text == 'TERRENO') spans.add(s);
+        return true;
+      });
+      expect(spans.single.style!.color, AppTheme.pendingSign);
+      // El español formal ya no se muestra cuando hay LSB.
+      expect(find.text('Casa o terreno que no se puede mover.'), findsNothing);
+      // Lo demás de la hoja tampoco queda en blanco sobre blanco.
+      final ejemplo = tester.widget<Text>(
+        find.text('«¿Tiene la matrícula del inmueble?»'),
+      );
+      expect(ejemplo.style!.color, AppTheme.lightText);
     });
 
     test('una errata de la traducción remite a su palabra', () {

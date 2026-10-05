@@ -94,6 +94,10 @@ SALIDA_VOCABULARIO = os.path.join(RAG, "senas_a_incorporar.md")
 # la app lo muestra al deslizar o tocar esa palabra.
 DESCRIPCIONES = os.path.join(RAG, "descripciones_sin_sena.json")
 SALIDA_SIN_SENA = os.path.join(ROOT, "assets", "dictionary", "senas_sin_sena.json")
+# Las descripciones cuya traducción a LSB no se muestra, y por qué.
+SALIDA_REVISION_LSB = os.path.join(RAG, "descripciones_lsb_revision.md")
+# Esas descripciones traducidas a LSB por la Lambda (tool/rag_descripciones_lsb.py).
+DESCRIPCIONES_LSB = os.path.join(RAG, "descripciones_lsb_cache.json")
 
 # Un hecho con plazo («hasta el 2026-10-05») deja de valer al pasar la fecha.
 _HASTA = re.compile(r"hasta\s+(?:el\s+)?(\d{4}-\d{2}-\d{2})", re.IGNORECASE)
@@ -979,12 +983,104 @@ def vocabulario_md(corpus: dict) -> str:
     return "\n".join(lineas) + "\n"
 
 
-def info_sin_sena(corpus: dict, avisos: list) -> dict:
+_NEGACION = re.compile(r"\bno\b|\bnunca\b|\btampoco\b|\bning[uú]n", re.IGNORECASE)
+_GLOSAS_NEGATIVAS = {"no", "no_saber", "no_puedo", "nunca", "no_estar_de_acuerdo"}
+# Señas interrogativas: «cuando» o «para que» sin tilde no preguntan.
+_INTERROGATIVAS = {
+    "cuando": r"cuándo", "donde": r"dónde", "como": r"cómo", "que": r"qué",
+    "cual": r"cuál", "quien": r"quién", "cuantos": r"cuánt", "por_que": r"por qué",
+    "para_que": r"para qué",
+}
+
+
+def descripcion_fundada(texto: str, glosas: list, palabra: str = "") -> list:
+    """Las señas de [glosas] que no se apoyan en ninguna palabra de
+    [texto], o la negación que se perdió o se añadió. Vacío si la
+    traducción dice lo mismo que el español.
+
+    Cada seña del catálogo tiene que nombrarse en la descripción, por su
+    glosa o por una de sus formas en español: «propiedad que no se puede
+    mover» no lleva NO_SABER, ni «todas las personas» TODOS_LOS_DÍAS. Las
+    señas a incorporar salen de la propia frase y no se revisan."""
+    formas = {_norm(g): f for g, f in _leer(FORMAS_SENAS).items()}
+
+    def raices(frase: str) -> list:
+        return [w[:5] for w in re.findall(r"[a-zñ]+", _norm(frase)) if len(w) > 3]
+
+    del_texto = set(raices(texto))
+    malas = []
+    negadas = False
+    pendientes = [g for g in glosas if g.startswith(SENA_PENDIENTE)]
+    # Explicarla con ella misma no explica nada.
+    if palabra and any(_norm(g[len(SENA_PENDIENTE):]) == _norm(palabra)
+                       for g in pendientes):
+        malas.append(f"(usa {palabra})")
+    # Con más señas por incorporar que señas, la persona no la entiende.
+    if len(pendientes) * 2 > len(glosas):
+        malas.append("(sobre todo señas por incorporar)")
+    # Solo letras (un nombre deletreado) tampoco explica qué es.
+    if not any(len(g) > 1 and not g.isdigit() and not g.startswith(SENA_PENDIENTE)
+               for g in glosas):
+        malas.append("(ninguna seña)")
+    for g in glosas:
+        if g.startswith(SENA_PENDIENTE) or len(g) <= 1 or g.isdigit():
+            continue
+        clave = _norm(g)
+        if clave in _INTERROGATIVAS:
+            if not re.search(_INTERROGATIVAS[clave], texto, re.IGNORECASE):
+                malas.append(g)
+            continue
+        if clave in _GLOSAS_NEGATIVAS:
+            negadas = True
+            if not _NEGACION.search(texto):
+                malas.append(g)
+            elif clave == "no_saber" and not re.search(r"no s[eé]\b(?!\s+(?:puede|pueden|paga|hace|usa))|sab", texto, re.IGNORECASE):
+                malas.append(g)
+            continue
+        candidatas = raices(g.replace("_", " "))
+        for forma in formas.get(clave) or []:
+            candidatas += raices(forma)
+        if candidatas and not any(c in del_texto or any(t.startswith(c) or c.startswith(t) for t in del_texto if len(t) >= 4) for c in candidatas):
+            malas.append(g)
+    if _NEGACION.search(texto) and not negadas:
+        malas.append("(negación perdida)")
+    return malas
+
+
+def info_sin_sena(corpus: dict, avisos: list,
+                  revision: list | None = None) -> dict:
     """Lo que la app muestra de cada palabra sin seña propia del corpus: qué
     es (descripciones_sin_sena.json) y una frase del trámite donde aparece.
     Una palabra sin descripción se avisa: la app dirá solo que no tiene
     seña."""
     datos = _leer(DESCRIPCIONES).get("palabras", {})
+    traducidas = _leer(DESCRIPCIONES_LSB)
+    equivalencias = cargar_equivalencias()
+    sin_lsb, infieles = [], []
+
+    def en_lsb(palabra: str, texto: str) -> list:
+        """La descripción en glosas (tool/rag_descripciones_lsb.py), o []."""
+        t = traducidas.get(texto)
+        if not texto or not t:
+            if texto:
+                sin_lsb.append(palabra)
+            return []
+        glosas = marcar_senas_pendientes(t["glosas"], t.get("correcciones") or [],
+                                         texto, equivalencias)
+        malas = glosas_invalidas(glosas)
+        if malas:
+            avisos.append(f"descripción de {palabra}: elementos que no son "
+                          f"glosas ({', '.join(malas)}); se muestra en español")
+            return []
+        # Una traducción que dice otra cosa no se muestra: mejor el español.
+        motivos = descripcion_fundada(texto, glosas, palabra)
+        if motivos:
+            infieles.append(palabra)
+            if revision is not None:
+                revision.append((palabra, texto, glosas, motivos))
+            return []
+        return glosas_canonicas(glosas)
+
     ejemplos = {}
     for e in corpus["escenarios"]:
         for t in e["turnos"] + [r for p in e["variantes"] for r in p["respuestas"]]:
@@ -1000,18 +1096,59 @@ def info_sin_sena(corpus: dict, avisos: list) -> dict:
         if not dato or not dato.get("descripcion"):
             faltan.append(palabra)
             dato = {}
+        descripcion = dato.get("descripcion", "")
         salida[palabra] = {
-            "descripcion": dato.get("descripcion", ""),
+            "descripcion": descripcion,
+            "descripcionLsb": en_lsb(palabra, descripcion),
             "tipo": dato.get("tipo", "concepto"),
             "revisada": bool(dato.get("revisada")),
             "ejemplo": ejemplos[palabra],
         }
+    if sin_lsb:
+        avisos.append(f"{len(sin_lsb)} descripciones sin traducir a LSB: ejecuta "
+                      "tool/rag_descripciones_lsb.py")
+    if infieles:
+        avisos.append(f"{len(infieles)} descripciones con una traducción LSB que "
+                      "no dice lo mismo (se muestran en español; p. ej. "
+                      f"{', '.join(infieles[:5])}): reescríbelas con palabras "
+                      "que tengan seña o corrige su traducción")
     if faltan:
         avisos.append(f"{len(faltan)} palabras sin seña no tienen descripción en "
                       f"{_rel(DESCRIPCIONES)} (p. ej. {', '.join(faltan[:5])})")
     return {"_nota": "GENERADO por tool/build_rag_corpus.py desde "
                      f"{_rel(DESCRIPCIONES)}. No editar a mano.",
             "palabras": salida}
+
+
+def revision_lsb_md(revision: list) -> str:
+    """La lista de trabajo de las descripciones que se ven en español porque
+    su traducción a LSB no dice lo mismo."""
+    lineas = [
+        "# Descripciones en LSB por revisar",
+        "",
+        "Generado por `tool/build_rag_corpus.py`. No editar a mano.",
+        "",
+        "La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la "
+        "traducción de la Lambda dice lo mismo que el español: cada seña se "
+        "apoya en una palabra de la descripción, la negación coincide, las "
+        "interrogativas solo van donde se pregunta, no se explica la palabra "
+        "con ella misma y hay más señas que señas por incorporar. Estas no "
+        "pasan y se ven en español. Para arreglarlas, reescribe la descripción "
+        "en `descripciones_sin_sena.json` con palabras que tengan seña y vuelve "
+        "a ejecutar `python tool/rag_descripciones_lsb.py` y "
+        "`python tool/build_rag_corpus.py`.",
+        "",
+        f"**{len(revision)} descripciones.** `*` = seña por incorporar.",
+        "",
+        "| Palabra | Descripción | Traducción LSB | Motivo |",
+        "|---|---|---|---|",
+    ]
+    for palabra, texto, glosas, motivos in sorted(revision):
+        lsb = " · ".join("*" + g[len(SENA_PENDIENTE):] if g.startswith(SENA_PENDIENTE)
+                         else g for g in glosas)
+        lineas.append(f"| {palabra} | {texto.replace('|', '/')} | {lsb} | "
+                      f"{', '.join(motivos)} |")
+    return "\n".join(lineas) + "\n"
 
 
 def _ofrecible(t: dict) -> bool:
@@ -1818,7 +1955,8 @@ def main() -> int:
                        archivos=archivos)
     poner_glosas(corpus, avisos)
     banco = banco_tramites(corpus, avisos) if not errores else None
-    sin_sena = info_sin_sena(corpus, avisos)
+    revision_lsb = []
+    sin_sena = info_sin_sena(corpus, avisos, revision_lsb)
     for a in avisos:
         print(f"aviso: {a}")
     if errores:
@@ -1831,7 +1969,8 @@ def main() -> int:
     salidas = {SALIDA: texto, SALIDA_TRAMITES: dart_tramites(banco),
                SALIDA_VOCABULARIO: vocabulario_md(corpus),
                SALIDA_SIN_SENA: json.dumps(sin_sena, ensure_ascii=False,
-                                           indent=1) + "\n"}
+                                           indent=1) + "\n",
+               SALIDA_REVISION_LSB: revision_lsb_md(revision_lsb)}
     for linea in resumen(corpus):
         print(linea)
     print(f"trámites: {len(banco['contextos'])} recorridos · "

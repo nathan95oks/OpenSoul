@@ -7,7 +7,9 @@
 1. Valida todos los `docs/negocio/rag/escenarios/*.md` y genera el corpus.
 2. Si hay frases sin glosas (respuestas del usuario sordo **y** preguntas
    del funcionario de un escenario nuevo), las traduce con la Lambda
-   Texto→LSB (`LSB_TEXT_API_URL` de `.env`); solo las que faltan.
+   Texto→LSB (`LSB_TEXT_API_URL` de `.env`); solo las que faltan. También
+   las descripciones de las palabras sin seña (`tool/rag_descripciones_lsb.py`),
+   que la app muestra en LSB.
 3. Busca seña para las palabras que la traducción dejó sin seña
    (`tool/rag_equivalencias.py`): la del léxico si el sentido coincide
    (forma 1) o un sinónimo o combinación de señas del léxico (forma 2),
@@ -44,6 +46,9 @@ def main() -> int:
         return 1
     if paso(os.path.join(AQUI, "rag_precalcular_glosas.py")) != 0:
         print("Algunas frases no se tradujeron; vuelve a ejecutar para reintentar.")
+        return 1
+    if paso(os.path.join(AQUI, "rag_descripciones_lsb.py")) != 0:
+        print("Algunas descripciones no se tradujeron; vuelve a ejecutar.")
         return 1
     if paso(constructor) != 0:
         return 1
