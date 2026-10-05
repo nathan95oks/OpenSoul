@@ -83,7 +83,12 @@ class _Palabra extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tema = Theme.of(context).textTheme;
+    // La hoja es blanca: el texto va oscuro siempre. Con el tema oscuro de
+    // la app, el color por defecto era blanco y no se leía.
+    final tema = Theme.of(context).textTheme.apply(
+      bodyColor: AppTheme.lightText,
+      displayColor: AppTheme.lightText,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,12 +125,17 @@ class _Palabra extends StatelessWidget {
           style: tema.labelLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 4),
-        Text(
-          info.description.isEmpty
-              ? 'Todavía no tiene descripción.'
-              : info.description,
-          style: tema.bodyLarge,
-        ),
+        // Explicada en LSB, con señas que la persona ya conoce; el español
+        // solo mientras no esté traducida.
+        if (info.lsbDescription.isNotEmpty)
+          _EnLsb(glosses: info.lsbDescription, style: tema.titleMedium)
+        else
+          Text(
+            info.description.isEmpty
+                ? 'Todavía no tiene descripción.'
+                : info.description,
+            style: tema.bodyLarge,
+          ),
         if (info.example.isNotEmpty) ...[
           const SizedBox(height: 14),
           Text(
@@ -146,6 +156,46 @@ class _Palabra extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// Una descripción en glosas LSB: las señas en oscuro y, en azul, las
+/// palabras que tampoco tienen seña.
+class _EnLsb extends StatelessWidget {
+  final List<String> glosses;
+  final TextStyle? style;
+
+  const _EnLsb({required this.glosses, this.style});
+
+  @override
+  Widget build(BuildContext context) {
+    final base = (style ?? const TextStyle(fontSize: 16)).copyWith(
+      color: AppTheme.lightText,
+      fontWeight: FontWeight.w800,
+      letterSpacing: 0.3,
+      height: 1.4,
+    );
+    return Text.rich(
+      key: const Key('descripcion_lsb'),
+      TextSpan(
+        children: [
+          for (final (i, g) in glosses.indexed) ...[
+            if (i > 0)
+              TextSpan(
+                text: ' · ',
+                style: base.copyWith(color: AppTheme.lightTextSub),
+              ),
+            PendingSign.isPending(g)
+                ? TextSpan(
+                    text: PendingSign.wordOf(g),
+                    style: base.copyWith(color: AppTheme.pendingSign),
+                  )
+                : TextSpan(text: g.replaceAll('_', ' ')),
+          ],
+        ],
+      ),
+      style: base,
     );
   }
 }

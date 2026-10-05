@@ -106,6 +106,18 @@ Las fuentes y el formato están en `docs/lsb_fuentes/README.md`. En resumen:
 `python tool/rag_actualizar.py` comprueba el léxico, traduce, busca las
 equivalencias y regenera el corpus en una sola pasada.
 
+### Qué es cada palabra sin seña, en LSB
+
+Tocar una palabra en azul (o deslizar su fila) abre «¿Qué es?». La
+descripción se escribe en español en `descripciones_sin_sena.json` y se
+muestra **en glosas LSB**: `python tool/rag_descripciones_lsb.py` la traduce
+con la Lambda Texto→LSB ya desplegada (la frase entera, no palabra por
+palabra) a `descripciones_lsb_cache.json`, y el constructor la pone en
+`assets/dictionary/senas_sin_sena.json` («descripcionLsb»), marcando en azul
+lo que tampoco tiene seña. Mientras no esté traducida se ve el español.
+Para que se entienda mejor, conviene describir con palabras que tengan seña
+(el constructor no lo exige).
+
 ## Ramificaciones y composición (opcional, en el escenario)
 
 Los pasos de un trámite van en el orden del diálogo y no dependen unos de

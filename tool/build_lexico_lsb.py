@@ -88,9 +88,20 @@ def glosa_de(forma: str) -> str:
     return "_".join(p.upper() for p in palabras)
 
 
+def _rel(ruta: str) -> str:
+    """Ruta relativa al repositorio con «/», igual en Windows y en Linux: el
+    léxico generado no puede depender del sistema donde se construye."""
+    return os.path.relpath(ruta, ROOT).replace(os.sep, "/")
+
+
 def huella(ruta: str) -> str:
+    """SHA-256 del archivo. En un texto (CSV, .md) no cuentan los finales de
+    línea: Git en Windows los cambia a CRLF y la huella no debe cambiar."""
     with open(ruta, "rb") as f:
-        return hashlib.sha256(f.read()).hexdigest()
+        datos = f.read()
+    if not ruta.lower().endswith(".pdf"):
+        datos = datos.replace(b"\r\n", b"\n")
+    return hashlib.sha256(datos).hexdigest()
 
 
 # ── Índice de los módulos ────────────────────────────────────────────────────
@@ -421,7 +432,7 @@ def construir() -> tuple:
         modulo = f"M{i}"
         ruta = os.path.join(MODULOS, f"{modulo}.pdf")
         if not os.path.exists(ruta):
-            errores.append(f"falta {os.path.relpath(ruta, ROOT)}")
+            errores.append(f"falta {_rel(ruta)}")
             continue
         try:
             e, err, av = entradas_de_modulo(modulo, ruta)
@@ -431,7 +442,7 @@ def construir() -> tuple:
         entradas += e
         errores += err
         avisos += av
-        fuentes[modulo] = {"archivo": os.path.relpath(ruta, ROOT),
+        fuentes[modulo] = {"archivo": _rel(ruta),
                            "sha256": huella(ruta), "palabras": len(e)}
     for ruta in sorted(glob.glob(os.path.join(DICCIONARIOS, "*"))):
         base, ext = os.path.splitext(ruta)
@@ -445,10 +456,10 @@ def construir() -> tuple:
         errores += err
         entradas += e
         nombre = os.path.splitext(os.path.basename(ruta))[0]
-        fuentes[nombre] = {"archivo": os.path.relpath(ruta, ROOT),
+        fuentes[nombre] = {"archivo": _rel(ruta),
                            "sha256": huella(ruta), "palabras": len(e)}
         if os.path.exists(base + ".pdf"):
-            fuentes[nombre]["pdf"] = os.path.relpath(base + ".pdf", ROOT)
+            fuentes[nombre]["pdf"] = _rel(base + ".pdf")
     with open(CATALOGO, encoding="utf-8") as f:
         catalogo = json.load(f)
     lexico, ambiguas, mas = unir(catalogo, entradas, glosas_animadas())

@@ -12,6 +12,11 @@ class PendingSignInfo {
   /// Qué es, en pocas palabras. Vacío si nadie la describió todavía.
   final String description;
 
+  /// [description] en LSB: la secuencia de glosas que dio la Lambda
+  /// Texto→LSB con la frase entera (`tool/rag_descripciones_lsb.py`). Vacía
+  /// si aún no se tradujo; entonces se muestra el español.
+  final List<String> lsbDescription;
+
   /// Una frase del trámite donde aparece.
   final String example;
 
@@ -24,6 +29,7 @@ class PendingSignInfo {
   const PendingSignInfo({
     required this.word,
     this.description = '',
+    this.lsbDescription = const [],
     this.example = '',
     this.isProperName = false,
     this.reviewed = false,
@@ -47,6 +53,9 @@ class PendingSignCatalog {
         key: PendingSignInfo(
           word: key.replaceAll('_', ' '),
           description: '${(v as Map<String, dynamic>)['descripcion'] ?? ''}',
+          lsbDescription: [
+            for (final g in (v['descripcionLsb'] as List? ?? const [])) '$g',
+          ],
           example: '${v['ejemplo'] ?? ''}',
           isProperName: v['tipo'] == 'nombre_propio',
           reviewed: v['revisada'] == true,

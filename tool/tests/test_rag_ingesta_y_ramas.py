@@ -552,3 +552,38 @@ class CorpusActual(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DescripcionesEnLsb(unittest.TestCase):
+    """Una descripción solo se muestra en LSB si su traducción dice lo mismo."""
+
+    def test_una_traduccion_fiel_se_acepta(self):
+        self.assertEqual(B.descripcion_fundada(
+            "Ahora, en este momento.", ["AHORA", "MOMENTO"]), [])
+        self.assertEqual(B.descripcion_fundada(
+            "Otro papel igual al original.",
+            ["PAPEL", "IGUAL", "SENA_PENDIENTE:ORIGINAL"]), [])
+
+    def test_casos_reales_que_cambiaban_el_sentido(self):
+        # «no se puede mover» no es «no sé».
+        self.assertIn("NO_SABER", B.descripcion_fundada(
+            "Casa, departamento o terreno: propiedad que no se puede mover.",
+            ["SENA_PENDIENTE:PROPIEDAD", "NO_SABER", "SENA_PENDIENTE:MOVER",
+             "CASA"]))
+        # «todas las personas» no es «todos los días».
+        self.assertIn("TODOS_LOS_DÍAS", B.descripcion_fundada(
+            "Que todas las personas pueden usar algo.",
+            ["TODOS_LOS_DÍAS", "USAR"]))
+        # «cuando» sin tilde no pregunta.
+        self.assertIn("CUÁNDO", B.descripcion_fundada(
+            "Hacer un papel nuevo cuando el anterior vence.",
+            ["NUEVO", "PAPEL", "HACER", "CUÁNDO"]))
+
+    def test_negacion_perdida_o_sin_senas(self):
+        self.assertIn("(negación perdida)", B.descripcion_fundada(
+            "Guardar algo y no perderlo.", ["GUARDAR", "PERDER"]))
+        self.assertIn("(ninguna seña)", B.descripcion_fundada(
+            "Nombre de una calle.", list("CALLE")))
+        self.assertIn("(usa CANCELAR)", B.descripcion_fundada(
+            "Terminar algo. «Cancelar una deuda».",
+            ["TERMINAR", "SENA_PENDIENTE:CANCELAR", "DEUDA"], "CANCELAR"))
