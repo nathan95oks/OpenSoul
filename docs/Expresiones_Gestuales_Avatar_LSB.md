@@ -21,11 +21,11 @@ expresión inequívoca. Son las únicas aptas para activación automática inici
 
 | Glosa | Expresión visual sugerida | Dibujo blanco | Fuente del catálogo | Animación 3D actual | Estado |
 |---|---|---|---|---|---|
-| `MIEDO` | miedo / alarma | ojos abiertos, cejas elevadas, boca pequeña abierta | M3-T12-05 · M3 · Opuestos II · p.101 | Sí | **Piloto implementable** |
-| `TRISTE` | tristeza | cejas interiores elevadas, boca curvada hacia abajo | M4-T04-11 · M4 · Opuestos II · p.51 | No | Esperar animación y revisión LSB |
-| `PREOCUPAR` | preocupación | cejas inclinadas, boca tensa | M4-T02-11 · M4 · Verbos IV · p.39 | No | Esperar animación y revisión LSB |
-| `CONFIANZA` | seguridad / calma | ojos relajados, sonrisa leve | M4-T11-11 · M4 · General II · p.99 | No | Esperar animación y revisión LSB |
-| `DOLOR` | dolor físico | ojos cerrados, cejas contraídas, boca tensa | M2-T13-17 · M2 · Salud sexual y reproductiva · p.91 | No | Esperar animación y revisión LSB |
+| `MIEDO` | miedo / alarma | ojos abiertos, cejas elevadas, boca pequeña abierta | M3-T12-05 · M3 · Opuestos II · p.101 | Sí | **Indicador implementado** |
+| `TRISTE` | tristeza | cejas interiores elevadas, boca curvada hacia abajo | M4-T04-11 · M4 · Opuestos II · p.51 | No | **Indicador implementado** |
+| `PREOCUPAR` | preocupación | cejas inclinadas, boca tensa | M4-T02-11 · M4 · Verbos IV · p.39 | No | **Indicador implementado** |
+| `CONFIANZA` | seguridad / calma | ojos relajados, sonrisa leve | M4-T11-11 · M4 · General II · p.99 | No | **Indicador implementado** |
+| `DOLOR` | dolor físico | ojos cerrados, cejas contraídas, boca tensa | M2-T13-17 · M2 · Salud sexual y reproductiva · p.91 | No | **Indicador implementado** |
 
 > La expresión exacta de cada fila debe ser validada por una persona experta
 > en LSB antes de declararla definitiva. El dibujo es una ayuda semántica, no

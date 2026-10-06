@@ -19,7 +19,7 @@ class AvatarExpressionIndicator extends StatelessWidget {
       image: true,
       child: ExcludeSemantics(
         child: Container(
-          key: ValueKey('avatar_expression_$label'),
+          key: ValueKey('avatar_expression_${expression.keyName}'),
           width: 58,
           height: 58,
           padding: const EdgeInsets.all(7),
@@ -59,6 +59,14 @@ class _ExpressionPainter extends CustomPainter {
     switch (expression) {
       case AvatarFacialExpression.fear:
         _paintFear(canvas, size, stroke);
+      case AvatarFacialExpression.sadness:
+        _paintSadness(canvas, size, stroke);
+      case AvatarFacialExpression.worry:
+        _paintWorry(canvas, size, stroke);
+      case AvatarFacialExpression.confidence:
+        _paintConfidence(canvas, size, stroke);
+      case AvatarFacialExpression.pain:
+        _paintPain(canvas, size, stroke);
     }
   }
 
@@ -105,6 +113,116 @@ class _ExpressionPainter extends CustomPainter {
       ),
       stroke,
     );
+  }
+
+  void _paintSadness(Canvas canvas, Size size, Paint stroke) {
+    final w = size.width;
+    final h = size.height;
+    canvas.drawLine(
+      Offset(w * 0.23, h * 0.31),
+      Offset(w * 0.43, h * 0.25),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.57, h * 0.25),
+      Offset(w * 0.77, h * 0.31),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.28, h * 0.47),
+      Offset(w * 0.41, h * 0.49),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.59, h * 0.49),
+      Offset(w * 0.72, h * 0.47),
+      stroke,
+    );
+    final mouth = Path()
+      ..moveTo(w * 0.34, h * 0.76)
+      ..quadraticBezierTo(w * 0.5, h * 0.61, w * 0.66, h * 0.76);
+    canvas.drawPath(mouth, stroke);
+  }
+
+  void _paintWorry(Canvas canvas, Size size, Paint stroke) {
+    final w = size.width;
+    final h = size.height;
+    canvas.drawLine(
+      Offset(w * 0.24, h * 0.33),
+      Offset(w * 0.42, h * 0.27),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.58, h * 0.27),
+      Offset(w * 0.76, h * 0.34),
+      stroke,
+    );
+    canvas.drawCircle(Offset(w * 0.35, h * 0.47), w * 0.035, stroke);
+    canvas.drawCircle(Offset(w * 0.65, h * 0.47), w * 0.035, stroke);
+    final mouth = Path()
+      ..moveTo(w * 0.32, h * 0.7)
+      ..quadraticBezierTo(w * 0.41, h * 0.64, w * 0.5, h * 0.7)
+      ..quadraticBezierTo(w * 0.59, h * 0.76, w * 0.68, h * 0.7);
+    canvas.drawPath(mouth, stroke);
+  }
+
+  void _paintConfidence(Canvas canvas, Size size, Paint stroke) {
+    final w = size.width;
+    final h = size.height;
+    final leftEye = Path()
+      ..moveTo(w * 0.27, h * 0.47)
+      ..quadraticBezierTo(w * 0.35, h * 0.53, w * 0.43, h * 0.47);
+    final rightEye = Path()
+      ..moveTo(w * 0.57, h * 0.47)
+      ..quadraticBezierTo(w * 0.65, h * 0.53, w * 0.73, h * 0.47);
+    canvas.drawPath(leftEye, stroke);
+    canvas.drawPath(rightEye, stroke);
+    final mouth = Path()
+      ..moveTo(w * 0.32, h * 0.66)
+      ..quadraticBezierTo(w * 0.5, h * 0.8, w * 0.68, h * 0.66);
+    canvas.drawPath(mouth, stroke);
+  }
+
+  void _paintPain(Canvas canvas, Size size, Paint stroke) {
+    final w = size.width;
+    final h = size.height;
+    canvas.drawLine(
+      Offset(w * 0.24, h * 0.29),
+      Offset(w * 0.43, h * 0.36),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.57, h * 0.36),
+      Offset(w * 0.76, h * 0.29),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.28, h * 0.47),
+      Offset(w * 0.42, h * 0.53),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.28, h * 0.53),
+      Offset(w * 0.42, h * 0.47),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.58, h * 0.47),
+      Offset(w * 0.72, h * 0.53),
+      stroke,
+    );
+    canvas.drawLine(
+      Offset(w * 0.58, h * 0.53),
+      Offset(w * 0.72, h * 0.47),
+      stroke,
+    );
+    final mouth = Path()
+      ..moveTo(w * 0.31, h * 0.72)
+      ..lineTo(w * 0.4, h * 0.66)
+      ..lineTo(w * 0.5, h * 0.73)
+      ..lineTo(w * 0.6, h * 0.66)
+      ..lineTo(w * 0.69, h * 0.72);
+    canvas.drawPath(mouth, stroke);
   }
 
   @override
