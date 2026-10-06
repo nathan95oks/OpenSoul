@@ -200,14 +200,15 @@ def _frases_con_glosas() -> dict:
     tarjeta con una palabra sin seña no lleva glosas en el corpus, y es
     justo la frase con que se confirma su equivalencia."""
     from build_rag_corpus import (CORRECCIONES, aplicar_equivalencias,
-                                  cargar_equivalencias, marcar_senas_pendientes)
+                                  equivalencias_vigentes,
+                                  marcar_senas_pendientes)
     with open(GLOSAS, encoding="utf-8") as f:
         cache = json.load(f)
     corregidas = {}
     if os.path.exists(CORRECCIONES):
         with open(CORRECCIONES, encoding="utf-8") as f:
             corregidas = json.load(f)
-    equivalencias = cargar_equivalencias()
+    equivalencias = equivalencias_vigentes()
     out = {}
     for texto, v in cache.items():
         if texto in corregidas:

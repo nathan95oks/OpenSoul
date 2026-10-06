@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
@@ -7,11 +8,13 @@ import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 
 /// Explica qué es cada palabra de [glosses] que no tiene seña propia en los
-/// módulos M1–M4 ni en el II Diccionario 2024.
+/// módulos M1–M4.
 ///
 /// Se abre donde se esperaría la seña: al deslizar una fila o tocar una
 /// palabra en azul. Una palabra con seña se hace en el avatar; una sin seña
 /// no se inventa: se explica. No hace nada si ninguna glosa es pendiente.
+/// Una palabra en azul dentro de la descripción también se toca: abre la
+/// suya encima, y así.
 Future<void> showPendingSignInfo(
   BuildContext context,
   FutureOr<PendingSignCatalog> catalogo,
@@ -36,14 +39,18 @@ Future<void> showPendingSignInfo(
     isScrollControlled: true,
     showDragHandle: true,
     backgroundColor: AppTheme.pageBg,
-    builder: (_) => PendingSignInfoSheet(infos: infos),
+    builder: (_) => PendingSignInfoSheet(infos: infos, catalog: catalog),
   );
 }
 
 class PendingSignInfoSheet extends StatelessWidget {
   final List<PendingSignInfo> infos;
 
-  const PendingSignInfoSheet({super.key, required this.infos});
+  /// De dónde salen las descripciones de las palabras en azul de cada
+  /// descripción. Sin él, esas palabras no se pueden tocar.
+  final PendingSignCatalog? catalog;
+
+  const PendingSignInfoSheet({super.key, required this.infos, this.catalog});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +68,7 @@ class PendingSignInfoSheet extends StatelessWidget {
             children: [
               for (final (i, info) in infos.indexed) ...[
                 if (i > 0) const Divider(height: 32),
-                _Palabra(info: info),
+                _Palabra(info: info, catalog: catalog),
               ],
               const SizedBox(height: 16),
               FilledButton(
@@ -78,8 +85,9 @@ class PendingSignInfoSheet extends StatelessWidget {
 
 class _Palabra extends StatelessWidget {
   final PendingSignInfo info;
+  final PendingSignCatalog? catalog;
 
-  const _Palabra({required this.info});
+  const _Palabra({required this.info, this.catalog});
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +97,9 @@ class _Palabra extends StatelessWidget {
       bodyColor: AppTheme.lightText,
       displayColor: AppTheme.lightText,
     );
+    final catalogo = catalog;
+    final tocables =
+        catalogo != null && info.lsbDescription.any(PendingSign.isPending);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -112,8 +123,7 @@ class _Palabra extends StatelessWidget {
               child: Text(
                 info.isProperName
                     ? 'Nombre propio: no tiene seña, se deletrea.'
-                    : 'No tiene seña propia en los módulos M1–M4 ni en el '
-                          'II Diccionario LSB–Castellano 2024.',
+                    : 'No tiene seña propia en los módulos M1–M4.',
                 style: tema.bodySmall?.copyWith(color: AppTheme.lightTextSub),
               ),
             ),
@@ -128,7 +138,13 @@ class _Palabra extends StatelessWidget {
         // Explicada en LSB, con señas que la persona ya conoce; el español
         // solo mientras no esté traducida.
         if (info.lsbDescription.isNotEmpty)
-          _EnLsb(glosses: info.lsbDescription, style: tema.titleMedium)
+          LsbDescriptionText(
+            glosses: info.lsbDescription,
+            style: tema.titleMedium,
+            onPendingTap: catalogo == null
+                ? null
+                : (g) => showPendingSignInfo(context, catalogo, [g]),
+          )
         else
           Text(
             info.description.isEmpty
@@ -136,6 +152,13 @@ class _Palabra extends StatelessWidget {
                 : info.description,
             style: tema.bodyLarge,
           ),
+        if (tocables) ...[
+          const SizedBox(height: 4),
+          Text(
+            'Toque una palabra en azul para ver qué es.',
+            style: tema.bodySmall?.copyWith(color: AppTheme.lightTextSub),
+          ),
+        ],
         if (info.example.isNotEmpty) ...[
           const SizedBox(height: 14),
           Text(
@@ -161,17 +184,63 @@ class _Palabra extends StatelessWidget {
 }
 
 /// Una descripción en glosas LSB: las señas en oscuro y, en azul, las
-/// palabras que tampoco tienen seña.
-class _EnLsb extends StatelessWidget {
+/// palabras que tampoco tienen seña. Con [onPendingTap], cada palabra en
+/// azul se toca (va subrayada) para ver qué es.
+class LsbDescriptionText extends StatefulWidget {
   final List<String> glosses;
   final TextStyle? style;
 
-  const _EnLsb({required this.glosses, this.style});
+  /// Fondo oscuro (el bloque delante del avatar): señas en claro y el azul
+  /// que se lee sobre oscuro.
+  final bool onDark;
+  final ValueChanged<String>? onPendingTap;
+
+  const LsbDescriptionText({
+    super.key,
+    required this.glosses,
+    this.style,
+    this.onDark = false,
+    this.onPendingTap,
+  });
+
+  @override
+  State<LsbDescriptionText> createState() => _LsbDescriptionTextState();
+}
+
+class _LsbDescriptionTextState extends State<LsbDescriptionText> {
+  final List<TapGestureRecognizer> _toques = [];
+
+  @override
+  void dispose() {
+    _soltarToques();
+    super.dispose();
+  }
+
+  void _soltarToques() {
+    for (final t in _toques) {
+      t.dispose();
+    }
+    _toques.clear();
+  }
+
+  TapGestureRecognizer? _toque(String gloss) {
+    final onTap = widget.onPendingTap;
+    if (onTap == null) return null;
+    final t = TapGestureRecognizer()..onTap = () => onTap(gloss);
+    _toques.add(t);
+    return t;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final base = (style ?? const TextStyle(fontSize: 16)).copyWith(
-      color: AppTheme.lightText,
+    _soltarToques();
+    final tinta = widget.onDark ? Colors.white : AppTheme.lightText;
+    final tenue = widget.onDark ? Colors.white60 : AppTheme.lightTextSub;
+    final azul = widget.onDark
+        ? AppTheme.pendingSignOnDark
+        : AppTheme.pendingSign;
+    final base = (widget.style ?? const TextStyle(fontSize: 16)).copyWith(
+      color: tinta,
       fontWeight: FontWeight.w800,
       letterSpacing: 0.3,
       height: 1.4,
@@ -180,16 +249,23 @@ class _EnLsb extends StatelessWidget {
       key: const Key('descripcion_lsb'),
       TextSpan(
         children: [
-          for (final (i, g) in glosses.indexed) ...[
+          for (final (i, g) in widget.glosses.indexed) ...[
             if (i > 0)
               TextSpan(
                 text: ' · ',
-                style: base.copyWith(color: AppTheme.lightTextSub),
+                style: base.copyWith(color: tenue),
               ),
             PendingSign.isPending(g)
                 ? TextSpan(
                     text: PendingSign.wordOf(g),
-                    style: base.copyWith(color: AppTheme.pendingSign),
+                    style: base.copyWith(
+                      color: azul,
+                      decoration: widget.onPendingTap == null
+                          ? null
+                          : TextDecoration.underline,
+                      decorationColor: azul,
+                    ),
+                    recognizer: _toque(g),
                   )
                 : TextSpan(text: g.replaceAll('_', ' ')),
           ],
