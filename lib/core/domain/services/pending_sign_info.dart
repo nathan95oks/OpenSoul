@@ -72,4 +72,35 @@ class PendingSignCatalog {
     return _byKey[key] ??
         PendingSignInfo(word: PendingSign.wordOf(PendingSign.prefix + key));
   }
+
+  /// La glosa pendiente con que se explica [word], tal como la escribió el
+  /// backend («Hipoteca», «FOLIO REAL», «catastro»), o `null` si no hay
+  /// descripción que mostrar: entonces la palabra se deletrea. Un nombre
+  /// propio también se deletrea.
+  String? describedGloss(String word) {
+    final key = _byPlainKey[_plain(word)];
+    final info = key == null ? null : _byKey[key];
+    if (info == null || info.description.isEmpty || info.isProperName) {
+      return null;
+    }
+    return PendingSign.prefix + key!;
+  }
+
+  // El catálogo es const (tiene [empty]): el índice se guarda aparte.
+  static final Expando<Map<String, String>> _indices = Expando();
+
+  Map<String, String> get _byPlainKey =>
+      _indices[this] ??= {for (final key in _byKey.keys) _plain(key): key};
+
+  /// Mayúsculas, sin tildes (la Ñ se queda: es otra letra) y con `_` entre
+  /// palabras, como las claves del catálogo.
+  static String _plain(String word) {
+    const from = 'ÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛ';
+    const to = 'AAAAEEEEIIIIOOOOUUUU';
+    var out = word.toUpperCase().trim();
+    for (var i = 0; i < from.length; i++) {
+      out = out.replaceAll(from[i], to[i]);
+    }
+    return out.replaceAll(RegExp(r'[\s_]+'), '_');
+  }
 }

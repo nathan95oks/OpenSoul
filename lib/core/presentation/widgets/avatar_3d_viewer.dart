@@ -12,6 +12,8 @@ import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/avatar_facial_expression.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/pending_sign_info_sheet.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_expression_indicator.dart';
 
 class Avatar3DViewer extends ConsumerStatefulWidget {
@@ -40,6 +42,12 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   /// para que el avatar no siga senando al cambiar de modulo.
   final bool isActive;
 
+  /// Una palabra sin seña con descripción (`SENA_PENDIENTE:…`) se explica:
+  /// un bloque con su descripción se desliza delante del avatar el tiempo de
+  /// leerla y, al terminar, se va y el avatar sigue. Lo usa el Traductor a
+  /// LSB; las demás vistas siguen con el aviso «En espera para su avatar».
+  final bool describePendingSigns;
+
   const Avatar3DViewer({
     super.key,
     required this.isProcessing,
@@ -54,10 +62,21 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
     this.isUserComposing = false,
     this.showControls = true,
     this.showBackButton = true,
+    this.describePendingSigns = false,
   });
 
   @override
   ConsumerState<Avatar3DViewer> createState() => _Avatar3DViewerState();
+
+  /// Lo que se deja una descripción delante del avatar: lo que tarda en
+  /// leerse, entre 5 y 15 segundos.
+  static Duration readingTimeFor(PendingSignInfo info) {
+    final palabras = info.lsbDescription.isNotEmpty
+        ? info.lsbDescription.length
+        : info.description.split(RegExp(r'\s+')).length;
+    final ms = 3000 + 700 * palabras;
+    return Duration(milliseconds: ms.clamp(5000, 15000));
+  }
 }
 
 /// Margen sobre la duracion de una sena antes de dar el paso por perdido.
@@ -474,6 +493,37 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   void _handleFinished(String viewerId) => _finishCurrentStep();
 
+  /// El paso sin clip se cierra solo: una descripción, cuando la persona
+  /// termina de leerla; lo demás, en [Avatar3DViewer.animationDuration].
+  void _armPlaceholderTimer(String gloss) {
+    final descrita = _describedInfo(gloss);
+    _placeholderTimer = Timer(
+      descrita == null
+          ? widget.animationDuration
+          : Avatar3DViewer.readingTimeFor(descrita),
+      _finishCurrentStep,
+    );
+  }
+
+  String _rawGlossAt(int index) {
+    final glosses = _testGlosses ?? widget.glosses;
+    if (glosses == null || index < 0 || index >= glosses.length) return '';
+    return glosses[index];
+  }
+
+  /// La descripción que se muestra delante del avatar para [gloss], o `null`
+  /// si no es una palabra sin seña con descripción (o esta vista no las
+  /// explica).
+  PendingSignInfo? _describedInfo(String gloss) {
+    if (!widget.describePendingSigns || !PendingSign.isPending(gloss)) {
+      return null;
+    }
+    final catalog = ref.read(pendingSignCatalogProvider).asData?.value;
+    final info = catalog?.infoOf(gloss);
+    if (info == null || info.description.isEmpty) return null;
+    return info;
+  }
+
   String? _glossAt(int index) {
     final glosses = _testGlosses ?? widget.glosses;
     if (glosses == null || index < 0 || index >= glosses.length) return null;
@@ -512,7 +562,27 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
     if (url.startsWith(AnimationUrlResolver.placeholderScheme)) {
       _stepStartedAt = DateTime.now();
-      _placeholderTimer = Timer(widget.animationDuration, _finishCurrentStep);
+      final gloss = _rawGlossAt(_currentIndex);
+      if (widget.describePendingSigns &&
+          PendingSign.isPending(gloss) &&
+          !ref.read(pendingSignCatalogProvider).hasValue) {
+        // Las descripciones todavía se están leyendo del paquete de la app:
+        // el paso las espera, en vez de pasar de largo sin explicarla.
+        final token = _playToken;
+        _placeholderTimer = Timer(_loadWatchdog, _finishCurrentStep);
+        void seguir(Object? _) {
+          if (!mounted || token != _playToken || _stepSettled) return;
+          _cancelPlaceholderTimer();
+          setState(() {});
+          _armPlaceholderTimer(gloss);
+        }
+
+        ref
+            .read(pendingSignCatalogProvider.future)
+            .then(seguir, onError: seguir);
+        return;
+      }
+      _armPlaceholderTimer(gloss);
       return;
     }
 
@@ -714,6 +784,11 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       AnimationUrlResolver.placeholderScheme,
     );
     final facialExpression = AvatarFacialExpressions.forGloss(currentGloss);
+    if (widget.describePendingSigns) {
+      // Se lee empaquetado con la app; al llegar, se redibuja.
+      ref.watch(pendingSignCatalogProvider);
+    }
+    final descrita = isPlaceholder ? _describedInfo(currentGloss) : null;
 
     // Solo los rotulos: el visor vive debajo, en [build], y no se desmonta al
     // cambiar de estado.
@@ -723,9 +798,12 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         // La sena espera al modelo: se dice, en vez de un visor vacio.
         if (!isPlaceholder && !_modelLoaded)
           Positioned.fill(child: _LoadingAvatarNotice(gloss: currentGloss)),
-        if (isPlaceholder && PendingSign.isPending(currentGloss))
+        // Una palabra descrita no lleva aviso: la explica el bloque de abajo.
+        if (isPlaceholder &&
+            descrita == null &&
+            PendingSign.isPending(currentGloss))
           Positioned.fill(child: _PendingSignNotice(gloss: currentGloss))
-        else if (isPlaceholder)
+        else if (isPlaceholder && descrita == null)
           Positioned.fill(
             child: Container(
               color: const Color(0xFF1E1E2F).withValues(alpha: 0.9),
@@ -791,6 +869,28 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
               }),
             ),
           ),
+
+        Positioned.fill(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 380),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (child, animation) => SlideTransition(
+              position: Tween(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+            child: descrita != null && _isPlayingSequence
+                ? _PendingDescriptionPanel(
+                    key: ValueKey('descripcion_$_currentIndex'),
+                    info: descrita,
+                    onContinue: _finishCurrentStep,
+                  )
+                : const SizedBox.shrink(key: ValueKey('sin_descripcion')),
+          ),
+        ),
 
         Positioned(
           top: 14,
@@ -951,7 +1051,10 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        currentGloss,
+        // Una palabra sin seña se rotula en español, sin la marca interna.
+        PendingSign.isPending(currentGloss)
+            ? PendingSign.wordOf(currentGloss)
+            : currentGloss,
         style: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
@@ -1057,6 +1160,94 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Qué es una palabra que no existe en LSB, delante del avatar: el bloque
+/// entra deslizándose, se lee y se va, y el avatar sigue con la seña
+/// siguiente. «Seguir» lo cierra antes.
+class _PendingDescriptionPanel extends StatelessWidget {
+  final PendingSignInfo info;
+  final VoidCallback onContinue;
+
+  const _PendingDescriptionPanel({
+    super.key,
+    required this.info,
+    required this.onContinue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        key: const Key('avatar_descripcion'),
+        width: double.infinity,
+        margin: const EdgeInsets.fromLTRB(12, 64, 12, 12),
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E1E2F).withValues(alpha: 0.96),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: AppTheme.pendingSignOnDark.withValues(alpha: 0.6),
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black45,
+              blurRadius: 18,
+              offset: Offset(0, -4),
+            ),
+          ],
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                info.word,
+                style: const TextStyle(
+                  color: AppTheme.pendingSignOnDark,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.1,
+                ),
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'No tiene seña en LSB. ¿Qué es?',
+                style: TextStyle(color: Colors.white70, fontSize: 13),
+              ),
+              const SizedBox(height: 10),
+              if (info.lsbDescription.isNotEmpty)
+                LsbDescriptionText(
+                  glosses: info.lsbDescription,
+                  onDark: true,
+                  style: const TextStyle(fontSize: 18),
+                )
+              else
+                Text(
+                  info.description,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    height: 1.35,
+                  ),
+                ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: onContinue,
+                  style: TextButton.styleFrom(foregroundColor: Colors.white),
+                  child: const Text('Seguir'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

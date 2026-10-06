@@ -1,7 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lsb_legal_app/core/di/injection.dart'
+    show pendingSignCatalogProvider;
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/di/injection.dart';
+import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/described_word_steps.dart';
 
 enum AudioTranslationStatus {
   idle,
@@ -68,15 +72,17 @@ class AudioTranslationState {
       translationResult: identical(translationResult, _unset)
           ? this.translationResult
           : translationResult as LsbTranslation?,
-      errorMessage:
-          identical(errorMessage, _unset) ? this.errorMessage : errorMessage as String?,
+      errorMessage: identical(errorMessage, _unset)
+          ? this.errorMessage
+          : errorMessage as String?,
       recognizedText: identical(recognizedText, _unset)
           ? this.recognizedText
           : recognizedText as String?,
       pendingSourceText: identical(pendingSourceText, _unset)
           ? this.pendingSourceText
           : pendingSourceText as String?,
-      pendingClarifications: pendingClarifications ?? this.pendingClarifications,
+      pendingClarifications:
+          pendingClarifications ?? this.pendingClarifications,
       resolvedSenses: resolvedSenses ?? this.resolvedSenses,
     );
   }
@@ -84,8 +90,8 @@ class AudioTranslationState {
 
 final audioTranslationControllerProvider =
     NotifierProvider<AudioTranslationController, AudioTranslationState>(() {
-  return AudioTranslationController();
-});
+      return AudioTranslationController();
+    });
 
 class AudioTranslationController extends Notifier<AudioTranslationState> {
   // Un identificador de solicitud simple: si llega una respuesta de una
@@ -135,8 +141,9 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
       final result = await useCase.execute(
         text,
         situation: situation,
-        resolvedSenses:
-            state.resolvedSenses.isEmpty ? null : state.resolvedSenses,
+        resolvedSenses: state.resolvedSenses.isEmpty
+            ? null
+            : state.resolvedSenses,
       );
       if (myToken != _requestToken) return; // ya no es la solicitud vigente.
 
@@ -149,9 +156,14 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
         return;
       }
 
+      // Una palabra que no existe en LSB y tiene descripción se explica
+      // delante del avatar en vez de deletrearse.
+      final catalog = await _pendingSignCatalog();
+      if (myToken != _requestToken) return;
+
       state = state.copyWith(
         status: AudioTranslationStatus.success,
-        translationResult: result,
+        translationResult: DescribedWordSteps.apply(result, catalog),
         pendingClarifications: const [],
       );
     } catch (e) {
@@ -160,6 +172,16 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
         status: AudioTranslationStatus.error,
         errorMessage: e.toString(),
       );
+    }
+  }
+
+  /// Las descripciones de las palabras sin seña, empaquetadas con la app. Si
+  /// no se pueden leer, las palabras se deletrean como siempre.
+  Future<PendingSignCatalog> _pendingSignCatalog() async {
+    try {
+      return await ref.read(pendingSignCatalogProvider.future);
+    } catch (_) {
+      return PendingSignCatalog.empty;
     }
   }
 
