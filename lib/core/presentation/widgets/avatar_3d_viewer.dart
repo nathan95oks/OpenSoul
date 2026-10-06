@@ -663,7 +663,8 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           },
         ),
       },
-      relatedJs: '''
+      relatedJs:
+          '''
         // Antes de que arranque model-viewer (su modulo se ejecuta despues de
         // este script): menos pixeles por fotograma.
         (() => {
@@ -767,13 +768,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
             ),
           ),
 
-        if (facialExpression != null)
-          Positioned(
-            left: 16,
-            bottom: 16,
-            child: AvatarExpressionIndicator(expression: facialExpression),
-          ),
-
         if (_localUrls.length > 1)
           Positioned(
             bottom: 12,
@@ -824,6 +818,15 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                   padding: EdgeInsets.zero,
                   onPressed: _replaySequence,
                 ),
+              ],
+              // La expresion no manual comparte la franja informativa con la
+              // glosa: queda cerca del rostro, pero fuera del area central en
+              // la que se mueven las manos. En Conversacion ocupa el espacio
+              // libre de la esquina; en las otras vistas respeta los controles.
+              if (facialExpression != null) ...[
+                if (widget.showControls && widget.showBackButton)
+                  const SizedBox(width: 14),
+                AvatarExpressionIndicator(expression: facialExpression),
               ],
               const Spacer(),
               Column(
@@ -902,10 +905,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 margin: const EdgeInsets.symmetric(horizontal: 2),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 7,
-                  vertical: 4,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
                 decoration: BoxDecoration(
                   color: isCurrent
                       ? Colors.deepPurpleAccent
@@ -933,9 +933,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                   letters[idx],
                   style: TextStyle(
                     color: isCurrent ? Colors.white : Colors.white60,
-                    fontWeight: isCurrent
-                        ? FontWeight.w900
-                        : FontWeight.w500,
+                    fontWeight: isCurrent ? FontWeight.w900 : FontWeight.w500,
                     fontSize: isCurrent ? 14 : 12,
                   ),
                 ),
@@ -947,10 +945,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(20),
