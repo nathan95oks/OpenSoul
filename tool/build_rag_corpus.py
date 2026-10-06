@@ -1058,8 +1058,17 @@ def info_sin_sena(corpus: dict, avisos: list,
     equivalencias = cargar_equivalencias()
     sin_lsb, infieles = [], []
 
-    def en_lsb(palabra: str, texto: str) -> list:
-        """La descripción en glosas (tool/rag_descripciones_lsb.py), o []."""
+    def en_lsb(palabra: str, texto: str, tipo: str = "concepto") -> list:
+        """La descripción en glosas (tool/rag_descripciones_lsb.py), o [].
+
+        Las traducciones provisionales se conservan para que la ficha de una
+        seña pendiente nunca vuelva a mostrar la definición en castellano. El
+        informe de revisión sigue registrando sus observaciones; así se puede
+        mejorar la secuencia sin quitarle a la persona sorda el contenido LSB.
+        Los nombres propios se representan mediante deletreo manual LSB.
+        """
+        if tipo == "nombre_propio":
+            return [c for c in palabra.replace("_", "") if c.isalnum()]
         t = traducidas.get(texto)
         if not texto or not t:
             if texto:
@@ -1072,13 +1081,13 @@ def info_sin_sena(corpus: dict, avisos: list,
             avisos.append(f"descripción de {palabra}: elementos que no son "
                           f"glosas ({', '.join(malas)}); se muestra en español")
             return []
-        # Una traducción que dice otra cosa no se muestra: mejor el español.
+        # La traducción provisional se muestra en LSB y queda registrada para
+        # revisión. Antes se descartaba aquí y la interfaz volvía al español.
         motivos = descripcion_fundada(texto, glosas, palabra)
         if motivos:
             infieles.append(palabra)
             if revision is not None:
                 revision.append((palabra, texto, glosas, motivos))
-            return []
         return glosas_canonicas(glosas)
 
     ejemplos = {}
@@ -1099,7 +1108,9 @@ def info_sin_sena(corpus: dict, avisos: list,
         descripcion = dato.get("descripcion", "")
         salida[palabra] = {
             "descripcion": descripcion,
-            "descripcionLsb": en_lsb(palabra, descripcion),
+            "descripcionLsb": en_lsb(
+                palabra, descripcion, dato.get("tipo", "concepto")
+            ),
             "tipo": dato.get("tipo", "concepto"),
             "revisada": bool(dato.get("revisada")),
             "ejemplo": ejemplos[palabra],
@@ -1108,8 +1119,8 @@ def info_sin_sena(corpus: dict, avisos: list,
         avisos.append(f"{len(sin_lsb)} descripciones sin traducir a LSB: ejecuta "
                       "tool/rag_descripciones_lsb.py")
     if infieles:
-        avisos.append(f"{len(infieles)} descripciones con una traducción LSB que "
-                      "no dice lo mismo (se muestran en español; p. ej. "
+        avisos.append(f"{len(infieles)} descripciones con una traducción LSB "
+                      "provisional (se muestran en LSB y requieren revisión; p. ej. "
                       f"{', '.join(infieles[:5])}): reescríbelas con palabras "
                       "que tengan seña o corrige su traducción")
     if faltan:
@@ -1122,18 +1133,19 @@ def info_sin_sena(corpus: dict, avisos: list,
 
 def revision_lsb_md(revision: list) -> str:
     """La lista de trabajo de las descripciones que se ven en español porque
-    su traducción a LSB no dice lo mismo."""
+    su traducción a LSB todavía requiere revisión."""
     lineas = [
         "# Descripciones en LSB por revisar",
         "",
         "Generado por `tool/build_rag_corpus.py`. No editar a mano.",
         "",
         "La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la "
-        "traducción de la Lambda dice lo mismo que el español: cada seña se "
+        "traducción provisional de la Lambda requiere revisión: cada seña se "
         "apoya en una palabra de la descripción, la negación coincide, las "
         "interrogativas solo van donde se pregunta, no se explica la palabra "
         "con ella misma y hay más señas que señas por incorporar. Estas no "
-        "pasan y se ven en español. Para arreglarlas, reescribe la descripción "
+        "registran aquí, pero ya se ven en LSB en la aplicación. Para "
+        "arreglarlas, reescribe la descripción "
         "en `descripciones_sin_sena.json` con palabras que tengan seña y vuelve "
         "a ejecutar `python tool/rag_descripciones_lsb.py` y "
         "`python tool/build_rag_corpus.py`.",

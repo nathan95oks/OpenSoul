@@ -113,7 +113,7 @@ void main() {
       File('assets/dictionary/senas_sin_sena.json').readAsStringSync(),
     );
 
-    testWidgets('tocarla abre su descripción en lugar de una seña', (
+    testWidgets('tocarla abre su descripción LSB en lugar de una seña', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -140,11 +140,12 @@ void main() {
         find.textContaining('No tiene seña propia en los módulos M1–M4'),
         findsOneWidget,
       );
+      expect(find.byKey(const Key('descripcion_lsb')), findsOneWidget);
       expect(
         find.text(
           'Casa, departamento o terreno: propiedad que no se puede mover.',
         ),
-        findsOneWidget,
+        findsNothing,
       );
       expect(
         find.text('Descripción provisional, por revisar.'),
@@ -260,22 +261,26 @@ void main() {
       expect(find.byKey(const Key('info_sin_sena')), findsNothing);
     });
 
-    test('toda palabra sin seña del corpus tiene descripción', () {
+    test('toda palabra sin seña del corpus tiene descripción en LSB', () {
       final corpus = RagCorpus.fromJsonString(
         File('assets/rag/escenarios_cbba.json').readAsStringSync(),
       );
       final sinDescripcion = <String>{};
+      final sinDescripcionLsb = <String>{};
       for (final s in corpus.scenarios) {
         for (final t in [
           ...s.turns,
           for (final v in s.variants) ...v.replies,
         ]) {
           for (final g in t.glosses.where(PendingSign.isPending)) {
-            if (catalog.infoOf(g).description.isEmpty) sinDescripcion.add(g);
+            final info = catalog.infoOf(g);
+            if (info.description.isEmpty) sinDescripcion.add(g);
+            if (info.lsbDescription.isEmpty) sinDescripcionLsb.add(g);
           }
         }
       }
       expect(sinDescripcion, isEmpty);
+      expect(sinDescripcionLsb, isEmpty);
     });
   });
 

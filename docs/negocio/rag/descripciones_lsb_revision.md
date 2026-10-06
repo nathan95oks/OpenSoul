@@ -2,9 +2,9 @@
 
 Generado por `tool/build_rag_corpus.py`. No editar a mano.
 
-La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la traducción de la Lambda dice lo mismo que el español: cada seña se apoya en una palabra de la descripción, la negación coincide, las interrogativas solo van donde se pregunta, no se explica la palabra con ella misma y hay más señas que señas por incorporar. Estas no pasan y se ven en español. Para arreglarlas, reescribe la descripción en `descripciones_sin_sena.json` con palabras que tengan seña y vuelve a ejecutar `python tool/rag_descripciones_lsb.py` y `python tool/build_rag_corpus.py`.
+La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la traducción provisional de la Lambda requiere revisión: cada seña se apoya en una palabra de la descripción, la negación coincide, las interrogativas solo van donde se pregunta, no se explica la palabra con ella misma y hay más señas que señas por incorporar. Estas no registran aquí, pero ya se ven en LSB en la aplicación. Para arreglarlas, reescribe la descripción en `descripciones_sin_sena.json` con palabras que tengan seña y vuelve a ejecutar `python tool/rag_descripciones_lsb.py` y `python tool/build_rag_corpus.py`.
 
-**268 descripciones.** `*` = seña por incorporar.
+**257 descripciones.** `*` = seña por incorporar.
 
 | Palabra | Descripción | Traducción LSB | Motivo |
 |---|---|---|---|
@@ -21,13 +21,11 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | ALGUNAS | Uno, cualquiera, sin decir cuál. | 1 · *CUALQUIERA · NO · *DECIR · CUAL | NO |
 | ALGUNO | Uno, cualquiera, sin decir cuál. | 1 · *CUALQUIERA · NO · *DECIR · CUAL | NO |
 | ALODIAL | «Certificado alodial»: dice qué propiedades tiene una persona y si tienen deudas o hipotecas. | CERTIFICADO · *PROPIEDAD · *PERSONA · DEUDA · *HIPOTECA | (sobre todo señas por incorporar) |
-| ALY | Nombre de un edificio en Cochabamba. Se deletrea. | C · O · C · H · A · B · A · M · B · A | (ninguna seña) |
 | AMBITO | El área o espacio donde vale algo. | *ESPACIO · *VALE · *ALGO | (sobre todo señas por incorporar), (ninguna seña) |
 | ANOTACION_PREVENTIVA | Aviso que se escribe en el registro de una propiedad mientras hay un juicio, para proteger un derecho. | *REGISTRO · *PROPIEDAD · *JUICIO · PROTEGER · *DERECHO | (sobre todo señas por incorporar) |
 | ANTECEDENTES | Lo que pasó antes. «Antecedentes penales»: registro de si una persona tuvo procesos penales. | PASADO · *REGISTRO · *PERSONA · *PROCESO · *PENAL · TENER | (sobre todo señas por incorporar), PASADO, TENER |
 | ANTERIOR | El que estaba antes, el viejo. | *ANTES · *VIEJO | (sobre todo señas por incorporar), (ninguna seña) |
 | ANTES | En un tiempo que ya pasó, primero. | PASADO · *PRIMERO | PASADO |
-| ANTEZANA | Nombre de una calle en Cochabamba. Se deletrea. | C · O · C · H · A · B · A · M · B · A | (ninguna seña) |
 | ANTICIPO | Dar algo antes del tiempo normal. «Anticipo de legítima»: dar a un hijo parte de su herencia en vida. | *ANTES · *TIEMPO · *NORMAL · DAR · *LEGITIMA · PARTE · HIJO · *VIDA · HERENCIA | (sobre todo señas por incorporar), DAR |
 | ANTICRESIS | Contrato: una persona usa una casa a cambio de prestar dinero al dueño; al devolver el dinero, deja la casa. | CONTRATO · *PERSONA · CASA · USAR · CAMBIAR · *PRESTAR · BILLETES · *DUEÑO · DEVOLVER · DEJAR · CASA | USAR |
 | ANTICRETICOS | Contrato: una persona usa una casa a cambio de prestar dinero al dueño; al devolver el dinero, deja la casa. | CONTRATO · *PERSONA · CASA · USAR · CAMBIAR · *PRESTAR · BILLETES · *DUEÑO · DEVOLVER · DEJAR · CASA | USAR |
@@ -52,7 +50,6 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | CATASTRAL | Del catastro: el registro de la municipalidad con el tamaño y la ubicación de terrenos y casas. | *CATASTRO · *REGISTRO · *MUNICIPALIDAD · *TAMAÑO · *UBICACION · *TERRENO · CASA | (sobre todo señas por incorporar) |
 | CENTRO | Lugar o edificio donde se da un servicio. | *LUGAR · *EDIFICIO · *SERVICIO · DAR | (sobre todo señas por incorporar), DAR |
 | CERRADO | Que no atiende, no se puede entrar. | ATENDER · NO_SABER · *ENTRAR · NO_PUEDO | ATENDER, NO_SABER |
-| CHIMBA | La Chimba: zona de Cochabamba donde hay una oficina. Se deletrea. | C · H · I · M · B · A | (ninguna seña) |
 | CITAR | Llamar a una persona para que vaya a un lugar un día y hora, por ejemplo al juzgado. | LLAMAR · *PERSONA · *LUGAR · DIA · HORA · JUZGADO · PARA_QUE | PARA_QUE |
 | CIVIL | De la vida de las personas como ciudadanos. «Estado civil»: si una persona es soltera, casada, divorciada o viuda. | *PERSONA · *CIUDADANO · *ESTADO_CIVIL · *SOLTERO · *CASADO · *DIVORCIADO · *VIUDA | (sobre todo señas por incorporar), (ninguna seña) |
 | CODIGO | Número o letras que identifican algo. | *NUMERO · *LETRA · IDENTIFICAR | (sobre todo señas por incorporar) |
@@ -61,7 +58,6 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | COMUNICACION | Entenderse con otra persona, en señas, por escrito o hablando. | COMPRENDER · *OTRO · *PERSONA · *SEÑA · ESCRIBIR · HABLAR | COMPRENDER |
 | COMUNICARSE | Entenderse con otra persona, en señas, por escrito o hablando. | COMPRENDER · *OTRO · *PERSONA · *SEÑA · ESCRIBIR · HABLAR | COMPRENDER |
 | CONCEPTO | El motivo de un pago: lo que se está pagando. | *PAGO · *MOTIVO · *PAGAR | (sobre todo señas por incorporar), (ninguna seña) |
-| CONDONACIÓN | Cuando una deuda o una multa se perdona y ya no hay que pagarla. | DEUDA · *MULTA · *PERDONAR · *PAGAR · NO | (sobre todo señas por incorporar) |
 | CONFIRMAR | Comprobar que algo es correcto o seguro. | *COMPROBAR · CORRECTO · *SEGURO | (sobre todo señas por incorporar) |
 | CONFORME | Según, de acuerdo con una regla. | *SEGUN · *REGLA | (sobre todo señas por incorporar), (ninguna seña) |
 | CONMIGO | Con la persona que habla: «la tengo conmigo» es «la tengo yo, aquí». | YO · TENER · ELLA · AQUI | TENER, ELLA |
@@ -82,7 +78,6 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | DENUNCIADO | Persona acusada en una denuncia. | *PERSONA · *ACUSAR · *DENUNCIA | (sobre todo señas por incorporar), (ninguna seña) |
 | DENUNCIAR | Avisar a la policía o la fiscalía de un delito para que lo investiguen. | POLICIA · FISCALIA · *DELITO · INVESTIGACION · AVISAR · PARA_QUE | PARA_QUE |
 | DEPARTAMENTO | Cada una de las 9 regiones de Bolivia, como Cochabamba. También: vivienda dentro de un edificio. | *CADA · 1 · 9 · *REGIONES · *BOLIVIA · COMO · COCHABAMBA · *TAMBIEN · *VIVIENDA · DENTRO · *EDIFICIO | (sobre todo señas por incorporar), COMO |
-| DERECHOS_REALES | Oficina que registra quién es dueño de casas y terrenos, y sus hipotecas. | OFICINA · *REGISTRAR · *PROPIETARIO · CASA · *TERRENO · *HIPOTECA | (sobre todo señas por incorporar) |
 | DESCRIBIR | Decir cómo es algo. | *DECIR · COMO · *ALGO | (sobre todo señas por incorporar) |
 | DESCUENTO | Pagar menos de lo normal. | *PAGAR · *MENOS · *NORMAL | (sobre todo señas por incorporar), (ninguna seña) |
 | DESEA | Querer algo. «¿Desea…?» es «¿Quiere…?». | QUERER · QUE · QUIEN | QUE, QUIEN |
@@ -112,7 +107,6 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | ESTAFA | Delito: engañar a una persona para quitarle dinero o cosas. | *ENGANAR · *PERSONA · *QUITARLE · BILLETES · COSAS | (sobre todo señas por incorporar) |
 | ESTE | Señala algo que ya se mencionó. En LSB se indica señalando. | *SEÑALAR · *YA · *MENCION | (sobre todo señas por incorporar), (ninguna seña) |
 | EXACTO | Justo, sin error. | *JUSTO · *ERROR · NO | (sobre todo señas por incorporar), NO |
-| EXISTIR | Haber, estar. |  | (ninguna seña) |
 | EXPLICACION | Lo que se dice o se escribe para que alguien entienda algo. | EXPLICAR · *ENTENDER · PARA_QUE | EXPLICAR, PARA_QUE |
 | FALLECIDO | Persona que murió. | *PERSONA · *MORIR | (sobre todo señas por incorporar), (ninguna seña) |
 | FAMILIA | Padres, hijos, hermanos y demás parientes. | *PADRE · HIJA · HERMANO · PARIENTE | HIJA |
@@ -146,9 +140,7 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | INTEGRAL | Completo, que atiende todo. | *COMPLETO · ATENDER · *TODO | (sobre todo señas por incorporar), ATENDER |
 | INTENCION | Lo que una persona quiere hacer. | *PERSONA · QUERER · HACER | QUERER |
 | INTERPRETAR | Pasar lo que se dice de una lengua a otra, por ejemplo de español a LSB. | *TRADUCIR · *LENGUA · *OTRO | (sobre todo señas por incorporar), (ninguna seña) |
-| LANZA | Nombre de una calle en Cochabamba. Se deletrea. | C · O · C · H · A · B · A · M · B · A | (ninguna seña) |
 | LENGUA | Idioma. «Lengua de señas»: la lengua de las personas sordas. | *LENGUA_DE_SEÑAS · SORDO · *PERSONA | (sobre todo señas por incorporar) |
-| LSB | Lengua de Señas Boliviana. Se deletrea L-S-B. | *LENGUA · *SEÑAS_BOLIVIANA | (sobre todo señas por incorporar), (ninguna seña) |
 | LUGAR | Sitio, espacio. | *LUGAR · *ESPACIO | (usa LUGAR), (sobre todo señas por incorporar), (ninguna seña) |
 | MANTENER | Seguir igual, no cambiar. | COMO_ESTAS | COMO_ESTAS, (negación perdida) |
 | MARGINAL | «Nota marginal»: algo escrito al costado de un registro para corregirlo o agregar datos. | *NOTA · *MARGINAL · ESCRIBIR · AL_LADO · *REGISTRO · *CORREGIR · *AGREGAR · *DATOS | (usa MARGINAL), (sobre todo señas por incorporar), AL_LADO |
@@ -162,7 +154,6 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | MENCIONAR | Cuando un documento nombra algo. | CUANDO · PAPEL · *NOMBRAR · *ALGO | CUANDO |
 | MINISTERIO | Parte del gobierno que se ocupa de un tema, por ejemplo Ministerio de Salud. | GOBIERNO · *TEMA · *OCUPAR · *EJEMPLO · *MINISTERIO · *SALUD | (usa MINISTERIO), (sobre todo señas por incorporar) |
 | MOTO | Motocicleta: vehículo de dos ruedas con motor. | *MOTOCICLETA · *VEHICULO · *DOS · *RUEDA · *MOTOR | (sobre todo señas por incorporar), (ninguna seña) |
-| MULTA | Dinero que se paga como castigo, por ejemplo por pagar tarde un impuesto. | BILLETES · *PAGAR · *CASTIGO · *EJEMPLO · *PAGAR · TARDE · IMPUESTO | (sobre todo señas por incorporar) |
 | NACIMIENTO | Cuando una persona nace. «Certificado de nacimiento»: documento que dice dónde y cuándo nació. | *PERSONA · *NACER · CERTIFICADO · *NACIMIENTO · DONDE · CUANDO | (usa NACIMIENTO) |
 | NEGAR | Decir que no; no dar algo. Ej.: no dar atención. | *DECIR · NO · DAR | DAR |
 | NIÑEZ | Edad de los niños y niñas. | EDAD · NIÑO · MUCHO | MUCHO |
@@ -262,12 +253,10 @@ La ventana «¿Qué es?» muestra la descripción en glosas LSB solo si la tradu
 | TRABAJO | Lugar donde una persona trabaja, o lo que hace para ganar dinero. | *LUGAR · *TRABAJAR · GANAR_DINERO | (sobre todo señas por incorporar) |
 | TRANSFERENCIA | Pasar algo de una persona a otra: dinero, o una propiedad al venderla. | *PASAR · *ALGO · *PERSONA · *OTRO · BILLETES · *PROPIEDAD · VENDER | (sobre todo señas por incorporar) |
 | TRIBUNAL | Oficina de jueces. | OFICINA · JUEZ | JUEZ |
-| TRIBUNAL_DEPARTAMENTAL | Tribunal Departamental de Justicia: oficina principal de los jueces de Cochabamba. | *TRIBUNAL_DEPARTAMENTAL · JUSTICIA · OFICINA · *PRINCIPAL · JUEZ · COCHABAMBA | (usa TRIBUNAL_DEPARTAMENTAL), JUEZ |
 | USUCAPION | Ser dueño de una propiedad por haber vivido en ella muchos años, cuando un juez lo reconoce. | VIVIR · *PROPIEDAD · AÑO · MUCHO · JUEZ · *RECONOCER | VIVIR |
 | VALIDAR | Comprobar que algo es correcto y vale. | *COMPROBAR · *VALE | (sobre todo señas por incorporar), (ninguna seña) |
 | VALIDO | Que sirve, que vale. | *VALE | (sobre todo señas por incorporar), (ninguna seña) |
 | VEHICULO | Auto, moto o camión. | *MOTO · *CAMION | (sobre todo señas por incorporar), (ninguna seña) |
-| VEHÍCULO | Auto, moto o camión. | *MOTO · *CAMION | (sobre todo señas por incorporar), (ninguna seña) |
 | VENTA | Cuando una persona da algo a cambio de dinero. | *PERSONA · DAR · BILLETES · CAMBIAR | DAR |
 | VIAJE | Ir de un lugar a otro lejano. | IR · *LUGAR · *OTRO · LEJOS | LEJOS |
 | VICTIMA | Persona que sufrió un delito. | *PERSONA · *DELITO · *SUFRI | (sobre todo señas por incorporar), (ninguna seña) |
