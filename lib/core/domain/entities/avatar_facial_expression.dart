@@ -1,10 +1,22 @@
 /// Expresiones visuales no manuales que la interfaz puede mostrar junto al
 /// avatar. No modifican el clip 3D ni sustituyen una validación lingüística.
-enum AvatarFacialExpression { fear }
+enum AvatarFacialExpression { fear, sadness, worry, confidence, pain }
 
 extension AvatarFacialExpressionInfo on AvatarFacialExpression {
   String get accessibleLabel => switch (this) {
     AvatarFacialExpression.fear => 'miedo',
+    AvatarFacialExpression.sadness => 'tristeza',
+    AvatarFacialExpression.worry => 'preocupación',
+    AvatarFacialExpression.confidence => 'confianza',
+    AvatarFacialExpression.pain => 'dolor',
+  };
+
+  String get keyName => switch (this) {
+    AvatarFacialExpression.fear => 'miedo',
+    AvatarFacialExpression.sadness => 'tristeza',
+    AvatarFacialExpression.worry => 'preocupacion',
+    AvatarFacialExpression.confidence => 'confianza',
+    AvatarFacialExpression.pain => 'dolor',
   };
 }
 
@@ -16,6 +28,10 @@ extension AvatarFacialExpressionInfo on AvatarFacialExpression {
 abstract final class AvatarFacialExpressions {
   static const Map<String, AvatarFacialExpression> _byGloss = {
     'MIEDO': AvatarFacialExpression.fear,
+    'TRISTE': AvatarFacialExpression.sadness,
+    'PREOCUPAR': AvatarFacialExpression.worry,
+    'CONFIANZA': AvatarFacialExpression.confidence,
+    'DOLOR': AvatarFacialExpression.pain,
   };
 
   static AvatarFacialExpression? forGloss(String gloss) {

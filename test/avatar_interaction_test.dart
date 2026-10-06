@@ -163,7 +163,7 @@ void main() {
     expect(playbackEvents.where((event) => event), hasLength(2));
   });
 
-  testWidgets('MIEDO muestra un rostro blanco solo durante esa glosa', (
+  testWidgets('cada glosa emocional directa muestra su rostro blanco', (
     tester,
   ) async {
     Widget viewer(String gloss) => ProviderScope(
@@ -182,13 +182,22 @@ void main() {
       ),
     );
 
-    await tester.pumpWidget(viewer('MIEDO'));
-    await tester.pump();
-
-    expect(
-      find.byKey(const ValueKey('avatar_expression_miedo')),
-      findsOneWidget,
-    );
+    const expressions = {
+      'MIEDO': 'miedo',
+      'TRISTE': 'tristeza',
+      'PREOCUPAR': 'preocupacion',
+      'CONFIANZA': 'confianza',
+      'DOLOR': 'dolor',
+    };
+    for (final entry in expressions.entries) {
+      await tester.pumpWidget(viewer(entry.key));
+      await tester.pump();
+      expect(
+        find.byKey(ValueKey('avatar_expression_${entry.value}')),
+        findsOneWidget,
+        reason: entry.key,
+      );
+    }
 
     await tester.pumpWidget(viewer('HOLA'));
     await tester.pump();
