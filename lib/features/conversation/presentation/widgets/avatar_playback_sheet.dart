@@ -6,10 +6,13 @@ import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
 
 class AvatarPlaybackSheet extends StatefulWidget {
+  static const dismissDelay = Duration(milliseconds: 180);
+
   final List<String> glosses;
   final List<String> animationUrls;
   final List<String>? animationGlosses;
   final bool autoDismissOnFinish;
+  final Duration animationDuration;
 
   const AvatarPlaybackSheet({
     super.key,
@@ -17,6 +20,7 @@ class AvatarPlaybackSheet extends StatefulWidget {
     required this.animationUrls,
     this.animationGlosses,
     this.autoDismissOnFinish = true,
+    this.animationDuration = const Duration(seconds: 3),
   });
 
   static Future<void> show(
@@ -25,6 +29,7 @@ class AvatarPlaybackSheet extends StatefulWidget {
     required List<String> animationUrls,
     List<String>? animationGlosses,
     bool autoDismissOnFinish = true,
+    Duration animationDuration = const Duration(seconds: 3),
   }) {
     return showModalBottomSheet<void>(
       context: context,
@@ -35,6 +40,7 @@ class AvatarPlaybackSheet extends StatefulWidget {
         animationUrls: animationUrls,
         animationGlosses: animationGlosses,
         autoDismissOnFinish: autoDismissOnFinish,
+        animationDuration: animationDuration,
       ),
     );
   }
@@ -44,7 +50,7 @@ class AvatarPlaybackSheet extends StatefulWidget {
 }
 
 class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
-  DateTime? _playbackStartedAt;
+  bool _playbackStarted = false;
   Timer? _dismissTimer;
 
   // Calculadas una vez: el avatar compartido reinicia la seña si cambia la
@@ -60,21 +66,14 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
 
   void _onPlaybackStateChanged(bool playing) {
     if (playing) {
-      _playbackStartedAt = DateTime.now();
+      _playbackStarted = true;
       _dismissTimer?.cancel();
-    } else if (_playbackStartedAt != null && widget.autoDismissOnFinish) {
-      final elapsed = DateTime.now()
-          .difference(_playbackStartedAt!)
-          .inMilliseconds;
-      // Solo auto-descartar si realmente se reprodujo la animación (al menos 1.8s)
-      if (elapsed >= 1800) {
-        _dismissTimer?.cancel();
-        _dismissTimer = Timer(const Duration(milliseconds: 500), () {
-          if (mounted) {
-            Navigator.of(context).maybePop();
-          }
-        });
-      }
+    } else if (_playbackStarted && widget.autoDismissOnFinish) {
+      _playbackStarted = false;
+      _dismissTimer?.cancel();
+      _dismissTimer = Timer(AvatarPlaybackSheet.dismissDelay, () {
+        if (mounted) Navigator.of(context).maybePop();
+      });
     }
   }
 
@@ -132,6 +131,11 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
                       expandToFit: true,
                       request: AvatarRequest(
                         showControls: false,
+                        // Esta hoja representa un turno, no el avatar en
+                        // reposo: al terminar debe volver al chat sin ejecutar
+                        // NEUTRO1..3 durante la transición de cierre.
+                        isUserComposing: true,
+                        animationDuration: widget.animationDuration,
                         playbackRequestId: 1,
                         onPlaybackStateChanged: _onPlaybackStateChanged,
                         onReturnToInput: () {
