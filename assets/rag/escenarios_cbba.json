@@ -35643,7 +35643,7 @@
      "motivos": [],
      "glosas": [
       "COMPRAR",
-      "SENA_PENDIENTE:AUTO",
+      "AUTO",
       "QUERER",
       "MÍO",
       "NOMBRE",
@@ -37182,7 +37182,7 @@
       "SENA_PENDIENTE:VICTIMA",
       "ROBAR",
       "NECESITAR",
-      "SENA_PENDIENTE:FUI",
+      "IR",
       "ABOGADO",
       "GRATIS"
      ]
@@ -42684,7 +42684,7 @@
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "SENA_PENDIENTE:MINISTERIO",
+      "MINISTERIO",
       "SENA_PENDIENTE:INFORMAR",
       "CUANTOS"
      ]

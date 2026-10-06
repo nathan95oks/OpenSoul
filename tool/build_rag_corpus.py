@@ -741,10 +741,39 @@ def _mayuscula_interior(palabra: str, texto: str) -> bool:
     («Folio Real», «Derechos Reales») y no se cambia por otra seña."""
     for m in re.finditer(r"\w+", texto):
         antes = texto[:m.start()].rstrip()
+        # Tras una comilla o un paréntesis que se abre, la frase empieza:
+        # «Contrato privado» no es un nombre propio.
         if (_norm(m.group()) == _norm(palabra) and m.group()[:1].isupper()
-                and antes and antes[-1] not in ".?!¿¡:"):
+                and antes and antes[-1] not in ".?!¿¡:«\"“("):
             return True
     return False
+
+
+def _en_nombre_compuesto(palabra: str, texto: str) -> bool:
+    """Si [palabra] va con mayúscula junto a otra palabra con mayúscula
+    («Folio Real», «Derechos Reales»): es parte de un nombre de varias
+    palabras, que se explica entero."""
+    w = re.findall(r"\w+", texto)
+    for i, a in enumerate(w):
+        if _norm(a) != _norm(palabra) or not a[:1].isupper():
+            continue
+        vecinas = w[max(i - 1, 0):i] + w[i + 1:i + 2]
+        if any(v[:1].isupper() for v in vecinas):
+            return True
+    return False
+
+
+def _se_cambia(palabra: str, equivalente, texto: str) -> bool:
+    """Si la palabra deletreada pasa a [equivalente]. Un nombre propio no se
+    cambia por otra seña, salvo que sea la misma palabra y vaya sola: Bolivia
+    y «el Ministerio» tienen su seña en los módulos; «Folio Real», no."""
+    if not equivalente:
+        return False
+    if not _mayuscula_interior(palabra, texto):
+        return True
+    return (isinstance(equivalente, str)
+            and _norm(equivalente) == _norm(palabra.replace("_", " "))
+            and not _en_nombre_compuesto(palabra, texto))
 
 
 def cargar_equivalencias(ruta: str = EQUIVALENCIAS) -> dict:
@@ -799,6 +828,45 @@ def lexico_directo(lexico: dict | None = None) -> dict:
             clave = _norm(f)
             if clave and clave not in ambiguas:
                 out.setdefault(clave, g)
+    return out
+
+
+MODULOS = ("M1", "M2", "M3", "M4")
+
+
+def equivalencias_de_modulos(lexico: dict | None = None) -> dict:
+    """{palabra normalizada: glosa} de las palabras que son una seña de los
+    módulos M1–M4. Una palabra de un módulo existe en LSB: se seña (en
+    negro), no se muestra como seña a incorporar (en azul). Los
+    diccionarios no cuentan: solo los cuatro módulos del curso."""
+    lexico = cargar_lexico() if lexico is None else lexico
+    ambiguas = set(lexico.get("ambiguas") or {})
+    out = {}
+    for g, d in (lexico.get("glosas") or {}).items():
+        if not any(f.get("fuente") in MODULOS for f in d.get("fuentes") or []):
+            continue
+        for f in d.get("formas") or []:
+            clave = _norm(f)
+            if clave and clave not in ambiguas:
+                out.setdefault(clave, g)
+    return out
+
+
+def equivalencias_vigentes(ruta: str = EQUIVALENCIAS,
+                           lexico: dict | None = None) -> dict:
+    """Las equivalencias con que se marcan las glosas: cada palabra de los
+    módulos M1–M4 es su seña, salvo las que una persona rechazó por cambiar
+    el sentido («mi fiscal» no es FISCAL de «escuela fiscal»); encima, las
+    aprobadas de tool/rag_equivalencias.py, que pueden combinar señas."""
+    rechazadas = set()
+    if os.path.exists(ruta):
+        with open(ruta, encoding="utf-8") as f:
+            rechazadas = {_norm(p.replace("_", " "))
+                          for p, e in json.load(f).items()
+                          if e.get("estado") == "rechazada"}
+    out = {k: v for k, v in equivalencias_de_modulos(lexico).items()
+           if k not in rechazadas}
+    out.update(cargar_equivalencias(ruta))
     return out
 
 
@@ -871,7 +939,7 @@ def marcar_senas_pendientes(glosas: list | None, correcciones: list,
             pass
         elif _es_sigla(palabra, texto):
             salida.extend(glosas[i:i + len(letras)])
-        elif equivalente and not _mayuscula_interior(palabra, texto):
+        elif _se_cambia(palabra, equivalente, texto):
             # Una seña del léxico que es la palabra (forma 1) o que la
             # explica, sola o combinada (forma 2, revisada): se hace la seña,
             # no se espera. Si la frase ya la tiene («CUANTOS … C-U-A-N-T-O»),
@@ -1055,7 +1123,7 @@ def info_sin_sena(corpus: dict, avisos: list,
     seña."""
     datos = _leer(DESCRIPCIONES).get("palabras", {})
     traducidas = _leer(DESCRIPCIONES_LSB)
-    equivalencias = cargar_equivalencias()
+    equivalencias = equivalencias_vigentes()
     sin_lsb, infieles = [], []
 
     def en_lsb(palabra: str, texto: str, tipo: str = "concepto") -> list:
@@ -1097,7 +1165,14 @@ def info_sin_sena(corpus: dict, avisos: list,
                 if g.startswith(SENA_PENDIENTE):
                     ejemplos.setdefault(g[len(SENA_PENDIENTE):], t["texto"])
     salida, faltan = {}, []
-    for palabra in sorted(ejemplos):
+    # Una palabra en azul dentro de una descripción también se toca y se
+    # explica: se sigue hasta que toda palabra en azul tenga su entrada. Esas
+    # no tienen frase del trámite («ejemplo» vacío).
+    por_ver = sorted(ejemplos)
+    while por_ver:
+        palabra = por_ver.pop(0)
+        if palabra in salida:
+            continue
         dato, vistas = datos.get(palabra), set()
         while dato and "ver" in dato and dato["ver"] not in vistas:
             vistas.add(dato["ver"])
@@ -1106,15 +1181,17 @@ def info_sin_sena(corpus: dict, avisos: list,
             faltan.append(palabra)
             dato = {}
         descripcion = dato.get("descripcion", "")
+        lsb = en_lsb(palabra, descripcion, dato.get("tipo", "concepto"))
         salida[palabra] = {
             "descripcion": descripcion,
-            "descripcionLsb": en_lsb(
-                palabra, descripcion, dato.get("tipo", "concepto")
-            ),
+            "descripcionLsb": lsb,
             "tipo": dato.get("tipo", "concepto"),
             "revisada": bool(dato.get("revisada")),
-            "ejemplo": ejemplos[palabra],
+            "ejemplo": ejemplos.get(palabra, ""),
         }
+        por_ver += sorted({g[len(SENA_PENDIENTE):] for g in lsb
+                           if g.startswith(SENA_PENDIENTE)} - set(salida))
+    salida = {p: salida[p] for p in sorted(salida)}
     if sin_lsb:
         avisos.append(f"{len(sin_lsb)} descripciones sin traducir a LSB: ejecuta "
                       "tool/rag_descripciones_lsb.py")
@@ -1793,7 +1870,7 @@ def aplicar_equivalencias(glosas: list, texto: str,
                        if palabra else None)
         if palabra and _norm(palabra) in _TRATAMIENTO:
             equivalente = _TRATAMIENTO[_norm(palabra)]
-        if equivalente and not _mayuscula_interior(palabra, texto):
+        if palabra and _se_cambia(palabra, equivalente, texto):
             for sena in _senas(equivalente):
                 if _norm(sena) not in presentes:
                     salida.append(sena)
@@ -1872,11 +1949,10 @@ def poner_glosas(corpus: dict, avisos: list) -> None:
     if os.path.exists(GLOSAS):
         with open(GLOSAS, encoding="utf-8") as f:
             cache = json.load(f)
-    # Una palabra del léxico no se cambia por su seña solo porque se escribe
-    # igual: «mi fiscal» no es FISCAL de «escuela fiscal» (M3, Escuela). Toda
-    # seña que reemplaza a una palabra deletreada pasa por
-    # tool/rag_equivalencias.py, que confirma su sentido.
-    equivalencias = cargar_equivalencias()
+    # Una palabra de los módulos M1–M4 es su seña. Las que cambian de sentido
+    # («mi fiscal» no es FISCAL de «escuela fiscal», M3) están rechazadas en
+    # tool/rag_equivalencias.py; las demás equivalencias pasan por allí.
+    equivalencias = equivalencias_vigentes()
     corregidas = {}
     if os.path.exists(CORRECCIONES):
         with open(CORRECCIONES, encoding="utf-8") as f:

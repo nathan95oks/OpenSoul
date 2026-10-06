@@ -87,6 +87,30 @@
    "revisada": false,
    "ejemplo": "SIREJ indica acudir a información del Tribunal."
   },
+  "ACUERDO": {
+   "descripcion": "Las personas dicen sí a lo mismo.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "SENA_PENDIENTE:DECIR",
+    "SÍ",
+    "MISMO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "ACUSAR": {
+   "descripcion": "Decir que una persona hizo algo malo.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:DECIR",
+    "SENA_PENDIENTE:PERSONA",
+    "HACER",
+    "MALO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "ADAPTARSE": {
    "descripcion": "Cambiar para que algo sirva a una persona. Ej.: la atención se adapta a la persona sorda.",
    "descripcionLsb": [
@@ -187,6 +211,17 @@
    "revisada": false,
    "ejemplo": "Mi pareja me agrede y necesito ayuda."
   },
+  "AGREGAR": {
+   "descripcion": "Poner algo más.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PONER",
+    "SENA_PENDIENTE:ALGO",
+    "SENA_PENDIENTE:MAS"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "ALCANCE": {
    "descripcion": "Hasta dónde llega o vale algo. Un certificado puede valer en un departamento o en todo el país.",
    "descripcionLsb": [
@@ -204,11 +239,33 @@
    "revisada": false,
    "ejemplo": "No sé qué alcance debe tener el certificado."
   },
+  "ALGO": {
+   "descripcion": "Una cosa, sin decir cuál.",
+   "descripcionLsb": [
+    "COSAS",
+    "NO_SABER"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "ALGUIEN": {
+   "descripcion": "Una persona, sin decir quién.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "SENA_PENDIENTE:SIN",
+    "SENA_PENDIENTE:DECIR",
+    "QUIÉN"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "ALGUN": {
    "descripcion": "Uno, cualquiera, sin decir cuál.",
    "descripcionLsb": [
     "1",
-    "SENA_PENDIENTE:CUALQUIERA",
+    "CUALQUIERA",
     "NO",
     "SENA_PENDIENTE:DECIR",
     "CUÁL"
@@ -221,7 +278,7 @@
    "descripcion": "Uno, cualquiera, sin decir cuál.",
    "descripcionLsb": [
     "1",
-    "SENA_PENDIENTE:CUALQUIERA",
+    "CUALQUIERA",
     "NO",
     "SENA_PENDIENTE:DECIR",
     "CUÁL"
@@ -234,7 +291,7 @@
    "descripcion": "Uno, cualquiera, sin decir cuál.",
    "descripcionLsb": [
     "1",
-    "SENA_PENDIENTE:CUALQUIERA",
+    "CUALQUIERA",
     "NO",
     "SENA_PENDIENTE:DECIR",
     "CUÁL"
@@ -295,9 +352,9 @@
    "descripcionLsb": [
     "SENA_PENDIENTE:REGISTRO",
     "SENA_PENDIENTE:PROPIEDAD",
-    "SENA_PENDIENTE:JUICIO",
+    "JUICIO",
     "PROTEGER",
-    "SENA_PENDIENTE:DERECHO"
+    "DERECHO"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -321,7 +378,7 @@
    "descripcion": "El que estaba antes, el viejo.",
    "descripcionLsb": [
     "SENA_PENDIENTE:ANTES",
-    "SENA_PENDIENTE:VIEJO"
+    "VIEJO"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -358,12 +415,12 @@
    "descripcionLsb": [
     "SENA_PENDIENTE:ANTES",
     "SENA_PENDIENTE:TIEMPO",
-    "SENA_PENDIENTE:NORMAL",
+    "NORMAL",
     "DAR",
     "SENA_PENDIENTE:LEGITIMA",
     "PARTE",
     "HIJO",
-    "SENA_PENDIENTE:VIDA",
+    "VIDA",
     "HERENCIA"
    ],
    "tipo": "concepto",
@@ -378,7 +435,7 @@
     "CASA",
     "USAR",
     "CAMBIAR",
-    "SENA_PENDIENTE:PRESTAR",
+    "PRESTAR",
     "BILLETES",
     "SENA_PENDIENTE:DUEÑO",
     "DEVOLVER",
@@ -397,7 +454,7 @@
     "CASA",
     "USAR",
     "CAMBIAR",
-    "SENA_PENDIENTE:PRESTAR",
+    "PRESTAR",
     "BILLETES",
     "SENA_PENDIENTE:DUEÑO",
     "DEVOLVER",
@@ -444,7 +501,7 @@
    "descripcion": "Usar una regla en un caso. Ej.: la reposición se usa si la cédula se perdió.",
    "descripcionLsb": [
     "SENA_PENDIENTE:CASO",
-    "SENA_PENDIENTE:REGLA",
+    "REGLA",
     "USAR",
     "1"
    ],
@@ -523,6 +580,28 @@
    "revisada": false,
    "ejemplo": "¿Le indicaron que los documentos del trámite están archivados?"
   },
+  "ARCHIVO": {
+   "descripcion": "Lugar donde se guardan papeles.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:LUGAR",
+    "PAPEL",
+    "GUARDAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "ASEGURAR": {
+   "descripcion": "Hacer que algo pase seguro.",
+   "descripcionLsb": [
+    "HACER",
+    "SENA_PENDIENTE:SEGURIDAD",
+    "SENA_PENDIENTE:PASAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "ASUMIR": {
    "descripcion": "Pensar que algo es verdad sin comprobarlo.",
    "descripcionLsb": [
@@ -560,17 +639,6 @@
    "revisada": false,
    "ejemplo": "Quiero confirmar mi audiencia."
   },
-  "AUTO": {
-   "descripcion": "Vehículo para personas; carro.",
-   "descripcionLsb": [
-    "SENA_PENDIENTE:VEHICULO",
-    "SENA_PENDIENTE:PERSONA",
-    "SENA_PENDIENTE:CARRO"
-   ],
-   "tipo": "concepto",
-   "revisada": false,
-   "ejemplo": "Compré un auto. Quiero pasarlo a mi nombre."
-  },
   "AUTOMATICO": {
    "descripcion": "Que pasa solo, sin hacer un trámite nuevo.",
    "descripcionLsb": [
@@ -582,6 +650,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "La norma 2025 incorporó mecanismos de renovación automática."
+  },
+  "AUTORIZADO": {
+   "descripcion": "Que tiene permiso para hacer algo.",
+   "descripcionLsb": [
+    "PERMISO",
+    "HACER",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "AYUDA": {
    "descripcion": "Lo que una persona da a otra para resolver algo.",
@@ -634,6 +713,17 @@
    "revisada": false,
    "ejemplo": "¿Su cédula muestra el dato de identidad correcto?"
   },
+  "BIENES": {
+   "descripcion": "Las cosas de una persona: casa, auto, dinero.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "CASA",
+    "BILLETES"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "BOLETA": {
    "descripcion": "Papel que muestra que algo se pagó o se observó.",
    "descripcionLsb": [
@@ -658,6 +748,28 @@
    "revisada": false,
    "ejemplo": "No borre ni modifique mensajes relacionados al hecho."
   },
+  "CADA": {
+   "descripcion": "Uno por uno, todos.",
+   "descripcionLsb": [
+    "1",
+    "SENA_PENDIENTE:TODOS"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "CALENDARIO": {
+   "descripcion": "Hoja con los días y los meses del año.",
+   "descripcionLsb": [
+    "HOJA",
+    "DÍA",
+    "MES",
+    "AÑO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "CALIFICAR": {
    "descripcion": "Evaluar a una persona y darle un resultado. Ej.: el grado de discapacidad.",
    "descripcionLsb": [
@@ -669,6 +781,28 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Ya me calificaron."
+  },
+  "CAMINO": {
+   "descripcion": "Calle por la que se va a un lugar.",
+   "descripcionLsb": [
+    "CALLE",
+    "IR",
+    "SENA_PENDIENTE:LUGAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "CAMION": {
+   "descripcion": "Auto grande para llevar cosas.",
+   "descripcionLsb": [
+    "GRANDE",
+    "LLEVAR",
+    "COSAS"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CANAL": {
    "descripcion": "Medio para comunicarse: en persona, por teléfono, por internet.",
@@ -689,7 +823,7 @@
     "TERMINAR",
     "SENA_PENDIENTE:BORRAR",
     "SENA_PENDIENTE:REGISTRO",
-    "SENA_PENDIENTE:EJEMPLO",
+    "EJEMPLO",
     "SENA_PENDIENTE:HIPOTECA",
     "SENA_PENDIENTE:PAGAR"
    ],
@@ -715,6 +849,16 @@
    "revisada": false,
    "ejemplo": "No, quiero cancelar una hipoteca registrada."
   },
+  "CANTIDAD": {
+   "descripcion": "Cuánto hay de algo.",
+   "descripcionLsb": [
+    "CUÁNTOS",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "CAPTURA": {
    "descripcion": "Foto de la pantalla del celular o la computadora.",
    "descripcionLsb": [
@@ -725,6 +869,29 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Tengo capturas y comprobante de transferencia."
+  },
+  "CARA": {
+   "descripcion": "Parte del cuerpo con la boca y los ojos.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:CUERPO",
+    "BOCA",
+    "SENA_PENDIENTE:OJO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "CARTA": {
+   "descripcion": "Papel escrito para otra persona.",
+   "descripcionLsb": [
+    "PAPEL",
+    "ESCRIBIR",
+    "SENA_PENDIENTE:OTRO",
+    "SENA_PENDIENTE:PERSONA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CASO": {
    "descripcion": "Un asunto o problema que se está tratando.",
@@ -744,7 +911,7 @@
     "SENA_PENDIENTE:MUNICIPALIDAD",
     "SENA_PENDIENTE:TAMAÑO",
     "SENA_PENDIENTE:UBICACION",
-    "SENA_PENDIENTE:TERRENO",
+    "TERRENO",
     "CASA"
    ],
    "tipo": "concepto",
@@ -759,30 +926,51 @@
     "SENA_PENDIENTE:MUNICIPALIDAD",
     "SENA_PENDIENTE:TAMAÑO",
     "SENA_PENDIENTE:UBICACION",
-    "SENA_PENDIENTE:TERRENO",
+    "TERRENO",
     "CASA"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Tiene un documento catastral de la casa?"
   },
+  "CATASTRO": {
+   "descripcion": "Lista de la alcaldía con las casas y los terrenos.",
+   "descripcionLsb": [
+    "ALCALDÍA",
+    "LISTA",
+    "CASA",
+    "TERRENO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "CEDULA": {
+   "descripcion": "El carnet de identidad, con su nombre y su foto.",
+   "descripcionLsb": [
+    "PAPEL",
+    "IDENTIDAD",
+    "NOMBRE",
+    "FOTOS"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "CENTRAL": {
    "descripcion": "La oficina principal.",
    "descripcionLsb": [
     "OFICINA",
-    "SENA_PENDIENTE:PRINCIPAL"
+    "PRINCIPAL"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Le queda mejor la oficina central o La Chimba?"
   },
   "CENTRO": {
-   "descripcion": "Lugar o edificio donde se da un servicio.",
+   "descripcion": "El medio de algo.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:LUGAR",
-    "SENA_PENDIENTE:EDIFICIO",
-    "SENA_PENDIENTE:SERVICIO",
-    "DAR"
+    "SENA_PENDIENTE:MEDIO"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -828,12 +1016,14 @@
    "ejemplo": "Está en el Centro Internacional de Convenciones, piso uno."
   },
   "CERRADO": {
-   "descripcion": "Que no atiende, no se puede entrar.",
+   "descripcion": "La oficina no atiende: nadie puede entrar.",
    "descripcionLsb": [
+    "OFICINA",
     "ATENDER",
-    "NO_SABER",
+    "NO",
     "SENA_PENDIENTE:ENTRAR",
-    "NO_PUEDO"
+    "PUEDO",
+    "NO"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -865,6 +1055,17 @@
    "revisada": false,
    "ejemplo": "¿Le queda mejor la oficina central o La Chimba?"
   },
+  "CIEN": {
+   "descripcion": "El número 100.",
+   "descripcionLsb": [
+    "1",
+    "0",
+    "0"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "CITAR": {
    "descripcion": "Llamar a una persona para que vaya a un lugar un día y hora, por ejemplo al juzgado.",
    "descripcionLsb": [
@@ -880,16 +1081,26 @@
    "revisada": false,
    "ejemplo": "Sí. Me citaron y no tengo abogado."
   },
+  "CIUDADANO": {
+   "descripcion": "Persona de un país, con derechos.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PAIS",
+    "DERECHO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "CIVIL": {
    "descripcion": "De la vida de las personas como ciudadanos. «Estado civil»: si una persona es soltera, casada, divorciada o viuda.",
    "descripcionLsb": [
     "SENA_PENDIENTE:PERSONA",
     "SENA_PENDIENTE:CIUDADANO",
     "SENA_PENDIENTE:ESTADO_CIVIL",
-    "SENA_PENDIENTE:SOLTERO",
-    "SENA_PENDIENTE:CASADO",
+    "SOLTERO",
+    "CASADO",
     "SENA_PENDIENTE:DIVORCIADO",
-    "SENA_PENDIENTE:VIUDA"
+    "VIUDA"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -940,13 +1151,23 @@
    "descripcion": "La oficina que tiene la tarea de atender ese caso.",
    "descripcionLsb": [
     "OFICINA",
-    "SENA_PENDIENTE:TAREA",
+    "TAREA",
     "ATENDER",
     "SENA_PENDIENTE:CASO"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Para víctimas, consulte SEPDAVI u otro servicio competente."
+  },
+  "COMPLETO": {
+   "descripcion": "Que tiene todo.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:TODO",
+    "TENER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "COMPRA": {
    "descripcion": "Cuando una persona paga para que algo sea suyo.",
@@ -970,7 +1191,7 @@
     "SENA_PENDIENTE:OTRA",
     "COMPRAR",
     "SENA_PENDIENTE:CASO",
-    "SENA_PENDIENTE:EJEMPLO",
+    "EJEMPLO",
     "CASA"
    ],
    "tipo": "concepto",
@@ -988,6 +1209,28 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí, tengo el comprobante del impuesto a la transferencia."
+  },
+  "COMPROBAR": {
+   "descripcion": "Ver que algo es verdad.",
+   "descripcionLsb": [
+    "VER",
+    "VERDAD"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "COMUN": {
+   "descripcion": "Que es de muchas personas, no de una sola.",
+   "descripcionLsb": [
+    "MUCHO",
+    "SENA_PENDIENTE:PERSONA",
+    "NO",
+    "1"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "COMUNICACION": {
    "descripcion": "Entenderse con otra persona, en señas, por escrito o hablando.",
@@ -1043,11 +1286,23 @@
    "descripcion": "Según, de acuerdo con una regla.",
    "descripcionLsb": [
     "SENA_PENDIENTE:SEGUN",
-    "SENA_PENDIENTE:REGLA"
+    "REGLA"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Debe tramitarse la interpretación conforme al procedimiento aplicable."
+  },
+  "CONJUNTO": {
+   "descripcion": "Varias cosas en un mismo grupo.",
+   "descripcionLsb": [
+    "VARIOS",
+    "COSAS",
+    "MISMO",
+    "GRUPO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CONMIGO": {
    "descripcion": "Con la persona que habla: «la tengo conmigo» es «la tengo yo, aquí».",
@@ -1060,6 +1315,16 @@
    "tipo": "palabra_funcion",
    "revisada": false,
    "ejemplo": "Sí. La tengo conmigo."
+  },
+  "CONSEGUIR": {
+   "descripcion": "Lograr tener algo.",
+   "descripcionLsb": [
+    "TENER",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CONSERVAR": {
    "descripcion": "Guardar algo y no perderlo.",
@@ -1082,6 +1347,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+  },
+  "CONSIGUE": {
+   "descripcion": "Lograr tener algo.",
+   "descripcionLsb": [
+    "TENER",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CONSTANCIA": {
    "descripcion": "Papel que demuestra que algo pasó. Ej.: que una oficina recibió sus documentos.",
@@ -1107,6 +1382,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí. Me escribe mensajes constantemente."
+  },
+  "CONSTRUCCION": {
+   "descripcion": "Una casa o un edificio que se hace.",
+   "descripcionLsb": [
+    "CASA",
+    "SENA_PENDIENTE:EDIFICIO",
+    "HACER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CONSULTA": {
    "descripcion": "Pregunta que se hace para saber algo.",
@@ -1135,7 +1421,7 @@
     "SENA_PENDIENTE:COMUNICARSE",
     "SENA_PENDIENTE:PERSONA",
     "CELULAR",
-    "SENA_PENDIENTE:CORREO",
+    "CORREO",
     "SENA_PENDIENTE:LUGAR"
    ],
    "tipo": "concepto",
@@ -1213,6 +1499,18 @@
    "revisada": false,
    "ejemplo": "Contacte SEPDEP para activar la atención correspondiente."
   },
+  "CORTAR": {
+   "descripcion": "Separar en partes con tijera o cuchillo.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:SEPARAR",
+    "PARTE",
+    "TIJERA",
+    "CUCHILLO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "COSTAR": {
    "descripcion": "Tener un precio.",
    "descripcionLsb": [
@@ -1233,6 +1531,17 @@
    "revisada": false,
    "ejemplo": "¿Cuánto cuesta el trámite que voy a solicitar?"
   },
+  "CUADRADO": {
+   "descripcion": "En «metros cuadrados»: la medida del tamaño de un terreno o una casa.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:TAMAÑO",
+    "TERRENO",
+    "CASA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "CUENTA": {
    "descripcion": "Usuario personal para entrar a una página o sistema de internet.",
    "descripcionLsb": [
@@ -1243,6 +1552,29 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Puede ingresar a su cuenta?"
+  },
+  "CUERPO": {
+   "descripcion": "Toda la persona: los brazos, la boca, el cabello.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "BRAZO",
+    "BOCA",
+    "CABELLO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "CUIDADO": {
+   "descripcion": "Atención para que todo salga bien.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:ATENCION",
+    "SENA_PENDIENTE:BIEN",
+    "PARA_QUE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CUOTA": {
    "descripcion": "Una parte de un pago. «Pagar en cuotas»: pagar de a poco.",
@@ -1322,6 +1654,18 @@
    "revisada": false,
    "ejemplo": "No sé qué dice el documento."
   },
+  "DEFENDER": {
+   "descripcion": "Ayudar a una persona para que no le hagan daño.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "DAÑAR",
+    "NO",
+    "PARA_QUE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "DEFENSA": {
    "descripcion": "Ayuda de un abogado para una persona denunciada o acusada en un proceso.",
    "descripcionLsb": [
@@ -1375,7 +1719,7 @@
    "descripcionLsb": [
     "OFICINA",
     "PROTEGER",
-    "SENA_PENDIENTE:DERECHO",
+    "DERECHO",
     "SENA_PENDIENTE:NIÑEZ",
     "PROTEGER",
     "NIÑO",
@@ -1395,7 +1739,7 @@
     "SENA_PENDIENTE:DEFUNCION",
     "PAPEL",
     "SENA_PENDIENTE:DECIR",
-    "SENA_PENDIENTE:MORIR"
+    "MORIR"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -1406,12 +1750,35 @@
    "descripcionLsb": [
     "PROHIBIDO",
     "LEY",
-    "SENA_PENDIENTE:CASTIGAR",
+    "CASTIGAR",
     "ROBAR"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿El hecho fue robo, estafa u otro delito?"
+  },
+  "DEMORAR": {
+   "descripcion": "Tardar mucho tiempo.",
+   "descripcionLsb": [
+    "MUCHO",
+    "SENA_PENDIENTE:TIEMPO",
+    "SENA_PENDIENTE:TARDAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "DEMOSTRAR": {
+   "descripcion": "Mostrar algo para que vean que es verdad.",
+   "descripcionLsb": [
+    "VER",
+    "VERDAD",
+    "MOSTRAR",
+    "PARA_QUE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "DENUNCIA": {
    "descripcion": "Avisar a la policía o la fiscalía de un delito para que lo investiguen.",
@@ -1459,7 +1826,7 @@
     "1",
     "9",
     "SENA_PENDIENTE:REGIONES",
-    "SENA_PENDIENTE:BOLIVIA",
+    "BOLIVIA",
     "CÓMO",
     "COCHABAMBA",
     "SENA_PENDIENTE:TAMBIEN",
@@ -1571,7 +1938,7 @@
    "descripcionLsb": [
     "SENA_PENDIENTE:PAGAR",
     "SENA_PENDIENTE:MENOS",
-    "SENA_PENDIENTE:NORMAL"
+    "NORMAL"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -1634,6 +2001,29 @@
    "revisada": false,
    "ejemplo": "¿Cuánto dice la página que cuesta?"
   },
+  "DIFFERENTE": {
+   "descripcion": "Diferente: que no es igual.",
+   "descripcionLsb": [
+    "DIFERENTE",
+    "IGUAL",
+    "NO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "DIGITAL": {
+   "descripcion": "En la computadora o en el celular, no en papel.",
+   "descripcionLsb": [
+    "COMPUTADORA",
+    "CELULAR",
+    "PAPEL",
+    "NO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "DIRECTAMENTE": {
    "descripcion": "Sin otra persona en el medio; uno mismo.",
    "descripcionLsb": [
@@ -1642,6 +2032,18 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Quiero participar directamente en mi audiencia."
+  },
+  "DIRIGIR": {
+   "descripcion": "Organizar y decir qué hacer a otras personas.",
+   "descripcionLsb": [
+    "ORGANIZAR",
+    "SENA_PENDIENTE:DECIR",
+    "SENA_PENDIENTE:OTRO",
+    "HACER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "DISCAPACIDAD": {
    "descripcion": "Condición de una persona que tiene limitaciones; las personas sordas pueden tener carnet de discapacidad.",
@@ -1657,6 +2059,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Quiero orientación para la calificación de discapacidad."
+  },
+  "DISPONER": {
+   "descripcion": "Tener algo listo para usar.",
+   "descripcionLsb": [
+    "TENER",
+    "LISTO",
+    "USAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "DISPONIBLE": {
    "descripcion": "Que se puede usar ahora.",
@@ -1674,13 +2087,23 @@
    "descripcionLsb": [
     "PARTE",
     "SENA_PENDIENTE:SEPARAR",
-    "SENA_PENDIENTE:TERRENO",
+    "TERRENO",
     "VARIOS",
     "SENA_PENDIENTE:PROPIETARIO"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Cómo registro la división y partición de un inmueble?"
+  },
+  "DIVORCIADO": {
+   "descripcion": "Persona que ya no está casada: se separó por ley.",
+   "descripcionLsb": [
+    "SEPARADOS",
+    "LEY"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "DOCUMENTACION": {
    "descripcion": "Conjunto de papeles o documentos.",
@@ -1723,6 +2146,16 @@
    "revisada": false,
    "ejemplo": "No, mi duda es sobre el paso siguiente."
   },
+  "DUEÑO": {
+   "descripcion": "Persona que tiene algo: es suyo.",
+   "descripcionLsb": [
+    "TENER",
+    "SUYO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "DUPLICADO": {
    "descripcion": "Otra copia oficial de un documento.",
    "descripcionLsb": [
@@ -1750,13 +2183,25 @@
    "descripcion": "Construcción grande con varios pisos.",
    "descripcionLsb": [
     "SENA_PENDIENTE:CONSTRUCCION",
-    "SENA_PENDIENTE:GRANDE",
+    "GRANDE",
     "VARIOS",
     "SENA_PENDIENTE:PISO"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Queda entre Antezana y Lanza, Edificio Aly."
+  },
+  "ELEGIR": {
+   "descripcion": "Decidir cuál quiere entre varios.",
+   "descripcionLsb": [
+    "DECIDIR",
+    "QUÉ",
+    "QUERER",
+    "VARIOS"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "ELEMENTOS": {
    "descripcion": "Cosas, objetos o pruebas.",
@@ -1830,6 +2275,27 @@
    "tipo": "palabra_funcion",
    "revisada": false,
    "ejemplo": "¿Entonces no pago el impuesto?"
+  },
+  "ENTRAR": {
+   "descripcion": "Ir adentro de un lugar.",
+   "descripcionLsb": [
+    "DENTRO",
+    "IR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "ENTRE": {
+   "descripcion": "En el medio de una cosa y otra.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:MEDIO",
+    "COSAS",
+    "SENA_PENDIENTE:OTRO"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
   },
   "ENTREGA": {
    "descripcion": "Cuando se da algo a la persona.",
@@ -1959,6 +2425,16 @@
    "revisada": false,
    "ejemplo": "No sé cuál de esos documentos me pidieron."
   },
+  "ESPACIO": {
+   "descripcion": "Lugar vacío.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:LUGAR",
+    "SENA_PENDIENTE:VACIO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "ESPACIOS": {
    "descripcion": "Lugares vacíos entre letras o números.",
    "descripcionLsb": [
@@ -2005,10 +2481,34 @@
    "revisada": false,
    "ejemplo": "No sé si esta copia de mi cédula sirve."
   },
+  "ESTADO": {
+   "descripcion": "El gobierno de un país y sus oficinas.",
+   "descripcionLsb": [
+    "GOBIERNO",
+    "SENA_PENDIENTE:PAIS",
+    "OFICINA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "ESTADO_CIVIL": {
+   "descripcion": "Si una persona es soltera, casada, separada o viuda.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "SOLTERO",
+    "CASADO",
+    "SEPARADOS",
+    "VIUDA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "ESTAFA": {
    "descripcion": "Delito: engañar a una persona para quitarle dinero o cosas.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:ENGANAR",
+    "ENGAÑAR",
     "SENA_PENDIENTE:PERSONA",
     "SENA_PENDIENTE:QUITARLE",
     "BILLETES",
@@ -2066,6 +2566,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "No sé si esa evaluación fue de calificación."
+  },
+  "EVENTO": {
+   "descripcion": "Algo que pasa en un día y una hora.",
+   "descripcionLsb": [
+    "DÍA",
+    "HORA",
+    "SENA_PENDIENTE:PASAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "EXACTO": {
    "descripcion": "Justo, sin error.",
@@ -2126,7 +2637,7 @@
    "descripcion": "Persona que murió.",
    "descripcionLsb": [
     "SENA_PENDIENTE:PERSONA",
-    "SENA_PENDIENTE:MORIR"
+    "MORIR"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -2141,6 +2652,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Qué documento me falta para solicitar el Folio Real?"
+  },
+  "FALTE": {
+   "descripcion": "No estar algo que se necesita.",
+   "descripcionLsb": [
+    "NECESITAR",
+    "NO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "FAMILIA": {
    "descripcion": "Padres, hijos, hermanos y demás parientes.",
@@ -2187,6 +2708,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "No sé quién figura como titular."
+  },
+  "FIJAR": {
+   "descripcion": "Decidir un día y una hora.",
+   "descripcionLsb": [
+    "DECIDIR",
+    "DÍA",
+    "HORA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "FIRMA": {
    "descripcion": "Nombre escrito a mano de una persona, que muestra que está de acuerdo.",
@@ -2246,7 +2778,7 @@
   "FOLIO": {
    "descripcion": "Hoja de un registro. Ver «Folio Real».",
    "descripcionLsb": [
-    "SENA_PENDIENTE:HOJA",
+    "HOJA",
     "SENA_PENDIENTE:REGISTRO",
     "VER",
     "SENA_PENDIENTE:FOLIO_REAL"
@@ -2270,6 +2802,16 @@
    "revisada": false,
    "ejemplo": "¿Puedo solicitar el Folio Real actualizado de mi casa?"
   },
+  "FORMAL": {
+   "descripcion": "Serio y oficial, como en una oficina.",
+   "descripcionLsb": [
+    "OFICIAL",
+    "OFICINA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "FORMALIZAR": {
    "descripcion": "Hacer algo oficial, con documentos legales.",
    "descripcionLsb": [
@@ -2282,14 +2824,15 @@
    "revisada": false,
    "ejemplo": "No sé si este documento formaliza la división."
   },
-  "FUI": {
-   "descripcion": "Forma de «ser» o «ir» en pasado. «Fui víctima»: era la víctima.",
+  "GARANTIA": {
+   "descripcion": "Algo que se deja para asegurar que se va a pagar.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:VICTIMA"
+    "SENA_PENDIENTE:PAGAR",
+    "SENA_PENDIENTE:ASEGURAR"
    ],
-   "tipo": "palabra_funcion",
+   "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "Fui víctima de robo. Necesito abogado gratuito."
+   "ejemplo": ""
   },
   "GARANTIZAR": {
    "descripcion": "Asegurar que algo se cumpla.",
@@ -2300,6 +2843,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Debe garantizarse comunicación accesible durante la atención."
+  },
+  "GASTAR": {
+   "descripcion": "Usar dinero para comprar algo.",
+   "descripcionLsb": [
+    "BILLETES",
+    "COMPRAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "GESTION": {
    "descripcion": "Trámite o tarea que se hace. También: año de impuestos («gestión 2023»).",
@@ -2317,6 +2870,18 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí, el poder menciona esta gestión."
+  },
+  "GOLPE": {
+   "descripcion": "Cuando se pega fuerte con la mano o con algo.",
+   "descripcionLsb": [
+    "PEGAR",
+    "FUERTE",
+    "SENA_PENDIENTE:MANO",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "GRADO": {
    "descripcion": "Nivel o medida. Ej.: el grado de discapacidad.",
@@ -2396,7 +2961,7 @@
     "RECIBIR",
     "SENA_PENDIENTE:BIENES",
     "SENA_PENDIENTE:PERSONA",
-    "SENA_PENDIENTE:MORIR"
+    "MORIR"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -2415,36 +2980,36 @@
    "ejemplo": "¿La herencia corresponde a varios herederos?"
   },
   "HIPOTECA": {
-   "descripcion": "Préstamo de dinero en que una casa queda como garantía; si no se paga, el banco puede quedarse con la casa.",
+   "descripcion": "El banco presta dinero y la casa queda como garantía. Si usted no paga, el banco se queda con la casa.",
    "descripcionLsb": [
     "BANCO",
     "BILLETES",
-    "SENA_PENDIENTE:PRESTAR",
+    "PRESTAR",
     "CASA",
     "SENA_PENDIENTE:GARANTIA",
     "SENA_PENDIENTE:PAGAR",
-    "NO_SABER",
+    "NO",
     "BANCO",
     "CASA",
-    "SENA_PENDIENTE:QUEDARSE"
+    "QUEDAR"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Quiere consultar una posible hipoteca de la casa?"
   },
   "HIPOTECAR": {
-   "descripcion": "Préstamo de dinero en que una casa queda como garantía; si no se paga, el banco puede quedarse con la casa.",
+   "descripcion": "El banco presta dinero y la casa queda como garantía. Si usted no paga, el banco se queda con la casa.",
    "descripcionLsb": [
     "BANCO",
     "BILLETES",
-    "SENA_PENDIENTE:PRESTAR",
+    "PRESTAR",
     "CASA",
     "SENA_PENDIENTE:GARANTIA",
     "SENA_PENDIENTE:PAGAR",
-    "NO_SABER",
+    "NO",
     "BANCO",
     "CASA",
-    "SENA_PENDIENTE:QUEDARSE"
+    "QUEDAR"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -2634,11 +3199,12 @@
    "ejemplo": "Quiero iniciar la atención."
   },
   "INMUEBLE": {
-   "descripcion": "Casa, departamento o terreno: propiedad que no se puede mover.",
+   "descripcion": "Casa, departamento o terreno: una propiedad que no cambia de lugar.",
    "descripcionLsb": [
     "SENA_PENDIENTE:PROPIEDAD",
-    "NO_SABER",
-    "SENA_PENDIENTE:MOVER"
+    "NO",
+    "CAMBIAR",
+    "SENA_PENDIENTE:LUGAR"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -2709,6 +3275,18 @@
    "revisada": false,
    "ejemplo": "La Ley 1658 contempla interpretación gratuita en justicia."
   },
+  "INTIMIDAD": {
+   "descripcion": "Lo privado de una persona: su cuerpo y su vida.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "SENA_PENDIENTE:CUERPO",
+    "VIDA",
+    "SENA_PENDIENTE:PRIVADO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "INVESTIGADOR": {
    "descripcion": "Policía que busca pruebas sobre un delito.",
    "descripcionLsb": [
@@ -2721,6 +3299,18 @@
    "revisada": false,
    "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
   },
+  "INVESTIGAR": {
+   "descripcion": "Buscar y ver para saber la verdad.",
+   "descripcionLsb": [
+    "BUSCAR",
+    "VER",
+    "SABER",
+    "VERDAD"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "JUDICIAL": {
    "descripcion": "Del juez o del juzgado.",
    "descripcionLsb": [
@@ -2730,6 +3320,26 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Tiene un documento judicial de anotación preventiva?"
+  },
+  "JUNTO": {
+   "descripcion": "Uno al lado del otro.",
+   "descripcionLsb": [
+    "AL_LADO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "JUSTO": {
+   "descripcion": "Que está bien, igual para todos.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:BIEN",
+    "TODOS_LOS_DÍAS",
+    "IGUAL"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "LANZA": {
    "descripcion": "Nombre de una calle en Cochabamba. Se deletrea.",
@@ -2788,6 +3398,55 @@
    "revisada": false,
    "ejemplo": "Necesito comunicarme usando lengua de señas."
   },
+  "LENGUA_DE_SEÑAS": {
+   "descripcion": "La lengua de las personas sordas. Aquí es la LSB.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:LENGUA",
+    "SENA_PENDIENTE:PERSONA",
+    "SORDO",
+    "AQUÍ",
+    "L",
+    "S",
+    "B"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "LETRA": {
+   "descripcion": "Signo para escribir palabras.",
+   "descripcionLsb": [
+    "ESCRIBIR",
+    "PALABRA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "LEYES": {
+   "descripcion": "Las reglas del país que todos deben cumplir.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PAIS",
+    "SENA_PENDIENTE:TODOS",
+    "CUMPLIR",
+    "SENA_PENDIENTE:DEBER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "LIMITACION": {
+   "descripcion": "Algo que una persona no puede hacer.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:ALGO",
+    "SENA_PENDIENTE:PERSONA",
+    "NO_PUEDO",
+    "HACER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "LO": {
    "descripcion": "Reemplaza a algo que ya se nombró: «lo perdí» es «perdí eso». En LSB se indica señalando.",
    "descripcionLsb": [
@@ -2829,6 +3488,25 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí, desconozco su paradero."
+  },
+  "MADRE": {
+   "descripcion": "Mamá.",
+   "descripcionLsb": [
+    "MAMÁ"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "MANO": {
+   "descripcion": "Parte del brazo con la que se escribe.",
+   "descripcionLsb": [
+    "BRAZO",
+    "ESCRIBIR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "MANTENER": {
    "descripcion": "Seguir igual, no cambiar.",
@@ -2946,6 +3624,16 @@
    "revisada": false,
    "ejemplo": "Quiero informar sobre mis medidas de protección."
   },
+  "MEDIO": {
+   "descripcion": "La parte del centro.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:CENTRO",
+    "PARTE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "MEMORIAL": {
    "descripcion": "Carta formal, normalmente con abogado, para pedir algo a un juzgado u oficina.",
    "descripcionLsb": [
@@ -2986,6 +3674,16 @@
    "revisada": false,
    "ejemplo": "No, el documento solo me menciona a mí."
   },
+  "MENOS": {
+   "descripcion": "Más poco.",
+   "descripcionLsb": [
+    "POCO",
+    "SENA_PENDIENTE:MAS"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "MENSAJE": {
    "descripcion": "Texto que se envía, por ejemplo por celular.",
    "descripcionLsb": [
@@ -2996,6 +3694,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Tiene documentos o mensajes sobre lo ocurrido?"
+  },
+  "MENTE": {
+   "descripcion": "Lo que una persona piensa y siente.",
+   "descripcionLsb": [
+    "PENSAR",
+    "SENTIR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "MESES": {
    "descripcion": "Meses del año.",
@@ -3011,15 +3719,26 @@
    "descripcion": "Parte del gobierno que se ocupa de un tema, por ejemplo Ministerio de Salud.",
    "descripcionLsb": [
     "GOBIERNO",
-    "SENA_PENDIENTE:TEMA",
+    "TEMA",
     "SENA_PENDIENTE:OCUPAR",
-    "SENA_PENDIENTE:EJEMPLO",
-    "SENA_PENDIENTE:MINISTERIO",
+    "EJEMPLO",
+    "MINISTERIO",
     "SENA_PENDIENTE:SALUD"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "El Ministerio informó cuatro días para el área urbana."
+  },
+  "MINISTERIO_PUBLICO": {
+   "descripcion": "La Fiscalía: investiga los delitos.",
+   "descripcionLsb": [
+    "FISCALIA",
+    "INVESTIGACIÓN",
+    "SENA_PENDIENTE:DELITO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "MIYO": {
    "descripcion": "«Mi»: de la persona que habla. Tiene seña: MÍO.",
@@ -3062,10 +3781,21 @@
    "revisada": false,
    "ejemplo": "¿El monto aparece en línea?"
   },
+  "MOTIVO": {
+   "descripcion": "Por qué pasa algo.",
+   "descripcionLsb": [
+    "POR_QUE",
+    "SENA_PENDIENTE:PASAR",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "MOTO": {
    "descripcion": "Motocicleta: vehículo de dos ruedas con motor.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:MOTOCICLETA",
+    "MOTOCICLETA",
     "SENA_PENDIENTE:VEHICULO",
     "SENA_PENDIENTE:DOS",
     "SENA_PENDIENTE:RUEDA",
@@ -3075,6 +3805,58 @@
    "revisada": false,
    "ejemplo": "Quiero saber cuánto debo de mi moto."
   },
+  "MOTOR": {
+   "descripcion": "Lo que hace andar a un auto o una moto.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:MOTO",
+    "ANDAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "MUCHOS": {
+   "descripcion": "Varios, una cantidad grande.",
+   "descripcionLsb": [
+    "VARIOS",
+    "MUCHO"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "MUERTE": {
+   "descripcion": "Cuando una persona deja de vivir.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "VIVIR",
+    "DEJAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "MUERTO": {
+   "descripcion": "Persona que ya no vive.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "VIVIR",
+    "NO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "MUNICIPALIDAD": {
+   "descripcion": "La alcaldía de la ciudad.",
+   "descripcionLsb": [
+    "ALCALDÍA",
+    "CIUDAD"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "MUY": {
    "descripcion": "Mucho, bastante.",
    "descripcionLsb": [
@@ -3083,6 +3865,17 @@
    "tipo": "palabra_funcion",
    "revisada": false,
    "ejemplo": "Sí, pero escribí muy poco."
+  },
+  "NACER": {
+   "descripcion": "Empezar a vivir, como un bebé.",
+   "descripcionLsb": [
+    "EMPEZAR",
+    "VIVIR",
+    "BEBÉ"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "NACIMIENTO": {
    "descripcion": "Cuando una persona nace. «Certificado de nacimiento»: documento que dice dónde y cuándo nació.",
@@ -3097,6 +3890,36 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Tiene un certificado de nacimiento anterior?"
+  },
+  "NADA": {
+   "descripcion": "Que no hay cosas.",
+   "descripcionLsb": [
+    "NO",
+    "COSAS",
+    "SENA_PENDIENTE:HAY"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "NADA_MAS": {
+   "descripcion": "Solo eso.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:SOLO",
+    "SENA_PENDIENTE:ESO"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "NADIE": {
+   "descripcion": "Ni una persona.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
   },
   "NECESIDAD": {
    "descripcion": "Lo que una persona necesita.",
@@ -3128,6 +3951,26 @@
    "revisada": false,
    "ejemplo": "¿Le negaron atención por su forma de comunicarse?"
   },
+  "NINGUNA": {
+   "descripcion": "Ni una.",
+   "descripcionLsb": [
+    "1",
+    "NO"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "NIVEL": {
+   "descripcion": "Qué tan alto está algo.",
+   "descripcionLsb": [
+    "ALTO",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "NIÑEZ": {
    "descripcion": "Edad de los niños y niñas.",
    "descripcionLsb": [
@@ -3138,6 +3981,26 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Debe activarse la atención de la Defensoría de la Niñez."
+  },
+  "NOMBRAR": {
+   "descripcion": "Decir el nombre de algo o de alguien.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:DECIR",
+    "NOMBRE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "NORMALMENTE": {
+   "descripcion": "Casi siempre.",
+   "descripcionLsb": [
+    "CASI",
+    "SIEMPRE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "NOTA": {
    "descripcion": "Algo escrito corto. Ver «nota marginal».",
@@ -3163,7 +4026,7 @@
    "descripcion": "De la notaría. «Documento notarial»: documento hecho ante un notario.",
    "descripcionLsb": [
     "SENA_PENDIENTE:NOTARIA",
-    "SENA_PENDIENTE:DOCUMENTO",
+    "PAPEL",
     "SENA_PENDIENTE:NOTARIAL"
    ],
    "tipo": "concepto",
@@ -3182,6 +4045,18 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "DIRNOPLU ofrece un buscador de notarios."
+  },
+  "NOTICIAS": {
+   "descripcion": "Lo nuevo que se sabe de algo que pasó.",
+   "descripcionLsb": [
+    "NUEVO",
+    "SABER",
+    "PASADO",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "NOTIFICACION": {
    "descripcion": "Aviso oficial escrito de una institución sobre un trámite o un proceso.",
@@ -3216,6 +4091,21 @@
    "revisada": false,
    "ejemplo": "¿Tiene el número de matrícula de la casa?"
   },
+  "OBLIGAR": {
+   "descripcion": "Hacer que otra persona haga algo que no quiere.",
+   "descripcionLsb": [
+    "HACER",
+    "SENA_PENDIENTE:OTRO",
+    "SENA_PENDIENTE:PERSONA",
+    "HACER",
+    "SENA_PENDIENTE:ALGO",
+    "NO",
+    "QUERER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "OBSERVACION": {
    "descripcion": "Problema que la oficina encuentra en un trámite y que hay que corregir.",
    "descripcionLsb": [
@@ -3236,6 +4126,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Necesito orientación para obtener un documento notarial anterior."
+  },
+  "OCUPAR": {
+   "descripcion": "Usar un lugar.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:LUGAR",
+    "USAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "OCURRIDO": {
    "descripcion": "Pasar, suceder.",
@@ -3267,6 +4167,16 @@
    "revisada": false,
    "ejemplo": "DIRNOPLU ofrece un buscador de notarios."
   },
+  "OJO": {
+   "descripcion": "Parte de la cara para ver.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:CARA",
+    "VER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "OPCION": {
    "descripcion": "Una de las posibilidades para elegir.",
    "descripcionLsb": [
@@ -3276,6 +4186,18 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Quiero consultar opciones para pagar mi deuda."
+  },
+  "ORDEN": {
+   "descripcion": "Lo que una autoridad dice que se debe hacer.",
+   "descripcionLsb": [
+    "AUTORIDAD",
+    "SENA_PENDIENTE:DECIR",
+    "SENA_PENDIENTE:DEBER",
+    "HACER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "ORIENTACION": {
    "descripcion": "Explicación de qué hacer y a dónde ir.",
@@ -3365,7 +4287,7 @@
   "PADRE": {
    "descripcion": "Papá.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:PAPA"
+    "PAPÁ"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -3393,6 +4315,17 @@
    "revisada": false,
    "ejemplo": "¿Trajo documentación del pago del impuesto a la transferencia?"
   },
+  "PAIS": {
+   "descripcion": "Lugar grande con su gobierno. Ejemplo: Bolivia.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:LUGAR",
+    "GRANDE",
+    "GOBIERNO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "PARADERO": {
    "descripcion": "El lugar donde está una persona.",
    "descripcionLsb": [
@@ -3403,6 +4336,16 @@
    "revisada": false,
    "ejemplo": "¿Desconoce el paradero actual de esa persona?"
   },
+  "PARAR": {
+   "descripcion": "Dejar de hacer algo.",
+   "descripcionLsb": [
+    "DEJAR",
+    "HACER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "PARENTESCO": {
    "descripcion": "Relación de familia entre personas: madre, hijo, hermano, tío.",
    "descripcionLsb": [
@@ -3410,7 +4353,7 @@
     "SENA_PENDIENTE:MADRE",
     "HIJO",
     "HERMANO",
-    "SENA_PENDIENTE:TIO"
+    "TÍO"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -3594,7 +4537,7 @@
    "descripcion": "Dibujo de un terreno o casa con sus medidas.",
    "descripcionLsb": [
     "DIBUJAR",
-    "SENA_PENDIENTE:TERRENO",
+    "TERRENO",
     "CASA",
     "SENA_PENDIENTE:MEDIDA"
    ],
@@ -3607,7 +4550,7 @@
    "descripcionLsb": [
     "DIBUJAR",
     "CASA",
-    "SENA_PENDIENTE:TERRENO",
+    "TERRENO",
     "SENA_PENDIENTE:MEDIDA"
    ],
    "tipo": "concepto",
@@ -3645,7 +4588,7 @@
   "POBLACION": {
    "descripcion": "Grupo de personas, por ejemplo los niños de un lugar.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:GRUPO",
+    "GRUPO",
     "SENA_PENDIENTE:PERSONA",
     "NIÑO",
     "SENA_PENDIENTE:LUGAR"
@@ -3692,6 +4635,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Le dijeron que necesita treinta por ciento?"
+  },
+  "POSIBILIDAD": {
+   "descripcion": "Algo que puede pasar.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PODER",
+    "SENA_PENDIENTE:PASAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "PRECIO": {
    "descripcion": "Lo que cuesta algo.",
@@ -3771,6 +4724,17 @@
    "revisada": false,
    "ejemplo": "¿Puede acudir presencialmente ahora?"
   },
+  "PREVENIR": {
+   "descripcion": "Cuidar antes para estar seguro.",
+   "descripcionLsb": [
+    "CUIDAR",
+    "SENA_PENDIENTE:ANTES",
+    "SENA_PENDIENTE:SEGURIDAD"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "PREVENTIVA": {
    "descripcion": "Para prevenir o proteger mientras se decide algo. Ver «anotación preventiva».",
    "descripcionLsb": [
@@ -3796,7 +4760,7 @@
    "descripcion": "Hecho entre personas, sin notario. «Contrato privado».",
    "descripcionLsb": [
     "SENA_PENDIENTE:PERSONA",
-    "SENA_PENDIENTE:CONTRATO",
+    "CONTRATO",
     "SENA_PENDIENTE:PRIVADO"
    ],
    "tipo": "concepto",
@@ -3831,9 +4795,9 @@
     "SENA_PENDIENTE:PERSONA",
     "SENA_PENDIENTE:PROPIEDAD",
     "SENA_PENDIENTE:CASO",
-    "SENA_PENDIENTE:EJEMPLO",
+    "EJEMPLO",
     "SENA_PENDIENTE:CASO",
-    "SENA_PENDIENTE:TERRENO"
+    "TERRENO"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -3877,7 +4841,7 @@
   "PROTECCION": {
    "descripcion": "Cuidado para que una persona no sufra daño. «Medidas de protección»: órdenes de una autoridad para cuidar a una persona.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:CUIDAR",
+    "CUIDAR",
     "SENA_PENDIENTE:PERSONA",
     "DAÑAR",
     "NO",
@@ -3885,7 +4849,6 @@
     "SENA_PENDIENTE:PROTECCION",
     "SENA_PENDIENTE:ORDEN",
     "AUTORIDAD",
-    "SENA_PENDIENTE:CUIDAR",
     "SENA_PENDIENTE:PERSONA",
     "PARA_QUE"
    ],
@@ -3893,11 +4856,23 @@
    "revisada": false,
    "ejemplo": "Quiero informar sobre mis medidas de protección."
   },
+  "PRUEBA": {
+   "descripcion": "Lo que muestra que algo es verdad: una foto, un papel, un testigo.",
+   "descripcionLsb": [
+    "FOTOS",
+    "PAPEL",
+    "TESTIGO",
+    "VERDAD"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "PSICOLOGICA": {
    "descripcion": "De la mente y las emociones. «Ayuda psicológica»: apoyo de un psicólogo.",
    "descripcionLsb": [
     "SENA_PENDIENTE:MENTE",
-    "SENA_PENDIENTE:EMOCION",
+    "EMOCIÓN",
     "SENA_PENDIENTE:PSICOLOGO",
     "SENA_PENDIENTE:APOYO"
    ],
@@ -3916,6 +4891,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Desea apoyo psicológico?"
+  },
+  "PSICOLOGO": {
+   "descripcion": "Persona que ayuda cuando hay tristeza o miedo.",
+   "descripcionLsb": [
+    "TRISTE",
+    "MIEDO",
+    "AYUDAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "PUBLICA": {
    "descripcion": "Del Estado o para todos. «Escritura pública»: hecha ante notario.",
@@ -3974,6 +4960,26 @@
    "revisada": false,
    "ejemplo": "¿Usaron violencia para quitarle el objeto?"
   },
+  "QUITARLA": {
+   "descripcion": "Sacar algo a alguien. En un robo: le quitaron el celular.",
+   "descripcionLsb": [
+    "ROBAR",
+    "CELULAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "QUITARLE": {
+   "descripcion": "Sacar algo a alguien. En un robo: le quitaron el celular.",
+   "descripcionLsb": [
+    "ROBAR",
+    "CELULAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "RADICAR": {
    "descripcion": "Estar registrado en un lugar. «Vehículo radicado en Cochabamba».",
    "descripcionLsb": [
@@ -3985,6 +4991,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿El vehículo está radicado en Cochabamba?"
+  },
+  "RAYA": {
+   "descripcion": "Una línea pequeña: -",
+   "descripcionLsb": [
+    "LÍNEA",
+    "PEQUEÑO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "REALIZAR": {
    "descripcion": "Hacer.",
@@ -4031,6 +5047,16 @@
    "revisada": false,
    "ejemplo": "Sí. Queremos reconocer nuestras firmas."
   },
+  "RECONOCER": {
+   "descripcion": "Aceptar como propio. «Reconocer firmas»: confirmar ante notario que la firma es suya.",
+   "descripcionLsb": [
+    "ACEPTAR",
+    "SUYO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "RECONOCIMIENTO": {
    "descripcion": "«Reconocimiento de firmas»: el notario confirma que una firma es de esa persona.",
    "descripcionLsb": [
@@ -4068,17 +5094,27 @@
    "descripcion": "Conjunto de reglas para algo.",
    "descripcionLsb": [
     "SENA_PENDIENTE:CONJUNTO",
-    "SENA_PENDIENTE:REGLA",
+    "REGLA",
     "SENA_PENDIENTE:ALGO"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "No sé si mi departamento tiene ese régimen."
   },
+  "REGIONES": {
+   "descripcion": "Partes de un país.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PAIS",
+    "PARTE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "REGISTRADO": {
    "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:LIBRO",
+    "LIBRO",
     "SENA_PENDIENTE:SISTEMA",
     "OFICIAL",
     "SENA_PENDIENTE:CASO",
@@ -4093,7 +5129,7 @@
   "REGISTRAL": {
    "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:LIBRO",
+    "LIBRO",
     "SENA_PENDIENTE:SISTEMA",
     "OFICIAL",
     "SENA_PENDIENTE:CASO",
@@ -4108,7 +5144,7 @@
   "REGISTRAR": {
    "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:LIBRO",
+    "LIBRO",
     "SENA_PENDIENTE:SISTEMA",
     "OFICIAL",
     "SENA_PENDIENTE:CASO",
@@ -4123,7 +5159,7 @@
   "REGISTRO": {
    "descripcion": "Anotar algo en un libro o sistema oficial, por ejemplo quién es dueño de una casa.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:LIBRO",
+    "LIBRO",
     "SENA_PENDIENTE:SISTEMA",
     "OFICIAL",
     "SENA_PENDIENTE:CASO",
@@ -4166,7 +5202,7 @@
    "descripcionLsb": [
     "SENA_PENDIENTE:PERSONA",
     "SENA_PENDIENTE:PARENTESCO",
-    "SENA_PENDIENTE:EJEMPLO"
+    "EJEMPLO"
    ],
    "tipo": "concepto",
    "revisada": false,
@@ -4299,6 +5335,28 @@
    "revisada": false,
    "ejemplo": "Sí, tengo la solicitud escrita de resellado."
   },
+  "RESOLVER": {
+   "descripcion": "Arreglar un problema.",
+   "descripcionLsb": [
+    "ARREGLAR",
+    "PROBLEMA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "RESPECTAR": {
+   "descripcion": "Respetar: tratar bien a otra persona.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:OTRA",
+    "SENA_PENDIENTE:PERSONA",
+    "SENA_PENDIENTE:BIEN",
+    "SENA_PENDIENTE:TRATAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "RESSELLADO": {
    "descripcion": "Volver a sellar un documento para confirmar o actualizar un registro.",
    "descripcionLsb": [
@@ -4337,6 +5395,27 @@
    "revisada": false,
    "ejemplo": "¿Trajo el Folio Real del inmueble que quiere revisar?"
   },
+  "ROTO": {
+   "descripcion": "Dañado, ya no funciona.",
+   "descripcionLsb": [
+    "DAÑAR",
+    "FUNCIONAR",
+    "NO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "RUEDA": {
+   "descripcion": "Lo que tiene un auto abajo para andar.",
+   "descripcionLsb": [
+    "BAJO",
+    "ANDAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "RUTA": {
    "descripcion": "Camino o pasos que se siguen. «Ruta de atención»: las oficinas que atienden un caso.",
    "descripcionLsb": [
@@ -4357,7 +5436,7 @@
    "descripcion": "Obtener, por ejemplo un documento.",
    "descripcionLsb": [
     "SENA_PENDIENTE:OBTENER",
-    "SENA_PENDIENTE:EJEMPLO",
+    "EJEMPLO",
     "PAPEL"
    ],
    "tipo": "concepto",
@@ -4374,6 +5453,17 @@
    "revisada": false,
    "ejemplo": "¿Debo confirmar antes de salir?"
   },
+  "SALUD": {
+   "descripcion": "Cuando el cuerpo y la mente están bien.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:CUERPO",
+    "SENA_PENDIENTE:MENTE",
+    "SENA_PENDIENTE:BIEN"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "SEDE": {
    "descripcion": "Oficina o lugar donde atiende una institución.",
    "descripcionLsb": [
@@ -4384,6 +5474,29 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Primero confirmaré la sede."
+  },
+  "SEGUIR": {
+   "descripcion": "Continuar; también hacer lo que dicen. «Seguir instrucciones».",
+   "descripcionLsb": [
+    "CONTINUAR",
+    "HACER",
+    "SENA_PENDIENTE:DECIR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SEGUN": {
+   "descripcion": "Lo que dice una persona o un papel.",
+   "descripcionLsb": [
+    "PALABRA",
+    "SENA_PENDIENTE:DECIR",
+    "SENA_PENDIENTE:PERSONA",
+    "PAPEL"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SEGURIDAD": {
    "descripcion": "Estar sin peligro.",
@@ -4404,6 +5517,38 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí, tengo un contacto seguro."
+  },
+  "SENTIMIENTO": {
+   "descripcion": "Lo que una persona siente, como miedo o tristeza.",
+   "descripcionLsb": [
+    "SENTIR",
+    "MIEDO",
+    "TRISTE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SEPARADO": {
+   "descripcion": "Que no está junto.",
+   "descripcionLsb": [
+    "NO",
+    "SENA_PENDIENTE:JUNTO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SEPARAR": {
+   "descripcion": "Poner una cosa lejos de otra.",
+   "descripcionLsb": [
+    "COSAS",
+    "LEJOS",
+    "SENA_PENDIENTE:OTRO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SERVICIO": {
    "descripcion": "Atención o ayuda que da una institución.",
@@ -4443,6 +5588,20 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Necesito ayuda por violencia sexual."
+  },
+  "SEÑA": {
+   "descripcion": "Palabra hecha con las manos, en LSB.",
+   "descripcionLsb": [
+    "PALABRA",
+    "SENA_PENDIENTE:HECHO",
+    "SENA_PENDIENTE:MANO",
+    "L",
+    "S",
+    "B"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SEÑALADA": {
    "descripcion": "Fijar. «Audiencia señalada»: audiencia con fecha y hora fijadas por el juzgado.",
@@ -4529,6 +5688,28 @@
    "revisada": false,
    "ejemplo": "No sé si la hipoteca sigue registrada."
   },
+  "SIN": {
+   "descripcion": "Que no tiene algo.",
+   "descripcionLsb": [
+    "NO",
+    "TENER",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SIRVE": {
+   "descripcion": "Ser útil, valer para algo.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:UTIL",
+    "SENA_PENDIENTE:VALER",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "SISTEMA": {
    "descripcion": "Programa o página de computadora que usa una oficina.",
    "descripcionLsb": [
@@ -4539,6 +5720,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿El trámite sigue usando el sistema SIPRUNPCD?"
+  },
+  "SOBRE": {
+   "descripcion": "Que habla de algo, de ese tema.",
+   "descripcionLsb": [
+    "HABLAR",
+    "TEMA"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SOCIAL": {
    "descripcion": "De la sociedad o de la ayuda a las personas. «Trabajo social»: profesionales que orientan y ayudan.",
@@ -4553,6 +5744,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí, quiero orientación social."
+  },
+  "SOCIEDAD": {
+   "descripcion": "Las personas que viven en un lugar.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "VIVIR",
+    "SENA_PENDIENTE:LUGAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SOLICITANTE": {
    "descripcion": "Persona que pide algo.",
@@ -4583,6 +5785,15 @@
    "revisada": false,
    "ejemplo": "No tengo memorial. Solo traje mi cédula."
   },
+  "SORDA": {
+   "descripcion": "Persona que no oye.",
+   "descripcionLsb": [
+    "SORDO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "SUBSANAR": {
    "descripcion": "Corregir un error o un problema del trámite.",
    "descripcionLsb": [
@@ -4595,18 +5806,51 @@
    "revisada": false,
    "ejemplo": "¿Trajo un documento para subsanar la observación?"
   },
+  "SUCEDER": {
+   "descripcion": "Pasar, ocurrir.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:OCURRIR",
+    "SENA_PENDIENTE:PASAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SUFRI": {
+   "descripcion": "Me pasó algo malo. Ejemplo: un robo o un golpe.",
+   "descripcionLsb": [
+    "YO",
+    "SENA_PENDIENTE:PASAR",
+    "SENA_PENDIENTE:ALGO",
+    "MALO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "SUPERFICIE": {
    "descripcion": "Tamaño de un terreno o casa, en metros cuadrados.",
    "descripcionLsb": [
     "SENA_PENDIENTE:TAMAÑO",
-    "SENA_PENDIENTE:TERRENO",
+    "TERRENO",
     "CASA",
-    "SENA_PENDIENTE:METRO",
+    "METRO",
     "SENA_PENDIENTE:CUADRADO"
    ],
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿La diferencia está en la superficie del inmueble?"
+  },
+  "TAMAÑO": {
+   "descripcion": "Qué tan grande o pequeño es algo.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:ALGO",
+    "GRANDE",
+    "PEQUEÑO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "TAMBIEN": {
    "descripcion": "Además, igual.",
@@ -4627,6 +5871,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Cuánto tarda en ciudad?"
+  },
+  "TARJETA": {
+   "descripcion": "Carnet pequeño, como la cédula.",
+   "descripcionLsb": [
+    "PAPEL",
+    "IDENTIDAD",
+    "PEQUEÑO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "TENGO": {
    "descripcion": "Tener. Tiene seña: TENER.",
@@ -4651,7 +5906,7 @@
   "TIPO": {
    "descripcion": "Clase o forma.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:CLASE",
+    "CLASE",
     "FORMA"
    ],
    "tipo": "concepto",
@@ -4722,6 +5977,28 @@
    "revisada": false,
    "ejemplo": "Mi expareja me amenaza todos los días."
   },
+  "TRABAJADOR_SOCIAL": {
+   "descripcion": "Persona que ayuda y orienta a las familias.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:FAMILIA",
+    "AYUDAR",
+    "SENA_PENDIENTE:ORIENTAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "TRABAJAR": {
+   "descripcion": "Hacer algo para ganar dinero.",
+   "descripcionLsb": [
+    "HACER",
+    "SENA_PENDIENTE:ALGO",
+    "GANAR_DINERO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "TRABAJO": {
    "descripcion": "Lugar donde una persona trabaja, o lo que hace para ganar dinero.",
    "descripcionLsb": [
@@ -4732,6 +6009,22 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Ocurrió en mi trabajo."
+  },
+  "TRADUCIR": {
+   "descripcion": "Decir lo mismo en otra lengua, por ejemplo en LSB.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:DECIR",
+    "MISMO",
+    "SENA_PENDIENTE:OTRO",
+    "SENA_PENDIENTE:LENGUA",
+    "EJEMPLO",
+    "L",
+    "S",
+    "B"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "TRAJE": {
    "descripcion": "Traer en pasado. Tiene seña: TRAER.",
@@ -4757,6 +6050,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Trajo documentación del pago del impuesto a la transferencia?"
+  },
+  "TRATAR": {
+   "descripcion": "Atender un caso o un problema.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:CASO",
+    "PROBLEMA",
+    "ATENDER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "TRIBUNAL": {
    "descripcion": "Oficina de jueces.",
@@ -4807,6 +6111,26 @@
    "revisada": false,
    "ejemplo": "No, la diferencia está en la ubicación."
   },
+  "UBICADO": {
+   "descripcion": "Dónde está algo.",
+   "descripcionLsb": [
+    "DÓNDE",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "UNO_MISMO": {
+   "descripcion": "Yo mismo, sin otra persona.",
+   "descripcionLsb": [
+    "YO",
+    "MISMO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "URBANA": {
    "descripcion": "De la ciudad.",
    "descripcionLsb": [
@@ -4829,6 +6153,50 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Tiene un documento judicial referido a una usucapión?"
+  },
+  "UTIL": {
+   "descripcion": "Que sirve para algo.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:SERVIR",
+    "SENA_PENDIENTE:ALGO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "VACIO": {
+   "descripcion": "Que no tiene nada adentro.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:NADA",
+    "DENTRO",
+    "NO",
+    "TENER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "VALE": {
+   "descripcion": "Que todavía se puede usar.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:TODAVIA",
+    "USAR",
+    "SENA_PENDIENTE:PODER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "VALER": {
+   "descripcion": "Poder usarse, servir.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PODER",
+    "USAR",
+    "SENA_PENDIENTE:SERVIR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "VALIDAR": {
    "descripcion": "Comprobar que algo es correcto y vale.",
@@ -4909,6 +6277,15 @@
    "revisada": false,
    "ejemplo": "¿Puedo verificar también el documento después?"
   },
+  "VEZ": {
+   "descripcion": "Un momento.",
+   "descripcionLsb": [
+    "MOMENTO"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "VIA": {
    "descripcion": "Camino o forma de hacer algo.",
    "descripcionLsb": [
@@ -4974,6 +6351,19 @@
    "revisada": false,
    "ejemplo": "No sé si mi documento está vigente."
   },
+  "VIOLENCIA_SEXUAL": {
+   "descripcion": "Tocar el cuerpo de una persona sin su permiso.",
+   "descripcionLsb": [
+    "SENA_PENDIENTE:PERSONA",
+    "SENA_PENDIENTE:CUERPO",
+    "TOCAR",
+    "PERMISO",
+    "NO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "VIVIENDA": {
    "descripcion": "Casa o lugar donde vive una persona.",
    "descripcionLsb": [
@@ -4987,7 +6377,7 @@
   "VULNERACION": {
    "descripcion": "Cuando no se respeta un derecho.",
    "descripcionLsb": [
-    "SENA_PENDIENTE:DERECHO",
+    "DERECHO",
     "SENA_PENDIENTE:RESPECTAR",
     "NO_SABER"
    ],

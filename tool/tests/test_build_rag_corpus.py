@@ -290,6 +290,93 @@ class Equivalencias(unittest.TestCase):
             self.assertEqual(B.cargar_equivalencias(ruta), {"documento": "PAPEL"})
 
 
+class PalabrasDeLosModulos(unittest.TestCase):
+    LEXICO = {"glosas": {
+        "TERRENO": {"formas": ["Terreno"], "fuentes": [{"fuente": "M3"}]},
+        "BOLIVIA": {"formas": ["Bolivia"], "fuentes": [{"fuente": "M1"}]},
+        "FISCAL": {"formas": ["Fiscal"], "fuentes": [{"fuente": "M3"}]},
+        "REAL": {"formas": ["Real"], "fuentes": [{"fuente": "M2"}]},
+        "DIGNIDAD": {"formas": ["Dignidad"], "fuentes": [{"fuente": "D2024"}]},
+    }, "ambiguas": {}}
+
+    def vigentes(self, equivalencias: dict) -> dict:
+        with tempfile.TemporaryDirectory() as d:
+            ruta = os.path.join(d, "eq.json")
+            with open(ruta, "w", encoding="utf-8") as f:
+                json.dump(equivalencias, f)
+            return B.equivalencias_vigentes(ruta, self.LEXICO)
+
+    def test_una_palabra_de_los_modulos_es_su_sena(self):
+        eq = self.vigentes({})
+        self.assertEqual(eq["terreno"], "TERRENO")
+        # Solo los módulos M1–M4: una seña solo del diccionario sigue en azul.
+        self.assertNotIn("dignidad", eq)
+        corr = [{"palabra": "TERRENO", "accion": "concepto_sin_catalogo"}]
+        self.assertEqual(B.marcar_senas_pendientes(
+            ["CASA", *"TERRENO"], corr, "Casas y terrenos.", eq),
+            ["CASA", "TERRENO"])
+
+    def test_una_equivalencia_rechazada_por_su_sentido_sigue_en_azul(self):
+        eq = self.vigentes({"FISCAL": {"sena": "FISCAL", "estado": "rechazada"},
+                            "TERRENO": {"senas": ["CASA", "LUGAR"],
+                                        "estado": "aprobada"}})
+        self.assertNotIn("fiscal", eq)
+        # La aprobada a mano manda sobre la del módulo.
+        self.assertEqual(eq["terreno"], ["CASA", "LUGAR"])
+
+    def test_un_nombre_propio_que_es_una_sena_del_modulo_se_sena(self):
+        eq = self.vigentes({})
+        corr = [{"palabra": "BOLIVIA", "accion": "concepto_sin_catalogo"}]
+        self.assertEqual(B.marcar_senas_pendientes(
+            ["DEPARTAMENTO", *"BOLIVIA"], corr,
+            "Las regiones de Bolivia.", eq), ["DEPARTAMENTO", "BOLIVIA"])
+        # Un nombre de varias palabras no: «Folio Real» se explica entero.
+        corr = [{"palabra": "REAL", "accion": "concepto_sin_catalogo"}]
+        self.assertEqual(B.marcar_senas_pendientes(
+            [*"REAL"], corr, "Necesito el Folio Real.", eq),
+            ["SENA_PENDIENTE:REAL"])
+
+    def test_tras_una_comilla_empieza_la_frase(self):
+        corr = [{"palabra": "TERRENO", "accion": "concepto_sin_catalogo"}]
+        self.assertEqual(B.marcar_senas_pendientes(
+            [*"TERRENO"], corr, "Venta: «Terreno urbano».",
+            self.vigentes({})), ["TERRENO"])
+
+
+class DescripcionesEnCadena(unittest.TestCase):
+    def test_cada_palabra_en_azul_de_una_descripcion_tiene_la_suya(self):
+        datos = {"palabras": {
+            "FOLIO": {"descripcion": "Hoja de un registro.", "tipo": "concepto"},
+            "REGISTRO": {"descripcion": "Lista oficial.", "tipo": "concepto"},
+            "OFICIAL": {"descripcion": "De una autoridad.", "tipo": "concepto"},
+        }}
+        traducidas = {
+            "Hoja de un registro.": {"glosas": ["PAPEL", *"REGISTRO"],
+                                     "correcciones": [{"palabra": "REGISTRO", "accion": "concepto_sin_catalogo"}]},
+            "Lista oficial.": {"glosas": ["LISTA", *"OFICIAL"],
+                               "correcciones": [{"palabra": "OFICIAL", "accion": "concepto_sin_catalogo"}]},
+            "De una autoridad.": {"glosas": ["AUTORIDAD"], "correcciones": []},
+        }
+        corpus = {"escenarios": [{
+            "turnos": [{"texto": "Traje el folio.",
+                        "glosas": ["TRAER", "SENA_PENDIENTE:FOLIO"]}],
+            "variantes": []}]}
+
+        def leer(ruta):
+            return {B.DESCRIPCIONES: datos,
+                    B.DESCRIPCIONES_LSB: traducidas}.get(ruta, {})
+
+        with mock.patch.object(B, "_leer", side_effect=leer), \
+                mock.patch.object(B, "equivalencias_vigentes", return_value={}):
+            salida = B.info_sin_sena(corpus, [])["palabras"]
+        self.assertEqual(sorted(salida), ["FOLIO", "OFICIAL", "REGISTRO"])
+        self.assertEqual(salida["FOLIO"]["ejemplo"], "Traje el folio.")
+        # Las que solo están en una descripción no tienen frase del trámite.
+        self.assertEqual(salida["REGISTRO"]["ejemplo"], "")
+        self.assertEqual(salida["REGISTRO"]["descripcionLsb"],
+                         ["LISTA", "SENA_PENDIENTE:OFICIAL"])
+
+
 class HerramientaEquivalencias(unittest.TestCase):
     import rag_equivalencias as E  # noqa: E402
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -281,6 +282,58 @@ void main() {
       }
       expect(sinDescripcion, isEmpty);
       expect(sinDescripcionLsb, isEmpty);
+    });
+
+    test('toda palabra en azul de una descripción tiene la suya', () {
+      final datos =
+          jsonDecode(
+                File(
+                  'assets/dictionary/senas_sin_sena.json',
+                ).readAsStringSync(),
+              )['palabras']
+              as Map<String, dynamic>;
+      final sinDescripcion = <String>{
+        for (final v in datos.values)
+          for (final g in (v['descripcionLsb'] as List).cast<String>())
+            if (PendingSign.isPending(g) &&
+                catalog.infoOf(g).description.isEmpty)
+              g,
+      };
+      expect(sinDescripcion, isEmpty);
+    });
+
+    testWidgets('tocar una palabra en azul de la descripción abre la suya', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TextButton(
+                onPressed: () => showPendingSignInfo(context, catalog, [
+                  'SENA_PENDIENTE:INMUEBLE',
+                ]),
+                child: const Text('abrir'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('abrir'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('info_sin_sena')), findsOneWidget);
+      expect(
+        find.text('Toque una palabra en azul para ver qué es.'),
+        findsOneWidget,
+      );
+      await tester.tapOnText(find.textRange.ofSubstring('PROPIEDAD'));
+      await tester.pumpAndSettle();
+      // Se abre encima: la de INMUEBLE sigue debajo.
+      expect(find.byKey(const Key('info_sin_sena')), findsNWidgets(2));
+      expect(find.text('PROPIEDAD'), findsOneWidget);
+      await tester.tap(find.text('Entendido').last);
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('info_sin_sena')), findsOneWidget);
     });
   });
 
