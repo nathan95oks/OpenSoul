@@ -9,8 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/domain/entities/avatar_facial_expression.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/presentation/widgets/avatar_expression_indicator.dart';
 
 class Avatar3DViewer extends ConsumerStatefulWidget {
   final bool isProcessing;
@@ -710,6 +712,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     final isPlaceholder = currentUrl.startsWith(
       AnimationUrlResolver.placeholderScheme,
     );
+    final facialExpression = AvatarFacialExpressions.forGloss(currentGloss);
 
     // Solo los rotulos: el visor vive debajo, en [build], y no se desmonta al
     // cambiar de estado.
@@ -762,6 +765,13 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                 ),
               ),
             ),
+          ),
+
+        if (facialExpression != null)
+          Positioned(
+            left: 16,
+            bottom: 16,
+            child: AvatarExpressionIndicator(expression: facialExpression),
           ),
 
         if (_localUrls.length > 1)
