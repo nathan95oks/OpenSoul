@@ -172,6 +172,7 @@ void main() {
           body: Avatar3DViewer(
             isProcessing: false,
             isUserComposing: true,
+            showControls: false,
             glosses: [gloss],
             animationUrls: const [
               '${AnimationUrlResolver.placeholderScheme}PRUEBA',
@@ -197,6 +198,19 @@ void main() {
         findsOneWidget,
         reason: entry.key,
       );
+      final expressionPosition = tester.getTopLeft(
+        find.byKey(ValueKey('avatar_expression_${entry.value}')),
+      );
+      expect(
+        expressionPosition.dx,
+        inInclusiveRange(14, 16),
+        reason: '${entry.key}: margen lateral',
+      );
+      expect(
+        expressionPosition.dy,
+        inInclusiveRange(14, 16),
+        reason: '${entry.key}: franja superior',
+      );
     }
 
     await tester.pumpWidget(viewer('HOLA'));
@@ -204,4 +218,41 @@ void main() {
 
     expect(find.byKey(const ValueKey('avatar_expression_miedo')), findsNothing);
   });
+
+  testWidgets(
+    'la expresion y la glosa no se superponen en un telefono angosto',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 640);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(
+        const ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: Avatar3DViewer(
+                isProcessing: false,
+                isUserComposing: true,
+                glosses: ['PREOCUPAR'],
+                animationUrls: [
+                  '${AnimationUrlResolver.placeholderScheme}PRUEBA',
+                ],
+                animationDuration: Duration(minutes: 1),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      final expression = tester.getRect(
+        find.byKey(const ValueKey('avatar_expression_preocupacion')),
+      );
+      final gloss = tester.getRect(find.text('PREOCUPAR'));
+
+      expect(expression.right, lessThan(gloss.left));
+      expect(tester.takeException(), isNull);
+    },
+  );
 }
