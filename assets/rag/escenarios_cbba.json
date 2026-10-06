@@ -730,7 +730,7 @@
    "vigenciaSinConfirmar": false,
    "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
    "vence": "2026-10-05",
-   "vencido": false
+   "vencido": true
   },
   "H-IMP-08": {
    "institucion": "RUAT",
@@ -35311,13 +35311,9 @@
      "hechos": [
       "H-IMP-07"
      ],
-     "mostrable": true,
-     "motivos": [],
-     "glosas": [
-      "SENA_PENDIENTE:VEHÍCULO",
-      "SENA_PENDIENTE:INMUEBLE",
-      "ACTIVIDAD",
-      "DEUDA"
+     "mostrable": false,
+     "motivos": [
+      "dato_vencido"
      ]
     },
     {
@@ -35344,12 +35340,9 @@
      "hechos": [
       "H-IMP-07"
      ],
-     "mostrable": true,
-     "motivos": [],
-     "glosas": [
-      "AÑO",
-      "DEUDA",
-      "CUANTOS"
+     "mostrable": false,
+     "motivos": [
+      "dato_vencido"
      ]
     },
     {
@@ -35371,14 +35364,9 @@
      "hechos": [
       "H-IMP-07"
      ],
-     "mostrable": true,
-     "motivos": [],
-     "glosas": [
-      "SENA_PENDIENTE:INFORMAR",
-      "SENA_PENDIENTE:CONDONACIÓN",
-      "SENA_PENDIENTE:MULTA",
-      "SENA_PENDIENTE:INTERÉS",
-      "OCTUBRE"
+     "mostrable": false,
+     "motivos": [
+      "dato_vencido"
      ]
     },
     {
@@ -35404,8 +35392,10 @@
      "hechos": [
       "H-IMP-07"
      ],
-     "mostrable": true,
-     "motivos": []
+     "mostrable": false,
+     "motivos": [
+      "dato_vencido"
+     ]
     }
    ],
    "variantes": [
