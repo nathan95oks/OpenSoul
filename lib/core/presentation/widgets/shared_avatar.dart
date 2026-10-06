@@ -14,6 +14,9 @@ class AvatarRequest {
   final bool isUserComposing;
   final bool showControls;
   final bool showBackButton;
+
+  /// Ver [Avatar3DViewer.describePendingSigns].
+  final bool describePendingSigns;
   final Duration animationDuration;
   final ValueChanged<bool>? onPlaybackStateChanged;
   final VoidCallback? onReturnToInput;
@@ -26,6 +29,7 @@ class AvatarRequest {
     this.isUserComposing = false,
     this.showControls = true,
     this.showBackButton = true,
+    this.describePendingSigns = false,
     this.animationDuration = const Duration(seconds: 3),
     this.onPlaybackStateChanged,
     this.onReturnToInput,
@@ -199,6 +203,7 @@ class _SharedAvatarHostState extends ConsumerState<SharedAvatarHost> {
         isUserComposing: !visible || (request?.isUserComposing ?? false),
         showControls: request?.showControls ?? false,
         showBackButton: request?.showBackButton ?? true,
+        describePendingSigns: request?.describePendingSigns ?? false,
         animationDuration:
             request?.animationDuration ?? const Duration(seconds: 3),
         playbackRequestId: visible
@@ -306,9 +311,7 @@ class _SharedAvatarSlotState extends ConsumerState<SharedAvatarSlot> {
   Widget build(BuildContext context) {
     final route = ModalRoute.of(context);
     _visible =
-        widget.active &&
-        Visibility.of(context) &&
-        (route?.isCurrent ?? true);
+        widget.active && Visibility.of(context) && (route?.isCurrent ?? true);
 
     final alto = widget.expandToFit ? double.infinity : 300.0;
     if (!_controller.hostMounted) {
@@ -320,6 +323,7 @@ class _SharedAvatarSlotState extends ConsumerState<SharedAvatarSlot> {
         isUserComposing: r.isUserComposing,
         showControls: r.showControls,
         showBackButton: r.showBackButton,
+        describePendingSigns: r.describePendingSigns,
         animationDuration: r.animationDuration,
         playbackRequestId: r.playbackRequestId,
         glosses: r.glosses,

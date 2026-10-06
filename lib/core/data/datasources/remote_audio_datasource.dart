@@ -157,6 +157,14 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           'semanticStatus': decodedResponse['semanticStatus'],
           'representationStatus': decodedResponse['representationStatus'],
           'semanticTurn': decodedResponse['semanticTurn'],
+          'spelledWords': [
+            for (final fix
+                in (decodedResponse['fidelityFixes'] as List? ?? const []))
+              if (fix is Map &&
+                  fix['accion'] == 'concepto_sin_catalogo' &&
+                  '${fix['palabra'] ?? ''}'.isNotEmpty)
+                '${fix['palabra']}',
+          ],
         });
       } else {
         throw Exception(

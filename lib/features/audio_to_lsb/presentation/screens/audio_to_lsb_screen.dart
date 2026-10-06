@@ -162,6 +162,9 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                               // Al terminar la seña el campo de texto vuelve:
                               // sin flecha, y repetir queda bajo la glosa.
                               showBackButton: false,
+                              // Una palabra sin seña con descripción se
+                              // explica delante del avatar.
+                              describePendingSigns: true,
                               onPlaybackStateChanged: _setPlaybackActive,
                               onReturnToInput: () =>
                                   _returnToInitial(controller),

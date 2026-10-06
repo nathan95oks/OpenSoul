@@ -20,6 +20,12 @@ class LsbTranslation {
   /// modelo). `null` si el backend todavía no lo envía.
   final BackendSemanticTurn? semanticTurn;
 
+  /// Las palabras que no son una seña del catálogo y por eso el backend
+  /// deletreó (`fidelityFixes` con «concepto_sin_catalogo»), en el orden en
+  /// que las informó. Con ellas se sabe qué letras de [animationGlosses]
+  /// forman una palabra que se puede explicar en vez de deletrear.
+  final List<String> spelledWords;
+
   bool get needsClarification =>
       semanticStatus == SemanticStatus.needsClarification ||
       pendingClarifications.isNotEmpty;
@@ -34,5 +40,6 @@ class LsbTranslation {
     this.semanticStatus = SemanticStatus.resolved,
     this.representationStatus = RepresentationStatus.complete,
     this.semanticTurn,
+    this.spelledWords = const [],
   });
 }
