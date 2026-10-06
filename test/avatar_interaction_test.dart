@@ -162,4 +162,37 @@ void main() {
 
     expect(playbackEvents.where((event) => event), hasLength(2));
   });
+
+  testWidgets('MIEDO muestra un rostro blanco solo durante esa glosa', (
+    tester,
+  ) async {
+    Widget viewer(String gloss) => ProviderScope(
+      child: MaterialApp(
+        home: Scaffold(
+          body: Avatar3DViewer(
+            isProcessing: false,
+            isUserComposing: true,
+            glosses: [gloss],
+            animationUrls: const [
+              '${AnimationUrlResolver.placeholderScheme}PRUEBA',
+            ],
+            animationDuration: const Duration(minutes: 1),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(viewer('MIEDO'));
+    await tester.pump();
+
+    expect(
+      find.byKey(const ValueKey('avatar_expression_miedo')),
+      findsOneWidget,
+    );
+
+    await tester.pumpWidget(viewer('HOLA'));
+    await tester.pump();
+
+    expect(find.byKey(const ValueKey('avatar_expression_miedo')), findsNothing);
+  });
 }
