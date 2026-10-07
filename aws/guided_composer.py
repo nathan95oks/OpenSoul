@@ -291,7 +291,12 @@ class Composer:
                 text = self._sentence(q, a)
             text = self._finalize(text)
             if text:
-                sentences.append(text)
+                # La misma frase dos veces seguidas no dice más: dos
+                # indicaciones contestadas «Entendido.» se leían
+                # «Entendido. Entendido.». Gemelo de `composeTraced`.
+                ultima = next((x for x in reversed(sentences) if x), None)
+                if text != ultima:
+                    sentences.append(text)
             else:
                 self._represented = antes
             sentences.extend(self._finalize(e) for e in self._extras)

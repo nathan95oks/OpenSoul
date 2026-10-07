@@ -6648,7 +6648,7 @@
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me maltrataron. No lo sé. Fue un hombre que no conozco. Pasa todos los días. No estoy seguro de estar herido. No lo sé. No lo sé. No lo sé. Por ahora no quiero asistencia. Sí, quiero presentar una denuncia.",
+  "texto": "Me maltrataron. No lo sé. Fue un hombre que no conozco. Pasa todos los días. No estoy seguro de estar herido. No lo sé. Por ahora no quiero asistencia. Sí, quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#si",
    "Q.RIE.AUXILIO#no_sabe",
