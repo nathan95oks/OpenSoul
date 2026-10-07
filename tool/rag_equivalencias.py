@@ -200,7 +200,7 @@ def _frases_con_glosas() -> dict:
     tarjeta con una palabra sin seña no lleva glosas en el corpus, y es
     justo la frase con que se confirma su equivalencia."""
     from build_rag_corpus import (CORRECCIONES, aplicar_equivalencias,
-                                  equivalencias_vigentes,
+                                  cargar_equivalencias,
                                   marcar_senas_pendientes)
     with open(GLOSAS, encoding="utf-8") as f:
         cache = json.load(f)
@@ -208,7 +208,12 @@ def _frases_con_glosas() -> dict:
     if os.path.exists(CORRECCIONES):
         with open(CORRECCIONES, encoding="utf-8") as f:
             corregidas = json.load(f)
-    equivalencias = equivalencias_vigentes()
+    # Solo las equivalencias ya aprobadas, no las palabras de M1–M4: una
+    # palabra del módulo que se está confirmando («maestro») tiene que
+    # seguir marcada como pendiente en su frase. Con las del módulo ya
+    # puestas, nunca aparecía, se rechazaba «sin frase con la palabra» y ese
+    # rechazo le quitaba su seña del módulo.
+    equivalencias = cargar_equivalencias()
     out = {}
     for texto, v in cache.items():
         if texto in corregidas:
