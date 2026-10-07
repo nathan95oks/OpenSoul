@@ -263,6 +263,16 @@ class CaseSearch {
     'pegaron': ['violencia', 'golpe'],
     'pegan': ['violencia', 'golpe'],
     'pegar': ['violencia', 'golpe'],
+    // «Acoso» también es el que va por internet («ciberacoso»).
+    'acoso': ['ciberacoso'],
+    'acosa': ['acoso', 'ciberacoso'],
+    'acosan': ['acoso', 'ciberacoso'],
+    'acosar': ['acoso', 'ciberacoso'],
+    'bulling': ['bullying'],
+    'buling': ['bullying'],
+    'ciberbullying': ['ciberacoso'],
+    'discriminacion': ['discriminatorio'],
+    'discrimina': ['discriminatorio'],
   };
 
   /// Terminaciones de verbos y plurales, de la más larga a la más corta.

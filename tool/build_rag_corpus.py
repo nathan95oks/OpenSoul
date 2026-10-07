@@ -952,7 +952,12 @@ def marcar_senas_pendientes(glosas: list | None, correcciones: list,
         else:
             nombre = palabra.upper().replace(" ", "_")
             anterior = salida[-1] if salida else ""
-            if (anterior.startswith(SENA_PENDIENTE)
+            compuesto = (_termino_compuesto(anterior[len(SENA_PENDIENTE):],
+                                            nombre)
+                         if anterior.startswith(SENA_PENDIENTE) else None)
+            if compuesto:
+                salida[-1] = SENA_PENDIENTE + compuesto
+            elif (anterior.startswith(SENA_PENDIENTE)
                     and _es_nombre_propio(anterior[len(SENA_PENDIENTE):]
                                           .split("_") + [palabra], texto)):
                 salida[-1] = f"{anterior}_{nombre}"
@@ -960,6 +965,46 @@ def marcar_senas_pendientes(glosas: list | None, correcciones: list,
                 salida.append(SENA_PENDIENTE + nombre)
         i += len(letras)
     return salida
+
+
+# Palabras de enlace que un término compuesto puede llevar entre las suyas
+# («trata y tráfico»): la traducción no les da seña.
+_ENLACES = {"Y", "E", "DE", "DEL", "LA", "EL", "LOS", "LAS"}
+
+_compuestos = None
+
+
+def terminos_compuestos(ruta: str | None = None) -> dict:
+    """{(PALABRA, PALABRA…): CLAVE} de los términos de varias palabras de
+    descripciones_sin_sena.json marcados `"juntar": true` («ACOSO_SEXUAL»,
+    «TRATA_Y_TRAFICO»), sin las palabras de enlace. Solo los marcados: los
+    demás («FOLIO_REAL») se juntan, como siempre, por sus mayúsculas."""
+    datos = _leer(ruta or DESCRIPCIONES).get("palabras", {})
+    out = {}
+    for clave, dato in datos.items():
+        if "_" not in clave or not dato.get("juntar"):
+            continue
+        partes = tuple(_norm(w).upper() for w in clave.split("_")
+                       if w.upper() not in _ENLACES)
+        if len(partes) > 1:
+            out[partes] = clave
+    return out
+
+
+def _termino_compuesto(anterior: str, palabra: str) -> str | None:
+    """La clave del término compuesto que forman la seña pendiente
+    [anterior] (una palabra o un término ya juntado) y [palabra], o None.
+    Dos palabras sueltas también se juntan en el orden de LSB, que suele
+    poner primero lo que califica (FÍSICO · ACOSO)."""
+    global _compuestos
+    if _compuestos is None:
+        _compuestos = terminos_compuestos()
+    previas = next((k for k, v in _compuestos.items() if v == anterior),
+                   tuple(_norm(w).upper() for w in anterior.split("_")))
+    nueva = (_norm(palabra).upper(),)
+    return (_compuestos.get(previas + nueva)
+            or (_compuestos.get(nueva + previas) if len(previas) == 1
+                else None))
 
 
 def senas_pendientes(corpus: dict) -> dict:
@@ -1185,8 +1230,11 @@ def info_sin_sena(corpus: dict, avisos: list,
     # que la Lambda deletrea siempre (FELCC, NUREJ…): Voz a LSB las explica
     # mientras las deletrea.
     siglas = [p for p, d in datos.items() if d.get("tipo") == "sigla"]
+    # Los términos del léxico de varias palabras («ACOSO_DISCRIMINATORIO»)
+    # se explican aunque ninguna frase del corpus los use todavía.
+    terminos = [p for p, d in datos.items() if d.get("juntar")]
     por_ver = sorted(ejemplos) + [
-        p for p in dict.fromkeys(deletreados_por_norma() + siglas)
+        p for p in dict.fromkeys(deletreados_por_norma() + siglas + terminos)
         if p in datos and p not in ejemplos]
     while por_ver:
         palabra = por_ver.pop(0)
@@ -1659,6 +1707,44 @@ def unidades_indicacion() -> list:
             for estado, uid, glosas, etiqueta, frase in UNIDADES_INDICACION]
 
 
+# Respuestas largas que se ofrecen a una indicación, además de ENTENDIDO y
+# NO ENTIENDO: más que eso ya no es elegir rápido.
+MAX_RESPUESTAS_LARGAS = 3
+
+
+def respuestas_a_indicacion(e: dict, n: int) -> list:
+    """Lo que la persona sorda contesta en el escenario a la indicación del
+    turno [n] (el turno siguiente y las «Respuestas» de sus variantes), con
+    sus glosas completas: la respuesta larga, junto a las cortas ENTENDIDO y
+    NO ENTIENDO. Sin ellas, dos indicaciones seguidas se contestaban
+    «Entendido. Entendido.» aunque el escenario documentaba qué responder
+    («Quiero que me indiquen dónde acudir.»).
+
+    Solo respuestas documentadas y con glosas: no se inventa ninguna. Como
+    toda tarjeta de la persona sorda, solo las que se dicen enteras con
+    señas del léxico: nunca con una seña que falta."""
+    cortas = {_norm(frase).strip(" .") for *_, frase in UNIDADES_INDICACION}
+    vistas, out = set(), []
+    for r in respuestas_de(e, n):
+        clave = _norm(r["texto"]).strip(" .¿?¡!")
+        if clave in cortas or clave in vistas:
+            continue
+        glosas = glosas_canonicas(r["glosas"])
+        if glosas_invalidas(glosas):
+            continue
+        if any(g.startswith(SENA_PENDIENTE) for g in glosas):
+            continue
+        vistas.add(clave)
+        out.append({"estado": _estado(r["texto"]),
+                    "etiqueta": r["texto"].rstrip("."),
+                    "frase": r["texto"], "glosas": glosas,
+                    "glosasPropias": True, "id": f"respuesta_{len(out) + 1}",
+                    "origen": f"respuesta documentada «{r['texto']}»"})
+        if len(out) == MAX_RESPUESTAS_LARGAS:
+            break
+    return out
+
+
 def glosas_canonicas(glosas: list) -> list:
     """Cada glosa con la forma del catálogo («SI» → «SÍ», «DONDE» →
     «DÓNDE»), si la correspondencia es única. Letras, cifras y señas a
@@ -1757,7 +1843,8 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
             # * sí o no → SÍ · NO · NO SÉ; se dice la respuesta documentada;
             # * abierta o disyuntiva → las señas de sus respuestas
             #   documentadas, si se pueden decir todas en LSB;
-            # * indicación → ENTENDIDO · NO ENTIENDO.
+            # * indicación → ENTENDIDO · NO ENTIENDO, y lo que el escenario
+            #   documenta que se responde (respuesta larga).
             preguntas_turno = []  # [(id, formulación, glosas, opciones, control)]
             pregs = interrogativos(t["texto"], zonas)
             if responde_si_o_no(e, t):
@@ -1804,9 +1891,11 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
             elif es_pregunta_abierta(t["texto"]) or not re.search(
                     r"\s(?:o|u)\s", t["texto"]):
                 if "?" not in t["texto"] and not es_pregunta_abierta(t["texto"]):
-                    preguntas_turno.append((qid, t["texto"], glosas,
-                                            unidades_indicacion(),
-                                            {"control": "seleccion_unica"}))
+                    preguntas_turno.append((
+                        qid, t["texto"], glosas,
+                        unidades_indicacion()
+                        + respuestas_a_indicacion(e, t["n"]),
+                        {"control": "seleccion_unica"}))
                 else:
                     avisos.append(f"{e['id']} turno {t['n']}: no se sabe qué "
                                   "zona de señas contesta la pregunta; no se "
@@ -2000,7 +2089,7 @@ MARCA_ESTRICTA = "<!-- lexico: estricto -->"
 def es_estricto(archivo: str) -> bool:
     """Si el archivo de escenarios [archivo] (ruta relativa a la raíz) pide el
     léxico estricto."""
-    ruta = os.path.join(ROOT, archivo)
+    ruta = os.path.join(ROOT, archivo) if archivo else ""
     if not os.path.exists(ruta):
         return False
     with open(ruta, encoding="utf-8") as f:

@@ -132,6 +132,142 @@
   "correcciones": [],
   "traducido": "2026-10-04"
  },
+ "Acoso con el cuerpo: seguir, tocar o pegar a una persona muchas veces.": {
+  "glosas": [
+   "M",
+   "U",
+   "C",
+   "H",
+   "O",
+   "S",
+   "V",
+   "E",
+   "Z",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "S",
+   "E",
+   "G",
+   "U",
+   "I",
+   "R",
+   "T",
+   "O",
+   "C",
+   "A",
+   "R",
+   "PEGAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MUCHOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEGUIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TOCAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Acoso en la escuela: otros niños se burlan, le pegan o maltratan a un niño muchas veces.": {
+  "glosas": [
+   "ESCUELA",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "O",
+   "T",
+   "R",
+   "O",
+   "S",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "BURLAR",
+   "PEGAR",
+   "MALTRATAR",
+   "MUCHO",
+   "V",
+   "E",
+   "Z"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "NIÑO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OTROS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Acoso por internet o por celular: amenazas, burlas o fotos publicadas sin permiso, muchas veces.": {
+  "glosas": [
+   "INTERNET",
+   "CELULAR",
+   "AMENAZAR",
+   "BURLAR",
+   "FOTOS",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "A",
+   "R",
+   "PERMISO",
+   "NO",
+   "MUCHO",
+   "V",
+   "E",
+   "Z"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PUBLICAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Actuar en nombre de otra persona, con su permiso.": {
   "glosas": [
    "O",
@@ -2432,6 +2568,36 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Contar lo que pasó ante la policía o la fiscalía.": {
+  "glosas": [
+   "POLICIA",
+   "FISCALIA",
+   "C",
+   "U",
+   "E",
+   "N",
+   "T",
+   "A",
+   "R",
+   "PASADO",
+   "A",
+   "N",
+   "T",
+   "E"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CUENTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ANTE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Continuar; también hacer lo que dicen. «Seguir instrucciones».": {
   "glosas": [
    "CONTINUAR",
@@ -4596,6 +4762,38 @@
   ],
   "traducido": "2026-10-06"
  },
+ "Defensa Pública: abogado gratis para la persona acusada.": {
+  "glosas": [
+   "ABOGADO",
+   "GRATIS",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "A",
+   "C",
+   "U",
+   "S",
+   "A",
+   "D",
+   "O"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUSADO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Dejar de hacer algo.": {
   "glosas": [
    "DEJAR",
@@ -4663,6 +4861,45 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Del Estado: para atender a todas las personas.": {
+  "glosas": [
+   "E",
+   "S",
+   "T",
+   "A",
+   "D",
+   "O",
+   "ATENDER",
+   "T",
+   "O",
+   "D",
+   "O",
+   "S",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ESTADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TODOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Del catastro: el registro de la municipalidad con el tamaño y la ubicación de terrenos y casas.": {
   "glosas": [
@@ -4853,6 +5090,64 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Del cuerpo. «Acoso físico»: tocar o pegar a una persona.": {
+  "glosas": [
+   "C",
+   "U",
+   "E",
+   "R",
+   "P",
+   "O",
+   "A",
+   "C",
+   "O",
+   "S",
+   "O",
+   "F",
+   "I",
+   "S",
+   "I",
+   "C",
+   "O",
+   "T",
+   "O",
+   "C",
+   "A",
+   "R",
+   "PEGAR",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "CUERPO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACOSO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "FISICO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TOCAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Del juez o del juzgado.": {
   "glosas": [
@@ -9756,6 +10051,97 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Molestar o rechazar a una persona muchas veces por ser diferente; por ejemplo, por ser sorda.": {
+  "glosas": [
+   "M",
+   "U",
+   "C",
+   "H",
+   "O",
+   "S",
+   "V",
+   "E",
+   "Z",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "DIFERENTE",
+   "RECHAZAR",
+   "M",
+   "O",
+   "L",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MUCHOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MOLESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Molestar, amenazar o maltratar a una persona muchas veces, aunque ella no quiere. Le da miedo.": {
+  "glosas": [
+   "M",
+   "U",
+   "C",
+   "H",
+   "O",
+   "S",
+   "V",
+   "E",
+   "Z",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "AMENAZAR",
+   "MALTRATAR",
+   "NO",
+   "QUERER",
+   "MIEDO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MUCHOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Mostrar algo para que vean que es verdad.": {
   "glosas": [
    "VER",
@@ -10153,6 +10539,50 @@
   ],
   "traducido": "2026-10-06"
  },
+ "No respetar un derecho de una persona; hacerle daño.": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "D",
+   "E",
+   "R",
+   "E",
+   "C",
+   "H",
+   "O",
+   "R",
+   "E",
+   "S",
+   "P",
+   "E",
+   "T",
+   "A",
+   "R",
+   "NO",
+   "DAÑAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DERECHO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "RESPETAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Nombrar cosas una por una, en lista.": {
   "glosas": [
    "LISTA",
@@ -10383,6 +10813,34 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Número de su caso en el juzgado.": {
+  "glosas": [
+   "JUZGADO",
+   "C",
+   "A",
+   "S",
+   "O",
+   "N",
+   "U",
+   "M",
+   "E",
+   "R",
+   "O",
+   "SUYO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CASO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NUMERO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Número o letras que identifican algo.": {
   "glosas": [
    "N",
@@ -10481,6 +10939,95 @@
   "correcciones": [],
   "traducido": "2026-10-04"
  },
+ "Oficina de la alcaldía que protege a los niños y las niñas.": {
+  "glosas": [
+   "ALCALDIA",
+   "PROTEGER",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "M",
+   "U",
+   "C",
+   "H",
+   "O",
+   "S"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "NIÑO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MUCHOS",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Oficina de los certificados de nacimiento y de matrimonio.": {
+  "glosas": [
+   "OFICINA",
+   "CERTIFICADO",
+   "N",
+   "A",
+   "C",
+   "I",
+   "M",
+   "I",
+   "E",
+   "N",
+   "T",
+   "O",
+   "M",
+   "A",
+   "T",
+   "R",
+   "I",
+   "M",
+   "O",
+   "N",
+   "I",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NACIMIENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MATRIMONIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Oficina de los notarios: sellos y papeles oficiales.": {
+  "glosas": [
+   "OFICINA",
+   "N",
+   "O",
+   "T",
+   "A",
+   "R",
+   "I",
+   "O",
+   "SELLO",
+   "PAPEL",
+   "OFICIAL"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "NOTARIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Oficina del notario.": {
   "glosas": [
    "OFICINA",
@@ -10530,6 +11077,17 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Oficina que da el carnet de identidad.": {
+  "glosas": [
+   "OFICINA",
+   "PAPEL",
+   "IDENTIDAD",
+   "DAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Oficina que protege derechos. «Defensoría de la Niñez»: protege a niños, niñas y adolescentes.": {
   "glosas": [
@@ -10862,6 +11420,31 @@
   ],
   "traducido": "2026-10-06"
  },
+ "Papel donde se escribe lo que pasó en una reunión o audiencia.": {
+  "glosas": [
+   "PAPEL",
+   "ESCRIBIR",
+   "PASADO",
+   "REUNION",
+   "A",
+   "U",
+   "D",
+   "I",
+   "E",
+   "N",
+   "C",
+   "I",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "AUDIENCIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Papel escrito para otra persona.": {
   "glosas": [
    "PAPEL",
@@ -10968,6 +11551,15 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Papel que dice de quién es un auto.": {
+  "glosas": [
+   "PAPEL",
+   "IDENTIDAD"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Papel que muestra que algo se pagó o se observó.": {
   "glosas": [
@@ -12133,6 +12725,36 @@
   "correcciones": [],
   "traducido": "2026-10-06"
  },
+ "Persona que trabaja en una oficina del Estado y atiende a la gente.": {
+  "glosas": [
+   "TRABAJADOR",
+   "OFICINA",
+   "E",
+   "S",
+   "T",
+   "A",
+   "D",
+   "O",
+   "G",
+   "E",
+   "N",
+   "T",
+   "E",
+   "ATENDER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "GENTE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Persona que ya no está casada: se separó por ley.": {
   "glosas": [
    "SEPARADOS",
@@ -12319,6 +12941,29 @@
   ],
   "traducido": "2026-10-06"
  },
+ "Policía que atiende la violencia contra las mujeres y en la familia.": {
+  "glosas": [
+   "POLICIA",
+   "ATENDER",
+   "VIOLENCIA",
+   "MUJER",
+   "F",
+   "A",
+   "M",
+   "I",
+   "L",
+   "I",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "FAMILIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Policía que busca pruebas sobre un delito.": {
   "glosas": [
    "POLICIA",
@@ -12348,6 +12993,68 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Policía que combate la droga.": {
+  "glosas": [
+   "POLICIA",
+   "D",
+   "R",
+   "O",
+   "G",
+   "A",
+   "S",
+   "C",
+   "O",
+   "M",
+   "B",
+   "A",
+   "T",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DROGAS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COMBATIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Policía que investiga delitos, como robos y estafas.": {
+  "glosas": [
+   "POLICIA",
+   "INVESTIGACION",
+   "D",
+   "E",
+   "L",
+   "I",
+   "T",
+   "O",
+   "ROBAR",
+   "E",
+   "S",
+   "T",
+   "A",
+   "F",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DELITO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAFA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Poner algo más.": {
   "glosas": [
@@ -12872,6 +13579,45 @@
    }
   ],
   "traducido": "2026-10-06"
+ },
+ "Página de internet de la Fiscalía para ver su caso.": {
+  "glosas": [
+   "PAGINA",
+   "INTERNET",
+   "FISCALIA",
+   "C",
+   "A",
+   "S",
+   "O",
+   "VER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CASO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Página de internet del juzgado para ver su caso.": {
+  "glosas": [
+   "INTERNET",
+   "JUZGADO",
+   "C",
+   "A",
+   "S",
+   "O",
+   "VER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CASO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Pérdida: no saber dónde está algo.": {
   "glosas": [
@@ -13675,6 +14421,27 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Que trata mal a una persona por ser diferente.": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "MALTRATAR",
+   "DIFERENTE"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Que un abogado lleve y defienda el caso de una persona.": {
   "glosas": [
@@ -14640,6 +15407,71 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Servicio de la alcaldía que ayuda a las mujeres que sufren violencia.": {
+  "glosas": [
+   "ALCALDIA",
+   "MUJER",
+   "VIOLENCIA",
+   "AYUDAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Servicio del Estado que da abogado gratis a las víctimas de delitos.": {
+  "glosas": [
+   "E",
+   "S",
+   "T",
+   "A",
+   "D",
+   "O",
+   "S",
+   "E",
+   "R",
+   "V",
+   "I",
+   "C",
+   "I",
+   "O",
+   "ABOGADO",
+   "GRATIS",
+   "V",
+   "I",
+   "C",
+   "T",
+   "I",
+   "M",
+   "A",
+   "D",
+   "E",
+   "L",
+   "I",
+   "T",
+   "O",
+   "DAR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTADO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SERVICIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VICTIMA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DELITO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Servicio del Estado que da abogado gratis a quien lo necesita en un proceso penal.": {
   "glosas": [
    "E",
@@ -15022,6 +15854,46 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Sistema de los impuestos de autos y casas.": {
+  "glosas": [
+   "A",
+   "U",
+   "T",
+   "O",
+   "CASA",
+   "I",
+   "M",
+   "P",
+   "U",
+   "E",
+   "S",
+   "T",
+   "O",
+   "S",
+   "I",
+   "S",
+   "T",
+   "E",
+   "M",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "AUTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "IMPUESTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SISTEMA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sitio, espacio.": {
   "glosas": [
@@ -15533,6 +16405,73 @@
   ],
   "traducido": "2026-10-06"
  },
+ "Tocar o pedir cosas íntimas a una persona que no quiere, muchas veces.": {
+  "glosas": [
+   "M",
+   "U",
+   "C",
+   "H",
+   "O",
+   "S",
+   "V",
+   "E",
+   "Z",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "NO",
+   "QUERER",
+   "C",
+   "O",
+   "S",
+   "A",
+   "S",
+   "I",
+   "N",
+   "T",
+   "I",
+   "M",
+   "O",
+   "PEDIR",
+   "T",
+   "O",
+   "C",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MUCHOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COSAS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INTIMO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TOCAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Tocar o usar el cuerpo de una persona sin su permiso.": {
   "glosas": [
    "C",
@@ -15751,6 +16690,52 @@
   "correcciones": [],
   "traducido": "2026-10-04"
  },
+ "Trata y tráfico de personas: engañar a una persona, llevarla lejos y venderla u obligarla a trabajar.": {
+  "glosas": [
+   "ENGAÑAR",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "LEJOS",
+   "LLEVAR",
+   "VENDER",
+   "O",
+   "B",
+   "L",
+   "I",
+   "G",
+   "A",
+   "R",
+   "T",
+   "R",
+   "A",
+   "B",
+   "A",
+   "J",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OBLIGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TRABAJAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Tribunal Departamental de Justicia: oficina principal de los jueces de Cochabamba.": {
   "glosas": [
    "T",
@@ -15876,6 +16861,47 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Un delito grave: robar, engañar o hacer daño a una persona.": {
+  "glosas": [
+   "D",
+   "E",
+   "L",
+   "I",
+   "T",
+   "O",
+   "G",
+   "R",
+   "A",
+   "V",
+   "E",
+   "ROBAR",
+   "ENGAÑAR",
+   "DAÑAR",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DELITO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "GRAVE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Un hombre, una mujer, alguien.": {
   "glosas": [

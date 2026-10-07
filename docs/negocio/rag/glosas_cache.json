@@ -9,6 +9,66 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "Bien, no voy a borrar nada.": {
+  "glosas": [
+   "B",
+   "I",
+   "E",
+   "N",
+   "NO",
+   "B",
+   "O",
+   "R",
+   "R",
+   "A",
+   "R",
+   "N",
+   "A",
+   "D",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "BIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "BORRAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NADA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Bien, voy a guardar todo.": {
+  "glosas": [
+   "B",
+   "I",
+   "E",
+   "N",
+   "GUARDAR",
+   "T",
+   "O",
+   "D",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "BIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TODO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Compré un auto. Quiero pasarlo a mi nombre.": {
   "glosas": [
    "COMPRAR",
@@ -1347,6 +1407,29 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Entonces quiero ir a la FELCV.": {
+  "glosas": [
+   "E",
+   "N",
+   "T",
+   "O",
+   "N",
+   "C",
+   "E",
+   "S",
+   "QUERER",
+   "IR",
+   "FELCV"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ENTONCES",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Entonces ya puedo renovarla.": {
   "glosas": [
    "Y",
@@ -1867,6 +1950,38 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "Guarde los videos y las fotos.": {
+  "glosas": [
+   "GUARDAR",
+   "VIDEO",
+   "FOTOS"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Guarde los videos y las fotos; no los borre.": {
+  "glosas": [
+   "GUARDAR",
+   "VIDEO",
+   "FOTOS",
+   "B",
+   "O",
+   "R",
+   "R",
+   "A",
+   "R",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "BORRAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Haré la consulta en línea.": {
   "glosas": [
    "HACER",
@@ -1929,6 +2044,17 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Hoy quiero quejarme a la policía.": {
+  "glosas": [
+   "HOY",
+   "YO",
+   "POLICIA",
+   "QUEJAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Incluya qué pasó, cuándo y dónde, si lo sabe.": {
   "glosas": [
@@ -2034,6 +2160,190 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos.": {
+  "glosas": [
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "S",
+   "O",
+   "R",
+   "I",
+   "A",
+   "P",
+   "U",
+   "E",
+   "B",
+   "L",
+   "O",
+   "ATENDER",
+   "SI",
+   "S",
+   "E",
+   "R",
+   "V",
+   "I",
+   "C",
+   "I",
+   "O",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "O",
+   "V",
+   "U",
+   "L",
+   "N",
+   "E",
+   "R",
+   "A",
+   "R",
+   "D",
+   "E",
+   "R",
+   "E",
+   "C",
+   "H",
+   "O",
+   "SUYO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "DEFENSORIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PUEBLO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SERVICIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PUBLICO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VULNERAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DERECHO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "La FELCC es la unidad especializada contra el crimen.": {
+  "glosas": [
+   "FELCC",
+   "U",
+   "N",
+   "I",
+   "D",
+   "A",
+   "D",
+   "E",
+   "S",
+   "P",
+   "E",
+   "C",
+   "I",
+   "A",
+   "L",
+   "I",
+   "Z",
+   "A",
+   "D",
+   "A",
+   "C",
+   "R",
+   "I",
+   "M",
+   "E",
+   "N",
+   "C",
+   "O",
+   "N",
+   "T",
+   "R",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "UNIDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESPECIALIZADA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CRIMEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CONTRA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "La FELCV es la unidad especializada contra la violencia.": {
+  "glosas": [
+   "FELCV",
+   "U",
+   "N",
+   "I",
+   "D",
+   "A",
+   "D",
+   "E",
+   "S",
+   "P",
+   "E",
+   "C",
+   "I",
+   "A",
+   "L",
+   "I",
+   "Z",
+   "A",
+   "D",
+   "A",
+   "C",
+   "O",
+   "N",
+   "T",
+   "R",
+   "A",
+   "VIOLENCIA"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "UNIDAD",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESPECIALIZADA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CONTRA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "La Ley 1658 contempla interpretación gratuita en justicia.": {
   "glosas": [
@@ -3026,6 +3336,39 @@
   "estado": "partial",
   "correcciones": [],
   "traducido": "2026-09-27"
+ },
+ "Mi hijo sufre bullying en la escuela.": {
+  "glosas": [
+   "YO",
+   "HIJO",
+   "B",
+   "U",
+   "L",
+   "L",
+   "Y",
+   "I",
+   "N",
+   "G",
+   "ESCUELA",
+   "S",
+   "U",
+   "F",
+   "R",
+   "I",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "BULLYING",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SUFRIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Mi pareja me agrede y necesito ayuda.": {
   "glosas": [
@@ -4290,6 +4633,14 @@
   ],
   "traducido": "2026-09-27"
  },
+ "No lo sé.": {
+  "glosas": [
+   "NO_SABER"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No lo tengo.": {
   "glosas": [
    "NO",
@@ -4614,6 +4965,17 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No sé con quién hablar en la escuela.": {
+  "glosas": [
+   "ESCUELA",
+   "HABLAR",
+   "QUIEN",
+   "NO_SABER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No sé cuál asiento corresponde a la anotación.": {
   "glosas": [
@@ -5693,6 +6055,32 @@
   ],
   "traducido": "2026-09-27"
  },
+ "No sé cuántas veces pasó.": {
+  "glosas": [
+   "NO_SABER",
+   "V",
+   "E",
+   "Z",
+   "CUANTOS",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé cuánto puedo pagar.": {
   "glosas": [
    "NO_SABER",
@@ -5754,6 +6142,16 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé cómo buscarlo.": {
+  "glosas": [
+   "NO_SABER",
+   "BUSCAR",
+   "EL"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No sé cómo empezar.": {
   "glosas": [
    "NO_SABER",
@@ -5810,6 +6208,37 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé cómo explicarlo.": {
+  "glosas": [
+   "NO_SABER",
+   "EXPLICAR",
+   "COMO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No sé cómo guardar los mensajes.": {
+  "glosas": [
+   "NO_SABER",
+   "GUARDAR",
+   "M",
+   "E",
+   "N",
+   "S",
+   "A",
+   "J",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MENSAJE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé cómo hacerlo.": {
   "glosas": [
    "NO_SABER",
@@ -5827,6 +6256,16 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "No sé cómo pedir un intérprete.": {
+  "glosas": [
+   "NO_SABER",
+   "PEDIR",
+   "INTERPRETE"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No sé cómo preparar la solicitud de desarchivo.": {
   "glosas": [
@@ -6197,6 +6636,26 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé dónde está la caja.": {
+  "glosas": [
+   "NO_SABER",
+   "DONDE",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "CAJA"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé dónde está mi certificado.": {
   "glosas": [
    "NO_SABER",
@@ -6273,6 +6732,27 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "No sé dónde la llevaron.": {
+  "glosas": [
+   "NO_SABER",
+   "DONDE",
+   "L",
+   "L",
+   "A",
+   "V",
+   "E",
+   "R",
+   "ELLA"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "LLAVER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No sé dónde mirar.": {
   "glosas": [
@@ -6442,6 +6922,22 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No sé quién es.": {
+  "glosas": [
+   "NO_SABER",
+   "QUIEN",
+   "E",
+   "S"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No sé quién figura como beneficiario.": {
   "glosas": [
@@ -6998,6 +7494,38 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé qué es un investigador.": {
+  "glosas": [
+   "NO_SABER",
+   "QUE",
+   "E",
+   "S",
+   "I",
+   "N",
+   "V",
+   "E",
+   "S",
+   "T",
+   "I",
+   "G",
+   "A",
+   "D",
+   "O",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INVESTIGADOR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé qué forma de explicación me ayudará más.": {
   "glosas": [
    "NO_SABER",
@@ -7104,6 +7632,28 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No sé qué le prometieron.": {
+  "glosas": [
+   "NO_SABER",
+   "P",
+   "R",
+   "O",
+   "M",
+   "E",
+   "T",
+   "E",
+   "R",
+   "ELLOS"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PROMETER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No sé qué memorial.": {
   "glosas": [
@@ -7464,6 +8014,27 @@
   ],
   "traducido": "2026-10-03"
  },
+ "No sé si alguien vio.": {
+  "glosas": [
+   "NO_SABER",
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N",
+   "VER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé si ambos documentos corresponden al mismo inmueble.": {
   "glosas": [
    "NO_SABER",
@@ -7759,6 +8330,30 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No sé si desapareció.": {
+  "glosas": [
+   "NO_SABER",
+   "D",
+   "E",
+   "S",
+   "A",
+   "P",
+   "A",
+   "R",
+   "E",
+   "C",
+   "E",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DESAPARECER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No sé si el dato está equivocado.": {
   "glosas": [
@@ -8158,6 +8753,66 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No sé si es un funcionario.": {
+  "glosas": [
+   "NO_SABER",
+   "F",
+   "U",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "R",
+   "I",
+   "O",
+   "E",
+   "S",
+   "U",
+   "N",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "FUNCIONARIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "UNO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No sé si es una amenaza.": {
+  "glosas": [
+   "NO_SABER",
+   "AMENAZAR",
+   "E",
+   "S",
+   "U",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "UNA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No sé si es una notificación.": {
   "glosas": [
@@ -10003,6 +10658,31 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé si fue un golpe.": {
+  "glosas": [
+   "NO_SABER",
+   "G",
+   "O",
+   "L",
+   "P",
+   "E",
+   "F",
+   "U",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "GOLPE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "FUE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé si fui afectado.": {
   "glosas": [
    "NO_SABER",
@@ -10091,6 +10771,44 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé si hay cámaras.": {
+  "glosas": [
+   "NO_SABER",
+   "CAMARA_FOTOGRAFICA",
+   "H",
+   "A",
+   "Y"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "HAY",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No sé si hay testigos.": {
+  "glosas": [
+   "NO_SABER",
+   "TESTIGO",
+   "E",
+   "X",
+   "I",
+   "S",
+   "T",
+   "I",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "EXISTIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé si hay un niño afectado.": {
   "glosas": [
    "NO_SABER",
@@ -10136,6 +10854,16 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No sé si la engañaron.": {
+  "glosas": [
+   "NO_SABER",
+   "ELLA",
+   "ENGAÑAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No sé si la explicación escrita me ayuda.": {
   "glosas": [
@@ -10306,6 +11034,16 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé si le pegan.": {
+  "glosas": [
+   "NO_SABER",
+   "EL",
+   "PEGAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No sé si llegaré.": {
   "glosas": [
    "NO_SABER",
@@ -10417,6 +11155,24 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No sé si me atendieron bien.": {
+  "glosas": [
+   "NO_SABER",
+   "ATENDER",
+   "B",
+   "I",
+   "E",
+   "N"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "BIEN",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No sé si me denunciaron.": {
   "glosas": [
@@ -10698,6 +11454,55 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé si necesito un médico.": {
+  "glosas": [
+   "NO_SABER",
+   "NECESITAR",
+   "M",
+   "E",
+   "D",
+   "I",
+   "C",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MEDICO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No sé si publicaron algo.": {
+  "glosas": [
+   "NO_SABER",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "A",
+   "R",
+   "A",
+   "L",
+   "G",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PUBLICAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ALGO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No sé si puedo pedirlo.": {
   "glosas": [
    "NO_SABER",
@@ -10714,6 +11519,48 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "No sé si robaron documentos.": {
+  "glosas": [
+   "ROBAR",
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "NO_SABER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No sé si se burlan de él.": {
+  "glosas": [
+   "NO_SABER",
+   "BURLAR",
+   "EL"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No sé si se burlan.": {
+  "glosas": [
+   "NO_SABER",
+   "BURLAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No sé si sigue representándome.": {
   "glosas": [
@@ -10818,6 +11665,17 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No sé si tengo fotos.": {
+  "glosas": [
+   "NO_SABER",
+   "YO",
+   "FOTOS",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No sé si tengo medidas de protección.": {
   "glosas": [
    "NO_SABER",
@@ -10852,6 +11710,58 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No sé si tengo pruebas.": {
+  "glosas": [
+   "NO_SABER",
+   "YO",
+   "P",
+   "R",
+   "U",
+   "E",
+   "B",
+   "A",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PRUEBA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No sé si tengo videos.": {
+  "glosas": [
+   "NO_SABER",
+   "YO",
+   "TENER",
+   "VIDEO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No sé si tiene heridas.": {
+  "glosas": [
+   "NO_SABER",
+   "HERIDA",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No sé su edad.": {
+  "glosas": [
+   "NO_SABER",
+   "EDAD",
+   "SUYO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No sé usarlo.": {
   "glosas": [
@@ -10970,6 +11880,37 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "No, ahora estoy lejos de esa persona.": {
+  "glosas": [
+   "AHORA",
+   "LEJOS",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "NO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No, ahora no.": {
+  "glosas": [
+   "AHORA",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No, aparece el nombre de otra persona.": {
   "glosas": [
    "NO",
@@ -11084,6 +12025,36 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No, borré los mensajes.": {
+  "glosas": [
+   "NO",
+   "M",
+   "E",
+   "N",
+   "S",
+   "A",
+   "J",
+   "E",
+   "B",
+   "O",
+   "R",
+   "R",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MENSAJE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "BORRAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No, compré la casa.": {
   "glosas": [
    "NO",
@@ -11155,6 +12126,56 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No, creo que está cerca.": {
+  "glosas": [
+   "NO",
+   "CREER",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "CERCA"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No, creo que está en Bolivia.": {
+  "glosas": [
+   "NO",
+   "CREER",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "B",
+   "O",
+   "L",
+   "I",
+   "V",
+   "I",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "BOLIVIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No, el beneficiario es otra persona.": {
   "glosas": [
@@ -11673,6 +12694,36 @@
   ],
   "traducido": "2026-09-27"
  },
+ "No, es una amiga.": {
+  "glosas": [
+   "NO",
+   "AMIGO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No, es una persona adulta.": {
+  "glosas": [
+   "NO",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "ADULTO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No, ese inmueble no aparece en el documento.": {
   "glosas": [
    "NO",
@@ -11897,6 +12948,15 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No, me atendieron.": {
+  "glosas": [
+   "NO",
+   "ATENDER"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No, me pidieron el certificado departamental.": {
   "glosas": [
@@ -12147,6 +13207,132 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No, mi hijo no tiene heridas.": {
+  "glosas": [
+   "YO",
+   "HIJO",
+   "HERIDA",
+   "NO",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No, nadie la engañó.": {
+  "glosas": [
+   "NO",
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N",
+   "ENGAÑAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No, nadie le prometió nada.": {
+  "glosas": [
+   "N",
+   "A",
+   "D",
+   "I",
+   "E",
+   "P",
+   "R",
+   "O",
+   "M",
+   "E",
+   "T",
+   "E",
+   "R",
+   "N",
+   "A",
+   "D",
+   "A",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NADIE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PROMETER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NADA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No, nadie vio el robo.": {
+  "glosas": [
+   "ROBAR",
+   "VER",
+   "N",
+   "A",
+   "D",
+   "I",
+   "E",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NADIE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "No, nadie vio lo que pasó.": {
+  "glosas": [
+   "NO",
+   "N",
+   "A",
+   "D",
+   "I",
+   "E",
+   "VER",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R",
+   "L",
+   "O",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NADIE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "LO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No, necesito el certificado de otro departamento.": {
   "glosas": [
@@ -12649,6 +13835,30 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No, no es un funcionario.": {
+  "glosas": [
+   "NO",
+   "F",
+   "U",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "R",
+   "I",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "FUNCIONARIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No, no estoy en peligro ahora.": {
   "glosas": [
    "AHORA",
@@ -12699,6 +13909,24 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No, no hay cámaras.": {
+  "glosas": [
+   "NO",
+   "CAMARA_FOTOGRAFICA"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No, no hay testigos.": {
+  "glosas": [
+   "NO",
+   "TESTIGO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No, no hay un niño afectado.": {
   "glosas": [
@@ -12803,6 +14031,25 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No, no le pegan.": {
+  "glosas": [
+   "NO",
+   "PEGAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No, no me amenaza.": {
+  "glosas": [
+   "NO",
+   "AMENAZAR",
+   "YO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No, no me comunicaron medidas de protección.": {
   "glosas": [
    "NO",
@@ -12889,6 +14136,33 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No, no me pegó.": {
+  "glosas": [
+   "NO",
+   "PEGAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No, no me tocó.": {
+  "glosas": [
+   "NO",
+   "T",
+   "O",
+   "C",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "TOCAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No, no necesito atención médica.": {
   "glosas": [
@@ -12978,6 +14252,35 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No, no publicaron nada.": {
+  "glosas": [
+   "NO",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "A",
+   "R",
+   "N",
+   "A",
+   "D",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PUBLICAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NADA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No, no quiero apoyo psicológico.": {
   "glosas": [
@@ -13148,6 +14451,35 @@
   "correcciones": [],
   "traducido": "2026-10-03"
  },
+ "No, no se burlan de mí.": {
+  "glosas": [
+   "NO_SABER",
+   "BURLAR",
+   "YO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No, no se burlan de él.": {
+  "glosas": [
+   "NO_SABER",
+   "BURLAR",
+   "EL"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "No, no siempre.": {
+  "glosas": [
+   "NO",
+   "SIEMPRE"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No, no soy el titular.": {
   "glosas": [
    "NO",
@@ -13189,6 +14521,25 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No, no sé dónde está.": {
+  "glosas": [
+   "NO_SABER",
+   "DONDE",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No, no tengo abogado.": {
   "glosas": [
@@ -13786,6 +15137,16 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No, no tengo fotos.": {
+  "glosas": [
+   "NO",
+   "FOTOS",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No, no tengo informes médicos.": {
   "glosas": [
    "NO",
@@ -13838,6 +15199,16 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No, no tengo la caja.": {
+  "glosas": [
+   "NO",
+   "TENER",
+   "CAJA"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "No, no tengo la escritura pública de donación.": {
   "glosas": [
@@ -14374,6 +15745,16 @@
   ],
   "traducido": "2026-10-03"
  },
+ "No, no tengo videos.": {
+  "glosas": [
+   "NO",
+   "TENER",
+   "VIDEO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "No, no traje documentos.": {
   "glosas": [
    "NO",
@@ -14660,6 +16041,34 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No, pasó una vez.": {
+  "glosas": [
+   "NO",
+   "U",
+   "N",
+   "A",
+   "V",
+   "E",
+   "Z",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "UNA_VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No, pertenece a otra persona.": {
   "glosas": [
@@ -14971,6 +16380,18 @@
   ],
   "traducido": "2026-10-03"
  },
+ "No, solo el celular.": {
+  "glosas": [
+   "CELULAR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "accion": "negacion_perdida"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No, solo estoy acompañando al titular.": {
   "glosas": [
    "NO",
@@ -15164,6 +16585,25 @@
   ],
   "traducido": "2026-10-03"
  },
+ "No, sé dónde está.": {
+  "glosas": [
+   "NO_SABER",
+   "DONDE",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "No, todavía no confirmé si están archivados.": {
   "glosas": [
    "NO",
@@ -15239,6 +16679,28 @@
   "estado": "partial",
   "correcciones": [],
   "traducido": "2026-10-04"
+ },
+ "No, todavía no hablé con la escuela.": {
+  "glosas": [
+   "NO",
+   "ESCUELA",
+   "HABLAR",
+   "T",
+   "O",
+   "D",
+   "A",
+   "V",
+   "I",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "TODAVIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "No, todavía no identificaron mi trámite.": {
   "glosas": [
@@ -15948,6 +17410,16 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Para la violencia de pareja corresponde la FELCV.": {
+  "glosas": [
+   "PAREJA",
+   "VIOLENCIA",
+   "FELCV"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Para violencia corresponde activar la ruta de FELCV.": {
   "glosas": [
    "VIOLENCIA",
@@ -16252,6 +17724,96 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "Puede acudir a la Defensoría del Pueblo cuando un servidor público vulnera sus derechos.": {
+  "glosas": [
+   "P",
+   "U",
+   "E",
+   "B",
+   "L",
+   "E",
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "S",
+   "O",
+   "R",
+   "I",
+   "A",
+   "A",
+   "C",
+   "U",
+   "D",
+   "I",
+   "R",
+   "CUANDO",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "O",
+   "S",
+   "E",
+   "R",
+   "V",
+   "I",
+   "C",
+   "I",
+   "O",
+   "D",
+   "E",
+   "R",
+   "E",
+   "C",
+   "H",
+   "O",
+   "S",
+   "V",
+   "U",
+   "L",
+   "N",
+   "E",
+   "R",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PUEBLE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DEFENSORIA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACUDIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PUBLICO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SERVICIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DERECHOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VULNERAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Puede acudir a la Defensoría por posible vulneración de derechos.": {
   "glosas": [
@@ -17582,6 +19144,47 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "Quiero denunciar acoso sexual.": {
+  "glosas": [
+   "QUERER",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "A",
+   "C",
+   "O",
+   "S",
+   "O",
+   "S",
+   "E",
+   "X",
+   "U",
+   "A",
+   "L"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACOSO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEXUAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Quiero denunciar el robo de mi celular.": {
   "glosas": [
    "YO",
@@ -17606,6 +19209,59 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "Quiero denunciar trata y tráfico de personas.": {
+  "glosas": [
+   "QUERER",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "T",
+   "R",
+   "A",
+   "T",
+   "A",
+   "T",
+   "R",
+   "A",
+   "F",
+   "I",
+   "C",
+   "O",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TRATA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TRAFICO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Quiero denunciar violencia de mi pareja.": {
   "glosas": [
@@ -17960,6 +19616,16 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Quiero ir a la FELCV.": {
+  "glosas": [
+   "YO",
+   "IR",
+   "FELCV"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Quiero ir a una oficina en Cercado.": {
   "glosas": [
    "YO",
@@ -18174,6 +19840,28 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Quiero presentar mi denuncia hoy.": {
+  "glosas": [
+   "HOY",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "PRESENTAR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "DENUNCIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Quiero presentar mi reclamo.": {
   "glosas": [
    "YO",
@@ -18215,6 +19903,70 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Quiero presentar una queja en la Defensoría.": {
+  "glosas": [
+   "YO",
+   "QUEJAR",
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "S",
+   "O",
+   "R",
+   "I",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DEFENSORIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Quiero que la busquen pronto.": {
+  "glosas": [
+   "QUERER",
+   "BUSCAR",
+   "P",
+   "R",
+   "O",
+   "N",
+   "T",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PRONTO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Quiero que la busquen rápido.": {
+  "glosas": [
+   "QUERER",
+   "BUSCAR",
+   "R",
+   "A",
+   "P",
+   "I",
+   "D",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "RAPIDO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Quiero que me indiquen dónde acudir.": {
   "glosas": [
@@ -18280,6 +20032,15 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "Quiero quejarme.": {
+  "glosas": [
+   "QUERER",
+   "QUEJAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Quiero recibir instrucciones claras por escrito también.": {
   "glosas": [
@@ -19470,6 +21231,131 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Sufro acoso discriminatorio porque soy sordo.": {
+  "glosas": [
+   "SORDO",
+   "A",
+   "C",
+   "O",
+   "S",
+   "O",
+   "DISCRIMINACION",
+   "S",
+   "U",
+   "F",
+   "R",
+   "I",
+   "R",
+   "POR_QUE"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ACOSO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SUFRIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sufro acoso físico: una persona me sigue y me toca.": {
+  "glosas": [
+   "F",
+   "I",
+   "S",
+   "I",
+   "C",
+   "O",
+   "A",
+   "C",
+   "O",
+   "S",
+   "O",
+   "S",
+   "U",
+   "F",
+   "R",
+   "I",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "S",
+   "E",
+   "G",
+   "U",
+   "I",
+   "R",
+   "T",
+   "O",
+   "C",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "FISICO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACOSO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SUFRI",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEGUIR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TOCAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sufro ciberacoso en internet y en mi celular.": {
+  "glosas": [
+   "INTERNET",
+   "CELULAR",
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R",
+   "S",
+   "U",
+   "F",
+   "R",
+   "I"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ACOSAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SUFRI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Sí tengo mi última boleta.": {
   "glosas": [
    "ULTIMO",
@@ -19769,6 +21655,18 @@
   ],
   "traducido": "2026-10-03"
  },
+ "Sí, creo que la llevaron lejos.": {
+  "glosas": [
+   "SI",
+   "CREER",
+   "ELLA",
+   "LLEVAR",
+   "LEJOS"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Sí, creo que lo perdí.": {
   "glosas": [
    "SI",
@@ -19779,6 +21677,32 @@
   "estado": "partial",
   "correcciones": [],
   "traducido": "2026-10-04"
+ },
+ "Sí, desapareció y no volvió.": {
+  "glosas": [
+   "SI",
+   "D",
+   "E",
+   "S",
+   "A",
+   "P",
+   "A",
+   "R",
+   "E",
+   "C",
+   "E",
+   "R",
+   "VOLVER",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DESAPARECER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, desconozco su paradero.": {
   "glosas": [
@@ -20250,6 +22174,67 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Sí, es adolescente.": {
+  "glosas": [
+   "SI",
+   "JOVEN"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, es mi compañero.": {
+  "glosas": [
+   "SI",
+   "YO",
+   "COMPAÑERO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, es mi hermana.": {
+  "glosas": [
+   "SI",
+   "HERMANA",
+   "M",
+   "I"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, es mi hijo.": {
+  "glosas": [
+   "SI",
+   "YO",
+   "HIJO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, es mi jefe.": {
+  "glosas": [
+   "YO",
+   "JEFE",
+   "M",
+   "I"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Sí, es mi pareja.": {
   "glosas": [
    "SI",
@@ -20291,6 +22276,31 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Sí, es un funcionario de una oficina.": {
+  "glosas": [
+   "SI",
+   "F",
+   "U",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "R",
+   "I",
+   "O",
+   "OFICINA"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "FUNCIONARIO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, estoy en peligro ahora.": {
   "glosas": [
@@ -20349,6 +22359,91 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Sí, guardé todo en mi celular.": {
+  "glosas": [
+   "YO",
+   "CELULAR",
+   "GUARDAR",
+   "T",
+   "O",
+   "D",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "TODO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, hablé con el maestro, pero no ayudó.": {
+  "glosas": [
+   "SI",
+   "M",
+   "A",
+   "E",
+   "S",
+   "T",
+   "R",
+   "O",
+   "HABLAR",
+   "AYUDAR",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MAESTRO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, hablé con la maestra, pero no ayudó.": {
+  "glosas": [
+   "SI",
+   "M",
+   "A",
+   "E",
+   "S",
+   "T",
+   "R",
+   "A",
+   "HABLAR",
+   "AYUDAR",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MAESTRA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, hay cámaras en esa calle.": {
+  "glosas": [
+   "SI",
+   "CALLE",
+   "CAMARA_FOTOGRAFICA",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, hay otros herederos en el documento.": {
   "glosas": [
@@ -20479,6 +22574,15 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Sí, hay un testigo.": {
+  "glosas": [
+   "SI",
+   "TESTIGO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Sí, incumplió las medidas.": {
   "glosas": [
@@ -20637,6 +22741,17 @@
   ],
   "traducido": "2026-10-03"
  },
+ "Sí, la engañaron con un trabajo.": {
+  "glosas": [
+   "SI",
+   "ELLA",
+   "ENGAÑAR",
+   "TRABAJADOR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Sí, la escritura dice anticipo de legítima.": {
   "glosas": [
    "SI",
@@ -20753,6 +22868,29 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "Sí, le prometieron un trabajo lejos.": {
+  "glosas": [
+   "LEJOS",
+   "TRABAJADOR",
+   "P",
+   "R",
+   "O",
+   "M",
+   "E",
+   "T",
+   "E",
+   "R",
+   "SI"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PROMETER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Sí, lo tengo.": {
   "glosas": [
    "YO",
@@ -20770,6 +22908,16 @@
   "estado": "complete",
   "correcciones": [],
   "traducido": "2026-09-27"
+ },
+ "Sí, me amenaza siempre.": {
+  "glosas": [
+   "SIEMPRE",
+   "AMENAZAR",
+   "YO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Sí, me comunicaron medidas de protección.": {
   "glosas": [
@@ -20902,6 +23050,15 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Sí, me pegó.": {
+  "glosas": [
+   "SI",
+   "PEGAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Sí, me pidieron el certificado de no propiedad nacional.": {
   "glosas": [
    "SI",
@@ -20962,6 +23119,26 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "Sí, me tocó sin mi permiso.": {
+  "glosas": [
+   "SI",
+   "T",
+   "O",
+   "Q",
+   "U",
+   "E",
+   "PERMISO",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "TOQUE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, mi cédula muestra el dato correcto.": {
   "glosas": [
@@ -21076,6 +23253,17 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "Sí, mi hijo tiene dolor.": {
+  "glosas": [
+   "SI",
+   "YO",
+   "HIJO",
+   "DOLOR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Sí, mi nombre aparece como beneficiario.": {
   "glosas": [
@@ -21317,6 +23505,17 @@
   ],
   "traducido": "2026-10-03"
  },
+ "Sí, necesito ir al hospital.": {
+  "glosas": [
+   "SI",
+   "NECESITAR",
+   "IR",
+   "HOSPITAL"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Sí, necesito un intérprete de LSB.": {
   "glosas": [
    "SI",
@@ -21404,6 +23603,70 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Sí, no quisieron atenderme.": {
+  "glosas": [
+   "SI",
+   "ATENDER",
+   "NO_PUEDO",
+   "YO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, otros niños le pegan.": {
+  "glosas": [
+   "SI",
+   "O",
+   "T",
+   "R",
+   "O",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "PEGAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, otros niños se burlan de él.": {
+  "glosas": [
+   "O",
+   "T",
+   "R",
+   "O",
+   "S",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "BURLAR",
+   "EL"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "OTROS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Sí, pagué y tengo el comprobante.": {
   "glosas": [
    "SI",
@@ -21437,6 +23700,59 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "Sí, pasa siempre y tengo miedo.": {
+  "glosas": [
+   "SIEMPRE",
+   "TENER",
+   "MIEDO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, pasa siempre.": {
+  "glosas": [
+   "SIEMPRE",
+   "P",
+   "A",
+   "S",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PASA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, pasó muchas veces.": {
+  "glosas": [
+   "SI",
+   "MUCHO",
+   "V",
+   "E",
+   "Z",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, pero escribí muy poco.": {
   "glosas": [
@@ -21532,6 +23848,36 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "Sí, publicaron mis fotos sin mi permiso.": {
+  "glosas": [
+   "SI",
+   "FOTOS",
+   "M",
+   "I",
+   "PERMISO",
+   "NO",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PUBLICAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, puedo hablar aquí con seguridad.": {
   "glosas": [
@@ -21639,6 +23985,28 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "Sí, quiero conocer al investigador.": {
+  "glosas": [
+   "SI",
+   "CONOCER",
+   "INVESTIGACION",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, quiero consultar antes de comprar la casa.": {
   "glosas": [
@@ -21985,6 +24353,42 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Sí, se burlan de mis señas.": {
+  "glosas": [
+   "SI",
+   "BURLAR",
+   "S",
+   "E",
+   "Ñ",
+   "A",
+   "M",
+   "I"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "SEÑA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, se burlan de mí porque soy sordo.": {
+  "glosas": [
+   "SI",
+   "BURLAR",
+   "YO",
+   "SORDO",
+   "POR_QUE"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Sí, solicito el certificado para mi inmueble.": {
   "glosas": [
    "SI",
@@ -22104,6 +24508,54 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "Sí, sé dónde está.": {
+  "glosas": [
+   "SI",
+   "DONDE",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, también robaron mi carnet.": {
+  "glosas": [
+   "SI",
+   "T",
+   "A",
+   "M",
+   "B",
+   "I",
+   "E",
+   "N",
+   "ROBAR",
+   "M",
+   "I",
+   "PAPEL",
+   "IDENTIDAD"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "TAMBIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, tengo abogado.": {
   "glosas": [
@@ -22967,6 +25419,17 @@
   ],
   "traducido": "2026-10-03"
  },
+ "Sí, tengo fotos en mi celular.": {
+  "glosas": [
+   "SI",
+   "CELULAR",
+   "FOTOS",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Sí, tengo informes médicos.": {
   "glosas": [
    "SI",
@@ -23056,6 +25519,17 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "Sí, tengo la caja del celular.": {
+  "glosas": [
+   "SI",
+   "CELULAR",
+   "CAJA",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "Sí, tengo la escritura de adquisición.": {
   "glosas": [
@@ -24093,6 +26567,37 @@
   ],
   "traducido": "2026-10-03"
  },
+ "Sí, tengo videos en mi celular.": {
+  "glosas": [
+   "SI",
+   "YO",
+   "CELULAR",
+   "VIDEO",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, todos los días, y tengo miedo.": {
+  "glosas": [
+   "TODOS_LOS_DIAS",
+   "MIEDO",
+   "SI"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, todos los días.": {
+  "glosas": [
+   "SI",
+   "TODOS_LOS_DIAS"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "Sí, traje documentos.": {
   "glosas": [
    "SI",
@@ -24355,6 +26860,65 @@
   "correcciones": [],
   "traducido": "2026-10-03"
  },
+ "Sí, una compañera es testigo.": {
+  "glosas": [
+   "SI",
+   "COMPAÑERO",
+   "TESTIGO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Sí, una compañera vio lo que pasó.": {
+  "glosas": [
+   "SI",
+   "COMPAÑERO",
+   "VER",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Sí, una persona vio el robo.": {
+  "glosas": [
+   "SI",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "R",
+   "O",
+   "B",
+   "O",
+   "VER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ROBO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Sí, usaron violencia.": {
   "glosas": [
    "SI",
@@ -24372,6 +26936,23 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "Sí, vive cerca de mi casa.": {
+  "glosas": [
+   "CERCA",
+   "M",
+   "I",
+   "CASA",
+   "VIVIR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "Sí, ya firmé.": {
   "glosas": [
@@ -25322,6 +27903,97 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Tengo miedo de denunciar.": {
+  "glosas": [
+   "YO",
+   "MIEDO",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "Tengo miedo.": {
+  "glosas": [
+   "MIEDO",
+   "TENER"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "Un delito por internet se denuncia en la FELCC; conserve toda la información.": {
+  "glosas": [
+   "INTERNET",
+   "D",
+   "E",
+   "L",
+   "I",
+   "T",
+   "O",
+   "D",
+   "E",
+   "N",
+   "U",
+   "N",
+   "C",
+   "I",
+   "A",
+   "R",
+   "FELCC",
+   "I",
+   "N",
+   "F",
+   "O",
+   "R",
+   "M",
+   "A",
+   "C",
+   "I",
+   "O",
+   "N",
+   "GUARDAR",
+   "T",
+   "O",
+   "D",
+   "O",
+   "S"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "DELITO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DENUNCIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "INFORMACION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TODOS",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "Una persona me está amenazando.": {
   "glosas": [
    "P",
@@ -25543,6 +28215,68 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "¿Alguien la engañó con un trabajo lejos?": {
+  "glosas": [
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N",
+   "TRABAJADOR",
+   "LEJOS",
+   "ENGAÑAR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Alguien vio el robo?": {
+  "glosas": [
+   "ROBAR",
+   "VER",
+   "QUIEN"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "¿Alguien vio lo que pasó?": {
+  "glosas": [
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N",
+   "VER",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R",
+   "QUE"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Atienden por la tarde?": {
   "glosas": [
    "TARDE",
@@ -25666,6 +28400,78 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "¿Conoce a esa persona?": {
+  "glosas": [
+   "CONOCER",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Conoce a la persona que la acosa?": {
+  "glosas": [
+   "CONOCER",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "QUIEN"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACOSA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Conoce a la persona que le escribe?": {
+  "glosas": [
+   "CONOCER",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "ESCRIBIR",
+   "TU"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Conoce a la persona que participó?": {
   "glosas": [
@@ -25907,6 +28713,43 @@
   ],
   "traducido": "2026-10-04"
  },
+ "¿Cree que la llevaron a otro país?": {
+  "glosas": [
+   "CREER",
+   "P",
+   "A",
+   "I",
+   "S",
+   "O",
+   "T",
+   "R",
+   "O",
+   "LLEVAR"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PAIS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Cree que la llevaron lejos?": {
+  "glosas": [
+   "CREER",
+   "LEJOS",
+   "LLEVAR",
+   "ELLA"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "¿Cree que perdió el objeto?": {
   "glosas": [
    "CREER",
@@ -26037,6 +28880,23 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "¿Cuándo sabré algo de mi celular?": {
+  "glosas": [
+   "CELULAR",
+   "M",
+   "I",
+   "SABER",
+   "CUANDO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Cuándo y dónde ocurrió el robo?": {
   "glosas": [
@@ -26700,6 +29560,37 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Cómo guardo las fotos?": {
+  "glosas": [
+   "COMO",
+   "GUARDAR",
+   "FOTOS"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "¿Cómo guardo los mensajes?": {
+  "glosas": [
+   "COMO",
+   "GUARDAR",
+   "M",
+   "E",
+   "N",
+   "S",
+   "A",
+   "J",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MENSAJE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Cómo registro el inmueble que recibí por herencia?": {
   "glosas": [
@@ -27993,6 +30884,57 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Dónde está esa oficina?": {
+  "glosas": [
+   "OFICINA",
+   "DONDE"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "¿Dónde está la Defensoría?": {
+  "glosas": [
+   "D",
+   "E",
+   "F",
+   "E",
+   "N",
+   "S",
+   "O",
+   "R",
+   "I",
+   "A",
+   "DONDE"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DEFENSORIA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Dónde está la FELCV?": {
+  "glosas": [
+   "DONDE",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "FELCV"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Dónde está la oficina de Cochabamba?": {
   "glosas": [
    "OFICINA",
@@ -28211,6 +31153,25 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Dónde tengo que ir?": {
+  "glosas": [
+   "IR",
+   "DONDE"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "¿Dónde tengo que llevar los videos?": {
+  "glosas": [
+   "VIDEO",
+   "LLEVAR",
+   "DONDE"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "¿El certificado será emitido a su nombre?": {
   "glosas": [
@@ -29177,6 +32138,16 @@
   ],
   "traducido": "2026-10-04"
  },
+ "¿Entonces aquí no me atienden?": {
+  "glosas": [
+   "AQUI",
+   "ATENDER",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "¿Entonces aquí no sigo el trámite?": {
   "glosas": [
    "AQUI",
@@ -29276,6 +32247,94 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "¿Esa persona es su pareja?": {
+  "glosas": [
+   "PAREJA",
+   "E",
+   "S",
+   "SUYO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Esa persona la busca todos los días?": {
+  "glosas": [
+   "TODOS_LOS_DIAS",
+   "BUSCAR",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "EL"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Esa persona la tocó sin su permiso?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "T",
+   "O",
+   "C",
+   "A",
+   "R",
+   "PERMISO",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TOCAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Esa persona lo amenaza?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "AMENAZAR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Ese número aparece en la página municipal?": {
   "glosas": [
@@ -29398,6 +32457,79 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Esto pasa muchas veces?": {
+  "glosas": [
+   "M",
+   "U",
+   "C",
+   "H",
+   "O",
+   "S",
+   "V",
+   "E",
+   "Z",
+   "P",
+   "A",
+   "S",
+   "A",
+   "DIA"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MUCHOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PASA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Esto pasó más de una vez?": {
+  "glosas": [
+   "U",
+   "N",
+   "A",
+   "V",
+   "E",
+   "Z",
+   "M",
+   "A",
+   "S",
+   "P",
+   "A",
+   "S",
+   "A",
+   "R",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "UNA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "VEZ",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MAS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PASAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Está en peligro ahora?": {
   "glosas": [
@@ -29546,6 +32678,151 @@
   ],
   "traducido": "2026-10-03"
  },
+ "¿Guardó los mensajes y las fotos?": {
+  "glosas": [
+   "GUARDAR",
+   "M",
+   "E",
+   "N",
+   "S",
+   "A",
+   "J",
+   "E",
+   "FOTOS"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MENSAJE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Habló con el maestro de la escuela?": {
+  "glosas": [
+   "ESCUELA",
+   "M",
+   "A",
+   "E",
+   "S",
+   "T",
+   "R",
+   "O",
+   "HABLAR",
+   "QUIEN"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MAESTRO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Habló con la maestra de la escuela?": {
+  "glosas": [
+   "ESCUELA",
+   "M",
+   "A",
+   "E",
+   "S",
+   "T",
+   "R",
+   "A",
+   "HABLAR",
+   "C",
+   "O",
+   "N",
+   "YO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MAESTRA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CON",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Hay cámaras en el lugar del robo?": {
+  "glosas": [
+   "ROBAR",
+   "L",
+   "U",
+   "G",
+   "A",
+   "R",
+   "CAMARA_FOTOGRAFICA",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "LUGAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Hay cámaras en esa calle?": {
+  "glosas": [
+   "CALLE",
+   "CAMARA_FOTOGRAFICA",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Hay testigos del robo?": {
+  "glosas": [
+   "ROBAR",
+   "TESTIGO",
+   "DONDE"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "¿Hay testigos?": {
+  "glosas": [
+   "TESTIGO",
+   "H",
+   "A",
+   "Y"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "HAY",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Hay un niño o adolescente afectado?": {
   "glosas": [
    "N",
@@ -29599,6 +32876,25 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "¿La acosa todos los días?": {
+  "glosas": [
+   "TODOS_LOS_DIAS",
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "ACOSAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿La anotación preventiva aparece en el Folio Real?": {
   "glosas": [
@@ -30101,6 +33397,187 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿La persona afectada es su familiar?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "A",
+   "F",
+   "E",
+   "C",
+   "T",
+   "A",
+   "D",
+   "A",
+   "F",
+   "A",
+   "M",
+   "I",
+   "L",
+   "I",
+   "A",
+   "R",
+   "TU"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "AFECTADA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "FAMILIAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿La persona desapareció?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "D",
+   "E",
+   "S",
+   "A",
+   "P",
+   "A",
+   "R",
+   "E",
+   "C",
+   "E",
+   "R",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DESAPARECER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿La persona es adolescente?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "A",
+   "D",
+   "O",
+   "L",
+   "E",
+   "S",
+   "C",
+   "E",
+   "N",
+   "T",
+   "E",
+   "E",
+   "S",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ADOLESCENTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿La persona es su familiar?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "F",
+   "A",
+   "M",
+   "I",
+   "L",
+   "I",
+   "A",
+   "R",
+   "S",
+   "E",
+   "R",
+   "QUIEN"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "FAMILIAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SER",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿La persona incumplió las medidas de protección?": {
   "glosas": [
@@ -30698,6 +34175,54 @@
   ],
   "traducido": "2026-10-04"
  },
+ "¿Le negaron la atención?": {
+  "glosas": [
+   "A",
+   "T",
+   "E",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "N",
+   "E",
+   "G",
+   "A",
+   "R",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ATENCION",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NEGAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Le pegan todos los días?": {
+  "glosas": [
+   "DIA",
+   "TODOS_LOS_DIAS",
+   "PEGAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "¿Le pegó?": {
+  "glosas": [
+   "PEGAR"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "¿Le pidieron específicamente un certificado de propiedad?": {
   "glosas": [
    "CERTIFICADO",
@@ -30720,6 +34245,40 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Le prometieron un trabajo lejos?": {
+  "glosas": [
+   "TRABAJADOR",
+   "LEJOS",
+   "P",
+   "R",
+   "O",
+   "M",
+   "E",
+   "T",
+   "E",
+   "R",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PROMETER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Le queda mejor la oficina central o La Chimba?": {
   "glosas": [
@@ -30752,6 +34311,29 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "¿Le robaron documentos?": {
+  "glosas": [
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "ROBAR",
+   "QUIEN"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Le solicitaron un certificado de no propiedad nacional?": {
   "glosas": [
@@ -30836,6 +34418,15 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Me pueden ayudar a ir?": {
+  "glosas": [
+   "AYUDAR",
+   "IR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "¿Necesita apoyo de interpretación en LSB?": {
   "glosas": [
@@ -31130,6 +34721,115 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Otros niños le pegan a su hijo?": {
+  "glosas": [
+   "O",
+   "T",
+   "R",
+   "O",
+   "S",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "S",
+   "PEGAR",
+   "S",
+   "U",
+   "HIJO",
+   "QUIEN"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "OTROS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SU",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Otros niños pegan a su hijo?": {
+  "glosas": [
+   "O",
+   "T",
+   "R",
+   "O",
+   "S",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "S",
+   "PEGAR",
+   "S",
+   "U",
+   "HIJO",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "OTROS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑOS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SU",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Otros niños se burlan de su hijo?": {
+  "glosas": [
+   "O",
+   "T",
+   "R",
+   "O",
+   "S",
+   "N",
+   "I",
+   "Ñ",
+   "O",
+   "BURLAR",
+   "HIJO",
+   "TU"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "OTROS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "NIÑO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Prefiere que escriba la explicación del trámite?": {
   "glosas": [
    "TRAMITE",
@@ -31185,6 +34885,30 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "¿Publicaron sus fotos o videos sin su permiso?": {
+  "glosas": [
+   "FOTOS",
+   "VIDEO",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "A",
+   "R",
+   "PERMISO",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PUBLICAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Puede acudir presencialmente ahora?": {
   "glosas": [
@@ -31692,6 +35416,42 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Quien lo discrimina es un funcionario público?": {
+  "glosas": [
+   "F",
+   "U",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "R",
+   "I",
+   "O",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "O",
+   "DISCRIMINACION",
+   "QUIEN"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "FUNCIONARIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PUBLICO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Quiere consultar un expediente judicial?": {
   "glosas": [
    "C",
@@ -31869,6 +35629,39 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Quiere saber quién investigará el robo?": {
+  "glosas": [
+   "INVESTIGACION",
+   "ROBAR",
+   "QUIEN",
+   "SABER",
+   "QUERER"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
+ "¿Quiere saber quién investigará su caso?": {
+  "glosas": [
+   "C",
+   "A",
+   "S",
+   "O",
+   "SUYO",
+   "INVESTIGACION",
+   "QUIEN",
+   "SABER",
+   "QUERER"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "CASO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Quiere solicitar un Plan Cuotas?": {
   "glosas": [
@@ -33141,6 +36934,24 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Qué más necesitan saber?": {
+  "glosas": [
+   "SABER",
+   "NECESITAR",
+   "QUE",
+   "M",
+   "A",
+   "S"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "MAS",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Qué necesita consultar de su proceso?": {
   "glosas": [
    "P",
@@ -33197,6 +37008,16 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "¿Qué necesitan saber?": {
+  "glosas": [
+   "QUE",
+   "NECESITAR",
+   "SABER"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "¿Qué necesito para solicitar el certificado de no propiedad nacional?": {
   "glosas": [
@@ -33556,6 +37377,60 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "¿Sabe dónde está su celular ahora?": {
+  "glosas": [
+   "AHORA",
+   "CELULAR",
+   "E",
+   "S",
+   "T",
+   "A",
+   "R",
+   "DONDE",
+   "SABER"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ESTAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Se burlan de usted por ser sordo?": {
+  "glosas": [
+   "SORDO",
+   "BURLAR",
+   "TU",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Se burlan de usted todos los días?": {
+  "glosas": [
+   "TODOS_LOS_DIAS",
+   "BURLAR",
+   "TU"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "¿Sigue funcionando allí?": {
   "glosas": [
@@ -33929,6 +37804,18 @@
   ],
   "traducido": "2026-10-03"
  },
+ "¿Su hijo tiene heridas o dolor?": {
+  "glosas": [
+   "HIJO",
+   "HERIDA",
+   "DOLOR",
+   "TENER",
+   "NO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
+ },
  "¿Su proceso está en Cochabamba?": {
   "glosas": [
    "P",
@@ -34022,6 +37909,45 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿También le robaron documentos?": {
+  "glosas": [
+   "ROBAR",
+   "D",
+   "O",
+   "C",
+   "U",
+   "M",
+   "E",
+   "N",
+   "T",
+   "O",
+   "T",
+   "A",
+   "M",
+   "B",
+   "I",
+   "E",
+   "N",
+   "L",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DOCUMENTO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "TAMBIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "LE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿También tienen línea gratuita?": {
   "glosas": [
@@ -34993,6 +38919,34 @@
   ],
   "traducido": "2026-10-03"
  },
+ "¿Tiene la caja o la factura del celular?": {
+  "glosas": [
+   "CELULAR",
+   "CAJA",
+   "FACTURA",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "O",
+    "accion": "letra_descartada"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Tiene la carátula del expediente?": {
   "glosas": [
    "E",
@@ -35643,6 +39597,16 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "¿Tiene testigos?": {
+  "glosas": [
+   "TESTIGO",
+   "TENER",
+   "QUIEN"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-07"
  },
  "¿Tiene un certificado de nacimiento anterior?": {
   "glosas": [
@@ -36561,6 +40525,39 @@
   ],
   "traducido": "2026-10-04"
  },
+ "¿Tiene una foto de la persona?": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "FOTOS",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
  "¿Tiene una licencia de funcionamiento anterior?": {
   "glosas": [
    "A",
@@ -36789,6 +40786,50 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Tiene videos o fotos de lo que pasa?": {
+  "glosas": [
+   "VER",
+   "FOTOS",
+   "VIDEO",
+   "TENER",
+   "P",
+   "A",
+   "S",
+   "A",
+   "DONDE"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PASA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
+ },
+ "¿Tiene videos o fotos?": {
+  "glosas": [
+   "FOTOS",
+   "VIDEO",
+   "TENER",
+   "P",
+   "R",
+   "E",
+   "G",
+   "U",
+   "N",
+   "T",
+   "A"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PREGUNTA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Todavía hay descuento si pago hoy?": {
   "glosas": [
@@ -37480,6 +41521,41 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "¿Un funcionario público lo discrimina?": {
+  "glosas": [
+   "F",
+   "U",
+   "N",
+   "C",
+   "I",
+   "O",
+   "N",
+   "A",
+   "R",
+   "I",
+   "O",
+   "P",
+   "U",
+   "B",
+   "L",
+   "I",
+   "C",
+   "O",
+   "DISCRIMINACION"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "FUNCIONARIO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PUBLICO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-07"
  },
  "¿Usa el mismo número de contacto?": {
   "glosas": [

@@ -208,6 +208,101 @@ class BancoTramites(unittest.TestCase):
              ("no_se", "No sé cuál.", "desconocido", ["NO_SABER"])])
 
 
+class IndicacionesYCompuestos(unittest.TestCase):
+    """Respuestas cortas y largas a una indicación; términos de varias
+    palabras del léxico."""
+
+    def corpus(self):
+        return {"escenarios": [{
+            "id": "ESC-FELCC-04", "tramite": "Llegar a oficina incorrecta",
+            "institucion": "FELCC",
+            "turnos": [
+                {"n": 1, "rol": "funcionario",
+                 "texto": "Para violencia corresponde la FELCV.",
+                 "mostrable": True, "glosas": ["VIOLENCIA", "FELCV"]},
+                {"n": 2, "rol": "sordo",
+                 "texto": "¿Entonces aquí no sigo el trámite?",
+                 "mostrable": True, "glosas": ["IR", "NO"]},
+                {"n": 3, "rol": "funcionario",
+                 "texto": "Debe ir al servicio contra la violencia.",
+                 "mostrable": True, "glosas": ["IR", "VIOLENCIA"]},
+                {"n": 4, "rol": "sordo",
+                 "texto": "Quiero que me indiquen dónde acudir.",
+                 "mostrable": True, "glosas": ["QUERER", "DÓNDE", "IR"]},
+            ],
+            "variantes": [{"turno": 3, "preguntas": [],
+                           "respuestas": [
+                               {"texto": "Entendido.", "mostrable": True,
+                                "glosas": ["COMPRENDER"]},
+                               {"texto": "¿Dónde está la FELCV?",
+                                "mostrable": True,
+                                "glosas": ["FELCV", "DÓNDE"]}]}],
+        }]}
+
+    def test_una_indicacion_ofrece_cortas_y_la_respuesta_documentada(self):
+        banco = B.banco_tramites(self.corpus())
+        q = {p["id"]: p for p in banco["preguntas"]}
+        primera = q["R.ESC-FELCC-04.1"]
+        self.assertEqual(primera["acto"], "indicacion")
+        self.assertEqual(
+            [(o["id"], o["frase"], o["glosas"]) for o in primera["opciones"]],
+            [("entendido", "Entendido.", ["COMPRENDER"]),
+             ("no_entiendo", "No entiendo.", ["COMPRENDER", "NO"]),
+             ("respuesta_1", "¿Entonces aquí no sigo el trámite?",
+              ["IR", "NO"])])
+        # «Entendido.» documentado ya es la corta: no se repite.
+        segunda = q["R.ESC-FELCC-04.3"]
+        self.assertEqual(
+            [o["frase"] for o in segunda["opciones"]],
+            ["Entendido.", "No entiendo.",
+             "Quiero que me indiquen dónde acudir.", "¿Dónde está la FELCV?"])
+
+    def test_la_larga_va_solo_con_senas_del_lexico(self):
+        corpus = self.corpus()
+        corpus["escenarios"][0]["turnos"][1]["glosas"] = [
+            "IR", "SENA_PENDIENTE:TRAMITE"]
+        self.assertEqual(
+            B.respuestas_a_indicacion(corpus["escenarios"][0], 1), [])
+
+    def test_si_lo_documentado_es_entendido_quedan_solo_las_cortas(self):
+        corpus = self.corpus()
+        corpus["escenarios"][0]["turnos"][1].update(
+            texto="Entendido.", glosas=["COMPRENDER"])
+        banco = B.banco_tramites(corpus)
+        primera = next(p for p in banco["preguntas"]
+                       if p["id"] == "R.ESC-FELCC-04.1")
+        self.assertEqual([o["id"] for o in primera["opciones"]],
+                         ["entendido", "no_entiendo"])
+
+    def test_un_termino_compuesto_del_lexico_es_una_sola_sena_pendiente(self):
+        corr = [{"palabra": p, "accion": "concepto_sin_catalogo"}
+                for p in ("acoso", "sexual", "trata", "tráfico")]
+        compuestos = {("ACOSO", "SEXUAL"): "ACOSO_SEXUAL",
+                      ("TRATA", "TRAFICO"): "TRATA_Y_TRAFICO"}
+        with mock.patch.object(B, "_compuestos", compuestos):
+            self.assertEqual(B.marcar_senas_pendientes(
+                ["YO", *"ACOSO", *"SEXUAL", "DENUNCIAR"], corr[:2],
+                "Denuncio acoso sexual."),
+                ["YO", "SENA_PENDIENTE:ACOSO_SEXUAL", "DENUNCIAR"])
+            self.assertEqual(B.marcar_senas_pendientes(
+                [*"TRATA", *"TRAFICO"], corr[2:], "Trata y tráfico."),
+                ["SENA_PENDIENTE:TRATA_Y_TRAFICO"])
+            # En el orden de LSB (lo que califica primero), también.
+            self.assertEqual(B.marcar_senas_pendientes(
+                [*"SEXUAL", *"ACOSO"], corr[:2], "Acoso sexual."),
+                ["SENA_PENDIENTE:ACOSO_SEXUAL"])
+            # Dos palabras que no forman un término siguen separadas.
+            self.assertEqual(B.marcar_senas_pendientes(
+                [*"ACOSO", *"TRATA"], [corr[0], corr[2]], "Acoso, trata."),
+                ["SENA_PENDIENTE:ACOSO", "SENA_PENDIENTE:TRATA"])
+
+    def test_los_compuestos_salen_del_lexico_sin_palabras_de_enlace(self):
+        compuestos = B.terminos_compuestos()
+        self.assertEqual(compuestos[("ACOSO", "SEXUAL")], "ACOSO_SEXUAL")
+        self.assertEqual(compuestos[("TRATA", "TRAFICO")], "TRATA_Y_TRAFICO")
+        self.assertNotIn(("FOLIO", "REAL"), compuestos)
+
+
 class Equivalencias(unittest.TestCase):
     CORR = [{"palabra": "DOCUMENTO", "accion": "concepto_sin_catalogo"},
             {"palabra": "REAL", "accion": "concepto_sin_catalogo"}]

@@ -24,7 +24,7 @@ void main() {
   group('qué encuentra', () {
     test('como lo diría la persona: conjugado, coloquial, sin tildes', () {
       for (final (q, caso) in [
-        ('me robaron el celular', 'Denunciar robo de celular'),
+        ('me robaron el celular', 'Robo de celular: pruebas y seguimiento'),
         ('robaron mi celu', 'Denunciar robo'),
         ('me pegaron', 'Denunciar violencia'),
         ('me estafaron', 'Estafa y transferencia de dinero'),
@@ -39,9 +39,9 @@ void main() {
 
     test('con un error de tipeo encuentra lo que se le parece, y solo si no '
         'hay nada exacto', () {
-      expect(casos('selular'), contains('Denunciar robo de celular'));
+      expect(casos('selular'), contains('Robo de celular: pruebas y seguimiento'));
       // «cédula» existe tal cual: no trae lo que solo se le parece.
-      expect(casos('cedula'), isNot(contains('Denunciar robo de celular')));
+      expect(casos('cedula'), isNot(contains('Robo de celular: pruebas y seguimiento')));
     });
 
     test('filtra poco a poco: desde 3 letras, cada letra deja lo mismo o '
@@ -55,7 +55,7 @@ void main() {
       expect(rob.containsAll(robo), isTrue);
       expect(robo.containsAll(roboCel), isTrue);
       expect(roboCel.containsAll(roboCelular), isTrue);
-      expect(roboCelular, contains('Denunciar robo de celular'));
+      expect(roboCelular, contains('Robo de celular: pruebas y seguimiento'));
       expect(
         roboCelular,
         isNot(contains('Presentar denuncia verbal por robo')),
@@ -155,7 +155,7 @@ void main() {
       expect(find.text(sale), findsOneWidget, reason: 'todavía saliendo');
       await tester.pumpAndSettle();
       expect(find.text(sale), findsNothing);
-      expect(find.text('Denunciar robo de celular'), findsOneWidget);
+      expect(find.text('Robo de celular: pruebas y seguimiento'), findsOneWidget);
     });
 
     testWidgets('un caso encontrado entra directo; al volver, la búsqueda '
@@ -165,11 +165,11 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('TRÁMITES · FELCC'), findsOneWidget);
 
-      await tester.tap(find.text('Denunciar robo de celular'));
+      await tester.tap(find.text('Robo de celular: pruebas y seguimiento'));
       await tester.pumpAndSettle();
       expect(
         container.read(contextProvider)?.name,
-        'Denunciar robo de celular',
+        'Robo de celular: pruebas y seguimiento',
       );
 
       // Volver (la pantalla se vuelve a montar): ahí sigue lo escrito.
@@ -177,7 +177,7 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       await seleccion(tester);
       expect(escrito(tester), 'robaron mi celu');
-      expect(find.text('Denunciar robo de celular'), findsOneWidget);
+      expect(find.text('Robo de celular: pruebas y seguimiento'), findsOneWidget);
     });
 
     testWidgets('Enter abre el primer caso', (tester) async {

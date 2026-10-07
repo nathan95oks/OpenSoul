@@ -871,28 +871,52 @@ CONTINÚA EN LA PARTE 4
 | H-FELCV-03 | FELCV | La Ley 1658, según la Defensoría del Pueblo, reconoce LSB y respalda accesibilidad para personas sordas; en justicia se prevé interpretación. | accesibilidad | F-LSB-01 | Publicado 2026-02-23 |
 | H-FELCV-04 | FELCV | [VERIFICAR] dirección, número de emergencia y horario exactos vigentes de FELCV Cochabamba antes de incorporarlos como dato fijo. | lugar/contacto | — | [VERIFICAR] |
 
-## ESC-FELCC-01 — Denunciar robo de celular
+## ESC-FELCC-01 — Robo de celular: pruebas y seguimiento
 
 - **Institución:** Policía Boliviana – FELCC
-- **Trámite:** Denunciar robo de celular
+- **Trámite:** Robo de celular: pruebas y seguimiento
 - **Tipo:** mixto
 - **Inicia:** Usuario Sordo
-- **Situación:** La persona quiere denunciar un robo común.
+- **Situación:** La persona ya contó el robo (qué, cuándo y dónde se pregunta en Denuncias → Denunciar robo) y en la FELCC sigue con lo que ayuda a investigar: pruebas de que el celular es suyo, documentos robados, testigos, cámaras y el seguimiento de su denuncia.
 
 | # | Rol | Mensaje | Propósito | Hechos |
 |---|---|---|---|---|
 | 1 | Usuario Sordo | Me robaron mi celular. Quiero denunciar. | Iniciar | — |
 | 2 | Funcionario | ¿El hecho fue robo, estafa u otro delito? | Clasificar | H-FELCC-01 |
 | 3 | Usuario Sordo | Fue robo. Me quitaron el celular. | Responder | — |
-| 4 | Funcionario | Describa cuándo y dónde ocurrió. | Recabar | — |
-| 5 | Usuario Sordo | Ocurrió ayer en una calle del centro. | Relatar | — |
-| 6 | Funcionario | Registraremos los datos que usted pueda aportar. | Continuar | H-FELCC-01 |
-| 7 | Usuario Sordo | Quiero una copia de mi denuncia. | Cierre | — |
+| 4 | Funcionario | ¿Tiene la caja o la factura del celular? | Recabar | — |
+| 5 | Usuario Sordo | Sí, tengo la caja del celular. | Responder | — |
+| 6 | Funcionario | ¿Sabe dónde está su celular ahora? | Recabar | — |
+| 7 | Usuario Sordo | No, no sé dónde está. | Responder | — |
+| 8 | Funcionario | ¿Le robaron documentos? | Recabar | — |
+| 9 | Usuario Sordo | Sí, también robaron mi carnet. | Responder | — |
+| 10 | Funcionario | ¿Hay testigos del robo? | Recabar | — |
+| 11 | Usuario Sordo | Sí, hay un testigo. | Responder | — |
+| 12 | Funcionario | ¿Hay cámaras en esa calle? | Recabar | — |
+| 13 | Usuario Sordo | Sí, hay cámaras en esa calle. | Responder | — |
+| 14 | Funcionario | Registraremos los datos que usted pueda aportar. | Continuar | H-FELCC-01 |
+| 15 | Usuario Sordo | Quiero una copia de mi denuncia. | Cierre | — |
+| 16 | Funcionario | ¿Quiere saber quién investigará el robo? | Seguimiento | — |
+| 17 | Usuario Sordo | Sí, quiero conocer al investigador. | Responder | — |
 
 ### Variantes
 
 - **Turno 2 (Funcionario):** «¿Fue robo o estafa?» · «¿Qué delito quiere denunciar?»
 - **Respuestas:** «Fue robo.» · «No fue robo.» · «No sé cómo se llama.»
+- **Turno 4 (Funcionario):** «¿Puede mostrar que el celular es suyo?» · «¿Guardó la caja del celular?»
+- **Respuestas:** «Sí, tengo la caja del celular.» · «No, no tengo la caja.» · «No sé dónde está la caja.»
+- **Turno 6 (Funcionario):** «¿Puede ver dónde está su celular?» · «¿Sabe dónde está el celular ahora?»
+- **Respuestas:** «Sí, sé dónde está.» · «No, no sé dónde está.» · «No sé cómo buscarlo.»
+- **Turno 8 (Funcionario):** «¿Le quitaron también documentos?» · «¿Robaron su carnet?»
+- **Respuestas:** «Sí, también robaron mi carnet.» · «No, solo el celular.» · «No sé si robaron documentos.»
+- **Turno 10 (Funcionario):** «¿Alguien vio el robo?» · «¿Otra persona vio lo que pasó?»
+- **Respuestas:** «Sí, hay un testigo.» · «No, no hay testigos.» · «No sé si hay testigos.»
+- **Turno 12 (Funcionario):** «¿Hay cámaras cerca?» · «¿El lugar tiene cámaras?»
+- **Respuestas:** «Sí, hay cámaras en esa calle.» · «No, no hay cámaras.» · «No sé si hay cámaras.»
+- **Turno 14 (Funcionario):** «Vamos a anotar todo lo que usted pueda aportar.»
+- **Respuestas:** «Quiero una copia de mi denuncia.» · «¿Cuándo sabré algo de mi celular?»
+- **Turno 16 (Funcionario):** «¿Quiere conocer al investigador?» · «¿Necesita el nombre del investigador?»
+- **Respuestas:** «Sí, quiero conocer al investigador.» · «No, ahora no.» · «No sé qué es un investigador.»
 
 ### Datos ficticios
 
@@ -964,14 +988,18 @@ CONTINÚA EN LA PARTE 4
 | 1 | Funcionario | ¿Qué hecho quiere denunciar? | Clasificar | — |
 | 2 | Usuario Sordo | Mi pareja me amenaza y me golpea. | Relatar | — |
 | 3 | Funcionario | Para violencia corresponde activar la ruta de FELCV. | Derivar | H-FELCV-01, H-FELCV-02 |
-| 4 | Usuario Sordo | ¿Entonces aquí no sigo el trámite? | Confirmar | — |
+| 4 | Usuario Sordo | ¿Entonces aquí no me atienden? | Confirmar | — |
 | 5 | Funcionario | Debe ser derivado al servicio especializado contra la violencia. | Orientar | H-FELCV-01 |
-| 6 | Usuario Sordo | Quiero que me indiquen dónde acudir. | Cerrar | — |
+| 6 | Usuario Sordo | ¿Dónde tengo que ir? | Cerrar | — |
 
 ### Variantes
 
 - **Turno 1 (Funcionario):** «¿Qué ocurrió?» · «¿Es violencia de pareja?»
 - **Respuestas:** «Sí.» · «No.» · «No sé dónde denunciar.»
+- **Turno 3 (Funcionario):** «Para violencia corresponde la FELCV.»
+- **Respuestas:** «¿Entonces aquí no me atienden?» · «Quiero ir a la FELCV.»
+- **Turno 5 (Funcionario):** «Lo van a derivar al servicio contra la violencia.»
+- **Respuestas:** «¿Dónde tengo que ir?» · «¿Me pueden ayudar a ir?»
 
 ### Datos ficticios
 
