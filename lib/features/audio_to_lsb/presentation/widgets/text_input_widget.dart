@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/audio_input_validator.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 
 class TextInputWidget extends ConsumerStatefulWidget {
@@ -238,11 +239,14 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
       ref
           .read(audioTranslationControllerProvider.notifier)
           .processAudioAsText('');
-      if (porError) {
-        _warn(
-          'No se reconoció nada. Puedes intentar de nuevo o escribir el mensaje.',
-        );
-      }
+      // Un audio vacío nunca pasa: se avisa siempre, no solo si falló el
+      // reconocimiento.
+      _warn(
+        porError
+            ? 'No se reconoció nada. Puedes intentar de nuevo o escribir el '
+                  'mensaje.'
+            : 'No escuché nada. Habla otra vez o escribe el mensaje.',
+      );
     } else if (porError) {
       _warn(
         'Revisa el texto reconocido antes de enviarlo: puede tener errores.',
@@ -307,6 +311,9 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(AudioInputValidator.maxLength),
+              ],
               onChanged: (_) => _notifyComposing(),
               onSubmitted: (_) => _submit(),
             ),
