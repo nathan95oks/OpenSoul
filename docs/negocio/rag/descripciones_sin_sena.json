@@ -15,6 +15,63 @@
     "VER"
    ]
   },
+  "ACOSA": {
+   "ver": "ACOSO"
+  },
+  "ACOSAR": {
+   "ver": "ACOSO"
+  },
+  "ACOSO": {
+   "descripcion": "Molestar, amenazar o maltratar a una persona muchas veces, aunque ella no quiere. Le da miedo.",
+   "tipo": "concepto",
+   "lsb": [
+    "AMENAZAR",
+    "MALTRATAR",
+    "SIEMPRE",
+    "MIEDO"
+   ],
+   "revisada": false
+  },
+  "ACOSO_DISCRIMINATORIO": {
+   "descripcion": "Molestar o rechazar a una persona muchas veces por ser diferente; por ejemplo, por ser sorda.",
+   "tipo": "concepto",
+   "lsb": [
+    "DISCRIMINACIÓN",
+    "RECHAZAR",
+    "BURLAR",
+    "SORDO",
+    "DIFERENTE",
+    "SIEMPRE"
+   ],
+   "juntar": true,
+   "revisada": false
+  },
+  "ACOSO_FISICO": {
+   "descripcion": "Acoso con el cuerpo: seguir, tocar o pegar a una persona muchas veces.",
+   "tipo": "concepto",
+   "lsb": [
+    "TOCAR",
+    "PEGAR",
+    "MALTRATAR",
+    "SIEMPRE",
+    "MIEDO"
+   ],
+   "juntar": true,
+   "revisada": false
+  },
+  "ACOSO_SEXUAL": {
+   "descripcion": "Tocar o pedir cosas íntimas a una persona que no quiere, muchas veces.",
+   "tipo": "concepto",
+   "lsb": [
+    "TOCAR",
+    "ABUSAR",
+    "SIEMPRE",
+    "QUERER",
+    "NO"
+   ],
+   "juntar": true,
+   "revisada": false
+  },
   "ACREDITAR": {
    "descripcion": "Demostrar con un documento que algo es verdad.",
    "tipo": "concepto",
@@ -163,12 +220,21 @@
   "ALGO": {
    "descripcion": "Una cosa, sin decir cuál.",
    "tipo": "palabra_funcion",
-   "revisada": false
+   "revisada": false,
+   "lsb": [
+    "COSAS",
+    "NO_SABER"
+   ]
   },
   "ALGUIEN": {
    "descripcion": "Una persona, sin decir quién.",
    "tipo": "palabra_funcion",
-   "revisada": false
+   "revisada": false,
+   "lsb": [
+    "HOMBRE",
+    "MUJER",
+    "QUIÉN"
+   ]
   },
   "ALGUN": {
    "descripcion": "Uno, cualquiera, sin decir cuál.",
@@ -423,6 +489,22 @@
     "BORRADOR"
    ]
   },
+  "BULLING": {
+   "ver": "BULLYING"
+  },
+  "BULLYING": {
+   "descripcion": "Acoso en la escuela: otros niños se burlan, le pegan o maltratan a un niño muchas veces.",
+   "tipo": "concepto",
+   "lsb": [
+    "ESCUELA",
+    "NIÑO",
+    "BURLAR",
+    "PEGAR",
+    "MALTRATAR",
+    "SIEMPRE"
+   ],
+   "revisada": false
+  },
   "CADA": {
    "descripcion": "Uno por uno, todos.",
    "tipo": "palabra_funcion",
@@ -581,6 +663,20 @@
   "CHIMBA": {
    "descripcion": "La Chimba: zona de Cochabamba donde hay una oficina. Se deletrea.",
    "tipo": "nombre_propio",
+   "revisada": false
+  },
+  "CIBERACOSO": {
+   "descripcion": "Acoso por internet o por celular: amenazas, burlas o fotos publicadas sin permiso, muchas veces.",
+   "tipo": "concepto",
+   "lsb": [
+    "INTERNET",
+    "CELULAR",
+    "AMENAZAR",
+    "BURLAR",
+    "FOTOS",
+    "DIFUNDIR",
+    "SIEMPRE"
+   ],
    "revisada": false
   },
   "CIEN": {
@@ -868,6 +964,17 @@
     "BILLETES"
    ]
   },
+  "CRIMEN": {
+   "descripcion": "Un delito grave: robar, engañar o hacer daño a una persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "lsb": [
+    "ROBAR",
+    "ENGAÑAR",
+    "MALTRATAR",
+    "PROHIBIDO"
+   ]
+  },
   "CRPVA": {
    "descripcion": "Papel que dice de quién es un auto.",
    "revisada": false,
@@ -1065,6 +1172,9 @@
   "DEPERDER": {
    "ver": "DEPENDER"
   },
+  "DERECHO": {
+   "ver": "DERECHOS"
+  },
   "DERECHOS": {
    "descripcion": "Lo que la ley protege para cada persona.",
    "tipo": "concepto",
@@ -1194,6 +1304,15 @@
     "DISCAPACIDAD_VISUAL",
     "SILLA_DE_RUEDAS"
    ]
+  },
+  "DISCRIMINATORIO": {
+   "descripcion": "Que trata mal a una persona por ser diferente.",
+   "tipo": "concepto",
+   "lsb": [
+    "DISCRIMINACIÓN",
+    "DIFERENTE"
+   ],
+   "revisada": false
   },
   "DISPONER": {
    "descripcion": "Tener algo listo para usar.",
@@ -1422,6 +1541,9 @@
     "NADA"
    ]
   },
+  "ESPECIALIZADA": {
+   "ver": "ESPECIALIZADO"
+  },
   "ESPECIALIZADO": {
    "descripcion": "Que se ocupa solo de un tipo de casos.",
    "tipo": "concepto",
@@ -1626,6 +1748,15 @@
     "COMPUTADORA"
    ]
   },
+  "FISICO": {
+   "descripcion": "Del cuerpo. «Acoso físico»: tocar o pegar a una persona.",
+   "tipo": "concepto",
+   "lsb": [
+    "TOCAR",
+    "PEGAR"
+   ],
+   "revisada": false
+  },
   "FOLIO": {
    "descripcion": "Hoja de un registro. Ver «Folio Real».",
    "tipo": "concepto",
@@ -1665,6 +1796,16 @@
    "tipo": "palabra_funcion",
    "revisada": false
   },
+  "FUNCIONARIO": {
+   "descripcion": "Persona que trabaja en una oficina del Estado y atiende a la gente.",
+   "tipo": "concepto",
+   "revisada": false,
+   "lsb": [
+    "TRABAJADOR",
+    "OFICINA",
+    "ESTADO"
+   ]
+  },
   "GARANTIA": {
    "descripcion": "Algo que se deja para asegurar que se va a pagar.",
    "tipo": "concepto",
@@ -1696,7 +1837,11 @@
   "GOLPE": {
    "descripcion": "Cuando se pega fuerte con la mano o con algo.",
    "tipo": "concepto",
-   "revisada": false
+   "revisada": false,
+   "lsb": [
+    "PEGAR",
+    "FUERTE"
+   ]
   },
   "GRADO": {
    "descripcion": "Nivel o medida. Ej.: el grado de discapacidad.",
@@ -2951,6 +3096,15 @@
   "PUBLICAR": {
    "ver": "PUBLICADO"
   },
+  "PUBLICO": {
+   "descripcion": "Del Estado: para atender a todas las personas.",
+   "tipo": "concepto",
+   "revisada": false,
+   "lsb": [
+    "ESTADO",
+    "ATENDER"
+   ]
+  },
   "QUEDA": {
    "descripcion": "Estar ubicado. «Queda entre…»: está entre…",
    "tipo": "concepto",
@@ -3428,7 +3582,11 @@
   "SIN": {
    "descripcion": "Que no tiene algo.",
    "tipo": "palabra_funcion",
-   "revisada": false
+   "revisada": false,
+   "lsb": [
+    "NO",
+    "TENER"
+   ]
   },
   "SIREJ": {
    "descripcion": "Página de internet del juzgado para ver su caso.",
@@ -3633,6 +3791,9 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "TRAFICO": {
+   "ver": "TRATA_Y_TRAFICO"
+  },
   "TRAJE": {
    "descripcion": "Traer en pasado. Tiene seña: TRAER.",
    "tipo": "concepto",
@@ -3648,9 +3809,25 @@
     "NOMBRE"
    ]
   },
+  "TRATA": {
+   "ver": "TRATA_Y_TRAFICO"
+  },
   "TRATAR": {
    "descripcion": "Atender un caso o un problema.",
    "tipo": "concepto",
+   "revisada": false
+  },
+  "TRATA_Y_TRAFICO": {
+   "descripcion": "Trata y tráfico de personas: engañar a una persona, llevarla lejos y venderla u obligarla a trabajar.",
+   "tipo": "concepto",
+   "lsb": [
+    "ENGAÑAR",
+    "LLEVAR",
+    "LEJOS",
+    "VENDER",
+    "ESCLAVITUD"
+   ],
+   "juntar": true,
    "revisada": false
   },
   "TRIBUNAL": {
@@ -3851,6 +4028,16 @@
     "NO",
     "RESPETAR",
     "LEY"
+   ]
+  },
+  "VULNERAR": {
+   "descripcion": "No respetar un derecho de una persona; hacerle daño.",
+   "tipo": "concepto",
+   "revisada": false,
+   "lsb": [
+    "RESPETAR",
+    "NO",
+    "DAÑAR"
    ]
   },
   "YA": {

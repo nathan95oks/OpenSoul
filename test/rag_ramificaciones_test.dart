@@ -202,17 +202,24 @@ void main() {
             expect(antes, contains(c.questionId), reason: step.questionId);
           }
           // Cada tarjeta es una seña (o una seña con su negación: «No
-          // entiendo» = COMPRENDER NO), nunca una frase entera, y nunca una
-          // seña que falta; su español va aparte.
+          // entiendo» = COMPRENDER NO), y nunca una seña que falta; su
+          // español va aparte. La respuesta larga a una indicación es lo que
+          // el escenario documenta que se contesta: la frase entera.
           for (final o in q['opciones'] as List<dynamic>) {
             final opcion = o as Map<String, dynamic>;
             final glosas = (opcion['glosas'] as List<dynamic>).cast<String>();
-            expect(
-              glosas.length,
-              inInclusiveRange(1, 2),
-              reason: opcion['frase'],
-            );
-            if (glosas.length == 2) expect(glosas.last, 'NO');
+            final larga = '${opcion['id']}'.startsWith('respuesta_');
+            if (larga) {
+              expect(q['acto'], 'indicacion', reason: opcion['frase']);
+              expect(glosas, isNotEmpty, reason: opcion['frase']);
+            } else {
+              expect(
+                glosas.length,
+                inInclusiveRange(1, 2),
+                reason: opcion['frase'],
+              );
+              if (glosas.length == 2) expect(glosas.last, 'NO');
+            }
             expect(
               glosas.any((g) => g.startsWith('SENA_PENDIENTE:')),
               isFalse,

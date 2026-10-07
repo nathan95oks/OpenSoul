@@ -3,7 +3,8 @@
  "archivos": [
   "docs/negocio/rag/escenarios/derechos_reales_escenarios.md",
   "docs/negocio/rag/escenarios/opensoul_flujos_tramites_cochabamba_escenarios.md",
-  "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md"
+  "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+  "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md"
  ],
  "fuentes": {
   "F-DDRR-05": {
@@ -38342,12 +38343,12 @@
   {
    "id": "ESC-FELCC-01",
    "archivo": "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
-   "titulo": "Denunciar robo de celular",
+   "titulo": "Robo de celular: pruebas y seguimiento",
    "institucion": "Policía Boliviana – FELCC",
-   "tramite": "Denunciar robo de celular",
+   "tramite": "Robo de celular: pruebas y seguimiento",
    "tipo": "mixto",
    "inicia": "sordo",
-   "situacion": "La persona quiere denunciar un robo común.",
+   "situacion": "La persona ya contó el robo (qué, cuándo y dónde se pregunta en Denuncias → Denunciar robo) y en la FELCC sigue con lo que ayuda a investigar: pruebas de que el celular es suyo, documentos robados, testigos, cámaras y el seguimiento de su denuncia.",
    "turnos": [
     {
      "n": 1,
@@ -38399,35 +38400,148 @@
     {
      "n": 4,
      "rol": "funcionario",
-     "texto": "Describa cuándo y dónde ocurrió.",
+     "texto": "¿Tiene la caja o la factura del celular?",
      "proposito": "Recabar",
      "hechos": [],
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "CUÁNDO",
-      "DÓNDE",
-      "EXPLICAR",
-      "SENA_PENDIENTE:OCURRIR"
+      "CELULAR",
+      "CAJA",
+      "FACTURA",
+      "TENER"
      ]
     },
     {
      "n": 5,
      "rol": "sordo",
-     "texto": "Ocurrió ayer en una calle del centro.",
-     "proposito": "Relatar",
+     "texto": "Sí, tengo la caja del celular.",
+     "proposito": "Responder",
      "hechos": [],
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AYER",
-      "CALLE",
-      "SENA_PENDIENTE:CENTRO",
-      "SENA_PENDIENTE:OCURRIR"
+      "SI",
+      "CELULAR",
+      "CAJA",
+      "TENER"
      ]
     },
     {
      "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Sabe dónde está su celular ahora?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AHORA",
+      "CELULAR",
+      "DONDE",
+      "SABER"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "No, no sé dónde está.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO_SABER",
+      "DONDE"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Le robaron documentos?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PAPEL",
+      "ROBAR",
+      "QUIEN"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, también robaron mi carnet.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "SENA_PENDIENTE:TAMBIEN",
+      "ROBAR",
+      "MÍO",
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "¿Hay testigos del robo?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "ROBAR",
+      "TESTIGO",
+      "DONDE"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Sí, hay un testigo.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TESTIGO"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Hay cámaras en esa calle?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CALLE",
+      "CAMARA_FOTOGRAFICA"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, hay cámaras en esa calle.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "CALLE",
+      "CAMARA_FOTOGRAFICA"
+     ]
+    },
+    {
+     "n": 14,
      "rol": "funcionario",
      "texto": "Registraremos los datos que usted pueda aportar.",
      "proposito": "Continuar",
@@ -38445,7 +38559,7 @@
      ]
     },
     {
-     "n": 7,
+     "n": 15,
      "rol": "sordo",
      "texto": "Quiero una copia de mi denuncia.",
      "proposito": "Cierre",
@@ -38457,6 +38571,38 @@
       "SENA_PENDIENTE:DENUNCIA",
       "SENA_PENDIENTE:COPIA",
       "QUERER"
+     ]
+    },
+    {
+     "n": 16,
+     "rol": "funcionario",
+     "texto": "¿Quiere saber quién investigará el robo?",
+     "proposito": "Seguimiento",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "INVESTIGACION",
+      "ROBAR",
+      "QUIEN",
+      "SABER",
+      "QUERER"
+     ]
+    },
+    {
+     "n": 17,
+     "rol": "sordo",
+     "texto": "Sí, quiero conocer al investigador.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "CONOCER",
+      "INVESTIGACION",
+      "HOMBRE",
+      "MUJER"
      ]
     }
    ],
@@ -38493,6 +38639,268 @@
         "NO_SABER",
         "COMO",
         "LLAMAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Puede mostrar que el celular es suyo?",
+      "¿Guardó la caja del celular?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo la caja del celular.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CELULAR",
+        "CAJA",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No, no tengo la caja.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "CAJA"
+       ]
+      },
+      {
+       "texto": "No sé dónde está la caja.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "DONDE",
+        "CAJA"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Puede ver dónde está su celular?",
+      "¿Sabe dónde está el celular ahora?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, sé dónde está.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "DONDE"
+       ]
+      },
+      {
+       "texto": "No, no sé dónde está.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "DONDE"
+       ]
+      },
+      {
+       "texto": "No sé cómo buscarlo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "BUSCAR",
+        "EL"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Le quitaron también documentos?",
+      "¿Robaron su carnet?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, también robaron mi carnet.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "SENA_PENDIENTE:TAMBIEN",
+        "ROBAR",
+        "MÍO",
+        "PAPEL",
+        "IDENTIDAD"
+       ]
+      },
+      {
+       "texto": "No, solo el celular.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "CELULAR"
+       ]
+      },
+      {
+       "texto": "No sé si robaron documentos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "ROBAR",
+        "PAPEL",
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "¿Alguien vio el robo?",
+      "¿Otra persona vio lo que pasó?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, hay un testigo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TESTIGO"
+       ]
+      },
+      {
+       "texto": "No, no hay testigos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TESTIGO"
+       ]
+      },
+      {
+       "texto": "No sé si hay testigos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "TESTIGO",
+        "SENA_PENDIENTE:EXISTIR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Hay cámaras cerca?",
+      "¿El lugar tiene cámaras?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, hay cámaras en esa calle.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CALLE",
+        "CAMARA_FOTOGRAFICA"
+       ]
+      },
+      {
+       "texto": "No, no hay cámaras.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CAMARA_FOTOGRAFICA"
+       ]
+      },
+      {
+       "texto": "No sé si hay cámaras.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CAMARA_FOTOGRAFICA",
+        "SENA_PENDIENTE:HAY"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 14,
+     "preguntas": [
+      "Vamos a anotar todo lo que usted pueda aportar."
+     ],
+     "respuestas": [
+      {
+       "texto": "Quiero una copia de mi denuncia.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "SENA_PENDIENTE:DENUNCIA",
+        "SENA_PENDIENTE:COPIA",
+        "QUERER"
+       ]
+      },
+      {
+       "texto": "¿Cuándo sabré algo de mi celular?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "CELULAR",
+        "MÍO",
+        "SABER",
+        "CUANDO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 16,
+     "preguntas": [
+      "¿Quiere conocer al investigador?",
+      "¿Necesita el nombre del investigador?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero conocer al investigador.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CONOCER",
+        "INVESTIGACION",
+        "HOMBRE",
+        "MUJER"
+       ]
+      },
+      {
+       "texto": "No, ahora no.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé qué es un investigador.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUE",
+        "SENA_PENDIENTE:INVESTIGADOR"
        ]
       }
      ]
@@ -38852,15 +39260,14 @@
     {
      "n": 4,
      "rol": "sordo",
-     "texto": "¿Entonces aquí no sigo el trámite?",
+     "texto": "¿Entonces aquí no me atienden?",
      "proposito": "Confirmar",
      "hechos": [],
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "AQUÍ",
-      "TRÁMITE",
-      "SENA_PENDIENTE:SIGUIR",
+      "AQUI",
+      "ATENDER",
       "NO"
      ]
     },
@@ -38886,15 +39293,14 @@
     {
      "n": 6,
      "rol": "sordo",
-     "texto": "Quiero que me indiquen dónde acudir.",
+     "texto": "¿Dónde tengo que ir?",
      "proposito": "Cerrar",
      "hechos": [],
      "mostrable": true,
      "motivos": [],
      "glosas": [
-      "EXPLICAR",
-      "DONDE",
-      "SENA_PENDIENTE:ACUDIR"
+      "IR",
+      "DONDE"
      ]
     }
    ],
@@ -38930,6 +39336,60 @@
         "NO_SABER",
         "SENA_PENDIENTE:DENUNCIAR",
         "DONDE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 3,
+     "preguntas": [
+      "Para violencia corresponde la FELCV."
+     ],
+     "respuestas": [
+      {
+       "texto": "¿Entonces aquí no me atienden?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AQUI",
+        "ATENDER",
+        "NO"
+       ]
+      },
+      {
+       "texto": "Quiero ir a la FELCV.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "IR",
+        "FELCV"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 5,
+     "preguntas": [
+      "Lo van a derivar al servicio contra la violencia."
+     ],
+     "respuestas": [
+      {
+       "texto": "¿Dónde tengo que ir?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "IR",
+        "DONDE"
+       ]
+      },
+      {
+       "texto": "¿Me pueden ayudar a ir?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AYUDAR",
+        "IR"
        ]
       }
      ]
@@ -43475,6 +43935,2942 @@
         "EXPLICAR",
         "NECESITAR",
         "YO"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-DNA-201",
+   "archivo": "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md",
+   "titulo": "Bullying en la escuela",
+   "institucion": "DNA – Gobierno Autónomo Municipal de Cochabamba",
+   "tramite": "Bullying en la escuela",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "Una madre o un padre sordo informa que su hijo sufre bullying (acoso escolar) de otros niños en la escuela.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Mi hijo sufre bullying en la escuela.",
+     "proposito": "Iniciar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "HIJO",
+      "SENA_PENDIENTE:BULLYING",
+      "ESCUELA",
+      "SUFRIR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Su hijo tiene heridas o dolor?",
+     "proposito": "Priorizar salud",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HIJO",
+      "HERIDA",
+      "DOLOR",
+      "TENER",
+      "NO"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, mi hijo tiene dolor.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "YO",
+      "HIJO",
+      "DOLOR"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Otros niños se burlan de su hijo?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "DIFERENTE",
+      "NIÑO",
+      "BURLAR",
+      "HIJO",
+      "TU"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, otros niños se burlan de él.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "DIFERENTE",
+      "NIÑO",
+      "BURLAR",
+      "EL"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Otros niños pegan a su hijo?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "DIFERENTE",
+      "NIÑOS",
+      "PEGAR",
+      "TUYO",
+      "HIJO"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, otros niños le pegan.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "DIFERENTE",
+      "NIÑO",
+      "PEGAR"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Le pegan todos los días?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "DIA",
+      "TODOS_LOS_DIAS",
+      "PEGAR"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, todos los días.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TODOS_LOS_DIAS"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "¿Habló con el maestro de la escuela?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "ESCUELA",
+      "MAESTRO",
+      "HABLAR",
+      "QUIEN"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Sí, hablé con el maestro, pero no ayudó.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "MAESTRO",
+      "HABLAR",
+      "AYUDAR",
+      "NO"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Tiene videos o fotos?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "FOTOS",
+      "VIDEO",
+      "TENER"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, tengo videos en mi celular.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "YO",
+      "CELULAR",
+      "VIDEO",
+      "TENER"
+     ]
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "Guarde los videos y las fotos.",
+     "proposito": "Orientar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "GUARDAR",
+      "VIDEO",
+      "FOTOS"
+     ]
+    },
+    {
+     "n": 15,
+     "rol": "sordo",
+     "texto": "Bien, voy a guardar todo.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "BUENO",
+      "GUARDAR",
+      "TOTAL"
+     ]
+    },
+    {
+     "n": 16,
+     "rol": "funcionario",
+     "texto": "¿Necesita un intérprete de Lengua de Señas Boliviana?",
+     "proposito": "Accesibilidad",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NECESITAR",
+      "INTERPRETE",
+      "SENA_PENDIENTE:LSB"
+     ]
+    },
+    {
+     "n": 17,
+     "rol": "sordo",
+     "texto": "Sí, necesito un intérprete de LSB.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "INTERPRETE"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Su hijo está herido?",
+      "¿Su hijo siente dolor?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, mi hijo tiene dolor.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "YO",
+        "HIJO",
+        "DOLOR"
+       ]
+      },
+      {
+       "texto": "No, mi hijo no tiene heridas.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "HIJO",
+        "HERIDA",
+        "NO",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No sé si tiene heridas.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "HERIDA",
+        "TENER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Los compañeros se burlan de su hijo?",
+      "¿Se ríen de su hijo en la escuela?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, otros niños se burlan de él.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "DIFERENTE",
+        "NIÑO",
+        "BURLAR",
+        "EL"
+       ]
+      },
+      {
+       "texto": "No, no se burlan de él.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "BURLAR",
+        "EL"
+       ]
+      },
+      {
+       "texto": "No sé si se burlan de él.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "BURLAR",
+        "EL"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Los compañeros le pegan?",
+      "¿Maltratan a su hijo en la escuela?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, otros niños le pegan.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "DIFERENTE",
+        "NIÑO",
+        "PEGAR"
+       ]
+      },
+      {
+       "texto": "No, no le pegan.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "PEGAR"
+       ]
+      },
+      {
+       "texto": "No sé si le pegan.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "EL",
+        "PEGAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Le pegan siempre?",
+      "¿Es todos los días?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, todos los días.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TODOS_LOS_DIAS"
+       ]
+      },
+      {
+       "texto": "No, no siempre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SIEMPRE"
+       ]
+      },
+      {
+       "texto": "No lo sé.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "¿Avisó a la escuela?",
+      "¿El maestro sabe lo que pasa?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, hablé con el maestro, pero no ayudó.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "MAESTRO",
+        "HABLAR",
+        "AYUDAR",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No, todavía no hablé con la escuela.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "ESCUELA",
+        "HABLAR",
+        "AÚN"
+       ]
+      },
+      {
+       "texto": "No sé con quién hablar en la escuela.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "ESCUELA",
+        "HABLAR",
+        "QUIEN",
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Tiene pruebas de lo que pasa?",
+      "¿Guardó videos o fotos?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo videos en mi celular.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "YO",
+        "CELULAR",
+        "VIDEO",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No, no tengo videos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "VIDEO"
+       ]
+      },
+      {
+       "texto": "No sé si tengo videos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "TENER",
+        "VIDEO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 14,
+     "preguntas": [
+      "Conserve los videos y las fotos."
+     ],
+     "respuestas": [
+      {
+       "texto": "Bien, voy a guardar todo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "BUENO",
+        "GUARDAR",
+        "TOTAL"
+       ]
+      },
+      {
+       "texto": "¿Dónde tengo que llevar los videos?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "VIDEO",
+        "LLEVAR",
+        "DONDE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 16,
+     "preguntas": [
+      "¿Requiere interpretación en LSB?",
+      "¿Necesita apoyo de un intérprete de LSB?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No, no necesito un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No sé cómo pedir un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PEDIR",
+        "INTERPRETE"
+       ]
+      }
+     ]
+    }
+   ],
+   "ramificaciones": [
+    {
+     "turno": 14,
+     "condiciones": [
+      {
+       "turno": 12,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-FELCV-201",
+   "archivo": "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md",
+   "titulo": "Denunciar acoso sexual",
+   "institucion": "Policía Boliviana – FELCV",
+   "tramite": "Denunciar acoso sexual",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "Una persona sorda denuncia acoso sexual: una persona la toca o le pide sexo sin su permiso, muchas veces.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Quiero denunciar acoso sexual.",
+     "proposito": "Iniciar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "SENA_PENDIENTE:DENUNCIAR",
+      "SENA_PENDIENTE:ACOSO_SEXUAL"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Está en peligro ahora?",
+     "proposito": "Priorizar seguridad",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AHORA",
+      "PELIGROSO"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "No, ahora estoy lejos de esa persona.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AHORA",
+      "LEJOS",
+      "HOMBRE",
+      "MUJER",
+      "NO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Conoce a la persona que la acosa?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CONOCER",
+      "HOMBRE",
+      "MUJER",
+      "SENA_PENDIENTE:ACOSA",
+      "QUIEN"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, es mi jefe.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "JEFE",
+      "MÍO"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Esa persona la tocó sin su permiso?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HOMBRE",
+      "MUJER",
+      "TOCAR",
+      "PERMISO",
+      "NO"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, me tocó sin mi permiso.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TOCAR",
+      "PERMISO",
+      "NO"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿La acosa todos los días?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TODOS_LOS_DIAS",
+      "SENA_PENDIENTE:ACOSAR"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, todos los días.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TODOS_LOS_DIAS"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "¿Tiene testigos?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TESTIGO",
+      "TENER",
+      "QUIEN"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Sí, una compañera es testigo.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPAÑERO",
+      "TESTIGO"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "La FELCV es la unidad especializada contra la violencia.",
+     "proposito": "Orientar",
+     "hechos": [
+      "H-FELCV-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "FELCV",
+      "UNIDAD",
+      "SENA_PENDIENTE:ESPECIALIZADA",
+      "CONTRA",
+      "VIOLENCIA"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Hoy quiero quejarme a la policía.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HOY",
+      "YO",
+      "POLICIA",
+      "QUEJAR"
+     ]
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "¿Necesita un intérprete de Lengua de Señas Boliviana?",
+     "proposito": "Accesibilidad",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NECESITAR",
+      "INTERPRETE",
+      "SENA_PENDIENTE:LSB"
+     ]
+    },
+    {
+     "n": 15,
+     "rol": "sordo",
+     "texto": "Sí, necesito un intérprete de LSB.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "INTERPRETE"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Corre peligro en este momento?",
+      "¿Esa persona está cerca de usted ahora?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, estoy en peligro ahora.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "PELIGROSO"
+       ]
+      },
+      {
+       "texto": "No, ahora estoy lejos de esa persona.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "LEJOS",
+        "HOMBRE",
+        "MUJER",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si estoy en peligro.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PELIGROSO",
+        "YO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Sabe quién es esa persona?",
+      "¿Reconoce a la persona que la acosa?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, es mi jefe.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "JEFE",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "Sí, es mi compañero.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "YO",
+        "COMPAÑERO"
+       ]
+      },
+      {
+       "texto": "No, no conozco a esa persona.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CONOCER",
+        "HOMBRE",
+        "MUJER"
+       ]
+      },
+      {
+       "texto": "No sé quién es.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUIEN"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Le tocó el cuerpo sin permiso?",
+      "¿Hubo contacto sin su permiso?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, me tocó sin mi permiso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TOCAR",
+        "PERMISO",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No, no me tocó.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TOCAR"
+       ]
+      },
+      {
+       "texto": "No sé cómo explicarlo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "EXPLICAR",
+        "COMO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿La acosa siempre?",
+      "¿Es todos los días?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, todos los días.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TODOS_LOS_DIAS"
+       ]
+      },
+      {
+       "texto": "No, no siempre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SIEMPRE"
+       ]
+      },
+      {
+       "texto": "No lo sé.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "¿Alguien es testigo?",
+      "¿Otra persona vio lo que pasó?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, una compañera es testigo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPAÑERO",
+        "TESTIGO"
+       ]
+      },
+      {
+       "texto": "No, no hay testigos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TESTIGO"
+       ]
+      },
+      {
+       "texto": "No sé si hay testigos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "TESTIGO",
+        "SENA_PENDIENTE:EXISTIR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "La FELCV atiende los casos de violencia."
+     ],
+     "respuestas": [
+      {
+       "texto": "Hoy quiero quejarme a la policía.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "HOY",
+        "YO",
+        "POLICIA",
+        "QUEJAR"
+       ]
+      },
+      {
+       "texto": "Tengo miedo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "MIEDO",
+        "TENER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 14,
+     "preguntas": [
+      "¿Requiere interpretación en LSB?",
+      "¿Necesita apoyo de un intérprete de LSB?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No, no necesito un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No sé cómo pedir un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PEDIR",
+        "INTERPRETE"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-FELCC-201",
+   "archivo": "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md",
+   "titulo": "Denunciar ciberacoso",
+   "institucion": "Policía Boliviana – FELCC",
+   "tramite": "Denunciar ciberacoso",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "Una persona sorda sufre ciberacoso: le envían amenazas o publican sus fotos por internet o por celular.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Sufro ciberacoso en internet y en mi celular.",
+     "proposito": "Iniciar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "INTERNET",
+      "CELULAR",
+      "SENA_PENDIENTE:CIBERACOSO",
+      "SUFRIR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Conoce a la persona que le escribe?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CONOCER",
+      "HOMBRE",
+      "MUJER",
+      "ESCRIBIR",
+      "TU"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "No, no conozco a esa persona.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "CONOCER",
+      "HOMBRE",
+      "MUJER"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Esa persona lo amenaza?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HOMBRE",
+      "MUJER",
+      "AMENAZAR"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, me amenaza siempre.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SIEMPRE",
+      "AMENAZAR",
+      "YO"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Publicaron sus fotos o videos sin su permiso?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "FOTOS",
+      "VIDEO",
+      "SENA_PENDIENTE:PUBLICAR",
+      "PERMISO",
+      "NO"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, publicaron mis fotos sin mi permiso.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "FOTOS",
+      "MÍO",
+      "PERMISO",
+      "NO",
+      "SENA_PENDIENTE:PUBLICAR"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Guardó los mensajes y las fotos?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "GUARDAR",
+      "SENA_PENDIENTE:MENSAJE",
+      "FOTOS"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, guardé todo en mi celular.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "CELULAR",
+      "GUARDAR",
+      "TOTAL"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "Un delito por internet se denuncia en la FELCC; conserve toda la información.",
+     "proposito": "Orientar",
+     "hechos": [
+      "H-FELCC-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "INTERNET",
+      "SENA_PENDIENTE:DELITO",
+      "SENA_PENDIENTE:DENUNCIAR",
+      "FELCC",
+      "SENA_PENDIENTE:INFORMACION",
+      "GUARDAR",
+      "TOTAL"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Bien, voy a guardar todo.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "BUENO",
+      "GUARDAR",
+      "TOTAL"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Necesita un intérprete de Lengua de Señas Boliviana?",
+     "proposito": "Accesibilidad",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NECESITAR",
+      "INTERPRETE",
+      "SENA_PENDIENTE:LSB"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, necesito un intérprete de LSB.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "INTERPRETE"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Sabe quién le escribe?",
+      "¿Reconoce a esa persona?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, conozco a esa persona.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "CONOCER",
+        "HOMBRE",
+        "MUJER"
+       ]
+      },
+      {
+       "texto": "No, no conozco a esa persona.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CONOCER",
+        "HOMBRE",
+        "MUJER"
+       ]
+      },
+      {
+       "texto": "No sé quién es.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUIEN"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Recibe amenazas?",
+      "¿Le escriben amenazas?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, me amenaza siempre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SIEMPRE",
+        "AMENAZAR",
+        "YO"
+       ]
+      },
+      {
+       "texto": "No, no me amenaza.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "AMENAZAR",
+        "YO"
+       ]
+      },
+      {
+       "texto": "No sé si es una amenaza.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "AMENAZAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Difundieron sus fotos?",
+      "¿Compartieron sus videos sin permiso?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, publicaron mis fotos sin mi permiso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "FOTOS",
+        "MÍO",
+        "PERMISO",
+        "NO",
+        "SENA_PENDIENTE:PUBLICAR"
+       ]
+      },
+      {
+       "texto": "No, no publicaron nada.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SENA_PENDIENTE:PUBLICAR",
+        "NADA"
+       ]
+      },
+      {
+       "texto": "No sé si publicaron algo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:PUBLICAR",
+        "SENA_PENDIENTE:ALGO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Conserva los mensajes?",
+      "¿Tiene guardadas las fotos?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, guardé todo en mi celular.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "CELULAR",
+        "GUARDAR",
+        "TOTAL"
+       ]
+      },
+      {
+       "texto": "No, borré los mensajes.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SENA_PENDIENTE:MENSAJE",
+        "SENA_PENDIENTE:BORRAR"
+       ]
+      },
+      {
+       "texto": "No sé cómo guardar los mensajes.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "GUARDAR",
+        "SENA_PENDIENTE:MENSAJE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "Conserve los mensajes; la FELCC atiende los delitos por internet."
+     ],
+     "respuestas": [
+      {
+       "texto": "Bien, voy a guardar todo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "BUENO",
+        "GUARDAR",
+        "TOTAL"
+       ]
+      },
+      {
+       "texto": "¿Cómo guardo las fotos?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "COMO",
+        "GUARDAR",
+        "FOTOS"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Requiere interpretación en LSB?",
+      "¿Necesita apoyo de un intérprete de LSB?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No, no necesito un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No sé cómo pedir un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PEDIR",
+        "INTERPRETE"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-FELCC-202",
+   "archivo": "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md",
+   "titulo": "Acoso físico: una persona me sigue y me toca",
+   "institucion": "Policía Boliviana – FELCC",
+   "tramite": "Acoso físico: una persona me sigue y me toca",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "Una persona sorda sufre acoso físico: alguien la sigue, se acerca o la toca sin permiso. Si es su pareja, corresponde la FELCV.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Sufro acoso físico: una persona me sigue y me toca.",
+     "proposito": "Iniciar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:ACOSO_FISICO",
+      "SUFRIR",
+      "HOMBRE",
+      "MUJER",
+      "SENA_PENDIENTE:SEGUIR",
+      "TOCAR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Conoce a esa persona?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CONOCER",
+      "HOMBRE",
+      "MUJER"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, vive cerca de mi casa.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERCA",
+      "MÍO",
+      "CASA",
+      "VIVIR"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Esa persona es su pareja?",
+     "proposito": "Clasificar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PAREJA",
+      "SUYO"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "No, no es mi pareja.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "PAREJA",
+      "MIO"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Le pegó?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PEGAR"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, me pegó.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "PEGAR"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Necesita atención médica ahora?",
+     "proposito": "Priorizar salud",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AHORA",
+      "ATENDER",
+      "DOCTOR",
+      "NECESITAR"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, necesito ir al hospital.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "IR",
+      "HOSPITAL"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "¿Esa persona la busca todos los días?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TODOS_LOS_DIAS",
+      "BUSCAR",
+      "HOMBRE",
+      "MUJER",
+      "EL"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Sí, todos los días, y tengo miedo.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TODOS_LOS_DIAS",
+      "MIEDO",
+      "SI"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "Para la violencia de pareja corresponde la FELCV.",
+     "proposito": "Derivar",
+     "hechos": [
+      "H-FELCV-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PAREJA",
+      "VIOLENCIA",
+      "FELCV"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Quiero ir a la FELCV.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "IR",
+      "FELCV"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Sabe quién es esa persona?",
+      "¿Reconoce a esa persona?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, vive cerca de mi casa.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "CERCA",
+        "MÍO",
+        "CASA",
+        "VIVIR"
+       ]
+      },
+      {
+       "texto": "No, no conozco a esa persona.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CONOCER",
+        "HOMBRE",
+        "MUJER"
+       ]
+      },
+      {
+       "texto": "No sé quién es.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUIEN"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Es su pareja?",
+      "¿Tiene una relación con esa persona?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, es mi pareja.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PAREJA",
+        "MIO"
+       ]
+      },
+      {
+       "texto": "No, no es mi pareja.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "PAREJA",
+        "MIO"
+       ]
+      },
+      {
+       "texto": "No sé cómo explicarlo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "EXPLICAR",
+        "COMO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Lo agredió?",
+      "¿Hubo golpes?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, me pegó.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PEGAR"
+       ]
+      },
+      {
+       "texto": "No, no me pegó.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "PEGAR"
+       ]
+      },
+      {
+       "texto": "No sé si fue un golpe.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:GOLPE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Necesita ayuda médica inmediata?",
+      "¿Requiere atención de salud en este momento?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito ir al hospital.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "IR",
+        "HOSPITAL"
+       ]
+      },
+      {
+       "texto": "No, no necesito atención médica.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "ATENDER",
+        "DOCTOR"
+       ]
+      },
+      {
+       "texto": "No sé si necesito un médico.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "NECESITAR",
+        "DOCTOR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "¿La busca siempre?",
+      "¿Es todos los días?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, todos los días, y tengo miedo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "TODOS_LOS_DIAS",
+        "MIEDO",
+        "SI"
+       ]
+      },
+      {
+       "texto": "No, no siempre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SIEMPRE"
+       ]
+      },
+      {
+       "texto": "No lo sé.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "Si es su pareja, la denuncia corresponde a la FELCV."
+     ],
+     "respuestas": [
+      {
+       "texto": "Quiero ir a la FELCV.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "IR",
+        "FELCV"
+       ]
+      },
+      {
+       "texto": "¿Dónde está la FELCV?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "DONDE",
+        "FELCV"
+       ]
+      }
+     ]
+    }
+   ],
+   "ramificaciones": [
+    {
+     "turno": 8,
+     "condiciones": [
+      {
+       "turno": 6,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "condiciones": [
+      {
+       "turno": 4,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-LSB-201",
+   "archivo": "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md",
+   "titulo": "Acoso discriminatorio por ser sordo",
+   "institucion": "Derechos lingüísticos LSB / Defensoría del Pueblo",
+   "tramite": "Acoso discriminatorio por ser sordo",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "Una persona sorda sufre acoso discriminatorio: se burlan de ella o la rechazan muchas veces por ser sorda.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Sufro acoso discriminatorio porque soy sordo.",
+     "proposito": "Iniciar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SORDO",
+      "SENA_PENDIENTE:ACOSO",
+      "DISCRIMINACION",
+      "SUFRIR",
+      "POR_QUE"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Un funcionario público lo discrimina?",
+     "proposito": "Clasificar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:FUNCIONARIO",
+      "SENA_PENDIENTE:PUBLICO",
+      "DISCRIMINACION"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, es un funcionario de una oficina.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "SENA_PENDIENTE:FUNCIONARIO",
+      "OFICINA"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Se burlan de usted por ser sordo?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SORDO",
+      "BURLAR",
+      "TU"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, se burlan de mí porque soy sordo.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "BURLAR",
+      "YO",
+      "SORDO",
+      "POR_QUE"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Le negaron la atención?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "ATENDER",
+      "SENA_PENDIENTE:NEGAR",
+      "NO"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, no quisieron atenderme.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "ATENDER",
+      "NO_PUEDO",
+      "YO"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Se burlan de usted todos los días?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TODOS_LOS_DIAS",
+      "BURLAR",
+      "TU"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, todos los días.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TODOS_LOS_DIAS"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos.",
+     "proposito": "Orientar",
+     "hechos": [
+      "H-LSB-05"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:DEFENSORIA",
+      "PUEBLO",
+      "ATENDER",
+      "SI",
+      "SENA_PENDIENTE:PUBLICO",
+      "SENA_PENDIENTE:VULNERAR",
+      "SENA_PENDIENTE:DERECHO",
+      "SUYO"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Quiero quejarme.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "QUEJAR"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Necesita un intérprete de Lengua de Señas Boliviana?",
+     "proposito": "Accesibilidad",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NECESITAR",
+      "INTERPRETE",
+      "SENA_PENDIENTE:LSB"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, necesito un intérprete de LSB.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "INTERPRETE"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Es un servidor público?",
+      "¿Pasó en una oficina pública?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, es un funcionario de una oficina.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "SENA_PENDIENTE:FUNCIONARIO",
+        "OFICINA"
+       ]
+      },
+      {
+       "texto": "No, no es un funcionario.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SENA_PENDIENTE:FUNCIONARIO"
+       ]
+      },
+      {
+       "texto": "No sé si es un funcionario.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:FUNCIONARIO",
+        "1"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Se ríen de usted?",
+      "¿Se burlan de sus señas?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, se burlan de mí porque soy sordo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "BURLAR",
+        "YO",
+        "SORDO",
+        "POR_QUE"
+       ]
+      },
+      {
+       "texto": "No, no se burlan de mí.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "BURLAR",
+        "YO"
+       ]
+      },
+      {
+       "texto": "No sé si se burlan.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "BURLAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿No quisieron atenderle?",
+      "¿Le rechazaron la atención?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, no quisieron atenderme.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "ATENDER",
+        "NO_PUEDO",
+        "YO"
+       ]
+      },
+      {
+       "texto": "No, me atendieron.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "ATENDER"
+       ]
+      },
+      {
+       "texto": "No sé si me atendieron bien.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "ATENDER",
+        "BUENO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Se burlan siempre?",
+      "¿Es todos los días?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, todos los días.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TODOS_LOS_DIAS"
+       ]
+      },
+      {
+       "texto": "No, no siempre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SIEMPRE"
+       ]
+      },
+      {
+       "texto": "No lo sé.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "La Defensoría del Pueblo atiende si un servidor público vulnera derechos."
+     ],
+     "respuestas": [
+      {
+       "texto": "Quiero quejarme.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "QUERER",
+        "QUEJAR"
+       ]
+      },
+      {
+       "texto": "¿Dónde está esa oficina?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "OFICINA",
+        "DONDE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Requiere interpretación en LSB?",
+      "¿Necesita apoyo de un intérprete de LSB?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No, no necesito un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No sé cómo pedir un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PEDIR",
+        "INTERPRETE"
+       ]
+      }
+     ]
+    }
+   ],
+   "ramificaciones": [
+    {
+     "turno": 10,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-FELCC-203",
+   "archivo": "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md",
+   "titulo": "Denunciar trata y tráfico de personas",
+   "institucion": "Policía Boliviana – FELCC",
+   "tramite": "Denunciar trata y tráfico de personas",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "Una persona sorda denuncia trata y tráfico de personas: un familiar desapareció después de que le prometieron un trabajo lejos.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Quiero denunciar trata y tráfico de personas.",
+     "proposito": "Iniciar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "SENA_PENDIENTE:DENUNCIAR",
+      "SENA_PENDIENTE:TRATA_Y_TRAFICO",
+      "HOMBRE",
+      "MUJER"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿La persona es su familiar?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HOMBRE",
+      "MUJER",
+      "PARIENTE",
+      "QUIEN"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, es mi hermana.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "HERMANA",
+      "MÍO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿La persona desapareció?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HOMBRE",
+      "MUJER",
+      "DESAPARECER"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, desapareció y no volvió.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "DESAPARECER",
+      "VOLVER",
+      "NO"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Alguien la engañó con un trabajo lejos?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:ALGUIEN",
+      "TRABAJADOR",
+      "LEJOS",
+      "ENGAÑAR"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, la engañaron con un trabajo.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "ELLA",
+      "ENGAÑAR",
+      "TRABAJADOR"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Cree que la llevaron lejos?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CREER",
+      "LEJOS",
+      "LLEVAR",
+      "ELLA"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "No sé dónde la llevaron.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO_SABER",
+      "DONDE",
+      "LLEVAR",
+      "ELLA"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "¿La persona es adolescente?",
+     "proposito": "Priorizar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HOMBRE",
+      "MUJER",
+      "ADOLESCENTE"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Sí, es adolescente.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "JOVEN"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Tiene una foto de la persona?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HOMBRE",
+      "MUJER",
+      "FOTOS",
+      "TENER"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, tengo fotos en mi celular.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "CELULAR",
+      "FOTOS",
+      "TENER"
+     ]
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "La FELCC es la unidad especializada contra el crimen.",
+     "proposito": "Orientar",
+     "hechos": [
+      "H-FELCC-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "FELCC",
+      "UNIDAD",
+      "SENA_PENDIENTE:ESPECIALIZADA",
+      "SENA_PENDIENTE:CRIMEN",
+      "CONTRA"
+     ]
+    },
+    {
+     "n": 15,
+     "rol": "sordo",
+     "texto": "Quiero que la busquen rápido.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "BUSCAR",
+      "RÁPIDO"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Es un familiar suyo?",
+      "¿Conoce a la persona afectada?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, es mi hermana.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "HERMANA",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "Sí, es mi hijo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "YO",
+        "HIJO"
+       ]
+      },
+      {
+       "texto": "No, es una amiga.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "AMIGO"
+       ]
+      },
+      {
+       "texto": "No sé cómo explicarlo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "EXPLICAR",
+        "COMO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿No sabe dónde está la persona?",
+      "¿La persona no volvió?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, desapareció y no volvió.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "DESAPARECER",
+        "VOLVER",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No, sé dónde está.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "DONDE"
+       ]
+      },
+      {
+       "texto": "No sé si desapareció.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "DESAPARECER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Le ofrecieron un trabajo lejos?",
+      "¿La engañaron con un trabajo?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, la engañaron con un trabajo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "ELLA",
+        "ENGAÑAR",
+        "TRABAJADOR"
+       ]
+      },
+      {
+       "texto": "No, nadie la engañó.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SENA_PENDIENTE:ALGUIEN",
+        "ENGAÑAR"
+       ]
+      },
+      {
+       "texto": "No sé si la engañaron.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "ELLA",
+        "ENGAÑAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Pudo viajar lejos?",
+      "¿Cree que salió de Bolivia?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, creo que la llevaron lejos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CREER",
+        "ELLA",
+        "LLEVAR",
+        "LEJOS"
+       ]
+      },
+      {
+       "texto": "No, creo que está cerca.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CREER",
+        "CERCA"
+       ]
+      },
+      {
+       "texto": "No sé dónde la llevaron.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "DONDE",
+        "LLEVAR",
+        "ELLA"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "¿Es menor de edad?",
+      "¿Es una niña o una adolescente?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, es adolescente.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "JOVEN"
+       ]
+      },
+      {
+       "texto": "No, es una persona adulta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "HOMBRE",
+        "MUJER",
+        "ADULTO"
+       ]
+      },
+      {
+       "texto": "No sé su edad.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "EDAD",
+        "SUYO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Tiene fotos de la persona?",
+      "¿Puede mostrar una foto suya?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo fotos en mi celular.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CELULAR",
+        "FOTOS",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No, no tengo fotos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "FOTOS",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No sé si tengo fotos.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "FOTOS",
+        "TENER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 14,
+     "preguntas": [
+      "La FELCC atiende los delitos."
+     ],
+     "respuestas": [
+      {
+       "texto": "Quiero que la busquen rápido.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "QUERER",
+        "BUSCAR",
+        "RÁPIDO"
+       ]
+      },
+      {
+       "texto": "¿Qué necesitan saber?",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "QUE",
+        "NECESITAR",
+        "SABER"
+       ]
+      }
+     ]
+    }
+   ],
+   "ramificaciones": [
+    {
+     "turno": 6,
+     "condiciones": [
+      {
+       "turno": 4,
+       "estados": [
+        "afirmado",
+        "desconocido"
        ]
       }
      ]

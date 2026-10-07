@@ -95,9 +95,15 @@ Las fuentes y el formato están en `docs/lsb_fuentes/README.md`. En resumen:
     dice la pregunta; más NO SÉ;
   - disyuntiva («¿Por internet o presencialmente?») → sus alternativas, si
     todas tienen seña;
-  - indicación del funcionario → ENTENDIDO · NO ENTIENDO.
+  - indicación del funcionario → ENTENDIDO · NO ENTIENDO (respuestas
+    cortas, una seña) y, como respuesta larga, lo que el escenario documenta
+    que la persona contesta (el turno siguiente y las «Respuestas» de sus
+    variantes, hasta 3), con sus glosas completas: «Quiero que me indiquen
+    dónde acudir.». Escribe esas respuestas en el escenario; sin ellas solo
+    quedan las cortas.
   Una pregunta que no se puede contestar así no se ofrece (el constructor
-  avisa por qué).
+  avisa por qué). Al redactar, la misma frase no se repite dos veces
+  seguidas («Entendido. Entendido.»).
 - La pregunta del funcionario se muestra aunque tenga palabras sin seña
   (marcadas «seña a incorporar»; el avatar las deletrea). Un archivo con
   `<!-- lexico: estricto -->` (los borradores de la ingesta la llevan) avisa
@@ -117,6 +123,13 @@ palabra) a `descripciones_lsb_cache.json`, y el constructor la pone en
 lo que tampoco tiene seña. Mientras no esté traducida se ve el español.
 Para que se entienda mejor, conviene describir con palabras que tengan seña
 (el constructor no lo exige).
+
+Un término de varias palabras («acoso sexual», «trata y tráfico») se explica
+entero si tiene su entrada con «_» y `"juntar": true` (`ACOSO_SEXUAL`,
+`TRATA_Y_TRAFICO`): dos
+señas pendientes seguidas que lo forman se juntan en una (las palabras de
+enlace «y», «de» no cuentan). Cada palabra suelta conviene que tenga también
+la suya (o un «ver» a la del término).
 
 ## Ramificaciones y composición (opcional, en el escenario)
 

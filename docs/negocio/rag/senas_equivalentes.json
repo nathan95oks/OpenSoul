@@ -60,6 +60,41 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "ACOSA": {
+  "razon": "¿Conoce a la persona que la acosa?",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Conoce a la persona que la acosa?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
+ "ACOSAR": {
+  "razon": "Sufro ciberacoso en internet y en mi celular.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sufro ciberacoso en internet y en mi celular."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
+ "ACOSO": {
+  "razon": "Quiero denunciar acoso sexual. | Sufro acoso discriminatorio porque soy sordo. | Sufro acoso físico: una persona me sigue y me toca.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero denunciar acoso sexual.",
+   "Sufro acoso discriminatorio porque soy sordo.",
+   "Sufro acoso físico: una persona me sigue y me toca."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "ACREDITAR": {
   "razon": "No hay seña equivalente en la lista para 'acreditar' en estos contextos.",
   "origen": "bedrock",
@@ -255,6 +290,17 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "AFECTADA": {
+  "razon": "¿La persona afectada es su familiar?",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿La persona afectada es su familiar?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "AFECTADO": {
   "ejemplos": [
    "Sí, hay un niño afectado.",
@@ -306,6 +352,29 @@
    "No, la solicitud indica alcance nacional."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "ALGO": {
+  "razon": "No sé si publicaron algo.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si publicaron algo."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
+ "ALGUIEN": {
+  "razon": "No sé si alguien vio. | ¿Alguien vio lo que pasó?",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si alguien vio.",
+   "¿Alguien vio lo que pasó?"
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "ALGUN": {
@@ -844,6 +913,30 @@
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "FACTURA"
  },
+ "BOLIVIA": {
+  "razon": "El país: la seña BOLIVIA de los módulos.",
+  "origen": "revision_manual",
+  "candidata": "BOLIVIA",
+  "sena": "BOLIVIA",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "No, creo que está en Bolivia."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "BOLIVIA"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": false,
+   "vuelta_detalle": "sin frase con la palabra"
+  },
+  "revisado": true
+ },
  "BORRAR": {
   "razon": "No hay seña para «borrar mensajes» en este contexto.",
   "origen": "bedrock",
@@ -853,6 +946,17 @@
    "No borre ni modifique mensajes relacionados al hecho."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "BULLYING": {
+  "razon": "Mi hijo sufre bullying en la escuela.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Mi hijo sufre bullying en la escuela."
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "CALIFICACION": {
@@ -1796,6 +1900,17 @@
   "revisado": true,
   "revisadoEl": "2026-09-27"
  },
+ "CRIMEN": {
+  "razon": "La FELCC es la unidad especializada contra el crimen.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La FELCC es la unidad especializada contra el crimen."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "CUANTO": {
   "razon": "«¿Cuánto cuesta actualmente?»",
   "origen": "bedrock",
@@ -2236,6 +2351,32 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "DESAPARECER": {
+  "razon": "«La persona desapareció»: dejar de estar, el sentido de la seña DESAPARECER (M4).",
+  "origen": "revision_manual",
+  "candidata": "DESAPARECER",
+  "sena": "DESAPARECER",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "No sé si desapareció.",
+   "Sí, desapareció y no volvió.",
+   "¿La persona desapareció?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "DESAPARECER"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": false,
+   "vuelta_detalle": "sin frase con la palabra"
+  },
+  "revisado": true
+ },
  "DESAPARECIDO": {
   "razon": "No hay una seña específica para 'DESAPARECIDO' en la lista proporcionada. Aunque 'DESAPARECIDO' puede referirse a una persona que ha desaparecido, no existe una seña directa que lo represente.",
   "origen": "bedrock",
@@ -2530,7 +2671,7 @@
    "Me falta un documento.",
    "Necesito certificado porque robaron mis documentos."
   ],
-  "fecha": "2026-10-04"
+  "fecha": "2026-10-07"
  },
  "DONACION": {
   "ejemplos": [
@@ -2906,6 +3047,18 @@
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "ALLÍ"
  },
+ "ESPECIALIZADA": {
+  "razon": "No hay una combinación de señas de la lista que pueda expresar «unidad especializada» en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "La FELCC es la unidad especializada contra el crimen.",
+   "La FELCV es la unidad especializada contra la violencia."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "ESPECIALIZADO": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «especializado» en los contextos dados.",
   "origen": "bedrock",
@@ -3271,6 +3424,17 @@
   "automatica": true,
   "revisado": true
  },
+ "FISICO": {
+  "razon": "La palabra «físico» en el contexto de «acoso físico» no tiene una seña directa ni una combinación adecuada en la lista.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sufro acoso físico: una persona me sigue y me toca."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "FOLIO": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas de la lista para expresar «FOLIO» en las frases proporcionadas.",
   "origen": "bedrock",
@@ -3358,6 +3522,19 @@
   },
   "automatica": true
  },
+ "FUNCIONARIO": {
+  "razon": "Aunque «oficial» está en la lista, no se refiere específicamente a «funcionario» en el contexto dado, y no hay una combinación adecuada.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si es un funcionario.",
+   "No, no es un funcionario.",
+   "Sí, es un funcionario de una oficina."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "GARANTIZAR": {
   "razon": "No hay una seña directa para garantizar en los módulos proporcionados.",
   "origen": "bedrock",
@@ -3380,6 +3557,17 @@
    "Sí, el poder menciona esta gestión."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "GOLPE": {
+  "razon": "No hay una seña o combinación que corresponda a «golpe» en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si fue un golpe."
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "GRADO": {
@@ -3948,19 +4136,6 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
- "LE": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «¿Le entregaron observaciones por escrito?» | «¿Le indicaron que los documentos del trámite están archivados?» | «¿Le negaron atención por su forma de comunicarse?»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
-  "ejemplos": [
-   "¿Le entregaron observaciones por escrito?",
-   "¿Le indicaron que los documentos del trámite están archivados?",
-   "¿Le negaron atención por su forma de comunicarse?"
-  ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
- },
  "LEGAL": {
   "ejemplos": [
    "Necesito ayuda legal y psicológica.",
@@ -4076,18 +4251,17 @@
   },
   "automatica": true
  },
- "LO": {
-  "razon": "'LO' es un pronombre que no tiene una seña específica en la lista; su significado depende del contexto y no hay una seña equivalente.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
+ "LLAVER": {
+  "razon": "Error de la traducción por «llevaron»: LLEVAR.",
+  "origen": "revision_manual",
+  "sena": "LLEVAR",
+  "estado": "aprobada",
   "ejemplos": [
-   "No sé cómo hacerlo.",
-   "No sé si lo perdí o lo robaron.",
-   "No sé si puedo pedirlo."
+   "No sé dónde la llevaron."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "revisado": true
  },
  "LOCALIZAR": {
   "ejemplos": [
@@ -4150,6 +4324,43 @@
   ],
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
+ },
+ "MAESTRA": {
+  "razon": "Aunque «maestro» está en la lista, se refiere a un profesor masculino. No hay una seña específica para «maestra» ni una combinación adecuada para el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí, hablé con la maestra, pero no ayudó.",
+   "¿Habló con la maestra de la escuela?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
+ "MAESTRO": {
+  "razon": "«Sí, hablé con el maestro, pero no ayudó.» | «¿Habló con el maestro de la escuela?»",
+  "origen": "bedrock+titan+vuelta",
+  "candidata": "MAESTRO",
+  "sena": "MAESTRO",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "Sí, hablé con el maestro, pero no ayudó.",
+   "¿Habló con el maestro de la escuela?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "MAESTRO"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": true,
+   "vuelta_detalle": "«Sí, hablé con el maestro, pero no ayudó.» → falta [] sobra []"
+  },
+  "automatica": true
  },
  "MANTENER": {
   "razon": "No hay una seña específica para 'MANTENER' en la lista proporcionada.",
@@ -4395,7 +4606,7 @@
    "Mi carnet tiene un dato equivocado.",
    "Necesito ayuda por violencia de mi pareja."
   ],
-  "fecha": "2026-10-04"
+  "fecha": "2026-10-07"
  },
  "MINISTERIO": {
   "razon": "La seña MINISTERIO [M4 · Política II] se usa para expresar «MINISTERIO» en todas las frases proporcionadas.",
@@ -4511,6 +4722,17 @@
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "MOTOCICLETA"
  },
+ "MUCHOS": {
+  "razon": "No hay una seña o combinación que pueda expresar «muchos» en el contexto dado.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Esto pasa muchas veces?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "MULTA": {
   "razon": "No se encontró una seña equivalente o combinación de señas que expresen «multa» en la frase proporcionada.",
   "origen": "bedrock",
@@ -4590,6 +4812,58 @@
    "titan": null,
    "vuelta": true,
    "vuelta_detalle": "«La norma 2025 mantiene el registro dentro del sistema nacional.» → falta [] sobra []"
+  },
+  "automatica": true
+ },
+ "NADA": {
+  "razon": "La seña «NADA» [D2024 · Ninguna cosa o cantidad.] es una candidata adecuada para expresar «nada» en las frases dadas.",
+  "origen": "bedrock+titan+vuelta",
+  "candidata": "NADA",
+  "sena": "NADA",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "Bien, no voy a borrar nada.",
+   "No, nadie le prometió nada.",
+   "No, no publicaron nada."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "NADA"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": true,
+   "vuelta_detalle": "«Bien, no voy a borrar nada.» → falta ['voy'] sobra ['BUENO']"
+  },
+  "automatica": true
+ },
+ "NADIE": {
+  "razon": "La seña «NADIE» [D2024 · Ninguna persona.] es una candidata adecuada para expresar «nadie» en las frases dadas.",
+  "origen": "bedrock+titan+vuelta",
+  "candidata": "NADIE",
+  "sena": "NADIE",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "No, nadie le prometió nada.",
+   "No, nadie vio el robo.",
+   "No, nadie vio lo que pasó."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "NADIE"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": true,
+   "vuelta_detalle": "«No, nadie le prometió nada.» → falta [] sobra []"
   },
   "automatica": true
  },
@@ -4702,6 +4976,30 @@
    "vuelta_detalle": "«Necesito ayuda por un niño de mi familia.» → falta [] sobra []"
   },
   "automatica": true
+ },
+ "NIÑOS": {
+  "razon": "«Otros niños pegan a su hijo»: plural de NIÑO, el sentido de la seña (M2).",
+  "origen": "revision_manual",
+  "candidata": "NIÑOS",
+  "sena": "NIÑOS",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "¿Otros niños le pegan a su hijo?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "NIÑOS"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": false,
+   "vuelta_detalle": "sin frase con la palabra"
+  },
+  "revisado": true
  },
  "NORMA": {
   "razon": "La seña NORMA se usa para expresar 'norma' en los contextos proporcionados.",
@@ -5114,6 +5412,18 @@
    "BILLETES"
   ]
  },
+ "PAIS": {
+  "razon": "¿Cree que la llevaron a otro país?",
+  "origen": "bedrock",
+  "descartada": "PAÍS",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "¿Cree que la llevaron a otro país?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "PARA": {
   "razon": "Palabra función: LSB no seña preposiciones, conjunciones ni la cópula ser/estar; se omite (misma regla que el prompt de la Lambda Texto→LSB).",
   "origen": "bedrock+titan+vuelta",
@@ -5271,6 +5581,20 @@
    "Sí, mi documento tiene una partida antigua."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "PASA": {
+  "razon": "Sí, pasa siempre.",
+  "origen": "bedrock",
+  "descartada": "SUCEDER",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí, pasa siempre.",
+   "¿Esto pasa muchas veces?",
+   "¿Tiene videos o fotos de lo que pasa?"
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "PASAR": {
@@ -5893,6 +6217,32 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "PROMETER": {
+  "razon": "No sé qué le prometieron.",
+  "origen": "bedrock",
+  "descartada": "PROMETER",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé qué le prometieron.",
+   "No, nadie le prometió nada.",
+   "Sí, le prometieron un trabajo lejos."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
+ "PRONTO": {
+  "razon": "Quiero que la busquen pronto.",
+  "origen": "bedrock",
+  "descartada": "PRONTO",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero que la busquen pronto."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "PROPIEDAD": {
   "razon": "No hay seña equivalente o combinación que cubra el significado en los contextos dados.",
   "origen": "bedrock",
@@ -5967,6 +6317,18 @@
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "PROTEGER"
  },
+ "PRUEBA": {
+  "razon": "No sé si tengo pruebas.",
+  "origen": "bedrock",
+  "descartada": "PRUEBA",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé si tengo pruebas."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "PSICOLOGICA": {
   "razon": "Aunque «psicológica» está relacionada con «psicológico», no hay una combinación de señas de la lista que explique este término en las frases dadas.",
   "origen": "bedrock",
@@ -6026,6 +6388,66 @@
   ],
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
+ },
+ "PUBLICO": {
+  "razon": "Puede acudir a la Defensoría del Pueblo cuando un servidor público vulnera sus derechos.",
+  "origen": "bedrock",
+  "descartada": "PÚBLICO",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede acudir a la Defensoría del Pueblo cuando un servidor público vulnera sus derechos.",
+   "¿Quien lo discrimina es un funcionario público?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
+ "PUEBLE": {
+  "razon": "Puede acudir a la Defensoría del Pueblo cuando un servidor público vulnera sus derechos.",
+  "origen": "bedrock+titan+vuelta",
+  "sena": "PUEBLO",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "Puede acudir a la Defensoría del Pueblo cuando un servidor público vulnera sus derechos."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "PUEBLO"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": true,
+   "vuelta_detalle": "«Puede acudir a la Defensoría del Pueblo cuando un servidor público vulnera sus derechos.» → falta ['Puede'] sobra ['ATENDER']"
+  },
+  "automatica": true
+ },
+ "PUEBLO": {
+  "razon": "«La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos.»",
+  "origen": "bedrock+titan+vuelta",
+  "candidata": "PUEBLO",
+  "sena": "PUEBLO",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "PUEBLO"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": true,
+   "vuelta_detalle": "«La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos.» → falta [] sobra []"
+  },
+  "automatica": true
  },
  "QUEDAR": {
   "razon": "La seña «QUEDAR» está en la lista y se usa en la frase «Fue extravío. No sé dónde quedó».",
@@ -6522,6 +6944,16 @@
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "OBSERVAR"
  },
+ "ROBO": {
+  "sena": "ROBAR",
+  "origen": "catalogo",
+  "estado": "aprobada",
+  "razon": "El catálogo oficial escribe ROBAR como «Robar» / «robó».",
+  "ejemplos": [
+   "Sí, una persona vio el robo."
+  ],
+  "fecha": "2026-10-07"
+ },
  "RUTA": {
   "razon": "No hay seña equivalente o combinación para 'ruta' en las frases dadas.",
   "origen": "bedrock",
@@ -6575,6 +7007,18 @@
    "Primero confirmaré la sede."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "SEGUIR": {
+  "razon": "Sufro acoso físico: una persona me sigue y me toca.",
+  "origen": "bedrock",
+  "descartada": "SEGUIR",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sufro acoso físico: una persona me sigue y me toca."
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "SEGURIDAD": {
@@ -6694,6 +7138,18 @@
    "Necesito ayuda por violencia sexual."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "SEÑA": {
+  "razon": "Sí, se burlan de mis señas.",
+  "origen": "bedrock",
+  "descartada": "SEÑA",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Sí, se burlan de mis señas."
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "SEÑALADA": {
@@ -6994,6 +7450,17 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "SU": {
+  "sena": "TUYO",
+  "origen": "catalogo",
+  "estado": "aprobada",
+  "razon": "El catálogo oficial escribe TUYO como «Tuyo» / «su».",
+  "ejemplos": [
+   "¿Otros niños le pegan a su hijo?",
+   "¿Otros niños pegan a su hijo?"
+  ],
+  "fecha": "2026-10-07"
+ },
  "SUBSANAR": {
   "ejemplos": [
    "No sé si este documento subsana la observación.",
@@ -7007,6 +7474,55 @@
   "fecha": "2026-10-06",
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "ARREGLAR"
+ },
+ "SUFRI": {
+  "razon": "Sufro acoso físico: una persona me sigue y me toca.",
+  "origen": "bedrock+titan+vuelta",
+  "sena": "SUFRIR",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "Sufro acoso físico: una persona me sigue y me toca.",
+   "Sufro ciberacoso en internet y en mi celular."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "SUFRIR"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": true,
+   "vuelta_detalle": "«Sufro acoso físico: una persona me sigue y me toca.» → falta ['persona'] sobra ['HOMBRE', 'MUJER']"
+  },
+  "automatica": true
+ },
+ "SUFRIR": {
+  "razon": "«Sufro acoso»: padecer, el sentido de la seña SUFRIR.",
+  "origen": "revision_manual",
+  "candidata": "SUFRIR",
+  "sena": "SUFRIR",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "Mi hijo sufre bullying en la escuela.",
+   "Sufro acoso discriminatorio porque soy sordo."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "SUFRIR"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": false,
+   "vuelta_detalle": "sin frase con la palabra"
+  },
+  "revisado": true
  },
  "SUPERFICIE": {
   "razon": "No se encontró una seña equivalente o combinación de señas que coincidan con los contextos proporcionados.",
@@ -7167,6 +7683,32 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "TOCAR": {
+  "razon": "«Me tocó sin mi permiso»: tocar con la mano, el sentido de la seña TOCAR (M4).",
+  "origen": "revision_manual",
+  "candidata": "TOCAR",
+  "sena": "TOCAR",
+  "estado": "aprobada",
+  "misma_raiz": true,
+  "ejemplos": [
+   "No, no me tocó.",
+   "Sufro acoso físico: una persona me sigue y me toca.",
+   "¿Esa persona la tocó sin su permiso?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "senales": {
+   "bedrock": [
+    "TOCAR"
+   ],
+   "zona_palabra": null,
+   "zona_sena": null,
+   "titan": null,
+   "vuelta": false,
+   "vuelta_detalle": "sin frase con la palabra"
+  },
+  "revisado": true
+ },
  "TODAS": {
   "origen": "revision_manual",
   "estado": "aprobada",
@@ -7223,6 +7765,18 @@
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "TOTAL"
  },
+ "TOQUE": {
+  "razon": "Error de la traducción por «tocó»: TOCAR.",
+  "origen": "revision_manual",
+  "sena": "TOCAR",
+  "estado": "aprobada",
+  "ejemplos": [
+   "Sí, me tocó sin mi permiso."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0",
+  "revisado": true
+ },
  "TRABAJO": {
   "ejemplos": [
    "Ocurrió en mi trabajo."
@@ -7244,6 +7798,17 @@
    "No la traje."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "TRAFICO": {
+  "razon": "No hay una seña específica para 'tráfico' en este contexto; podría necesitar una combinación de señas o explicación adicional.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero denunciar trata y tráfico de personas."
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "TRAJE": {
@@ -7271,6 +7836,17 @@
    "No sé si la transferencia se completó."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "TRATA": {
+  "razon": "No hay una seña específica para 'trata' en este contexto; podría necesitar una combinación de señas o explicación adicional.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Quiero denunciar trata y tráfico de personas."
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "TRIBUNAL": {
@@ -7307,6 +7883,17 @@
   "fecha": "2026-10-06",
   "razon": "Palabra simple con seña directa (revisión manual).",
   "sena": "DÓNDE"
+ },
+ "UNA_VEZ": {
+  "razon": "No hay una seña específica para 'una vez' en este contexto; podría necesitar una combinación de señas o explicación adicional.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No, pasó una vez."
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
  },
  "UNIDAD": {
   "razon": "La seña UNIDAD [D2024 · Valor que se usa para contar.] es equivalente en esas frases.",
@@ -7519,6 +8106,19 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "VEZ": {
+  "razon": "No hay una seña específica para 'vez' en este contexto; podría necesitar una combinación de señas o explicación adicional.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "No sé cuántas veces pasó.",
+   "Sí, pasó muchas veces.",
+   "¿Esto pasa muchas veces?"
+  ],
+  "fecha": "2026-10-07",
+  "lexico": "3fbe162fc7b0"
+ },
  "VIA": {
   "razon": "No hay seña equivalente o combinación que explique 'vía de regularización' en los contextos dados.",
   "origen": "bedrock",
@@ -7638,6 +8238,17 @@
    "Puede acudir a la Defensoría por posible vulneración de derechos."
   ],
   "fecha": "2026-10-04",
+  "lexico": "3fbe162fc7b0"
+ },
+ "VULNERAR": {
+  "razon": "No hay una seña específica para 'vulnerar' en este contexto; podría necesitar una combinación de señas o explicación adicional.",
+  "origen": "bedrock",
+  "sena": null,
+  "estado": "sin_equivalente",
+  "ejemplos": [
+   "Puede acudir a la Defensoría del Pueblo cuando un servidor público vulnera sus derechos."
+  ],
+  "fecha": "2026-10-07",
   "lexico": "3fbe162fc7b0"
  },
  "YA": {

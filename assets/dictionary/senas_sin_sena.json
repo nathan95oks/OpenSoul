@@ -11,6 +11,82 @@
    "revisada": false,
    "ejemplo": "¿Tiene acceso a su proceso en ROMA?"
   },
+  "ACOSA": {
+   "descripcion": "Molestar, amenazar o maltratar a una persona muchas veces, aunque ella no quiere. Le da miedo.",
+   "descripcionLsb": [
+    "AMENAZAR",
+    "MALTRATAR",
+    "SIEMPRE",
+    "MIEDO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Conoce a la persona que la acosa?"
+  },
+  "ACOSAR": {
+   "descripcion": "Molestar, amenazar o maltratar a una persona muchas veces, aunque ella no quiere. Le da miedo.",
+   "descripcionLsb": [
+    "AMENAZAR",
+    "MALTRATAR",
+    "SIEMPRE",
+    "MIEDO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿La acosa todos los días?"
+  },
+  "ACOSO": {
+   "descripcion": "Molestar, amenazar o maltratar a una persona muchas veces, aunque ella no quiere. Le da miedo.",
+   "descripcionLsb": [
+    "AMENAZAR",
+    "MALTRATAR",
+    "SIEMPRE",
+    "MIEDO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sufro acoso discriminatorio porque soy sordo."
+  },
+  "ACOSO_DISCRIMINATORIO": {
+   "descripcion": "Molestar o rechazar a una persona muchas veces por ser diferente; por ejemplo, por ser sorda.",
+   "descripcionLsb": [
+    "DISCRIMINACIÓN",
+    "RECHAZAR",
+    "BURLAR",
+    "SORDO",
+    "DIFERENTE",
+    "SIEMPRE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "ACOSO_FISICO": {
+   "descripcion": "Acoso con el cuerpo: seguir, tocar o pegar a una persona muchas veces.",
+   "descripcionLsb": [
+    "TOCAR",
+    "PEGAR",
+    "MALTRATAR",
+    "SIEMPRE",
+    "MIEDO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sufro acoso físico: una persona me sigue y me toca."
+  },
+  "ACOSO_SEXUAL": {
+   "descripcion": "Tocar o pedir cosas íntimas a una persona que no quiere, muchas veces.",
+   "descripcionLsb": [
+    "TOCAR",
+    "ABUSAR",
+    "SIEMPRE",
+    "QUERER",
+    "NO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero denunciar acoso sexual."
+  },
   "ACREDITAR": {
    "descripcion": "Demostrar con un documento que algo es verdad.",
    "descripcionLsb": [
@@ -114,6 +190,27 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "No sé qué alcance debe tener el certificado."
+  },
+  "ALGO": {
+   "descripcion": "Una cosa, sin decir cuál.",
+   "descripcionLsb": [
+    "COSAS",
+    "NO_SABER"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "No sé si publicaron algo."
+  },
+  "ALGUIEN": {
+   "descripcion": "Una persona, sin decir quién.",
+   "descripcionLsb": [
+    "HOMBRE",
+    "MUJER",
+    "QUIÉN"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Alguien la engañó con un trabajo lejos?"
   },
   "ALODIAL": {
    "descripcion": "«Certificado alodial»: dice qué propiedades tiene una persona y si tienen deudas o hipotecas.",
@@ -328,6 +425,20 @@
    "revisada": false,
    "ejemplo": "No borre ni modifique mensajes relacionados al hecho."
   },
+  "BULLYING": {
+   "descripcion": "Acoso en la escuela: otros niños se burlan, le pegan o maltratan a un niño muchas veces.",
+   "descripcionLsb": [
+    "ESCUELA",
+    "NIÑO",
+    "BURLAR",
+    "PEGAR",
+    "MALTRATAR",
+    "SIEMPRE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Mi hijo sufre bullying en la escuela."
+  },
   "CALIFICAR": {
    "descripcion": "Evaluar a una persona y darle un resultado. Ej.: el grado de discapacidad.",
    "descripcionLsb": [
@@ -505,6 +616,21 @@
    "tipo": "nombre_propio",
    "revisada": false,
    "ejemplo": "¿Le queda mejor la oficina central o La Chimba?"
+  },
+  "CIBERACOSO": {
+   "descripcion": "Acoso por internet o por celular: amenazas, burlas o fotos publicadas sin permiso, muchas veces.",
+   "descripcionLsb": [
+    "INTERNET",
+    "CELULAR",
+    "AMENAZAR",
+    "BURLAR",
+    "FOTOS",
+    "DIFUNDIR",
+    "SIEMPRE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sufro ciberacoso en internet y en mi celular."
   },
   "CITAR": {
    "descripcion": "Llamar a una persona para que vaya a un lugar un día y hora, por ejemplo al juzgado.",
@@ -719,6 +845,18 @@
    "revisada": false,
    "ejemplo": "¿Cuánto cuesta el trámite que voy a solicitar?"
   },
+  "CRIMEN": {
+   "descripcion": "Un delito grave: robar, engañar o hacer daño a una persona.",
+   "descripcionLsb": [
+    "ROBAR",
+    "ENGAÑAR",
+    "MALTRATAR",
+    "PROHIBIDO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La FELCC es la unidad especializada contra el crimen."
+  },
   "CRPVA": {
    "descripcion": "Papel que dice de quién es un auto.",
    "descripcionLsb": [
@@ -906,6 +1044,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Depende de su grado y situación; revise la norma aplicable."
+  },
+  "DERECHO": {
+   "descripcion": "Lo que la ley protege para cada persona.",
+   "descripcionLsb": [
+    "LEY",
+    "PROTEGER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos."
   },
   "DERECHOS": {
    "descripcion": "Lo que la ley protege para cada persona.",
@@ -1178,6 +1326,15 @@
    "revisada": false,
    "ejemplo": "Escríbala sin espacios ni guiones."
   },
+  "ESPECIALIZADA": {
+   "descripcion": "Que se ocupa solo de un tipo de casos.",
+   "descripcionLsb": [
+    "EXPERTO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La FELCV es la unidad especializada contra la violencia."
+  },
   "ESPECIALIZADO": {
    "descripcion": "Que se ocupa solo de un tipo de casos.",
    "descripcionLsb": [
@@ -1374,6 +1531,17 @@
    "revisada": false,
    "ejemplo": "No sé si este documento formaliza la división."
   },
+  "FUNCIONARIO": {
+   "descripcion": "Persona que trabaja en una oficina del Estado y atiende a la gente.",
+   "descripcionLsb": [
+    "TRABAJADOR",
+    "OFICINA",
+    "ESTADO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Un funcionario público lo discrimina?"
+  },
   "GARANTIZAR": {
    "descripcion": "Asegurar que algo se cumpla.",
    "descripcionLsb": [
@@ -1393,6 +1561,16 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí, el poder menciona esta gestión."
+  },
+  "GOLPE": {
+   "descripcion": "Cuando se pega fuerte con la mano o con algo.",
+   "descripcionLsb": [
+    "PEGAR",
+    "FUERTE"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "No sé si fue un golpe."
   },
   "GRADO": {
    "descripcion": "Nivel o medida. Ej.: el grado de discapacidad.",
@@ -1643,7 +1821,7 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+   "ejemplo": "No sé qué es un investigador."
   },
   "JUDICIAL": {
    "descripcion": "Del juez o del juzgado.",
@@ -2436,6 +2614,16 @@
    "revisada": false,
    "ejemplo": "El arancel publicado incluye anticréticos entre otras escrituras."
   },
+  "PUBLICO": {
+   "descripcion": "Del Estado: para atender a todas las personas.",
+   "descripcionLsb": [
+    "ESTADO",
+    "ATENDER"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "¿Un funcionario público lo discrimina?"
+  },
   "QUEDA": {
    "descripcion": "Estar ubicado. «Queda entre…»: está entre…",
    "descripcionLsb": [
@@ -2723,6 +2911,15 @@
    "revisada": false,
    "ejemplo": ""
   },
+  "SEGUIR": {
+   "descripcion": "Continuar; también hacer lo que dicen. «Seguir instrucciones».",
+   "descripcionLsb": [
+    "CONTINUAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Sufro acoso físico: una persona me sigue y me toca."
+  },
   "SEGURIDAD": {
    "descripcion": "Estar sin peligro.",
    "descripcionLsb": [
@@ -2987,6 +3184,19 @@
    "revisada": false,
    "ejemplo": "¿Trajo documentación del pago del impuesto a la transferencia?"
   },
+  "TRATA_Y_TRAFICO": {
+   "descripcion": "Trata y tráfico de personas: engañar a una persona, llevarla lejos y venderla u obligarla a trabajar.",
+   "descripcionLsb": [
+    "ENGAÑAR",
+    "LLEVAR",
+    "LEJOS",
+    "VENDER",
+    "ESCLAVITUD"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "Quiero denunciar trata y tráfico de personas."
+  },
   "TRIBUNAL": {
    "descripcion": "Oficina de jueces.",
    "descripcionLsb": [
@@ -3130,6 +3340,17 @@
    "revisada": false,
    "ejemplo": "Puede acudir a la Defensoría por posible vulneración de derechos."
   },
+  "VULNERAR": {
+   "descripcion": "No respetar un derecho de una persona; hacerle daño.",
+   "descripcionLsb": [
+    "RESPETAR",
+    "NO",
+    "DAÑAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": "La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos."
+  },
   "YA": {
    "descripcion": "En este momento o antes; algo que ya pasó.",
    "descripcionLsb": [
@@ -3240,6 +3461,9 @@
   "BOLETA": [
    "FACTURA"
   ],
+  "BOLIVIA": [
+   "BOLIVIA"
+  ],
   "CALIFICACION": [
    "CALIFICACIÓN"
   ],
@@ -3339,6 +3563,9 @@
   ],
   "DEPENDER": [
    "DEPENDER"
+  ],
+  "DESAPARECER": [
+   "DESAPARECER"
   ],
   "DESCRIBIR": [
    "EXPLICAR"
@@ -3518,11 +3745,17 @@
   "LISTO": [
    "LISTO"
   ],
+  "LLAVER": [
+   "LLEVAR"
+  ],
   "LOCALIZAR": [
    "BUSCAR"
   ],
   "LOTE": [
    "LOTE"
+  ],
+  "MAESTRO": [
+   "MAESTRO"
   ],
   "MATERIAL": [
    "MATERIAL"
@@ -3569,6 +3802,12 @@
   "NACIONAL": [
    "NACIONAL"
   ],
+  "NADA": [
+   "NADA"
+  ],
+  "NADIE": [
+   "NADIE"
+  ],
   "NECESIDAD": [
    "NECESITAR"
   ],
@@ -3583,6 +3822,9 @@
   ],
   "NIÑO": [
    "NIÑO"
+  ],
+  "NIÑOS": [
+   "NIÑOS"
   ],
   "NORMA": [
    "NORMA"
@@ -3688,6 +3930,12 @@
   "PROTECCION": [
    "PROTEGER"
   ],
+  "PUEBLE": [
+   "PUEBLO"
+  ],
+  "PUEBLO": [
+   "PUEBLO"
+  ],
   "QUEDAR": [
    "QUEDAR"
   ],
@@ -3727,6 +3975,9 @@
   "REVISION": [
    "OBSERVAR"
   ],
+  "ROBO": [
+   "ROBAR"
+  ],
   "SALIR": [
    "IR",
    "FUERA"
@@ -3758,8 +4009,17 @@
   "SOLICITUD": [
    "PEDIR"
   ],
+  "SU": [
+   "TUYO"
+  ],
   "SUBSANAR": [
    "ARREGLAR"
+  ],
+  "SUFRI": [
+   "SUFRIR"
+  ],
+  "SUFRIR": [
+   "SUFRIR"
   ],
   "TECNICO": [
    "TÉCNICA"
@@ -3769,6 +4029,9 @@
   ],
   "TEXTO": [
    "TEXTO"
+  ],
+  "TOCAR": [
+   "TOCAR"
   ],
   "TODAS": [
    "TOTAL"
@@ -3784,6 +4047,9 @@
   ],
   "TODOS": [
    "TOTAL"
+  ],
+  "TOQUE": [
+   "TOCAR"
   ],
   "TRABAJO": [
    "TRABAJADOR"

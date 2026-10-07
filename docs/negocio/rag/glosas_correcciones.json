@@ -1715,5 +1715,27 @@
   ],
   "motivo": "La traducción puso la marca de tiempo inglesa PAST deletreada; la seña del catálogo es PASADO.",
   "fecha": "2026-10-04"
+ },
+ "Sufro ciberacoso en internet y en mi celular.": {
+  "glosas": [
+   "INTERNET",
+   "CELULAR",
+   "SENA_PENDIENTE:CIBERACOSO",
+   "SUFRIR"
+  ],
+  "antes": [
+   "INTERNET",
+   "CELULAR",
+   "SENA_PENDIENTE:ACOSAR",
+   "SENA_PENDIENTE:SUFRI"
+  ],
+  "faltan": [
+   "ciberacoso"
+  ],
+  "sobran": [
+   "ACOSAR"
+  ],
+  "origen": "revision_manual",
+  "fecha": "2026-10-07"
  }
 }
