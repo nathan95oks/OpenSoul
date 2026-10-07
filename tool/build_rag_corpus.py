@@ -1181,8 +1181,11 @@ def info_sin_sena(corpus: dict, avisos: list,
     salida, faltan = {}, []
     # Una palabra en azul dentro de una descripción también se toca y se
     # explica: se sigue hasta que toda palabra en azul tenga su entrada. Esas
-    # no tienen frase del trámite («ejemplo» vacío).
-    por_ver = sorted(ejemplos)
+    # no tienen frase del trámite («ejemplo» vacío). También van las siglas
+    # que la Lambda deletrea siempre (FELCC, NUREJ…): Voz a LSB las explica
+    # mientras las deletrea.
+    por_ver = sorted(ejemplos) + [p for p in deletreados_por_norma()
+                                  if p in datos and p not in ejemplos]
     while por_ver:
         palabra = por_ver.pop(0)
         if palabra in salida:
@@ -1227,6 +1230,27 @@ def info_sin_sena(corpus: dict, avisos: list,
             # seña equivalente aprobada se seña con ella, igual que en las
             # tarjetas, en vez de explicarse o deletrearse.
             "equivalencias": equivalencias_para_la_app()}
+
+
+def deletreados_por_norma(ruta: str | None = None) -> list:
+    """Los términos que la Lambda Texto→LSB deletrea siempre
+    (`TERMS_TO_SPELL`: FELCC, NUREJ, CÉDULA…), como claves de
+    descripciones_sin_sena.json (sin tildes, con «_»)."""
+    ruta = ruta or LAMBDA
+    if not os.path.exists(ruta):
+        return []
+    with open(ruta, encoding="utf-8") as f:
+        fuente = f.read()
+    m = re.search(r"^TERMS_TO_SPELL = \{(.*?)\}", fuente,
+                  re.MULTILINE | re.DOTALL)
+    if not m:
+        return []
+    claves = []
+    for t in re.findall(r'"([^"]+)"', m.group(1)):
+        clave = _norm(t).upper().replace(" ", "_")
+        if clave not in claves:
+            claves.append(clave)
+    return claves
 
 
 def equivalencias_para_la_app(ruta: str = EQUIVALENCIAS) -> dict:

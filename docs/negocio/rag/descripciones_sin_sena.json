@@ -25,6 +25,16 @@
     "VERDAD"
    ]
   },
+  "ACTA": {
+   "descripcion": "Papel donde se escribe lo que pasó en una reunión o audiencia.",
+   "tipo": "concepto",
+   "revisada": false,
+   "lsb": [
+    "PAPEL",
+    "ESCRIBIR",
+    "REUNIÓN"
+   ]
+  },
   "ACTIVAR": {
    "descripcion": "Hacer que un servicio o trámite empiece a funcionar.",
    "tipo": "concepto",
@@ -520,7 +530,12 @@
   "CEDULA": {
    "descripcion": "El carnet de identidad, con su nombre y su foto.",
    "tipo": "concepto",
-   "revisada": false
+   "revisada": false,
+   "lsb": [
+    "PAPEL",
+    "IDENTIDAD",
+    "FOTOS"
+   ]
   },
   "CENTRAL": {
    "descripcion": "La oficina principal.",
@@ -920,6 +935,26 @@
    "descripcion": "Comunicar algo a otra persona.",
    "tipo": "concepto",
    "revisada": false
+  },
+  "DECLARACION": {
+   "descripcion": "Contar lo que pasó ante la policía o la fiscalía.",
+   "tipo": "concepto",
+   "revisada": false,
+   "lsb": [
+    "NARRAR",
+    "PASADO",
+    "POLICÍA"
+   ]
+  },
+  "DECLARAR": {
+   "descripcion": "Contar lo que pasó ante la policía o la fiscalía.",
+   "tipo": "concepto",
+   "revisada": false,
+   "lsb": [
+    "NARRAR",
+    "PASADO",
+    "POLICÍA"
+   ]
   },
   "DEFENDER": {
    "descripcion": "Ayudar a una persona para que no le hagan daño.",
@@ -1476,6 +1511,28 @@
    "descripcion": "De la familia. «Audiencia familiar»: en un juzgado de familia.",
    "tipo": "concepto",
    "revisada": false
+  },
+  "FELCC": {
+   "descripcion": "Policía que investiga delitos, como robos y estafas.",
+   "tipo": "sigla",
+   "revisada": false,
+   "lsb": [
+    "POLICÍA",
+    "INVESTIGACIÓN",
+    "ROBAR",
+    "ENGAÑAR"
+   ]
+  },
+  "FELCV": {
+   "descripcion": "Policía que atiende la violencia contra las mujeres y en la familia.",
+   "tipo": "sigla",
+   "revisada": false,
+   "lsb": [
+    "POLICÍA",
+    "PROTEGER",
+    "VIOLENCIA",
+    "MUJER"
+   ]
   },
   "FIGURA": {
    "descripcion": "Aparecer escrito en un documento o registro.",
@@ -2117,7 +2174,11 @@
   "MINISTERIO_PUBLICO": {
    "descripcion": "La Fiscalía: investiga los delitos.",
    "tipo": "concepto",
-   "revisada": false
+   "revisada": false,
+   "lsb": [
+    "FISCALIA",
+    "INVESTIGACIÓN"
+   ]
   },
   "MIYO": {
    "descripcion": "«Mi»: de la persona que habla. Tiene seña: MÍO.",
@@ -2325,6 +2386,17 @@
    "descripcion": "Número.",
    "tipo": "concepto",
    "revisada": false
+  },
+  "NUREJ": {
+   "descripcion": "Número de su caso en el juzgado.",
+   "tipo": "sigla",
+   "revisada": false,
+   "lsb": [
+    "1",
+    "2",
+    "3",
+    "JUICIO"
+   ]
   },
   "OBLIGAR": {
    "descripcion": "Hacer que otra persona haga algo que no quiere.",
@@ -3170,6 +3242,27 @@
    "descripcion": "Poner una cosa lejos de otra.",
    "tipo": "concepto",
    "revisada": false
+  },
+  "SEPDAVI": {
+   "descripcion": "Servicio del Estado que da abogado gratis a las víctimas de delitos.",
+   "tipo": "sigla",
+   "revisada": false,
+   "lsb": [
+    "ABOGADO",
+    "GRATIS",
+    "AYUDAR",
+    "SUFRIR"
+   ]
+  },
+  "SEPDEP": {
+   "descripcion": "Defensa Pública: abogado gratis para la persona acusada.",
+   "tipo": "sigla",
+   "revisada": false,
+   "lsb": [
+    "ABOGADO",
+    "GRATIS",
+    "CULPAR"
+   ]
   },
   "SERVICIO": {
    "descripcion": "Atención o ayuda que da una institución.",
