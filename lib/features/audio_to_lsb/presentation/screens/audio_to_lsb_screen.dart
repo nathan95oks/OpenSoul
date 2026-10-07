@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/di/injection.dart'
+    show pendingSignCatalogProvider;
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
+import 'package:lsb_legal_app/core/domain/services/spelling_help.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
@@ -81,12 +85,37 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
     );
   }
 
+  /// Las palabras que el avatar va a deletrear, con su sinónimo o qué son.
+  List<SpellingHelp> _spellingHelp(
+    AudioTranslationState state,
+    List<String>? steps,
+  ) {
+    final result = state.translationResult;
+    if (state.status != AudioTranslationStatus.success ||
+        result == null ||
+        steps == null) {
+      return const [];
+    }
+    final catalog =
+        ref.watch(pendingSignCatalogProvider).asData?.value ??
+        PendingSignCatalog.empty;
+    return SpellingHelp.forSteps(steps, [
+      ...result.unanimatedSigns,
+      ...result.spelledWords,
+    ], catalog);
+  }
+
   Widget _buildScreen(
     BuildContext context,
     AudioTranslationState state,
     AudioTranslationController controller,
     bool immersive,
   ) {
+    final steps = state.status == AudioTranslationStatus.success
+        ? (state.translationResult?.animationGlosses.isNotEmpty == true
+              ? state.translationResult?.animationGlosses
+              : state.translationResult?.glosses)
+        : null;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppTheme.audioPageBg,
@@ -167,18 +196,10 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                                   _returnToInitial(controller),
                               playbackRequestId: _playbackRequestId,
                               isUserComposing: _userComposing,
-                              glosses:
-                                  state.status == AudioTranslationStatus.success
-                                  ? (state
-                                                .translationResult
-                                                ?.animationGlosses
-                                                .isNotEmpty ==
-                                            true
-                                        ? state
-                                              .translationResult
-                                              ?.animationGlosses
-                                        : state.translationResult?.glosses)
-                                  : null,
+                              glosses: steps,
+                              // Mientras deletrea: sinónimo o qué es, y
+                              // «Siguiente» para saltar el deletreo.
+                              spellingHelp: _spellingHelp(state, steps),
                               animationUrls:
                                   state.status == AudioTranslationStatus.success
                                   ? state.translationResult?.animationUrls

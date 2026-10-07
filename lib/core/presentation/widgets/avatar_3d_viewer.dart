@@ -13,6 +13,7 @@ import 'package:lsb_legal_app/core/domain/entities/avatar_facial_expression.dart
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
+import 'package:lsb_legal_app/core/domain/services/spelling_help.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/pending_sign_info_sheet.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_expression_indicator.dart';
 
@@ -53,6 +54,11 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   /// («realizar» → HACER). Se mira antes que el catálogo.
   final Map<String, PendingSignInfo> stepDescriptions;
 
+  /// Las palabras que se deletrean en [glosses], con su sinónimo o su
+  /// descripción: mientras el avatar deletrea una, abajo aparece qué es y un
+  /// botón «Siguiente» para saltar el resto del deletreo. Lo usa Voz a LSB.
+  final List<SpellingHelp> spellingHelp;
+
   const Avatar3DViewer({
     super.key,
     required this.isProcessing,
@@ -69,6 +75,7 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
     this.showBackButton = true,
     this.describePendingSigns = false,
     this.stepDescriptions = const {},
+    this.spellingHelp = const [],
   });
 
   @override
@@ -698,6 +705,18 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     _playCurrentStep();
   }
 
+  /// «Siguiente» durante un deletreo: se salta el resto de las letras y el
+  /// avatar sigue con la seña de después (o termina, si era la última).
+  void _skipSpelling(SpellingHelp ayuda) {
+    if (!mounted || !_isPlayingSequence || !ayuda.contains(_currentIndex)) {
+      return;
+    }
+    _cancelPlaceholderTimer();
+    _stepSettled = false;
+    setState(() => _currentIndex = ayuda.end);
+    _finishCurrentStep();
+  }
+
   @override
   void dispose() {
     _cancelPlaceholderTimer();
@@ -798,6 +817,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       ref.watch(pendingSignCatalogProvider);
     }
     final descrita = isPlaceholder ? _describedInfo(currentGloss) : null;
+    final ayuda = widget.spellingHelp
+        .where((h) => h.contains(_currentIndex))
+        .firstOrNull;
 
     // Solo los rotulos: el visor vive debajo, en [build], y no se desmonta al
     // cambiar de estado.
@@ -963,6 +985,33 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                     onContinue: _finishCurrentStep,
                   )
                 : const SizedBox.shrink(key: ValueKey('sin_cortina')),
+          ),
+        ),
+
+        // Mientras se deletrea una palabra: abajo, su sinónimo o qué es, y
+        // «Siguiente» para no esperar todas las letras.
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 280),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (child, animation) => SlideTransition(
+              position: Tween(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+            child: ayuda != null && _isPlayingSequence
+                ? _SpellingHelpPanel(
+                    key: ValueKey('deletreo_${ayuda.start}'),
+                    help: ayuda,
+                    onNext: () => _skipSpelling(ayuda),
+                  )
+                : const SizedBox.shrink(key: ValueKey('sin_deletreo')),
           ),
         ),
       ],
@@ -1295,6 +1344,127 @@ class _Tarjeta extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Abajo, mientras el avatar deletrea una palabra: el sinónimo en LSB o, si
+/// no hay, la misma descripción de la hoja «¿Qué es?» de las tarjetas LSB; y
+/// «Siguiente» para pasar a la seña de después.
+class _SpellingHelpPanel extends StatelessWidget {
+  final SpellingHelp help;
+  final VoidCallback onNext;
+
+  const _SpellingHelpPanel({
+    super.key,
+    required this.help,
+    required this.onNext,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final tema = Theme.of(context).textTheme.apply(
+      bodyColor: AppTheme.lightText,
+      displayColor: AppTheme.lightText,
+    );
+    final descripcion = help.description;
+    return Container(
+      key: const Key('avatar_deletreo_ayuda'),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.45,
+      ),
+      margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      decoration: BoxDecoration(
+        color: AppTheme.pageBg,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppTheme.glossCardBorder),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black38,
+            blurRadius: 16,
+            offset: Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Flexible(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.spellcheck_rounded,
+                        size: 18,
+                        color: AppTheme.lightTextSub,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Deletreando',
+                        style: tema.bodySmall?.copyWith(
+                          color: AppTheme.lightTextSub,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  if (help.synonyms.isNotEmpty) ...[
+                    Text(
+                      help.word,
+                      style: tema.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Sinónimo en LSB:',
+                      style: tema.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      help.synonyms
+                          .map((g) => g.replaceAll('_', ' '))
+                          .join(' · '),
+                      key: const Key('avatar_deletreo_sinonimo'),
+                      style: tema.titleMedium?.copyWith(
+                        color: AppTheme.lsbViolet,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                  ] else if (descripcion != null)
+                    PendingSignInfoView(
+                      info: descripcion,
+                      showReviewNote: false,
+                    )
+                  else
+                    Text(
+                      help.word,
+                      style: tema.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 14),
+            child: FilledButton.icon(
+              onPressed: onNext,
+              icon: const Icon(Icons.skip_next_rounded),
+              label: const Text('Siguiente'),
+            ),
+          ),
+        ],
       ),
     );
   }

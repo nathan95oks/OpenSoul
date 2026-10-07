@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
+import 'package:lsb_legal_app/core/domain/services/spelling_help.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
 
 /// Lo que un lugar de la pantalla le pide al avatar compartido: las mismas
@@ -21,6 +22,9 @@ class AvatarRequest {
 
   /// Ver [Avatar3DViewer.stepDescriptions].
   final Map<String, PendingSignInfo> stepDescriptions;
+
+  /// Ver [Avatar3DViewer.spellingHelp].
+  final List<SpellingHelp> spellingHelp;
   final Duration animationDuration;
   final ValueChanged<bool>? onPlaybackStateChanged;
   final VoidCallback? onReturnToInput;
@@ -35,6 +39,7 @@ class AvatarRequest {
     this.showBackButton = true,
     this.describePendingSigns = false,
     this.stepDescriptions = const {},
+    this.spellingHelp = const [],
     this.animationDuration = const Duration(seconds: 3),
     this.onPlaybackStateChanged,
     this.onReturnToInput,
@@ -212,6 +217,7 @@ class _SharedAvatarHostState extends ConsumerState<SharedAvatarHost> {
         stepDescriptions: visible
             ? request!.stepDescriptions
             : const <String, PendingSignInfo>{},
+        spellingHelp: visible ? request!.spellingHelp : const [],
         animationDuration:
             request?.animationDuration ?? const Duration(seconds: 3),
         playbackRequestId: visible
@@ -333,6 +339,7 @@ class _SharedAvatarSlotState extends ConsumerState<SharedAvatarSlot> {
         showBackButton: r.showBackButton,
         describePendingSigns: r.describePendingSigns,
         stepDescriptions: r.stepDescriptions,
+        spellingHelp: r.spellingHelp,
         animationDuration: r.animationDuration,
         playbackRequestId: r.playbackRequestId,
         glosses: r.glosses,
