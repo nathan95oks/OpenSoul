@@ -8,6 +8,9 @@ import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/domain/services/case_search.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/case_search_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/case_search_view.dart';
 
 class ContextSelectionWidget extends ConsumerStatefulWidget {
   const ContextSelectionWidget({super.key});
@@ -20,6 +23,15 @@ class ContextSelectionWidget extends ConsumerStatefulWidget {
 class _ContextSelectionWidgetState
     extends ConsumerState<ContextSelectionWidget> {
   ContextFamily? _abierta;
+
+  /// El foco del buscador: con él (o con algo escrito) la búsqueda manda.
+  final FocusNode _buscador = FocusNode();
+
+  final ScrollController _scroll = ScrollController();
+
+  /// Qué lista se ve (familia, institución, búsqueda): si cambia, la vista
+  /// vuelve arriba, al título o a los primeros resultados.
+  String? _vista;
 
   /// La familia que pidió Conversation («¿Quiere denunciar algo?» abre
   /// Denuncias). La persona puede volver a la lista general igual.
@@ -37,6 +49,9 @@ class _ContextSelectionWidgetState
   @override
   void initState() {
     super.initState();
+    _buscador.addListener(() {
+      if (mounted) setState(() {});
+    });
     // Al volver de un contexto con la flecha, la lista de su familia sigue
     // abierta (Denuncias → Denunciar robo → ← vuelve a Denuncias).
     _abierta =
@@ -50,6 +65,51 @@ class _ContextSelectionWidgetState
         if (mounted) ref.read(openFamilyProvider.notifier).open(abierta.id);
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _buscador.dispose();
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  /// Abre lo que se tocó en el buscador. Un caso entra directo y deja la
+  /// búsqueda escrita (al volver con la flecha sigue ahí); una familia o
+  /// una institución abre su lista, como si se hubiera tocado en el menú.
+  void _abrirResultado(CaseSearchHit hit) {
+    _buscador.unfocus();
+    final e = hit.entry;
+    switch (e.kind) {
+      case CaseHitKind.context:
+        ref.read(contextProvider.notifier).setContext(e.context!);
+      case CaseHitKind.family:
+        ref.read(caseSearchQueryProvider.notifier).clear();
+        final contextos = contextsOfFamily(e.family!);
+        if (contextos.length == 1) {
+          ref.read(contextProvider.notifier).setContext(contextos.first);
+        } else {
+          _abrir(e.family);
+        }
+      case CaseHitKind.section:
+        ref.read(caseSearchQueryProvider.notifier).clear();
+        final tramites = _familiaPorId(e.familyId);
+        if (tramites != null) _abrir(tramites);
+        ref.read(openSectionProvider.notifier).open(e.id);
+    }
+  }
+
+  /// Enter en el teclado: el primer resultado.
+  void _abrirPrimero() {
+    final grupos = ref.read(caseSearchResultsProvider);
+    if (grupos.isEmpty) return;
+    // Primero un caso (es lo directo); si no hay, la primera sección.
+    final casos = [
+      for (final g in grupos)
+        for (final h in g.hits)
+          if (h.entry.kind == CaseHitKind.context) h,
+    ];
+    _abrirResultado(casos.isNotEmpty ? casos.first : grupos.first.hits.first);
   }
 
   Widget _familyButton(ContextFamily f, String? highlightedId) => _FamilyButton(
@@ -88,8 +148,12 @@ class _ContextSelectionWidgetState
     });
     ref.listen(cardsFlowLaunchProvider, (anterior, launch) {
       if (anterior?.sameErrand(launch) ?? false) return;
+      ref.read(caseSearchQueryProvider.notifier).clear();
       _abrir(_familiaDe(launch));
     });
+    final query = ref.watch(caseSearchQueryProvider);
+    final buscando = query.trim().isNotEmpty;
+    final activo = buscando || _buscador.hasFocus;
     final pending = ref.watch(pendingReplyProvider);
     final suggestion = pending?.suggestion;
     final highlightedId = pending?.proposedContextId;
@@ -114,81 +178,182 @@ class _ContextSelectionWidgetState
           ]
         : contextsOfFamily(familia);
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            if (pending != null) ...[
-              _ReplyingToBanner(text: pending.question),
-              const SizedBox(height: 20),
-            ],
-            Text(
-              seccion != null
-                  ? seccion.name
-                  : pending != null
-                  ? '¿Desde qué contexto respondes?'
-                  : 'Selecciona el contexto',
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.lightText,
-                letterSpacing: -0.5,
+    final lista = Column(
+      key: const ValueKey('lista'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (familia == null)
+          ...contextFamilies.indexed.map(
+            (e) => BubbleEntrance(
+              key: ValueKey('menu_${e.$2.id}'),
+              index: e.$1,
+              child: _familyButton(e.$2, highlightedId),
+            ),
+          )
+        else ...[
+          ...desplegados.indexed.map(
+            (e) => BubbleEntrance(
+              key: ValueKey('${seccion?.id ?? familia.id}_${e.$2.id}'),
+              index: e.$1,
+              child: _ContextButton(
+                context: e.$2,
+                highlighted: e.$2.id == highlightedId,
+                suggestion: e.$2.id == suggestion?.contextId
+                    ? suggestion
+                    : null,
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              seccion != null
-                  ? seccion.description
-                  : pending != null
-                  ? 'Puedes aceptar el contexto propuesto o elegir otro.'
-                  : '¿Qué necesitas hacer?',
-              style: const TextStyle(
-                fontSize: 15,
-                color: AppTheme.lightTextSub,
-                fontWeight: FontWeight.w400,
+          ),
+          if (porSecciones && seccion == null)
+            ...RagTramites.sections.indexed.map(
+              (e) => BubbleEntrance(
+                key: ValueKey(e.$2.id),
+                index: desplegados.length + e.$1,
+                child: _sectionButton(e.$2, highlightedId),
               ),
             ),
-            const SizedBox(height: 28),
-            if (familia == null)
-              ...contextFamilies.indexed.map(
-                (e) => BubbleEntrance(
-                  key: ValueKey('menu_${e.$2.id}'),
-                  index: e.$1,
-                  child: _familyButton(e.$2, highlightedId),
-                ),
-              )
-            else ...[
-              ...desplegados.indexed.map(
-                (e) => BubbleEntrance(
-                  key: ValueKey('${seccion?.id ?? familia.id}_${e.$2.id}'),
-                  index: e.$1,
-                  child: _ContextButton(
-                    context: e.$2,
-                    highlighted: e.$2.id == highlightedId,
-                    suggestion: e.$2.id == suggestion?.contextId
-                        ? suggestion
-                        : null,
-                  ),
+        ],
+      ],
+    );
+
+    // Debajo de la barra: la lista de siempre, las sugerencias al abrir el
+    // buscador vacío, o los resultados mientras se escribe.
+    final debajo = buscando
+        ? CaseSearchResults(
+            key: const ValueKey('resultados'),
+            onOpen: _abrirResultado,
+          )
+        : activo
+        ? const CaseSearchSuggestions(key: ValueKey('sugerencias'))
+        : lista;
+
+    final vista = '${familia?.id}/${seccion?.id}/$buscando';
+    if (_vista != null && vista != _vista) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scroll.hasClients) _scroll.jumpTo(0);
+      });
+    }
+    _vista = vista;
+
+    return PopScope(
+      // El «atrás» del teléfono primero cierra la búsqueda.
+      canPop: !activo,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        ref.read(caseSearchQueryProvider.notifier).clear();
+        _buscador.unfocus();
+      },
+      child: CustomScrollView(
+        controller: _scroll,
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              // Al buscar, el encabezado se pliega y la barra sube: la
+              // pantalla es de los resultados.
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 280),
+                curve: Curves.easeOutCubic,
+                alignment: Alignment.topCenter,
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: activo ? 0 : 1,
+                  child: activo
+                      ? const SizedBox(width: double.infinity, height: 12)
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 36),
+                            if (pending != null) ...[
+                              _ReplyingToBanner(text: pending.question),
+                              const SizedBox(height: 20),
+                            ],
+                            Text(
+                              seccion != null
+                                  ? seccion.name
+                                  : pending != null
+                                  ? '¿Desde qué contexto respondes?'
+                                  : 'Selecciona el contexto',
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800,
+                                color: AppTheme.lightText,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              seccion != null
+                                  ? seccion.description
+                                  : pending != null
+                                  ? 'Puedes aceptar el contexto propuesto o elegir otro.'
+                                  : '¿Qué necesitas hacer?',
+                              style: const TextStyle(
+                                fontSize: 15,
+                                color: AppTheme.lightTextSub,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(height: 18),
+                          ],
+                        ),
                 ),
               ),
-              if (porSecciones && seccion == null)
-                ...RagTramites.sections.indexed.map(
-                  (e) => BubbleEntrance(
-                    key: ValueKey(e.$2.id),
-                    index: desplegados.length + e.$1,
-                    child: _sectionButton(e.$2, highlightedId),
-                  ),
+            ),
+          ),
+          // La barra queda fija arriba al desplazar la lista.
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _BarraFija(
+              CaseSearchBar(focusNode: _buscador, onSubmitted: _abrirPrimero),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 36),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 280),
+                switchInCurve: Curves.easeOutCubic,
+                transitionBuilder: bubbleSwitcherTransition,
+                layoutBuilder: (actual, anteriores) => Stack(
+                  alignment: Alignment.topCenter,
+                  children: [...anteriores, ?actual],
                 ),
-            ],
-            const SizedBox(height: 16),
-          ],
-        ),
+                child: debajo,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+}
+
+/// La barra del buscador fija arriba, sobre el fondo de la página.
+class _BarraFija extends SliverPersistentHeaderDelegate {
+  final Widget barra;
+
+  const _BarraFija(this.barra);
+
+  static const _alto = 54.0 + 16;
+
+  @override
+  double get minExtent => _alto;
+
+  @override
+  double get maxExtent => _alto;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlaps) {
+    return Container(
+      color: AppTheme.lightBg,
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      child: barra,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_BarraFija oldDelegate) => barra != oldDelegate.barra;
 }
 
 class _FamilyButton extends StatelessWidget {
