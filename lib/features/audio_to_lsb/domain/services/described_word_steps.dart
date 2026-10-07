@@ -13,7 +13,7 @@ import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 ///    avatar tiene sus clips: se seña.
 /// 2. Existe en LSB pero no está animada (VERDAD; «realizar» → HACER), o es
 ///    una palabra en azul con descripción: un solo paso
-///    `SENA_PENDIENTE:PALABRA` y la pantalla amarilla dice qué es
+///    `SENA_PENDIENTE:PALABRA` y la pantalla violeta dice qué es
 ///    ([LsbTranslation.stepDescriptions]); al leerla el avatar sigue.
 /// 3. No existe en LSB (ni descripción): se deletrea.
 abstract final class DescribedWordSteps {
