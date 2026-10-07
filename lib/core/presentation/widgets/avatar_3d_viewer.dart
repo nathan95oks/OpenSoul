@@ -141,6 +141,11 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// termino mas de una vez —el evento 'loop' se reenvia como 'finished'— y
   /// ademas esta el reloj de seguridad, asi que cerrar el paso es idempotente.
   bool _stepSettled = false;
+
+  /// Identifica la secuencia en curso. Si se pide otra, o se corta, mientras
+  /// se preparan las señas de la anterior, esa preparación se descarta en vez
+  /// de pisar el estado de la nueva.
+  int _sequenceId = 0;
   bool _reportedPlaying = false;
   bool _modelLoaded = false;
   bool _returnRequested = false;
@@ -190,6 +195,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           .runJavaScript('''
         const mv = document.querySelector('model-viewer');
         window.__lsbMode = 'idle';
+        window.__lsbStep = -1;
         if (mv) mv.pause();
       ''')
           .catchError((e) {});
@@ -231,6 +237,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
             ? wanted
             : neutrals[$preferred % neutrals.length];
           window.__lsbMode = 'neutral';
+          window.__lsbStep = -1;
           mv.animationName = name;
           if (mv.updateComplete) await mv.updateComplete;
           // Si arranco una sena mientras tanto, el reposo no la pisa.
@@ -322,6 +329,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   /// Corta la secuencia en curso: pausa el `model-viewer`, cancela el timer de
   /// los placeholders y devuelve el visor a reposo.
   void _stopPlayback() {
+    _sequenceId++;
     _returnRequested = false;
     _cancelPlaceholderTimer();
     _cancelNeutral();
@@ -373,6 +381,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       const mv = document.querySelector('model-viewer');
       if (mv) {
         window.__lsbMode = 'idle';
+        window.__lsbStep = -1;
         mv.pause();
         mv.currentTime = 0;
       }
@@ -391,13 +400,19 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }) {
     if (!mounted) return;
     _returnRequested = false;
+    _sequenceId++;
+    // Un paso nuevo: ningún aviso de «terminó» del anterior (el reposo, o la
+    // última seña de la frase pasada) puede cerrarlo ni adelantar el índice
+    // mientras se preparan las señas. Sin esto, un aviso atrasado se comía la
+    // primera seña («quiero realizar un trámite» salía «trámite realizar»).
+    _playToken++;
     _cancelPlaceholderTimer();
     _cancelNeutral();
     _reportPlayback(true);
     setState(() {
       _currentIndex = 0;
       _isPlayingSequence = false;
-      _stepSettled = false;
+      _stepSettled = true;
 
       if (overrideUrls != null) {
         _testUrls = overrideUrls;
@@ -412,6 +427,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
   void _resetToIdle() {
     if (!mounted) return;
+    _sequenceId++;
     _cancelPlaceholderTimer();
     _reportPlayback(false);
     setState(() {
@@ -427,6 +443,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 
   Future<void> _downloadAndStartSequence() async {
+    final secuencia = _sequenceId;
     final urlsToDownload = _testUrls ?? widget.animationUrls;
     if (urlsToDownload == null || urlsToDownload.isEmpty) {
       _reportPlayback(false);
@@ -439,13 +456,17 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           .read(animationRepositoryProvider)
           .playableSources(urlsToDownload);
     } catch (_) {
-      _reportPlayback(false);
+      if (secuencia == _sequenceId) _reportPlayback(false);
       return;
     }
+
+    // Se pidió otra secuencia (o se cortó) mientras se preparaba esta.
+    if (secuencia != _sequenceId) return;
 
     if (mounted) {
       setState(() {
         _localUrls = localPaths;
+        _currentIndex = 0;
         _isPlayingSequence = true;
       });
 
@@ -499,8 +520,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     // Con setState: se quita el aviso de «Cargando avatar…».
     setState(() => _modelLoaded = true);
     // El WebView acaba de existir. Si el paso en curso quedo sin reproducir
-    // por no haber controller todavia, este es el momento de lanzarlo.
-    _playCurrentStep();
+    // por no haber controller todavia, este es el momento de lanzarlo. Con
+    // la secuencia todavía preparándose no hay paso que lanzar.
+    if (_isPlayingSequence) _playCurrentStep();
     if (_localUrls.isEmpty) _startNeutral();
   }
 
