@@ -1051,103 +1051,176 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
 
     // Detectar si la glosa actual forma parte de una palabra deletreada (dactilologia)
     if (currentGloss.length == 1) {
-      int start = currentIndex;
-      while (start > 0 && activeGlosses[start - 1].length == 1) {
-        start--;
-      }
-      int end = currentIndex;
-      while (end < activeGlosses.length - 1 &&
-          activeGlosses[end + 1].length == 1) {
-        end++;
+      // Si se sabe dónde empieza y termina la palabra (Voz a LSB), se usa:
+      // dos palabras deletreadas seguidas («DERECHOS REALES») no se juntan.
+      final ayuda = widget.spellingHelp
+          .where((h) => h.contains(currentIndex))
+          .firstOrNull;
+      int start = ayuda?.start ?? currentIndex;
+      int end = ayuda?.end ?? currentIndex;
+      if (ayuda == null) {
+        while (start > 0 && activeGlosses[start - 1].length == 1) {
+          start--;
+        }
+        while (end < activeGlosses.length - 1 &&
+            activeGlosses[end + 1].length == 1) {
+          end++;
+        }
       }
 
       if (end > start) {
-        final letters = activeGlosses.sublist(start, end + 1);
-        final activeLetterIdx = currentIndex - start;
+        // Una palabra larga no entra entera: se ve una ventana de letras
+        // alrededor de la que se hace, con «…» a los lados, que avanza con
+        // el deletreo.
+        final todas = activeGlosses.sublist(start, end + 1);
+        final enCurso = currentIndex - start;
+        var desde = 0;
+        var hasta = todas.length;
+        if (todas.length > _maxLetrasVisibles) {
+          desde = (enCurso - _maxLetrasVisibles ~/ 2).clamp(
+            0,
+            todas.length - _maxLetrasVisibles,
+          );
+          hasta = desde + _maxLetrasVisibles;
+        }
+        final letters = todas.sublist(desde, hasta);
+        final activeLetterIdx = enCurso - desde;
+        final hayAntes = desde > 0;
+        final hayDespues = hasta < todas.length;
 
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E1B4B).withValues(alpha: 0.92),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Colors.deepPurpleAccent.withValues(alpha: 0.7),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.deepPurpleAccent.withValues(alpha: 0.3),
-                blurRadius: 12,
-                offset: const Offset(0, 3),
+        return _badgeAncho(
+          Container(
+            key: const Key('avatar_deletreo_letras'),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E1B4B).withValues(alpha: 0.92),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: Colors.deepPurpleAccent.withValues(alpha: 0.7),
+                width: 1.5,
               ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(letters.length, (idx) {
-              final isCurrent = idx == activeLetterIdx;
-              return AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
-                decoration: BoxDecoration(
-                  color: isCurrent
-                      ? Colors.deepPurpleAccent
-                      : Colors.white.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: isCurrent
-                        ? Colors.white
-                        : Colors.white.withValues(alpha: 0.2),
-                    width: isCurrent ? 1.5 : 1,
-                  ),
-                  boxShadow: isCurrent
-                      ? [
-                          BoxShadow(
-                            color: Colors.deepPurpleAccent.withValues(
-                              alpha: 0.7,
-                            ),
-                            blurRadius: 6,
-                            spreadRadius: 1,
-                          ),
-                        ]
-                      : null,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.deepPurpleAccent.withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 3),
                 ),
-                child: Text(
-                  letters[idx],
-                  style: TextStyle(
-                    color: isCurrent ? Colors.white : Colors.white60,
-                    fontWeight: isCurrent ? FontWeight.w900 : FontWeight.w500,
-                    fontSize: isCurrent ? 14 : 12,
-                  ),
-                ),
-              );
-            }),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (hayAntes) _puntos(),
+                ...List.generate(letters.length, (idx) {
+                  final isCurrent = idx == activeLetterIdx;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.symmetric(horizontal: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 7,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isCurrent
+                          ? Colors.deepPurpleAccent
+                          : Colors.white.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: isCurrent
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.2),
+                        width: isCurrent ? 1.5 : 1,
+                      ),
+                      boxShadow: isCurrent
+                          ? [
+                              BoxShadow(
+                                color: Colors.deepPurpleAccent.withValues(
+                                  alpha: 0.7,
+                                ),
+                                blurRadius: 6,
+                                spreadRadius: 1,
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Text(
+                      letters[idx],
+                      style: TextStyle(
+                        color: isCurrent ? Colors.white : Colors.white60,
+                        fontWeight: isCurrent
+                            ? FontWeight.w900
+                            : FontWeight.w500,
+                        fontSize: isCurrent ? 14 : 12,
+                      ),
+                    ),
+                  );
+                }),
+                if (hayDespues) _puntos(),
+              ],
+            ),
           ),
         );
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        // Una palabra sin seña se rotula en español, sin la marca interna.
-        PendingSign.isPending(currentGloss)
-            ? PendingSign.wordOf(currentGloss)
-            : currentGloss,
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-          letterSpacing: 1,
+    return _badgeAncho(
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.deepPurpleAccent.withValues(alpha: 0.85),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          // Una palabra sin seña se rotula en español, sin la marca interna.
+          PendingSign.isPending(currentGloss)
+              ? PendingSign.wordOf(currentGloss)
+              : currentGloss.replaceAll('_', ' '),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            letterSpacing: 1,
+          ),
         ),
       ),
     );
   }
+
+  /// Letras de una palabra deletreada que se ven a la vez.
+  static const _maxLetrasVisibles = 7;
+
+  /// La glosa de la esquina nunca pasa del ancho que le toca: si no entra,
+  /// se achica en vez de salirse de la pantalla.
+  Widget _badgeAncho(Widget badge) => LayoutBuilder(
+    builder: (context, constraints) {
+      final ancho = constraints.maxWidth.isFinite
+          ? constraints.maxWidth
+          : MediaQuery.sizeOf(context).width * 0.6;
+      return ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: ancho),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerRight,
+          child: badge,
+        ),
+      );
+    },
+  );
+
+  /// «…»: hay más letras de la palabra a ese lado.
+  Widget _puntos() => const Padding(
+    padding: EdgeInsets.symmetric(horizontal: 3),
+    child: Text(
+      '…',
+      style: TextStyle(
+        color: Colors.white70,
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+  );
 
   /// Estado que se muestra cuando el modulo quedo en segundo plano: sin
   /// `ModelViewer`, para que ningun WebView siga animando fuera de pantalla.
