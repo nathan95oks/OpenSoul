@@ -86,6 +86,30 @@ void main() {
       ]);
     });
 
+    test('con una seña equivalente que el avatar tiene, se seña', () {
+      final catalogo = PendingSignCatalog.fromJsonString(
+        jsonEncode({
+          'palabras': {
+            'COMPROBANTE': {'descripcion': 'Papel de un pago.'},
+          },
+          'equivalencias': {
+            'COMPROBANTE': ['FACTURA'],
+            'TERRENO': ['TERRENO'],
+          },
+        }),
+      );
+      final t = DescribedWordSteps.apply(
+        _traduccion(
+          ['YO', ...'COMPROBANTE'.split(''), ...'TERRENO'.split('')],
+          ['comprobante', 'terreno'],
+        ),
+        catalogo,
+      );
+      // FACTURA tiene clip; TERRENO no: sin descripción, se deletrea.
+      expect(t.animationGlosses, ['YO', 'FACTURA', ...'TERRENO'.split('')]);
+      expect(t.animationUrls[1], isNot(startsWith(_marca)));
+    });
+
     test('sin descripción (o sin avatar) se deletrea', () {
       final pasos = ['YO', ...'ACOSO'.split('')];
       final t = DescribedWordSteps.apply(
@@ -234,7 +258,14 @@ void main() {
       );
       expect(bloque.height, greaterThan(100));
       expect(bloque.width, greaterThan(600));
-      expect(find.text('No tiene seña en LSB. ¿Qué es?'), findsOneWidget);
+      // La misma tarjeta de la hoja «¿Qué es?», sobre la pantalla amarilla.
+      expect(
+        find.text('No tiene seña propia en los módulos M1–M4.'),
+        findsOneWidget,
+      );
+      expect(find.byKey(const Key('avatar_descripcion_lectura')), findsOne);
+      // Tapa todo el avatar.
+      expect(bloque, tester.getRect(find.byType(Avatar3DViewer)).deflate(1));
       expect(find.byKey(const Key('descripcion_lsb')), findsOneWidget);
       // La esquina rotula la palabra, sin la marca interna.
       expect(find.text('HIPOTECA'), findsWidgets);
@@ -253,10 +284,11 @@ void main() {
       expect(find.byKey(const Key('avatar_descripcion')), findsNothing);
     });
 
-    testWidgets('«Seguir» la cierra antes', (tester) async {
+    testWidgets('«Entendido» la cierra antes', (tester) async {
       await reproducir(tester, describir: true);
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Seguir'));
+      // Solo la entrada: la barra de lectura sigue corriendo.
+      await tester.pump(const Duration(milliseconds: 700));
+      await tester.tap(find.text('Entendido'));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('avatar_descripcion')), findsNothing);
     });

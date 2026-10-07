@@ -2,15 +2,19 @@ import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 
-/// Una palabra que no existe en LSB se explica en vez de deletrearse.
+/// Una palabra que no es una seña del catálogo no se deletrea si se puede
+/// decir de otra forma.
 ///
 /// El backend deletrea cada palabra que no es una seña del catálogo y la
-/// informa en [LsbTranslation.spelledWords]. Si esa palabra tiene
-/// descripción («¿Qué es?» de las palabras en azul), sus letras se cambian
-/// por un solo paso `SENA_PENDIENTE:PALABRA`: el avatar muestra la
-/// descripción delante y, leída, sigue con la seña siguiente. Una palabra sin
-/// descripción (o un nombre propio) se sigue deletreando.
+/// informa en [LsbTranslation.spelledWords]. Por orden:
+/// 1. Si tiene una seña equivalente aprobada (la misma de las tarjetas:
+///    «comprobante» → FACTURA) y el avatar tiene sus clips, se seña.
+/// 2. Si tiene descripción («¿Qué es?» de las palabras en azul), sus letras
+///    se cambian por un solo paso `SENA_PENDIENTE:PALABRA`: el avatar
+///    muestra la descripción delante y, leída, sigue con la seña siguiente.
+/// 3. Si no (o es un nombre propio), se sigue deletreando.
 abstract final class DescribedWordSteps {
+  static const _resolver = AnimationUrlResolver();
   static LsbTranslation apply(
     LsbTranslation translation,
     PendingSignCatalog catalog,
@@ -53,6 +57,21 @@ abstract final class DescribedWordSteps {
       );
       words.remove(word);
       final length = _letters(word).length;
+      final signs = catalog.equivalentSigns(word);
+      if (signs != null &&
+          signs.every(
+            (g) => AnimationUrlResolver.available3DGlosses.contains(
+              AnimationUrlResolver.canonicalFor(g),
+            ),
+          )) {
+        for (final g in signs) {
+          outSteps.add(g);
+          outUrls.add(_resolver.resolveAll(gloss: g).first);
+        }
+        changed = true;
+        i += length;
+        continue;
+      }
       final gloss = catalog.describedGloss(word);
       if (gloss == null) {
         outSteps.addAll(steps.sublist(i, i + length));

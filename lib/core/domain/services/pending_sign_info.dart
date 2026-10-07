@@ -41,27 +41,43 @@ class PendingSignInfo {
 class PendingSignCatalog {
   final Map<String, PendingSignInfo> _byKey;
 
-  const PendingSignCatalog._(this._byKey);
+  /// Palabra → señas equivalentes aprobadas (`COMPROBANTE` → FACTURA): la
+  /// palabra se seña con ellas, igual que en las tarjetas.
+  final Map<String, List<String>> _equivalents;
+
+  const PendingSignCatalog._(this._byKey, [this._equivalents = const {}]);
 
   static const PendingSignCatalog empty = PendingSignCatalog._({});
 
   factory PendingSignCatalog.fromJsonString(String raw) {
     final data = jsonDecode(raw) as Map<String, dynamic>;
     final words = (data['palabras'] as Map<String, dynamic>? ?? const {});
-    return PendingSignCatalog._({
-      for (final MapEntry(key: key, value: v) in words.entries)
-        key: PendingSignInfo(
-          word: key.replaceAll('_', ' '),
-          description: '${(v as Map<String, dynamic>)['descripcion'] ?? ''}',
-          lsbDescription: [
-            for (final g in (v['descripcionLsb'] as List? ?? const [])) '$g',
-          ],
-          example: '${v['ejemplo'] ?? ''}',
-          isProperName: v['tipo'] == 'nombre_propio',
-          reviewed: v['revisada'] == true,
-        ),
-    });
+    return PendingSignCatalog._(
+      {
+        for (final MapEntry(key: key, value: v) in words.entries)
+          key: PendingSignInfo(
+            word: key.replaceAll('_', ' '),
+            description: '${(v as Map<String, dynamic>)['descripcion'] ?? ''}',
+            lsbDescription: [
+              for (final g in (v['descripcionLsb'] as List? ?? const [])) '$g',
+            ],
+            example: '${v['ejemplo'] ?? ''}',
+            isProperName: v['tipo'] == 'nombre_propio',
+            reviewed: v['revisada'] == true,
+          ),
+      },
+      {
+        for (final MapEntry(key: key, value: v)
+            in (data['equivalencias'] as Map<String, dynamic>? ?? const {})
+                .entries)
+          _plain(key): [for (final g in v as List) '$g'],
+      },
+    );
   }
+
+  /// Las señas con que se dice [word] cuando tiene una equivalencia aprobada
+  /// («comprobante» → FACTURA), o `null`.
+  List<String>? equivalentSigns(String word) => _equivalents[_plain(word)];
 
   /// Lo que se sabe de [gloss] (`SENA_PENDIENTE:FOLIO_REAL`). Una palabra sin
   /// descripción da al menos su nombre: la app dice que no tiene seña.
@@ -80,7 +96,9 @@ class PendingSignCatalog {
   String? describedGloss(String word) {
     final key = _byPlainKey[_plain(word)];
     final info = key == null ? null : _byKey[key];
-    if (info == null || info.description.isEmpty || info.isProperName) {
+    if (info == null ||
+        (info.description.isEmpty && info.lsbDescription.isEmpty) ||
+        info.isProperName) {
       return null;
     }
     return PendingSign.prefix + key!;
