@@ -191,10 +191,12 @@ void main() {
       // El español formal ya no se muestra cuando hay LSB.
       expect(find.text('Casa o terreno que no se puede mover.'), findsNothing);
       // Lo demás de la hoja tampoco queda en blanco sobre blanco.
-      final ejemplo = tester.widget<Text>(
-        find.text('«¿Tiene la matrícula del inmueble?»'),
-      );
-      expect(ejemplo.style!.color, AppTheme.lightText);
+      final titulo = tester.widget<Text>(find.text('¿Qué es?'));
+      expect(titulo.style!.color, AppTheme.lightText);
+      // La frase de ejemplo del trámite ya no se muestra: la descripción va
+      // directa.
+      expect(find.textContaining('matrícula del inmueble'), findsNothing);
+      expect(find.text('En el trámite'), findsNothing);
     });
 
     test('una errata de la traducción remite a su palabra', () {
@@ -284,7 +286,7 @@ void main() {
       expect(sinDescripcionLsb, isEmpty);
     });
 
-    test('toda palabra en azul de una descripción tiene la suya', () {
+    test('ninguna descripción tiene palabras en azul: va directa en señas', () {
       final datos =
           jsonDecode(
                 File(
@@ -292,19 +294,62 @@ void main() {
                 ).readAsStringSync(),
               )['palabras']
               as Map<String, dynamic>;
-      final sinDescripcion = <String>{
-        for (final v in datos.values)
-          for (final g in (v['descripcionLsb'] as List).cast<String>())
-            if (PendingSign.isPending(g) &&
-                catalog.infoOf(g).description.isEmpty)
-              g,
+      final conAzul = <String>{
+        for (final MapEntry(key: palabra, value: v) in datos.entries)
+          if ((v['descripcionLsb'] as List).cast<String>().any(
+            PendingSign.isPending,
+          ))
+            palabra,
       };
-      expect(sinDescripcion, isEmpty);
+      expect(conAzul, isEmpty);
+    });
+
+    test('una palabra simple con seña no queda en azul', () {
+      final corpus = RagCorpus.fromJsonString(
+        File('assets/rag/escenarios_cbba.json').readAsStringSync(),
+      );
+      final azules = <String>{
+        for (final s in corpus.scenarios)
+          for (final t in [
+            ...s.turns,
+            for (final v in s.variants) ...v.replies,
+          ])
+            for (final g in t.glosses.where(PendingSign.isPending))
+              PendingSign.wordOf(g),
+      };
+      for (final simple in [
+        'NUMERO',
+        'PERSONA',
+        'AYUDA',
+        'ENTENDER',
+        'COMPROBANTE',
+        'ATENCION',
+        'OTRO',
+        'TODAVIA',
+      ]) {
+        expect(azules, isNot(contains(simple)), reason: simple);
+      }
     });
 
     testWidgets('tocar una palabra en azul de la descripción abre la suya', (
       tester,
     ) async {
+      // Hoy ninguna descripción lleva azul; si una volviera a tenerlo, la
+      // palabra se sigue pudiendo tocar.
+      final catalog = PendingSignCatalog.fromJsonString(
+        jsonEncode({
+          'palabras': {
+            'INMUEBLE': {
+              'descripcion': 'Casa o terreno.',
+              'descripcionLsb': ['CASA', 'SENA_PENDIENTE:PROPIEDAD'],
+            },
+            'PROPIEDAD': {
+              'descripcion': 'Lo que es suyo.',
+              'descripcionLsb': ['SUYO'],
+            },
+          },
+        }),
+      );
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

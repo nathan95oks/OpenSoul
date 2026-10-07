@@ -376,6 +376,41 @@ class DescripcionesEnCadena(unittest.TestCase):
         self.assertEqual(salida["REGISTRO"]["descripcionLsb"],
                          ["LISTA", "SENA_PENDIENTE:OFICIAL"])
 
+    def test_la_descripcion_en_senas_va_directa_y_sin_azul(self):
+        datos = {"palabras": {
+            "PROPIETARIO": {"descripcion": "Dueño.", "lsb": ["JEFE", "CASA"],
+                            "tipo": "concepto"},
+            "CASO": {"descripcion": "Un asunto.",
+                     "lsb": ["PROBLEMA", "SENA_PENDIENTE:ASUNTO"],
+                     "tipo": "concepto"},
+        }}
+        # La traducción tendría azul; la descripción en señas no la usa.
+        traducidas = {"Dueño.": {"glosas": [*"DUEÑO"], "correcciones": [
+            {"palabra": "DUEÑO", "accion": "concepto_sin_catalogo"}]},
+            "Un asunto.": {"glosas": ["PROBLEMA"], "correcciones": []}}
+        corpus = {"escenarios": [{
+            "turnos": [{"texto": "El propietario y el caso.",
+                        "glosas": ["SENA_PENDIENTE:PROPIETARIO",
+                                   "SENA_PENDIENTE:CASO"]}],
+            "variantes": []}]}
+
+        def leer(ruta):
+            return {B.DESCRIPCIONES: datos,
+                    B.DESCRIPCIONES_LSB: traducidas}.get(ruta, {})
+
+        avisos = []
+        with mock.patch.object(B, "_leer", side_effect=leer), \
+                mock.patch.object(B, "equivalencias_vigentes", return_value={}), \
+                mock.patch.object(B, "glosas_conocidas",
+                                  return_value={"jefe", "casa", "problema"}):
+            salida = B.info_sin_sena(corpus, avisos)["palabras"]
+        self.assertEqual(salida["PROPIETARIO"]["descripcionLsb"], ["JEFE", "CASA"])
+        self.assertEqual(sorted(salida), ["CASO", "PROPIETARIO"])
+        # Una «seña» que no existe no se acepta: se avisa y se usa la
+        # traducción.
+        self.assertTrue(any("CASO" in a for a in avisos))
+        self.assertEqual(salida["CASO"]["descripcionLsb"], ["PROBLEMA"])
+
 
 class HerramientaEquivalencias(unittest.TestCase):
     import rag_equivalencias as E  # noqa: E402

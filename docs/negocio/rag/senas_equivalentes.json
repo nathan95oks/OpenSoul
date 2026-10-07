@@ -111,30 +111,32 @@
   "automatica": true
  },
  "ACTUAL": {
-  "razon": "No hay seña equivalente en la lista para 'actual' en estos contextos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Cómo confirmo la atención actual?",
    "¿Desconoce el paradero actual de esa persona?",
    "¿Tiene la placa actual del vehículo?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AHORA"
  },
  "ACTUALIZADO": {
-  "razon": "No hay seña equivalente en la lista para 'actualizado' en estos contextos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si este documento catastral está actualizado.",
    "No, me pidieron un Folio Real actualizado.",
    "¿Puedo solicitar el Folio Real actualizado de mi casa?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "NUEVO"
  },
  "ACTUALIZAR": {
   "razon": "El servicio para violencia familiar figura actualizado en 2026.",
@@ -161,6 +163,14 @@
    "vuelta_detalle": "«Consulte primero el monto actualizado antes de pagar.» → falta ['antes'] sobra []"
   },
   "automatica": true
+ },
+ "ACTUALMENTE": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AHORA"
  },
  "ACUDIR": {
   "razon": "No hay seña equivalente en la lista para 'acudir' en estos contextos.",
@@ -246,41 +256,44 @@
   "lexico": "3fbe162fc7b0"
  },
  "AFECTADO": {
-  "razon": "No hay seña equivalente o combinación que explique «afectado» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Sí, hay un niño afectado.",
    "¿Hay un niño o adolescente afectado?",
    "¿Usted es familiar de la persona afectada?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DAÑAR"
  },
  "AFECTAR": {
-  "razon": "No hay seña equivalente o combinación que explique «afectar» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si fui afectado.",
    "No sé si hay un niño afectado.",
    "No, no fui afectado."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DAÑAR"
  },
  "AGREDIR": {
-  "razon": "No hay seña equivalente o combinación que explique «agredir» en el contexto dado.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Mi pareja me agrede y necesito ayuda."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MALTRATAR"
  },
  "ALCANCE": {
   "razon": "No hay seña equivalente o combinación que explique «alcance» en los contextos dados.",
@@ -296,30 +309,38 @@
   "lexico": "3fbe162fc7b0"
  },
  "ALGUN": {
-  "razon": "La seña «ALGUNO» [M4 · Diálogo II] es equivalente y corresponde al sentido en la frase «¿Trajo algún relato de lo ocurrido?».",
-  "origen": "bedrock",
-  "descartada": "ALGUNO",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Trajo algún relato de lo ocurrido?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VARIOS"
+ },
+ "ALGUNAS": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VARIOS"
  },
  "ALGUNO": {
-  "razon": "La seña «ALGUNO» [M4 · Diálogo II] es equivalente y corresponde al sentido en las frases dadas.",
-  "origen": "bedrock",
-  "descartada": "ALGUNO",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Recibió alguna observación sobre ese trámite?",
    "¿Tiene algún Folio Real anterior del inmueble?",
    "¿Trajo algún documento relacionado con su solicitud?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VARIOS"
  },
  "ALODIAL": {
   "razon": "No hay seña equivalente o combinación que explique «alodial» en los contextos dados.",
@@ -381,17 +402,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "ANOTACION": {
-  "razon": "No hay seña para «anotación» en el sentido de registro o nota oficial; las frases involucran procedimientos legales específicos sin seña directa.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé cuál asiento corresponde a la anotación.",
    "No sé si este documento ordena una anotación preventiva.",
    "No, el documento menciona otra anotación."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ESCRIBIR"
  },
  "ANOTACION_PREVENTIVA": {
   "razon": "No existe seña para «anotación preventiva» en el contexto de trámites legales o registros; es un término técnico sin equivalente en LSB.",
@@ -418,42 +440,32 @@
   "lexico": "3fbe162fc7b0"
  },
  "ANTERIOR": {
-  "razon": "Aunque «anterior» puede expresarse con combinaciones de señas de tiempo o posición, en estos contextos legales no hay una seña específica que cubra el uso documental o registral del término.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Necesito orientación para obtener un documento notarial anterior.",
    "No sé si existe un registro anterior.",
    "No sé si existe una licencia anterior."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PASADO"
  },
  "ANTES": {
-  "razon": "«Antes» puede expresarse con la seña de «AHORA» y un gesto o contexto que indique anterioridad, aunque no es ideal para todos los contextos legales.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "AHORA",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Consulte primero el monto actualizado antes de pagar.",
    "Iré antes de esa hora.",
    "La renovación puede solicitarse desde seis meses antes."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "AHORA"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Tiempo",
-   "titan": false,
-   "vuelta": false,
-   "vuelta_detalle": "«Iré antes de esa hora.» → falta ['antes'] sobra ['AHORA']"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PASADO"
  },
  "ANTICIPO": {
   "razon": "No hay seña para «anticipo» en el sentido financiero o legal de adelanto de dinero o derechos; las frases involucran conceptos económicos específicos.",
@@ -506,28 +518,30 @@
   "automatica": true
  },
  "ANTIGUA": {
-  "razon": "Aunque «antigua» podría expresarse con combinaciones, en el contexto de documentos o partidas legales no hay una seña que cubra el uso específico mencionado.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Sí, mi documento tiene una partida antigua."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VIEJO"
  },
  "ANTIGUO": {
-  "razon": "Similar a «antigua», no hay seña específica para «antiguo» en el sentido de registros o deudas históricas en documentos legales.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé quién figura en el registro antiguo.",
    "Sí, mi nombre aparece en el registro antiguo.",
    "Tengo deuda antigua de mi casa."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VIEJO"
  },
  "APARECE": {
   "razon": "«No aparece.»",
@@ -602,52 +616,43 @@
   "lexico": "3fbe162fc7b0"
  },
  "APORTAR": {
-  "razon": "No hay seña equivalente o combinación que cubra el significado específico de 'aportar' en estos contextos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Registraremos los datos que usted pueda aportar."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DAR"
  },
  "APOYO": {
-  "razon": "La seña AYUDAR puede expresar la idea de apoyo en los contextos dados, aunque no captura completamente el nuance formal de 'apoyo' en documentos o sistemas.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "AYUDAR",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Necesito apoyo después de lo ocurrido.",
    "No sé si hay apoyo de interpretación disponible.",
    "No sé si necesito ese apoyo."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "AYUDAR"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Acciones",
-   "titan": false,
-   "vuelta": true,
-   "vuelta_detalle": "«Necesito apoyo después de lo ocurrido.» → falta [] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AYUDAR"
  },
  "AQUELLA": {
-  "razon": "'Aquella' es un determinante demostrativo que no tiene una seña directa; se podría expresar con gestos o contexto, pero no hay una seña equivalente en la lista.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si el documento corresponde a esa casa.",
    "¿El documento de cancelación corresponde a esa anotación?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ALLÁ"
  },
  "ARANCEL": {
   "razon": "No hay seña equivalente o combinación que cubra el significado específico de 'arancel' en estos contextos.",
@@ -674,17 +679,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "ARCHIVAR": {
-  "razon": "No hay seña equivalente o combinación que cubra el significado específico de 'archivar' en estos contextos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si mis documentos están archivados.",
    "No, todavía no confirmé si están archivados.",
    "Sí, me indicaron que los documentos están archivados."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "GUARDAR"
  },
  "AREA": {
   "razon": "«El Ministerio informó cuatro días para el área urbana.»",
@@ -735,29 +741,18 @@
   "automatica": true
  },
  "ATENCION": {
-  "razon": "La seña ATENDER puede expresar la idea de atención en los contextos dados, aunque no captura completamente el nuance formal de servicios o sistemas de atención.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "ATENDER",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Debe activarse la atención de la Defensoría de la Niñez.",
    "Debe garantizarse comunicación accesible durante la atención.",
    "Desde 2026 existe atención virtual en LSB."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "ATENDER"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Acciones",
-   "titan": false,
-   "vuelta": true,
-   "vuelta_detalle": "«Debe activarse la atención de la Defensoría de la Niñez.» → falta ['Debe'] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ATENDER"
  },
  "AUDIENCIA": {
   "razon": "No hay seña equivalente o combinación que cubra el significado específico de 'audiencia' en estos contextos.",
@@ -784,29 +779,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "AYUDA": {
-  "razon": "«Mi pareja me agrede y necesito ayuda» → AYUDAR.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "AYUDAR",
-  "estado": "rechazada",
-  "misma_raiz": true,
   "ejemplos": [
    "Mi pareja me agrede y necesito ayuda.",
    "Necesito ayuda legal y psicológica.",
    "Necesito ayuda para escribir mi denuncia."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "AYUDAR"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Acciones",
-   "titan": false,
-   "vuelta": true,
-   "vuelta_detalle": "«Mi pareja me agrede y necesito ayuda.» → falta [] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AYUDAR"
  },
  "BEIJING": {
   "razon": "No hay seña para topónimos específicos como Beijing.",
@@ -833,31 +817,32 @@
   "lexico": "3fbe162fc7b0"
  },
  "BIEN": {
-  "razon": "«No entiendo bien explicaciones solo habladas» → BIEN.",
-  "origen": "bedrock",
-  "descartada": "BIEN",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No entiendo bien explicaciones solo habladas.",
    "No quiero responder sin comprender bien.",
    "¿Su cédula muestra el dato de identidad correcto?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "BUENO"
  },
  "BOLETA": {
-  "razon": "No hay seña para «boleta de pago» o «boleta de observación».",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, no tengo la boleta de observación.",
    "No, no tengo una boleta de pago.",
    "Puede buscarlos en una boleta de pago anterior."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "FACTURA"
  },
  "BORRAR": {
   "razon": "No hay seña para «borrar mensajes» en este contexto.",
@@ -944,15 +929,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "CAPTURA": {
-  "razon": "No se encontró una seña equivalente o combinación de señas para expresar 'CAPTURA' en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Tengo capturas y comprobante de transferencia."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "FOTOS"
  },
  "CARATULA": {
   "razon": "La seña «CARÁTULA» corresponde exactamente al significado de «carátula» en el contexto de portada de expedientes o cuadernos.",
@@ -1173,6 +1159,14 @@
   },
   "automatica": true
  },
+ "CLASE": {
+  "origen": "revision_manual",
+  "estado": "rechazada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "La seña CLASE del M3 (Escuela) es la clase de la escuela, no «tipo».",
+  "sena": "CLASE"
+ },
  "CODIGO": {
   "razon": "No hay seña que represente 'código' en el sentido de código catastral o fiscal.",
   "origen": "bedrock",
@@ -1270,67 +1264,61 @@
   "automatica": true
  },
  "COMPRA": {
-  "razon": "Aunque hay señas para 'comprar', no hay una seña específica para 'compra' como documento o acción en estos contextos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Sí, tengo la escritura pública de compra venta.",
    "¿Tiene la escritura pública de compra venta?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "COMPRAR"
  },
  "COMPRA_VENTA": {
-  "razon": "Se refiere a un documento necesario para registrar una transacción de compraventa.",
-  "origen": "bedrock",
-  "descartada": "DOCUMENTO + FALTA",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Qué documento me falta para registrar la compra venta?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": null,
+  "senas": [
+   "COMPRAR",
+   "VENDER"
+  ]
  },
  "COMPROBANTE": {
-  "razon": "Se refiere a un documento que sirve como prueba de un trámite realizado.",
-  "origen": "bedrock",
-  "descartada": "DOCUMENTO + TRÁMITE",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé cuál comprobante corresponde a ese trámite.",
    "No sé cuál comprobante corresponde a mi trámite.",
    "No sé cuál comprobante corresponde al trámite."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "FACTURA"
  },
  "COMUNICACION": {
-  "razon": "Se refiere a la necesidad de garantizar comunicación accesible durante la atención.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "ACCESIBLE",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Debe garantizarse comunicación accesible durante la atención.",
    "La atención debe permitir comunicación accesible.",
    "Registraremos su necesidad de comunicación accesible."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "ACCESIBLE"
-   ],
-   "zona_palabra": null,
-   "zona_sena": null,
-   "titan": null,
-   "vuelta": false,
-   "vuelta_detalle": "«Debe garantizarse comunicación accesible durante la atención.» → falta ['Debe', 'comunicación'] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "COMUNICAR"
  },
  "COMUNICAR": {
   "razon": "Señal equivalente con el mismo significado en las frases proporcionadas.",
@@ -1359,18 +1347,18 @@
   "automatica": true
  },
  "COMUNICARSE": {
-  "razon": "Se refiere a la forma de comunicación utilizando la Lengua de Señas Boliviana.",
-  "origen": "bedrock",
-  "descartada": "LSB",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Necesito comunicarme usando lengua de señas.",
    "No me atendieron por mi forma de comunicarme.",
    "No, prefiero comunicarme en LSB."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "COMUNICAR"
  },
  "CON": {
   "razon": "Palabra función: LSB no seña preposiciones, conjunciones ni la cópula ser/estar; se omite (misma regla que el prompt de la Lambda Texto→LSB).",
@@ -1465,66 +1453,44 @@
   "razon_revision": "CON es una palabra función que LSB no seña (se omite siempre)."
  },
  "CONSERVAR": {
-  "razon": "Se refiere a guardar o mantener algo, como un comprobante o documento.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "GUARDAR",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "No, no conservo el comprobante del trámite.",
    "No, no conservo la escritura de adquisición.",
    "No, no conservo un Folio Real anterior."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "GUARDAR"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Acciones",
-   "titan": false,
-   "vuelta": false,
-   "vuelta_detalle": "«No, no conservo el comprobante del trámite.» → falta ['conservo'] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "GUARDAR"
  },
  "CONSERVE": {
-  "razon": "Se refiere a la instrucción de guardar elementos específicos.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "GUARDAR",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Conserve esos elementos y siga instrucciones del investigador."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "GUARDAR"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Acciones",
-   "titan": false,
-   "vuelta": false,
-   "vuelta_detalle": "«Conserve esos elementos y siga instrucciones del investigador.» → falta ['Conserve'] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "GUARDAR"
  },
  "CONSTANCIA": {
-  "razon": "Se refiere a un documento que sirve como constancia de recepción.",
-  "origen": "bedrock",
-  "descartada": "DOCUMENTO + RECEPCIÓN",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si este papel es la constancia.",
    "No, no tengo constancia.",
    "Sí, tengo constancia de recepción."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "CERTIFICADO"
  },
  "CONSTANTE": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas que expresen «mensajes constantemente» en la frase dada.",
@@ -1614,15 +1580,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "CONTAR": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas que expresen «Cuente lo ocurrido con sus propias palabras» en la frase dada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Cuente lo ocurrido con sus propias palabras."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "NARRAR"
  },
  "CONTENER": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas que expresen «documento contiene la observación» en la frase dada.",
@@ -1741,28 +1708,17 @@
   "automatica": true
  },
  "CORREGIR": {
-  "razon": "La seña ARREGLAR [M4 · Verbos IV] puede expresar «¿Cómo corrijo mi nombre en el Folio Real?» y «¿Qué documento necesito para corregir mis datos de identidad?».",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "ARREGLAR",
-  "estado": "rechazada",
-  "misma_raiz": true,
   "ejemplos": [
    "¿Cómo corrijo mi nombre en el Folio Real?",
    "¿Qué documento necesito para corregir mis datos de identidad?"
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "ARREGLAR"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Acciones",
-   "titan": false,
-   "vuelta": false,
-   "vuelta_detalle": "«¿Cómo corrijo mi nombre en el Folio Real?» → falta [] sobra ['ARREGLAR']"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ARREGLAR"
  },
  "CORRESPONDER": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas que expresen «asiento corresponde a la anotación», «comprobante corresponde a ese trámite» o «comprobante corresponde a mi trámite» en las frases dadas.",
@@ -1991,43 +1947,29 @@
   "lexico": "3fbe162fc7b0"
  },
  "DECIR": {
-  "razon": "No hay seña equivalente en la lista para expresar 'decir' en este contexto.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé qué dice el documento."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "DEFENSA": {
-  "razon": "«Me denunciaron y necesito defensa.» | «No puedo pagar abogado para mi defensa.»",
-  "origen": "bedrock+titan+vuelta",
-  "sena": null,
-  "senas": [
-   "ABOGADO",
-   "PROTEGER"
-  ],
-  "estado": "rechazada",
   "ejemplos": [
    "Me denunciaron y necesito defensa.",
    "No puedo pagar abogado para mi defensa."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "ABOGADO",
-    "PROTEGER"
-   ],
-   "zona_palabra": null,
-   "zona_sena": null,
-   "titan": null,
-   "vuelta": false,
-   "vuelta_detalle": "«Me denunciaron y necesito defensa.» → falta [] sobra ['ABOGADO']"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ABOGADO"
  },
  "DEFENSA_PUBLICA": {
   "razon": "«¿Dónde está Defensa Pública en Cochabamba?»",
@@ -2059,27 +2001,16 @@
   "automatica": true
  },
  "DEFENSOR": {
-  "razon": "«Necesito hablar con mi defensor para la audiencia.»",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "ABOGADO",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Necesito hablar con mi defensor para la audiencia."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "ABOGADO"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Instituciones",
-   "titan": false,
-   "vuelta": true,
-   "vuelta_detalle": "«Necesito hablar con mi defensor para la audiencia.» → falta ['Necesito'] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ABOGADO"
  },
  "DEFENSORIA": {
   "razon": "«Debe activarse la atención de la Defensoría de la Niñez.» | «Puede acudir a la Defensoría por posible vulneración de derechos.» | «¿Puede venir a la oficina de la Defensoría?»",
@@ -2096,17 +2027,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "DEFUNCION": {
-  "razon": "«Necesito otro certificado de defunción de mi padre.» | «Quiero orientación para un certificado de defunción.» | «¿El precio es igual al de defunción?»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Necesito otro certificado de defunción de mi padre.",
    "Quiero orientación para un certificado de defunción.",
    "¿El precio es igual al de defunción?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MORIR"
  },
  "DEL": {
   "razon": "Palabra función: LSB no seña preposiciones, conjunciones ni la cópula ser/estar; se omite (misma regla que el prompt de la Lambda Texto→LSB).",
@@ -2261,6 +2193,14 @@
   },
   "automatica": true
  },
+ "DERECHO": {
+  "origen": "revision_manual",
+  "estado": "rechazada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "La seña DERECHO del M3 (Opuestos II) es la dirección, no el derecho legal.",
+  "sena": "DERECHO"
+ },
  "DERECHOS": {
   "razon": "No hay una seña específica para 'DERECHOS' en la lista proporcionada. Aunque 'DERECHOS' es un concepto amplio, no existe una seña directa que lo represente.",
   "origen": "bedrock",
@@ -2321,15 +2261,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "DESCRIBIR": {
-  "razon": "No hay una seña específica para 'DESCRIBIR' en la lista proporcionada. Aunque 'DESCRIBIR' puede referirse a la acción de describir, no existe una seña directa que lo represente.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si ambos documentos describen el mismo inmueble."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "DESCUENTO": {
   "razon": "No hay una seña específica para 'DESCUENTO' en la lista proporcionada. Aunque 'DESCUENTO' puede referirse a una reducción de precio, no existe una seña directa que lo represente.",
@@ -2343,15 +2284,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "DESEA": {
-  "razon": "No hay una seña específica para 'DESEA' en la lista proporcionada. Aunque 'DESEA' puede referirse a un deseo o necesidad, no existe una seña directa que lo represente.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Desea orientación de trabajo social?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "QUERER"
  },
  "DESEAR": {
   "razon": "La palabra «DESEAR» se expresa con la seña correspondiente del módulo Cumpleaños, que se aplica al contexto de identificar un inmueble o trámite deseado.",
@@ -2379,15 +2321,16 @@
   "automatica": true
  },
  "DETENIDO": {
-  "razon": "No hay una seña específica para 'DETENIDO' en la lista proporcionada. Aunque 'DETENIDO' puede referirse a una persona detenida, no existe una seña directa que lo represente.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Estoy detenido y necesito un abogado."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ARRESTAR"
  },
  "DETERIORADO": {
   "razon": "No hay seña equivalente o combinación que explique «Está deteriorada.»",
@@ -2436,6 +2379,14 @@
    "vuelta_detalle": "«No puedo pagar toda la deuda del auto.» → falta ['auto'] sobra []"
   },
   "automatica": true
+ },
+ "DICE": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "DINERO": {
   "razon": "En la frase 'Fue por internet. Envié dinero.', 'dinero' puede ser representado por la seña 'BILLETES', que significa 'billetes y dinero'.",
@@ -2556,17 +2507,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "DOCUMENTACION": {
-  "razon": "No hay seña equivalente o combinación que explique «¿Qué documentación judicial debo presentar para el registro?»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Qué documentación judicial debo presentar para el registro?",
    "¿Qué documentación necesito para registrar mi departamento?",
    "¿Trajo documentación del pago del impuesto a la transferencia?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "CARPETA"
  },
  "DOCUMENTO": {
   "sena": "PAPEL",
@@ -2581,17 +2533,30 @@
   "fecha": "2026-10-04"
  },
  "DONACION": {
-  "razon": "No hay seña equivalente o combinación que explique «No sé si este documento es una donación.»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si este documento es una donación.",
    "No, no tengo la escritura pública de donación.",
    "Sí, recibí la casa por donación."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": null,
+  "senas": [
+   "DAR",
+   "GRATIS"
+  ]
+ },
+ "DOS": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "2"
  },
  "DUDAR": {
   "razon": "No hay seña equivalente o combinación que explique «No, mi duda es sobre el paso siguiente.»",
@@ -2616,6 +2581,14 @@
   ],
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
+ },
+ "DÍAS": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DÍA"
  },
  "EDIFICIO": {
   "razon": "No hay seña equivalente o combinación que explique «Queda entre Antezana y Lanza, Edificio Aly.»",
@@ -2712,52 +2685,30 @@
   "automatica": true
  },
  "ENTENDER": {
-  "razon": "La seña COMPRENDER [M1 · Verbos] puede expresar el significado de entender o comprender, como en los contextos proporcionados.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "COMPRENDER",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Entiendo. Iré al servicio para víctimas.",
    "No entiendo bien explicaciones solo habladas.",
    "No, no entendí el siguiente paso."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "COMPRENDER"
-   ],
-   "zona_palabra": "Acciones",
-   "zona_sena": "Respuesta",
-   "titan": false,
-   "vuelta": false,
-   "vuelta_detalle": "«Entiendo. Iré al servicio para víctimas.» → falta ['Entiendo'] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "COMPRENDER"
  },
  "ENTENDIDO": {
-  "razon": "La seña COMPRENDER [M1 · Verbos] puede expresar el significado de haber entendido o comprendido.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "COMPRENDER",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "Entendido."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "COMPRENDER"
-   ],
-   "zona_palabra": "Respuesta",
-   "zona_sena": "Respuesta",
-   "titan": true,
-   "vuelta": false,
-   "vuelta_detalle": "«Entendido.» → falta ['Entendido'] sobra ['COMPRENDER']"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "COMPRENDER"
  },
  "ENTONCES": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «entonces» en el contexto dado.",
@@ -2772,16 +2723,17 @@
   "lexico": "3fbe162fc7b0"
  },
  "ENTREGA": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «entrega» en el contexto dado.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, todavía no recibí un aviso de entrega.",
    "Quiero consultar la entrega de mi memorial."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DAR"
  },
  "ENTREGAR": {
   "razon": "La seña DAR [M2 · Verbos II] puede expresar la acción de entregar algo, como en los contextos proporcionados.",
@@ -2834,55 +2786,59 @@
   "automatica": true
  },
  "EQUIVOCADO": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «equivocado» en el contexto dado.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Mi carnet tiene un dato equivocado.",
    "Mi certificado tiene un dato equivocado.",
    "No sé si el dato está equivocado."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MAL"
  },
  "ERROR": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «error» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, el error está en mi número de cédula.",
    "No, mi cédula también tiene un error.",
    "No, no encontré un error."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MAL"
  },
  "ESA": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «esa» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, no tengo documentos de esa casa.",
    "¿Tiene un poder para representar a esa persona?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ALLÍ"
  },
  "ESCRITO": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «escrito» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si la explicación escrita me ayuda.",
    "No, no prefiero la explicación escrita.",
    "No, no tengo la solicitud escrita."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ESCRIBIR"
  },
  "ESCRITURA": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «escritura» en los contextos dados.",
@@ -2910,42 +2866,45 @@
   "lexico": "3fbe162fc7b0"
  },
  "ESE": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «ese» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé cuál comprobante corresponde a ese trámite.",
    "No sé cuál comprobante identifica ese trámite.",
    "No sé si necesito ese apoyo."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ALLÍ"
  },
  "ESO": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «eso» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si esa matrícula corresponde al inmueble.",
    "Sí, traje el Folio Real con ese dato.",
    "¿Usted es la persona identificada en ese comprobante?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ALLÍ"
  },
  "ESOS": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «esos» en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Conserve esos elementos y siga instrucciones del investigador.",
    "No sé cuál de esos documentos me pidieron."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ALLÍ"
  },
  "ESPECIALIZADO": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «especializado» en los contextos dados.",
@@ -2970,17 +2929,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "ESTA": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «ESTA» en estas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si el poder incluye esta gestión.",
    "No sé si esta copia de mi cédula sirve.",
    "No sé si esta matrícula corresponde al inmueble."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AQUÍ"
  },
  "ESTADO": {
   "razon": "La seña ESTADO [D2024 · País soberano, adopta una] puede expresar el significado de «estado» en el contexto de consultar el estado de un trámite, aunque es un uso metafórico.",
@@ -3007,51 +2967,55 @@
   "automatica": true
  },
  "ESTAFA": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «ESTAFA» en estas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿El hecho fue robo, estafa u otro delito?",
    "¿La estafa ocurrió por internet o presencialmente?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ENGAÑAR"
  },
  "ESTAFAR": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «ESTAFAR» en esta frase.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Creo que me estafaron."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ENGAÑAR"
  },
  "ESTE": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «ESTE» en estas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No entiendo este documento y necesito ayuda.",
    "No sé qué significa el nombre de este documento.",
    "No sé si esta boleta corresponde a mi trámite."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AQUÍ"
  },
  "ESTOS": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «ESTOS» en esta frase.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si estos planos corresponden."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AQUÍ"
  },
  "EVALUACION": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «EVALUACION» en esta frase.",
@@ -3102,30 +3066,32 @@
   "lexico": "3fbe162fc7b0"
  },
  "EXPEDIENTE": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «EXPEDIENTE» en estas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Debemos revisar la información de su expediente.",
    "La modalidad depende del señalamiento de su expediente.",
    "Quiero consultar mi expediente judicial."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "CARPETA"
  },
  "EXPLICACION": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «EXPLICACION» en estas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No entiendo bien explicaciones solo habladas.",
    "No sé si la explicación escrita me ayuda.",
    "No, no prefiero la explicación escrita."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "EXTRAVIO": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas que expresen «EXTRAVIO» en estas frases.",
@@ -3140,15 +3106,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "FALLECIDO": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas de la lista para expresar «FALLECIDO» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "También enumera identificación del fallecido y dos testigos."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MORIR"
  },
  "FALTA": {
   "razon": "La seña «AUSENTE» puede expresar «falta» en los contextos dados, ya que se refiere a algo que no está presente o no se ha concluido.",
@@ -3189,28 +3156,30 @@
   "lexico": "3fbe162fc7b0"
  },
  "FAMILIA": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas de la lista para expresar «FAMILIA» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Necesito ayuda por un niño de mi familia."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PARIENTE"
  },
  "FAMILIAR": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas de la lista para expresar «FAMILIAR» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "El servicio para violencia familiar figura actualizado en 2026.",
    "Necesito ayuda por lo ocurrido a mi familiar.",
    "Necesito orientación sobre asistencia familiar."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PARIENTE"
  },
  "FIGURA": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas de la lista para expresar «FIGURA» en las frases proporcionadas.",
@@ -3449,6 +3418,14 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "HACERLE": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "HACER"
+ },
  "HASTA": {
   "razon": "No hay una seña directa para hasta en los módulos proporcionados.",
   "origen": "bedrock",
@@ -3558,6 +3535,14 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "HOJA": {
+  "origen": "revision_manual",
+  "estado": "rechazada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "La seña HOJA del M1 (Naturaleza) es la hoja de una planta.",
+  "sena": "HOJA"
+ },
  "HORIZONTAL": {
   "razon": "La seña HORIZONTAL [D2024 · Perteneciente o relativo] es equivalente y corresponde al sentido de las frases proporcionadas.",
   "origen": "bedrock+titan+vuelta",
@@ -3659,17 +3644,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "INCORRECTO": {
-  "razon": "No hay una seña equivalente o combinación que explique «No sé cuál dato de identidad está incorrecto»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé cuál dato de identidad está incorrecto.",
    "No sé qué dato técnico está incorrecto.",
    "Sí, mi nombre está escrito incorrectamente."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MAL"
  },
  "INCUMPLIMIENTO": {
   "razon": "No hay una seña equivalente o combinación que explique «No sé si lo ocurrido es incumplimiento»",
@@ -3705,17 +3691,26 @@
   "lexico": "3fbe162fc7b0"
  },
  "INDICAR": {
-  "razon": "No hay seña equivalente en la lista para expresar 'indicar' en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé qué transferencia indica la escritura.",
    "No sé qué vía de regularización indica mi documento.",
    "No, el beneficiario indicado es otra persona."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
+ },
+ "INDICARME": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "INFORMACION": {
   "razon": "No hay seña equivalente en la lista para expresar 'información' en los contextos dados.",
@@ -3742,17 +3737,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "INFORMAR": {
-  "razon": "No hay seña equivalente en la lista para expresar 'informar' en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "El Ministerio informa que la carnetización es gratuita.",
    "El Ministerio informó cuatro días para el área urbana.",
    "Quiero informar sobre mis medidas de protección."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AVISAR"
  },
  "INFORME": {
   "razon": "No hay seña equivalente en la lista para expresar 'informe' en los contextos dados.",
@@ -3793,16 +3789,17 @@
   "lexico": "3fbe162fc7b0"
  },
  "INICIAR": {
-  "razon": "No hay seña equivalente en la lista para expresar 'iniciar' en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero iniciar la atención.",
    "Quiero saber dónde iniciar en Cochabamba."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EMPEZAR"
  },
  "INMUEBLE": {
   "razon": "No hay seña equivalente en la lista para expresar 'inmueble' en los contextos dados.",
@@ -3818,39 +3815,42 @@
   "lexico": "3fbe162fc7b0"
  },
  "INSCRIPCION": {
-  "razon": "No hay seña equivalente en la lista para expresar 'inscripción' en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si corresponde inscripción o cancelación.",
    "¿Cómo consulto la inscripción de propiedad horizontal?",
    "¿Cómo consulto la inscripción de una usucapión?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ESCRIBIR"
  },
  "INSTRUCCION": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «Quiero recibir instrucciones claras por escrito también.»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero recibir instrucciones claras por escrito también."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "INSTRUCCIONES": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «Conserve esos elementos y siga instrucciones del investigador.»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Conserve esos elementos y siga instrucciones del investigador."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "INTEGRAL": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «SEPDAVI evaluará su acceso al patrocinio y apoyo integral.»",
@@ -3864,15 +3864,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "INTENCION": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «No, solo tengo la intención de dividir el inmueble.»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, solo tengo la intención de dividir el inmueble."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "QUERER"
  },
  "INTERES": {
   "razon": "La seña INTERÉS [M3 · General I] expresa «Se informó condonación de multas e intereses hasta octubre.»",
@@ -3961,17 +3962,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "LEGAL": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «Necesito ayuda legal y psicológica.» | «Solo legal.» | «¿Necesita primero orientación legal o psicológica?»",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Necesito ayuda legal y psicológica.",
    "Solo legal.",
    "¿Necesita primero orientación legal o psicológica?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "LEY"
  },
  "LEGITIMA": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «Sí, la escritura dice anticipo de legítima.» | «¿Cómo registro un anticipo de legítima?» | «¿La escritura indica que es un anticipo de legítima?»",
@@ -4088,15 +4090,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "LOCALIZAR": {
-  "razon": "No hay una seña específica para 'LOCALIZAR' en la lista proporcionada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Qué documento puedo mostrar para localizar la matrícula?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "BUSCAR"
  },
  "LOTE": {
   "razon": "«Necesito certificado del lote de mi hermana.» | «No. El lote pertenece a mi hermana.»",
@@ -4279,54 +4282,32 @@
   "lexico": "3fbe162fc7b0"
  },
  "MEDICA": {
-  "razon": "La seña «MEDICINA» puede expresar «atención médica» en las frases proporcionadas.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "MEDICINA",
-  "estado": "rechazada",
-  "misma_raiz": true,
   "ejemplos": [
    "No sé si necesito atención médica.",
    "No, no necesito atención médica.",
    "Sí, necesito atención médica."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "MEDICINA"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Objetos",
-   "titan": false,
-   "vuelta": true,
-   "vuelta_detalle": "«No sé si necesito atención médica.» → falta [] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DOCTOR"
  },
  "MEDICO": {
-  "razon": "La seña «MEDICINA» puede expresar «informes médicos» o «certificado médico» en las frases proporcionadas.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "MEDICINA",
-  "estado": "rechazada",
-  "misma_raiz": true,
   "ejemplos": [
    "No, no tengo informes médicos.",
    "Sí, tengo informes médicos.",
    "Tengo el certificado médico original."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "MEDICINA"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Objetos",
-   "titan": false,
-   "vuelta": true,
-   "vuelta_detalle": "«No, no tengo informes médicos.» → falta [] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DOCTOR"
  },
  "MEDIDA": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «MEDIDA» en las frases proporcionadas.",
@@ -4393,15 +4374,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "MESES": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «meses» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "La renovación puede solicitarse desde seis meses antes."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MES"
  },
  "MI": {
   "sena": "MÍO",
@@ -4468,15 +4450,16 @@
   "automatica": true
  },
  "MIYO": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «miyo» en la frase proporcionada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Cómo consulto un error en los datos de mi inmueble?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MÍO"
  },
  "MODALIDAD": {
   "razon": "No se encontró una seña equivalente o combinación de señas que expresen «modalidad» en las frases proporcionadas.",
@@ -4491,39 +4474,42 @@
   "lexico": "3fbe162fc7b0"
  },
  "MODIFICAR": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «modificar» en la frase proporcionada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No borre ni modifique mensajes relacionados al hecho."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "CAMBIAR"
  },
  "MONTO": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «monto» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Consulte primero el monto actualizado antes de pagar.",
    "Primero confirmaré el monto.",
    "¿El monto aparece en línea?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "BILLETES"
  },
  "MOTO": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «moto» en la frase proporcionada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero saber cuánto debo de mi moto."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MOTOCICLETA"
  },
  "MULTA": {
   "razon": "No se encontró una seña equivalente o combinación de señas que expresen «multa» en la frase proporcionada.",
@@ -4559,6 +4545,14 @@
    "vuelta_detalle": "«¿Ese número aparece en la página municipal?» → falta [] sobra []"
   },
   "automatica": true
+ },
+ "MUY": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "MUCHO"
  },
  "NACIMIENTO": {
   "razon": "No se encontró una seña equivalente o combinación de señas que expresen «nacimiento» en las frases proporcionadas.",
@@ -4600,26 +4594,28 @@
   "automatica": true
  },
  "NECESIDAD": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «necesidad» en la frase proporcionada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Registraremos su necesidad de comunicación accesible."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "NECESITAR"
  },
  "NECESITO": {
-  "razon": "No hay seña equivalente en la lista para expresar 'NECESITO' en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No. Necesito atención a distancia."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "NECESITAR"
  },
  "NEED": {
   "razon": "No hay seña equivalente en la lista para expresar 'NEED' en la frase proporcionada.",
@@ -4672,15 +4668,16 @@
   "automatica": true
  },
  "NIÑEZ": {
-  "razon": "No hay seña equivalente en la lista para expresar 'NIÑEZ' en la frase proporcionada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Debe activarse la atención de la Defensoría de la Niñez."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "NIÑO"
  },
  "NIÑO": {
   "razon": "La seña NIÑO se usa para expresar 'niño' en el contexto dado.",
@@ -4777,41 +4774,49 @@
   "lexico": "3fbe162fc7b0"
  },
  "NOTIFICACION": {
-  "razon": "No hay seña equivalente en la lista para expresar 'NOTIFICACION' en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si es una notificación.",
    "No, no recibí una notificación.",
    "Sí, recibí una notificación."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AVISAR"
  },
  "NUESTRAS": {
-  "razon": "No hay seña equivalente en la lista para expresar posesivo plural femenino en estos contextos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Sí. Queremos reconocer nuestras firmas."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "NOSOTROS"
  },
  "NUMERO": {
-  "razon": "Aunque hay señas para números individuales, no hay una seña específica para 'número' como concepto abstracto o categoría en los contextos dados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No recuerdo esos números.",
    "No sé cuál es el número.",
    "No sé si este número es la matrícula."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": null,
+  "senas": [
+   "1",
+   "2",
+   "3"
+  ]
  },
  "OBJETO": {
   "razon": "La seña OBJETO [M3 · General I] se usa para referirse a un objeto en general, lo que encaja en los contextos de pérdida o violencia relacionada con un objeto.",
@@ -4913,15 +4918,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "OFRECER": {
-  "razon": "No hay una seña específica para 'ofrecer' en el contexto de venta de certificados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "SERECI ofrece venta de certificados duplicados."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DAR"
  },
  "OPCION": {
   "razon": "No hay una seña directa para 'opción' en el sentido de posibilidad o alternativa para pagar una deuda.",
@@ -4960,17 +4966,18 @@
   "automatica": true
  },
  "ORIENTACION": {
-  "razon": "No hay una seña específica para 'orientación' en el sentido de asesoramiento o guía para obtener documentos o pagar deudas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Llamaré para pedir orientación.",
    "Necesito orientación para obtener un documento notarial anterior.",
    "Perdí mi carnet y necesito orientación."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "ORIENTACION_SOCIAL": {
   "razon": "No hay seña equivalente o combinación para 'orientación social' en las frases proporcionadas.",
@@ -4985,17 +4992,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "ORIENTAR": {
-  "razon": "No hay seña equivalente o combinación para 'orientar' en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "El equipo puede orientar su ruta de atención.",
    "Necesito orientación por violencia.",
    "Necesito orientación sobre asistencia familiar."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "EXPLICAR"
  },
  "ORIGINAL": {
   "razon": "No hay seña equivalente o combinación para 'original' en las frases proporcionadas.",
@@ -5010,83 +5018,101 @@
   "lexico": "3fbe162fc7b0"
  },
  "OTRA": {
-  "razon": "La seña «OTRO» puede usarse para expresar «otra» en contextos como «otra persona».",
-  "origen": "bedrock",
-  "descartada": "OTRO",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si la otra persona vendrá.",
    "No, el beneficiario indicado es otra persona.",
    "No, el comprobante está a nombre de otra persona."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DIFERENTE"
+ },
+ "OTRAS": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DIFERENTE"
  },
  "OTRO": {
-  "razon": "La seña «OTRO» es directamente equivalente para expresar «otro» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "descartada": "OTRO",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "El arancel publicado incluye anticréticos entre otras escrituras.",
    "Necesito otro certificado de defunción de mi padre.",
    "No, aparece el nombre de otra persona."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DIFERENTE"
  },
  "OTROS": {
-  "razon": "La seña «OTRO» puede usarse en plural para expresar «otros» en contextos como «otros herederos».",
-  "origen": "bedrock",
-  "descartada": "OTRO",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Sí, hay otros herederos en el documento.",
    "Sí, hay otros propietarios en la división."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DIFERENTE"
  },
  "PADRE": {
-  "razon": "La seña «PADRE» es directamente equivalente para expresar «padre» en la frase proporcionada.",
-  "origen": "bedrock",
-  "descartada": "PADRE",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Necesito otro certificado de defunción de mi padre."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PAPÁ"
  },
  "PAGAR": {
-  "razon": "No hay seña equivalente o combinación para 'pagar' en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Confirmaré antes de pagar.",
    "Consulte primero el monto actualizado antes de pagar.",
    "No puedo pagar abogado para mi defensa."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": null,
+  "senas": [
+   "DAR",
+   "BILLETES"
+  ]
  },
  "PAGO": {
-  "razon": "No hay seña equivalente o combinación para 'pago' en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si el pago corresponde a ese trámite.",
    "No sé si el pago fue registrado.",
    "No, no realicé ningún pago."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": null,
+  "senas": [
+   "DAR",
+   "BILLETES"
+  ]
  },
  "PARA": {
   "razon": "Palabra función: LSB no seña preposiciones, conjunciones ni la cópula ser/estar; se omite (misma regla que el prompt de la Lambda Texto→LSB).",
@@ -5115,16 +5141,17 @@
   "revisado": true
  },
  "PARADERO": {
-  "razon": "No hay seña equivalente o combinación para 'paradero' en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, conozco su paradero.",
    "¿Desconoce el paradero actual de esa persona?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DÓNDE"
  },
  "PARENTESCO": {
   "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «parentesco».",
@@ -5296,15 +5323,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "PATROCINIO": {
-  "razon": "No hay seña equivalente o combinación de hasta 3 señas en la lista para expresar «patrocinio».",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "SEPDAVI evaluará su acceso al patrocinio y apoyo integral."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ABOGADO"
  },
  "PELIGRO": {
   "razon": "«No sé si estoy en peligro.» → PELIGROSO (situación de riesgo). «No, no estoy en peligro ahora.» → PELIGROSO. «Sí, estoy en peligro ahora.» → PELIGROSO.",
@@ -5404,28 +5432,28 @@
   "automatica": true
  },
  "PERMITIDO": {
-  "razon": "Debe acreditar la relación permitida y su identidad.",
-  "origen": "bedrock",
-  "descartada": "IDENTIFICAR + RELACIÓN",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Debe acreditar la relación permitida y su identidad."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PERMISO"
  },
  "PERMITIR": {
-  "razon": "La atención debe permitir comunicación accesible.",
-  "origen": "bedrock",
-  "descartada": "ATENCIÓN + COMUNICACIÓN + ACCESIBLE",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "La atención debe permitir comunicación accesible."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PERMISO"
  },
  "PERO": {
   "razon": "Palabra función: LSB no seña preposiciones, conjunciones ni la cópula ser/estar; se omite (misma regla que el prompt de la Lambda Texto→LSB).",
@@ -5453,18 +5481,22 @@
   "revisado": true
  },
  "PERSONA": {
-  "razon": "No sé quién fue la persona. No sé si la otra persona vendrá. No, aparece el nombre de otra persona.",
-  "origen": "bedrock",
-  "descartada": "QUIÉN + OTRO",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé quién fue la persona.",
    "No sé si la otra persona vendrá.",
    "No, aparece el nombre de otra persona."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": null,
+  "senas": [
+   "HOMBRE",
+   "MUJER"
+  ]
  },
  "PERSONALMENTE": {
   "razon": "Sí. Quiero ir personalmente.",
@@ -5678,28 +5710,30 @@
   "lexico": "3fbe162fc7b0"
  },
  "PREFERIR": {
-  "razon": "No hay seña equivalente en la lista para 'preferir' en estos contextos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, no prefiero la explicación escrita.",
    "No, prefiero comunicarme en LSB.",
    "Sí, prefiero la explicación por escrito."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "QUERER"
  },
  "PREFIERES": {
-  "razon": "No hay seña equivalente en la lista para 'prefieres' en este contexto.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Prefiere que escriba la explicación del trámite?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "QUERER"
  },
  "PREGUNTA": {
   "razon": "No hay seña equivalente en la lista para 'pregunta' en estos contextos.",
@@ -5920,17 +5954,18 @@
   "automatica": true
  },
  "PROTECCION": {
-  "razon": "No hay una combinación de señas de la lista que explique «protección» en las frases dadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No entiendo el papel sobre mi protección.",
    "No sé si tengo medidas de protección.",
    "No, no me comunicaron medidas de protección."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PROTEGER"
  },
  "PSICOLOGICA": {
   "razon": "Aunque «psicológica» está relacionada con «psicológico», no hay una combinación de señas de la lista que explique este término en las frases dadas.",
@@ -6089,40 +6124,43 @@
   "lexico": "3fbe162fc7b0"
  },
  "REALIZAR": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista para expresar «realizar» en las frases dadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, no realicé ningún pago.",
    "No, no realicé una transferencia.",
    "No, todavía no realicé el pago."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "HACER"
  },
  "RECEPCION": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista para expresar «recepción» en las frases dadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Sí, tengo constancia de recepción.",
    "¿Tiene una constancia de recepción de documentos?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "RECIBIR"
  },
  "RECLAMO": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista para expresar «reclamo» en la frase dada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero presentar mi reclamo."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "QUEJAR"
  },
  "RECOCNER": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista para expresar «recocner» en la frase dada. Posible error tipográfico; se asume «reconocer».",
@@ -6173,15 +6211,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "REEMPLAZAR": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista para expresar «reemplazar» en la frase dada.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "La reposición mantiene la vigencia del documento reemplazado."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "CAMBIAR"
  },
  "REFERIR": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista para expresar «referir» en las frases dadas.",
@@ -6232,17 +6271,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "REGISTRAR": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «REGISTRAR» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si el pago fue registrado.",
    "Quiero que quede registrada mi solicitud.",
    "Registraremos su necesidad de comunicación accesible."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ESCRIBIR"
  },
  "REGISTRO": {
   "razon": "No se encontró una seña equivalente o combinación de señas que expresen «REGISTRO» en las frases proporcionadas.",
@@ -6256,6 +6296,14 @@
   ],
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
+ },
+ "REGLA": {
+  "origen": "revision_manual",
+  "estado": "rechazada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "La seña REGLA del M1 (Sustantivos) es el útil para medir.",
+  "sena": "REGLA"
  },
  "REGLAMENTO": {
   "razon": "La seña REGLAMENTO (M3 · Política I) se corresponde con el significado de la palabra en los contextos dados.",
@@ -6329,15 +6377,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "RELATO": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que expresen «RELATO» en las frases proporcionadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Trajo algún relato de lo ocurrido?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "NARRAR"
  },
  "RENOVACION": {
   "razon": "No se encontró una seña equivalente o combinación de señas que expresen «RENOVACION» en las frases proporcionadas.",
@@ -6448,30 +6497,30 @@
   "lexico": "3fbe162fc7b0"
  },
  "REVISAR": {
-  "razon": "Las señas EXAMINAR, CONTROLAR y VERIFICAR pueden expresar la acción de revisar en los contextos dados.",
-  "origen": "bedrock",
-  "descartada": "EXAMINAR + CONTROLAR + VERIFICAR",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Debemos revisar la información de su expediente.",
    "Depende de su grado y situación; revise la norma aplicable.",
    "Quiero revisar fecha y modalidad."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "OBSERVAR"
  },
  "REVISION": {
-  "razon": "Las señas EXAMEN, CONTROL y VERIFICACIÓN pueden expresar la acción de revisión en la frase dada.",
-  "origen": "bedrock",
-  "descartada": "EXAMEN + CONTROL + VERIFICACIÓN",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Trajo el Folio Real del inmueble que quiere revisar?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "OBSERVAR"
  },
  "RUTA": {
   "razon": "No hay seña equivalente o combinación para 'ruta' en las frases dadas.",
@@ -6500,31 +6549,20 @@
   "lexico": "3fbe162fc7b0"
  },
  "SALIR": {
-  "razon": "¿Debo confirmar antes de salir?",
-  "origen": "bedrock+titan+vuelta",
-  "sena": null,
-  "senas": [
-   "IR",
-   "PUEDO"
-  ],
-  "estado": "rechazada",
   "ejemplos": [
    "¿Debo confirmar antes de salir?"
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "IR",
-    "PUEDO"
-   ],
-   "zona_palabra": "Acciones",
-   "zona_sena": null,
-   "titan": null,
-   "vuelta": false,
-   "vuelta_detalle": "«¿Debo confirmar antes de salir?» → falta [] sobra ['IR', 'PUEDO']"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": null,
+  "senas": [
+   "IR",
+   "FUERA"
+  ]
  },
  "SEDE": {
   "razon": "Primero confirmaré la sede y horario.",
@@ -6608,18 +6646,18 @@
   "revisado": true
  },
  "SERVICIO": {
-  "razon": "Debe ser derivado al servicio especializado contra la violencia.",
-  "origen": "bedrock",
-  "descartada": "AYUDA",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Debe ser derivado al servicio especializado contra la violencia.",
    "El servicio para violencia familiar figura actualizado en 2026.",
    "Entiendo. Iré al servicio para víctimas."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ATENDER"
  },
  "SERVIR": {
   "razon": "No sé si esta copia de mi cédula sirve.",
@@ -6770,29 +6808,18 @@
   "automatica": true
  },
  "SIGUIENTE": {
-  "razon": "Se refiere al paso o elemento que sigue en una secuencia.",
-  "origen": "bedrock+titan+vuelta",
-  "sena": "PRÓXIMO",
-  "estado": "rechazada",
-  "misma_raiz": false,
   "ejemplos": [
    "No sé cuál es el siguiente paso.",
    "No, mi duda es sobre el paso siguiente.",
    "No, no entendí el siguiente paso."
   ],
-  "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0",
-  "senales": {
-   "bedrock": [
-    "PRÓXIMO"
-   ],
-   "zona_palabra": null,
-   "zona_sena": "Tiempo",
-   "titan": false,
-   "vuelta": true,
-   "vuelta_detalle": "«No sé cuál es el siguiente paso.» → falta [] sobra []"
-  },
-  "automatica": true
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PRÓXIMO"
  },
  "SIGUIR": {
   "razon": "Indica la acción de continuar un proceso o trámite.",
@@ -6820,16 +6847,17 @@
   "automatica": true
  },
  "SISTEMA": {
-  "razon": "No hay una seña específica para 'sistema' en las frases dadas.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "La norma 2025 mantiene el registro dentro del sistema nacional.",
    "¿El trámite sigue usando el sistema SIPRUNPCD?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "COMPUTADORA"
  },
  "SITUACION": {
   "razon": "La seña SITUACIÓN [D2024 · Asunto problemático o difícil] es equivalente en las frases dadas («Depende de su grado y situación...», «La DNA atiende situaciones de protección...»).",
@@ -6940,18 +6968,18 @@
   "automatica": true
  },
  "SOLICITUD": {
-  "razon": "Se refiere al acto de solicitar algo, como un documento o trámite.",
-  "origen": "bedrock",
-  "descartada": "SOLICITAR",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé cómo preparar la solicitud de desarchivo.",
    "No sé cómo preparar la solicitud de resellado.",
    "No sé cómo preparar la solicitud escrita."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "PEDIR"
  },
  "SOLO": {
   "razon": "No se encontró una seña equivalente o combinación de señas que coincidan con los contextos proporcionados.",
@@ -6967,17 +6995,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "SUBSANAR": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que coincidan con los contextos proporcionados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si este documento subsana la observación.",
    "Sí, traje un documento para subsanar la observación.",
    "¿Trajo un documento para subsanar la observación?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "ARREGLAR"
  },
  "SUPERFICIE": {
   "razon": "No se encontró una seña equivalente o combinación de señas que coincidan con los contextos proporcionados.",
@@ -7040,15 +7069,16 @@
   "automatica": true
  },
  "TENGO": {
-  "razon": "No se encontró una seña equivalente o combinación de señas que coincidan con los contextos proporcionados.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Sí, tengo la escritura pública de compra venta."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "TENER"
  },
  "TEXTO": {
   "razon": "La seña TEXTO [D2024 · Documento escrito Hay diferentes tipos de textos.] se usa para expresar 'texto' en las frases proporcionadas.",
@@ -7137,54 +7167,73 @@
   "fecha": "2026-10-04",
   "lexico": "3fbe162fc7b0"
  },
+ "TODAS": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "TOTAL"
+ },
  "TODAVIA": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «todavía» en esas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si compraré la casa todavía.",
    "No, todavía no firmé.",
    "No, todavía no realicé el pago."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AÚN"
+ },
+ "TODAVÍA": {
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AÚN"
  },
  "TODO": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «todo» en esas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No puedo pagar toda la deuda del auto.",
    "Quiero revisar todo antes de pagar.",
    "Sí, tengo todo."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "TOTAL"
  },
  "TODOS": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «todos» en esas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero entender todas las preguntas de la denuncia."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "TOTAL"
  },
  "TRABAJO": {
-  "razon": "La seña «TRABAJO» [M2 · Trabajo] expresa «trabajo» en la frase «Ocurrió en mi trabajo».",
-  "origen": "bedrock",
-  "descartada": "TRABAJO",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Ocurrió en mi trabajo."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "TRABAJADOR"
  },
  "TRAE": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «trae» en esas frases.",
@@ -7198,17 +7247,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "TRAJE": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «traje» en esas frases.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No sé si la traje.",
    "No, no traje planos.",
    "Ya la traje escrita."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "TRAER"
  },
  "TRANSFERENCIA": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «transferencia» en esas frases.",
@@ -7224,15 +7274,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "TRIBUNAL": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «tribunal» en esa frase.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "SIREJ indica acudir a información del Tribunal."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "JUZGADO"
  },
  "TRIBUNAL_DEPARTAMENTAL": {
   "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «Tribunal Departamental» en esa frase.",
@@ -7246,15 +7297,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "UBICACION": {
-  "razon": "No hay una seña equivalente o combinación de hasta 3 señas de la lista que expresen «ubicación» en esa frase.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "No, la diferencia está en la ubicación."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "DÓNDE"
  },
  "UNIDAD": {
   "razon": "La seña UNIDAD [D2024 · Valor que se usa para contar.] es equivalente en esas frases.",
@@ -7403,17 +7455,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "VEHICULO": {
-  "razon": "Aunque existe la seña «AUTO» [M1 · Medios de transporte], no cubre el término general «vehículo» usado en los contextos de deuda y radicación.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero consultar la deuda de mi vehículo.",
    "¿Busca deuda de inmueble o vehículo?",
    "¿El vehículo está radicado en Cochabamba?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "AUTO"
  },
  "VENCER": {
   "razon": "No hay seña para «vencer» (caducar) o combinación que lo explique en los ejemplos de cédula vencida.",
@@ -7429,17 +7482,18 @@
   "lexico": "3fbe162fc7b0"
  },
  "VENTA": {
-  "razon": "No hay seña para «venta» o combinación que cubra el contexto de compraventa en los documentos.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "SERECI ofrece venta de certificados duplicados.",
    "Sí, tengo la escritura pública de compra venta.",
    "¿Tiene la escritura pública de compra venta?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VENDER"
  },
  "VERBALMENTE": {
   "razon": "No hay seña para «verbalmente» o combinación que indique la forma oral de realizar una acción.",
@@ -7478,15 +7532,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "VIAJE": {
-  "razon": "No hay seña equivalente o combinación que explique 'viaje' en el contexto de consultar con el hijo.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero consultar un viaje con mi hijo."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VIAJAR"
  },
  "VICTIMA": {
   "razon": "Aunque hay señas para 'daño' o 'robo', no hay una seña específica para 'víctima' que cubra los contextos legales y de asistencia.",
@@ -7502,15 +7557,16 @@
   "lexico": "3fbe162fc7b0"
  },
  "VIENES": {
-  "razon": "La palabra 'vienes' (tercera persona del singular de 'venir') no tiene una seña directa en la lista proporcionada. No hay una seña que signifique 'venir' o una forma derivada que cubra este uso específico.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "¿Viene a registrar una defunción?"
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "VENIR"
  },
  "VIGENCIA": {
   "razon": "No hay seña que signifique 'vigencia' o 'validez' en documentos o estado actual.",
@@ -7562,15 +7618,16 @@
   "automatica": true
  },
  "VIVIENDA": {
-  "razon": "Aunque hay señas para 'casa' o 'lugar', no hay una seña específica para 'vivencia' como concepto legal o contractual.",
-  "origen": "bedrock",
-  "sena": null,
-  "estado": "sin_equivalente",
   "ejemplos": [
    "Quiero consultar el contrato de mi vivienda."
   ],
-  "fecha": "2026-10-04",
-  "lexico": "3fbe162fc7b0"
+  "lexico": "3fbe162fc7b0",
+  "origen": "revision_manual",
+  "estado": "aprobada",
+  "revisado": true,
+  "fecha": "2026-10-06",
+  "razon": "Palabra simple con seña directa (revisión manual).",
+  "sena": "CASA"
  },
  "VULNERACION": {
   "razon": "No hay seña que signifique 'vulneración' en el sentido de 'infracción de derechos' o 'daño a derechos'.",
