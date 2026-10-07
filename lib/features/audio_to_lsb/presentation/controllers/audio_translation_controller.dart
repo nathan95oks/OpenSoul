@@ -1,12 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lsb_legal_app/core/di/injection.dart'
-    show lexiconEntriesProvider, pendingSignCatalogProvider;
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
-import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
-import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/di/injection.dart';
-import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/described_word_steps.dart';
 
 enum AudioTranslationStatus {
   idle,
@@ -73,17 +68,15 @@ class AudioTranslationState {
       translationResult: identical(translationResult, _unset)
           ? this.translationResult
           : translationResult as LsbTranslation?,
-      errorMessage: identical(errorMessage, _unset)
-          ? this.errorMessage
-          : errorMessage as String?,
+      errorMessage:
+          identical(errorMessage, _unset) ? this.errorMessage : errorMessage as String?,
       recognizedText: identical(recognizedText, _unset)
           ? this.recognizedText
           : recognizedText as String?,
       pendingSourceText: identical(pendingSourceText, _unset)
           ? this.pendingSourceText
           : pendingSourceText as String?,
-      pendingClarifications:
-          pendingClarifications ?? this.pendingClarifications,
+      pendingClarifications: pendingClarifications ?? this.pendingClarifications,
       resolvedSenses: resolvedSenses ?? this.resolvedSenses,
     );
   }
@@ -91,8 +84,8 @@ class AudioTranslationState {
 
 final audioTranslationControllerProvider =
     NotifierProvider<AudioTranslationController, AudioTranslationState>(() {
-      return AudioTranslationController();
-    });
+  return AudioTranslationController();
+});
 
 class AudioTranslationController extends Notifier<AudioTranslationState> {
   // Un identificador de solicitud simple: si llega una respuesta de una
@@ -142,9 +135,8 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
       final result = await useCase.execute(
         text,
         situation: situation,
-        resolvedSenses: state.resolvedSenses.isEmpty
-            ? null
-            : state.resolvedSenses,
+        resolvedSenses:
+            state.resolvedSenses.isEmpty ? null : state.resolvedSenses,
       );
       if (myToken != _requestToken) return; // ya no es la solicitud vigente.
 
@@ -157,16 +149,9 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
         return;
       }
 
-      // Una palabra que existe en LSB pero no está animada (o una en azul
-      // con descripción) se explica delante del avatar; solo lo que no
-      // existe en LSB se deletrea.
-      final catalog = await _pendingSignCatalog();
-      final sources = await _signSources();
-      if (myToken != _requestToken) return;
-
       state = state.copyWith(
         status: AudioTranslationStatus.success,
-        translationResult: _describe(result, catalog, sources),
+        translationResult: result,
         pendingClarifications: const [],
       );
     } catch (e) {
@@ -176,54 +161,6 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
         errorMessage: e.toString(),
       );
     }
-  }
-
-  /// Las descripciones de las palabras sin seña, empaquetadas con la app. Si
-  /// no se pueden leer, las palabras se deletrean como siempre.
-  Future<PendingSignCatalog> _pendingSignCatalog() async {
-    try {
-      return await ref.read(pendingSignCatalogProvider.future);
-    } catch (_) {
-      return PendingSignCatalog.empty;
-    }
-  }
-
-  /// La traducción con sus palabras explicadas. Si algo falla al armarlas,
-  /// la seña se hace igual, como la dio el backend (deletreando), en vez de
-  /// mostrar un error.
-  LsbTranslation _describe(
-    LsbTranslation result,
-    PendingSignCatalog catalog,
-    Map<String, String> sources,
-  ) {
-    try {
-      return DescribedWordSteps.apply(result, catalog, signSources: sources);
-    } catch (_) {
-      return result;
-    }
-  }
-
-  /// Dónde está cada seña del catálogo («M3 · General I · p.111»), para decir
-  /// en qué módulo verla cuando el avatar todavía no la tiene.
-  Future<Map<String, String>> _signSources() async {
-    try {
-      final entries = await ref.read(lexiconEntriesProvider.future);
-      return {
-        for (final e in entries)
-          if (e.source.isNotEmpty)
-            AnimationUrlResolver.canonicalFor(e.gloss): _sinCodigo(e.source),
-      };
-    } catch (_) {
-      return const {};
-    }
-  }
-
-  /// «M3-T14-04 · M3 · General I · p.111» → «M3 · General I · p.111».
-  static String _sinCodigo(String source) {
-    final partes = source.split(' · ');
-    return partes.length > 1 && partes.first.contains('-T')
-        ? partes.skip(1).join(' · ')
-        : source;
   }
 
   /// La persona responde la aclaración pendiente para [term] con la opción
