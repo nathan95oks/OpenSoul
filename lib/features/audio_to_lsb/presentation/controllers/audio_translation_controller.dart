@@ -5,7 +5,7 @@ import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/di/injection.dart';
-import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/audio_input_validator.dart';
+import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/lost_verbs.dart';
 
 enum AudioTranslationStatus {
@@ -121,7 +121,7 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
 
   void processAudioAsText(String transcribedText) {
     // Un audio sin voz no se traduce: la pantalla vuelve al inicio.
-    if (AudioInputValidator.clean(transcribedText).isEmpty) {
+    if (InputValidator.clean(transcribedText).isEmpty) {
       _requestToken++;
       state = state.copyWith(status: AudioTranslationStatus.idle);
       return;
@@ -132,8 +132,8 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
   void processText(String rawText, {String? situation}) async {
     // Control de calidad antes de llamar al traductor: nada vacío, sin
     // sentido, solo símbolos ni en otro idioma llega al modelo.
-    final text = AudioInputValidator.clean(rawText);
-    final problema = AudioInputValidator.validate(text);
+    final text = InputValidator.clean(rawText);
+    final problema = InputValidator.validate(text);
     if (problema != null) {
       _requestToken++; // una traducción en curso deja de ser vigente.
       state = state.copyWith(
