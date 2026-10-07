@@ -10,7 +10,7 @@ import 'package:http/testing.dart';
 import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart';
 import 'package:lsb_legal_app/core/di/injection.dart'
     show remoteAudioDataSourceProvider;
-import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/audio_input_validator.dart';
+import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/screens/audio_to_lsb_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +18,7 @@ import 'package:webview_flutter_platform_interface/webview_flutter_platform_inte
 
 import 'support/fake_webview_platform.dart';
 
-AudioInputIssue? _v(String t) => AudioInputValidator.validate(t);
+InputIssue? _v(String t) => InputValidator.validate(t);
 
 void main() {
   WebViewPlatform.instance = FakeWebViewPlatform();
@@ -49,14 +49,14 @@ void main() {
     );
     await tester.tap(find.byTooltip('Enviar mensaje'));
     await tester.pump(const Duration(milliseconds: 600));
-    expect(find.text(AudioInputIssue.gibberish.message), findsOneWidget);
+    expect(find.text(InputIssue.gibberish.message), findsOneWidget);
     expect(llamadas, isEmpty);
   });
 
   group('lo que no debe pasar', () {
     test('vacío o solo espacios (un audio sin voz)', () {
       for (final t in ['', '   ', '\n\t ', '​​']) {
-        expect(_v(t), AudioInputIssue.empty, reason: '«$t»');
+        expect(_v(t), InputIssue.empty, reason: '«$t»');
       }
     });
 
@@ -71,7 +71,7 @@ void main() {
         'hola ljalskalksjlakj',
         'kjhgfdsapoiuytrewq',
       ]) {
-        expect(_v(t), AudioInputIssue.gibberish, reason: t);
+        expect(_v(t), InputIssue.gibberish, reason: t);
       }
       for (final t in [
         '(*\$)\$#()#)',
@@ -80,13 +80,13 @@ void main() {
         '--- ---',
         '😀😀😀',
       ]) {
-        expect(_v(t), AudioInputIssue.noWords, reason: t);
+        expect(_v(t), InputIssue.noWords, reason: t);
       }
     });
 
     test('demasiado largo', () {
-      expect(_v('hola ' * 80), AudioInputIssue.tooLong);
-      expect(_v('a' * 301), AudioInputIssue.tooLong);
+      expect(_v('hola ' * 80), InputIssue.tooLong);
+      expect(_v('a' * 301), InputIssue.tooLong);
     });
 
     test('otro idioma o otro alfabeto', () {
@@ -106,7 +106,7 @@ void main() {
         'مرحبا أحتاج مساعدة',
         'γεια σου',
       ]) {
-        expect(_v(t), AudioInputIssue.otherLanguage, reason: t);
+        expect(_v(t), InputIssue.otherLanguage, reason: t);
       }
     });
   });
@@ -138,7 +138,7 @@ void main() {
       ]) {
         // «help» es una palabra suelta en otro idioma: debe rechazarse.
         if (t == 'help') {
-          expect(_v(t), AudioInputIssue.otherLanguage);
+          expect(_v(t), InputIssue.otherLanguage);
         } else {
           expect(_v(t), isNull, reason: t);
         }
@@ -154,7 +154,7 @@ void main() {
       for (final e in (corpus['escenarios'] as List).cast<Map>()) {
         for (final t in (e['turnos'] as List).cast<Map>()) {
           final texto = '${t['texto']}';
-          if (texto.length > AudioInputValidator.maxLength) continue;
+          if (texto.length > InputValidator.maxLength) continue;
           total++;
           final problema = _v(texto);
           if (problema != null) rechazadas.add('$problema «$texto»');
@@ -166,7 +166,7 @@ void main() {
 
     test('una frase de más de una oración se limpia pero pasa', () {
       expect(
-        AudioInputValidator.clean('  hola \n  quiero\tayuda  '),
+        InputValidator.clean('  hola \n  quiero\tayuda  '),
         'hola quiero ayuda',
       );
       expect(_v('  hola \n  quiero\tayuda  '), isNull);
@@ -220,10 +220,10 @@ void main() {
       final llamadas = <String>[];
       final c = app(llamadas);
       for (final (texto, motivo) in [
-        ('ljalskalksjlakj(*\$)\$#()#)', AudioInputIssue.gibberish),
-        ('hello I need help', AudioInputIssue.otherLanguage),
-        ('   ', AudioInputIssue.empty),
-        ('???', AudioInputIssue.noWords),
+        ('ljalskalksjlakj(*\$)\$#()#)', InputIssue.gibberish),
+        ('hello I need help', InputIssue.otherLanguage),
+        ('   ', InputIssue.empty),
+        ('???', InputIssue.noWords),
       ]) {
         final estado = await enviar(c, texto);
         expect(estado.status, AudioTranslationStatus.error, reason: texto);

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:lsb_legal_app/app/app_theme.dart';
-import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/audio_input_validator.dart';
+import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 
 class TextInputWidget extends ConsumerStatefulWidget {
@@ -326,7 +326,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
               inputFormatters: [
-                LengthLimitingTextInputFormatter(AudioInputValidator.maxLength),
+                LengthLimitingTextInputFormatter(InputValidator.maxLength),
               ],
               onChanged: (_) => _notifyComposing(),
               onSubmitted: (_) => _submit(),

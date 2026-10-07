@@ -9,6 +9,7 @@ import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
 import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
+import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
 
 class ConversationState {
   final Conversation conversation;
@@ -31,8 +32,18 @@ class ConversationNotifier extends Notifier<ConversationState> {
     String text, {
     MessageSource source = MessageSource.text,
   }) async {
-    final trimmed = text.trim();
+    final trimmed = InputValidator.clean(text);
     if (trimmed.isEmpty || state.processing) return;
+    // El mismo control de calidad que Voz a LSB: un texto sin sentido, solo
+    // símbolos o en otro idioma no entra en la conversación ni se traduce.
+    final problema = InputValidator.validate(trimmed);
+    if (problema != null) {
+      state = ConversationState(
+        conversation: state.conversation,
+        error: problema.message,
+      );
+      return;
+    }
 
     final engine = ref.read(conversationEngineProvider);
     final conversation = state.conversation;

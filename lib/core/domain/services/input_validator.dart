@@ -1,16 +1,16 @@
-/// Por qué un texto no se manda a traducir a LSB.
-enum AudioInputIssue {
+/// Por qué un texto escrito o dictado no se acepta.
+enum InputIssue {
   /// Vacío, o solo espacios: un audio sin voz, o nada escrito.
   empty('No escuché nada. Escribe o di tu mensaje otra vez.'),
 
   /// Más largo de lo que se puede señar de una vez.
   tooLong(
     'El mensaje es muy largo. Escríbelo en frases más cortas '
-    '(máximo ${AudioInputValidator.maxLength} caracteres).',
+    '(máximo ${InputValidator.maxLength} caracteres).',
   ),
 
   /// Solo símbolos, o casi: no hay palabras que traducir.
-  noWords('Escribe palabras para traducir: solo hay símbolos o signos.'),
+  noWords('Escribe palabras: solo hay símbolos o signos.'),
 
   /// Letras sin sentido («ljalskalksjlakj»).
   gibberish(
@@ -20,18 +20,24 @@ enum AudioInputIssue {
   /// Otro idioma u otro alfabeto: solo se traduce el español.
   otherLanguage(
     'Solo se traduce el español. Escribe o di el mensaje en español.',
-  );
+  ),
+
+  /// Un nombre o un lugar escrito con otro alfabeto (cirílico, árabe…).
+  otherAlphabet('Escríbelo con las letras del español.');
 
   /// Lo que se le dice a la persona.
   final String message;
 
-  const AudioInputIssue(this.message);
+  const InputIssue(this.message);
 }
 
-/// Control de calidad de lo que se escribe o se dicta en Voz a LSB, antes de
-/// llamar al traductor: un texto sin sentido, vacío o en otro idioma no se
-/// traduce (el modelo inventaría señas o deletrearía basura).
-abstract final class AudioInputValidator {
+/// Control de calidad de lo que se escribe o se dicta, antes de usarlo: un
+/// texto sin sentido, vacío o en otro idioma no se traduce (el modelo
+/// inventaría señas o deletrearía basura) ni entra en una declaración.
+///
+/// Lo usan Voz a LSB y Conversación (el mensaje del oyente) y los campos de
+/// texto libre de LSB a Texto (una calle, un nombre, un detalle).
+abstract final class InputValidator {
   /// Largo máximo de un mensaje, en caracteres.
   static const int maxLength = 300;
 
@@ -41,11 +47,19 @@ abstract final class AudioInputValidator {
       .replaceAll(RegExp(r'\s+'), ' ')
       .trim();
 
-  /// `null` si [text] se puede traducir; si no, el motivo.
-  static AudioInputIssue? validate(String text) {
+  /// `null` si [text] se acepta; si no, el motivo.
+  ///
+  /// [literal] es para un nombre propio (una persona, una calle, un lugar):
+  /// puede llevar palabras o letras de otro idioma («The Strongest»,
+  /// «Françoise»), así que solo se rechaza otro alfabeto, no el idioma.
+  static InputIssue? validate(
+    String text, {
+    int maxLength = InputValidator.maxLength,
+    bool literal = false,
+  }) {
     final limpio = clean(text);
-    if (limpio.isEmpty) return AudioInputIssue.empty;
-    if (limpio.length > maxLength) return AudioInputIssue.tooLong;
+    if (limpio.isEmpty) return InputIssue.empty;
+    if (limpio.length > maxLength) return InputIssue.tooLong;
 
     final letras = _letra.allMatches(limpio).length;
     final cifras = RegExp(r'\d').allMatches(limpio).length;
@@ -53,12 +67,16 @@ abstract final class AudioInputValidator {
     // Letras y cifras son el mensaje; lo demás (puntuación y signos) lo
     // acompaña. Si es la minoría, no hay mensaje.
     if (letras + cifras == 0 || (letras + cifras) / visibles < 0.6) {
-      return AudioInputIssue.noWords;
+      return InputIssue.noWords;
     }
 
     final palabras = [for (final m in _palabra.allMatches(limpio)) m.group(0)!];
-    if (_otroIdioma(limpio, palabras)) return AudioInputIssue.otherLanguage;
-    if (_sinSentido(palabras)) return AudioInputIssue.gibberish;
+    if (literal) {
+      if (_otroAlfabeto(limpio)) return InputIssue.otherAlphabet;
+    } else if (_otroIdioma(limpio, palabras)) {
+      return InputIssue.otherLanguage;
+    }
+    if (_sinSentido(palabras, literal)) return InputIssue.gibberish;
     return null;
   }
 
@@ -106,15 +124,15 @@ abstract final class AudioInputValidator {
     'trámite', 'tramite', 'policía', 'felcc', 'felcv', 'fiscalía',
   };
 
+  /// Otro alfabeto: cirílico, griego, árabe, chino…
+  static bool _otroAlfabeto(String texto) =>
+      texto.runes.any((r) => r > 0x24F && !_esMarca(r) && _esLetra(r));
+
   static bool _otroIdioma(String texto, List<String> palabras) {
-    var fuera = false;
-    for (final r in texto.toLowerCase().runes) {
-      // Otro alfabeto (cirílico, griego, árabe, chino…), o letras que el
-      // español no usa.
-      if (r > 0x24F && !_esMarca(r) && _esLetra(r)) return true;
-      if (_ajenas.contains(String.fromCharCode(r))) fuera = true;
-    }
-    if (fuera) return true;
+    if (_otroAlfabeto(texto)) return true;
+    // Letras que el español no usa.
+    final minusculasTexto = texto.toLowerCase();
+    if (_ajenas.split('').any(minusculasTexto.contains)) return true;
 
     final minusculas = [for (final p in palabras) p.toLowerCase()];
     final ajenas = minusculas.where(_extranjeras.contains).length;
@@ -129,7 +147,7 @@ abstract final class AudioInputValidator {
 
   // ---- Letras sin sentido -----------------------------------------------
 
-  static bool _sinSentido(List<String> palabras) {
+  static bool _sinSentido(List<String> palabras, bool literal) {
     final conLetras = [
       for (final p in palabras)
         if (p.length >= 3) p,
@@ -137,7 +155,7 @@ abstract final class AudioInputValidator {
     if (conLetras.isEmpty) return false;
     final malas = [
       for (final p in conLetras)
-        if (_palabraSinSentido(p)) p,
+        if (_palabraSinSentido(p, literal)) p,
     ];
     if (malas.isEmpty) return false;
     return malas.length * 2 >= conLetras.length ||
@@ -161,7 +179,7 @@ abstract final class AudioInputValidator {
     return false;
   }
 
-  static bool _palabraSinSentido(String palabra) {
+  static bool _palabraSinSentido(String palabra, bool literal) {
     final p = palabra.toLowerCase();
     // Una sigla en mayúsculas (FELCC, SIPRUNPCD) tiene pocas vocales.
     final sigla = palabra == palabra.toUpperCase() && palabra.length <= 10;
@@ -183,6 +201,9 @@ abstract final class AudioInputValidator {
     }
     if (maxRacha >= 5) return true;
     if (vocales == 0 && p.length >= 4) return true;
+    // Un apellido o un nombre puede tener pocas vocales («Schwarz»,
+    // «Jhonny»): en ellos solo cuentan las reglas de arriba.
+    if (literal) return false;
     return !sigla && p.length >= 6 && vocales / p.length <= 0.2;
   }
 }
