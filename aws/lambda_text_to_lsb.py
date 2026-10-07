@@ -8,7 +8,7 @@ Objetivo Específico 3:
 
 Flujo:
   1. Recibe JSON con `text` (frase en español) y `context` (legal/general)
-  2. Genera Hash MD5 de la frase para verificar caché
+  2. Genera el hash SHA-256 de la frase para verificar caché
   3. Construye Prompt de desambiguación semántica para Bedrock
   4. Invoca Amazon Bedrock (Claude 3 Haiku) para análisis PLN
   5. Parsea la respuesta: extrae arreglo de glosas LSB
@@ -1913,7 +1913,7 @@ def build_response(status_code: int, body: dict) -> dict:
 
 def generate_cache_key(text: str, situation: str = None, resolved_senses: dict = None) -> str:
     """
-    Genera un hash MD5 determinista de la frase normalizada.
+    Genera un hash SHA-256 determinista de la frase normalizada.
 
     La situación y el sentido elegido para un término ambiguo forman parte de
     la clave porque forman parte del resultado: la misma frase traducida bajo
@@ -1934,7 +1934,14 @@ def generate_cache_key(text: str, situation: str = None, resolved_senses: dict =
     # de un sistema que ya no está en producción.
     seed = (f"{CACHE_VERSION}|{TRANSLATION_RULESET_VERSION}|"
             f"{BEDROCK_MODEL_ID}|{normalized}")
-    return hashlib.md5(seed.encode("utf-8")).hexdigest()
+    # SHA-256 (NIST FIPS 180-4), no MD5. La clave sale de lo que manda
+    # cualquiera a un endpoint público, y MD5 tiene colisiones prácticas desde
+    # 2004 (la RFC 6151 lo descarta para seguridad desde 2011): alguien podría
+    # fabricar dos pedidos con la misma clave y que la caché le sirviera a una
+    # persona la traducción o el audio de otra. SHA-256 no tiene colisiones
+    # conocidas, viene en la biblioteca estándar y es el hash que ya usa AWS
+    # (firma SigV4, checksums de S3); su costo aquí es de microsegundos.
+    return hashlib.sha256(seed.encode("utf-8")).hexdigest()
 
 
 # ---------------------------------------------------------------------------

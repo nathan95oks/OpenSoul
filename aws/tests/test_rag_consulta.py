@@ -40,7 +40,7 @@ def falso_embed(texto: str) -> list:
         w = _SINONIMOS.get(w, w)
         if w in _VACIAS:
             continue
-        v[int(hashlib.md5(w.encode()).hexdigest(), 16) % 512] += 1.0
+        v[int(hashlib.sha256(w.encode()).hexdigest(), 16) % 512] += 1.0
     norma = math.sqrt(sum(x * x for x in v)) or 1.0
     return [x / norma for x in v]
 

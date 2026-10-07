@@ -643,7 +643,7 @@ Cuando el usuario presiona el botón "Terminé y traducir", se dispara el siguie
 
 - Repository Impl: solicita los datos al RemoteTranslationDataSource. 
 
-- DataSource: realiza la petición POST a AWS API Gateway, que la redirige a la función Lambda. La Lambda valida el request, genera la clave de caché MD5, ejecuta el análisis semántico con el GLOSS_LEXICON, genera la oración base con reglas propias, la refina opcionalmente con Bedrock, sintetiza el audio con Polly y lo sube a S3, devolviendo un JSON. 
+- DataSource: realiza la petición POST a AWS API Gateway, que la redirige a la función Lambda. La Lambda valida el request, genera la clave de caché SHA-256, ejecuta el análisis semántico con el GLOSS_LEXICON, genera la oración base con reglas propias, la refina opcionalmente con Bedrock, sintetiza el audio con Polly y lo sube a S3, devolviendo un JSON. 
 
 - Repository Impl: convierte el JSON en una entidad TranslationResult y la devuelve hacia arriba. 
 
@@ -966,7 +966,7 @@ _educativo para aprendizaje de Lengua de Señas Boliviana_ . Proyecto de innovac
 
 [32]P. J. Sadalage y M. Fowler, _NoSQL Distilled: A Brief Guide to the Emerging World of Polyglot Persistence_ . Upper Saddle River, NJ, EE. UU.: Addison-Wesley, 2012. 
 
-[33]R. Rivest, “The MD5 Message-Digest Algorithm,” RFC 1321, Internet Engineering Task Force (IETF), 1992. 
+[33]National Institute of Standards and Technology, “Secure Hash Standard (SHS),” FIPS PUB 180-4, 2015. 
 
 [34]Estado Plurinacional de Bolivia, Ley N.º 1658, Ley de Reconocimiento de la Lengua de Señas Boliviana (LSB) como idioma oficial y de derechos lingüísticos de las personas sordas. La Paz, Bolivia, 31-oct-2025. 
 
