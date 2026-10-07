@@ -3299,7 +3299,14 @@ def generate_cache_key(context_type: str, cards: list, institution_type: str = "
         (json.dumps(semantic_frame, sort_keys=True, ensure_ascii=False)
          if semantic_frame else ""),
     ])
-    return hashlib.md5(normalized.encode("utf-8")).hexdigest()
+    # SHA-256 (NIST FIPS 180-4), no MD5. La clave sale de lo que manda
+    # cualquiera a un endpoint público, y MD5 tiene colisiones prácticas desde
+    # 2004 (la RFC 6151 lo descarta para seguridad desde 2011): alguien podría
+    # fabricar dos pedidos con la misma clave y que la caché le sirviera a una
+    # persona la traducción o el audio de otra. SHA-256 no tiene colisiones
+    # conocidas, viene en la biblioteca estándar y es el hash que ya usa AWS
+    # (firma SigV4, checksums de S3); su costo aquí es de microsegundos.
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 # ---------------------------------------------------------------------------
 # Cotas de entrada
