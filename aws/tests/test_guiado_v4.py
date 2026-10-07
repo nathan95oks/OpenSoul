@@ -22,6 +22,32 @@ def answer(question, option, state="afirmado", values=None):
 
 
 class GuidedComposerV4(unittest.TestCase):
+    def test_la_misma_frase_seguida_no_se_repite(self):
+        """Dos indicaciones contestadas «Entendido.» decían «Entendido.
+        Entendido.». Gemelo de guided_composer_test.dart."""
+        def indicacion(qid):
+            return {"id": qid, "modo": "frase", "control": "seleccion_unica",
+                    "acto": "indicacion",
+                    "opciones": [{"id": "entendido", "frase": "Entendido.",
+                                  "estado": "afirmado",
+                                  "glosas": ["COMPRENDER"]},
+                                 {"id": "respuesta_1",
+                                  "frase": "Quiero que me indiquen dónde acudir.",
+                                  "estado": "afirmado",
+                                  "glosas": ["QUERER", "DÓNDE", "IR"]}]}
+        bank = {"preguntas": [indicacion("R.A"), indicacion("R.B")],
+                "recorridos": {"t": {"nombre": "T", "pasos": [
+                    {"pregunta": "R.A"}, {"pregunta": "R.B"}]}}}
+        dos_veces = {"recorrido": "t", "proposito": "initiative",
+                     "respuestas": [answer("R.A", "entendido"),
+                                    answer("R.B", "entendido")]}
+        self.assertEqual("Entendido.", G.compose(dos_veces, bank))
+        distintas = {"recorrido": "t", "proposito": "initiative",
+                     "respuestas": [answer("R.A", "entendido"),
+                                    answer("R.B", "respuesta_1")]}
+        self.assertEqual("Entendido. Quiero que me indiquen dónde acudir.",
+                         G.compose(distintas, bank))
+
     def test_phone_is_literal_and_not_an_actor_gloss(self):
         guided = {
             "recorrido": "amenaza_digital",

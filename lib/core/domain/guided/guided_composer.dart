@@ -115,7 +115,11 @@ class GuidedComposer {
       }
       final finalized = _finalize(text, reply: reply);
       if (finalized.isNotEmpty) {
-        sentences.add(finalized);
+        // La misma frase dos veces seguidas no dice más: dos indicaciones
+        // contestadas «Entendido.» se leían «Entendido. Entendido.».
+        if (sentences.isEmpty || sentences.last != finalized) {
+          sentences.add(finalized);
+        }
       } else {
         represented
           ..clear()
