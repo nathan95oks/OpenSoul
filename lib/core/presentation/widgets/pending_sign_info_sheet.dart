@@ -93,11 +93,21 @@ class PendingSignInfoView extends StatelessWidget {
   /// Muestra «Descripción provisional, por revisar.» si nadie la confirmó.
   final bool showReviewNote;
 
+  /// Muestra la línea que dice por qué no tiene seña («No tiene seña propia
+  /// en los módulos M1–M4», «Sigla: se deletrea»). El avatar no la muestra:
+  /// allí solo importa qué es.
+  final bool showSignStatus;
+
+  /// «¿Qué es?» en grande, para leerlo de un vistazo junto al avatar.
+  final bool largeQuestion;
+
   const PendingSignInfoView({
     super.key,
     required this.info,
     this.catalog,
     this.showReviewNote = true,
+    this.showSignStatus = true,
+    this.largeQuestion = false,
   });
 
   @override
@@ -123,34 +133,38 @@ class PendingSignInfoView extends StatelessWidget {
             fontWeight: FontWeight.w800,
           ),
         ),
-        const SizedBox(height: 6),
-        Row(
-          children: [
-            const Icon(
-              Icons.sign_language_outlined,
-              size: 18,
-              color: AppTheme.lightTextSub,
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: Text(
-                info.hasLsbSign
-                    ? 'Existe en LSB, pero el avatar todavía no tiene '
-                          'esta seña.'
-                    : info.isAcronym
-                    ? 'Sigla: se deletrea.'
-                    : info.isProperName
-                    ? 'Nombre propio: no tiene seña, se deletrea.'
-                    : 'No tiene seña propia en los módulos M1–M4.',
-                style: tema.bodySmall?.copyWith(color: AppTheme.lightTextSub),
+        if (showSignStatus) ...[
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              const Icon(
+                Icons.sign_language_outlined,
+                size: 18,
+                color: AppTheme.lightTextSub,
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 14),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  info.hasLsbSign
+                      ? 'Existe en LSB, pero el avatar todavía no tiene '
+                            'esta seña.'
+                      : info.isAcronym
+                      ? 'Sigla: se deletrea.'
+                      : info.isProperName
+                      ? 'Nombre propio: no tiene seña, se deletrea.'
+                      : 'No tiene seña propia en los módulos M1–M4.',
+                  style: tema.bodySmall?.copyWith(color: AppTheme.lightTextSub),
+                ),
+              ),
+            ],
+          ),
+        ],
+        SizedBox(height: showSignStatus ? 14 : 8),
         Text(
           info.hasLsbSign ? 'En LSB se seña:' : '¿Qué es?',
-          style: tema.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+          style: largeQuestion
+              ? tema.titleLarge?.copyWith(fontWeight: FontWeight.w800)
+              : tema.labelLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 4),
         // Explicada en LSB, con señas que la persona ya conoce; el español

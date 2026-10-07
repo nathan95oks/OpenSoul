@@ -167,6 +167,13 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
       expect(find.byKey(const Key('avatar_deletreo_ayuda')), findsOneWidget);
       expect(find.text('¿Qué es?'), findsOneWidget);
+      // Junto al avatar no se dice por qué no tiene seña: solo qué es, con
+      // «¿Qué es?» en grande.
+      expect(find.textContaining('No tiene seña propia'), findsNothing);
+      expect(
+        tester.widget<Text>(find.text('¿Qué es?')).style!.fontSize,
+        greaterThanOrEqualTo(20),
+      );
       expect(find.byKey(const Key('descripcion_lsb')), findsOneWidget);
 
       // En la última letra, «Siguiente» termina la seña.

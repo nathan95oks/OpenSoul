@@ -1408,7 +1408,12 @@ class _Tarjeta extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  PendingSignInfoView(info: info, showReviewNote: false),
+                  PendingSignInfoView(
+                    info: info,
+                    showReviewNote: false,
+                    showSignStatus: false,
+                    largeQuestion: true,
+                  ),
                   const SizedBox(height: 18),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(4),
@@ -1568,8 +1573,8 @@ class _SpellingHelpPanel extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text(
                       'Sinónimo en LSB:',
-                      style: tema.labelLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
+                      style: tema.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -1588,6 +1593,8 @@ class _SpellingHelpPanel extends StatelessWidget {
                     PendingSignInfoView(
                       info: descripcion,
                       showReviewNote: false,
+                      showSignStatus: false,
+                      largeQuestion: true,
                     )
                   else
                     Text(
