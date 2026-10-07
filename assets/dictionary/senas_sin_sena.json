@@ -719,6 +719,17 @@
    "revisada": false,
    "ejemplo": "¿Cuánto cuesta el trámite que voy a solicitar?"
   },
+  "CRPVA": {
+   "descripcion": "Papel que dice de quién es un auto.",
+   "descripcionLsb": [
+    "PAPEL",
+    "AUTO",
+    "SUYO"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "CUENTA": {
    "descripcion": "Usuario personal para entrar a una página o sistema de internet.",
    "descripcionLsb": [
@@ -987,6 +998,18 @@
    "revisada": false,
    "ejemplo": "Quiero participar directamente en mi audiencia."
   },
+  "DIRNOPLU": {
+   "descripcion": "Oficina de los notarios: sellos y papeles oficiales.",
+   "descripcionLsb": [
+    "OFICINA",
+    "ABOGADO",
+    "SELLO",
+    "PAPEL"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "DISCAPACIDAD": {
    "descripcion": "Condición de una persona que tiene limitaciones; las personas sordas pueden tener carnet de discapacidad.",
    "descripcionLsb": [
@@ -1018,6 +1041,18 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Cómo registro la división y partición de un inmueble?"
+  },
+  "DNA": {
+   "descripcion": "Oficina de la alcaldía que protege a los niños y las niñas.",
+   "descripcionLsb": [
+    "ALCALDÍA",
+    "PROTEGER",
+    "NIÑO",
+    "NIÑA"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
   },
   "DUDAR": {
    "descripcion": "No estar seguro de algo.",
@@ -1215,6 +1250,17 @@
     "INVESTIGACIÓN",
     "ROBAR",
     "ENGAÑAR"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "FELCN": {
+   "descripcion": "Policía que combate la droga.",
+   "descripcionLsb": [
+    "POLICÍA",
+    "DROGA",
+    "LUCHAR"
    ],
    "tipo": "sigla",
    "revisada": false,
@@ -2614,6 +2660,29 @@
    "revisada": false,
    "ejemplo": "¿Tiene una solicitud escrita de resellado de nota marginal?"
   },
+  "ROMA": {
+   "descripcion": "Página de internet de la Fiscalía para ver su caso.",
+   "descripcionLsb": [
+    "INTERNET",
+    "FISCALIA",
+    "VER",
+    "INVESTIGACIÓN"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "RUAT": {
+   "descripcion": "Sistema de los impuestos de autos y casas.",
+   "descripcionLsb": [
+    "IMPUESTO",
+    "AUTO",
+    "CASA"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "RUTA": {
    "descripcion": "Camino o pasos que se siguen. «Ruta de atención»: las oficinas que atienden un caso.",
    "descripcionLsb": [
@@ -2642,6 +2711,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Primero confirmaré la sede."
+  },
+  "SEGIP": {
+   "descripcion": "Oficina que da el carnet de identidad.",
+   "descripcionLsb": [
+    "OFICINA",
+    "IDENTIDAD",
+    "PAPEL"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SEGURIDAD": {
    "descripcion": "Estar sin peligro.",
@@ -2683,6 +2763,18 @@
     "ABOGADO",
     "GRATIS",
     "CULPAR"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SERECI": {
+   "descripcion": "Oficina de los certificados de nacimiento y de matrimonio.",
+   "descripcionLsb": [
+    "OFICINA",
+    "PAPEL",
+    "BEBÉ",
+    "MATRIMONIO"
    ],
    "tipo": "sigla",
    "revisada": false,
@@ -2769,6 +2861,30 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "No sé si la hipoteca sigue registrada."
+  },
+  "SIREJ": {
+   "descripcion": "Página de internet del juzgado para ver su caso.",
+   "descripcionLsb": [
+    "INTERNET",
+    "JUZGADO",
+    "VER",
+    "JUICIO"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SLIM": {
+   "descripcion": "Servicio de la alcaldía que ayuda a las mujeres que sufren violencia.",
+   "descripcionLsb": [
+    "ALCALDÍA",
+    "AYUDAR",
+    "MUJER",
+    "VIOLENCIA"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SOCIAL": {
    "descripcion": "De la sociedad o de la ayuda a las personas. «Trabajo social»: profesionales que orientan y ayudan.",

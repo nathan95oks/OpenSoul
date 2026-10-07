@@ -208,7 +208,20 @@ void main() {
   });
 
   test('toda sigla que la Lambda deletrea siempre tiene descripción', () {
-    for (final sigla in ['FELCC', 'FELCV', 'SEPDAVI', 'SEPDEP', 'NUREJ']) {
+    for (final sigla in [
+      'FELCC',
+      'FELCV',
+      'FELCN',
+      'SEPDAVI',
+      'SEPDEP',
+      'NUREJ',
+      'SERECI',
+      'SEGIP',
+      'SLIM',
+      'DNA',
+      'RUAT',
+      'DIRNOPLU',
+    ]) {
       final gloss = _catalogo.describedGloss(sigla);
       expect(gloss, isNotNull, reason: sigla);
       expect(_catalogo.infoOf(gloss!).lsbDescription, isNotEmpty);
