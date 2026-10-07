@@ -26,6 +26,18 @@ ROOT = os.path.dirname(AWS)
 FIXTURES = os.path.join(ROOT, "test", "fixtures", "contract")
 
 
+def _contrato_vigente() -> int:
+    """BACKEND_CONTRACT_VERSION de lambda_function.py, leído del archivo."""
+    import re
+
+    with open(os.path.join(AWS, "lambda_function.py"), encoding="utf-8") as f:
+        return int(re.search(r"^BACKEND_CONTRACT_VERSION\s*=\s*(\d+)", f.read(),
+                             re.MULTILINE).group(1))
+
+
+CONTRATO = _contrato_vigente()
+
+
 def cargar(nombre: str) -> dict:
     with open(os.path.join(FIXTURES, nombre + ".json"), encoding="utf-8") as f:
         return json.load(f)
@@ -77,12 +89,19 @@ def main() -> int:
     def texto(d):
         return (d.get("generatedText") or d.get("baseSentence") or "")
 
-    check("1. anuncia contractVersion 3",
-          sospechoso.get("contractVersion") == 3, str(sospechoso.get("contractVersion")))
+    # El contrato vigente es el del código (BACKEND_CONTRACT_VERSION); un
+    # número fijo aquí quedaba viejo en cada versión.
+    check(f"1. anuncia contractVersion {CONTRATO}",
+          sospechoso.get("contractVersion") == CONTRATO,
+          str(sospechoso.get("contractVersion")))
     check("2. ESCAPAR sola no denuncia un robo",
           "robo" not in texto(escapar).lower(), texto(escapar))
+    # El texto remoto lo puede redactar Bedrock con otras palabras: vale
+    # «fuga» o «escap(ó)», pero atribuida al sospechoso, no a quien denuncia.
+    t3 = texto(sospechoso).lower()
     check("3. la huida del sospechoso se atribuye bien",
-          "fuga" in texto(sospechoso).lower(), texto(sospechoso))
+          ("fuga" in t3 or "escap" in t3) and "sospechoso" in t3,
+          texto(sospechoso))
     check("4. la huida propia se atribuye bien",
           "escap" in texto(victima).lower(), texto(victima))
     check("5. los dos relatos no dicen lo mismo",
