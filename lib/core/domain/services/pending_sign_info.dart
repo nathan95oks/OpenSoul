@@ -26,6 +26,14 @@ class PendingSignInfo {
   /// Una persona confirmó la descripción. Si no, es un borrador.
   final bool reviewed;
 
+  /// La palabra existe en LSB (es una seña, o equivale a una), pero el avatar
+  /// todavía no tiene su animación: [lsbDescription] dice con qué seña se
+  /// dice.
+  final bool hasLsbSign;
+
+  /// Dónde está la seña: «M3 · General I · p.111». Vacío si no se sabe.
+  final String source;
+
   const PendingSignInfo({
     required this.word,
     this.description = '',
@@ -33,6 +41,8 @@ class PendingSignInfo {
     this.example = '',
     this.isProperName = false,
     this.reviewed = false,
+    this.hasLsbSign = false,
+    this.source = '',
   });
 }
 

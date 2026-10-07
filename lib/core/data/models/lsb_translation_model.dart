@@ -14,6 +14,7 @@ class LsbTranslationModel extends LsbTranslation {
     super.representationStatus = RepresentationStatus.complete,
     super.semanticTurn,
     super.spelledWords = const [],
+    super.unanimatedSigns = const [],
   });
 
   factory LsbTranslationModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +42,9 @@ class LsbTranslationModel extends LsbTranslation {
       semanticTurn: BackendSemanticTurn.fromJson(json['semanticTurn']),
       spelledWords: [
         for (final w in (json['spelledWords'] as List? ?? const [])) '$w',
+      ],
+      unanimatedSigns: [
+        for (final w in (json['unanimatedSigns'] as List? ?? const [])) '$w',
       ],
     );
   }
@@ -74,6 +78,7 @@ class LsbTranslationModel extends LsbTranslation {
           : 'complete',
       if (semanticTurn != null) 'semanticTurn': semanticTurn!.toJson(),
       if (spelledWords.isNotEmpty) 'spelledWords': spelledWords,
+      if (unanimatedSigns.isNotEmpty) 'unanimatedSigns': unanimatedSigns,
     };
   }
 }

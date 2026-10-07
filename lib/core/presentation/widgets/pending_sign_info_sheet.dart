@@ -117,7 +117,9 @@ class PendingSignInfoView extends StatelessWidget {
         Text(
           info.word,
           style: tema.headlineSmall?.copyWith(
-            color: AppTheme.pendingSign,
+            // Una seña de LSB va en el violeta de LSB; una palabra sin seña,
+            // en azul.
+            color: info.hasLsbSign ? AppTheme.lsbViolet : AppTheme.pendingSign,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -132,7 +134,10 @@ class PendingSignInfoView extends StatelessWidget {
             const SizedBox(width: 6),
             Expanded(
               child: Text(
-                info.isProperName
+                info.hasLsbSign
+                    ? 'Existe en LSB, pero el avatar todavía no tiene '
+                          'esta seña.'
+                    : info.isProperName
                     ? 'Nombre propio: no tiene seña, se deletrea.'
                     : 'No tiene seña propia en los módulos M1–M4.',
                 style: tema.bodySmall?.copyWith(color: AppTheme.lightTextSub),
@@ -142,7 +147,7 @@ class PendingSignInfoView extends StatelessWidget {
         ),
         const SizedBox(height: 14),
         Text(
-          '¿Qué es?',
+          info.hasLsbSign ? 'En LSB se seña:' : '¿Qué es?',
           style: tema.labelLarge?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 4),
@@ -163,6 +168,13 @@ class PendingSignInfoView extends StatelessWidget {
                 : info.description,
             style: tema.bodyLarge,
           ),
+        if (info.source.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Text(
+            'Véala en el módulo: ${info.source}',
+            style: tema.bodySmall?.copyWith(color: AppTheme.lightTextSub),
+          ),
+        ],
         if (tocables) ...[
           const SizedBox(height: 4),
           Text(

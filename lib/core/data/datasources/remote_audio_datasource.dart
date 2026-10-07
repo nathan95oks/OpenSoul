@@ -165,6 +165,14 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
                   '${fix['palabra'] ?? ''}'.isNotEmpty)
                 '${fix['palabra']}',
           ],
+          'unanimatedSigns': [
+            for (final d in glossDetails)
+              if (d is Map &&
+                  d['available'] == false &&
+                  (d['spelledLetters'] as List?)?.isNotEmpty == true &&
+                  '${d['gloss'] ?? ''}'.length > 1)
+                '${d['gloss']}',
+          ],
         });
       } else {
         throw Exception(
