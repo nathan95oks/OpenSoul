@@ -13,15 +13,12 @@ import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
 import 'package:lsb_legal_app/core/di/injection.dart'
     show pendingSignCatalogProvider, remoteAudioDataSourceProvider;
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
-import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/avatar_3d_viewer.dart';
-import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/described_word_steps.dart';
 
 import 'support/fake_webview_platform.dart';
 
-const _modelo = 'https://x/avatar_test.glb';
 const _marca = AnimationUrlResolver.placeholderScheme;
 
 /// Un catálogo de descripciones pequeño, con la forma del asset.
@@ -57,108 +54,10 @@ final _catalogo = PendingSignCatalog.fromJsonString(
   }),
 );
 
-/// Una traducción con [pasos] (señas con clip y letras) y las palabras que
-/// el backend informó deletreadas.
-LsbTranslation _traduccion(List<String> pasos, List<String> deletreadas) {
-  final urls = [for (final p in pasos) p.length == 1 ? '$_marca$p' : _modelo];
-  return LsbTranslation(
-    glosses: pasos,
-    animationUrl: urls.first,
-    animationUrls: urls,
-    animationGlosses: pasos,
-    spelledWords: deletreadas,
-  );
-}
-
 void main() {
   WebViewPlatform.instance = FakeWebViewPlatform();
 
-  group('una palabra que no existe en LSB', () {
-    test('con descripción se explica en vez de deletrearse', () {
-      final t = DescribedWordSteps.apply(
-        _traduccion(['YO', ...'HIPOTECA'.split(''), 'TENER'], ['HIPOTECA']),
-        _catalogo,
-      );
-      expect(t.animationGlosses, ['YO', 'SENA_PENDIENTE:HIPOTECA', 'TENER']);
-      expect(t.animationUrls, [
-        _modelo,
-        '${_marca}SENA_PENDIENTE:HIPOTECA',
-        _modelo,
-      ]);
-    });
-
-    test('con una seña equivalente que el avatar tiene, se seña', () {
-      final catalogo = PendingSignCatalog.fromJsonString(
-        jsonEncode({
-          'palabras': {
-            'COMPROBANTE': {'descripcion': 'Papel de un pago.'},
-          },
-          'equivalencias': {
-            'COMPROBANTE': ['FACTURA'],
-            'TERRENO': ['TERRENO'],
-          },
-        }),
-      );
-      final t = DescribedWordSteps.apply(
-        _traduccion(
-          ['YO', ...'COMPROBANTE'.split(''), ...'TERRENO'.split('')],
-          ['comprobante', 'terreno'],
-        ),
-        catalogo,
-      );
-      // FACTURA tiene clip: se seña. TERRENO existe en LSB pero el avatar no
-      // la tiene: no se deletrea, se explica.
-      expect(t.animationGlosses, ['YO', 'FACTURA', 'SENA_PENDIENTE:TERRENO']);
-      expect(t.animationUrls[1], isNot(startsWith(_marca)));
-      final terreno = t.stepDescriptions['SENA_PENDIENTE:TERRENO']!;
-      expect(terreno.hasLsbSign, isTrue);
-      expect(terreno.lsbDescription, ['TERRENO']);
-    });
-
-    test('«hola quiero realizar un tramite»: realizar existe (HACER) y se '
-        'explica, no se deletrea', () {
-      final catalogo = PendingSignCatalog.fromJsonString(
-        jsonEncode({
-          'palabras': const {},
-          'equivalencias': {
-            'REALIZAR': ['HACER'],
-          },
-        }),
-      );
-      // Lo que devuelve hoy la Lambda desplegada para esa frase.
-      final t = DescribedWordSteps.apply(
-        _traduccion(['HOLA', 'TRAMITE', ...'REALIZAR'.split('')], ['REALIZAR']),
-        catalogo,
-        signSources: const {'HACER': 'M3 · General I · p.111'},
-      );
-      expect(t.animationGlosses, [
-        'HOLA',
-        'TRAMITE',
-        'SENA_PENDIENTE:REALIZAR',
-      ]);
-      final info = t.stepDescriptions['SENA_PENDIENTE:REALIZAR']!;
-      expect(info.word, 'REALIZAR');
-      expect(info.hasLsbSign, isTrue);
-      expect(info.lsbDescription, ['HACER']);
-      expect(info.source, 'M3 · General I · p.111');
-    });
-
-    test('una seña del catálogo sin animación no se deletrea: se explica', () {
-      // «es verdad»: la Lambda deletrea VERDAD porque no hay clip.
-      final t = DescribedWordSteps.apply(
-        LsbTranslation(
-          glosses: const ['VERDAD'],
-          animationUrl: '',
-          animationGlosses: 'VERDAD'.split(''),
-          animationUrls: [for (final l in 'VERDAD'.split('')) '$_marca$l'],
-          unanimatedSigns: const ['VERDAD'],
-        ),
-        _catalogo,
-      );
-      expect(t.animationGlosses, ['SENA_PENDIENTE:VERDAD']);
-      expect(t.stepDescriptions['SENA_PENDIENTE:VERDAD']!.hasLsbSign, isTrue);
-    });
-
+  group('datos de la traducción', () {
     test('la Lambda informa las señas sin animación', () async {
       final fuente = RemoteAudioDataSourceImpl(
         apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
@@ -186,39 +85,6 @@ void main() {
       );
       final t = await fuente.translateText('es verdad');
       expect(t.unanimatedSigns, ['VERDAD']);
-    });
-
-    test('sin descripción (o sin avatar) se deletrea', () {
-      final pasos = ['YO', ...'ACOSO'.split('')];
-      final t = DescribedWordSteps.apply(
-        _traduccion(pasos, ['ACOSO']),
-        _catalogo,
-      );
-      expect(t.animationGlosses, pasos);
-    });
-
-    test('un nombre propio se deletrea aunque tenga entrada', () {
-      final pasos = ['SEÑOR', ...'ANTEZANA'.split('')];
-      final t = DescribedWordSteps.apply(
-        _traduccion(pasos, ['Antezana']),
-        _catalogo,
-      );
-      expect(t.animationGlosses, pasos);
-    });
-
-    test('se reconoce con tildes, Ñ, minúsculas y varias palabras', () {
-      final t = DescribedWordSteps.apply(
-        _traduccion(
-          [...'FOLIOREAL'.split(''), 'Y', ...'TAMAÑO'.split('')],
-          ['Folio Real', 'y', 'tamaño'],
-        ),
-        _catalogo,
-      );
-      expect(t.animationGlosses, [
-        'SENA_PENDIENTE:FOLIO_REAL',
-        'Y',
-        'SENA_PENDIENTE:TAMAÑO',
-      ]);
     });
 
     test('la respuesta del backend trae las palabras deletreadas', () {
@@ -260,10 +126,6 @@ void main() {
         );
         final t = await fuente.translateText('Tengo una hipoteca');
         expect(t.spelledWords, ['HIPOTECA']);
-        expect(DescribedWordSteps.apply(t, _catalogo).animationGlosses, [
-          'YO',
-          'SENA_PENDIENTE:HIPOTECA',
-        ]);
       },
     );
 
@@ -295,7 +157,7 @@ void main() {
   });
 
   test('Voz a LSB: «hola quiero realizar un tramite» termina sin error y '
-      'explica REALIZAR', () async {
+      'deletrea REALIZAR', () async {
     // La respuesta real de la Lambda desplegada para esa frase.
     final respuesta = {
       'glosses': ['HOLA', 'TRAMITE', ...'REALIZAR'.split('')],
@@ -352,14 +214,9 @@ void main() {
       expect(estado.errorMessage, isNull);
       expect(estado.status, AudioTranslationStatus.success);
       final t = estado.translationResult!;
-      expect(t.animationGlosses, [
-        'HOLA',
-        'TRAMITE',
-        'SENA_PENDIENTE:REALIZAR',
-      ]);
-      expect(t.stepDescriptions['SENA_PENDIENTE:REALIZAR']!.lsbDescription, [
-        'HACER',
-      ]);
+      // Sin la pantalla de descripción: como antes, lo que el avatar no
+      // tiene se deletrea.
+      expect(t.animationGlosses, ['HOLA', 'TRAMITE', ...'REALIZAR'.split('')]);
     }
   });
 
