@@ -14,23 +14,39 @@ import 'package:webview_flutter_platform_interface/webview_flutter_platform_inte
 /// `PlatformWebViewController`/`PlatformNavigationDelegate` no hace falta
 /// porque ninguna prueba interactúa con el WebView de verdad.
 class FakeWebViewPlatform extends WebViewPlatform {
+  /// Los canales de JavaScript que registró cada visor, en orden de creación.
+  /// Sirven para simular lo que el visor 3D le avisa a la app («loaded»,
+  /// «finished:3»).
+  static final List<JavaScriptChannelParams> channels = [];
+
+  /// El JavaScript que la app le mandó al visor, en orden.
+  static final List<String> scripts = [];
+
+  /// Borra lo registrado: se llama al empezar cada prueba.
+  static void reset() {
+    channels.clear();
+    scripts.clear();
+  }
+
+  /// El visor más reciente le avisa a la app [message].
+  static void emit(String message) {
+    channels.last.onMessageReceived(JavaScriptMessage(message: message));
+  }
+
   @override
   PlatformWebViewController createPlatformWebViewController(
     PlatformWebViewControllerCreationParams params,
-  ) =>
-      _FakePlatformWebViewController(params);
+  ) => _FakePlatformWebViewController(params);
 
   @override
   PlatformNavigationDelegate createPlatformNavigationDelegate(
     PlatformNavigationDelegateCreationParams params,
-  ) =>
-      _FakePlatformNavigationDelegate(params);
+  ) => _FakePlatformNavigationDelegate(params);
 
   @override
   PlatformWebViewWidget createPlatformWebViewWidget(
     PlatformWebViewWidgetCreationParams params,
-  ) =>
-      _FakePlatformWebViewWidget(params);
+  ) => _FakePlatformWebViewWidget(params);
 }
 
 class _FakePlatformWebViewController extends PlatformWebViewController {
@@ -50,7 +66,14 @@ class _FakePlatformWebViewController extends PlatformWebViewController {
   @override
   Future<void> addJavaScriptChannel(
     JavaScriptChannelParams javaScriptChannelParams,
-  ) async {}
+  ) async {
+    FakeWebViewPlatform.channels.add(javaScriptChannelParams);
+  }
+
+  @override
+  Future<void> runJavaScript(String javaScript) async {
+    FakeWebViewPlatform.scripts.add(javaScript);
+  }
 
   @override
   Future<void> loadRequest(LoadRequestParams params) async {}
