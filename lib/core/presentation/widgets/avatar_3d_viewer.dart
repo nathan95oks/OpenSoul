@@ -860,40 +860,44 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           Positioned.fill(
             child: Container(
               color: const Color(0xFF1E1E2F).withValues(alpha: 0.9),
+              padding: const EdgeInsets.all(16),
               child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.amber.withValues(alpha: 0.1),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.amber, width: 2),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.amber, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.text_fields_rounded,
+                          color: Colors.amber,
+                          size: 40,
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.text_fields_rounded,
-                        color: Colors.amber,
-                        size: 40,
+                      const SizedBox(height: 16),
+                      Text(
+                        'ANIMACION PALABRA: $currentGloss.glb',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.amber,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'ANIMACION PALABRA: $currentGloss.glb',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.amber,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Seña no disponible en 3D (Simulación)',
+                        style: TextStyle(color: Colors.white70, fontSize: 13),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Seña no disponible en 3D (Simulación)',
-                      style: TextStyle(color: Colors.white70, fontSize: 13),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -902,25 +906,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         if (_localUrls.length > 1)
           Positioned(
             bottom: 12,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(_localUrls.length, (i) {
-                return AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 3),
-                  width: i == _currentIndex ? 18 : 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(3),
-                    color: i == _currentIndex
-                        ? Colors.deepPurpleAccent
-                        : Colors.white24,
-                  ),
-                );
-              }),
-            ),
+            left: 24,
+            right: 24,
+            child: _Progreso(pasos: _localUrls.length, actual: _currentIndex),
           ),
 
         Positioned(
@@ -1444,6 +1432,58 @@ class _Tarjeta extends StatelessWidget {
   }
 }
 
+/// Por dónde va la frase. Con pocos pasos, un punto por seña; con muchos
+/// (cada letra deletreada es un paso), una barra fina: los puntos no cabían y
+/// Flutter pintaba la franja amarilla y negra de desborde.
+class _Progreso extends StatelessWidget {
+  final int pasos;
+  final int actual;
+
+  const _Progreso({required this.pasos, required this.actual});
+
+  static const _maxPuntos = 15;
+
+  @override
+  Widget build(BuildContext context) {
+    if (pasos > _maxPuntos) {
+      return Center(
+        child: SizedBox(
+          key: const Key('avatar_progreso_barra'),
+          width: 140,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(
+              value: (actual + 1) / pasos,
+              minHeight: 6,
+              color: Colors.deepPurpleAccent,
+              backgroundColor: Colors.white24,
+            ),
+          ),
+        ),
+      );
+    }
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        key: const Key('avatar_progreso_puntos'),
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(pasos, (i) {
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            margin: const EdgeInsets.symmetric(horizontal: 3),
+            width: i == actual ? 18 : 6,
+            height: 6,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(3),
+              color: i == actual ? Colors.deepPurpleAccent : Colors.white24,
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
 /// Abajo, mientras el avatar deletrea una palabra: el sinónimo en LSB o, si
 /// no hay, la misma descripción de la hoja «¿Qué es?» de las tarjetas LSB; y
 /// «Siguiente» para pasar a la seña de después.
@@ -1500,10 +1540,12 @@ class _SpellingHelpPanel extends StatelessWidget {
                         color: AppTheme.lightTextSub,
                       ),
                       const SizedBox(width: 6),
-                      Text(
-                        'Deletreando',
-                        style: tema.bodySmall?.copyWith(
-                          color: AppTheme.lightTextSub,
+                      Flexible(
+                        child: Text(
+                          'Deletreando',
+                          style: tema.bodySmall?.copyWith(
+                            color: AppTheme.lightTextSub,
+                          ),
                         ),
                       ),
                     ],
