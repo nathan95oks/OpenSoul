@@ -228,6 +228,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         (async () => {
           const mv = document.querySelector('model-viewer');
           if (!mv) return;
+          // Una frase en curso manda: un reposo que llega tarde no le cambia
+          // la animación a la seña que se está preparando.
+          if (window.__lsbMode === 'sign') return;
           const candidates = ${_neutralAnimations.map((e) => "'$e'").toList()};
           const available = mv.availableAnimations || [];
           const neutrals = candidates.filter((name) => available.includes(name));
@@ -244,6 +247,11 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
             : neutrals[$preferred % neutrals.length];
           window.__lsbMode = 'neutral';
           window.__lsbStep = -1;
+          // Desde quieto, como las señas. Con el avatar en movimiento el
+          // visor funde la animación anterior con la nueva, y el
+          // `currentTime = 0` de abajo atrasa el reloj del fundido: la nueva
+          // quedaba invisible varios segundos detrás de la anterior.
+          mv.pause();
           mv.animationName = name;
           if (mv.updateComplete) await mv.updateComplete;
           // Si arranco una sena mientras tanto, el reposo no la pisa.
@@ -382,6 +390,21 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     });
   }
 
+  /// El visor deja el modo seña sin parar el avatar (queda en la última
+  /// postura): a partir de aquí el reposo puede tomarlo.
+  void _markIdle() {
+    final controller = _controllerA;
+    if (controller == null) return;
+    try {
+      controller
+          .runJavaScript('''
+        window.__lsbMode = 'idle';
+        window.__lsbStep = -1;
+      ''')
+          .catchError((e) {});
+    } catch (_) {}
+  }
+
   void _pauseViewers() {
     const pauseJs = """
       const mv = document.querySelector('model-viewer');
@@ -435,6 +458,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (!mounted) return;
     _sequenceId++;
     _cancelPlaceholderTimer();
+    _markIdle();
     _reportPlayback(false);
     setState(() {
       _localUrls = [];
@@ -648,6 +672,18 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     final gloss = _glossAt(_currentIndex);
     final seleccion = gloss != null ? "mv.animationName = '$gloss';" : '';
     final token = _playToken;
+    // Si mientras se aplicaba la seña otra animación tomó su lugar, se la
+    // vuelve a pedir: `play()` reproduce la que esté puesta, y un reposo
+    // colado hacía el reposo con la etiqueta de la seña («QUERER»).
+    final reponer = gloss != null
+        ? '''
+          if (mv.animationName !== '$gloss') {
+            mv.pause();
+            mv.animationName = '$gloss';
+            if (mv.updateComplete) { await mv.updateComplete; }
+            if (window.__lsbStep !== $token) return;
+          }'''
+        : '';
     _stepStartedAt = DateTime.now();
     try {
       // `animationName` es una propiedad reactiva de lit: asignarla encola un
@@ -670,6 +706,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           window.__lsbStep = $token;
           $seleccion
           if (mv.updateComplete) { await mv.updateComplete; }
+          // Otro paso ya tomó el visor.
+          if (window.__lsbStep !== $token) return;
+$reponer
 
           let dur = mv.duration;
           if (!dur || dur <= 0) {
@@ -725,6 +764,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       // el campo de texto vuelve al terminar la frase completa.
       setState(() => _isPlayingSequence = false);
       _reportPlayback(false);
+      _markIdle();
       _neutralTimer = Timer(const Duration(milliseconds: 350), _startNeutral);
       return;
     }
