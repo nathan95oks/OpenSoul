@@ -29,6 +29,10 @@ class TextInputWidget extends ConsumerStatefulWidget {
   /// `false` queda en el campo para revisarlo y enviarlo a mano.
   final bool sendSpeechAutomatically;
 
+  /// Lo que se ve escrito al aparecer el campo: el mensaje que se envió,
+  /// cuando la persona vuelve atrás desde el avatar para corregirlo.
+  final String? initialText;
+
   const TextInputWidget({
     super.key,
     required this.onSubmit,
@@ -38,6 +42,7 @@ class TextInputWidget extends ConsumerStatefulWidget {
     this.focusNode,
     this.onComposingChanged,
     this.sendSpeechAutomatically = false,
+    this.initialText,
   });
 
   @override
@@ -61,6 +66,15 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
   void initState() {
     super.initState();
     _speechToText = stt.SpeechToText();
+    final inicial = widget.initialText?.trim() ?? '';
+    if (inicial.isNotEmpty) {
+      _controller.text = inicial;
+      _controller.selection = TextSelection.collapsed(offset: inicial.length);
+      // Hay texto para corregir: el avatar queda quieto mientras tanto.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _notifyComposing();
+      });
+    }
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),

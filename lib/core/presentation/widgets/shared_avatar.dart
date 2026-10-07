@@ -20,6 +20,9 @@ class AvatarRequest {
   /// Ver [Avatar3DViewer.describePendingSigns].
   final bool describePendingSigns;
 
+  /// Ver [Avatar3DViewer.showBackWhilePlaying].
+  final bool showBackWhilePlaying;
+
   /// Ver [Avatar3DViewer.stepDescriptions].
   final Map<String, PendingSignInfo> stepDescriptions;
 
@@ -38,6 +41,7 @@ class AvatarRequest {
     this.showControls = true,
     this.showBackButton = true,
     this.describePendingSigns = false,
+    this.showBackWhilePlaying = false,
     this.stepDescriptions = const {},
     this.spellingHelp = const [],
     this.animationDuration = const Duration(seconds: 3),
@@ -214,6 +218,7 @@ class _SharedAvatarHostState extends ConsumerState<SharedAvatarHost> {
         showControls: request?.showControls ?? false,
         showBackButton: request?.showBackButton ?? true,
         describePendingSigns: request?.describePendingSigns ?? false,
+        showBackWhilePlaying: request?.showBackWhilePlaying ?? false,
         stepDescriptions: visible
             ? request!.stepDescriptions
             : const <String, PendingSignInfo>{},
@@ -338,6 +343,7 @@ class _SharedAvatarSlotState extends ConsumerState<SharedAvatarSlot> {
         showControls: r.showControls,
         showBackButton: r.showBackButton,
         describePendingSigns: r.describePendingSigns,
+        showBackWhilePlaying: r.showBackWhilePlaying,
         stepDescriptions: r.stepDescriptions,
         spellingHelp: r.spellingHelp,
         animationDuration: r.animationDuration,
