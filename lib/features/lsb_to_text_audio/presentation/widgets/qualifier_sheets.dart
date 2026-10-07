@@ -417,6 +417,7 @@ Future<void> elegirGlosa(
       context,
       titulo: '¿Qué otro elemento tienes?',
       hint: 'Ej: un recibo, una nota, un audio guardado',
+      literal: false,
     );
     if (texto == null || texto.isEmpty) return;
     zonesNotifier.toggleAnswer(card.gloss);

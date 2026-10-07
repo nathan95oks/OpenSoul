@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
+import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/amount_input_sheet.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/app_toast_manager.dart';
@@ -42,14 +43,38 @@ const _ageConcepts = {'JOVEN', 'ADULTO'};
 const _buildConcepts = {'FLACO', 'GORDO'};
 const _heightConcepts = {'ALTO', 'BAJO'};
 
+/// Largo máximo del teclado de texto libre.
+const _maxTextoLibre = 80;
+
 /// Abre el teclado de texto libre accesible con preservación de tildes y mayúsculas.
+///
+/// Lo escrito pasa el control de calidad de [InputValidator]: un texto sin
+/// sentido o solo con símbolos no se puede confirmar. Con [literal] (un
+/// nombre, una calle, un color) se aceptan palabras de otro idioma.
 Future<String?> mostrarTecladoTextoLibre(
   BuildContext context, {
   required String titulo,
   String? valorInicial,
   String? hint,
+  bool literal = true,
 }) {
   final controlador = TextEditingController(text: valorInicial ?? '');
+  // Vacío no es un problema: es «Omitir».
+  InputIssue? problema() {
+    final texto = controlador.text.trim();
+    if (texto.isEmpty) return null;
+    return InputValidator.validate(
+      texto,
+      maxLength: _maxTextoLibre,
+      literal: literal,
+    );
+  }
+
+  void confirmar(BuildContext ctx) {
+    if (problema() != null) return;
+    Navigator.of(ctx).pop(InputValidator.clean(controlador.text));
+  }
+
   return showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
@@ -90,7 +115,7 @@ Future<String?> mostrarTecladoTextoLibre(
                 controller: controlador,
                 autofocus: true,
                 textCapitalization: TextCapitalization.words,
-                maxLength: 80,
+                maxLength: _maxTextoLibre,
                 cursorColor: AppTheme.lightInputCursor,
                 style: const TextStyle(color: AppTheme.lightInputText),
                 decoration: AppTheme.lightInputDecoration(
@@ -98,11 +123,20 @@ Future<String?> mostrarTecladoTextoLibre(
                       hint ?? 'Escribe aquí (se conservan espacios y tildes)',
                 ),
                 onChanged: (_) => setModalState(() {}),
-                onSubmitted: (v) => Navigator.of(ctx).pop(v.trim()),
+                onSubmitted: (_) => confirmar(ctx),
               ),
+              if (problema() case final p?)
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    p.message,
+                    key: const Key('texto_libre_problema'),
+                    style: const TextStyle(color: AppTheme.errorLight),
+                  ),
+                ),
               const SizedBox(height: 10),
               FilledButton(
-                onPressed: () => Navigator.of(ctx).pop(controlador.text.trim()),
+                onPressed: problema() == null ? () => confirmar(ctx) : null,
                 style: FilledButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(

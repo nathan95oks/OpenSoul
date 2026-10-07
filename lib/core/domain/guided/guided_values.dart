@@ -11,6 +11,8 @@
 /// quitan los espacios y guiones de un teléfono, que no son parte del número.
 library;
 
+import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
+
 /// Claves que rellena cada editor. Gemelo de `EDITOR_KEYS` en
 /// `aws/guided_composer.py`.
 const Map<String, List<String>> kEditorKeys = {
@@ -34,6 +36,14 @@ const List<String> kCurrencies = ['Bs', 'USD'];
 /// Longitud máxima de un valor escrito. Gemelo de `MAX_VALUE_LENGTH` en la
 /// Lambda.
 const int kMaxValueLength = 120;
+
+/// Editores cuyo valor es un nombre propio (persona, lugar, referencia): se
+/// aceptan palabras de otro idioma («The Strongest»), no otro alfabeto.
+const Set<String> _kLiteralEditors = {
+  'texto_nombre',
+  'lugar_literal',
+  'referencia',
+};
 
 /// Resultado de validar los valores de un editor.
 class ValueCheck {
@@ -114,6 +124,17 @@ class GuidedValues {
           if (value.isEmpty) return const ValueCheck.invalid('Escribe el dato.');
           if (value.length > kMaxValueLength) {
             return const ValueCheck.invalid('El texto es demasiado largo.');
+          }
+          // El mismo control de calidad que Voz a LSB y Conversación. Un
+          // número de documento es un código: no se le pide que sean
+          // palabras.
+          if (editor != 'documento_numero') {
+            final problema = InputValidator.validate(
+              value,
+              maxLength: kMaxValueLength,
+              literal: _kLiteralEditors.contains(editor),
+            );
+            if (problema != null) return ValueCheck.invalid(problema.message);
           }
           out[key] = value;
         }
