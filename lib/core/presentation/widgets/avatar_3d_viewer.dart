@@ -870,28 +870,6 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
             ),
           ),
 
-        Positioned.fill(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 380),
-            switchInCurve: Curves.easeOutCubic,
-            switchOutCurve: Curves.easeInCubic,
-            transitionBuilder: (child, animation) => SlideTransition(
-              position: Tween(
-                begin: const Offset(0, 1),
-                end: Offset.zero,
-              ).animate(animation),
-              child: child,
-            ),
-            child: descrita != null && _isPlayingSequence
-                ? _PendingDescriptionPanel(
-                    key: ValueKey('descripcion_$_currentIndex'),
-                    info: descrita,
-                    onContinue: _finishCurrentStep,
-                  )
-                : const SizedBox.shrink(key: ValueKey('sin_descripcion')),
-          ),
-        ),
-
         Positioned(
           top: 14,
           left: 14,
@@ -950,6 +928,34 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                 ],
               ),
             ],
+          ),
+        ),
+
+        // Una palabra sin seña con descripción: una pantalla amarilla sale
+        // desde el centro y tapa todo el avatar; se lee y se retira, y el
+        // avatar sigue con la seña siguiente.
+        Positioned.fill(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 460),
+            reverseDuration: const Duration(milliseconds: 320),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (child, animation) => AnimatedBuilder(
+              animation: animation,
+              child: child,
+              builder: (context, child) => ClipPath(
+                clipper: _CircleReveal(animation.value),
+                child: child,
+              ),
+            ),
+            child: descrita != null && _isPlayingSequence
+                ? _DescriptionCurtain(
+                    key: ValueKey('descripcion_$_currentIndex'),
+                    info: descrita,
+                    readingTime: Avatar3DViewer.readingTimeFor(descrita),
+                    onContinue: _finishCurrentStep,
+                  )
+                : const SizedBox.shrink(key: ValueKey('sin_descripcion')),
           ),
         ),
       ],
@@ -1166,92 +1172,105 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 }
 
-/// Qué es una palabra que no existe en LSB, delante del avatar: el bloque
-/// entra deslizándose, se lee y se va, y el avatar sigue con la seña
-/// siguiente. «Seguir» lo cierra antes.
-class _PendingDescriptionPanel extends StatelessWidget {
+/// Qué es una palabra que no existe en LSB, tapando al avatar: una pantalla
+/// amarilla con la misma tarjeta de la hoja «¿Qué es?» de las tarjetas LSB.
+/// La barra muestra cuánto queda para leerla; «Entendido» la cierra antes.
+class _DescriptionCurtain extends StatelessWidget {
   final PendingSignInfo info;
+  final Duration readingTime;
   final VoidCallback onContinue;
 
-  const _PendingDescriptionPanel({
+  const _DescriptionCurtain({
     super.key,
     required this.info,
+    required this.readingTime,
     required this.onContinue,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        key: const Key('avatar_descripcion'),
-        width: double.infinity,
-        margin: const EdgeInsets.fromLTRB(12, 64, 12, 12),
-        padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E1E2F).withValues(alpha: 0.96),
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(
-            color: AppTheme.pendingSignOnDark.withValues(alpha: 0.6),
-          ),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black45,
-              blurRadius: 18,
-              offset: Offset(0, -4),
-            ),
-          ],
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                info.word,
-                style: const TextStyle(
-                  color: AppTheme.pendingSignOnDark,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 1.1,
-                ),
+    return SizedBox.expand(
+      key: const Key('avatar_descripcion'),
+      child: ColoredBox(
+        color: AppTheme.describeCurtain,
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            // La tarjeta entra un poco después que el amarillo, con un
+            // pequeño rebote.
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(begin: 0, end: 1),
+              duration: const Duration(milliseconds: 560),
+              curve: const Interval(0.3, 1, curve: Curves.easeOutBack),
+              builder: (context, t, child) => Opacity(
+                opacity: t.clamp(0.0, 1.0),
+                child: Transform.scale(scale: 0.9 + 0.1 * t, child: child),
               ),
-              const SizedBox(height: 4),
-              const Text(
-                'No tiene seña en LSB. ¿Qué es?',
-                style: TextStyle(color: Colors.white70, fontSize: 13),
-              ),
-              const SizedBox(height: 10),
-              if (info.lsbDescription.isNotEmpty)
-                LsbDescriptionText(
-                  glosses: info.lsbDescription,
-                  onDark: true,
-                  style: const TextStyle(fontSize: 18),
-                )
-              else
-                Text(
-                  info.description,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    height: 1.35,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 460),
+                child: Material(
+                  color: AppTheme.pageBg,
+                  elevation: 8,
+                  shadowColor: Colors.black38,
+                  borderRadius: BorderRadius.circular(24),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 22, 24, 16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        PendingSignInfoView(info: info, showReviewNote: false),
+                        const SizedBox(height: 18),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween(begin: 0, end: 1),
+                            duration: readingTime,
+                            builder: (context, v, _) => LinearProgressIndicator(
+                              key: const Key('avatar_descripcion_lectura'),
+                              value: v,
+                              minHeight: 6,
+                              color: AppTheme.pendingSign,
+                              backgroundColor: AppTheme.lightSubtle,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        FilledButton(
+                          onPressed: onContinue,
+                          child: const Text('Entendido'),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: onContinue,
-                  style: TextButton.styleFrom(foregroundColor: Colors.white),
-                  child: const Text('Seguir'),
-                ),
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
+}
+
+/// Recorta un círculo que crece desde el centro: con [t] = 0 no se ve nada,
+/// con [t] = 1 cubre todo el rectángulo.
+class _CircleReveal extends CustomClipper<Path> {
+  final double t;
+
+  const _CircleReveal(this.t);
+
+  @override
+  Path getClip(Size size) {
+    final radio =
+        math.sqrt(size.width * size.width + size.height * size.height) / 2;
+    return Path()..addOval(
+      Rect.fromCircle(center: size.center(Offset.zero), radius: radio * t),
+    );
+  }
+
+  @override
+  bool shouldReclip(_CircleReveal oldClipper) => oldClipper.t != t;
 }
 
 /// Una palabra sin seña en el catálogo: se dice que falta, no se inventa.
