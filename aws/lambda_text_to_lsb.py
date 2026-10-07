@@ -271,7 +271,8 @@ _AVAILABLE_3D_GLOSSES_NORM = {
 TERMS_TO_SPELL = {
     "ACTA", "CEDULA", "CÉDULA", "FIRMA", "FIRMAR", "DECLARACION",
     "DECLARACIÓN", "DECLARAR", "MINISTERIO_PUBLICO", "MINISTERIO PÚBLICO",
-    "FELCC", "FELCV", "SEPDAVI", "SEPDEP", "NUREJ",
+    "FELCC", "FELCV", "FELCN", "SEPDAVI", "SEPDEP", "NUREJ",
+    "SERECI", "SEGIP", "SLIM", "DNA", "RUAT", "DIRNOPLU",
 }
 
 # Variantes con las que el modelo nombra una misma seña
@@ -561,6 +562,7 @@ Tu misión es transformar la frase en español a un ARREGLO ORDENADO DE GLOSAS L
 
 6. DELETREO DACTILOLÓGICO:
    - Los nombres propios, siglas sin seña y términos no catalogados deben deletrearse letra por letra: ['S', 'E', 'G', 'I', 'P'].
+   - Cada sigla es una institución distinta: FELCN, FELCC y FELCV no se cambian entre sí ni por otra seña; se deletrea la que dijo la persona.
 
 {LEGAL_DISAMBIGUATION_RULES}
 

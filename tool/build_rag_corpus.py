@@ -1184,8 +1184,10 @@ def info_sin_sena(corpus: dict, avisos: list,
     # no tienen frase del trámite («ejemplo» vacío). También van las siglas
     # que la Lambda deletrea siempre (FELCC, NUREJ…): Voz a LSB las explica
     # mientras las deletrea.
-    por_ver = sorted(ejemplos) + [p for p in deletreados_por_norma()
-                                  if p in datos and p not in ejemplos]
+    siglas = [p for p, d in datos.items() if d.get("tipo") == "sigla"]
+    por_ver = sorted(ejemplos) + [
+        p for p in dict.fromkeys(deletreados_por_norma() + siglas)
+        if p in datos and p not in ejemplos]
     while por_ver:
         palabra = por_ver.pop(0)
         if palabra in salida:

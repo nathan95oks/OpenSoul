@@ -868,6 +868,16 @@
     "BILLETES"
    ]
   },
+  "CRPVA": {
+   "descripcion": "Papel que dice de quién es un auto.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "PAPEL",
+    "AUTO",
+    "SUYO"
+   ]
+  },
   "CUADRADO": {
    "descripcion": "En «metros cuadrados»: la medida del tamaño de un terreno o una casa.",
    "tipo": "concepto",
@@ -1164,6 +1174,17 @@
    "tipo": "concepto",
    "revisada": false
   },
+  "DIRNOPLU": {
+   "descripcion": "Oficina de los notarios: sellos y papeles oficiales.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "OFICINA",
+    "ABOGADO",
+    "SELLO",
+    "PAPEL"
+   ]
+  },
   "DISCAPACIDAD": {
    "descripcion": "Condición de una persona que tiene limitaciones; las personas sordas pueden tener carnet de discapacidad.",
    "tipo": "concepto",
@@ -1202,6 +1223,17 @@
    "descripcion": "Persona que ya no está casada: se separó por ley.",
    "tipo": "concepto",
    "revisada": false
+  },
+  "DNA": {
+   "descripcion": "Oficina de la alcaldía que protege a los niños y las niñas.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "ALCALDÍA",
+    "PROTEGER",
+    "NIÑO",
+    "NIÑA"
+   ]
   },
   "DOCUMENTACION": {
    "descripcion": "Conjunto de papeles o documentos.",
@@ -1521,6 +1553,16 @@
     "INVESTIGACIÓN",
     "ROBAR",
     "ENGAÑAR"
+   ]
+  },
+  "FELCN": {
+   "descripcion": "Policía que combate la droga.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "POLICÍA",
+    "DROGA",
+    "LUCHAR"
    ]
   },
   "FELCV": {
@@ -3149,10 +3191,31 @@
   "REVISION": {
    "ver": "REVISAR"
   },
+  "ROMA": {
+   "descripcion": "Página de internet de la Fiscalía para ver su caso.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "INTERNET",
+    "FISCALIA",
+    "VER",
+    "INVESTIGACIÓN"
+   ]
+  },
   "ROTO": {
    "descripcion": "Dañado, ya no funciona.",
    "tipo": "concepto",
    "revisada": false
+  },
+  "RUAT": {
+   "descripcion": "Sistema de los impuestos de autos y casas.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "IMPUESTO",
+    "AUTO",
+    "CASA"
+   ]
   },
   "RUEDA": {
    "descripcion": "Lo que tiene un auto abajo para andar.",
@@ -3193,6 +3256,16 @@
    "revisada": false,
    "lsb": [
     "OFICINA"
+   ]
+  },
+  "SEGIP": {
+   "descripcion": "Oficina que da el carnet de identidad.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "OFICINA",
+    "IDENTIDAD",
+    "PAPEL"
    ]
   },
   "SEGUIR": {
@@ -3262,6 +3335,17 @@
     "ABOGADO",
     "GRATIS",
     "CULPAR"
+   ]
+  },
+  "SERECI": {
+   "descripcion": "Oficina de los certificados de nacimiento y de matrimonio.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "OFICINA",
+    "PAPEL",
+    "BEBÉ",
+    "MATRIMONIO"
    ]
   },
   "SERVICIO": {
@@ -3346,6 +3430,17 @@
    "tipo": "palabra_funcion",
    "revisada": false
   },
+  "SIREJ": {
+   "descripcion": "Página de internet del juzgado para ver su caso.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "INTERNET",
+    "JUZGADO",
+    "VER",
+    "JUICIO"
+   ]
+  },
   "SIRVE": {
    "ver": "SERVIR"
   },
@@ -3353,6 +3448,17 @@
    "descripcion": "Programa o página de computadora que usa una oficina.",
    "tipo": "concepto",
    "revisada": false
+  },
+  "SLIM": {
+   "descripcion": "Servicio de la alcaldía que ayuda a las mujeres que sufren violencia.",
+   "revisada": false,
+   "tipo": "sigla",
+   "lsb": [
+    "ALCALDÍA",
+    "AYUDAR",
+    "MUJER",
+    "VIOLENCIA"
+   ]
   },
   "SOBRE": {
    "descripcion": "Que habla de algo, de ese tema.",
