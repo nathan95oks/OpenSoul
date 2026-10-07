@@ -412,6 +412,17 @@ class DescripcionesEnCadena(unittest.TestCase):
         self.assertEqual(salida["CASO"]["descripcionLsb"], ["PROBLEMA"])
 
 
+class DeletreadosPorNorma(unittest.TestCase):
+    def test_se_leen_de_la_lambda(self):
+        with tempfile.TemporaryDirectory() as d:
+            ruta = os.path.join(d, "lambda.py")
+            with open(ruta, "w", encoding="utf-8") as f:
+                f.write('X = 1\nTERMS_TO_SPELL = {\n    "FELCC", "CÉDULA",\n'
+                        '    "MINISTERIO PÚBLICO", "CEDULA",\n}\n')
+            self.assertEqual(B.deletreados_por_norma(ruta),
+                             ["FELCC", "CEDULA", "MINISTERIO_PUBLICO"])
+
+
 class HerramientaEquivalencias(unittest.TestCase):
     import rag_equivalencias as E  # noqa: E402
 

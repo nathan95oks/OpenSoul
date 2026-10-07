@@ -137,6 +137,8 @@ class PendingSignInfoView extends StatelessWidget {
                 info.hasLsbSign
                     ? 'Existe en LSB, pero el avatar todavía no tiene '
                           'esta seña.'
+                    : info.isAcronym
+                    ? 'Sigla: se deletrea.'
                     : info.isProperName
                     ? 'Nombre propio: no tiene seña, se deletrea.'
                     : 'No tiene seña propia en los módulos M1–M4.',

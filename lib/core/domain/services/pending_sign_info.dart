@@ -23,6 +23,9 @@ class PendingSignInfo {
   /// Un nombre propio (calle, edificio, institución): se deletrea.
   final bool isProperName;
 
+  /// Una sigla (FELCC, NUREJ): se deletrea, pero tiene descripción.
+  final bool isAcronym;
+
   /// Una persona confirmó la descripción. Si no, es un borrador.
   final bool reviewed;
 
@@ -40,6 +43,7 @@ class PendingSignInfo {
     this.lsbDescription = const [],
     this.example = '',
     this.isProperName = false,
+    this.isAcronym = false,
     this.reviewed = false,
     this.hasLsbSign = false,
     this.source = '',
@@ -73,6 +77,7 @@ class PendingSignCatalog {
             ],
             example: '${v['ejemplo'] ?? ''}',
             isProperName: v['tipo'] == 'nombre_propio',
+            isAcronym: v['tipo'] == 'sigla',
             reviewed: v['revisada'] == true,
           ),
       },

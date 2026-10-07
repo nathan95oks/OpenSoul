@@ -22,6 +22,17 @@
    "revisada": false,
    "ejemplo": "No sé si este documento acredita la aceptación."
   },
+  "ACTA": {
+   "descripcion": "Papel donde se escribe lo que pasó en una reunión o audiencia.",
+   "descripcionLsb": [
+    "PAPEL",
+    "ESCRIBIR",
+    "REUNIÓN"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "ACTIVAR": {
    "descripcion": "Hacer que un servicio o trámite empiece a funcionar.",
    "descripcionLsb": [
@@ -390,6 +401,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Tiene un documento catastral de la casa?"
+  },
+  "CEDULA": {
+   "descripcion": "El carnet de identidad, con su nombre y su foto.",
+   "descripcionLsb": [
+    "PAPEL",
+    "IDENTIDAD",
+    "FOTOS"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "CENTRAL": {
    "descripcion": "La oficina principal.",
@@ -771,6 +793,28 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Qué documentos debo presentar para solicitar el certificado alodial?"
+  },
+  "DECLARACION": {
+   "descripcion": "Contar lo que pasó ante la policía o la fiscalía.",
+   "descripcionLsb": [
+    "NARRAR",
+    "PASADO",
+    "POLICÍA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "DECLARAR": {
+   "descripcion": "Contar lo que pasó ante la policía o la fiscalía.",
+   "descripcionLsb": [
+    "NARRAR",
+    "PASADO",
+    "POLICÍA"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "DEFENSA_PUBLICA": {
    "descripcion": "Servicio del Estado que da abogado gratis a quien lo necesita en un proceso penal.",
@@ -1163,6 +1207,30 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Qué documento me falta para solicitar el Folio Real?"
+  },
+  "FELCC": {
+   "descripcion": "Policía que investiga delitos, como robos y estafas.",
+   "descripcionLsb": [
+    "POLICÍA",
+    "INVESTIGACIÓN",
+    "ROBAR",
+    "ENGAÑAR"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "FELCV": {
+   "descripcion": "Policía que atiende la violencia contra las mujeres y en la familia.",
+   "descripcionLsb": [
+    "POLICÍA",
+    "PROTEGER",
+    "VIOLENCIA",
+    "MUJER"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
   },
   "FIGURA": {
    "descripcion": "Aparecer escrito en un documento o registro.",
@@ -1728,6 +1796,16 @@
    "revisada": false,
    "ejemplo": "El Ministerio informó cuatro días para el área urbana."
   },
+  "MINISTERIO_PUBLICO": {
+   "descripcion": "La Fiscalía: investiga los delitos.",
+   "descripcionLsb": [
+    "FISCALIA",
+    "INVESTIGACIÓN"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "MODALIDAD": {
    "descripcion": "Forma de hacer algo: en persona o virtual.",
    "descripcionLsb": [
@@ -1807,6 +1885,18 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "DIRNOPLU ofrece un buscador de notarios."
+  },
+  "NUREJ": {
+   "descripcion": "Número de su caso en el juzgado.",
+   "descripcionLsb": [
+    "1",
+    "2",
+    "3",
+    "JUICIO"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
   },
   "OBSERVACION": {
    "descripcion": "Problema que la oficina encuentra en un trámite y que hay que corregir.",
@@ -2574,6 +2664,29 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "Sí, tengo un contacto seguro."
+  },
+  "SEPDAVI": {
+   "descripcion": "Servicio del Estado que da abogado gratis a las víctimas de delitos.",
+   "descripcionLsb": [
+    "ABOGADO",
+    "GRATIS",
+    "AYUDAR",
+    "SUFRIR"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
+  },
+  "SEPDEP": {
+   "descripcion": "Defensa Pública: abogado gratis para la persona acusada.",
+   "descripcionLsb": [
+    "ABOGADO",
+    "GRATIS",
+    "CULPAR"
+   ],
+   "tipo": "sigla",
+   "revisada": false,
+   "ejemplo": ""
   },
   "SERVIR": {
    "descripcion": "Ser útil, valer para algo.",
