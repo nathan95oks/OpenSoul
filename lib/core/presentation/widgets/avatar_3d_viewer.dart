@@ -951,11 +951,15 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _buildGlossBadge(activeGlosses, _currentIndex),
+                  // Voz a LSB: al terminar la frase, la última glosa se va y
+                  // repetir queda solo, en la esquina donde estaba ella.
+                  if (_isPlayingSequence || !_repetirEnLaEsquina)
+                    _buildGlossBadge(activeGlosses, _currentIndex),
                   // Sin flecha de volver, repetir va debajo de la glosa.
-                  if (widget.showControls && !widget.showBackButton) ...[
-                    const SizedBox(height: 10),
+                  if (_repetirEnLaEsquina) ...[
+                    if (_isPlayingSequence) const SizedBox(height: 10),
                     IconButton(
+                      key: const Key('avatar_repetir'),
                       icon: const Icon(
                         Icons.replay_rounded,
                         color: Colors.white,
@@ -1175,6 +1179,9 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       ),
     );
   }
+
+  /// Repetir va arriba a la derecha, sin flecha de volver (Voz a LSB).
+  bool get _repetirEnLaEsquina => widget.showControls && !widget.showBackButton;
 
   /// Letras de una palabra deletreada que se ven a la vez.
   static const _maxLetrasVisibles = 7;
