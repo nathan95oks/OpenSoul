@@ -49,6 +49,11 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   /// LSB; las demás vistas siguen con el aviso «En espera para su avatar».
   final bool describePendingSigns;
 
+  /// Mientras se hace la frase, una flecha arriba a la izquierda para volver
+  /// a escribir (por si se escribió mal). Lo usa Voz a LSB, que no tiene la
+  /// flecha de [showBackButton].
+  final bool showBackWhilePlaying;
+
   /// Qué es cada paso `SENA_PENDIENTE:…` que no está en las descripciones
   /// de la app: una seña que existe en LSB pero el avatar no tiene animada
   /// («realizar» → HACER). Se mira antes que el catálogo.
@@ -74,6 +79,7 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
     this.showControls = true,
     this.showBackButton = true,
     this.describePendingSigns = false,
+    this.showBackWhilePlaying = false,
     this.stepDescriptions = const {},
     this.spellingHelp = const [],
   });
@@ -918,6 +924,22 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (widget.showBackWhilePlaying &&
+                  _isPlayingSequence &&
+                  !_returnRequested) ...[
+                IconButton(
+                  key: const Key('avatar_volver'),
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: Colors.white,
+                  ),
+                  tooltip: 'Volver a escribir',
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: _returnToInput,
+                ),
+                const SizedBox(width: 14),
+              ],
               if (widget.showControls && widget.showBackButton) ...[
                 IconButton(
                   icon: const Icon(
@@ -947,30 +969,37 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
                   const SizedBox(width: 14),
                 AvatarExpressionIndicator(expression: facialExpression),
               ],
-              const Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  // Voz a LSB: al terminar la frase, la última glosa se va y
-                  // repetir queda solo, en la esquina donde estaba ella.
-                  if (_isPlayingSequence || !_repetirEnLaEsquina)
-                    _buildGlossBadge(activeGlosses, _currentIndex),
-                  // Sin flecha de volver, repetir va debajo de la glosa.
-                  if (_repetirEnLaEsquina) ...[
-                    if (_isPlayingSequence) const SizedBox(height: 10),
-                    IconButton(
-                      key: const Key('avatar_repetir'),
-                      icon: const Icon(
-                        Icons.replay_rounded,
-                        color: Colors.white,
-                      ),
-                      tooltip: 'Volver a hacer la seña',
-                      constraints: const BoxConstraints(),
-                      padding: EdgeInsets.zero,
-                      onPressed: _replaySequence,
-                    ),
-                  ],
-                ],
+              // La glosa y repetir ocupan lo que dejan la flecha y la
+              // expresión: con poco ancho la glosa se achica en vez de
+              // desbordar la fila.
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      // Voz a LSB: al terminar la frase, la última glosa se va y
+                      // repetir queda solo, en la esquina donde estaba ella.
+                      if (_isPlayingSequence || !_repetirEnLaEsquina)
+                        _buildGlossBadge(activeGlosses, _currentIndex),
+                      // Sin flecha de volver, repetir va debajo de la glosa.
+                      if (_repetirEnLaEsquina) ...[
+                        if (_isPlayingSequence) const SizedBox(height: 10),
+                        IconButton(
+                          key: const Key('avatar_repetir'),
+                          icon: const Icon(
+                            Icons.replay_rounded,
+                            color: Colors.white,
+                          ),
+                          tooltip: 'Volver a hacer la seña',
+                          constraints: const BoxConstraints(),
+                          padding: EdgeInsets.zero,
+                          onPressed: _replaySequence,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -1193,6 +1222,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       final ancho = constraints.maxWidth.isFinite
           ? constraints.maxWidth
           : MediaQuery.sizeOf(context).width * 0.6;
+      if (ancho <= 0) return const SizedBox.shrink();
       return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: ancho),
         child: FittedBox(

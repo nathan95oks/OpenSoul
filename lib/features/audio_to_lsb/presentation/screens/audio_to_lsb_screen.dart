@@ -24,6 +24,10 @@ class AudioToLsbScreen extends ConsumerStatefulWidget {
 class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
   bool _playbackActive = false;
   bool _userComposing = false;
+
+  /// El mensaje enviado, para corregirlo, cuando se vuelve atrás desde el
+  /// avatar con la flecha.
+  String? _borrador;
   int _playbackRequestId = 0;
 
   @override
@@ -50,12 +54,17 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
     setState(() {
       _playbackActive = true;
       _userComposing = false;
+      _borrador = null;
       _playbackRequestId++;
     });
     controller.processText(text);
   }
 
+  /// La flecha del avatar: se corta la frase y vuelve el campo de texto con
+  /// lo que se había enviado, para corregirlo.
   void _returnToInitial(AudioTranslationController controller) {
+    final enviado = ref.read(audioTranslationControllerProvider).recognizedText;
+    if (mounted) setState(() => _borrador = enviado);
     _setPlaybackActive(false);
     controller.reset();
   }
@@ -191,6 +200,9 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                               // Al terminar la seña el campo de texto vuelve:
                               // sin flecha, y repetir queda bajo la glosa.
                               showBackButton: false,
+                              // Mientras hace la frase: flecha para volver a
+                              // escribir, arriba a la izquierda.
+                              showBackWhilePlaying: true,
                               onPlaybackStateChanged: _setPlaybackActive,
                               onReturnToInput: () =>
                                   _returnToInitial(controller),
@@ -325,6 +337,7 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                       ),
                       child: TextInputWidget(
                         isActive: widget.isActive,
+                        initialText: _borrador,
                         onSubmit: (text) => _submit(context, controller, text),
                         onComposingChanged: _setUserComposing,
                         // Lo dictado se traduce en cuanto termina de oírse.
