@@ -885,7 +885,7 @@ _COPULA = frozenset("es ser son soy eres somos era eran fue fueron sea estar "
 # conjunciones sin carga semántica (la lista de la regla 1 del prompt de la
 # Lambda Texto→LSB). «Sin», «ni» y «contra» no están: dicen algo.
 _FUNCION = frozenset("a al de del en con para por pero y e o u que el la los "
-                     "las un una unos unas".split())
+                     "las un una unos unas lo le les".split())
 _OMITIDAS = _COPULA | _FUNCION
 _TRATAMIENTO = {"usted": "TÚ"}
 
@@ -1126,6 +1126,20 @@ def info_sin_sena(corpus: dict, avisos: list,
     equivalencias = equivalencias_vigentes()
     sin_lsb, infieles = [], []
 
+    def directa(palabra: str, glosas: list) -> list | None:
+        """La descripción escrita directamente en señas («lsb»), sin pasar por
+        la traducción: así no queda ninguna palabra en azul dentro. Toda
+        glosa tiene que ser una seña conocida; si no, se avisa y se usa la
+        traducción."""
+        conocidas = glosas_conocidas() or set()
+        malas = [g for g in glosas
+                 if g.startswith(SENA_PENDIENTE) or _norm(g) not in conocidas]
+        if malas:
+            avisos.append(f"descripción en señas de {palabra}: no son señas "
+                          f"({', '.join(malas)}); se usa la traducción")
+            return None
+        return glosas_canonicas(list(glosas))
+
     def en_lsb(palabra: str, texto: str, tipo: str = "concepto") -> list:
         """La descripción en glosas (tool/rag_descripciones_lsb.py), o [].
 
@@ -1181,7 +1195,9 @@ def info_sin_sena(corpus: dict, avisos: list,
             faltan.append(palabra)
             dato = {}
         descripcion = dato.get("descripcion", "")
-        lsb = en_lsb(palabra, descripcion, dato.get("tipo", "concepto"))
+        lsb = (directa(palabra, dato["lsb"]) if dato.get("lsb") else None)
+        if lsb is None:
+            lsb = en_lsb(palabra, descripcion, dato.get("tipo", "concepto"))
         salida[palabra] = {
             "descripcion": descripcion,
             "descripcionLsb": lsb,
@@ -1204,8 +1220,30 @@ def info_sin_sena(corpus: dict, avisos: list,
         avisos.append(f"{len(faltan)} palabras sin seña no tienen descripción en "
                       f"{_rel(DESCRIPCIONES)} (p. ej. {', '.join(faltan[:5])})")
     return {"_nota": "GENERADO por tool/build_rag_corpus.py desde "
-                     f"{_rel(DESCRIPCIONES)}. No editar a mano.",
-            "palabras": salida}
+                     f"{_rel(DESCRIPCIONES)} y {_rel(EQUIVALENCIAS)}. "
+                     "No editar a mano.",
+            "palabras": salida,
+            # La palabra que se escribe en el Traductor a LSB y tiene una
+            # seña equivalente aprobada se seña con ella, igual que en las
+            # tarjetas, en vez de explicarse o deletrearse.
+            "equivalencias": equivalencias_para_la_app()}
+
+
+def equivalencias_para_la_app(ruta: str = EQUIVALENCIAS) -> dict:
+    """{PALABRA: [señas]} de las equivalencias aprobadas, con la palabra como
+    se escribe en el archivo (la app la normaliza)."""
+    if not os.path.exists(ruta):
+        return {}
+    with open(ruta, encoding="utf-8") as f:
+        datos = json.load(f)
+    out = {}
+    for p, e in sorted(datos.items()):
+        if e.get("estado") != "aprobada":
+            continue
+        senas = _senas(e.get("senas") or e.get("sena"))
+        if senas and all(senas):
+            out[p] = senas
+    return out
 
 
 def revision_lsb_md(revision: list) -> str:

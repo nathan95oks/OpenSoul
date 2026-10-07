@@ -68,7 +68,7 @@ class PendingSignInfoSheet extends StatelessWidget {
             children: [
               for (final (i, info) in infos.indexed) ...[
                 if (i > 0) const Divider(height: 32),
-                _Palabra(info: info, catalog: catalog),
+                PendingSignInfoView(info: info, catalog: catalog),
               ],
               const SizedBox(height: 16),
               FilledButton(
@@ -83,11 +83,22 @@ class PendingSignInfoSheet extends StatelessWidget {
   }
 }
 
-class _Palabra extends StatelessWidget {
+/// Qué es una palabra sin seña: su nombre en azul, que no tiene seña y su
+/// descripción en señas. La misma vista se usa en la hoja «¿Qué es?» de las
+/// tarjetas y en la pantalla que tapa al avatar en el Traductor a LSB.
+class PendingSignInfoView extends StatelessWidget {
   final PendingSignInfo info;
   final PendingSignCatalog? catalog;
 
-  const _Palabra({required this.info, this.catalog});
+  /// Muestra «Descripción provisional, por revisar.» si nadie la confirmó.
+  final bool showReviewNote;
+
+  const PendingSignInfoView({
+    super.key,
+    required this.info,
+    this.catalog,
+    this.showReviewNote = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -159,19 +170,9 @@ class _Palabra extends StatelessWidget {
             style: tema.bodySmall?.copyWith(color: AppTheme.lightTextSub),
           ),
         ],
-        if (info.example.isNotEmpty) ...[
-          const SizedBox(height: 14),
-          Text(
-            'En el trámite',
-            style: tema.labelLarge?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            '«${info.example}»',
-            style: tema.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
-          ),
-        ],
-        if (info.description.isNotEmpty && !info.reviewed) ...[
+        if (showReviewNote &&
+            info.description.isNotEmpty &&
+            !info.reviewed) ...[
           const SizedBox(height: 10),
           Text(
             'Descripción provisional, por revisar.',
