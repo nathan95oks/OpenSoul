@@ -262,11 +262,10 @@ void main() {
       );
       expect(bloque.height, greaterThan(100));
       expect(bloque.width, greaterThan(600));
-      // La misma tarjeta de la hoja «¿Qué es?», sobre la pantalla amarilla.
-      expect(
-        find.text('No tiene seña propia en los módulos M1–M4.'),
-        findsOneWidget,
-      );
+      // La tarjeta de la hoja «¿Qué es?», sobre la pantalla: junto al avatar
+      // sin la línea de por qué no tiene seña.
+      expect(find.text('¿Qué es?'), findsOneWidget);
+      expect(find.textContaining('No tiene seña propia'), findsNothing);
       expect(find.byKey(const Key('avatar_descripcion_lectura')), findsOne);
       // Tapa todo el avatar.
       expect(bloque, tester.getRect(find.byType(Avatar3DViewer)).deflate(1));
@@ -343,13 +342,7 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 700));
-      expect(
-        find.text(
-          'Existe en LSB, pero el avatar todavía no tiene esta '
-          'seña.',
-        ),
-        findsOneWidget,
-      );
+      expect(find.textContaining('Existe en LSB'), findsNothing);
       expect(find.text('En LSB se seña:'), findsOneWidget);
       final pantalla = tester.element(
         find.byKey(const Key('avatar_descripcion')),
