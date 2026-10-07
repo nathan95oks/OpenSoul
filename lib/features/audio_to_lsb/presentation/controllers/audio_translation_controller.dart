@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/core/di/injection.dart'
-    show pendingSignCatalogProvider;
+    show lexiconEntriesProvider, pendingSignCatalogProvider;
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/di/injection.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/domain/services/described_word_steps.dart';
@@ -156,14 +157,20 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
         return;
       }
 
-      // Una palabra que no existe en LSB y tiene descripción se explica
-      // delante del avatar en vez de deletrearse.
+      // Una palabra que existe en LSB pero no está animada (o una en azul
+      // con descripción) se explica delante del avatar; solo lo que no
+      // existe en LSB se deletrea.
       final catalog = await _pendingSignCatalog();
+      final sources = await _signSources();
       if (myToken != _requestToken) return;
 
       state = state.copyWith(
         status: AudioTranslationStatus.success,
-        translationResult: DescribedWordSteps.apply(result, catalog),
+        translationResult: DescribedWordSteps.apply(
+          result,
+          catalog,
+          signSources: sources,
+        ),
         pendingClarifications: const [],
       );
     } catch (e) {
@@ -183,6 +190,29 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
     } catch (_) {
       return PendingSignCatalog.empty;
     }
+  }
+
+  /// Dónde está cada seña del catálogo («M3 · General I · p.111»), para decir
+  /// en qué módulo verla cuando el avatar todavía no la tiene.
+  Future<Map<String, String>> _signSources() async {
+    try {
+      final entries = await ref.read(lexiconEntriesProvider.future);
+      return {
+        for (final e in entries)
+          if (e.source.isNotEmpty)
+            AnimationUrlResolver.canonicalFor(e.gloss): _sinCodigo(e.source),
+      };
+    } catch (_) {
+      return const {};
+    }
+  }
+
+  /// «M3-T14-04 · M3 · General I · p.111» → «M3 · General I · p.111».
+  static String _sinCodigo(String source) {
+    final partes = source.split(' · ');
+    return partes.length > 1 && partes.first.contains('-T')
+        ? partes.skip(1).join(' · ')
+        : source;
   }
 
   /// La persona responde la aclaración pendiente para [term] con la opción

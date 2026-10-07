@@ -105,9 +105,86 @@ void main() {
         ),
         catalogo,
       );
-      // FACTURA tiene clip; TERRENO no: sin descripción, se deletrea.
-      expect(t.animationGlosses, ['YO', 'FACTURA', ...'TERRENO'.split('')]);
+      // FACTURA tiene clip: se seña. TERRENO existe en LSB pero el avatar no
+      // la tiene: no se deletrea, se explica.
+      expect(t.animationGlosses, ['YO', 'FACTURA', 'SENA_PENDIENTE:TERRENO']);
       expect(t.animationUrls[1], isNot(startsWith(_marca)));
+      final terreno = t.stepDescriptions['SENA_PENDIENTE:TERRENO']!;
+      expect(terreno.hasLsbSign, isTrue);
+      expect(terreno.lsbDescription, ['TERRENO']);
+    });
+
+    test('«hola quiero realizar un tramite»: realizar existe (HACER) y se '
+        'explica, no se deletrea', () {
+      final catalogo = PendingSignCatalog.fromJsonString(
+        jsonEncode({
+          'palabras': const {},
+          'equivalencias': {
+            'REALIZAR': ['HACER'],
+          },
+        }),
+      );
+      // Lo que devuelve hoy la Lambda desplegada para esa frase.
+      final t = DescribedWordSteps.apply(
+        _traduccion(['HOLA', 'TRAMITE', ...'REALIZAR'.split('')], ['REALIZAR']),
+        catalogo,
+        signSources: const {'HACER': 'M3 · General I · p.111'},
+      );
+      expect(t.animationGlosses, [
+        'HOLA',
+        'TRAMITE',
+        'SENA_PENDIENTE:REALIZAR',
+      ]);
+      final info = t.stepDescriptions['SENA_PENDIENTE:REALIZAR']!;
+      expect(info.word, 'REALIZAR');
+      expect(info.hasLsbSign, isTrue);
+      expect(info.lsbDescription, ['HACER']);
+      expect(info.source, 'M3 · General I · p.111');
+    });
+
+    test('una seña del catálogo sin animación no se deletrea: se explica', () {
+      // «es verdad»: la Lambda deletrea VERDAD porque no hay clip.
+      final t = DescribedWordSteps.apply(
+        LsbTranslation(
+          glosses: const ['VERDAD'],
+          animationUrl: '',
+          animationGlosses: 'VERDAD'.split(''),
+          animationUrls: [for (final l in 'VERDAD'.split('')) '$_marca$l'],
+          unanimatedSigns: const ['VERDAD'],
+        ),
+        _catalogo,
+      );
+      expect(t.animationGlosses, ['SENA_PENDIENTE:VERDAD']);
+      expect(t.stepDescriptions['SENA_PENDIENTE:VERDAD']!.hasLsbSign, isTrue);
+    });
+
+    test('la Lambda informa las señas sin animación', () async {
+      final fuente = RemoteAudioDataSourceImpl(
+        apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
+        client: MockClient(
+          (_) async => http.Response(
+            jsonEncode({
+              'glosses': ['VERDAD'],
+              'glossDetails': [
+                {
+                  'gloss': 'VERDAD',
+                  'available': false,
+                  'spelledLetters': 'VERDAD'.split(''),
+                },
+              ],
+              'animationSequence': [
+                for (final l in 'VERDAD'.split(''))
+                  {'gloss': l, 'animationFile': l},
+              ],
+            }),
+            200,
+            headers: {'content-type': 'application/json; charset=utf-8'},
+          ),
+        ),
+        animationResolver: const AnimationUrlResolver(baseUrl: 'https://x/'),
+      );
+      final t = await fuente.translateText('es verdad');
+      expect(t.unanimatedSigns, ['VERDAD']);
     });
 
     test('sin descripción (o sin avatar) se deletrea', () {
@@ -250,7 +327,7 @@ void main() {
       tester,
     ) async {
       await reproducir(tester, describir: true);
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 700));
       expect(find.byKey(const Key('avatar_descripcion')), findsOneWidget);
       // Se ve delante del avatar (no colapsa la capa de la seña).
       final bloque = tester.getRect(
@@ -288,6 +365,80 @@ void main() {
       await reproducir(tester, describir: true);
       // Solo la entrada: la barra de lectura sigue corriendo.
       await tester.pump(const Duration(milliseconds: 700));
+      await tester.tap(find.text('Entendido'));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('avatar_descripcion')), findsNothing);
+    });
+
+    testWidgets('dos palabras seguidas: la pantalla se queda y cambia la '
+        'tarjeta', (tester) async {
+      const a = PendingSignInfo(
+        word: 'REALIZAR',
+        description: 'HACER',
+        lsbDescription: ['HACER'],
+        hasLsbSign: true,
+      );
+      const b = PendingSignInfo(
+        word: 'VERDAD',
+        description: 'VERDAD',
+        lsbDescription: ['VERDAD'],
+        hasLsbSign: true,
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            pendingSignCatalogProvider.overrideWith((ref) async => _catalogo),
+          ],
+          child: const MaterialApp(
+            home: Scaffold(
+              body: Avatar3DViewer(
+                isProcessing: false,
+                describePendingSigns: true,
+                animationDuration: Duration(milliseconds: 10),
+                stepDescriptions: {
+                  'SENA_PENDIENTE:REALIZAR': a,
+                  'SENA_PENDIENTE:VERDAD': b,
+                },
+                glosses: [
+                  'SENA_PENDIENTE:REALIZAR',
+                  'SENA_PENDIENTE:VERDAD',
+                  'HOLA',
+                ],
+                animationUrls: [
+                  '${_marca}SENA_PENDIENTE:REALIZAR',
+                  '${_marca}SENA_PENDIENTE:VERDAD',
+                  '${_marca}HOLA',
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 700));
+      expect(
+        find.text(
+          'Existe en LSB, pero el avatar todavía no tiene esta '
+          'seña.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('En LSB se seña:'), findsOneWidget);
+      final pantalla = tester.element(
+        find.byKey(const Key('avatar_descripcion')),
+      );
+
+      await tester.tap(find.text('Entendido'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      // La misma pantalla amarilla, con la tarjeta de VERDAD.
+      expect(find.byKey(const Key('avatar_descripcion')), findsOneWidget);
+      expect(
+        tester.element(find.byKey(const Key('avatar_descripcion'))),
+        same(pantalla),
+      );
+      expect(find.text('VERDAD'), findsWidgets);
+
       await tester.tap(find.text('Entendido'));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('avatar_descripcion')), findsNothing);

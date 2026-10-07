@@ -1,5 +1,6 @@
 import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
 
 class LsbTranslation {
   final List<String> glosses;
@@ -26,6 +27,14 @@ class LsbTranslation {
   /// forman una palabra que se puede explicar en vez de deletrear.
   final List<String> spelledWords;
 
+  /// Señas del catálogo que el backend deletreó porque el avatar no tiene su
+  /// clip (`glossDetails` con «available»: false): existen en LSB.
+  final List<String> unanimatedSigns;
+
+  /// Qué mostrar delante del avatar en cada paso `SENA_PENDIENTE:…` de
+  /// [animationGlosses] (ver `DescribedWordSteps`).
+  final Map<String, PendingSignInfo> stepDescriptions;
+
   bool get needsClarification =>
       semanticStatus == SemanticStatus.needsClarification ||
       pendingClarifications.isNotEmpty;
@@ -41,5 +50,7 @@ class LsbTranslation {
     this.representationStatus = RepresentationStatus.complete,
     this.semanticTurn,
     this.spelledWords = const [],
+    this.unanimatedSigns = const [],
+    this.stepDescriptions = const {},
   });
 }

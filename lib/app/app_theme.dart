@@ -78,9 +78,10 @@ class AppTheme {
   static const Color pendingSign = audioActionBlue;
   static const Color pendingSignOnDark = Color(0xFFBFDBFE);
 
-  /// La pantalla amarilla que tapa al avatar mientras se lee qué es una
-  /// palabra sin seña: un color que se distingue de inmediato de la seña.
+  /// La pantalla amarilla y naranja que tapa al avatar mientras se lee qué
+  /// es una palabra sin seña: se distingue de inmediato de la seña.
   static const Color describeCurtain = Color(0xFFFFD43B);
+  static const Color describeCurtainEdge = Color(0xFFFF9F1C);
 
   static InputDecoration lightInputDecoration({
     String? hintText,

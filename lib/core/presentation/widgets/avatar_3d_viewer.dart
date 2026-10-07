@@ -48,6 +48,11 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
   /// LSB; las demás vistas siguen con el aviso «En espera para su avatar».
   final bool describePendingSigns;
 
+  /// Qué es cada paso `SENA_PENDIENTE:…` que no está en las descripciones
+  /// de la app: una seña que existe en LSB pero el avatar no tiene animada
+  /// («realizar» → HACER). Se mira antes que el catálogo.
+  final Map<String, PendingSignInfo> stepDescriptions;
+
   const Avatar3DViewer({
     super.key,
     required this.isProcessing,
@@ -63,6 +68,7 @@ class Avatar3DViewer extends ConsumerStatefulWidget {
     this.showControls = true,
     this.showBackButton = true,
     this.describePendingSigns = false,
+    this.stepDescriptions = const {},
   });
 
   @override
@@ -518,6 +524,8 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
     if (!widget.describePendingSigns || !PendingSign.isPending(gloss)) {
       return null;
     }
+    final propia = widget.stepDescriptions[gloss];
+    if (propia != null) return propia;
     final catalog = ref.read(pendingSignCatalogProvider).asData?.value;
     final info = catalog?.infoOf(gloss);
     if (info == null || info.description.isEmpty) return null;
@@ -565,6 +573,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
       final gloss = _rawGlossAt(_currentIndex);
       if (widget.describePendingSigns &&
           PendingSign.isPending(gloss) &&
+          !widget.stepDescriptions.containsKey(gloss) &&
           !ref.read(pendingSignCatalogProvider).hasValue) {
         // Las descripciones todavía se están leyendo del paquete de la app:
         // el paso las espera, en vez de pasar de largo sin explicarla.
@@ -931,31 +940,29 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
           ),
         ),
 
-        // Una palabra sin seña con descripción: una pantalla amarilla sale
-        // desde el centro y tapa todo el avatar; se lee y se retira, y el
-        // avatar sigue con la seña siguiente.
+        // Una palabra sin seña (o sin animación) con descripción: una
+        // pantalla amarilla y naranja entra barriendo desde la derecha y tapa
+        // todo el avatar; leída, sigue hacia la izquierda y el avatar
+        // continúa. Si la palabra siguiente también se describe, la pantalla
+        // se queda y solo cambia la tarjeta.
         Positioned.fill(
           child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 460),
-            reverseDuration: const Duration(milliseconds: 320),
+            duration: const Duration(milliseconds: 420),
+            reverseDuration: const Duration(milliseconds: 380),
             switchInCurve: Curves.easeOutCubic,
             switchOutCurve: Curves.easeInCubic,
-            transitionBuilder: (child, animation) => AnimatedBuilder(
-              animation: animation,
-              child: child,
-              builder: (context, child) => ClipPath(
-                clipper: _CircleReveal(animation.value),
-                child: child,
-              ),
-            ),
+            layoutBuilder: (actual, anteriores) =>
+                Stack(fit: StackFit.expand, children: [...anteriores, ?actual]),
+            transitionBuilder: _barrido,
             child: descrita != null && _isPlayingSequence
                 ? _DescriptionCurtain(
-                    key: ValueKey('descripcion_$_currentIndex'),
+                    key: const ValueKey('cortina'),
+                    step: _currentIndex,
                     info: descrita,
                     readingTime: Avatar3DViewer.readingTimeFor(descrita),
                     onContinue: _finishCurrentStep,
                   )
-                : const SizedBox.shrink(key: ValueKey('sin_descripcion')),
+                : const SizedBox.shrink(key: ValueKey('sin_cortina')),
           ),
         ),
       ],
@@ -1172,15 +1179,72 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
   }
 }
 
-/// Qué es una palabra que no existe en LSB, tapando al avatar: una pantalla
-/// amarilla con la misma tarjeta de la hoja «¿Qué es?» de las tarjetas LSB.
-/// La barra muestra cuánto queda para leerla; «Entendido» la cierra antes.
+/// Barrido de un solo sentido: entra desde la derecha y, al irse, sigue
+/// hacia la izquierda.
+Widget _barrido(Widget child, Animation<double> animation) => AnimatedBuilder(
+  animation: animation,
+  child: child,
+  builder: (context, child) {
+    final saliendo = animation.status == AnimationStatus.reverse;
+    final dx = saliendo ? -(1 - animation.value) : 1 - animation.value;
+    return FractionalTranslation(translation: Offset(dx, 0), child: child);
+  },
+);
+
+/// Qué es una palabra sin seña (o sin animación), tapando al avatar: una
+/// pantalla amarilla y naranja con la misma tarjeta de la hoja «¿Qué es?» de
+/// las tarjetas LSB. La barra muestra cuánto queda para leerla; «Entendido»
+/// la cierra antes. Cada palabra trae su tarjeta, que entra con el mismo
+/// barrido.
 class _DescriptionCurtain extends StatelessWidget {
+  final int step;
   final PendingSignInfo info;
   final Duration readingTime;
   final VoidCallback onContinue;
 
   const _DescriptionCurtain({
+    super.key,
+    required this.step,
+    required this.info,
+    required this.readingTime,
+    required this.onContinue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      key: const Key('avatar_descripcion'),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [AppTheme.describeCurtain, AppTheme.describeCurtainEdge],
+        ),
+      ),
+      child: ClipRect(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 380),
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          transitionBuilder: _barrido,
+          child: _Tarjeta(
+            key: ValueKey('tarjeta_$step'),
+            info: info,
+            readingTime: readingTime,
+            onContinue: onContinue,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Tarjeta extends StatelessWidget {
+  final PendingSignInfo info;
+  final Duration readingTime;
+  final VoidCallback onContinue;
+
+  const _Tarjeta({
     super.key,
     required this.info,
     required this.readingTime,
@@ -1189,61 +1253,44 @@ class _DescriptionCurtain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      key: const Key('avatar_descripcion'),
-      child: ColoredBox(
-        color: AppTheme.describeCurtain,
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
-            // La tarjeta entra un poco después que el amarillo, con un
-            // pequeño rebote.
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: 0, end: 1),
-              duration: const Duration(milliseconds: 560),
-              curve: const Interval(0.3, 1, curve: Curves.easeOutBack),
-              builder: (context, t, child) => Opacity(
-                opacity: t.clamp(0.0, 1.0),
-                child: Transform.scale(scale: 0.9 + 0.1 * t, child: child),
-              ),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 460),
-                child: Material(
-                  color: AppTheme.pageBg,
-                  elevation: 8,
-                  shadowColor: Colors.black38,
-                  borderRadius: BorderRadius.circular(24),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 22, 24, 16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        PendingSignInfoView(info: info, showReviewNote: false),
-                        const SizedBox(height: 18),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: TweenAnimationBuilder<double>(
-                            tween: Tween(begin: 0, end: 1),
-                            duration: readingTime,
-                            builder: (context, v, _) => LinearProgressIndicator(
-                              key: const Key('avatar_descripcion_lectura'),
-                              value: v,
-                              minHeight: 6,
-                              color: AppTheme.pendingSign,
-                              backgroundColor: AppTheme.lightSubtle,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        FilledButton(
-                          onPressed: onContinue,
-                          child: const Text('Entendido'),
-                        ),
-                      ],
+    return Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 460),
+          child: Material(
+            color: AppTheme.pageBg,
+            elevation: 8,
+            shadowColor: Colors.black38,
+            borderRadius: BorderRadius.circular(24),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 22, 24, 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  PendingSignInfoView(info: info, showReviewNote: false),
+                  const SizedBox(height: 18),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: TweenAnimationBuilder<double>(
+                      tween: Tween(begin: 0, end: 1),
+                      duration: readingTime,
+                      builder: (context, v, _) => LinearProgressIndicator(
+                        key: const Key('avatar_descripcion_lectura'),
+                        value: v,
+                        minHeight: 6,
+                        color: AppTheme.describeCurtainEdge,
+                        backgroundColor: AppTheme.lightSubtle,
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed: onContinue,
+                    child: const Text('Entendido'),
+                  ),
+                ],
               ),
             ),
           ),
@@ -1251,26 +1298,6 @@ class _DescriptionCurtain extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Recorta un círculo que crece desde el centro: con [t] = 0 no se ve nada,
-/// con [t] = 1 cubre todo el rectángulo.
-class _CircleReveal extends CustomClipper<Path> {
-  final double t;
-
-  const _CircleReveal(this.t);
-
-  @override
-  Path getClip(Size size) {
-    final radio =
-        math.sqrt(size.width * size.width + size.height * size.height) / 2;
-    return Path()..addOval(
-      Rect.fromCircle(center: size.center(Offset.zero), radius: radio * t),
-    );
-  }
-
-  @override
-  bool shouldReclip(_CircleReveal oldClipper) => oldClipper.t != t;
 }
 
 /// Una palabra sin seña en el catálogo: se dice que falta, no se inventa.

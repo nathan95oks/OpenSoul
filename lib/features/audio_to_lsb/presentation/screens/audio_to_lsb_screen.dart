@@ -165,6 +165,11 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
                               // Una palabra sin seña con descripción se
                               // explica delante del avatar.
                               describePendingSigns: true,
+                              stepDescriptions:
+                                  state.status == AudioTranslationStatus.success
+                                  ? state.translationResult?.stepDescriptions ??
+                                        const {}
+                                  : const {},
                               onPlaybackStateChanged: _setPlaybackActive,
                               onReturnToInput: () =>
                                   _returnToInitial(controller),
