@@ -166,11 +166,7 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
 
       state = state.copyWith(
         status: AudioTranslationStatus.success,
-        translationResult: DescribedWordSteps.apply(
-          result,
-          catalog,
-          signSources: sources,
-        ),
+        translationResult: _describe(result, catalog, sources),
         pendingClarifications: const [],
       );
     } catch (e) {
@@ -189,6 +185,21 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
       return await ref.read(pendingSignCatalogProvider.future);
     } catch (_) {
       return PendingSignCatalog.empty;
+    }
+  }
+
+  /// La traducción con sus palabras explicadas. Si algo falla al armarlas,
+  /// la seña se hace igual, como la dio el backend (deletreando), en vez de
+  /// mostrar un error.
+  LsbTranslation _describe(
+    LsbTranslation result,
+    PendingSignCatalog catalog,
+    Map<String, String> sources,
+  ) {
+    try {
+      return DescribedWordSteps.apply(result, catalog, signSources: sources);
+    } catch (_) {
+      return result;
     }
   }
 

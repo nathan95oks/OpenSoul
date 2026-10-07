@@ -11,7 +11,8 @@ import 'package:webview_flutter_platform_interface/webview_flutter_platform_inte
 import 'package:lsb_legal_app/core/data/datasources/remote_audio_datasource.dart';
 import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
 import 'package:lsb_legal_app/core/di/injection.dart'
-    show pendingSignCatalogProvider;
+    show pendingSignCatalogProvider, remoteAudioDataSourceProvider;
+import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
@@ -291,6 +292,75 @@ void main() {
       expect(catalogo.describedGloss('hipoteca'), 'SENA_PENDIENTE:HIPOTECA');
       expect(catalogo.describedGloss('PALABRA_QUE_NO_ESTA'), isNull);
     });
+  });
+
+  test('Voz a LSB: «hola quiero realizar un tramite» termina sin error y '
+      'explica REALIZAR', () async {
+    // La respuesta real de la Lambda desplegada para esa frase.
+    final respuesta = {
+      'glosses': ['HOLA', 'TRAMITE', ...'REALIZAR'.split('')],
+      'animationSequence': [
+        {'gloss': 'HOLA', 'animationFile': 'avatar_test.glb'},
+        {'gloss': 'TRAMITE', 'animationFile': 'avatar_test.glb'},
+        for (final l in 'REALIZAR'.split(''))
+          {'gloss': l, 'animationFile': 'avatar_test.glb'},
+      ],
+      'glossDetails': [
+        {'gloss': 'HOLA', 'available': true},
+        {'gloss': 'TRAMITE', 'available': true},
+      ],
+      'fidelityFixes': [
+        {'palabra': 'REALIZAR', 'accion': 'concepto_sin_catalogo'},
+      ],
+      'semanticStatus': 'resolved',
+      'representationStatus': 'complete',
+    };
+    final c = ProviderContainer(
+      overrides: [
+        remoteAudioDataSourceProvider.overrideWithValue(
+          RemoteAudioDataSourceImpl(
+            apiGatewayUrl: 'https://example.test/OpenSoul-TextToLSB',
+            client: MockClient(
+              (_) async => http.Response(
+                jsonEncode(respuesta),
+                200,
+                headers: {'content-type': 'application/json; charset=utf-8'},
+              ),
+            ),
+          ),
+        ),
+        pendingSignCatalogProvider.overrideWith(
+          (ref) async => PendingSignCatalog.fromJsonString(
+            File('assets/dictionary/senas_sin_sena.json').readAsStringSync(),
+          ),
+        ),
+      ],
+    );
+    addTearDown(c.dispose);
+    final controlador = c.read(audioTranslationControllerProvider.notifier);
+    // Dos veces: la segunda sale de la caché de traducciones.
+    for (var vez = 0; vez < 2; vez++) {
+      controlador.processText('hola quiero realizar un tramite');
+      for (var i = 0; i < 100; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        if (c.read(audioTranslationControllerProvider).status !=
+            AudioTranslationStatus.processing) {
+          break;
+        }
+      }
+      final estado = c.read(audioTranslationControllerProvider);
+      expect(estado.errorMessage, isNull);
+      expect(estado.status, AudioTranslationStatus.success);
+      final t = estado.translationResult!;
+      expect(t.animationGlosses, [
+        'HOLA',
+        'TRAMITE',
+        'SENA_PENDIENTE:REALIZAR',
+      ]);
+      expect(t.stepDescriptions['SENA_PENDIENTE:REALIZAR']!.lsbDescription, [
+        'HACER',
+      ]);
+    }
   });
 
   group('delante del avatar', () {

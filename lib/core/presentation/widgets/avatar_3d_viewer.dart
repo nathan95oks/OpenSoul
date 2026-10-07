@@ -941,7 +941,7 @@ class _Avatar3DViewerState extends ConsumerState<Avatar3DViewer>
         ),
 
         // Una palabra sin seña (o sin animación) con descripción: una
-        // pantalla amarilla y naranja entra barriendo desde la derecha y tapa
+        // pantalla con el violeta de LSB entra barriendo desde la derecha y tapa
         // todo el avatar; leída, sigue hacia la izquierda y el avatar
         // continúa. Si la palabra siguiente también se describe, la pantalla
         // se queda y solo cambia la tarjeta.
@@ -1192,7 +1192,7 @@ Widget _barrido(Widget child, Animation<double> animation) => AnimatedBuilder(
 );
 
 /// Qué es una palabra sin seña (o sin animación), tapando al avatar: una
-/// pantalla amarilla y naranja con la misma tarjeta de la hoja «¿Qué es?» de
+/// pantalla con el violeta de LSB y la misma tarjeta de la hoja «¿Qué es?» de
 /// las tarjetas LSB. La barra muestra cuánto queda para leerla; «Entendido»
 /// la cierra antes. Cada palabra trae su tarjeta, que entra con el mismo
 /// barrido.
@@ -1216,8 +1216,8 @@ class _DescriptionCurtain extends StatelessWidget {
       key: const Key('avatar_descripcion'),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [AppTheme.describeCurtain, AppTheme.describeCurtainEdge],
         ),
       ),
@@ -1280,8 +1280,8 @@ class _Tarjeta extends StatelessWidget {
                         key: const Key('avatar_descripcion_lectura'),
                         value: v,
                         minHeight: 6,
-                        color: AppTheme.describeCurtainEdge,
-                        backgroundColor: AppTheme.lightSubtle,
+                        color: AppTheme.lsbViolet,
+                        backgroundColor: AppTheme.glossCardBg,
                       ),
                     ),
                   ),
