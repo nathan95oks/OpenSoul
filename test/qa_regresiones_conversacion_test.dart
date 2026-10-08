@@ -9,6 +9,7 @@ import 'package:lsb_legal_app/core/domain/conversation/semantic_turn_builder.dar
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/speech_act.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_composer.dart';
 import 'package:lsb_legal_app/core/domain/guided/guided_session.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
@@ -253,10 +254,39 @@ void main() {
       ], contains('R.ESC-FELCV-201.12'));
     });
 
+    test('el mensaje armado no tiene un «Sí.» o «No.» suelto', () {
+      // QA 2026-10-08, acoso sexual (FELCV): «No. Sí. Me tocó sin mi
+      // permiso…» no se entendía; y el «sí» a los testigos no se oía.
+      String mensaje(String testigos) {
+        var s = flow.startJourney('tramite_felcv_201');
+        for (final (q, o) in [
+          ('R.ESC-FELCV-201.2', 'no'),
+          ('R.ESC-FELCV-201.4', 'si'),
+          ('R.ESC-FELCV-201.6', 'si'),
+          ('R.ESC-FELCV-201.8', 'si'),
+          ('R.ESC-FELCV-201.10', testigos),
+          ('R.ESC-FELCV-201.14', 'si'),
+        ]) {
+          s = flow.select(s, q, o).session;
+        }
+        return GuidedComposer(bank).compose(s.toIntervention());
+      }
+
+      expect(
+        mensaje('no'),
+        'No estoy en peligro ahora. Conozco a esa persona. '
+        'Me tocó sin mi permiso. Todos los días. No hay testigos. '
+        'Necesito un intérprete de LSB.',
+      );
+      expect(mensaje('si'), contains('Hay testigos.'));
+    });
+
     test('SÍ no pone datos que nadie dijo en boca de la persona', () {
       for (final id in ['R.ESC-FELCV-201.4', 'R.ESC-FELCC-202.2']) {
         final si = bank.question(id)!.options.firstWhere((o) => o.id == 'si');
-        expect(si.phrase, 'Sí.', reason: id);
+        // Lo preguntado, afirmado («No, no conozco…» dado vuelta), sin el
+        // «jefe» ni la «casa» que antes se decían.
+        expect(si.phrase, 'Sí, conozco a esa persona.', reason: id);
       }
     });
   });

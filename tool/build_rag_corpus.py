@@ -1715,8 +1715,8 @@ def unidades_si_no(e: dict, n: int) -> list:
     turno = next((t for t in e["turnos"] if t["n"] == n), None)
     preguntas = ([turno["texto"]] if turno else []) + [
         q for p in e["variantes"] if p["turno"] == n for q in p["preguntas"]]
-    unidades = []
-    for estado, uid, glosa, etiqueta, patron in UNIDADES_POLARES:
+    elegidas = {}
+    for estado, _, _, _, patron in UNIDADES_POLARES:
         # «No sé…» solo repite la duda sobre lo preguntado; un sí o un no con
         # más palabras afirma algo, y eso tiene que estar en la pregunta.
         del_estado = [r for r in docs if _estado(r["texto"]) == estado
@@ -1724,15 +1724,73 @@ def unidades_si_no(e: dict, n: int) -> list:
                            or sin_contenido_nuevo(r["texto"], preguntas))]
         elegida = next((r for r in del_estado if patron.match(_norm(r["texto"]))),
                        del_estado[0] if del_estado else None)
+        if elegida:
+            elegidas[estado] = (elegida["texto"],
+                                f"respuesta documentada «{elegida['texto']}»")
+            continue
+        # La primera cláusula de una documentada, si ella sola no agrega nada:
+        # «Sí, hablé con el maestro, pero no ayudó.» → «Sí, hablé con el
+        # maestro.».
+        if estado != "desconocido":
+            for r in docs:
+                if _estado(r["texto"]) != estado:
+                    continue
+                corta = primera_clausula(r["texto"])
+                if corta and sin_contenido_nuevo(corta, preguntas):
+                    elegidas[estado] = (corta, f"primera cláusula de «{r['texto']}»")
+                    break
+    # Sin frase propia, la del estado opuesto dada vuelta: «No, no hay
+    # testigos.» → «Sí, hay testigos.». Una partícula suelta («Sí.») no se
+    # entiende cuando las respuestas se juntan en un mensaje.
+    for estado, opuesto in (("afirmado", "negado"), ("negado", "afirmado")):
+        if estado not in elegidas and opuesto in elegidas:
+            frase = invertir_polar(elegidas[opuesto][0])
+            if frase:
+                elegidas[estado] = (frase, f"opuesta de «{elegidas[opuesto][0]}»")
+    unidades = []
+    for estado, uid, glosa, etiqueta, _ in UNIDADES_POLARES:
+        frase, origen = elegidas.get(
+            estado,
+            (f"{etiqueta}.", "partícula: el escenario no documenta este estado"))
         unidades.append({
-            "estado": estado, "etiqueta": etiqueta,
-            "frase": elegida["texto"] if elegida else f"{etiqueta}.",
+            "estado": estado, "etiqueta": etiqueta, "frase": frase,
             "glosas": [glosa], "glosasPropias": True, "id": uid,
-            "polar": True,
-            "origen": (f"respuesta documentada «{elegida['texto']}»" if elegida
-                       else "partícula: el escenario no documenta este estado"),
+            "polar": True, "origen": origen,
         })
     return unidades
+
+
+def primera_clausula(frase: str) -> str | None:
+    """«Sí, hablé con el maestro, pero no ayudó.» → «Sí, hablé con el
+    maestro.»: la partícula y lo que sigue hasta el primer límite de
+    cláusula («, pero», «, aunque», «, y», «. »). None si no hay más que eso."""
+    m = re.match(r"\s*((?:Sí|No)[,.]\s+.+?)(?:,\s*(?:pero|aunque|y|porque)\b|\.\s+\S)",
+                 frase)
+    if not m:
+        return None
+    return m.group(1).rstrip(" ,.") + "."
+
+
+# Palabras tras las que «no» no niega bien («No, no alguien vio.»).
+_NO_INVERTIBLE = {"alguien", "algo", "alguno", "alguna", "algun", "nadie",
+                  "nada", "nunca", "ninguno", "ninguna", "ningun"}
+
+
+def invertir_polar(frase: str) -> str | None:
+    """«Sí, X.» ↔ «No, no X.»: la misma afirmación, dada vuelta. Solo con esa
+    forma exacta; si no, nada (no se adivina cómo negar otra cosa)."""
+    m = re.fullmatch(r"\s*(Sí|No)[,.]\s+(.+?)\s*", frase)
+    if not m:
+        return None
+    resto = m.group(2)
+    if m.group(1) == "No":
+        if not resto.lower().startswith("no "):
+            return None
+        resto = resto[3:]
+        return f"Sí, {resto}" if resto else None
+    if _norm(resto.split()[0]) in _NO_INVERTIBLE or _norm(resto).startswith("no "):
+        return None
+    return f"No, no {resto[0].lower()}{resto[1:]}"
 
 
 def unidades_indicacion() -> list:
