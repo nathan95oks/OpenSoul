@@ -676,6 +676,24 @@ class ZonaPorUso(unittest.TestCase):
         self.assertEqual(self.ZN.zona_valida(
             "TRIBUNAL_DEPARTAMENTAL", "Instituciones", []), "Instituciones")
 
+
+class RespuestaPolarSinDatosNuevos(unittest.TestCase):
+    """QA 2026-10-08: elegir SÍ decía «Sí, es mi jefe.» o «Sí, vive cerca de
+    mi casa.» a «¿Conoce a la persona…?»: datos que nadie mencionó."""
+
+    def test_agregar_un_dato_no_vale(self):
+        for respuesta in ("Sí, es mi jefe.", "Sí, vive cerca de mi casa."):
+            self.assertFalse(B.sin_contenido_nuevo(
+                respuesta, ["¿Conoce a la persona que la acosa?"]))
+
+    def test_confirmar_lo_preguntado_si_vale(self):
+        self.assertTrue(B.sin_contenido_nuevo(
+            "Sí, me tocó sin mi permiso.", ["¿Esa persona la tocó sin su permiso?"]))
+        self.assertTrue(B.sin_contenido_nuevo(
+            "Sí, tengo fotos de la pantalla.", ["¿Tiene fotos de la pantalla?"]))
+        self.assertTrue(B.sin_contenido_nuevo("Sí.", ["¿Tiene testigos?"]))
+
+
 if __name__ == "__main__":
     unittest.main()
 
@@ -799,4 +817,3 @@ class LexicoEstricto(unittest.TestCase):
             f.write(B.MARCA_ESTRICTA + "\n# Escenarios\n")
         self.assertTrue(B.es_estricto(os.path.relpath(ruta, B.ROOT)))
         self.assertFalse(B.es_estricto("no/existe.md"))
-

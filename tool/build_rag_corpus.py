@@ -1232,7 +1232,10 @@ def info_sin_sena(corpus: dict, avisos: list,
     siglas = [p for p, d in datos.items() if d.get("tipo") == "sigla"]
     # Los términos del léxico de varias palabras («ACOSO_DISCRIMINATORIO»)
     # se explican aunque ninguna frase del corpus los use todavía.
-    terminos = [p for p, d in datos.items() if d.get("juntar")]
+    terminos = [
+        p for p, d in datos.items()
+        if d.get("juntar") or d.get("incluir")
+    ]
     por_ver = sorted(ejemplos) + [
         p for p in dict.fromkeys(deletreados_por_norma() + siglas + terminos)
         if p in datos and p not in ejemplos]
@@ -1676,17 +1679,49 @@ def responde_si_o_no(e: dict, t: dict) -> bool:
                               for r in docs)
 
 
+# Palabras que una respuesta de sí o no dice sin agregar nada: partículas,
+# pronombres y verbos auxiliares que cambian de persona («tiene» → «tengo»).
+_SIN_CONTENIDO = {
+    "esta", "este", "esto", "estoy", "estas", "tengo", "tiene", "tienen",
+    "tenia", "creo", "todavia", "tambien", "ahora", "nada", "nadie", "algo",
+    "pero", "bien", "eso", "esa", "ese", "aqui", "nunca", "siempre",
+}
+
+
+def sin_contenido_nuevo(respuesta: str, preguntas: list) -> bool:
+    """Si [respuesta] solo confirma o niega lo que dicen [preguntas]. «Sí,
+    es mi jefe.» a «¿Conoce a la persona que la acosa?» agrega un jefe que
+    nadie mencionó; elegir SÍ no puede decir eso por la persona."""
+    base = {_norm(w)[:4] for q in preguntas
+            for w in re.findall(r"[\wáéíóúüñÁÉÍÓÚÜÑ]+", q) if len(w) >= 3}
+    for w in re.findall(r"[\wáéíóúüñÁÉÍÓÚÜÑ]+", respuesta):
+        n = _norm(w)
+        if len(n) < 4 or n in _SIN_CONTENIDO:
+            continue
+        if n[:4] not in base:
+            return False
+    return True
+
+
 def unidades_si_no(e: dict, n: int) -> list:
     """SÍ, NO y NO SÉ, siempre las tres, una seña cada una.
 
     Lo que se dice al elegirla es la respuesta documentada de ese estado
-    («Sí, traje mi cédula de identidad.»): una frase completa que se entiende
-    sola en la conversación. Si el escenario no documenta ese estado, la
-    partícula sola («No.»): no se inventa una frase."""
+    («Sí, traje mi cédula de identidad.»), solo si no agrega nada a lo que
+    se preguntó: «Sí, es mi jefe.» o «Sí, vive cerca de mi casa.» ponían en
+    boca de la persona datos que nadie dijo. Si no hay una así, la partícula
+    sola («Sí.»): no se inventa una frase."""
     docs = _documentadas_sordo(e, n)
+    turno = next((t for t in e["turnos"] if t["n"] == n), None)
+    preguntas = ([turno["texto"]] if turno else []) + [
+        q for p in e["variantes"] if p["turno"] == n for q in p["preguntas"]]
     unidades = []
     for estado, uid, glosa, etiqueta, patron in UNIDADES_POLARES:
-        del_estado = [r for r in docs if _estado(r["texto"]) == estado]
+        # «No sé…» solo repite la duda sobre lo preguntado; un sí o un no con
+        # más palabras afirma algo, y eso tiene que estar en la pregunta.
+        del_estado = [r for r in docs if _estado(r["texto"]) == estado
+                      and (estado == "desconocido"
+                           or sin_contenido_nuevo(r["texto"], preguntas))]
         elegida = next((r for r in del_estado if patron.match(_norm(r["texto"]))),
                        del_estado[0] if del_estado else None)
         unidades.append({
@@ -1970,6 +2005,15 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
             ofrecidas[t["n"]] = (preguntas_turno[0][0], preguntas_turno[0][3])
         if not pasos:
             continue
+        # Una indicación («La FELCV es la unidad especializada…») se contesta
+        # cuando el funcionario la dice en la conversación. Armando el
+        # trámite a solas nadie la dijo: contestar «Entendido» no tenía
+        # sentido. Si el trámite es solo indicaciones, quedan como están.
+        actos = {q["id"]: q["acto"] for q in preguntas}
+        if any(actos.get(p["pregunta"]) == "pregunta" for p in pasos):
+            for p in pasos:
+                if actos.get(p["pregunta"]) == "indicacion":
+                    p["soloConversacion"] = True
         area = e["id"].split("-")[1]
         cid = "tramite_" + e["id"].lower().removeprefix("esc-").replace("-", "_")
         recorridos[cid] = {"nombre": e["tramite"], "pasos": pasos}

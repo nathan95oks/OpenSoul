@@ -136,14 +136,15 @@ void main() {
       expect(q.isMultiple, isFalse);
       expect(q.isPolar, isTrue);
       // SÍ, NO y NO SÉ, una seña cada una; al elegirla se dice la respuesta
-      // documentada de ese estado.
+      // documentada de ese estado que no agrega nada a lo preguntado: «Sí.
+      // Perdimos la copia anterior.» pondría un dato en boca de la persona.
       expect(
         q.options.map(
           (o) =>
               '${o.id}:${o.glosses.join('+')}:${o.phrase}:${o.state.wireName}',
         ),
         [
-          'si:SÍ:Sí. Perdimos la copia anterior.:afirmado',
+          'si:SÍ:Sí.:afirmado',
           'no:NO:No.:negado',
           'no_se:NO_SABER:No sé cuál certificado.:desconocido',
         ],
@@ -178,7 +179,7 @@ void main() {
       await c.read(guidedEmissionProvider).emit();
       final respuesta = c.read(conversationProvider).conversation.lastTurn!;
       expect(respuesta.message.speaker, SpeakerRole.deaf);
-      expect(respuesta.message.text, 'Sí. Perdimos la copia anterior.');
+      expect(respuesta.message.text, 'Sí.');
       expect(respuesta.message.replyToId, launch.hearingTurnId);
     });
 

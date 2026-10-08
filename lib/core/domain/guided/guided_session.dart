@@ -212,7 +212,9 @@ class GuidedFlow {
       steps: [
         ...extra,
         for (final s in journey.steps)
-          if (kept == null || kept.contains(s.questionId)) s,
+          if ((kept == null || kept.contains(s.questionId)) &&
+              (!s.conversationOnly || requested.contains(s.questionId)))
+            s,
       ],
       hasInstitutionProfile: hasInstitutionProfile,
       requestedQuestionIds: requested.toSet(),
