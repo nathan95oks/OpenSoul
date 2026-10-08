@@ -13,7 +13,7 @@ with open("assets/dictionary/official_dictionary.json", "r", encoding="utf-8") a
 official_entries = off_data["entries"]
 
 # 2. Load assembler lexicon
-with open("lib/core/domain/services/local_sentence_assembler.dart", "r", encoding="utf-8") as f:
+with open("lib/core/domain/services/local_sentence_assembler_lexicon.dart", "r", encoding="utf-8") as f:
     dart_text = f.read()
 
 assembler_matches = re.findall(r"'([A-ZÑ_0-9]+)':\s*_Lex\(_Role\.(\w+),\s*'((?:[^'\\]|\\')*)'", dart_text)
