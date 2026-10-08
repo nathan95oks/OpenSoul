@@ -26,7 +26,7 @@ void main() {
   }
 
   Map<String, String> leerServidor() {
-    final fuente = File('aws/lambda_function.py').readAsStringSync();
+    final fuente = File('aws/gloss_lexicon.py').readAsStringSync();
     final bloque =
         RegExp(r'GLOSS_LEXICON = \{(.*?)\n\}', dotAll: true).firstMatch(fuente);
     expect(bloque, isNotNull, reason: 'no se encontró GLOSS_LEXICON');
@@ -72,7 +72,9 @@ void main() {
   });
 
   test('todo rol generado es uno que el backend sabe leer', () {
-    final fuente = File('aws/lambda_function.py').readAsStringSync();
+    // El mapping de roles vive en la Lambda; el lexicón, en su módulo.
+    final fuente = File('aws/lambda_function.py').readAsStringSync() +
+        File('aws/gloss_lexicon.py').readAsStringSync();
 
     // Tabla con la que el backend reparte cada glosa en su cubo de análisis.
     final tabla = RegExp(r'mapping = \{(.*?)\}', dotAll: true).firstMatch(fuente);
@@ -126,7 +128,7 @@ void main() {
         m.group(1)!: (rol: m.group(2)!, es: m.group(3)!)
     };
     
-    final servidor = File('aws/lambda_function.py').readAsStringSync();
+    final servidor = File('aws/gloss_lexicon.py').readAsStringSync();
     final bloque =
         RegExp(r'GLOSS_LEXICON = \{(.*?)\n\}', dotAll: true).firstMatch(servidor);
     final patronServidor = RegExp(r'"([A-ZÑ_0-9]+)":\s*\{(.*?)\}');
