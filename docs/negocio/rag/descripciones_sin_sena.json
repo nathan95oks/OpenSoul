@@ -1791,6 +1791,16 @@
     "LEY"
    ]
   },
+  "FRAUDE": {
+   "descripcion": "Engañar a una persona para quitarle dinero o cosas. También se llama estafa.",
+   "tipo": "concepto",
+   "revisada": false,
+   "incluir": true,
+   "lsb": [
+    "ENGAÑAR",
+    "DINERO"
+   ]
+  },
   "FUI": {
    "descripcion": "Forma de «ser» o «ir» en pasado. «Fui víctima»: era la víctima.",
    "tipo": "palabra_funcion",
@@ -1926,6 +1936,17 @@
   },
   "HIPOTECAR": {
    "ver": "HIPOTECA"
+  },
+  "HOMICIDIO": {
+   "descripcion": "Matar a una persona.",
+   "tipo": "concepto",
+   "revisada": false,
+   "incluir": true,
+   "lsb": [
+    "HOMBRE",
+    "MUJER",
+    "MATAR"
+   ]
   },
   "HUBO": {
    "descripcion": "Que algo pasó o existió antes. «¿Hubo violencia?»: «¿Pasó violencia?».",

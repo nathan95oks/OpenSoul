@@ -1531,6 +1531,16 @@
    "revisada": false,
    "ejemplo": "No sé si este documento formaliza la división."
   },
+  "FRAUDE": {
+   "descripcion": "Engañar a una persona para quitarle dinero o cosas. También se llama estafa.",
+   "descripcionLsb": [
+    "ENGAÑAR",
+    "DINERO"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
+  },
   "FUNCIONARIO": {
    "descripcion": "Persona que trabaja en una oficina del Estado y atiende a la gente.",
    "descripcionLsb": [
@@ -1675,6 +1685,17 @@
    "tipo": "concepto",
    "revisada": false,
    "ejemplo": "¿Conoce la matrícula del inmueble que se hipotecará?"
+  },
+  "HOMICIDIO": {
+   "descripcion": "Matar a una persona.",
+   "descripcionLsb": [
+    "HOMBRE",
+    "MUJER",
+    "MATAR"
+   ],
+   "tipo": "concepto",
+   "revisada": false,
+   "ejemplo": ""
   },
   "HUBO": {
    "descripcion": "Que algo pasó o existió antes. «¿Hubo violencia?»: «¿Pasó violencia?».",
