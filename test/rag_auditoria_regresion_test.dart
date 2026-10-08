@@ -99,6 +99,8 @@ void main() {
     test('«¿Trajo su cédula?» y «¿Tiene algún documento?»', () {
       expect(retriever.suggest('¿Trajo su cédula de identidad?'), isEmpty);
       expect(retriever.suggest('¿Tiene algún documento?'), isEmpty);
+      expect(retriever.suggest('¿Trae su carnet de identidad?'), isEmpty);
+      expect(retriever.suggest('¿Tiene testigos?'), isEmpty);
     });
 
     test('lo que identifica un trámite se sigue encontrando', () {
@@ -165,6 +167,91 @@ void main() {
     // Aunque en el recorrido dependiera de otra respuesta, se puede
     // contestar: el oyente ya la hizo.
     expect(route.presupposedQuestionIds, route.pathQuestionIds);
+  });
+
+  test('una coincidencia literal de SEGIP vence una pregunta genérica', () {
+    const texto = '¿Perdió su cédula de identidad?';
+    final pending = ConversationTurn(
+      route: const ConversationRoute(
+        type: ConversationRouteType.directQuestion,
+        targetContextId: 'denuncia_robo',
+        targetQuestionIds: ['Q.ROB.FALTA_CARNET'],
+      ),
+      message: SemanticMessage(
+        id: 'segip',
+        speaker: SpeakerRole.hearing,
+        source: MessageSource.text,
+        glosses: [],
+        text: texto,
+      ),
+      outputs: const GeneratedOutputs(text: texto),
+    );
+    final conversation = Conversation(
+      id: 'c-segip',
+      startedAt: DateTime(2026, 10, 8),
+      turns: [pending],
+    );
+    final route = ragTramiteRoute(
+      conversation,
+      pending,
+      pending.route!,
+      retriever,
+      graphText: const {'Q.ROB.FALTA_CARNET': 0.86},
+    );
+    expect(route?.targetContextId, 'tramite_segip_103');
+  });
+
+  test('el RAG no saca una pregunta del contexto activo de violencia', () {
+    const texto = '¿Está en peligro ahora mismo?';
+    final previous = ConversationTurn(
+      message: SemanticMessage(
+        id: 'respuesta',
+        speaker: SpeakerRole.deaf,
+        source: MessageSource.cards,
+        glosses: [],
+        text: 'Me pegaron.',
+        contextId: 'violencia',
+      ),
+      outputs: const GeneratedOutputs(text: 'Me pegaron.'),
+    );
+    final pending = ConversationTurn(
+      route: const ConversationRoute.noSafeRoute(),
+      message: SemanticMessage(
+        id: 'riesgo',
+        speaker: SpeakerRole.hearing,
+        source: MessageSource.text,
+        glosses: [],
+        text: texto,
+      ),
+      outputs: const GeneratedOutputs(text: texto),
+    );
+    final conversation = Conversation(
+      id: 'c-riesgo',
+      startedAt: DateTime(2026, 10, 8),
+      turns: [previous, pending],
+    );
+    expect(
+      ragTramiteRoute(
+        conversation,
+        pending,
+        pending.route!,
+        retriever,
+        graphText: const {'Q.RIE.AUXILIO': 0.5},
+        graphSupportsActiveContext: true,
+        remote: const [
+          RagSuggestion(
+            text: 'Sí, estoy en peligro ahora.',
+            glosses: ['SI', 'PELIGRO', 'AHORA'],
+            scenarioId: 'ESC-FIS-101',
+            institution: 'Ministerio Público',
+            procedure: 'Presentar denuncia y comunicar los hechos',
+            score: 0.99,
+            questionTurn: 6,
+          ),
+        ],
+      ),
+      isNull,
+    );
   });
 }
 

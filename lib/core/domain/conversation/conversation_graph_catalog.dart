@@ -96,6 +96,19 @@ class ConversationGraphCatalog {
 
     for (final n in replyNodes) {
       add(n.id, n.bankQuestion!, n.scope, n.phrase, fromNode: true);
+      // Las otras formas de hacerla, en el mismo ámbito: también vale para
+      // preguntas que no son paso de ningún recorrido («¿Viene a ver cómo va
+      // su denuncia?» es «¿Vino a consultar el estado de su caso?»).
+      final variants = bank.question(n.bankQuestion!)?.variants ?? const [];
+      for (var i = 0; i < variants.length; i++) {
+        add(
+          '${n.id}#$i',
+          n.bankQuestion!,
+          n.scope,
+          variants[i],
+          fromNode: false,
+        );
+      }
     }
     for (final contextId in _contexts.keys) {
       for (final step in bank.journey(contextId)!.steps) {
@@ -107,6 +120,17 @@ class ConversationGraphCatalog {
           step.formulation ?? bank.question(step.questionId)!.formulation,
           fromNode: false,
         );
+        // Las otras formas de hacerla que documenta el banco.
+        final variants = bank.question(step.questionId)!.variants;
+        for (var i = 0; i < variants.length; i++) {
+          add(
+            'bank:${step.questionId}@$contextId#$i',
+            step.questionId,
+            contextId,
+            variants[i],
+            fromNode: false,
+          );
+        }
       }
     }
     return out;

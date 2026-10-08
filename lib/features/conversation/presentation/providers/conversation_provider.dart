@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalog.dart';
+import 'package:lsb_legal_app/core/domain/conversation/graph_matcher.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
@@ -118,7 +119,35 @@ class ConversationNotifier extends Notifier<ConversationState> {
     if (ref.read(remoteRagProvider) == null) return;
     final retriever = ref.read(ragRetrieverProvider);
     final conversation = state.conversation;
-    if (ragTramiteRoute(conversation, turn, route, retriever) != null) return;
+    final graphText =
+        ref
+            .read(conversationGraphRouterProvider)
+            ?.matcher
+            .textScores(turn.message.text) ??
+        const <String, double>{};
+    final router = ref.read(conversationGraphRouterProvider);
+    final topic = topicBeforePending(conversation, turn);
+    final graphSupportsActiveContext =
+        topic != null &&
+        router?.catalog.hasContext(topic) == true &&
+        graphText.entries.any(
+          (entry) =>
+              entry.value >= GraphMatcher.weakMatch &&
+              (router!.catalog.isStepOf(topic, entry.key) ||
+                  router.catalog.journeysOf(entry.key).isEmpty),
+        );
+    if (graphSupportsActiveContext) return;
+    if (ragTramiteRoute(
+          conversation,
+          turn,
+          route,
+          retriever,
+          graphText: graphText,
+          graphSupportsActiveContext: graphSupportsActiveContext,
+        ) !=
+        null) {
+      return;
+    }
     unawaited(
       ref
           .read(

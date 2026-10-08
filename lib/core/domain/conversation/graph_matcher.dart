@@ -55,15 +55,49 @@ class GraphMatcher {
 
   GraphMatcher(this.catalog);
 
-  List<RequestedQuestion> match(SemanticTurn turn, {String? activeContextId}) =>
-      turn.source == SemanticTurnSource.backend
-      ? bySemantics(turn, activeContextId: activeContextId)
-      : byText(
-          turn.text,
-          activeContextId: activeContextId,
-          requestedSlots: requestedSlotsOf(turn),
-          contexts: contextsOf(turn, activeContextId: activeContextId),
-        );
+  List<RequestedQuestion> match(SemanticTurn turn, {String? activeContextId}) {
+    final requested = requestedSlotsOf(turn);
+    final contexts = contextsOf(turn, activeContextId: activeContextId);
+    if (turn.source != SemanticTurnSource.backend) {
+      return byText(
+        turn.text,
+        activeContextId: activeContextId,
+        requestedSlots: requested,
+        contexts: contexts,
+      );
+    }
+    final semantic = bySemantics(turn, activeContextId: activeContextId);
+    // La lectura del backend puede perder una cláusula al deletrear un
+    // concepto («denuncia») o conservar solo una de dos preguntas. Una forma
+    // documentada casi literal es evidencia verificable del propio banco.
+    final literal = [
+      for (final hit in byText(
+        turn.text,
+        activeContextId: activeContextId,
+        contexts: contexts,
+      ))
+        if (hit.score >= exactMatch) hit,
+    ];
+    // Una disyuntiva («¿Tiene fotos o videos?») es una sola pregunta: sus
+    // partes coinciden literal con «¿Tiene video?», pero no son dos preguntas.
+    if (literal.isEmpty || LsbGlossSemantics.isDisjunction(turn.text)) {
+      return semantic;
+    }
+    final clauses = _clauses(turn.text);
+    if (clauses.isNotEmpty && literal.length >= clauses.length) return literal;
+    final ids = {for (final hit in literal) hit.questionId};
+    final covered = {for (final hit in literal) ...hit.slots};
+    return [
+      ...literal,
+      for (final hit in semantic)
+        if (!ids.contains(hit.questionId) &&
+            (hit.slots.isEmpty ||
+                hit.slots.toSet().difference(covered).isNotEmpty))
+          hit,
+    ]..sort(
+      (a, b) => _position(turn.text, a).compareTo(_position(turn.text, b)),
+    );
+  }
 
   /// Lo que el oyente quiere saber: las ranuras de la lectura y las que dicen
   /// sus glosas interrogativas. Es lo primero que decide la ruta; el tema
@@ -264,8 +298,108 @@ class GraphMatcher {
     }
 
     _weighText(found, turn.text, slots);
+    // 6. El oyente dijo algo que ni el corpus ni la traducción entendieron
+    //    («¿Se burlan de usted por ser sorda?»: BURLAR no está en ninguna
+    //    pregunta; «maestro» salió deletreado). Una pregunta reconocida por el
+    //    resto («¿Usted es sorda?») no responde a eso: no es segura y decide
+    //    el desempate o un trámite documentado.
+    if (_notUnderstood(
+      turn,
+      content.difference(cues).difference(presupposed),
+    ).isNotEmpty) {
+      for (final f in found) {
+        if (f.shared.isNotEmpty &&
+            f.score >= strongMatch &&
+            f.score < exactMatch) {
+          f.score = strongMatch - 0.01;
+        }
+      }
+    }
+    // 7. Una pregunta abierta («¿Qué vio exactamente?») no se responde con
+    //    una de sí/no («¿Vio al ladrón?»).
+    if (LsbGlossSemantics.asksOpen(turn.text)) {
+      // Sin formulación LSB la pregunta no tiene interrogativo que leer: se
+      // mira su español («¿Qué vio o qué quiere declarar?» es abierta).
+      found.removeWhere(
+        (f) => f.slots.isEmpty && _polarFormulation(f.sig.entry.questionId),
+      );
+    }
+    //    Y una de sí/no («¿Tiene la denuncia de pérdida?») no abre una
+    //    abierta reconocida solo por contenido («¿Qué tiene?»): la persona
+    //    terminaría diciendo «Tengo fotos.».
+    if (LsbGlossSemantics.asksPolar(turn.text)) {
+      found.removeWhere(
+        (f) =>
+            !f.sig.polar &&
+            f.slots.isEmpty &&
+            f.shared.isNotEmpty &&
+            _openFormulation(f),
+      );
+    }
     _preferJourney(found, activeContextId, turn);
     return _settle(found, glosses);
+  }
+
+  /// Si la pregunta del banco es de sí o no, por su formulación en español
+  /// («¿Vio al ladrón?»; no «¿Era hombre o mujer?» ni «¿Qué vio?»).
+  bool _polarFormulation(String questionId) {
+    final f = catalog.bank.question(questionId)?.formulation;
+    return f != null && LsbGlossSemantics.asksPolar(f);
+  }
+
+  /// Si la pregunta del banco es abierta, por su formulación (no por una
+  /// variante: «¿Viene a ver cómo va su denuncia?» es de sí o no aunque
+  /// diga «cómo»).
+  bool _openFormulation(_Found f) => LsbGlossSemantics.asksOpen(
+    catalog.bank.question(f.sig.entry.questionId)?.formulation ??
+        f.sig.entry.phrase,
+  );
+
+  /// Verbos que casi nunca dicen de qué trata una pregunta («¿Qué pasó?»).
+  /// Que el banco no los use no es perder significado.
+  static const _genericVerbs = {
+    'PASAR',
+    'OCURRIR',
+    'SUCEDER',
+    'HACER',
+    'ESTAR',
+    'SER',
+    'IR',
+    'DECIR',
+  };
+
+  /// Palabras de contenido del español que nadie entendió: el corpus no las
+  /// usa en ninguna pregunta y la traducción tampoco las llevó a una seña
+  /// que el banco conozca (salieron deletreadas, o su seña no está en
+  /// ninguna pregunta). «Chorearon» no entra: llega como ROBAR.
+  Set<String> _notUnderstood(SemanticTurn turn, Set<String> content) {
+    final letters = StringBuffer();
+    final runs = <String>[];
+    for (final g in turn.entities) {
+      final plain = LsbGlossSemantics.spokenWord(g);
+      if (plain.length == 1) {
+        letters.write(plain);
+      } else if (letters.isNotEmpty) {
+        runs.add(letters.toString());
+        letters.clear();
+      }
+    }
+    if (letters.isNotEmpty) runs.add(letters.toString());
+    final unknownSign = content.any(
+      (g) => (_questionFrequency[g] ?? 0) == 0 && !_genericVerbs.contains(g),
+    );
+    return {
+      for (final word in RegExp(r'[\wáéíóúüñÁÉÍÓÚÜÑ]+').allMatches(turn.text))
+        for (final token in DialogueGraph.tokensOf(word.group(0)!))
+          if (_textWeight(token) == 0 &&
+              (unknownSign ||
+                  runs.any(
+                    (r) => r.contains(
+                      LsbGlossSemantics.spokenWord(word.group(0)!),
+                    ),
+                  )))
+            token,
+    };
   }
 
   /// Preguntas del recorrido activo que llevan [gloss] en su formulación.
@@ -639,7 +773,39 @@ class GraphMatcher {
   /// pedido: «¿Cuándo te robaron el celular?» se parece mucho a «¿Le robaron
   /// el celular?», pero pide una fecha. Lo pedido que ninguna frase cubre va
   /// a la pregunta que solo pide ese dato, preferentemente en [contexts].
+  /// Lo que pide [text] sin lectura del backend. Como con ella, una pregunta
+  /// abierta («¿Qué viene a realizar?») no se responde con una de sí/no.
   List<RequestedQuestion> byText(
+    String text, {
+    String? activeContextId,
+    Set<String> requestedSlots = const {},
+    Set<String> contexts = const {},
+  }) {
+    final found = _byText(
+      text,
+      activeContextId: activeContextId,
+      requestedSlots: requestedSlots,
+      contexts: contexts,
+    );
+    if (LsbGlossSemantics.asksOpen(text)) {
+      return [
+        for (final r in found)
+          if (r.slots.isNotEmpty || !_polarFormulation(r.questionId)) r,
+      ];
+    }
+    if (LsbGlossSemantics.asksPolar(text)) {
+      return [
+        for (final r in found)
+          if (!LsbGlossSemantics.asksOpen(
+            catalog.bank.question(r.questionId)?.formulation ?? '',
+          ))
+            r,
+      ];
+    }
+    return found;
+  }
+
+  List<RequestedQuestion> _byText(
     String text, {
     String? activeContextId,
     Iterable<String> requestedSlots = const [],
@@ -659,7 +825,8 @@ class GraphMatcher {
       // otra pregunta: «¿Tiene fotos, video…?» es una sola.
       if (whole != null &&
           match.questionId != whole.questionId &&
-          DialogueGraph.tokensOf(clause).every(explained.contains)) {
+          DialogueGraph.tokensOf(clause).every(explained.contains) &&
+          match.slots.toSet().difference(whole.slots.toSet()).isEmpty) {
         continue;
       }
       final previous = best[match.questionId];
@@ -685,11 +852,8 @@ class GraphMatcher {
         score: f.score,
       );
     }
-    return [
-      ...best.values.toList()
-        ..sort((a, b) => _position(text, a).compareTo(_position(text, b))),
-      ...bySlot.values,
-    ];
+    return [...best.values, ...bySlot.values]
+      ..sort((a, b) => _position(text, a).compareTo(_position(text, b)));
   }
 
   RequestedQuestion? _bestEntry(
@@ -699,8 +863,17 @@ class GraphMatcher {
   ) {
     final wanted = DialogueGraph.tokensOf(clause);
     if (wanted.isEmpty) return null;
+    final asksOpen = LsbGlossSemantics.asksOpen(clause);
+    final asksPolar = LsbGlossSemantics.asksPolar(clause);
     RequestedQuestion? best;
     for (final entry in catalog.replyEntries) {
+      if (asksOpen && _polarFormulation(entry.questionId)) continue;
+      if (asksPolar &&
+          LsbGlossSemantics.asksOpen(
+            catalog.bank.question(entry.questionId)?.formulation ?? '',
+          )) {
+        continue;
+      }
       final tokens = _entryTokens[entry.id]!;
       if (tokens.isEmpty) continue;
       final answerSlots = {
@@ -747,6 +920,13 @@ class GraphMatcher {
 
   int _position(String text, RequestedQuestion r) {
     final plain = plainText(text);
+    for (final match in RegExp(r'[a-z0-9ñ]+').allMatches(plain)) {
+      final key = match.group(0)!.toUpperCase();
+      final slot =
+          LsbGlossSemantics.spokenInterrogativeSlots[key] ??
+          LsbGlossSemantics.spokenHeadSlots[key];
+      if (slot != null && r.slots.contains(slot)) return match.start;
+    }
     var first = plain.length;
     for (final t in _entryTokens[r.nodeId] ?? const <String>{}) {
       final at = plain.indexOf(t);

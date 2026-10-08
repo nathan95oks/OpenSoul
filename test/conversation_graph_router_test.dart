@@ -198,6 +198,41 @@ void main() {
   });
 
   group('contexto entre turnos', () {
+    test('una pregunta contextual única no se pierde por décimas', () {
+      final danger = SemanticTurn.fromBackend(
+        turnId: 'peligro-ahora',
+        text: '¿Está en peligro ahora mismo?',
+        speechAct: SpeechAct.question,
+        backend: const BackendSemanticTurn(
+          version: 1,
+          intent: SemanticIntent.askInformation,
+        ),
+        glosses: const ['AHORA', 'PELIGRO', 'ESTAR'],
+      );
+      final r = router.routeDeterministic(danger, activeContextId: 'violencia');
+      expect(r.type, ConversationRouteType.directQuestion);
+      expect(r.targetContextId, 'violencia');
+      expect(r.targetQuestionIds, ['Q.RIE.AUXILIO']);
+    });
+
+    test('una pregunta polar no abre su continuación abierta', () {
+      final comprobante = SemanticTurn.fromBackend(
+        turnId: 'comprobante',
+        text: '¿Tiene el comprobante?',
+        speechAct: SpeechAct.question,
+        backend: const BackendSemanticTurn(
+          version: 1,
+          intent: SemanticIntent.askInformation,
+        ),
+        glosses: const ['COMPROBANTE', 'TENER'],
+      );
+      final r = router.routeDeterministic(
+        comprobante,
+        activeContextId: 'engano_dinero',
+      );
+      expect(r.targetQuestionIds, ['Q.DIN.COMPROBANTE']);
+    });
+
     test('11. con Denuncias activo, «¿Dónde ocurrió?» se queda en él', () {
       expect(
         route('donde_ocurrio', activeContextId: 'violencia').targetContextId,
