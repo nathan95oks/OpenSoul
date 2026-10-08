@@ -91,3 +91,8 @@ android/local.properties
 # Paquete de despliegue generado por aws/deploy/build_package.py
 /aws/deploy/lambda_function.zip
 /aws/deploy/.version-previa
+
+# QA de Conversación: lo que genera cada corrida
+/test/qa/reporte_*.json
+/test/qa/lambda_pendientes.json
+/test/qa/lambda_respuestas_redespliegue.json
