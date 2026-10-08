@@ -13,13 +13,23 @@ Reemplaza a `QA_CONVERSACION_CONTINUACION_CODEX_2026-10-08.md` (ver §2).
 | Medición | Turnos con falla |
 |---|---|
 | Línea base, antes de corregir (`reporte_rag.json`) | 33 de 85 |
-| Hoy, con las Lambdas desplegadas | 28 de 95 |
-| Tras redesplegar las dos Lambdas (simulado, §6) | **23 de 95** |
+| Lambdas anteriores, con el cliente corregido | 28 de 95 |
+| Redespliegue simulado (§6) | 23 de 95 |
+| **Lambdas nuevas desplegadas, respuestas reales** | **19 de 95** |
 
 Son 29 conversaciones (C01–C29); C26–C29 son nuevas y reproducen los cuatro
-problemas reportados. Los cuatro quedan corregidos. Los 23 turnos que siguen
-fallando no se tapan con reglas por frase: son preguntas que el banco no tiene
-(§5), con su causa.
+problemas reportados. Los cuatro quedan corregidos, ya verificados con las
+Lambdas nuevas desplegadas. Los 19 turnos que siguen fallando no se tapan
+con reglas por frase: son preguntas que el banco no tiene (§5), con su causa.
+
+El desempate con Bedrock ya funciona en producción. De 19 consultas eligió
+una ruta en 8 y resolvió «¿Está herida? ¿Le duele algo?», «¿Necesita que la
+llevemos al médico?», «¿Necesita atención médica?» y «¿Puede leer lo que le
+escribo?». Cuando la pregunta correcta no está entre las candidatas, a veces
+propone una parecida pero equivocada; por ejemplo, para «¿A qué número la
+podemos llamar?» eligió el número del receptor del dinero. La app la rechaza:
+la propuesta pasa por el mismo validador que las rutas deterministas, y queda
+lo seguro (no abrir nada).
 
 Pruebas: Flutter 1143 ✓ · `flutter analyze` sin observaciones · aws/tests 450 ✓
 · tool/tests 132 ✓ · `build_rag_corpus.py --check` ✓.
@@ -48,7 +58,7 @@ mano, y no generaliza: «¿Tiene la caja o la factura?» ya no entraba.
 Además, el desempate con el modelo (`route`) **nunca funcionó en producción**:
 todas sus respuestas grabadas son `model_error`. `invoke_bedrock_json` leía
 solo la primera línea de la respuesta de Nova y el JSON en varias líneas no se
-podía leer. Corregido en `aws/lambda_function.py` (falta desplegar).
+podía leer. Corregido en `aws/lambda_function.py` y desplegado.
 
 ## 3. Los cuatro problemas reportados
 
@@ -57,7 +67,7 @@ podía leer. Corregido en `aws/lambda_function.py` (falta desplegar).
 **Causa:** el catálogo del avatar solo trae BUENOS_DÍAS y el modelo convertía
 cualquier saludo en él. **Corrección** (Lambda Texto→LSB,
 `enforce_spoken_form_fidelity`): el saludo dicho manda; BUENAS_TARDES y
-BUENAS_NOCHES son señas del Módulo 1 y no se deletrean. **Requiere redesplegar.**
+BUENAS_NOCHES son señas del Módulo 1 y no se deletrean. Desplegado.
 
 ```
 Funcionario: Buenas tardes, ¿en qué le puedo ayudar?
@@ -136,10 +146,10 @@ Todas son reglas generales, sin frases escritas a mano.
 1. **«¿Quiere denunciar…?» se traducía QUIÉN DENUNCIAR**, y el sistema
    preguntaba «¿Conoce a la persona involucrada?». La Lambda cambia QUIÉN por
    QUERER cuando el español dice «quiere» y no «quién». También descarta las
-   ranuras de interrogativos que nadie dijo. *Requiere redesplegar.*
+   ranuras de interrogativos que nadie dijo. *Desplegado.*
 2. **PREGUNTA deletreada al final de cada pregunta** (P-R-E-G-U-N-T-A en el
    avatar). En LSB la pregunta se marca con la cara. Se retira si el oyente
-   no dijo «pregunta». *Requiere redesplegar.*
+   no dijo «pregunta». *Desplegado.*
 3. **Apertura de ventanilla.** «¿En qué le puedo ayudar?» y «Hola, ¿qué le
    pasó? Cuénteme…» abren el selector de motivo. Antes no abrían nada o
    abrían una calificación de discapacidad contestada con «Entendido.». Un
@@ -165,7 +175,7 @@ Todas son reglas generales, sin frases escritas a mano.
    Denunciar violencia). Se usan las pistas lingüísticas de la Lambda
    (`SITUATION_CUES`: `fraud`, `violaci`). **Homicidio** no tiene contexto
    propio: abre Denuncias y elige la persona, sin inventar uno.
-   *Requiere redesplegar.*
+   *Desplegado.*
 9. **Desempate con el modelo.** El cliente ya no manda candidatas que la
    Lambda no conoce (antes ese 400 rechazaba el pedido entero).
 
@@ -173,14 +183,14 @@ Se probó y se descartó una pista `acos` → violencia para «acoso». Abría e
 recorrido general de violencia («Me pegaron.») en lugar del trámite de acoso,
 así que no se dejó.
 
-## 5. Lo que todavía falla (23 turnos) y por qué
+## 5. Lo que todavía falla (19 turnos) y por qué
 
 Ninguno se arregla bien con una regla por frase. Se indica qué haría falta.
 
 | Turnos | Causa | Qué haría falta |
 |---|---|---|
-| C02 «¿Está en peligro ahora mismo?», «¿Está herida? ¿Le duele algo?», «¿Esto ya le pasó antes?», «¿Necesita que la llevemos al médico?»; C15 «¿Necesita atención médica?» | El recorrido de violencia no tiene esas preguntas con esas palabras; PELIGRO, MÉDICO y ANTES salen deletreadas y no aportan significado | Agregar al banco de violencia frases del corpus para riesgo y salud, o señas para PELIGRO/MÉDICO |
-| C03 «¿A qué número la podemos llamar?», C04 «¿Puede leer lo que le escribo?» | Coincidencia débil: NÚMERO deletreado; LEER coincide con dos preguntas | Variantes en el banco de identificación y accesibilidad |
+| C02 «¿Está en peligro ahora mismo?», «¿Esto ya le pasó antes?» | Las preguntas correctas (Q.RIE.AUXILIO con esas palabras, Q.VIO.FRECUENCIA) no llegan a ser candidatas; PELIGRO y ANTES salen deletreadas | Agregar al banco de violencia esas frases del corpus, o señas para PELIGRO |
+| C03 «¿A qué número la podemos llamar?» | NÚMERO deletreado; Q.ID.TELEFONO_PROPIO no queda entre las candidatas | Variante en el banco de identificación |
 | C05 cédula perdida, C06 certificado de nacimiento | El grafo tiene «¿Le falta su carnet?» y «¿Tiene un certificado?» (robo, testimonio) y ganan a los trámites SEGIP/SERECI | Que una pregunta de trámite de otra área gane cuando nombra un documento propio de ese trámite (NACIMIENTO) |
 | C09 «¿Habló con el maestro?», C10 «¿Tiene una foto de ella?» | El trámite (DNA, trata) no tiene esa pregunta | Agregar el turno al escenario, con palabras existentes o azules con descripción |
 | C11 «¿Tiene el comprobante?» | Abre «¿Qué comprobante tiene?» en vez de «¿Tiene comprobante?» (COMPROBANTE deletreado) | Seña o equivalencia para COMPROBANTE |
@@ -200,10 +210,11 @@ No se agregaron escenarios nuevos: los que faltan arriba necesitan palabras
 que todavía no tienen seña y conviene revisarlos con la comunidad antes de
 escribirlos.
 
-## 6. Despliegue pendiente
+## 6. Despliegue
 
-Hay que desplegar las **dos** Lambdas (mismo procedimiento que la vez
-anterior, con zip):
+**Hecho el 2026-10-08.** Smoke check contra el endpoint: 8/8. Las respuestas
+de `test/qa/lambda_respuestas.json` se volvieron a grabar contra lo
+desplegado (Texto→LSB y `route`). Se desplegaron las **dos** Lambdas:
 
 1. `aws/lambda_text_to_lsb.py` (Texto→LSB): saludo dicho, marca PREGUNTA,
    QUIÉN por «quiere», ranuras de interrogativos dichos, pistas `fraud` y
@@ -212,7 +223,7 @@ anterior, con zip):
 2. `aws/lambda_function.py` (LSB→Texto/Audio): lectura completa del JSON de
    Nova en el desempate `route`.
 
-Después, para medir con la Lambda real:
+Para volver a medir con la Lambda real:
 
 ```
 # borrar de test/qa/lambda_respuestas.json las entradas "texto/…" y las
