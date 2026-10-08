@@ -4,7 +4,7 @@ Generado por `tool/build_rag_corpus.py` desde el corpus RAG. No editar a mano.
 
 Palabras de los trámites de Cochabamba que no tienen seña en el catálogo del avatar. En la app se ven en azul claro («seña a incorporar») y el avatar dice «En espera para su avatar». Al incorporar una seña (catálogo + animación) y regenerar el corpus, deja de verse en azul en todas sus tarjetas.
 
-**298 palabras · 1827 usos.** Las siglas (NUREJ, CRPVA…) no están: en LSB se deletrean.
+**298 palabras · 1831 usos.** Las siglas (NUREJ, CRPVA…) no están: en LSB se deletrean.
 
 ## Ya resueltas con una seña existente
 
@@ -258,7 +258,7 @@ La primera columna es lo que dejó la traducción automática, a veces mal escri
 | 5 | CONSULTAR | 52 | DDRR, DISC, DNA, FELCC, FELCV, FIS, GAM, IMP, NOT, OJ, SEGIP, SEPDAVI, SEPDEP, SERECI | Sí, quiero consultar antes de comprar la casa. |  |
 | 6 | MATRICULA | 48 | DDRR | ¿Tiene el número de matrícula de la casa? |  |
 | 7 | FOLIO REAL | 46 | DDRR | ¿Puedo solicitar el Folio Real actualizado de mi casa? |  |
-| 8 | LSB | 42 | DDRR, DISC, DNA, FELCC, FELCV, FIS, GAM, LSB, NOT, OJ, SEGIP, SEPDAVI, SEPDEP, SERECI, SLIM | ¿Necesita un intérprete de Lengua de Señas Boliviana? |  |
+| 8 | LSB | 43 | DDRR, DISC, DNA, FELCC, FELCV, FIS, GAM, LSB, NOT, OJ, SEGIP, SEPDAVI, SEPDEP, SERECI, SLIM | ¿Necesita un intérprete de Lengua de Señas Boliviana? |  |
 | 9 | OCURRIR | 42 | FELCC, FIS | ¿Cuándo ocurrió el hecho? |  |
 | 10 | RELACIONADO | 41 | DDRR, DISC, DNA, FELCC, FIS, GAM, IMP, LSB, NOT, OJ, SEGIP, SERECI, SLIM | ¿Trajo algún documento relacionado con su solicitud? |  |
 | 11 | ESCRITURA | 36 | DDRR, NOT | ¿Trajo la escritura pública del inmueble? |  |
@@ -297,24 +297,24 @@ La primera columna es lo que dejó la traducción automática, a veces mal escri
 | 44 | CONTACTO | 10 | FELCC, LSB | ¿Tiene un contacto seguro para recibir información? |  |
 | 45 | DEBO | 10 | DDRR, DISC, IMP, SEGIP | ¿Qué documentos debo presentar para solicitar el certificado alodial? |  |
 | 46 | INFORMACION | 10 | DDRR, FELCC, FIS, LSB, OJ | ¿Puedo pedir información rápida de esta casa? |  |
-| 47 | OBSERVACION | 10 | DDRR, GAM | No sé cuál documento contiene la observación. |  |
-| 48 | PLANO | 10 | DDRR, GAM | ¿Tiene un plano de la división del inmueble? |  |
-| 49 | PRIMERO | 10 | DISC, DNA, FELCC, FELCV, IMP, NOT, SEGIP, SERECI, SLIM | Consulte primero el monto actualizado antes de pagar. |  |
-| 50 | VICTIMA | 10 | SEPDAVI, SEPDEP | Soy víctima y necesito asistencia. |  |
-| 51 | CANCELAR | 9 | DDRR | No, quiero cancelar una hipoteca registrada. |  |
-| 52 | INCLUIR | 9 | DDRR, FIS, LSB, NOT, SERECI | No sé si el documento incluye ese inmueble. |  |
-| 53 | REPRESENTAR | 9 | DDRR, NOT, SEPDEP, SERECI | ¿Tiene un poder para representar a esa persona? |  |
-| 54 | COPIA | 8 | DDRR, FELCC, IMP, SEPDAVI, SERECI | No sé si esta copia de mi cédula sirve. | no es FOTOCOPIA (revisado) |
-| 55 | FIGURA | 8 | DDRR, SEPDAVI | ¿Usted figura como titular en el documento? |  |
-| 56 | FIRMAR | 8 | IMP, LSB, NOT | ¿Comprendió el documento antes de firmar? |  |
-| 57 | INGRESO | 8 | DDRR | ¿Tiene el comprobante de ingreso del trámite anterior? |  |
-| 58 | REGULARIZACION | 8 | DDRR | ¿Cómo consulto el registro de mi regularización de propiedad? |  |
-| 59 | SEÑALAR | 8 | OJ, SEPDEP | ¿Tiene una audiencia señalada? |  |
-| 60 | ACREDITAR | 7 | DDRR, NOT, SERECI | No sé si este documento acredita la aceptación. |  |
-| 61 | ANTICIPO | 7 | DDRR | ¿La escritura indica que es un anticipo de legítima? |  |
-| 62 | CATASTRAL | 7 | DDRR, IMP | ¿Tiene un documento catastral de la casa? |  |
-| 63 | DEBER | 7 | DDRR, FIS, IMP, LSB | No sé qué alcance debe tener el certificado. |  |
-| 64 | NACIMIENTO | 7 | SEGIP, SERECI | ¿Tiene un certificado de nacimiento anterior? |  |
+| 47 | NACIMIENTO | 10 | SEGIP, SERECI | ¿Tiene un certificado de nacimiento anterior? |  |
+| 48 | OBSERVACION | 10 | DDRR, GAM | No sé cuál documento contiene la observación. |  |
+| 49 | PLANO | 10 | DDRR, GAM | ¿Tiene un plano de la división del inmueble? |  |
+| 50 | PRIMERO | 10 | DISC, DNA, FELCC, FELCV, IMP, NOT, SEGIP, SERECI, SLIM | Consulte primero el monto actualizado antes de pagar. |  |
+| 51 | VICTIMA | 10 | SEPDAVI, SEPDEP | Soy víctima y necesito asistencia. |  |
+| 52 | CANCELAR | 9 | DDRR | No, quiero cancelar una hipoteca registrada. |  |
+| 53 | INCLUIR | 9 | DDRR, FIS, LSB, NOT, SERECI | No sé si el documento incluye ese inmueble. |  |
+| 54 | REPRESENTAR | 9 | DDRR, NOT, SEPDEP, SERECI | ¿Tiene un poder para representar a esa persona? |  |
+| 55 | COPIA | 8 | DDRR, FELCC, IMP, SEPDAVI, SERECI | No sé si esta copia de mi cédula sirve. | no es FOTOCOPIA (revisado) |
+| 56 | FIGURA | 8 | DDRR, SEPDAVI | ¿Usted figura como titular en el documento? |  |
+| 57 | FIRMAR | 8 | IMP, LSB, NOT | ¿Comprendió el documento antes de firmar? |  |
+| 58 | INGRESO | 8 | DDRR | ¿Tiene el comprobante de ingreso del trámite anterior? |  |
+| 59 | REGULARIZACION | 8 | DDRR | ¿Cómo consulto el registro de mi regularización de propiedad? |  |
+| 60 | SEÑALAR | 8 | OJ, SEPDEP | ¿Tiene una audiencia señalada? |  |
+| 61 | ACREDITAR | 7 | DDRR, NOT, SERECI | No sé si este documento acredita la aceptación. |  |
+| 62 | ANTICIPO | 7 | DDRR | ¿La escritura indica que es un anticipo de legítima? |  |
+| 63 | CATASTRAL | 7 | DDRR, IMP | ¿Tiene un documento catastral de la casa? |  |
+| 64 | DEBER | 7 | DDRR, FIS, IMP, LSB | No sé qué alcance debe tener el certificado. |  |
 | 65 | NEGAR | 7 | LSB | ¿Le negaron atención por su forma de comunicarse? |  |
 | 66 | SEGURO | 7 | FELCC, FELCV, LSB | Sí, tengo un contacto seguro. |  |
 | 67 | SERVIR | 7 | DDRR, NOT, SEPDAVI | No sé si esta copia de mi cédula sirve. | no es AYUDAR (revisado) |

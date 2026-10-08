@@ -36,9 +36,11 @@ import corpus_dialogue as CD  # noqa: E402
 # Q.HEC.PERDIDA_TIPO (PERDER es «Perdí algo») y preguntar «¿Quién escapó?»
 # enseguida; y el 2026-09-29 al declarar como datos del banco las `ranuras`
 # de cinco puertas y la tabla `zonasOyente` (sin ellas la huella es la
-# anterior, 5796c252…). Si cambia, algo distinto de la formulación cambió:
-# preguntas, opciones, estados, frases o recorridos.
-HUELLA_SIN_FORMULACION = "f3c8df3e2eb2052ffbfeba7d90ae78cda3193808f18870cb24af0c97a9be3d40"
+# anterior, 5796c252…); y el 2026-10-08 al añadir `variantes` (otras formas
+# reales de hacer la misma pregunta, del QA de Conversación; sin ellas la
+# huella es la anterior, f3c8df3e…). Si cambia, algo distinto de la
+# formulación cambió: preguntas, opciones, estados, frases o recorridos.
+HUELLA_SIN_FORMULACION = "e1364f597a225a6b65032005d1bdb75b83300618360296f9c7d750a65d4c8062"
 
 
 class GramaticaLsb(unittest.TestCase):

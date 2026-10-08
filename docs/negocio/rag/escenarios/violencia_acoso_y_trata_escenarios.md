@@ -48,7 +48,7 @@
 - **Respuestas:** «Sí, otros niños le pegan.» · «No, no le pegan.» · «No sé si le pegan.»
 - **Turno 8 (Funcionario):** «¿Le pegan siempre?» · «¿Es todos los días?»
 - **Respuestas:** «Sí, todos los días.» · «No, no siempre.» · «No lo sé.»
-- **Turno 10 (Funcionario):** «¿Avisó a la escuela?» · «¿El maestro sabe lo que pasa?»
+- **Turno 10 (Funcionario):** «¿Avisó a la escuela?» · «¿El maestro sabe lo que pasa?» · «¿Habló con el maestro?»
 - **Respuestas:** «Sí, hablé con el maestro, pero no ayudó.» · «No, todavía no hablé con la escuela.» · «No sé con quién hablar en la escuela.»
 - **Turno 12 (Funcionario):** «¿Tiene pruebas de lo que pasa?» · «¿Guardó videos o fotos?»
 - **Respuestas:** «Sí, tengo videos en mi celular.» · «No, no tengo videos.» · «No sé si tengo videos.»
@@ -179,7 +179,7 @@
 - **Respuestas:** «Sí, necesito ir al hospital.» · «No, no necesito atención médica.» · «No sé si necesito un médico.»
 - **Turno 10 (Funcionario):** «¿La busca siempre?» · «¿Es todos los días?»
 - **Respuestas:** «Sí, todos los días, y tengo miedo.» · «No, no siempre.» · «No lo sé.»
-- **Turno 12 (Funcionario):** «Si es su pareja, la denuncia corresponde a la FELCV.»
+- **Turno 12 (Funcionario):** «Si es su pareja, la denuncia corresponde a la FELCV.» · «Para violencia tiene que ir a la FELCV.» · «La violencia la atiende la FELCV.»
 - **Respuestas:** «Quiero ir a la FELCV.» · «¿Dónde está la FELCV?»
 
 ### Ramificaciones
@@ -213,7 +213,7 @@
 
 ### Variantes
 
-- **Turno 2 (Funcionario):** «¿Es un servidor público?» · «¿Pasó en una oficina pública?»
+- **Turno 2 (Funcionario):** «¿Es un servidor público?» · «¿Pasó en una oficina pública?» · «¿Un funcionario lo discriminó por ser sordo?» · «¿Un funcionario la discriminó por ser sorda?»
 - **Respuestas:** «Sí, es un funcionario de una oficina.» · «No, no es un funcionario.» · «No sé si es un funcionario.»
 - **Turno 4 (Funcionario):** «¿Se ríen de usted?» · «¿Se burlan de sus señas?»
 - **Respuestas:** «Sí, se burlan de mí porque soy sordo.» · «No, no se burlan de mí.» · «No sé si se burlan.»
@@ -268,7 +268,7 @@
 - **Respuestas:** «Sí, creo que la llevaron lejos.» · «No, creo que está cerca.» · «No sé dónde la llevaron.»
 - **Turno 10 (Funcionario):** «¿Es menor de edad?» · «¿Es una niña o una adolescente?»
 - **Respuestas:** «Sí, es adolescente.» · «No, es una persona adulta.» · «No sé su edad.»
-- **Turno 12 (Funcionario):** «¿Tiene fotos de la persona?» · «¿Puede mostrar una foto suya?»
+- **Turno 12 (Funcionario):** «¿Tiene fotos de la persona?» · «¿Puede mostrar una foto suya?» · «¿Tiene una foto de ella?» · «¿Tiene una foto de él?»
 - **Respuestas:** «Sí, tengo fotos en mi celular.» · «No, no tengo fotos.» · «No sé si tengo fotos.»
 - **Turno 14 (Funcionario):** «La FELCC atiende los delitos.»
 - **Respuestas:** «Quiero que la busquen rápido.» · «¿Qué necesitan saber?»

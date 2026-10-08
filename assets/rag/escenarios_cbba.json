@@ -4,6 +4,7 @@
   "docs/negocio/rag/escenarios/derechos_reales_escenarios.md",
   "docs/negocio/rag/escenarios/opensoul_flujos_tramites_cochabamba_escenarios.md",
   "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+  "docs/negocio/rag/escenarios/ventanilla_escenarios.md",
   "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md"
  ],
  "fuentes": {
@@ -29684,7 +29685,9 @@
      "turno": 2,
      "preguntas": [
       "¿Piensa que el objeto se extravió?",
-      "¿Puede haber perdido el objeto?"
+      "¿Puede haber perdido el objeto?",
+      "¿Perdió su cédula de identidad?",
+      "¿Perdió su carnet?"
      ],
      "respuestas": [
       {
@@ -29764,7 +29767,8 @@
      "turno": 6,
      "preguntas": [
       "¿Ya denunció lo ocurrido?",
-      "¿Este hecho ya fue denunciado?"
+      "¿Este hecho ya fue denunciado?",
+      "¿Tiene la denuncia de pérdida?"
      ],
      "respuestas": [
       {
@@ -30336,7 +30340,8 @@
      "turno": 2,
      "preguntas": [
       "¿Conserva su certificado de nacimiento?",
-      "¿Trajo un certificado anterior de nacimiento?"
+      "¿Trajo un certificado anterior de nacimiento?",
+      "¿Trajo su certificado de nacimiento?"
      ],
      "respuestas": [
       {
@@ -43942,6 +43947,294 @@
    ]
   },
   {
+   "id": "ESC-SERECI-201",
+   "archivo": "docs/negocio/rag/escenarios/ventanilla_escenarios.md",
+   "titulo": "Pedir un certificado de nacimiento",
+   "institucion": "SERECI – Cochabamba",
+   "tramite": "Pedir un certificado de nacimiento",
+   "tipo": "mixto",
+   "inicia": "funcionario",
+   "situacion": "El funcionario de SERECI recibe a una persona sorda, le pregunta si viene por un certificado de nacimiento y para quién es.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "funcionario",
+     "texto": "¿Viene por un certificado de nacimiento?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERTIFICADO",
+      "SENA_PENDIENTE:NACIMIENTO",
+      "VENIR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "sordo",
+     "texto": "Sí, necesito un certificado de nacimiento.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "CERTIFICADO",
+      "SENA_PENDIENTE:NACIMIENTO"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "funcionario",
+     "texto": "¿El certificado es suyo?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERTIFICADO",
+      "SUYO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "sordo",
+     "texto": "Sí, es mi certificado.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "YO",
+      "CERTIFICADO"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "funcionario",
+     "texto": "¿Trajo su cédula de identidad?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TU",
+      "PAPEL",
+      "IDENTIDAD",
+      "TRAER"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "sordo",
+     "texto": "Sí, traje mi cédula.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "TRAER",
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Necesita un intérprete de Lengua de Señas Boliviana?",
+     "proposito": "Accesibilidad",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NECESITAR",
+      "INTERPRETE",
+      "SENA_PENDIENTE:LSB"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, necesito un intérprete de LSB.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "INTERPRETE"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 1,
+     "preguntas": [
+      "¿Necesita un certificado de nacimiento?",
+      "¿Viene a sacar un certificado de nacimiento?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito un certificado de nacimiento.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "CERTIFICADO",
+        "SENA_PENDIENTE:NACIMIENTO"
+       ]
+      },
+      {
+       "texto": "No, vengo por otro trámite.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TRAMITE",
+        "DIFERENTE",
+        "VENIR"
+       ]
+      },
+      {
+       "texto": "No sé qué trámite necesito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "TRAMITE",
+        "NECESITAR",
+        "QUE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 3,
+     "preguntas": [
+      "¿El certificado es suyo o de otra persona?",
+      "¿El certificado es para usted?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, es mi certificado.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "YO",
+        "CERTIFICADO"
+       ]
+      },
+      {
+       "texto": "No, es el certificado de mi hijo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CERTIFICADO",
+        "HIJO",
+        "MIO"
+       ]
+      },
+      {
+       "texto": "No sé.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 5,
+     "preguntas": [
+      "¿Tiene su cédula de identidad?",
+      "¿Trae su carnet de identidad?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, traje mi cédula.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TRAER",
+        "PAPEL",
+        "IDENTIDAD"
+       ]
+      },
+      {
+       "texto": "No, no traje mi cédula.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "YO",
+        "PAPEL",
+        "IDENTIDAD",
+        "TRAER"
+       ]
+      },
+      {
+       "texto": "No sé si la traje.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "TRAER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Requiere interpretación en LSB?",
+      "¿Necesita apoyo de un intérprete de LSB?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No, no necesito un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No sé cómo pedir un intérprete.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PEDIR",
+        "INTERPRETE"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "ESC-DNA-201",
    "archivo": "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md",
    "titulo": "Bullying en la escuela",
@@ -44366,7 +44659,8 @@
      "turno": 10,
      "preguntas": [
       "¿Avisó a la escuela?",
-      "¿El maestro sabe lo que pasa?"
+      "¿El maestro sabe lo que pasa?",
+      "¿Habló con el maestro?"
      ],
      "respuestas": [
       {
@@ -45864,7 +46158,9 @@
     {
      "turno": 12,
      "preguntas": [
-      "Si es su pareja, la denuncia corresponde a la FELCV."
+      "Si es su pareja, la denuncia corresponde a la FELCV.",
+      "Para violencia tiene que ir a la FELCV.",
+      "La violencia la atiende la FELCV."
      ],
      "respuestas": [
       {
@@ -46122,7 +46418,9 @@
      "turno": 2,
      "preguntas": [
       "¿Es un servidor público?",
-      "¿Pasó en una oficina pública?"
+      "¿Pasó en una oficina pública?",
+      "¿Un funcionario lo discriminó por ser sordo?",
+      "¿Un funcionario la discriminó por ser sorda?"
      ],
      "respuestas": [
       {
@@ -46796,7 +47094,9 @@
      "turno": 12,
      "preguntas": [
       "¿Tiene fotos de la persona?",
-      "¿Puede mostrar una foto suya?"
+      "¿Puede mostrar una foto suya?",
+      "¿Tiene una foto de ella?",
+      "¿Tiene una foto de él?"
      ],
      "respuestas": [
       {

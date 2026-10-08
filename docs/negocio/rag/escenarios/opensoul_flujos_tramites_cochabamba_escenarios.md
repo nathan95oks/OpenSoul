@@ -2328,11 +2328,11 @@ Nota narrativa del documento (no crea ramificaciones): Con cédula anterior: con
 
 ### Variantes
 
-- **Turno 2 (Funcionario):** «¿Piensa que el objeto se extravió?» · «¿Puede haber perdido el objeto?»
+- **Turno 2 (Funcionario):** «¿Piensa que el objeto se extravió?» · «¿Puede haber perdido el objeto?» · «¿Perdió su cédula de identidad?» · «¿Perdió su carnet?»
 - **Respuestas:** «Sí, creo que lo perdí.» · «No, no creo haberlo perdido.» · «No sé si lo perdí o lo robaron.»
 - **Turno 4 (Funcionario):** «¿Tiene documentos de su solicitud?» · «¿Trae algún papel sobre este trámite?»
 - **Respuestas:** «Sí, traje documentos.» · «No, no traje documentos.» · «No sé qué documento corresponde.»
-- **Turno 6 (Funcionario):** «¿Ya denunció lo ocurrido?» · «¿Este hecho ya fue denunciado?»
+- **Turno 6 (Funcionario):** «¿Ya denunció lo ocurrido?» · «¿Este hecho ya fue denunciado?» · «¿Tiene la denuncia de pérdida?»
 - **Respuestas:** «Sí, ya presenté una denuncia.» · «No, todavía no presenté una denuncia.» · «No sé si existe una denuncia.»
 - **Turno 8 (Funcionario):** «¿Requiere interpretación en LSB?» · «¿Necesita apoyo de un intérprete de LSB?»
 - **Respuestas:** «Sí, necesito un intérprete de LSB.» · «No, no necesito un intérprete.» · «No sé cómo solicitar un intérprete.»
@@ -2408,7 +2408,7 @@ Nota narrativa del documento (no crea ramificaciones): Identificar dato incorrec
 
 ### Variantes
 
-- **Turno 2 (Funcionario):** «¿Conserva su certificado de nacimiento?» · «¿Trajo un certificado anterior de nacimiento?»
+- **Turno 2 (Funcionario):** «¿Conserva su certificado de nacimiento?» · «¿Trajo un certificado anterior de nacimiento?» · «¿Trajo su certificado de nacimiento?»
 - **Respuestas:** «Sí, tengo mi certificado.» · «No, no tengo mi certificado.» · «No sé dónde está mi certificado.»
 - **Turno 4 (Funcionario):** «¿Algún dato del documento está equivocado?» · «¿Necesita corregir información personal?»
 - **Respuestas:** «Sí, encontré un error.» · «No, no encontré un error.» · «No sé si el dato está equivocado.»

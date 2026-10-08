@@ -2816,7 +2816,9 @@
    "variantes": [
     "¿Tiene factura o papel del banco?",
     "¿Tiene el papel del banco o factura?",
-    "¿Conserva el comprobante bancario?"
+    "¿Conserva el comprobante bancario?",
+    "¿Tiene el comprobante?",
+    "¿Tiene algún recibo?"
    ]
   },
   {
@@ -5276,7 +5278,12 @@
      "polar": true
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿Trajo su cédula?",
+    "¿Trae su cédula?",
+    "¿Trajo su carnet de identidad?",
+    "¿Trae su carnet de identidad?"
+   ]
   },
   {
    "acto": "pregunta_abierta",
@@ -5397,7 +5404,10 @@
      "sinAproximado": true
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿Cuántos años tiene?",
+    "¿Qué edad tiene usted?"
+   ]
   },
   {
    "acto": "pregunta_abierta",
@@ -5441,7 +5451,10 @@
      "id": "nombre"
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿Cuál es su nombre?",
+    "¿Cómo se llama?"
+   ]
   },
   {
    "acto": "pregunta_abierta",
@@ -5484,7 +5497,12 @@
      "id": "telefono"
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿A qué número la podemos llamar?",
+    "¿A qué número le podemos llamar?",
+    "¿Me da su número de celular?",
+    "¿Cuál es su número de teléfono?"
+   ]
   },
   {
    "acto": "pregunta_polar",
@@ -9382,7 +9400,11 @@
      "polar": true
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿Viene a ver cómo va su denuncia?",
+    "¿Quiere saber cómo va su caso?",
+    "¿Viene a preguntar por su denuncia?"
+   ]
   },
   {
    "acto": "pregunta_abierta",
@@ -10456,7 +10478,10 @@
      "polar": true
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿Alguien vio lo que pasó?",
+    "¿Alguien vio lo que ocurrió?"
+   ]
   },
   {
    "acto": "pregunta_polar",
@@ -10515,7 +10540,11 @@
      "polar": true
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿Podría declarar como testigo?",
+    "¿Puede declarar como testigo?",
+    "¿Puede contar lo que vio?"
+   ]
   },
   {
    "acto": "pregunta_abierta",
@@ -10613,7 +10642,11 @@
    "reglas": [
     "Cada opción introduce un contenido que se puede redactar; NARRAR, EXPLICAR, EMPEZAR y TOTAL no se ofrecen solos."
    ],
-   "variantes": []
+   "variantes": [
+    "¿Qué vio exactamente?",
+    "¿Qué vio?",
+    "¿Qué quiere declarar?"
+   ]
   },
   {
    "acto": "pregunta_polar",
@@ -11340,7 +11373,12 @@
      "salida": true
     }
    ],
-   "variantes": []
+   "variantes": [
+    "¿Esto ya le pasó antes?",
+    "¿Le había pasado antes?",
+    "¿Es la primera vez que le pasa?",
+    "¿Le pasa seguido?"
+   ]
   },
   {
    "acto": "pregunta_abierta",

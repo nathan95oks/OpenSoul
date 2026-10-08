@@ -1474,6 +1474,74 @@
   ],
   "traducido": "2026-09-27"
  },
+ "Es de otra persona.": {
+  "glosas": [
+   "O",
+   "T",
+   "R",
+   "A",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "OTRA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-08"
+ },
+ "Es el certificado de mi hija.": {
+  "glosas": [
+   "CERTIFICADO",
+   "HIJA",
+   "M",
+   "I"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-08"
+ },
+ "Es el certificado de mi hijo.": {
+  "glosas": [
+   "CERTIFICADO",
+   "HIJO",
+   "M",
+   "I"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "MI",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-08"
+ },
+ "Es mi certificado.": {
+  "glosas": [
+   "YO",
+   "CERTIFICADO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-08"
+ },
  "Es primera vez.": {
   "glosas": [
    "PRIMERA_VEZ"
@@ -12694,6 +12762,17 @@
   ],
   "traducido": "2026-09-27"
  },
+ "No, es el certificado de mi hijo.": {
+  "glosas": [
+   "NO",
+   "CERTIFICADO",
+   "HIJO",
+   "MIO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-08"
+ },
  "No, es una amiga.": {
   "glosas": [
    "NO",
@@ -16985,6 +17064,25 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No, vengo por otro trámite.": {
+  "glosas": [
+   "NO",
+   "TRAMITE",
+   "O",
+   "T",
+   "R",
+   "O",
+   "VENIR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-08"
  },
  "No, ya tuve cédula.": {
   "glosas": [
@@ -22183,6 +22281,16 @@
   "correcciones": [],
   "traducido": "2026-10-07"
  },
+ "Sí, es mi certificado.": {
+  "glosas": [
+   "SI",
+   "YO",
+   "CERTIFICADO"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-08"
+ },
  "Sí, es mi compañero.": {
   "glosas": [
    "SI",
@@ -23515,6 +23623,31 @@
   "estado": "partial",
   "correcciones": [],
   "traducido": "2026-10-07"
+ },
+ "Sí, necesito un certificado de nacimiento.": {
+  "glosas": [
+   "SI",
+   "NECESITAR",
+   "CERTIFICADO",
+   "N",
+   "A",
+   "C",
+   "I",
+   "M",
+   "I",
+   "E",
+   "N",
+   "T",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NACIMIENTO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-08"
  },
  "Sí, necesito un intérprete de LSB.": {
   "glosas": [
@@ -31172,6 +31305,59 @@
   "estado": "partial",
   "correcciones": [],
   "traducido": "2026-10-07"
+ },
+ "¿El certificado es suyo o de otra persona?": {
+  "glosas": [
+   "CERTIFICADO",
+   "SUYO",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "O",
+   "T",
+   "R",
+   "O"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "OTRO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-08"
+ },
+ "¿El certificado es suyo o de su hijo?": {
+  "glosas": [
+   "CERTIFICADO",
+   "SUYO",
+   "HIJO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "O",
+    "accion": "letra_descartada"
+   }
+  ],
+  "traducido": "2026-10-08"
+ },
+ "¿El certificado es suyo?": {
+  "glosas": [
+   "CERTIFICADO",
+   "SUYO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-08"
  },
  "¿El certificado será emitido a su nombre?": {
   "glosas": [
@@ -42261,6 +42447,30 @@
    }
   ],
   "traducido": "2026-09-27"
+ },
+ "¿Viene por un certificado de nacimiento?": {
+  "glosas": [
+   "CERTIFICADO",
+   "N",
+   "A",
+   "C",
+   "I",
+   "M",
+   "I",
+   "E",
+   "N",
+   "T",
+   "O",
+   "VENIR"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NACIMIENTO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-08"
  },
  "¿Ya firmó el documento?": {
   "glosas": [
