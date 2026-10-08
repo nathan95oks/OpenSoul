@@ -38,6 +38,15 @@ const _guiones = 'test/qa/guiones_conversacion.json';
 const _respuestas = 'test/qa/lambda_respuestas.json';
 const _pendientes = 'test/qa/lambda_pendientes.json';
 
+/// Las URLs de las Lambdas son constantes de compilación: sin ellas la app
+/// no crea sus clientes y no hay qué reproducir. Se corre con
+/// --dart-define=LSB_API_URL=https://api.qa.invalid/translate
+/// --dart-define=LSB_TEXT_API_URL=https://texto.qa.invalid/translate
+const _textoUrl = String.fromEnvironment('LSB_TEXT_API_URL');
+const _sinUrls =
+    'QA de Conversación: correr con las --dart-define de las URLs de QA '
+    '(ver docs/QA_CONVERSACION_2026-10-08.md)';
+
 /// Reproduce las respuestas reales grabadas de las Lambdas. Lo que no está
 /// grabado se anota y falla como falla la red (503).
 class _Grabadas extends http.BaseClient {
@@ -179,226 +188,239 @@ void main() {
   }
 
   for (final guion in guiones) {
-    test('${guion['id']} ${guion['titulo']}', () async {
-      final c = app();
-      await c.read(lexiconEntriesProvider.future);
-      await c.read(conversationGraphCatalogProvider.future);
-      await c.read(ragCorpusProvider.future);
-      final turnos = <Map<String, dynamic>>[];
-      final fallas = <String>[];
+    test(
+      '${guion['id']} ${guion['titulo']}',
+      skip: _textoUrl.isEmpty ? _sinUrls : null,
+      () async {
+        final c = app();
+        await c.read(lexiconEntriesProvider.future);
+        await c.read(conversationGraphCatalogProvider.future);
+        await c.read(ragCorpusProvider.future);
+        final turnos = <Map<String, dynamic>>[];
+        final fallas = <String>[];
 
-      final inicio = guion['inicia_sorda'] as Map<String, dynamic>?;
-      if (inicio != null) {
-        final handoff = c.read(conversationHandoffProvider);
-        handoff.openCards(handoff.nextDeafLaunch());
-        c
-            .read(contextProvider.notifier)
-            .setContext(contextById(inicio['contexto'] as String)!);
-        final texto = await contestar(c, inicio, const []);
-        turnos.add({'sorda_inicia': texto});
-      }
-
-      for (final t in (guion['turnos'] as List).cast<Map<String, dynamic>>()) {
-        final texto = t['oyente'] as String;
-        final espera = (t['espera'] as Map?)?.cast<String, dynamic>() ?? {};
-        final activo = c.read(conversationProvider).conversation.topicContextId;
-        await c.read(conversationProvider.notifier).sendHearingMessage(texto);
-        await pumpEventQueue(times: 50);
-        final estado = c.read(conversationProvider);
-        final registro = <String, dynamic>{'oyente': texto, 'espera': espera};
-        turnos.add(registro);
-
-        final ultimo = estado.conversation.lastHearingTurn;
-        if (ultimo == null || ultimo.message.text != texto.trim()) {
-          registro['rechazado'] = estado.error ?? 'sin turno';
-          if (espera['rechazado'] != true) {
-            fallas.add('«$texto»: rechazado (${estado.error})');
-          }
-          continue;
-        }
-        if (espera['rechazado'] == true) {
-          fallas.add('«$texto»: se aceptó y debía rechazarse');
-        }
-        final sem = ultimo.semantic;
-        registro['glosas'] = ultimo.message.glosses;
-        final router = c.read(conversationGraphRouterProvider);
-        if (sem != null && router != null) {
-          registro['coincidencias'] = [
-            for (final m
-                in router.matcher.match(sem, activeContextId: activo).take(6))
-              '${m.questionId} ${m.score.toStringAsFixed(2)}',
-          ];
-          registro['activo'] = activo;
-        }
-        registro['lectura'] = {
-          'intencion': sem?.intent.name,
-          'datos': sem?.requestedSlots,
-          'contextos': sem?.mentionedContexts,
-          'negaciones': sem?.negations,
-          'fuente': sem?.source.name,
-        };
-
-        final retriever = c.read(ragRetrieverProvider);
-        registro['rag'] = [
-          for (final s in retriever?.suggest(texto, limit: 8) ?? const [])
-            '${s.scenarioId}#${s.questionTurn} ${s.score.toStringAsFixed(2)}',
-        ];
-
-        final handoff = c.read(conversationHandoffProvider);
-        final launch = handoff.nextDeafLaunch();
-        handoff.openCards(launch);
-        final r = launch.route;
-        final session = c.read(guidedFlowProvider).session;
-        final contexto = c.read(contextProvider)?.id;
-        final bank = c.read(questionBankProvider);
-        final pasos = [
-          for (final s in session?.steps ?? const []) s.questionId,
-        ];
-        final pedidas = [
-          ...?r?.targetQuestionIds,
-          ...?r?.pathQuestionIds,
-        ].where(pasos.contains).toSet().toList();
-        final visibles = pedidas.isNotEmpty
-            ? pedidas
-            : [
-                if (session?.currentQuestionId != null)
-                  session!.currentQuestionId!,
-              ];
-        registro['ruta'] = {
-          'tipo': r?.type.name,
-          'origen': r?.sourceLabel,
-          'contexto': r?.targetContextId,
-          'familia': r?.targetFamilyId,
-          'preguntas': r?.targetQuestionIds,
-          'camino': r?.pathQuestionIds,
-          'motivo': r?.reason,
-        };
-        registro['abre'] = {
-          'contexto': contexto,
-          'familiaEnfocada': launch.focusedFamilyId,
-          'preguntas': [
-            for (final q in visibles)
-              {'id': q, 'formulacion': bank.question(q)?.formulation},
-          ],
-          'pasos': pasos.length,
-        };
-
-        // ¿Coherente?
-        final abiertas = {...visibles, ...pedidas};
-        final tramite = (contexto ?? '').startsWith('tramite_')
-            ? contexto
-            : null;
-        bool algunaPregunta(List l) => l.any((q) => abiertas.contains(q));
-        bool enContexto(List l) => l.contains(contexto);
-        bool enTramite(List l) => tramite != null && l.contains(tramite);
-        bool enArea(List l) =>
-            tramite != null &&
-            l.any((a) => tramite.startsWith('tramite_${'$a'.toLowerCase()}_'));
-        final alternativas = <bool>[];
-        void exige(String clave, bool ok) {
-          if (espera.containsKey(clave)) alternativas.add(ok);
+        final inicio = guion['inicia_sorda'] as Map<String, dynamic>?;
+        if (inicio != null) {
+          final handoff = c.read(conversationHandoffProvider);
+          handoff.openCards(handoff.nextDeafLaunch());
+          c
+              .read(contextProvider.notifier)
+              .setContext(contextById(inicio['contexto'] as String)!);
+          final texto = await contestar(c, inicio, const []);
+          turnos.add({'sorda_inicia': texto});
         }
 
-        exige(
-          'preguntas',
-          espera['todas'] == true
-              ? (espera['preguntas'] as List).every(abiertas.contains)
-              : algunaPregunta(espera['preguntas'] as List? ?? const []),
-        );
-        exige(
-          'o_preguntas',
-          algunaPregunta(espera['o_preguntas'] as List? ?? const []),
-        );
-        exige('contexto', contexto == espera['contexto']);
-        exige(
-          'o_contexto',
-          enContexto(espera['o_contexto'] as List? ?? const []),
-        );
-        exige(
-          'familia',
-          launch.focusedFamilyId == espera['familia'] ||
-              c.read(questionBankProvider).journey(contexto ?? '') != null &&
-                  r?.targetFamilyId == espera['familia'],
-        );
-        exige(
-          'tipo',
-          (espera['tipo'] as List? ?? const []).contains(r?.type.name),
-        );
-        exige(
-          'o_tipo',
-          (espera['o_tipo'] as List? ?? const []).contains(r?.type.name),
-        );
-        exige('tramite', enTramite(espera['tramite'] as List? ?? const []));
-        exige('o_tramite', enTramite(espera['o_tramite'] as List? ?? const []));
-        exige(
-          'tramite_area',
-          enArea(espera['tramite_area'] as List? ?? const []),
-        );
-        exige(
-          'o_tramite_area',
-          enArea(espera['o_tramite_area'] as List? ?? const []),
-        );
-        final positivas = alternativas.isEmpty || alternativas.any((x) => x);
-        // Lo que dijo el oyente tiene que llegar en señas: «buenas tardes»
-        // no es BUENOS_DÍAS.
-        final glosas = [
-          for (final g in ultimo.message.glosses)
-            g.toUpperCase().replaceAll('Í', 'I'),
-        ];
-        final prohibido = [
-          for (final g in espera['glosas_contienen'] as List? ?? const [])
-            if (!glosas.contains(g)) 'faltó la seña $g',
-          for (final g in espera['glosas_no_contienen'] as List? ?? const [])
-            if (glosas.contains(g)) 'tradujo $g',
-          for (final x in espera['no_contexto'] as List? ?? const [])
-            if (x == contexto) 'abrió $x',
-          if ((espera['sin_tramite'] == true) && tramite != null)
-            'abrió el trámite $tramite',
-        ];
-        if (!positivas || prohibido.isNotEmpty) {
-          fallas.add(
-            '«$texto»: abrió ${contexto ?? 'el selector'} '
-            '${visibles.isEmpty ? '' : visibles} '
-            '(${r?.type.name}) ${prohibido.join(', ')}',
-          );
-          registro['falla'] = true;
-        }
+        for (final t
+            in (guion['turnos'] as List).cast<Map<String, dynamic>>()) {
+          final texto = t['oyente'] as String;
+          final espera = (t['espera'] as Map?)?.cast<String, dynamic>() ?? {};
+          final activo = c
+              .read(conversationProvider)
+              .conversation
+              .topicContextId;
+          await c.read(conversationProvider.notifier).sendHearingMessage(texto);
+          await pumpEventQueue(times: 50);
+          final estado = c.read(conversationProvider);
+          final registro = <String, dynamic>{'oyente': texto, 'espera': espera};
+          turnos.add(registro);
 
-        // La persona sorda contesta y su texto vuelve al chat.
-        final sorda = (t['sorda'] as Map?)?.cast<String, dynamic>() ?? {};
-        // El selector, o la familia enfocada («Denuncias»): la persona sorda
-        // elige su caso, como en la app (también con el buscador).
-        if (contexto == null &&
-            (r?.type == ConversationRouteType.contextSelector ||
-                launch.focusedFamilyId != null)) {
-          final elegido = sorda['contexto'] as String?;
-          if (elegido == null) {
-            registro['sorda'] = '(elige contexto en el selector)';
+          final ultimo = estado.conversation.lastHearingTurn;
+          if (ultimo == null || ultimo.message.text != texto.trim()) {
+            registro['rechazado'] = estado.error ?? 'sin turno';
+            if (espera['rechazado'] != true) {
+              fallas.add('«$texto»: rechazado (${estado.error})');
+            }
             continue;
           }
-          c.read(contextProvider.notifier).setContext(contextById(elegido)!);
+          if (espera['rechazado'] == true) {
+            fallas.add('«$texto»: se aceptó y debía rechazarse');
+          }
+          final sem = ultimo.semantic;
+          registro['glosas'] = ultimo.message.glosses;
+          final router = c.read(conversationGraphRouterProvider);
+          if (sem != null && router != null) {
+            registro['coincidencias'] = [
+              for (final m
+                  in router.matcher.match(sem, activeContextId: activo).take(6))
+                '${m.questionId} ${m.score.toStringAsFixed(2)}',
+            ];
+            registro['activo'] = activo;
+          }
+          registro['lectura'] = {
+            'intencion': sem?.intent.name,
+            'datos': sem?.requestedSlots,
+            'contextos': sem?.mentionedContexts,
+            'negaciones': sem?.negations,
+            'fuente': sem?.source.name,
+          };
+
+          final retriever = c.read(ragRetrieverProvider);
+          registro['rag'] = [
+            for (final s in retriever?.suggest(texto, limit: 8) ?? const [])
+              '${s.scenarioId}#${s.questionTurn} ${s.score.toStringAsFixed(2)}',
+          ];
+
+          final handoff = c.read(conversationHandoffProvider);
+          final launch = handoff.nextDeafLaunch();
+          handoff.openCards(launch);
+          final r = launch.route;
+          final session = c.read(guidedFlowProvider).session;
+          final contexto = c.read(contextProvider)?.id;
+          final bank = c.read(questionBankProvider);
+          final pasos = [
+            for (final s in session?.steps ?? const []) s.questionId,
+          ];
+          final pedidas = [
+            ...?r?.targetQuestionIds,
+            ...?r?.pathQuestionIds,
+          ].where(pasos.contains).toSet().toList();
+          final visibles = pedidas.isNotEmpty
+              ? pedidas
+              : [
+                  if (session?.currentQuestionId != null)
+                    session!.currentQuestionId!,
+                ];
+          registro['ruta'] = {
+            'tipo': r?.type.name,
+            'origen': r?.sourceLabel,
+            'contexto': r?.targetContextId,
+            'familia': r?.targetFamilyId,
+            'preguntas': r?.targetQuestionIds,
+            'camino': r?.pathQuestionIds,
+            'motivo': r?.reason,
+          };
+          registro['abre'] = {
+            'contexto': contexto,
+            'familiaEnfocada': launch.focusedFamilyId,
+            'preguntas': [
+              for (final q in visibles)
+                {'id': q, 'formulacion': bank.question(q)?.formulation},
+            ],
+            'pasos': pasos.length,
+          };
+
+          // ¿Coherente?
+          final abiertas = {...visibles, ...pedidas};
+          final tramite = (contexto ?? '').startsWith('tramite_')
+              ? contexto
+              : null;
+          bool algunaPregunta(List l) => l.any((q) => abiertas.contains(q));
+          bool enContexto(List l) => l.contains(contexto);
+          bool enTramite(List l) => tramite != null && l.contains(tramite);
+          bool enArea(List l) =>
+              tramite != null &&
+              l.any(
+                (a) => tramite.startsWith('tramite_${'$a'.toLowerCase()}_'),
+              );
+          final alternativas = <bool>[];
+          void exige(String clave, bool ok) {
+            if (espera.containsKey(clave)) alternativas.add(ok);
+          }
+
+          exige(
+            'preguntas',
+            espera['todas'] == true
+                ? (espera['preguntas'] as List).every(abiertas.contains)
+                : algunaPregunta(espera['preguntas'] as List? ?? const []),
+          );
+          exige(
+            'o_preguntas',
+            algunaPregunta(espera['o_preguntas'] as List? ?? const []),
+          );
+          exige('contexto', contexto == espera['contexto']);
+          exige(
+            'o_contexto',
+            enContexto(espera['o_contexto'] as List? ?? const []),
+          );
+          exige(
+            'familia',
+            launch.focusedFamilyId == espera['familia'] ||
+                c.read(questionBankProvider).journey(contexto ?? '') != null &&
+                    r?.targetFamilyId == espera['familia'],
+          );
+          exige(
+            'tipo',
+            (espera['tipo'] as List? ?? const []).contains(r?.type.name),
+          );
+          exige(
+            'o_tipo',
+            (espera['o_tipo'] as List? ?? const []).contains(r?.type.name),
+          );
+          exige('tramite', enTramite(espera['tramite'] as List? ?? const []));
+          exige(
+            'o_tramite',
+            enTramite(espera['o_tramite'] as List? ?? const []),
+          );
+          exige(
+            'tramite_area',
+            enArea(espera['tramite_area'] as List? ?? const []),
+          );
+          exige(
+            'o_tramite_area',
+            enArea(espera['o_tramite_area'] as List? ?? const []),
+          );
+          final positivas = alternativas.isEmpty || alternativas.any((x) => x);
+          // Lo que dijo el oyente tiene que llegar en señas: «buenas tardes»
+          // no es BUENOS_DÍAS.
+          final glosas = [
+            for (final g in ultimo.message.glosses)
+              g.toUpperCase().replaceAll('Í', 'I'),
+          ];
+          final prohibido = [
+            for (final g in espera['glosas_contienen'] as List? ?? const [])
+              if (!glosas.contains(g)) 'faltó la seña $g',
+            for (final g in espera['glosas_no_contienen'] as List? ?? const [])
+              if (glosas.contains(g)) 'tradujo $g',
+            for (final x in espera['no_contexto'] as List? ?? const [])
+              if (x == contexto) 'abrió $x',
+            if ((espera['sin_tramite'] == true) && tramite != null)
+              'abrió el trámite $tramite',
+          ];
+          if (!positivas || prohibido.isNotEmpty) {
+            fallas.add(
+              '«$texto»: abrió ${contexto ?? 'el selector'} '
+              '${visibles.isEmpty ? '' : visibles} '
+              '(${r?.type.name}) ${prohibido.join(', ')}',
+            );
+            registro['falla'] = true;
+          }
+
+          // La persona sorda contesta y su texto vuelve al chat.
+          final sorda = (t['sorda'] as Map?)?.cast<String, dynamic>() ?? {};
+          // El selector, o la familia enfocada («Denuncias»): la persona sorda
+          // elige su caso, como en la app (también con el buscador).
+          if (contexto == null &&
+              (r?.type == ConversationRouteType.contextSelector ||
+                  launch.focusedFamilyId != null)) {
+            final elegido = sorda['contexto'] as String?;
+            if (elegido == null) {
+              registro['sorda'] = '(elige contexto en el selector)';
+              continue;
+            }
+            c.read(contextProvider.notifier).setContext(contextById(elegido)!);
+          }
+          final dicho = await contestar(c, sorda, pedidas);
+          registro['sorda'] = dicho;
+          // La persona sorda no dice datos que nadie mencionó («es mi jefe»).
+          final inventado = [
+            for (final w in espera['sorda_no_dice'] as List? ?? const [])
+              if ((dicho ?? '').toLowerCase().contains('$w'.toLowerCase())) w,
+          ];
+          if (inventado.isNotEmpty) {
+            fallas.add('«$texto»: la persona sorda dijo «$dicho» ($inventado)');
+            registro['falla'] = true;
+          }
         }
-        final dicho = await contestar(c, sorda, pedidas);
-        registro['sorda'] = dicho;
-        // La persona sorda no dice datos que nadie mencionó («es mi jefe»).
-        final inventado = [
-          for (final w in espera['sorda_no_dice'] as List? ?? const [])
-            if ((dicho ?? '').toLowerCase().contains('$w'.toLowerCase())) w,
-        ];
-        if (inventado.isNotEmpty) {
-          fallas.add('«$texto»: la persona sorda dijo «$dicho» ($inventado)');
-          registro['falla'] = true;
+        informe.add({
+          'id': guion['id'],
+          'titulo': guion['titulo'],
+          'turnos': turnos,
+          'fallas': fallas,
+        });
+        if (Platform.environment['QA_ESTRICTO'] != '0') {
+          expect(fallas, isEmpty);
         }
-      }
-      informe.add({
-        'id': guion['id'],
-        'titulo': guion['titulo'],
-        'turnos': turnos,
-        'fallas': fallas,
-      });
-      if (Platform.environment['QA_ESTRICTO'] == '1') {
-        expect(fallas, isEmpty);
-      }
-    });
+      },
+    );
   }
 }

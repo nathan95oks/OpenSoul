@@ -36,7 +36,7 @@
       "turnos": [
         {"oyente": "¿Quiere denunciar un robo?", "espera": {"familia": "denuncias", "contexto": "denuncia_robo"}, "sorda": {"contexto": "denuncia_robo", "elige": {"Q.HEC.QUE_OCURRIO": "robar"}}},
         {"oyente": "Primero necesito sus datos. ¿Cuál es su nombre completo?", "espera": {"preguntas": ["Q.ID.NOMBRE"], "contexto": "identificacion"}},
-        {"oyente": "¿Trae su carnet de identidad?", "espera": {"preguntas": ["Q.ID.DOC_TIPO", "Q.ID.DOC_NUMERO"], "contexto": "identificacion"}},
+        {"oyente": "¿Trae su carnet de identidad?", "espera": {"preguntas": ["Q.ID.DOC_TIENE", "Q.ID.DOC_TIPO", "Q.ID.DOC_NUMERO"], "contexto": "identificacion"}},
         {"oyente": "¿A qué número la podemos llamar?", "espera": {"preguntas": ["Q.ID.TELEFONO_PROPIO"], "contexto": "identificacion"}},
         {"oyente": "Bien, volvamos al robo. ¿A qué hora pasó?", "espera": {"preguntas": ["Q.TIE.HORA", "Q.TIE.CUANDO"], "contexto": "denuncia_robo"}}
       ]
@@ -136,7 +136,7 @@
       "id": "C14",
       "titulo": "Negaciones y presuposiciones",
       "turnos": [
-        {"oyente": "No le pregunto por el robo, le pregunto por su cédula. ¿La trae?", "espera": {"preguntas": ["Q.ID.DOC_TIPO", "Q.ID.DOC_NUMERO"], "o_tramite_area": ["SEGIP"], "no_contexto": ["denuncia_robo"]}},
+        {"oyente": "No le pregunto por el robo, le pregunto por su cédula. ¿La trae?", "espera": {"preguntas": ["Q.ID.DOC_TIPO", "Q.ID.DOC_NUMERO", "Q.ID.DOC_TIENE"], "o_tramite_area": ["SEGIP"], "no_contexto": ["denuncia_robo"]}},
         {"oyente": "¿Su pareja le pegó ayer?", "espera": {"contexto": "violencia"}},
         {"oyente": "¿No sabe quién fue?", "espera": {"preguntas": ["Q.PER.CONOCE", "Q.VIO.AGRESOR"]}}
       ]
