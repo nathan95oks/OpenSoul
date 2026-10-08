@@ -131,6 +131,11 @@ señas pendientes seguidas que lo forman se juntan en una (las palabras de
 enlace «y», «de» no cuentan). Cada palabra suelta conviene que tenga también
 la suya (o un «ver» a la del término).
 
+Una palabra que debe estar disponible aunque todavía no aparezca en un
+escenario lleva `"incluir": true`. Es útil para términos que Conversación
+puede recibir como texto libre: si no tienen seña en los módulos, se muestran
+en azul y su ficha «¿Qué es?» queda disponible desde el primer uso.
+
 ## Ramificaciones y composición (opcional, en el escenario)
 
 Los pasos de un trámite van en el orden del diálogo y no dependen unos de
