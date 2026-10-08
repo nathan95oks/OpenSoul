@@ -2374,7 +2374,9 @@
    "variantes": [
     "¿Tiene factura o papel del banco?",
     "¿Tiene el papel del banco o factura?",
-    "¿Conserva el comprobante bancario?"
+    "¿Conserva el comprobante bancario?",
+    "¿Tiene el comprobante?",
+    "¿Tiene algún recibo?"
    ],
    "campos": [
     "polaridad"
@@ -4980,7 +4982,12 @@
      "polar": true
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿Trajo su cédula?",
+    "¿Trae su cédula?",
+    "¿Trajo su carnet de identidad?",
+    "¿Trae su carnet de identidad?"
+   ],
    "campos": [
     "polaridad"
    ]
@@ -5110,7 +5117,10 @@
      "sinAproximado": true
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿Cuántos años tiene?",
+    "¿Qué edad tiene usted?"
+   ],
    "campos": [
     "edad"
    ],
@@ -5159,7 +5169,10 @@
      "editor": "texto_nombre"
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿Cuál es su nombre?",
+    "¿Cómo se llama?"
+   ],
    "campos": [
     "nombre"
    ]
@@ -5202,7 +5215,12 @@
      "editor": "telefono"
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿A qué número la podemos llamar?",
+    "¿A qué número le podemos llamar?",
+    "¿Me da su número de celular?",
+    "¿Cuál es su número de teléfono?"
+   ],
    "campos": [
     "telefono"
    ],
@@ -9290,7 +9308,11 @@
      "polar": true
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿Viene a ver cómo va su denuncia?",
+    "¿Quiere saber cómo va su caso?",
+    "¿Viene a preguntar por su denuncia?"
+   ],
    "campos": [
     "polaridad"
    ]
@@ -10400,14 +10422,21 @@
      "polar": true
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿Alguien vio lo que pasó?",
+    "¿Alguien vio lo que ocurrió?"
+   ],
    "campos": [
     "polaridad"
    ]
   },
   {
    "id": "Q.TES.PUEDE_TESTIMONIO",
-   "variantes": [],
+   "variantes": [
+    "¿Podría declarar como testigo?",
+    "¿Puede declarar como testigo?",
+    "¿Puede contar lo que vio?"
+   ],
    "nodos": [],
    "dominio": "testigos",
    "formulacion": "¿Puede dar testimonio de lo que vio?",
@@ -10466,7 +10495,11 @@
   },
   {
    "id": "Q.TES.QUE_VIO",
-   "variantes": [],
+   "variantes": [
+    "¿Qué vio exactamente?",
+    "¿Qué vio?",
+    "¿Qué quiere declarar?"
+   ],
    "nodos": [],
    "dominio": "testigos",
    "formulacion": "¿Qué vio o qué quiere declarar?",
@@ -11322,7 +11355,12 @@
      "frase": "No sé decirlo."
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿Esto ya le pasó antes?",
+    "¿Le había pasado antes?",
+    "¿Es la primera vez que le pasa?",
+    "¿Le pasa seguido?"
+   ],
    "campos": [
     "frecuencia"
    ],
