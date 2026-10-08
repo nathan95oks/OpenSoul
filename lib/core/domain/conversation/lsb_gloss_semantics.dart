@@ -218,8 +218,25 @@ class LsbGlossSemantics {
     for (var i = 0; i < from.length; i++) {
       out = out.replaceAll(from[i], to[i]);
     }
-    return out;
+    // Errores muy frecuentes de escritura móvil. Solo normalizamos
+    // interrogativos inequívocos; no se corrigen palabras de contenido ni
+    // se intenta adivinar una oración completa.
+    return const {
+          'DND': 'DONDE',
+          'DNDE': 'DONDE',
+          'DONDE': 'DONDE',
+          'CNDO': 'CUANDO',
+          'CUANDO': 'CUANDO',
+          'Q': 'QUE',
+          'K': 'QUE',
+        }[out] ??
+        out;
   }
+
+  /// Una palabra del español como la leen las reglas: mayúsculas, sin
+  /// tildes y con los interrogativos abreviados al escribir en el celular
+  /// («dnde», «q») completos.
+  static String spokenWord(String word) => _plain(word);
 
   static List<String> _questionClauses(String text) {
     var spans = text.contains('¿')
@@ -356,8 +373,14 @@ class LsbGlossSemantics {
     // «qué» es abierto y normalmente no identifica una ranura por sí solo.
     // En una pregunta de robo, sin embargo, el verbo la acota al objeto
     // sustraído («¿Qué te robaron/se llevaron?»).
+    final asksStolenObject = [
+      for (var i = 0; i < keys.length; i++)
+        if (keys[i] == 'QUE' &&
+            (i + 1 >= keys.length || !spokenHeadSlots.containsKey(keys[i + 1])))
+          i,
+    ].isNotEmpty;
     if (interrogative &&
-        keys.contains('QUE') &&
+        asksStolenObject &&
         keys.any(
           (key) =>
               key.startsWith('ROB') ||
@@ -408,6 +431,38 @@ class LsbGlossSemantics {
     final heads = {for (final g in normalized) ?headSlots[g]};
     if (heads.isNotEmpty) return heads;
     return {for (final g in normalized) ?interrogativeSlots[g]};
+  }
+
+  /// Las ranuras de [slots] que el español respalda.
+  ///
+  /// Persona, lugar, tiempo y cantidad salen de un interrogativo; si solo
+  /// los dice una glosa de la traducción (QUIÉN por «¿Quiere…?», o por
+  /// «¿Alguien vio…?»), el oyente no los pidió: «¿Tiene testigos?» es de sí o
+  /// no, no pregunta quién. Se conservan si el texto los pregunta o si los
+  /// respalda un núcleo («a qué HORA»). Sin texto, todas.
+  static Set<String> groundSlots(
+    Set<String> slots,
+    Iterable<String> normalized,
+    String text,
+  ) {
+    if (text.trim().isEmpty) return slots;
+    // Lo que pregunta el español: sus interrogativos, aun sin signos de
+    // pregunta («hola como estas quien te robo»), y sus núcleos («en qué
+    // LUGAR», «a qué HORA»).
+    final spoken = {
+      ...spokenSlotsOf(text),
+      for (final w in _words(text)) ?spokenInterrogativeSlots[_plain(w)],
+      for (final w in _words(text)) ?spokenHeadSlots[_plain(w)],
+    };
+    final heads = {for (final g in normalized) ?headSlots[g]};
+    final fromInterrogatives = interrogativeSlots.values.toSet();
+    return {
+      for (final s in slots)
+        if (!fromInterrogatives.contains(s) ||
+            spoken.contains(s) ||
+            heads.contains(s))
+          s,
+    };
   }
 
   static Set<String> headsOf(Iterable<String> normalized) => {

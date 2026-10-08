@@ -68,16 +68,24 @@ class GraphMatcher {
   /// Lo que el oyente quiere saber: las ranuras de la lectura y las que dicen
   /// sus glosas interrogativas. Es lo primero que decide la ruta; el tema
   /// solo restringe o desempata.
-  static Set<String> requestedSlotsOf(SemanticTurn turn) => {
-    ...turn.requestedSlots,
-    if (turn.isQuestion ||
-        LsbGlossSemantics.hasInterrogative(
-          LsbGlossSemantics.normalizeAll(turn.entities),
-        ))
-      ...LsbGlossSemantics.slotsOf(
-        LsbGlossSemantics.normalizeAll(turn.entities),
-      ),
-  }.intersection(LsbGlossSemantics.slotVocabulary);
+  static Set<String> requestedSlotsOf(SemanticTurn turn) {
+    final glosses = LsbGlossSemantics.normalizeAll(turn.entities);
+    final declared = turn.requestedSlots.toSet().intersection(
+      LsbGlossSemantics.slotVocabulary,
+    );
+    final inferred = {
+      if (turn.isQuestion || LsbGlossSemantics.hasInterrogative(glosses))
+        ...LsbGlossSemantics.slotsOf(glosses),
+    }.intersection(LsbGlossSemantics.slotVocabulary);
+    // La lectura semántica ya declaró lo pedido y se conserva: el router no
+    // relee el texto (la Lambda ancla sus ranuras al español). Solo se
+    // fundamentan las ranuras adicionales inferidas de glosas: un QUIÉN que
+    // puso la traducción por «¿Quiere…?» o «¿Alguien…?» no pide una persona.
+    return {
+      ...declared,
+      ...LsbGlossSemantics.groundSlots(inferred, glosses, turn.text),
+    };
+  }
 
   /// Contextos donde se sitúa el turno: el activo y los que nombra.
   Set<String> contextsOf(SemanticTurn turn, {String? activeContextId}) => {

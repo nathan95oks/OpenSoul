@@ -68,7 +68,7 @@ PARAFRASIS = [
     ("¿Cuándo te robaron?", ["CUÁNDO", "ROBAR", "TÚ"], "denuncia_robo", "Q.TIE.CUANDO"),
     ("cuando te robaron el celular", ["CUÁNDO", "ROBAR", "CELULAR"], "denuncia_robo",
      "Q.TIE.CUANDO"),
-    ("¿A qué hora pasó?", ["HORA", "QUÉ", "PASAR"], "denuncia_robo", "Q.TIE.CUANDO"),
+    ("¿A qué hora pasó?", ["HORA", "QUÉ", "PASAR"], "denuncia_robo", "Q.TIE.HORA"),
     ("¿Dónde fue?", ["DÓNDE"], "denuncia_robo", "Q.LUG.DONDE"),
     ("donde te robaron", ["PLAZA", "ROBAR"], "denuncia_robo", "Q.LUG.DONDE"),
     ("¿En qué lugar ocurrió?", ["LUGAR", "QUÉ", "PASAR"], "denuncia_robo", "Q.LUG.DONDE"),

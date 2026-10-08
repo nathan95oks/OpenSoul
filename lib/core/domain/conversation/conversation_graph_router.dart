@@ -36,7 +36,7 @@ abstract class GraphRouteModel {
 class ConversationGraphRouter {
   /// Versión de las reglas; viaja a la Lambda y forma parte de la clave de
   /// su caché de rutas.
-  static const int version = 3;
+  static const int version = 4;
 
   final ConversationGraphCatalog catalog;
   final ConversationRouteValidator validator;
@@ -221,13 +221,45 @@ class ConversationGraphRouter {
       return r;
     }
 
+    // Apertura de ventanilla («¿En qué le puedo ayudar?», «Cuénteme qué le
+    // pasó»): sin un caso abierto, la persona elige el motivo. No se adivina
+    // un trámite por «ayudar» o «pasó».
+    if (active == null &&
+        turn.mentionedContexts.isEmpty &&
+        requested.difference(const {'polarity'}).isEmpty &&
+        _opensService(turn.text)) {
+      return done(
+        _selector(
+          'apertura de ventanilla: elegir motivo',
+          confidence: askedMotiveConfidence,
+        ),
+      );
+    }
+
+    // Una instrucción puede tener palabras parecidas a una pregunta del
+    // banco («Firme aquí» se parecía a «¿La tiene aquí?»). El grafo no debe
+    // convertirla en pregunta. Queda disponible el RAG para instrucciones
+    // documentadas que sí esperan una respuesta («pase a otra oficina»).
+    if (!_expectsAnswer(turn)) {
+      return done(
+        const ConversationRoute.noSafeRoute(
+          reason: 'el turno es una indicación, no una pregunta',
+        ),
+      );
+    }
+
     // 0. El oyente pregunta por la clase de atención o nombra el papel de la
     //    persona en un contexto, sin pedir un dato.
     if (requested.difference(const {'polarity'}).isEmpty) {
       // «¿Qué trámite desea realizar?», «¿Qué denuncia quiere presentar?»:
       // la respuesta es elegir el contexto.
       if (_asksWhichKind(turn.text)) {
-        return done(_selector('pregunta qué clase de atención'));
+        return done(
+          _selector(
+            'pregunta qué clase de atención',
+            confidence: askedMotiveConfidence,
+          ),
+        );
       }
       // «¿Usted fue testigo de un crimen?»: ser testigo es el contexto
       // «Declaración y testimonio».
@@ -334,7 +366,12 @@ class ConversationGraphRouter {
     //    antes que las coincidencias débiles, que aquí serían solo ruido de
     //    verbos genéricos.
     if (turn.intent == SemanticIntent.askPurpose) {
-      return done(_selector('pregunta abierta por el motivo de la atención'));
+      return done(
+        _selector(
+          'pregunta abierta por el motivo de la atención',
+          confidence: askedMotiveConfidence,
+        ),
+      );
     }
 
     // 4. Coincidencias débiles: rutas posibles, no seguras.
@@ -469,7 +506,17 @@ class ConversationGraphRouter {
     // sé».
     final opened = <String>{};
     final targets = <String>[];
+    // Una pregunta compuesta («¿Tiene la factura o la caja?») se responde con
+    // sus partes: se abren todas, porque el oyente preguntó por cada una.
+    final parts = <String>{};
     for (final id in ids) {
+      final own = catalog.partsOf(id);
+      if (own.isNotEmpty) {
+        for (final p in own) {
+          if (parts.add(p) && !targets.contains(p)) targets.add(p);
+        }
+        continue;
+      }
       final children = catalog.openedBy(context, id);
       if (children.isEmpty) {
         if (!targets.contains(id)) targets.add(id);
@@ -512,6 +559,46 @@ class ConversationGraphRouter {
           ..add(keep);
       }
     }
+    // Cada «qué + núcleo» del español («¿Cuándo y a QUÉ HORA…?») es su
+    // propia pregunta si el recorrido la tiene: la hora no es el «cuándo».
+    // Si es el único modo en que se pregunta ese dato («¿A qué hora fue?»),
+    // reemplaza a la pregunta general del mismo dato; con «cuándo» dicho
+    // aparte, van las dos.
+    final heads = <String>{};
+    final words = _plainWords(text);
+    for (final head in _askedHeads(text)) {
+      final own = _ownHeadQuestion(context, head);
+      if (own == null) continue;
+      final slot = LsbGlossSemantics.spokenHeadSlots[head.split(' ').last];
+      final saidApart = words.any(
+        (w) => LsbGlossSemantics.spokenInterrogativeSlots[w] == slot,
+      );
+      if (!saidApart) {
+        targets.removeWhere(
+          (t) =>
+              t != own &&
+              !heads.contains(t) &&
+              catalog.answerSlotsOf(t).contains(slot),
+        );
+      }
+      if (!targets.contains(own)) targets.add(own);
+      heads.add(own);
+      // «¿Cuándo y a qué hora…?»: el «cuándo» dicho aparte también es su
+      // pregunta, aunque la coincidencia del grafo ya fuera la hora.
+      if (saidApart &&
+          !targets.any(
+            (t) => t != own && catalog.answerSlotsOf(t).contains(slot),
+          )) {
+        for (final w in words) {
+          if (LsbGlossSemantics.spokenInterrogativeSlots[w] != slot) continue;
+          final apart = _ownHeadQuestion(context, w);
+          if (apart != null && !targets.contains(apart)) {
+            targets.add(apart);
+            heads.add(apart);
+          }
+        }
+      }
+    }
     final confidence = requests
         .map((r) => r.score)
         .reduce((a, b) => a < b ? a : b);
@@ -533,7 +620,10 @@ class ConversationGraphRouter {
                     catalog,
                     minConfidence: minConfidence,
                   ))
-            .validate(route, presupposed: {...ids, ...opened});
+            .validate(
+              route,
+              presupposed: {...ids, ...opened, ...parts, ...heads},
+            );
     return validation.route;
   }
 
@@ -708,6 +798,100 @@ class ConversationGraphRouter {
       if (w.isNotEmpty) w.toUpperCase(),
   ];
 
+  static bool _hasStem(Iterable<String> words, String stem) =>
+      words.any((w) => w.startsWith(stem));
+
+  bool _expectsAnswer(SemanticTurn turn) {
+    final words = _plainWords(turn.text);
+    // El dictado por voz llega sin puntuación («vino a consultar el estado
+    // de su caso»): no dice si es una afirmación. Solo un texto puntuado
+    // sin signos de pregunta («Firme aquí, por favor.») es una indicación.
+    if (!RegExp(r'[.!¡?¿]').hasMatch(turn.text)) return true;
+    return turn.isQuestion ||
+        turn.intent == SemanticIntent.askPurpose ||
+        turn.intent == SemanticIntent.askInformation ||
+        LsbGlossSemantics.spokenSlotsOf(turn.text).isNotEmpty ||
+        _hasStem(words, 'CUENT') ||
+        _hasStem(words, 'EXPLIC') ||
+        _hasStem(words, 'DESCRIB');
+  }
+
+  /// Los «qué/cuál + núcleo» que pregunta el español: «QUE HORA», «QUE DIA».
+  static List<String> _askedHeads(String text) {
+    final words = [
+      for (final w in _plainWords(text)) LsbGlossSemantics.spokenWord(w),
+    ];
+    return [
+      for (var i = 0; i + 1 < words.length; i++)
+        if (const {'QUE', 'CUAL'}.contains(words[i]) &&
+            LsbGlossSemantics.spokenHeadSlots.containsKey(words[i + 1]))
+          '${words[i]} ${words[i + 1]}',
+    ];
+  }
+
+  /// La pregunta de [context] que pregunta por [head] con las mismas
+  /// palabras («¿A qué hora ocurrió?» para «QUE HORA»): un paso de su
+  /// recorrido o una pregunta real del funcionario en ese contexto. Si el
+  /// contexto no tiene una, una pregunta general que no es de ningún otro
+  /// recorrido (la hora no es exclusiva del robo).
+  String? _ownHeadQuestion(String context, String head) {
+    // La más general: la frase más corta que lo pregunta («¿Cuándo
+    // ocurrió?», no «¿Cuándo presentó la denuncia?»).
+    String? shortest(bool Function(ReplyEntry) where) {
+      ReplyEntry? best;
+      var size = 0;
+      for (final e in catalog.replyEntries) {
+        final words = _plainWords(e.phrase);
+        if (!where(e) || !' ${words.join(' ')} '.contains(' $head ')) continue;
+        if (best == null || words.length < size) {
+          best = e;
+          size = words.length;
+        }
+      }
+      return best?.questionId;
+    }
+
+    return shortest(
+          (e) => e.scope == context || catalog.isStepOf(context, e.questionId),
+        ) ??
+        shortest((e) => catalog.journeysOf(e.questionId).isEmpty);
+  }
+
+  /// Una fórmula de apertura de ventanilla: ofrecer ayuda («¿En qué le
+  /// puedo ayudar/servir?») o pedir el relato («Cuénteme qué le pasó»,
+  /// «¿Qué le pasó?»). Verbos de una clase cerrada; sin contenido propio.
+  bool _opensService(String text) {
+    final words = _plainWords(text);
+    bool stem(String s) => _hasStem(words, s);
+    final asks = words.contains('QUE') || words.contains('CUAL');
+    final offersHelp = (stem('AYUD') || stem('SIRV') || stem('SERVIR')) && asks;
+    final asksStory =
+        (stem('CUENT') || stem('CONT')) && (stem('PAS') || stem('OCURR')) ||
+        _asksWhatHappened(words);
+    return offersHelp || asksStory;
+  }
+
+  /// «¿Qué (le) pasó?»: QUÉ interrogativo seguido del verbo. «Lo que pasó»
+  /// es una relativa («¿Usted fue testigo de lo que pasó?») y no pide el
+  /// relato.
+  static bool _asksWhatHappened(List<String> words) {
+    const clitics = {'LE', 'LES', 'TE', 'SE', 'ME', 'HA', 'HAN'};
+    for (var i = 0; i < words.length; i++) {
+      if (words[i] != 'QUE' || (i > 0 && words[i - 1] == 'LO')) continue;
+      var j = i + 1;
+      while (j < words.length && clitics.contains(words[j])) {
+        j++;
+      }
+      if (j < words.length &&
+          (words[j].startsWith('PAS') ||
+              words[j].startsWith('OCURRI') ||
+              words[j].startsWith('SUCEDI'))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /// «¿Qué X…?» donde X nombra una clase de contexto: pide elegirlo.
   bool _asksWhichKind(String text) {
     final words = _plainWords(text);
@@ -778,15 +962,22 @@ class ConversationGraphRouter {
     );
   }
 
-  ConversationRoute _selector(String reason) => validator
-      .validate(
-        ConversationRoute(
-          type: ConversationRouteType.contextSelector,
-          confidence: 0.6,
-          reason: reason,
-        ),
-      )
-      .route!;
+  /// Confianza del selector cuando el oyente pidió el motivo («¿En qué le
+  /// puedo ayudar?», «¿Qué le pasó?», «¿Qué trámite desea?»): elegir el
+  /// contexto es la respuesta, no un tema reconocido a medias. Un trámite
+  /// del RAG no lo reemplaza: sin caso abierto sería adivinar uno.
+  static const double askedMotiveConfidence = 0.9;
+
+  ConversationRoute _selector(String reason, {double confidence = 0.6}) =>
+      validator
+          .validate(
+            ConversationRoute(
+              type: ConversationRouteType.contextSelector,
+              confidence: confidence,
+              reason: reason,
+            ),
+          )
+          .route!;
 
   /// Por qué gana una ruta: lo pedido, lo nombrado, las candidatas con el
   /// dato que responde cada una y la ruta elegida. Para trazas y pruebas.

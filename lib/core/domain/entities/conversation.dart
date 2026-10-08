@@ -104,12 +104,19 @@ class Conversation {
   /// persona sorda o, si todavía no respondió, el de la última pregunta del
   /// oyente que se abrió en un contexto. Así «¿Sigue recibiendo mensajes?»
   /// tras «¿Las amenazas llegaron por celular?» sigue en las amenazas.
-  String? get topicContextId {
+  String? get topicContextId => topicContextWhere((_) => true);
+
+  /// El tema más reciente que cumple [known]: el grafo no conoce los
+  /// trámites (RAG), y dentro de uno sigue con el último contexto suyo
+  /// («Denunciar robo» durante el trámite de robo en la FELCC).
+  String? topicContextWhere(bool Function(String id) known) {
     for (final turn in turns.reversed) {
       final ctx = turn.message.contextId;
-      if (ctx != null && ctx.isNotEmpty) return ctx;
+      if (ctx != null && ctx.isNotEmpty && known(ctx)) return ctx;
       final routed = turn.route?.targetContextId;
-      if (turn.message.speaker == SpeakerRole.hearing && routed != null) {
+      if (turn.message.speaker == SpeakerRole.hearing &&
+          routed != null &&
+          known(routed)) {
         return routed;
       }
     }
