@@ -44,6 +44,8 @@ FUENTES = [
     os.path.join(AWS, "lexico_lsb.json"),
     # Glosa → rol y forma en español (tool/sync_vocabulary.dart).
     os.path.join(AWS, "gloss_lexicon.py"),
+    # Composición de la oración base (analyze_glosses, generate_*_sentence).
+    os.path.join(AWS, "sentence_composer.py"),
     os.path.join(AWS, "rag_zonas.py"),
     os.path.join(AWS, "zonas_senas.json"),
 ]

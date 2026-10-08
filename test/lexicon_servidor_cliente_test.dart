@@ -72,8 +72,9 @@ void main() {
   });
 
   test('todo rol generado es uno que el backend sabe leer', () {
-    // El mapping de roles vive en la Lambda; el lexicón, en su módulo.
-    final fuente = File('aws/lambda_function.py').readAsStringSync() +
+    // El mapping de roles vive en la composición de la Lambda; el lexicón,
+    // en su módulo.
+    final fuente = File('aws/sentence_composer.py').readAsStringSync() +
         File('aws/gloss_lexicon.py').readAsStringSync();
 
     // Tabla con la que el backend reparte cada glosa en su cubo de análisis.
