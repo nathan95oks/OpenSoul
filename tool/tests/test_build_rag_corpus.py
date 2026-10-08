@@ -519,7 +519,7 @@ class DeletreadosPorNorma(unittest.TestCase):
 
 
 class HerramientaEquivalencias(unittest.TestCase):
-    import rag_equivalencias as E  # noqa: E402
+    import rag_buscar_equivalencias as E  # noqa: E402
 
     CAT = {"PAPEL": ["Papel", "el documento"], "MÍO": ["Mío", "mi"],
            "AYUDAR": ["Ayudar", "ayudar"], "INVESTIGACIÓN": ["Investigación"]}
@@ -624,8 +624,8 @@ class ConfirmacionAutomatica(unittest.TestCase):
     """Una equivalencia de Bedrock se decide sola con Titan y la vuelta."""
 
     def decidir(self, zona, faltan, sobran):
-        import rag_equivalencias as E
-        import rag_zonas as ZN
+        import rag_buscar_equivalencias as E
+        import rag_clasificar_zonas as ZN
         import rag_indexar_embeddings as RI
         salida = {"BOLETA": {"sena": "FACTURA", "estado": "propuesta",
                              "origen": "bedrock",
@@ -655,7 +655,7 @@ class ConfirmacionAutomatica(unittest.TestCase):
 
 
 class ZonaPorUso(unittest.TestCase):
-    import rag_zonas as ZN  # noqa: E402
+    import rag_clasificar_zonas as ZN  # noqa: E402
 
     def test_solo_un_sustantivo_entra_a_una_zona_de_cosas(self):
         self.assertEqual(self.ZN.zona_valida(

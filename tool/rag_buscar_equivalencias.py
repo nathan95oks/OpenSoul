@@ -1,7 +1,7 @@
 """Busca señas del catálogo equivalentes para las palabras sin seña del RAG.
 
-    python tool/rag_equivalencias.py            # catálogo + Bedrock (Lambda)
-    python tool/rag_equivalencias.py --sin-red  # solo la evidencia del catálogo
+    python tool/rag_buscar_equivalencias.py            # catálogo + Bedrock (Lambda)
+    python tool/rag_buscar_equivalencias.py --sin-red  # solo la evidencia del catálogo
 
 Las palabras salen de `docs/negocio/rag/glosas_cache.json`: las que la
 traducción Texto→LSB marcó «concepto_sin_catalogo», menos las siglas (NUREJ,
@@ -22,7 +22,7 @@ CRPVA), que en LSB se deletrean. Para cada una:
      combinación de hasta tres señas del léxico (`senas`).
 3. **Confirmación automática**, sin revisión humana: una propuesta de
    Bedrock se aprueba sola si además (a) la seña es de la misma zona que la
-   palabra (la que le dieron Titan y Bedrock en `tool/rag_zonas.py`), cuando
+   palabra (la que le dieron Titan y Bedrock en `tool/rag_clasificar_zonas.py`), cuando
    es una sola seña con zona, y (b) una frase real con las señas en lugar de
    la palabra dice lo mismo que la original (`action: "retrotraducir"`: no
    falta la palabra ni sobra ninguna seña). Si falla una señal, se rechaza
@@ -30,7 +30,7 @@ CRPVA), que en LSB se deletrean. Para cada una:
 
 Escribe `docs/negocio/rag/senas_equivalentes.json`.
 
-    python tool/rag_equivalencias.py --actualizar-catalogo
+    python tool/rag_buscar_equivalencias.py --actualizar-catalogo
 
 regenera `aws/catalogo_senas.json` desde la exportación del catálogo
 (`assets/dictionary/glosas_opensoul.csv`, de `tool/generate_csv.py`), que no
@@ -232,7 +232,7 @@ def confirmar(url: str, salida: dict) -> None:
     """Decide sola cada propuesta de Bedrock no revisada a mano: aprobada si
     Titan y la vuelta al español la confirman, rechazada si no."""
     from rag_indexar_embeddings import llamar
-    from rag_zonas import DESTINO as ZONAS
+    from rag_clasificar_zonas import DESTINO as ZONAS
     sys.path.insert(0, os.path.join(ROOT, "aws"))
     from rag_revision import conjugada  # noqa: E402
     zona_de = {}

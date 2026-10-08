@@ -11,7 +11,7 @@
    las descripciones de las palabras sin seña (`tool/rag_descripciones_lsb.py`),
    que la app muestra en LSB.
 3. Busca seña para las palabras que la traducción dejó sin seña
-   (`tool/rag_equivalencias.py`): la del léxico si el sentido coincide
+   (`tool/rag_buscar_equivalencias.py`): la del léxico si el sentido coincide
    (forma 1) o un sinónimo o combinación de señas del léxico (forma 2),
    confirmados con la vuelta al español.
 4. Vuelve a generar el corpus con esas glosas, comprueba que quedó al día y
@@ -52,7 +52,7 @@ def main() -> int:
         return 1
     if paso(constructor) != 0:
         return 1
-    if paso(os.path.join(AQUI, "rag_equivalencias.py")) != 0:
+    if paso(os.path.join(AQUI, "rag_buscar_equivalencias.py")) != 0:
         print("La búsqueda de señas equivalentes falló; vuelve a ejecutar.")
         return 1
     if paso(constructor) != 0:

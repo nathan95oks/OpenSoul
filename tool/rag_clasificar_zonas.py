@@ -1,7 +1,7 @@
 """Ubica cada palabra sin seña del corpus RAG en su zona de tarjetas.
 
-    python tool/rag_zonas.py           # solo las palabras nuevas
-    python tool/rag_zonas.py --todo    # vuelve a clasificar todas
+    python tool/rag_clasificar_zonas.py           # solo las palabras nuevas
+    python tool/rag_clasificar_zonas.py --todo    # vuelve a clasificar todas
 
 Las zonas son las categorías del catálogo oficial (Tiempo, Lugares,
 Documentos, Objetos…; ver `aws/zonas_senas.json`). Una seña del catálogo ya

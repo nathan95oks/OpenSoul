@@ -4112,7 +4112,7 @@ def rag_index_batch():
 #
 # Para el vocabulario del corpus RAG: Bedrock propone una seña oficial
 # equivalente para cada palabra sin seña, o ninguna. Ver `rag_equivalencias.py`.
-# Solo lo usa `tool/rag_equivalencias.py`; la app no lo llama.
+# Solo lo usa `tool/rag_buscar_equivalencias.py`; la app no lo llama.
 
 _CATALOGO_LSB = None
 _LEXICO_LSB = None

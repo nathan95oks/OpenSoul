@@ -20,7 +20,7 @@ equivalente o ninguna, y la Lambda descarta cualquier glosa fuera del
 catálogo. No necesita permisos nuevos. Se usa desde el repositorio:
 
 ```bash
-python tool/rag_equivalencias.py   # escribe docs/negocio/rag/senas_equivalentes.json
+python tool/rag_buscar_equivalencias.py   # escribe docs/negocio/rag/senas_equivalentes.json
 python tool/build_rag_corpus.py    # aplica las aprobadas
 ```
 
