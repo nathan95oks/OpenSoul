@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalog.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
@@ -92,12 +93,19 @@ class ConversationNotifier extends Notifier<ConversationState> {
     ConversationTurn turn,
     String? activeContextId,
   ) async {
+    final ConversationGraphCatalog catalog;
     try {
-      await ref.read(conversationGraphCatalogProvider.future);
+      catalog = await ref.read(conversationGraphCatalogProvider.future);
     } catch (_) {
       return turn;
     }
-    final routed = routeForTurn(ref, turn, activeContextId: activeContextId);
+    // Un trámite (RAG) no es un contexto del grafo: dentro de él, el grafo
+    // sigue con el último contexto que conoce.
+    final graphContext =
+        activeContextId == null || catalog.hasContext(activeContextId)
+        ? activeContextId
+        : state.conversation.topicContextWhere(catalog.hasContext);
+    final routed = routeForTurn(ref, turn, activeContextId: graphContext);
     return routed ?? turn;
   }
 

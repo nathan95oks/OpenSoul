@@ -154,6 +154,18 @@ class ConversationGraphCatalog {
 
   /// Preguntas de [contextId] que abre la puerta [gateId] (su condición es
   /// una respuesta de la puerta), en el orden del recorrido.
+  /// Las preguntas en que se divide una pregunta compuesta (derivación):
+  /// «¿Tiene la factura o la caja del celular?» se responde con FACTURA y
+  /// con CAJA. Vacío si [questionId] no es una derivación.
+  List<String> partsOf(String questionId) {
+    final q = bank.question(questionId);
+    if (q == null || !q.isDerivation) return const [];
+    return [
+      for (final p in q.answerSteps)
+        if (hasQuestion(p)) p,
+    ];
+  }
+
   List<String> openedBy(String contextId, String gateId) => [
     if (isControlGate(gateId))
       for (final s in bank.journey(contextId)?.steps ?? const <JourneyStep>[])

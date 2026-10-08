@@ -64,6 +64,12 @@ class RagRetriever {
   /// coincidencia claramente mejor de otro.
   static const double topicBonus = 0.05;
 
+  /// Ventaja adicional del recorrido exacto que está abierto. Dos trámites
+  /// de una misma institución pueden preguntar por «una foto» o «un
+  /// documento»; la continuidad del diálogo es evidencia más precisa que el
+  /// área FELCC/FELCV completa.
+  static const double scenarioBonus = 0.12;
+
   /// Vocabulario institucional inequívoco. Complementa las frases del
   /// corpus cuando el escenario describe una derivación desde otra oficina
   /// (por ejemplo, una persona cuenta violencia en FELCC pero corresponde
@@ -325,9 +331,12 @@ class RagRetriever {
     String hearingText, {
     int limit = 4,
     String? preferArea,
+    String? preferScenarioId,
   }) {
     double ranking((_Entry, double) r) =>
-        r.$2 + (r.$1.scenario.area == preferArea ? topicBonus : 0);
+        r.$2 +
+        (r.$1.scenario.area == preferArea ? topicBonus : 0) +
+        (r.$1.scenario.id == preferScenarioId ? scenarioBonus : 0);
 
     // Por oración: sus coincidencias casi tan buenas como su mejor.
     final groups = <List<(_Entry, double)>>[];
@@ -367,6 +376,18 @@ class RagRetriever {
         // Sin tema previo, una pregunta que vale en varias instituciones
         // («¿Trajo su cédula?», «¿Tiene algún documento?») no elige una.
         continue;
+      }
+      if (preferScenarioId != null && !otherNamed) {
+        final sameScenario = [
+          for (final r in ranked)
+            if (r.$1.scenario.id == preferScenarioId) r,
+        ];
+        // Una coincidencia razonable en el trámite activo conserva el hilo.
+        // Si otro trámite es claramente mejor, no se fuerza la continuidad.
+        if (sameScenario.isNotEmpty &&
+            ranked.first.$2 - sameScenario.first.$2 <= 2 * margin) {
+          ranked = sameScenario;
+        }
       }
       final best = ranking(ranked.first);
       final winningArea = ranked.first.$1.scenario.area;

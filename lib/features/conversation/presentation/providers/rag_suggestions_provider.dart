@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_router.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
@@ -24,6 +25,10 @@ bool ragOutranksGraph(ConversationRoute route, double ragScore) {
     case ConversationRouteType.noSafeRoute:
       return ragScore >= RagRetriever.minScore;
     case ConversationRouteType.contextSelector:
+      if (route.confidence >= ConversationGraphRouter.askedMotiveConfidence) {
+        return false;
+      }
+      return ragScore >= ragOverTopicScore;
     case ConversationRouteType.directContext:
       return ragScore >= ragOverTopicScore;
     case ConversationRouteType.directQuestion:
@@ -65,6 +70,8 @@ String? _recentArea(
   RagRetriever retriever, {
   int lookBack = 3,
 }) {
+  final active = _activeTramite(conversation);
+  if (active != null) return active.area;
   var seen = 0;
   for (final t in conversation.turns.reversed) {
     if (identical(t, pending) ||
@@ -79,12 +86,22 @@ String? _recentArea(
   return null;
 }
 
+RagTramite? _activeTramite(Conversation conversation) {
+  final active = conversation.activeContextId;
+  if (active == null) return null;
+  for (final tramite in RagTramites.all) {
+    if (tramite.contextId == active) return tramite;
+  }
+  return null;
+}
+
 /// La pregunta del trámite documentado que responde [pending], como ruta del
 /// módulo de tarjetas: «¿Necesita un duplicado del certificado de
 /// matrimonio?» abre el paso de SERECI con sus respuestas documentadas.
 ///
-/// Solo donde el grafo no tiene una ruta segura ([ragOutranksGraph]): lo que
-/// el grafo reconoce se sigue respondiendo con sus tarjetas guiadas. Primero
+/// Solo donde el grafo no tiene una ruta segura ([ragOutranksGraph]), o
+/// cuando la pregunta es del trámite que ya está abierto: lo demás que el
+/// grafo reconoce se sigue respondiendo con sus tarjetas guiadas. Primero
 /// la búsqueda por palabras; si no encuentra nada, lo que ya haya devuelto la
 /// búsqueda por significado ([remote]). `null` si nada se parece lo
 /// suficiente.
@@ -96,11 +113,23 @@ ConversationRoute? ragTramiteRoute(
   List<RagSuggestion> remote = const [],
 }) {
   if (retriever == null) return null;
+  final activeTramite = _activeTramite(conversation);
   final local = retriever.suggest(
     pending.message.text,
     preferArea: _recentArea(conversation, pending, retriever),
+    preferScenarioId: activeTramite?.scenarioId,
   );
-  final found = local.isNotEmpty && ragOutranksGraph(route, local.first.score)
+  // Dentro de un trámite abierto, su propia pregunta («¿Tiene una foto de
+  // ella?» en trata) sigue el hilo: el grafo no conoce los trámites y
+  // abriría la parecida de otro contexto.
+  final continues =
+      activeTramite != null &&
+      local.isNotEmpty &&
+      local.first.scenarioId == activeTramite.scenarioId &&
+      local.first.score >= ragOverTopicScore;
+  final found =
+      local.isNotEmpty &&
+          (continues || ragOutranksGraph(route, local.first.score))
       ? local
       : ragMayAskRemote(route)
       ? remote

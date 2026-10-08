@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalo
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_router.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
+import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
 
 /// Ruteo de conversación con el Bedrock de LSB→Texto/Audio (`action: route`).
@@ -28,6 +29,13 @@ class RemoteGraphRouteDataSource implements GraphRouteModel {
     this.apiUrl = _envUrl,
   });
 
+  static final QuestionBank _lambdaBank = QuestionBank.generated();
+
+  static bool _knownByLambda(ConversationRoute c) =>
+      (c.targetContextId == null ||
+          _lambdaBank.journey(c.targetContextId!) != null) &&
+      c.targetQuestionIds.every((q) => _lambdaBank.question(q) != null);
+
   bool get isConfigured {
     final uri = Uri.tryParse(apiUrl);
     return uri != null && uri.hasScheme && uri.host.isNotEmpty;
@@ -39,7 +47,15 @@ class RemoteGraphRouteDataSource implements GraphRouteModel {
     required List<ConversationRoute> candidates,
     String? activeContextId,
   }) async {
-    if (!isConfigured || candidates.isEmpty) return null;
+    // La Lambda valida cada candidata contra SU banco (el generado). Los
+    // trámites del RAG viven solo en la app: una candidata suya hacía que
+    // la Lambda rechazara todo el pedido (400) y el desempate se perdía.
+    final enLaLambda = [
+      for (final c in candidates)
+        if (_knownByLambda(c)) c,
+    ];
+    if (!isConfigured || enLaLambda.isEmpty) return null;
+    candidates = enLaLambda;
     try {
       final response = await client
           .post(
