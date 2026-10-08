@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:lsb_legal_app/core/domain/entities/dialogue_node.dart';
 import 'package:lsb_legal_app/core/domain/session/cards_flow_purpose.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// El banco de nodos conversacionales, con su emparejamiento.
 ///
@@ -233,15 +234,7 @@ class DialogueGraph {
     return w;
   }
 
-  static String _unaccent(String s) {
-    const from = 'áàäâéèëêíìïîóòöôúùüû';
-    const to = 'aaaaeeeeiiiioooouuuu';
-    var out = s;
-    for (var i = 0; i < from.length; i++) {
-      out = out.replaceAll(from[i], to[i]);
-    }
-    return out;
-  }
+  static String _unaccent(String s) => SpanishText.stripAccents(s);
 }
 
 class DialogueMatch {

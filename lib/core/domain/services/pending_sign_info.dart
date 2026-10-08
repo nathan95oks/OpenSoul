@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Qué es una palabra sin seña propia en los módulos M1–M4 ni en el II
 /// Diccionario 2024: lo que la app muestra al deslizar o tocar esa palabra,
@@ -127,13 +128,7 @@ class PendingSignCatalog {
 
   /// Mayúsculas, sin tildes (la Ñ se queda: es otra letra) y con `_` entre
   /// palabras, como las claves del catálogo.
-  static String _plain(String word) {
-    const from = 'ÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛ';
-    const to = 'AAAAEEEEIIIIOOOOUUUU';
-    var out = word.toUpperCase().trim();
-    for (var i = 0; i < from.length; i++) {
-      out = out.replaceAll(from[i], to[i]);
-    }
-    return out.replaceAll(RegExp(r'[\s_]+'), '_');
-  }
+  static String _plain(String word) => SpanishText.stripAccents(
+    word.toUpperCase().trim(),
+  ).replaceAll(RegExp(r'[\s_]+'), '_');
 }

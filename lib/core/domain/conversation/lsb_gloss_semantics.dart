@@ -1,5 +1,6 @@
 import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics_data.g.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Qué dato pide una glosa canónica, para leer preguntas en LSB.
 ///
@@ -212,12 +213,7 @@ class LsbGlossSemantics {
   ];
 
   static String _plain(String word) {
-    const from = 'ÁÉÍÓÚÜ';
-    const to = 'AEIOUU';
-    var out = word.toUpperCase();
-    for (var i = 0; i < from.length; i++) {
-      out = out.replaceAll(from[i], to[i]);
-    }
+    final out = SpanishText.stripAccents(word.toUpperCase());
     // Errores muy frecuentes de escritura móvil. Solo normalizamos
     // interrogativos inequívocos; no se corrigen palabras de contenido ni
     // se intenta adivinar una oración completa.
@@ -440,13 +436,9 @@ class LsbGlossSemantics {
   /// de interrogación. `null` para lo que no es una glosa (dactilología
   /// `d(…)`, número `NÚM(…)` o una letra suelta).
   static String? normalize(String raw) {
-    const from = 'ÁÉÍÓÚÜ';
-    const to = 'AEIOUU';
-    var out = raw.toUpperCase().trim();
-    for (var i = 0; i < from.length; i++) {
-      out = out.replaceAll(from[i], to[i]);
-    }
-    out = out.replaceAll(RegExp(r'[¿?¡!]'), '').trim();
+    final out = SpanishText.stripAccents(
+      raw.toUpperCase().trim(),
+    ).replaceAll(RegExp(r'[¿?¡!]'), '').trim();
     if (out.isEmpty || out.contains('(') || out.length == 1) return null;
     return out;
   }

@@ -6,6 +6,7 @@ import 'package:lsb_legal_app/core/domain/guided/bank_contexts.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
 import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart'
     show kEvidenceMarker;
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Quita duplicados exactos conservando el primer orden de aparición.
 ///
@@ -1157,13 +1158,7 @@ AssemblerRoute routeToAssembler({
   String? needId,
   String? intentId,
 }) {
-  String unaccent(String s) => s
-      .toUpperCase()
-      .replaceAll('Á', 'A')
-      .replaceAll('É', 'E')
-      .replaceAll('Í', 'I')
-      .replaceAll('Ó', 'O')
-      .replaceAll('Ú', 'U');
+  String unaccent(String s) => SpanishText.stripAccents(s.toUpperCase());
 
   final norm = glosses.map(unaccent).toSet();
 

@@ -1,3 +1,5 @@
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
+
 class SignImageResolver {
   static const String defaultBaseUrl =
       String.fromEnvironment('LSB_SIGN_IMAGES_BASE_URL');
@@ -25,12 +27,10 @@ class SignImageResolver {
   static final RegExp _admitido = RegExp(r'^[A-Z0-9_-]+$');
 
   static String? _sanitize(String gloss) {
-    const equivalencias = {
-      'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U', 'Ü': 'U', 'Ñ': 'N',
-    };
-    var normalizada = gloss.trim().toUpperCase();
-    equivalencias.forEach((con, sin) => normalizada = normalizada.replaceAll(con, sin));
-    normalizada = normalizada.replaceAll(' ', '_');
+    final normalizada = SpanishText.stripAccents(
+      gloss.trim().toUpperCase(),
+      foldEnye: true,
+    ).replaceAll(' ', '_');
     return _admitido.hasMatch(normalizada) ? normalizada : null;
   }
 }

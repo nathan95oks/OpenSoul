@@ -1,4 +1,5 @@
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 class AnimationUrlResolver {
   /// Modelo distribuido dentro del APK/IPA. Todos los clips disponibles viven
@@ -140,15 +141,7 @@ class AnimationUrlResolver {
 
   /// Quita las tildes de una glosa conservando la N con virgulilla, que es una
   /// letra del alfabeto dactilologico y no un acento.
-  static String stripAccents(String gloss) {
-    const from = 'ÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛ';
-    const to = 'AAAAEEEEIIIIOOOOUUUU';
-    var out = gloss;
-    for (var i = 0; i < from.length; i++) {
-      out = out.replaceAll(from[i], to[i]);
-    }
-    return out;
-  }
+  static String stripAccents(String gloss) => SpanishText.stripAccents(gloss);
 
   /// Letras con las que se deletrea [gloss], o `null` si [gloss] no se
   /// deletrea. Incluye las que no tienen animacion: se representan con un

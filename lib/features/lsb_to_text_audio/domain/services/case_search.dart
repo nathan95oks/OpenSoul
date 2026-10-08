@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
 import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Qué abre un resultado del buscador.
 enum CaseHitKind {
@@ -308,18 +309,8 @@ class CaseSearch {
 
   /// Minúsculas y sin tildes, letra por letra: el texto normalizado mide lo
   /// mismo que el original, así una coincidencia se puede resaltar.
-  static String normalize(String text) {
-    final b = StringBuffer();
-    for (final ch in text.toLowerCase().split('')) {
-      b.write(_sinTilde[ch] ?? ch);
-    }
-    return b.toString();
-  }
-
-  static const _sinTilde = {
-    'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'ü': 'u', //
-    'à': 'a', 'è': 'e', 'ì': 'i', 'ò': 'o', 'ù': 'u',
-  };
+  static String normalize(String text) =>
+      SpanishText.stripAccents(text.toLowerCase());
 
   /// Dónde aparece cada palabra de [query] en [text] (por su comienzo), para
   /// resaltarla. Rangos `[inicio, fin)` sobre [text], ordenados y sin
