@@ -107,6 +107,39 @@ def _modelo(**respuesta):
     return mock.patch.object(lambda_function, "invoke_bedrock_json", return_value=respuesta)
 
 
+class RespuestaRealDelModelo(unittest.TestCase):
+    """Nova escribe el JSON en varias líneas o en un bloque ```json. Leer
+    solo la primera línea (como una oración refinada) dejaba el desempate
+    siempre en «model_error» en producción. Aquí se simula `invoke_model`,
+    no `invoke_bedrock_json`, para que el lector se pruebe de verdad."""
+
+    def _nova(self, texto):
+        cuerpo = json.dumps({"output": {"message": {"content": [{"text": texto}]}}})
+        cliente = mock.Mock()
+        cliente.invoke_model.return_value = {"body": _Cuerpo(cuerpo.encode("utf-8"))}
+        return mock.patch.object(lambda_function, "bedrock_runtime", cliente)
+
+    def test_json_en_varias_lineas(self):
+        with self._nova('{\n  "candidateId": "X",\n  "confidence": 0.8\n}'):
+            self.assertEqual(lambda_function.invoke_bedrock_json("p"),
+                             {"candidateId": "X", "confidence": 0.8})
+
+    def test_json_en_bloque_markdown(self):
+        with self._nova('```json\n{"candidateId": null, "confidence": 0}\n```'):
+            self.assertEqual(lambda_function.invoke_bedrock_json("p"),
+                             {"candidateId": None, "confidence": 0})
+
+    def test_la_ruta_se_genera_con_la_respuesta_real(self):
+        s3 = _S3Falso()
+        texto = ('{\n  "candidateId": "DIRECT_CONTEXT|denuncias||",\n'
+                 '  "confidence": 0.82,\n  "reason": "nombra denunciar"\n}')
+        with mock.patch.object(lambda_function, "s3_client", s3), self._nova(texto):
+            estado, cuerpo = _llamar(_body())
+        self.assertEqual(estado, 200)
+        self.assertTrue(cuerpo["generated"], cuerpo)
+        self.assertEqual(cuerpo["targetFamilyId"], "denuncias")
+
+
 class RuteoDeConversacion(unittest.TestCase):
     def setUp(self):
         self.s3 = _S3Falso()

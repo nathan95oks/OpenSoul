@@ -3119,18 +3119,25 @@ def _refinement_is_safe(base: str, refined: str) -> bool:
         return False
     return len(base_w & refined_w) >= 1
 
-def _parse_bedrock_response(response_body: dict) -> str:
+def _bedrock_raw_text(response_body: dict) -> str:
+    """El texto completo que devolvió el modelo, según la familia."""
     if "output" in response_body and isinstance(response_body.get("output"), dict):
-        raw = (response_body["output"].get("message", {})
-               .get("content", [{}])[0].get("text", "").strip())
-    elif "content" in response_body and isinstance(response_body["content"], list):
-        raw = response_body["content"][0].get("text", "").strip()
-    elif "results" in response_body and isinstance(response_body["results"], list):
-        raw = response_body["results"][0].get("outputText", "").strip()
-    elif "generation" in response_body:
-        raw = response_body["generation"].strip()
-    else:
-        raise ValueError("Respuesta Bedrock no reconocida")
+        return (response_body["output"].get("message", {})
+                .get("content", [{}])[0].get("text", "").strip())
+    if "content" in response_body and isinstance(response_body["content"], list):
+        return response_body["content"][0].get("text", "").strip()
+    if "results" in response_body and isinstance(response_body["results"], list):
+        return response_body["results"][0].get("outputText", "").strip()
+    if "generation" in response_body:
+        return response_body["generation"].strip()
+    raise ValueError("Respuesta Bedrock no reconocida")
+
+
+def _parse_bedrock_response(response_body: dict) -> str:
+    """La oración que devolvió el modelo: la primera línea con contenido,
+    sin rótulos («Oración refinada:») ni comillas. Solo para respuestas de
+    una frase; un JSON se lee con `invoke_bedrock_json`."""
+    raw = _bedrock_raw_text(response_body)
 
     labels = ("oracion refinada", "oración refinada", "salida", "respuesta",
               "resultado", "texto refinado", "oracion", "oración")
@@ -3591,7 +3598,12 @@ def invoke_bedrock_json(prompt: str) -> dict:
         # y la sugerencia se descartaba entera sin que se notara.
         body=json.dumps(_build_bedrock_request_body(prompt, max_tokens=800)),
     )
-    crudo = _parse_bedrock_response(json.loads(respuesta["body"].read()))
+    # El texto completo, no solo su primera línea: el modelo suele escribir
+    # el JSON en varias líneas («{» sola, o un bloque ```json). Leerlo con
+    # `_parse_bedrock_response` (una frase, la primera línea) dejaba sin
+    # objeto JSON toda respuesta así, y el desempate de Conversación y las
+    # sugerencias caían siempre en «model_error».
+    crudo = _bedrock_raw_text(json.loads(respuesta["body"].read()))
     # El modelo suele envolver el JSON en explicaciones o en un bloque de
     # markdown; se extrae el objeto en lugar de exigir una salida limpia.
     inicio, fin = crudo.find("{"), crudo.rfind("}")

@@ -65,6 +65,30 @@ class LecturaDeterminista(unittest.TestCase):
         self.assertEqual({m["id"] for m in lectura["mentionedContexts"]}, DENUNCIAS)
         self.assertEqual(lectura["requestedSlots"], [])
 
+    def test_delitos_sin_contexto_propio_nombran_el_que_corresponde(self):
+        # QA 2026-10-08: «fraude» llega como palabra azul y «violación» como
+        # su seña; sin pista, el router no sabía a qué contexto iban.
+        for texto, glosas, contexto in (
+            ("¿Fue víctima de fraude?", ["TU", "SENA_PENDIENTE:FRAUDE"],
+             "engano_dinero"),
+            ("¿Fue víctima de una estafa?", ["TU", "ENGAÑAR"], "engano_dinero"),
+            ("¿Quiere denunciar una violación?",
+             ["TU", "QUERER", "QUEJAR", "VIOLACIÓN"], "violencia"),
+        ):
+            with self.subTest(texto=texto):
+                ids = {m["id"] for m in _lectura(texto, glosas)["mentionedContexts"]}
+                self.assertIn(contexto, ids)
+        # «homicidio» no tiene contexto propio: solo la familia (lo elige la
+        # persona), sin inventar uno.
+        # «acoso sexual» no abre el recorrido general de violencia: su
+        # trámite FELCV es el que pregunta lo que corresponde.
+        acoso = _lectura("¿Quiere denunciar acoso sexual?",
+                         ["QUERER", "QUEJAR", "SENA_PENDIENTE:ACOSO", "SEXUAL"])
+        self.assertEqual({m["id"] for m in acoso["mentionedContexts"]}, DENUNCIAS)
+        lectura = _lectura("¿Quiere denunciar un homicidio?",
+                           ["TU", "QUERER", "QUEJAR", "SENA_PENDIENTE:HOMICIDIO"])
+        self.assertEqual({m["id"] for m in lectura["mentionedContexts"]}, DENUNCIAS)
+
     def test_pregunta_abierta_por_el_motivo(self):
         lectura = _lectura(
             "Hola, ¿cómo está? ¿Qué viene a realizar?",
