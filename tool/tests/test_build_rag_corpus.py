@@ -677,6 +677,32 @@ class ZonaPorUso(unittest.TestCase):
             "TRIBUNAL_DEPARTAMENTAL", "Instituciones", []), "Instituciones")
 
 
+class RespuestaPolarQueSeEntiendeSola(unittest.TestCase):
+    """QA 2026-10-08: un «Sí.» o «No.» suelto no se entiende cuando las
+    respuestas se juntan en un mensaje. Se recupera sin inventar nada."""
+
+    def test_la_opuesta_dada_vuelta(self):
+        self.assertEqual(B.invertir_polar("No, no conozco a esa persona."),
+                         "Sí, conozco a esa persona.")
+        self.assertEqual(B.invertir_polar("Sí, estoy en peligro ahora."),
+                         "No, no estoy en peligro ahora.")
+        self.assertEqual(B.invertir_polar("No. No tengo abogado."),
+                         "Sí, tengo abogado.")
+        self.assertEqual(B.invertir_polar("Sí. Lo tengo aquí."),
+                         "No, no lo tengo aquí.")
+
+    def test_sin_esa_forma_no_se_adivina(self):
+        for frase in ("No.", "Sí, alguien vio.", "No, todavía no pagué."):
+            with self.subTest(frase=frase):
+                self.assertIsNone(B.invertir_polar(frase))
+
+    def test_la_primera_clausula(self):
+        self.assertEqual(
+            B.primera_clausula("Sí, hablé con el maestro, pero no ayudó."),
+            "Sí, hablé con el maestro.")
+        self.assertIsNone(B.primera_clausula("Sí, tengo fotos y videos."))
+
+
 class RespuestaPolarSinDatosNuevos(unittest.TestCase):
     """QA 2026-10-08: elegir SÍ decía «Sí, es mi jefe.» o «Sí, vive cerca de
     mi casa.» a «¿Conoce a la persona…?»: datos que nadie mencionó."""
