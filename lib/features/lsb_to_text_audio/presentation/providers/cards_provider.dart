@@ -28,12 +28,6 @@ final categoriesProvider = FutureProvider<List<String>>((ref) async {
   return useCase();
 });
 
-final cardsByCategoryProvider = FutureProvider<List<LsbCard>>((ref) async {
-  final category = ref.watch(currentCategoryProvider);
-  final useCase = ref.watch(getCardsByCategoryUseCaseProvider);
-  return useCase(category);
-});
-
 final allCardsProvider = FutureProvider<List<LsbCard>>((ref) async {
   final categories = await ref.watch(categoriesProvider.future);
   final useCase = ref.watch(getCardsByCategoryUseCaseProvider);
