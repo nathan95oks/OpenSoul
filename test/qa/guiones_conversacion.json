@@ -1,0 +1,274 @@
+{
+  "nota": "Guiones de QA del módulo Conversación (2026-10-07). Cada turno del oyente lleva lo que haría un sistema coherente («espera»): preguntas que deben abrirse (cualquiera de la lista), contexto o familia, tipo de ruta, trámite, o contextos que NO deben abrirse. «sorda» dice cómo contesta la persona sorda: contexto que elige en el selector y opciones; si no, la primera opción ofrecida de cada pregunta pedida. Las respuestas de la Lambda Texto→LSB son las reales (test/qa/lambda_respuestas.json).",
+  "conversaciones": [
+    {
+      "id": "C01",
+      "titulo": "Denuncia de robo en ventanilla, de principio a fin",
+      "turnos": [
+        {"oyente": "Buenos días, ¿en qué le puedo ayudar?", "espera": {"tipo": ["contextSelector", "directContext"]}, "sorda": {"contexto": "denuncia_robo", "elige": {"Q.HEC.QUE_OCURRIO": "robar"}}},
+        {"oyente": "¿Qué le robaron?", "espera": {"preguntas": ["Q.ROB.QUE"], "contexto": "denuncia_robo"}, "sorda": {"elige": {"Q.ROB.QUE": "celular"}}},
+        {"oyente": "¿Cuándo pasó?", "espera": {"preguntas": ["Q.TIE.CUANDO"], "contexto": "denuncia_robo"}},
+        {"oyente": "¿Y dónde fue?", "espera": {"preguntas": ["Q.LUG.DONDE"], "contexto": "denuncia_robo"}},
+        {"oyente": "¿Conoce a la persona que le robó?", "espera": {"preguntas": ["Q.PER.CONOCE"], "contexto": "denuncia_robo"}},
+        {"oyente": "¿Me puede describir a esa persona? ¿Cómo era?", "espera": {"preguntas": ["Q.PER.DESCRIBIR", "Q.PER.DESC.SEXO", "Q.PER.DESC.EDAD", "Q.PER.DESC.ESTATURA", "Q.PER.DESC.CONTEXTURA", "Q.PER.DESC.ROPA"], "contexto": "denuncia_robo"}},
+        {"oyente": "¿Qué ropa llevaba puesta?", "espera": {"preguntas": ["Q.PER.DESC.ROPA"], "contexto": "denuncia_robo"}},
+        {"oyente": "¿Alguien vio lo que pasó?", "espera": {"preguntas": ["Q.TES.EXISTE"], "contexto": "denuncia_robo", "o_tramite": ["tramite_felcc_01"]}},
+        {"oyente": "¿Tiene la factura o la caja del celular?", "espera": {"preguntas": ["Q.EVI.FACTURA_O_CAJA", "Q.EVI.FACTURA", "Q.EVI.QUE_TIENE", "Q.EVI.TIPOS"], "contexto": "denuncia_robo", "o_tramite": ["tramite_felcc_01"]}},
+        {"oyente": "¿Quiere presentar la denuncia formal?", "espera": {"preguntas": ["Q.DEN.INTENCION"], "contexto": "denuncia_robo"}}
+      ]
+    },
+    {
+      "id": "C02",
+      "titulo": "Violencia de pareja: seguridad primero",
+      "turnos": [
+        {"oyente": "Hola, ¿qué le pasó? Cuénteme con calma.", "espera": {"tipo": ["contextSelector", "directContext", "directQuestion"]}, "sorda": {"contexto": "violencia", "elige": {"Q.VIO.TIPO": "pegar"}}},
+        {"oyente": "¿Está en peligro ahora mismo?", "espera": {"preguntas": ["Q.RIE.AUXILIO", "Q.RIE.MIEDO_CASA"], "contexto": "violencia"}},
+        {"oyente": "¿Quién le hizo esto?", "espera": {"preguntas": ["Q.VIO.AGRESOR", "Q.PER.VINCULO"], "contexto": "violencia"}},
+        {"oyente": "¿Está herida? ¿Le duele algo?", "espera": {"preguntas": ["Q.SAL.HERIDO", "Q.SAL.PARTE"], "contexto": "violencia"}},
+        {"oyente": "¿Esto ya le pasó antes?", "espera": {"preguntas": ["Q.VIO.FRECUENCIA"], "contexto": "violencia"}},
+        {"oyente": "¿Tiene miedo de volver a su casa?", "espera": {"preguntas": ["Q.RIE.MIEDO_CASA"], "contexto": "violencia"}},
+        {"oyente": "¿Necesita que la llevemos al médico?", "espera": {"preguntas": ["Q.SAL.ASISTENCIA"], "contexto": "violencia"}}
+      ]
+    },
+    {
+      "id": "C03",
+      "titulo": "Datos personales en medio de una denuncia (cambio de tema explícito)",
+      "turnos": [
+        {"oyente": "¿Quiere denunciar un robo?", "espera": {"familia": "denuncias", "contexto": "denuncia_robo"}, "sorda": {"contexto": "denuncia_robo", "elige": {"Q.HEC.QUE_OCURRIO": "robar"}}},
+        {"oyente": "Primero necesito sus datos. ¿Cuál es su nombre completo?", "espera": {"preguntas": ["Q.ID.NOMBRE"], "contexto": "identificacion"}},
+        {"oyente": "¿Trae su carnet de identidad?", "espera": {"preguntas": ["Q.ID.DOC_TIPO", "Q.ID.DOC_NUMERO"], "contexto": "identificacion"}},
+        {"oyente": "¿A qué número la podemos llamar?", "espera": {"preguntas": ["Q.ID.TELEFONO_PROPIO"], "contexto": "identificacion"}},
+        {"oyente": "Bien, volvamos al robo. ¿A qué hora pasó?", "espera": {"preguntas": ["Q.TIE.HORA", "Q.TIE.CUANDO"], "contexto": "denuncia_robo"}}
+      ]
+    },
+    {
+      "id": "C04",
+      "titulo": "Accesibilidad: intérprete y lectura",
+      "turnos": [
+        {"oyente": "¿Necesita un intérprete de lengua de señas?", "espera": {"preguntas": ["Q.ACC.INTERPRETE"]}},
+        {"oyente": "¿Puede leer lo que le escribo?", "espera": {"preguntas": ["Q.ACC.LECTURA"]}},
+        {"oyente": "¿Me entiende bien?", "espera": {"no_contexto": ["denuncia_robo", "engano_dinero"]}}
+      ]
+    },
+    {
+      "id": "C05",
+      "titulo": "Trámite SEGIP: cédula perdida",
+      "turnos": [
+        {"oyente": "¿Perdió su cédula de identidad?", "espera": {"tramite_area": ["SEGIP", "FELCC"], "contexto_o_tramite": true}},
+        {"oyente": "¿Trajo su certificado de nacimiento?", "espera": {"tramite_area": ["SEGIP", "SERECI"]}},
+        {"oyente": "¿Tiene la denuncia de pérdida?", "espera": {"tramite_area": ["SEGIP", "FELCC"]}}
+      ]
+    },
+    {
+      "id": "C06",
+      "titulo": "Certificado de nacimiento en SERECI",
+      "turnos": [
+        {"oyente": "¿Viene por un certificado de nacimiento?", "espera": {"tramite_area": ["SERECI"]}},
+        {"oyente": "¿El certificado es suyo o de otra persona?", "espera": {"tramite_area": ["SERECI"]}}
+      ]
+    },
+    {
+      "id": "C07",
+      "titulo": "Acoso sexual en el trabajo (escenario nuevo)",
+      "turnos": [
+        {"oyente": "¿Quiere denunciar acoso sexual?", "espera": {"familia": "denuncias", "o_tramite": ["tramite_felcv_201"], "o_contexto": ["violencia"]}, "sorda": {"contexto": "tramite_felcv_201"}},
+        {"oyente": "¿Conoce a la persona que la acosa?", "espera": {"tramite": ["tramite_felcv_201"], "o_preguntas": ["Q.PER.CONOCE", "Q.VIO.AGRESOR"]}},
+        {"oyente": "¿Esa persona la tocó sin su permiso?", "espera": {"tramite": ["tramite_felcv_201"]}},
+        {"oyente": "¿Tiene testigos?", "espera": {"tramite": ["tramite_felcv_201"], "o_preguntas": ["Q.TES.EXISTE"]}}
+      ]
+    },
+    {
+      "id": "C08",
+      "titulo": "Ciberacoso por celular (escenario nuevo)",
+      "turnos": [
+        {"oyente": "¿Le están amenazando por internet?", "espera": {"contexto": "amenaza_digital", "o_tramite": ["tramite_felcc_201"]}},
+        {"oyente": "¿Publicaron sus fotos sin su permiso?", "espera": {"tramite": ["tramite_felcc_201"], "o_contexto": ["amenaza_digital"]}},
+        {"oyente": "¿Guardó los mensajes?", "espera": {"preguntas": ["Q.DIG.GUARDO", "Q.DIG.CAPTURAS"], "o_tramite": ["tramite_felcc_201"]}}
+      ]
+    },
+    {
+      "id": "C09",
+      "titulo": "Bullying en la escuela (escenario nuevo)",
+      "turnos": [
+        {"oyente": "¿Su hijo sufre bullying en la escuela?", "espera": {"tramite": ["tramite_dna_201"]}},
+        {"oyente": "¿Otros niños le pegan a su hijo?", "espera": {"tramite": ["tramite_dna_201"]}},
+        {"oyente": "¿Habló con el maestro?", "espera": {"tramite": ["tramite_dna_201"]}}
+      ]
+    },
+    {
+      "id": "C10",
+      "titulo": "Trata y tráfico: familiar desaparecida (escenario nuevo)",
+      "turnos": [
+        {"oyente": "¿Quiere denunciar trata y tráfico de personas?", "espera": {"familia": "denuncias", "o_tramite": ["tramite_felcc_203"]}, "sorda": {"contexto": "tramite_felcc_203"}},
+        {"oyente": "¿La persona desapareció?", "espera": {"tramite": ["tramite_felcc_203", "tramite_felcc_103"]}},
+        {"oyente": "¿Tiene una foto de ella?", "espera": {"tramite": ["tramite_felcc_203", "tramite_felcc_103"]}}
+      ]
+    },
+    {
+      "id": "C11",
+      "titulo": "Estafa por transferencia",
+      "turnos": [
+        {"oyente": "¿Le engañaron para que deposite dinero?", "espera": {"contexto": "engano_dinero", "o_tramite": ["tramite_felcc_102", "tramite_felcc_02"]}},
+        {"oyente": "¿Cuánto dinero transfirió?", "espera": {"preguntas": ["Q.DIN.MONTO"], "o_tramite": ["tramite_felcc_102"]}},
+        {"oyente": "¿Tiene el comprobante?", "espera": {"preguntas": ["Q.DIN.COMPROBANTE"], "o_tramite": ["tramite_felcc_102"]}}
+      ]
+    },
+    {
+      "id": "C12",
+      "titulo": "Charla de ventanilla que no es trámite (no debe abrir nada raro)",
+      "turnos": [
+        {"oyente": "Espere un momento, por favor.", "espera": {"no_contexto": ["denuncia_robo", "violencia", "engano_dinero", "amenaza_digital"], "sin_tramite": true}},
+        {"oyente": "Tome asiento, ya la atiendo.", "espera": {"no_contexto": ["denuncia_robo", "violencia", "engano_dinero", "amenaza_digital"], "sin_tramite": true}},
+        {"oyente": "¿Hace frío afuera, no?", "espera": {"no_contexto": ["denuncia_robo", "violencia", "engano_dinero", "amenaza_digital"], "sin_tramite": true}},
+        {"oyente": "Gracias, eso sería todo por hoy.", "espera": {"no_contexto": ["denuncia_robo", "violencia", "engano_dinero", "amenaza_digital"], "sin_tramite": true}}
+      ]
+    },
+    {
+      "id": "C13",
+      "titulo": "Preguntas sueltas sin contexto (ambiguas)",
+      "turnos": [
+        {"oyente": "¿Dónde?", "espera": {"tipo": ["contextSelector", "noSafeRoute", "directQuestion"], "sin_tramite": true}},
+        {"oyente": "¿Tiene testigos?", "espera": {"preguntas": ["Q.TES.EXISTE"], "o_tipo": ["contextSelector"]}},
+        {"oyente": "¿Y eso cuándo fue?", "espera": {"preguntas": ["Q.TIE.CUANDO"], "o_tipo": ["contextSelector"]}}
+      ]
+    },
+    {
+      "id": "C14",
+      "titulo": "Negaciones y presuposiciones",
+      "turnos": [
+        {"oyente": "No le pregunto por el robo, le pregunto por su cédula. ¿La trae?", "espera": {"preguntas": ["Q.ID.DOC_TIPO", "Q.ID.DOC_NUMERO"], "o_tramite_area": ["SEGIP"], "no_contexto": ["denuncia_robo"]}},
+        {"oyente": "¿Su pareja le pegó ayer?", "espera": {"contexto": "violencia"}},
+        {"oyente": "¿No sabe quién fue?", "espera": {"preguntas": ["Q.PER.CONOCE", "Q.VIO.AGRESOR"]}}
+      ]
+    },
+    {
+      "id": "C15",
+      "titulo": "Cambio de tema a mitad de la conversación",
+      "turnos": [
+        {"oyente": "¿Qué le robaron?", "espera": {"preguntas": ["Q.ROB.QUE"]}, "sorda": {"elige": {"Q.ROB.QUE": "celular"}}},
+        {"oyente": "¿También le golpearon?", "espera": {"contexto": "violencia", "o_preguntas": ["Q.DAN.QUE", "Q.HEC.QUE_OCURRIO", "Q.SAL.HERIDO"]}},
+        {"oyente": "¿Necesita atención médica?", "espera": {"preguntas": ["Q.SAL.ASISTENCIA", "Q.SAL.HERIDO"]}}
+      ]
+    },
+    {
+      "id": "C16",
+      "titulo": "Lenguaje coloquial y errores de tipeo",
+      "turnos": [
+        {"oyente": "¿Qué le chorearon?", "espera": {"preguntas": ["Q.ROB.QUE"]}},
+        {"oyente": "dnde paso eso", "espera": {"preguntas": ["Q.LUG.DONDE"]}},
+        {"oyente": "¿a q hora fue?", "espera": {"preguntas": ["Q.TIE.HORA", "Q.TIE.CUANDO"]}}
+      ]
+    },
+    {
+      "id": "C17",
+      "titulo": "Varias preguntas a la vez",
+      "turnos": [
+        {"oyente": "¿Cuándo, dónde y a qué hora le robaron?", "espera": {"preguntas": ["Q.TIE.CUANDO", "Q.LUG.DONDE", "Q.TIE.HORA"], "todas": true}},
+        {"oyente": "¿Cómo se llama y cuántos años tiene?", "espera": {"preguntas": ["Q.ID.NOMBRE", "Q.ID.EDAD_PROPIA"], "todas": true}}
+      ]
+    },
+    {
+      "id": "C18",
+      "titulo": "Seguimiento de una denuncia anterior",
+      "turnos": [
+        {"oyente": "¿Viene a ver cómo va su denuncia?", "espera": {"contexto": "seguimiento", "o_tramite_area": ["FIS", "FELCC"]}},
+        {"oyente": "¿Tiene el número de su caso?", "espera": {"preguntas": ["Q.SEG.NUM_REFERENCIA"], "o_tramite_area": ["FIS", "FELCC"]}},
+        {"oyente": "¿Sabe quién es su fiscal?", "espera": {"o_preguntas": ["I.PREG.HABLAR_CON", "Q.SEG.AUTORIDAD"], "o_tramite_area": ["FIS"]}}
+      ]
+    },
+    {
+      "id": "C19",
+      "titulo": "Oficina equivocada: derivar a FELCV",
+      "turnos": [
+        {"oyente": "Aquí atendemos robos. Para violencia tiene que ir a la FELCV.", "espera": {"tramite": ["tramite_felcc_04", "tramite_felcc_202"], "o_contexto": ["violencia"]}},
+        {"oyente": "¿Entiende a dónde tiene que ir?", "espera": {"no_contexto": ["denuncia_robo"]}}
+      ]
+    },
+    {
+      "id": "C20",
+      "titulo": "Entrada en otro idioma o sin sentido (control de calidad)",
+      "turnos": [
+        {"oyente": "Where did it happen?", "espera": {"rechazado": true}},
+        {"oyente": "asdfgh qwerty", "espera": {"rechazado": true}}
+      ]
+    },
+    {
+      "id": "C21",
+      "titulo": "Testigo de un hecho (contexto «otro»)",
+      "turnos": [
+        {"oyente": "¿Usted fue testigo de lo que pasó?", "espera": {"contexto": "otro", "o_preguntas": ["Q.TES.QUE_VIO"]}},
+        {"oyente": "¿Qué vio exactamente?", "espera": {"preguntas": ["Q.TES.QUE_VIO", "Q.PER.OBSERVADA"]}},
+        {"oyente": "¿Podría declarar como testigo?", "espera": {"preguntas": ["Q.TES.PUEDE_TESTIMONIO"]}}
+      ]
+    },
+    {
+      "id": "C22",
+      "titulo": "Acoso discriminatorio en una oficina pública",
+      "turnos": [
+        {"oyente": "¿Un funcionario la discriminó por ser sorda?", "espera": {"tramite": ["tramite_lsb_201", "tramite_lsb_102"]}},
+        {"oyente": "¿Se burlan de usted por ser sorda?", "espera": {"tramite": ["tramite_lsb_201"]}}
+      ]
+    },
+    {
+      "id": "C23",
+      "titulo": "La persona sorda abre el turno y el funcionario sigue",
+      "inicia_sorda": {"contexto": "denuncia_robo", "elige": {"Q.HEC.QUE_OCURRIO": "robar"}},
+      "turnos": [
+        {"oyente": "Entiendo. ¿Qué le robaron exactamente?", "espera": {"preguntas": ["Q.ROB.QUE"], "contexto": "denuncia_robo"}},
+        {"oyente": "¿Fue con violencia?", "espera": {"o_preguntas": ["Q.HEC.QUE_OCURRIO", "Q.DAN.QUE"], "o_contexto": ["violencia", "denuncia_robo"]}}
+      ]
+    },
+    {
+      "id": "C24",
+      "titulo": "Instrucciones del funcionario (no son preguntas)",
+      "turnos": [
+        {"oyente": "Firme aquí, por favor.", "espera": {"sin_tramite_ajeno": true, "no_contexto": ["denuncia_robo", "violencia"]}},
+        {"oyente": "Vuelva el lunes con su carnet.", "espera": {"no_contexto": ["denuncia_robo", "violencia"]}},
+        {"oyente": "Le voy a dar una copia de su denuncia.", "espera": {"no_contexto": ["violencia"]}}
+      ]
+    },
+    {
+      "id": "C25",
+      "titulo": "Robo de celular en FELCC: pruebas y seguimiento",
+      "turnos": [
+        {"oyente": "¿Tiene la caja o la factura del celular?", "espera": {"preguntas": ["Q.EVI.FACTURA", "Q.EVI.QUE_TIENE"], "o_tramite": ["tramite_felcc_01"]}},
+        {"oyente": "¿Hay cámaras en esa calle?", "espera": {"tramite": ["tramite_felcc_01"], "o_preguntas": ["Q.EVI.TIPOS", "Q.EVI.QUE_TIENE"]}},
+        {"oyente": "¿Quiere saber quién investigará el robo?", "espera": {"tramite": ["tramite_felcc_01"], "o_contexto": ["seguimiento"]}}
+      ]
+    },
+    {
+      "id": "C26",
+      "titulo": "Saludo de la tarde y de la noche (no es «buenos días»)",
+      "turnos": [
+        {"oyente": "Buenas tardes, ¿en qué le puedo ayudar?", "espera": {"tipo": ["contextSelector"], "glosas_contienen": ["BUENAS_TARDES"], "glosas_no_contienen": ["BUENOS_DIAS"]}, "sorda": {"contexto": "denuncia_robo"}},
+        {"oyente": "Buenas noches. ¿Qué le robaron?", "espera": {"preguntas": ["Q.ROB.QUE"], "glosas_contienen": ["BUENAS_NOCHES"], "glosas_no_contienen": ["BUENOS_DIAS"]}}
+      ]
+    },
+    {
+      "id": "C27",
+      "titulo": "«¿Cuándo y a qué hora?»: dos datos, dos preguntas",
+      "turnos": [
+        {"oyente": "¿Quiere denunciar un robo?", "espera": {"contexto": "denuncia_robo"}},
+        {"oyente": "¿Cuándo y a qué hora pasó?", "espera": {"preguntas": ["Q.TIE.CUANDO", "Q.TIE.HORA"], "todas": true}}
+      ]
+    },
+    {
+      "id": "C28",
+      "titulo": "Acoso sexual en la FELCV: sin datos inventados y sin «Entendido» suelto",
+      "turnos": [
+        {"oyente": "¿Quiere denunciar acoso sexual?", "espera": {"familia": "denuncias", "o_tramite": ["tramite_felcv_201"], "o_contexto": ["violencia"]}, "sorda": {"contexto": "tramite_felcv_201"}},
+        {"oyente": "¿Conoce a la persona que la acosa?", "espera": {"preguntas": ["R.ESC-FELCV-201.4", "Q.PER.CONOCE"], "sorda_no_dice": ["jefe"]}, "sorda": {"elige": {"R.ESC-FELCV-201.4": "si", "Q.PER.CONOCE": "si"}}},
+        {"oyente": "La FELCV es la unidad especializada contra la violencia.", "espera": {"o_tramite": ["tramite_felcv_201"], "o_contexto": ["violencia"]}}
+      ]
+    },
+    {
+      "id": "C29",
+      "titulo": "Acoso físico: «¿Conoce a esa persona?» no agrega dónde vive",
+      "turnos": [
+        {"oyente": "¿Viene a denunciar acoso físico?", "espera": {"familia": "denuncias", "o_tramite": ["tramite_felcc_202", "tramite_felcv_201"], "o_contexto": ["violencia"]}, "sorda": {"contexto": "tramite_felcc_202"}},
+        {"oyente": "¿Conoce a esa persona?", "espera": {"preguntas": ["R.ESC-FELCC-202.2", "Q.PER.CONOCE"], "sorda_no_dice": ["casa", "cerca", "jefe"]}, "sorda": {"elige": {"R.ESC-FELCC-202.2": "si", "Q.PER.CONOCE": "si"}}},
+        {"oyente": "Para la violencia de pareja corresponde la FELCV.", "espera": {"no_contexto": ["denuncia_robo"]}}
+      ]
+    }
+  ]
+}
