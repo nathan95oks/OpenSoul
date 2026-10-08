@@ -6,7 +6,7 @@ Cada turno se juzga con lo que haría una conversación coherente entre la
 persona sorda y el funcionario: qué tarjetas se abren, qué señas se traducen
 y qué termina diciendo la persona sorda.
 
-Reemplaza a `QA_CONVERSACION_CONTINUACION_CODEX_2026-10-08.md` (ver §2).
+Reemplaza al informe de continuación de Codex del mismo día, ya retirado del repositorio; su verificación está en §2.
 
 ## 1. Resultado
 
