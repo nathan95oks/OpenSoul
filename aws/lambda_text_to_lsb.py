@@ -1140,6 +1140,7 @@ def enforce_catalog_membership(glosses: list,
     for gloss in glosses:
         clave = strip_gloss_accents(gloss.upper())
         if (clave in _AVAILABLE_GLOSSES_NORM
+                or clave in _SENAS_DE_MODULO_EXTRA
                 or clave in verified_animation_glosses
                 or clave in _COMPOUND_SPECS
                 or len(clave) <= 1):
@@ -1386,6 +1387,10 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
     # inventada. Por ejemplo, «donde te robaron» no puede salir como PLAZA si
     # la persona nunca dijo «plaza». Esta regla es determinista y usa la misma
     # taxonomía cerrada de ranuras que `build_semantic_turn`.
+    raw_glosses, incidencias_forma = enforce_spoken_form_fidelity(
+        raw_glosses, text,
+    )
+    incidencias += incidencias_forma
     raw_glosses, incidencias_pregunta = enforce_spoken_question_fidelity(
         raw_glosses, text,
     )
@@ -1625,11 +1630,16 @@ SITUATION_CUES = {
     "denuncia_robo": {"glosas": {"ROBAR", "LADRON"},
                       "raices": {"denunci", "rob", "hurt", "asalt"}},
     "violencia": {"glosas": {"VIOLENCIA", "PEGAR", "MALTRATAR", "ABUSAR"},
-                  "raices": {"denunci", "violenci", "agresi", "agredi"}},
+                  # «violación»: violencia sexual (VIOLACIÓN es seña D2024).
+                  # «Acoso» no: lo atienden sus trámites (FELCV, DNA), que
+                  # el recorrido general de violencia taparía.
+                  "raices": {"denunci", "violenci", "agresi", "agredi",
+                             "violaci"}},
     "amenaza_digital": {"glosas": {"AMENAZAR"},
                         "raices": {"denunci", "amenaz"}},
     "engano_dinero": {"glosas": {"ENGANAR"},
-                      "raices": {"denunci", "estaf", "engan"}},
+                      # «fraude» no tiene seña: llega como palabra azul.
+                      "raices": {"denunci", "estaf", "engan", "fraud"}},
     "otro": {"glosas": {"TESTIMONIO"},
              "raices": {"denunci", "testimoni", "declar"}},
     "seguimiento": {"glosas": {"TRAMITE", "RESOLUCION"},
@@ -1738,6 +1748,78 @@ def _ranuras_por_raiz(palabras: list) -> list:
     return ranuras
 
 
+# Saludos de M1 (Módulo 1, «Saludos»): cada uno tiene su seña. El catálogo
+# del avatar solo trae BUENOS_DÍAS y el modelo convertía «buenas tardes» y
+# «buenas noches» en él.
+_SALUDOS_HABLADOS = (
+    ("BUENAS TARDES", "BUENAS_TARDES"),
+    ("BUENAS NOCHES", "BUENAS_NOCHES"),
+    ("BUENOS DIAS", "BUENOS_DÍAS"),
+)
+_GLOSAS_DE_SALUDO = {"BUENAS_TARDES", "BUENAS_NOCHES", "BUENOS_DIAS"}
+# Señas de los módulos que no están en el diccionario oficial del avatar:
+# son señas documentadas y no se deletrean.
+_SENAS_DE_MODULO_EXTRA = {"BUENAS_TARDES", "BUENAS_NOCHES"}
+_MARCA_PREGUNTA = list("PREGUNTA")
+
+
+def enforce_spoken_form_fidelity(glosses: list, text: str) -> tuple:
+    """Corrige tres errores frecuentes del modelo que el español desmiente.
+
+    * El saludo dicho: «buenas tardes» no es BUENOS_DÍAS.
+    * La marca de pregunta: el modelo escribe PREGUNTA al final (el prompt
+      describe el orden «… [NEGACIÓN / PREGUNTA]»); en LSB la pregunta va
+      en la cara, no es una seña, y el avatar la deletreaba P-R-E-G-U-N-T-A.
+      Solo se retira si el oyente no dijo «pregunta».
+    * QUIÉN por «quiere»: «¿Quiere denunciar…?» salía QUIÉN DENUNCIAR…, y la
+      seña de QUIÉN cambia lo que se pregunta. Solo si el español no dice
+      «quién» y sí una forma de «querer».
+
+    Devuelve (glosas, incidencias).
+    """
+    plano = remove_accents((text or "").upper())
+    palabras = _PALABRA.findall(plano)
+    resultado = [canonical_gloss(str(g)) for g in glosses]
+    incidencias = []
+
+    for frase, glosa in _SALUDOS_HABLADOS:
+        if frase not in plano:
+            continue
+        for i, g in enumerate(resultado):
+            if _clave(g) in _GLOSAS_DE_SALUDO and _clave(g) != _clave(glosa):
+                incidencias.append({"accion": "saludo_dicho", "retirada": g,
+                                    "glosa": glosa})
+                resultado[i] = glosa
+                break
+        break
+
+    if not any(w.startswith("PREGUNT") for w in palabras):
+        sin_marca = [g for g in resultado if _clave(g) != "PREGUNTA"]
+        # También deletreada (respuestas guardadas antes de esta regla).
+        for i in range(len(sin_marca) - len(_MARCA_PREGUNTA) + 1):
+            if [_clave(g) for g in sin_marca[i:i + len(_MARCA_PREGUNTA)]] == _MARCA_PREGUNTA:
+                sin_marca = sin_marca[:i] + sin_marca[i + len(_MARCA_PREGUNTA):]
+                break
+        if len(sin_marca) != len(resultado):
+            incidencias.append({"accion": "marca_de_pregunta_retirada"})
+            resultado = sin_marca
+
+    dice_quien = any(w in ("QUIEN", "QUIENES") for w in palabras)
+    dice_querer = any(w.startswith(("QUIER", "QUIS", "QUERE", "QUERI"))
+                      for w in palabras)
+    if not dice_quien and dice_querer:
+        for i, g in enumerate(resultado):
+            if _clave(g) == "QUIEN":
+                if any(_clave(x) == "QUERER" for x in resultado):
+                    resultado.pop(i)
+                else:
+                    resultado[i] = "QUERER"
+                incidencias.append({"accion": "quien_por_querer",
+                                    "glosa": "QUERER"})
+                break
+    return resultado, incidencias
+
+
 def enforce_spoken_question_fidelity(glosses: list, text: str) -> tuple:
     """Preserva el interrogativo hablado y elimina respuestas alucinadas.
 
@@ -1829,6 +1911,11 @@ def build_semantic_turn(text: str, result: dict) -> dict:
         if slot not in slots:
             slots.append(slot)
 
+    # Las ranuras que pregunta el español: QUIÉN por «¿Quiere…?» o por
+    # «¿Alguien vio…?» no pide una persona («¿Tiene testigos?» es de sí o no).
+    habladas = {_SLOT_POR_INTERROGATIVO_HABLADO[w] for w in palabras
+                if w in _SLOT_POR_INTERROGATIVO_HABLADO}
+
     if es_pregunta:
         for i, g in enumerate(glosas):
             # «HORA CUÁNTOS» es cómo LSB pregunta la hora: el interrogativo
@@ -1836,6 +1923,8 @@ def build_semantic_turn(text: str, result: dict) -> dict:
             if (g == "CUANTOS" and i > 0 and glosas[i - 1] in _SLOT_POR_NUCLEO):
                 continue
             if g in _SLOT_POR_INTERROGATIVO:
+                if text and _SLOT_POR_INTERROGATIVO[g] not in habladas:
+                    continue
                 _anadir(_SLOT_POR_INTERROGATIVO[g])
             elif g in _SLOT_POR_NUCLEO:
                 _anadir(_SLOT_POR_NUCLEO[g])
@@ -1959,6 +2048,29 @@ def generate_cache_key(text: str, situation: str = None, resolved_senses: dict =
 
 def _cache_object_key(cache_key: str) -> str:
     return f"{CACHE_PREFIX.strip('/')}/cache/{cache_key}.json"
+
+
+def repair_cached_translation(cached: dict, text: str) -> dict:
+    """Una traducción guardada antes de las reglas de fidelidad, reparada.
+
+    Se aplican las mismas reglas deterministas que a una traducción nueva
+    (saludo dicho, marca de pregunta, QUIÉN por «quiere», interrogativo
+    dicho), sin invocar Bedrock y sin mutar el objeto cacheado. La usa el
+    acierto de caché y tool/qa_simular_redespliegue.py.
+    """
+    cached = dict(cached)
+    glosas, arreglos_forma = enforce_spoken_form_fidelity(
+        cached.get("glosses") or [], text,
+    )
+    glosas, arreglos = enforce_spoken_question_fidelity(glosas, text)
+    arreglos = arreglos_forma + arreglos
+    cached["glosses"] = glosas
+    if arreglos:
+        cached["fidelityFixes"] = [
+            *(cached.get("fidelityFixes") or []),
+            *arreglos,
+        ]
+    return cached
 
 
 def check_cache(cache_key: str):
@@ -2104,16 +2216,7 @@ def lambda_handler(event, context):
         # Las entradas creadas antes de esta regla pueden contener una
         # respuesta concreta en lugar del interrogativo. Se reparan al servir
         # sin invocar Bedrock y sin mutar silenciosamente el objeto cacheado.
-        cached = dict(cached)
-        glosas_cache, arreglos = enforce_spoken_question_fidelity(
-            cached.get("glosses") or [], text,
-        )
-        cached["glosses"] = glosas_cache
-        if arreglos:
-            cached["fidelityFixes"] = [
-                *(cached.get("fidelityFixes") or []),
-                *arreglos,
-            ]
+        cached = repair_cached_translation(cached, text)
         # La traducción sale de la caché, pero qué señas tiene el avatar se
         # comprueba ahora: el .glb puede haber cambiado desde que se guardó.
         return build_response(200, {
