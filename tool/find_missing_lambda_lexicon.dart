@@ -32,7 +32,7 @@ String _norm(String g) => g
 void main() {
   const dsPath = 'assets/dictionary/official_dictionary.json';
   const asmPath =
-      'lib/core/domain/services/local_sentence_assembler.dart';
+      'lib/core/domain/services/local_sentence_assembler_lexicon.dart';
   const lambdaPath = 'aws/lambda_function.py';
 
   final catalogJson =

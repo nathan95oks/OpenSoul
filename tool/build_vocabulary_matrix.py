@@ -35,7 +35,8 @@ import corpus_dialogue as C  # noqa: E402
 
 OUT_DIR = os.path.join(C.ROOT, "docs", "negocio")
 ASSEMBLER = os.path.join(
-    C.ROOT, "lib", "core", "domain", "services", "local_sentence_assembler.dart")
+    C.ROOT, "lib", "core", "domain", "services",
+    "local_sentence_assembler_lexicon.dart")
 GRAPH = os.path.join(C.ROOT, "assets", "dialogue", "dialogue_graph.json")
 
 # --------------------------------------------------------------------------

@@ -12,7 +12,7 @@ import 'dart:io';
 
 const _catalogo = 'assets/dictionary/official_dictionary.json';
 const _lambda = 'aws/lambda_text_to_lsb.py';
-const _ensamblador = 'lib/core/domain/services/local_sentence_assembler.dart';
+const _ensamblador = 'lib/core/domain/services/local_sentence_assembler_lexicon.dart';
 const _lambdaCards = 'aws/lambda_function.py';
 const _inicio = 'AVAILABLE_GLOSSES = {';
 const _fin = '}';
