@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_card.dart';
 import 'package:lsb_legal_app/core/domain/services/context_catalog.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 class ContextInferenceEngine {
   final Map<String, Set<String>> _glossContexts;
@@ -305,20 +306,8 @@ const List<String> _suffixes = [
 
 const int _minStemLength = 3;
 
-String _removeAccents(String value) {
-  const map = {
-    'á': 'a',
-    'é': 'e',
-    'í': 'i',
-    'ó': 'o',
-    'ú': 'u',
-    'ü': 'u',
-    'ñ': 'n',
-  };
-  var result = value;
-  map.forEach((from, to) => result = result.replaceAll(from, to));
-  return result;
-}
+String _removeAccents(String value) =>
+    SpanishText.stripAccents(value, foldEnye: true);
 
 String _normalizeText(String input) {
   final sinTildes = _removeAccents(input.toLowerCase());

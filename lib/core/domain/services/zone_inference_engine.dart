@@ -1,4 +1,5 @@
 import 'package:lsb_legal_app/core/domain/entities/semantic_context.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 class ZoneInferenceEngine {
   const ZoneInferenceEngine();
@@ -36,9 +37,12 @@ class ZoneInferenceEngine {
 
     // 2. Fallback to gloss/question semantic matching for unmapped aliases
     for (final zone in context.zones) {
-      final question = _normalize('${zone.question} ${zone.hint} ${zone.label} ${zone.glossAllowlist.join(" ")}');
+      final question = _normalize(
+        '${zone.question} ${zone.hint} ${zone.label} ${zone.glossAllowlist.join(" ")}',
+      );
       for (final mark in marks.entries) {
-        if (question.contains(mark.key) || zone.glossAllowlist.contains(mark.key.toUpperCase())) {
+        if (question.contains(mark.key) ||
+            zone.glossAllowlist.contains(mark.key.toUpperCase())) {
           final previous = hits[zone.id];
           if (previous == null || mark.value < previous) {
             hits[zone.id] = mark.value;
@@ -54,13 +58,10 @@ class ZoneInferenceEngine {
   }
 
   static String _normalize(String input) {
-    const from = 'áàäâéèëêíìïîóòöôúùüûñ';
-    const to = 'aaaaeeeeiiiioooouuuun';
-    var out = input.toLowerCase();
-    for (var i = 0; i < from.length; i++) {
-      out = out.replaceAll(from[i], to[i]);
-    }
-    return out.replaceAll(RegExp(r'[^a-z0-9 ]'), ' ').replaceAll(RegExp(r'\s+'), ' ');
+    final out = SpanishText.stripAccents(input.toLowerCase(), foldEnye: true);
+    return out
+        .replaceAll(RegExp(r'[^a-z0-9 ]'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ');
   }
 }
 

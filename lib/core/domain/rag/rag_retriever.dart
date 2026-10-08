@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Una respuesta documentada que la persona sorda puede enviar.
 class RagSuggestion {
@@ -242,12 +243,7 @@ class RagRetriever {
     return out;
   }
 
-  static String _sinTildes(String s) => s
-      .replaceAll(RegExp('[áà]'), 'a')
-      .replaceAll(RegExp('[éè]'), 'e')
-      .replaceAll(RegExp('[íì]'), 'i')
-      .replaceAll(RegExp('[óò]'), 'o')
-      .replaceAll(RegExp('[úùü]'), 'u');
+  static String _sinTildes(String s) => SpanishText.stripAccents(s);
 
   static bool _otroComplemento(Map<String, String> a, Map<String, String> b) {
     for (final MapEntry(key: nucleo, value: comp) in a.entries) {

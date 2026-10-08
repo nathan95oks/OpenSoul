@@ -1,5 +1,6 @@
 import 'package:lsb_legal_app/core/domain/entities/declaration_draft.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_function.dart';
+import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 const String kVictimMarker = 'VICTIMA';
 const String kEvidenceMarker = 'PRUEBA_MARCADOR';
@@ -2172,15 +2173,8 @@ class LocalSentenceAssembler {
 
   String _normalize(String g) => _stripGlossAccents(g.trim().toUpperCase());
 
-  static String _stripGlossAccents(String input) {
-    const from = 'ÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛ';
-    const to = 'AAAAEEEEIIIIOOOOUUUU';
-    var out = input.replaceAll('-', '_');
-    for (var i = 0; i < from.length; i++) {
-      out = out.replaceAll(from[i], to[i]);
-    }
-    return out;
-  }
+  static String _stripGlossAccents(String input) =>
+      SpanishText.stripAccents(input.replaceAll('-', '_'));
 
   String _cap(String s) {
     if (s.isEmpty) return s;
