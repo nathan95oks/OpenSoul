@@ -12,7 +12,7 @@ empaquetado en el ZIP): las señas «Catálogo Oficial» de la app, que tienen
 seña documentada, con sus formas en español. Las «Variante / Alias
 Semántico» (PAGAR, DENUNCIAR) son reglas del ensamblador de texto, sin seña
 detrás, y no están. Se regenera con
-`python tool/rag_equivalencias.py --actualizar-catalogo`.
+`python tool/rag_buscar_equivalencias.py --actualizar-catalogo`.
 
 Si está empaquetado el léxico LSB (`lexico_lsb.json`, de
 `tool/build_lexico_lsb.py`: M1–M4, los diccionarios y el catálogo), se
@@ -26,7 +26,7 @@ propone con él y no solo con el catálogo:
   una combinación de hasta tres señas del léxico que la explican
   (`senas`), o ninguna.
 
-Lo que se propone aquí no se aplica solo: `tool/rag_equivalencias.py` lo
+Lo que se propone aquí no se aplica solo: `tool/rag_buscar_equivalencias.py` lo
 guarda para revisar y decide qué se aprueba.
 """
 

@@ -57,7 +57,7 @@ SALIDA_TRAMITES = os.path.join(ROOT, "lib", "core", "domain", "rag",
 # Glosas de las frases del usuario sordo, traducidas una vez por la Lambda
 # Texto→LSB (tool/rag_precalcular_glosas.py). Se leen sin red.
 GLOSAS = os.path.join(RAG, "glosas_cache.json")
-# Señas del catálogo equivalentes a palabras sin seña (tool/rag_equivalencias.py).
+# Señas del catálogo equivalentes a palabras sin seña (tool/rag_buscar_equivalencias.py).
 # Solo se usan las aprobadas.
 EQUIVALENCIAS = os.path.join(RAG, "senas_equivalentes.json")
 # Glosas corregidas de frases que marcó la revisión (tool/rag_corregir_glosas.py):
@@ -65,7 +65,7 @@ EQUIVALENCIAS = os.path.join(RAG, "senas_equivalentes.json")
 CORRECCIONES = os.path.join(RAG, "glosas_correcciones.json")
 # Zonas de tarjetas: la de cada seña oficial (aws/zonas_senas.json), la de
 # cada seña a incorporar que Titan y Bedrock ubicaron de acuerdo
-# (tool/rag_zonas.py) y las formas en español de las señas.
+# (tool/rag_clasificar_zonas.py) y las formas en español de las señas.
 ZONAS_SENAS = os.path.join(ROOT, "aws", "zonas_senas.json")
 FORMAS_SENAS = os.path.join(ROOT, "aws", "catalogo_senas.json")
 ZONAS_PALABRAS = os.path.join(RAG, "zonas_palabras.json")
@@ -819,7 +819,7 @@ def lexico_directo(lexico: dict | None = None) -> dict:
     """{palabra normalizada: glosa} de las palabras que ya son una seña del
     léxico (forma 1: existe en M1–M4 o en un diccionario). Una forma que
     nombra varias señas no está. Son candidatas: su sentido lo confirma
-    tool/rag_equivalencias.py antes de usarlas."""
+    tool/rag_buscar_equivalencias.py antes de usarlas."""
     lexico = cargar_lexico() if lexico is None else lexico
     ambiguas = set(lexico.get("ambiguas") or {})
     out = {}
@@ -857,7 +857,7 @@ def equivalencias_vigentes(ruta: str = EQUIVALENCIAS,
     """Las equivalencias con que se marcan las glosas: cada palabra de los
     módulos M1–M4 es su seña, salvo las que una persona rechazó por cambiar
     el sentido («mi fiscal» no es FISCAL de «escuela fiscal»); encima, las
-    aprobadas de tool/rag_equivalencias.py, que pueden combinar señas."""
+    aprobadas de tool/rag_buscar_equivalencias.py, que pueden combinar señas."""
     rechazadas = set()
     if os.path.exists(ruta):
         with open(ruta, encoding="utf-8") as f:
@@ -1441,7 +1441,7 @@ def datos_de_zonas() -> dict:
     palabras = {p: d["zona"] for p, d in _leer(ZONAS_PALABRAS).items()
                 if d.get("zona")}
     # Señas del léxico LSB fuera del catálogo (M1–M4, diccionario): su zona
-    # es la que Titan y Bedrock acordaron para esa palabra (tool/rag_zonas.py)
+    # es la que Titan y Bedrock acordaron para esa palabra (tool/rag_clasificar_zonas.py)
     # y su forma, la del léxico.
     lexico = cargar_lexico().get("glosas") or {}
     por_palabra = {_norm(p.replace("_", " ")): z for p, z in palabras.items()}
@@ -2148,7 +2148,7 @@ def poner_glosas(corpus: dict, avisos: list) -> None:
             cache = json.load(f)
     # Una palabra de los módulos M1–M4 es su seña. Las que cambian de sentido
     # («mi fiscal» no es FISCAL de «escuela fiscal», M3) están rechazadas en
-    # tool/rag_equivalencias.py; las demás equivalencias pasan por allí.
+    # tool/rag_buscar_equivalencias.py; las demás equivalencias pasan por allí.
     equivalencias = equivalencias_vigentes()
     corregidas = {}
     if os.path.exists(CORRECCIONES):

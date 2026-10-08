@@ -80,7 +80,7 @@ Las fuentes y el formato están en `docs/lsb_fuentes/README.md`. En resumen:
   de señas válidas: M1–M4, los diccionarios y el catálogo, con módulo, tema
   y página de cada una. Va empaquetado en la Lambda.
 - Una palabra que la traducción deja sin seña entra de dos formas, ambas
-  por `tool/rag_equivalencias.py` y confirmadas antes de usarse:
+  por `tool/rag_buscar_equivalencias.py` y confirmadas antes de usarse:
   1. **existe** en el léxico: Bedrock confirma que el sentido es el del tema
      de la seña (no basta con que se escriba igual);
   2. **no existe**: un sinónimo o una combinación de hasta 3 señas del
