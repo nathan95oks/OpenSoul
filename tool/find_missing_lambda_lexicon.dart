@@ -33,7 +33,7 @@ void main() {
   const dsPath = 'assets/dictionary/official_dictionary.json';
   const asmPath =
       'lib/core/domain/services/local_sentence_assembler_lexicon.dart';
-  const lambdaPath = 'aws/lambda_function.py';
+  const lambdaPath = 'aws/gloss_lexicon.py';
 
   final catalogJson =
       jsonDecode(File(dsPath).readAsStringSync()) as Map<String, dynamic>;

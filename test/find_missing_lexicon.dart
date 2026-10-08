@@ -8,7 +8,7 @@ import 'helpers/official_dictionary.dart';
 /// Garantizan que NINGUNA glosa del catálogo local quede sin representación
 /// semántica, comparando las 153 glosas de [LocalCardsDataSource] contra:
 ///   a) el lexicón del motor local (`LocalSentenceAssembler._lexicon`)
-///   b) el `GLOSS_LEXICON` del backend (`aws/lambda_function.py`)
+///   b) el `GLOSS_LEXICON` del backend (`aws/gloss_lexicon.py`)
 ///
 /// Ambos se leen como TEXTO porque sus mapas son privados (`_lexicon`) o están
 /// en otro lenguaje (Python). Las claves de glosa incluyen la letra `Ñ`
@@ -19,7 +19,7 @@ void main() {
 
   test('todas las glosas del catálogo están en el lexicón del motor local', () {
     final content = File(
-      'lib/core/domain/services/local_sentence_assembler.dart',
+      'lib/core/domain/services/local_sentence_assembler_lexicon.dart',
     ).readAsStringSync();
 
     final regex = RegExp(r"'([A-Z0-9_Ñ]+)':\s*_Lex\(");
@@ -37,13 +37,13 @@ void main() {
 
   test('todas las glosas del catálogo están en el GLOSS_LEXICON del backend',
       () {
-    final lambda = File('aws/lambda_function.py').readAsStringSync();
+    final lambda = File('aws/gloss_lexicon.py').readAsStringSync();
 
     // Acota la búsqueda al bloque del diccionario GLOSS_LEXICON.
     final start = lambda.indexOf('GLOSS_LEXICON = {');
-    final end = lambda.indexOf('def analyze_glosses');
-    expect(start >= 0 && end > start, isTrue,
-        reason: 'No se encontró el bloque GLOSS_LEXICON en lambda_function.py');
+    final end = lambda.length;
+    expect(start >= 0, isTrue,
+        reason: 'No se encontró el bloque GLOSS_LEXICON en gloss_lexicon.py');
     final segment = lambda.substring(start, end);
 
     final regex = RegExp(r'"([A-Z0-9_Ñ]+)":\s*\{');
