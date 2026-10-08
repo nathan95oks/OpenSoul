@@ -241,13 +241,13 @@
     {
      "estado": "afirmado",
      "etiqueta": "Sí",
-     "frase": "Sí, está en mi casa.",
+     "frase": "Sí.",
      "glosas": [
       "SÍ"
      ],
      "glosasPropias": true,
      "id": "si",
-     "origen": "respuesta documentada «Sí, está en mi casa.»",
+     "origen": "partícula: el escenario no documenta este estado",
      "polar": true
     },
     {

@@ -107,6 +107,10 @@ class JourneyStep {
   final String? parent;
   final String? formulation;
 
+  /// Solo se ofrece cuando el oyente lo dijo en la conversación (una
+  /// indicación del funcionario): armando el trámite a solas, nadie la dijo.
+  final bool conversationOnly;
+
   const JourneyStep({
     required this.questionId,
     this.conditions = const [],
@@ -114,6 +118,7 @@ class JourneyStep {
     this.hiddenOptions = const [],
     this.parent,
     this.formulation,
+    this.conversationOnly = false,
   });
 
   factory JourneyStep.fromJson(Map<String, dynamic> json) => JourneyStep(
@@ -126,6 +131,7 @@ class JourneyStep {
     hiddenOptions: _strings(json['ocultar']),
     parent: json['padre'] as String?,
     formulation: json['formulacion'] as String?,
+    conversationOnly: json['soloConversacion'] == true,
   );
 }
 
@@ -213,6 +219,10 @@ class BankQuestion {
   /// interrogativo (`ranuras`): «¿Conoce a la persona?» lleva a quién fue.
   final List<String> slots;
 
+  /// Las preguntas en que se divide una [isDerivation] (`pasosRespuesta`):
+  /// «¿Tiene la factura o la caja?» son dos respuestas independientes.
+  final List<String> answerSteps;
+
   const BankQuestion({
     required this.id,
     required this.formulation,
@@ -225,6 +235,7 @@ class BankQuestion {
     this.lsb = LsbFormulation.none,
     this.looseSentence,
     this.slots = const [],
+    this.answerSteps = const [],
   });
 
   factory BankQuestion.fromJson(Map<String, dynamic> json) => BankQuestion(
@@ -242,6 +253,10 @@ class BankQuestion {
     lsb: LsbFormulation.fromJson(json['formulacionLsb']),
     looseSentence: json['fraseSuelta'] as String?,
     slots: _strings(json['ranuras']),
+    answerSteps: [
+      for (final p in (json['pasosRespuesta'] as List<dynamic>? ?? const []))
+        if (p is Map && p['pregunta'] is String) p['pregunta'] as String,
+    ],
   );
 
   bool get isPolar => control == 'polar2' || control == 'polar3';
