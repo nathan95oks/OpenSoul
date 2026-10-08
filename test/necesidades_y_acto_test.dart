@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/entities/institution_profile.dart';
+import 'package:lsb_legal_app/core/domain/session/communicative_act_policy.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/needs_screen.dart';
@@ -20,10 +21,12 @@ import 'helpers/official_dictionary.dart';
 /// y el borrador salía siempre como `statement` porque nadie llamaba a
 /// `setSpeechAct`.
 ProviderContainer _app() {
-  final c = ProviderContainer(overrides: [
-    lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-    audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-  ]);
+  final c = ProviderContainer(
+    overrides: [
+      lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
+      audioOutputProvider.overrideWithValue(FakeAudioOutput()),
+    ],
+  );
   addTearDown(c.dispose);
   return c;
 }
@@ -32,11 +35,18 @@ void main() {
   group('cada necesidad produce su acto comunicativo', () {
     test('Consultas parte de una pregunta; Denuncias y Trámites, de una '
         'declaración', () {
-      expect(NeedsScreen.initialActFor(NeedId.inquiries), CommunicativeAct.question);
-      expect(NeedsScreen.initialActFor(NeedId.complaints),
-          CommunicativeAct.statement);
-      expect(NeedsScreen.initialActFor(NeedId.procedures),
-          CommunicativeAct.statement);
+      expect(
+        CommunicativeActPolicy.initialActFor(NeedId.inquiries),
+        CommunicativeAct.question,
+      );
+      expect(
+        CommunicativeActPolicy.initialActFor(NeedId.complaints),
+        CommunicativeAct.statement,
+      );
+      expect(
+        CommunicativeActPolicy.initialActFor(NeedId.procedures),
+        CommunicativeAct.statement,
+      );
     });
 
     test('el acto viaja al backend con el nombre del contrato', () {
@@ -74,7 +84,8 @@ void main() {
       final notifier = c.read(declarationDraftProvider.notifier);
 
       notifier.setSpeechAct(
-          NeedsScreen.initialActFor(NeedId.inquiries).wireName);
+        CommunicativeActPolicy.initialActFor(NeedId.inquiries).wireName,
+      );
 
       expect(c.read(declarationDraftProvider).speechAct, 'question');
     });
@@ -83,7 +94,9 @@ void main() {
       final c = _app();
       c
           .read(declarationDraftProvider.notifier)
-          .setSpeechAct(NeedsScreen.initialActFor(NeedId.complaints).wireName);
+          .setSpeechAct(
+            CommunicativeActPolicy.initialActFor(NeedId.complaints).wireName,
+          );
 
       expect(c.read(declarationDraftProvider).speechAct, 'statement');
     });
@@ -92,8 +105,10 @@ void main() {
       final c = _app();
       c.read(declarationDraftProvider.notifier).setSpeechAct('question');
 
-      expect(c.read(declarationDraftProvider).toJson()['speechAct'],
-          'question');
+      expect(
+        c.read(declarationDraftProvider).toJson()['speechAct'],
+        'question',
+      );
     });
   });
 
@@ -102,9 +117,13 @@ void main() {
       const denuncias = CardsFlowLaunch.standalone(need: NeedId.complaints);
       const consultas = CardsFlowLaunch.standalone(need: NeedId.inquiries);
 
-      expect(denuncias.sameErrand(consultas), isFalse,
-          reason: 'Cambiar de necesidad tiene que pedir confirmación antes '
-              'de descartar lo que se estaba armando.');
+      expect(
+        denuncias.sameErrand(consultas),
+        isFalse,
+        reason:
+            'Cambiar de necesidad tiene que pedir confirmación antes '
+            'de descartar lo que se estaba armando.',
+      );
     });
 
     test('la misma necesidad sí es el mismo encargo', () {
@@ -118,19 +137,22 @@ void main() {
     testWidgets('muestra las tres, con texto además de icono', (tester) async {
       NeedId? elegida;
 
-      await tester.pumpWidget(ProviderScope(
-        overrides: [
-          lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-          audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-          businessCatalogDataSourceProvider
-              .overrideWithValue(FakeBusinessCatalogDataSource()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: NeedsScreen(onSelected: (n) => elegida = n),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            lexiconRepositoryProvider.overrideWithValue(
+              FakeLexiconRepository(),
+            ),
+            audioOutputProvider.overrideWithValue(FakeAudioOutput()),
+            businessCatalogDataSourceProvider.overrideWithValue(
+              FakeBusinessCatalogDataSource(),
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(body: NeedsScreen(onSelected: (n) => elegida = n)),
           ),
         ),
-      ));
+      );
       for (var i = 0; i < 8; i++) {
         await tester.pump(const Duration(milliseconds: 50));
       }
@@ -146,17 +168,22 @@ void main() {
     });
 
     testWidgets('cada necesidad dice de dónde arranca', (tester) async {
-      await tester.pumpWidget(ProviderScope(
-        overrides: [
-          lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-          audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-          businessCatalogDataSourceProvider
-              .overrideWithValue(FakeBusinessCatalogDataSource()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(body: NeedsScreen(onSelected: (_) {})),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            lexiconRepositoryProvider.overrideWithValue(
+              FakeLexiconRepository(),
+            ),
+            audioOutputProvider.overrideWithValue(FakeAudioOutput()),
+            businessCatalogDataSourceProvider.overrideWithValue(
+              FakeBusinessCatalogDataSource(),
+            ),
+          ],
+          child: MaterialApp(
+            home: Scaffold(body: NeedsScreen(onSelected: (_) {})),
+          ),
         ),
-      ));
+      );
       // Sin `pumpAndSettle`: el indicador de carga gira mientras el catálogo
       // llega y nunca queda todo quieto.
       for (var i = 0; i < 8; i++) {
@@ -173,7 +200,7 @@ void main() {
   group('el acto se decide por intervención, no por la necesidad', () {
     test('responder es responder, aunque la necesidad sea Consultas', () {
       expect(
-        NeedsScreen.actForIntervention(
+        CommunicativeActPolicy.forIntervention(
           purpose: CardsFlowPurpose.conversationReply,
           need: NeedId.inquiries,
           glosses: const ['DONDE'],
@@ -185,7 +212,7 @@ void main() {
     test('dentro de Consultas también se declara', () {
       // «Sí, ya traje el papel» es una declaración dentro de una consulta.
       expect(
-        NeedsScreen.actForIntervention(
+        CommunicativeActPolicy.forIntervention(
           purpose: CardsFlowPurpose.standaloneIntervention,
           need: NeedId.inquiries,
           glosses: const ['PAPEL', 'TRAER'],
@@ -195,21 +222,23 @@ void main() {
       );
     });
 
-    test('una interrogativa explícita hace pregunta cualquier intervención',
-        () {
-      expect(
-        NeedsScreen.actForIntervention(
-          purpose: CardsFlowPurpose.standaloneIntervention,
-          need: NeedId.complaints,
-          glosses: const ['DONDE', 'PAPEL'],
-        ),
-        CommunicativeAct.question,
-      );
-    });
+    test(
+      'una interrogativa explícita hace pregunta cualquier intervención',
+      () {
+        expect(
+          CommunicativeActPolicy.forIntervention(
+            purpose: CardsFlowPurpose.standaloneIntervention,
+            need: NeedId.complaints,
+            glosses: const ['DONDE', 'PAPEL'],
+          ),
+          CommunicativeAct.question,
+        );
+      },
+    );
 
     test('pedir algo es una solicitud, no una afirmación', () {
       expect(
-        NeedsScreen.actForIntervention(
+        CommunicativeActPolicy.forIntervention(
           purpose: CardsFlowPurpose.conversationInitiative,
           need: NeedId.procedures,
           glosses: const ['PEDIR', 'INTERPRETE'],
@@ -220,7 +249,7 @@ void main() {
 
     test('sin glosas manda el punto de partida de la necesidad', () {
       expect(
-        NeedsScreen.actForIntervention(
+        CommunicativeActPolicy.forIntervention(
           purpose: CardsFlowPurpose.standaloneIntervention,
           need: NeedId.inquiries,
         ),
@@ -230,7 +259,7 @@ void main() {
 
     test('sin necesidad ni glosas, se declara', () {
       expect(
-        NeedsScreen.actForIntervention(
+        CommunicativeActPolicy.forIntervention(
           purpose: CardsFlowPurpose.standaloneIntervention,
         ),
         CommunicativeAct.statement,

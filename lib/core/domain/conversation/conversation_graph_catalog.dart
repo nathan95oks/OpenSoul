@@ -6,7 +6,7 @@ import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/domain/services/context_catalog.dart';
 import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
-import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/domain/session/cards_flow_purpose.dart';
 
 /// Lo que el router puede ofrecer: familias, contextos, recorridos,
 /// preguntas y ranuras que **ya existen**.

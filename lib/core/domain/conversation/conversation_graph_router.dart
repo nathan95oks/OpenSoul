@@ -8,7 +8,7 @@ import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart'
 import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
 import 'package:lsb_legal_app/core/domain/entities/context_suggestion.dart';
 import 'package:lsb_legal_app/core/domain/services/context_inference_engine.dart';
-import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/domain/session/cards_flow_purpose.dart';
 
 /// El modelo que rankea rutas candidatas (Bedrock de LSB→Texto/Audio,
 /// acción `route`, con su caché S3).
