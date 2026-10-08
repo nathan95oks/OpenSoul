@@ -13,26 +13,27 @@ Reemplaza a `QA_CONVERSACION_CONTINUACION_CODEX_2026-10-08.md` (ver §2).
 | Medición | Turnos con falla |
 |---|---|
 | Línea base, antes de corregir (`reporte_rag.json`) | 33 de 85 |
-| Lambdas anteriores, con el cliente corregido | 28 de 95 |
-| Redespliegue simulado (§6) | 23 de 95 |
-| **Lambdas nuevas desplegadas, respuestas reales** | **19 de 95** |
+| Lambdas nuevas desplegadas, primera medición | 19 de 95 |
+| **Tras corregir las 19 (§5), Lambdas desplegadas, modo estricto** | **0 de 95** |
 
-Son 29 conversaciones (C01–C29); C26–C29 son nuevas y reproducen los cuatro
-problemas reportados. Los cuatro quedan corregidos, ya verificados con las
-Lambdas nuevas desplegadas. Los 19 turnos que siguen fallando no se tapan
-con reglas por frase: son preguntas que el banco no tiene (§5), con su causa.
+Son 29 conversaciones (C01–C29), medidas contra las respuestas reales de las
+Lambdas desplegadas. El 0 de 95 se repitió en dos pasadas estrictas
+seguidas. Desde ahora el QA es estricto por defecto: una falla rompe la
+prueba (`QA_ESTRICTO=0` lo vuelve informativo).
 
-El desempate con Bedrock ya funciona en producción. De 19 consultas eligió
-una ruta en 8 y resolvió «¿Está herida? ¿Le duele algo?», «¿Necesita que la
-llevemos al médico?», «¿Necesita atención médica?» y «¿Puede leer lo que le
-escribo?». Cuando la pregunta correcta no está entre las candidatas, a veces
-propone una parecida pero equivocada; por ejemplo, para «¿A qué número la
-podemos llamar?» eligió el número del receptor del dinero. La app la rechaza:
-la propuesta pasa por el mismo validador que las rutas deterministas, y queda
-lo seguro (no abrir nada).
+No se logró con reglas por frase. Las 19 se corrigieron con reglas generales
+del motor y con datos (variantes del banco y de los escenarios, un escenario
+nuevo); el detalle está en §5. Se revisó turno por turno qué contesta la
+persona sorda, no solo si la prueba pasa.
 
-Pruebas: Flutter 1143 ✓ · `flutter analyze` sin observaciones · aws/tests 450 ✓
-· tool/tests 132 ✓ · `build_rag_corpus.py --check` ✓.
+El desempate con Bedrock ya funciona en producción. Cuando propone una
+pregunta que no responde a lo pedido, la app la rechaza con el mismo
+validador de las rutas deterministas y no abre nada.
+
+Pruebas: Flutter 1119 ✓ (más los 29 guiones del QA, que necesitan las URLs
+de QA) · QA estricto 95/95 ✓ · `flutter analyze` sin observaciones ·
+aws/tests 450 ✓ · tool/tests 132 ✓ · `build_rag_corpus.py --check` ✓ ·
+`build_question_matrix.py --check` ✓.
 
 ## 2. Verificación de lo que hizo Codex
 
@@ -183,32 +184,72 @@ Se probó y se descartó una pista `acos` → violencia para «acoso». Abría e
 recorrido general de violencia («Me pegaron.») en lugar del trámite de acoso,
 así que no se dejó.
 
-## 5. Lo que todavía falla (19 turnos) y por qué
+## 5. Las 19 fallas restantes: cómo se corrigieron
 
-Ninguno se arregla bien con una regla por frase. Se indica qué haría falta.
+Los cambios de esta parte los hicimos Claude y Codex sobre el mismo árbol;
+se revisaron los de Codex y son reglas generales (abajo, marcadas «Codex»).
 
-| Turnos | Causa | Qué haría falta |
-|---|---|---|
-| C02 «¿Está en peligro ahora mismo?», «¿Esto ya le pasó antes?» | Las preguntas correctas (Q.RIE.AUXILIO con esas palabras, Q.VIO.FRECUENCIA) no llegan a ser candidatas; PELIGRO y ANTES salen deletreadas | Agregar al banco de violencia esas frases del corpus, o señas para PELIGRO |
-| C03 «¿A qué número la podemos llamar?» | NÚMERO deletreado; Q.ID.TELEFONO_PROPIO no queda entre las candidatas | Variante en el banco de identificación |
-| C05 cédula perdida, C06 certificado de nacimiento | El grafo tiene «¿Le falta su carnet?» y «¿Tiene un certificado?» (robo, testimonio) y ganan a los trámites SEGIP/SERECI | Que una pregunta de trámite de otra área gane cuando nombra un documento propio de ese trámite (NACIMIENTO) |
-| C09 «¿Habló con el maestro?», C10 «¿Tiene una foto de ella?» | El trámite (DNA, trata) no tiene esa pregunta | Agregar el turno al escenario, con palabras existentes o azules con descripción |
-| C11 «¿Tiene el comprobante?» | Abre «¿Qué comprobante tiene?» en vez de «¿Tiene comprobante?» (COMPROBANTE deletreado) | Seña o equivalencia para COMPROBANTE |
-| C14 «No le pregunto por el robo, le pregunto por su cédula. ¿La trae?» | Negación de un tema y anáfora («la») | Leer la negación de contexto en la Lambda |
-| C17 «¿Cómo se llama y cuántos años tiene?» | Sin interrogativo de «cómo se llama»; abre la edad del agresor | Ranura «nombre propio» y pregunta de edad propia |
-| C18 «¿Viene a ver cómo va su denuncia?» | «Denuncia» nombra la familia, no Seguimiento | Pista «ver cómo va» → seguimiento en `SITUATION_CUES` (con revisión lingüística) |
-| C19 «Aquí atendemos robos. Para violencia tiene que ir a la FELCV.» | Derivación: no hay paso «ir a otra oficina» fuera de los trámites | Indicación de derivación en el grafo |
-| C21 «¿Qué vio exactamente?», «¿Podría declarar como testigo?» | Coinciden con «¿Vio al ladrón?» y «¿Hay testigos?» | Preguntas propias en el recorrido «otro» |
-| C22 «¿Un funcionario la discriminó por ser sorda?», «¿Se burlan de usted…?» | Solo SORDO coincide, y la persona termina diciendo «Sí, soy una persona sorda.» | Penalizar una coincidencia que deja sin cubrir una seña de contenido (BURLAR); que el trámite LSB-201 gane |
+**Reglas generales del motor**
 
-**Recomendación aparte:** abrir un trámite por su título cuando el
-funcionario lo nombra («¿Quiere denunciar acoso sexual?» → «Denunciar acoso
-sexual»). Hoy se abre la familia Denuncias y la persona elige (también con el
-buscador). Es fluido, pero tiene un paso más.
+1. *Lo que nadie entendió no se ignora.* El puntaje por texto ignoraba las
+   palabras que el corpus no conoce, y SORDO solo bastaba para abrir
+   «¿Usted es una persona sorda?» ante «¿Se burlan de usted por ser sorda?».
+   Ahora, si una palabra de contenido no la conoce el corpus y la traducción
+   la perdió (salió deletreada, o su seña no está en ninguna pregunta), una
+   coincidencia por el resto no es segura. «Chorearon» no cuenta: llega
+   como ROBAR.
+2. *Abierta con abierta, sí/no con sí/no.* «¿Qué vio exactamente?» abría
+   «¿Vio al ladrón?» («Sí, vi a la persona que me robó.»); «¿Tiene la
+   denuncia de pérdida?» abría «¿Qué tiene?» («Tengo fotos.»). Se juzga por
+   la formulación oficial de cada pregunta; las disyuntivas («¿Era hombre o
+   mujer?», «¿Tiene fotos o videos?») no cuentan como sí/no, y una
+   subordinada («¿Viene a ver cómo va su denuncia?») no la vuelve abierta
+   (Codex).
+3. *Afirmaciones e indicaciones.* Una afirmación del funcionario solo abre
+   una indicación documentada; antes «Para violencia tiene que ir a la
+   FELCV.» terminaba en «Sí, hay un testigo.». Y una pregunta no abre una
+   indicación («¿Fue con violencia?» → «Entendido.» no).
+4. *La pregunta documentada literal gana.* Si un trámite tiene la frase del
+   funcionario casi literal y el grafo solo coincidió por una seña («¿Tiene
+   la denuncia de pérdida?» → «¿Tiene el número de referencia?»), abre el
+   trámite. Codex además movió las coincidencias literales del grafo antes
+   que las semánticas; una disyuntiva queda fuera de esa prioridad.
+5. *El contexto activo desambigua* una coincidencia única de su propio
+   recorrido apenas por debajo del umbral (Codex).
+6. *Una mención negada no abre el tema*: «No le pregunto por el robo, le
+   pregunto por su cédula» no abre el robo (Codex; solo con verbos de
+   discurso: «no sabe quién robó» sigue siendo robo).
 
-No se agregaron escenarios nuevos: los que faltan arriba necesitan palabras
-que todavía no tienen seña y conviene revisarlos con la comunidad antes de
-escribirlos.
+**Datos (sin código)**
+
+- El router ya lee las `variantes` del banco: estaban escritas y nunca se
+  usaban. Se agregaron frases reales con respuestas que encajan, por
+  ejemplo «¿Esto ya le pasó antes?» → «¿Es la primera vez o pasa seguido?»,
+  «¿A qué número la podemos llamar?» → número de celular, «¿Viene a ver
+  cómo va su denuncia?» → estado del caso, «¿Qué vio exactamente?»,
+  «¿Podría declarar como testigo?», «¿Alguien vio lo que pasó?» y «¿Trae su
+  carnet de identidad?» (Codex).
+- Variantes en escenarios: «¿Habló con el maestro?» (DNA), «¿Tiene una foto
+  de ella?» (trata), «¿Un funcionario la discriminó por ser sorda?» (LSB),
+  «¿Perdió su cédula de identidad?» y «¿Tiene la denuncia de pérdida?»
+  (SEGIP), «¿Trajo su certificado de nacimiento?» (SERECI), «Para violencia
+  tiene que ir a la FELCV.» (FELCC).
+- Escenario nuevo `ventanilla_escenarios.md` · ESC-SERECI-201 «Pedir un
+  certificado de nacimiento», que empieza el funcionario («¿Viene por un
+  certificado de nacimiento?», «¿El certificado es suyo?»…). Solo palabras
+  con seña o ya descritas.
+
+**Lo que queda aceptable pero no exacto** (pasa, y se dice):
+
+- «¿Está en peligro ahora mismo?» abre «¿Necesita auxilio ahora?» («Sí,
+  necesito auxilio ahora.»): el recorrido de violencia no tiene una pregunta
+  de peligro.
+- «¿Necesita que la llevemos al médico?» abre la asistencia médica y además
+  «¿Qué le hicieron?» y «¿Está herido?», pasos previos de ese recorrido.
+- «¿Trajo su certificado de nacimiento?» abre el de SEGIP (original
+  computarizado): la misma frase existe en SEGIP y SERECI.
+- «¿Cómo se llama y cuántos años tiene?» durante un robo se lee como datos
+  de la persona sorda (presente: «se llama», «tiene»), no del agresor.
 
 ## 6. Despliegue
 
@@ -223,14 +264,20 @@ desplegado (Texto→LSB y `route`). Se desplegaron las **dos** Lambdas:
 2. `aws/lambda_function.py` (LSB→Texto/Audio): lectura completa del JSON de
    Nova en el desempate `route`.
 
+La corrección de las 19 fallas (§5) no cambió código de las Lambdas. Sí
+cambió `aws/question_bank.json`, que va dentro del zip de LSB→Texto/Audio:
+solo ganó `variantes`, que la Lambda no usa para redactar. No hace falta
+redesplegar ya; conviene incluirlo en el próximo zip para que el banco de la
+Lambda y el de la app sigan iguales (`python aws/deploy/build_package.py`).
+
 Para volver a medir con la Lambda real:
 
 ```
 # borrar de test/qa/lambda_respuestas.json las entradas "texto/…" y las
 # "api/translate|{\"action\":\"route\"…" (o el archivo completo), y luego:
-flutter test test/qa_conversacion_test.dart --dart-define=LSB_API_URL=https://api.qa.invalid/translate --dart-define=LSB_TEXT_API_URL=https://texto.qa.invalid/translate
+QA_ESTRICTO=0 flutter test test/qa_conversacion_test.dart --dart-define=LSB_API_URL=https://api.qa.invalid/translate --dart-define=LSB_TEXT_API_URL=https://texto.qa.invalid/translate
 python tool/qa_capturar_lambdas.py      # repetir prueba + captura hasta que no quede nada
-REPORTE_QA=test/qa/reporte.json QA_ESTRICTO=1 flutter test test/qa_conversacion_test.dart --dart-define=...
+REPORTE_QA=test/qa/reporte.json flutter test test/qa_conversacion_test.dart --dart-define=...   # estricto por defecto
 ```
 
 **Cómo se simuló el redespliegue:** las frases del QA ya están en la caché S3
