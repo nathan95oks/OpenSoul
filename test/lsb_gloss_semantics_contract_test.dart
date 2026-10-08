@@ -90,4 +90,11 @@ void main() {
       expect(cliente, backend, reason: c['id'] as String);
     }
   });
+
+  test('una interrogativa subordinada no cambia una pregunta polar', () {
+    const visita = '¿Viene a ver cómo va su denuncia?';
+    expect(LsbGlossSemantics.asksOpen(visita), isFalse);
+    expect(LsbGlossSemantics.asksPolar(visita), isTrue);
+    expect(LsbGlossSemantics.asksOpen('¿Cómo va su denuncia?'), isTrue);
+  });
 }

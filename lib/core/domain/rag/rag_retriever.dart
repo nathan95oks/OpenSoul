@@ -448,7 +448,7 @@ class RagRetriever {
   /// impide que una pregunta hecha de estas palabras identifique una
   /// institución por estar escrita tal cual en una sola.
   static final Set<String> _anyCounter = DialogueGraph.tokensOf(
-    'cédula identidad documento',
+    'cédula carnet identidad documento testigo testigos',
   );
 
   /// Si lo dicho comparte con la mejor coincidencia algo más que palabras de

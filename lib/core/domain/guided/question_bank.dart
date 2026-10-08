@@ -223,6 +223,13 @@ class BankQuestion {
   /// «¿Tiene la factura o la caja?» son dos respuestas independientes.
   final List<String> answerSteps;
 
+  /// Qué hace el turno del funcionario (`acto`): «pregunta», «indicacion»…
+  final String act;
+
+  /// Otras formas reales de hacer la misma pregunta (`variantes`): «¿Esto
+  /// ya le pasó antes?» es «¿Es la primera vez o pasa seguido?».
+  final List<String> variants;
+
   const BankQuestion({
     required this.id,
     required this.formulation,
@@ -236,6 +243,8 @@ class BankQuestion {
     this.looseSentence,
     this.slots = const [],
     this.answerSteps = const [],
+    this.act = '',
+    this.variants = const [],
   });
 
   factory BankQuestion.fromJson(Map<String, dynamic> json) => BankQuestion(
@@ -253,6 +262,8 @@ class BankQuestion {
     lsb: LsbFormulation.fromJson(json['formulacionLsb']),
     looseSentence: json['fraseSuelta'] as String?,
     slots: _strings(json['ranuras']),
+    act: (json['acto'] ?? '').toString(),
+    variants: _strings(json['variantes']),
     answerSteps: [
       for (final p in (json['pasosRespuesta'] as List<dynamic>? ?? const []))
         if (p is Map && p['pregunta'] is String) p['pregunta'] as String,
@@ -268,6 +279,10 @@ class BankQuestion {
   /// Una pregunta compuesta que el banco divide en otras (`derivacion`): no
   /// se responde ella misma.
   bool get isDerivation => control == 'derivacion';
+
+  /// Una indicación del funcionario («La FELCV es la unidad…»), no una
+  /// pregunta.
+  bool get isIndication => act == 'indicacion';
 
   /// Máximo de opciones activas a la vez. Toda pregunta que no sea de
   /// selección múltiple admite exactamente una.

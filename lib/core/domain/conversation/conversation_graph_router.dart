@@ -38,6 +38,11 @@ class ConversationGraphRouter {
   /// su caché de rutas.
   static const int version = 4;
 
+  /// Una pregunta que ya pertenece al recorrido activo necesita menos
+  /// evidencia que una pregunta que abriría un contexto nuevo. Solo se usa
+  /// cuando queda una única coincidencia dentro de ese recorrido.
+  static const double contextualQuestionConfidence = 0.5;
+
   final ConversationGraphCatalog catalog;
   final ConversationRouteValidator validator;
   final GraphMatcher matcher;
@@ -189,7 +194,9 @@ class ConversationGraphRouter {
     final requested = GraphMatcher.requestedSlotsOf(turn);
     final matches = [
       for (final r in matcher.match(turn, activeContextId: active))
-        if (catalog.answers(r.questionId, requested)) r,
+        if (r.score >= GraphMatcher.exactMatch ||
+            catalog.answers(r.questionId, requested))
+          r,
     ];
     final (mentionedContexts, mentionedFamilies) = _mentions(turn);
     var strong = [
@@ -318,6 +325,29 @@ class ConversationGraphRouter {
       if (route != null) return done(route);
     }
 
+    // El contexto ya confirmado también desambigua una coincidencia apenas
+    // por debajo del umbral global. No sirve para cambiar de tema y exige una
+    // sola pregunta del recorrido activo, para no elegir entre alternativas.
+    if (active != null &&
+        mentionedContexts.isEmpty &&
+        mentionedFamilies.isEmpty) {
+      final contextual = [
+        for (final r in weak)
+          if (catalog.isStepOf(active, r.questionId)) r,
+      ];
+      if (contextual.length == 1 &&
+          contextual.single.score >= contextualQuestionConfidence) {
+        final route = _questionRoute(
+          contextual,
+          context: active,
+          reason: 'pregunta respaldada por el contexto activo',
+          minConfidence: contextualQuestionConfidence,
+          text: turn.text,
+        );
+        if (route != null) return done(route);
+      }
+    }
+
     // 2. Un contexto o una familia nombrados: se abren directamente, aunque
     //    la conversación viniera de otro contexto.
     if (mentionedContexts.isNotEmpty || mentionedFamilies.isNotEmpty) {
@@ -441,6 +471,7 @@ class ConversationGraphRouter {
     final byContext = <String, Set<String>>{};
     final families = <String>{};
     for (final m in turn.mentionedContexts) {
+      if (_negatesMention(turn.text, m.evidence)) continue;
       if (m.isFamily) {
         if (catalog.hasFamily(m.id)) families.add(m.id);
       } else if (catalog.hasContext(m.id)) {
@@ -472,6 +503,38 @@ class ConversationGraphRouter {
       }
     }
     return (contexts, families);
+  }
+
+  /// Una mención usada para descartar un tema no lo activa. Se limita a
+  /// verbos de discurso para no confundir «No sabe quién robó» con una
+  /// negación del contexto de robo.
+  static bool _negatesMention(String text, Iterable<String> evidence) {
+    final cues = {
+      for (final raw in evidence)
+        for (final token in GraphMatcher.plainText(raw).split(' '))
+          if (token.isNotEmpty) token,
+    };
+    if (cues.isEmpty) return false;
+    for (final clause in GraphMatcher.plainText(
+      text,
+    ).split(RegExp(r'[,;.!?]+'))) {
+      final words = clause.split(' ').where((w) => w.isNotEmpty).toList();
+      final no = words.indexOf('no');
+      if (no < 0) continue;
+      final cue = words.indexWhere(
+        (word) => cues.any((e) => word.startsWith(e) || e.startsWith(word)),
+        no + 1,
+      );
+      if (cue < 0) continue;
+      final metalinguistic = words
+          .sublist(no + 1, cue)
+          .any(
+            (word) =>
+                const ['pregunt', 'habl', 'refer', 'trat'].any(word.startsWith),
+          );
+      if (metalinguistic) return true;
+    }
+    return false;
   }
 
   /// Preguntas cercanas cuando nada coincide con seguridad (para el modelo).

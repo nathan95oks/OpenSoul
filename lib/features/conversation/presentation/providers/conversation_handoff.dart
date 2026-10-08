@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/conversation/graph_matcher.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
@@ -60,6 +61,19 @@ class ConversationHandoff {
     // documentado que se le parece (Trámites, RAG). La consulta por
     // significado se lanzó al llegar el turno: aquí solo se usa si ya volvió.
     final retriever = ref.read(ragRetrieverProvider);
+    final router = ref.read(conversationGraphRouterProvider);
+    final graphText =
+        router?.matcher.textScores(pending.message.text) ?? const {};
+    final topic = topicBeforePending(conversation, pending);
+    final graphSupportsActiveContext =
+        topic != null &&
+        router?.catalog.hasContext(topic) == true &&
+        graphText.entries.any(
+          (entry) =>
+              entry.value >= GraphMatcher.weakMatch &&
+              (router!.catalog.isStepOf(topic, entry.key) ||
+                  router.catalog.journeysOf(entry.key).isEmpty),
+        );
     final route = graphRoute == null
         ? null
         : ragTramiteRoute(
@@ -67,6 +81,8 @@ class ConversationHandoff {
                 pending,
                 graphRoute,
                 retriever,
+                graphText: graphText,
+                graphSupportsActiveContext: graphSupportsActiveContext,
                 remote:
                     ref
                         .read(

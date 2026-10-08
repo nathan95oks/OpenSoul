@@ -345,6 +345,50 @@ class LsbGlossSemantics {
     return result;
   }
 
+  /// Si todas las preguntas del texto son abiertas («¿Qué vio
+  /// exactamente?»): no se contestan con sí o no. Con una de sí/no entre
+  /// ellas («Hola, ¿cómo está? ¿Tiene testigos?») no lo es.
+  static bool asksOpen(String text) {
+    final clauses = _questionClauses(text);
+    return clauses.isNotEmpty && clauses.every(_clauseAsksOpen);
+  }
+
+  /// «¿Tiene fotos o videos?»: una sola pregunta que ofrece alternativas.
+  static bool isDisjunction(String text) =>
+      RegExp(r'(^|[^\p{L}])[oOuU]($|[^\p{L}])', unicode: true).hasMatch(text);
+
+  /// Si todas las preguntas del texto son de sí o no («¿Tiene la denuncia
+  /// de pérdida?»): no piden elegir entre opciones abiertas. Una
+  /// disyuntiva («¿Era un hombre o una mujer?») no lo es.
+  static bool asksPolar(String text) {
+    if (isDisjunction(text)) return false;
+    final clauses = _questionClauses(text);
+    return clauses.isNotEmpty && clauses.every((c) => !_clauseAsksOpen(c));
+  }
+
+  /// «¿Viene/Quiere a ver cómo va su caso?» pregunta primero si ese es el
+  /// motivo de la visita; el «cómo» pertenece a una subordinada.
+  static bool _clauseAsksOpen(String clause) {
+    final words = _words(clause);
+    final keys = [for (final word in words) _plain(word)];
+    var start = 0;
+    while (start < keys.length && questionPrepositions.contains(keys[start])) {
+      start++;
+    }
+    if (start < keys.length &&
+        (keys[start].startsWith('VEN') ||
+            keys[start].startsWith('VIEN') ||
+            keys[start].startsWith('QUIER'))) {
+      for (var i = start + 1; i < words.length; i++) {
+        if (spokenInterrogativeSlots.containsKey(keys[i]) ||
+            spokenOpenInterrogatives.contains(keys[i])) {
+          return false;
+        }
+      }
+    }
+    return _readClause(clause).$2;
+  }
+
   static (List<String>, bool) _readClause(String clause) {
     final words = _words(clause);
     final keys = [for (final w in words) _plain(w)];
