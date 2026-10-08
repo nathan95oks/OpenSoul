@@ -6,29 +6,6 @@
 /// su procedencia y su estado de confirmación para todos los 8 contextos.
 library;
 
-/// Cómo se obtuvo el valor de una respuesta.
-enum AnswerValueType {
-  /// Un concepto del diccionario (una tarjeta/gloss).
-  concept,
-
-  /// Texto escrito literalmente por la persona (p. ej. el nombre de un
-  /// lugar), que debe conservar espacios y tildes.
-  literalText,
-
-  /// Un número con su unidad.
-  number,
-
-  /// Una relación entre dos entidades ya capturadas (p. ej. "el hombre que
-  /// llevaba la polera roja").
-  relation,
-
-  /// La persona indicó explícitamente que no lo sabe o no lo recuerda.
-  unknown,
-
-  /// La persona prefirió omitir este dato.
-  omission,
-}
-
 /// Estado de confirmación de un dato. La ausencia de respuesta NUNCA se
 /// equipara a [negated]: son estados distintos y deben poder distinguirse en
 /// el texto final.

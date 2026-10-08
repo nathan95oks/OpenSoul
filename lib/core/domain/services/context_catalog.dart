@@ -1021,9 +1021,6 @@ final allSelectableContexts = <SemanticContext>[
   ...BankContexts.contexts,
 ];
 
-/// Lista por defecto para el catálogo
-final defaultSemanticContexts = allSelectableContexts;
-
 /// Busca un contexto por su ID
 SemanticContext? contextById(String id) {
   for (final c in allSelectableContexts) {
