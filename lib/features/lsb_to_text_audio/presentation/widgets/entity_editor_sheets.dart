@@ -558,7 +558,7 @@ class _PersonSequentialWizardSheetState
 
     // Mutar `declarationDraftProvider` en pleno `initState` puede coincidir
     // con el montaje de esta hoja modal mientras otros widgets que también
-    // lo observan (ConfiguredEntityChips, LiveDeclarationPreviewPanel,
+    // lo observan (LiveDeclarationPreviewPanel,
     // GuidedWizardStepper) siguen en su propio paso de construcción, lo que
     // dispara "Tried to modify a provider while the widget tree was
     // building". Se difiere la escritura al primer frame ya renderizado.

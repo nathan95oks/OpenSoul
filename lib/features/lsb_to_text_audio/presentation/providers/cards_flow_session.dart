@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controllers/translation_controller.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/card_grid.dart' show expandedAnswersProvider;
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
@@ -24,7 +23,6 @@ class CardsFlowSession {
     // caso: si no se limpia, una respuesta tardía podría insertarse en el
     // caso nuevo tras cambiar de contexto.
     ref.read(denunciaRoboDraftProvider.notifier).reset();
-    ref.read(expandedAnswersProvider.notifier).collapse();
     ref.read(currentCategoryProvider.notifier).setCategory(kSuggestionsCategory);
   }
 }

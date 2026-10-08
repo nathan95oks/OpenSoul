@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,7 +12,6 @@ import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/cards_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/card_grid.dart';
 
 import 'helpers/fake_audio_output.dart';
 import 'helpers/official_dictionary.dart';
@@ -179,73 +177,6 @@ void main() {
       final glosas = salida.map((c) => c.card.gloss);
       expect(glosas, contains('JUEZ'));
       expect(glosas, isNot(contains('MOCHILA')));
-    });
-  });
-
-  group('las tarjetas renderizadas respetan el campo', () {
-    Future<List<String>> visibles(WidgetTester tester, WidgetRef ref,
-        String contextId, String zoneId) async {
-      ref.read(contextProvider.notifier).setContext(contextById(contextId)!);
-      await tester.pump();
-      ref.read(semanticZonesProvider.notifier).activateZone(zoneId);
-      for (var i = 0; i < 8; i++) {
-        await tester.pump(const Duration(milliseconds: 50));
-      }
-      return tester
-          .widgetList<Text>(find.byType(Text))
-          .map((t) => t.data ?? '')
-          .toList();
-    }
-
-    testWidgets('la zona de lugar no muestra objetos', (tester) async {
-      late WidgetRef ref;
-      await tester.pumpWidget(ProviderScope(
-        overrides: [
-          lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-          audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: Consumer(builder: (context, r, _) {
-                ref = r;
-                return const CardGrid();
-              }),
-            ),
-          ),
-        ),
-      ));
-
-      final textos = await visibles(tester, ref, 'denuncia_robo', 'lugar');
-
-      expect(textos, isNot(contains('MOCHILA')),
-          reason: 'Un objeto no responde «¿dónde ocurrió?».');
-      expect(textos, isNot(contains('AYER')));
-    });
-
-    testWidgets('la zona de tiempo no muestra lugares', (tester) async {
-      late WidgetRef ref;
-      await tester.pumpWidget(ProviderScope(
-        overrides: [
-          lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-          audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: Consumer(builder: (context, r, _) {
-                ref = r;
-                return const CardGrid();
-              }),
-            ),
-          ),
-        ),
-      ));
-
-      final textos = await visibles(tester, ref, 'denuncia_robo', 'tiempo');
-
-      expect(textos, isNot(contains('CALLE')));
-      expect(textos, isNot(contains('MOCHILA')));
     });
   });
 
