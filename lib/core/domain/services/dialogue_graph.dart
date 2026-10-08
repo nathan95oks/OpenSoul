@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:lsb_legal_app/core/domain/entities/dialogue_node.dart';
-import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/domain/session/cards_flow_purpose.dart';
 
 /// El banco de nodos conversacionales, con su emparejamiento.
 ///

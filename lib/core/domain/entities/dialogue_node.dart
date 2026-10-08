@@ -1,4 +1,4 @@
-import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
+import 'package:lsb_legal_app/core/domain/session/cards_flow_purpose.dart';
 
 /// Con qué recurso real se representa una opción.
 ///

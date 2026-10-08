@@ -9,7 +9,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/controller
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/conversation_return.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/result_visibility_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/screens/needs_screen.dart';
+import 'package:lsb_legal_app/core/domain/session/communicative_act_policy.dart';
 
 enum GuidedEmissionStatus {
   /// No había nada que emitir.
@@ -75,7 +75,7 @@ class GuidedEmission {
     // El acto comunicativo se decide por ESTA intervención, no por la
     // necesidad elegida hace cinco pantallas.
     final launch = ref.read(cardsFlowLaunchProvider);
-    final acto = NeedsScreen.actForIntervention(
+    final acto = CommunicativeActPolicy.forIntervention(
       purpose: launch.purpose,
       need: ref.read(activeNeedProvider),
       glosses: glosses,
