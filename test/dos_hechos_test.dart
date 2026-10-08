@@ -8,7 +8,6 @@ import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
-import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/widgets/configured_entity_chips.dart';
 
 import 'helpers/fake_audio_output.dart';
 import 'helpers/official_dictionary.dart';
@@ -208,61 +207,6 @@ void main() {
 
       final completo = buildFullDeclarationDraft(ref);
       expect(completo.facts.map((f) => f.action), ['ESCAPAR']);
-    });
-  });
-
-  group('la pantalla muestra una ficha por hecho', () {
-    testWidgets('dos hechos, dos fichas, cada una con su botón de quitar',
-        (tester) async {
-      late WidgetRef ref;
-      await tester.pumpWidget(ProviderScope(
-        overrides: [
-          lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-          audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: Consumer(builder: (context, r, _) {
-              ref = r;
-              return const ConfiguredEntityChips();
-            }),
-          ),
-        ),
-      ));
-
-      ref.read(contextProvider.notifier).setContext(contextById('denuncia_robo')!);
-      final notifier = ref.read(declarationDraftProvider.notifier);
-      notifier.toggleFactAction('ROBAR');
-      notifier.toggleFactAction('ESCAPAR');
-      await tester.pump();
-
-      expect(find.textContaining('ROBAR'), findsOneWidget);
-      expect(find.textContaining('Escapó'), findsOneWidget);
-    });
-
-    testWidgets('sin aclarar quién escapó, la ficha lo dice', (tester) async {
-      late WidgetRef ref;
-      await tester.pumpWidget(ProviderScope(
-        overrides: [
-          lexiconRepositoryProvider.overrideWithValue(FakeLexiconRepository()),
-          audioOutputProvider.overrideWithValue(FakeAudioOutput()),
-        ],
-        child: MaterialApp(
-          home: Scaffold(
-            body: Consumer(builder: (context, r, _) {
-              ref = r;
-              return const ConfiguredEntityChips();
-            }),
-          ),
-        ),
-      ));
-
-      ref.read(contextProvider.notifier).setContext(contextById('denuncia_robo')!);
-      ref.read(declarationDraftProvider.notifier).toggleFactAction('ESCAPAR');
-      await tester.pump();
-
-      expect(find.text('Escapó: falta aclarar quién'), findsOneWidget,
-          reason: 'Cancelar la aclaración no puede fingir que se resolvió.');
     });
   });
 

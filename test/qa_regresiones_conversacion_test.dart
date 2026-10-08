@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'helpers/rag_ofrecidas.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalog.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_router.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
@@ -219,7 +220,7 @@ void main() {
           ),
         ],
       );
-      expect(ragSuggestionsFor(conversation, retriever), isEmpty);
+      expect(ragOfrecidas(conversation, retriever), isEmpty);
     });
 
     test('un dictado sin puntuación no es una indicación', () {

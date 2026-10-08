@@ -66,30 +66,6 @@ bool ragOutranksGraph(ConversationRoute route, double ragScore) {
   }
 }
 
-/// Situaciones parecidas para el turno del oyente que espera respuesta.
-///
-/// Se recalcula con la ruta del turno: si el modelo de desempate encuentra
-/// después una ruta, el RAG se vuelve a medir contra ella.
-List<RagSuggestion> ragSuggestionsFor(
-  Conversation conversation,
-  RagRetriever? retriever,
-) {
-  final pending = conversation.pendingReply;
-  if (retriever == null || pending == null || pending.pending) {
-    return const [];
-  }
-  final route = pending.route;
-  if (route == null) return const [];
-  final found = retriever.suggest(
-    pending.message.text,
-    preferArea: _recentArea(conversation, pending, retriever),
-  );
-  if (found.isEmpty || !ragOutranksGraph(route, found.first.score)) {
-    return const [];
-  }
-  return found;
-}
-
 /// El trámite del que se venía hablando: el de las preguntas anteriores del
 /// funcionario más recientes que se parecen a alguno. Decide empates en
 /// preguntas que valen en muchos trámites («¿Trajo su cédula?»).

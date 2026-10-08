@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'helpers/rag_ofrecidas.dart';
 import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
@@ -346,14 +347,16 @@ void main() {
           ...conversacion.turns,
         ],
       );
-      final found = ragSuggestionsFor(enSepdep, retriever);
-      expect(found.map((s) => s.text), contains('Soy denunciado.'));
+      final found = ragOfrecidas(enSepdep, retriever);
+      // Se responde desde SEPDEP, la institución de la conversación.
+      expect({for (final s in found) s.scenarioId.split('-')[1]}, {'SEPDEP'});
+      expect(found.map((s) => s.text), contains('Sí, me denunciaron.'));
     });
 
     test('un contexto directo determinista bloquea el RAG', () {
       // «denunciado» nombra Denuncias y el grafo abre ese contexto, pero la
       // pregunta es de SEPDEP.
-      final found = ragSuggestionsFor(
+      final found = ragOfrecidas(
         withHearing(
           pregunta,
           route: const ConversationRoute(
@@ -377,12 +380,12 @@ void main() {
         confidence: confidence,
       );
       expect(
-        ragSuggestionsFor(withHearing(nurej, route: graph(0.95)), retriever),
+        ragOfrecidas(withHearing(nurej, route: graph(0.95)), retriever),
         isEmpty,
       );
       // Aunque la confianza sea menor, ya eligió una pregunta determinista.
       expect(
-        ragSuggestionsFor(withHearing(nurej, route: graph(0.6)), retriever),
+        ragOfrecidas(withHearing(nurej, route: graph(0.6)), retriever),
         isEmpty,
       );
     });
@@ -411,7 +414,7 @@ void main() {
       );
       // Derechos Reales documenta la pregunta de la cédula: se responde
       // ahí, sin traer respuestas de otra institución.
-      final found = ragSuggestionsFor(conversation, retriever);
+      final found = ragOfrecidas(conversation, retriever);
       expect({
         for (final s in found) s.scenarioId.split('-')[1],
       }, anyOf(isEmpty, {'DDRR'}));
@@ -419,7 +422,7 @@ void main() {
 
     test('mientras se traduce, sin ruta todavía o sin corpus: nada', () {
       expect(
-        ragSuggestionsFor(
+        ragOfrecidas(
           withHearing(
             pregunta,
             route: const ConversationRoute.noSafeRoute(),
@@ -429,9 +432,9 @@ void main() {
         ),
         isEmpty,
       );
-      expect(ragSuggestionsFor(withHearing(pregunta), retriever), isEmpty);
+      expect(ragOfrecidas(withHearing(pregunta), retriever), isEmpty);
       expect(
-        ragSuggestionsFor(
+        ragOfrecidas(
           withHearing(pregunta, route: const ConversationRoute.noSafeRoute()),
           null,
         ),
