@@ -48,8 +48,9 @@ void main() {
   ).map(_norm).toSet();
 
   final lambdaSrc = File(lambdaPath).readAsStringSync();
+  // aws/gloss_lexicon.py contiene solo el diccionario: se lee hasta el final.
   final start = lambdaSrc.indexOf('GLOSS_LEXICON = {');
-  final end = lambdaSrc.indexOf('def analyze_glosses');
+  final end = lambdaSrc.length;
   final lambda = _matchAll(
     lambdaSrc.substring(start, end),
     RegExp(r'"([A-Z0-9_ÑÁÉÍÓÚ]+)":\s*\{'),
