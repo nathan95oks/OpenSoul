@@ -97,6 +97,31 @@ class NegacionNoDicha(unittest.TestCase):
                          ["FISCAL", "QUIEN", "NO_SABER"])
 
 
+class PalabrasSinSenaPropia(unittest.TestCase):
+    """QA 2026-10-09 (respuestas reales de la Lambda): se deletreaban
+    partículas (F-U-E, C-O-N, E-S S-U) y palabras con una seña documentada
+    en el catálogo (U-S-T-E-D, H-A-Y)."""
+
+    def catalogo(self, entrada):
+        return T.enforce_catalog_membership(
+            [T.canonical_gloss(g) for g in entrada])[0]
+
+    def test_una_particula_no_se_deletrea(self):
+        self.assertEqual(self.catalogo(["QUIEN", "FUE", "NO_SABER"]),
+                         ["QUIEN", "NO_SABER"])
+        self.assertEqual(self.catalogo(["HABLAR", "CON", "ESTE", "MAESTRO"]),
+                         ["HABLAR", *"MAESTRO"])
+
+    def test_se_usa_la_sena_que_el_corpus_documenta(self):
+        self.assertEqual(self.catalogo(["HAY", "TESTIGO"]), ["TENER", "TESTIGO"])
+        self.assertEqual(self.catalogo(["USTED", "ENTENDER"]),
+                         ["TU", "COMPRENDER"])
+        self.assertEqual(self.catalogo(["SU", "PAREJA"]), ["SUYO", "PAREJA"])
+
+    def test_una_palabra_de_contenido_sin_sena_se_sigue_deletreando(self):
+        self.assertEqual(self.catalogo(["PUBLICAR"]), list("PUBLICAR"))
+
+
 class RanurasDelEspanol(unittest.TestCase):
     def ranuras(self, texto, entrada):
         return T.build_semantic_turn(texto, {"glosses": entrada})["requestedSlots"]
