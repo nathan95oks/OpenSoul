@@ -56,7 +56,7 @@ CACHE_VERSION = os.environ.get("CACHE_VERSION", "v2")
 # Versión interna de las reglas deterministas. Forma parte de la clave aunque
 # CACHE_VERSION esté fijada en las variables de entorno de Lambda, para que un
 # despliegue de reglas nuevas nunca siga sirviendo traducciones antiguas.
-TRANSLATION_RULESET_VERSION = "compound-glosses-v3"
+TRANSLATION_RULESET_VERSION = "particulas-v4"
 
 # Animaciones del avatar. Todas las señas son clips dentro de UN solo .glb en
 # S3, y el visor elige el clip por nombre. La lista de clips del propio archivo
@@ -306,6 +306,27 @@ GLOSS_ALIASES = {
     "TELEFONO": "CELULAR",
     "FOTOGRAFIA": "FOTOS",
     "DELGADO": "FLACO",
+    # Palabras del español sin seña propia que el corpus dice con otra que sí
+    # está en el catálogo (QA 2026-10-09: se deletreaban U-S-T-E-D, H-A-Y,
+    # S-U…): «¿Hay testigos del robo?» → TESTIGO · TENER (§6); «¿Esa persona es
+    # su pareja?» → PAREJA · SUYO; «¿Comprende…?» → COMPRENDER; «atención
+    # médica» → ATENDER · DOCTOR; «otros niños» → DIFERENTE · NIÑO.
+    "USTED": "TU",
+    "SU": "SUYO",
+    "SUS": "SUYO",
+    "SUYA": "SUYO",
+    "SUYAS": "SUYO",
+    "SUYOS": "SUYO",
+    "HAY": "TENER",
+    "HABER": "TENER",
+    "ENTENDER": "COMPRENDER",
+    "MEDICO": "DOCTOR",
+    "MEDICA": "DOCTOR",
+    "ATENCION": "ATENDER",
+    "OTRO": "DIFERENTE",
+    "OTRA": "DIFERENTE",
+    "OTROS": "DIFERENTE",
+    "OTRAS": "DIFERENTE",
 }
 
 # ---------------------------------------------------------------------------
@@ -1119,9 +1140,18 @@ def _spell_out(word: str) -> list:
     return [c for c in strip_gloss_accents(word.upper()) if c.isalnum()]
 
 
+# Partículas que la LSB no signa, además de las de `_PALABRAS_FUNCION`.
+_DEMOSTRATIVOS = frozenset(
+    "ESTE ESTOS ESTAS ESE ESA ESOS ESAS ESO ESTO AQUEL AQUELLA".split())
+
+
 def enforce_catalog_membership(glosses: list,
                                verified_animation_glosses=None) -> tuple:
     """Ninguna glosa que no esté en el catálogo sale como si fuera una seña real.
+
+    Una partícula que el modelo dejó como glosa (FUE, ES, CON, ESTE…) se
+    retira: la LSB no la signa, y deletreada solo agregaba letras que nadie
+    entiende («¿No sabe quién fue?» salía QUIÉN F-U-E NO_SABER).
 
     Antes, `post_process_glosses` solo comprobaba FORMA: una glosa bien escrita
     pero inventada ("ROBOXYZ", o un alias retirado como "BILLETERA" tras la
@@ -1145,6 +1175,10 @@ def enforce_catalog_membership(glosses: list,
                 or clave in _COMPOUND_SPECS
                 or len(clave) <= 1):
             resultado.append(gloss)
+            continue
+        if clave in _PALABRAS_FUNCION or clave in _DEMOSTRATIVOS:
+            incidencias.append({"palabra": gloss,
+                                "accion": "particula_sin_sena"})
             continue
         resultado.extend(_spell_out(gloss))
         incidencias.append({
