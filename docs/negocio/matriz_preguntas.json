@@ -6,9 +6,9 @@
  ],
  "fecha": "2026-09-25",
  "totales": {
-  "preguntas": 148,
-  "recorridos": 8,
-  "opciones": 555
+  "preguntas": 155,
+  "recorridos": 9,
+  "opciones": 577
  },
  "preguntas": [
   {
@@ -1083,9 +1083,9 @@
     "institucion"
    ],
    "recorridos": [
-    "denuncia_robo#32",
+    "denuncia_robo#36",
     "violencia#21",
-    "amenaza_digital#10",
+    "amenaza_digital#11",
     "engano_dinero#10"
    ],
    "nodos": [],
@@ -1163,9 +1163,9 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#31",
+    "denuncia_robo#35",
     "violencia#20",
-    "amenaza_digital#9",
+    "amenaza_digital#10",
     "engano_dinero#9"
    ],
    "nodos": [
@@ -1367,7 +1367,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "amenaza_digital#8"
+    "amenaza_digital#9"
    ],
    "nodos": [
     "n-s6-amenazas_mensajes-05"
@@ -1545,7 +1545,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "amenaza_digital#7"
+    "amenaza_digital#8"
    ],
    "nodos": [
     "n-s6-amenazas_mensajes-04"
@@ -1859,6 +1859,66 @@
    "reglas": [],
    "rutas": [
     "respuesta al funcionario"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.DIG.PUBLICACION",
+   "dominio": "mensajes",
+   "formulacion": "¿Publicaron sus fotos sin su permiso?",
+   "acto": "pregunta_polar",
+   "entidad": "Hecho[publicacion]",
+   "campo": "publicacion",
+   "control": "polar3",
+   "modo": "frase",
+   "campos": [
+    "polaridad"
+   ],
+   "recorridos": [
+    "amenaza_digital#7"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "frase": "Sí, publicaron mis fotos sin mi permiso.",
+     "polar": true
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "frase": "No, no publicaron nada.",
+     "polar": true
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "frase": "No sé si publicaron algo.",
+     "polar": true
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "FOTOS": "formulacion",
+    "PERMISO": "formulacion"
+   },
+   "reglas": [],
+   "rutas": [
+    "recorrido"
    ],
    "opcionesSinSena": []
   },
@@ -2940,7 +3000,9 @@
    "campos": [
     "polaridad"
    ],
-   "recorridos": [],
+   "recorridos": [
+    "denuncia_robo#34"
+   ],
    "nodos": [
     "n-s6-robo_hurto_y_obje-09"
    ],
@@ -2987,6 +3049,7 @@
    },
    "reglas": [],
    "rutas": [
+    "recorrido",
     "respuesta al funcionario"
    ],
    "opcionesSinSena": []
@@ -3066,7 +3129,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#27"
+    "denuncia_robo#30"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3354,7 +3417,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#29",
+    "denuncia_robo#32",
     "violencia#16"
    ],
    "nodos": [],
@@ -3477,7 +3540,7 @@
     "documento"
    ],
    "recorridos": [
-    "denuncia_robo#30",
+    "denuncia_robo#33",
     "violencia#17"
    ],
    "nodos": [],
@@ -3542,7 +3605,7 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#28"
+    "denuncia_robo#31"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -5005,6 +5068,109 @@
    "reglas": [],
    "rutas": [
     "respuesta al funcionario"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.ORI.DESTINO",
+   "dominio": "orientacion",
+   "formulacion": "¿Sabe a dónde tiene que ir?",
+   "acto": "pregunta_abierta",
+   "entidad": "Orientacion",
+   "campo": "institucion_destino",
+   "control": "seleccion_unica",
+   "modo": "frase",
+   "campos": [
+    "institucion"
+   ],
+   "recorridos": [
+    "derivacion#1"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "felcc",
+     "etiqueta": "La FELCC",
+     "glosas": [
+      "FELCC"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la FELCC."
+    },
+    {
+     "id": "felcv",
+     "etiqueta": "La FELCV",
+     "glosas": [
+      "FELCV"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la FELCV."
+    },
+    {
+     "id": "fiscalia",
+     "etiqueta": "La Fiscalía",
+     "glosas": [
+      "FISCALIA"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la Fiscalía."
+    },
+    {
+     "id": "policia",
+     "etiqueta": "La Policía",
+     "glosas": [
+      "POLICÍA"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la Policía."
+    },
+    {
+     "id": "sepdavi",
+     "etiqueta": "SEPDAVI",
+     "glosas": [
+      "SEPDAVI"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a SEPDAVI."
+    },
+    {
+     "id": "sepdep",
+     "etiqueta": "SEPDEP",
+     "glosas": [
+      "SEPDEP"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a SEPDEP."
+    },
+    {
+     "id": "juzgado",
+     "etiqueta": "El juzgado",
+     "glosas": [
+      "JUZGADO"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir al juzgado."
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé, dígame usted",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No sé a dónde tengo que ir. Dígame usted, por favor."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "IR": "formulacion",
+    "DÓNDE": "formulacion"
+   },
+   "reglas": [],
+   "rutas": [
+    "recorrido"
    ],
    "opcionesSinSena": []
   },
@@ -8031,6 +8197,59 @@
    "opcionesSinSena": []
   },
   {
+   "id": "Q.SEG.CONOCE_FISCAL",
+   "dominio": "seguimiento",
+   "formulacion": "¿Sabe quién es su fiscal?",
+   "acto": "pregunta_polar",
+   "entidad": "Persona[fiscal]",
+   "campo": "nombre_literal",
+   "control": "polar2",
+   "modo": "frase",
+   "campos": [
+    "polaridad"
+   ],
+   "recorridos": [
+    "seguimiento#7"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "polar": true,
+     "frase": "Sí, mi fiscal es {nombre}.",
+     "editor": "texto_nombre"
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "polar": true,
+     "frase": "No sé quién es mi fiscal."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "TUYO": "formulacion",
+    "CONOCER": "formulacion"
+   },
+   "reglas": [
+    "Es el nombre de un tercero: nunca se guarda en Ciudadano.nombre ni en la ficha de identificación."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
    "id": "Q.SEG.CONFORMIDAD",
    "dominio": "seguimiento",
    "formulacion": "¿Está de acuerdo con lo escrito?",
@@ -9254,6 +9473,58 @@
    "opcionesSinSena": []
   },
   {
+   "id": "Q.SEG.SABER_INVESTIGADOR",
+   "dominio": "seguimiento",
+   "formulacion": "¿Quiere saber quién investigará su caso?",
+   "acto": "pregunta_polar",
+   "entidad": "Solicitud",
+   "campo": "saber_investigador",
+   "control": "polar2",
+   "modo": "frase",
+   "campos": [
+    "polaridad"
+   ],
+   "recorridos": [
+    "denuncia_robo#37",
+    "seguimiento#8"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "polar": true,
+     "frase": "Sí, quiero saber quién investigará mi caso."
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "polar": true,
+     "frase": "No, ahora no."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "INVESTIGACIÓN": "formulacion",
+    "SABER": "formulacion",
+    "QUERER": "formulacion"
+   },
+   "reglas": [],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
    "id": "Q.TES.CANTIDAD",
    "dominio": "testigos",
    "formulacion": "¿Cuántos testigos hay?",
@@ -9308,6 +9579,166 @@
    "rutas": [
     "recorrido",
     "respuesta al funcionario"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.TES.CONOCE",
+   "dominio": "testigos",
+   "formulacion": "¿Conoce a los testigos?",
+   "acto": "pregunta_polar",
+   "entidad": "Testigos",
+   "campo": "conocidos",
+   "control": "polar3",
+   "modo": "frase",
+   "campos": [
+    "polaridad"
+   ],
+   "recorridos": [
+    "denuncia_robo#27"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "polar": true,
+     "frase": "Sí, conozco a los testigos."
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "polar": true,
+     "frase": "No conozco a los testigos."
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "polar": true,
+     "frase": "No sé quiénes son los testigos."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "TESTIGO": "formulacion",
+    "CONOCER": "formulacion"
+   },
+   "reglas": [],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.TES.NOMBRE",
+   "dominio": "testigos",
+   "formulacion": "¿Cuál es el nombre del testigo?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona[testigo]",
+   "campo": "nombre_literal",
+   "control": "seleccion_unica",
+   "modo": "frase",
+   "campos": [
+    "nombre"
+   ],
+   "recorridos": [
+    "denuncia_robo#28"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "nombre",
+     "etiqueta": "Escribir su nombre",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "El testigo se llama {nombre}.",
+     "editor": "texto_nombre"
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No sé cómo se llama el testigo."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "TESTIGO": "formulacion",
+    "NOMBRE": "formulacion: la respuesta es el nombre escrito",
+    "CUÁL": "formulacion"
+   },
+   "reglas": [
+    "Es el nombre de un tercero: nunca se guarda en Ciudadano.nombre ni en la ficha de identificación."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.TES.TELEFONO",
+   "dominio": "testigos",
+   "formulacion": "¿Cuál es el número de celular del testigo?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona[testigo]",
+   "campo": "telefono_literal",
+   "control": "seleccion_unica",
+   "modo": "frase",
+   "campos": [
+    "telefono"
+   ],
+   "recorridos": [
+    "denuncia_robo#29"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "telefono",
+     "etiqueta": "Escribir su número",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "El número de celular del testigo es {telefono}.",
+     "editor": "telefono"
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No lo sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No tengo el número del testigo."
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {
+    "TESTIGO": "formulacion",
+    "CELULAR": "formulacion",
+    "CUÁL": "formulacion"
+   },
+   "reglas": [],
+   "rutas": [
+    "recorrido"
    ],
    "opcionesSinSena": []
   },

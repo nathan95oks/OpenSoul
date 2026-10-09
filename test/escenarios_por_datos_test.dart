@@ -56,8 +56,8 @@ void main() {
 
     test('se convierte en un contexto de su familia', () {
       final contexts = BankContexts.fromBank(bank);
-      expect(contexts.map((c) => c.id), ['extravio_documento']);
-      final c = contexts.single;
+      expect(contexts.map((c) => c.id), ['derivacion', 'extravio_documento']);
+      final c = contexts.firstWhere((c) => c.id == 'extravio_documento');
       expect(c.name, 'Perdí algo');
       expect(c.emoji, '📄');
       expect(BankContexts.idsOfFamily(bank, 'tramites'), [
@@ -94,10 +94,14 @@ void main() {
       expect(rules.glossesOf(session.toIntervention()), ['CELULAR']);
     });
 
-    test('el banco empaquetado no cambia: sin contextos declarados aún', () {
-      // Hoy todos los recorridos tienen su contexto escrito a mano; el
-      // mecanismo está listo para el primero que se declare con datos.
-      expect(BankContexts.contexts, isEmpty);
+    test('el banco empaquetado declara solo «Derivación» con datos', () {
+      // Los demás recorridos tienen su contexto escrito a mano. «Derivación»
+      // («¿Sabe a dónde tiene que ir?», QA 2026-10-09) es el primero que se
+      // declaró con datos, en la familia Consultas.
+      expect(BankContexts.contexts.map((c) => c.id), ['derivacion']);
+      expect(BankContexts.ofFamily('consultas').map((c) => c.id), [
+        'derivacion',
+      ]);
       final seleccionables = {for (final c in allSelectableContexts) c.id};
       for (final id in QuestionBank.generated().journeys.keys) {
         expect(seleccionables, contains(id), reason: id);

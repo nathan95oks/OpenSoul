@@ -1737,5 +1737,222 @@
   ],
   "origen": "revision_manual",
   "fecha": "2026-10-07"
+ },
+ "¿Su hijo tiene heridas o dolor?": {
+  "glosas": [
+   "HIJO",
+   "HERIDA",
+   "DOLOR",
+   "TENER"
+  ],
+  "antes": [
+   "HIJO",
+   "HERIDA",
+   "DOLOR",
+   "TENER",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [
+   "NO"
+  ],
+  "fecha": "2026-10-09"
+ },
+ "¿Tiene la matrícula de la casa que consulta?": {
+  "glosas": [
+   "CASA",
+   "SENA_PENDIENTE:MATRICULA",
+   "SENA_PENDIENTE:CONSULTAR",
+   "TENER"
+  ],
+  "antes": [
+   "CASA",
+   "SENA_PENDIENTE:MATRICULA",
+   "SENA_PENDIENTE:CONSULTAR",
+   "TENER",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [
+   "NO"
+  ],
+  "fecha": "2026-10-09"
+ },
+ "¿Usaron violencia para quitarle el objeto?": {
+  "glosas": [
+   "VIOLENCIA",
+   "USAR",
+   "OBJETO",
+   "SENA_PENDIENTE:QUITAR"
+  ],
+  "antes": [
+   "VIOLENCIA",
+   "USAR",
+   "OBJETO",
+   "SENA_PENDIENTE:QUITAR",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [
+   "NO"
+  ],
+  "fecha": "2026-10-09"
+ },
+ "¿La acosaron sexualmente?": {
+  "glosas": [
+   "ELLA",
+   "SENA_PENDIENTE:ACOSO_SEXUAL"
+  ],
+  "antes": [
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R",
+   "S",
+   "E",
+   "X",
+   "U",
+   "A",
+   "L",
+   "M",
+   "E",
+   "N",
+   "T",
+   "E",
+   "ELLA",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R",
+   "S",
+   "E",
+   "X",
+   "U",
+   "A",
+   "L",
+   "M",
+   "E",
+   "N",
+   "T",
+   "E",
+   "NO"
+  ],
+  "fecha": "2026-10-09"
+ },
+ "No, mi hijo no sufre bullying.": {
+  "glosas": [
+   "NO",
+   "YO",
+   "HIJO",
+   "SENA_PENDIENTE:BULLYING",
+   "SUFRIR",
+   "NO"
+  ],
+  "antes": [
+   "NO",
+   "YO",
+   "HIJO",
+   "B",
+   "U",
+   "L",
+   "L",
+   "Y",
+   "I",
+   "N",
+   "G",
+   "S",
+   "U",
+   "F",
+   "R",
+   "E",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [
+   "B",
+   "U",
+   "L",
+   "L",
+   "Y",
+   "I",
+   "N",
+   "G",
+   "S",
+   "U",
+   "F",
+   "R",
+   "E"
+  ],
+  "fecha": "2026-10-09"
+ },
+ "Sí, me acosaron sexualmente.": {
+  "glosas": [
+   "SI",
+   "YO",
+   "SENA_PENDIENTE:ACOSO_SEXUAL"
+  ],
+  "antes": [
+   "SI",
+   "YO",
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R",
+   "S",
+   "E",
+   "X",
+   "O",
+   "NO"
+  ],
+  "faltan": [],
+  "sobran": [
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R",
+   "S",
+   "E",
+   "X",
+   "O",
+   "NO"
+  ],
+  "fecha": "2026-10-09"
+ },
+ "Es un pariente.": {
+  "glosas": [
+   "PARIENTE"
+  ],
+  "antes": [
+   "P",
+   "A",
+   "R",
+   "E",
+   "N",
+   "T",
+   "E"
+  ],
+  "faltan": [],
+  "sobran": [
+   "P",
+   "A",
+   "R",
+   "E",
+   "N",
+   "T",
+   "E"
+  ],
+  "fecha": "2026-10-09"
  }
 }

@@ -21,45 +21,45 @@
 | # | Rol | Mensaje | Propósito | Hechos |
 |---|---|---|---|---|
 | 1 | Usuario Sordo | Mi hijo sufre bullying en la escuela. | Iniciar | — |
-| 2 | Funcionario | ¿Su hijo tiene heridas o dolor? | Priorizar salud | — |
-| 3 | Usuario Sordo | Sí, mi hijo tiene dolor. | Responder | — |
-| 4 | Funcionario | ¿Otros niños se burlan de su hijo? | Recabar | — |
-| 5 | Usuario Sordo | Sí, otros niños se burlan de él. | Responder | — |
-| 6 | Funcionario | ¿Otros niños pegan a su hijo? | Recabar | — |
-| 7 | Usuario Sordo | Sí, otros niños le pegan. | Responder | — |
-| 8 | Funcionario | ¿Le pegan todos los días? | Recabar | — |
-| 9 | Usuario Sordo | Sí, todos los días. | Responder | — |
-| 10 | Funcionario | ¿Habló con el maestro de la escuela? | Recabar | — |
-| 11 | Usuario Sordo | Sí, hablé con el maestro, pero no ayudó. | Responder | — |
-| 12 | Funcionario | ¿Tiene videos o fotos? | Recabar | — |
-| 13 | Usuario Sordo | Sí, tengo videos en mi celular. | Responder | — |
-| 14 | Funcionario | Guarde los videos y las fotos. | Orientar | — |
-| 15 | Usuario Sordo | Bien, voy a guardar todo. | Responder | — |
-| 16 | Funcionario | ¿Necesita un intérprete de Lengua de Señas Boliviana? | Accesibilidad | — |
-| 17 | Usuario Sordo | Sí, necesito un intérprete de LSB. | Responder | — |
+| 2 | Funcionario | ¿Su hijo sufre bullying? | Confirmar | — |
+| 3 | Usuario Sordo | Sí, mi hijo sufre bullying. | Responder | — |
+| 4 | Funcionario | ¿Su hijo tiene heridas o dolor? | Priorizar salud | — |
+| 5 | Usuario Sordo | Sí, mi hijo tiene dolor. | Responder | — |
+| 6 | Funcionario | ¿Otros niños se burlan de su hijo? | Recabar | — |
+| 7 | Usuario Sordo | Sí, otros niños se burlan de él. | Responder | — |
+| 8 | Funcionario | ¿Otros niños pegan a su hijo? | Recabar | — |
+| 9 | Usuario Sordo | Sí, otros niños le pegan. | Responder | — |
+| 10 | Funcionario | ¿Le pegan todos los días? | Recabar | — |
+| 11 | Usuario Sordo | Sí, todos los días. | Responder | — |
+| 12 | Funcionario | ¿Habló con el maestro de la escuela? | Recabar | — |
+| 13 | Usuario Sordo | Sí, hablé con el maestro, pero no ayudó. | Responder | — |
+| 14 | Funcionario | ¿Tiene videos o fotos? | Recabar | — |
+| 15 | Usuario Sordo | Sí, tengo videos en mi celular. | Responder | — |
+| 16 | Funcionario | Guarde los videos y las fotos. | Orientar | — |
+| 17 | Usuario Sordo | Bien, voy a guardar todo. | Responder | — |
+| 18 | Funcionario | ¿Necesita un intérprete de Lengua de Señas Boliviana? | Accesibilidad | — |
+| 19 | Usuario Sordo | Sí, necesito un intérprete de LSB. | Responder | — |
 
 ### Variantes
 
-- **Turno 2 (Funcionario):** «¿Su hijo está herido?» · «¿Su hijo siente dolor?»
+- **Turno 2 (Funcionario):** «¿Usted o su hijo sufre bullying?» · «¿Su hijo sufre bullying en la escuela?» · «¿Molestan a su hijo en la escuela?»
+- **Respuestas:** «Sí, mi hijo sufre bullying.» · «No, mi hijo no sufre bullying.» · «No sé si es bullying.»
+- **Turno 4 (Funcionario):** «¿Su hijo está herido?» · «¿Su hijo siente dolor?»
 - **Respuestas:** «Sí, mi hijo tiene dolor.» · «No, mi hijo no tiene heridas.» · «No sé si tiene heridas.»
-- **Turno 4 (Funcionario):** «¿Los compañeros se burlan de su hijo?» · «¿Se ríen de su hijo en la escuela?»
+- **Turno 6 (Funcionario):** «¿Los compañeros se burlan de su hijo?» · «¿Se ríen de su hijo en la escuela?»
 - **Respuestas:** «Sí, otros niños se burlan de él.» · «No, no se burlan de él.» · «No sé si se burlan de él.»
-- **Turno 6 (Funcionario):** «¿Los compañeros le pegan?» · «¿Maltratan a su hijo en la escuela?»
+- **Turno 8 (Funcionario):** «¿Los compañeros le pegan?» · «¿Maltratan a su hijo en la escuela?»
 - **Respuestas:** «Sí, otros niños le pegan.» · «No, no le pegan.» · «No sé si le pegan.»
-- **Turno 8 (Funcionario):** «¿Le pegan siempre?» · «¿Es todos los días?»
+- **Turno 10 (Funcionario):** «¿Le pegan siempre?» · «¿Es todos los días?»
 - **Respuestas:** «Sí, todos los días.» · «No, no siempre.» · «No lo sé.»
-- **Turno 10 (Funcionario):** «¿Avisó a la escuela?» · «¿El maestro sabe lo que pasa?» · «¿Habló con el maestro?»
+- **Turno 12 (Funcionario):** «¿Avisó a la escuela?» · «¿El maestro sabe lo que pasa?» · «¿Habló con el maestro?»
 - **Respuestas:** «Sí, hablé con el maestro, pero no ayudó.» · «No, todavía no hablé con la escuela.» · «No sé con quién hablar en la escuela.»
-- **Turno 12 (Funcionario):** «¿Tiene pruebas de lo que pasa?» · «¿Guardó videos o fotos?»
+- **Turno 14 (Funcionario):** «¿Tiene pruebas de lo que pasa?» · «¿Guardó videos o fotos?»
 - **Respuestas:** «Sí, tengo videos en mi celular.» · «No, no tengo videos.» · «No sé si tengo videos.»
-- **Turno 14 (Funcionario):** «Conserve los videos y las fotos.»
+- **Turno 16 (Funcionario):** «Conserve los videos y las fotos.»
 - **Respuestas:** «Bien, voy a guardar todo.» · «¿Dónde tengo que llevar los videos?»
-- **Turno 16 (Funcionario):** «¿Requiere interpretación en LSB?» · «¿Necesita apoyo de un intérprete de LSB?»
+- **Turno 18 (Funcionario):** «¿Requiere interpretación en LSB?» · «¿Necesita apoyo de un intérprete de LSB?»
 - **Respuestas:** «Sí, necesito un intérprete de LSB.» · «No, no necesito un intérprete.» · «No sé cómo pedir un intérprete.»
-
-### Ramificaciones
-
-- **Turno 14:** si Turno 12 es afirmado
 
 ## ESC-FELCV-201 — Denunciar acoso sexual
 
@@ -72,37 +72,58 @@
 | # | Rol | Mensaje | Propósito | Hechos |
 |---|---|---|---|---|
 | 1 | Usuario Sordo | Quiero denunciar acoso sexual. | Iniciar | — |
-| 2 | Funcionario | ¿Está en peligro ahora? | Priorizar seguridad | — |
-| 3 | Usuario Sordo | No, ahora estoy lejos de esa persona. | Responder | — |
-| 4 | Funcionario | ¿Conoce a la persona que la acosa? | Recabar | — |
-| 5 | Usuario Sordo | Sí, es mi jefe. | Responder | — |
-| 6 | Funcionario | ¿Esa persona la tocó sin su permiso? | Recabar | — |
-| 7 | Usuario Sordo | Sí, me tocó sin mi permiso. | Responder | — |
-| 8 | Funcionario | ¿La acosa todos los días? | Recabar | — |
-| 9 | Usuario Sordo | Sí, todos los días. | Responder | — |
-| 10 | Funcionario | ¿Tiene testigos? | Recabar | — |
-| 11 | Usuario Sordo | Sí, una compañera es testigo. | Responder | — |
-| 12 | Funcionario | La FELCV es la unidad especializada contra la violencia. | Orientar | H-FELCV-01 |
-| 13 | Usuario Sordo | Hoy quiero quejarme a la policía. | Responder | — |
-| 14 | Funcionario | ¿Necesita un intérprete de Lengua de Señas Boliviana? | Accesibilidad | — |
-| 15 | Usuario Sordo | Sí, necesito un intérprete de LSB. | Responder | — |
+| 2 | Funcionario | ¿La acosaron sexualmente? | Confirmar | — |
+| 3 | Usuario Sordo | Sí, me acosaron sexualmente. | Responder | — |
+| 4 | Funcionario | ¿Está en peligro ahora? | Priorizar seguridad | — |
+| 5 | Usuario Sordo | No, ahora estoy lejos de esa persona. | Responder | — |
+| 6 | Funcionario | ¿Conoce a la persona que la acosa? | Recabar | — |
+| 7 | Usuario Sordo | Sí, es mi jefe. | Responder | — |
+| 8 | Funcionario | ¿Quién es esa persona? | Recabar | — |
+| 9 | Usuario Sordo | Es mi jefe. | Responder | — |
+| 10 | Funcionario | ¿Esa persona la tocó sin su permiso? | Recabar | — |
+| 11 | Usuario Sordo | Sí, me tocó sin mi permiso. | Responder | — |
+| 12 | Funcionario | ¿La acosa todos los días? | Recabar | — |
+| 13 | Usuario Sordo | Sí, todos los días. | Responder | — |
+| 14 | Funcionario | ¿Tiene testigos? | Recabar | — |
+| 15 | Usuario Sordo | Sí, una compañera es testigo. | Responder | — |
+| 16 | Funcionario | ¿Habló con alguien más sobre este acoso? | Recabar | — |
+| 17 | Usuario Sordo | Sí, hablé con alguien más. | Responder | — |
+| 18 | Funcionario | ¿Con quién habló? | Recabar | — |
+| 19 | Usuario Sordo | Hablé con mi mamá. | Responder | — |
+| 20 | Funcionario | La FELCV es la unidad especializada contra la violencia. | Orientar | H-FELCV-01 |
+| 21 | Usuario Sordo | Hoy quiero quejarme a la policía. | Responder | — |
+| 22 | Funcionario | ¿Necesita un intérprete de Lengua de Señas Boliviana? | Accesibilidad | — |
+| 23 | Usuario Sordo | Sí, necesito un intérprete de LSB. | Responder | — |
 
 ### Variantes
 
-- **Turno 2 (Funcionario):** «¿Corre peligro en este momento?» · «¿Esa persona está cerca de usted ahora?»
+- **Turno 2 (Funcionario):** «¿Sufrió acoso sexual?» · «¿Alguien la acosó sexualmente?» · «¿Lo acosaron sexualmente?»
+- **Respuestas:** «Sí, me acosaron sexualmente.» · «No, no me acosaron.» · «No sé si fue acoso sexual.»
+- **Turno 4 (Funcionario):** «¿Corre peligro en este momento?» · «¿Esa persona está cerca de usted ahora?»
 - **Respuestas:** «Sí, estoy en peligro ahora.» · «No, ahora estoy lejos de esa persona.» · «No sé si estoy en peligro.»
-- **Turno 4 (Funcionario):** «¿Sabe quién es esa persona?» · «¿Reconoce a la persona que la acosa?»
+- **Turno 6 (Funcionario):** «¿Sabe quién es esa persona?» · «¿Reconoce a la persona que la acosa?» · «¿Conoce a la persona que lo acosa?»
 - **Respuestas:** «Sí, es mi jefe.» · «Sí, es mi compañero.» · «No, no conozco a esa persona.» · «No sé quién es.»
-- **Turno 6 (Funcionario):** «¿Le tocó el cuerpo sin permiso?» · «¿Hubo contacto sin su permiso?»
+- **Turno 8 (Funcionario):** «¿Quién la acosa?» · «¿Quién es la persona que la acosa?»
+- **Respuestas:** «Es mi jefe.» · «Es mi compañero.» · «Es mi pareja.» · «Es un amigo.» · «Es un pariente.» · «No sé quién es.»
+- **Turno 10 (Funcionario):** «¿Le tocó el cuerpo sin permiso?» · «¿Hubo contacto sin su permiso?»
 - **Respuestas:** «Sí, me tocó sin mi permiso.» · «No, no me tocó.» · «No sé cómo explicarlo.»
-- **Turno 8 (Funcionario):** «¿La acosa siempre?» · «¿Es todos los días?»
+- **Turno 12 (Funcionario):** «¿La acosa siempre?» · «¿Es todos los días?»
 - **Respuestas:** «Sí, todos los días.» · «No, no siempre.» · «No lo sé.»
-- **Turno 10 (Funcionario):** «¿Alguien es testigo?» · «¿Otra persona vio lo que pasó?»
+- **Turno 14 (Funcionario):** «¿Alguien es testigo?» · «¿Otra persona vio lo que pasó?»
 - **Respuestas:** «Sí, una compañera es testigo.» · «No, no hay testigos.» · «No sé si hay testigos.»
-- **Turno 12 (Funcionario):** «La FELCV atiende los casos de violencia.»
+- **Turno 16 (Funcionario):** «¿Le contó a alguien sobre el acoso?» · «¿Alguien más sabe de este acoso?»
+- **Respuestas:** «Sí, hablé con alguien más.» · «No, no hablé con nadie.» · «No sé si debo contarlo.»
+- **Turno 18 (Funcionario):** «¿A quién se lo contó?» · «¿Con quién habló del acoso?»
+- **Respuestas:** «Hablé con mi mamá.» · «Hablé con un amigo.» · «Hablé con mi pareja.» · «Hablé con mi hermana.» · «Hablé con un compañero.» · «No sé.»
+- **Turno 20 (Funcionario):** «La FELCV atiende los casos de violencia.»
 - **Respuestas:** «Hoy quiero quejarme a la policía.» · «Tengo miedo.»
-- **Turno 14 (Funcionario):** «¿Requiere interpretación en LSB?» · «¿Necesita apoyo de un intérprete de LSB?»
+- **Turno 22 (Funcionario):** «¿Requiere interpretación en LSB?» · «¿Necesita apoyo de un intérprete de LSB?»
 - **Respuestas:** «Sí, necesito un intérprete de LSB.» · «No, no necesito un intérprete.» · «No sé cómo pedir un intérprete.»
+
+### Ramificaciones
+
+- **Turno 8:** si Turno 6 es afirmado (se pregunta junto)
+- **Turno 18:** si Turno 16 es afirmado (se pregunta junto)
 
 ## ESC-FELCC-201 — Denunciar ciberacoso
 
@@ -156,36 +177,41 @@
 | 1 | Usuario Sordo | Sufro acoso físico: una persona me sigue y me toca. | Iniciar | — |
 | 2 | Funcionario | ¿Conoce a esa persona? | Recabar | — |
 | 3 | Usuario Sordo | Sí, vive cerca de mi casa. | Responder | — |
-| 4 | Funcionario | ¿Esa persona es su pareja? | Clasificar | — |
-| 5 | Usuario Sordo | No, no es mi pareja. | Responder | — |
-| 6 | Funcionario | ¿Le pegó? | Recabar | — |
-| 7 | Usuario Sordo | Sí, me pegó. | Responder | — |
-| 8 | Funcionario | ¿Necesita atención médica ahora? | Priorizar salud | — |
-| 9 | Usuario Sordo | Sí, necesito ir al hospital. | Responder | — |
-| 10 | Funcionario | ¿Esa persona la busca todos los días? | Recabar | — |
-| 11 | Usuario Sordo | Sí, todos los días, y tengo miedo. | Responder | — |
-| 12 | Funcionario | Para la violencia de pareja corresponde la FELCV. | Derivar | H-FELCV-01 |
-| 13 | Usuario Sordo | Quiero ir a la FELCV. | Responder | — |
+| 4 | Funcionario | ¿Quién es esa persona? | Recabar | — |
+| 5 | Usuario Sordo | Es un compañero. | Responder | — |
+| 6 | Funcionario | ¿Esa persona es su pareja? | Clasificar | — |
+| 7 | Usuario Sordo | No, no es mi pareja. | Responder | — |
+| 8 | Funcionario | ¿Le pegó? | Recabar | — |
+| 9 | Usuario Sordo | Sí, me pegó. | Responder | — |
+| 10 | Funcionario | ¿Necesita atención médica ahora? | Priorizar salud | — |
+| 11 | Usuario Sordo | Sí, necesito ir al hospital. | Responder | — |
+| 12 | Funcionario | ¿Esa persona la busca todos los días? | Recabar | — |
+| 13 | Usuario Sordo | Sí, todos los días, y tengo miedo. | Responder | — |
+| 14 | Funcionario | Para la violencia de pareja corresponde la FELCV. | Derivar | H-FELCV-01 |
+| 15 | Usuario Sordo | Quiero ir a la FELCV. | Responder | — |
 
 ### Variantes
 
 - **Turno 2 (Funcionario):** «¿Sabe quién es esa persona?» · «¿Reconoce a esa persona?»
 - **Respuestas:** «Sí, vive cerca de mi casa.» · «No, no conozco a esa persona.» · «No sé quién es.»
-- **Turno 4 (Funcionario):** «¿Es su pareja?» · «¿Tiene una relación con esa persona?»
+- **Turno 4 (Funcionario):** «¿Quién la sigue?» · «¿Quién es la persona que la acosa?»
+- **Respuestas:** «Es un compañero.» · «Es mi jefe.» · «Es un amigo.» · «Es mi pareja.» · «Es un pariente.» · «No sé quién es.»
+- **Turno 6 (Funcionario):** «¿Es su pareja?» · «¿Tiene una relación con esa persona?»
 - **Respuestas:** «Sí, es mi pareja.» · «No, no es mi pareja.» · «No sé cómo explicarlo.»
-- **Turno 6 (Funcionario):** «¿Lo agredió?» · «¿Hubo golpes?»
+- **Turno 8 (Funcionario):** «¿Lo agredió?» · «¿Hubo golpes?»
 - **Respuestas:** «Sí, me pegó.» · «No, no me pegó.» · «No sé si fue un golpe.»
-- **Turno 8 (Funcionario):** «¿Necesita ayuda médica inmediata?» · «¿Requiere atención de salud en este momento?»
+- **Turno 10 (Funcionario):** «¿Necesita ayuda médica inmediata?» · «¿Requiere atención de salud en este momento?»
 - **Respuestas:** «Sí, necesito ir al hospital.» · «No, no necesito atención médica.» · «No sé si necesito un médico.»
-- **Turno 10 (Funcionario):** «¿La busca siempre?» · «¿Es todos los días?»
+- **Turno 12 (Funcionario):** «¿La busca siempre?» · «¿Es todos los días?»
 - **Respuestas:** «Sí, todos los días, y tengo miedo.» · «No, no siempre.» · «No lo sé.»
-- **Turno 12 (Funcionario):** «Si es su pareja, la denuncia corresponde a la FELCV.» · «Para violencia tiene que ir a la FELCV.» · «La violencia la atiende la FELCV.»
+- **Turno 14 (Funcionario):** «Si es su pareja, la denuncia corresponde a la FELCV.» · «Para violencia tiene que ir a la FELCV.» · «La violencia la atiende la FELCV.»
 - **Respuestas:** «Quiero ir a la FELCV.» · «¿Dónde está la FELCV?»
 
 ### Ramificaciones
 
-- **Turno 8:** si Turno 6 es afirmado
-- **Turno 12:** si Turno 4 es afirmado
+- **Turno 4:** si Turno 2 es afirmado (se pregunta junto)
+- **Turno 10:** si Turno 8 es afirmado
+- **Turno 14:** si Turno 6 es afirmado
 
 ## ESC-LSB-201 — Acoso discriminatorio por ser sordo
 

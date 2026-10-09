@@ -1542,6 +1542,33 @@
   "correcciones": [],
   "traducido": "2026-10-08"
  },
+ "Es mi compañero.": {
+  "glosas": [
+   "COMPAÑERO",
+   "YO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Es mi jefe.": {
+  "glosas": [
+   "YO",
+   "JEFE"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Es mi pareja.": {
+  "glosas": [
+   "PAREJA",
+   "YO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
  "Es primera vez.": {
   "glosas": [
    "PRIMERA_VEZ"
@@ -1549,6 +1576,41 @@
   "estado": "complete",
   "correcciones": [],
   "traducido": "2026-09-27"
+ },
+ "Es un amigo.": {
+  "glosas": [
+   "AMIGO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Es un compañero.": {
+  "glosas": [
+   "COMPAÑERO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Es un pariente.": {
+  "glosas": [
+   "P",
+   "A",
+   "R",
+   "E",
+   "N",
+   "T",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PARENTE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "Escríbala sin espacios ni guiones.": {
   "glosas": [
@@ -2049,6 +2111,54 @@
    }
   ],
   "traducido": "2026-10-07"
+ },
+ "Hablé con mi hermana.": {
+  "glosas": [
+   "YO",
+   "HERMANA",
+   "HABLAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Hablé con mi mamá.": {
+  "glosas": [
+   "YO",
+   "MAMA",
+   "HABLAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Hablé con mi pareja.": {
+  "glosas": [
+   "YO",
+   "PAREJA",
+   "HABLAR"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Hablé con un amigo.": {
+  "glosas": [
+   "HABLAR",
+   "AMIGO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
+ "Hablé con un compañero.": {
+  "glosas": [
+   "HABLAR",
+   "COMPAÑERO"
+  ],
+  "estado": "partial",
+  "correcciones": [],
+  "traducido": "2026-10-09"
  },
  "Haré la consulta en línea.": {
   "glosas": [
@@ -8399,6 +8509,40 @@
   ],
   "traducido": "2026-10-03"
  },
+ "No sé si debo contarlo.": {
+  "glosas": [
+   "NO_SABER",
+   "D",
+   "E",
+   "B",
+   "E",
+   "R",
+   "C",
+   "O",
+   "N",
+   "T",
+   "A",
+   "R",
+   "L",
+   "O"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "DEBER",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "CONTAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "LO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "No sé si desapareció.": {
   "glosas": [
    "NO_SABER",
@@ -8821,6 +8965,27 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "No sé si es bullying.": {
+  "glosas": [
+   "NO_SABER",
+   "B",
+   "U",
+   "L",
+   "L",
+   "Y",
+   "I",
+   "N",
+   "G"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "BULLYING",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "No sé si es un funcionario.": {
   "glosas": [
@@ -10725,6 +10890,34 @@
    }
   ],
   "traducido": "2026-10-04"
+ },
+ "No sé si fue acoso sexual.": {
+  "glosas": [
+   "NO_SABER",
+   "A",
+   "C",
+   "O",
+   "S",
+   "O",
+   "S",
+   "E",
+   "X",
+   "U",
+   "A",
+   "L"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ACOSO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEXUAL",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "No sé si fue un golpe.": {
   "glosas": [
@@ -13287,6 +13480,39 @@
   ],
   "traducido": "2026-10-03"
  },
+ "No, mi hijo no sufre bullying.": {
+  "glosas": [
+   "NO",
+   "YO",
+   "HIJO",
+   "B",
+   "U",
+   "L",
+   "L",
+   "Y",
+   "I",
+   "N",
+   "G",
+   "S",
+   "U",
+   "F",
+   "R",
+   "E",
+   "NO"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "BULLYING",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SUFRE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "No, mi hijo no tiene heridas.": {
   "glosas": [
    "YO",
@@ -13989,6 +14215,25 @@
   ],
   "traducido": "2026-10-04"
  },
+ "No, no hablé con nadie.": {
+  "glosas": [
+   "NO",
+   "HABLAR",
+   "N",
+   "A",
+   "D",
+   "I",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "NADIE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "No, no hay cámaras.": {
   "glosas": [
    "NO",
@@ -14118,6 +14363,25 @@
   "estado": "complete",
   "correcciones": [],
   "traducido": "2026-10-07"
+ },
+ "No, no me acosaron.": {
+  "glosas": [
+   "NO",
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ACOSAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "No, no me amenaza.": {
   "glosas": [
@@ -22487,6 +22751,34 @@
   ],
   "traducido": "2026-10-07"
  },
+ "Sí, hablé con alguien más.": {
+  "glosas": [
+   "SI",
+   "HABLAR",
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N",
+   "M",
+   "A",
+   "S"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MAS",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "Sí, hablé con el maestro, pero no ayudó.": {
   "glosas": [
    "SI",
@@ -23017,6 +23309,35 @@
   "correcciones": [],
   "traducido": "2026-09-27"
  },
+ "Sí, me acosaron sexualmente.": {
+  "glosas": [
+   "SI",
+   "YO",
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R",
+   "S",
+   "E",
+   "X",
+   "O",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ACOSAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEXO",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "Sí, me amenaza siempre.": {
   "glosas": [
    "SIEMPRE",
@@ -23361,6 +23682,38 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "Sí, mi hijo sufre bullying.": {
+  "glosas": [
+   "YO",
+   "HIJO",
+   "B",
+   "U",
+   "L",
+   "L",
+   "Y",
+   "I",
+   "N",
+   "G",
+   "S",
+   "U",
+   "F",
+   "R",
+   "I",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "BULLYING",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SUFRIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "Sí, mi hijo tiene dolor.": {
   "glosas": [
@@ -28534,6 +28887,15 @@
   ],
   "traducido": "2026-10-04"
  },
+ "¿Con quién habló?": {
+  "glosas": [
+   "HABLAR",
+   "QUIEN"
+  ],
+  "estado": "complete",
+  "correcciones": [],
+  "traducido": "2026-10-09"
+ },
  "¿Conoce a esa persona?": {
   "glosas": [
    "CONOCER",
@@ -32885,6 +33247,62 @@
   ],
   "traducido": "2026-10-07"
  },
+ "¿Habló con alguien más sobre este acoso?": {
+  "glosas": [
+   "HABLAR",
+   "A",
+   "L",
+   "G",
+   "U",
+   "I",
+   "E",
+   "N",
+   "M",
+   "A",
+   "S",
+   "A",
+   "C",
+   "O",
+   "S",
+   "O",
+   "E",
+   "S",
+   "T",
+   "E",
+   "S",
+   "O",
+   "B",
+   "R",
+   "E"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "accion": "marca_de_pregunta_retirada"
+   },
+   {
+    "palabra": "ALGUIEN",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MAS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ACOSO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESTE",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SOBRE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "¿Habló con el maestro de la escuela?": {
   "glosas": [
    "ESCUELA",
@@ -33081,6 +33499,41 @@
    }
   ],
   "traducido": "2026-10-07"
+ },
+ "¿La acosaron sexualmente?": {
+  "glosas": [
+   "A",
+   "C",
+   "O",
+   "S",
+   "A",
+   "R",
+   "S",
+   "E",
+   "X",
+   "U",
+   "A",
+   "L",
+   "M",
+   "E",
+   "N",
+   "T",
+   "E",
+   "ELLA",
+   "NO"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ACOSAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SEXUALMENTE",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "¿La anotación preventiva aparece en el Folio Real?": {
   "glosas": [
@@ -35888,6 +36341,39 @@
   ],
   "traducido": "2026-09-27"
  },
+ "¿Quién es esa persona?": {
+  "glosas": [
+   "QUIEN",
+   "E",
+   "S",
+   "E",
+   "S",
+   "A",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ES",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "ESA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "¿Qué ayuda necesita?": {
   "glosas": [
    "A",
@@ -37989,6 +38475,37 @@
    }
   ],
   "traducido": "2026-10-03"
+ },
+ "¿Su hijo sufre bullying?": {
+  "glosas": [
+   "HIJO",
+   "B",
+   "U",
+   "L",
+   "L",
+   "Y",
+   "I",
+   "N",
+   "G",
+   "S",
+   "U",
+   "F",
+   "R",
+   "I",
+   "R"
+  ],
+  "estado": "partial",
+  "correcciones": [
+   {
+    "palabra": "BULLYING",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "SUFRIR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "¿Su hijo tiene heridas o dolor?": {
   "glosas": [

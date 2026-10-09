@@ -54,9 +54,9 @@ El valor escrito se guarda y se redacta tal cual; no se convierte en glosas.
 | `lugar_literal` | 6 |
 | `monto` | 3 |
 | `referencia` | 3 |
-| `telefono` | 5 |
+| `telefono` | 6 |
 | `texto_detalle` | 26 |
-| `texto_nombre` | 5 |
+| `texto_nombre` | 7 |
 
 ## Animación de las glosas del banco
 

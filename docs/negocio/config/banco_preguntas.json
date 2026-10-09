@@ -2135,6 +2135,83 @@
    ]
   },
   {
+   "id": "Q.DIG.PUBLICACION",
+   "dominio": "mensajes",
+   "formulacion": "¿Publicaron sus fotos sin su permiso?",
+   "gramaticaLsb": {
+    "estado": "LEXICAL_GAP",
+    "secuencia": [
+     "FOTOS",
+     "SUYO",
+     "PERMISO"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "huecos": [
+     {
+      "concepto": "PUBLICAR",
+      "posicion": 2
+     },
+     {
+      "concepto": "SIN",
+      "posicion": 3
+     }
+    ],
+    "regla": "R17: PUBLICAR no existe en v4, y «sin permiso» se diría PERMISO · NO, que una pregunta sí/no no lleva: hueco léxico",
+    "evidencia": "corpus §6 «¿Tiene fotos de la pantalla?» → FOTOS · … · TENER; escenario ESC-FELCC-201 «¿Publicaron sus fotos o videos sin su permiso?»"
+   },
+   "acto": "pregunta_polar",
+   "entidad": "Hecho[publicacion]",
+   "campo": "publicacion",
+   "control": "polar3",
+   "noOfrecer": {
+    "FOTOS": "formulacion",
+    "PERMISO": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "frase": "Sí, publicaron mis fotos sin mi permiso.",
+     "polar": true
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "frase": "No, no publicaron nada.",
+     "polar": true
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "frase": "No sé si publicaron algo.",
+     "polar": true
+    }
+   ],
+   "variantes": [
+    "¿Publicaron fotos suyas sin su permiso?",
+    "¿Subieron sus fotos a internet sin su permiso?",
+    "¿Difundieron sus fotos sin permiso?"
+   ],
+   "campos": [
+    "polaridad"
+   ]
+  },
+  {
    "id": "Q.DIG.REMITENTE",
    "dominio": "mensajes",
    "formulacion": "¿Quién le envió los mensajes?",
@@ -3399,7 +3476,11 @@
      "polar": true
     }
    ],
-   "variantes": [],
+   "variantes": [
+    "¿Hay cámaras en esa calle?",
+    "¿Había cámaras en el lugar?",
+    "¿Hay cámaras de seguridad?"
+   ],
    "campos": [
     "polaridad"
    ]
@@ -5647,6 +5728,117 @@
    "variantes": [],
    "campos": [
     "polaridad"
+   ]
+  },
+  {
+   "id": "Q.ORI.DESTINO",
+   "dominio": "orientacion",
+   "formulacion": "¿Sabe a dónde tiene que ir?",
+   "gramaticaLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "IR",
+     "DÓNDE"
+    ],
+    "tipo": "qu",
+    "interrogativo": "DÓNDE",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R10: la respuesta es la institución; el enunciado es IR · ¿DÓNDE?",
+    "evidencia": "corpus §6 «¿Dónde ocurrió?» → ¿DÓNDE?; «¿Dónde está la Fiscalía?» → d(FISCALÍA) · ¿DÓNDE? (§7)"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Orientacion",
+   "campo": "institucion_destino",
+   "control": "seleccion_unica",
+   "noOfrecer": {
+    "IR": "formulacion",
+    "DÓNDE": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "felcc",
+     "etiqueta": "La FELCC",
+     "glosas": [
+      "FELCC"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la FELCC."
+    },
+    {
+     "id": "felcv",
+     "etiqueta": "La FELCV",
+     "glosas": [
+      "FELCV"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la FELCV."
+    },
+    {
+     "id": "fiscalia",
+     "etiqueta": "La Fiscalía",
+     "glosas": [
+      "FISCALIA"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la Fiscalía."
+    },
+    {
+     "id": "policia",
+     "etiqueta": "La Policía",
+     "glosas": [
+      "POLICÍA"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a la Policía."
+    },
+    {
+     "id": "sepdavi",
+     "etiqueta": "SEPDAVI",
+     "glosas": [
+      "SEPDAVI"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a SEPDAVI."
+    },
+    {
+     "id": "sepdep",
+     "etiqueta": "SEPDEP",
+     "glosas": [
+      "SEPDEP"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir a SEPDEP."
+    },
+    {
+     "id": "juzgado",
+     "etiqueta": "El juzgado",
+     "glosas": [
+      "JUZGADO"
+     ],
+     "estado": "afirmado",
+     "frase": "Tengo que ir al juzgado."
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé, dígame usted",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No sé a dónde tengo que ir. Dígame usted, por favor."
+    }
+   ],
+   "variantes": [
+    "¿Entiende a dónde tiene que ir?",
+    "¿Sabe adónde tiene que ir?",
+    "¿Sabe dónde tiene que ir?",
+    "¿Entiende adónde ir?"
+   ],
+   "campos": [
+    "institucion"
    ]
   },
   {
@@ -8980,6 +9172,70 @@
    ]
   },
   {
+   "id": "Q.SEG.CONOCE_FISCAL",
+   "dominio": "seguimiento",
+   "formulacion": "¿Sabe quién es su fiscal?",
+   "gramaticaLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TUYO",
+     "d(FISCAL)",
+     "CONOCER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R6: objeto · verbo, como TÚ · ÉL · CONOCER (Q.PER.CONOCE): «¿sabe quién es…?» es «¿conoce a…?»",
+    "evidencia": "corpus §6 «¿Conoce a la persona involucrada?» → TÚ · ÉL/ELLA · CONOCER; «¿Necesita hablar con el fiscal?» → d(FISCAL) · HABLAR · NECESITAR"
+   },
+   "acto": "pregunta_polar",
+   "entidad": "Persona[fiscal]",
+   "campo": "nombre_literal",
+   "control": "polar2",
+   "reglas": [
+    "Es el nombre de un tercero: nunca se guarda en Ciudadano.nombre ni en la ficha de identificación."
+   ],
+   "noOfrecer": {
+    "TUYO": "formulacion",
+    "CONOCER": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "polar": true,
+     "frase": "Sí, mi fiscal es {nombre}.",
+     "editor": "texto_nombre"
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "polar": true,
+     "frase": "No sé quién es mi fiscal."
+    }
+   ],
+   "variantes": [
+    "¿Conoce a su fiscal?",
+    "¿Sabe el nombre de su fiscal?",
+    "¿Sabe quién es el fiscal de su caso?"
+   ],
+   "campos": [
+    "polaridad"
+   ],
+   "ranuras": [
+    "person"
+   ]
+  },
+  {
    "id": "Q.SEG.CONFORMIDAD",
    "dominio": "seguimiento",
    "formulacion": "¿Está de acuerdo con lo escrito?",
@@ -10295,6 +10551,63 @@
    ]
   },
   {
+   "id": "Q.SEG.SABER_INVESTIGADOR",
+   "dominio": "seguimiento",
+   "formulacion": "¿Quiere saber quién investigará su caso?",
+   "gramaticaLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "INVESTIGACIÓN",
+     "SABER",
+     "QUERER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R11: pregunta sí/no («¿quiere saber quién…?»): cláusula + SABER + modal",
+    "evidencia": "§8 INVESTIGACIÓN · CONTINUAR · SABER · QUERER"
+   },
+   "acto": "pregunta_polar",
+   "entidad": "Solicitud",
+   "campo": "saber_investigador",
+   "control": "polar2",
+   "noOfrecer": {
+    "INVESTIGACIÓN": "formulacion",
+    "SABER": "formulacion",
+    "QUERER": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "polar": true,
+     "frase": "Sí, quiero saber quién investigará mi caso."
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "polar": true,
+     "frase": "No, ahora no."
+    }
+   ],
+   "variantes": [
+    "¿Quiere saber quién investiga su caso?",
+    "¿Quiere conocer al investigador de su caso?"
+   ],
+   "campos": [
+    "polaridad"
+   ]
+  },
+  {
    "id": "Q.TES.CANTIDAD",
    "dominio": "testigos",
    "formulacion": "¿Cuántos testigos hay?",
@@ -10354,6 +10667,200 @@
    "fraseSuelta": "Hay {frag}."
   },
   {
+   "id": "Q.TES.CONOCE",
+   "dominio": "testigos",
+   "formulacion": "¿Conoce a los testigos?",
+   "gramaticaLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TESTIGO",
+     "CONOCER"
+    ],
+    "tipo": "polar",
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "regla": "R6: objeto · verbo, como TÚ · ÉL · CONOCER (Q.PER.CONOCE)",
+    "evidencia": "corpus §6 «¿Conoce a la persona involucrada?» → TÚ · ÉL/ELLA · CONOCER; «¿Hay testigos del robo?» → TESTIGO · TENER"
+   },
+   "acto": "pregunta_polar",
+   "entidad": "Testigos",
+   "campo": "conocidos",
+   "control": "polar3",
+   "siguiente": [
+    {
+     "si": "si",
+     "abrir": [
+      "Q.TES.NOMBRE",
+      "Q.TES.TELEFONO"
+     ]
+    }
+   ],
+   "noOfrecer": {
+    "TESTIGO": "formulacion",
+    "CONOCER": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "si",
+     "etiqueta": "Sí",
+     "glosas": [
+      "SÍ"
+     ],
+     "estado": "afirmado",
+     "polar": true,
+     "frase": "Sí, conozco a los testigos."
+    },
+    {
+     "id": "no",
+     "etiqueta": "No",
+     "glosas": [
+      "NO"
+     ],
+     "estado": "negado",
+     "polar": true,
+     "frase": "No conozco a los testigos."
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "polar": true,
+     "frase": "No sé quiénes son los testigos."
+    }
+   ],
+   "variantes": [
+    "¿Quiénes son los testigos?",
+    "¿Quién es el testigo?",
+    "¿Conoce al testigo?"
+   ],
+   "campos": [
+    "polaridad"
+   ],
+   "ranuras": [
+    "person"
+   ]
+  },
+  {
+   "id": "Q.TES.NOMBRE",
+   "dominio": "testigos",
+   "formulacion": "¿Cuál es el nombre del testigo?",
+   "gramaticaLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TESTIGO",
+     "NOMBRE",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R14 + R10: poseedor delante y ¿CUÁL? al final, como TUYO · NOMBRE · ¿CUÁL? (Q.ID.NOMBRE)",
+    "evidencia": "corpus §6 «¿Cuál es su nombre completo?» → TUYO · NOMBRE · ¿CUÁL?"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona[testigo]",
+   "campo": "nombre_literal",
+   "control": "seleccion_unica",
+   "reglas": [
+    "Es el nombre de un tercero: nunca se guarda en Ciudadano.nombre ni en la ficha de identificación."
+   ],
+   "noOfrecer": {
+    "TESTIGO": "formulacion",
+    "NOMBRE": "formulacion: la respuesta es el nombre escrito",
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "nombre",
+     "etiqueta": "Escribir su nombre",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "El testigo se llama {nombre}.",
+     "editor": "texto_nombre"
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No sé cómo se llama el testigo."
+    }
+   ],
+   "variantes": [
+    "¿Cómo se llama el testigo?",
+    "¿Sabe cómo se llama el testigo?"
+   ],
+   "campos": [
+    "nombre"
+   ]
+  },
+  {
+   "id": "Q.TES.TELEFONO",
+   "dominio": "testigos",
+   "formulacion": "¿Cuál es el número de celular del testigo?",
+   "gramaticaLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "secuencia": [
+     "TESTIGO",
+     "CELULAR",
+     "NÚM(...)",
+     "CUÁL"
+    ],
+    "tipo": "qu",
+    "interrogativo": "CUÁL",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "regla": "R14 + R10: poseedor delante, como TUYO · CELULAR · NÚM(...) · ¿CUÁL? (Q.ID.TELEFONO_PROPIO)",
+    "evidencia": "§7 «¿Puedo cambiar mi número de celular?» → MÍO · CELULAR · NÚM(...) · CAMBIAR · PUEDO"
+   },
+   "acto": "pregunta_abierta",
+   "entidad": "Persona[testigo]",
+   "campo": "telefono_literal",
+   "control": "seleccion_unica",
+   "noOfrecer": {
+    "TESTIGO": "formulacion",
+    "CELULAR": "formulacion",
+    "CUÁL": "formulacion"
+   },
+   "nodos": [],
+   "modo": "frase",
+   "opciones": [
+    {
+     "id": "telefono",
+     "etiqueta": "Escribir su número",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "El número de celular del testigo es {telefono}.",
+     "editor": "telefono"
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No lo sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "salida": true,
+     "frase": "No tengo el número del testigo."
+    }
+   ],
+   "variantes": [
+    "¿Tiene el número de celular del testigo?",
+    "¿Cuál es el teléfono del testigo?"
+   ],
+   "campos": [
+    "telefono"
+   ]
+  },
+  {
    "id": "Q.TES.EXISTE",
    "dominio": "testigos",
    "formulacion": "¿Hay testigos?",
@@ -10376,7 +10883,8 @@
     {
      "si": "si",
      "abrir": [
-      "Q.TES.CANTIDAD"
+      "Q.TES.CANTIDAD",
+      "Q.TES.CONOCE"
      ],
      "nota": "opcional"
     }
@@ -11744,6 +12252,43 @@
      ]
     },
     {
+     "pregunta": "Q.TES.CONOCE",
+     "cuando": [
+      {
+       "pregunta": "Q.TES.EXISTE",
+       "opciones": [
+        "si"
+       ]
+      }
+     ]
+    },
+    {
+     "pregunta": "Q.TES.NOMBRE",
+     "cuando": [
+      {
+       "pregunta": "Q.TES.CONOCE",
+       "opciones": [
+        "si"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.TES.CONOCE"
+    },
+    {
+     "pregunta": "Q.TES.TELEFONO",
+     "cuando": [
+      {
+       "pregunta": "Q.TES.CONOCE",
+       "opciones": [
+        "si"
+       ]
+      }
+     ],
+     "obligatoria": true,
+     "padre": "Q.TES.CONOCE"
+    },
+    {
      "pregunta": "Q.EVI.FACTURA",
      "cuando": [
       {
@@ -11781,6 +12326,9 @@
      ]
     },
     {
+     "pregunta": "Q.EVI.CAMARAS"
+    },
+    {
      "pregunta": "Q.DEN.INTENCION"
     },
     {
@@ -11796,6 +12344,10 @@
        "perfil": false
       }
      ]
+    },
+    {
+     "pregunta": "Q.SEG.SABER_INVESTIGADOR",
+     "soloConversacion": true
     }
    ],
    "ordenRedaccion": [
@@ -11825,12 +12377,17 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
-    "Q.DEN.AUTORIDAD"
+    "Q.DEN.AUTORIDAD",
+    "Q.SEG.SABER_INVESTIGADOR"
    ]
   },
   "violencia": {
@@ -12017,6 +12574,9 @@
     },
     {
      "pregunta": "Q.DIG.CONTINUA"
+    },
+    {
+     "pregunta": "Q.DIG.PUBLICACION"
     },
     {
      "pregunta": "Q.DIG.GUARDO"
@@ -12214,6 +12774,14 @@
        "perfil": false
       }
      ]
+    },
+    {
+     "pregunta": "Q.SEG.CONOCE_FISCAL",
+     "soloConversacion": true
+    },
+    {
+     "pregunta": "Q.SEG.SABER_INVESTIGADOR",
+     "soloConversacion": true
     }
    ]
   },
@@ -12403,6 +12971,21 @@
        ]
       }
      ]
+    }
+   ]
+  },
+  "derivacion": {
+   "nombre": "Derivación",
+   "contexto": {
+    "nombre": "Derivación",
+    "familia": "consultas",
+    "descripcion": "Saber a dónde ir después de esta atención.",
+    "emoji": "🧭"
+   },
+   "pasos": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "obligatoria": true
     }
    ]
   }

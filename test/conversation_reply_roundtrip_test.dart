@@ -657,9 +657,16 @@ void main() {
             .setContext(contextById('denuncia_robo')!);
 
         final session = c.read(guidedFlowProvider).session!;
+        // Todo el recorrido, menos lo que solo se pregunta en una
+        // conversación («¿Sabe a dónde tiene que ir?»).
         expect(
           session.steps.length,
-          c.read(questionBankProvider).journey('denuncia_robo')!.steps.length,
+          c
+              .read(questionBankProvider)
+              .journey('denuncia_robo')!
+              .steps
+              .where((s) => !s.conversationOnly)
+              .length,
         );
         c
             .read(guidedFlowProvider.notifier)

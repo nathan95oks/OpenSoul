@@ -8,6 +8,7 @@ import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/conversation/graph_matcher.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
+import 'package:lsb_legal_app/core/domain/guided/guided_session.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_corpus.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_retriever.dart';
 import 'package:lsb_legal_app/core/domain/rag/rag_tramites.dart';
@@ -227,7 +228,7 @@ ConversationRoute? ragTramiteRoute(
     // Y una pregunta («¿Fue con violencia?») no es una indicación que se
     // contesta «Entendido».
     if (text.contains('?') && question.isIndication) continue;
-    return _tramiteRoute(best, turn, tramite);
+    return _tramiteRoute(best, turn, tramite, GuidedFlow(bank));
   }
   return null;
 }
@@ -236,6 +237,7 @@ ConversationRoute _tramiteRoute(
   RagSuggestion best,
   int turn,
   RagTramite tramite,
+  GuidedFlow flow,
 ) {
   // «¿Cuándo y dónde ocurrió?» son dos preguntas, cada una con sus tarjetas.
   final questionIds = RagTramites.questionIdsOfTurn(best.scenarioId, turn);
@@ -247,7 +249,13 @@ ConversationRoute _tramiteRoute(
     // La hizo el oyente: se responde aunque en el recorrido dependa de una
     // respuesta anterior (una ramificación del escenario).
     presupposedQuestionIds: questionIds,
-    pathQuestionIds: questionIds,
+    // Con sus hijas obligatorias: «¿Quién es esa persona?» aparece si se
+    // contesta que sí se la conoce.
+    pathQuestionIds: flow.minimalPath(
+      tramite.contextId,
+      questionIds,
+      presupposed: questionIds.toSet(),
+    ),
     confidence: best.score,
     reason: 'rag:${best.scenarioId}#$turn',
   );

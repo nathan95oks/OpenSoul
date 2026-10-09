@@ -2400,8 +2400,7 @@
       "CASA",
       "SENA_PENDIENTE:MATRICULA",
       "SENA_PENDIENTE:CONSULTAR",
-      "TENER",
-      "NO"
+      "TENER"
      ]
     },
     {
@@ -18638,8 +18637,7 @@
       "VIOLENCIA",
       "USAR",
       "OBJETO",
-      "SENA_PENDIENTE:QUITAR",
-      "NO"
+      "SENA_PENDIENTE:QUITAR"
      ]
     },
     {
@@ -44263,6 +44261,35 @@
     {
      "n": 2,
      "rol": "funcionario",
+     "texto": "¿Su hijo sufre bullying?",
+     "proposito": "Confirmar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HIJO",
+      "SENA_PENDIENTE:BULLYING",
+      "SUFRIR"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, mi hijo sufre bullying.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "HIJO",
+      "SENA_PENDIENTE:BULLYING",
+      "SUFRIR"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
      "texto": "¿Su hijo tiene heridas o dolor?",
      "proposito": "Priorizar salud",
      "hechos": [],
@@ -44272,12 +44299,11 @@
       "HIJO",
       "HERIDA",
       "DOLOR",
-      "TENER",
-      "NO"
+      "TENER"
      ]
     },
     {
-     "n": 3,
+     "n": 5,
      "rol": "sordo",
      "texto": "Sí, mi hijo tiene dolor.",
      "proposito": "Responder",
@@ -44292,7 +44318,7 @@
      ]
     },
     {
-     "n": 4,
+     "n": 6,
      "rol": "funcionario",
      "texto": "¿Otros niños se burlan de su hijo?",
      "proposito": "Recabar",
@@ -44308,7 +44334,7 @@
      ]
     },
     {
-     "n": 5,
+     "n": 7,
      "rol": "sordo",
      "texto": "Sí, otros niños se burlan de él.",
      "proposito": "Responder",
@@ -44323,7 +44349,7 @@
      ]
     },
     {
-     "n": 6,
+     "n": 8,
      "rol": "funcionario",
      "texto": "¿Otros niños pegan a su hijo?",
      "proposito": "Recabar",
@@ -44339,7 +44365,7 @@
      ]
     },
     {
-     "n": 7,
+     "n": 9,
      "rol": "sordo",
      "texto": "Sí, otros niños le pegan.",
      "proposito": "Responder",
@@ -44354,7 +44380,7 @@
      ]
     },
     {
-     "n": 8,
+     "n": 10,
      "rol": "funcionario",
      "texto": "¿Le pegan todos los días?",
      "proposito": "Recabar",
@@ -44368,7 +44394,7 @@
      ]
     },
     {
-     "n": 9,
+     "n": 11,
      "rol": "sordo",
      "texto": "Sí, todos los días.",
      "proposito": "Responder",
@@ -44381,7 +44407,7 @@
      ]
     },
     {
-     "n": 10,
+     "n": 12,
      "rol": "funcionario",
      "texto": "¿Habló con el maestro de la escuela?",
      "proposito": "Recabar",
@@ -44396,7 +44422,7 @@
      ]
     },
     {
-     "n": 11,
+     "n": 13,
      "rol": "sordo",
      "texto": "Sí, hablé con el maestro, pero no ayudó.",
      "proposito": "Responder",
@@ -44412,7 +44438,7 @@
      ]
     },
     {
-     "n": 12,
+     "n": 14,
      "rol": "funcionario",
      "texto": "¿Tiene videos o fotos?",
      "proposito": "Recabar",
@@ -44426,7 +44452,7 @@
      ]
     },
     {
-     "n": 13,
+     "n": 15,
      "rol": "sordo",
      "texto": "Sí, tengo videos en mi celular.",
      "proposito": "Responder",
@@ -44442,7 +44468,7 @@
      ]
     },
     {
-     "n": 14,
+     "n": 16,
      "rol": "funcionario",
      "texto": "Guarde los videos y las fotos.",
      "proposito": "Orientar",
@@ -44456,7 +44482,7 @@
      ]
     },
     {
-     "n": 15,
+     "n": 17,
      "rol": "sordo",
      "texto": "Bien, voy a guardar todo.",
      "proposito": "Responder",
@@ -44470,7 +44496,7 @@
      ]
     },
     {
-     "n": 16,
+     "n": 18,
      "rol": "funcionario",
      "texto": "¿Necesita un intérprete de Lengua de Señas Boliviana?",
      "proposito": "Accesibilidad",
@@ -44484,7 +44510,7 @@
      ]
     },
     {
-     "n": 17,
+     "n": 19,
      "rol": "sordo",
      "texto": "Sí, necesito un intérprete de LSB.",
      "proposito": "Responder",
@@ -44501,6 +44527,49 @@
    "variantes": [
     {
      "turno": 2,
+     "preguntas": [
+      "¿Usted o su hijo sufre bullying?",
+      "¿Su hijo sufre bullying en la escuela?",
+      "¿Molestan a su hijo en la escuela?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, mi hijo sufre bullying.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "HIJO",
+        "SENA_PENDIENTE:BULLYING",
+        "SUFRIR"
+       ]
+      },
+      {
+       "texto": "No, mi hijo no sufre bullying.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "YO",
+        "HIJO",
+        "SENA_PENDIENTE:BULLYING",
+        "SUFRIR",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si es bullying.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:BULLYING"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
      "preguntas": [
       "¿Su hijo está herido?",
       "¿Su hijo siente dolor?"
@@ -44542,7 +44611,7 @@
      ]
     },
     {
-     "turno": 4,
+     "turno": 6,
      "preguntas": [
       "¿Los compañeros se burlan de su hijo?",
       "¿Se ríen de su hijo en la escuela?"
@@ -44582,7 +44651,7 @@
      ]
     },
     {
-     "turno": 6,
+     "turno": 8,
      "preguntas": [
       "¿Los compañeros le pegan?",
       "¿Maltratan a su hijo en la escuela?"
@@ -44621,7 +44690,7 @@
      ]
     },
     {
-     "turno": 8,
+     "turno": 10,
      "preguntas": [
       "¿Le pegan siempre?",
       "¿Es todos los días?"
@@ -44656,7 +44725,7 @@
      ]
     },
     {
-     "turno": 10,
+     "turno": 12,
      "preguntas": [
       "¿Avisó a la escuela?",
       "¿El maestro sabe lo que pasa?",
@@ -44700,7 +44769,7 @@
      ]
     },
     {
-     "turno": 12,
+     "turno": 14,
      "preguntas": [
       "¿Tiene pruebas de lo que pasa?",
       "¿Guardó videos o fotos?"
@@ -44742,7 +44811,7 @@
      ]
     },
     {
-     "turno": 14,
+     "turno": 16,
      "preguntas": [
       "Conserve los videos y las fotos."
      ],
@@ -44770,7 +44839,7 @@
      ]
     },
     {
-     "turno": 16,
+     "turno": 18,
      "preguntas": [
       "¿Requiere interpretación en LSB?",
       "¿Necesita apoyo de un intérprete de LSB?"
@@ -44808,19 +44877,6 @@
       }
      ]
     }
-   ],
-   "ramificaciones": [
-    {
-     "turno": 14,
-     "condiciones": [
-      {
-       "turno": 12,
-       "estados": [
-        "afirmado"
-       ]
-      }
-     ]
-    }
    ]
   },
   {
@@ -44850,6 +44906,33 @@
     {
      "n": 2,
      "rol": "funcionario",
+     "texto": "¿La acosaron sexualmente?",
+     "proposito": "Confirmar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "ELLA",
+      "SENA_PENDIENTE:ACOSO_SEXUAL"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, me acosaron sexualmente.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "YO",
+      "SENA_PENDIENTE:ACOSO_SEXUAL"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
      "texto": "¿Está en peligro ahora?",
      "proposito": "Priorizar seguridad",
      "hechos": [],
@@ -44861,7 +44944,7 @@
      ]
     },
     {
-     "n": 3,
+     "n": 5,
      "rol": "sordo",
      "texto": "No, ahora estoy lejos de esa persona.",
      "proposito": "Responder",
@@ -44877,7 +44960,7 @@
      ]
     },
     {
-     "n": 4,
+     "n": 6,
      "rol": "funcionario",
      "texto": "¿Conoce a la persona que la acosa?",
      "proposito": "Recabar",
@@ -44893,7 +44976,7 @@
      ]
     },
     {
-     "n": 5,
+     "n": 7,
      "rol": "sordo",
      "texto": "Sí, es mi jefe.",
      "proposito": "Responder",
@@ -44907,7 +44990,35 @@
      ]
     },
     {
-     "n": 6,
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Quién es esa persona?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUIEN",
+      "ALLÍ",
+      "HOMBRE",
+      "MUJER"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Es mi jefe.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "JEFE"
+     ]
+    },
+    {
+     "n": 10,
      "rol": "funcionario",
      "texto": "¿Esa persona la tocó sin su permiso?",
      "proposito": "Recabar",
@@ -44923,7 +45034,7 @@
      ]
     },
     {
-     "n": 7,
+     "n": 11,
      "rol": "sordo",
      "texto": "Sí, me tocó sin mi permiso.",
      "proposito": "Responder",
@@ -44938,7 +45049,7 @@
      ]
     },
     {
-     "n": 8,
+     "n": 12,
      "rol": "funcionario",
      "texto": "¿La acosa todos los días?",
      "proposito": "Recabar",
@@ -44951,7 +45062,7 @@
      ]
     },
     {
-     "n": 9,
+     "n": 13,
      "rol": "sordo",
      "texto": "Sí, todos los días.",
      "proposito": "Responder",
@@ -44964,7 +45075,7 @@
      ]
     },
     {
-     "n": 10,
+     "n": 14,
      "rol": "funcionario",
      "texto": "¿Tiene testigos?",
      "proposito": "Recabar",
@@ -44978,7 +45089,7 @@
      ]
     },
     {
-     "n": 11,
+     "n": 15,
      "rol": "sordo",
      "texto": "Sí, una compañera es testigo.",
      "proposito": "Responder",
@@ -44992,7 +45103,66 @@
      ]
     },
     {
-     "n": 12,
+     "n": 16,
+     "rol": "funcionario",
+     "texto": "¿Habló con alguien más sobre este acoso?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HABLAR",
+      "SENA_PENDIENTE:ALGUIEN",
+      "SENA_PENDIENTE:MAS",
+      "SENA_PENDIENTE:ACOSO",
+      "AQUÍ",
+      "SENA_PENDIENTE:SOBRE"
+     ]
+    },
+    {
+     "n": 17,
+     "rol": "sordo",
+     "texto": "Sí, hablé con alguien más.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "HABLAR",
+      "SENA_PENDIENTE:ALGUIEN",
+      "SENA_PENDIENTE:MAS"
+     ]
+    },
+    {
+     "n": 18,
+     "rol": "funcionario",
+     "texto": "¿Con quién habló?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "HABLAR",
+      "QUIEN"
+     ]
+    },
+    {
+     "n": 19,
+     "rol": "sordo",
+     "texto": "Hablé con mi mamá.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "MAMA",
+      "HABLAR"
+     ]
+    },
+    {
+     "n": 20,
      "rol": "funcionario",
      "texto": "La FELCV es la unidad especializada contra la violencia.",
      "proposito": "Orientar",
@@ -45010,7 +45180,7 @@
      ]
     },
     {
-     "n": 13,
+     "n": 21,
      "rol": "sordo",
      "texto": "Hoy quiero quejarme a la policía.",
      "proposito": "Responder",
@@ -45025,7 +45195,7 @@
      ]
     },
     {
-     "n": 14,
+     "n": 22,
      "rol": "funcionario",
      "texto": "¿Necesita un intérprete de Lengua de Señas Boliviana?",
      "proposito": "Accesibilidad",
@@ -45039,7 +45209,7 @@
      ]
     },
     {
-     "n": 15,
+     "n": 23,
      "rol": "sordo",
      "texto": "Sí, necesito un intérprete de LSB.",
      "proposito": "Responder",
@@ -45056,6 +45226,44 @@
    "variantes": [
     {
      "turno": 2,
+     "preguntas": [
+      "¿Sufrió acoso sexual?",
+      "¿Alguien la acosó sexualmente?",
+      "¿Lo acosaron sexualmente?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, me acosaron sexualmente.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "YO",
+        "SENA_PENDIENTE:ACOSO_SEXUAL"
+       ]
+      },
+      {
+       "texto": "No, no me acosaron.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SENA_PENDIENTE:ACOSAR"
+       ]
+      },
+      {
+       "texto": "No sé si fue acoso sexual.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:ACOSO_SEXUAL"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
      "preguntas": [
       "¿Corre peligro en este momento?",
       "¿Esa persona está cerca de usted ahora?"
@@ -45095,10 +45303,11 @@
      ]
     },
     {
-     "turno": 4,
+     "turno": 6,
      "preguntas": [
       "¿Sabe quién es esa persona?",
-      "¿Reconoce a la persona que la acosa?"
+      "¿Reconoce a la persona que la acosa?",
+      "¿Conoce a la persona que lo acosa?"
      ],
      "respuestas": [
       {
@@ -45144,7 +45353,68 @@
      ]
     },
     {
-     "turno": 6,
+     "turno": 8,
+     "preguntas": [
+      "¿Quién la acosa?",
+      "¿Quién es la persona que la acosa?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Es mi jefe.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "JEFE"
+       ]
+      },
+      {
+       "texto": "Es mi compañero.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "COMPAÑERO",
+        "YO"
+       ]
+      },
+      {
+       "texto": "Es mi pareja.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "PAREJA",
+        "YO"
+       ]
+      },
+      {
+       "texto": "Es un amigo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AMIGO"
+       ]
+      },
+      {
+       "texto": "Es un pariente.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "PARIENTE"
+       ]
+      },
+      {
+       "texto": "No sé quién es.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUIEN"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
      "preguntas": [
       "¿Le tocó el cuerpo sin permiso?",
       "¿Hubo contacto sin su permiso?"
@@ -45183,7 +45453,7 @@
      ]
     },
     {
-     "turno": 8,
+     "turno": 12,
      "preguntas": [
       "¿La acosa siempre?",
       "¿Es todos los días?"
@@ -45218,7 +45488,7 @@
      ]
     },
     {
-     "turno": 10,
+     "turno": 14,
      "preguntas": [
       "¿Alguien es testigo?",
       "¿Otra persona vio lo que pasó?"
@@ -45256,7 +45526,112 @@
      ]
     },
     {
-     "turno": 12,
+     "turno": 16,
+     "preguntas": [
+      "¿Le contó a alguien sobre el acoso?",
+      "¿Alguien más sabe de este acoso?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, hablé con alguien más.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "HABLAR",
+        "SENA_PENDIENTE:ALGUIEN",
+        "SENA_PENDIENTE:MAS"
+       ]
+      },
+      {
+       "texto": "No, no hablé con nadie.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "HABLAR",
+        "NADIE"
+       ]
+      },
+      {
+       "texto": "No sé si debo contarlo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:DEBER",
+        "NARRAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 18,
+     "preguntas": [
+      "¿A quién se lo contó?",
+      "¿Con quién habló del acoso?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Hablé con mi mamá.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "MAMA",
+        "HABLAR"
+       ]
+      },
+      {
+       "texto": "Hablé con un amigo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "HABLAR",
+        "AMIGO"
+       ]
+      },
+      {
+       "texto": "Hablé con mi pareja.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "PAREJA",
+        "HABLAR"
+       ]
+      },
+      {
+       "texto": "Hablé con mi hermana.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "HERMANA",
+        "HABLAR"
+       ]
+      },
+      {
+       "texto": "Hablé con un compañero.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "HABLAR",
+        "COMPAÑERO"
+       ]
+      },
+      {
+       "texto": "No sé.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 20,
      "preguntas": [
       "La FELCV atiende los casos de violencia."
      ],
@@ -45284,7 +45659,7 @@
      ]
     },
     {
-     "turno": 14,
+     "turno": 22,
      "preguntas": [
       "¿Requiere interpretación en LSB?",
       "¿Necesita apoyo de un intérprete de LSB?"
@@ -45321,6 +45696,32 @@
        ]
       }
      ]
+    }
+   ],
+   "ramificaciones": [
+    {
+     "turno": 8,
+     "condiciones": [
+      {
+       "turno": 6,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ],
+     "junto": true
+    },
+    {
+     "turno": 18,
+     "condiciones": [
+      {
+       "turno": 16,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ],
+     "junto": true
     }
    ]
   },
@@ -45822,6 +46223,33 @@
     {
      "n": 4,
      "rol": "funcionario",
+     "texto": "¿Quién es esa persona?",
+     "proposito": "Recabar",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUIEN",
+      "ALLÍ",
+      "HOMBRE",
+      "MUJER"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Es un compañero.",
+     "proposito": "Responder",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPAÑERO"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
      "texto": "¿Esa persona es su pareja?",
      "proposito": "Clasificar",
      "hechos": [],
@@ -45833,7 +46261,7 @@
      ]
     },
     {
-     "n": 5,
+     "n": 7,
      "rol": "sordo",
      "texto": "No, no es mi pareja.",
      "proposito": "Responder",
@@ -45847,7 +46275,7 @@
      ]
     },
     {
-     "n": 6,
+     "n": 8,
      "rol": "funcionario",
      "texto": "¿Le pegó?",
      "proposito": "Recabar",
@@ -45859,7 +46287,7 @@
      ]
     },
     {
-     "n": 7,
+     "n": 9,
      "rol": "sordo",
      "texto": "Sí, me pegó.",
      "proposito": "Responder",
@@ -45872,7 +46300,7 @@
      ]
     },
     {
-     "n": 8,
+     "n": 10,
      "rol": "funcionario",
      "texto": "¿Necesita atención médica ahora?",
      "proposito": "Priorizar salud",
@@ -45887,7 +46315,7 @@
      ]
     },
     {
-     "n": 9,
+     "n": 11,
      "rol": "sordo",
      "texto": "Sí, necesito ir al hospital.",
      "proposito": "Responder",
@@ -45902,7 +46330,7 @@
      ]
     },
     {
-     "n": 10,
+     "n": 12,
      "rol": "funcionario",
      "texto": "¿Esa persona la busca todos los días?",
      "proposito": "Recabar",
@@ -45918,7 +46346,7 @@
      ]
     },
     {
-     "n": 11,
+     "n": 13,
      "rol": "sordo",
      "texto": "Sí, todos los días, y tengo miedo.",
      "proposito": "Responder",
@@ -45932,7 +46360,7 @@
      ]
     },
     {
-     "n": 12,
+     "n": 14,
      "rol": "funcionario",
      "texto": "Para la violencia de pareja corresponde la FELCV.",
      "proposito": "Derivar",
@@ -45948,7 +46376,7 @@
      ]
     },
     {
-     "n": 13,
+     "n": 15,
      "rol": "sordo",
      "texto": "Quiero ir a la FELCV.",
      "proposito": "Responder",
@@ -46006,6 +46434,66 @@
     {
      "turno": 4,
      "preguntas": [
+      "¿Quién la sigue?",
+      "¿Quién es la persona que la acosa?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Es un compañero.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "COMPAÑERO"
+       ]
+      },
+      {
+       "texto": "Es mi jefe.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "JEFE"
+       ]
+      },
+      {
+       "texto": "Es un amigo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AMIGO"
+       ]
+      },
+      {
+       "texto": "Es mi pareja.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "PAREJA",
+        "YO"
+       ]
+      },
+      {
+       "texto": "Es un pariente.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "PARIENTE"
+       ]
+      },
+      {
+       "texto": "No sé quién es.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUIEN"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
       "¿Es su pareja?",
       "¿Tiene una relación con esa persona?"
      ],
@@ -46043,7 +46531,7 @@
      ]
     },
     {
-     "turno": 6,
+     "turno": 8,
      "preguntas": [
       "¿Lo agredió?",
       "¿Hubo golpes?"
@@ -46079,7 +46567,7 @@
      ]
     },
     {
-     "turno": 8,
+     "turno": 10,
      "preguntas": [
       "¿Necesita ayuda médica inmediata?",
       "¿Requiere atención de salud en este momento?"
@@ -46120,7 +46608,7 @@
      ]
     },
     {
-     "turno": 10,
+     "turno": 12,
      "preguntas": [
       "¿La busca siempre?",
       "¿Es todos los días?"
@@ -46156,7 +46644,7 @@
      ]
     },
     {
-     "turno": 12,
+     "turno": 14,
      "preguntas": [
       "Si es su pareja, la denuncia corresponde a la FELCV.",
       "Para violencia tiene que ir a la FELCV.",
@@ -46187,10 +46675,22 @@
    ],
    "ramificaciones": [
     {
-     "turno": 8,
+     "turno": 4,
      "condiciones": [
       {
-       "turno": 6,
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ],
+     "junto": true
+    },
+    {
+     "turno": 10,
+     "condiciones": [
+      {
+       "turno": 8,
        "estados": [
         "afirmado"
        ]
@@ -46198,10 +46698,10 @@
      ]
     },
     {
-     "turno": 12,
+     "turno": 14,
      "condiciones": [
       {
-       "turno": 4,
+       "turno": 6,
        "estados": [
         "afirmado"
        ]

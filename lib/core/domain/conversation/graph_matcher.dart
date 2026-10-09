@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:lsb_legal_app/core/domain/conversation/conversation_graph_catalog.dart';
 import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/domain/conversation/semantic_turn.dart';
+import 'package:lsb_legal_app/core/domain/guided/question_bank.dart';
 import 'package:lsb_legal_app/core/domain/services/dialogue_graph.dart';
 
 /// Una pregunta del banco que responde a lo que pidió el oyente.
@@ -629,6 +630,19 @@ class GraphMatcher {
       for (final s in candidates)
         if (_dice(heads, s.heads) == form) s,
     ];
+    // A igual puntaje, la que el recorrido activo pregunta antes: en la
+    // violencia, «¿No sabe quién fue?» es el agresor, no los testigos.
+    final steps = [
+      for (final s
+          in catalog.bank.journey(activeContextId ?? '')?.steps ??
+              const <JourneyStep>[])
+        s.questionId,
+    ];
+    int order(String q) {
+      final i = steps.indexOf(q);
+      return i < 0 ? steps.length : i;
+    }
+
     _Found? best;
     for (final sig in candidates) {
       var score = 0.7 + 0.2 * form;
@@ -639,7 +653,10 @@ class GraphMatcher {
       } else if (catalog.journeysOf(q).isNotEmpty) {
         score += 0.02;
       }
-      if (best == null || score > best.score) {
+      if (best == null ||
+          score > best.score ||
+          (score == best.score &&
+              order(q) < order(best.sig.entry.questionId))) {
         best = _Found(sig, score.clamp(0, 1).toDouble(), {slot}, const {});
       }
     }
@@ -899,6 +916,20 @@ class GraphMatcher {
             (_tokenFrequency[t] ?? 0) <= _distinctiveMaxQuestions,
       );
       if (score < exactMatch && !distinctive) continue;
+      // Casi literal no es literal si al turno le falta la palabra que
+      // identifica la pregunta: «¿No sabe quién fue?» dice «sabe quién», pero
+      // no el «fiscal» de «¿Sabe quién es su fiscal?».
+      if (score >= exactMatch &&
+          tokens
+              .difference(wanted)
+              .any(
+                (t) =>
+                    !_textInterrogatives.contains(t) &&
+                    (_textQuestionFrequency[t] ?? 0) <=
+                        _distinctiveMaxQuestions,
+              )) {
+        score = exactMatch - 0.01;
+      }
       if (activeContextId != null && entry.scope == activeContextId) {
         score += 0.05;
       }

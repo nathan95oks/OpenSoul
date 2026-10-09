@@ -63,9 +63,10 @@ class ParidadConElCliente(unittest.TestCase):
             cls.casos = json.load(f)
         cls.composer = G.Composer(G.load_bank())
 
-    def test_hay_casos_de_los_ocho_recorridos(self):
+    def test_hay_casos_de_todos_los_recorridos(self):
+        # Nueve desde «Derivación» (¿Sabe a dónde tiene que ir?, 2026-10-09).
         recorridos = {c["guided"]["recorrido"] for c in self.casos}
-        self.assertEqual(8, len(recorridos))
+        self.assertEqual(9, len(recorridos))
 
     def test_mismo_texto_y_mismas_respuestas_representadas(self):
         for i, caso in enumerate(self.casos):

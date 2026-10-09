@@ -6742,6 +6742,65 @@
   ],
   "traducido": "2026-10-04"
  },
+ "Engañar a una persona para quitarle dinero o cosas. También se llama estafa.": {
+  "glosas": [
+   "E",
+   "N",
+   "G",
+   "A",
+   "N",
+   "A",
+   "R",
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "D",
+   "I",
+   "N",
+   "E",
+   "R",
+   "O",
+   "C",
+   "O",
+   "S",
+   "A",
+   "S",
+   "Q",
+   "U",
+   "I",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "ENGANAR",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "DINERO",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "COSAS",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "QUITAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
+ },
  "Entenderse con otra persona, en señas, por escrito o hablando.": {
   "glosas": [
    "COMPRENDER",
@@ -9880,6 +9939,34 @@
    }
   ],
   "traducido": "2026-10-06"
+ },
+ "Matar a una persona.": {
+  "glosas": [
+   "P",
+   "E",
+   "R",
+   "S",
+   "O",
+   "N",
+   "A",
+   "M",
+   "A",
+   "T",
+   "A",
+   "R"
+  ],
+  "estado": "complete",
+  "correcciones": [
+   {
+    "palabra": "PERSONA",
+    "accion": "concepto_sin_catalogo"
+   },
+   {
+    "palabra": "MATAR",
+    "accion": "concepto_sin_catalogo"
+   }
+  ],
+  "traducido": "2026-10-09"
  },
  "Mayor cantidad.": {
   "glosas": [

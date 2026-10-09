@@ -196,11 +196,11 @@ void main() {
     expect(elegidas, ['plain'], reason: 'deslizar no elige');
   });
 
-  testWidgets('la formulación superior es compacta en las 148 preguntas', (
+  testWidgets('la formulación superior es compacta en las 155 preguntas', (
     tester,
   ) async {
     final bank = QuestionBank.generated();
-    expect(bank.allQuestions, hasLength(148));
+    expect(bank.allQuestions, hasLength(155));
     for (final question in bank.allQuestions) {
       await _pump(
         tester,
