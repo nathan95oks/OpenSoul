@@ -38,9 +38,13 @@ import corpus_dialogue as CD  # noqa: E402
 # de cinco puertas y la tabla `zonasOyente` (sin ellas la huella es la
 # anterior, 5796c252…); y el 2026-10-08 al añadir `variantes` (otras formas
 # reales de hacer la misma pregunta, del QA de Conversación; sin ellas la
-# huella es la anterior, f3c8df3e…). Si cambia, algo distinto de la
-# formulación cambió: preguntas, opciones, estados, frases o recorridos.
-HUELLA_SIN_FORMULACION = "e1364f597a225a6b65032005d1bdb75b83300618360296f9c7d750a65d4c8062"
+# huella es la anterior, f3c8df3e…); y el 2026-10-09 al añadir las
+# preguntas del QA de Conversación (testigos: si los conoce, nombre y
+# celular; fiscal; investigador; publicar fotos; «Derivación»: ¿Sabe a dónde
+# tiene que ir?; sin ellas la huella es la anterior, e1364f59…). Si cambia,
+# algo distinto de la formulación cambió: preguntas, opciones, estados,
+# frases o recorridos.
+HUELLA_SIN_FORMULACION = "e0f6c85034dfeafd1e35f3d70c1e9bb445bf55caa3e6c5c5d783f319c831236f"
 
 
 class GramaticaLsb(unittest.TestCase):
@@ -140,8 +144,8 @@ class GramaticaLsb(unittest.TestCase):
             q["id"]: B.formulacion_lsb_utilizable(q)
             for q in self.banco["preguntas"]
         }
-        self.assertEqual(133, sum(decisiones.values()))
-        self.assertEqual(15, len(decisiones) - sum(decisiones.values()))
+        self.assertEqual(139, sum(decisiones.values()))
+        self.assertEqual(16, len(decisiones) - sum(decisiones.values()))
         self.assertTrue(decisiones["Q.HEC.QUE_OCURRIO"])
         self.assertFalse(decisiones["I.PREG.CUANDO"])
         self.assertFalse(decisiones["Q.EVI.QUE_TIENE"])

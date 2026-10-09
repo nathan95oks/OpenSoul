@@ -38,22 +38,36 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
+     "pregunta": "Q.DIG.PUBLICACION",
      "estado": "omitido",
      "opciones": []
     },
     {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
      "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
      "estado": "afirmado",
      "opciones": [
       "si"
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
-     "estado": "negado",
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
      "opciones": [
-      "no"
+      "fiscalia"
      ]
     }
    ],
@@ -64,19 +78,22 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por internet. Me los envía un hombre; no sé quién es. No lo sé. Tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por internet. Me los envía un hombre; no sé quién es. No lo sé. No guardé los mensajes. No tengo fotos de la pantalla. Quiero presentar una denuncia. Quiero presentarla ante la Fiscalía.",
   "representadas": [
-   "Q.DEN.INTENCION#no",
+   "Q.DEN.AUTORIDAD#fiscalia",
+   "Q.DEN.INTENCION#si",
    "Q.DIG.CANAL#internet",
-   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CAPTURAS#no",
    "Q.DIG.CONTENIDO#otro",
    "Q.DIG.CONTINUA#no_sabe",
+   "Q.DIG.GUARDO#no",
    "Q.DIG.REMITENTE#hombre"
   ]
  },
@@ -112,6 +129,13 @@
      ]
     },
     {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
      "pregunta": "Q.DIG.CAPTURAS",
      "estado": "negado",
      "opciones": [
@@ -133,18 +157,20 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». No sé quién me envía los mensajes. Sigo recibiendo mensajes. No tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». No sé quién me envía los mensajes. Sigo recibiendo mensajes. Guardé los mensajes. No tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#no",
    "Q.DIG.CAPTURAS#no",
    "Q.DIG.CONTENIDO#otro",
    "Q.DIG.CONTINUA#si",
+   "Q.DIG.GUARDO#si",
    "Q.DIG.REMITENTE#no_sabe"
   ]
  },
@@ -194,21 +220,21 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
-     "estado": "negado",
-     "opciones": [
-      "no"
-     ]
-    },
-    {
-     "pregunta": "Q.DIG.CAPTURAS",
+     "pregunta": "Q.DIG.PUBLICACION",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
@@ -222,20 +248,21 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes con amenazas. Me llegaron mensajes por «un recibo firmado». Sé quién me envía los mensajes. Es mi pareja. No lo sé. No guardé los mensajes. No sé si tengo fotos de la pantalla. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Recibí mensajes con amenazas. Me llegaron mensajes por «un recibo firmado». Sé quién me envía los mensajes. Es mi pareja. No lo sé. No sé si publicaron algo. Sí, guardé los mensajes. No sé si tengo fotos de la pantalla.",
   "representadas": [
-   "Q.DEN.INTENCION#no_sabe",
    "Q.DIG.CANAL#otro",
    "Q.DIG.CAPTURAS#no_sabe",
    "Q.DIG.CONTENIDO#amenazas",
    "Q.DIG.CONTINUA#no_sabe",
-   "Q.DIG.GUARDO#no",
+   "Q.DIG.GUARDO#si",
+   "Q.DIG.PUBLICACION#no_sabe",
    "Q.DIG.REMITENTE#conoce",
    "Q.PER.VINCULO#pareja"
   ]
@@ -289,24 +316,24 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
-     "estado": "negado",
+     "pregunta": "Q.DIG.PUBLICACION",
+     "estado": "desconocido",
      "opciones": [
-      "no"
+      "no_sabe"
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.DIG.CAPTURAS",
      "estado": "afirmado",
      "opciones": [
       "si"
      ]
     },
     {
-     "pregunta": "Q.DEN.AUTORIDAD",
-     "estado": "afirmado",
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
      "opciones": [
-      "policia"
+      "no_sabe"
      ]
     }
    ],
@@ -317,20 +344,21 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por «un recibo firmado». No conozco su nombre; el número que aparece es 78168203. No lo sé. No guardé los mensajes. Quiero presentar una denuncia. Quiero presentarla ante la Policía.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por «un recibo firmado». No conozco su nombre; el número que aparece es 78168203. No lo sé. No sé si publicaron algo. Tengo fotos de la pantalla. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.AUTORIDAD#policia",
-   "Q.DEN.INTENCION#si",
+   "Q.DEN.INTENCION#no_sabe",
    "Q.DIG.CANAL#otro",
+   "Q.DIG.CAPTURAS#si",
    "Q.DIG.CONTENIDO#otro",
    "Q.DIG.CONTINUA#no_sabe",
-   "Q.DIG.GUARDO#no",
+   "Q.DIG.PUBLICACION#no_sabe",
    "Q.DIG.REMITENTE#solo_numero"
   ]
  },
@@ -361,18 +389,23 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
-     "estado": "afirmado",
+     "pregunta": "Q.DIG.PUBLICACION",
+     "estado": "desconocido",
      "opciones": [
-      "si"
+      "no_sabe"
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.DIG.CAPTURAS",
      "estado": "negado",
      "opciones": [
       "no"
      ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
     }
    ],
    "pasos": [
@@ -382,18 +415,19 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes con amenazas. Me los envía una mujer; no sé quién es. Sigo recibiendo mensajes. Guardé los mensajes. Por ahora no quiero presentar una denuncia.",
+  "texto": "Recibí mensajes con amenazas. Me los envía una mujer; no sé quién es. Sigo recibiendo mensajes. No sé si publicaron algo. No tengo fotos de la pantalla.",
   "representadas": [
-   "Q.DEN.INTENCION#no",
+   "Q.DIG.CAPTURAS#no",
    "Q.DIG.CONTENIDO#amenazas",
    "Q.DIG.CONTINUA#si",
-   "Q.DIG.GUARDO#si",
+   "Q.DIG.PUBLICACION#no_sabe",
    "Q.DIG.REMITENTE#mujer"
   ]
  },
@@ -429,6 +463,13 @@
      ]
     },
     {
+     "pregunta": "Q.DIG.PUBLICACION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
      "pregunta": "Q.DIG.GUARDO",
      "estado": "negado",
      "opciones": [
@@ -444,16 +485,9 @@
     },
     {
      "pregunta": "Q.DEN.INTENCION",
-     "estado": "afirmado",
+     "estado": "negado",
      "opciones": [
-      "si"
-     ]
-    },
-    {
-     "pregunta": "Q.DEN.AUTORIDAD",
-     "estado": "afirmado",
-     "opciones": [
-      "felcv"
+      "no"
      ]
     }
    ],
@@ -464,21 +498,22 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Ya no recibo mensajes. No guardé los mensajes. Sí, tengo fotos de la pantalla. Sí, quiero presentar una denuncia. Quiero presentarla ante la FELCV.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Ya no recibo mensajes. Sí, publicaron mis fotos sin mi permiso. No guardé los mensajes. Sí, tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.AUTORIDAD#felcv",
-   "Q.DEN.INTENCION#si",
+   "Q.DEN.INTENCION#no",
    "Q.DIG.CANAL#celular",
    "Q.DIG.CAPTURAS#si",
    "Q.DIG.CONTENIDO#otro",
    "Q.DIG.CONTINUA#no",
-   "Q.DIG.GUARDO#no"
+   "Q.DIG.GUARDO#no",
+   "Q.DIG.PUBLICACION#si"
   ]
  },
  {
@@ -516,17 +551,24 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
-     "estado": "negado",
+     "pregunta": "Q.DIG.PUBLICACION",
+     "estado": "desconocido",
      "opciones": [
-      "no"
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
      ]
     },
     {
      "pregunta": "Q.DEN.INTENCION",
-     "estado": "desconocido",
+     "estado": "negado",
      "opciones": [
-      "no_sabe"
+      "no"
      ]
     }
    ],
@@ -537,18 +579,20 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». No lo sé. No guardé los mensajes. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». No lo sé. No sé si publicaron algo. No sé si tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no_sabe",
+   "Q.DEN.INTENCION#no",
+   "Q.DIG.CAPTURAS#no_sabe",
    "Q.DIG.CONTENIDO#otro",
    "Q.DIG.CONTINUA#no_sabe",
-   "Q.DIG.GUARDO#no"
+   "Q.DIG.PUBLICACION#no_sabe"
   ]
  },
  {
@@ -590,10 +634,17 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.CAPTURAS",
-     "estado": "afirmado",
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "negado",
      "opciones": [
-      "si"
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
+     "estado": "negado",
+     "opciones": [
+      "no"
      ]
     },
     {
@@ -611,19 +662,21 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Me los envía una mujer; no sé quién es. Sigo recibiendo mensajes. Tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Me los envía una mujer; no sé quién es. Sigo recibiendo mensajes. No guardé los mensajes. No tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#no",
    "Q.DIG.CANAL#celular",
-   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CAPTURAS#no",
    "Q.DIG.CONTENIDO#otro",
    "Q.DIG.CONTINUA#si",
+   "Q.DIG.GUARDO#no",
    "Q.DIG.REMITENTE#mujer"
   ]
  },
@@ -654,16 +707,23 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
-     "estado": "afirmado",
+     "pregunta": "Q.DIG.PUBLICACION",
+     "estado": "negado",
      "opciones": [
-      "todos"
+      "no"
      ]
     },
     {
-     "pregunta": "Q.DIG.CAPTURAS",
+     "pregunta": "Q.DIG.GUARDO",
      "estado": "omitido",
      "opciones": []
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
     }
    ],
    "pasos": [
@@ -673,18 +733,20 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes con amenazas. No sé por dónde llegaron los mensajes. Sí, sigo recibiendo mensajes. Sí, guardé todos los mensajes.",
+  "texto": "Recibí mensajes con amenazas. No sé por dónde llegaron los mensajes. Sí, sigo recibiendo mensajes. No, no publicaron nada. Por ahora no quiero presentar una denuncia.",
   "representadas": [
+   "Q.DEN.INTENCION#no",
    "Q.DIG.CANAL#no_sabe",
    "Q.DIG.CONTENIDO#amenazas",
    "Q.DIG.CONTINUA#si",
-   "Q.DIG.GUARDO#todos"
+   "Q.DIG.PUBLICACION#no"
   ]
  },
  {
@@ -729,24 +791,38 @@
      "opciones": []
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
-     "estado": "desconocido",
-     "opciones": [
-      "no_sabe"
-     ]
-    },
-    {
-     "pregunta": "Q.DIG.CAPTURAS",
+     "pregunta": "Q.DIG.PUBLICACION",
      "estado": "afirmado",
      "opciones": [
       "si"
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.CAPTURAS",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
      ]
     }
    ],
@@ -757,19 +833,22 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por «un recibo firmado». Me los envía una mujer; no sé quién es. No sé si se guardaron. Tengo fotos de la pantalla. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por «un recibo firmado». Me los envía una mujer; no sé quién es. Publicaron mis fotos sin mi permiso. Guardé los mensajes. No sé si tengo fotos de la pantalla. Quiero presentar una denuncia. Quiero presentarla ante la FELCV.",
   "representadas": [
-   "Q.DEN.INTENCION#no_sabe",
+   "Q.DEN.AUTORIDAD#felcv",
+   "Q.DEN.INTENCION#si",
    "Q.DIG.CANAL#otro",
-   "Q.DIG.CAPTURAS#si",
+   "Q.DIG.CAPTURAS#no_sabe",
    "Q.DIG.CONTENIDO#otro",
-   "Q.DIG.GUARDO#no_sabe",
+   "Q.DIG.GUARDO#si",
+   "Q.DIG.PUBLICACION#si",
    "Q.DIG.REMITENTE#mujer"
   ]
  },
@@ -831,10 +910,17 @@
      ]
     },
     {
-     "pregunta": "Q.DIG.GUARDO",
-     "estado": "negado",
+     "pregunta": "Q.DIG.PUBLICACION",
+     "estado": "afirmado",
      "opciones": [
-      "no"
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DIG.GUARDO",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
      ]
     },
     {
@@ -859,20 +945,22 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Sé quién me envía los mensajes. Es un pariente. Se llama María Quispe. Sigo recibiendo mensajes. No guardé los mensajes. No tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
+  "texto": "Recibí mensajes que decían: «un recibo firmado». Me llegaron mensajes por celular. Sé quién me envía los mensajes. Es un pariente. Se llama María Quispe. Sigo recibiendo mensajes. Publicaron mis fotos sin mi permiso. Guardé los mensajes. No tengo fotos de la pantalla. Por ahora no quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#no",
    "Q.DIG.CANAL#celular",
    "Q.DIG.CAPTURAS#no",
    "Q.DIG.CONTENIDO#otro",
    "Q.DIG.CONTINUA#si",
-   "Q.DIG.GUARDO#no",
+   "Q.DIG.GUARDO#si",
+   "Q.DIG.PUBLICACION#si",
    "Q.DIG.REMITENTE#conoce",
    "Q.PER.NOMBRE_TERCERO#nombre",
    "Q.PER.VINCULO#pariente"
@@ -908,6 +996,13 @@
      "opciones": []
     },
     {
+     "pregunta": "Q.DIG.PUBLICACION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
      "pregunta": "Q.DIG.GUARDO",
      "estado": "desconocido",
      "opciones": [
@@ -916,15 +1011,15 @@
     },
     {
      "pregunta": "Q.DIG.CAPTURAS",
-     "estado": "afirmado",
-     "opciones": [
-      "si"
-     ]
+     "estado": "omitido",
+     "opciones": []
     },
     {
      "pregunta": "Q.DEN.INTENCION",
-     "estado": "omitido",
-     "opciones": []
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
     }
    ],
    "pasos": [
@@ -934,18 +1029,20 @@
     "Q.PER.VINCULO",
     "Q.PER.NOMBRE_TERCERO",
     "Q.DIG.CONTINUA",
+    "Q.DIG.PUBLICACION",
     "Q.DIG.GUARDO",
     "Q.DIG.CAPTURAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Recibí mensajes con amenazas. Me llegaron mensajes por internet. No sé si se guardaron. Sí, tengo fotos de la pantalla.",
+  "texto": "Recibí mensajes con amenazas. Me llegaron mensajes por internet. No sé si publicaron algo. No sé si se guardaron. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
    "Q.DIG.CANAL#internet",
-   "Q.DIG.CAPTURAS#si",
    "Q.DIG.CONTENIDO#amenazas",
-   "Q.DIG.GUARDO#no_sabe"
+   "Q.DIG.GUARDO#no_sabe",
+   "Q.DIG.PUBLICACION#no_sabe"
   ]
  },
  {
@@ -1021,6 +1118,11 @@
      ]
     },
     {
+     "pregunta": "Q.EVI.CAMARAS",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
      "pregunta": "Q.DEN.INTENCION",
      "estado": "omitido",
      "opciones": []
@@ -1053,10 +1155,14 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
@@ -1173,11 +1279,23 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "negado",
      "opciones": [
       "no"
      ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "omitido",
+     "opciones": []
     }
    ],
    "pasos": [
@@ -1207,17 +1325,22 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron «un recibo firmado». Perdí la mochila, la bolsa y «un recibo firmado». Otra persona escapó. Ocurrió anteayer. Ocurrió dentro de un trufi. Fue al lado de este lugar: «el mercado 25 de Mayo». No conozco a esa persona. No sé si hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Me robaron «un recibo firmado». Perdí la mochila, la bolsa y «un recibo firmado». Otra persona escapó. Ocurrió anteayer. Ocurrió dentro de un trufi. Fue al lado de este lugar: «el mercado 25 de Mayo». No conozco a esa persona. No sé si hay testigos. No sé si tengo algo para mostrar. No hay cámaras en ese lugar. Quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no",
+   "Q.DEN.INTENCION#si",
+   "Q.EVI.CAMARAS#no",
    "Q.EVI.QUE_TIENE#no_sabe",
    "Q.FALTA.QUE#bolsa",
    "Q.FALTA.QUE#mochila",
@@ -1395,7 +1518,7 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "afirmado",
      "opciones": [
       "si"
@@ -1429,17 +1552,21 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron el celular, la bolsa, la chamarra y «un recibo firmado». Ocurrió en la plaza Heroínas. Fue lejos de este lugar: «el mercado 25 de Mayo». No sé si era hombre o mujer. Tenía 50 años. Era una persona baja. Era una persona delgada. Llevaba una polera y «un recibo firmado». La polera era de color negro y «un recibo firmado». Su ropa era de color «un recibo firmado». Sí, tengo fotos y un video. Sí, quiero presentar una denuncia.",
+  "texto": "Me robaron el celular, la bolsa, la chamarra y «un recibo firmado». Ocurrió en la plaza Heroínas. Fue lejos de este lugar: «el mercado 25 de Mayo». No sé si era hombre o mujer. Tenía 50 años. Era una persona baja. Era una persona delgada. Llevaba una polera y «un recibo firmado». La polera era de color negro y «un recibo firmado». Su ropa era de color «un recibo firmado». Sí, tengo fotos y un video. Sí, hay video del lugar.",
   "representadas": [
-   "Q.DEN.INTENCION#si",
+   "Q.EVI.CAMARAS#si",
    "Q.EVI.QUE_TIENE#si",
    "Q.EVI.TIPOS#fotos",
    "Q.EVI.TIPOS#video",
@@ -1532,9 +1659,16 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "omitido",
      "opciones": []
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
     }
    ],
    "pasos": [
@@ -1564,16 +1698,21 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron algo que no sé precisar. La persona que me robó escapó. Ocurrió hace 21 meses. No sé si hay testigos. Tengo un certificado.",
+  "texto": "Me robaron algo que no sé precisar. La persona que me robó escapó. Ocurrió hace 21 meses. No sé si hay testigos. Tengo un certificado. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
    "Q.EVI.QUE_TIENE#si",
    "Q.EVI.TIPOS#certificado",
    "Q.HEC.ESCAPE_ACTOR#autor",
@@ -1679,6 +1818,13 @@
      ]
     },
     {
+     "pregunta": "Q.TES.CONOCE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
      "pregunta": "Q.EVI.QUE_TIENE",
      "estado": "negado",
      "opciones": [
@@ -1686,10 +1832,24 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "negado",
      "opciones": [
       "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
      ]
     }
    ],
@@ -1720,19 +1880,25 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron Bs 500, la gorra y el comprobante del banco. Dañaron mi casa. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Hay testigos, pero no sé cuántos. No tengo fotos, video ni otra cosa para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Me robaron Bs 500, la gorra y el comprobante del banco. Dañaron mi casa. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Hay testigos, pero no sé cuántos. No conozco a los testigos. No tengo fotos, video ni otra cosa para mostrar. No hay cámaras en ese lugar. Quiero presentar una denuncia. Quiero presentarla ante la Policía.",
   "representadas": [
    "Q.DAN.QUE#casa",
-   "Q.DEN.INTENCION#no",
+   "Q.DEN.AUTORIDAD#policia",
+   "Q.DEN.INTENCION#si",
    "Q.DOC.ACLARAR#comprobante_banco",
+   "Q.EVI.CAMARAS#no",
    "Q.EVI.QUE_TIENE#no",
    "Q.HEC.QUE_OCURRIO#danar",
    "Q.HEC.QUE_OCURRIO#robar",
@@ -1743,6 +1909,7 @@
    "Q.ROB.QUE#gorra",
    "Q.ROB.QUE#papel",
    "Q.TES.CANTIDAD#no_sabe",
+   "Q.TES.CONOCE#no",
    "Q.TES.EXISTE#si"
   ]
  },
@@ -1800,6 +1967,13 @@
      ]
     },
     {
+     "pregunta": "Q.EVI.CAMARAS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
      "pregunta": "Q.DEN.INTENCION",
      "estado": "desconocido",
      "opciones": [
@@ -1834,17 +2008,22 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Perdí algo. Otra persona escapó. Ocurrió hace 12 semanas. No sé exactamente dónde ocurrió. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Perdí algo. Otra persona escapó. Ocurrió hace 12 semanas. No sé exactamente dónde ocurrió. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar. No sé si hay cámaras. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
    "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.CAMARAS#no_sabe",
    "Q.EVI.QUE_TIENE#no",
    "Q.HEC.ESCAPE_ACTOR#otra",
    "Q.HEC.QUE_OCURRIO#perder",
@@ -1941,17 +2120,24 @@
      "opciones": []
     },
     {
-     "pregunta": "Q.EVI.QUE_TIENE",
+     "pregunta": "Q.TES.CONOCE",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.QUE_TIENE",
      "estado": "negado",
      "opciones": [
       "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.CAMARAS",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
      ]
     }
    ],
@@ -1982,24 +2168,29 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Dañaron algo mío. Logré escapar. Ocurrió hace 23 horas. Ocurrió en la avenida Heroínas. Fue lejos de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Dañaron algo mío. Logré escapar. Ocurrió hace 23 horas. Ocurrió en la avenida Heroínas. Fue lejos de este lugar: «el mercado 25 de Mayo». No sé si la conozco. Hay testigos. No sé quiénes son los testigos. No tengo fotos, video ni otra cosa para mostrar. No sé si hay cámaras.",
   "representadas": [
    "Q.DAN.QUE#no_sabe",
-   "Q.DEN.INTENCION#no",
-   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.EVI.CAMARAS#no_sabe",
+   "Q.EVI.QUE_TIENE#no",
    "Q.HEC.ESCAPE_ACTOR#yo",
    "Q.HEC.QUE_OCURRIO#danar",
    "Q.LUG.DONDE#avenida",
    "Q.LUG.RELACION#lejos",
    "Q.PER.CONOCE#no_sabe",
+   "Q.TES.CONOCE#no_sabe",
    "Q.TES.EXISTE#si",
    "Q.TIE.CUANDO#hace_h"
   ]
@@ -2114,10 +2305,24 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "negado",
      "opciones": [
       "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcc"
      ]
     }
    ],
@@ -2148,20 +2353,26 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Perdí los lentes, mi carnet de identidad y un papel. Dañaron la puerta, el celular y mi tienda. No recuerdo cuándo ocurrió. Ocurrió en «un recibo firmado». Fue al lado de este lugar: «el mercado 25 de Mayo». Conozco a esa persona. Es un conocido. Se llama Juan Mamani. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Perdí los lentes, mi carnet de identidad y un papel. Dañaron la puerta, el celular y mi tienda. No recuerdo cuándo ocurrió. Ocurrió en «un recibo firmado». Fue al lado de este lugar: «el mercado 25 de Mayo». Conozco a esa persona. Es un conocido. Se llama Juan Mamani. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar. No hay cámaras en ese lugar. Quiero presentar una denuncia. Quiero presentarla ante la FELCC.",
   "representadas": [
    "Q.DAN.QUE#celular",
    "Q.DAN.QUE#puerta",
    "Q.DAN.QUE#tienda",
-   "Q.DEN.INTENCION#no",
+   "Q.DEN.AUTORIDAD#felcc",
+   "Q.DEN.INTENCION#si",
+   "Q.EVI.CAMARAS#no",
    "Q.EVI.QUE_TIENE#no",
    "Q.FALTA.QUE#carnet",
    "Q.FALTA.QUE#lentes",
@@ -2278,10 +2489,24 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.QUE_TIENE",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.CAMARAS",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
      ]
     }
    ],
@@ -2312,17 +2537,23 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron algo. No sé exactamente dónde ocurrió. No sé si la conozco. Era un hombre. Era una persona adulta. Era una persona alta. Era una persona delgada. Llevaba un pantalón. El pantalón era de color «un recibo firmado». Sí, hay testigos, pero no sé cuántos. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Me robaron algo. No sé exactamente dónde ocurrió. No sé si la conozco. Era un hombre. Era una persona adulta. Era una persona alta. Era una persona delgada. Llevaba un pantalón. El pantalón era de color «un recibo firmado». Sí, hay testigos, pero no sé cuántos. No sé si tengo algo para mostrar. No hay cámaras en ese lugar. Por ahora no quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no_sabe",
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.CAMARAS#no",
+   "Q.EVI.QUE_TIENE#no_sabe",
    "Q.HEC.QUE_OCURRIO#robar",
    "Q.LUG.DONDE#no_sabe",
    "Q.PER.CONOCE#no_sabe",
@@ -2408,10 +2639,17 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
      ]
     }
    ],
@@ -2442,17 +2680,22 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron la bolsa y «un recibo firmado». Otra persona escapó. Ocurrió en «un recibo firmado». Fue cerca de este lugar: «el mercado 25 de Mayo». No sé si la conozco. No sé si hay testigos. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Me robaron la bolsa y «un recibo firmado». Otra persona escapó. Ocurrió en «un recibo firmado». Fue cerca de este lugar: «el mercado 25 de Mayo». No sé si la conozco. No sé si hay testigos. No sé si hay cámaras. Por ahora no quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no_sabe",
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.CAMARAS#no_sabe",
    "Q.HEC.ESCAPE_ACTOR#otra",
    "Q.HEC.QUE_OCURRIO#robar",
    "Q.LUG.DONDE#otro",
@@ -2547,10 +2790,17 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "desconocido",
      "opciones": [
       "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
      ]
     }
    ],
@@ -2581,18 +2831,23 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron el celular y una citación. La persona que me robó escapó. Ocurrió por la tarde. Ocurrió en mi casa. Fue cerca de este lugar: «el mercado 25 de Mayo». No conozco a esa persona. No sé si tengo algo para mostrar. Todavía no sé si quiero presentar una denuncia.",
+  "texto": "Me robaron el celular y una citación. La persona que me robó escapó. Ocurrió por la tarde. Ocurrió en mi casa. Fue cerca de este lugar: «el mercado 25 de Mayo». No conozco a esa persona. No sé si tengo algo para mostrar. No sé si hay cámaras. Quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no_sabe",
+   "Q.DEN.INTENCION#si",
    "Q.DOC.ACLARAR#citacion",
+   "Q.EVI.CAMARAS#no_sabe",
    "Q.EVI.QUE_TIENE#no_sabe",
    "Q.HEC.ESCAPE_ACTOR#autor",
    "Q.HEC.QUE_OCURRIO#robar",
@@ -2720,10 +2975,17 @@
      ]
     },
     {
-     "pregunta": "Q.DEN.INTENCION",
+     "pregunta": "Q.EVI.CAMARAS",
      "estado": "negado",
      "opciones": [
       "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
      ]
     }
    ],
@@ -2754,17 +3016,22 @@
     "Q.PER.DESC.ROPA_COLOR",
     "Q.TES.EXISTE",
     "Q.TES.CANTIDAD",
+    "Q.TES.CONOCE",
+    "Q.TES.NOMBRE",
+    "Q.TES.TELEFONO",
     "Q.EVI.FACTURA",
     "Q.EVI.TRAE_COPIA",
     "Q.EVI.QUE_TIENE",
     "Q.EVI.TIPOS",
+    "Q.EVI.CAMARAS",
     "Q.DEN.INTENCION",
     "Q.DEN.AUTORIDAD"
    ]
   },
-  "texto": "Me robaron algo. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». Era una mujer. Era una persona adulta. Era una persona baja. Era una persona delgada. Llevaba una chamarra. La chamarra era de color «un recibo firmado». No sé si hay testigos. No sé si tengo algo para mostrar. Por ahora no quiero presentar una denuncia.",
+  "texto": "Me robaron algo. Ocurrió en el barrio Heroínas. Fue al lado de este lugar: «el mercado 25 de Mayo». Era una mujer. Era una persona adulta. Era una persona baja. Era una persona delgada. Llevaba una chamarra. La chamarra era de color «un recibo firmado». No sé si hay testigos. No sé si tengo algo para mostrar. No hay cámaras en ese lugar. Todavía no sé si quiero presentar una denuncia.",
   "representadas": [
-   "Q.DEN.INTENCION#no",
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.CAMARAS#no",
    "Q.EVI.QUE_TIENE#no_sabe",
    "Q.HEC.QUE_OCURRIO#robar",
    "Q.LUG.DONDE#barrio",
@@ -2776,6 +3043,270 @@
    "Q.PER.DESC.ROPA_COLOR.CHAMARRA#otro",
    "Q.PER.DESC.SEXO#mujer",
    "Q.TES.EXISTE#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a la Policía.",
+  "representadas": [
+   "Q.ORI.DESTINO#policia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "policia"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a la Policía.",
+  "representadas": [
+   "Q.ORI.DESTINO#policia"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "sepdavi"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a SEPDAVI.",
+  "representadas": [
+   "Q.ORI.DESTINO#sepdavi"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "No sé a dónde tengo que ir. Dígame usted, por favor.",
+  "representadas": [
+   "Q.ORI.DESTINO#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "sepdavi"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a SEPDAVI.",
+  "representadas": [
+   "Q.ORI.DESTINO#sepdavi"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a la FELCV.",
+  "representadas": [
+   "Q.ORI.DESTINO#felcv"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "No sé a dónde tengo que ir. Dígame usted, por favor.",
+  "representadas": [
+   "Q.ORI.DESTINO#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "sepdep"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a SEPDEP.",
+  "representadas": [
+   "Q.ORI.DESTINO#sepdep"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "sepdavi"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a SEPDAVI.",
+  "representadas": [
+   "Q.ORI.DESTINO#sepdavi"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "No sé a dónde tengo que ir. Dígame usted, por favor.",
+  "representadas": [
+   "Q.ORI.DESTINO#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "No sé a dónde tengo que ir. Dígame usted, por favor.",
+  "representadas": [
+   "Q.ORI.DESTINO#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "derivacion",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.ORI.DESTINO",
+     "estado": "afirmado",
+     "opciones": [
+      "felcc"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.ORI.DESTINO"
+   ]
+  },
+  "texto": "Tengo que ir a la FELCC.",
+  "representadas": [
+   "Q.ORI.DESTINO#felcc"
   ]
  },
  {

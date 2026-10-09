@@ -109,14 +109,25 @@ class Conversation {
   /// El tema más reciente que cumple [known]: el grafo no conoce los
   /// trámites (RAG), y dentro de uno sigue con el último contexto suyo
   /// («Denunciar robo» durante el trámite de robo en la FELCC).
+  ///
+  /// La ruta de una pregunta del oyente es la provisional del grafo: si la
+  /// persona sorda la respondió en otro contexto (el trámite de acoso para
+  /// «¿Conoce a la persona que la acosa?», que el grafo había puesto en el
+  /// robo), ese contexto no fue el tema.
   String? topicContextWhere(bool Function(String id) known) {
+    final answeredElsewhere = <String>{};
     for (final turn in turns.reversed) {
       final ctx = turn.message.contextId;
-      if (ctx != null && ctx.isNotEmpty && known(ctx)) return ctx;
+      if (ctx != null && ctx.isNotEmpty) {
+        if (known(ctx)) return ctx;
+        final replied = turn.message.replyToId;
+        if (replied != null) answeredElsewhere.add(replied);
+      }
       final routed = turn.route?.targetContextId;
       if (turn.message.speaker == SpeakerRole.hearing &&
           routed != null &&
-          known(routed)) {
+          known(routed) &&
+          !answeredElsewhere.contains(turn.message.id)) {
         return routed;
       }
     }

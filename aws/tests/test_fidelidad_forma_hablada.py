@@ -66,6 +66,37 @@ class QuienPorQuiere(unittest.TestCase):
                          ["QUIEN", "ROBAR"])
 
 
+class NegacionNoDicha(unittest.TestCase):
+    """QA 2026-10-09: «¿La acosaron sexualmente?» salía con NO al final y el
+    avatar preguntaba lo contrario."""
+
+    def test_un_no_que_nadie_dijo_se_retira(self):
+        self.assertEqual(
+            glosas("¿La acosaron sexualmente?",
+                   ["ACOSAR", "SEXUALMENTE", "ELLA", "NO"]),
+            ["ACOSAR", "SEXUALMENTE", "ELLA"])
+        self.assertEqual(glosas("¿Su hijo tiene heridas o dolor?",
+                                ["HIJO", "HERIDA", "DOLOR", "TENER", "NO"]),
+                         ["HIJO", "HERIDA", "DOLOR", "TENER"])
+
+    def test_la_negacion_dicha_se_conserva(self):
+        for texto, entrada in [
+            ("¿Publicaron sus fotos sin su permiso?",
+             ["FOTOS", "PUBLICAR", "PERMISO", "NO"]),
+            ("No tengo testigos.", ["TESTIGO", "TENER", "NO"]),
+            ("¿Le negaron la atención?", ["ATENDER", "NEGAR", "NO"]),
+            ("Aquí está prohibido fumar.", ["AQUI", "FUMAR", "NO"]),
+            ("No sé.", ["NO_SABER"]),
+        ]:
+            with self.subTest(texto=texto):
+                self.assertEqual(glosas(texto, entrada), entrada)
+
+    def test_no_saber_no_es_una_negacion_que_retirar(self):
+        self.assertEqual(glosas("¿Sabe quién es su fiscal?",
+                                ["FISCAL", "QUIEN", "NO_SABER"]),
+                         ["FISCAL", "QUIEN", "NO_SABER"])
+
+
 class RanurasDelEspanol(unittest.TestCase):
     def ranuras(self, texto, entrada):
         return T.build_semantic_turn(texto, {"glosses": entrada})["requestedSlots"]

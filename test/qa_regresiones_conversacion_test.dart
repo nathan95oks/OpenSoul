@@ -241,18 +241,18 @@ void main() {
     test('armando el trámite a solas no se contesta «Entendido»', () {
       final s = flow.startJourney('tramite_felcv_201');
       final ids = [for (final p in s.steps) p.questionId];
-      expect(ids, isNot(contains('R.ESC-FELCV-201.12')));
-      expect(ids, contains('R.ESC-FELCV-201.4'));
+      expect(ids, isNot(contains('R.ESC-FELCV-201.20')));
+      expect(ids, contains('R.ESC-FELCV-201.6'));
     });
 
     test('si el funcionario dice la indicación, sí se contesta', () {
       final s = flow.startJourney(
         'tramite_felcv_201',
-        requestedQuestionIds: const ['R.ESC-FELCV-201.12'],
+        requestedQuestionIds: const ['R.ESC-FELCV-201.20'],
       );
       expect([
         for (final p in s.steps) p.questionId,
-      ], contains('R.ESC-FELCV-201.12'));
+      ], contains('R.ESC-FELCV-201.20'));
     });
 
     test('el mensaje armado no tiene un «Sí.» o «No.» suelto', () {
@@ -261,12 +261,12 @@ void main() {
       String mensaje(String testigos) {
         var s = flow.startJourney('tramite_felcv_201');
         for (final (q, o) in [
-          ('R.ESC-FELCV-201.2', 'no'),
-          ('R.ESC-FELCV-201.4', 'si'),
+          ('R.ESC-FELCV-201.4', 'no'),
           ('R.ESC-FELCV-201.6', 'si'),
-          ('R.ESC-FELCV-201.8', 'si'),
-          ('R.ESC-FELCV-201.10', testigos),
-          ('R.ESC-FELCV-201.14', 'si'),
+          ('R.ESC-FELCV-201.10', 'si'),
+          ('R.ESC-FELCV-201.12', 'si'),
+          ('R.ESC-FELCV-201.14', testigos),
+          ('R.ESC-FELCV-201.22', 'si'),
         ]) {
           s = flow.select(s, q, o).session;
         }
@@ -283,7 +283,7 @@ void main() {
     });
 
     test('SÍ no pone datos que nadie dijo en boca de la persona', () {
-      for (final id in ['R.ESC-FELCV-201.4', 'R.ESC-FELCC-202.2']) {
+      for (final id in ['R.ESC-FELCV-201.6', 'R.ESC-FELCC-202.2']) {
         final si = bank.question(id)!.options.firstWhere((o) => o.id == 'si');
         // Lo preguntado, afirmado («No, no conozco…» dado vuelta), sin el
         // «jefe» ni la «casa» que antes se decían.

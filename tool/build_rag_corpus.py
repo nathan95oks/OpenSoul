@@ -407,8 +407,15 @@ def leer_relaciones(eid: str, esc: dict, turnos: list, pares: list,
         - **Turno 6:** si Turno 4 es negado o desconocido
         - **Turno 8:** si Turno 4 = «Sí, traje mi cédula.»; si Turno 6 es afirmado
 
-    Varias condiciones separadas por «;» deben cumplirse todas. La composición
-    da la frase con que se juntan las tarjetas de una pregunta abierta:
+    Varias condiciones separadas por «;» deben cumplirse todas. Con «(se
+    pregunta junto)» al final, el turno precisa esa respuesta («¿Quién es esa
+    persona?» tras «Sí, la conozco») y se pide con ella, también cuando el
+    funcionario solo hizo la primera pregunta:
+
+        - **Turno 8:** si Turno 6 es afirmado (se pregunta junto)
+
+    La composición da la frase con que se juntan las tarjetas de una pregunta
+    abierta:
 
         - **Turno 4:** «Traje {items}.»
     """
@@ -443,6 +450,9 @@ def leer_relaciones(eid: str, esc: dict, turnos: list, pares: list,
                            "junta sus condiciones con «;»")
             continue
         hijos.add(n)
+        junto = re.search(r"\s*\(se pregunta junto\)\s*$", contenido)
+        if junto:
+            contenido = contenido[:junto.start()]
         condiciones, valida = [], True
         for clausula in [c for c in re.split(r";\s*", contenido.strip()) if c]:
             c = _RAMA.fullmatch(clausula.strip().rstrip("."))
@@ -486,7 +496,8 @@ def leer_relaciones(eid: str, esc: dict, turnos: list, pares: list,
                         valida = False
                 condiciones.append({"turno": p, "respuestas": elegidas})
         if valida and condiciones:
-            ramas.append({"turno": n, "condiciones": condiciones})
+            ramas.append({"turno": n, "condiciones": condiciones,
+                          **({"junto": True} if junto else {})})
 
     composicion, vistos = [], set()
     for etiqueta, contenido, linea in esc.get("composicion", []):
@@ -2058,6 +2069,10 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
                 if cuando:
                     paso["cuando"] = cuando
                     paso["padre"] = cuando[0]["pregunta"]
+                    # «(se pregunta junto)»: precisa la respuesta de la que
+                    # depende y se pide con ella.
+                    if ramas[t["n"]].get("junto"):
+                        paso["obligatoria"] = True
                 pasos.append(paso)
             # Una rama que dependa de este turno mira su primera pregunta.
             ofrecidas[t["n"]] = (preguntas_turno[0][0], preguntas_turno[0][3])

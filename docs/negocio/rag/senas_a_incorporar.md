@@ -4,7 +4,7 @@ Generado por `tool/build_rag_corpus.py` desde el corpus RAG. No editar a mano.
 
 Palabras de los trámites de Cochabamba que no tienen seña en el catálogo del avatar. En la app se ven en azul claro («seña a incorporar») y el avatar dice «En espera para su avatar». Al incorporar una seña (catálogo + animación) y regenerar el corpus, deja de verse en azul en todas sus tarjetas.
 
-**298 palabras · 1831 usos.** Las siglas (NUREJ, CRPVA…) no están: en LSB se deletrean.
+**299 palabras · 1850 usos.** Las siglas (NUREJ, CRPVA…) no están: en LSB se deletrean.
 
 ## Ya resueltas con una seña existente
 
@@ -306,138 +306,138 @@ La primera columna es lo que dejó la traducción automática, a veces mal escri
 | 53 | INCLUIR | 9 | DDRR, FIS, LSB, NOT, SERECI | No sé si el documento incluye ese inmueble. |  |
 | 54 | REPRESENTAR | 9 | DDRR, NOT, SEPDEP, SERECI | ¿Tiene un poder para representar a esa persona? |  |
 | 55 | COPIA | 8 | DDRR, FELCC, IMP, SEPDAVI, SERECI | No sé si esta copia de mi cédula sirve. | no es FOTOCOPIA (revisado) |
-| 56 | FIGURA | 8 | DDRR, SEPDAVI | ¿Usted figura como titular en el documento? |  |
-| 57 | FIRMAR | 8 | IMP, LSB, NOT | ¿Comprendió el documento antes de firmar? |  |
-| 58 | INGRESO | 8 | DDRR | ¿Tiene el comprobante de ingreso del trámite anterior? |  |
-| 59 | REGULARIZACION | 8 | DDRR | ¿Cómo consulto el registro de mi regularización de propiedad? |  |
-| 60 | SEÑALAR | 8 | OJ, SEPDEP | ¿Tiene una audiencia señalada? |  |
-| 61 | ACREDITAR | 7 | DDRR, NOT, SERECI | No sé si este documento acredita la aceptación. |  |
-| 62 | ANTICIPO | 7 | DDRR | ¿La escritura indica que es un anticipo de legítima? |  |
-| 63 | CATASTRAL | 7 | DDRR, IMP | ¿Tiene un documento catastral de la casa? |  |
-| 64 | DEBER | 7 | DDRR, FIS, IMP, LSB | No sé qué alcance debe tener el certificado. |  |
+| 56 | DEBER | 8 | DDRR, FELCV, FIS, IMP, LSB | No sé qué alcance debe tener el certificado. |  |
+| 57 | FIGURA | 8 | DDRR, SEPDAVI | ¿Usted figura como titular en el documento? |  |
+| 58 | FIRMAR | 8 | IMP, LSB, NOT | ¿Comprendió el documento antes de firmar? |  |
+| 59 | INGRESO | 8 | DDRR | ¿Tiene el comprobante de ingreso del trámite anterior? |  |
+| 60 | REGULARIZACION | 8 | DDRR | ¿Cómo consulto el registro de mi regularización de propiedad? |  |
+| 61 | SEÑALAR | 8 | OJ, SEPDEP | ¿Tiene una audiencia señalada? |  |
+| 62 | ACREDITAR | 7 | DDRR, NOT, SERECI | No sé si este documento acredita la aceptación. |  |
+| 63 | ANTICIPO | 7 | DDRR | ¿La escritura indica que es un anticipo de legítima? |  |
+| 64 | CATASTRAL | 7 | DDRR, IMP | ¿Tiene un documento catastral de la casa? |  |
 | 65 | NEGAR | 7 | LSB | ¿Le negaron atención por su forma de comunicarse? |  |
 | 66 | SEGURO | 7 | FELCC, FELCV, LSB | Sí, tengo un contacto seguro. |  |
 | 67 | SERVIR | 7 | DDRR, NOT, SEPDAVI | No sé si esta copia de mi cédula sirve. | no es AYUDAR (revisado) |
 | 68 | VIGENTE | 7 | DDRR, DISC, DNA | No sé si mi documento está vigente. |  |
 | 69 | ALCANCE | 6 | DDRR | No sé qué alcance debe tener el certificado. |  |
-| 70 | DESARCHIVO | 6 | DDRR | ¿Cómo solicito el desarchivo de mis documentos? |  |
-| 71 | HAY | 6 | DNA, FELCC, FELCV | ¿Hay un niño o adolescente afectado? |  |
-| 72 | PROCESO | 6 | DISC, FIS, OJ, SEPDEP | ¿Qué necesita consultar de su proceso? |  |
-| 73 | PUBLICAR | 6 | FELCC, NOT | El arancel publicado incluye anticréticos entre otras escrituras. |  |
-| 74 | TAMBIEN | 6 | DDRR, FELCC, LSB, NOT, SLIM | No, mi cédula también tiene un error. |  |
-| 75 | DATOS | 5 | DDRR, FELCC, GAM, SEGIP | No sé cuál dato de identidad está incorrecto. |  |
-| 76 | DERECHOS REALES | 5 | DDRR | ¿El comprobante corresponde a esta oficina de Derechos Reales? |  |
-| 77 | FIRMA | 5 | LSB, NOT | Quiero consultar el reconocimiento de firmas. |  |
-| 78 | FUNCIONARIO | 5 | LSB | ¿Un funcionario público lo discrimina? |  |
-| 79 | INFORME | 5 | DISC | ¿Conserva informes médicos relacionados con su solicitud? |  |
-| 80 | LEGITIMA | 5 | DDRR | ¿La escritura indica que es un anticipo de legítima? |  |
-| 81 | LUGAR | 5 | FELCC, FELCV | Sí, desconozco su paradero. |  |
-| 82 | PREVENTIVA | 5 | DDRR | ¿Tiene un documento judicial de anotación preventiva? |  |
-| 83 | PROPIETARIO | 5 | DDRR | ¿La división incluye a varios propietarios? |  |
-| 84 | USUCAPION | 5 | DDRR | ¿Tiene un documento judicial referido a una usucapión? |  |
-| 85 | ACTIVAR | 4 | DNA, FELCC, FELCV, SEPDEP | Contacte SEPDEP para activar la atención correspondiente. |  |
-| 86 | ADQUISICION | 4 | DDRR | Sí, tengo la escritura de adquisición. |  |
-| 87 | ALODIAL | 4 | DDRR | ¿Cómo solicito el certificado alodial de mi casa? |  |
-| 88 | CONSULTA | 4 | DDRR, IMP, SEPDEP | ¿Tiene la matrícula del inmueble para esta consulta? |  |
-| 89 | DEFENSORIA | 4 | DNA, LSB | Debe activarse la atención de la Defensoría de la Niñez. |  |
-| 90 | EVALUACION | 4 | DISC | No sé si esa evaluación fue de calificación. |  |
-| 91 | FIGURAR | 4 | DDRR | No sé quién figura como titular. |  |
-| 92 | GESTION | 4 | DDRR | Sí, el poder menciona esta gestión. |  |
-| 93 | HEREDERO | 4 | DDRR | ¿La herencia corresponde a varios herederos? |  |
-| 94 | MEMORIAL | 4 | DDRR, OJ | Quiero consultar la entrega de mi memorial. |  |
-| 95 | MENCION | 4 | DDRR | No, el documento menciona otro inmueble. |  |
-| 96 | PARENTESCO | 4 | DNA, SEPDAVI, SERECI | No sé cómo explicar el parentesco. |  |
-| 97 | SOLO | 4 | DDRR, IMP, SLIM | No tengo memorial. Solo traje mi cédula. |  |
-| 98 | TIPO | 4 | DDRR, SEPDAVI | No sé qué tipo de transferencia hicieron. |  |
-| 99 | ACUDIR | 3 | LSB, OJ, SLIM | SIREJ indica acudir a información del Tribunal. |  |
-| 100 | ANOTACION PREVENTIVA | 3 | DDRR | ¿Qué falta para presentar la anotación preventiva? |  |
-| 101 | CHIMBA | 3 | SEPDAVI | ¿Le queda mejor la oficina central o La Chimba? |  |
-| 102 | CONCEPTO | 3 | DDRR | ¿Tiene una boleta con el concepto de pago? |  |
-| 103 | CORRESPONDIENTE | 3 | DISC, FELCV, SEPDEP | Contacte SEPDEP para activar la atención correspondiente. |  |
-| 104 | COSTAR | 3 | FELCC, SEGIP | ¿Cuánto dice la página que cuesta? |  |
-| 105 | COSTO | 3 | DDRR, NOT, SERECI | ¿Cuánto cuesta el trámite que voy a solicitar? |  |
-| 106 | DUPLICADO | 3 | SERECI | SERECI ofrece venta de certificados duplicados. |  |
-| 107 | GRAVAMENES | 3 | DDRR | ¿Cómo solicito el certificado de gravámenes de mi casa? |  |
-| 108 | MENCIONAR | 3 | DDRR | No, el documento solo me menciona a mí. |  |
-| 109 | PARTICION | 3 | DDRR | ¿Cómo registro la división y partición de un inmueble? |  |
-| 110 | REGISTRAL | 3 | DDRR | ¿La parte que no entiende está en el documento registral? |  |
-| 111 | RELACION | 3 | FELCC, FELCV, SERECI | No sé cómo explicar esa relación. |  |
-| 112 | REPRESENTACION | 3 | NOT, SERECI | No sé cómo acreditar la representación. |  |
-| 113 | RESELLADO | 3 | DDRR | Sí, tengo la solicitud escrita de resellado. |  |
-| 114 | RUTA | 3 | FELCC, FELCV, SLIM | Para violencia corresponde activar la ruta de FELCV. |  |
-| 115 | SUPERFICIE | 3 | DDRR | ¿La diferencia está en la superficie del inmueble? |  |
-| 116 | VENCER | 3 | DISC, SEGIP | ¿Su cédula ya venció? |  |
-| 117 | VERBALMENTE | 3 | FIS | ¿Desea denunciar verbalmente o trae escrito? |  |
-| 118 | ACCESO | 2 | FIS, SEPDAVI | ¿Tiene acceso a su proceso en ROMA? |  |
-| 119 | ALGUIEN | 2 | FELCC | ¿Alguien la engañó con un trabajo lejos? |  |
-| 120 | APLICABLE | 2 | DISC, LSB | Depende de su grado y situación; revise la norma aplicable. |  |
-| 121 | ARANCEL | 2 | DDRR, NOT | ¿Dónde pago el arancel de este trámite? |  |
-| 122 | ARANCELE | 2 | NOT | La certificación de firmas tiene arancel publicado específico. |  |
-| 123 | BORRAR | 2 | FELCC | No borre ni modifique mensajes relacionados al hecho. |  |
-| 124 | CALIFICAR | 2 | DISC | Ya me calificaron. |  |
-| 125 | CENTRAL | 2 | SEPDAVI | ¿Le queda mejor la oficina central o La Chimba? |  |
-| 126 | CERRADO | 2 | DNA | Sí. La dirección que tenía estaba cerrada. |  |
-| 127 | CERTIFICAR | 2 | DDRR, NOT | ¿Tiene un documento del inmueble que debe certificarse? |  |
-| 128 | DELITO | 2 | FELCC | ¿El hecho fue robo, estafa u otro delito? |  |
-| 129 | DENUNCIADO | 2 | SEPDEP | Soy denunciado. |  |
-| 130 | ESCRITURA PUBLICA | 2 | DDRR | No sé si este contrato es una escritura pública. |  |
-| 131 | ESPECIALIZADA | 2 | FELCC, FELCV | La FELCV es la unidad especializada contra la violencia. |  |
-| 132 | EXTRAVIO | 2 | SEGIP | La reposición aplica por extravío, robo o deterioro. |  |
-| 133 | FALTAR | 2 | DDRR | ¿Qué documento me falta para solicitar el Folio Real? |  |
-| 134 | FISCAL | 2 | FIS | Necesito hablar con el fiscal de mi caso. | no es FISCALIA (revisado) |
-| 135 | FISICA | 2 | SEGIP | ¿Cuánto cuesta la cédula física? | no es FÍSICA (revisado) |
-| 136 | GRADO | 2 | DISC | Depende de su grado y situación; revise la norma aplicable. |  |
-| 137 | HEREDAR | 2 | DDRR | Sí, el documento identifica el inmueble heredado. |  |
-| 138 | INGRESAR | 2 | DDRR, FIS | No sé en qué oficina ingresaron el trámite. |  |
-| 139 | INTEGRAL | 2 | SEPDAVI | SEPDAVI evaluará su acceso al patrocinio y apoyo integral. |  |
-| 140 | INTERPRETAR | 2 | LSB | La Ley 1658 contempla interpretación gratuita en justicia. | no es INTÉRPRETE (revisado) |
-| 141 | INVESTIGADOR | 2 | FELCC | No sé qué es un investigador. |  |
-| 142 | LENGUA | 2 | FELCV, LSB | Necesito comunicarme usando lengua de señas. |  |
-| 143 | MANTENER | 2 | DISC, SEGIP | La reposición mantiene la vigencia del documento reemplazado. |  |
-| 144 | MAS | 2 | DDRR, SEGIP | No sé qué forma de explicación me ayudará más. |  |
-| 145 | MINISTERIO | 2 | DISC | El Ministerio informó cuatro días para el área urbana. |  |
-| 146 | MODALIDAD | 2 | OJ | No sé cuál es la modalidad. |  |
-| 147 | ORIENTACION SOCIAL | 2 | SEPDAVI | No, no quiero orientación social. |  |
-| 148 | ORIGINAL | 2 | SEGIP, SERECI | ¿Tiene certificado de nacimiento original computarizado? |  |
-| 149 | PARTIDA | 2 | DDRR | Sí, mi documento tiene una partida antigua. |  |
-| 150 | PASAR | 2 | FIS, IMP | Compré un auto. Quiero pasarlo a mi nombre. | no es IR (revisado) |
-| 151 | PENAL | 2 | OJ, SEPDEP | Quiero consultar un certificado de antecedentes penales. |  |
-| 152 | PRECIO | 2 | SERECI | Entonces quiero confirmar el precio primero. |  |
-| 153 | PREGUNTAR | 2 | DDRR, FELCV | ¿Qué documento me falta para solicitar el Folio Real? |  |
-| 154 | PSICOLOGICA | 2 | SEPDAVI, SLIM | Necesito ayuda legal y psicológica. |  |
-| 155 | PUBLICO | 2 | LSB | ¿Un funcionario público lo discrimina? |  |
-| 156 | QUITAR | 2 | FELCC | ¿Usaron violencia para quitarle el objeto? | no es ROBAR (revisado) |
-| 157 | REFERIR | 2 | DDRR | No sé si ambos documentos se refieren a lo mismo. |  |
-| 158 | RENOVACION | 2 | DISC, SEGIP | La renovación puede solicitarse desde seis meses antes. |  |
-| 159 | RENOVAR | 2 | SEGIP | Quiero renovar mi carnet. |  |
-| 160 | RESSELLADO | 2 | DDRR | ¿Tiene una solicitud escrita de resellado de nota marginal? |  |
-| 161 | SACAR | 2 | DISC, SEGIP | Necesito sacar mi cédula por primera vez. |  |
-| 162 | SEDE | 2 | DNA, FELCV | Primero confirmaré la sede. |  |
-| 163 | SEÑALADA | 2 | OJ, SEPDEP | No, no tengo audiencia señalada. |  |
-| 164 | SEÑAS | 2 | FELCV, LSB | Necesito comunicarme usando lengua de señas. |  |
-| 165 | SIGUIR | 2 | DDRR, DISC | No sé si la hipoteca sigue registrada. | no es CONTINUAR (revisado) |
-| 166 | SOCIAL | 2 | SEPDAVI | Sí, quiero orientación social. | no es COMUNIDAD_SORDA (revisado) |
-| 167 | VIA | 2 | DDRR | No, mi documento indica otra vía de regularización. |  |
-| 168 | ACOSA | 1 | FELCV | ¿Conoce a la persona que la acosa? |  |
-| 169 | ACOSAR | 1 | FELCV | ¿La acosa todos los días? |  |
-| 170 | ACOSO | 1 | LSB | Sufro acoso discriminatorio porque soy sordo. |  |
-| 171 | ACOSO FISICO | 1 | FELCC | Sufro acoso físico: una persona me sigue y me toca. |  |
-| 172 | ACOSO SEXUAL | 1 | FELCV | Quiero denunciar acoso sexual. |  |
-| 173 | ADAPTARSE | 1 | SLIM | La atención debe adaptarse para que comprenda el trámite. |  |
-| 174 | ADE CUADA | 1 | FELCV | Gracias. Esperaré la asistencia adecuada. |  |
-| 175 | ADMINISTRACION | 1 | LSB | La Ley 1658 incluye el ámbito de administración de justicia. |  |
-| 176 | ADQUIRIR | 1 | DDRR | ¿Tiene la escritura con la que adquirió el inmueble? |  |
-| 177 | ALGO | 1 | FELCC | No sé si publicaron algo. |  |
-| 178 | ALY | 1 | SEPDEP | Queda entre Antezana y Lanza, Edificio Aly. |  |
-| 179 | AMBITO | 1 | LSB | La Ley 1658 incluye el ámbito de administración de justicia. |  |
-| 180 | ANTECEDENTES | 1 | OJ | Quiero consultar un certificado de antecedentes penales. |  |
-| 181 | ANTEZANA | 1 | SEPDEP | Queda entre Antezana y Lanza, Edificio Aly. |  |
-| 182 | ANTICRETICOS | 1 | NOT | El arancel publicado incluye anticréticos entre otras escrituras. |  |
-| 183 | APLICAR | 1 | SEGIP | La reposición aplica por extravío, robo o deterioro. |  |
-| 184 | ASUMIR | 1 | DNA | No asumiremos que el servicio dejó de funcionar. |  |
-| 185 | AUTOMATICO | 1 | DISC | La norma 2025 incorporó mecanismos de renovación automática. |  |
-| 186 | BEIJING | 1 | SEPDAVI | Existe representación en Centro Integral FELCV, avenida Beijing. |  |
-| 187 | BULLYING | 1 | DNA | Mi hijo sufre bullying en la escuela. |  |
+| 70 | BULLYING | 6 | DNA | Mi hijo sufre bullying en la escuela. |  |
+| 71 | DESARCHIVO | 6 | DDRR | ¿Cómo solicito el desarchivo de mis documentos? |  |
+| 72 | HAY | 6 | DNA, FELCC, FELCV | ¿Hay un niño o adolescente afectado? |  |
+| 73 | PROCESO | 6 | DISC, FIS, OJ, SEPDEP | ¿Qué necesita consultar de su proceso? |  |
+| 74 | PUBLICAR | 6 | FELCC, NOT | El arancel publicado incluye anticréticos entre otras escrituras. |  |
+| 75 | TAMBIEN | 6 | DDRR, FELCC, LSB, NOT, SLIM | No, mi cédula también tiene un error. |  |
+| 76 | ACOSO SEXUAL | 5 | FELCV | Quiero denunciar acoso sexual. |  |
+| 77 | ALGUIEN | 5 | FELCC, FELCV | ¿Habló con alguien más sobre este acoso? |  |
+| 78 | DATOS | 5 | DDRR, FELCC, GAM, SEGIP | No sé cuál dato de identidad está incorrecto. |  |
+| 79 | DERECHOS REALES | 5 | DDRR | ¿El comprobante corresponde a esta oficina de Derechos Reales? |  |
+| 80 | FIRMA | 5 | LSB, NOT | Quiero consultar el reconocimiento de firmas. |  |
+| 81 | FUNCIONARIO | 5 | LSB | ¿Un funcionario público lo discrimina? |  |
+| 82 | INFORME | 5 | DISC | ¿Conserva informes médicos relacionados con su solicitud? |  |
+| 83 | LEGITIMA | 5 | DDRR | ¿La escritura indica que es un anticipo de legítima? |  |
+| 84 | LUGAR | 5 | FELCC, FELCV | Sí, desconozco su paradero. |  |
+| 85 | MAS | 5 | DDRR, FELCV, SEGIP | No sé qué forma de explicación me ayudará más. |  |
+| 86 | PREVENTIVA | 5 | DDRR | ¿Tiene un documento judicial de anotación preventiva? |  |
+| 87 | PROPIETARIO | 5 | DDRR | ¿La división incluye a varios propietarios? |  |
+| 88 | USUCAPION | 5 | DDRR | ¿Tiene un documento judicial referido a una usucapión? |  |
+| 89 | ACTIVAR | 4 | DNA, FELCC, FELCV, SEPDEP | Contacte SEPDEP para activar la atención correspondiente. |  |
+| 90 | ADQUISICION | 4 | DDRR | Sí, tengo la escritura de adquisición. |  |
+| 91 | ALODIAL | 4 | DDRR | ¿Cómo solicito el certificado alodial de mi casa? |  |
+| 92 | CONSULTA | 4 | DDRR, IMP, SEPDEP | ¿Tiene la matrícula del inmueble para esta consulta? |  |
+| 93 | DEFENSORIA | 4 | DNA, LSB | Debe activarse la atención de la Defensoría de la Niñez. |  |
+| 94 | EVALUACION | 4 | DISC | No sé si esa evaluación fue de calificación. |  |
+| 95 | FIGURAR | 4 | DDRR | No sé quién figura como titular. |  |
+| 96 | GESTION | 4 | DDRR | Sí, el poder menciona esta gestión. |  |
+| 97 | HEREDERO | 4 | DDRR | ¿La herencia corresponde a varios herederos? |  |
+| 98 | MEMORIAL | 4 | DDRR, OJ | Quiero consultar la entrega de mi memorial. |  |
+| 99 | MENCION | 4 | DDRR | No, el documento menciona otro inmueble. |  |
+| 100 | PARENTESCO | 4 | DNA, SEPDAVI, SERECI | No sé cómo explicar el parentesco. |  |
+| 101 | SOLO | 4 | DDRR, IMP, SLIM | No tengo memorial. Solo traje mi cédula. |  |
+| 102 | TIPO | 4 | DDRR, SEPDAVI | No sé qué tipo de transferencia hicieron. |  |
+| 103 | ACUDIR | 3 | LSB, OJ, SLIM | SIREJ indica acudir a información del Tribunal. |  |
+| 104 | ANOTACION PREVENTIVA | 3 | DDRR | ¿Qué falta para presentar la anotación preventiva? |  |
+| 105 | CHIMBA | 3 | SEPDAVI | ¿Le queda mejor la oficina central o La Chimba? |  |
+| 106 | CONCEPTO | 3 | DDRR | ¿Tiene una boleta con el concepto de pago? |  |
+| 107 | CORRESPONDIENTE | 3 | DISC, FELCV, SEPDEP | Contacte SEPDEP para activar la atención correspondiente. |  |
+| 108 | COSTAR | 3 | FELCC, SEGIP | ¿Cuánto dice la página que cuesta? |  |
+| 109 | COSTO | 3 | DDRR, NOT, SERECI | ¿Cuánto cuesta el trámite que voy a solicitar? |  |
+| 110 | DUPLICADO | 3 | SERECI | SERECI ofrece venta de certificados duplicados. |  |
+| 111 | GRAVAMENES | 3 | DDRR | ¿Cómo solicito el certificado de gravámenes de mi casa? |  |
+| 112 | MENCIONAR | 3 | DDRR | No, el documento solo me menciona a mí. |  |
+| 113 | PARTICION | 3 | DDRR | ¿Cómo registro la división y partición de un inmueble? |  |
+| 114 | REGISTRAL | 3 | DDRR | ¿La parte que no entiende está en el documento registral? |  |
+| 115 | RELACION | 3 | FELCC, FELCV, SERECI | No sé cómo explicar esa relación. |  |
+| 116 | REPRESENTACION | 3 | NOT, SERECI | No sé cómo acreditar la representación. |  |
+| 117 | RESELLADO | 3 | DDRR | Sí, tengo la solicitud escrita de resellado. |  |
+| 118 | RUTA | 3 | FELCC, FELCV, SLIM | Para violencia corresponde activar la ruta de FELCV. |  |
+| 119 | SUPERFICIE | 3 | DDRR | ¿La diferencia está en la superficie del inmueble? |  |
+| 120 | VENCER | 3 | DISC, SEGIP | ¿Su cédula ya venció? |  |
+| 121 | VERBALMENTE | 3 | FIS | ¿Desea denunciar verbalmente o trae escrito? |  |
+| 122 | ACCESO | 2 | FIS, SEPDAVI | ¿Tiene acceso a su proceso en ROMA? |  |
+| 123 | ACOSAR | 2 | FELCV | ¿La acosa todos los días? |  |
+| 124 | ACOSO | 2 | FELCV, LSB | ¿Habló con alguien más sobre este acoso? |  |
+| 125 | APLICABLE | 2 | DISC, LSB | Depende de su grado y situación; revise la norma aplicable. |  |
+| 126 | ARANCEL | 2 | DDRR, NOT | ¿Dónde pago el arancel de este trámite? |  |
+| 127 | ARANCELE | 2 | NOT | La certificación de firmas tiene arancel publicado específico. |  |
+| 128 | BORRAR | 2 | FELCC | No borre ni modifique mensajes relacionados al hecho. |  |
+| 129 | CALIFICAR | 2 | DISC | Ya me calificaron. |  |
+| 130 | CENTRAL | 2 | SEPDAVI | ¿Le queda mejor la oficina central o La Chimba? |  |
+| 131 | CERRADO | 2 | DNA | Sí. La dirección que tenía estaba cerrada. |  |
+| 132 | CERTIFICAR | 2 | DDRR, NOT | ¿Tiene un documento del inmueble que debe certificarse? |  |
+| 133 | DELITO | 2 | FELCC | ¿El hecho fue robo, estafa u otro delito? |  |
+| 134 | DENUNCIADO | 2 | SEPDEP | Soy denunciado. |  |
+| 135 | ESCRITURA PUBLICA | 2 | DDRR | No sé si este contrato es una escritura pública. |  |
+| 136 | ESPECIALIZADA | 2 | FELCC, FELCV | La FELCV es la unidad especializada contra la violencia. |  |
+| 137 | EXTRAVIO | 2 | SEGIP | La reposición aplica por extravío, robo o deterioro. |  |
+| 138 | FALTAR | 2 | DDRR | ¿Qué documento me falta para solicitar el Folio Real? |  |
+| 139 | FISCAL | 2 | FIS | Necesito hablar con el fiscal de mi caso. | no es FISCALIA (revisado) |
+| 140 | FISICA | 2 | SEGIP | ¿Cuánto cuesta la cédula física? | no es FÍSICA (revisado) |
+| 141 | GRADO | 2 | DISC | Depende de su grado y situación; revise la norma aplicable. |  |
+| 142 | HEREDAR | 2 | DDRR | Sí, el documento identifica el inmueble heredado. |  |
+| 143 | INGRESAR | 2 | DDRR, FIS | No sé en qué oficina ingresaron el trámite. |  |
+| 144 | INTEGRAL | 2 | SEPDAVI | SEPDAVI evaluará su acceso al patrocinio y apoyo integral. |  |
+| 145 | INTERPRETAR | 2 | LSB | La Ley 1658 contempla interpretación gratuita en justicia. | no es INTÉRPRETE (revisado) |
+| 146 | INVESTIGADOR | 2 | FELCC | No sé qué es un investigador. |  |
+| 147 | LENGUA | 2 | FELCV, LSB | Necesito comunicarme usando lengua de señas. |  |
+| 148 | MANTENER | 2 | DISC, SEGIP | La reposición mantiene la vigencia del documento reemplazado. |  |
+| 149 | MINISTERIO | 2 | DISC | El Ministerio informó cuatro días para el área urbana. |  |
+| 150 | MODALIDAD | 2 | OJ | No sé cuál es la modalidad. |  |
+| 151 | ORIENTACION SOCIAL | 2 | SEPDAVI | No, no quiero orientación social. |  |
+| 152 | ORIGINAL | 2 | SEGIP, SERECI | ¿Tiene certificado de nacimiento original computarizado? |  |
+| 153 | PARTIDA | 2 | DDRR | Sí, mi documento tiene una partida antigua. |  |
+| 154 | PASAR | 2 | FIS, IMP | Compré un auto. Quiero pasarlo a mi nombre. | no es IR (revisado) |
+| 155 | PENAL | 2 | OJ, SEPDEP | Quiero consultar un certificado de antecedentes penales. |  |
+| 156 | PRECIO | 2 | SERECI | Entonces quiero confirmar el precio primero. |  |
+| 157 | PREGUNTAR | 2 | DDRR, FELCV | ¿Qué documento me falta para solicitar el Folio Real? |  |
+| 158 | PSICOLOGICA | 2 | SEPDAVI, SLIM | Necesito ayuda legal y psicológica. |  |
+| 159 | PUBLICO | 2 | LSB | ¿Un funcionario público lo discrimina? |  |
+| 160 | QUITAR | 2 | FELCC | ¿Usaron violencia para quitarle el objeto? | no es ROBAR (revisado) |
+| 161 | REFERIR | 2 | DDRR | No sé si ambos documentos se refieren a lo mismo. |  |
+| 162 | RENOVACION | 2 | DISC, SEGIP | La renovación puede solicitarse desde seis meses antes. |  |
+| 163 | RENOVAR | 2 | SEGIP | Quiero renovar mi carnet. |  |
+| 164 | RESSELLADO | 2 | DDRR | ¿Tiene una solicitud escrita de resellado de nota marginal? |  |
+| 165 | SACAR | 2 | DISC, SEGIP | Necesito sacar mi cédula por primera vez. |  |
+| 166 | SEDE | 2 | DNA, FELCV | Primero confirmaré la sede. |  |
+| 167 | SEÑALADA | 2 | OJ, SEPDEP | No, no tengo audiencia señalada. |  |
+| 168 | SEÑAS | 2 | FELCV, LSB | Necesito comunicarme usando lengua de señas. |  |
+| 169 | SIGUIR | 2 | DDRR, DISC | No sé si la hipoteca sigue registrada. | no es CONTINUAR (revisado) |
+| 170 | SOCIAL | 2 | SEPDAVI | Sí, quiero orientación social. | no es COMUNIDAD_SORDA (revisado) |
+| 171 | VIA | 2 | DDRR | No, mi documento indica otra vía de regularización. |  |
+| 172 | ACOSA | 1 | FELCV | ¿Conoce a la persona que la acosa? |  |
+| 173 | ACOSO FISICO | 1 | FELCC | Sufro acoso físico: una persona me sigue y me toca. |  |
+| 174 | ADAPTARSE | 1 | SLIM | La atención debe adaptarse para que comprenda el trámite. |  |
+| 175 | ADE CUADA | 1 | FELCV | Gracias. Esperaré la asistencia adecuada. |  |
+| 176 | ADMINISTRACION | 1 | LSB | La Ley 1658 incluye el ámbito de administración de justicia. |  |
+| 177 | ADQUIRIR | 1 | DDRR | ¿Tiene la escritura con la que adquirió el inmueble? |  |
+| 178 | ALGO | 1 | FELCC | No sé si publicaron algo. |  |
+| 179 | ALY | 1 | SEPDEP | Queda entre Antezana y Lanza, Edificio Aly. |  |
+| 180 | AMBITO | 1 | LSB | La Ley 1658 incluye el ámbito de administración de justicia. |  |
+| 181 | ANTECEDENTES | 1 | OJ | Quiero consultar un certificado de antecedentes penales. |  |
+| 182 | ANTEZANA | 1 | SEPDEP | Queda entre Antezana y Lanza, Edificio Aly. |  |
+| 183 | ANTICRETICOS | 1 | NOT | El arancel publicado incluye anticréticos entre otras escrituras. |  |
+| 184 | APLICAR | 1 | SEGIP | La reposición aplica por extravío, robo o deterioro. |  |
+| 185 | ASUMIR | 1 | DNA | No asumiremos que el servicio dejó de funcionar. |  |
+| 186 | AUTOMATICO | 1 | DISC | La norma 2025 incorporó mecanismos de renovación automática. |  |
+| 187 | BEIJING | 1 | SEPDAVI | Existe representación en Centro Integral FELCV, avenida Beijing. |  |
 | 188 | CANAL | 1 | LSB | Usaré un canal accesible. |  |
 | 189 | CENTRO | 1 | SEPDAVI | Existe representación en Centro Integral FELCV, avenida Beijing. |  |
 | 190 | CENTRO INTERNACIONAL CONVENCIONES | 1 | SEPDAVI | Está en el Centro Internacional de Convenciones, piso uno. |  |
@@ -536,16 +536,17 @@ La primera columna es lo que dejó la traducción automática, a veces mal escri
 | 283 | SEÑALAMIENTO | 1 | OJ | La modalidad depende del señalamiento de su expediente. |  |
 | 284 | SEXUAL | 1 | FELCV | Necesito ayuda por violencia sexual. |  |
 | 285 | SIGA | 1 | FELCC | Conserve esos elementos y siga instrucciones del investigador. | no es CONTINUAR (revisado) |
-| 286 | SOLICITANTE | 1 | DDRR | No sé quién figura como solicitante. |  |
-| 287 | TARDAR | 1 | DISC | ¿Cuánto tarda en ciudad? |  |
-| 288 | TIEMPO | 1 | SEGIP | Falta más tiempo. | no es AHORA (revisado) |
-| 289 | TRATA Y TRAFICO | 1 | FELCC | Quiero denunciar trata y tráfico de personas. |  |
-| 290 | TRIBUNAL | 1 | OJ | SIREJ indica acudir a información del Tribunal. |  |
-| 291 | TRIBUNAL DEPARTAMENTAL | 1 | OJ | ¿Dónde está el Tribunal Departamental? |  |
-| 292 | URBANA | 1 | DISC | El Ministerio informó cuatro días para el área urbana. |  |
-| 293 | VALIDAR | 1 | SEGIP | El reglamento exige validarlo con los datos de SERECI. |  |
-| 294 | VALIDO | 1 | SEGIP | No sé si es válido. |  |
-| 295 | VERIFICAR | 1 | NOT | ¿Puedo verificar también el documento después? |  |
-| 296 | VIGENCIA | 1 | SEGIP | La reposición mantiene la vigencia del documento reemplazado. |  |
-| 297 | VULNERACION | 1 | LSB | Puede acudir a la Defensoría por posible vulneración de derechos. |  |
-| 298 | VULNERAR | 1 | LSB | La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos. |  |
+| 286 | SOBRE | 1 | FELCV | ¿Habló con alguien más sobre este acoso? |  |
+| 287 | SOLICITANTE | 1 | DDRR | No sé quién figura como solicitante. |  |
+| 288 | TARDAR | 1 | DISC | ¿Cuánto tarda en ciudad? |  |
+| 289 | TIEMPO | 1 | SEGIP | Falta más tiempo. | no es AHORA (revisado) |
+| 290 | TRATA Y TRAFICO | 1 | FELCC | Quiero denunciar trata y tráfico de personas. |  |
+| 291 | TRIBUNAL | 1 | OJ | SIREJ indica acudir a información del Tribunal. |  |
+| 292 | TRIBUNAL DEPARTAMENTAL | 1 | OJ | ¿Dónde está el Tribunal Departamental? |  |
+| 293 | URBANA | 1 | DISC | El Ministerio informó cuatro días para el área urbana. |  |
+| 294 | VALIDAR | 1 | SEGIP | El reglamento exige validarlo con los datos de SERECI. |  |
+| 295 | VALIDO | 1 | SEGIP | No sé si es válido. |  |
+| 296 | VERIFICAR | 1 | NOT | ¿Puedo verificar también el documento después? |  |
+| 297 | VIGENCIA | 1 | SEGIP | La reposición mantiene la vigencia del documento reemplazado. |  |
+| 298 | VULNERACION | 1 | LSB | Puede acudir a la Defensoría por posible vulneración de derechos. |  |
+| 299 | VULNERAR | 1 | LSB | La Defensoría del Pueblo atiende si un servidor público vulnera sus derechos. |  |

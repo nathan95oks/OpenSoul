@@ -8,9 +8,9 @@ Es el contrato que implementan la app (`lib/core/domain/guided/`) y la Lambda (`
 
 | Qué | Cantidad |
 |---|---:|
-| Preguntas del banco | 148 |
-| Recorridos (uno por contexto) | 8 |
-| Opciones de respuesta | 555 |
+| Preguntas del banco | 155 |
+| Recorridos (uno por contexto) | 9 |
+| Opciones de respuesta | 577 |
 | Enunciados del funcionario con pregunta asignada | 98 |
 
 Leyenda: `[GLOSAS]` tarjetas del catálogo; `⟨editor⟩` valor escrito que se conserva literal; *(sin seña)* opción de texto sin glosa; *salida* = No sé / No recuerdo / Ninguno.
@@ -45,14 +45,19 @@ Leyenda: `[GLOSAS]` tarjetas del catálogo; `⟨editor⟩` valor escrito que se 
 | 24 | `Q.PER.DESC.ROPA_COLOR` ¿De qué color era su ropa? | Q.PER.DESC.ROPA ∈ {otro} | sí | Negro [NEGRO] → «negro»<br>Azul [AZUL] → «azul»<br>Rojo [ROJO] → «rojo»<br>Otro color (escribir) ⟨texto_detalle⟩ → ««{texto}»»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo el color de su ropa.» |
 | 25 | `Q.TES.EXISTE` ¿Hay testigos? | siempre | no | Sí [SÍ] → «Sí, hay {Q.TES.CANTIDAD\|testigos}.»<br>No [NO] → «No hay testigos.»<br>No sé [NO_SABER] → «No sé si hay testigos.» |
 | 26 | `Q.TES.CANTIDAD` ¿Cuántos testigos hay? | Q.TES.EXISTE ∈ {si} | no | Escribir cuántos ⟨entero⟩ → «{n} testigos»<br>No sé [NO_SABER] *salida* → «testigos, pero no sé cuántos» |
-| 27 | `Q.EVI.FACTURA` ¿Tiene la factura del celular? | Q.ROB.QUE ∈ {celular} | no | Sí [SÍ] → «Sí, tengo la factura.»<br>No [NO] → «No tengo la factura.»<br>No sé [NO_SABER] → «No sé si tengo la factura.» |
-| 28 | `Q.EVI.TRAE_COPIA` ¿La tiene aquí con usted? | Q.EVI.FACTURA ∈ {si} | no | Sí [SÍ] → «La tengo aquí.»<br>No [NO] → «No la tengo aquí.»<br>No sé [NO_SABER] → «No sé si la traje.» |
-| 29 | `Q.EVI.QUE_TIENE` ¿Tiene fotos, video u otra cosa que pueda mostrar? | siempre | no | Sí [SÍ] → «Sí, tengo {Q.EVI.TIPOS\|algo que puedo mostrar}.»<br>No [NO] → «No tengo fotos, video ni otra cosa para mostrar.»<br>No sé [NO_SABER] → «No sé si tengo algo para mostrar.» |
-| 30 | `Q.EVI.TIPOS` ¿Qué tiene? | Q.EVI.QUE_TIENE ∈ {si} | no | Fotos [FOTOS] → «fotos»<br>Video [VIDEO] → «un video»<br>Certificado [CERTIFICADO] → «un certificado»<br>Otra cosa (escribir) ⟨texto_detalle⟩ → ««{texto}»» |
-| 31 | `Q.DEN.INTENCION` ¿Desea presentar una denuncia? | siempre | no | Sí [SÍ] → «Sí, quiero presentar una denuncia.»<br>No [NO] → «Por ahora no quiero presentar una denuncia.»<br>No sé [NO_SABER] → «Todavía no sé si quiero presentar una denuncia.» |
-| 32 | `Q.DEN.AUTORIDAD` ¿Ante qué institución quiere presentarla? | Q.DEN.INTENCION ∈ {si}; sin perfil institucional | no | Policía [POLICÍA] → «Quiero presentarla ante la Policía.»<br>FELCC [FELCC] → «Quiero presentarla ante la FELCC.»<br>FELCV [FELCV] → «Quiero presentarla ante la FELCV.»<br>Fiscalía [FISCALIA] → «Quiero presentarla ante la Fiscalía.»<br>No sé [NO_SABER] *salida* → «No sé ante qué institución presentarla.» |
+| 27 | `Q.TES.CONOCE` ¿Conoce a los testigos? | Q.TES.EXISTE ∈ {si} | no | Sí [SÍ] → «Sí, conozco a los testigos.»<br>No [NO] → «No conozco a los testigos.»<br>No sé [NO_SABER] → «No sé quiénes son los testigos.» |
+| 28 | `Q.TES.NOMBRE` ¿Cuál es el nombre del testigo? | Q.TES.CONOCE ∈ {si} | sí | Escribir su nombre ⟨texto_nombre⟩ → «El testigo se llama {nombre}.»<br>No sé [NO_SABER] *salida* → «No sé cómo se llama el testigo.» |
+| 29 | `Q.TES.TELEFONO` ¿Cuál es el número de celular del testigo? | Q.TES.CONOCE ∈ {si} | sí | Escribir su número ⟨telefono⟩ → «El número de celular del testigo es {telefono}.»<br>No lo sé [NO_SABER] *salida* → «No tengo el número del testigo.» |
+| 30 | `Q.EVI.FACTURA` ¿Tiene la factura del celular? | Q.ROB.QUE ∈ {celular} | no | Sí [SÍ] → «Sí, tengo la factura.»<br>No [NO] → «No tengo la factura.»<br>No sé [NO_SABER] → «No sé si tengo la factura.» |
+| 31 | `Q.EVI.TRAE_COPIA` ¿La tiene aquí con usted? | Q.EVI.FACTURA ∈ {si} | no | Sí [SÍ] → «La tengo aquí.»<br>No [NO] → «No la tengo aquí.»<br>No sé [NO_SABER] → «No sé si la traje.» |
+| 32 | `Q.EVI.QUE_TIENE` ¿Tiene fotos, video u otra cosa que pueda mostrar? | siempre | no | Sí [SÍ] → «Sí, tengo {Q.EVI.TIPOS\|algo que puedo mostrar}.»<br>No [NO] → «No tengo fotos, video ni otra cosa para mostrar.»<br>No sé [NO_SABER] → «No sé si tengo algo para mostrar.» |
+| 33 | `Q.EVI.TIPOS` ¿Qué tiene? | Q.EVI.QUE_TIENE ∈ {si} | no | Fotos [FOTOS] → «fotos»<br>Video [VIDEO] → «un video»<br>Certificado [CERTIFICADO] → «un certificado»<br>Otra cosa (escribir) ⟨texto_detalle⟩ → ««{texto}»» |
+| 34 | `Q.EVI.CAMARAS` ¿Hay cámaras o video del lugar? | siempre | no | Sí [SÍ] → «Sí, hay video del lugar.»<br>No [NO] → «No hay cámaras en ese lugar.»<br>No sé [NO_SABER] → «No sé si hay cámaras.» |
+| 35 | `Q.DEN.INTENCION` ¿Desea presentar una denuncia? | siempre | no | Sí [SÍ] → «Sí, quiero presentar una denuncia.»<br>No [NO] → «Por ahora no quiero presentar una denuncia.»<br>No sé [NO_SABER] → «Todavía no sé si quiero presentar una denuncia.» |
+| 36 | `Q.DEN.AUTORIDAD` ¿Ante qué institución quiere presentarla? | Q.DEN.INTENCION ∈ {si}; sin perfil institucional | no | Policía [POLICÍA] → «Quiero presentarla ante la Policía.»<br>FELCC [FELCC] → «Quiero presentarla ante la FELCC.»<br>FELCV [FELCV] → «Quiero presentarla ante la FELCV.»<br>Fiscalía [FISCALIA] → «Quiero presentarla ante la Fiscalía.»<br>No sé [NO_SABER] *salida* → «No sé ante qué institución presentarla.» |
+| 37 | `Q.SEG.SABER_INVESTIGADOR` ¿Quiere saber quién investigará su caso? | siempre | no | Sí [SÍ] → «Sí, quiero saber quién investigará mi caso.»<br>No [NO] → «No, ahora no.» |
 
-Orden de redacción: `Q.HEC.QUE_OCURRIO` → `Q.ROB.QUE` → `Q.DOC.ACLARAR` → `Q.FALTA.QUE` → `Q.DAN.QUE` → `Q.HEC.ESCAPE_ACTOR` → `Q.TIE.CUANDO` → `Q.LUG.DONDE` → `Q.LUG.RELACION` → `Q.PER.CONOCE` → `Q.PER.VINCULO` → `Q.PER.NOMBRE_TERCERO` → `Q.PER.DESCRIBIR` → `Q.PER.DESC.SEXO` → `Q.PER.DESC.EDAD` → `Q.PER.DESC.ESTATURA` → `Q.PER.DESC.CONTEXTURA` → `Q.PER.DESC.ROPA` → `Q.PER.DESC.ROPA_COLOR.POLERA` → `Q.PER.DESC.ROPA_COLOR.PANTALON` → `Q.PER.DESC.ROPA_COLOR.CHAMARRA` → `Q.PER.DESC.ROPA_COLOR.GORRA` → `Q.PER.DESC.ROPA_COLOR.MOCHILA` → `Q.PER.DESC.ROPA_COLOR` → `Q.TES.EXISTE` → `Q.TES.CANTIDAD` → `Q.EVI.FACTURA` → `Q.EVI.TRAE_COPIA` → `Q.EVI.QUE_TIENE` → `Q.EVI.TIPOS` → `Q.DEN.INTENCION` → `Q.DEN.AUTORIDAD`.
+Orden de redacción: `Q.HEC.QUE_OCURRIO` → `Q.ROB.QUE` → `Q.DOC.ACLARAR` → `Q.FALTA.QUE` → `Q.DAN.QUE` → `Q.HEC.ESCAPE_ACTOR` → `Q.TIE.CUANDO` → `Q.LUG.DONDE` → `Q.LUG.RELACION` → `Q.PER.CONOCE` → `Q.PER.VINCULO` → `Q.PER.NOMBRE_TERCERO` → `Q.PER.DESCRIBIR` → `Q.PER.DESC.SEXO` → `Q.PER.DESC.EDAD` → `Q.PER.DESC.ESTATURA` → `Q.PER.DESC.CONTEXTURA` → `Q.PER.DESC.ROPA` → `Q.PER.DESC.ROPA_COLOR.POLERA` → `Q.PER.DESC.ROPA_COLOR.PANTALON` → `Q.PER.DESC.ROPA_COLOR.CHAMARRA` → `Q.PER.DESC.ROPA_COLOR.GORRA` → `Q.PER.DESC.ROPA_COLOR.MOCHILA` → `Q.PER.DESC.ROPA_COLOR` → `Q.TES.EXISTE` → `Q.TES.CANTIDAD` → `Q.TES.CONOCE` → `Q.TES.NOMBRE` → `Q.TES.TELEFONO` → `Q.EVI.FACTURA` → `Q.EVI.TRAE_COPIA` → `Q.EVI.QUE_TIENE` → `Q.EVI.TIPOS` → `Q.EVI.CAMARAS` → `Q.DEN.INTENCION` → `Q.DEN.AUTORIDAD` → `Q.SEG.SABER_INVESTIGADOR`.
 
 ## Recorrido `violencia` — Violencia o agresión
 
@@ -90,10 +95,11 @@ Orden de redacción: `Q.HEC.QUE_OCURRIO` → `Q.ROB.QUE` → `Q.DOC.ACLARAR` →
 | 4 | `Q.PER.VINCULO` ¿Qué relación tiene con esa persona? | Q.DIG.REMITENTE ∈ {conoce} | no | Mi pareja [PAREJA] → «Es mi pareja.»<br>Mi expareja [PAREJA · PASADO] → «Es mi expareja.»<br>Mi esposa [ESPOSA] → «Es mi esposa.»<br>Mi hermano [HERMANO] → «Es mi hermano.»<br>Mi hermana [HERMANA] → «Es mi hermana.»<br>Un pariente [PARIENTE] → «Es un pariente.»<br>Un amigo [AMIGO] → «Es un amigo.»<br>Un conocido [CONOCER] → «Es un conocido.»<br>Otra relación (escribir) ⟨texto_detalle⟩ → «Es {texto}.» |
 | 5 | `Q.PER.NOMBRE_TERCERO` ¿Sabe cómo se llama esa persona? | Q.DIG.REMITENTE ∈ {conoce} | no | Escribir su nombre ⟨texto_nombre⟩ → «Se llama {nombre}.»<br>No sé [NO_SABER] *salida* → «No sé cómo se llama.» |
 | 6 | `Q.DIG.CONTINUA` ¿Sigue recibiendo mensajes? | siempre | no | Sí [SÍ] → «Sí, sigo recibiendo mensajes.»<br>No [NO] → «Ya no recibo mensajes.»<br>No sé [NO_SABER] → «No lo sé.» |
-| 7 | `Q.DIG.GUARDO` ¿Guardó los mensajes? | siempre | no | Sí [SÍ] → «Sí, guardé los mensajes.»<br>No [NO] → «No guardé los mensajes.»<br>No sé [NO_SABER] → «No sé si se guardaron.»<br>Sí, todos [SÍ · TOTAL] → «Sí, guardé todos los mensajes.» |
-| 8 | `Q.DIG.CAPTURAS` ¿Tiene fotos de la pantalla? | siempre | no | Sí [SÍ] → «Sí, tengo fotos de la pantalla.»<br>No [NO] → «No tengo fotos de la pantalla.»<br>No sé [NO_SABER] → «No sé si tengo fotos de la pantalla.» |
-| 9 | `Q.DEN.INTENCION` ¿Desea presentar una denuncia? | siempre | no | Sí [SÍ] → «Sí, quiero presentar una denuncia.»<br>No [NO] → «Por ahora no quiero presentar una denuncia.»<br>No sé [NO_SABER] → «Todavía no sé si quiero presentar una denuncia.» |
-| 10 | `Q.DEN.AUTORIDAD` ¿Ante qué institución quiere presentarla? | Q.DEN.INTENCION ∈ {si}; sin perfil institucional | no | Policía [POLICÍA] → «Quiero presentarla ante la Policía.»<br>FELCC [FELCC] → «Quiero presentarla ante la FELCC.»<br>FELCV [FELCV] → «Quiero presentarla ante la FELCV.»<br>Fiscalía [FISCALIA] → «Quiero presentarla ante la Fiscalía.»<br>No sé [NO_SABER] *salida* → «No sé ante qué institución presentarla.» |
+| 7 | `Q.DIG.PUBLICACION` ¿Publicaron sus fotos sin su permiso? | siempre | no | Sí [SÍ] → «Sí, publicaron mis fotos sin mi permiso.»<br>No [NO] → «No, no publicaron nada.»<br>No sé [NO_SABER] → «No sé si publicaron algo.» |
+| 8 | `Q.DIG.GUARDO` ¿Guardó los mensajes? | siempre | no | Sí [SÍ] → «Sí, guardé los mensajes.»<br>No [NO] → «No guardé los mensajes.»<br>No sé [NO_SABER] → «No sé si se guardaron.»<br>Sí, todos [SÍ · TOTAL] → «Sí, guardé todos los mensajes.» |
+| 9 | `Q.DIG.CAPTURAS` ¿Tiene fotos de la pantalla? | siempre | no | Sí [SÍ] → «Sí, tengo fotos de la pantalla.»<br>No [NO] → «No tengo fotos de la pantalla.»<br>No sé [NO_SABER] → «No sé si tengo fotos de la pantalla.» |
+| 10 | `Q.DEN.INTENCION` ¿Desea presentar una denuncia? | siempre | no | Sí [SÍ] → «Sí, quiero presentar una denuncia.»<br>No [NO] → «Por ahora no quiero presentar una denuncia.»<br>No sé [NO_SABER] → «Todavía no sé si quiero presentar una denuncia.» |
+| 11 | `Q.DEN.AUTORIDAD` ¿Ante qué institución quiere presentarla? | Q.DEN.INTENCION ∈ {si}; sin perfil institucional | no | Policía [POLICÍA] → «Quiero presentarla ante la Policía.»<br>FELCC [FELCC] → «Quiero presentarla ante la FELCC.»<br>FELCV [FELCV] → «Quiero presentarla ante la FELCV.»<br>Fiscalía [FISCALIA] → «Quiero presentarla ante la Fiscalía.»<br>No sé [NO_SABER] *salida* → «No sé ante qué institución presentarla.» |
 
 ## Recorrido `engano_dinero` — Engaño con dinero
 
@@ -122,6 +128,8 @@ Orden de redacción: `Q.DIN.ENGANO` → `Q.DIN.MECANISMO` → `Q.DIN.MONTO` → 
 | 4 | `Q.SEG.FECHA_PROGRAMADA` ¿Para cuándo le dieron fecha? | Q.SEG.MOTIVO ∈ {citacion} | no | Hoy [HOY] → «Me dieron fecha para hoy.»<br>Mañana [MAÑANA] → «Me dieron fecha para mañana.»<br>La próxima semana [PRÓXIMO · SEMANA] → «Me dieron fecha para la próxima semana.»<br>Escribir la fecha [FECHA] ⟨texto_detalle⟩ → «Me dieron fecha para el {texto}.»<br>No sé [NO_SABER] *salida* → «No sé para cuándo es.» |
 | 5 | `Q.SEG.NUM_REFERENCIA` ¿Tiene el número de referencia? | Q.SEG.MOTIVO ∈ {estado, continua, citacion, resolucion} | no | Sí [SÍ] ⟨documento_numero⟩ → «Sí, el número de referencia es {numero}. / sin valor: «Sí, tengo el número de referencia.»»<br>No [NO] → «No tengo el número de referencia.»<br>No sé [NO_SABER] → «No sé si lo tengo.» |
 | 6 | `Q.SEG.AUTORIDAD` ¿Con qué institución es su trámite? | sin perfil institucional | no | Policía [POLICÍA] → «Mi trámite es con la Policía.»<br>FELCC [FELCC] → «Mi trámite es con la FELCC.»<br>FELCV [FELCV] → «Mi trámite es con la FELCV.»<br>Fiscalía [FISCALIA] → «Mi trámite es con la Fiscalía.»<br>Juzgado [JUZGADO] → «Mi trámite es con el juzgado.»<br>Órgano Judicial [ÓRGANO_JUDICIAL] → «Mi trámite es con el Órgano Judicial.»<br>SEPDAVI [SEPDAVI] → «Mi trámite es con SEPDAVI.»<br>SEPDEP [SEPDEP] → «Mi trámite es con SEPDEP.»<br>No sé [NO_SABER] *salida* → «No sé con qué institución es mi trámite.» |
+| 7 | `Q.SEG.CONOCE_FISCAL` ¿Sabe quién es su fiscal? | siempre | no | Sí [SÍ] ⟨texto_nombre⟩ → «Sí, mi fiscal es {nombre}.»<br>No [NO] → «No sé quién es mi fiscal.» |
+| 8 | `Q.SEG.SABER_INVESTIGADOR` ¿Quiere saber quién investigará su caso? | siempre | no | Sí [SÍ] → «Sí, quiero saber quién investigará mi caso.»<br>No [NO] → «No, ahora no.» |
 
 ## Recorrido `preguntas` — Preguntas
 
@@ -158,6 +166,12 @@ Orden de redacción: `Q.DIN.ENGANO` → `Q.DIN.MECANISMO` → `Q.DIN.MONTO` → 
 | 3 | `Q.TIE.CUANDO` ¿Cuándo ocurrió? | Q.TES.QUE_VIO ∈ {robo, agresion, escape, dano, otro} | no | Ahora mismo [AHORA] → «hace un momento»<br>Hoy [HOY] → «hoy»<br>Ayer [AYER] → «ayer»<br>Anteayer [ANTEAYER] → «anteayer»<br>Hace … minutos [MINUTO] ⟨entero⟩ → «hace {n} minutos»<br>Hace … horas [HORA] ⟨entero⟩ → «hace {n} horas»<br>Hace … días [DÍA] ⟨entero⟩ → «hace {n} días»<br>Hace … semanas [SEMANA] ⟨entero⟩ → «hace {n} semanas»<br>Hace … meses [MES] ⟨entero⟩ → «hace {n} meses»<br>Por la tarde [TARDE] → «por la tarde»<br>Temprano [TEMPRANO] → «temprano»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo cuándo ocurrió.» |
 | 4 | `Q.LUG.DONDE` ¿Dónde ocurrió? | Q.TES.QUE_VIO ∈ {robo, agresion, escape, dano, otro} | no | En la calle [CALLE] ⟨lugar_literal⟩ → «Ocurrió en la calle{?nombre}. / sin valor: «Ocurrió en la calle.»»<br>En una avenida [AVENIDA] ⟨lugar_literal⟩ → «Ocurrió en la avenida{?nombre}. / sin valor: «Ocurrió en la avenida.»»<br>En una plaza [PLAZA] ⟨lugar_literal⟩ → «Ocurrió en la plaza{?nombre}. / sin valor: «Ocurrió en la plaza.»»<br>En un mercado [MERCADO] ⟨lugar_literal⟩ → «Ocurrió en el mercado{?nombre}. / sin valor: «Ocurrió en el mercado.»»<br>En un barrio [BARRIO] ⟨lugar_literal⟩ → «Ocurrió en el barrio{?nombre}. / sin valor: «Ocurrió en el barrio.»»<br>En una tienda [TIENDA] ⟨lugar_literal⟩ → «Ocurrió en una tienda{?nombre}. / sin valor: «Ocurrió en una tienda.»»<br>En mi casa [CASA] → «Ocurrió en mi casa.»<br>Dentro de un micro [MICRO] → «Ocurrió dentro de un micro.»<br>Dentro de un trufi [TRUFI] → «Ocurrió dentro de un trufi.»<br>Otro lugar (escribir) ⟨texto_detalle⟩ → «Ocurrió en «{texto}».»<br>No sé [NO_SABER] *salida* → «No sé exactamente dónde ocurrió.» |
 | 5 | `Q.TES.PUEDE_TESTIMONIO` ¿Puede dar testimonio de lo que vio? | Q.TES.QUE_VIO ∈ {robo, agresion, escape, dano, otro} | no | Sí [SÍ] → «Sí, puedo dar testimonio de lo que vi.»<br>No [NO] → «No puedo dar testimonio.»<br>No sé [NO_SABER] → «No sé si puedo dar testimonio.» |
+
+## Recorrido `derivacion` — Derivación
+
+| # | Pregunta | Se muestra si | Obligatoria | Respuestas → frase |
+|---|---|---|---|---|
+| 1 | `Q.ORI.DESTINO` ¿Sabe a dónde tiene que ir? | siempre | sí | La FELCC [FELCC] → «Tengo que ir a la FELCC.»<br>La FELCV [FELCV] → «Tengo que ir a la FELCV.»<br>La Fiscalía [FISCALIA] → «Tengo que ir a la Fiscalía.»<br>La Policía [POLICÍA] → «Tengo que ir a la Policía.»<br>SEPDAVI [SEPDAVI] → «Tengo que ir a SEPDAVI.»<br>SEPDEP [SEPDEP] → «Tengo que ir a SEPDEP.»<br>El juzgado [JUZGADO] → «Tengo que ir al juzgado.»<br>No sé, dígame usted [NO_SABER] *salida* → «No sé a dónde tengo que ir. Dígame usted, por favor.» |
 
 ## Respuestas a preguntas del funcionario (modo respuesta)
 

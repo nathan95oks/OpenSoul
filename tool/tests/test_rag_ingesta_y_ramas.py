@@ -334,9 +334,10 @@ class Ingesta(CarpetasTemporales):
         self.assertIn("copia.md es la copia como texto de un PDF", texto)
 
 
-def construir_fixture(cache: dict = GLOSAS_DE_PRUEBA) -> tuple:
+def construir_fixture(cache: dict = GLOSAS_DE_PRUEBA,
+                      md: str = FIXTURE_MD) -> tuple:
     """(corpus, banco, errores, avisos) del escenario de prueba."""
-    fuentes, hechos, escenarios, errores, avisos = B.leer(FIXTURE_MD)
+    fuentes, hechos, escenarios, errores, avisos = B.leer(md)
     corpus = B.construir(fuentes, hechos, escenarios, errores, avisos,
                          hoy="2026-10-01", archivos=[B._rel(FIXTURE_MD)])
     with tempfile.TemporaryDirectory() as d:
@@ -490,6 +491,37 @@ class Ramificaciones(unittest.TestCase):
         with open(FIXTURE_DART, encoding="utf-8") as f:
             self.assertEqual(f.read(), datos,
                              "Regenera con REGENERAR_FIXTURES=1")
+
+
+class SePreguntaJunto(unittest.TestCase):
+    """QA 2026-10-09: tras «Sí, conozco a esa persona» nadie preguntaba quién
+    era. «(se pregunta junto)» pide la rama con la respuesta de la que
+    depende, también cuando el funcionario solo hizo la primera pregunta."""
+
+    def pasos(self, ramas: str) -> list:
+        with open(FIXTURE_MD, encoding="utf-8") as f:
+            texto = f.read()
+        inicio = texto.index("### Ramificaciones")
+        fin = texto.index("### Composición")
+        with tempfile.TemporaryDirectory() as d:
+            ruta = os.path.join(d, "x.md")
+            with open(ruta, "w", encoding="utf-8") as f:
+                f.write(texto[:inicio] + "### Ramificaciones\n\n" + ramas
+                        + "\n\n" + texto[fin:])
+            _, banco, errores, _ = construir_fixture(md=ruta)
+        self.assertEqual(errores, [])
+        return banco["recorridos"]["tramite_ddrr_90"]["pasos"]
+
+    def test_la_rama_marcada_es_obligatoria(self):
+        q1 = "R.ESC-DDRR-90.1"
+        self.assertEqual(
+            self.pasos("- **Turno 3:** si Turno 1 es afirmado (se pregunta junto)")[1],
+            {"pregunta": "R.ESC-DDRR-90.3", "padre": q1, "obligatoria": True,
+             "cuando": [{"pregunta": q1, "estados": ["afirmado"]}]})
+
+    def test_sin_la_marca_no_lo_es(self):
+        self.assertNotIn(
+            "obligatoria", self.pasos("- **Turno 3:** si Turno 1 es afirmado")[1])
 
 
 class RamificacionesInvalidas(unittest.TestCase):

@@ -173,7 +173,7 @@
       "turnos": [
         {"oyente": "¿Viene a ver cómo va su denuncia?", "espera": {"contexto": "seguimiento", "o_tramite_area": ["FIS", "FELCC"]}},
         {"oyente": "¿Tiene el número de su caso?", "espera": {"preguntas": ["Q.SEG.NUM_REFERENCIA"], "o_tramite_area": ["FIS", "FELCC"]}},
-        {"oyente": "¿Sabe quién es su fiscal?", "espera": {"o_preguntas": ["I.PREG.HABLAR_CON", "Q.SEG.AUTORIDAD"], "o_tramite_area": ["FIS"]}}
+        {"oyente": "¿Sabe quién es su fiscal?", "espera": {"preguntas": ["Q.SEG.CONOCE_FISCAL"]}}
       ]
     },
     {
@@ -181,7 +181,7 @@
       "titulo": "Oficina equivocada: derivar a FELCV",
       "turnos": [
         {"oyente": "Aquí atendemos robos. Para violencia tiene que ir a la FELCV.", "espera": {"tramite": ["tramite_felcc_04", "tramite_felcc_202"], "o_contexto": ["violencia"]}},
-        {"oyente": "¿Entiende a dónde tiene que ir?", "espera": {"no_contexto": ["denuncia_robo"]}}
+        {"oyente": "¿Entiende a dónde tiene que ir?", "espera": {"preguntas": ["Q.ORI.DESTINO"], "no_contexto": ["denuncia_robo"]}, "sorda": {"elige": {"Q.ORI.DESTINO": "felcv"}}}
       ]
     },
     {
@@ -257,7 +257,7 @@
       "titulo": "Acoso sexual en la FELCV: sin datos inventados y sin «Entendido» suelto",
       "turnos": [
         {"oyente": "¿Quiere denunciar acoso sexual?", "espera": {"familia": "denuncias", "o_tramite": ["tramite_felcv_201"], "o_contexto": ["violencia"]}, "sorda": {"contexto": "tramite_felcv_201"}},
-        {"oyente": "¿Conoce a la persona que la acosa?", "espera": {"preguntas": ["R.ESC-FELCV-201.4", "Q.PER.CONOCE"], "sorda_no_dice": ["jefe"]}, "sorda": {"elige": {"R.ESC-FELCV-201.4": "si", "Q.PER.CONOCE": "si"}}},
+        {"oyente": "¿Conoce a la persona que la acosa?", "espera": {"preguntas": ["R.ESC-FELCV-201.6", "Q.PER.CONOCE"], "sorda_no_dice": ["jefe"]}, "sorda": {"elige": {"R.ESC-FELCV-201.6": "si", "Q.PER.CONOCE": "si", "R.ESC-FELCV-201.8": "z2"}}},
         {"oyente": "La FELCV es la unidad especializada contra la violencia.", "espera": {"o_tramite": ["tramite_felcv_201"], "o_contexto": ["violencia"]}}
       ]
     },
@@ -268,6 +268,59 @@
         {"oyente": "¿Viene a denunciar acoso físico?", "espera": {"familia": "denuncias", "o_tramite": ["tramite_felcc_202", "tramite_felcv_201"], "o_contexto": ["violencia"]}, "sorda": {"contexto": "tramite_felcc_202"}},
         {"oyente": "¿Conoce a esa persona?", "espera": {"preguntas": ["R.ESC-FELCC-202.2", "Q.PER.CONOCE"], "sorda_no_dice": ["casa", "cerca", "jefe"]}, "sorda": {"elige": {"R.ESC-FELCC-202.2": "si", "Q.PER.CONOCE": "si"}}},
         {"oyente": "Para la violencia de pareja corresponde la FELCV.", "espera": {"no_contexto": ["denuncia_robo"]}}
+      ]
+    },
+    {
+      "id": "C30",
+      "titulo": "Testigos de un robo: si los conoce, su nombre y su celular; cámaras y a dónde ir",
+      "turnos": [
+        {"oyente": "Buenos días, ¿en qué le puedo ayudar?", "espera": {"tipo": ["contextSelector", "directContext"]}, "sorda": {"contexto": "denuncia_robo", "elige": {"Q.HEC.QUE_OCURRIO": "robar"}}},
+        {"oyente": "¿Hay testigos?", "espera": {"preguntas": ["Q.TES.EXISTE"], "contexto": "denuncia_robo"}, "sorda": {"elige": {"Q.TES.EXISTE": "si"}}},
+        {"oyente": "quienes son los testigos", "espera": {"preguntas": ["Q.TES.CONOCE", "Q.TES.NOMBRE", "Q.TES.TELEFONO"], "todas": true, "contexto": "denuncia_robo"}, "sorda": {"elige": {"Q.TES.CONOCE": "si"}}},
+        {"oyente": "¿Hay cámaras en esa calle?", "espera": {"preguntas": ["Q.EVI.CAMARAS"], "contexto": "denuncia_robo"}},
+        {"oyente": "entiende a donde tiene que ir?", "espera": {"preguntas": ["Q.ORI.DESTINO"], "no_contexto": ["identificacion"]}, "sorda": {"elige": {"Q.ORI.DESTINO": "no_sabe"}}}
+      ]
+    },
+    {
+      "id": "C31",
+      "titulo": "Seguimiento: quién investiga el caso y quién es su fiscal (sí o no)",
+      "turnos": [
+        {"oyente": "¿Viene a ver cómo va su denuncia?", "espera": {"contexto": "seguimiento", "o_tramite_area": ["FIS", "FELCC"]}},
+        {"oyente": "¿Quiere saber quién investigará su caso?", "espera": {"preguntas": ["Q.SEG.SABER_INVESTIGADOR"]}, "sorda": {"elige": {"Q.SEG.SABER_INVESTIGADOR": "si"}}},
+        {"oyente": "sabe quien es su fiscal", "espera": {"preguntas": ["Q.SEG.CONOCE_FISCAL"]}, "sorda": {"elige": {"Q.SEG.CONOCE_FISCAL": "no"}}}
+      ]
+    },
+    {
+      "id": "C32",
+      "titulo": "Acoso sexual sin decir «denunciar»: quién es y con quién habló",
+      "turnos": [
+        {"oyente": "¿La acosaron sexualmente?", "espera": {"tramite": ["tramite_felcv_201"], "o_preguntas": ["R.ESC-FELCV-201.2"]}, "sorda": {"elige": {"R.ESC-FELCV-201.2": "si"}}},
+        {"oyente": "¿Conoce a la persona que lo acosa?", "espera": {"preguntas": ["R.ESC-FELCV-201.6", "R.ESC-FELCV-201.8"], "todas": true, "tramite": ["tramite_felcv_201"]}, "sorda": {"elige": {"R.ESC-FELCV-201.6": "si"}}},
+        {"oyente": "¿Habló con alguien más sobre este acoso?", "espera": {"preguntas": ["R.ESC-FELCV-201.16", "R.ESC-FELCV-201.18"], "todas": true, "tramite": ["tramite_felcv_201"], "no_contexto": ["denuncia_robo"]}, "sorda": {"elige": {"R.ESC-FELCV-201.16": "si"}}}
+      ]
+    },
+    {
+      "id": "C33",
+      "titulo": "Fotos publicadas sin permiso: «No» dice que no publicaron nada",
+      "turnos": [
+        {"oyente": "¿Le están amenazando por internet?", "espera": {"contexto": "amenaza_digital", "o_tramite": ["tramite_felcc_201"]}},
+        {"oyente": "¿Publicaron fotos suyas sin su permiso?", "espera": {"o_preguntas": ["Q.DIG.PUBLICACION", "R.ESC-FELCC-201.6"], "sorda_no_dice": ["pantalla"]}, "sorda": {"elige": {"Q.DIG.PUBLICACION": "no", "R.ESC-FELCC-201.6": "no"}}}
+      ]
+    },
+    {
+      "id": "C34",
+      "titulo": "Bullying: «¿Usted o su hijo…?» pregunta por el bullying, no por heridas",
+      "turnos": [
+        {"oyente": "¿Usted o su hijo sufre bullying?", "espera": {"preguntas": ["R.ESC-DNA-201.2"]}, "sorda": {"elige": {"R.ESC-DNA-201.2": "si"}}},
+        {"oyente": "¿Su hijo tiene heridas o dolor?", "espera": {"preguntas": ["R.ESC-DNA-201.4"]}}
+      ]
+    },
+    {
+      "id": "C35",
+      "titulo": "Sin conversación previa: cámaras y a dónde ir (Derivación)",
+      "turnos": [
+        {"oyente": "¿Hay cámaras en esa calle?", "espera": {"o_preguntas": ["R.ESC-FELCC-01.12", "Q.EVI.CAMARAS"]}},
+        {"oyente": "¿Entiende a dónde tiene que ir?", "espera": {"preguntas": ["Q.ORI.DESTINO"], "contexto": "derivacion"}}
       ]
     }
   ]

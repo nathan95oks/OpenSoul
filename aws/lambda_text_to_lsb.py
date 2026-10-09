@@ -1761,10 +1761,17 @@ _GLOSAS_DE_SALUDO = {"BUENAS_TARDES", "BUENAS_NOCHES", "BUENOS_DIAS"}
 # son señas documentadas y no se deletrean.
 _SENAS_DE_MODULO_EXTRA = {"BUENAS_TARDES", "BUENAS_NOCHES"}
 _MARCA_PREGUNTA = list("PREGUNTA")
+# Palabras con las que el español niega: sin ninguna, NO no es del oyente.
+_NEGACIONES_HABLADAS = {"NO", "SIN", "NI", "NADIE", "NADA", "NUNCA", "JAMAS",
+                        "TAMPOCO", "NINGUN", "NINGUNO", "NINGUNA", "NINGUNOS",
+                        "NINGUNAS"}
+# Verbos y adjetivos que niegan sin «no» y que LSB dice con NO («Está
+# prohibido…», «le negaron…», «le falta…»).
+_RAICES_NEGATIVAS = ("NEG", "PROHIB", "IMPOSIB", "FALT", "EVIT")
 
 
 def enforce_spoken_form_fidelity(glosses: list, text: str) -> tuple:
-    """Corrige tres errores frecuentes del modelo que el español desmiente.
+    """Corrige cuatro errores frecuentes del modelo que el español desmiente.
 
     * El saludo dicho: «buenas tardes» no es BUENOS_DÍAS.
     * La marca de pregunta: el modelo escribe PREGUNTA al final (el prompt
@@ -1774,6 +1781,9 @@ def enforce_spoken_form_fidelity(glosses: list, text: str) -> tuple:
     * QUIÉN por «quiere»: «¿Quiere denunciar…?» salía QUIÉN DENUNCIAR…, y la
       seña de QUIÉN cambia lo que se pregunta. Solo si el español no dice
       «quién» y sí una forma de «querer».
+    * Una negación que nadie dijo: «¿La acosaron sexualmente?» salía
+      ACOSAR SEXUALMENTE ELLA NO, y el avatar preguntaba lo contrario. NO se
+      retira si el español no niega con ninguna palabra (ni con «negar»).
 
     Devuelve (glosas, incidencias).
     """
@@ -1817,6 +1827,12 @@ def enforce_spoken_form_fidelity(glosses: list, text: str) -> tuple:
                 incidencias.append({"accion": "quien_por_querer",
                                     "glosa": "QUERER"})
                 break
+
+    niega = any(w in _NEGACIONES_HABLADAS or w.startswith(_RAICES_NEGATIVAS)
+                for w in palabras)
+    if not niega and any(_clave(g) == "NO" for g in resultado):
+        resultado = [g for g in resultado if _clave(g) != "NO"]
+        incidencias.append({"accion": "negacion_no_dicha_retirada"})
     return resultado, incidencias
 
 

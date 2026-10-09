@@ -45,7 +45,7 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "Sufro acoso discriminatorio porque soy sordo."
+   "ejemplo": "¿Habló con alguien más sobre este acoso?"
   },
   "ACOSO_DISCRIMINATORIO": {
    "descripcion": "Molestar o rechazar a una persona muchas veces por ser diferente; por ejemplo, por ser sorda.",
@@ -210,7 +210,7 @@
    ],
    "tipo": "palabra_funcion",
    "revisada": false,
-   "ejemplo": "¿Alguien la engañó con un trabajo lejos?"
+   "ejemplo": "¿Habló con alguien más sobre este acoso?"
   },
   "ALODIAL": {
    "descripcion": "«Certificado alodial»: dice qué propiedades tiene una persona y si tienen deudas o hipotecas.",
@@ -3103,6 +3103,16 @@
    "tipo": "sigla",
    "revisada": false,
    "ejemplo": ""
+  },
+  "SOBRE": {
+   "descripcion": "Que habla de algo, de ese tema.",
+   "descripcionLsb": [
+    "HABLAR",
+    "TEMA"
+   ],
+   "tipo": "palabra_funcion",
+   "revisada": false,
+   "ejemplo": "¿Habló con alguien más sobre este acoso?"
   },
   "SOCIAL": {
    "descripcion": "De la sociedad o de la ayuda a las personas. «Trabajo social»: profesionales que orientan y ayudan.",
