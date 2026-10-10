@@ -19,25 +19,8 @@ class MainNavigationScreen extends ConsumerStatefulWidget {
 }
 
 class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
-    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+    with WidgetsBindingObserver {
   AppTabId get _currentTab => ref.watch(selectedTabProvider);
-
-  /// Entrada de la pestaña al cambiar: un fundido corto con un leve
-  /// desplazamiento. Las pestañas siguen montadas en el `IndexedStack`, así
-  /// que animar no reconstruye nada ni pierde su estado.
-  late final AnimationController _entrada = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 260),
-    value: 1,
-  );
-  late final Animation<double> _opacidad = CurvedAnimation(
-    parent: _entrada,
-    curve: Curves.easeOutCubic,
-  );
-  late final Animation<Offset> _desplazamiento = Tween<Offset>(
-    begin: const Offset(0, 0.015),
-    end: Offset.zero,
-  ).animate(_opacidad);
 
   @override
   void initState() {
@@ -49,7 +32,6 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _entrada.dispose();
     super.dispose();
   }
 
@@ -126,19 +108,14 @@ class _MainNavigationScreenState extends ConsumerState<MainNavigationScreen>
   @override
   Widget build(BuildContext context) {
     final current = _currentTab;
-    ref.listen(selectedTabProvider, (prev, next) {
-      if (prev != next) _entrada.forward(from: 0);
-    });
     return Scaffold(
-      body: FadeTransition(
-        opacity: _opacidad,
-        child: SlideTransition(
-          position: _desplazamiento,
-          child: IndexedStack(
-            index: visualIndexOf(current),
-            children: _screensInVisualOrder(current),
-          ),
-        ),
+      // Cambio de pestaña inmediato, como en WhatsApp: las pestañas ya están
+      // montadas en el `IndexedStack`. Antes la nueva entraba con un fundido
+      // desde 0 y, en esos 260 ms, se veía el fondo oscuro del Scaffold: la
+      // pantalla parecía apagarse y volver a prenderse.
+      body: IndexedStack(
+        index: visualIndexOf(current),
+        children: _screensInVisualOrder(current),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: visualIndexOf(current),
