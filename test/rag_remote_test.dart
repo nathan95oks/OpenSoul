@@ -210,7 +210,7 @@ void main() {
           );
 
       // Mientras la Lambda responde, las tarjetas se abren como siempre; cuando
-      // vuelve, «Responder con tarjetas LSB» abre la pregunta de su trámite.
+      // vuelve, «Responder en LSB» abre la pregunta de su trámite.
       final handoff = container.read(conversationHandoffProvider);
       expect(
         handoff.nextDeafLaunch().route?.type,

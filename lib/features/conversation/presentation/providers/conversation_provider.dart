@@ -112,7 +112,7 @@ class ConversationNotifier extends Notifier<ConversationState> {
 
   /// Si el grafo no tiene ruta segura y la búsqueda por palabras no encuentra
   /// un trámite, se pregunta ya a la Lambda por significado: cuando la
-  /// persona sorda toque «Responder con tarjetas LSB» la respuesta estará.
+  /// persona sorda toque «Responder en LSB» la respuesta estará.
   void _anticiparTramite(ConversationTurn turn) {
     final route = turn.route;
     if (route == null || !ragMayAskRemote(route)) return;

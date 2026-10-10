@@ -279,7 +279,7 @@ void main() {
           isNotNull,
         );
 
-        // Al pulsar "Responder con tarjetas LSB" vuelve la pregunta exacta.
+        // Al pulsar "Responder en LSB" vuelve la pregunta exacta.
         final handoff = container.read(conversationHandoffProvider);
         handoff.openCards(handoff.nextDeafLaunch());
 
