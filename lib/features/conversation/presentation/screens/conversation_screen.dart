@@ -34,6 +34,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
   /// aparece tal cual, sin que cada burbuja entre de nuevo.
   final Set<String> _porAnimar = {};
 
+  /// El avatar está signando el mensaje del oyente: la persona sorda todavía
+  /// lo está leyendo, no es momento de llamarla a responder.
+  bool _avatarSignando = false;
+
   @override
   void dispose() {
     _scroll.dispose();
@@ -117,6 +121,15 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       ? CardsFlowPurpose.conversationInitiative
       : CardsFlowPurpose.conversationReply;
 
+  /// Cuánto llama el botón de tarjetas: a responder cuando el avatar terminó
+  /// de signar lo que dijo el oyente; a empezar cuando el chat está vacío.
+  _LlamadoLsb _llamado(ConversationState state) {
+    if (state.processing || _avatarSignando) return _LlamadoLsb.ninguno;
+    if (state.conversation.pendingReply != null) return _LlamadoLsb.responder;
+    if (state.conversation.isEmpty) return _LlamadoLsb.empezar;
+    return _LlamadoLsb.ninguno;
+  }
+
   Future<void> _handleHearingSend(
     String text, {
     MessageSource source = MessageSource.text,
@@ -133,12 +146,16 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           ? lastTurn.outputs.animationGlosses
           : lastTurn.message.glosses;
       if (glosses.isNotEmpty || lastTurn.outputs.animationUrls.isNotEmpty) {
-        AvatarPlaybackSheet.show(
+        setState(() => _avatarSignando = true);
+        // La hoja se cierra sola al terminar la seña: recién entonces se
+        // llama a la persona sorda a responder.
+        await AvatarPlaybackSheet.show(
           context,
           glosses: glosses,
           animationUrls: lastTurn.outputs.animationUrls,
           animationGlosses: lastTurn.outputs.animationGlosses,
         );
+        if (mounted) setState(() => _avatarSignando = false);
       }
     }
   }
@@ -354,6 +371,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                     _handleHearingSend(text, source: MessageSource.speech),
                 onDeafCards: _openCardsFlow,
                 deafCardsMode: _deafCardsMode(state),
+                llamado: _llamado(state),
                 hearingFocus: _hearingFocus,
               ),
             ],
@@ -369,6 +387,7 @@ class _InputArea extends StatelessWidget {
   final void Function(String) onHearingSpeech;
   final VoidCallback onDeafCards;
   final CardsFlowPurpose deafCardsMode;
+  final _LlamadoLsb llamado;
   final FocusNode hearingFocus;
 
   const _InputArea({
@@ -376,15 +395,9 @@ class _InputArea extends StatelessWidget {
     required this.onHearingSpeech,
     required this.onDeafCards,
     required this.deafCardsMode,
+    required this.llamado,
     required this.hearingFocus,
   });
-
-  /// El botón dice lo que va a pasar. «Responder» cuando hay algo a lo que
-  /// responder; «Iniciar» cuando la persona sorda abre el turno ella misma.
-  String get _deafCardsLabel =>
-      deafCardsMode == CardsFlowPurpose.conversationReply
-      ? 'Responder con tarjetas LSB'
-      : 'Iniciar con tarjetas LSB';
 
   @override
   Widget build(BuildContext context) {
@@ -409,33 +422,10 @@ class _InputArea extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: double.infinity,
-            height: 46,
-            // Abre las tarjetas LSB: lleva el violeta de las glosas.
-            child: OutlinedButton.icon(
-              key: const Key('tarjetas_lsb'),
-              onPressed: onDeafCards,
-              icon: const Icon(
-                Icons.sign_language,
-                size: 18,
-                color: AppTheme.lsbViolet,
-              ),
-              label: Text(
-                _deafCardsLabel,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.lsbViolet,
-                ),
-              ),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: AppTheme.lsbViolet,
-                side: const BorderSide(color: AppTheme.lsbViolet, width: 1.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(23),
-                ),
-              ),
-            ),
+          _BotonTarjetasLsb(
+            onPressed: onDeafCards,
+            responder: deafCardsMode == CardsFlowPurpose.conversationReply,
+            llamado: llamado,
           ),
           const SizedBox(height: 10),
           TextInputWidget(
@@ -512,7 +502,7 @@ class _EmptyConversation extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             const Text(
-              'Un chat, dos idiomas',
+              'Empiecen a conversar',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppTheme.ink,
@@ -520,20 +510,215 @@ class _EmptyConversation extends StatelessWidget {
                 fontWeight: FontWeight.w800,
               ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              'Habla o escribe y el mensaje se interpreta en el avatar LSB.\n\n'
-              'Responde con tarjetas para convertir el mensaje en texto y '
-              'voz.\n\nPásense el teléfono '
-              'para conversar.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppTheme.inkSub,
-                fontSize: 14,
-                height: 1.5,
-              ),
+            const SizedBox(height: 14),
+            // Quién hace qué, en una línea cada uno.
+            const _QuienHaceQue(
+              icon: Icons.mic_none,
+              color: AppTheme.brandLight,
+              text: 'Oyente: habla o escribe',
+            ),
+            const SizedBox(height: 8),
+            const _QuienHaceQue(
+              icon: Icons.sign_language,
+              color: AppTheme.lsbViolet,
+              text: 'Persona sorda: responde en LSB',
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _QuienHaceQue extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String text;
+
+  const _QuienHaceQue({
+    required this.icon,
+    required this.color,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 18, color: color),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: AppTheme.inkSub,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// A qué invita el botón de tarjetas LSB en este momento.
+enum _LlamadoLsb {
+  /// Turno del oyente (o el avatar todavía signa): el botón espera, quieto.
+  ninguno,
+
+  /// El chat está vacío: la persona sorda también puede empezar.
+  empezar,
+
+  /// El avatar terminó de signar al oyente: le toca a la persona sorda.
+  responder,
+}
+
+/// El botón que abre las tarjetas LSB. Lleva el violeta de las glosas y
+/// llama la atención solo cuando le toca a la persona sorda: relleno y
+/// latiendo para responder, con el borde latiendo para empezar. Al pasar a
+/// «responder» vibra una vez: quien no oye el audio del oyente lo siente.
+class _BotonTarjetasLsb extends StatefulWidget {
+  final VoidCallback onPressed;
+  final bool responder;
+  final _LlamadoLsb llamado;
+
+  const _BotonTarjetasLsb({
+    required this.onPressed,
+    required this.responder,
+    required this.llamado,
+  });
+
+  @override
+  State<_BotonTarjetasLsb> createState() => _BotonTarjetasLsbState();
+}
+
+class _BotonTarjetasLsbState extends State<_BotonTarjetasLsb>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _latido = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1100),
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _sincronizar());
+  }
+
+  @override
+  void didUpdateWidget(covariant _BotonTarjetasLsb old) {
+    super.didUpdateWidget(old);
+    if (old.llamado != widget.llamado) {
+      if (widget.llamado == _LlamadoLsb.responder) {
+        HapticFeedback.mediumImpact();
+      }
+      _sincronizar();
+    }
+  }
+
+  void _sincronizar() {
+    if (!mounted) return;
+    final quieto =
+        widget.llamado == _LlamadoLsb.ninguno ||
+        MediaQuery.of(context).disableAnimations;
+    if (quieto) {
+      _latido
+        ..stop()
+        ..value = 0;
+    } else if (!_latido.isAnimating) {
+      _latido.repeat(reverse: true);
+    }
+  }
+
+  @override
+  void dispose() {
+    _latido.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final responder = widget.llamado == _LlamadoLsb.responder;
+    final empezar = widget.llamado == _LlamadoLsb.empezar;
+    final texto = widget.responder ? 'Responder en LSB' : 'Empezar en LSB';
+    final tinta = responder ? Colors.white : AppTheme.lsbViolet;
+
+    return AnimatedBuilder(
+      animation: _latido,
+      builder: (context, child) {
+        final t = Curves.easeInOut.transform(_latido.value);
+        return Transform.scale(
+          scale: responder ? 1 + 0.03 * t : 1,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOutCubic,
+            width: double.infinity,
+            height: 48,
+            decoration: BoxDecoration(
+              color: responder
+                  ? AppTheme.lsbViolet
+                  : AppTheme.lsbViolet.withValues(
+                      alpha: empezar ? 0.05 + 0.08 * t : 0,
+                    ),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: AppTheme.lsbViolet,
+                width: empezar ? 1.5 + 0.8 * t : 1.5,
+              ),
+              boxShadow: [
+                if (responder || empezar)
+                  BoxShadow(
+                    color: AppTheme.lsbViolet.withValues(
+                      alpha: (responder ? 0.28 : 0.12) + 0.22 * t,
+                    ),
+                    blurRadius: 10 + 10 * t,
+                    spreadRadius: responder ? 1 + 2 * t : 0,
+                  ),
+              ],
+            ),
+            child: child,
+          ),
+        );
+      },
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          key: const Key('tarjetas_lsb'),
+          borderRadius: BorderRadius.circular(24),
+          onTap: widget.onPressed,
+          child: Center(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: Row(
+                key: ValueKey('$texto$responder'),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // La mano se mueve mientras el botón llama.
+                  AnimatedBuilder(
+                    animation: _latido,
+                    builder: (context, icon) => Transform.rotate(
+                      angle: (responder || empezar)
+                          ? 0.18 * (_latido.value - 0.5)
+                          : 0,
+                      child: icon,
+                    ),
+                    child: Icon(Icons.sign_language, size: 20, color: tinta),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    texto,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: tinta,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

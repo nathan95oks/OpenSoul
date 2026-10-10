@@ -60,7 +60,7 @@ void main() {
   });
 
   test('la conversación no ofrece respuestas rápidas', () {
-    // Bajo el chat solo quedan «Responder con tarjetas LSB» y la caja de
+    // Bajo el chat solo quedan «Responder en LSB» y la caja de
     // texto: nada de «Entendido», «¿Dónde queda?»… por encima.
     expect(
         File('lib/features/conversation/presentation/widgets/'
