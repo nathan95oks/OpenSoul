@@ -37,6 +37,11 @@ Cinco cosas distintas: (1) que la glosa exista en el catálogo; (2) su acepción
 
 | Pregunta | Opción | Frase |
 |---|---|---|
+| `Q.HOM.HECHO` | Mataron a una persona | Mataron a una persona. |
+| `Q.HOM.HECHO` | Mataron a una mujer | Mataron a una mujer. |
+| `Q.HOM.HECHO` | Mataron a un niño o niña | Mataron a un niño. |
+| `Q.HOM.HECHO` | Intentaron matar a una persona | Intentaron matar a una persona. |
+| `Q.HOM.HECHO` | Murió en un accidente | Una persona murió en un accidente. |
 | `Q.ID.DOC_TIPO` | Pasaporte | Presento mi pasaporte. |
 | `Q.ID.DOC_TIPO` | Licencia de conducir | Presento mi licencia de conducir. |
 | `Q.SEG.MOTIVO` | Otra consulta (escribir) | Quiero consultar esto: «{texto}». |
@@ -55,8 +60,8 @@ El valor escrito se guarda y se redacta tal cual; no se convierte en glosas.
 | `monto` | 3 |
 | `referencia` | 3 |
 | `telefono` | 6 |
-| `texto_detalle` | 26 |
-| `texto_nombre` | 7 |
+| `texto_detalle` | 27 |
+| `texto_nombre` | 8 |
 
 ## Animación de las glosas del banco
 

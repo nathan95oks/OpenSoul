@@ -4976,6 +4976,306 @@
    "variantes": []
   },
   {
+   "acto": "pregunta_abierta",
+   "campo": "accion",
+   "campos": [
+    "hecho"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "homicidio",
+   "entidad": "Hecho",
+   "formulacion": "¿Qué ocurrió?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUÉ",
+     "HACER"
+    ],
+    "interrogativo": "QUÉ",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "el homicidio (contexto Homicidio): referente ya establecido; no se repite",
+    "tipo": "qu",
+    "utilizable": true
+   },
+   "id": "Q.HOM.HECHO",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mataron a una persona",
+     "frase": "Mataron a una persona.",
+     "glosas": [],
+     "id": "homicidio",
+     "sinSena": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mataron a una mujer",
+     "frase": "Mataron a una mujer.",
+     "glosas": [],
+     "id": "feminicidio",
+     "sinSena": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mataron a un niño o niña",
+     "frase": "Mataron a un niño.",
+     "glosas": [],
+     "id": "infanticidio",
+     "sinSena": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Intentaron matar a una persona",
+     "frase": "Intentaron matar a una persona.",
+     "glosas": [],
+     "id": "tentativa",
+     "sinSena": true
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Murió en un accidente",
+     "frase": "Una persona murió en un accidente.",
+     "glosas": [],
+     "id": "accidente",
+     "sinSena": true
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé cómo murió",
+     "frase": "No sé cómo murió.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Homicidio, feminicidio, infanticidio, homicidio culposo (accidente) y tentativa: la persona elige el hecho; el tipo penal lo califica la Fiscalía.",
+    "Parricidio no es una opción: se deduce de la víctima (Q.HOM.VICTIMA: mamá).",
+    "MATAR y MORIR no están en el catálogo: las opciones de muerte van sin seña."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_abierta",
+   "campo": "vinculo",
+   "campos": [
+    "persona"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "homicidio",
+   "entidad": "Persona[victima]",
+   "formulacion": "¿Quién es la víctima?",
+   "formulacionLsb": {
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "QUIÉN"
+    ],
+    "interrogativo": "QUIÉN",
+    "noManuales": "marca no manual de pregunta QU-: probablemente requerida; no documentada ni modelada",
+    "referente": "la víctima del homicidio (Q.HOM.HECHO)",
+    "tipo": "qu",
+    "utilizable": true
+   },
+   "id": "Q.HOM.VICTIMA",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi pareja",
+     "frase": "La víctima es mi pareja.",
+     "glosas": [
+      "PAREJA"
+     ],
+     "id": "pareja"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi esposa",
+     "frase": "La víctima es mi esposa.",
+     "glosas": [
+      "ESPOSA"
+     ],
+     "id": "esposa"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hijo",
+     "frase": "La víctima es mi hijo.",
+     "glosas": [
+      "HIJO"
+     ],
+     "id": "hijo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hija",
+     "frase": "La víctima es mi hija.",
+     "glosas": [
+      "HIJA"
+     ],
+     "id": "hija"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi mamá",
+     "frase": "La víctima es mi mamá.",
+     "glosas": [
+      "MAMÁ"
+     ],
+     "id": "mama"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hermano",
+     "frase": "La víctima es mi hermano.",
+     "glosas": [
+      "HERMANO"
+     ],
+     "id": "hermano"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Mi hermana",
+     "frase": "La víctima es mi hermana.",
+     "glosas": [
+      "HERMANA"
+     ],
+     "id": "hermana"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un pariente",
+     "frase": "La víctima es un pariente.",
+     "glosas": [
+      "PARIENTE"
+     ],
+     "id": "pariente"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un amigo",
+     "frase": "La víctima es un amigo.",
+     "glosas": [
+      "AMIGO"
+     ],
+     "id": "amigo"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un conocido",
+     "frase": "La víctima es un conocido.",
+     "glosas": [
+      "CONOCER"
+     ],
+     "id": "conocido"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Un hombre que no conozco",
+     "frase": "La víctima es un hombre que no conozco.",
+     "glosas": [
+      "HOMBRE"
+     ],
+     "id": "hombre"
+    },
+    {
+     "estado": "afirmado",
+     "etiqueta": "Una mujer que no conozco",
+     "frase": "La víctima es una mujer que no conozco.",
+     "glosas": [
+      "MUJER"
+     ],
+     "id": "mujer"
+    },
+    {
+     "editor": "texto_detalle",
+     "estado": "afirmado",
+     "etiqueta": "Otra persona (escribir)",
+     "frase": "La víctima es {texto}.",
+     "glosas": [],
+     "id": "otro"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé quién es la víctima.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Es un tercero: nunca se guarda en la ficha de identificación de la persona sorda."
+   ],
+   "variantes": []
+  },
+  {
+   "acto": "pregunta_polar",
+   "campo": "nombre_literal",
+   "campos": [
+    "nombre"
+   ],
+   "control": "seleccion_unica",
+   "dominio": "homicidio",
+   "entidad": "Persona[victima]",
+   "formulacion": "¿Sabe cómo se llama la víctima?",
+   "formulacionLsb": {
+    "alternativas": {
+     "0": [
+      "ÉL",
+      "ELLA"
+     ]
+    },
+    "estado": "GRAMMAR_PROVISIONAL",
+    "glosas": [
+     "ÉL",
+     "NOMBRE",
+     "CONOCER"
+    ],
+    "noManuales": "marca no manual de pregunta sí/no (cejas, cabeza): requerida; el corpus no la documenta y el modelo lineal no la representa",
+    "referente": "la persona involucrada",
+    "tipo": "polar",
+    "utilizable": true
+   },
+   "id": "Q.HOM.VICTIMA_NOMBRE",
+   "modo": "frase",
+   "noOfrecer": [],
+   "nodos": [],
+   "opciones": [
+    {
+     "editor": "texto_nombre",
+     "estado": "afirmado",
+     "etiqueta": "Escribir su nombre",
+     "frase": "La víctima se llama {nombre}.",
+     "glosas": [],
+     "id": "nombre"
+    },
+    {
+     "estado": "desconocido",
+     "etiqueta": "No sé",
+     "frase": "No sé cómo se llama la víctima.",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "id": "no_sabe",
+     "salida": true
+    }
+   ],
+   "reglas": [
+    "Es el nombre de un tercero: nunca se guarda en Ciudadano.nombre ni en la ficha de identificación."
+   ],
+   "variantes": []
+  },
+  {
    "acto": "pregunta_alternativa",
    "campo": "acompanante",
    "campos": [
@@ -12549,6 +12849,142 @@
     },
     {
      "pregunta": "Q.DIN.ENGANO"
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.DEN.INTENCION"
+      },
+      {
+       "perfil": false
+      }
+     ],
+     "pregunta": "Q.DEN.AUTORIDAD"
+    }
+   ]
+  },
+  "homicidio": {
+   "contexto": {
+    "descripcion": "Mataron o intentaron matar a una persona, o murió de forma violenta.",
+    "emoji": "⚖️",
+    "familia": "denuncias",
+    "nombre": "Homicidio",
+    "pistas": [
+     "homicidio",
+     "homicidios",
+     "homicida",
+     "homicidas",
+     "asesinato",
+     "asesinar",
+     "asesinaron",
+     "asesino",
+     "asesina",
+     "matar",
+     "mataron",
+     "mató",
+     "matado",
+     "feminicidio",
+     "infanticidio",
+     "parricidio",
+     "muerte",
+     "muerto",
+     "muerta",
+     "murió",
+     "fallecido",
+     "fallecida"
+    ]
+   },
+   "nombre": "Homicidio o muerte violenta",
+   "pasos": [
+    {
+     "obligatoria": true,
+     "pregunta": "Q.HOM.HECHO"
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA"
+    },
+    {
+     "cuando": [
+      {
+       "estados": [
+        "afirmado"
+       ],
+       "pregunta": "Q.HOM.VICTIMA"
+      }
+     ],
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE"
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO"
+    },
+    {
+     "pregunta": "Q.LUG.DONDE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "homicidio",
+        "feminicidio",
+        "infanticidio",
+        "tentativa",
+        "accidente"
+       ],
+       "pregunta": "Q.HOM.HECHO"
+      }
+     ],
+     "formulacion": "¿Quién lo hizo?",
+     "pregunta": "Q.VIO.AGRESOR"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "conoce"
+       ],
+       "pregunta": "Q.VIO.AGRESOR"
+      }
+     ],
+     "formulacion": "¿Qué relación tiene con la persona que lo hizo?",
+     "pregunta": "Q.PER.VINCULO"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "conoce"
+       ],
+       "pregunta": "Q.VIO.AGRESOR"
+      }
+     ],
+     "formulacion": "¿Sabe cómo se llama la persona que lo hizo?",
+     "pregunta": "Q.PER.NOMBRE_TERCERO"
+    },
+    {
+     "pregunta": "Q.TES.EXISTE"
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE"
+    },
+    {
+     "cuando": [
+      {
+       "opciones": [
+        "si"
+       ],
+       "pregunta": "Q.EVI.QUE_TIENE"
+      }
+     ],
+     "pregunta": "Q.EVI.TIPOS"
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION"
     },
     {
      "pregunta": "Q.DEN.INTENCION"

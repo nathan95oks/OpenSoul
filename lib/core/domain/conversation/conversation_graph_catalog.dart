@@ -287,12 +287,16 @@ class ConversationGraphCatalog {
     for (final f in families) f.id: spanishContentStems(f.name),
   };
 
-  /// Raíces que nombran un contexto: las de su nombre que no comparte con
-  /// otro contexto ni con el nombre de una familia. «Denunciar robo» aporta
-  /// `rob`; «denunci» nombra a la familia, no a un contexto.
+  /// Raíces que nombran un contexto: las de su nombre (y sus `pistas`, si
+  /// el banco las declara) que no comparte con otro contexto ni con el
+  /// nombre de una familia. «Denunciar robo» aporta `rob`; «denunci» nombra
+  /// a la familia, no a un contexto.
   late final Map<String, Set<String>> contextStems = () {
     final own = {
-      for (final c in _contexts.values) c.id: spanishContentStems(c.name),
+      for (final c in _contexts.values)
+        c.id: spanishContentStems(
+          [c.name, ...?bank.journey(c.id)?.context?.cues].join(' '),
+        ),
     };
     final shared = <String>{for (final s in familyStems.values) ...s};
     final seen = <String>{};

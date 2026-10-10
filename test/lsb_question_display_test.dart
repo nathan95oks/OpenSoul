@@ -13,15 +13,15 @@ class _ImagesOff extends SignImagesNotifier {
 void main() {
   final bank = QuestionBank.generated();
 
-  test('las 533 opciones con seña muestran su secuencia LSB completa', () {
+  test('las 548 opciones con seña muestran su secuencia LSB completa', () {
     final options = [
       for (final question in bank.allQuestions) ...question.options,
     ];
     final signed = options.where((option) => option.hasSign).toList();
     final fallback = options.where((option) => !option.hasSign).toList();
-    expect(options, hasLength(577));
-    expect(signed, hasLength(533));
-    expect(fallback, hasLength(44));
+    expect(options, hasLength(599));
+    expect(signed, hasLength(548));
+    expect(fallback, hasLength(51));
 
     for (final option in signed) {
       expect(
@@ -58,10 +58,10 @@ void main() {
     await tester.pump();
   }
 
-  testWidgets('las 155 preguntas muestran exactamente una formulación', (
+  testWidgets('las 158 preguntas muestran exactamente una formulación', (
     tester,
   ) async {
-    expect(bank.allQuestions, hasLength(155));
+    expect(bank.allQuestions, hasLength(158));
     for (final question in bank.allQuestions) {
       await pumpQuestion(tester, question);
       final lsb = find.byKey(const Key('formulacion_lsb')).evaluate().length;

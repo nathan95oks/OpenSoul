@@ -514,6 +514,7 @@ SITUATION_LABELS = {
     "violencia": "denuncia de violencia o agresión física/psicológica",
     "amenaza_digital": "amenazas por mensajes, llamadas o internet",
     "engano_dinero": "estafa, engaño económico o transferencias",
+    "homicidio": "homicidio, asesinato, feminicidio o muerte violenta de una persona",
     "seguimiento": "consulta de estado de caso o resoluciones judiciales",
     "identificacion": "identificación del ciudadano y contacto",
     "preguntas": "preguntas y consultas directas del ciudadano sordo",
@@ -1674,6 +1675,12 @@ SITUATION_CUES = {
     "engano_dinero": {"glosas": {"ENGANAR"},
                       # «fraude» no tiene seña: llega como palabra azul.
                       "raices": {"denunci", "estaf", "engan", "fraud"}},
+    # «homicidio» no tiene seña: llega como palabra azul. Las raíces de
+    # «matar» son las formas enteras («mat» nombraría «matrícula»).
+    "homicidio": {"glosas": set(),
+                  "raices": {"denunci", "homicid", "asesin", "feminicid",
+                             "infanticid", "parricid", "matar", "mato",
+                             "matad", "matan", "muert", "muri", "fallec"}},
     "otro": {"glosas": {"TESTIMONIO"},
              "raices": {"denunci", "testimoni", "declar"}},
     "seguimiento": {"glosas": {"TRAMITE", "RESOLUCION"},
@@ -1683,7 +1690,7 @@ SITUATION_CUES = {
 }
 # «Quejar» es la seña con la que el banco formula «presentar una denuncia».
 for _situacion in ("denuncia_robo", "violencia", "amenaza_digital",
-                   "engano_dinero", "otro"):
+                   "engano_dinero", "homicidio", "otro"):
     SITUATION_CUES[_situacion]["glosas"].add("QUEJAR")
 
 

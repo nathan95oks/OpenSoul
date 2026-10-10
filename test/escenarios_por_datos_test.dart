@@ -56,14 +56,18 @@ void main() {
 
     test('se convierte en un contexto de su familia', () {
       final contexts = BankContexts.fromBank(bank);
-      expect(contexts.map((c) => c.id), ['derivacion', 'extravio_documento']);
+      expect(contexts.map((c) => c.id), [
+        'derivacion',
+        'homicidio',
+        'extravio_documento',
+      ]);
       final c = contexts.firstWhere((c) => c.id == 'extravio_documento');
       expect(c.name, 'Perdí algo');
       expect(c.emoji, '📄');
       expect(BankContexts.idsOfFamily(bank, 'tramites'), [
         'extravio_documento',
       ]);
-      expect(BankContexts.idsOfFamily(bank, 'denuncias'), isEmpty);
+      expect(BankContexts.idsOfFamily(bank, 'denuncias'), ['homicidio']);
     });
 
     test('el grafo de conversación lo conoce y lo puede abrir', () {
@@ -94,25 +98,35 @@ void main() {
       expect(rules.glossesOf(session.toIntervention()), ['CELULAR']);
     });
 
-    test('el banco empaquetado declara solo «Derivación» con datos', () {
-      // Los demás recorridos tienen su contexto escrito a mano. «Derivación»
-      // («¿Sabe a dónde tiene que ir?», QA 2026-10-09) es el primero que se
-      // declaró con datos, en la familia Consultas.
-      expect(BankContexts.contexts.map((c) => c.id), ['derivacion']);
-      expect(BankContexts.ofFamily('consultas').map((c) => c.id), [
-        'derivacion',
-      ]);
-      final seleccionables = {for (final c in allSelectableContexts) c.id};
-      for (final id in QuestionBank.generated().journeys.keys) {
-        expect(seleccionables, contains(id), reason: id);
-      }
-      for (final f in contextFamilies) {
-        expect(
-          contextsOfFamily(f).map((c) => c.id),
-          containsAll(f.contextIds.where((id) => contextById(id) != null)),
-        );
-      }
-    });
+    test(
+      'el banco empaquetado declara «Homicidio» y «Derivación» con datos',
+      () {
+        // Los demás recorridos tienen su contexto escrito a mano. «Derivación»
+        // («¿Sabe a dónde tiene que ir?», QA 2026-10-09) fue el primero que se
+        // declaró con datos, en la familia Consultas; «Homicidio» (2026-10-10)
+        // el segundo, en Denuncias.
+        expect(BankContexts.contexts.map((c) => c.id), [
+          'derivacion',
+          'homicidio',
+        ]);
+        expect(BankContexts.ofFamily('denuncias').map((c) => c.id), [
+          'homicidio',
+        ]);
+        expect(BankContexts.ofFamily('consultas').map((c) => c.id), [
+          'derivacion',
+        ]);
+        final seleccionables = {for (final c in allSelectableContexts) c.id};
+        for (final id in QuestionBank.generated().journeys.keys) {
+          expect(seleccionables, contains(id), reason: id);
+        }
+        for (final f in contextFamilies) {
+          expect(
+            contextsOfFamily(f).map((c) => c.id),
+            containsAll(f.contextIds.where((id) => contextById(id) != null)),
+          );
+        }
+      },
+    );
   });
 
   group('ranuras y zonas del oyente como configuración', () {

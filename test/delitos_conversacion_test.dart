@@ -104,6 +104,7 @@ void main() {
         'violencia',
         'amenaza_digital',
         'engano_dinero',
+        'homicidio',
         'otro',
       ])
         c: ['QUEJAR', 'denunci', if (c == own && cue != null) cue],
@@ -163,17 +164,41 @@ void main() {
       );
     });
 
-    test('homicidio no tiene contexto propio: elige la persona', () {
-      // No se inventa uno («Declaración y testimonio» no es un homicidio):
-      // se abre la familia y la persona sorda elige.
+    test('homicidio abre su propio contexto', () {
+      // El recorrido «Homicidio» se declara en el banco: la pista propia
+      // («homicid») manda sobre «denunciar», que nombra a toda la familia.
       final route = routeFor('¿Quiere denunciar un homicidio?', const [
         'TU',
         'QUERER',
         'QUEJAR',
         'SENA_PENDIENTE:HOMICIDIO',
-      ], denuncias());
-      expect(route.targetFamilyId, 'denuncias');
-      expect(route.targetContextId, isNull);
+      ], denuncias('homicidio', 'homicid'));
+      expect(route.targetContextId, 'homicidio');
+    });
+
+    test('sus variantes también nombran Homicidio, sin la Lambda', () {
+      // Lectura del cliente (sin backend): las `pistas` del banco.
+      final builder = SemanticTurnBuilder(catalog);
+      for (final text in const [
+        '¿Quiere denunciar un homicidio?',
+        '¿Vio al homicida?',
+        '¿Fue un asesinato?',
+        '¿Quién lo asesinó?',
+        '¿Lo mataron?',
+        '¿Quién lo mató?',
+        '¿Fue un feminicidio?',
+        '¿Fue un infanticidio?',
+        '¿Es un parricidio?',
+        '¿Cómo fue la muerte?',
+        '¿Cuándo murió?',
+      ]) {
+        final turn = builder.build(turnId: text, text: text, glosses: const []);
+        expect(
+          turn.mentionedContexts.map((m) => m.id),
+          contains('homicidio'),
+          reason: text,
+        );
+      }
     });
 
     test('«¿Tiene la factura o la caja?» abre las dos respuestas', () {
