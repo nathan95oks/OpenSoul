@@ -143,12 +143,17 @@ class BankJourneyContext {
   final String emoji;
   final String icon;
 
+  /// Palabras habladas que también nombran el contexto (`pistas`), además
+  /// de las de su nombre: «asesinato» o «mataron» nombran a Homicidio.
+  final List<String> cues;
+
   const BankJourneyContext({
     required this.name,
     required this.familyId,
     required this.description,
     required this.emoji,
     this.icon = 'description',
+    this.cues = const [],
   });
 
   static BankJourneyContext? fromJson(Object? json) {
@@ -159,6 +164,7 @@ class BankJourneyContext {
       description: (json['descripcion'] ?? '').toString(),
       emoji: (json['emoji'] ?? '').toString(),
       icon: (json['icono'] ?? 'description').toString(),
+      cues: _strings(json['pistas']),
     );
   }
 }

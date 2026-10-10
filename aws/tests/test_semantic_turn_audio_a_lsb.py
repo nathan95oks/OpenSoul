@@ -23,7 +23,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import lambda_text_to_lsb as t2l  # noqa: E402
 
-DENUNCIAS = {"denuncia_robo", "violencia", "amenaza_digital", "engano_dinero", "otro"}
+DENUNCIAS = {"denuncia_robo", "violencia", "amenaza_digital", "engano_dinero",
+             "homicidio", "otro"}
 
 
 def _lectura(texto, glosas):
@@ -78,16 +79,41 @@ class LecturaDeterminista(unittest.TestCase):
             with self.subTest(texto=texto):
                 ids = {m["id"] for m in _lectura(texto, glosas)["mentionedContexts"]}
                 self.assertIn(contexto, ids)
-        # «homicidio» no tiene contexto propio: solo la familia (lo elige la
-        # persona), sin inventar uno.
         # «acoso sexual» no abre el recorrido general de violencia: su
         # trámite FELCV es el que pregunta lo que corresponde.
         acoso = _lectura("¿Quiere denunciar acoso sexual?",
                          ["QUERER", "QUEJAR", "SENA_PENDIENTE:ACOSO", "SEXUAL"])
         self.assertEqual({m["id"] for m in acoso["mentionedContexts"]}, DENUNCIAS)
-        lectura = _lectura("¿Quiere denunciar un homicidio?",
-                           ["TU", "QUERER", "QUEJAR", "SENA_PENDIENTE:HOMICIDIO"])
-        self.assertEqual({m["id"] for m in lectura["mentionedContexts"]}, DENUNCIAS)
+
+    def test_homicidio_y_sus_variantes_nombran_su_contexto(self):
+        # Homicidio tiene recorrido propio: lo nombran la palabra, sus formas,
+        # los tipos penales y las de matar o morir; «denunciar» sigue
+        # nombrando a toda la familia.
+        for texto, glosas in (
+            ("¿Quiere denunciar un homicidio?",
+             ["TU", "QUERER", "QUEJAR", "SENA_PENDIENTE:HOMICIDIO"]),
+            ("¿Hubo homicidios en su barrio?", ["BARRIO"]),
+            ("¿Vio al homicida?", ["TU", "VER"]),
+            ("¿Fue un asesinato?", ["SENA_PENDIENTE:ASESINATO"]),
+            ("¿Quién lo asesinó?", ["QUIEN"]),
+            ("¿Lo mataron?", ["SENA_PENDIENTE:MATAR"]),
+            ("¿Quién lo mató?", ["QUIEN"]),
+            ("¿Quiere denunciar un feminicidio?", ["QUERER", "QUEJAR"]),
+            ("¿Fue un infanticidio?", []),
+            ("¿Es un parricidio?", []),
+            ("¿Cómo fue la muerte?", ["COMO"]),
+            ("¿Cuándo murió?", ["CUANDO"]),
+            ("¿La persona fallecida es su familiar?", ["PARIENTE"]),
+        ):
+            with self.subTest(texto=texto):
+                ids = {m["id"] for m in _lectura(texto, glosas)["mentionedContexts"]}
+                self.assertIn("homicidio", ids)
+
+    def test_palabras_parecidas_no_nombran_homicidio(self):
+        for texto in ("¿Trajo su matrícula?", "¿Estudia matemáticas?"):
+            with self.subTest(texto=texto):
+                ids = {m["id"] for m in _lectura(texto, [])["mentionedContexts"]}
+                self.assertNotIn("homicidio", ids)
 
     def test_pregunta_abierta_por_el_motivo(self):
         lectura = _lectura(

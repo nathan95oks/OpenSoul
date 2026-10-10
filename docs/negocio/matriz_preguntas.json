@@ -6,9 +6,9 @@
  ],
  "fecha": "2026-09-25",
  "totales": {
-  "preguntas": 155,
-  "recorridos": 9,
-  "opciones": 577
+  "preguntas": 158,
+  "recorridos": 10,
+  "opciones": 599
  },
  "preguntas": [
   {
@@ -1086,7 +1086,8 @@
     "denuncia_robo#36",
     "violencia#21",
     "amenaza_digital#11",
-    "engano_dinero#10"
+    "engano_dinero#10",
+    "homicidio#14"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -1166,7 +1167,8 @@
     "denuncia_robo#35",
     "violencia#20",
     "amenaza_digital#10",
-    "engano_dinero#9"
+    "engano_dinero#9",
+    "homicidio#13"
    ],
    "nodos": [
     "n-s6-inicio_de_denuncia-01"
@@ -3418,7 +3420,8 @@
    ],
    "recorridos": [
     "denuncia_robo#32",
-    "violencia#16"
+    "violencia#16",
+    "homicidio#10"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -3541,7 +3544,8 @@
    ],
    "recorridos": [
     "denuncia_robo#33",
-    "violencia#17"
+    "violencia#17",
+    "homicidio#11"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -4114,6 +4118,295 @@
    "reglas": [],
    "rutas": [
     "respuesta al funcionario"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.HOM.HECHO",
+   "dominio": "homicidio",
+   "formulacion": "¿Qué ocurrió?",
+   "acto": "pregunta_abierta",
+   "entidad": "Hecho",
+   "campo": "accion",
+   "control": "seleccion_unica",
+   "modo": "frase",
+   "campos": [
+    "hecho"
+   ],
+   "recorridos": [
+    "homicidio#1"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "homicidio",
+     "etiqueta": "Mataron a una persona",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "Mataron a una persona.",
+     "sinSena": true
+    },
+    {
+     "id": "feminicidio",
+     "etiqueta": "Mataron a una mujer",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "Mataron a una mujer.",
+     "sinSena": true
+    },
+    {
+     "id": "infanticidio",
+     "etiqueta": "Mataron a un niño o niña",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "Mataron a un niño.",
+     "sinSena": true
+    },
+    {
+     "id": "tentativa",
+     "etiqueta": "Intentaron matar a una persona",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "Intentaron matar a una persona.",
+     "sinSena": true
+    },
+    {
+     "id": "accidente",
+     "etiqueta": "Murió en un accidente",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "Una persona murió en un accidente.",
+     "sinSena": true
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé cómo murió",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "frase": "No sé cómo murió.",
+     "salida": true
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {},
+   "reglas": [
+    "Homicidio, feminicidio, infanticidio, homicidio culposo (accidente) y tentativa: la persona elige el hecho; el tipo penal lo califica la Fiscalía.",
+    "Parricidio no es una opción: se deduce de la víctima (Q.HOM.VICTIMA: mamá).",
+    "MATAR y MORIR no están en el catálogo: las opciones de muerte van sin seña."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": [
+    "homicidio",
+    "feminicidio",
+    "infanticidio",
+    "tentativa",
+    "accidente"
+   ]
+  },
+  {
+   "id": "Q.HOM.VICTIMA",
+   "dominio": "homicidio",
+   "formulacion": "¿Quién es la víctima?",
+   "acto": "pregunta_abierta",
+   "entidad": "Persona[victima]",
+   "campo": "vinculo",
+   "control": "seleccion_unica",
+   "modo": "frase",
+   "campos": [
+    "persona"
+   ],
+   "recorridos": [
+    "homicidio#2"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "pareja",
+     "etiqueta": "Mi pareja",
+     "glosas": [
+      "PAREJA"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es mi pareja."
+    },
+    {
+     "id": "esposa",
+     "etiqueta": "Mi esposa",
+     "glosas": [
+      "ESPOSA"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es mi esposa."
+    },
+    {
+     "id": "hijo",
+     "etiqueta": "Mi hijo",
+     "glosas": [
+      "HIJO"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es mi hijo."
+    },
+    {
+     "id": "hija",
+     "etiqueta": "Mi hija",
+     "glosas": [
+      "HIJA"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es mi hija."
+    },
+    {
+     "id": "mama",
+     "etiqueta": "Mi mamá",
+     "glosas": [
+      "MAMÁ"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es mi mamá."
+    },
+    {
+     "id": "hermano",
+     "etiqueta": "Mi hermano",
+     "glosas": [
+      "HERMANO"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es mi hermano."
+    },
+    {
+     "id": "hermana",
+     "etiqueta": "Mi hermana",
+     "glosas": [
+      "HERMANA"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es mi hermana."
+    },
+    {
+     "id": "pariente",
+     "etiqueta": "Un pariente",
+     "glosas": [
+      "PARIENTE"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es un pariente."
+    },
+    {
+     "id": "amigo",
+     "etiqueta": "Un amigo",
+     "glosas": [
+      "AMIGO"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es un amigo."
+    },
+    {
+     "id": "conocido",
+     "etiqueta": "Un conocido",
+     "glosas": [
+      "CONOCER"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es un conocido."
+    },
+    {
+     "id": "hombre",
+     "etiqueta": "Un hombre que no conozco",
+     "glosas": [
+      "HOMBRE"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es un hombre que no conozco."
+    },
+    {
+     "id": "mujer",
+     "etiqueta": "Una mujer que no conozco",
+     "glosas": [
+      "MUJER"
+     ],
+     "estado": "afirmado",
+     "frase": "La víctima es una mujer que no conozco."
+    },
+    {
+     "id": "otro",
+     "etiqueta": "Otra persona (escribir)",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "La víctima es {texto}.",
+     "editor": "texto_detalle"
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "frase": "No sé quién es la víctima.",
+     "salida": true
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {},
+   "reglas": [
+    "Es un tercero: nunca se guarda en la ficha de identificación de la persona sorda."
+   ],
+   "rutas": [
+    "recorrido"
+   ],
+   "opcionesSinSena": []
+  },
+  {
+   "id": "Q.HOM.VICTIMA_NOMBRE",
+   "dominio": "homicidio",
+   "formulacion": "¿Sabe cómo se llama la víctima?",
+   "acto": "pregunta_polar",
+   "entidad": "Persona[victima]",
+   "campo": "nombre_literal",
+   "control": "seleccion_unica",
+   "modo": "frase",
+   "campos": [
+    "nombre"
+   ],
+   "recorridos": [
+    "homicidio#3"
+   ],
+   "nodos": [],
+   "enunciadosFuncionario": [],
+   "opciones": [
+    {
+     "id": "nombre",
+     "etiqueta": "Escribir su nombre",
+     "glosas": [],
+     "estado": "afirmado",
+     "frase": "La víctima se llama {nombre}.",
+     "editor": "texto_nombre"
+    },
+    {
+     "id": "no_sabe",
+     "etiqueta": "No sé",
+     "glosas": [
+      "NO_SABER"
+     ],
+     "estado": "desconocido",
+     "frase": "No sé cómo se llama la víctima.",
+     "salida": true
+    }
+   ],
+   "pasosRespuesta": [],
+   "noOfrecer": {},
+   "reglas": [
+    "Es el nombre de un tercero: nunca se guarda en Ciudadano.nombre ni en la ficha de identificación."
+   ],
+   "rutas": [
+    "recorrido"
    ],
    "opcionesSinSena": []
   },
@@ -4814,7 +5107,8 @@
    "recorridos": [
     "denuncia_robo#8",
     "violencia#8",
-    "otro#4"
+    "otro#4",
+    "homicidio#5"
    ],
    "nodos": [
     "n-s6-inicio_de_denuncia-07"
@@ -6450,7 +6744,8 @@
    "recorridos": [
     "denuncia_robo#12",
     "violencia#5",
-    "amenaza_digital#5"
+    "amenaza_digital#5",
+    "homicidio#8"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -6703,7 +6998,8 @@
    "recorridos": [
     "denuncia_robo#11",
     "violencia#4",
-    "amenaza_digital#4"
+    "amenaza_digital#4",
+    "homicidio#7"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -7007,7 +7303,8 @@
     "polaridad"
    ],
    "recorridos": [
-    "violencia#13"
+    "violencia#13",
+    "homicidio#12"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],
@@ -9755,7 +10052,8 @@
     "polaridad"
    ],
    "recorridos": [
-    "denuncia_robo#25"
+    "denuncia_robo#25",
+    "homicidio#9"
    ],
    "nodos": [
     "n-s6-robo_hurto_y_obje-10",
@@ -10176,7 +10474,8 @@
    "recorridos": [
     "denuncia_robo#7",
     "violencia#6",
-    "otro#3"
+    "otro#3",
+    "homicidio#4"
    ],
    "nodos": [
     "n-s6-inicio_de_denuncia-04"
@@ -10493,7 +10792,8 @@
     "persona"
    ],
    "recorridos": [
-    "violencia#3"
+    "violencia#3",
+    "homicidio#6"
    ],
    "nodos": [],
    "enunciadosFuncionario": [],

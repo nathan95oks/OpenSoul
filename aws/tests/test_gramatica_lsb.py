@@ -41,10 +41,12 @@ import corpus_dialogue as CD  # noqa: E402
 # huella es la anterior, f3c8df3e…); y el 2026-10-09 al añadir las
 # preguntas del QA de Conversación (testigos: si los conoce, nombre y
 # celular; fiscal; investigador; publicar fotos; «Derivación»: ¿Sabe a dónde
-# tiene que ir?; sin ellas la huella es la anterior, e1364f59…). Si cambia,
-# algo distinto de la formulación cambió: preguntas, opciones, estados,
-# frases o recorridos.
-HUELLA_SIN_FORMULACION = "e0f6c85034dfeafd1e35f3d70c1e9bb445bf55caa3e6c5c5d783f319c831236f"
+# tiene que ir?; sin ellas la huella es la anterior, e1364f59…); y el
+# 2026-10-10 al añadir el contexto «Homicidio» (¿Qué ocurrió?, ¿Quién es la
+# víctima?, ¿Sabe cómo se llama la víctima?; sin ellas la huella es la
+# anterior, e0f6c850…). Si cambia, algo distinto de la formulación cambió:
+# preguntas, opciones, estados, frases o recorridos.
+HUELLA_SIN_FORMULACION = "e6470d5347543658c741388053ec76dcee6a14f1c4ed101a89bae383abc2a08f"
 
 
 class GramaticaLsb(unittest.TestCase):
@@ -144,7 +146,7 @@ class GramaticaLsb(unittest.TestCase):
             q["id"]: B.formulacion_lsb_utilizable(q)
             for q in self.banco["preguntas"]
         }
-        self.assertEqual(139, sum(decisiones.values()))
+        self.assertEqual(142, sum(decisiones.values()))
         self.assertEqual(16, len(decisiones) - sum(decisiones.values()))
         self.assertTrue(decisiones["Q.HEC.QUE_OCURRIO"])
         self.assertFalse(decisiones["I.PREG.CUANDO"])

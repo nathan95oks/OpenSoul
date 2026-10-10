@@ -8,9 +8,9 @@ Es el contrato que implementan la app (`lib/core/domain/guided/`) y la Lambda (`
 
 | Qué | Cantidad |
 |---|---:|
-| Preguntas del banco | 155 |
-| Recorridos (uno por contexto) | 9 |
-| Opciones de respuesta | 577 |
+| Preguntas del banco | 158 |
+| Recorridos (uno por contexto) | 10 |
+| Opciones de respuesta | 599 |
 | Enunciados del funcionario con pregunta asignada | 98 |
 
 Leyenda: `[GLOSAS]` tarjetas del catálogo; `⟨editor⟩` valor escrito que se conserva literal; *(sin seña)* opción de texto sin glosa; *salida* = No sé / No recuerdo / Ninguno.
@@ -172,6 +172,25 @@ Orden de redacción: `Q.DIN.ENGANO` → `Q.DIN.MECANISMO` → `Q.DIN.MONTO` → 
 | # | Pregunta | Se muestra si | Obligatoria | Respuestas → frase |
 |---|---|---|---|---|
 | 1 | `Q.ORI.DESTINO` ¿Sabe a dónde tiene que ir? | siempre | sí | La FELCC [FELCC] → «Tengo que ir a la FELCC.»<br>La FELCV [FELCV] → «Tengo que ir a la FELCV.»<br>La Fiscalía [FISCALIA] → «Tengo que ir a la Fiscalía.»<br>La Policía [POLICÍA] → «Tengo que ir a la Policía.»<br>SEPDAVI [SEPDAVI] → «Tengo que ir a SEPDAVI.»<br>SEPDEP [SEPDEP] → «Tengo que ir a SEPDEP.»<br>El juzgado [JUZGADO] → «Tengo que ir al juzgado.»<br>No sé, dígame usted [NO_SABER] *salida* → «No sé a dónde tengo que ir. Dígame usted, por favor.» |
+
+## Recorrido `homicidio` — Homicidio o muerte violenta
+
+| # | Pregunta | Se muestra si | Obligatoria | Respuestas → frase |
+|---|---|---|---|---|
+| 1 | `Q.HOM.HECHO` ¿Qué ocurrió? | siempre | sí | Mataron a una persona *(sin seña)* → «Mataron a una persona.»<br>Mataron a una mujer *(sin seña)* → «Mataron a una mujer.»<br>Mataron a un niño o niña *(sin seña)* → «Mataron a un niño.»<br>Intentaron matar a una persona *(sin seña)* → «Intentaron matar a una persona.»<br>Murió en un accidente *(sin seña)* → «Una persona murió en un accidente.»<br>No sé cómo murió [NO_SABER] *salida* → «No sé cómo murió.» |
+| 2 | `Q.HOM.VICTIMA` ¿Quién es la víctima? | siempre | no | Mi pareja [PAREJA] → «La víctima es mi pareja.»<br>Mi esposa [ESPOSA] → «La víctima es mi esposa.»<br>Mi hijo [HIJO] → «La víctima es mi hijo.»<br>Mi hija [HIJA] → «La víctima es mi hija.»<br>Mi mamá [MAMÁ] → «La víctima es mi mamá.»<br>Mi hermano [HERMANO] → «La víctima es mi hermano.»<br>Mi hermana [HERMANA] → «La víctima es mi hermana.»<br>Un pariente [PARIENTE] → «La víctima es un pariente.»<br>Un amigo [AMIGO] → «La víctima es un amigo.»<br>Un conocido [CONOCER] → «La víctima es un conocido.»<br>Un hombre que no conozco [HOMBRE] → «La víctima es un hombre que no conozco.»<br>Una mujer que no conozco [MUJER] → «La víctima es una mujer que no conozco.»<br>Otra persona (escribir) ⟨texto_detalle⟩ → «La víctima es {texto}.»<br>No sé [NO_SABER] *salida* → «No sé quién es la víctima.» |
+| 3 | `Q.HOM.VICTIMA_NOMBRE` ¿Sabe cómo se llama la víctima? | Q.HOM.VICTIMA ∈ {afirmado} | no | Escribir su nombre ⟨texto_nombre⟩ → «La víctima se llama {nombre}.»<br>No sé [NO_SABER] *salida* → «No sé cómo se llama la víctima.» |
+| 4 | `Q.TIE.CUANDO` ¿Cuándo ocurrió? | siempre | no | Ahora mismo [AHORA] → «hace un momento»<br>Hoy [HOY] → «hoy»<br>Ayer [AYER] → «ayer»<br>Anteayer [ANTEAYER] → «anteayer»<br>Hace … minutos [MINUTO] ⟨entero⟩ → «hace {n} minutos»<br>Hace … horas [HORA] ⟨entero⟩ → «hace {n} horas»<br>Hace … días [DÍA] ⟨entero⟩ → «hace {n} días»<br>Hace … semanas [SEMANA] ⟨entero⟩ → «hace {n} semanas»<br>Hace … meses [MES] ⟨entero⟩ → «hace {n} meses»<br>Por la tarde [TARDE] → «por la tarde»<br>Temprano [TEMPRANO] → «temprano»<br>No recuerdo [RECORDAR · NO] *salida* → «No recuerdo cuándo ocurrió.» |
+| 5 | `Q.LUG.DONDE` ¿Dónde ocurrió? | siempre | no | En la calle [CALLE] ⟨lugar_literal⟩ → «Ocurrió en la calle{?nombre}. / sin valor: «Ocurrió en la calle.»»<br>En una avenida [AVENIDA] ⟨lugar_literal⟩ → «Ocurrió en la avenida{?nombre}. / sin valor: «Ocurrió en la avenida.»»<br>En una plaza [PLAZA] ⟨lugar_literal⟩ → «Ocurrió en la plaza{?nombre}. / sin valor: «Ocurrió en la plaza.»»<br>En un mercado [MERCADO] ⟨lugar_literal⟩ → «Ocurrió en el mercado{?nombre}. / sin valor: «Ocurrió en el mercado.»»<br>En un barrio [BARRIO] ⟨lugar_literal⟩ → «Ocurrió en el barrio{?nombre}. / sin valor: «Ocurrió en el barrio.»»<br>En una tienda [TIENDA] ⟨lugar_literal⟩ → «Ocurrió en una tienda{?nombre}. / sin valor: «Ocurrió en una tienda.»»<br>En mi casa [CASA] → «Ocurrió en mi casa.»<br>Dentro de un micro [MICRO] → «Ocurrió dentro de un micro.»<br>Dentro de un trufi [TRUFI] → «Ocurrió dentro de un trufi.»<br>Otro lugar (escribir) ⟨texto_detalle⟩ → «Ocurrió en «{texto}».»<br>No sé [NO_SABER] *salida* → «No sé exactamente dónde ocurrió.» |
+| 6 | `Q.VIO.AGRESOR` ¿Quién lo hizo? | Q.HOM.HECHO ∈ {homicidio, feminicidio, infanticidio, tentativa, accidente} | no | Alguien que conozco [CONOCER] → «Fue alguien que conozco.»<br>Un hombre que no conozco [HOMBRE] → «Fue un hombre que no conozco.»<br>Una mujer que no conozco [MUJER] → «Fue una mujer que no conozco.»<br>No sé [NO_SABER] *salida* → «No sé quién fue.» |
+| 7 | `Q.PER.VINCULO` ¿Qué relación tiene con la persona que lo hizo? | Q.VIO.AGRESOR ∈ {conoce} | no | Mi pareja [PAREJA] → «Es mi pareja.»<br>Mi expareja [PAREJA · PASADO] → «Es mi expareja.»<br>Mi esposa [ESPOSA] → «Es mi esposa.»<br>Mi hermano [HERMANO] → «Es mi hermano.»<br>Mi hermana [HERMANA] → «Es mi hermana.»<br>Un pariente [PARIENTE] → «Es un pariente.»<br>Un amigo [AMIGO] → «Es un amigo.»<br>Un conocido [CONOCER] → «Es un conocido.»<br>Otra relación (escribir) ⟨texto_detalle⟩ → «Es {texto}.» |
+| 8 | `Q.PER.NOMBRE_TERCERO` ¿Sabe cómo se llama la persona que lo hizo? | Q.VIO.AGRESOR ∈ {conoce} | no | Escribir su nombre ⟨texto_nombre⟩ → «Se llama {nombre}.»<br>No sé [NO_SABER] *salida* → «No sé cómo se llama.» |
+| 9 | `Q.TES.EXISTE` ¿Hay testigos? | siempre | no | Sí [SÍ] → «Sí, hay {Q.TES.CANTIDAD\|testigos}.»<br>No [NO] → «No hay testigos.»<br>No sé [NO_SABER] → «No sé si hay testigos.» |
+| 10 | `Q.EVI.QUE_TIENE` ¿Tiene fotos, video u otra cosa que pueda mostrar? | siempre | no | Sí [SÍ] → «Sí, tengo {Q.EVI.TIPOS\|algo que puedo mostrar}.»<br>No [NO] → «No tengo fotos, video ni otra cosa para mostrar.»<br>No sé [NO_SABER] → «No sé si tengo algo para mostrar.» |
+| 11 | `Q.EVI.TIPOS` ¿Qué tiene? | Q.EVI.QUE_TIENE ∈ {si} | no | Fotos [FOTOS] → «fotos»<br>Video [VIDEO] → «un video»<br>Certificado [CERTIFICADO] → «un certificado»<br>Otra cosa (escribir) ⟨texto_detalle⟩ → ««{texto}»» |
+| 12 | `Q.RIE.PIDE_PROTECCION` ¿Necesita protección? | siempre | no | Sí [SÍ] → «Sí, necesito protección.»<br>No [NO] → «No necesito protección.»<br>No sé [NO_SABER] → «No lo sé.» |
+| 13 | `Q.DEN.INTENCION` ¿Desea presentar una denuncia? | siempre | no | Sí [SÍ] → «Sí, quiero presentar una denuncia.»<br>No [NO] → «Por ahora no quiero presentar una denuncia.»<br>No sé [NO_SABER] → «Todavía no sé si quiero presentar una denuncia.» |
+| 14 | `Q.DEN.AUTORIDAD` ¿Ante qué institución quiere presentarla? | Q.DEN.INTENCION ∈ {si}; sin perfil institucional | no | Policía [POLICÍA] → «Quiero presentarla ante la Policía.»<br>FELCC [FELCC] → «Quiero presentarla ante la FELCC.»<br>FELCV [FELCV] → «Quiero presentarla ante la FELCV.»<br>Fiscalía [FISCALIA] → «Quiero presentarla ante la Fiscalía.»<br>No sé [NO_SABER] *salida* → «No sé ante qué institución presentarla.» |
 
 ## Respuestas a preguntas del funcionario (modo respuesta)
 

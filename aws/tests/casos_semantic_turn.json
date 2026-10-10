@@ -62,6 +62,13 @@
             ]
           },
           {
+            "id": "homicidio",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
             "id": "otro",
             "evidence": [
               "QUEJAR",
@@ -360,6 +367,13 @@
           },
           {
             "id": "engano_dinero",
+            "evidence": [
+              "QUEJAR",
+              "denunci"
+            ]
+          },
+          {
+            "id": "homicidio",
             "evidence": [
               "QUEJAR",
               "denunci"

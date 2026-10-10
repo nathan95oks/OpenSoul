@@ -4175,6 +4175,1272 @@
  },
  {
   "guided": {
+   "recorrido": "homicidio",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "feminicidio"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "conocido"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "María Quispe"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hoy"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "conoce"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.VINCULO",
+     "estado": "afirmado",
+     "opciones": [
+      "pareja"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.NOMBRE_TERCERO",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "María Quispe"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Mataron a una mujer. La víctima es un conocido. La víctima se llama María Quispe. Ocurrió hoy. Ocurrió dentro de un micro. Fue alguien que conozco. Es mi pareja. Se llama María Quispe. Tengo algo que puedo mostrar. No necesito protección. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.HOM.HECHO#feminicidio",
+   "Q.HOM.VICTIMA#conocido",
+   "Q.HOM.VICTIMA_NOMBRE#nombre",
+   "Q.LUG.DONDE#micro",
+   "Q.PER.NOMBRE_TERCERO#nombre",
+   "Q.PER.VINCULO#pareja",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.TIE.CUANDO#hoy",
+   "Q.VIO.AGRESOR#conoce"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "tentativa"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_h"
+     ],
+     "valores": {
+      "hace_h": {
+       "n": "9"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "avenida"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Intentaron matar a una persona. La víctima es una mujer que no conozco. No sé cómo se llama la víctima. Ocurrió hace 9 horas. Ocurrió en la avenida. Fue una mujer que no conozco. No hay testigos. Tengo algo que puedo mostrar. Necesito protección. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.HOM.HECHO#tentativa",
+   "Q.HOM.VICTIMA#mujer",
+   "Q.HOM.VICTIMA_NOMBRE#no_sabe",
+   "Q.LUG.DONDE#avenida",
+   "Q.RIE.PIDE_PROTECCION#si",
+   "Q.TES.EXISTE#no",
+   "Q.TIE.CUANDO#hace_h",
+   "Q.VIO.AGRESOR#mujer"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "infanticidio"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "esposa"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "plaza"
+     ],
+     "valores": {
+      "plaza": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "hombre"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Mataron a un niño. La víctima es mi esposa. No sé cómo se llama la víctima. Ocurrió en la plaza Heroínas. Fue un hombre que no conozco. No sé si hay testigos. No sé si tengo algo para mostrar. No lo sé.",
+  "representadas": [
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HOM.HECHO#infanticidio",
+   "Q.HOM.VICTIMA#esposa",
+   "Q.HOM.VICTIMA_NOMBRE#no_sabe",
+   "Q.LUG.DONDE#plaza",
+   "Q.RIE.PIDE_PROTECCION#no_sabe",
+   "Q.TES.EXISTE#no_sabe",
+   "Q.VIO.AGRESOR#hombre"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "tentativa"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hoy"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "conoce"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.VINCULO",
+     "estado": "afirmado",
+     "opciones": [
+      "otro"
+     ],
+     "valores": {
+      "otro": {
+       "texto": "un recibo firmado"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.PER.NOMBRE_TERCERO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Intentaron matar a una persona. Ocurrió hoy. No sé exactamente dónde ocurrió. Fue alguien que conozco. Es un recibo firmado. No sé si tengo algo para mostrar. Necesito protección. Quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#si",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HOM.HECHO#tentativa",
+   "Q.LUG.DONDE#no_sabe",
+   "Q.PER.VINCULO#otro",
+   "Q.RIE.PIDE_PROTECCION#si",
+   "Q.TIE.CUANDO#hoy",
+   "Q.VIO.AGRESOR#conoce"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "homicidio"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_s"
+     ],
+     "valores": {
+      "hace_s": {
+       "n": "4"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "barrio"
+     ],
+     "valores": {
+      "barrio": {
+       "nombre": "Heroínas"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Mataron a una persona. Ocurrió hace 4 semanas. Ocurrió en el barrio Heroínas. No hay testigos. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.HOM.HECHO#homicidio",
+   "Q.LUG.DONDE#barrio",
+   "Q.TES.EXISTE#no",
+   "Q.TIE.CUANDO#hace_s"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "pariente"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_s"
+     ],
+     "valores": {
+      "hace_s": {
+       "n": "12"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "No sé cómo murió. La víctima es un pariente. No sé cómo se llama la víctima. Ocurrió hace 12 semanas. No sé exactamente dónde ocurrió. No sé si hay testigos. No tengo fotos, video ni otra cosa para mostrar. No lo sé. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.HOM.HECHO#no_sabe",
+   "Q.HOM.VICTIMA#pariente",
+   "Q.HOM.VICTIMA_NOMBRE#no_sabe",
+   "Q.LUG.DONDE#no_sabe",
+   "Q.RIE.PIDE_PROTECCION#no_sabe",
+   "Q.TES.EXISTE#no_sabe",
+   "Q.TIE.CUANDO#hace_s"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "feminicidio"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "hermano"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "plaza"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "omitido",
+     "opciones": []
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Mataron a una mujer. La víctima es mi hermano. No sé cómo se llama la víctima. Ocurrió en la plaza. No sé quién fue. No hay testigos. No sé si tengo algo para mostrar.",
+  "representadas": [
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HOM.HECHO#feminicidio",
+   "Q.HOM.VICTIMA#hermano",
+   "Q.HOM.VICTIMA_NOMBRE#no_sabe",
+   "Q.LUG.DONDE#plaza",
+   "Q.TES.EXISTE#no",
+   "Q.VIO.AGRESOR#no_sabe"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "tentativa"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "ahora"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "conoce"
+     ]
+    },
+    {
+     "pregunta": "Q.PER.VINCULO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.PER.NOMBRE_TERCERO",
+     "estado": "afirmado",
+     "opciones": [
+      "nombre"
+     ],
+     "valores": {
+      "nombre": {
+       "nombre": "Juan Mamani"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Intentaron matar a una persona. No sé quién es la víctima. Ocurrió hace un momento. Ocurrió dentro de un micro. Fue alguien que conozco. Se llama Juan Mamani. No tengo fotos, video ni otra cosa para mostrar. No lo sé. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.HOM.HECHO#tentativa",
+   "Q.HOM.VICTIMA#no_sabe",
+   "Q.LUG.DONDE#micro",
+   "Q.PER.NOMBRE_TERCERO#nombre",
+   "Q.RIE.PIDE_PROTECCION#no_sabe",
+   "Q.TIE.CUANDO#ahora",
+   "Q.VIO.AGRESOR#conoce"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "infanticidio"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "pariente"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "ahora"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.AUTORIDAD",
+     "estado": "afirmado",
+     "opciones": [
+      "felcv"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Mataron a un niño. La víctima es un pariente. Ocurrió hace un momento. Ocurrió dentro de un micro. No tengo fotos, video ni otra cosa para mostrar. No necesito protección. Sí, quiero presentar una denuncia. Quiero presentarla ante la FELCV.",
+  "representadas": [
+   "Q.DEN.AUTORIDAD#felcv",
+   "Q.DEN.INTENCION#si",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.HOM.HECHO#infanticidio",
+   "Q.HOM.VICTIMA#pariente",
+   "Q.LUG.DONDE#micro",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.TIE.CUANDO#ahora"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "standalone",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "hermana"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "afirmado",
+     "opciones": [
+      "hace_m"
+     ],
+     "valores": {
+      "hace_m": {
+       "n": "1"
+      }
+     }
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "barrio"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.TIPOS",
+     "estado": "afirmado",
+     "opciones": [
+      "video",
+      "certificado",
+      "fotos"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "No sé cómo murió. La víctima es mi hermana. No sé cómo se llama la víctima. Ocurrió hace un mes. Ocurrió en el barrio. No sé si hay testigos. Tengo fotos, un video y un certificado. No necesito protección. Todavía no sé si quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no_sabe",
+   "Q.EVI.QUE_TIENE#si",
+   "Q.EVI.TIPOS#certificado",
+   "Q.EVI.TIPOS#fotos",
+   "Q.EVI.TIPOS#video",
+   "Q.HOM.HECHO#no_sabe",
+   "Q.HOM.VICTIMA#hermana",
+   "Q.HOM.VICTIMA_NOMBRE#no_sabe",
+   "Q.LUG.DONDE#barrio",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.TES.EXISTE#no_sabe",
+   "Q.TIE.CUANDO#hace_m"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "initiative",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "tentativa"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "hija"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "desconocido",
+     "opciones": [
+      "no_recuerda"
+     ]
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "afirmado",
+     "opciones": [
+      "si"
+     ]
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Intentaron matar a una persona. La víctima es mi hija. No sé cómo se llama la víctima. No recuerdo cuándo ocurrió. No sé exactamente dónde ocurrió. Hay testigos. No tengo fotos, video ni otra cosa para mostrar. No lo sé. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no",
+   "Q.HOM.HECHO#tentativa",
+   "Q.HOM.VICTIMA#hija",
+   "Q.HOM.VICTIMA_NOMBRE#no_sabe",
+   "Q.LUG.DONDE#no_sabe",
+   "Q.RIE.PIDE_PROTECCION#no_sabe",
+   "Q.TES.EXISTE#si",
+   "Q.TIE.CUANDO#no_recuerda"
+  ]
+ },
+ {
+  "guided": {
+   "recorrido": "homicidio",
+   "proposito": "reply",
+   "respuestas": [
+    {
+     "pregunta": "Q.HOM.HECHO",
+     "estado": "afirmado",
+     "opciones": [
+      "homicidio"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA",
+     "estado": "afirmado",
+     "opciones": [
+      "hermano"
+     ]
+    },
+    {
+     "pregunta": "Q.HOM.VICTIMA_NOMBRE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.TIE.CUANDO",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.LUG.DONDE",
+     "estado": "afirmado",
+     "opciones": [
+      "micro"
+     ]
+    },
+    {
+     "pregunta": "Q.VIO.AGRESOR",
+     "estado": "afirmado",
+     "opciones": [
+      "mujer"
+     ]
+    },
+    {
+     "pregunta": "Q.TES.EXISTE",
+     "estado": "omitido",
+     "opciones": []
+    },
+    {
+     "pregunta": "Q.EVI.QUE_TIENE",
+     "estado": "desconocido",
+     "opciones": [
+      "no_sabe"
+     ]
+    },
+    {
+     "pregunta": "Q.RIE.PIDE_PROTECCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    },
+    {
+     "pregunta": "Q.DEN.INTENCION",
+     "estado": "negado",
+     "opciones": [
+      "no"
+     ]
+    }
+   ],
+   "pasos": [
+    "Q.HOM.HECHO",
+    "Q.HOM.VICTIMA",
+    "Q.HOM.VICTIMA_NOMBRE",
+    "Q.TIE.CUANDO",
+    "Q.LUG.DONDE",
+    "Q.VIO.AGRESOR",
+    "Q.PER.VINCULO",
+    "Q.PER.NOMBRE_TERCERO",
+    "Q.TES.EXISTE",
+    "Q.EVI.QUE_TIENE",
+    "Q.EVI.TIPOS",
+    "Q.RIE.PIDE_PROTECCION",
+    "Q.DEN.INTENCION",
+    "Q.DEN.AUTORIDAD"
+   ]
+  },
+  "texto": "Mataron a una persona. La víctima es mi hermano. Ocurrió dentro de un micro. Fue una mujer que no conozco. No sé si tengo algo para mostrar. No necesito protección. Por ahora no quiero presentar una denuncia.",
+  "representadas": [
+   "Q.DEN.INTENCION#no",
+   "Q.EVI.QUE_TIENE#no_sabe",
+   "Q.HOM.HECHO#homicidio",
+   "Q.HOM.VICTIMA#hermano",
+   "Q.LUG.DONDE#micro",
+   "Q.RIE.PIDE_PROTECCION#no",
+   "Q.VIO.AGRESOR#mujer"
+  ]
+ },
+ {
+  "guided": {
    "recorrido": "identificacion",
    "proposito": "standalone",
    "respuestas": [

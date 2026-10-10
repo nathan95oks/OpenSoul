@@ -92,8 +92,10 @@ CAMPOS_PREGUNTA = ("id", "dominio", "formulacion", "acto", "entidad", "campo", "
 
 # Lo que un recorrido puede declarar de su contexto cuando no está escrito a
 # mano en context_catalog.dart: con esto basta para que la app lo liste en su
-# familia y el grafo de conversación lo pueda abrir.
-CAMPOS_CONTEXTO = {"nombre", "familia", "descripcion", "emoji", "icono"}
+# familia y el grafo de conversación lo pueda abrir. `pistas` son palabras
+# habladas que también lo nombran («asesinato», «mataron» para Homicidio),
+# además de las de su nombre.
+CAMPOS_CONTEXTO = {"nombre", "familia", "descripcion", "emoji", "icono", "pistas"}
 CAMPOS_CONTEXTO_OBLIGATORIOS = ("nombre", "familia", "descripcion", "emoji")
 
 
@@ -138,6 +140,10 @@ def validar_contexto(cid, ctx, repo, errores):
     if familia and familia not in repo["familias"]:
         errores.append(f"recorrido {cid}: familia desconocida «{familia}» "
                        f"(existen {sorted(repo['familias'])})")
+    pistas = ctx.get("pistas", [])
+    if not isinstance(pistas, list) or not all(
+            isinstance(p, str) and p.strip() for p in pistas):
+        errores.append(f"recorrido {cid}: «pistas» debe ser una lista de palabras")
 
 
 def validar_zonas_oyente(zonas, Q, repo, errores):
