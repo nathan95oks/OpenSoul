@@ -184,11 +184,16 @@ class AudioTranslationController extends Notifier<AudioTranslationState> {
         translationResult: _withLostVerbs(text, result, catalog),
         pendingClarifications: const [],
       );
-    } catch (e) {
+    } catch (_) {
       if (myToken != _requestToken) return;
       state = state.copyWith(
         status: AudioTranslationStatus.error,
-        errorMessage: e.toString(),
+        // No se exponen excepciones técnicas del servicio (por ejemplo,
+        // "Exception: Failed to translate") a la persona usuaria. Se usa el
+        // mismo mensaje claro que en Conversación cuando no hay conexión.
+        errorMessage:
+            'No se pudo traducir el mensaje a señas. '
+            'Revisa tu conexión e intenta de nuevo.',
       );
     }
   }

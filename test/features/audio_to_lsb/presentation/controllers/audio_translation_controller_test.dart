@@ -90,7 +90,11 @@ void main() {
 
       final state = container.read(audioTranslationControllerProvider);
       expect(state.status, AudioTranslationStatus.error);
-      expect(state.errorMessage, "Exception: Network Timeout error");
+      expect(
+        state.errorMessage,
+        'No se pudo traducir el mensaje a señas. '
+        'Revisa tu conexión e intenta de nuevo.',
+      );
     });
 
     test(
