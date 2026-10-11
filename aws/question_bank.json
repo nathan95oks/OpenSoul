@@ -11,6 +11,9 @@
   "ABUSAR": [
    "hecho"
   ],
+  "ACCIDENTE": [
+   "hecho"
+  ],
   "ACOMPAÑAR": [
    "compania"
   ],
@@ -374,6 +377,9 @@
   "MAMÁ": [
    "persona"
   ],
+  "MATAR": [
+   "hecho"
+  ],
   "MAÑANA": [
    "tiempo"
   ],
@@ -400,6 +406,9 @@
    "objeto",
    "prenda"
   ],
+  "MORIR": [
+   "hecho"
+  ],
   "MOSTRAR": [
    "hecho"
   ],
@@ -417,6 +426,12 @@
   ],
   "NEGRO": [
    "modificador"
+  ],
+  "NIÑA": [
+   "persona"
+  ],
+  "NIÑO": [
+   "persona"
   ],
   "NO": [
    "polaridad"
@@ -592,6 +607,9 @@
   ],
   "TRAER": [
    "consulta"
+  ],
+  "TRATAR": [
+   "modificador"
   ],
   "TRUFI": [
    "lugar",
@@ -5006,41 +5024,51 @@
      "estado": "afirmado",
      "etiqueta": "Mataron a una persona",
      "frase": "Mataron a una persona.",
-     "glosas": [],
-     "id": "homicidio",
-     "sinSena": true
+     "glosas": [
+      "MATAR"
+     ],
+     "id": "homicidio"
     },
     {
      "estado": "afirmado",
      "etiqueta": "Mataron a una mujer",
      "frase": "Mataron a una mujer.",
-     "glosas": [],
-     "id": "feminicidio",
-     "sinSena": true
+     "glosas": [
+      "MATAR",
+      "MUJER"
+     ],
+     "id": "feminicidio"
     },
     {
      "estado": "afirmado",
      "etiqueta": "Mataron a un niño o niña",
      "frase": "Mataron a un niño.",
-     "glosas": [],
-     "id": "infanticidio",
-     "sinSena": true
+     "glosas": [
+      "MATAR",
+      "NIÑO",
+      "NIÑA"
+     ],
+     "id": "infanticidio"
     },
     {
      "estado": "afirmado",
      "etiqueta": "Intentaron matar a una persona",
      "frase": "Intentaron matar a una persona.",
-     "glosas": [],
-     "id": "tentativa",
-     "sinSena": true
+     "glosas": [
+      "MATAR",
+      "TRATAR"
+     ],
+     "id": "tentativa"
     },
     {
      "estado": "afirmado",
      "etiqueta": "Murió en un accidente",
      "frase": "Una persona murió en un accidente.",
-     "glosas": [],
-     "id": "accidente",
-     "sinSena": true
+     "glosas": [
+      "ACCIDENTE",
+      "MORIR"
+     ],
+     "id": "accidente"
     },
     {
      "estado": "desconocido",
@@ -5056,7 +5084,7 @@
    "reglas": [
     "Homicidio, feminicidio, infanticidio, homicidio culposo (accidente) y tentativa: la persona elige el hecho; el tipo penal lo califica la Fiscalía.",
     "Parricidio no es una opción: se deduce de la víctima (Q.HOM.VICTIMA: mamá).",
-    "MATAR y MORIR no están en el catálogo: las opciones de muerte van sin seña."
+    "Señas de los módulos oficiales: MATAR (M3 p.55), MORIR (M2 p.91), ACCIDENTE (M4 p.99), NIÑO y NIÑA (M2 p.67) y TRATAR = intentar (D2024 p.216). El hecho va primero y la víctima o el matiz después, como PAREJA · PASADO."
    ],
    "variantes": []
   },
@@ -8498,8 +8526,7 @@
    ],
    "plantilla": "Estas personas necesitan protección: {items}.",
    "reglas": [
-    "Plantilla: «{terceros} necesita(n) protección.»",
-    "NIÑO no está en el catálogo."
+    "Plantilla: «{terceros} necesita(n) protección.»"
    ],
    "variantes": []
   },

@@ -741,6 +741,12 @@ Este apéndice conserva la unión de las entradas v2/v3 para no perder trabajo p
 |INSTITUCIÓN|Institución|D2024-312|II Diccionario Bilingüe LSB-Castellano (2024), p.116|0|P3|B — directo D2024|
 |MALTRATAR|Maltratar|D2024-p135|II Diccionario Bilingüe LSB-Castellano (2024), p.135|0|P3|B — directo D2024|
 |ÓRGANO-JUDICIAL|Órgano Judicial|D2024-p157|II Diccionario Bilingüe LSB-Castellano (2024), p.157|0|P3|B — directo D2024|
+|MATAR|Matar|M3-T04-09|M3 · Verbos III · p.55|0|P3|A — M1–M4 trazado|
+|MORIR|Morir|M2-T13-04|M2 · Salud sexual y reproductiva · p.91|0|P3|A — M1–M4 trazado|
+|ACCIDENTE|Accidente|M4-T11-04|M4 · General II · p.99|0|P3|A — M1–M4 trazado|
+|NIÑO|Niño|M2-T08-22|M2 · Familia II · p.67|0|P3|A — M1–M4 trazado|
+|NIÑA|Niña|M2-T08-21|M2 · Familia II · p.67|0|P3|A — M1–M4 trazado|
+|TRATAR|Tratar (intentar)|D2024-573|II Diccionario Bilingüe LSB-Castellano (2024), p.216|0|P3|B — directo D2024|
 
 # **13. Fuentes y trazabilidad**
 Ministerio de Educación de Bolivia / Federación Boliviana de Sordos. Curso de Enseñanza de la Lengua de Señas Boliviana (LSB), Módulos 1, 2, 3 y 4. 2010.

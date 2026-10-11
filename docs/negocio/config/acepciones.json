@@ -1622,6 +1622,48 @@
     "sentido": "institución o dependencia",
     "origen": "revisión fase 2"
    }
+  ],
+  "MATAR": [
+   {
+    "campo": "hecho",
+    "sentido": "acción",
+    "origen": "revisión 2026-10 (contexto Homicidio)"
+   }
+  ],
+  "MORIR": [
+   {
+    "campo": "hecho",
+    "sentido": "suceso",
+    "origen": "revisión 2026-10 (contexto Homicidio)"
+   }
+  ],
+  "ACCIDENTE": [
+   {
+    "campo": "hecho",
+    "sentido": "suceso",
+    "origen": "revisión 2026-10 (contexto Homicidio)"
+   }
+  ],
+  "NIÑO": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión 2026-10 (contexto Homicidio)"
+   }
+  ],
+  "NIÑA": [
+   {
+    "campo": "persona",
+    "sentido": "persona",
+    "origen": "revisión 2026-10 (contexto Homicidio)"
+   }
+  ],
+  "TRATAR": [
+   {
+    "campo": "modificador",
+    "sentido": "intentar: matiza el verbo que acompaña",
+    "origen": "revisión 2026-10 (contexto Homicidio)"
+   }
   ]
  }
 }

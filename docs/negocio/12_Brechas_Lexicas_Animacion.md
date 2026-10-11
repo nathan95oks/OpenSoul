@@ -17,7 +17,7 @@ Cinco cosas distintas: (1) que la glosa exista en el catálogo; (2) su acepción
 | TRANSFERENCIA, QR, CUENTA, DEPÓSITO, EFECTIVO | Q.DIN.MECANISMO | Sin glosa | No redactar «transferencia»; «Otra forma (escribir)» literal |
 | MENSAJE, CAPTURA, PANTALLA, CHAT | Q.DIG.* | Sin glosa; corpus: ESCRIBIR (mensajes), FOTOS·CELULAR (capturas), ESCRIBIR·TOTAL (conversación) | Composiciones del corpus; nunca inferir canal |
 | WHATSAPP, SMS, FACEBOOK | Q.DIG.CANAL | Sin glosa; WHATSAPP solo en la tabla léxica | Solo texto literal escrito por la persona |
-| NIÑO, ANCIANO | Q.PER.DESC.EDAD, Q.RIE.QUIENES | Sin glosa ni lexema; el asistente los ofrece y se pierden en la frase | Retirar del asistente o marcarlos como texto literal |
+| ANCIANO | Q.PER.DESC.EDAD, Q.RIE.QUIENES | Sin glosa ni lexema; el asistente los ofrece y se pierden en la frase | Retirar del asistente o marcarlos como texto literal |
 | COLOR y colores BLANCO, VERDE, CAFÉ, GRIS, AMARILLO, NARANJA, MORADO | Q.PER.DESC.ROPA, Q.PER.DESC.CABELLO | Solo NEGRO, AZUL y ROJO tienen glosa | Texto literal declarado para el resto |
 | DENUNCIA / DENUNCIAR | Q.DEN.INTENCION | Concepto pendiente (corpus §4); composición QUEJAR+AUTORIDAD sin validar | Responder con SÍ/NO; en texto→LSB, dactilología o composición marcada como provisional |
 | FIRMA / FIRMAR | Q.SEG.LEER_ANTES_FIRMAR | Composición provisional NOMBRE·ESCRIBIR | No afirmar firma |
@@ -37,11 +37,6 @@ Cinco cosas distintas: (1) que la glosa exista en el catálogo; (2) su acepción
 
 | Pregunta | Opción | Frase |
 |---|---|---|
-| `Q.HOM.HECHO` | Mataron a una persona | Mataron a una persona. |
-| `Q.HOM.HECHO` | Mataron a una mujer | Mataron a una mujer. |
-| `Q.HOM.HECHO` | Mataron a un niño o niña | Mataron a un niño. |
-| `Q.HOM.HECHO` | Intentaron matar a una persona | Intentaron matar a una persona. |
-| `Q.HOM.HECHO` | Murió en un accidente | Una persona murió en un accidente. |
 | `Q.ID.DOC_TIPO` | Pasaporte | Presento mi pasaporte. |
 | `Q.ID.DOC_TIPO` | Licencia de conducir | Presento mi licencia de conducir. |
 | `Q.SEG.MOTIVO` | Otra consulta (escribir) | Quiero consultar esto: «{texto}». |
@@ -67,6 +62,6 @@ El valor escrito se guarda y se redacta tal cual; no se convierte en glosas.
 
 Solo cuenta para mostrar una frase en el avatar (texto/voz → LSB). La salida de las tarjetas es texto y audio en español.
 
-- Glosas distintas en respuestas del banco: **147**.
+- Glosas distintas en respuestas del banco: **153**.
 - Con clip declarado en `available3DGlosses` (árbol de trabajo al generar): **74** — CUÁNDO, VOLVER, ESPERAR, CUÁNTOS, HORA, DÓNDE, POLICÍA, OFICINA, QUIÉN, QUÉ, JUEZ, ABOGADO, INTÉRPRETE, HABLAR, PUEDO, AUTORIDAD, FACTURA, TRAER, NECESITAR, FOTOCOPIA, CERTIFICADO, CELULAR, BUSCAR, FOTOS, DAR, VIDEO, MAÑANA, PAPEL, RECIBIR, INVESTIGACIÓN, SÍ, NO, COMPRENDER, LENTO, EXPLICAR, POR_FAVOR, NO_SABER, LEER, ASISTENCIA, CASA, 1, AMENAZAR, HOMBRE, MUJER, BANCO, ENGAÑAR, BILLETES, ENVIAR, RECORDAR, IDENTIDAD, RESOLUCIÓN, YO, ÉL, ROBAR, PERDER, DAÑAR, ACOMPAÑAR, DENTRO, CALLE, AVENIDA, CERCA, SEMANA, AYER, HOY, FECHA, SABER, QUERER, PEDIR, VER, PEGAR, AHORA, TARDE, PRIMERA_VEZ, VIOLENCIA.
 - El resto se deletrea o queda como marcador en el avatar. La lista real de clips vive en el `.glb` de S3, que no está en el repositorio: **no se ha verificado en dispositivo**.

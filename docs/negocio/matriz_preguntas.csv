@@ -217,11 +217,11 @@ Q.HEC.QUE_OCURRIO;relato;¿Qué ocurrió?;seleccion_multiple;hecho;frase;denunci
 Q.HEC.QUE_OCURRIO;relato;¿Qué ocurrió?;seleccion_multiple;hecho;frase;denuncia_robo#1;n-s6-inicio_de_denuncia-02;escapar;Alguien escapó;ESCAPAR;hecho;afirmado;False;;;;False;recorrido|respuesta al funcionario
 Q.HEC.RELATO_ORDENADO;relato;¿Puede contarme lo sucedido desde el inicio?;polar2;polaridad;frase;;n-s6-inicio_de_denuncia-03;si;Sí;SÍ;polaridad;afirmado;False;;Sí. Quiero explicar lo sucedido desde el principio.;;False;respuesta al funcionario
 Q.HEC.RELATO_ORDENADO;relato;¿Puede contarme lo sucedido desde el inicio?;polar2;polaridad;frase;;n-s6-inicio_de_denuncia-03;no;No;NO;polaridad;negado;False;;Ahora no puedo contarlo.;;False;respuesta al funcionario
-Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;homicidio;Mataron a una persona;;;afirmado;False;;Mataron a una persona.;;True;recorrido
-Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;feminicidio;Mataron a una mujer;;;afirmado;False;;Mataron a una mujer.;;True;recorrido
-Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;infanticidio;Mataron a un niño o niña;;;afirmado;False;;Mataron a un niño.;;True;recorrido
-Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;tentativa;Intentaron matar a una persona;;;afirmado;False;;Intentaron matar a una persona.;;True;recorrido
-Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;accidente;Murió en un accidente;;;afirmado;False;;Una persona murió en un accidente.;;True;recorrido
+Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;homicidio;Mataron a una persona;MATAR;hecho;afirmado;False;;Mataron a una persona.;;False;recorrido
+Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;feminicidio;Mataron a una mujer;MATAR|MUJER;hecho;afirmado;False;;Mataron a una mujer.;;False;recorrido
+Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;infanticidio;Mataron a un niño o niña;MATAR|NIÑO|NIÑA;hecho;afirmado;False;;Mataron a un niño.;;False;recorrido
+Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;tentativa;Intentaron matar a una persona;MATAR|TRATAR;hecho;afirmado;False;;Intentaron matar a una persona.;;False;recorrido
+Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;accidente;Murió en un accidente;ACCIDENTE|MORIR;hecho;afirmado;False;;Una persona murió en un accidente.;;False;recorrido
 Q.HOM.HECHO;homicidio;¿Qué ocurrió?;seleccion_unica;hecho;frase;homicidio#1;;no_sabe;No sé cómo murió;NO_SABER;polaridad;desconocido;True;;No sé cómo murió.;;False;recorrido
 Q.HOM.VICTIMA;homicidio;¿Quién es la víctima?;seleccion_unica;persona;frase;homicidio#2;;pareja;Mi pareja;PAREJA;persona;afirmado;False;;La víctima es mi pareja.;;False;recorrido
 Q.HOM.VICTIMA;homicidio;¿Quién es la víctima?;seleccion_unica;persona;frase;homicidio#2;;esposa;Mi esposa;ESPOSA;persona;afirmado;False;;La víctima es mi esposa.;;False;recorrido

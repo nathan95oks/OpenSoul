@@ -2,7 +2,7 @@
 
 Fuente: `docs/Corpus_Maestro_Unificado_LSB_v4_Auditado (2).md`, secciones 6, 7 y
 8 (98 preguntas del funcionario, 60 del ciudadano y 51 declaraciones) y la
-sección 12 (303 glosas del apéndice).
+sección 12 (309 glosas del apéndice).
 
 Lo que el corpus llama «conceptos LSB objetivo» es un objetivo semántico, no
 una secuencia validada ni prueba de que exista una animación. Este módulo
@@ -225,7 +225,7 @@ def load_corpus_entries() -> list:
 
 
 def load_corpus_glosses() -> dict:
-    """Las 303 glosas del apéndice 12, indexadas por clave normalizada."""
+    """Las 309 glosas del apéndice 12, indexadas por clave normalizada."""
     text = open(corpus_path(), encoding="utf-8").read()
     a, b = _section_bounds(text, 12)
     out = {}

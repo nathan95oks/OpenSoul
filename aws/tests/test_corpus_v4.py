@@ -40,8 +40,8 @@ class CorpusMaestroV4(unittest.TestCase):
             return g.isdigit()
         return g in DACTILOLOGIA_INSTITUCIONAL
 
-    def test_la_seccion_12_tiene_303_glosas(self):
-        self.assertEqual(303, len(self.seccion12))
+    def test_la_seccion_12_tiene_309_glosas(self):
+        self.assertEqual(309, len(self.seccion12))
 
     def test_el_diccionario_de_la_app_es_el_corpus_v4(self):
         fuera = [e["gloss"] for e in self.entradas

@@ -13,15 +13,15 @@ class _ImagesOff extends SignImagesNotifier {
 void main() {
   final bank = QuestionBank.generated();
 
-  test('las 548 opciones con seña muestran su secuencia LSB completa', () {
+  test('las 553 opciones con seña muestran su secuencia LSB completa', () {
     final options = [
       for (final question in bank.allQuestions) ...question.options,
     ];
     final signed = options.where((option) => option.hasSign).toList();
     final fallback = options.where((option) => !option.hasSign).toList();
     expect(options, hasLength(599));
-    expect(signed, hasLength(548));
-    expect(fallback, hasLength(51));
+    expect(signed, hasLength(553));
+    expect(fallback, hasLength(46));
 
     for (final option in signed) {
       expect(
@@ -38,6 +38,21 @@ void main() {
     expect(
       {for (final option in happened.options) option.displayFormulation},
       {'ROBAR', 'PERDER', 'DAÑAR', 'ESCAPAR'},
+    );
+
+    // Homicidio: cada hecho es una secuencia de señas, no una oración en
+    // español («Mataron a una persona») metida en la tarjeta.
+    final homicide = bank.question('Q.HOM.HECHO')!;
+    expect(
+      {for (final option in homicide.options) option.displayFormulation},
+      {
+        'MATAR',
+        'MATAR · MUJER',
+        'MATAR · NIÑO · NIÑA',
+        'MATAR · TRATAR',
+        'ACCIDENTE · MORIR',
+        'NO_SABER',
+      },
     );
   });
 

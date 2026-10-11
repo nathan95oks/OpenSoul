@@ -225,7 +225,7 @@ void main() {
       final delAsset = File('assets/dictionary/official_dictionary.json')
           .readAsStringSync();
       expect(delAsset, isNotEmpty);
-      expect(loadOfficialEntries(), hasLength(346));
+      expect(loadOfficialEntries(), hasLength(352));
     });
   });
 }

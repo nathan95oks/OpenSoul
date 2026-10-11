@@ -4689,49 +4689,59 @@
    "reglas": [
     "Homicidio, feminicidio, infanticidio, homicidio culposo (accidente) y tentativa: la persona elige el hecho; el tipo penal lo califica la Fiscalía.",
     "Parricidio no es una opción: se deduce de la víctima (Q.HOM.VICTIMA: mamá).",
-    "MATAR y MORIR no están en el catálogo: las opciones de muerte van sin seña."
+    "Señas de los módulos oficiales: MATAR (M3 p.55), MORIR (M2 p.91), ACCIDENTE (M4 p.99), NIÑO y NIÑA (M2 p.67) y TRATAR = intentar (D2024 p.216). El hecho va primero y la víctima o el matiz después, como PAREJA · PASADO."
    ],
    "modo": "frase",
    "opciones": [
     {
      "id": "homicidio",
      "etiqueta": "Mataron a una persona",
-     "glosas": [],
+     "glosas": [
+      "MATAR"
+     ],
      "estado": "afirmado",
-     "frase": "Mataron a una persona.",
-     "sinSena": true
+     "frase": "Mataron a una persona."
     },
     {
      "id": "feminicidio",
      "etiqueta": "Mataron a una mujer",
-     "glosas": [],
+     "glosas": [
+      "MATAR",
+      "MUJER"
+     ],
      "estado": "afirmado",
-     "frase": "Mataron a una mujer.",
-     "sinSena": true
+     "frase": "Mataron a una mujer."
     },
     {
      "id": "infanticidio",
      "etiqueta": "Mataron a un niño o niña",
-     "glosas": [],
+     "glosas": [
+      "MATAR",
+      "NIÑO",
+      "NIÑA"
+     ],
      "estado": "afirmado",
-     "frase": "Mataron a un niño.",
-     "sinSena": true
+     "frase": "Mataron a un niño."
     },
     {
      "id": "tentativa",
      "etiqueta": "Intentaron matar a una persona",
-     "glosas": [],
+     "glosas": [
+      "MATAR",
+      "TRATAR"
+     ],
      "estado": "afirmado",
-     "frase": "Intentaron matar a una persona.",
-     "sinSena": true
+     "frase": "Intentaron matar a una persona."
     },
     {
      "id": "accidente",
      "etiqueta": "Murió en un accidente",
-     "glosas": [],
+     "glosas": [
+      "ACCIDENTE",
+      "MORIR"
+     ],
      "estado": "afirmado",
-     "frase": "Una persona murió en un accidente.",
-     "sinSena": true
+     "frase": "Una persona murió en un accidente."
     },
     {
      "id": "no_sabe",
@@ -8303,8 +8313,7 @@
    "control": "seleccion_multiple",
    "maximo": 3,
    "reglas": [
-    "Plantilla: «{terceros} necesita(n) protección.»",
-    "NIÑO no está en el catálogo."
+    "Plantilla: «{terceros} necesita(n) protección.»"
    ],
    "modo": "frase",
    "opciones": [
@@ -13611,7 +13620,7 @@
    "tratamiento": "Solo texto literal escrito por la persona"
   },
   {
-   "concepto": "NIÑO, ANCIANO",
+   "concepto": "ANCIANO",
    "necesario": [
     "Q.PER.DESC.EDAD",
     "Q.RIE.QUIENES"

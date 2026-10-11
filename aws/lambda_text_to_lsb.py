@@ -107,13 +107,13 @@ AVAILABLE_GLOSSES = {
     # --- Preguntas (8) ---
     "AMBOS", "ELLA", "ELLOS", "NOSOTROS", "SUYO", "TUYO",
     "VARIOS", "YO",
-    # --- Identificación (31) ---
+    # --- Identificación (33) ---
     "ADULTO", "ALTO", "AMIGO", "ASOCIACIÓN_SORDOS", "BAJO", "COMPAÑERO",
     "COMUNIDAD_SORDA", "EDAD", "ESPOSA", "FLACO", "GORDO", "HERMANA",
     "HERMANO", "HIJA", "HIJO", "HOMBRE", "IDENTIDAD", "JEFE",
-    "JOVEN", "LADRÓN", "MAMÁ", "MUJER", "NOMBRE", "OYENTE",
-    "PAREJA", "PARIENTE", "SEPARADOS", "SEÑOR", "SORDO", "TESTIGO",
-    "TRABAJADOR",
+    "JOVEN", "LADRÓN", "MAMÁ", "MUJER", "NIÑA", "NIÑO",
+    "NOMBRE", "OYENTE", "PAREJA", "PARIENTE", "SEPARADOS", "SEÑOR",
+    "SORDO", "TESTIGO", "TRABAJADOR",
     # --- Instituciones (19) ---
     "ABOGADO", "ALCALDÍA", "ASISTENTE", "AUTORIDAD", "DOCTOR", "FELCC",
     "FELCV", "FISCALIA", "GOBIERNO", "HOSPITAL", "INSTITUCIÓN", "INTÉRPRETE",
@@ -122,7 +122,7 @@ AVAILABLE_GLOSSES = {
     # --- Conceptos jurídicos (12) ---
     "ASISTENCIA", "CONVOCAR", "DISCRIMINACIÓN", "INVESTIGACIÓN", "JUSTICIA", "LEY",
     "PLAZO", "PROHIBIDO", "RESOLUCIÓN", "RESULTADO", "TESTIMONIO", "TRÁMITE",
-    # --- Acciones (87) ---
+    # --- Acciones (88) ---
     "ABRIR", "ACEPTAR", "ACOMPAÑAR", "ANDAR", "ARREGLAR", "ARRESTAR",
     "ATENDER", "AUMENTAR", "AVISAR", "AYUDAR", "BOCA", "BRAZO",
     "BURLAR", "BUSCAR", "CABELLO", "CAMBIAR", "COMPRAR", "CONOCER",
@@ -136,13 +136,13 @@ AVAILABLE_GLOSSES = {
     "NECESITAR", "OBSERVAR", "ORGANIZAR", "OÍR", "PALABRA", "PEDIR",
     "PRESENTAR", "PROTEGER", "QUEJAR", "QUERER", "QUIÉN", "QUÉ",
     "RECHAZAR", "RECIBIR", "RECORDAR", "REUNIÓN", "TENER", "TERMINAR",
-    "TOTAL", "TRAER", "TÚ", "VENDER", "VENIR", "VER",
-    "VIVIR", "VOLVER", "ÉL",
-    # --- Hechos y urgencia (20) ---
-    "ABUSAR", "AMENAZAR", "AUXILIO", "BUENOS_DÍAS", "DAÑAR", "DOLOR",
-    "ENGAÑAR", "ESCAPAR", "FRACTURA", "HERIDA", "HUESOS", "MALTRATAR",
-    "MÁS_O_MENOS", "PEGAR", "PELEAR", "PERDER", "ROBAR", "SÍ",
-    "URGENTE", "VIOLENCIA",
+    "TOTAL", "TRAER", "TRATAR", "TÚ", "VENDER", "VENIR",
+    "VER", "VIVIR", "VOLVER", "ÉL",
+    # --- Hechos y urgencia (23) ---
+    "ABUSAR", "ACCIDENTE", "AMENAZAR", "AUXILIO", "BUENOS_DÍAS", "DAÑAR",
+    "DOLOR", "ENGAÑAR", "ESCAPAR", "FRACTURA", "HERIDA", "HUESOS",
+    "MALTRATAR", "MATAR", "MORIR", "MÁS_O_MENOS", "PEGAR", "PELEAR",
+    "PERDER", "ROBAR", "SÍ", "URGENTE", "VIOLENCIA",
     # --- Descripción (15) ---
     "AZUL", "BUENO", "CARO", "CORTO", "DIFERENTE", "DIFÍCIL",
     "LENTO", "MAL", "MEJOR", "MUCHO", "NEGRO", "NUEVO",

@@ -44,7 +44,7 @@ def modelo(zonas):
 class Catalogo(unittest.TestCase):
     def test_cada_sena_oficial_tiene_su_zona(self):
         zonas = Z.cargar_zonas()
-        self.assertEqual(len(zonas), 346)
+        self.assertEqual(len(zonas), 352)
         self.assertEqual(zonas["PAPEL"], "Documentos")
         self.assertEqual(zonas["AYER"], "Tiempo")
 

@@ -415,9 +415,13 @@
   },
   "ACCIDENTE": {
    "formas": [
-    "Accidente"
+    "Accidente",
+    "un accidente"
    ],
    "fuentes": [
+    {
+     "fuente": "catalogo"
+    },
     {
      "fuente": "M4",
      "pagina": 99,
@@ -425,7 +429,7 @@
      "n": 4
     }
    ],
-   "catalogo": false,
+   "catalogo": true,
    "animacion": false
   },
   "ACEITE": {
@@ -18072,9 +18076,13 @@
   },
   "MATAR": {
    "formas": [
-    "Matar"
+    "Matar",
+    "mató"
    ],
    "fuentes": [
+    {
+     "fuente": "catalogo"
+    },
     {
      "fuente": "M3",
      "pagina": 55,
@@ -18082,7 +18090,7 @@
      "n": 9
     }
    ],
-   "catalogo": false,
+   "catalogo": true,
    "animacion": false
   },
   "MATE": {
@@ -19001,9 +19009,13 @@
   },
   "MORIR": {
    "formas": [
-    "Morir"
+    "Morir",
+    "murió"
    ],
    "fuentes": [
+    {
+     "fuente": "catalogo"
+    },
     {
      "fuente": "M2",
      "pagina": 91,
@@ -19011,7 +19023,7 @@
      "n": 4
     }
    ],
-   "catalogo": false,
+   "catalogo": true,
    "animacion": false
   },
   "MORTADELA": {
@@ -19629,9 +19641,13 @@
   },
   "NIÑA": {
    "formas": [
-    "Niña"
+    "Niña",
+    "una niña"
    ],
    "fuentes": [
+    {
+     "fuente": "catalogo"
+    },
     {
      "fuente": "M2",
      "pagina": 67,
@@ -19639,14 +19655,18 @@
      "n": 21
     }
    ],
-   "catalogo": false,
+   "catalogo": true,
    "animacion": false
   },
   "NIÑO": {
    "formas": [
-    "Niño"
+    "Niño",
+    "un niño"
    ],
    "fuentes": [
+    {
+     "fuente": "catalogo"
+    },
     {
      "fuente": "M2",
      "pagina": 67,
@@ -19654,7 +19674,7 @@
      "n": 22
     }
    ],
-   "catalogo": false,
+   "catalogo": true,
    "animacion": false
   },
   "NIÑOS": {
@@ -27766,9 +27786,14 @@
   },
   "TRATAR": {
    "formas": [
+    "Tratar (intentar)",
+    "intentó",
     "Tratar"
    ],
    "fuentes": [
+    {
+     "fuente": "catalogo"
+    },
     {
      "fuente": "D2024",
      "pagina": "216",
@@ -27776,7 +27801,7 @@
      "definicion": "Intentar La niña trata de no manchar su dibujo."
     }
    ],
-   "catalogo": false,
+   "catalogo": true,
    "animacion": false
   },
   "TREN": {

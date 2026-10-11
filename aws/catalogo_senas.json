@@ -44,6 +44,10 @@
   "Abusar",
   "cometió abusos"
  ],
+ "ACCIDENTE": [
+  "Accidente",
+  "un accidente"
+ ],
  "ACEPTAR": [
   "Aceptar",
   "acepto"
@@ -810,6 +814,10 @@
   "Marzo",
   "en marzo"
  ],
+ "MATAR": [
+  "Matar",
+  "mató"
+ ],
  "MAÑANA": [
   "Mañana",
   "mañana"
@@ -858,6 +866,10 @@
   "Momento",
   "en ese momento"
  ],
+ "MORIR": [
+  "Morir",
+  "murió"
+ ],
  "MOSTRAR": [
   "Mostrar",
   "puedo mostrar"
@@ -891,6 +903,14 @@
  "NEGRO": [
   "Negro",
   "de color negro"
+ ],
+ "NIÑA": [
+  "Niña",
+  "una niña"
+ ],
+ "NIÑO": [
+  "Niño",
+  "un niño"
  ],
  "NO": [
   "No",
@@ -1232,6 +1252,10 @@
  "TRAER": [
   "Traer",
   "puedo traer"
+ ],
+ "TRATAR": [
+  "Tratar (intentar)",
+  "intentó"
  ],
  "TRISTE": [
   "Triste",

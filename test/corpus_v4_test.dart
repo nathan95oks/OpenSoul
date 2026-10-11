@@ -12,7 +12,7 @@ import 'package:lsb_legal_app/core/domain/services/local_sentence_assembler.dart
 /// Unificado LSB v4.
 ///
 /// La fuente canónica en la app es `assets/dictionary/official_dictionary.json`:
-/// las 303 glosas de la sección 12 del corpus más los mecanismos que el propio
+/// las 309 glosas de la sección 12 del corpus más los mecanismos que el propio
 /// corpus autoriza (alfabeto dactilológico, números y dactilología
 /// institucional). Que ese archivo coincide con el corpus lo comprueba
 /// `aws/tests/test_corpus_v4.py` leyendo el documento del corpus.

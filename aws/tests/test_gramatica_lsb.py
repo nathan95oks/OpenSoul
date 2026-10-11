@@ -44,9 +44,12 @@ import corpus_dialogue as CD  # noqa: E402
 # tiene que ir?; sin ellas la huella es la anterior, e1364f59…); y el
 # 2026-10-10 al añadir el contexto «Homicidio» (¿Qué ocurrió?, ¿Quién es la
 # víctima?, ¿Sabe cómo se llama la víctima?; sin ellas la huella es la
-# anterior, e0f6c850…). Si cambia, algo distinto de la formulación cambió:
+# anterior, e0f6c850…); y el 2026-10-10 al dar glosas a las opciones de
+# ¿Qué ocurrió? (MATAR, MORIR, ACCIDENTE, NIÑO, NIÑA y TRATAR entran al
+# catálogo; sin ellas la huella es la anterior, e6470d53…). Si cambia, algo
+# distinto de la formulación cambió:
 # preguntas, opciones, estados, frases o recorridos.
-HUELLA_SIN_FORMULACION = "e6470d5347543658c741388053ec76dcee6a14f1c4ed101a89bae383abc2a08f"
+HUELLA_SIN_FORMULACION = "20739993d38b634a89a7bd5f528c7607d7959d705bdaffedb8a0ea38d3bd7a39"
 
 
 class GramaticaLsb(unittest.TestCase):

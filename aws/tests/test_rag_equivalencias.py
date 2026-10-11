@@ -29,7 +29,7 @@ HIPOTECA = {"palabra": "HIPOTECA", "ejemplos": ["¿Mi casa tiene hipoteca?"]}
 class Catalogo(unittest.TestCase):
     def test_solo_las_senas_oficiales(self):
         cat = EQ.cargar_catalogo()
-        self.assertEqual(len(cat), 346)
+        self.assertEqual(len(cat), 352)
         self.assertIn("el documento", cat["PAPEL"])
         # PAGAR y DENUNCIAR son reglas del ensamblador de texto, sin seña.
         self.assertNotIn("PAGAR", cat)
@@ -83,7 +83,7 @@ class Lexico(unittest.TestCase):
 
     def test_el_lexico_empaquetado_lleva_el_catalogo_y_los_modulos(self):
         lex = EQ.cargar_lexico()
-        self.assertGreater(len(lex), 346)
+        self.assertGreater(len(lex), 352)
         self.assertIn("el documento", lex["PAPEL"])
         self.assertIn("M3 · Escuela", lex["FISCAL"])
 
