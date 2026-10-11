@@ -253,14 +253,6 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
       ref
           .read(audioTranslationControllerProvider.notifier)
           .processAudioAsText('');
-      // Un audio vacío nunca pasa: se avisa siempre, no solo si falló el
-      // reconocimiento.
-      _warn(
-        porError
-            ? 'No se reconoció nada. Puedes intentar de nuevo o escribir el '
-                  'mensaje.'
-            : 'No escuché nada. Habla otra vez o escribe el mensaje.',
-      );
     } else if (porError) {
       _warn(
         'Revisa el texto reconocido antes de enviarlo: puede tener errores.',
