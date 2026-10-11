@@ -270,10 +270,16 @@ class LocalAudioTranslator {
 
     // 1. Extraer palabras limpias
     final cleanWords = text
-        .replaceAll(RegExp(r'[^\w\s]'), ' ')
+        // `\w` es solo ASCII: sin `Ñ` explícita, "mañana" se partía en
+        // "MA" + "ANA" y "ñandu" perdía la Ñ.
+        .replaceAll(RegExp(r'[^\wÑ\s]'), ' ')
         .split(RegExp(r'\s+'))
         .where((w) => w.isNotEmpty)
         .toList();
+
+    // Las claves del léxico van sin Ñ (MANANA, ENGANAR): se busca con la Ñ
+    // plegada a N, pero la palabra original se conserva para el deletreo.
+    final foldedWords = cleanWords.map(_fold).toList();
 
     final foundGlosses = <String>[];
     int i = 0;
@@ -285,7 +291,7 @@ class LocalAudioTranslator {
 
       // Probar trigrama
       if (i + 2 < cleanWords.length) {
-        final tri = '${cleanWords[i]} ${cleanWords[i + 1]} ${cleanWords[i + 2]}';
+        final tri = '${foldedWords[i]} ${foldedWords[i + 1]} ${foldedWords[i + 2]}';
         if (_lexicalMap.containsKey(tri)) {
           matchedGloss = _lexicalMap[tri];
           matchLen = 3;
@@ -294,7 +300,7 @@ class LocalAudioTranslator {
 
       // Probar bigrama
       if (matchedGloss == null && i + 1 < cleanWords.length) {
-        final bi = '${cleanWords[i]} ${cleanWords[i + 1]}';
+        final bi = '${foldedWords[i]} ${foldedWords[i + 1]}';
         if (_lexicalMap.containsKey(bi)) {
           matchedGloss = _lexicalMap[bi];
           matchLen = 2;
@@ -304,8 +310,9 @@ class LocalAudioTranslator {
       // Probar palabra simple
       if (matchedGloss == null) {
         final single = cleanWords[i];
-        if (_lexicalMap.containsKey(single)) {
-          matchedGloss = _lexicalMap[single];
+        final foldedSingle = foldedWords[i];
+        if (_lexicalMap.containsKey(foldedSingle)) {
+          matchedGloss = _lexicalMap[foldedSingle];
           matchLen = 1;
         } else if (!_stopwords.contains(single)) {
           // Si no está en el mapa y es relevante, comprobar si es número o si existe directamente en las 200 señas
@@ -381,6 +388,8 @@ class LocalAudioTranslator {
       representationStatus: RepresentationStatus.complete,
     );
   }
+
+  static String _fold(String w) => w.replaceAll('Ñ', 'N');
 
   /// Reglas sintácticas heurísticas de la LSB:
   /// - Mover palabras interrogativas (QUE, QUIEN, DONDE, etc.) hacia el final.

@@ -39,4 +39,20 @@ void main() {
     expect(result.glosses, contains('CONTINUAR'));
     expect(result.animationGlosses, contains('CONTINUAR'));
   });
+
+  test('Modo sin conexión: conserva la Ñ al deletrear y al buscar señas con Ñ', () async {
+    final repo = CachingAudioTranslationRepository(
+      FailingAudioTranslationRepository(),
+    );
+
+    final deletreo = await repo.translateText('ñandu');
+    expect(deletreo.glosses, ['ÑANDU']);
+    expect(deletreo.animationGlosses, ['Ñ', 'A', 'N', 'D', 'U']);
+
+    final manana = await repo.translateText('mañana');
+    expect(manana.animationGlosses, ['MANANA']);
+
+    final dano = await repo.translateText('engañar y dañar');
+    expect(dano.animationGlosses, containsAll(['ENGANAR', 'DANAR']));
+  });
 }
