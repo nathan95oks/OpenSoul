@@ -197,47 +197,39 @@ OFFICIAL_LSB_CORPUS = AVAILABLE_GLOSSES
 # Todas las demás señas (amarillas, naranjas, blancas o no catalogadas)
 # NO tienen animación horneada aún y se deletrean dactilológicamente.
 AVAILABLE_3D_GLOSSES = {
-    # 1. Comunicación básica, control del diálogo y cortesía (5)
-    "HOLA", "PERMISO", "GRACIAS", "POR_FAVOR", "LO_SIENTO",
-    # 2. Respuestas y confirmación (7)
-    "SI", "SÍ", "NO", "PUEDO", "NO_PUEDO", "SABER", "NO_SABER", "COMPRENDER",
-    "CONTESTAR", "CONTESTAR_DOS_VECES",
-    # 3. Pronombres y referencia personal (7)
-    "YO", "TU", "TÚ", "EL", "ÉL", "ELLA", "NOSOTROS", "USTEDES", "ELLOS", "COMO_ESTAS", "CÓMO_ESTÁS",
-    # 4. Preguntas e interrogativos (9)
-    "QUIEN", "QUIÉN", "DONDE", "DÓNDE", "COMO", "CÓMO", "POR_QUE", "POR_QUÉ",
-    "QUE", "QUÉ", "CUAL", "CUÁL", "PARA_QUE", "PARA_QUÉ", "CUANTOS", "CUÁNTOS",
-    "CUANDO", "CUÁNDO",
-    # 5. Abecedario Dactilológico LSB (27 letras completas)
-    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-    "N", "Ñ", "ENIE", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-    # 6. Números LSB (dígitos y numerales 0 - 10)
-    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    # 159 señas léxicas
+    "ABOGADO", "ABORTO", "ABRIR", "ACEPTAR", "ACOMPANAR", "ACOSO", "ACUSAR",
+    "AHORA", "ALCALDIA", "ALLI", "AMBOS", "AMENAZAR", "AMIGO", "AQUI", "ASISTENCIA",
+    "ATENDER", "AUN", "AUTORIDAD", "AVENIDA", "AYER", "AYUDAR_DAR", "AYUDAR_PEDIR",
+    "BANCO", "BILLETES", "BUENAS_NOCHES", "BUENAS_TARDES", "BUENOS_DIAS", "BULLYING",
+    "BUSCAR", "CALLE", "CARPETA", "CASA", "CELULAR", "CERCA", "CERTIFICADO",
+    "COCHABAMBA", "COMO", "COMO_ESTAS", "COMPRENDER", "CONOCER", "CONTESTAR",
+    "CONTINUAR", "CONVOCAR", "CUAL", "CUANDO", "CUANTOS", "DANAR", "DAR",
+    "DENTRO", "DEVOLVER", "DIA", "DIRECCION", "DOCTOR", "EL", "ELLA", "ELLOS",
+    "ENGANAR", "ENVIAR", "ESCAPAR", "ESCRIBIR", "ESPERAR", "EXPLICAR", "FACTURA",
+    "FECHA", "FILMAR", "FOTOCOPIA", "FOTOS", "FUTURO", "GRACIAS", "GUARDAR",
+    "HABLAR", "HACER", "HASTA_LUEGO", "HERIDA", "HIJA", "HIJO", "HOLA", "HOMBRE",
+    "HOSPITAL", "HOY", "IDENTIDAD", "INTERPRETE", "INVESTIGACION", "IR", "JUEZ",
+    "JUICIO", "JUSTICIA", "LADRON", "LEER", "LENTO", "LEY", "LLEVAR", "LO_SIENTO",
+    "MANANA", "MAS_O_MENOS", "MIEDO", "MIO", "MOSTRAR", "MUCHO", "MUJER", "NARRAR",
+    "NECESITAR", "NO", "NOMBRE", "NOSOTROS", "NO_PUEDO", "NO_SABER", "NUEVO",
+    "OBSERVAR", "OFICINA", "PAPEL", "PARA_QUE", "PASADO", "PEDIR", "PEGAR",
+    "PELEAR", "PERDER", "PERMISO", "POLICIA", "POR_FAVOR", "POR_QUE", "PRIMERA_VEZ",
+    "PROTEGER", "PUEDO", "QUE", "QUEJAR", "QUERER", "QUIEN", "RECHAZAR", "RECIBIR",
+    "RECORDAR", "RESOLUCION", "ROBAR", "SABER", "SELLO", "SEMANA", "SI", "SORDO",
+    "TARDE", "TENER", "TERMINAR", "TESTIGO", "TESTIMONIO", "TIENDA", "TOTAL",
+    "TRAER", "TRAMITE", "TRATA_TRAFICO", "TU", "TUYO", "ULTIMO", "URGENTE",
+    "USTEDES", "VENIR", "VER", "VIDEO", "VIOLENCIA", "VOLVER", "YO",
+
+    # 27 letras del alfabeto dactilológico
+    "A", "B", "C", "D", "E", "ENIE", "F", "G", "H", "I", "J", "K", "L", "M",
+    "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+
+    # 11 números
     "CERO", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ",
-    # 7. Identificación y personas (6)
-    "NOMBRE", "HOMBRE", "MUJER", "IDENTIDAD", "TESTIGO", "SORDO",
-    # 8. Instituciones y servicios (6)
-    "ABOGADO", "INTERPRETE", "INTÉRPRETE", "JUEZ", "AUTORIDAD", "POLICIA", "POLICÍA", "HOSPITAL",
-    # 9. Conceptos jurídicos y trámites (6)
-    "ASISTENCIA", "INVESTIGACION", "INVESTIGACIÓN", "JUSTICIA", "RESOLUCION", "RESOLUCIÓN",
-    "TESTIMONIO", "TRAMITE", "TRÁMITE",
-    # 10. Acciones y verbos (28)
-    "ACEPTAR", "ACOMPAÑAR", "ACOMPANAR", "ATENDER", "AYUDAR", "BUSCAR", "DAR",
-    "ENVIAR", "ESCRIBIR", "ESPERAR", "EXPLICAR", "GUARDAR", "HABLAR", "LEER",
-    "MOSTRAR", "NECESITAR", "OBSERVAR", "PROTEGER", "QUEJAR", "QUERER", "RECHAZAR",
-    "RECIBIR", "RECORDAR", "ROBAR", "TRAER", "VENIR", "VER", "VOLVER",
-    # 11. Hechos, urgencia y agresiones (7)
-    "AMENAZAR", "DAÑAR", "DANAR", "ENGAÑAR", "ENGANAR", "HERIDA", "PEGAR",
-    # 12. Descripción, estado y emoción (2)
-    "LENTO", "MIEDO",
-    # 13. Tiempo (10)
-    "AHORA", "AYER", "AUN", "AÚN", "FECHA", "HORA", "HOY", "MAÑANA", "MANANA", "PRIMERA_VEZ", "SEMANA", "TARDE",
-    # 14. Lugares (8)
-    "ALLI", "ALLÍ", "AQUI", "AQUÍ", "AVENIDA", "CALLE", "CASA", "CERCA", "DENTRO", "OFICINA",
-    # 15. Documentos (5)
-    "CARPETA", "CERTIFICADO", "FACTURA", "FOTOCOPIA", "PAPEL",
-    # 16. Objetos (4)
-    "BILLETES", "CELULAR", "FOTOS", "VIDEO",
+
+    # 3 poses neutras
+    "NEUTRO1", "NEUTRO2", "NEUTRO3"
 }
 
 # ---------------------------------------------------------------------------
