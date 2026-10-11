@@ -83,7 +83,7 @@ void main() {
     });
 
     test('la Ñ conserva su nombre propio de animación', () {
-      expect(AnimationUrlResolver.animationNameFor('Ñ'), 'ENE');
+      expect(AnimationUrlResolver.animationNameFor('Ñ'), 'ENIE');
     });
 
     test('una glosa sin animación sigue siendo marcador', () {

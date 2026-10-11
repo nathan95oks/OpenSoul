@@ -60,8 +60,8 @@ void main() {
 
     test('una seña sin animación cae al placeholder de texto', () {
       expect(
-        resolver.resolveAll(gloss: 'ESCAPAR'),
-        ['${AnimationUrlResolver.placeholderScheme}ESCAPAR'],
+        resolver.resolveAll(gloss: 'MALTRATAR'),
+        ['${AnimationUrlResolver.placeholderScheme}MALTRATAR'],
       );
     });
 
@@ -72,12 +72,10 @@ void main() {
     test('la Ñ no es un acento y no se colapsa en N', () {
       // Ñ es una letra del alfabeto dactilológico con seña propia: si se
       // normalizara como una tilde, dos letras distintas compartirían
-      // animación y el deletreo diría otra cosa. El modelo aún no trae su
-      // clip (ENE): sale como marcador de la Ñ, no como la N horneada.
-      expect(
-        resolver.resolveAll(gloss: 'Ñ'),
-        ['${AnimationUrlResolver.placeholderScheme}Ñ'],
-      );
+      // animación y el deletreo diría otra cosa. El modelo trae su clip
+      // (ENIE), que se pide por su nombre y no como la N horneada.
+      expect(resolver.resolveAll(gloss: 'Ñ'), [modelo]);
+      expect(AnimationUrlResolver.animationNameFor('Ñ'), 'ENIE');
     });
 
     test('resolve() devuelve la primera URL de la secuencia', () {

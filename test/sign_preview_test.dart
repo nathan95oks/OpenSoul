@@ -176,6 +176,7 @@ void main() {
     WidgetTester tester, {
     bool avatarReal = false,
     Size? tamano,
+    String contexto = 'denuncia_robo',
   }) async {
     if (tamano != null) {
       tester.view.physicalSize = tamano;
@@ -209,7 +210,7 @@ void main() {
     container
         .read(contextProvider.notifier)
         .setContext(
-          availableContexts.firstWhere((c) => c.id == 'denuncia_robo'),
+          availableContexts.firstWhere((c) => c.id == contexto),
         );
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -700,21 +701,21 @@ void main() {
 
     testWidgets('una seña sin animación lo dice en la fila y al deslizarla '
         'avisa sin abrir nada ni llamar a la red', (tester) async {
-      final arnes = await montar(tester);
+      final arnes = await montar(tester, contexto: 'violencia');
       expect(
-        _enFila('ESCAPAR', find.byKey(const Key('sin_animacion'))),
+        _enFila('MALTRATAR', find.byKey(const Key('sin_animacion'))),
         findsOneWidget,
       );
       expect(
-        _enFila('ROBAR', find.byKey(const Key('sin_animacion'))),
+        _enFila('PEGAR', find.byKey(const Key('sin_animacion'))),
         findsNothing,
       );
 
-      await ver(tester, 'ESCAPAR');
+      await ver(tester, 'MALTRATAR');
       expect(find.byType(SignPreviewOverlay), findsNothing);
       expect(arnes.avatar.planes, isEmpty);
       expect(find.text('Seña no disponible'), findsOneWidget);
-      expect(elegida(arnes.container, 'ESCAPAR'), isFalse);
+      expect(elegida(arnes.container, 'MALTRATAR'), isFalse);
       expect(arnes.red.peticiones, isEmpty);
       expect(arnes.backend.llamadas, 0);
 
@@ -725,18 +726,18 @@ void main() {
 
     testWidgets('una secuencia a medias se reproduce con su respaldo y dice '
         'qué falta', (tester) async {
-      final arnes = await montar(tester);
+      final arnes = await montar(tester, contexto: 'violencia');
       final controller = arnes.container.read(signPreviewControllerProvider);
       controller.show(tester.element(find.byType(HomeScreen)), const [
-        'ESCAPAR',
+        'MALTRATAR',
         'DÓNDE',
       ]);
       await tester.pumpAndSettle();
 
       final plan = arnes.avatar.planes.single;
-      expect(plan.animationGlosses, ['ESCAPAR', 'DÓNDE']);
-      expect(plan.missingGlosses, ['ESCAPAR']);
-      expect(find.text('Sin animación en el avatar: ESCAPAR'), findsOneWidget);
+      expect(plan.animationGlosses, ['MALTRATAR', 'DÓNDE']);
+      expect(plan.missingGlosses, ['MALTRATAR']);
+      expect(find.text('Sin animación en el avatar: MALTRATAR'), findsOneWidget);
       await cerrarAlTerminar(tester, arnes.avatar);
     });
 
@@ -1282,19 +1283,19 @@ void main() {
     );
 
     test('una glosa sin clip no se inventa: queda como marcador', () {
-      final plan = planner.plan(const ['ESCAPAR']);
-      expect(plan.missingGlosses, ['ESCAPAR']);
+      final plan = planner.plan(const ['MALTRATAR']);
+      expect(plan.missingGlosses, ['MALTRATAR']);
       expect(plan.animationUrls, [
-        '${AnimationUrlResolver.placeholderScheme}ESCAPAR',
+        '${AnimationUrlResolver.placeholderScheme}MALTRATAR',
       ]);
       expect(plan.isPlayable, isFalse);
       expect(planner.plan(const []).isPlayable, isFalse);
     });
 
     test('una secuencia a medias se reproduce con su marcador en su sitio', () {
-      final plan = planner.plan(const ['ESCAPAR', 'DÓNDE']);
-      expect(plan.animationGlosses, ['ESCAPAR', 'DÓNDE']);
-      expect(plan.missingGlosses, ['ESCAPAR']);
+      final plan = planner.plan(const ['MALTRATAR', 'DÓNDE']);
+      expect(plan.animationGlosses, ['MALTRATAR', 'DÓNDE']);
+      expect(plan.missingGlosses, ['MALTRATAR']);
       expect(
         plan.animationUrls.first,
         startsWith(AnimationUrlResolver.placeholderScheme),
@@ -1317,7 +1318,7 @@ void main() {
       final clips = _clipsDelGlb(
         'assets/models/avatar_test.glb',
       ).where((c) => !c.startsWith('NEUTRO')).toList();
-      expect(clips, hasLength(154));
+      expect(clips, hasLength(197));
       for (final clip in clips) {
         expect(
           AnimationUrlResolver.available3DGlosses,

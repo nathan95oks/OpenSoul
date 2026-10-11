@@ -19,45 +19,48 @@ class AnimationUrlResolver {
   static const String compositeSeparator = '+';
 
   /// Senas horneadas en `avatar_test.glb`, tomadas del propio modelo: son los
-  /// 157 clips de su lista de animaciones (menos NEUTRO1..3, los movimientos de reposo, que no son señas), en su forma canonica.
+  /// 200 clips de su lista de animaciones (menos NEUTRO1..3, los movimientos de reposo, que no son señas), en su forma canonica.
   ///
   /// Las cuatro palabras con ene se hornearon con N (`DANAR`) y ademas se
   /// listan con su grafia de glosa (`DAÑAR`), que es la que llega aqui;
-  /// [animationNameFor] la devuelve al nombre del clip. La 'Ñ' suelta no esta:
-  /// el modelo no trae `ENE`, y pedir una animacion inexistente no emite
-  /// 'finished' y deja la secuencia esperando al reloj de seguridad. Mientras
-  /// no se hornee, se deletrea como placeholder, que al menos se ve.
+  /// [animationNameFor] la devuelve al nombre del clip. La 'Ñ' suelta es el
+  /// clip `ENIE`: pedir una animacion inexistente no emite 'finished' y deja
+  /// la secuencia esperando al reloj de seguridad, asi que solo se piden
+  /// clips que el modelo trae.
   ///
   /// Si se hornea un .glb nuevo, esta lista se actualiza con el.
   static const Set<String> available3DGlosses = {
-    // Letras del alfabeto dactilologico.
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    // Letras del alfabeto dactilologico (la Ñ es el clip `ENIE`).
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Ñ', 'ENIE',
     // Numerales.
-    'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE',
-    'OCHO', 'NUEVE', 'DIEZ',
+    'CERO', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE', 'OCHO',
+    'NUEVE', 'DIEZ',
     // Senas.
-    'ABOGADO', 'ACEPTAR', 'ACOMPANAR', 'AHORA', 'ALLI', 'ASISTENCIA',
-    'AMENAZAR', 'AQUI', 'ATENDER', 'AUN', 'AUTORIDAD', 'AVENIDA', 'AYER',
-    'AYUDAR', 'BANCO', 'BILLETES', 'BUSCAR', 'CALLE', 'CARPETA', 'CASA',
-    'CELULAR', 'CERCA', 'CERTIFICADO', 'COMO', 'COMO_ESTAS', 'COMPRENDER',
-    'CONTESTAR', 'CUAL', 'CUANDO', 'CUANTOS', 'DANAR', 'DAR', 'DENTRO',
-    'DONDE', 'EL',
-    'ELLA', 'ELLOS', 'ENGANAR', 'ENVIAR', 'ESCRIBIR', 'ESPERAR', 'EXPLICAR',
-    'FACTURA', 'FECHA', 'FOTOCOPIA', 'FOTOS', 'GRACIAS', 'GUARDAR', 'HABLAR',
-    'HERIDA', 'HOLA', 'HOMBRE', 'HORA', 'HOSPITAL', 'HOY', 'IDENTIDAD',
-    'INTERPRETE',
-    'INVESTIGACION', 'JUEZ', 'JUSTICIA', 'LEER', 'LENTO', 'LO_SIENTO',
-    'MANANA', 'MIEDO', 'MIO', 'MOSTRAR', 'MUCHO', 'MUJER', 'NECESITAR', 'NO',
+    'ABOGADO', 'ABRIR', 'ACEPTAR', 'ACOMPANAR', 'ACOSO', 'AHORA', 'ALCALDIA',
+    'ALLI', 'AMBOS', 'AMENAZAR', 'AMIGO', 'AQUI', 'ASISTENCIA', 'ATENDER',
+    'AUN', 'AUTORIDAD', 'AVENIDA', 'AYER', 'AYUDAR_DAR', 'AYUDAR_PEDIR',
+    'BANCO', 'BILLETES', 'BUENAS_NOCHES', 'BUENAS_TARDES', 'BUENOS_DIAS',
+    'BULLYING', 'BUSCAR', 'CALLE', 'CARPETA', 'CASA', 'CELULAR', 'CERCA',
+    'CERTIFICADO', 'COCHABAMBA', 'COMO', 'COMO_ESTAS', 'COMPRENDER', 'CONOCER',
+    'CONTESTAR', 'CONTINUAR', 'CONVOCAR', 'CUAL', 'CUANDO', 'CUANTOS', 'DANAR',
+    'DAR', 'DENTRO', 'DEVOLVER', 'DIA', 'DIRECCION', 'DOCTOR', 'DONDE', 'EL',
+    'ELLA', 'ELLOS', 'ENGANAR', 'ENVIAR', 'ESCAPAR', 'ESCRIBIR', 'ESPERAR',
+    'EXPLICAR', 'FACTURA', 'FECHA', 'FILMAR', 'FOTOCOPIA', 'FOTOS', 'FUTURO',
+    'GRACIAS', 'GUARDAR', 'HABLAR', 'HACER', 'HASTA_LUEGO', 'HERIDA', 'HIJA',
+    'HIJO', 'HOLA', 'HOMBRE', 'HORA', 'HOSPITAL', 'HOY', 'IDENTIDAD',
+    'INTERPRETE', 'INVESTIGACION', 'IR', 'JUEZ', 'JUICIO', 'JUSTICIA', 'LADRON',
+    'LEER', 'LENTO', 'LEY', 'LLEVAR', 'LO_SIENTO', 'MANANA', 'MAS_O_MENOS',
+    'MIEDO', 'MIO', 'MOSTRAR', 'MUCHO', 'MUJER', 'NARRAR', 'NECESITAR', 'NO',
     'NOMBRE', 'NOSOTROS', 'NO_PUEDO', 'NO_SABER', 'NUEVO', 'OBSERVAR',
-    'OFICINA', 'PAPEL', 'PARA_QUE', 'PEDIR', 'PEGAR', 'PERDER', 'PERMISO',
-    'POLICIA',
-    'POR_FAVOR', 'POR_QUE', 'PRIMERA_VEZ', 'PROTEGER', 'PUEDO', 'QUE',
-    'QUEJAR',
-    'QUERER', 'QUIEN', 'RECHAZAR', 'RECIBIR', 'RECORDAR', 'RESOLUCION',
-    'ROBAR', 'SABER', 'SEMANA', 'SI', 'SORDO', 'TARDE', 'TENER', 'TESTIGO',
-    'TESTIMONIO', 'TRAER', 'TRAMITE', 'TU', 'USTEDES', 'VENIR', 'VER',
-    'VIDEO', 'VIOLENCIA', 'VOLVER', 'YO',
+    'OFICINA', 'PAPEL', 'PARA_QUE', 'PASADO', 'PEDIR', 'PEGAR', 'PELEAR',
+    'PERDER', 'PERMISO', 'POLICIA', 'POR_FAVOR', 'POR_QUE', 'PRIMERA_VEZ',
+    'PROTEGER', 'PUEDO', 'QUE', 'QUEJAR', 'QUERER', 'QUIEN', 'RECHAZAR',
+    'RECIBIR', 'RECORDAR', 'RESOLUCION', 'ROBAR', 'SABER', 'SELLO', 'SEMANA',
+    'SI', 'SORDO', 'TARDE', 'TENER', 'TERMINAR', 'TESTIGO', 'TESTIMONIO',
+    'TIENDA', 'TOTAL', 'TRAER', 'TRAMITE', 'TRATA_TRAFICO', 'TU', 'TUYO',
+    'ULTIMO', 'URGENTE', 'USTEDES', 'VENIR', 'VER', 'VIDEO', 'VIOLENCIA',
+    'VOLVER', 'YO',
     // Grafia de glosa de los clips horneados con N.
     'ACOMPAÑAR', 'DAÑAR', 'ENGAÑAR', 'MAÑANA',
   };
@@ -86,7 +89,7 @@ class AnimationUrlResolver {
   };
 
   /// Glosas cuyo nombre de animacion dentro del .glb no coincide con la glosa.
-  static const Map<String, String> animationNameOverrides = {'Ñ': 'ENE'};
+  static const Map<String, String> animationNameOverrides = {'Ñ': 'ENIE'};
 
   /// Forma canonica de la glosa para buscarla entre las animaciones.
   static String canonicalFor(String gloss) {
@@ -98,7 +101,7 @@ class AnimationUrlResolver {
   ///
   /// En S3 los clips están en mayúsculas con barra baja (ej: PRIMERA_VEZ)
   /// y las palabras que llevan Ñ usan N (ej: ACOMPANAR), mientras que
-  /// la letra suelta Ñ se mapea a ENE.
+  /// la letra suelta Ñ se mapea a ENIE.
   static String animationNameFor(String gloss) {
     final canonical = canonicalFor(gloss);
     if (animationNameOverrides.containsKey(canonical)) {

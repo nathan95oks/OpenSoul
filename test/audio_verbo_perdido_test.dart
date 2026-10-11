@@ -74,7 +74,7 @@ void main() {
     });
 
     test(
-      '«quiere hacer un trámite»: HACER no tiene animación, se deletrea',
+      '«quiere hacer un trámite»: HACER tiene animación, se seña',
       () {
         final t = LostVerbs.apply(
           'quiere hacer un trámite en la felcc?',
@@ -83,7 +83,7 @@ void main() {
         );
         expect(t.animationGlosses, [
           'QUERER',
-          ..._letras('HACER'),
+          'HACER',
           'TRAMITE',
           ..._letras('FELCC'),
         ]);
