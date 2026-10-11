@@ -1,5 +1,6 @@
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
+import 'package:lsb_legal_app/core/domain/services/local_audio_translator.dart';
 
 /// Versión de la forma de la clave de caché. Súbela si cambia qué distingue
 /// dos traducciones (p. ej. si se agrega un nuevo dato del que depende el
@@ -37,6 +38,8 @@ class CachingAudioTranslationRepository implements AudioTranslationRepository {
     return '$_cacheKeyVersion|${text.trim().toLowerCase()}|${situation ?? ''}|$sensesPart';
   }
 
+  static final LocalAudioTranslator _localTranslator = const LocalAudioTranslator();
+
   @override
   Future<LsbTranslation> translateText(
     String text, {
@@ -47,20 +50,26 @@ class CachingAudioTranslationRepository implements AudioTranslationRepository {
     final hit = _cache[key];
     if (hit != null) return hit;
 
-    final translation = await inner.translateText(
-      text,
-      situation: situation,
-      resolvedSenses: resolvedSenses,
-    );
-    // Una aclaración sin resolver todavía no es una traducción completa: no
-    // se guarda como si lo fuera, para que la próxima consulta de la misma
-    // frase vuelva a evaluarse (y pueda, por ejemplo, encontrar evidencia de
-    // contexto nueva) en vez de repetir la misma pregunta pendiente desde la
-    // caché indefinidamente disfrazada de resultado estable.
-    if (translation.glosses.isNotEmpty && !translation.needsClarification) {
-      if (_cache.length >= maxEntries) _cache.remove(_cache.keys.first);
-      _cache[key] = translation;
+    try {
+      final translation = await inner.translateText(
+        text,
+        situation: situation,
+        resolvedSenses: resolvedSenses,
+      );
+      if (translation.glosses.isNotEmpty && !translation.needsClarification) {
+        if (_cache.length >= maxEntries) _cache.remove(_cache.keys.first);
+        _cache[key] = translation;
+      }
+      return translation;
+    } catch (networkError) {
+      // MODO SIN CONEXIÓN (OFFLINE FALLBACK):
+      // Si la conexión a AWS Lambda falla o el dispositivo está en Modo Avión,
+      // se ejecuta el motor local en Dart usando el léxico y las 200 señas del avatar.
+      final fallback = _localTranslator.translate(text, situation: situation);
+      if (fallback.glosses.isNotEmpty) {
+        return fallback;
+      }
+      rethrow;
     }
-    return translation;
   }
 }
