@@ -150,13 +150,13 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
         ],
         1,
       ),
-      // `TextInputType.datetime` depende del teclado del fabricante: algunos
-      // no muestran dígitos. El teclado numérico existe en todos; los dos
-      // puntos los pone el formateador.
       'hora' => (
-        'Hora con 4 números (ej. 1830)',
-        TextInputType.number,
-        [const _HoraFormatter()],
+        'Hora (por ejemplo 18:30)',
+        TextInputType.datetime,
+        [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9:]')),
+          LengthLimitingTextInputFormatter(5),
+        ],
         1,
       ),
       'texto_nombre' => ('Nombre', TextInputType.name, const [], 1),
@@ -298,36 +298,6 @@ class _GuidedValueEditorState extends State<GuidedValueEditor> {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Convierte los dígitos tecleados en `HH:MM` (máximo 4 dígitos).
-///
-/// «1830» queda «18:30». Si la persona borra y el cursor queda tras los dos
-/// puntos, se quita también el dígito anterior para que borrar no se trabe.
-class _HoraFormatter extends TextInputFormatter {
-  const _HoraFormatter();
-
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    var digits = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-    final oldDigits = oldValue.text.replaceAll(RegExp(r'[^0-9]'), '');
-    if (newValue.text.length < oldValue.text.length &&
-        digits.length == oldDigits.length &&
-        digits.isNotEmpty) {
-      digits = digits.substring(0, digits.length - 1);
-    }
-    if (digits.length > 4) digits = digits.substring(0, 4);
-    final text = digits.length <= 2
-        ? digits
-        : '${digits.substring(0, 2)}:${digits.substring(2)}';
-    return TextEditingValue(
-      text: text,
-      selection: TextSelection.collapsed(offset: text.length),
     );
   }
 }
