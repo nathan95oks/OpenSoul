@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
@@ -160,6 +161,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
       _speechToText.errorListener = _onSpeechError;
 
       if (available) {
+        _finalResultSeen = false;
         setState(() {
           _isRecording = true;
           _controller.clear();
@@ -175,6 +177,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
         await _speechToText.listen(
           onResult: (result) {
             _lastRecognizedWords = result.recognizedWords;
+            if (result.finalResult) _finalResultSeen = true;
             setState(() {
               _controller.text = result.recognizedWords;
               _controller.selection = TextSelection.fromPosition(
@@ -205,8 +208,14 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
     }
   }
 
-  void _onSpeechError(Object _) {
-    if (_isRecording) _stopRecording(porError: true);
+  /// Los avisos de «no oí nada más» (silencio tras hablar) no son un fallo
+  /// del reconocimiento: lo dictado hasta ahí está completo y se envía.
+  static const _erroresDeSilencio = {'error_no_match', 'error_speech_timeout'};
+
+  void _onSpeechError(Object error) {
+    if (!_isRecording) return;
+    final mensaje = error is SpeechRecognitionError ? error.errorMsg : '';
+    _stopRecording(porError: !_erroresDeSilencio.contains(mensaje));
   }
 
   void _warn(String message) {
@@ -217,6 +226,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
   }
 
   String _lastRecognizedWords = '';
+  bool _finalResultSeen = false;
 
   /// Detiene el dictado. Terminar de grabar —por el botón o porque el motor
   /// decidió que ya terminó ("done"/"notListening")— envía lo reconocido si
@@ -231,6 +241,11 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
     } catch (_) {
       // Aunque falle al detener el motor, el estado local de grabación debe
       // reflejar que ya no se está escuchando.
+    }
+    // El resultado final llega justo después de detener: sin esperarlo se
+    // enviaba solo lo parcial («quiero hacer una» en vez de la frase entera).
+    for (var i = 0; i < 8 && !_finalResultSeen && mounted; i++) {
+      await Future<void>.delayed(const Duration(milliseconds: 60));
     }
 
     final text = _controller.text.trim().isNotEmpty
