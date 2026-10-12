@@ -69,9 +69,23 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           // glosa, si hay sena o si se deletrea (una letra sin clip viene sin
           // animationFile y va como placeholder). La URL no se toma de la
           // respuesta: siempre es el .glb de [baseUrl].
+          String? horneadaEnCurso;
           for (final step in sequence) {
             final gloss = (step['gloss'] ?? '').toString();
             if (gloss.isEmpty) continue;
+            // Una palabra con seña en el avatar que el servidor deletreó (una
+            // Lambda anterior, o una traducción suya en caché): ACOSO llegaba
+            // como A·C·O·S·O. Sus letras se vuelven su seña.
+            final origen = (step['sourceGloss'] ?? '').toString();
+            if (origen != gloss && _isBaked(origen)) {
+              if (horneadaEnCurso != origen) {
+                urls.add('${animationResolver.baseUrl}avatar_test.glb');
+                animationGlosses.add(origen);
+              }
+              horneadaEnCurso = origen;
+              continue;
+            }
+            horneadaEnCurso = null;
             final hasClip =
                 (step['animationFile']?.toString() ?? '').isNotEmpty;
             urls.add(
@@ -157,12 +171,15 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           'semanticStatus': decodedResponse['semanticStatus'],
           'representationStatus': decodedResponse['representationStatus'],
           'semanticTurn': decodedResponse['semanticTurn'],
+          // Una palabra que el avatar sí señala no se explica ni se resalta
+          // como deletreada.
           'spelledWords': [
             for (final fix
                 in (decodedResponse['fidelityFixes'] as List? ?? const []))
               if (fix is Map &&
                   fix['accion'] == 'concepto_sin_catalogo' &&
-                  '${fix['palabra'] ?? ''}'.isNotEmpty)
+                  '${fix['palabra'] ?? ''}'.isNotEmpty &&
+                  !_isBaked('${fix['palabra']}'))
                 '${fix['palabra']}',
           ],
           'unanimatedSigns': [
@@ -170,7 +187,8 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
               if (d is Map &&
                   d['available'] == false &&
                   (d['spelledLetters'] as List?)?.isNotEmpty == true &&
-                  '${d['gloss'] ?? ''}'.length > 1)
+                  '${d['gloss'] ?? ''}'.length > 1 &&
+                  !_isBaked('${d['gloss']}'))
                 '${d['gloss']}',
           ],
         });
@@ -182,6 +200,13 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
     } catch (e) {
       throw Exception('Network or Server error: $e');
     }
+  }
+
+  /// [gloss] es una palabra (no una letra) con seña horneada en el avatar.
+  static bool _isBaked(String gloss) {
+    final clave = AnimationUrlResolver.canonicalFor(gloss);
+    return clave.length > 1 &&
+        AnimationUrlResolver.available3DGlosses.contains(clave);
   }
 
   static final RegExp _punct = RegExp(r'[^\w\s]', unicode: true);

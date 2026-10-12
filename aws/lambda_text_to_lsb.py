@@ -56,7 +56,8 @@ CACHE_VERSION = os.environ.get("CACHE_VERSION", "v2")
 # Versión interna de las reglas deterministas. Forma parte de la clave aunque
 # CACHE_VERSION esté fijada en las variables de entorno de Lambda, para que un
 # despliegue de reglas nuevas nunca siga sirviendo traducciones antiguas.
-TRANSLATION_RULESET_VERSION = "particulas-v4"
+# senas-horneadas-v5: antes ACOSO, BULLYING, JUICIO… se guardaban deletreadas.
+TRANSLATION_RULESET_VERSION = "senas-horneadas-v5"
 
 # Animaciones del avatar. Todas las señas son clips dentro de UN solo .glb en
 # S3, y el visor elige el clip por nombre. La lista de clips del propio archivo

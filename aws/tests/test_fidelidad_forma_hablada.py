@@ -195,3 +195,24 @@ class SenasAnimadasSeOfrecenAlModelo(unittest.TestCase):
         prompt = T.build_disambiguation_prompt("Hay acoso")
         self.assertIn("BULLYING", prompt)
         self.assertNotIn("NEUTRO1", prompt)
+
+
+class TodasLasSenasDelGlbSeHacenConSuClip(unittest.TestCase):
+    """Cada palabra animada del .glb sale con su seña, nunca deletreada."""
+
+    def test_ninguna_palabra_horneada_se_deletrea(self):
+        import json
+        import struct
+        ruta = os.path.join(os.path.dirname(__file__), "..", "..",
+                            "assets", "models", "avatar_test.glb")
+        with open(ruta, "rb") as f:
+            datos = f.read()
+        largo = struct.unpack("<I", datos[12:16])[0]
+        nombres = [a["name"] for a in json.loads(datos[20:20 + largo])["animations"]
+                   if len(a["name"]) > 1 and not a["name"].startswith("NEUTRO")]
+        self.assertGreater(len(nombres), 150)
+        for nombre in nombres:
+            with self.subTest(nombre):
+                r = T.post_process_glosses({"glosses": [nombre]},
+                                           nombre.lower().replace("_", " "))
+                self.assertEqual(r["requiresDactylology"], 0, r["glosses"])
