@@ -131,6 +131,25 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           animationGlosses.add(singleGloss);
         }
 
+        // La Lambda desplegada rechaza algunas señas que el avatar sí tiene
+        // (ACOSO, BULLYING…) y las manda ya convertidas en letras sueltas,
+        // B·U·L·L·Y·I·N·G, avisando en `fidelityFixes`. Se vuelven su seña,
+        // en el avatar y en las glosas del chat.
+        final horneadasDeletreadas = {
+          for (final fix
+              in (decodedResponse['fidelityFixes'] as List? ?? const []))
+            if (fix is Map &&
+                fix['accion'] == 'concepto_sin_catalogo' &&
+                _isBaked('${fix['palabra'] ?? ''}'))
+              AnimationUrlResolver.canonicalFor('${fix['palabra']}'),
+        };
+        _collapseSpelledBaked(
+          animationGlosses,
+          horneadasDeletreadas,
+          urls: urls,
+          bakedUrl: '${animationResolver.baseUrl}avatar_test.glb',
+        );
+
         // Colapsar compuestos multipalabra (ej: "COMO" + deletreo "ESTAS" -> "COMO_ESTAS")
         // protegiendo contra respuestas fragmentadas o desactualizadas del backend.
         _collapseCompoundAnimations(animationGlosses, urls, text);
@@ -156,9 +175,11 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
                 ?.map((e) => e.toString().toUpperCase().trim())
                 .toList() ??
             effectiveGlosses;
+        final semanticRaw = [...rawSemantic];
+        _collapseSpelledBaked(semanticRaw, horneadasDeletreadas);
         final semanticGlosses = LsbGlossSemantics.reconcileQuestionGlosses(
           text,
-          _collapseSemanticCompounds(rawSemantic, text),
+          _collapseSemanticCompounds(semanticRaw, text),
         );
 
         return LsbTranslationModel.fromJson({
@@ -199,6 +220,37 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
       }
     } catch (e) {
       throw Exception('Network or Server error: $e');
+    }
+  }
+
+  /// Reemplaza en [glosses] cada palabra de [words] escrita letra por letra
+  /// (una glosa por letra) por la palabra entera. Con [urls], paralela a
+  /// [glosses], sus pasos se vuelven uno solo con [bakedUrl].
+  static void _collapseSpelledBaked(
+    List<String> glosses,
+    Set<String> words, {
+    List<String>? urls,
+    String bakedUrl = '',
+  }) {
+    for (final word in words) {
+      final letras = AnimationUrlResolver.stripAccents(
+        word,
+      ).replaceAll(RegExp(r'[^A-Z0-9Ñ]'), '').split('');
+      if (letras.length < 2) continue;
+      for (var i = 0; i + letras.length <= glosses.length; i++) {
+        var coincide = true;
+        for (var k = 0; k < letras.length && coincide; k++) {
+          final g = AnimationUrlResolver.stripAccents(
+            glosses[i + k].toUpperCase(),
+          );
+          coincide = g == letras[k];
+        }
+        if (!coincide) continue;
+        glosses.replaceRange(i, i + letras.length, [word]);
+        if (urls != null && urls.length >= i + letras.length) {
+          urls.replaceRange(i, i + letras.length, [bakedUrl]);
+        }
+      }
     }
   }
 

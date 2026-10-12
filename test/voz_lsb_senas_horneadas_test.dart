@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -65,4 +66,30 @@ void main() {
     expect(t.animationGlosses, 'DENUNCIA'.split(''));
     expect(t.unanimatedSigns, ['DENUNCIA']);
   });
+
+  // Respuesta real de la Lambda desplegada (grabada en el QA): BULLYING viene
+  // en letras sueltas en `glosses` y en la secuencia, y HIJO deletreado porque
+  // al .glb de S3 le faltaba su clip.
+  for (final frase in [
+    '¿Su hijo sufre bullying en la escuela?',
+    '¿Usted o su hijo sufre bullying?',
+  ]) {
+    test('respuesta real: «$frase»', () async {
+      final grabadas =
+          jsonDecode(File('test/qa/lambda_respuestas.json').readAsStringSync())
+              as Map<String, dynamic>;
+      final clave = grabadas.keys.firstWhere(
+        (k) => k.startsWith('texto/') && k.contains(jsonEncode(frase)),
+      );
+      final cuerpo =
+          jsonDecode((grabadas[clave] as Map)['cuerpo'] as String)
+              as Map<String, Object?>;
+      final t = await fuente(cuerpo).translateText(frase);
+      expect(t.animationGlosses, containsAll(['HIJO', 'BULLYING']));
+      expect(t.glosses, contains('BULLYING'));
+      expect(t.glosses.join(' '), isNot(contains('B U L L')));
+      expect(t.animationGlosses.length, t.animationUrls.length);
+      expect(t.spelledWords, isNot(contains('BULLYING')));
+    });
+  }
 }
