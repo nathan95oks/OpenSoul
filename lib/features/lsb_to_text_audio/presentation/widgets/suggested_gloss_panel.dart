@@ -254,8 +254,9 @@ Future<bool> seleccionarOpcionGuiada(
 /// Tocar una fila: la elige o, si ya estaba elegida, la quita.
 ///
 /// Quitar pasa por el dominio ([GuidedFlowNotifier.deselect]), que también
-/// borra lo que dependía de esa respuesta y lo avisa. Una opción con valor
-/// escrito (nombre, monto…) abre su editor, donde se corrige o se quita.
+/// borra lo que dependía de esa respuesta y lo avisa. Vale también para una
+/// opción con valor escrito (nombre, monto…): volver a tocarla la quita junto
+/// con su valor; para cambiar el valor se elige de nuevo.
 /// Devuelve si la opción quedó elegida.
 Future<bool> alternarOpcionGuiada(
   BuildContext context,
@@ -266,7 +267,7 @@ Future<bool> alternarOpcionGuiada(
 }) async {
   final session = ref.read(guidedFlowProvider).session;
   if (session == null) return false;
-  if (!option.hasEditor && session.isSelected(questionId, option.id)) {
+  if (session.isSelected(questionId, option.id)) {
     _informar(
       context,
       ref.read(guidedFlowProvider.notifier).deselect(questionId, option.id),

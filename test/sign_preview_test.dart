@@ -801,7 +801,7 @@ void main() {
 
       await verConAvatarReal(tester, 'ROBAR');
       expect(visor(tester).glosses, ['ROBAR']);
-      expect(visor(tester).isUserComposing, isFalse);
+      expect(visor(tester).isUserComposing, isTrue, reason: 'sin reposo');
       expect(visor(tester).showControls, isFalse);
       expect(find.byType(Avatar3DViewer), findsOneWidget);
       expect(tester.element(find.byType(Avatar3DViewer)), same(cargado));

@@ -37,7 +37,10 @@ Widget avatarSignPreviewPlayer(
       // tocando fuera o sola al terminar la seña.
       showControls: false,
       playbackRequestId: 1,
-      isUserComposing: plan.glosses.isEmpty,
+      // Siempre en «componiendo»: la vista previa no tiene reposo. Sin esto
+      // el avatar arrancaba un NEUTRO1..3 al abrirse o al terminar la seña
+      // (el reposo se colaba antes de la seña de la tarjeta).
+      isUserComposing: true,
       glosses: plan.animationGlosses,
       animationUrls: plan.animationUrls,
       onPlaybackStateChanged: (playing) {
