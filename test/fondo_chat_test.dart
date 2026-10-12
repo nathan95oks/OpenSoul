@@ -41,4 +41,28 @@ void main() {
     );
     semantica.dispose();
   });
+
+  test('en la pantalla de un teléfono ningún dibujo se repite', () {
+    // El chat se ancla arriba a la izquierda; 430×800 cubre los teléfonos.
+    final pantalla = (Offset.zero & const Size(430, 800)).inflate(24);
+    final tipos = [
+      for (final (centro, tipo) in chatDoodleLayout())
+        if (pantalla.contains(centro)) tipo,
+    ];
+    expect(tipos.length, greaterThan(15), reason: 'hay dibujos de sobra');
+    expect(tipos.toSet().length, tipos.length);
+  });
+
+  test('en una tableta los dibujos iguales quedan lejos entre sí', () {
+    final pantalla = (Offset.zero & const Size(1280, 1280)).inflate(24);
+    final dentro = chatDoodleLayout()
+        .where((e) => pantalla.contains(e.$1))
+        .toList();
+    for (var i = 0; i < dentro.length; i++) {
+      for (var j = i + 1; j < dentro.length; j++) {
+        if (dentro[i].$2 != dentro[j].$2) continue;
+        expect((dentro[i].$1 - dentro[j].$1).distance, greaterThan(450));
+      }
+    }
+  });
 }
