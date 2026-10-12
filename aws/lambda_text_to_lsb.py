@@ -1457,6 +1457,8 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
         raw_glosses, text,
     )
     incidencias += incidencias_pregunta
+    raw_glosses, incidencias_ayuda = enforce_help_direction(raw_glosses, text)
+    incidencias += incidencias_ayuda
 
     # Ninguna glosa que salga de aquí puede ser una invención: lo que no está
     # documentado se deletrea en vez de presentarse como una seña real.
@@ -1908,6 +1910,73 @@ def enforce_spoken_form_fidelity(glosses: list, text: str) -> tuple:
     return resultado, incidencias
 
 
+# ---------------------------------------------------------------------------
+# AYUDAR: quién ayuda a quién
+# ---------------------------------------------------------------------------
+# El avatar no tiene una seña AYUDAR: tiene AYUDAR_DAR (yo te ayudo) y
+# AYUDAR_PEDIR (ayúdame / necesito ayuda). «¿En qué le puedo ayudar?» salía
+# AYUDAR y se deletreaba. La dirección la dice el español de cada aparición.
+_AYUDA_FAMILIA = {"AYUDAR", "AYUDA", "AYUDAR_DAR", "AYUDAR_PEDIR"}
+_AYUDA_PALABRA = re.compile(r"\bayud\w*", re.IGNORECASE)
+_AYUDA_PIDE = [
+    # «necesito ayuda», «¿necesita que le ayudemos?», «pido ayuda»,
+    # «quiero ayuda», «busco ayuda»
+    re.compile(r"\b(necesit|pid|ped|pedi|quier|quer|requier|busc)\w*"
+               r"(\s+\w+){0,3}\s*$"),
+    # «¿me puede ayudar?», «me ayuda», «nos ayuda»
+    re.compile(r"\b(me|nos)(\s+\w+){0,2}\s*$"),
+    re.compile(r"\b(socorro|auxilio)\b"),
+]
+# «ayúdeme», «ayúdame», «ayúdenos», «ayudarme»
+_AYUDA_PIDE_PALABRA = re.compile(
+    r"^ayud\w*(me|nos)$|^ayudame$|^ayudeme$|^ayudenme$")
+
+
+def _direccion_ayuda(antes: str, palabra: str) -> str:
+    """AYUDAR_PEDIR o AYUDAR_DAR para una aparición de «ayud…»."""
+    palabra = remove_accents(palabra.upper()).lower()
+    if _AYUDA_PIDE_PALABRA.search(palabra):
+        return "AYUDAR_PEDIR"
+    antes = remove_accents(antes.upper()).lower()
+    # Solo la misma oración: «¿en qué le puedo ayudar? necesito…» no se mezcla.
+    antes = re.split(r"[.?!¿¡;]", antes)[-1]
+    if any(r.search(antes) for r in _AYUDA_PIDE):
+        return "AYUDAR_PEDIR"
+    # «le puedo ayudar», «lo voy a ayudar», «te ayudo», «podemos ayudar»:
+    # quien habla ayuda. Es también la lectura por defecto.
+    return "AYUDAR_DAR"
+
+
+def enforce_help_direction(glosses: list, text: str) -> tuple:
+    """Cambia AYUDAR (y una dirección equivocada) por AYUDAR_DAR o
+    AYUDAR_PEDIR según el español. Devuelve (glosas, incidencias)."""
+    if not any(_clave(g) in _AYUDA_FAMILIA for g in glosses):
+        return list(glosses), []
+    # Sin tildes: «ayúdeme» tiene que encontrarse como «ayudeme». La
+    # conversión es letra por letra, así que las posiciones no cambian.
+    plano = remove_accents((text or "").upper()).lower()
+    direcciones = [
+        _direccion_ayuda(plano[:m.start()], m.group(0))
+        for m in _AYUDA_PALABRA.finditer(plano)
+    ]
+    if not direcciones:
+        # «auxilio» o «socorro» sin la palabra «ayuda».
+        pide = any(r.search(plano) for r in _AYUDA_PIDE[2:])
+        direcciones = ["AYUDAR_PEDIR" if pide else "AYUDAR_DAR"]
+    resultado, incidencias, i = [], [], 0
+    for g in glosses:
+        if _clave(g) not in _AYUDA_FAMILIA:
+            resultado.append(g)
+            continue
+        nueva = direcciones[min(i, len(direcciones) - 1)]
+        i += 1
+        resultado.append(nueva)
+        if _clave(g) != nueva:
+            incidencias.append({"palabra": g, "accion": "direccion_ayuda",
+                                "glosa": nueva})
+    return resultado, incidencias
+
+
 def enforce_spoken_question_fidelity(glosses: list, text: str) -> tuple:
     """Preserva el interrogativo hablado y elimina respuestas alucinadas.
 
@@ -2151,7 +2220,8 @@ def repair_cached_translation(cached: dict, text: str) -> dict:
         cached.get("glosses") or [], text,
     )
     glosas, arreglos = enforce_spoken_question_fidelity(glosas, text)
-    arreglos = arreglos_forma + arreglos
+    glosas, arreglos_ayuda = enforce_help_direction(glosas, text)
+    arreglos = arreglos_forma + arreglos + arreglos_ayuda
     cached["glosses"] = glosas
     if arreglos:
         cached["fidelityFixes"] = [

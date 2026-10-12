@@ -216,3 +216,48 @@ class TodasLasSenasDelGlbSeHacenConSuClip(unittest.TestCase):
                 r = T.post_process_glosses({"glosses": [nombre]},
                                            nombre.lower().replace("_", " "))
                 self.assertEqual(r["requiresDactylology"], 0, r["glosses"])
+
+
+class AyudarSegunQuienAyuda(unittest.TestCase):
+    """El avatar no tiene AYUDAR: tiene AYUDAR_DAR y AYUDAR_PEDIR. «¿En qué
+    le puedo ayudar?» salía AYUDAR y se deletreaba."""
+
+    CASOS = [
+        ("Buenos días, ¿en qué le puedo ayudar?", "AYUDAR_DAR"),
+        ("buenos dias en que le puedo ayudar", "AYUDAR_DAR"),
+        ("Le ayudo con su trámite", "AYUDAR_DAR"),
+        ("Lo vamos a ayudar", "AYUDAR_DAR"),
+        ("Podemos ayudarle con eso", "AYUDAR_DAR"),
+        ("Necesito ayuda", "AYUDAR_PEDIR"),
+        ("¿Necesita ayuda?", "AYUDAR_PEDIR"),
+        ("¿Me puede ayudar?", "AYUDAR_PEDIR"),
+        ("¿Puede ayudarme?", "AYUDAR_PEDIR"),
+        ("Ayúdeme por favor", "AYUDAR_PEDIR"),
+        ("Pido ayuda", "AYUDAR_PEDIR"),
+        ("Quiero pedir ayuda a la policía", "AYUDAR_PEDIR"),
+    ]
+
+    def test_direccion_por_el_espanol(self):
+        for texto, esperada in self.CASOS:
+            with self.subTest(texto):
+                r = T.post_process_glosses({"glosses": ["AYUDAR"]}, texto)
+                # Puede sumar lo que faltaba («por favor» → POR_FAVOR).
+                ayuda = [g for g in r["glosses"] if g.startswith("AYUD")]
+                self.assertEqual(ayuda, [esperada])
+                self.assertEqual(r["requiresDactylology"], 0)
+
+    def test_corrige_la_direccion_equivocada_del_modelo(self):
+        r = T.post_process_glosses({"glosses": ["AYUDAR_PEDIR", "PUEDO"]},
+                                   "¿En qué le puedo ayudar?")
+        self.assertEqual(r["glosses"], ["AYUDAR_DAR", "PUEDO"])
+
+    def test_cada_aparicion_con_su_direccion(self):
+        salida, _ = T.enforce_help_direction(
+            ["AYUDAR", "AYUDAR"], "Le voy a ayudar. ¿Usted me ayuda también?")
+        self.assertEqual(salida, ["AYUDAR_DAR", "AYUDAR_PEDIR"])
+
+    def test_la_cache_vieja_tambien_se_corrige(self):
+        r = T.repair_cached_translation(
+            {"glosses": ["BUENOS_DIAS", "AYUDAR", "PUEDO"]},
+            "Buenos días, ¿en qué le puedo ayudar?")
+        self.assertEqual(r["glosses"], ["BUENOS_DIAS", "AYUDAR_DAR", "PUEDO"])
