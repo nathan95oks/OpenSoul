@@ -137,8 +137,9 @@ void main() {
   Future<String?> contestar(
     ProviderContainer c,
     Map<String, dynamic> sorda,
-    List<String> pedidas,
-  ) async {
+    List<String> pedidas, {
+    List<Map<String, dynamic>>? elegidas,
+  }) async {
     final flow = c.read(guidedFlowProvider.notifier);
     final rules = c.read(guidedFlowRulesProvider);
     final bank = c.read(questionBankProvider);
@@ -157,7 +158,16 @@ void main() {
         if (bank.question(qid)?.options.any((o) => o.id == id) != true) {
           continue;
         }
-        if (flow.select(qid, id).accepted) return true;
+        if (flow.select(qid, id).accepted) {
+          // Para el informe: qué tarjeta tocó la persona sorda y sus glosas.
+          final opcion = bank.question(qid)!.option(id)!;
+          elegidas?.add({
+            'pregunta': bank.question(qid)!.formulation,
+            'tarjeta': opcion.label,
+            'glosas': opcion.glosses,
+          });
+          return true;
+        }
       }
       return false;
     }
@@ -206,8 +216,18 @@ void main() {
           c
               .read(contextProvider.notifier)
               .setContext(contextById(inicio['contexto'] as String)!);
-          final texto = await contestar(c, inicio, const []);
-          turnos.add({'sorda_inicia': texto});
+          final elegidas = <Map<String, dynamic>>[];
+          final texto = await contestar(
+            c,
+            inicio,
+            const [],
+            elegidas: elegidas,
+          );
+          turnos.add({
+            'sorda_inicia': texto,
+            'contexto': inicio['contexto'],
+            'tarjetas': elegidas,
+          });
         }
 
         for (final t
@@ -399,8 +419,14 @@ void main() {
             }
             c.read(contextProvider.notifier).setContext(contextById(elegido)!);
           }
-          final dicho = await contestar(c, sorda, pedidas);
+          final elegidas = <Map<String, dynamic>>[];
+          final dicho = await contestar(c, sorda, pedidas, elegidas: elegidas);
           registro['sorda'] = dicho;
+          registro['tarjetas'] = elegidas;
+          final respuesta = c.read(conversationProvider).conversation.lastTurn;
+          if (respuesta?.message.speaker == SpeakerRole.deaf) {
+            registro['glosas_sorda'] = respuesta!.message.glosses;
+          }
           // La persona sorda no dice datos que nadie mencionó («es mi jefe»).
           final inventado = [
             for (final w in espera['sorda_no_dice'] as List? ?? const [])
