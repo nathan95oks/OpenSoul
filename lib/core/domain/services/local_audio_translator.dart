@@ -2,6 +2,7 @@ import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
 import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/help_direction.dart';
 import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Motor de traducción y desambiguación local en Dart para modo sin conexión (Offline).
@@ -314,6 +315,10 @@ class LocalAudioTranslator {
         if (_lexicalMap.containsKey(foldedSingle)) {
           matchedGloss = _lexicalMap[foldedSingle];
           matchLen = 1;
+        } else if (foldedSingle.startsWith('AYUD')) {
+          // «ayúdeme», «ayudarle», «ayudamos»…: la dirección se decide abajo.
+          matchedGloss = HelpDirection.dar;
+          matchLen = 1;
         } else if (!_stopwords.contains(single)) {
           // Si no está en el mapa y es relevante, comprobar si es número o si existe directamente en las 200 señas
           if (AnimationUrlResolver.digitToNumeral.containsKey(single)) {
@@ -335,23 +340,16 @@ class LocalAudioTranslator {
       }
 
       if (matchedGloss != null) {
-        // Desambiguación semántica local de ayuda (emisor vs receptor)
-        if (matchedGloss == 'AYUDAR_DAR') {
-          if (cleanWords.contains('AUXILIO') ||
-              cleanWords.contains('SOCORRO') ||
-              cleanWords.contains('NECESITO') ||
-              cleanWords.contains('PIDO') ||
-              cleanWords.contains('PEDIR')) {
-            matchedGloss = 'AYUDAR_PEDIR';
-          }
-        }
         foundGlosses.add(matchedGloss);
         i += matchLen;
       }
     }
 
     // 3. Estructuración sintáctica básica LSB (Orden OSV / Interrogación al final)
-    final semanticGlosses = _reorderToLsb(foundGlosses, rawText);
+    // Quién ayuda a quién: «¿en qué le puedo ayudar?» es AYUDAR_DAR;
+    // «necesito ayuda», «ayúdeme», AYUDAR_PEDIR (misma regla que la Lambda).
+    final dirigidas = HelpDirection.apply(foundGlosses, rawText);
+    final semanticGlosses = _reorderToLsb(dirigidas, rawText);
 
     // 4. Resolver clips de animación para el avatar 3D
     final animationGlosses = <String>[];

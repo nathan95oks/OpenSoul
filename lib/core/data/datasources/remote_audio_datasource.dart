@@ -4,6 +4,7 @@ import 'package:lsb_legal_app/core/data/models/lsb_translation_model.dart';
 import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart';
 import 'package:lsb_legal_app/core/network/endpoint_uri.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/help_direction.dart';
 
 abstract class RemoteAudioDataSource {
   Future<LsbTranslationModel> translateText(
@@ -77,7 +78,11 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
             // Lambda anterior, o una traducción suya en caché): ACOSO llegaba
             // como A·C·O·S·O. Sus letras se vuelven su seña.
             final origen = (step['sourceGloss'] ?? '').toString();
-            if (origen != gloss && _isBaked(origen)) {
+            if (origen != gloss &&
+                (_isBaked(origen) ||
+                    HelpDirection.familia.contains(
+                      AnimationUrlResolver.canonicalFor(origen),
+                    ))) {
               if (horneadaEnCurso != origen) {
                 urls.add('${animationResolver.baseUrl}avatar_test.glb');
                 animationGlosses.add(origen);
@@ -150,6 +155,15 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
           bakedUrl: '${animationResolver.baseUrl}avatar_test.glb',
         );
 
+        // AYUDAR no tiene seña: es AYUDAR_DAR o AYUDAR_PEDIR según quién
+        // ayuda a quién («¿en qué le puedo ayudar?» → DAR).
+        final dirigidas = HelpDirection.apply(animationGlosses, text);
+        for (var i = 0; i < dirigidas.length && i < urls.length; i++) {
+          if (dirigidas[i] == animationGlosses[i]) continue;
+          animationGlosses[i] = dirigidas[i];
+          urls[i] = '${animationResolver.baseUrl}avatar_test.glb';
+        }
+
         // Colapsar compuestos multipalabra (ej: "COMO" + deletreo "ESTAS" -> "COMO_ESTAS")
         // protegiendo contra respuestas fragmentadas o desactualizadas del backend.
         _collapseCompoundAnimations(animationGlosses, urls, text);
@@ -175,8 +189,9 @@ class RemoteAudioDataSourceImpl implements RemoteAudioDataSource {
                 ?.map((e) => e.toString().toUpperCase().trim())
                 .toList() ??
             effectiveGlosses;
-        final semanticRaw = [...rawSemantic];
+        var semanticRaw = [...rawSemantic];
         _collapseSpelledBaked(semanticRaw, horneadasDeletreadas);
+        semanticRaw = HelpDirection.apply(semanticRaw, text);
         final semanticGlosses = LsbGlossSemantics.reconcileQuestionGlosses(
           text,
           _collapseSemanticCompounds(semanticRaw, text),
