@@ -227,6 +227,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
 
   String _lastRecognizedWords = '';
   bool _finalResultSeen = false;
+  bool _deteniendo = false;
 
   /// Detiene el dictado. Terminar de grabar —por el botón o porque el motor
   /// decidió que ya terminó ("done"/"notListening")— envía lo reconocido si
@@ -235,7 +236,12 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
   /// envía solo: una transcripción cortada o equivocada no puede pasar por lo
   /// que se dijo, así que queda en el campo para revisarla.
   Future<void> _stopRecording({bool porError = false}) async {
-    if (!_isRecording) return;
+    // Detener lo llama el botón y también el aviso de «terminé de oír» que el
+    // motor emite al parar: la segunda llamada, con la espera del resultado
+    // final, encontraba el campo ya vacío y mandaba un audio vacío que
+    // cancelaba la traducción recién enviada (el avatar no hacía la seña).
+    if (!_isRecording || _deteniendo) return;
+    _deteniendo = true;
     try {
       await _speechToText.stop();
     } catch (_) {
@@ -262,6 +268,7 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
       });
     }
     _lastRecognizedWords = '';
+    _deteniendo = false;
     _notifyComposing();
 
     if (text.isEmpty) {

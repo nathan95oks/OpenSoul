@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_input_widget.dart';
 
 /// Dictar en Texto/Audio → LSB envía solo lo reconocido, sin esperar al
@@ -111,6 +112,39 @@ void main() {
     await tester.tap(find.byTooltip('Detener grabación'));
     await avanzar(tester);
     expect(enviados, ['pase a la ventanilla cuatro']);
+    await cerrar(tester);
+  });
+
+  testWidgets('detener con el botón y el aviso de fin del motor envían una '
+      'sola vez, sin un audio vacío detrás', (tester) async {
+    final enviados = await montar(tester, automatico: true);
+    // Un resultado parcial: al detener se espera el final, y en esa espera
+    // el motor avisa de que terminó de oír.
+    await delMotor(
+      tester,
+      'textRecognition',
+      jsonEncode({
+        'alternates': [
+          {'recognizedWords': 'quiero hacer un trámite', 'confidence': 0.9},
+        ],
+        'resultType': 1,
+      }),
+    );
+    await tester.tap(find.byTooltip('Detener grabación'));
+    await tester.pump(const Duration(milliseconds: 10));
+    await delMotor(tester, 'notifyStatus', 'done');
+    await avanzar(tester);
+    await tester.pump(const Duration(seconds: 1));
+    expect(enviados, ['quiero hacer un trámite']);
+    // Un segundo «detener» con el campo ya vacío mandaría un audio vacío, que
+    // devuelve el traductor a «idle» y cancela lo recién enviado.
+    final contenedor = ProviderScope.containerOf(
+      tester.element(find.byType(TextInputWidget)),
+    );
+    expect(
+      contenedor.read(audioTranslationControllerProvider).status,
+      isNot(AudioTranslationStatus.idle),
+    );
     await cerrar(tester);
   });
 
