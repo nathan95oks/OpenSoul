@@ -170,3 +170,28 @@ class SenasHorneadasNoSeDeletrean(unittest.TestCase):
             r = T.post_process_glosses({"glosses": [glosa]}, texto)
             self.assertEqual(r["glosses"], [glosa], texto)
             self.assertEqual(r["requiresDactylology"], 0, texto)
+
+
+class SenasAnimadasSeOfrecenAlModelo(unittest.TestCase):
+    """Un clip del .glb que no estaba en `AVAILABLE_GLOSSES` no aparecía en el
+    prompt: estaba animado pero el modelo nunca lo emitía."""
+
+    def test_los_clips_con_sena_se_ofrecen(self):
+        ofrecidas = T.offerable_glosses()
+        for g in ("ACOSO", "BULLYING", "JUICIO", "USTEDES", "POR_QUE",
+                  "PARA_QUE", "COMO_ESTAS", "AYUDAR_DAR", "AYUDAR_PEDIR",
+                  "CONTESTAR", "TRATA_TRAFICO"):
+            self.assertIn(g, ofrecidas, g)
+
+    def test_no_se_agregan_reposos_ni_nombres_de_numerales(self):
+        # Las letras y los dígitos ya vienen en el catálogo; lo que se suma de
+        # los clips nunca son reposos ni el nombre en letras de un numeral.
+        agregadas = T.offerable_glosses() - set(T.AVAILABLE_GLOSSES)
+        for g in ("NEUTRO1", "NEUTRO2", "NEUTRO3", "ENIE", "CERO", "DIEZ"):
+            self.assertNotIn(g, agregadas, g)
+        self.assertTrue(agregadas, "debe sumar las señas horneadas")
+
+    def test_el_prompt_los_trae(self):
+        prompt = T.build_disambiguation_prompt("Hay acoso")
+        self.assertIn("BULLYING", prompt)
+        self.assertNotIn("NEUTRO1", prompt)

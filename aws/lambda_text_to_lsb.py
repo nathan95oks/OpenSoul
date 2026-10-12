@@ -525,9 +525,31 @@ SITUATION_LABELS = {
     "otro": "declaración general y testimonio",
 }
 
+def offerable_glosses() -> set:
+    """Las glosas que se le ofrecen al modelo: el catálogo más los clips del .glb.
+
+    Un clip horneado que no está en `AVAILABLE_GLOSSES` (ACOSO, BULLYING,
+    JUICIO, USTEDES, POR_QUE, PARA_QUE, COMO_ESTAS, AYUDAR_DAR/PEDIR,
+    CONTESTAR, TRATA_TRAFICO) estaba animado pero el modelo nunca lo veía, así
+    que jamás lo emitía. Se excluyen las letras (el deletreo las usa solas), los
+    numerales (llegan como dígitos y `_NUMERAL_CLIPS` los traduce) y los
+    reposos NEUTRO, que no son señas.
+    """
+    ofrecidas = set(AVAILABLE_GLOSSES)
+    normalizadas = {strip_gloss_accents(g) for g in ofrecidas}
+    numerales = set(_NUMERAL_CLIPS.values())
+    for nombre in get_baked_clips().values():
+        clave = strip_gloss_accents(nombre.upper())
+        if (len(clave) <= 1 or clave == "ENIE" or clave in numerales
+                or clave.startswith("NEUTRO") or clave in normalizadas):
+            continue
+        ofrecidas.add(clave)
+    return ofrecidas
+
+
 def build_disambiguation_prompt(text: str, context: str = "legal", situation: str = None) -> str:
     """Construye el Prompt oficial con las reglas del Ministerio de Educación de Bolivia."""
-    gloss_list = ", ".join(sorted(AVAILABLE_GLOSSES))
+    gloss_list = ", ".join(sorted(offerable_glosses()))
     safe_text = sanitize_prompt_text(text)
 
     situation_instruction = ""
