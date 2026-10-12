@@ -1437,8 +1437,12 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
 
     # Ninguna glosa que salga de aquí puede ser una invención: lo que no está
     # documentado se deletrea en vez de presentarse como una seña real.
+    # Los clips del .glb también cuentan como catalogados: una seña horneada
+    # que aún no está en `AVAILABLE_GLOSSES` (ACOSO, BULLYING, JUICIO, los
+    # numerales…) se deletreaba aquí antes de que `plan_gloss_animation`
+    # llegara a encontrar su clip.
     raw_glosses, incidencias_catalogo = enforce_catalog_membership(
-        raw_glosses, compuestas_verificadas,
+        raw_glosses, set(compuestas_verificadas) | set(clips),
     )
     incidencias += incidencias_catalogo
 

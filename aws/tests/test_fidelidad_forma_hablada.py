@@ -140,3 +140,33 @@ class RanurasDelEspanol(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SenasHorneadasNoSeDeletrean(unittest.TestCase):
+    """Un clip del .glb cuenta como catalogado aunque `AVAILABLE_GLOSSES`
+    todavía no lo traiga: ACOSO y BULLYING se deletreaban (A-C-O-S-O)."""
+
+    def test_acoso_y_bullying_con_clip_se_conservan(self):
+        clips = T._clips_by_key(["ACOSO", "BULLYING", "JUICIO"])
+        salida, incidencias = T.enforce_catalog_membership(
+            ["ACOSO", "BULLYING", "JUICIO"], set(clips))
+        self.assertEqual(salida, ["ACOSO", "BULLYING", "JUICIO"])
+        self.assertEqual(incidencias, [])
+
+    def test_sin_clip_ni_catalogo_sigue_deletreandose(self):
+        salida, _ = T.enforce_catalog_membership(["BULLYING"], set())
+        self.assertEqual(salida, list("BULLYING"))
+
+    def test_el_plan_de_animacion_usa_el_clip(self):
+        clips = T._clips_by_key(["ACOSO"])
+        detalle, pasos = T.plan_gloss_animation("ACOSO", clips)
+        self.assertTrue(detalle["available"])
+        self.assertEqual(len(pasos), 1)
+
+    def test_post_process_no_deletrea_lo_horneado(self):
+        for texto, glosa in [("Hay acoso en la escuela", "ACOSO"),
+                             ("Sufro bullying", "BULLYING"),
+                             ("Fue al juicio", "JUICIO")]:
+            r = T.post_process_glosses({"glosses": [glosa]}, texto)
+            self.assertEqual(r["glosses"], [glosa], texto)
+            self.assertEqual(r["requiresDactylology"], 0, texto)
