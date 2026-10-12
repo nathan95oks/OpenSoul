@@ -454,8 +454,11 @@ void main() {
             caso.text,
             reason: caso.option,
           );
-          expect(audioOutput.played, isEmpty, reason: 'Sin autoplay remoto.');
-          expect(audioOutput.spoken, isEmpty, reason: 'Sin autoplay local.');
+          expect(
+            audioOutput.spoken,
+            [caso.text],
+            reason: 'Suena solo en Conversación.',
+          );
         }
       },
     );
@@ -524,7 +527,7 @@ void main() {
     );
 
     test(
-      '14. el audio validado queda en el reply y no se reproduce solo',
+      '14. el audio validado queda en el reply y suena solo en Conversación',
       () async {
         final c = app(
           declarationResponse: TranslationResult(
@@ -544,7 +547,7 @@ void main() {
         expect(respuesta.message.replyToId, pregunta.message.id);
         expect(respuesta.outputs.text, 'Ocurrió en la calle.');
         expect(respuesta.outputs.audioUrl, 'https://audio.example/reply.mp3');
-        expect(audioOutput.played, isEmpty);
+        expect(audioOutput.played, ['https://audio.example/reply.mp3']);
         expect(audioOutput.spoken, isEmpty);
       },
     );

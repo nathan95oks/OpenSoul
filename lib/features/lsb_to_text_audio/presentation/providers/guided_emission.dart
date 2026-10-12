@@ -81,7 +81,12 @@ class GuidedEmission {
       glosses: glosses,
     );
 
-    ref.read(resultVisibleProvider.notifier).show();
+    // Si la respuesta vuelve al chat, la declaración no pasa por su pantalla
+    // de resultado (aparecía un instante y saltaba sola a Conversación): solo
+    // se muestra si la entrega falla y la persona necesita verla.
+    final vuelveAlChat = launch.returnToConversation;
+    final resultado = ref.read(resultVisibleProvider.notifier);
+    if (!vuelveAlChat) resultado.show();
 
     try {
       await ref
@@ -96,6 +101,7 @@ class GuidedEmission {
 
     final result = ref.read(translationControllerProvider).value;
     if (result == null) {
+      if (vuelveAlChat) resultado.show();
       return const GuidedEmissionOutcome(GuidedEmissionStatus.shownResult);
     }
     final delivered = await ref
@@ -106,6 +112,9 @@ class GuidedEmission {
       SubmitOutcome.sent => GuidedEmissionStatus.returnedToConversation,
       _ => GuidedEmissionStatus.staleConversation,
     };
+    if (vuelveAlChat && status != GuidedEmissionStatus.returnedToConversation) {
+      resultado.show();
+    }
     // Si la declaración queda en pantalla, se escucha sola al llegar; si
     // volvió al chat, suena allí.
     if (status != GuidedEmissionStatus.returnedToConversation &&

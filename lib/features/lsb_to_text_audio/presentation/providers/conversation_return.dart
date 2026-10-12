@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/navigation_provider.dart';
@@ -20,8 +22,8 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 /// pestaña al chat. Abierto por su cuenta, el módulo no cambia: se queda en
 /// su pantalla de resultado.
 ///
-/// El audio no se reproduce solo: queda en el turno del chat para un toque
-/// explícito, igual que en la pantalla de resultado.
+/// El audio se reproduce solo al volver al chat, para seguir la conversación;
+/// queda además en el turno para repetirlo con un toque.
 class ConversationReturn {
   final Ref ref;
 
@@ -51,7 +53,27 @@ class ConversationReturn {
     ref.read(selectedTabProvider.notifier).select(AppTabId.conversation);
     ref.read(resultVisibleProvider.notifier).hide();
     await session.reset();
+    _reproducir(result);
     return outcome;
+  }
+
+  /// Suena en Conversación la declaración que se acaba de entregar. Un fallo
+  /// del audio no deshace el envío: el turno conserva su botón de reproducir.
+  void _reproducir(TranslationResult result) {
+    final audio = ref.read(audioOutputProvider);
+    final url = result.audioUrl;
+    Future<void> hablar() async {
+      if (url != null && url.isNotEmpty) {
+        try {
+          await audio.playUrl(url);
+          return;
+        } catch (_) {}
+      }
+      if (result.generatedText.isNotEmpty)
+        await audio.speak(result.generatedText);
+    }
+
+    unawaited(hablar().catchError((_) {}));
   }
 }
 
