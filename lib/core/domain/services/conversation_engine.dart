@@ -247,6 +247,10 @@ class ConversationEngine {
         text: message.text,
         animationUrls: translation.animationUrls,
         animationGlosses: translation.animationGlosses,
+        spelledWords: [
+          ...translation.unanimatedSigns,
+          ...translation.spelledWords,
+        ],
       ),
     );
   }

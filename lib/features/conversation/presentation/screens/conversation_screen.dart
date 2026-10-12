@@ -57,6 +57,19 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     });
   }
 
+  /// Las palabras que el avatar deletrea en [turn]: las que informó la
+  /// traducción más las palabras escritas, para separar cada una aunque la
+  /// traducción no las haya informado (sin conexión, o un turno guardado
+  /// antes). Una palabra solo cuenta si sus letras están seguidas en la
+  /// secuencia, así que sumar las escritas no inventa deletreos.
+  List<String> _palabrasDeletreadas(ConversationTurn turn) => [
+    ...turn.outputs.spelledWords,
+    for (final w in turn.message.text.split(
+      RegExp(r'[^\p{L}\p{N}]+', unicode: true),
+    ))
+      if (w.length > 1) w,
+  ];
+
   Future<void> _playDeafTurn(ConversationTurn turn) async {
     final audio = ref.read(audioOutputProvider);
     if (turn.outputs.hasRemoteAudio) {
@@ -155,6 +168,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           glosses: glosses,
           animationUrls: lastTurn.outputs.animationUrls,
           animationGlosses: lastTurn.outputs.animationGlosses,
+          spelledWords: _palabrasDeletreadas(lastTurn),
         );
         if (mounted) setState(() => _avatarSignando = false);
       }
@@ -338,6 +352,9 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                                             turn.outputs.animationUrls,
                                         animationGlosses:
                                             turn.outputs.animationGlosses,
+                                        spelledWords: _palabrasDeletreadas(
+                                          turn,
+                                        ),
                                         autoDismissOnFinish: false,
                                       );
                                     },

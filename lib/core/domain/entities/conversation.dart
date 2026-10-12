@@ -8,6 +8,11 @@ class GeneratedOutputs {
   final String? audioUrl;
   final List<String> animationUrls;
   final List<String> animationGlosses;
+
+  /// Palabras que el avatar deletrea (sin seña en el catálogo o sin
+  /// animación): con ellas se sabe dónde empieza y acaba cada palabra entre
+  /// las letras sueltas de [animationGlosses].
+  final List<String> spelledWords;
   final bool refinedByAi;
 
   const GeneratedOutputs({
@@ -16,6 +21,7 @@ class GeneratedOutputs {
     this.audioUrl,
     this.animationUrls = const [],
     this.animationGlosses = const [],
+    this.spelledWords = const [],
     this.refinedByAi = false,
   });
 

@@ -1,16 +1,25 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
+import 'package:lsb_legal_app/core/di/injection.dart'
+    show pendingSignCatalogProvider;
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
+import 'package:lsb_legal_app/core/domain/services/spelling_help.dart';
 import 'package:lsb_legal_app/core/presentation/widgets/shared_avatar.dart';
 
-class AvatarPlaybackSheet extends StatefulWidget {
+class AvatarPlaybackSheet extends ConsumerStatefulWidget {
   static const dismissDelay = Duration(milliseconds: 180);
 
   final List<String> glosses;
   final List<String> animationUrls;
   final List<String>? animationGlosses;
+
+  /// Las palabras que el avatar deletrea: con ellas cada palabra se ve y se
+  /// salta por separado, y no como una sola cadena de letras.
+  final List<String> spelledWords;
   final bool autoDismissOnFinish;
   final Duration animationDuration;
 
@@ -19,6 +28,7 @@ class AvatarPlaybackSheet extends StatefulWidget {
     required this.glosses,
     required this.animationUrls,
     this.animationGlosses,
+    this.spelledWords = const [],
     this.autoDismissOnFinish = true,
     this.animationDuration = const Duration(seconds: 3),
   });
@@ -28,6 +38,7 @@ class AvatarPlaybackSheet extends StatefulWidget {
     required List<String> glosses,
     required List<String> animationUrls,
     List<String>? animationGlosses,
+    List<String> spelledWords = const [],
     bool autoDismissOnFinish = true,
     Duration animationDuration = const Duration(seconds: 3),
   }) {
@@ -39,6 +50,7 @@ class AvatarPlaybackSheet extends StatefulWidget {
         glosses: glosses,
         animationUrls: animationUrls,
         animationGlosses: animationGlosses,
+        spelledWords: spelledWords,
         autoDismissOnFinish: autoDismissOnFinish,
         animationDuration: animationDuration,
       ),
@@ -46,10 +58,11 @@ class AvatarPlaybackSheet extends StatefulWidget {
   }
 
   @override
-  State<AvatarPlaybackSheet> createState() => _AvatarPlaybackSheetState();
+  ConsumerState<AvatarPlaybackSheet> createState() =>
+      _AvatarPlaybackSheetState();
 }
 
-class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
+class _AvatarPlaybackSheetState extends ConsumerState<AvatarPlaybackSheet> {
   bool _playbackStarted = false;
   Timer? _dismissTimer;
 
@@ -63,6 +76,23 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
       : widget.glosses
             .expand((g) => const AnimationUrlResolver().resolveAll(gloss: g))
             .toList();
+
+  /// Una ayuda por cada palabra deletreada: dónde empieza y acaba, y su
+  /// sinónimo o qué es. Solo cambia la lista si llegan descripciones nuevas
+  /// (el avatar compartido reinicia la seña si recibe otra lista).
+  List<SpellingHelp> _ayudas = const [];
+  PendingSignCatalog? _catalogoUsado;
+
+  List<SpellingHelp> get _spellingHelp {
+    final catalogo =
+        ref.watch(pendingSignCatalogProvider).asData?.value ??
+        PendingSignCatalog.empty;
+    if (!identical(catalogo, _catalogoUsado)) {
+      _catalogoUsado = catalogo;
+      _ayudas = SpellingHelp.forSteps(_glosses, widget.spelledWords, catalogo);
+    }
+    return _ayudas;
+  }
 
   void _onPlaybackStateChanged(bool playing) {
     if (playing) {
@@ -143,6 +173,9 @@ class _AvatarPlaybackSheetState extends State<AvatarPlaybackSheet> {
                         },
                         glosses: _glosses,
                         animationUrls: _animationUrls,
+                        // Cada palabra deletreada, con su sinónimo o qué es y
+                        // «Siguiente» para pasar a la palabra que sigue.
+                        spellingHelp: _spellingHelp,
                       ),
                     ),
                   ),

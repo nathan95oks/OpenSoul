@@ -73,6 +73,7 @@ class ConversationJson {
       'audioUrl': turn.outputs.audioUrl,
       'animationUrls': turn.outputs.animationUrls,
       'animationGlosses': turn.outputs.animationGlosses,
+      'spelledWords': turn.outputs.spelledWords,
       'refinedByAi': turn.outputs.refinedByAi,
     },
   };
@@ -131,6 +132,7 @@ class ConversationJson {
         audioUrl: salidas['audioUrl'] as String?,
         animationUrls: _textos(salidas['animationUrls']),
         animationGlosses: _textos(salidas['animationGlosses']),
+        spelledWords: _textos(salidas['spelledWords']),
         refinedByAi: salidas['refinedByAi'] == true,
       ),
     );
