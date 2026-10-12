@@ -16,6 +16,7 @@ import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_handoff.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/avatar_playback_sheet.dart';
+import 'package:lsb_legal_app/features/conversation/presentation/widgets/chat_doodle_background.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/widgets/turn_bubble.dart';
 
 class ConversationScreen extends ConsumerStatefulWidget {
@@ -295,52 +296,56 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                       ),
                     ],
                   ),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 280),
-                    switchInCurve: Curves.easeOutCubic,
-                    switchOutCurve: Curves.easeInCubic,
-                    child: state.conversation.isEmpty
-                        ? const _EmptyConversation(key: ValueKey('vacio'))
-                        : ListView.builder(
-                            key: const ValueKey('hilo'),
-                            controller: _scroll,
-                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                            itemCount: state.conversation.turns.length,
-                            itemBuilder: (context, i) {
-                              final turn = state.conversation.turns[i];
-                              return _EntradaMensaje(
-                                key: ValueKey(turn.message.id),
-                                animar: _porAnimar.remove(turn.message.id),
-                                desdeLaIzquierda:
-                                    turn.message.speaker == SpeakerRole.deaf,
-                                child: TurnBubble(
-                                  turn: turn,
-                                  onPlayAudio: () => _playDeafTurn(turn),
-                                  onShowAvatar: () {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                    SystemChannels.textInput.invokeMethod(
-                                      'TextInput.hide',
-                                    );
-                                    AvatarPlaybackSheet.show(
-                                      context,
-                                      glosses:
-                                          turn
-                                              .outputs
-                                              .animationGlosses
-                                              .isNotEmpty
-                                          ? turn.outputs.animationGlosses
-                                          : turn.message.glosses,
-                                      animationUrls: turn.outputs.animationUrls,
-                                      animationGlosses:
-                                          turn.outputs.animationGlosses,
-                                      autoDismissOnFinish: false,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+                  // Dibujitos de fondo bajo los mensajes, como en WhatsApp.
+                  child: ChatDoodleBackground(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 280),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeInCubic,
+                      child: state.conversation.isEmpty
+                          ? const _EmptyConversation(key: ValueKey('vacio'))
+                          : ListView.builder(
+                              key: const ValueKey('hilo'),
+                              controller: _scroll,
+                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                              itemCount: state.conversation.turns.length,
+                              itemBuilder: (context, i) {
+                                final turn = state.conversation.turns[i];
+                                return _EntradaMensaje(
+                                  key: ValueKey(turn.message.id),
+                                  animar: _porAnimar.remove(turn.message.id),
+                                  desdeLaIzquierda:
+                                      turn.message.speaker == SpeakerRole.deaf,
+                                  child: TurnBubble(
+                                    turn: turn,
+                                    onPlayAudio: () => _playDeafTurn(turn),
+                                    onShowAvatar: () {
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                      SystemChannels.textInput.invokeMethod(
+                                        'TextInput.hide',
+                                      );
+                                      AvatarPlaybackSheet.show(
+                                        context,
+                                        glosses:
+                                            turn
+                                                .outputs
+                                                .animationGlosses
+                                                .isNotEmpty
+                                            ? turn.outputs.animationGlosses
+                                            : turn.message.glosses,
+                                        animationUrls:
+                                            turn.outputs.animationUrls,
+                                        animationGlosses:
+                                            turn.outputs.animationGlosses,
+                                        autoDismissOnFinish: false,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
                   ),
                 ),
               ),
