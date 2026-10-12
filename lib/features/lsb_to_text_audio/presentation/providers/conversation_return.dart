@@ -69,8 +69,9 @@ class ConversationReturn {
           return;
         } catch (_) {}
       }
-      if (result.generatedText.isNotEmpty)
+      if (result.generatedText.isNotEmpty) {
         await audio.speak(result.generatedText);
+      }
     }
 
     unawaited(hablar().catchError((_) {}));
