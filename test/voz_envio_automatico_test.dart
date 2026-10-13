@@ -13,14 +13,21 @@ import 'package:lsb_legal_app/features/audio_to_lsb/presentation/widgets/text_in
 /// botón de enviar. Un error de reconocimiento, en cambio, nunca envía.
 void main() {
   const canal = MethodChannel('plugin.csdcorp.com/speech_to_text');
+  // Lo que la app le pidió al motor al escuchar (p. ej. `onDevice`).
+  final escuchas = <Map<Object?, Object?>>[];
 
   setUp(() {
+    escuchas.clear();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(canal, (call) async {
           switch (call.method) {
+            case 'listen':
+              escuchas.add(
+                Map<Object?, Object?>.from(call.arguments as Map? ?? {}),
+              );
+              return true;
             case 'has_permission':
             case 'initialize':
-            case 'listen':
               return true;
             case 'locales':
               return <String>['es_BO:Español (Bolivia)'];
@@ -73,10 +80,14 @@ void main() {
   Future<List<String>> montar(
     WidgetTester tester, {
     required bool automatico,
+    bool conInternet = true,
   }) async {
     final enviados = <String>[];
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          internetProbeProvider.overrideWithValue(() async => conInternet),
+        ],
         child: MaterialApp(
           home: Scaffold(
             body: TextInputWidget(
@@ -233,5 +244,61 @@ void main() {
         reason: pantalla,
       );
     }
+  });
+
+  group('sin internet', () {
+    testWidgets('con internet se usa el reconocimiento normal', (tester) async {
+      await montar(tester, automatico: true);
+      expect(escuchas.single['onDevice'], isFalse);
+      await cerrar(tester);
+    });
+
+    testWidgets('sin internet se intenta reconocer en el propio teléfono', (
+      tester,
+    ) async {
+      final enviados = await montar(
+        tester,
+        automatico: true,
+        conInternet: false,
+      );
+      expect(escuchas.single['onDevice'], isTrue);
+      // Si el teléfono reconoce sin red, se envía como siempre.
+      await oir(tester, 'necesito ayuda');
+      await delMotor(tester, 'notifyStatus', 'done');
+      expect(enviados, ['necesito ayuda']);
+      await cerrar(tester);
+    });
+
+    testWidgets('si no puede reconocer sin internet, pide conectarse', (
+      tester,
+    ) async {
+      final enviados = await montar(
+        tester,
+        automatico: true,
+        conInternet: false,
+      );
+      await delMotor(
+        tester,
+        'notifyError',
+        jsonEncode({'errorMsg': 'error_network', 'permanent': true}),
+      );
+      expect(enviados, isEmpty);
+      expect(find.text(sinInternetParaDictar), findsOneWidget);
+      expect(find.byTooltip('Grabar voz'), findsOneWidget);
+      await cerrar(tester);
+    });
+
+    testWidgets('con internet que se corta a mitad, también lo dice', (
+      tester,
+    ) async {
+      await montar(tester, automatico: true);
+      await delMotor(
+        tester,
+        'notifyError',
+        jsonEncode({'errorMsg': 'error_network_timeout', 'permanent': true}),
+      );
+      expect(find.text(sinInternetParaDictar), findsOneWidget);
+      await cerrar(tester);
+    });
   });
 }
