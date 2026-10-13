@@ -2363,8 +2363,8 @@ def lambda_handler(event, context):
     cache_key = generate_cache_key(text, situation, resolved_senses)
 
     logger.info(
-        "Texto recibido: '%s' | Contexto: %s | Situación: %s | Hash: %s",
-        text, context_type, situation or "-", cache_key,
+        "Texto recibido: %d caracteres | Contexto: %s | Situación: %s | Hash: %s",
+        len(text), context_type, situation or "-", cache_key,
     )
 
     # 3. Verificar caché antes de gastar una invocación de Bedrock
