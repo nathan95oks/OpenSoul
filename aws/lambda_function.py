@@ -987,13 +987,27 @@ def _parse_bedrock_response(response_body: dict) -> str:
         result = result[1:-1].strip()
     return result
 
+_NUMERO_LARGO = re.compile(r"(?<![\d.,])\d{7,}(?!\d)")
+_NUMERO_CON_GUION = re.compile(r"(?<![\d-])\d{3,4}-\d{4,5}(?![\d-])")
+
+
+def texto_para_voz(text: str) -> str:
+    """El texto como se dice en voz alta: un celular, una cédula o un número de
+    caso (siete cifras o más, o «7272-6841») se dicen cifra por cifra, no como
+    «setenta y dos millones…». Solo cambia lo que se sintetiza; el texto que se
+    ve no se toca. Misma regla que `SpokenText` en la app."""
+    def cifras(m):
+        return " ".join(m.group(0).replace("-", ""))
+    return _NUMERO_CON_GUION.sub(cifras, _NUMERO_LARGO.sub(cifras, text))
+
+
 def synthesize_audio(text: str, language: str = "es") -> bytes:
     default_voice, default_lang = _VOICE_BY_LANG.get(language.lower(), (VOICE_ID, "es-US"))
     voice_id = os.environ.get("VOICE_ID") or default_voice
     lang_code = default_lang
     logger.info("Sintetizando audio con Polly — Voz: %s, Idioma: %s", voice_id, lang_code)
     response = polly_client.synthesize_speech(
-        Text=text, OutputFormat="mp3", VoiceId=voice_id,
+        Text=texto_para_voz(text), OutputFormat="mp3", VoiceId=voice_id,
         Engine="neural", LanguageCode=lang_code,
     )
     audio_bytes = response["AudioStream"].read()

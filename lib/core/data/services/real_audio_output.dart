@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:lsb_legal_app/core/domain/services/audio_output.dart';
+import 'package:lsb_legal_app/core/domain/services/spoken_text.dart';
 
 class RealAudioOutput implements AudioOutput {
   RealAudioOutput() {
@@ -62,7 +63,7 @@ class RealAudioOutput implements AudioOutput {
     await _configureTtsOnce();
     try {
       await _tts.stop();
-      await _tts.speak(text);
+      await _tts.speak(SpokenText.forSpeech(text));
     } catch (_) {
     }
   }
