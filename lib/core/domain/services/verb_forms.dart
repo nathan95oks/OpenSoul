@@ -1,5 +1,6 @@
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
+import 'package:lsb_legal_app/core/domain/services/verb_forms_data.g.dart';
 import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Formas conjugadas cuyo verbo SÍ tiene seña: «va», «tiene», «da»…
@@ -10,41 +11,14 @@ import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 /// aquí porque no tiene seña: de sus sentidos se ocupa la descripción de la
 /// palabra (ver `PendingSignCatalog.infoOf`, «contextos»).
 ///
-/// La misma tabla está en `aws/lambda_text_to_lsb.py` (`_FORMAS_VERBALES`);
+/// La misma tabla la lee la Lambda (`aws/formas_verbales.json`);
 /// `test/formas_verbales_test.dart` comprueba que no se separen.
 abstract final class VerbForms {
   static const _resolver = AnimationUrlResolver();
 
-  /// Forma (sin tildes, en mayúsculas) → verbo con seña.
-  static final Map<String, String> lemmas = {
-    for (final f in [
-      'VA', 'VAS', 'VAN', 'VAMOS', 'VOY', 'VAYA', 'VAYAN', 'VAYAMOS', 'IBA',
-      'IBAS', 'IBAN', 'IBAMOS', //
-    ])
-      f: 'IR',
-    for (final f in [
-      'TIENE', 'TIENEN', 'TIENES', 'TENGO', 'TENEMOS', 'TENGA', 'TENGAN',
-      'TENIA', 'TENIAN', 'TUVO', 'TUVE', 'TUVIERON', 'TUVIMOS', //
-    ])
-      f: 'TENER',
-    for (final f in [
-      'VIENE', 'VIENEN', 'VIENES', 'VENGO', 'VENIMOS', 'VENGA', 'VENGAN',
-      'VENIA', 'VINO', 'VINIERON', 'VINE', //
-    ])
-      f: 'VENIR',
-    for (final f in ['DA', 'DAN', 'DOY', 'DAMOS', 'DIO', 'DIERON']) f: 'DAR',
-    for (final f in [
-      'QUIERO', 'QUIERE', 'QUIERES', 'QUEREMOS', 'QUIEREN', 'QUERIA', //
-    ])
-      f: 'QUERER',
-    for (final f in [
-      'NECESITO', 'NECESITA', 'NECESITAS', 'NECESITAMOS', 'NECESITAN', //
-    ])
-      f: 'NECESITAR',
-    for (final f in ['SABE', 'SABES', 'SABEN', 'SABEMOS', 'SABIA']) f: 'SABER',
-    for (final f in ['PUEDE', 'PUEDES', 'PUEDEN', 'PODEMOS', 'PODIA'])
-      f: 'PUEDO',
-  };
+  /// Forma (sin tildes, en mayúsculas) → verbo con seña. Generada por
+  /// `tool/build_formas_verbales.py`: conjuga los verbos del léxico LSB.
+  static const Map<String, String> lemmas = verbFormsData;
 
   /// «voy a denunciar», «va a empezar»: IR no es el verbo sino el futuro
   /// próximo. Termina como un infinitivo pero es un lugar: «voy a un bar».

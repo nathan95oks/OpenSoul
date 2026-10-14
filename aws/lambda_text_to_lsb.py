@@ -1173,6 +1173,33 @@ _DEMOSTRATIVOS = frozenset(
     "ESTE ESTOS ESTAS ESE ESA ESOS ESAS ESO ESTO AQUEL AQUELLA".split())
 
 
+def forma_base(clave: str, conocida) -> str | None:
+    """La seña de la que [clave] es plural o femenino, o None.
+
+    «abogadas» → ABOGADO, «papeles» → PAPEL, «testigos» → TESTIGO, «juezas»
+    → JUEZ, «luces» → LUZ. Solo si [conocida] (una seña del catálogo) la
+    reconoce: no inventa. La misma regla está en
+    `lib/core/domain/services/word_forms.dart`.
+    """
+    if len(clave) < 4 or not clave.isalpha():
+        return None
+    singulares = []
+    if clave.endswith("CES"):
+        singulares.append(clave[:-3] + "Z")
+    if clave.endswith("ES"):
+        singulares.append(clave[:-2])
+    if clave.endswith("S"):
+        singulares.append(clave[:-1])
+    singulares.append(clave)
+    for base in singulares:
+        for cand in (base, base[:-1] if base.endswith("A") else None,
+                     base[:-1] + "O" if base.endswith("A") else None):
+            if (cand and len(cand) >= 3 and cand != clave
+                    and conocida(cand)):
+                return cand
+    return None
+
+
 def enforce_catalog_membership(glosses: list,
                                verified_animation_glosses=None) -> tuple:
     """Ninguna glosa que no esté en el catálogo sale como si fuera una seña real.
@@ -1207,6 +1234,15 @@ def enforce_catalog_membership(glosses: list,
         if clave in _PALABRAS_FUNCION or clave in _DEMOSTRATIVOS:
             incidencias.append({"palabra": gloss,
                                 "accion": "particula_sin_sena"})
+            continue
+        base = forma_base(clave, lambda c: (
+            c in _AVAILABLE_GLOSSES_NORM or c in _SENAS_DE_MODULO_EXTRA
+            or c in verified_animation_glosses))
+        if base:
+            # Plural o femenino de una seña del catálogo: es esa seña.
+            resultado.append(base)
+            incidencias.append({"palabra": gloss, "accion": "forma_base",
+                                "glosa": base})
             continue
         resultado.extend(_spell_out(gloss))
         incidencias.append({
@@ -1980,20 +2016,23 @@ def enforce_help_direction(glosses: list, text: str) -> tuple:
 
 
 # ---------------------------------------------------------------------------
-# Formas conjugadas con seña: «va», «tiene», «da»… no se deletrean
+# Formas conjugadas: «va», «tiene», «escuché», «denunció» no son otra palabra
 # ---------------------------------------------------------------------------
 # El modelo lematiza casi siempre, pero no siempre: dictada sola, «va» volvía
 # V-A, «van» VAN, «tiene» TIENE, «da» DA, y «pasa» salía como IR. Una forma
-# conjugada cuyo verbo SÍ tiene seña en el catálogo no puede deletrearse:
-# es la misma palabra, con otra desinencia. Solo están las formas que no
-# se confunden con otra palabra («fue» es ir y ser; «iba» no) y cuyo verbo
-# está en AVAILABLE_GLOSSES. «pasar» no tiene seña: de sus formas se ocupa
-# la descripción de la palabra en la app, según la frase.
-_FORMAS_VERBALES = {
+# conjugada es el mismo verbo con otra desinencia: se vuelve a su verbo, que
+# es lo que la LSB seña y lo que la app sabe explicar.
+#
+# `formas_verbales.json` (tool/build_formas_verbales.py) conjuga los verbos del
+# léxico LSB y los verbos sin seña que la app describe; no agrega vocabulario.
+# Solo entran las formas que no se confunden con otra palabra: «fue» (ir y
+# ser), «ira» (el sustantivo) o «cita» (el verbo y el sustantivo) no están.
+# «pasar» no tiene seña: de sus sentidos se ocupa la descripción en la app.
+_FORMAS_RESPALDO = {
     "IR": "VA VAS VAN VAMOS VOY VAYA VAYAN VAYAMOS IBA IBAS IBAN IBAMOS",
     "TENER": "TIENE TIENEN TIENES TENGO TENEMOS TENGA TENGAN TENIA TENIAN "
              "TUVO TUVE TUVIERON TUVIMOS",
-    "VENIR": "VIENE VIENEN VIENES VENGO VENIMOS VENGA VENGAN VENIA VINO "
+    "VENIR": "VIENE VIENEN VIENES VENGO VENIMOS VENGA VENGAN VENIA "
              "VINIERON VINE",
     "DAR": "DA DAN DOY DAMOS DIO DIERON",
     "QUERER": "QUIERO QUIERE QUIERES QUEREMOS QUIEREN QUERIA",
@@ -2001,9 +2040,23 @@ _FORMAS_VERBALES = {
     "SABER": "SABE SABES SABEN SABEMOS SABIA",
     "PUEDO": "PUEDE PUEDES PUEDEN PODEMOS PODIA",
 }
-FORMAS_VERBALES = {forma: lema
-                   for lema, formas in _FORMAS_VERBALES.items()
-                   for forma in formas.split()}
+
+
+def _cargar_formas_verbales() -> tuple:
+    """(forma → verbo con seña, forma → verbo sin seña descrito)."""
+    ruta = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        "formas_verbales.json")
+    try:
+        with open(ruta, encoding="utf-8") as f:
+            datos = json.load(f)
+        return dict(datos["formas"]), dict(datos.get("descritas", {}))
+    except (OSError, ValueError, KeyError):
+        logger.warning("formas_verbales.json no está: solo las formas básicas")
+        return ({forma: lema for lema, formas in _FORMAS_RESPALDO.items()
+                 for forma in formas.split()}, {})
+
+
+FORMAS_VERBALES, FORMAS_DESCRITAS = _cargar_formas_verbales()
 # Formas de «ir» que, con «a» + infinitivo, no son el verbo ir sino el futuro
 # próximo: «voy a denunciar» es futuro + DENUNCIAR, no IR.
 _FORMAS_IR_FUTURO = "VOY VAS VA VAMOS VAN VAYA VAYAN".split()
@@ -2039,10 +2092,12 @@ def enforce_verb_forms(glosses: list, text: str) -> tuple:
     resultado = list(glosses)
     incidencias = []
 
-    # 1. Formas conjugadas con seña.
+    # 1. Formas conjugadas: al verbo con seña, o al verbo sin seña que la app
+    #    explica («denunció» → DENUNCIAR).
     for i, g in enumerate(resultado):
-        lema = FORMAS_VERBALES.get(_clave(g))
-        if lema and _clave(g) in dicho and lema in _AVAILABLE_GLOSSES_NORM:
+        forma = _clave(g)
+        lema = FORMAS_VERBALES.get(forma) or FORMAS_DESCRITAS.get(forma)
+        if lema and forma in dicho:
             incidencias.append({"palabra": g, "accion": "forma_verbal",
                                 "glosa": lema})
             resultado[i] = lema

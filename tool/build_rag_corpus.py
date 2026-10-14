@@ -228,7 +228,8 @@ def leer(ruta: str) -> tuple:
                 esc = {"id": m.group(1), "titulo": m.group(2).strip(),
                        "meta": {}, "turnos": [], "variantes": [],
                        "ficticios": [], "ramificaciones": [],
-                       "composicion": [], "_linea": n, "archivo": archivo}
+                       "composicion": [], "editables": [],
+                       "_linea": n, "archivo": archivo}
             else:
                 seccion = None
             continue
@@ -284,10 +285,11 @@ def leer(ruta: str) -> tuple:
                     esc["variantes"].append((m.group(1), m.group(2), n))
             elif sub == "datos ficticios" and linea.startswith("-"):
                 esc["ficticios"].append(linea)
-            elif sub in ("ramificaciones", "composicion"):
+            elif sub in ("ramificaciones", "composicion", "datos editables"):
                 m = re.match(r"- \*\*(.+?):\*\*\s*(.*)", linea)
                 if m:
-                    esc[sub].append((m.group(1), m.group(2), n))
+                    esc["editables" if sub == "datos editables"
+                        else sub].append((m.group(1), m.group(2), n))
                 else:
                     errores.append(f"{archivo}:{n}: línea de «{sub}» sin el "
                                    "formato «- **Turno N:** …»")
@@ -524,6 +526,62 @@ def leer_relaciones(eid: str, esc: dict, turnos: list, pares: list,
     return ramas, composicion
 
 
+# Qué claves rellena cada editor: las mismas que `EDITOR_KEYS` de
+# aws/guided_composer.py y `kEditorKeys` de la app.
+EDITORES = {
+    "texto_nombre": ("nombre",), "telefono": ("telefono",), "entero": ("n",),
+    "edad": ("n",), "monto": ("monto", "moneda"), "texto_detalle": ("texto",),
+    "lugar_literal": ("nombre",), "referencia": ("referencia",),
+    "documento_numero": ("numero",), "hora": ("hora",),
+}
+
+
+def leer_editables(eid: str, esc: dict, turnos: list, errores: list) -> list:
+    """Datos que la persona escribe al contestar «Sí» a una pregunta.
+
+        - **Turno 4:** documento_numero · «Sí, mi número de caso es {numero}.»
+
+    El valor es opcional: sin él, «Sí» dice lo de siempre. El valor lo escribe
+    la persona en la app: nunca va en el escenario (un número de ejemplo
+    escondería la respuesta como dato personal)."""
+    por_n = {t["n"]: t for t in turnos}
+    salida, vistos = [], set()
+    for etiqueta, contenido, linea in esc.get("editables", []):
+        donde = f"línea {linea}"
+        m = re.fullmatch(r"Turno (\d+)", etiqueta.strip())
+        partes = [p.strip() for p in contenido.split("·")]
+        frases = _comillas(contenido)
+        if not m or len(partes) != 2 or len(frases) != 1:
+            errores.append(f"{eid} {donde}: «Datos editables» es «- **Turno N:** "
+                           "editor · «Frase con {clave}.»»")
+            continue
+        n, editor, frase = int(m.group(1)), partes[0], frases[0]
+        t = por_n.get(n)
+        if t is None or t["rol"] != "funcionario" or "?" not in t["texto"]:
+            errores.append(f"{eid} {donde}: el turno {n} no es una pregunta "
+                           "del funcionario")
+            continue
+        if editor not in EDITORES:
+            errores.append(f"{eid} {donde}: editor desconocido «{editor}» "
+                           f"(se espera {', '.join(EDITORES)})")
+            continue
+        huecos = set(re.findall(r"\{(\w+)\}", frase))
+        if not huecos or not huecos <= set(EDITORES[editor]):
+            errores.append(f"{eid} {donde}: la frase lleva los huecos "
+                           f"{{{'}, {'.join(EDITORES[editor])}}} de «{editor}»")
+            continue
+        if not frase.startswith(("Sí", "Si")):
+            errores.append(f"{eid} {donde}: el dato se escribe al contestar "
+                           "«Sí»: la frase empieza por «Sí,»")
+            continue
+        if n in vistos:
+            errores.append(f"{eid} {donde}: el turno {n} ya tiene dato editable")
+            continue
+        vistos.add(n)
+        salida.append({"turno": n, "editor": editor, "frase": frase})
+    return salida
+
+
 def construir(fuentes, hechos, escenarios, errores, avisos,
               hoy: str | None = None, archivos: list | None = None) -> dict:
     hoy = hoy or os.environ.get("RAG_HOY") or datetime.date.today().isoformat()
@@ -691,6 +749,11 @@ def construir(fuentes, hechos, escenarios, errores, avisos,
                 errores.append(f"{eid}: cita la fuente inexistente {fid}")
 
         ramas, composicion = leer_relaciones(eid, esc, turnos, pares, errores)
+        editables = leer_editables(eid, esc, turnos, errores)
+        consolidado = meta.get("consolidado en", "")
+        if consolidado and not re.fullmatch(r"ESC-[A-Z]+-\d+", consolidado):
+            errores.append(f"{eid}: «Consolidado en» es un escenario "
+                           f"(ESC-XXX-NNN), no «{consolidado}»")
 
         salida.append({
             "id": eid,
@@ -707,7 +770,27 @@ def construir(fuentes, hechos, escenarios, errores, avisos,
             **({"referencias": referencias} if referencias else {}),
             **({"ramificaciones": ramas} if ramas else {}),
             **({"composicion": composicion} if composicion else {}),
+            **({"datosEditables": editables} if editables else {}),
+            **({"consolidadoEn": consolidado} if consolidado else {}),
         })
+
+    # «Consolidado en» apunta a un escenario que existe, de la misma
+    # institución, y no a otro consolidado (la cadena no termina).
+    por_id = {x["id"]: x for x in salida}
+    for x in salida:
+        destino = x.get("consolidadoEn")
+        if not destino:
+            continue
+        otro = por_id.get(destino)
+        if otro is None:
+            errores.append(f"{x['id']}: «Consolidado en» cita {destino}, que no existe")
+        elif otro["id"].split("-")[1] != x["id"].split("-")[1]:
+            errores.append(f"{x['id']}: solo se consolida dentro de la misma "
+                           f"institución ({x['id'].split('-')[1]} ≠ "
+                           f"{otro['id'].split('-')[1]})")
+        elif otro.get("consolidadoEn"):
+            errores.append(f"{x['id']}: {destino} también está consolidado; "
+                           "apunta al escenario que queda")
 
     return {
         "version": 2,
@@ -1263,7 +1346,12 @@ def info_sin_sena(corpus: dict, avisos: list,
             dato = {}
         descripcion = dato.get("descripcion", "")
         lsb = (directa(palabra, dato["lsb"]) if dato.get("lsb") else None)
-        if lsb is None:
+        if lsb is None and dato.get("contextos"):
+            # Una palabra que cambia de sentido según la frase («pasar») se
+            # explica en señas en cada contexto; su descripción general solo
+            # nombra los sentidos y se queda en español.
+            lsb = []
+        elif lsb is None:
             lsb = en_lsb(palabra, descripcion, dato.get("tipo", "concepto"))
         salida[palabra] = {
             "descripcion": descripcion,
@@ -1952,6 +2040,7 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
         pasos = []
         ramas = {r["turno"]: r for r in e.get("ramificaciones", [])}
         plantillas = {c["turno"]: c["plantilla"] for c in e.get("composicion", [])}
+        editables = {d["turno"]: d for d in e.get("datosEditables", [])}
         ofrecidas = {}
         for t in turnos_pregunta(e):
             qid = f"R.{e['id']}.{t['n']}"
@@ -1966,8 +2055,18 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
             preguntas_turno = []  # [(id, formulación, glosas, opciones, control)]
             pregs = interrogativos(t["texto"], zonas)
             if responde_si_o_no(e, t):
-                preguntas_turno.append((qid, t["texto"], glosas,
-                                        unidades_si_no(e, t["n"]),
+                unidades = unidades_si_no(e, t["n"])
+                editable = editables.get(t["n"])
+                if editable:
+                    # «Sí» admite escribir el dato (número de caso, placa…);
+                    # sin él, dice lo mismo que siempre.
+                    for u in unidades:
+                        if u["estado"] == "afirmado":
+                            u["fraseSinValor"] = u["frase"]
+                            u["frase"] = editable["frase"]
+                            u["editor"] = editable["editor"]
+                            u["editorOpcional"] = True
+                preguntas_turno.append((qid, t["texto"], glosas, unidades,
                                         {"control": "polar3"}))
             elif pregs:
                 # Una pregunta por palabra interrogativa: «¿Cuándo y dónde…?»
@@ -2111,11 +2210,15 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
             "area": area,
             "emoji": _EMOJI_AREA.get(area, "📄"),
             "escenario": e["id"],
+            **({"consolidadoEn": e["consolidadoEn"]}
+               if e.get("consolidadoEn") else {}),
         })
     # Dos trámites con el mismo nombre en una institución se ven iguales en
     # la lista: la persona no sabe cuál abrir.
     nombres = {}
     for c in contextos:
+        if c.get("consolidadoEn"):
+            continue          # no se ve en la lista: no puede confundirse
         nombres.setdefault((c["area"], _norm(c["nombre"])), []).append(c["escenario"])
     for (area, _), ids in sorted(nombres.items()):
         if len(ids) > 1:
@@ -2188,6 +2291,9 @@ def glosas_conocidas() -> set | None:
                                          re.MULTILINE)}
         conocidas |= {_norm(g) for g in
                       (cargar_lexico().get("glosas") or {})}
+        # AYUDAR se dice AYUDAR_DAR o AYUDAR_PEDIR según quién ayuda a quién
+        # (`enforce_help_direction` de la Lambda): son clips del avatar.
+        conocidas |= {"ayudar_dar", "ayudar_pedir"}
         _validas = conocidas
     return _validas
 

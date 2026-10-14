@@ -4,6 +4,7 @@
   "docs/negocio/rag/escenarios/derechos_reales_escenarios.md",
   "docs/negocio/rag/escenarios/opensoul_flujos_tramites_cochabamba_escenarios.md",
   "docs/negocio/rag/escenarios/tramites_cochabamba_2026-09-27.md",
+  "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
   "docs/negocio/rag/escenarios/ventanilla_escenarios.md",
   "docs/negocio/rag/escenarios/violencia_acoso_y_trata_escenarios.md"
  ],
@@ -35890,7 +35891,8 @@
       }
      ]
     }
-   ]
+   ],
+   "consolidadoEn": "ESC-IMP-301"
   },
   {
    "id": "ESC-FIS-01",
@@ -37429,7 +37431,8 @@
       }
      ]
     }
-   ]
+   ],
+   "consolidadoEn": "ESC-SEPDEP-301"
   },
   {
    "id": "ESC-SEPDEP-03",
@@ -40212,7 +40215,8 @@
       }
      ]
     }
-   ]
+   ],
+   "consolidadoEn": "ESC-SLIM-301"
   },
   {
    "id": "ESC-SLIM-03",
@@ -41174,7 +41178,8 @@
       }
      ]
     }
-   ]
+   ],
+   "consolidadoEn": "ESC-NOT-301"
   },
   {
    "id": "ESC-NOT-02",
@@ -43938,6 +43943,5484 @@
         "EXPLICAR",
         "NECESITAR",
         "YO"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-IMP-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Transferencia de una moto",
+   "institucion": "GAM Cochabamba / RUAT",
+   "tramite": "Transferencia de una moto",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "La persona vendió su moto y quiere transferirla. Se confirman titularidad, CRPVA y precio, se ofrece ayuda si falta el CRPVA y se explica sin montos cómo se considera el valor para el impuesto.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Quiero hacer la transferencia de mi moto.",
+     "proposito": "Iniciar el trámite",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "QUERER",
+      "SENA_PENDIENTE:TRANSFERENCIA",
+      "MOTOCICLETA",
+      "HACER"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿La moto está registrada a su nombre?",
+     "proposito": "Titularidad",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "MOTOCICLETA",
+      "ESCRIBIR",
+      "NOMBRE",
+      "TU"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, la moto está a mi nombre.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "NOMBRE",
+      "MOTOCICLETA"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Tiene el CRPVA de la moto?",
+     "proposito": "Documento del vehículo",
+     "hechos": [
+      "H-IMP-10"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "MOTOCICLETA",
+      "C",
+      "R",
+      "P",
+      "V",
+      "A",
+      "TENER"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, tengo el CRPVA de la moto.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "TENER",
+      "C",
+      "R",
+      "P",
+      "V",
+      "A",
+      "MOTOCICLETA"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Quiere ayuda con el CRPVA?",
+     "proposito": "Documento faltante",
+     "hechos": [
+      "H-IMP-10"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "C",
+      "R",
+      "P",
+      "V",
+      "A",
+      "AYUDAR_PEDIR",
+      "QUE"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, quiero ayuda con el CRPVA.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "AYUDAR_PEDIR",
+      "C",
+      "R",
+      "P",
+      "V",
+      "A"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Ya tiene el precio de venta?",
+     "proposito": "Precio de venta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:PRECIO",
+      "VENDER",
+      "TENER"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, ya tengo el precio de venta.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TENER",
+      "SENA_PENDIENTE:PRECIO",
+      "VENDER"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "Para el impuesto a la transferencia se considera el mayor valor entre el precio pagado y la base imponible aplicable.",
+     "proposito": "Costo sin monto",
+     "hechos": [
+      "H-IMP-11"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "Al transferir se actualizan los datos de la moto y se cambia el CRPVA. Confirme los requisitos antes de pagar.",
+     "proposito": "Cierre",
+     "hechos": [
+      "H-IMP-10"
+     ],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Usted figura como dueño de la moto?",
+      "¿La moto está a nombre suyo?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, la moto está a mi nombre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "NOMBRE",
+        "MOTOCICLETA"
+       ]
+      },
+      {
+       "texto": "No, la moto no está a mi nombre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "MOTOCICLETA",
+        "NOMBRE",
+        "YO"
+       ]
+      },
+      {
+       "texto": "No sé si la moto está a mi nombre.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "NO_SABER",
+        "MOTOCICLETA",
+        "NOMBRE",
+        "MÍO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Conserva el CRPVA de la moto?",
+      "¿Trae el CRPVA del vehículo?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo el CRPVA de la moto.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TENER",
+        "C",
+        "R",
+        "P",
+        "V",
+        "A",
+        "MOTOCICLETA"
+       ]
+      },
+      {
+       "texto": "No, no tengo el CRPVA de la moto.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "C",
+        "R",
+        "P",
+        "V",
+        "A",
+        "MOTOCICLETA"
+       ]
+      },
+      {
+       "texto": "No sé si tengo el CRPVA de la moto.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "TENER",
+        "C",
+        "R",
+        "P",
+        "V",
+        "A",
+        "MOTOCICLETA"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Desea ayuda con el CRPVA?",
+      "¿Necesita ayuda para el CRPVA?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero ayuda con el CRPVA.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "AYUDAR_PEDIR",
+        "C",
+        "R",
+        "P",
+        "V",
+        "A"
+       ]
+      },
+      {
+       "texto": "No, no quiero ayuda con el CRPVA.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "AYUDAR_PEDIR",
+        "C",
+        "R",
+        "P",
+        "V",
+        "A"
+       ]
+      },
+      {
+       "texto": "No sé si quiero ayuda con el CRPVA.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "AYUDAR_PEDIR",
+        "C",
+        "R",
+        "P",
+        "V",
+        "A"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Ya tiene definido el precio de venta?",
+      "¿Ya sabe el precio de venta?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, ya tengo el precio de venta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TENER",
+        "SENA_PENDIENTE:PRECIO",
+        "VENDER"
+       ]
+      },
+      {
+       "texto": "No, no tengo el precio de venta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "SENA_PENDIENTE:PRECIO",
+        "VENDER"
+       ]
+      },
+      {
+       "texto": "No sé el precio de venta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SENA_PENDIENTE:PRECIO",
+        "VENDER",
+        "NO_SABER"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-IMP-04"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 6,
+     "condiciones": [
+      {
+       "turno": 4,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-OJ-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Consultar un proceso y qué hacer sin NUREJ o WebID",
+   "institucion": "Órgano Judicial – TDJ Cochabamba",
+   "tramite": "Consultar un proceso y qué hacer sin NUREJ o WebID",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "La persona quiere saber cómo va su proceso de familia. Con NUREJ y WebID consulta en el sistema; sin ellos se la orienta al Tribunal Departamental. El estado del proceso es un dato en vivo.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Quiero saber cómo va mi proceso de familia.",
+     "proposito": "Iniciar la consulta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "QUERER",
+      "SABER",
+      "MÍO",
+      "SENA_PENDIENTE:PROCESO",
+      "PARIENTE"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Tiene el NUREJ de su proceso?",
+     "proposito": "Dato de búsqueda",
+     "hechos": [
+      "H-OJ-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:PROCESO",
+      "N",
+      "U",
+      "R",
+      "E",
+      "J",
+      "TENER",
+      "TU"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, tengo el NUREJ de mi proceso.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "TENER",
+      "N",
+      "U",
+      "R",
+      "E",
+      "J",
+      "MÍO",
+      "SENA_PENDIENTE:PROCESO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Tiene también el WebID de su proceso?",
+     "proposito": "Dato de búsqueda",
+     "hechos": [
+      "H-OJ-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:PROCESO",
+      "SUYO",
+      "W",
+      "E",
+      "B",
+      "I",
+      "D",
+      "TENER",
+      "SENA_PENDIENTE:TAMBIEN"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, tengo el WebID de mi proceso.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TENER",
+      "W",
+      "E",
+      "B",
+      "I",
+      "D",
+      "MÍO",
+      "SENA_PENDIENTE:PROCESO"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "Para consultar se usan el NUREJ, el WebID y el departamento donde está el proceso.",
+     "proposito": "Cómo consultar",
+     "hechos": [
+      "H-OJ-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Entendió?",
+     "proposito": "Cómo consultar",
+     "hechos": [
+      "H-OJ-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, entendí la consulta.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPRENDER",
+      "SENA_PENDIENTE:CONSULTA"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Quiere pedir información en el Tribunal Departamental?",
+     "proposito": "Derivación presencial",
+     "hechos": [
+      "H-OJ-04"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:TRIBUNAL_DEPARTAMENTAL",
+      "SENA_PENDIENTE:INFORMACION",
+      "PEDIR",
+      "QUE"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "Sí, quiero ir al Tribunal.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "QUERER",
+      "IR",
+      "SENA_PENDIENTE:TRIBUNAL"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "El Tribunal está en Av. San Martín entre Jordán y Sucre. Atiende de lunes a viernes, 08:00–12:00 y 14:30–18:30.",
+     "proposito": "Lugar y horario",
+     "hechos": [
+      "H-OJ-05",
+      "H-OJ-06"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "Si tiene la carátula del expediente, llévela: allí están el NUREJ y el WebID. La fecha de la audiencia depende de su expediente.",
+     "proposito": "Cierre y dato en vivo",
+     "hechos": [
+      "H-OJ-03",
+      "H-OJ-09"
+     ],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Conoce el NUREJ de su expediente?",
+      "¿Tiene el número NUREJ del proceso?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo el NUREJ de mi proceso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TENER",
+        "N",
+        "U",
+        "R",
+        "E",
+        "J",
+        "MÍO",
+        "SENA_PENDIENTE:PROCESO"
+       ]
+      },
+      {
+       "texto": "No, no tengo el NUREJ de mi proceso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "N",
+        "U",
+        "R",
+        "E",
+        "J",
+        "SENA_PENDIENTE:PROCESO",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "No sé cuál es el NUREJ de mi proceso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CUAL",
+        "N",
+        "U",
+        "R",
+        "E",
+        "J",
+        "MÍO",
+        "SENA_PENDIENTE:PROCESO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Conoce también el WebID del expediente?",
+      "¿Tiene el WebID de su proceso?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo el WebID de mi proceso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TENER",
+        "W",
+        "E",
+        "B",
+        "I",
+        "D",
+        "MÍO",
+        "SENA_PENDIENTE:PROCESO"
+       ]
+      },
+      {
+       "texto": "No, no tengo el WebID de mi proceso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "W",
+        "E",
+        "B",
+        "I",
+        "D",
+        "SENA_PENDIENTE:PROCESO",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "No sé cuál es el WebID de mi proceso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CUAL",
+        "W",
+        "E",
+        "B",
+        "I",
+        "D",
+        "MÍO",
+        "SENA_PENDIENTE:PROCESO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Comprendió?",
+      "¿Entendió qué datos se usan para consultar el proceso?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí la consulta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "SENA_PENDIENTE:CONSULTA"
+       ]
+      },
+      {
+       "texto": "No, no entendí la consulta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "SENA_PENDIENTE:CONSULTA"
+       ]
+      },
+      {
+       "texto": "No sé cómo consultar.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:CONSULTAR",
+        "COMO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Desea ir al Tribunal Departamental a pedir información?",
+      "¿Quiere pedir información en el Tribunal?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero ir al Tribunal.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "QUERER",
+        "IR",
+        "SENA_PENDIENTE:TRIBUNAL"
+       ]
+      },
+      {
+       "texto": "No, no quiero ir al Tribunal.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "IR",
+        "SENA_PENDIENTE:TRIBUNAL"
+       ]
+      },
+      {
+       "texto": "No sé si quiero ir al Tribunal.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "IR",
+        "SENA_PENDIENTE:TRIBUNAL"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-OJ-02",
+    "F-OJ-03"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 7,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    }
+   ],
+   "datosEditables": [
+    {
+     "turno": 2,
+     "editor": "documento_numero",
+     "frase": "Sí, mi NUREJ es {numero}."
+    },
+    {
+     "turno": 4,
+     "editor": "documento_numero",
+     "frase": "Sí, mi WebID es {numero}."
+    }
+   ]
+  },
+  {
+   "id": "ESC-SEPDEP-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Soy víctima y llegué a SEPDEP: orientación a SEPDAVI",
+   "institucion": "SEPDEP – Cochabamba",
+   "tramite": "Soy víctima y llegué a SEPDEP: orientación a SEPDAVI",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "Una persona víctima de un delito llega a SEPDEP, que defiende a personas denunciadas. Se aclara la competencia y se la orienta a SEPDAVI con su requisito, sin prometer el servicio.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Fui víctima de un delito y busco abogado gratis.",
+     "proposito": "Iniciar la consulta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "SENA_PENDIENTE:VICTIMA",
+      "SENA_PENDIENTE:DELITO",
+      "BUSCAR",
+      "ABOGADO",
+      "GRATIS"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Alguien lo denunció a usted por un delito?",
+     "proposito": "Distinguir quién consulta",
+     "hechos": [
+      "H-SEPDEP-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:ALGUIEN",
+      "SENA_PENDIENTE:DELITO",
+      "SENA_PENDIENTE:DENUNCIAR",
+      "TU"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "No, nadie me denunció por un delito.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "SENA_PENDIENTE:DELITO",
+      "SENA_PENDIENTE:DENUNCIAR",
+      "YO",
+      "NO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Ya tiene un abogado de defensa en su proceso?",
+     "proposito": "Defensa de la persona denunciada",
+     "hechos": [
+      "H-SEPDEP-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:PROCESO",
+      "ABOGADO",
+      "TENER"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "No, todavía no tengo abogado de defensa.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "ABOGADO",
+      "TENER",
+      "AUN"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "SEPDEP es la defensa pública para el denunciado, no para la víctima.",
+     "proposito": "Competencia",
+     "hechos": [
+      "H-SEPDEP-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Entendió?",
+     "proposito": "Competencia",
+     "hechos": [
+      "H-SEPDEP-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, entendí que SEPDEP no es para mí.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPRENDER",
+      "SEPDEP",
+      "NO",
+      "YO"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Quiere ir a SEPDAVI, el servicio para la víctima?",
+     "proposito": "Derivación",
+     "hechos": [
+      "H-SEPDAVI-06"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SEPDAVI",
+      "SENA_PENDIENTE:VICTIMA",
+      "ATENDER",
+      "IR",
+      "QUERER"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "Sí, quiero ir a SEPDAVI.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "SEPDAVI",
+      "IR"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "SEPDAVI exige la cédula para atender.",
+     "proposito": "Requisito",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Tiene su cédula para ir a SEPDAVI?",
+     "proposito": "Requisito",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TU",
+      "PAPEL",
+      "IDENTIDAD",
+      "SEPDAVI",
+      "IR"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, tengo mi cédula para ir a SEPDAVI.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "TENER",
+      "PAPEL",
+      "IDENTIDAD",
+      "SEPDAVI",
+      "IR"
+     ]
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "SEPDAVI Cochabamba está en Av. Salamanca N° 625, piso 1. Atiende de lunes a viernes, 08:30–16:30.",
+     "proposito": "Lugar y horario",
+     "hechos": [
+      "H-SEPDAVI-04",
+      "H-SEPDAVI-03"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 15,
+     "rol": "funcionario",
+     "texto": "Si tiene abogado particular o dinero para pagarlo, SEPDAVI no corresponde. Pregunte allí si cumple.",
+     "proposito": "Condición del servicio",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Lo denunciaron a usted por algún delito?",
+      "¿Hay una denuncia en su contra?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, me denunciaron por un delito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "SENA_PENDIENTE:DELITO",
+        "SENA_PENDIENTE:DENUNCIAR"
+       ]
+      },
+      {
+       "texto": "No, nadie me denunció por un delito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SENA_PENDIENTE:DELITO",
+        "SENA_PENDIENTE:DENUNCIAR",
+        "YO",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si hay una denuncia en mi contra.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:DENUNCIA",
+        "CONTRA",
+        "YO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Tiene un abogado de defensa para el proceso?",
+      "¿Ya nombró un abogado de defensa?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, ya tengo abogado de defensa.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "ABOGADO",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No, todavía no tengo abogado de defensa.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "ABOGADO",
+        "TENER",
+        "AUN"
+       ]
+      },
+      {
+       "texto": "No sé si tengo abogado de defensa.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "TENER",
+        "ABOGADO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Comprendió?",
+      "¿Entendió que SEPDEP es para la persona denunciada?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí que SEPDEP no es para mí.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "SEPDEP",
+        "NO",
+        "YO"
+       ]
+      },
+      {
+       "texto": "No, no entendí qué hace SEPDEP.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "SEPDEP",
+        "HACER",
+        "QUE"
+       ]
+      },
+      {
+       "texto": "No sé qué hace SEPDEP.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SEPDEP"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Desea ir a SEPDAVI, que atiende a la víctima?",
+      "¿Quiere que le indiquen SEPDAVI?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero ir a SEPDAVI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "SEPDAVI",
+        "IR"
+       ]
+      },
+      {
+       "texto": "No, no quiero ir a SEPDAVI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "IR",
+        "SEPDAVI"
+       ]
+      },
+      {
+       "texto": "No sé si quiero ir a SEPDAVI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "IR",
+        "SEPDAVI"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Trae su cédula para SEPDAVI?",
+      "¿Cuenta con la cédula que pide SEPDAVI?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo mi cédula para ir a SEPDAVI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TENER",
+        "PAPEL",
+        "IDENTIDAD",
+        "SEPDAVI",
+        "IR"
+       ]
+      },
+      {
+       "texto": "No, no tengo mi cédula para ir a SEPDAVI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "YO",
+        "PAPEL",
+        "IDENTIDAD",
+        "SEPDAVI",
+        "IR"
+       ]
+      },
+      {
+       "texto": "No sé dónde está mi cédula para SEPDAVI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "DONDE",
+        "MIO",
+        "PAPEL",
+        "IDENTIDAD",
+        "SEPDAVI"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-SEPDEP-01",
+    "F-SEPDAVI-02",
+    "F-SEPDAVI-03",
+    "F-SEPDAVI-04",
+    "F-SEPDAVI-05"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 4,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "condiciones": [
+      {
+       "turno": 7,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "condiciones": [
+      {
+       "turno": 9,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-SEGIP-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Cédula por primera vez sin certificado de nacimiento",
+   "institucion": "SEGIP",
+   "tramite": "Cédula por primera vez sin certificado de nacimiento",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "La persona quiere su primera cédula pero no tiene el certificado de nacimiento. Se aclara cuál certificado se necesita, se la orienta a SERECI, se informa el costo documentado y se cierra con el siguiente paso.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Quiero sacar mi cédula por primera vez.",
+     "proposito": "Iniciar el trámite",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "PRIMERA_VEZ",
+      "PAPEL",
+      "IDENTIDAD",
+      "SENA_PENDIENTE:SACAR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Tiene el certificado de nacimiento original?",
+     "proposito": "Documento principal",
+     "hechos": [
+      "H-SEGIP-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERTIFICADO",
+      "SENA_PENDIENTE:NACIMIENTO",
+      "SENA_PENDIENTE:ORIGINAL",
+      "TENER"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "No, no tengo el certificado de nacimiento.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "CERTIFICADO",
+      "SENA_PENDIENTE:NACIMIENTO",
+      "TENER",
+      "NO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Su certificado es computarizado y no una fotocopia?",
+     "proposito": "Validez del documento",
+     "hechos": [
+      "H-SEGIP-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERTIFICADO",
+      "COMPUTADORA",
+      "NO",
+      "FOTOCOPIA"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, mi certificado es computarizado.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "CERTIFICADO",
+      "COMPUTADORA"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "El certificado debe ser original, computarizado y emitido por SERECI.",
+     "proposito": "Documento faltante",
+     "hechos": [
+      "H-SEGIP-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Entendió?",
+     "proposito": "Documento faltante",
+     "hechos": [
+      "H-SEGIP-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, entendí qué certificado necesito.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPRENDER",
+      "CERTIFICADO",
+      "NECESITAR"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Quiere pedir el duplicado del certificado en SERECI?",
+     "proposito": "Derivación",
+     "hechos": [
+      "H-SERECI-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PEDIR",
+      "CERTIFICADO",
+      "SENA_PENDIENTE:DUPLICADO",
+      "S",
+      "E",
+      "R",
+      "E",
+      "C",
+      "I"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "Sí, quiero pedir el duplicado en SERECI.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "PEDIR",
+      "SENA_PENDIENTE:DUPLICADO",
+      "S",
+      "E",
+      "R",
+      "E",
+      "C",
+      "I"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "La cédula física cuesta Bs 17.",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-SEGIP-01"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Entendió el costo?",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-SEGIP-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER",
+      "SENA_PENDIENTE:COSTO"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, entendí el costo.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPRENDER",
+      "CARO"
+     ]
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "Vuelva a SEGIP con el certificado. Allí le confirmarán el siguiente paso.",
+     "proposito": "Cierre",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Trae el certificado de nacimiento original?",
+      "¿Cuenta con su certificado de nacimiento?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo el certificado de nacimiento.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CERTIFICADO",
+        "SENA_PENDIENTE:NACIMIENTO",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No, no tengo el certificado de nacimiento.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CERTIFICADO",
+        "SENA_PENDIENTE:NACIMIENTO",
+        "TENER",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si tengo el certificado de nacimiento.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "CERTIFICADO",
+        "SENA_PENDIENTE:NACIMIENTO",
+        "TENER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Su certificado es computarizado?",
+      "¿El certificado de nacimiento es una fotocopia?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, mi certificado es computarizado.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CERTIFICADO",
+        "COMPUTADORA"
+       ]
+      },
+      {
+       "texto": "No, mi certificado no es computarizado.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CERTIFICADO",
+        "YO",
+        "COMPUTADORA",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si mi certificado es computarizado.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CERTIFICADO",
+        "COMPUTADORA"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Comprendió?",
+      "¿Entendió qué certificado necesita?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí qué certificado necesito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "CERTIFICADO",
+        "NECESITAR"
+       ]
+      },
+      {
+       "texto": "No, no entendí qué certificado necesito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "CERTIFICADO",
+        "NECESITAR"
+       ]
+      },
+      {
+       "texto": "No sé qué certificado necesito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CERTIFICADO",
+        "NECESITAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Desea pedir el duplicado en SERECI?",
+      "¿Quiere que le orienten para pedir el certificado en SERECI?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero pedir el duplicado en SERECI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PEDIR",
+        "SENA_PENDIENTE:DUPLICADO",
+        "S",
+        "E",
+        "R",
+        "E",
+        "C",
+        "I"
+       ]
+      },
+      {
+       "texto": "No, no quiero pedir el duplicado en SERECI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "PEDIR",
+        "SENA_PENDIENTE:DUPLICADO",
+        "S",
+        "E",
+        "R",
+        "E",
+        "C",
+        "I"
+       ]
+      },
+      {
+       "texto": "No sé si quiero pedir el duplicado en SERECI.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "PEDIR",
+        "SENA_PENDIENTE:DUPLICADO",
+        "S",
+        "E",
+        "R",
+        "E",
+        "C",
+        "I"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Comprendió cuánto cuesta la cédula física?",
+      "¿Entendió?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí el costo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "CARO"
+       ]
+      },
+      {
+       "texto": "No, no entendí el costo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "SENA_PENDIENTE:COSTO"
+       ]
+      },
+      {
+       "texto": "No sé cuánto cuesta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CUÁNTOS",
+        "SENA_PENDIENTE:COSTO"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-SEGIP-01",
+    "F-SERECI-01"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 4,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "condiciones": [
+      {
+       "turno": 7,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-SERECI-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Registro de defunción con documento faltante",
+   "institucion": "SERECI – Cochabamba",
+   "tramite": "Registro de defunción con documento faltante",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "Un familiar registra una defunción. Se piden los documentos que la ficha enumera (certificado médico, documentos del fallecido y de quien declara); si falta uno, se indica volver con él. El duplicado tiene costo documentado.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Mi familiar murió. Quiero registrar la defunción.",
+     "proposito": "Iniciar el trámite",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PARIENTE",
+      "MORIR",
+      "ESCRIBIR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Tiene el certificado médico de la defunción?",
+     "proposito": "Documento requerido",
+     "hechos": [
+      "H-SERECI-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERTIFICADO",
+      "DOCTOR",
+      "MORIR",
+      "TENER"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "No, no tengo el certificado médico.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "CERTIFICADO",
+      "DOCTOR",
+      "TENER"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Tiene los documentos del fallecido?",
+     "proposito": "Documento requerido",
+     "hechos": [
+      "H-SERECI-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "MORIR",
+      "PAPEL",
+      "TENER"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, tengo los documentos del fallecido.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "TENER",
+      "PAPEL",
+      "MORIR"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Tiene sus propios documentos de identidad, como persona que declara?",
+     "proposito": "Documento requerido",
+     "hechos": [
+      "H-SERECI-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "SENA_PENDIENTE:PROPIO",
+      "PAPEL",
+      "IDENTIDAD",
+      "SENA_PENDIENTE:DECLARAR"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, tengo mis documentos de identidad.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "TENER",
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "Falta el certificado médico.",
+     "proposito": "Documento faltante",
+     "hechos": [
+      "H-SERECI-03"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Puede traer el certificado y volver?",
+     "proposito": "Documento faltante",
+     "hechos": [
+      "H-SERECI-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERTIFICADO",
+      "TRAER",
+      "VOLVER"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "Sí, puedo traer el certificado y volver.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "PUEDO",
+      "TRAER",
+      "CERTIFICADO",
+      "VOLVER"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "¿Necesita también un duplicado del certificado de defunción?",
+     "proposito": "Servicio relacionado",
+     "hechos": [
+      "H-SERECI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CERTIFICADO",
+      "MORIR",
+      "SENA_PENDIENTE:DUPLICADO",
+      "NECESITAR"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "sordo",
+     "texto": "Sí, necesito también el duplicado.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "SENA_PENDIENTE:COPIA"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "funcionario",
+     "texto": "El duplicado cuesta Bs 34 y tarda unos 5 minutos.",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-SERECI-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "¿Entendió?",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-SERECI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER"
+     ]
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Trae el certificado médico del fallecimiento?",
+      "¿Cuenta con el certificado médico de la defunción?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo el certificado médico.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "CERTIFICADO",
+        "DOCTOR",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No, no tengo el certificado médico.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "CERTIFICADO",
+        "DOCTOR",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No sé si tengo el certificado médico.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "CERTIFICADO",
+        "DOCTOR",
+        "TENER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Trae los documentos de la persona fallecida?",
+      "¿Cuenta con los documentos del fallecido?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo los documentos del fallecido.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TENER",
+        "PAPEL",
+        "MORIR"
+       ]
+      },
+      {
+       "texto": "No, no tengo los documentos del fallecido.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "PAPEL",
+        "MORIR"
+       ]
+      },
+      {
+       "texto": "No sé si tengo los documentos del fallecido.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "TENER",
+        "PAPEL",
+        "MORIR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Trae sus documentos de identidad para declarar?",
+      "¿Tiene su cédula como persona que declara?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo mis documentos de identidad.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TENER",
+        "PAPEL",
+        "IDENTIDAD"
+       ]
+      },
+      {
+       "texto": "No, no tengo mis documentos de identidad.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "YO",
+        "TENER",
+        "PAPEL",
+        "IDENTIDAD"
+       ]
+      },
+      {
+       "texto": "No sé si tengo mis documentos de identidad.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "TENER",
+        "PAPEL",
+        "IDENTIDAD",
+        "MIO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Puede traer el certificado?",
+      "¿Puede traer el certificado médico y volver?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, puedo traer el certificado y volver.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PUEDO",
+        "TRAER",
+        "CERTIFICADO",
+        "VOLVER"
+       ]
+      },
+      {
+       "texto": "No, no puedo traer el certificado y volver.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_PUEDO",
+        "CERTIFICADO",
+        "TRAER",
+        "VOLVER"
+       ]
+      },
+      {
+       "texto": "No sé si puedo traer el certificado y volver.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PUEDO",
+        "TRAER",
+        "CERTIFICADO",
+        "VOLVER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 11,
+     "preguntas": [
+      "¿Quiere también un duplicado del certificado de defunción?",
+      "¿Desea pedir un duplicado del certificado?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito también el duplicado.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "SENA_PENDIENTE:COPIA"
+       ]
+      },
+      {
+       "texto": "No, no necesito el duplicado.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "SENA_PENDIENTE:DUPLICADO"
+       ]
+      },
+      {
+       "texto": "No sé si necesito el duplicado.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "NECESITAR",
+        "SENA_PENDIENTE:DUPLICADO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 14,
+     "preguntas": [
+      "¿Comprendió el costo?",
+      "¿Entendió cuánto cuesta el duplicado y cuánto tarda?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí el costo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "CARO"
+       ]
+      },
+      {
+       "texto": "No, no entendí el costo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "SENA_PENDIENTE:COSTO"
+       ]
+      },
+      {
+       "texto": "No sé cuánto cuesta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CUÁNTOS",
+        "SENA_PENDIENTE:COSTO"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-SERECI-03",
+    "F-SERECI-04"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 9,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 14,
+     "condiciones": [
+      {
+       "turno": 11,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-DISC-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Carnet de discapacidad: porcentaje y plazo",
+   "institucion": "Registro y carnet de discapacidad",
+   "tramite": "Carnet de discapacidad: porcentaje y plazo",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "La persona quiere saber si le corresponde el carnet. Se pregunta por su calificación y el porcentaje, se informa que la carnetización es gratuita y el plazo informado, y si falta la calificación se ofrece una explicación.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Quiero saber si puedo tener carnet de discapacidad.",
+     "proposito": "Iniciar la consulta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "QUERER",
+      "SABER",
+      "PUEDO",
+      "TENER",
+      "PAPEL",
+      "IDENTIDAD",
+      "SENA_PENDIENTE:DISCAPACIDAD"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Tiene una calificación con su porcentaje de discapacidad?",
+     "proposito": "Requisito previo",
+     "hechos": [
+      "H-DISC-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "CALIFICACIÓN",
+      "SENA_PENDIENTE:DISCAPACIDAD",
+      "PORCENTAJE",
+      "TENER"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, tengo la calificación con mi porcentaje.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "TENER",
+      "CALIFICACIÓN",
+      "PORCENTAJE"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Su porcentaje es de 25 % o más?",
+     "proposito": "Criterio de la norma",
+     "hechos": [
+      "H-DISC-04"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PORCENTAJE",
+      "2",
+      "5"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, mi porcentaje es ese o más.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "PORCENTAJE"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "La carnetización es gratuita.",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-DISC-03"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Quiere iniciar el trámite?",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-DISC-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "TRAMITE",
+      "EMPEZAR",
+      "QUERER"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, quiero iniciar el trámite.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TRAMITE",
+      "EMPEZAR"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Quiere que le expliquen cómo obtener la calificación?",
+     "proposito": "Documento faltante",
+     "hechos": [
+      "H-DISC-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "EXPLICAR",
+      "SENA_PENDIENTE:OBTENER",
+      "CALIFICACIÓN",
+      "QUE"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "Sí, quiero esa explicación.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "QUERER",
+      "EXPLICAR"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "El Ministerio informó 4 días en zonas urbanas para el trámite.",
+     "proposito": "Plazo informado",
+     "hechos": [
+      "H-DISC-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "El lugar y las fechas de calificación se confirman en la oficina antes de ir.",
+     "proposito": "Cierre",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Cuenta con la calificación de su discapacidad?",
+      "¿Ya le calificaron su porcentaje de discapacidad?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo la calificación con mi porcentaje.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TENER",
+        "CALIFICACIÓN",
+        "PORCENTAJE"
+       ]
+      },
+      {
+       "texto": "No, no tengo la calificación con mi porcentaje.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "CALIFICACIÓN",
+        "PORCENTAJE"
+       ]
+      },
+      {
+       "texto": "No sé si tengo la calificación con mi porcentaje.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "TENER",
+        "CALIFICACIÓN",
+        "PORCENTAJE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Su porcentaje llega a 25 %?",
+      "¿Su porcentaje de discapacidad es 25 % o mayor?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, mi porcentaje es ese o más.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PORCENTAJE"
+       ]
+      },
+      {
+       "texto": "No, mi porcentaje no llega.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "PORCENTAJE",
+        "LLEGAR"
+       ]
+      },
+      {
+       "texto": "No sé cuál es mi porcentaje.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CUAL",
+        "MÍO",
+        "PORCENTAJE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Desea iniciar el trámite?",
+      "¿Quiere comenzar el trámite del carnet?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero iniciar el trámite.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TRAMITE",
+        "EMPEZAR"
+       ]
+      },
+      {
+       "texto": "No, no quiero iniciar el trámite.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "EMPEZAR",
+        "TRAMITE"
+       ]
+      },
+      {
+       "texto": "No sé si quiero iniciar el trámite.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "EMPEZAR",
+        "TRAMITE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Desea que le expliquen cómo conseguir la calificación?",
+      "¿Quiere saber cómo obtener la calificación?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero esa explicación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "QUERER",
+        "EXPLICAR"
+       ]
+      },
+      {
+       "texto": "No, no quiero esa explicación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "EXPLICAR"
+       ]
+      },
+      {
+       "texto": "No sé si quiero esa explicación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "EXPLICAR"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-DISC-01",
+    "F-DISC-02",
+    "F-DISC-03"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 4,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "condiciones": [
+      {
+       "turno": 4,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-NOT-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Certificar una firma: notaría habilitada y arancel",
+   "institucion": "Notarías de Fe Pública / DIRNOPLU",
+   "tramite": "Certificar una firma: notaría habilitada y arancel",
+   "tipo": "mixto",
+   "inicia": "sordo",
+   "situacion": "La persona necesita certificar su firma. Se ofrece verificar la notaría (SINPLU), se informa el arancel documentado por formulario y, si hay otra escritura, el arancel de referencia, sin prometer un precio único.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Necesito certificar mi firma en un documento.",
+     "proposito": "Iniciar el trámite",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NECESITAR",
+      "SENA_PENDIENTE:FIRMA",
+      "SENA_PENDIENTE:CERTIFICAR",
+      "PAPEL"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Quiere verificar primero la notaría?",
+     "proposito": "Verificar notaría",
+     "hechos": [
+      "H-NOT-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:VERIFICAR",
+      "SENA_PENDIENTE:NOTARIA",
+      "PRIMERA_VEZ"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, quiero verificar la notaría.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "SENA_PENDIENTE:VERIFICAR",
+      "SENA_PENDIENTE:NOTARIA"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Sabe usar el sistema SINPLU para buscar al notario?",
+     "proposito": "Servicio digital",
+     "hechos": [
+      "H-NOT-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SABER",
+      "USAR",
+      "COMPUTADORA",
+      "S",
+      "I",
+      "N",
+      "P",
+      "L",
+      "U",
+      "BUSCAR",
+      "SENA_PENDIENTE:NOTARIO"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "No, no sé usar el sistema SINPLU.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO_SABER",
+      "USAR",
+      "COMPUTADORA",
+      "S",
+      "I",
+      "N",
+      "P",
+      "L",
+      "U"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Quiere que le ayuden a buscar al notario en SINPLU?",
+     "proposito": "Ayuda accesible",
+     "hechos": [
+      "H-NOT-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "BUSCAR",
+      "SENA_PENDIENTE:NOTARIO",
+      "S",
+      "I",
+      "N",
+      "P",
+      "L",
+      "U",
+      "AYUDAR_PEDIR",
+      "QUERER"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, quiero esa ayuda.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "QUERER",
+      "AYUDAR_PEDIR"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "La certificación de firmas cuesta Bs 50 por formulario.",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-NOT-01"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Entendió el costo?",
+     "proposito": "Costo documentado",
+     "hechos": [
+      "H-NOT-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER",
+      "SENA_PENDIENTE:COSTO"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "Sí, entendí el costo.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPRENDER",
+      "CARO"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "¿Necesita también una escritura, como un anticrético?",
+     "proposito": "Otro instrumento",
+     "hechos": [
+      "H-NOT-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NECESITAR",
+      "SENA_PENDIENTE:ESCRITURA",
+      "ANTICRÉTICO"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "sordo",
+     "texto": "Sí, necesito también una escritura.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "SENA_PENDIENTE:ESCRITURA"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "funcionario",
+     "texto": "Para otras escrituras, como el anticrético, el arancel de referencia es Bs 180.",
+     "proposito": "Costo de referencia",
+     "hechos": [
+      "H-NOT-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "Antes de pagar, confirme con la notaría el arancel total de su documento.",
+     "proposito": "Cierre",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Desea verificar primero la notaría?",
+      "¿Quiere confirmar la notaría?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero verificar la notaría.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "SENA_PENDIENTE:VERIFICAR",
+        "SENA_PENDIENTE:NOTARIA"
+       ]
+      },
+      {
+       "texto": "No, no quiero verificar la notaría.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "SENA_PENDIENTE:VERIFICAR",
+        "SENA_PENDIENTE:NOTARIA"
+       ]
+      },
+      {
+       "texto": "No sé si quiero verificar la notaría.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "SENA_PENDIENTE:VERIFICAR",
+        "SENA_PENDIENTE:NOTARIA"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Usa el sistema SINPLU para buscar notarios?",
+      "¿Sabe buscar un notario en SINPLU?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, sé usar el sistema SINPLU.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "SABER",
+        "USAR",
+        "COMPUTADORA",
+        "S",
+        "I",
+        "N",
+        "P",
+        "L",
+        "U"
+       ]
+      },
+      {
+       "texto": "No, no sé usar el sistema SINPLU.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "USAR",
+        "COMPUTADORA",
+        "S",
+        "I",
+        "N",
+        "P",
+        "L",
+        "U"
+       ]
+      },
+      {
+       "texto": "No sé si sé usar el sistema SINPLU.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "COMPUTADORA",
+        "S",
+        "I",
+        "N",
+        "P",
+        "L",
+        "U",
+        "USAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Desea ayuda para buscar al notario en SINPLU?",
+      "¿Quiere que busquen al notario con usted?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero esa ayuda.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "QUERER",
+        "AYUDAR_PEDIR"
+       ]
+      },
+      {
+       "texto": "No, no quiero esa ayuda.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "AYUDAR_PEDIR"
+       ]
+      },
+      {
+       "texto": "No sé si quiero esa ayuda.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "AYUDAR_PEDIR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Comprendió cuánto cuesta certificar la firma por formulario?",
+      "¿Entendió?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí el costo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "CARO"
+       ]
+      },
+      {
+       "texto": "No, no entendí el costo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "SENA_PENDIENTE:COSTO"
+       ]
+      },
+      {
+       "texto": "No sé cuánto cuesta.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "CUÁNTOS",
+        "SENA_PENDIENTE:COSTO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 11,
+     "preguntas": [
+      "¿También requiere una escritura, por ejemplo un anticrético?",
+      "¿Quiere hacer además otra escritura?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito también una escritura.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "SENA_PENDIENTE:ESCRITURA"
+       ]
+      },
+      {
+       "texto": "No, no necesito otra escritura.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "ESCRIBIR",
+        "DIFERENTE"
+       ]
+      },
+      {
+       "texto": "No sé si necesito otra escritura.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "NECESITAR",
+        "SENA_PENDIENTE:ESCRITURA",
+        "DIFERENTE"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-NOT-01",
+    "F-NOT-02"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 4,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "condiciones": [
+      {
+       "turno": 4,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-SLIM-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Llegar al SLIM: emergencia, ubicación y horario",
+   "institucion": "SLIM – Gobierno Autónomo Municipal de Cochabamba",
+   "tramite": "Llegar al SLIM: emergencia, ubicación y horario",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "La persona pide ayuda por violencia. Primero se distingue si está en peligro; si lo está, se da el número de emergencia; si no, se la orienta a la sede con su ubicación y horario.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Necesito ayuda del SLIM por violencia.",
+     "proposito": "Iniciar la consulta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AYUDAR_PEDIR",
+      "S",
+      "L",
+      "I",
+      "M",
+      "VIOLENCIA",
+      "NECESITAR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Está en peligro en este momento?",
+     "proposito": "Riesgo inmediato",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AHORA",
+      "PELIGROSO"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "No, no estoy en peligro en este momento.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AHORA",
+      "PELIGROSO",
+      "NO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Puede llamar o escribir ahora?",
+     "proposito": "Medio de contacto",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "AHORA",
+      "LLAMAR",
+      "ESCRIBIR",
+      "PUEDO"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, puedo llamar o escribir ahora.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "PUEDO",
+      "LLAMAR",
+      "ESCRIBIR",
+      "AHORA"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Quiere ir a la sede del SLIM?",
+     "proposito": "Orientación presencial",
+     "hechos": [
+      "H-SLIM-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "S",
+      "L",
+      "I",
+      "M",
+      "SENA_PENDIENTE:SEDE",
+      "IR",
+      "QUERER"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "Sí, quiero ir a la sede.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "IR",
+      "SENA_PENDIENTE:SEDE"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Quiere la dirección y las horas de atención?",
+     "proposito": "Ubicación y horario",
+     "hechos": [
+      "H-SLIM-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "DIRECCION",
+      "HORA",
+      "ATENDER"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "Sí, quiero la dirección y las horas.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "DIRECCION",
+      "HORA"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "Si está en peligro, llame ahora a la emergencia del SLIM: 71742126.",
+     "proposito": "Emergencia",
+     "hechos": [
+      "H-SLIM-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "La Jefatura está en Plazuela Colón, entre Venezuela y Paccieri. Atiende de lunes a viernes, 08:00–16:00; sábado y domingo cerrada.",
+     "proposito": "Ubicación y horario",
+     "hechos": [
+      "H-SLIM-02",
+      "H-SLIM-03"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "El SLIM da atención gratuita con equipos psicológico, social y legal.",
+     "proposito": "Cierre",
+     "hechos": [
+      "H-SLIM-01"
+     ],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Corre peligro ahora mismo?",
+      "¿Su vida está en riesgo en este momento?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, estoy en peligro en este momento.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "PELIGROSO"
+       ]
+      },
+      {
+       "texto": "No, no estoy en peligro en este momento.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "PELIGROSO",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si estoy en peligro en este momento.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "PELIGROSO",
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Puede usar el teléfono o escribir ahora?",
+      "¿Puede llamar por teléfono ahora?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, puedo llamar o escribir ahora.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "PUEDO",
+        "LLAMAR",
+        "ESCRIBIR",
+        "AHORA"
+       ]
+      },
+      {
+       "texto": "No, no puedo llamar ni escribir ahora.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "LLAMAR",
+        "ESCRIBIR",
+        "NO_PUEDO"
+       ]
+      },
+      {
+       "texto": "No sé si puedo llamar o escribir ahora.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "AHORA",
+        "LLAMAR",
+        "ESCRIBIR",
+        "PUEDO",
+        "NO_SABER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Desea ir a la sede del SLIM?",
+      "¿Quiere que le indiquen cómo llegar a la sede?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero ir a la sede.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "IR",
+        "SENA_PENDIENTE:SEDE"
+       ]
+      },
+      {
+       "texto": "No, no quiero ir a la sede.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "IR",
+        "SENA_PENDIENTE:SEDE"
+       ]
+      },
+      {
+       "texto": "No sé si quiero ir a la sede.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "IR",
+        "SENA_PENDIENTE:SEDE"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Desea la dirección y el horario de atención?",
+      "¿Quiere saber dónde queda y a qué hora atienden?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero la dirección y las horas.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "DIRECCION",
+        "HORA"
+       ]
+      },
+      {
+       "texto": "No, no quiero la dirección ni las horas.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "DIRECCION",
+        "HORA"
+       ]
+      },
+      {
+       "texto": "No sé si quiero la dirección y las horas.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "DIRECCION",
+        "HORA"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-SLIM-01"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 4,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "condiciones": [
+      {
+       "turno": 6,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-SEPDAVI-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Requisitos del patrocinio gratuito para la víctima",
+   "institucion": "SEPDAVI – Cochabamba",
+   "tramite": "Requisitos del patrocinio gratuito para la víctima",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "La FELCV envió a la persona a SEPDAVI. Se revisan los requisitos uno por uno; si falta la cédula se indica volver con ella, y si cumple se informa el horario.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "La FELCV me envió a SEPDAVI.",
+     "proposito": "Iniciar el trámite",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "FELCV",
+      "YO",
+      "SEPDAVI",
+      "ENVIAR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Es víctima de un delito?",
+     "proposito": "Situación de víctima",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:DELITO",
+      "SENA_PENDIENTE:VICTIMA"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, soy víctima de un delito.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "YO",
+      "SENA_PENDIENTE:VICTIMA",
+      "SENA_PENDIENTE:DELITO"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "¿Trajo su cédula para el patrocinio de SEPDAVI?",
+     "proposito": "Requisito",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SEPDAVI",
+      "ABOGADO",
+      "PAPEL",
+      "IDENTIDAD",
+      "TRAER"
+     ]
+    },
+    {
+     "n": 5,
+     "rol": "sordo",
+     "texto": "Sí, traje mi cédula para el patrocinio.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "PAPEL",
+      "IDENTIDAD",
+      "ABOGADO",
+      "TRAER"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "funcionario",
+     "texto": "¿Tiene un abogado particular para su caso de víctima?",
+     "proposito": "Requisito",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:CASO",
+      "SENA_PENDIENTE:VICTIMA",
+      "ABOGADO",
+      "PARTICULAR",
+      "TENER",
+      "USTEDES"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "sordo",
+     "texto": "No, no tengo abogado particular para mi caso.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "YO",
+      "ABOGADO",
+      "PARTICULAR",
+      "SENA_PENDIENTE:CASO",
+      "MÍO"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "funcionario",
+     "texto": "¿Puede pagar un abogado para su caso de víctima?",
+     "proposito": "Requisito",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:CASO",
+      "SENA_PENDIENTE:VICTIMA",
+      "ABOGADO",
+      "DAR",
+      "BILLETES",
+      "PUEDO"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "sordo",
+     "texto": "No, no puedo pagar un abogado para mi caso.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO_PUEDO",
+      "DAR",
+      "BILLETES",
+      "ABOGADO",
+      "SENA_PENDIENTE:CASO",
+      "MÍO"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "funcionario",
+     "texto": "¿Puede volver a SEPDAVI con su cédula?",
+     "proposito": "Documento faltante",
+     "hechos": [
+      "H-SEPDAVI-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "VOLVER",
+      "SEPDAVI",
+      "PAPEL",
+      "IDENTIDAD",
+      "SUYO",
+      "YO"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "sordo",
+     "texto": "Sí, puedo volver a SEPDAVI con mi cédula.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "PUEDO",
+      "VOLVER",
+      "SEPDAVI",
+      "PAPEL",
+      "IDENTIDAD"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "Puede pedir patrocinio gratuito. SEPDAVI atiende de lunes a viernes, 08:30–16:30.",
+     "proposito": "Horario",
+     "hechos": [
+      "H-SEPDAVI-01",
+      "H-SEPDAVI-03"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 13,
+     "rol": "funcionario",
+     "texto": "Si algún requisito no se cumple, pregunte por otra ruta de ayuda.",
+     "proposito": "Cierre",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Usted es víctima de un delito?",
+      "¿Sufrió un delito y quiere apoyo?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, soy víctima de un delito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "YO",
+        "SENA_PENDIENTE:VICTIMA",
+        "SENA_PENDIENTE:DELITO"
+       ]
+      },
+      {
+       "texto": "No, no soy víctima de un delito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "YO",
+        "SENA_PENDIENTE:VICTIMA",
+        "SENA_PENDIENTE:DELITO",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si soy víctima de un delito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "SENA_PENDIENTE:VICTIMA",
+        "SENA_PENDIENTE:DELITO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 4,
+     "preguntas": [
+      "¿Trae su cédula para el patrocinio de SEPDAVI?",
+      "¿Cuenta con la cédula que SEPDAVI pide a la víctima?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, traje mi cédula para el patrocinio.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "PAPEL",
+        "IDENTIDAD",
+        "ABOGADO",
+        "TRAER"
+       ]
+      },
+      {
+       "texto": "No, no traje mi cédula para el patrocinio.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "ABOGADO",
+        "PAPEL",
+        "IDENTIDAD",
+        "TRAER",
+        "NO"
+       ]
+      },
+      {
+       "texto": "No sé si traje mi cédula para el patrocinio.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "PAPEL",
+        "IDENTIDAD",
+        "ABOGADO",
+        "TRAER"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "preguntas": [
+      "¿Hay un abogado particular en su caso de víctima?",
+      "¿Un abogado particular lleva su caso de víctima?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo abogado particular para mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "TENER",
+        "ABOGADO",
+        "PARTICULAR",
+        "SENA_PENDIENTE:CASO"
+       ]
+      },
+      {
+       "texto": "No, no tengo abogado particular para mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "YO",
+        "ABOGADO",
+        "PARTICULAR",
+        "SENA_PENDIENTE:CASO",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "No sé si tengo abogado particular para mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "NO_SABER",
+        "ABOGADO",
+        "PARTICULAR",
+        "MÍO",
+        "SENA_PENDIENTE:CASO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "preguntas": [
+      "¿Puede contratar un abogado para su caso de víctima?",
+      "¿Tiene dinero para un abogado en su caso de víctima?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, puedo pagar un abogado para mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PUEDO",
+        "DAR",
+        "BILLETES",
+        "ABOGADO",
+        "SENA_PENDIENTE:CASO",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "No, no puedo pagar un abogado para mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_PUEDO",
+        "DAR",
+        "BILLETES",
+        "ABOGADO",
+        "SENA_PENDIENTE:CASO",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "No sé si puedo pagar un abogado para mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PUEDO",
+        "DAR",
+        "BILLETES",
+        "ABOGADO",
+        "SENA_PENDIENTE:CASO",
+        "MÍO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "preguntas": [
+      "¿Puede regresar a SEPDAVI con su cédula?",
+      "¿Puede traer su cédula otro día a SEPDAVI?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, puedo volver a SEPDAVI con mi cédula.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PUEDO",
+        "VOLVER",
+        "SEPDAVI",
+        "PAPEL",
+        "IDENTIDAD"
+       ]
+      },
+      {
+       "texto": "No, no puedo volver a SEPDAVI con mi cédula.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_PUEDO",
+        "VOLVER",
+        "SEPDAVI",
+        "PAPEL",
+        "IDENTIDAD",
+        "MÍO"
+       ]
+      },
+      {
+       "texto": "No sé si puedo volver a SEPDAVI con mi cédula.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "PUEDO",
+        "VOLVER",
+        "SEPDAVI",
+        "PAPEL",
+        "IDENTIDAD"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-SEPDAVI-01",
+    "F-SEPDAVI-02",
+    "F-SEPDAVI-03"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 4,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 6,
+     "condiciones": [
+      {
+       "turno": 4,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 8,
+     "condiciones": [
+      {
+       "turno": 6,
+       "estados": [
+        "negado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 10,
+     "condiciones": [
+      {
+       "turno": 4,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-FIS-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Seguimiento del caso con o sin número de caso",
+   "institucion": "Ministerio Público – Fiscalía Departamental de Cochabamba",
+   "tramite": "Seguimiento del caso con o sin número de caso",
+   "tipo": "dato_en_vivo",
+   "inicia": "sordo",
+   "situacion": "La persona quiere saber cómo va su denuncia. Con el número de caso puede seguirla en Fiscalía ROMA; sin él se pregunta por datos que ayuden a ubicarla. El estado del caso es un dato en vivo del expediente.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Quiero saber cómo va mi denuncia.",
+     "proposito": "Iniciar la consulta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "QUERER",
+      "SENA_PENDIENTE:DENUNCIA",
+      "BUENO"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Tiene el número de su caso?",
+     "proposito": "Dato de búsqueda",
+     "hechos": [
+      "H-FIS-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:CASO",
+      "1",
+      "2",
+      "3",
+      "TENER",
+      "TU"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, tengo el número de mi caso.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "SENA_PENDIENTE:CASO",
+      "1",
+      "2",
+      "3",
+      "TENER"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "Con el número puede seguir su caso en Fiscalía ROMA.",
+     "proposito": "Servicio digital",
+     "hechos": [
+      "H-FIS-03"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 5,
+     "rol": "funcionario",
+     "texto": "¿Sabe usar ROMA?",
+     "proposito": "Servicio digital",
+     "hechos": [
+      "H-FIS-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SABER",
+      "USAR",
+      "R",
+      "O",
+      "M",
+      "A"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "sordo",
+     "texto": "No, no sé usar ROMA.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO_SABER",
+      "USAR",
+      "R",
+      "O",
+      "M",
+      "A"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Quiere que le orienten sobre cómo usar ROMA?",
+     "proposito": "Orientación accesible",
+     "hechos": [
+      "H-FIS-04"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "EXPLICAR",
+      "USAR",
+      "R",
+      "O",
+      "M",
+      "A"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, quiero esa orientación.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "QUERER",
+      "EXPLICAR"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Recuerda en qué fecha presentó la denuncia?",
+     "proposito": "Dato para ubicar el caso",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "RECORDAR",
+      "FECHA",
+      "SENA_PENDIENTE:DENUNCIA",
+      "PRESENTAR",
+      "CUANDO"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "No, no recuerdo la fecha.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "RECORDAR",
+      "FECHA"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "¿Tiene el papel o la constancia de su denuncia?",
+     "proposito": "Documento de respaldo",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SENA_PENDIENTE:DENUNCIA",
+      "PAPEL",
+      "CERTIFICADO",
+      "TENER",
+      "TU"
+     ]
+    },
+    {
+     "n": 12,
+     "rol": "sordo",
+     "texto": "Sí, tengo la constancia.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "TENER",
+      "CERTIFICADO"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "funcionario",
+     "texto": "El estado del caso, el fiscal asignado y las actuaciones dependen de su expediente. Pregunte en la plataforma de atención.",
+     "proposito": "Dato en vivo y cierre",
+     "hechos": [
+      "H-FIS-05"
+     ],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Conoce el número de su caso?",
+      "¿Trae el número de caso de su denuncia?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo el número de mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "SENA_PENDIENTE:CASO",
+        "1",
+        "2",
+        "3",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No, no tengo el número de mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SENA_PENDIENTE:CASO",
+        "1",
+        "2",
+        "3",
+        "NO",
+        "TENER"
+       ]
+      },
+      {
+       "texto": "No sé cuál es el número de mi caso.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "SENA_PENDIENTE:CASO",
+        "1",
+        "2",
+        "3",
+        "MIO"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 5,
+     "preguntas": [
+      "¿Usa Fiscalía ROMA para seguir su caso?",
+      "¿Sabe seguir su caso en ROMA?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, sé usar ROMA.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "USAR",
+        "R",
+        "O",
+        "M",
+        "A"
+       ]
+      },
+      {
+       "texto": "No, no sé usar ROMA.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "USAR",
+        "R",
+        "O",
+        "M",
+        "A"
+       ]
+      },
+      {
+       "texto": "No sé si sé usar ROMA.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "USAR",
+        "R",
+        "O",
+        "M",
+        "A"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Desea orientación para usar ROMA?",
+      "¿Quiere que le expliquen cómo usar ROMA?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero esa orientación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "QUERER",
+        "EXPLICAR"
+       ]
+      },
+      {
+       "texto": "No, no quiero esa orientación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "EXPLICAR"
+       ]
+      },
+      {
+       "texto": "No sé si quiero esa orientación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "EXPLICAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Recuerda cuándo presentó su denuncia?",
+      "¿Sabe la fecha de su denuncia?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, recuerdo la fecha.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "RECORDAR",
+        "FECHA"
+       ]
+      },
+      {
+       "texto": "No, no recuerdo la fecha.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "RECORDAR",
+        "FECHA"
+       ]
+      },
+      {
+       "texto": "No sé la fecha.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "FECHA"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 11,
+     "preguntas": [
+      "¿Conserva la constancia de su denuncia?",
+      "¿Tiene algún papel de su denuncia?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, tengo la constancia.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "TENER",
+        "CERTIFICADO"
+       ]
+      },
+      {
+       "texto": "No, no tengo la constancia.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "TENER",
+        "CERTIFICADO"
+       ]
+      },
+      {
+       "texto": "No sé si tengo la constancia.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "TENER",
+        "CERTIFICADO"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-FIS-02",
+    "F-FIS-03",
+    "F-FIS-04"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 5,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "condiciones": [
+      {
+       "turno": 5,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 11,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    }
+   ],
+   "datosEditables": [
+    {
+     "turno": 2,
+     "editor": "documento_numero",
+     "frase": "Sí, mi número de caso es {numero}."
+    }
+   ]
+  },
+  {
+   "id": "ESC-LSB-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Reclamo por falta de intérprete: dónde acudir",
+   "institucion": "Derechos lingüísticos LSB / Defensoría del Pueblo",
+   "tramite": "Reclamo por falta de intérprete: dónde acudir",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "A la persona sorda le negaron la interpretación en una institución pública. Se explica que la ley contempla interpretación gratuita en justicia y se la orienta a la Defensoría del Pueblo, por atención virtual en LSB, en persona o por la línea gratuita.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "En la fiscalía no me dieron intérprete de LSB.",
+     "proposito": "Iniciar el reclamo",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "FISCALIA",
+      "NO",
+      "INTERPRETE",
+      "L",
+      "S",
+      "B",
+      "DAR"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Le negaron la interpretación en una institución pública?",
+     "proposito": "Confirmar el hecho",
+     "hechos": [
+      "H-LSB-05"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "INSTITUCION",
+      "SENA_PENDIENTE:INTERPRETAR",
+      "SENA_PENDIENTE:NEGAR",
+      "SENA_PENDIENTE:PUBLICA",
+      "NO"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, me negaron la interpretación.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "SENA_PENDIENTE:INTERPRETAR",
+      "SENA_PENDIENTE:NEGAR"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "La ley contempla interpretación gratuita en justicia, en el Ministerio Público y en la Policía.",
+     "proposito": "Derecho",
+     "hechos": [
+      "H-LSB-02"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 5,
+     "rol": "funcionario",
+     "texto": "¿Entendió?",
+     "proposito": "Derecho",
+     "hechos": [
+      "H-LSB-02"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "sordo",
+     "texto": "Sí, entendí que es gratuita.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPRENDER",
+      "GRATIS"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Quiere presentar un reclamo en la Defensoría del Pueblo?",
+     "proposito": "Derivación",
+     "hechos": [
+      "H-LSB-05"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "PRESENTAR",
+      "QUEJAR",
+      "SENA_PENDIENTE:DEFENSORIA",
+      "PUEBLO"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, quiero presentar un reclamo.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "PRESENTAR",
+      "QUEJAR"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Prefiere hacerlo por atención virtual en LSB?",
+     "proposito": "Canal accesible",
+     "hechos": [
+      "H-LSB-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "HACER",
+      "ATENDER",
+      "VIRTUAL",
+      "L",
+      "S",
+      "B"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "No, prefiero ir a la oficina.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "NO",
+      "OFICINA",
+      "IR"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "La oficina de Cochabamba está en la calle 16 de Julio N° 680, Plazuela Constitución.",
+     "proposito": "Lugar",
+     "hechos": [
+      "H-LSB-04"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "También puede llamar a la línea gratuita 800-10-8004 para denunciar vulneraciones de derechos.",
+     "proposito": "Contacto",
+     "hechos": [
+      "H-LSB-06"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 13,
+     "rol": "funcionario",
+     "texto": "Pida que le confirmen por escrito que recibieron su reclamo.",
+     "proposito": "Cierre",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Una institución pública le negó la interpretación?",
+      "¿Le dijeron que no había intérprete en una oficina pública?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, me negaron la interpretación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "SENA_PENDIENTE:INTERPRETAR",
+        "SENA_PENDIENTE:NEGAR"
+       ]
+      },
+      {
+       "texto": "No, no me negaron la interpretación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "SENA_PENDIENTE:INTERPRETAR",
+        "SENA_PENDIENTE:NEGAR"
+       ]
+      },
+      {
+       "texto": "No sé si me negaron la interpretación.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "YO",
+        "SENA_PENDIENTE:INTERPRETAR",
+        "SENA_PENDIENTE:NEGAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 5,
+     "preguntas": [
+      "¿Comprendió?",
+      "¿Entendió que la ley contempla interpretación gratuita en justicia?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí que es gratuita.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "GRATIS"
+       ]
+      },
+      {
+       "texto": "No, no entendí si es gratuita.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "GRATIS",
+        "SI"
+       ]
+      },
+      {
+       "texto": "No sé si es gratuita.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "GRATIS"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Desea presentar un reclamo ante la Defensoría del Pueblo?",
+      "¿Quiere reclamar en la Defensoría del Pueblo?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, quiero presentar un reclamo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "PRESENTAR",
+        "QUEJAR"
+       ]
+      },
+      {
+       "texto": "No, no quiero presentar un reclamo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "PRESENTAR",
+        "QUEJAR"
+       ]
+      },
+      {
+       "texto": "No sé si quiero presentar un reclamo.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "PRESENTAR",
+        "QUEJAR"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Desea usar la atención virtual en LSB?",
+      "¿Quiere el reclamo por atención virtual en LSB?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, prefiero la atención virtual.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "ATENDER",
+        "VIRTUAL",
+        "QUERER"
+       ]
+      },
+      {
+       "texto": "No, prefiero ir a la oficina.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "OFICINA",
+        "IR"
+       ]
+      },
+      {
+       "texto": "No sé si prefiero la atención virtual.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "ATENDER",
+        "VIRTUAL"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-LSB-01",
+    "F-LSB-02",
+    "F-LSB-03",
+    "F-LSB-05"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 5,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "condiciones": [
+      {
+       "turno": 7,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ESC-FELCV-301",
+   "archivo": "docs/negocio/rag/escenarios/tramites_profundizados_2026-10-14.md",
+   "titulo": "Dónde pedir ayuda por violencia: FELCV o SLIM",
+   "institucion": "Policía Boliviana – FELCV",
+   "tramite": "Dónde pedir ayuda por violencia: FELCV o SLIM",
+   "tipo": "conocimiento_fijo",
+   "inicia": "sordo",
+   "situacion": "La persona sufre violencia y no sabe dónde acudir. Se distingue la ayuda policial de FELCV del apoyo gratuito del SLIM, y se recuerda que puede pedir intérprete de LSB.",
+   "turnos": [
+    {
+     "n": 1,
+     "rol": "sordo",
+     "texto": "Sufro violencia y no sé dónde pedir ayuda.",
+     "proposito": "Iniciar la consulta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "VIOLENCIA",
+      "SUFRIR",
+      "AYUDAR_PEDIR",
+      "PEDIR",
+      "DONDE",
+      "NO_SABER"
+     ]
+    },
+    {
+     "n": 2,
+     "rol": "funcionario",
+     "texto": "¿Necesita ayuda policial para denunciar?",
+     "proposito": "Elegir la ruta",
+     "hechos": [
+      "H-FELCV-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "POLICIA",
+      "AYUDAR_PEDIR",
+      "SENA_PENDIENTE:DENUNCIAR",
+      "NECESITAR"
+     ]
+    },
+    {
+     "n": 3,
+     "rol": "sordo",
+     "texto": "Sí, necesito ayuda policial.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "AYUDAR_PEDIR",
+      "POLICIA"
+     ]
+    },
+    {
+     "n": 4,
+     "rol": "funcionario",
+     "texto": "La FELCV es la unidad policial especializada contra la violencia.",
+     "proposito": "Competencia",
+     "hechos": [
+      "H-FELCV-01"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 5,
+     "rol": "funcionario",
+     "texto": "¿Entendió?",
+     "proposito": "Competencia",
+     "hechos": [
+      "H-FELCV-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "COMPRENDER"
+     ]
+    },
+    {
+     "n": 6,
+     "rol": "sordo",
+     "texto": "Sí, entendí qué es la FELCV.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "COMPRENDER",
+      "QUE",
+      "FELCV"
+     ]
+    },
+    {
+     "n": 7,
+     "rol": "funcionario",
+     "texto": "¿Prefiere apoyo psicológico, social y legal gratuito del SLIM?",
+     "proposito": "Ruta alternativa",
+     "hechos": [
+      "H-SLIM-01"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "QUERER",
+      "AYUDAR",
+      "SENA_PENDIENTE:PSICOLOGICO",
+      "SENA_PENDIENTE:SOCIAL",
+      "LEY",
+      "GRATIS",
+      "S",
+      "L",
+      "I",
+      "M"
+     ]
+    },
+    {
+     "n": 8,
+     "rol": "sordo",
+     "texto": "Sí, prefiero ese apoyo gratuito.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "AYUDAR",
+      "GRATIS",
+      "QUERER"
+     ]
+    },
+    {
+     "n": 9,
+     "rol": "funcionario",
+     "texto": "¿Necesita un intérprete de LSB para su atención?",
+     "proposito": "Accesibilidad",
+     "hechos": [
+      "H-FELCV-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "ATENDER",
+      "INTERPRETE",
+      "NECESITAR"
+     ]
+    },
+    {
+     "n": 10,
+     "rol": "sordo",
+     "texto": "Sí, necesito un intérprete de LSB.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "SI",
+      "NECESITAR",
+      "INTERPRETE"
+     ]
+    },
+    {
+     "n": 11,
+     "rol": "funcionario",
+     "texto": "La ley contempla interpretación en justicia.",
+     "proposito": "Derecho",
+     "hechos": [
+      "H-FELCV-03"
+     ],
+     "mostrable": true,
+     "motivos": []
+    },
+    {
+     "n": 12,
+     "rol": "funcionario",
+     "texto": "¿Puede pedirla al llegar?",
+     "proposito": "Derecho",
+     "hechos": [
+      "H-FELCV-03"
+     ],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "LLEGAR",
+      "PEDIR"
+     ]
+    },
+    {
+     "n": 13,
+     "rol": "sordo",
+     "texto": "Sí, puedo pedirla al llegar.",
+     "proposito": "Respuesta",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": [],
+     "glosas": [
+      "YO",
+      "PUEDO",
+      "PEDIR",
+      "LLEGAR"
+     ]
+    },
+    {
+     "n": 14,
+     "rol": "funcionario",
+     "texto": "Si el riesgo es inmediato, vaya hoy al lugar de atención más cercano.",
+     "proposito": "Cierre",
+     "hechos": [],
+     "mostrable": true,
+     "motivos": []
+    }
+   ],
+   "variantes": [
+    {
+     "turno": 2,
+     "preguntas": [
+      "¿Quiere denunciar con ayuda de la Policía?",
+      "¿Desea que la Policía la ayude a denunciar?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito ayuda policial.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "AYUDAR_PEDIR",
+        "POLICIA"
+       ]
+      },
+      {
+       "texto": "No, no necesito ayuda policial.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "AYUDAR_PEDIR",
+        "POLICIA"
+       ]
+      },
+      {
+       "texto": "No sé si necesito ayuda policial.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "NECESITAR",
+        "AYUDAR_PEDIR",
+        "POLICIA"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 5,
+     "preguntas": [
+      "¿Comprendió qué hace la FELCV?",
+      "¿Entendió?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, entendí qué es la FELCV.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "COMPRENDER",
+        "QUE",
+        "FELCV"
+       ]
+      },
+      {
+       "texto": "No, no entendí qué es la FELCV.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "COMPRENDER",
+        "QUE",
+        "FELCV"
+       ]
+      },
+      {
+       "texto": "No sé qué es la FELCV.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUE",
+        "FELCV"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "preguntas": [
+      "¿Desea apoyo gratuito del SLIM?",
+      "¿Quiere ayuda psicológica y legal del SLIM?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, prefiero ese apoyo gratuito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "AYUDAR",
+        "GRATIS",
+        "QUERER"
+       ]
+      },
+      {
+       "texto": "No, no quiero ese apoyo gratuito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "QUERER",
+        "AYUDAR",
+        "GRATIS"
+       ]
+      },
+      {
+       "texto": "No sé si quiero ese apoyo gratuito.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "QUERER",
+        "AYUDAR",
+        "GRATIS"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 9,
+     "preguntas": [
+      "¿Quiere un intérprete de LSB?",
+      "¿Le hace falta un intérprete de LSB?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "SI",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No, no necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO",
+        "NECESITAR",
+        "INTERPRETE"
+       ]
+      },
+      {
+       "texto": "No sé si necesito un intérprete de LSB.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "NO_SABER",
+        "NECESITAR",
+        "INTERPRETE",
+        "L",
+        "S",
+        "B"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "preguntas": [
+      "¿Puede pedir la interpretación al llegar?",
+      "¿Sabe que puede pedirla al llegar?"
+     ],
+     "respuestas": [
+      {
+       "texto": "Sí, puedo pedirla al llegar.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "YO",
+        "PUEDO",
+        "PEDIR",
+        "LLEGAR"
+       ]
+      },
+      {
+       "texto": "No, no puedo pedirla al llegar.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "LLEGAR",
+        "PEDIR",
+        "NO_PUEDO"
+       ]
+      },
+      {
+       "texto": "No sé si puedo pedirla al llegar.",
+       "mostrable": true,
+       "motivos": [],
+       "glosas": [
+        "LLEGAR",
+        "PEDIR",
+        "PUEDO",
+        "NO_SABER"
+       ]
+      }
+     ]
+    }
+   ],
+   "referencias": [
+    "F-FELCV-01",
+    "F-SLIM-01",
+    "F-LSB-01"
+   ],
+   "ramificaciones": [
+    {
+     "turno": 5,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "afirmado"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 7,
+     "condiciones": [
+      {
+       "turno": 2,
+       "estados": [
+        "negado",
+        "desconocido"
+       ]
+      }
+     ]
+    },
+    {
+     "turno": 12,
+     "condiciones": [
+      {
+       "turno": 9,
+       "estados": [
+        "afirmado"
        ]
       }
      ]

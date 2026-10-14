@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:lsb_legal_app/core/domain/services/pending_sign.dart';
+import 'package:lsb_legal_app/core/domain/services/verb_forms_data.g.dart';
+import 'package:lsb_legal_app/core/domain/services/word_forms.dart';
 import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Qué es una palabra sin seña propia en los módulos M1–M4 ni en el II
@@ -154,13 +156,19 @@ class PendingSignCatalog {
 
   /// Las señas con que se dice [word] cuando tiene una equivalencia aprobada
   /// («comprobante» → FACTURA), o `null`.
-  List<String>? equivalentSigns(String word) => _equivalents[_plain(word)];
+  List<String>? equivalentSigns(String word) {
+    final plain = _plain(word);
+    return _equivalents[plain] ??
+        _equivalents[describedVerbFormsData[plain]] ??
+        _equivalents[WordForms.baseOf(plain, _equivalents.containsKey)];
+  }
 
   /// Lo que se sabe de [gloss] (`SENA_PENDIENTE:FOLIO_REAL`). Una palabra sin
   /// descripción da al menos su nombre: la app dice que no tiene seña.
   ///
   /// Con [sentence] (lo que se dijo), una palabra con varios sentidos da el
   /// de esa frase: «pasar» en «¿qué está pasando?» no es «pasar a mi nombre».
+  /// Sin ella, el sentido de la frase del trámite donde aparece ([example]).
   PendingSignInfo infoOf(String gloss, {String? sentence}) {
     final key = PendingSign.isPending(gloss)
         ? gloss.substring(PendingSign.prefix.length)
@@ -168,7 +176,8 @@ class PendingSignCatalog {
     final info =
         _byKey[key] ??
         PendingSignInfo(word: PendingSign.wordOf(PendingSign.prefix + key));
-    return info.inContext(sentence);
+    // Sin frase (una tarjeta del corpus), la del trámite donde aparece.
+    return info.inContext(sentence ?? info.example);
   }
 
   /// La glosa pendiente con que se explica [word], tal como la escribió el
@@ -176,7 +185,13 @@ class PendingSignCatalog {
   /// descripción que mostrar: entonces la palabra se deletrea. Un nombre
   /// propio también se deletrea.
   String? describedGloss(String word) {
-    final key = _byPlainKey[_plain(word)];
+    // «denunció» se explica como «denunciar» y «documentos» como «documento»:
+    // la forma conjugada, el plural o el femenino de una palabra descrita.
+    final plain = _plain(word);
+    final key =
+        _byPlainKey[plain] ??
+        _byPlainKey[describedVerbFormsData[plain]] ??
+        _byPlainKey[WordForms.baseOf(plain, _byPlainKey.containsKey)];
     final info = key == null ? null : _byKey[key];
     if (info == null ||
         (info.description.isEmpty && info.lsbDescription.isEmpty) ||

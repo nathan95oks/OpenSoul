@@ -166,6 +166,51 @@ posibles: sin cédula, pasar a…») **no** crea condiciones.
   respuestas **afirmativas**; la composición da la frase con que se juntan.
   Una pregunta de sí o no no se contesta juntando tarjetas.
 
+### Datos editables (opcional)
+
+Una pregunta de sí o no puede dejar que la persona **escriba un dato** al
+contestar «Sí» (el número de caso, el NUREJ, el WebID…):
+
+```markdown
+### Datos editables
+
+- **Turno 2:** documento_numero · «Sí, mi NUREJ es {numero}.»
+```
+
+- El editor es uno de los de la app (`documento_numero`, `referencia`,
+  `texto_nombre`, `telefono`, `hora`, `monto`…) y la frase lleva su hueco
+  (`{numero}` para `documento_numero`; ver `EDITORES` en
+  `tool/build_rag_corpus.py`).
+- El dato es **opcional**: sin él, «Sí» dice la respuesta documentada de
+  siempre. «No» y «No sé» no piden nada.
+- El valor nunca va en el escenario: un número de ejemplo escondería la
+  respuesta como dato personal. Lo escribe la persona en la app y se guarda
+  tal como lo escribió.
+
+### Consolidar un trámite repetido (opcional)
+
+Si dos escenarios son el mismo trámite y uno es claramente más completo, el
+corto declara cuál lo reemplaza:
+
+```markdown
+- **Consolidado en:** ESC-SEGIP-101
+```
+
+El consolidado **sigue funcionando** (el RAG lo sugiere y su recorrido
+existe), pero ya no se lista dos veces en «Trámites». Solo se consolida
+dentro de la misma institución y en un escenario que no esté, a su vez,
+consolidado. `python tool/auditar_tramites.py --escribir` lista los
+candidatos (`docs/negocio/rag/auditoria_tramites.md`).
+
+### Vocabulario: trabajar con las palabras que se tienen
+
+Una palabra sin seña que ningún escenario usaba agrega una entrada a
+`assets/dictionary/senas_sin_sena.json`. Los escenarios nuevos se escriben con
+palabras que ya tienen seña o descripción: un nombre propio, un horario o una
+dirección van en un turno final del funcionario, que nadie contesta y por eso
+no se traduce a tarjetas. `tool/tests/test_tramites_profundizados.py`
+comprueba que el diccionario sea el mismo con y sin los escenarios nuevos.
+
 Los escenarios nuevos citan el documento como fuente
 (`documentos/arancel.pdf#p=2`). El constructor comprueba que el archivo
 exista y que la página esté dentro del PDF.

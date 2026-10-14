@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/local_audio_translator.dart';
+import 'package:lsb_legal_app/core/domain/services/pending_sign_info.dart';
+import 'package:lsb_legal_app/core/domain/services/verb_forms_data.g.dart';
+import 'package:lsb_legal_app/core/domain/services/word_forms.dart';
 import 'package:lsb_legal_app/core/domain/services/verb_forms.dart';
 
 const _modelo = 'https://x/avatar_test.glb';
@@ -18,6 +22,27 @@ LsbTranslation _traduccion(List<String> pasos) => LsbTranslation(
 List<String> _letras(String w) => w.split('');
 
 void main() {
+  group('plurales y femeninos de una seña', () {
+    test('sin conexión: «abogadas», «papeles», «testigos»', () {
+      const local = LocalAudioTranslator();
+      expect(local.translate('abogadas').glosses, ['ABOGADO']);
+      expect(local.translate('papeles').glosses, ['PAPEL']);
+      expect(local.translate('los testigos').glosses, ['TESTIGO']);
+      expect(local.translate('juezas').glosses, ['JUEZ']);
+    });
+
+    test('la misma regla que la Lambda', () {
+      bool known(String c) =>
+          {'ABOGADO', 'PAPEL', 'JUEZ', 'DOCTOR'}.contains(c);
+      expect(WordForms.baseOf('ABOGADAS', known), 'ABOGADO');
+      expect(WordForms.baseOf('JUEZAS', known), 'JUEZ');
+      expect(WordForms.baseOf('DOCTORAS', known), 'DOCTOR');
+      expect(WordForms.baseOf('PAPELES', known), 'PAPEL');
+      expect(WordForms.baseOf('XYZS', known), isNull);
+      expect(WordForms.baseOf('ASAS', known), isNull);
+    });
+  });
+
   group('formas conjugadas con seña (va, tiene, da…)', () {
     test('«va» dictada sola salía V-A: es IR', () {
       final t = VerbForms.apply('va', _traduccion(['V', 'A']));
@@ -88,36 +113,77 @@ void main() {
       expect(local.translate('él va a la casa').glosses, ['EL', 'IR', 'CASA']);
     });
 
-    test('toda forma lleva a un verbo con clip del avatar', () {
+    test('toda forma lleva a un verbo del léxico LSB', () {
+      final lexico =
+          (jsonDecode(File('aws/lexico_lsb.json').readAsStringSync())
+                  as Map<String, dynamic>)['glosas']
+              as Map<String, dynamic>;
       for (final MapEntry(key: forma, value: verbo)
           in VerbForms.lemmas.entries) {
-        expect(
-          AnimationUrlResolver.available3DGlosses,
-          contains(AnimationUrlResolver.canonicalFor(verbo)),
-          reason: '$forma → $verbo',
-        );
+        expect(lexico, contains(verbo), reason: '$forma → $verbo');
       }
     });
 
-    test('la tabla del cliente y la de la Lambda son la misma', () {
-      final py = File('aws/lambda_text_to_lsb.py').readAsStringSync();
-      final bloque = RegExp(
-        r'_FORMAS_VERBALES = \{(.*?)\n\}',
-        dotAll: true,
-      ).firstMatch(py)!.group(1)!;
-      final servidor = <String, String>{};
-      for (final m in RegExp(
-        r'"([A-Z]+)":\s*((?:"[^"]*"\s*)+),',
-      ).allMatches(bloque)) {
-        for (final tramo in RegExp('"([^"]*)"').allMatches(m.group(2)!)) {
-          for (final f
-              in tramo.group(1)!.split(' ').where((f) => f.isNotEmpty)) {
-            servidor[f] = m.group(1)!;
-          }
-        }
+    test('verbos con seña: una forma de cada tiempo', () {
+      const casos = {
+        'ESCUCHARON': 'ESCUCHAR',
+        'BUSQUE': 'BUSCAR',
+        'PIDIO': 'PEDIR',
+        'VUELVO': 'VOLVER',
+        'RECIBIRA': 'RECIBIR',
+        'PERDIO': 'PERDER',
+        'CONOZCO': 'CONOCER',
+        'ACOMPAÑARON': 'ACOMPAÑAR',
+        'MURIO': 'MORIR',
+        'VOY': 'IR',
+        'TUVO': 'TENER',
+      };
+      for (final MapEntry(key: f, value: v) in casos.entries) {
+        expect(VerbForms.lemmas[f], v, reason: f);
       }
-      expect(servidor, isNotEmpty);
-      expect(VerbForms.lemmas, servidor);
+    });
+
+    test('las formas ambiguas no se llevan a un verbo', () {
+      for (final f in [
+        'FUE', 'FUERON', 'IRA', 'DE', 'PASO', 'ENVIO', 'HACE', 'PARA', 'TRATA',
+        'PRUEBA', 'CITA', 'DENUNCIA', //
+      ]) {
+        expect(VerbForms.lemmas, isNot(contains(f)), reason: f);
+        expect(describedVerbFormsData, isNot(contains(f)), reason: f);
+      }
+    });
+
+    test('la tabla de la app y la de la Lambda son la misma', () {
+      final json =
+          jsonDecode(File('aws/formas_verbales.json').readAsStringSync())
+              as Map<String, dynamic>;
+      expect(VerbForms.lemmas, json['formas']);
+      expect(describedVerbFormsData, json['descritas']);
+    });
+
+    test('«denunció» se explica como «denunciar»', () {
+      final catalogo = PendingSignCatalog.fromJsonString(
+        File('assets/dictionary/senas_sin_sena.json').readAsStringSync(),
+      );
+      for (final f in ['denunció', 'denunciaron']) {
+        expect(catalogo.describedGloss(f), isNotNull, reason: f);
+      }
+      // Plural y femenino de una palabra descrita.
+      for (final f in ['mensajes', 'inmuebles', 'propietarias', 'herederos']) {
+        expect(catalogo.describedGloss(f), isNotNull, reason: f);
+      }
+      // «solicitar» y «realizar» no tienen descripción pero sí equivalencia.
+      expect(catalogo.equivalentSigns('solicitaron'), ['PEDIR']);
+      expect(catalogo.equivalentSigns('realizó'), ['HACER']);
+      expect(
+        catalogo
+            .infoOf(
+              catalogo.describedGloss('pasaron')!,
+              sentence: 'Pasaron adelante',
+            )
+            .lsbDescription,
+        ['VENIR', 'AQUÍ'],
+      );
     });
   });
 }

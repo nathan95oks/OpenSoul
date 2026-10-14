@@ -210,7 +210,7 @@
    ],
    "tipo": "palabra_funcion",
    "revisada": false,
-   "ejemplo": "¿Habló con alguien más sobre este acoso?"
+   "ejemplo": "¿Alguien lo denunció a usted por un delito?"
   },
   "ALODIAL": {
    "descripcion": "«Certificado alodial»: dice qué propiedades tiene una persona y si tienen deudas o hipotecas.",
@@ -983,7 +983,7 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": ""
+   "ejemplo": "¿Tiene sus propios documentos de identidad, como persona que declara?"
   },
   "DEFENSA_PUBLICA": {
    "descripcion": "Servicio del Estado que da abogado gratis a quien lo necesita en un proceso penal.",

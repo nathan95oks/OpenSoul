@@ -313,6 +313,7 @@
 - **Tipo:** mixto
 - **Inicia:** Usuario Sordo
 - **Situación:** Compró un vehículo usado y necesita cambio de titularidad.
+- **Consolidado en:** ESC-IMP-301
 
 | # | Rol | Mensaje | Propósito | Hechos |
 |---|---|---|---|---|
@@ -662,6 +663,7 @@ CONTINÚA EN LA PARTE 3
 - **Tipo:** conocimiento_fijo
 - **Inicia:** Funcionario
 - **Situación:** Una víctima busca abogado estatal, pero llegó al servicio incorrecto.
+- **Consolidado en:** ESC-SEPDEP-301
 
 | # | Rol | Mensaje | Propósito | Hechos |
 |---|---|---|---|---|
@@ -1169,6 +1171,7 @@ CONTINÚA EN LA PARTE 5
 - **Tipo:** conocimiento_fijo
 - **Inicia:** Usuario Sordo
 - **Situación:** La persona quiere acudir presencialmente.
+- **Consolidado en:** ESC-SLIM-301
 
 | # | Rol | Mensaje | Propósito | Hechos |
 |---|---|---|---|---|
@@ -1388,6 +1391,7 @@ CONTINÚA EN LA PARTE 6
 - **Tipo:** conocimiento_fijo
 - **Inicia:** Usuario Sordo
 - **Situación:** Dos personas quieren certificar firmas en un documento privado.
+- **Consolidado en:** ESC-NOT-301
 
 | # | Rol | Mensaje | Propósito | Hechos |
 |---|---|---|---|---|

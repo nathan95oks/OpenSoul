@@ -38,10 +38,14 @@ void main() {
       expect(_pasar('Páseme su cédula').lsbDescription, ['DAR']);
     });
 
-    test('sin frase, o sin pista: la general, que nombra los sentidos', () {
-      for (final f in [null, '', 'pasar']) {
+    test('sin frase: el sentido de la frase del trámite donde aparece', () {
+      expect(_pasar(null).lsbDescription, ['CAMBIAR', 'NOMBRE']);
+    });
+
+    test('sin pista en la frase: la general, que nombra los sentidos', () {
+      for (final f in ['', 'pasar']) {
         final info = _pasar(f);
-        expect(info.description, contains('cambia de sentido'), reason: '$f');
+        expect(info.description, contains('cambia de sentido'), reason: f);
         expect(info.lsbDescription, isEmpty);
       }
     });

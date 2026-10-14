@@ -14,6 +14,11 @@ class RagTramite {
   final String emoji;
   final String scenarioId;
 
+  /// El escenario más completo que lo reemplaza en la lista, o `null`. Un
+  /// trámite consolidado sigue funcionando (el RAG lo sugiere y su recorrido
+  /// existe), pero no se lista dos veces como si fuera otro trámite.
+  final String? consolidatedInto;
+
   const RagTramite({
     required this.contextId,
     required this.name,
@@ -21,7 +26,11 @@ class RagTramite {
     required this.area,
     required this.emoji,
     required this.scenarioId,
+    this.consolidatedInto,
   });
+
+  /// Si se ve en la lista de «Trámites».
+  bool get isListed => consolidatedInto == null;
 }
 
 /// Los trámites del corpus RAG dentro del módulo de tarjetas LSB.
@@ -44,6 +53,7 @@ abstract final class RagTramites {
         area: raw['area'] as String,
         emoji: raw['emoji'] as String,
         scenarioId: raw['escenario'] as String,
+        consolidatedInto: raw['consolidadoEn'] as String?,
       ),
   ];
 
@@ -147,6 +157,8 @@ abstract final class RagTramites {
   static final List<ContextFamily> sections = () {
     final porArea = <String, List<RagTramite>>{};
     for (final t in all) {
+      // Un trámite consolidado se abre desde el que lo reemplaza.
+      if (!t.isListed) continue;
       porArea.putIfAbsent(t.area, () => []).add(t);
     }
     // El orden de [_sectionInfo], no el de los archivos del corpus: añadir

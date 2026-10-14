@@ -4,6 +4,7 @@ import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/help_direction.dart';
 import 'package:lsb_legal_app/core/domain/services/verb_forms.dart';
+import 'package:lsb_legal_app/core/domain/services/word_forms.dart';
 import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Motor de traducción y desambiguación local en Dart para modo sin conexión (Offline).
@@ -255,19 +256,38 @@ class LocalAudioTranslator {
 
   /// Lista de palabras ignorables (artículos, preposiciones menores) para simplificar sintaxis a LSB.
   static const Set<String> _stopwords = {
-    'EL', 'LA', 'LOS', 'LAS', 'UN', 'UNA', 'UNOS', 'UNAS',
-    'DE', 'DEL', 'AL', 'A', 'EN', 'CON', 'POR', 'PARA', 'Y', 'O', 'E',
-    'SE', 'LE', 'LES', 'ME', 'TE', 'NOS',
+    'EL',
+    'LA',
+    'LOS',
+    'LAS',
+    'UN',
+    'UNA',
+    'UNOS',
+    'UNAS',
+    'DE',
+    'DEL',
+    'AL',
+    'A',
+    'EN',
+    'CON',
+    'POR',
+    'PARA',
+    'Y',
+    'O',
+    'E',
+    'SE',
+    'LE',
+    'LES',
+    'ME',
+    'TE',
+    'NOS',
   };
 
   /// Traduce [rawText] localmente sin requerir AWS Lambda.
   LsbTranslationModel translate(String rawText, {String? situation}) {
     final text = SpanishText.stripAccents(rawText.toUpperCase().trim());
     if (text.isEmpty) {
-      return LsbTranslationModel(
-        glosses: const [],
-        animationUrl: '',
-      );
+      return LsbTranslationModel(glosses: const [], animationUrl: '');
     }
 
     // 1. Extraer palabras limpias
@@ -293,7 +313,8 @@ class LocalAudioTranslator {
 
       // Probar trigrama
       if (i + 2 < cleanWords.length) {
-        final tri = '${foldedWords[i]} ${foldedWords[i + 1]} ${foldedWords[i + 2]}';
+        final tri =
+            '${foldedWords[i]} ${foldedWords[i + 1]} ${foldedWords[i + 2]}';
         if (_lexicalMap.containsKey(tri)) {
           matchedGloss = _lexicalMap[tri];
           matchLen = 3;
@@ -316,9 +337,10 @@ class LocalAudioTranslator {
         if (_lexicalMap.containsKey(foldedSingle)) {
           matchedGloss = _lexicalMap[foldedSingle];
           matchLen = 1;
-        } else if (VerbForms.lemmas.containsKey(foldedSingle)) {
-          // «va», «tiene», «da»: la forma conjugada de un verbo con seña.
-          matchedGloss = VerbForms.lemmas[foldedSingle];
+        } else if (VerbForms.lemmas.containsKey(single)) {
+          // «va», «tiene», «escuchó»: la forma conjugada de un verbo con
+          // seña (con la Ñ: «acompañó»).
+          matchedGloss = VerbForms.lemmas[single];
           matchLen = 1;
         } else if (foldedSingle.startsWith('AYUD')) {
           // «ayúdeme», «ayudarle», «ayudamos»…: la dirección se decide abajo.
@@ -331,6 +353,10 @@ class LocalAudioTranslator {
             matchLen = 1;
           } else if (AnimationUrlResolver.available3DGlosses.contains(single)) {
             matchedGloss = single;
+            matchLen = 1;
+          } else if (_baseDe(single) case final base?) {
+            // Plural o femenino de una seña: «abogadas» es ABOGADO.
+            matchedGloss = base;
             matchLen = 1;
           } else {
             // Palabra sin seña directa: se mantendrá para deletreo o análisis
@@ -363,7 +389,8 @@ class LocalAudioTranslator {
     // 4. Resolver clips de animación para el avatar 3D
     final animationGlosses = <String>[];
     final animationUrls = <String>[];
-    final modelUrl = '${animationResolver.baseUrl}${AnimationUrlResolver.bundledModelFileName}';
+    final modelUrl =
+        '${animationResolver.baseUrl}${AnimationUrlResolver.bundledModelFileName}';
 
     for (final gloss in semanticGlosses) {
       final canonical = AnimationUrlResolver.canonicalFor(gloss);
@@ -398,13 +425,35 @@ class LocalAudioTranslator {
 
   static String _fold(String w) => w.replaceAll('Ñ', 'N');
 
+  /// La seña de la que [word] es plural o femenino, con su glosa, o `null`.
+  static String? _baseDe(String word) {
+    String? glosa;
+    final base = WordForms.baseOf(word, (c) {
+      glosa =
+          _lexicalMap[_fold(c)] ??
+          (AnimationUrlResolver.available3DGlosses.contains(c) ? c : null);
+      return glosa != null;
+    });
+    return base == null ? null : glosa;
+  }
+
   /// Reglas sintácticas heurísticas de la LSB:
   /// - Mover palabras interrogativas (QUE, QUIEN, DONDE, etc.) hacia el final.
   /// - Colocar negación (NO) cerca del verbo o al final.
   List<String> _reorderToLsb(List<String> glosses, String originalText) {
     if (glosses.length <= 1) return glosses;
 
-    final interrogatives = {'QUE', 'QUIEN', 'CUANDO', 'DONDE', 'COMO', 'POR_QUE', 'PARA_QUE', 'CUAL', 'CUANTOS'};
+    final interrogatives = {
+      'QUE',
+      'QUIEN',
+      'CUANDO',
+      'DONDE',
+      'COMO',
+      'POR_QUE',
+      'PARA_QUE',
+      'CUAL',
+      'CUANTOS',
+    };
     final withoutQuestions = <String>[];
     final questions = <String>[];
 

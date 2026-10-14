@@ -47,14 +47,57 @@ class FormasConjugadasConSena(unittest.TestCase):
         # El modelo no puede traer «VA» de la nada.
         self.assertEqual(traducir(["VA", "CASA"], "la casa"), list("VA") + ["CASA"])
 
-    def test_cada_lema_de_la_tabla_tiene_seña_en_el_catalogo(self):
+    def test_cada_lema_de_la_tabla_tiene_seña_en_el_lexico(self):
+        import json
+        lexico = json.load(open(os.path.join(
+            os.path.dirname(__file__), "..", "lexico_lsb.json"),
+            encoding="utf-8"))["glosas"]
         for forma, lema in m.FORMAS_VERBALES.items():
             with self.subTest(forma=forma):
-                self.assertIn(lema, m._AVAILABLE_GLOSSES_NORM)
+                self.assertIn(lema, lexico)
+
+    def test_los_verbos_sin_seña_son_los_que_la_app_describe(self):
+        import json
+        sin_sena = json.load(open(os.path.join(
+            os.path.dirname(__file__), "..", "..", "assets", "dictionary",
+            "senas_sin_sena.json"), encoding="utf-8"))
+        claves = set(sin_sena["palabras"]) | set(sin_sena["equivalencias"])
+        for forma, lema in m.FORMAS_DESCRITAS.items():
+            with self.subTest(forma=forma):
+                self.assertIn(lema, claves)
+
+    def test_la_tabla_esta_al_dia(self):
+        import subprocess
+        raiz = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        r = subprocess.run(
+            [sys.executable, os.path.join(raiz, "tool", "build_formas_verbales.py"),
+             "--check"], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stdout)
+
+    def test_formas_de_todos_los_verbos_con_seña(self):
+        # Una por tiempo: pretérito, imperfecto, futuro, subjuntivo y gerundio.
+        casos = {
+            "ESCUCHAR": ["escuchó", "escuchaban", "escucharé",
+                         "escuchando", "escuchado"],
+            "BUSCAR": ["busqué", "busca", "buscaron", "busquen"],
+            "PEDIR": ["pidió", "pido", "pidieron", "pidiendo"],
+            "VOLVER": ["volvió", "vuelvo", "vuelto", "volverán"],
+            "RECIBIR": ["recibió", "recibirá", "recibieron"],
+            "PERDER": ["perdió", "pierdo", "perdieron"],
+            "CONOCER": ["conozco", "conoció", "conozcan"],
+            "ENVIAR": ["enviaron", "enviará"],
+        }
+        for lema, formas in casos.items():
+            for forma in formas:
+                with self.subTest(forma=forma):
+                    plano = m.remove_accents(forma.upper())
+                    esperado = m.FORMAS_VERBALES.get(plano)
+                    self.assertEqual(esperado, lema)
 
     def test_las_formas_ambiguas_no_estan(self):
-        # «fue» es ir y ser; «ira» es un sustantivo.
-        for forma in ("FUE", "FUERON", "IRA", "DE", "PASO"):
+        # «fue» es ir y ser; «ira» y «envío» son sustantivos; «hace» es tiempo.
+        for forma in ("FUE", "FUERON", "IRA", "DE", "PASO", "ENVIO", "HACE",
+                      "PARA", "TRATA", "PRUEBA", "CITA", "DENUNCIA"):
             self.assertNotIn(forma, m.FORMAS_VERBALES)
 
 
@@ -95,6 +138,28 @@ class PasarNoEsIrNiPasado(unittest.TestCase):
     def test_que_esta_pasando_conserva_la_palabra(self):
         self.assertEqual(traducir(["QUE", "PASAR"], "¿Qué está pasando?"),
                          ["QUE"] + list("PASAR"))
+
+
+class PluralesYFemeninos(unittest.TestCase):
+    """«abogadas», «papeles», «testigos»: la seña existe, solo cambia el
+    número o el género. Antes se deletreaban."""
+
+    def test_plural_y_femenino_de_una_seña(self):
+        casos = {"ABOGADAS": "ABOGADO", "PAPELES": "PAPEL", "TESTIGOS": "TESTIGO",
+                 "JUEZAS": "JUEZ", "DOCTORAS": "DOCTOR", "CASAS": "CASA",
+                 "MESES": "MES", "POLICIAS": "POLICIA"}
+        for forma, seña in casos.items():
+            with self.subTest(forma=forma):
+                self.assertEqual(traducir([forma], forma.lower()), [seña])
+
+    def test_lo_que_no_es_una_seña_se_deletrea(self):
+        self.assertEqual(traducir(["DENUNCIAS"], "denuncias"), list("DENUNCIAS"))
+        self.assertEqual(traducir(["NUREJ"], "NUREJ"), list("NUREJ"))
+
+    def test_no_inventa_senas(self):
+        conocida = lambda c: c in m._AVAILABLE_GLOSSES_NORM  # noqa: E731
+        self.assertIsNone(m.forma_base("ASAS", conocida))   # demasiado corta
+        self.assertIsNone(m.forma_base("XYZS", conocida))
 
 
 class ComoEstasNoDicho(unittest.TestCase):
