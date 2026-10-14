@@ -4,16 +4,18 @@ Qué escribe el funcionario en la caja de texto, qué glosas hace el avatar, qu�
 
 ## Cómo se obtuvieron
 
-- Prueba: `test/qa_conversacion_test.dart`, con los 35 guiones de `test/qa/guiones_conversacion.json`. Resultado: **35 de 35 conversaciones pasan** (2026-10-12).
+- Prueba: `test/qa_conversacion_test.dart`, con los 35 guiones de `test/qa/guiones_conversacion.json`. Resultado: **35 de 35 conversaciones pasan** (2026-10-12). Se volvió a jugar el 2026-10-14, con las respuestas completas de «Trámites» y las formas conjugadas con seña: sigue en **35 de 35**.
 - La traducción del funcionario a glosas es la **respuesta real de la Lambda Texto→LSB desplegada**, grabada en `test/qa/lambda_respuestas.json` (capturas del 8 y 9 de octubre). Con la Lambda nueva desplegada, algunas palabras deletreadas pasarán a tener seña.
 - Las tarjetas y el texto de la persona sorda salen del banco de preguntas y del redactor local de la app (el mismo que valida la Lambda).
 - 4 consultas de ruteo no estaban grabadas (C13 y una de C07); ahí la app usó su ruteo local, como hace sin conexión.
+- Los turnos de este documento se rehacen con `tool/qa_flujos_md.py` a partir del informe de la prueba; la cabecera y las observaciones se escriben a mano.
 - Para repetirlo:
 
   ```bash
   REPORTE_QA=reporte.json flutter test test/qa_conversacion_test.dart \
     --dart-define=LSB_API_URL=https://api.qa.invalid/translate \
     --dart-define=LSB_TEXT_API_URL=https://texto.qa.invalid/translate
+  python3 tool/qa_flujos_md.py reporte.json docs/FLUJOS_CONVERSACION_2026-10-12.md
   ```
 
 ## Cómo leer cada turno
@@ -41,7 +43,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
 **Turno 1**
 
 - Caja de texto (funcionario): «Buenos días, ¿en qué le puedo ayudar?»
-- Glosas del avatar: BUENOS_DIAS · AYUDAR · PUEDO
+- Glosas del avatar: BUENOS_DIAS · AYUDAR_DAR · PUEDO
 - Se abre: el selector de casos; la persona sorda elige «Denunciar robo»
 - Tarjeta: «Me robaron» [ROBAR] — responde a «¿Qué ocurrió?»
 - Vuelve al chat: «Me robaron algo.»
@@ -258,7 +260,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
 **Turno 1**
 
 - Caja de texto (funcionario): «Buenas tardes, ¿en qué le puedo ayudar?»
-- Glosas del avatar: BUENAS_TARDES · PUEDO · AYUDAR
+- Glosas del avatar: BUENAS_TARDES · PUEDO · AYUDAR_DAR
 - Se abre: el selector de casos; la persona sorda elige «Denunciar robo»
 - Tarjeta: «Me robaron» [ROBAR] — responde a «¿Qué ocurrió?»
 - Vuelve al chat: «Me robaron algo.»
@@ -460,7 +462,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
 - Glosas del avatar: TESTIGO · TENER · QUIEN
 - Se abre: «Denunciar acoso sexual (Policía Boliviana – FELCV)», pregunta «¿Tiene testigos?»
 - Tarjeta: «Sí» [SÍ] — responde a «¿Tiene testigos?»
-- Vuelve al chat: «Sí, hay testigos.»
+- Vuelve al chat: «Sí, tengo testigos.»
   - glosas de la respuesta: SÍ
 
 ### C28
@@ -528,7 +530,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
   - también: «¿Con quién habló?»
 - Tarjeta: «Sí» [SÍ] — responde a «¿Habló con alguien más sobre este acoso?»
 - Tarjeta: «Mamá» [MAMÁ] — responde a «¿Con quién habló?»
-- Vuelve al chat: «Sí, hablé con alguien más. Mi mamá.»
+- Vuelve al chat: «Sí, hablé con alguien más sobre este acoso. Mi mamá.»
   - glosas de la respuesta: SÍ · MAMÁ
 
 ### C29
@@ -681,7 +683,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
 - Glosas del avatar: QUERER · deletreo D-E-N-U-N-C-I-A-R · deletreo T-R-A-T-A · deletreo T-R-A-F-I-C-O · deletreo P-E-R-S-O-N-A
 - Se abre: el selector de casos; la persona sorda elige «Denunciar trata y tráfico de personas (Policía Boliviana – FELCC)»
 - Tarjeta: «Sí» [SÍ] — responde a «¿La persona es su familiar?»
-- Vuelve al chat: «Sí.»
+- Vuelve al chat: «Sí, la persona es mi familiar.»
   - glosas de la respuesta: SÍ
 
 **Turno 2**
@@ -690,7 +692,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
 - Glosas del avatar: deletreo P-E-R-S-O-N-A · deletreo D-E-S-A-P-A-R-E-C-E-R
 - Se abre: «Denunciar trata y tráfico de personas (Policía Boliviana – FELCC)», pregunta «¿La persona desapareció?»
 - Tarjeta: «Sí» [SÍ] — responde a «¿La persona desapareció?»
-- Vuelve al chat: «Sí, desapareció y no volvió.»
+- Vuelve al chat: «Sí, la persona desapareció y no volvió.»
   - glosas de la respuesta: SÍ
 
 **Turno 3**
@@ -699,7 +701,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
 - Glosas del avatar: ELLA · FOTOS · TENER
 - Se abre: «Denunciar trata y tráfico de personas (Policía Boliviana – FELCC)», pregunta «¿Tiene una foto de la persona?»
 - Tarjeta: «Sí» [SÍ] — responde a «¿Tiene una foto de la persona?»
-- Vuelve al chat: «Sí, tengo fotos.»
+- Vuelve al chat: «Sí, tengo una foto de la persona.»
   - glosas de la respuesta: SÍ
 
 ### C11
@@ -800,7 +802,7 @@ La persona sorda denuncia un hecho: robo, violencia, acoso, ciberacoso, bullying
 **Turno 1**
 
 - Caja de texto (funcionario): «Buenos días, ¿en qué le puedo ayudar?»
-- Glosas del avatar: BUENOS_DIAS · AYUDAR · PUEDO
+- Glosas del avatar: BUENOS_DIAS · AYUDAR_DAR · PUEDO
 - Se abre: el selector de casos; la persona sorda elige «Denunciar robo»
 - Tarjeta: «Me robaron» [ROBAR] — responde a «¿Qué ocurrió?»
 - Vuelve al chat: «Me robaron algo.»
@@ -1018,7 +1020,7 @@ Seguimiento de un caso, accesibilidad, derivación a otra oficina y charla de ve
 **Turno 2**
 
 - Caja de texto (funcionario): «Tome asiento, ya la atiendo.»
-- Glosas del avatar: deletreo T-O-M-E · deletreo A-S-I-E-N-T-O · deletreo Y-A · ATENDER
+- Glosas del avatar: TOMAR · deletreo A-S-I-E-N-T-O · deletreo Y-A · ATENDER
 - Se abre: nada. Es una instrucción o charla, no una pregunta que la persona sorda deba responder con tarjetas.
 
 **Turno 3**
@@ -1092,13 +1094,13 @@ Trámites documentados (SEGIP, SERECI, defensa de la persona sorda) y los datos 
 - Glosas del avatar: CERTIFICADO · deletreo N-A-C-I-M-I-E-N-T-O · TRAER · SUYO
 - Se abre: «Cédula por primera vez (SEGIP)», pregunta «¿Tiene certificado de nacimiento original computarizado?»
 - Tarjeta: «Sí» [SÍ] — responde a «¿Tiene certificado de nacimiento original computarizado?»
-- Vuelve al chat: «Sí. Lo tengo aquí.»
+- Vuelve al chat: «Sí, tengo el certificado de nacimiento original computarizado.»
   - glosas de la respuesta: SÍ
 
 **Turno 3**
 
 - Caja de texto (funcionario): «¿Tiene la denuncia de pérdida?»
-- Glosas del avatar: deletreo D-E-N-U-N-C-I-A · deletreo P-E-R-D-I-D-A · TENER
+- Glosas del avatar: deletreo D-E-N-U-N-C-I-A · PERDER · TENER
 - Se abre: «Reposición por pérdida o robo (SEGIP)», pregunta «¿Ya presentó una denuncia por este hecho?»
 - Tarjeta: «Sí» [SÍ] — responde a «¿Ya presentó una denuncia por este hecho?»
 - Vuelve al chat: «Sí, ya presenté una denuncia.»
@@ -1164,7 +1166,7 @@ Trámites documentados (SEGIP, SERECI, defensa de la persona sorda) y los datos 
 **Turno 2**
 
 - Caja de texto (funcionario): «Primero necesito sus datos. ¿Cuál es su nombre completo?»
-- Glosas del avatar: NECESITAR · deletreo D-A-T-O-S · deletreo S-U · NOMBRE · deletreo C-O-M-P-L-E-T-O · CUAL
+- Glosas del avatar: NECESITAR · deletreo D-A-T-O-S · deletreo S-U · NOMBRE · COMPLETAR · CUAL
 - Se abre: «Mis datos», pregunta «¿Cuál es su nombre completo?»
 - Vuelve al chat: la persona sorda tiene que escribir el dato en la tarjeta (nombre, número, monto…); la prueba no lo escribe.
 
@@ -1207,5 +1209,12 @@ Las 35 conversaciones abren el caso y las preguntas esperadas, pero los flujos m
    - «¿Su hijo…?» sale YO · HIJO en vez de SUYO · HIJO (C09).
    - «¿Hay testigos?» deja HAY deletreado (H-A-Y) aunque HAY debería volverse TENER.
 4. **Preguntas que piden un dato** (nombre completo, número de celular, monto, nombre de los testigos): la persona sorda lo escribe en la tarjeta. La prueba no escribe datos, por eso esos turnos no traen texto de respuesta (C03, C11, C17, C30).
-5. **C10, turno 1:** la tarjeta «Sí» a «¿La persona es su familiar?» vuelve al chat solo como «Sí.», sin la frase completa.
-6. **Charla e instrucciones** («Espere un momento», «Firme aquí, por favor», «Vuelva el lunes con su carnet») no abren tarjetas, como corresponde (C12, C24). Una pregunta suelta sin contexto («¿Dónde?», «¿Tiene testigos?») abre el selector de casos (C13). El inglés y el texto sin sentido no se envían (C20).
+5. **Respuestas con contexto (2026-10-14).** Antes, la tarjeta «Sí» de algunas preguntas volvía al chat solo como «Sí.» (C10, turno 1) o con frases que no decían de qué se hablaba. Ahora la respuesta repite lo preguntado, con la misma tarjeta de una seña y sin palabras nuevas:
+   - C10, turno 1: «Sí.» → «Sí, la persona es mi familiar.»
+   - C10, turnos 2 y 3: «Sí, desapareció y no volvió.» → «Sí, la persona desapareció y no volvió.»; «Sí, tengo fotos.» → «Sí, tengo una foto de la persona.»
+   - C05, turno 2: «Sí. Lo tengo aquí.» → «Sí, tengo el certificado de nacimiento original computarizado.»
+   - C07, turno 4: «Sí, hay testigos.» → «Sí, tengo testigos.»
+   - C32, turno 3: «Sí, hablé con alguien más. Mi mamá.» → «Sí, hablé con alguien más sobre este acoso. Mi mamá.»
+   Los turnos de este documento responden un paso a la vez. Las preguntas de documentos («¿Trajo algún documento…?») abren, tras un «Sí», «¿Qué documentos trajo?» con tarjetas de una seña, pero eso ocurre al recorrer el trámite en Tarjetas LSB y no aparece en estos flujos.
+6. **Glosas que cambiaron respecto del 2026-10-12.** La respuesta grabada de la Lambda es la misma; lo que cambia es lo que la app muestra: «¿en qué le puedo ayudar?» ahora sale con AYUDAR_DAR (C01, C26, C30), «tome» sale TOMAR (C12), «perdida» sale PERDER (C05) y «completo» sale COMPLETAR (C03), en vez de deletrearse o quedar como AYUDAR.
+7. **Charla e instrucciones** («Espere un momento», «Firme aquí, por favor», «Vuelva el lunes con su carnet») no abren tarjetas, como corresponde (C12, C24). Una pregunta suelta sin contexto («¿Dónde?», «¿Tiene testigos?») abre el selector de casos (C13). El inglés y el texto sin sentido no se envían (C20).
