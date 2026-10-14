@@ -1,0 +1,824 @@
+{
+ "_nota": "Respuestas más completas para «Trámites» (tarjetas LSB). Solo palabras que ya están en el corpus: tool/build_rag_corpus.py comprueba que cada palabra aparezca en algún escenario o hecho y no agrega vocabulario ni glosas. «respuestas» reescribe las tres respuestas de una pregunta de sí o no que quedaban en «Sí.»/«No.»/«Traje documentos.»; «documentos» son las tarjetas con que se contesta qué documentos se tienen, por institución (de los requisitos ya documentados en los hechos). GENERADO a mano; se edita aquí.",
+ "respuestas": {
+  "¿La escritura indica que es un anticipo de legítima?": {
+   "afirmado": "Sí, la escritura indica que es un anticipo de legítima.",
+   "negado": "No, la escritura no indica que es un anticipo de legítima."
+  },
+  "¿El documento judicial identifica la matrícula del inmueble?": {
+   "afirmado": "Sí, el documento judicial identifica la matrícula del inmueble.",
+   "negado": "No, el documento judicial no identifica la matrícula del inmueble."
+  },
+  "¿Ya realizó el pago de ese trámite?": {
+   "afirmado": "Sí, ya realicé el pago de ese trámite."
+  },
+  "¿La parte que no entiende está en el documento registral?": {
+   "negado": "No, la parte que no entiendo no está en el documento registral."
+  },
+  "¿Trajo algún documento relacionado con su solicitud?": {
+   "afirmado": "Sí, traje documentos relacionados con mi solicitud.",
+   "negado": "No, no traje documentos relacionados con mi solicitud.",
+   "desconocido": "No sé qué documento corresponde a mi solicitud."
+  },
+  "¿Tiene documentos o mensajes sobre lo ocurrido?": {
+   "afirmado": "Sí, tengo documentos o mensajes sobre lo ocurrido.",
+   "negado": "No, no tengo documentos ni mensajes sobre lo ocurrido.",
+   "desconocido": "No sé si tengo documentos o mensajes sobre lo ocurrido."
+  },
+  "¿La denuncia es contra usted?": {
+   "afirmado": "Sí, la denuncia es contra mí.",
+   "negado": "No, la denuncia no es contra mí.",
+   "desconocido": "No sé si la denuncia es contra mí."
+  },
+  "¿Usted fue afectado por el hecho?": {
+   "afirmado": "Sí, fui afectado por el hecho.",
+   "negado": "No, no fui afectado por el hecho.",
+   "desconocido": "No sé si fui afectado por el hecho."
+  },
+  "¿Tiene abogado para este caso?": {
+   "afirmado": "Sí, tengo abogado para este caso.",
+   "negado": "No, no tengo abogado para este caso.",
+   "desconocido": "No sé quién es mi abogado para este caso."
+  },
+  "¿Usted es familiar de la persona afectada?": {
+   "afirmado": "Sí, soy familiar de la persona afectada.",
+   "negado": "No, no soy familiar de la persona afectada.",
+   "desconocido": "No sé cómo explicar mi parentesco con la persona afectada."
+  },
+  "¿Usaron violencia para quitarle el objeto?": {
+   "afirmado": "Sí, usaron violencia y me quitaron el objeto.",
+   "negado": "No, no usaron violencia para quitarle el objeto.",
+   "desconocido": "No sé si usaron violencia para quitarle el objeto."
+  },
+  "¿Puede comunicarse aquí sin ponerse en peligro?": {
+   "afirmado": "Sí, puedo comunicarme aquí sin peligro.",
+   "negado": "No, aquí no puedo comunicarme sin peligro.",
+   "desconocido": "No sé si puedo comunicarme aquí sin peligro."
+  },
+  "¿Ya firmó el documento?": {
+   "afirmado": "Sí, ya firmé el documento.",
+   "negado": "No, todavía no firmé el documento."
+  },
+  "¿Tiene la placa actual del vehículo?": {
+   "afirmado": "Sí, tengo la placa actual del vehículo.",
+   "negado": "No, no tengo la placa actual del vehículo.",
+   "desconocido": "No sé cuál es la placa actual del vehículo."
+  },
+  "¿Tiene número de inmueble o código catastral?": {
+   "afirmado": "Sí, tengo el número de inmueble o el código catastral.",
+   "negado": "No, no tengo el número de inmueble ni el código catastral.",
+   "desconocido": "No sé dónde está el número de inmueble o el código catastral."
+  },
+  "Puede buscarlos en una boleta de pago anterior.": {
+   "afirmado": "Sí, los busco en una boleta de pago anterior.",
+   "negado": "No, no tengo una boleta de pago anterior.",
+   "desconocido": "No sé si tengo una boleta de pago anterior."
+  },
+  "¿Su deuda corresponde solamente a 2025?": {
+   "afirmado": "Sí, mi deuda corresponde solamente a 2025.",
+   "negado": "No, mi deuda no corresponde solamente a 2025.",
+   "desconocido": "No sé si mi deuda corresponde solamente a 2025."
+  },
+  "¿Quiere solicitar un Plan Cuotas?": {
+   "afirmado": "Sí, quiero solicitar un Plan Cuotas.",
+   "negado": "No, no quiero solicitar un Plan Cuotas.",
+   "desconocido": "No sé si quiero solicitar un Plan Cuotas."
+  },
+  "¿El vehículo está radicado en Cochabamba?": {
+   "afirmado": "Sí, el vehículo está radicado en Cochabamba.",
+   "negado": "No, el vehículo no está radicado en Cochabamba.",
+   "desconocido": "No sé si el vehículo está radicado en Cochabamba."
+  },
+  "¿Trae copia del CRPVA y su cédula?": {
+   "afirmado": "Sí, traje copia del CRPVA y mi cédula.",
+   "negado": "No, no traje copia del CRPVA.",
+   "desconocido": "No sé cuál es la copia del CRPVA."
+  },
+  "¿Trajo algún relato de lo ocurrido?": {
+   "afirmado": "Sí, traje un relato de lo ocurrido.",
+   "negado": "No, no traje un relato de lo ocurrido.",
+   "desconocido": "No sé cómo empezar el relato de lo ocurrido."
+  },
+  "Incluya qué pasó, cuándo y dónde, si lo sabe.": {
+   "afirmado": "Sí, voy a incluir qué pasó, cuándo y dónde.",
+   "negado": "No, no sé qué pasó, cuándo ni dónde."
+  },
+  "¿Puede ingresar a su cuenta?": {
+   "afirmado": "Sí, puedo ingresar a mi cuenta.",
+   "negado": "No, no puedo ingresar a mi cuenta.",
+   "desconocido": "No sé si puedo ingresar a mi cuenta."
+  },
+  "¿Tiene acceso a su proceso en ROMA?": {
+   "afirmado": "Sí, tengo acceso a mi proceso en ROMA.",
+   "negado": "No, no tengo acceso a mi proceso en ROMA.",
+   "desconocido": "No sé usar ROMA para ver mi proceso."
+  },
+  "¿Tiene NUREJ y WebID?": {
+   "afirmado": "Sí, tengo el NUREJ y el WebID.",
+   "negado": "No, no tengo el NUREJ ni el WebID.",
+   "desconocido": "No sé cuáles son mi NUREJ y mi WebID."
+  },
+  "¿Su proceso está en Cochabamba?": {
+   "afirmado": "Sí, mi proceso está en Cochabamba.",
+   "negado": "No, mi proceso no está en Cochabamba.",
+   "desconocido": "No sé si mi proceso está en Cochabamba."
+  },
+  "¿Quiere consultar un expediente judicial?": {
+   "afirmado": "Sí, quiero consultar un expediente judicial.",
+   "negado": "No, no quiero consultar un expediente judicial.",
+   "desconocido": "No sé si quiero consultar un expediente judicial."
+  },
+  "¿Tiene la carátula del expediente?": {
+   "afirmado": "Sí, tengo la carátula del expediente.",
+   "negado": "No, no tengo la carátula del expediente.",
+   "desconocido": "No sé cuál es la carátula del expediente."
+  },
+  "¿Ya tiene abogado particular?": {
+   "afirmado": "Sí, ya tengo abogado particular.",
+   "negado": "No, todavía no tengo abogado particular.",
+   "desconocido": "No sé si mi abogado particular sigue representándome."
+  },
+  "¿Su consulta es urgente y penal?": {
+   "afirmado": "Sí, mi consulta es urgente y penal.",
+   "negado": "No, mi consulta no es urgente y penal.",
+   "desconocido": "No sé si mi consulta es urgente y penal."
+  },
+  "¿Tiene actualmente abogado particular?": {
+   "afirmado": "Sí, actualmente tengo abogado particular.",
+   "negado": "No, actualmente no tengo abogado particular.",
+   "desconocido": "No sé si mi abogado particular continúa."
+  },
+  "¿Tiene su cédula de identidad?": {
+   "afirmado": "Sí, tengo mi cédula de identidad.",
+   "negado": "No, no tengo mi cédula de identidad.",
+   "desconocido": "No sé si sirve una copia de mi cédula de identidad."
+  },
+  "¿Cuenta con abogado particular?": {
+   "afirmado": "Sí, tengo abogado particular.",
+   "negado": "No, no tengo abogado particular.",
+   "desconocido": "No sé si tengo abogado particular."
+  },
+  "¿Quiere saber quién investigará el robo?": {
+   "negado": "No, ahora no quiero saber quién investigará el robo."
+  },
+  "¿Está en un lugar seguro ahora?": {
+   "afirmado": "Sí, estoy en un lugar seguro ahora.",
+   "negado": "No, no estoy en un lugar seguro ahora.",
+   "desconocido": "No sé si estoy en un lugar seguro ahora."
+  },
+  "Registraremos su necesidad de interpretación.": {
+   "afirmado": "Sí, necesito interpretación en LSB.",
+   "negado": "No, no necesito interpretación.",
+   "desconocido": "No sé si necesito interpretación."
+  },
+  "¿Las amenazas continúan actualmente?": {
+   "afirmado": "Sí, las amenazas continúan actualmente.",
+   "negado": "No, las amenazas ya no continúan.",
+   "desconocido": "No sé si las amenazas continúan actualmente."
+  },
+  "¿Puede acudir presencialmente ahora?": {
+   "afirmado": "Sí, puedo acudir presencialmente ahora.",
+   "negado": "No, no puedo acudir presencialmente ahora.",
+   "desconocido": "No sé si puedo acudir presencialmente ahora."
+  },
+  "¿Busca una notaría específica?": {
+   "afirmado": "Sí, busco una notaría específica.",
+   "negado": "No, no busco una notaría específica.",
+   "desconocido": "No sé qué notaría específica buscar."
+  },
+  "¿Tiene certificado de nacimiento original computarizado?": {
+   "afirmado": "Sí, tengo el certificado de nacimiento original computarizado.",
+   "negado": "No, no tengo el certificado de nacimiento original computarizado.",
+   "desconocido": "No sé si mi certificado de nacimiento es válido."
+  },
+  "¿Su cédula ya venció?": {
+   "afirmado": "Sí, mi cédula ya venció.",
+   "negado": "No, mi cédula todavía no venció.",
+   "desconocido": "No recuerdo si mi cédula ya venció."
+  },
+  "¿Necesita certificado de matrimonio duplicado?": {
+   "afirmado": "Sí, necesito un duplicado del certificado de matrimonio.",
+   "negado": "No, no necesito un duplicado del certificado de matrimonio.",
+   "desconocido": "No sé cuál certificado necesito."
+  },
+  "¿Viene a registrar una defunción?": {
+   "afirmado": "Sí, vengo a registrar una defunción.",
+   "negado": "No, no vengo a registrar una defunción.",
+   "desconocido": "No sé qué trámite corresponde para una defunción."
+  },
+  "¿Le dijeron que necesita treinta por ciento?": {
+   "afirmado": "Sí, me dijeron que necesito treinta por ciento.",
+   "negado": "No, no me dijeron que necesito treinta por ciento.",
+   "desconocido": "No recuerdo si me dijeron que necesito treinta por ciento."
+  },
+  "Debe garantizarse comunicación accesible durante la atención.": {
+   "afirmado": "Sí, necesito comunicación accesible durante la atención.",
+   "negado": "No, no necesito comunicación accesible durante la atención.",
+   "desconocido": "No sé si necesito comunicación accesible durante la atención."
+  },
+  "¿Necesita una medida de accesibilidad para la audiencia?": {
+   "afirmado": "Sí, necesito una medida de accesibilidad para la audiencia: un intérprete de LSB.",
+   "negado": "No, no necesito una medida de accesibilidad para la audiencia.",
+   "desconocido": "No sé cómo solicitar una medida de accesibilidad para la audiencia."
+  },
+  "¿Puede venir a la oficina de la Defensoría?": {
+   "afirmado": "Sí, puedo ir a la oficina de la Defensoría.",
+   "negado": "No, no puedo ir a la oficina de la Defensoría.",
+   "desconocido": "No sé si puedo ir a la oficina de la Defensoría."
+  },
+  "¿El certificado es suyo?": {
+   "desconocido": "No sé si es mi certificado."
+  },
+  "¿Le pegan todos los días?": {
+   "afirmado": "Sí, me pegan todos los días.",
+   "negado": "No, no me pegan todos los días.",
+   "desconocido": "No sé si me pegan todos los días."
+  },
+  "¿Tiene videos o fotos?": {
+   "afirmado": "Sí, tengo videos o fotos.",
+   "negado": "No, no tengo videos ni fotos.",
+   "desconocido": "No sé si tengo videos o fotos."
+  },
+  "¿La acosa todos los días?": {
+   "afirmado": "Sí, me acosa todos los días.",
+   "negado": "No, no me acosa todos los días.",
+   "desconocido": "No sé si me acosa todos los días."
+  },
+  "¿Tiene testigos?": {
+   "afirmado": "Sí, tengo testigos.",
+   "negado": "No, no tengo testigos.",
+   "desconocido": "No sé si tengo testigos."
+  },
+  "¿Guardó los mensajes y las fotos?": {
+   "afirmado": "Sí, guardé los mensajes y las fotos.",
+   "negado": "No, no guardé los mensajes ni las fotos.",
+   "desconocido": "No sé cómo guardar los mensajes y las fotos."
+  },
+  "¿Esa persona la busca todos los días?": {
+   "afirmado": "Sí, esa persona me busca todos los días.",
+   "negado": "No, esa persona no me busca todos los días.",
+   "desconocido": "No sé si esa persona me busca todos los días."
+  },
+  "¿Le negaron la atención?": {
+   "afirmado": "Sí, me negaron la atención: no quisieron atenderme.",
+   "negado": "No, no me negaron la atención: me atendieron.",
+   "desconocido": "No sé si me negaron la atención."
+  },
+  "¿Se burlan de usted todos los días?": {
+   "afirmado": "Sí, se burlan de mí todos los días.",
+   "negado": "No, no se burlan de mí todos los días.",
+   "desconocido": "No sé si se burlan de mí todos los días."
+  },
+  "¿La persona es su familiar?": {
+   "afirmado": "Sí, la persona es mi familiar.",
+   "negado": "No, la persona no es mi familiar.",
+   "desconocido": "No sé cómo explicar si la persona es mi familiar."
+  },
+  "¿La persona es adolescente?": {
+   "afirmado": "Sí, la persona es adolescente.",
+   "negado": "No, la persona no es adolescente.",
+   "desconocido": "No sé la edad de la persona."
+  },
+  "¿Tiene una foto de la persona?": {
+   "afirmado": "Sí, tengo una foto de la persona.",
+   "negado": "No, no tengo una foto de la persona.",
+   "desconocido": "No sé si tengo una foto de la persona."
+  },
+  "¿Habló con alguien más sobre este acoso?": {
+   "afirmado": "Sí, hablé con alguien más sobre este acoso.",
+   "negado": "No, no hablé con nadie más sobre este acoso.",
+   "desconocido": "No sé si debo contar este acoso."
+  },
+  "¿La persona desapareció?": {
+   "afirmado": "Sí, la persona desapareció y no volvió.",
+   "negado": "No, la persona no desapareció: sé dónde está.",
+   "desconocido": "No sé si la persona desapareció."
+  },
+  "¿Le comunicaron que los documentos pueden recogerse?": {
+   "negado": "No, no me comunicaron que los documentos pueden recogerse."
+  },
+  "¿El comprobante corresponde a esta oficina de Derechos Reales?": {
+   "afirmado": "Sí, el comprobante corresponde a esta oficina de Derechos Reales.",
+   "negado": "No, el comprobante no corresponde a esta oficina de Derechos Reales."
+  },
+  "¿Trajo documentación del pago del impuesto a la transferencia?": {
+   "negado": "No, no traje la documentación del pago del impuesto a la transferencia."
+  },
+  "¿Su documento identifica una regularización mediante Ley 247?": {
+   "afirmado": "Sí, mi documento identifica una regularización mediante Ley 247.",
+   "negado": "No, mi documento no identifica una regularización mediante Ley 247."
+  },
+  "¿Sabe dónde está su celular ahora?": {
+   "afirmado": "Sí, sé dónde está mi celular ahora.",
+   "negado": "No, no sé dónde está mi celular ahora.",
+   "desconocido": "No sé cómo buscar mi celular."
+  },
+  "¿Quiere que le expliquen cómo obtener la calificación?": {
+   "afirmado": "Sí, quiero que me expliquen cómo obtener la calificación.",
+   "negado": "No, no quiero que me expliquen cómo obtener la calificación.",
+   "desconocido": "No sé si quiero que me expliquen cómo obtener la calificación."
+  },
+  "¿Quiere que le ayuden a buscar al notario en SINPLU?": {
+   "afirmado": "Sí, quiero ayuda para buscar al notario en SINPLU.",
+   "negado": "No, no quiero ayuda para buscar al notario en SINPLU.",
+   "desconocido": "No sé si quiero ayuda para buscar al notario en SINPLU."
+  },
+  "¿Quiere que le orienten sobre cómo usar ROMA?": {
+   "afirmado": "Sí, quiero que me orienten sobre cómo usar ROMA.",
+   "negado": "No, no quiero que me orienten sobre cómo usar ROMA.",
+   "desconocido": "No sé si quiero que me orienten sobre cómo usar ROMA."
+  },
+  "¿Prefiere apoyo psicológico, social y legal gratuito del SLIM?": {
+   "afirmado": "Sí, prefiero el apoyo psicológico, social y legal gratuito del SLIM.",
+   "negado": "No, no prefiero el apoyo psicológico, social y legal gratuito del SLIM.",
+   "desconocido": "No sé si prefiero el apoyo psicológico, social y legal gratuito del SLIM."
+  },
+  "¿Necesita ayuda policial para denunciar?": {
+   "afirmado": "Sí, necesito ayuda policial para denunciar.",
+   "negado": "No, no necesito ayuda policial para denunciar.",
+   "desconocido": "No sé si necesito ayuda policial para denunciar."
+  },
+  "¿Su porcentaje es de 25 % o más?": {
+   "afirmado": "Sí, mi porcentaje es de 25 % o más.",
+   "negado": "No, mi porcentaje no es de 25 % o más.",
+   "desconocido": "No sé cuál es mi porcentaje."
+  },
+  "¿Quiere ayuda con el CRPVA?": {
+   "afirmado": "Sí, quiero ayuda con el CRPVA.",
+   "negado": "No, no quiero ayuda con el CRPVA.",
+   "desconocido": "No sé si quiero ayuda con el CRPVA."
+  }
+ },
+ "indicacion": {
+  "entendido": "Entendido. Comprendo lo que me indica: «{indicacion}».",
+  "no_entiendo": "No entiendo lo que me indica: «{indicacion}». ¿Me lo puede explicar por escrito?"
+ },
+ "preguntas_de_documentos": {
+  "¿Trajo algún documento relacionado con su solicitud?": {
+   "pregunta": "¿Qué documentos trajo?",
+   "glosas": [
+    "PAPEL",
+    "TRAER",
+    "QUÉ"
+   ],
+   "plantilla": "Traje {items}."
+  },
+  "¿Tiene documentos o mensajes sobre lo ocurrido?": {
+   "pregunta": "¿Qué documentos o mensajes tiene?",
+   "glosas": [
+    "PAPEL",
+    "TENER",
+    "QUÉ"
+   ],
+   "plantilla": "Tengo {items}."
+  }
+ },
+ "documentos": {
+  "SEGIP": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "certificado",
+    "etiqueta": "Certificado de nacimiento",
+    "frase": "mi certificado de nacimiento",
+    "glosas": [
+     "CERTIFICADO"
+    ]
+   },
+   {
+    "id": "fotocopia",
+    "etiqueta": "Fotocopia",
+    "frase": "una fotocopia",
+    "glosas": [
+     "FOTOCOPIA"
+    ]
+   }
+  ],
+  "SERECI": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "certificado_medico",
+    "etiqueta": "Certificado médico",
+    "frase": "el certificado médico",
+    "glosas": [
+     "CERTIFICADO"
+    ]
+   },
+   {
+    "id": "doc_fallecido",
+    "etiqueta": "Documentos del fallecido",
+    "frase": "los documentos del fallecido",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "certificado",
+    "etiqueta": "Certificado de nacimiento",
+    "frase": "mi certificado de nacimiento",
+    "glosas": [
+     "CERTIFICADO"
+    ]
+   }
+  ],
+  "DDRR": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "folio",
+    "etiqueta": "Folio Real",
+    "frase": "el Folio Real",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "matricula",
+    "etiqueta": "Número de matrícula",
+    "frase": "el número de matrícula",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "escritura",
+    "etiqueta": "Escritura pública",
+    "frase": "la escritura pública",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "fotocopia",
+    "etiqueta": "Fotocopia",
+    "frase": "una fotocopia",
+    "glosas": [
+     "FOTOCOPIA"
+    ]
+   }
+  ],
+  "IMP": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "crpva",
+    "etiqueta": "CRPVA",
+    "frase": "el CRPVA",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "boleta",
+    "etiqueta": "Boleta de pago anterior",
+    "frase": "una boleta de pago anterior",
+    "glosas": [
+     "PAPEL"
+    ]
+   }
+  ],
+  "GAM": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "recepcion",
+    "etiqueta": "Constancia de recepción",
+    "frase": "mi constancia de recepción",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "planos",
+    "etiqueta": "Planos",
+    "frase": "los planos",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "observaciones",
+    "etiqueta": "Observaciones escritas",
+    "frase": "las observaciones escritas",
+    "glosas": [
+     "PAPEL"
+    ]
+   }
+  ],
+  "FIS": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "constancia",
+    "etiqueta": "Constancia de la denuncia",
+    "frase": "mi constancia de denuncia",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "mensajes",
+    "etiqueta": "Mensajes",
+    "frase": "mis mensajes",
+    "glosas": [
+     "CELULAR"
+    ]
+   },
+   {
+    "id": "fotos",
+    "etiqueta": "Fotos",
+    "frase": "mis fotos",
+    "glosas": [
+     "FOTOS"
+    ]
+   }
+  ],
+  "FELCC": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "carta",
+    "etiqueta": "Carta de solicitud",
+    "frase": "la carta de solicitud",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "boleta_deposito",
+    "etiqueta": "Boleta de depósito",
+    "frase": "la boleta de depósito",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "mensajes",
+    "etiqueta": "Mensajes",
+    "frase": "mis mensajes",
+    "glosas": [
+     "CELULAR"
+    ]
+   },
+   {
+    "id": "fotos",
+    "etiqueta": "Fotos",
+    "frase": "mis fotos",
+    "glosas": [
+     "FOTOS"
+    ]
+   }
+  ],
+  "FELCV": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "mensajes",
+    "etiqueta": "Mensajes",
+    "frase": "mis mensajes",
+    "glosas": [
+     "CELULAR"
+    ]
+   },
+   {
+    "id": "fotos",
+    "etiqueta": "Fotos",
+    "frase": "mis fotos",
+    "glosas": [
+     "FOTOS"
+    ]
+   },
+   {
+    "id": "constancia",
+    "etiqueta": "Constancia de la denuncia",
+    "frase": "mi constancia de denuncia",
+    "glosas": [
+     "PAPEL"
+    ]
+   }
+  ],
+  "OJ": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "caratula",
+    "etiqueta": "Carátula del expediente",
+    "frase": "la carátula del expediente",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "memorial",
+    "etiqueta": "Memorial",
+    "frase": "mi memorial",
+    "glosas": [
+     "PAPEL"
+    ]
+   }
+  ],
+  "SEPDEP": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "notificacion",
+    "etiqueta": "Notificación",
+    "frase": "la notificación",
+    "glosas": [
+     "PAPEL"
+    ]
+   }
+  ],
+  "SEPDAVI": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "casos",
+    "etiqueta": "Documentos del caso",
+    "frase": "los documentos del caso",
+    "glosas": [
+     "CARPETA"
+    ]
+   },
+   {
+    "id": "mensajes",
+    "etiqueta": "Mensajes",
+    "frase": "mis mensajes",
+    "glosas": [
+     "CELULAR"
+    ]
+   }
+  ],
+  "SLIM": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "casos",
+    "etiqueta": "Documentos del caso",
+    "frase": "los documentos del caso",
+    "glosas": [
+     "CARPETA"
+    ]
+   },
+   {
+    "id": "mensajes",
+    "etiqueta": "Mensajes",
+    "frase": "mis mensajes",
+    "glosas": [
+     "CELULAR"
+    ]
+   }
+  ],
+  "DNA": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "casos",
+    "etiqueta": "Documentos del caso",
+    "frase": "los documentos del caso",
+    "glosas": [
+     "CARPETA"
+    ]
+   },
+   {
+    "id": "fotos",
+    "etiqueta": "Fotos",
+    "frase": "mis fotos",
+    "glosas": [
+     "FOTOS"
+    ]
+   }
+  ],
+  "NOT": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "documento",
+    "etiqueta": "Documento a firmar",
+    "frase": "el documento que voy a firmar",
+    "glosas": [
+     "PAPEL"
+    ]
+   },
+   {
+    "id": "fotocopia",
+    "etiqueta": "Fotocopia",
+    "frase": "una fotocopia",
+    "glosas": [
+     "FOTOCOPIA"
+    ]
+   }
+  ],
+  "DISC": [
+   {
+    "id": "cedula",
+    "etiqueta": "Cédula de identidad",
+    "frase": "mi cédula de identidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "carnet",
+    "etiqueta": "Carnet de discapacidad",
+    "frase": "mi carnet de discapacidad",
+    "glosas": [
+     "IDENTIDAD"
+    ]
+   },
+   {
+    "id": "calificacion",
+    "etiqueta": "Calificación",
+    "frase": "mi calificación",
+    "glosas": [
+     "PAPEL"
+    ]
+   }
+  ]
+ }
+}

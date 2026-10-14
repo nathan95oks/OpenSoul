@@ -2228,6 +2228,191 @@ def banco_tramites(corpus: dict, avisos: list | None = None) -> dict:
             "contextos": contextos}
 
 
+# Respuestas más completas de «Trámites» (docs/negocio/rag/respuestas_ampliadas.json).
+AMPLIADAS = os.path.join(RAG, "respuestas_ampliadas.json")
+_GLOSAS_INTERROGATIVAS = {"QUE", "CUANDO", "DONDE", "COMO", "QUIEN", "CUAL", "CUANTOS",
+                   "POR_QUE", "PARA_QUE", "SI", "NO", "NO_SABER", "COMPRENDER"}
+
+
+def palabras_del_corpus(corpus: dict) -> set:
+    """Las palabras que ya usa el corpus (escenarios, variantes y hechos):
+    con ellas se escriben las respuestas ampliadas, ninguna más."""
+    vocab = set()
+
+    def agrega(texto: str) -> None:
+        vocab.update(re.findall(r"[a-zñ]{3,}", _norm(texto)))
+
+    for e in corpus["escenarios"]:
+        for campo in ("titulo", "tramite", "situacion"):
+            agrega(e.get(campo, ""))
+        for t in e["turnos"]:
+            agrega(t["texto"])
+        for p in e["variantes"]:
+            for q in p["preguntas"]:
+                agrega(q)
+            for r in p["respuestas"]:
+                agrega(r["texto"])
+    for h in corpus["hechos"].values():
+        agrega(h["hecho"])
+    return vocab
+
+
+def _glosas_de_contexto(glosas: list, maximo: int = 2) -> list:
+    """Las señas de la indicación que dicen de qué se trata (ESCRIBIR,
+    PAGAR…): sin interrogativos, sin partículas y sin señas a incorporar."""
+    conocidas = glosas_conocidas() or set()
+    out = []
+    for g in glosas_canonicas(list(glosas or [])):
+        if (g.startswith(SENA_PENDIENTE) or len(g) <= 1
+                or _norm(g).upper() in _GLOSAS_INTERROGATIVAS
+                or _norm(g) not in conocidas or g in out):
+            continue
+        out.append(g)
+    return out[:maximo]
+
+
+def ampliar_banco_tramites(banco: dict, corpus: dict, avisos: list) -> dict:
+    """Respuestas con contexto en las tarjetas de «Trámites».
+
+    * Una pregunta de sí o no que se contestaba «Sí.», «No.» o «Traje
+      documentos.» dice ahora de qué se trata («Sí, tengo abogado para este
+      caso.»), con la frase de `respuestas_ampliadas.json`.
+    * ENTENDIDO / NO ENTIENDO repiten la indicación a la que contestan, y la
+      tarjeta suma las señas que dicen de qué se trata.
+    * «¿Trajo algún documento…?» abre, con «Sí», «¿Qué documentos trajo?»:
+      tarjetas de los documentos de esa institución, como en Denuncias.
+
+    Solo con palabras que el corpus ya usa; no se agrega vocabulario ni glosas
+    nuevas (los SÍ/NO/NO SÉ y las señas son las de siempre).
+    """
+    datos = _leer(AMPLIADAS)
+    if not datos or not banco:
+        return banco
+    vocab = palabras_del_corpus(corpus)
+
+    def valida(frase: str, donde: str) -> bool:
+        fuera = sorted({w for w in re.findall(r"[a-zñ]{3,}", _norm(frase))
+                        if w not in vocab})
+        if fuera:
+            avisos.append(f"respuesta ampliada de {donde}: palabras que el "
+                          f"corpus no usa ({', '.join(fuera)}); no se aplica")
+        return not fuera
+
+    empieza = {"afirmado": ("sí", "si"), "negado": ("no",),
+               "desconocido": ("no sé", "no se", "no recuerdo")}
+    respuestas = datos.get("respuestas", {})
+    plantillas = datos.get("indicacion", {})
+    escenarios = {e["id"]: e for e in corpus["escenarios"]}
+    for q in banco["preguntas"]:
+        control, formulacion = q.get("control"), q["formulacion"]
+        # «¿Entendió?» sola no dice qué: se muestra con la afirmación del
+        # funcionario que la precede («El duplicado cuesta Bs 34… ¿Entendió?»).
+        if control == "polar3" and len(formulacion.split()) <= 3:
+            e = escenarios.get(q["origen"]["escenario"])
+            previo = next((t for t in (e or {}).get("turnos", [])
+                           if t["n"] == q["origen"]["turno"] - 1), None)
+            if (previo and previo["rol"] == "funcionario"
+                    and "?" not in previo["texto"]):
+                # (las respuestas ampliadas se buscan por la pregunta sola)
+                q["formulacion"] = f"{previo['texto']} {formulacion}"
+        if control == "polar3" and formulacion in respuestas:
+            for o in q["opciones"]:
+                frase = respuestas[formulacion].get(o["estado"])
+                if not frase or not frase.lower().startswith(empieza[o["estado"]]):
+                    continue
+                if valida(frase, q["id"]):
+                    o["frase"] = frase
+                    o["origen"] = f"respuesta ampliada (antes: {o['origen']})"
+        elif q.get("acto") == "indicacion":
+            # ENTENDIDO y NO ENTIENDO se quedan como están (una seña cada una,
+            # y dos «Entendido» seguidos se dicen una vez); junto a ellos, las
+            # mismas respuestas con la indicación a la que contestan: la
+            # persona elige decir solo «Entendido» o decir qué entendió.
+            ind = formulacion.strip().rstrip(".!")
+            contexto = _glosas_de_contexto(
+                (q.get("formulacionLsb") or {}).get("glosas"))
+            ids = [o["id"] for o in q["opciones"]]
+            if "entendido" not in ids or any(
+                    i.startswith("respuesta_con_contexto") for i in ids):
+                continue
+            nuevas_opciones = []
+            for clave, uid, etiqueta, glosas in (
+                    ("entendido", "respuesta_con_contexto_si",
+                     "Entendido: lo que me indica", ["COMPRENDER"]),
+                    ("no_entiendo", "respuesta_con_contexto_no",
+                     "No entiendo lo que me indica", ["COMPRENDER", "NO"])):
+                if clave not in plantillas:
+                    continue
+                if not valida(plantillas[clave].replace("{indicacion}", ""),
+                              q["id"]):
+                    continue
+                nuevas_opciones.append({
+                    "estado": "afirmado" if clave == "entendido" else "negado",
+                    "etiqueta": etiqueta,
+                    "frase": plantillas[clave].replace("{indicacion}", ind),
+                    "glosas": contexto + glosas, "glosasPropias": True,
+                    "id": uid,
+                    "origen": "respuesta a una indicación, con la indicación"})
+            q["opciones"][2:2] = nuevas_opciones
+
+    # «¿Qué documentos trajo?» tras «Sí».
+    docs = datos.get("documentos", {})
+    pasos_de = {}
+    for rid, r in banco["recorridos"].items():
+        for i, p in enumerate(r["pasos"]):
+            pasos_de[p["pregunta"]] = (rid, i)
+    nuevas, vistos = [], set()
+    for q in banco["preguntas"]:
+        nuevas.append(q)
+        spec = datos.get("preguntas_de_documentos", {}).get(q["formulacion"])
+        if q.get("control") != "polar3" or not spec or q["id"] not in pasos_de:
+            continue
+        area = q["origen"]["escenario"].split("-")[1]
+        items = docs.get(area)
+        if not items:
+            continue
+        tarjetas = []
+        for i, d in enumerate(items, 1):
+            if (glosas_invalidas(d["glosas"]) or not valida(d["frase"], q["id"])):
+                continue
+            tarjetas.append({"estado": "afirmado", "etiqueta": d["etiqueta"],
+                             "frase": d["frase"], "glosas": list(d["glosas"]),
+                             "glosasPropias": True, "zona": "Documentos",
+                             "id": f"z{i}"})
+        if not tarjetas:
+            continue
+        opciones = tarjetas + [
+            {"estado": "afirmado", "etiqueta": "Otro documento (escribir)",
+             "frase": "«{texto}»", "glosas": ["PAPEL"], "glosasPropias": True,
+             "editor": "texto_detalle", "zona": "Documentos", "id": "otro"},
+            {"estado": "desconocido", "etiqueta": "No sé", "frase":
+             "No sé qué documentos corresponden.", "glosas": ["NO_SABER"],
+             "glosasPropias": True, "salida": True, "id": "no_se"}]
+        qid = f"{q['id']}.docs"
+        nuevas.append({
+            "acto": "pregunta", "campo": "tramite", "campos": ["tramite"],
+            "control": "seleccion_multiple", "dominio": "tramite",
+            "entidad": "Tramite", "formulacion": spec["pregunta"],
+            "formulacionLsb": {"estado": "GRAMMAR_PROVISIONAL",
+                               "glosas": spec["glosas"], "utilizable": True},
+            "id": qid, "maximo": len(tarjetas) + 1, "modo": "frase",
+            "noOfrecer": [], "nodos": [], "opciones": opciones,
+            "origen": {**q["origen"], "ampliacion": "documentos"},
+            "plantilla": spec["plantilla"], "variantes": [],
+        })
+        rid, i = pasos_de[q["id"]]
+        banco["recorridos"][rid]["pasos"].insert(i + 1, {
+            "pregunta": qid, "padre": q["id"],
+            "cuando": [{"pregunta": q["id"], "estados": ["afirmado"]}]})
+        # Los índices de los pasos siguientes se corren una posición.
+        for otro, (orid, oi) in list(pasos_de.items()):
+            if orid == rid and oi > i:
+                pasos_de[otro] = (orid, oi + 1)
+        pasos_de[qid] = (rid, i + 1)
+    banco["preguntas"] = nuevas
+    return banco
+
+
 def dart_tramites(banco: dict) -> str:
     datos = json.dumps(banco, ensure_ascii=False, sort_keys=True,
                        separators=(",", ":"))
@@ -2442,6 +2627,8 @@ def main() -> int:
                        archivos=archivos)
     poner_glosas(corpus, avisos)
     banco = banco_tramites(corpus, avisos) if not errores else None
+    if banco:
+        banco = ampliar_banco_tramites(banco, corpus, avisos)
     revision_lsb = []
     sin_sena = info_sin_sena(corpus, avisos, revision_lsb)
     for a in avisos:

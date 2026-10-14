@@ -136,17 +136,18 @@ void main() {
       expect(q.isMultiple, isFalse);
       expect(q.isPolar, isTrue);
       // SÍ, NO y NO SÉ, una seña cada una; al elegirla se dice la respuesta
-      // documentada de ese estado que no agrega nada a lo preguntado: «Sí.
-      // Perdimos la copia anterior.» pondría un dato en boca de la persona.
+      // con el contexto de la pregunta (no «Sí.» a secas): lo preguntado, sin
+      // agregar un dato que la persona no dijo («Sí. Perdimos la copia
+      // anterior.» pondría un dato en su boca).
       expect(
         q.options.map(
           (o) =>
               '${o.id}:${o.glosses.join('+')}:${o.phrase}:${o.state.wireName}',
         ),
         [
-          'si:SÍ:Sí.:afirmado',
-          'no:NO:No.:negado',
-          'no_se:NO_SABER:No sé cuál certificado.:desconocido',
+          'si:SÍ:Sí, necesito un duplicado del certificado de matrimonio.:afirmado',
+          'no:NO:No, no necesito un duplicado del certificado de matrimonio.:negado',
+          'no_se:NO_SABER:No sé cuál certificado necesito.:desconocido',
         ],
       );
     });
@@ -158,7 +159,11 @@ void main() {
       s = rules.select(s, pregunta, 'si').session;
       s = rules.select(s, pregunta, 'no').session;
       expect(s.answers[pregunta]!.optionIds, ['no']);
-      expect(GuidedComposer(bank).compose(s.toIntervention()), 'No.');
+      // El redactor junta «No,» con el «no» del verbo: «No necesito…».
+      expect(
+        GuidedComposer(bank).compose(s.toIntervention()),
+        'No necesito un duplicado del certificado de matrimonio.',
+      );
     });
   });
 
@@ -179,7 +184,10 @@ void main() {
       await c.read(guidedEmissionProvider).emit();
       final respuesta = c.read(conversationProvider).conversation.lastTurn!;
       expect(respuesta.message.speaker, SpeakerRole.deaf);
-      expect(respuesta.message.text, 'Sí.');
+      expect(
+        respuesta.message.text,
+        'Sí, necesito un duplicado del certificado de matrimonio.',
+      );
       expect(respuesta.message.replyToId, launch.hearingTurnId);
     });
 
@@ -193,10 +201,16 @@ void main() {
       c.read(guidedFlowProvider.notifier).select(pregunta, 'no');
       final inter = c.read(guidedFlowProvider.notifier).intervention!;
       expect(rules.glossesOf(inter), ['NO']);
-      expect(c.read(guidedComposerProvider).compose(inter), 'No.');
+      expect(
+        c.read(guidedComposerProvider).compose(inter),
+        'No, no necesito un duplicado del certificado de matrimonio.',
+      );
       await c.read(guidedEmissionProvider).emit();
       final respuesta = c.read(conversationProvider).conversation.lastTurn!;
-      expect(respuesta.message.text, 'No.');
+      expect(
+        respuesta.message.text,
+        'No, no necesito un duplicado del certificado de matrimonio.',
+      );
       expect(respuesta.message.replyToId, launch.hearingTurnId);
     });
 

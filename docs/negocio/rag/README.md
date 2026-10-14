@@ -215,6 +215,27 @@ Los escenarios nuevos citan el documento como fuente
 (`documentos/arancel.pdf#p=2`). El constructor comprueba que el archivo
 exista y que la página esté dentro del PDF.
 
+### Respuestas completas en «Trámites»
+
+Las tarjetas de «Trámites» no dicen «Sí, comprendo» ni «Sí.» a secas: la
+respuesta repite de qué se trata la pregunta. `respuestas_ampliadas.json`
+guarda, por pregunta, la frase de cada estado (`afirmado`, `negado`,
+`desconocido`) —«¿Tiene abogado para este caso?» → «Sí, tengo abogado para este
+caso.»—. Además:
+
+- una pregunta corta («¿Entendió?») se muestra con la afirmación del
+  funcionario que la precede;
+- una indicación se puede contestar diciendo cuál es
+  (`respuesta_con_contexto_si/no`), además de «Entendido» y «No entiendo»;
+- «¿Trajo algún documento…?» abre, si la persona dijo que sí, «¿Qué documentos
+  trajo?»: tarjetas de una seña por institución (`documentos`), más «Otro» escrito.
+
+Las tarjetas siguen siendo una seña (SÍ, NO, NO SÉ). **No se agrega
+vocabulario**: el constructor usa una frase curada solo si todas sus palabras
+ya están en el corpus; si no, deja la pregunta como estaba.
+`tool/tests/test_respuestas_completas.py` y
+`test/tramites_respuestas_completas_test.dart` lo comprueban.
+
 ## Búsqueda por significado (Lambda)
 
 La Lambda LSB→Texto/Audio lleva empaquetado el mismo corpus. Después de

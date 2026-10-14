@@ -350,7 +350,10 @@ void main() {
       final found = ragOfrecidas(enSepdep, retriever);
       // Se responde desde SEPDEP, la institución de la conversación.
       expect({for (final s in found) s.scenarioId.split('-')[1]}, {'SEPDEP'});
-      expect(found.map((s) => s.text), contains('Sí, me denunciaron.'));
+      expect(
+        found.map((s) => s.text),
+        contains('Sí, la denuncia es contra mí.'),
+      );
     });
 
     test('un contexto directo determinista bloquea el RAG', () {

@@ -276,10 +276,10 @@ void main() {
       expect(
         mensaje('no'),
         'No estoy en peligro ahora. Conozco a esa persona. '
-        'Me tocó sin mi permiso. Todos los días. No hay testigos. '
+        'Me tocó sin mi permiso. Me acosa todos los días. No tengo testigos. '
         'Necesito un intérprete de LSB.',
       );
-      expect(mensaje('si'), contains('Hay testigos.'));
+      expect(mensaje('si'), contains('Tengo testigos.'));
     });
 
     test('SÍ no pone datos que nadie dijo en boca de la persona', () {

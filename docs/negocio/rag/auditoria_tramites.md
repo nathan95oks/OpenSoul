@@ -2,7 +2,7 @@
 
 Generada por `python tool/auditar_tramites.py --escribir`. No se edita a mano.
 
-- Escenarios en el corpus: **183**; con recorrido en «Trámites»: **167**; preguntas del banco: **571**.
+- Escenarios en el corpus: **183**; con recorrido en «Trámites»: **167**; preguntas del banco: **616**.
 - Escenarios **sin recorrido** (ninguna pregunta se ofrece): **16**.
 - Recorridos **poco profundos** (menos de 8 turnos): **43**.
 - Recorridos **sin ramificaciones**: **119** de 167.
