@@ -38,6 +38,10 @@ class PendingSignInfo {
   /// Dónde está la seña: «M3 · General I · p.111». Vacío si no se sabe.
   final String source;
 
+  /// Los sentidos de una palabra que cambia según la frase («pasar»: ocurrir,
+  /// entrar, cambiar de dueño). Vacía si la palabra tiene un solo sentido.
+  final List<PendingSignContext> contexts;
+
   const PendingSignInfo({
     required this.word,
     this.description = '',
@@ -48,6 +52,48 @@ class PendingSignInfo {
     this.reviewed = false,
     this.hasLsbSign = false,
     this.source = '',
+    this.contexts = const [],
+  });
+
+  /// Lo que es la palabra en la frase [sentence]: el primer sentido cuya
+  /// palabra o frase aparece en ella. Sin frase, o si ninguno aparece, la
+  /// descripción general (que nombra los sentidos), no uno que no se dijo.
+  PendingSignInfo inContext(String? sentence) {
+    if (sentence == null || contexts.isEmpty) return this;
+    // Solo palabras, separadas por un espacio: «¿Qué pasó?» es « QUE PASO ».
+    final dicho =
+        ' ${SpanishText.stripAccents(sentence.toUpperCase()).replaceAll(RegExp(r'[^A-ZÑ0-9]+'), ' ').trim()} ';
+    for (final c in contexts) {
+      if (c.when.any((w) => dicho.contains(' $w '))) {
+        return PendingSignInfo(
+          word: word,
+          description: c.description,
+          lsbDescription: c.lsbDescription,
+          example: example,
+          isProperName: isProperName,
+          isAcronym: isAcronym,
+          reviewed: reviewed,
+          hasLsbSign: hasLsbSign,
+          source: source,
+        );
+      }
+    }
+    return this;
+  }
+}
+
+/// Un sentido de una palabra que cambia según la frase.
+class PendingSignContext {
+  /// Palabras o frases (sin tildes, en mayúsculas, con espacios) de las que
+  /// basta una en lo que se dijo: «PASE ADELANTE», «DENUNCIA».
+  final List<String> when;
+  final String description;
+  final List<String> lsbDescription;
+
+  const PendingSignContext({
+    required this.when,
+    required this.description,
+    this.lsbDescription = const [],
   });
 }
 
@@ -80,6 +126,21 @@ class PendingSignCatalog {
             isProperName: v['tipo'] == 'nombre_propio',
             isAcronym: v['tipo'] == 'sigla',
             reviewed: v['revisada'] == true,
+            contexts: [
+              for (final c in (v['contextos'] as List? ?? const []))
+                PendingSignContext(
+                  when: [
+                    for (final w
+                        in (c as Map<String, dynamic>)['cuando'] as List)
+                      plain('$w').replaceAll('_', ' '),
+                  ],
+                  description: '${c['descripcion'] ?? ''}',
+                  lsbDescription: [
+                    for (final g in (c['descripcionLsb'] as List? ?? const []))
+                      '$g',
+                  ],
+                ),
+            ],
           ),
       },
       {
@@ -97,12 +158,17 @@ class PendingSignCatalog {
 
   /// Lo que se sabe de [gloss] (`SENA_PENDIENTE:FOLIO_REAL`). Una palabra sin
   /// descripción da al menos su nombre: la app dice que no tiene seña.
-  PendingSignInfo infoOf(String gloss) {
+  ///
+  /// Con [sentence] (lo que se dijo), una palabra con varios sentidos da el
+  /// de esa frase: «pasar» en «¿qué está pasando?» no es «pasar a mi nombre».
+  PendingSignInfo infoOf(String gloss, {String? sentence}) {
     final key = PendingSign.isPending(gloss)
         ? gloss.substring(PendingSign.prefix.length)
         : gloss;
-    return _byKey[key] ??
+    final info =
+        _byKey[key] ??
         PendingSignInfo(word: PendingSign.wordOf(PendingSign.prefix + key));
+    return info.inContext(sentence);
   }
 
   /// La glosa pendiente con que se explica [word], tal como la escribió el
@@ -128,6 +194,8 @@ class PendingSignCatalog {
 
   /// Mayúsculas, sin tildes (la Ñ se queda: es otra letra) y con `_` entre
   /// palabras, como las claves del catálogo.
+  static String plain(String word) => _plain(word);
+
   static String _plain(String word) => SpanishText.stripAccents(
     word.toUpperCase().trim(),
   ).replaceAll(RegExp(r'[\s_]+'), '_');

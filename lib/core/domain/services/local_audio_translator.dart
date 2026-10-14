@@ -3,6 +3,7 @@ import 'package:lsb_legal_app/core/domain/conversation/lsb_gloss_semantics.dart'
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/domain/services/animation_url_resolver.dart';
 import 'package:lsb_legal_app/core/domain/services/help_direction.dart';
+import 'package:lsb_legal_app/core/domain/services/verb_forms.dart';
 import 'package:lsb_legal_app/core/domain/text/spanish_text.dart';
 
 /// Motor de traducción y desambiguación local en Dart para modo sin conexión (Offline).
@@ -315,6 +316,10 @@ class LocalAudioTranslator {
         if (_lexicalMap.containsKey(foldedSingle)) {
           matchedGloss = _lexicalMap[foldedSingle];
           matchLen = 1;
+        } else if (VerbForms.lemmas.containsKey(foldedSingle)) {
+          // «va», «tiene», «da»: la forma conjugada de un verbo con seña.
+          matchedGloss = VerbForms.lemmas[foldedSingle];
+          matchLen = 1;
         } else if (foldedSingle.startsWith('AYUD')) {
           // «ayúdeme», «ayudarle», «ayudamos»…: la dirección se decide abajo.
           matchedGloss = HelpDirection.dar;
@@ -348,7 +353,11 @@ class LocalAudioTranslator {
     // 3. Estructuración sintáctica básica LSB (Orden OSV / Interrogación al final)
     // Quién ayuda a quién: «¿en qué le puedo ayudar?» es AYUDAR_DAR;
     // «necesito ayuda», «ayúdeme», AYUDAR_PEDIR (misma regla que la Lambda).
-    final dirigidas = HelpDirection.apply(foundGlosses, rawText);
+    // «voy a denunciar»: futuro, no el verbo ir.
+    final dirigidas = HelpDirection.apply(
+      VerbForms.applyFuture(foundGlosses, rawText),
+      rawText,
+    );
     final semanticGlosses = _reorderToLsb(dirigidas, rawText);
 
     // 4. Resolver clips de animación para el avatar 3D

@@ -34,11 +34,15 @@ class SpellingHelp {
   /// informó ([words]: palabras sin seña del catálogo y señas sin animación).
   /// Las letras se buscan en orden; si dos palabras empiezan en el mismo
   /// paso, gana la más larga («DE» no se come el comienzo de «DENUNCIA»).
+  ///
+  /// [sentence] es lo que se dijo: una palabra con varios sentidos («pasar»)
+  /// se explica con el de esa frase.
   static List<SpellingHelp> forSteps(
     List<String> steps,
     List<String> words,
-    PendingSignCatalog catalog,
-  ) {
+    PendingSignCatalog catalog, {
+    String? sentence,
+  }) {
     final pending = [...words];
     final out = <SpellingHelp>[];
     var i = 0;
@@ -68,7 +72,9 @@ class SpellingHelp {
           end: i + length - 1,
           word: shown,
           synonyms: synonyms,
-          description: gloss == null ? null : catalog.infoOf(gloss),
+          description: gloss == null
+              ? null
+              : catalog.infoOf(gloss, sentence: sentence),
         ),
       );
       i += length;

@@ -1,6 +1,7 @@
 import 'package:lsb_legal_app/core/domain/entities/lsb_translation.dart';
 import 'package:lsb_legal_app/core/domain/repositories/audio_translation_repository.dart';
 import 'package:lsb_legal_app/core/domain/services/local_audio_translator.dart';
+import 'package:lsb_legal_app/core/domain/services/verb_forms.dart';
 
 /// Versión de la forma de la clave de caché. Súbela si cambia qué distingue
 /// dos traducciones (p. ej. si se agrega un nuevo dato del que depende el
@@ -51,10 +52,15 @@ class CachingAudioTranslationRepository implements AudioTranslationRepository {
     if (hit != null) return hit;
 
     try {
-      final translation = await inner.translateText(
+      // «va», «tiene», «da»… que el servidor dejó deletreadas vuelven a su
+      // verbo (IR, TENER, DAR): tienen seña.
+      final translation = VerbForms.apply(
         text,
-        situation: situation,
-        resolvedSenses: resolvedSenses,
+        await inner.translateText(
+          text,
+          situation: situation,
+          resolvedSenses: resolvedSenses,
+        ),
       );
       if (translation.glosses.isNotEmpty && !translation.needsClarification) {
         if (_cache.length >= maxEntries) _cache.remove(_cache.keys.first);

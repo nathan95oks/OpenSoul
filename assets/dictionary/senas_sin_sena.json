@@ -477,7 +477,27 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "No, quiero cancelar una hipoteca registrada."
+   "ejemplo": "No, quiero cancelar una hipoteca registrada.",
+   "contextos": [
+    {
+     "cuando": [
+      "deuda",
+      "cuota",
+      "cuotas",
+      "multa",
+      "pago",
+      "saldo",
+      "monto",
+      "costo",
+      "arancel"
+     ],
+     "descripcion": "Pagar lo que se debe. «Cancelar la multa»: pagarla.",
+     "descripcionLsb": [
+      "DAR",
+      "BILLETES"
+     ]
+    }
+   ]
   },
   "CASO": {
    "descripcion": "Un asunto o problema que se está tratando.",
@@ -1792,7 +1812,26 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "No sé en qué oficina ingresaron el trámite."
+   "ejemplo": "No sé en qué oficina ingresaron el trámite.",
+   "contextos": [
+    {
+     "cuando": [
+      "oficina",
+      "juzgado",
+      "fiscalia",
+      "sala",
+      "edificio",
+      "hospital",
+      "alcaldia",
+      "ventanilla"
+     ],
+     "descripcion": "Entrar a un lugar. «Ingresar a la oficina»: entrar a la oficina.",
+     "descripcionLsb": [
+      "IR",
+      "DENTRO"
+     ]
+    }
+   ]
   },
   "INGRESO": {
    "descripcion": "Cuando un trámite se presenta y se registra en la oficina.",
@@ -2256,14 +2295,96 @@
    "ejemplo": "Sí, mi documento tiene una partida antigua."
   },
   "PASAR": {
-   "descripcion": "Cambiar algo de lugar o de dueño. «Pasar a mi nombre»: registrarlo como mío.",
-   "descripcionLsb": [
-    "CAMBIAR",
-    "NOMBRE"
-   ],
+   "descripcion": "Pasar cambia de sentido según la frase: ocurrir («¿qué pasa?»), entrar o avanzar («pase adelante»), cambiar de dueño («pasar a mi nombre») o entregar («pásame el documento»).",
+   "descripcionLsb": [],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "Compré un auto. Quiero pasarlo a mi nombre."
+   "ejemplo": "Compré un auto. Quiero pasarlo a mi nombre.",
+   "contextos": [
+    {
+     "cuando": [
+      "a mi nombre",
+      "a su nombre",
+      "a nombre de",
+      "pasarlo",
+      "pasarla",
+      "pasarlos",
+      "pasarlas",
+      "pasarle"
+     ],
+     "descripcion": "Cambiar algo de dueño. «Pasar a mi nombre»: registrarlo como mío.",
+     "descripcionLsb": [
+      "CAMBIAR",
+      "NOMBRE"
+     ]
+    },
+    {
+     "cuando": [
+      "paseme",
+      "pasame",
+      "pasenme",
+      "pasele",
+      "paselo",
+      "pasela"
+     ],
+     "descripcion": "Dar algo a otra persona. «Páseme su cédula»: deme su cédula.",
+     "descripcionLsb": [
+      "DAR"
+     ]
+    },
+    {
+     "cuando": [
+      "que paso",
+      "lo que paso",
+      "paso algo",
+      "paso nada",
+      "que pasaron"
+     ],
+     "descripcion": "Ocurrir antes. «¿Qué pasó?»: ¿qué ocurrió?",
+     "descripcionLsb": [
+      "PASADO",
+      "QUÉ"
+     ]
+    },
+    {
+     "cuando": [
+      "que pasa",
+      "que pasan",
+      "que esta pasando",
+      "esta pasando",
+      "pasando",
+      "pasa algo",
+      "pasa nada",
+      "pasara algo"
+     ],
+     "descripcion": "Ocurrir ahora. «¿Qué está pasando?»: ¿qué ocurre?",
+     "descripcionLsb": [
+      "AHORA",
+      "QUÉ"
+     ]
+    },
+    {
+     "cuando": [
+      "pase adelante",
+      "pasen adelante",
+      "pasar adelante",
+      "pasa adelante",
+      "pase",
+      "pasen",
+      "puede pasar",
+      "pueden pasar",
+      "puedes pasar",
+      "adelante",
+      "pasar por",
+      "pase por"
+     ],
+     "descripcion": "Entrar o avanzar hasta donde le indican. «Pase adelante»: venga aquí.",
+     "descripcionLsb": [
+      "VENIR",
+      "AQUÍ"
+     ]
+    }
+   ]
   },
   "PASO": {
    "descripcion": "Cada parte de un trámite.",
@@ -2429,7 +2550,21 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "Compré una casa. Quiero ponerla a mi nombre."
+   "ejemplo": "Compré una casa. Quiero ponerla a mi nombre.",
+   "contextos": [
+    {
+     "cuando": [
+      "denuncia",
+      "queja",
+      "demanda",
+      "recurso"
+     ],
+     "descripcion": "Presentar. «Poner una denuncia»: presentarla ante la autoridad.",
+     "descripcionLsb": [
+      "PRESENTAR"
+     ]
+    }
+   ]
   },
   "POR_CIENTO": {
    "descripcion": "Parte de cada cien (%).",
@@ -2939,7 +3074,25 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "Sufro acoso físico: una persona me sigue y me toca."
+   "ejemplo": "Sufro acoso físico: una persona me sigue y me toca.",
+   "contextos": [
+    {
+     "cuando": [
+      "instrucciones",
+      "indicaciones",
+      "pasos",
+      "ruta",
+      "reglas",
+      "orden",
+      "ordenes"
+     ],
+     "descripcion": "Hacer lo que dicen. «Seguir las instrucciones»: hacer lo que le indican.",
+     "descripcionLsb": [
+      "HACER",
+      "EXPLICAR"
+     ]
+    }
+   ]
   },
   "SEGURIDAD": {
    "descripcion": "Estar sin peligro.",
@@ -3069,7 +3222,25 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador."
+   "ejemplo": "Conserve esos elementos y siga instrucciones del investigador.",
+   "contextos": [
+    {
+     "cuando": [
+      "instrucciones",
+      "indicaciones",
+      "pasos",
+      "ruta",
+      "reglas",
+      "orden",
+      "ordenes"
+     ],
+     "descripcion": "Hacer lo que dicen. «Seguir las instrucciones»: hacer lo que le indican.",
+     "descripcionLsb": [
+      "HACER",
+      "EXPLICAR"
+     ]
+    }
+   ]
   },
   "SIGUIR": {
    "descripcion": "Continuar; también hacer lo que dicen. «Seguir instrucciones».",
@@ -3078,7 +3249,25 @@
    ],
    "tipo": "concepto",
    "revisada": false,
-   "ejemplo": "No sé si la hipoteca sigue registrada."
+   "ejemplo": "No sé si la hipoteca sigue registrada.",
+   "contextos": [
+    {
+     "cuando": [
+      "instrucciones",
+      "indicaciones",
+      "pasos",
+      "ruta",
+      "reglas",
+      "orden",
+      "ordenes"
+     ],
+     "descripcion": "Hacer lo que dicen. «Seguir las instrucciones»: hacer lo que le indican.",
+     "descripcionLsb": [
+      "HACER",
+      "EXPLICAR"
+     ]
+    }
+   ]
   },
   "SIREJ": {
    "descripcion": "Página de internet del juzgado para ver su caso.",

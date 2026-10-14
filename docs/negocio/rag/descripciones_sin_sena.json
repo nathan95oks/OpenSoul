@@ -559,6 +559,26 @@
    "lsb": [
     "TERMINAR",
     "DEUDA"
+   ],
+   "contextos": [
+    {
+     "cuando": [
+      "DEUDA",
+      "CUOTA",
+      "CUOTAS",
+      "MULTA",
+      "PAGO",
+      "SALDO",
+      "MONTO",
+      "COSTO",
+      "ARANCEL"
+     ],
+     "descripcion": "Pagar lo que se debe. «Cancelar la multa»: pagarla.",
+     "lsb": [
+      "DAR",
+      "BILLETES"
+     ]
+    }
    ]
   },
   "CANTIDAD": {
@@ -2051,6 +2071,25 @@
    "lsb": [
     "PRESENTAR",
     "TRÁMITE"
+   ],
+   "contextos": [
+    {
+     "cuando": [
+      "OFICINA",
+      "JUZGADO",
+      "FISCALIA",
+      "SALA",
+      "EDIFICIO",
+      "HOSPITAL",
+      "ALCALDIA",
+      "VENTANILLA"
+     ],
+     "descripcion": "Entrar a un lugar. «Ingresar a la oficina»: entrar a la oficina.",
+     "lsb": [
+      "IR",
+      "DENTRO"
+     ]
+    }
    ]
   },
   "INGRESO": {
@@ -2770,12 +2809,93 @@
    ]
   },
   "PASAR": {
-   "descripcion": "Cambiar algo de lugar o de dueño. «Pasar a mi nombre»: registrarlo como mío.",
+   "descripcion": "Pasar cambia de sentido según la frase: ocurrir («¿qué pasa?»), entrar o avanzar («pase adelante»), cambiar de dueño («pasar a mi nombre») o entregar («pásame el documento»).",
    "tipo": "concepto",
    "revisada": false,
-   "lsb": [
-    "CAMBIAR",
-    "NOMBRE"
+   "contextos": [
+    {
+     "cuando": [
+      "A MI NOMBRE",
+      "A SU NOMBRE",
+      "A NOMBRE DE",
+      "PASARLO",
+      "PASARLA",
+      "PASARLOS",
+      "PASARLAS",
+      "PASARLE"
+     ],
+     "descripcion": "Cambiar algo de dueño. «Pasar a mi nombre»: registrarlo como mío.",
+     "lsb": [
+      "CAMBIAR",
+      "NOMBRE"
+     ]
+    },
+    {
+     "cuando": [
+      "PASEME",
+      "PASAME",
+      "PASENME",
+      "PASELE",
+      "PASELO",
+      "PASELA"
+     ],
+     "descripcion": "Dar algo a otra persona. «Páseme su cédula»: deme su cédula.",
+     "lsb": [
+      "DAR"
+     ]
+    },
+    {
+     "cuando": [
+      "QUE PASO",
+      "LO QUE PASO",
+      "PASO ALGO",
+      "PASO NADA",
+      "QUE PASARON"
+     ],
+     "descripcion": "Ocurrir antes. «¿Qué pasó?»: ¿qué ocurrió?",
+     "lsb": [
+      "PASADO",
+      "QUÉ"
+     ]
+    },
+    {
+     "cuando": [
+      "QUE PASA",
+      "QUE PASAN",
+      "QUE ESTA PASANDO",
+      "ESTA PASANDO",
+      "PASANDO",
+      "PASA ALGO",
+      "PASA NADA",
+      "PASARA ALGO"
+     ],
+     "descripcion": "Ocurrir ahora. «¿Qué está pasando?»: ¿qué ocurre?",
+     "lsb": [
+      "AHORA",
+      "QUÉ"
+     ]
+    },
+    {
+     "cuando": [
+      "PASE ADELANTE",
+      "PASEN ADELANTE",
+      "PASAR ADELANTE",
+      "PASA ADELANTE",
+      "PASE",
+      "PASEN",
+      "PUEDE PASAR",
+      "PUEDEN PASAR",
+      "PUEDES PASAR",
+      "ADELANTE",
+      "PASAR POR",
+      "PASE POR"
+     ],
+     "descripcion": "Entrar o avanzar hasta donde le indican. «Pase adelante»: venga aquí.",
+     "lsb": [
+      "VENIR",
+      "AQUÍ"
+     ]
+    }
    ]
   },
   "PASO": {
@@ -2918,6 +3038,20 @@
    "revisada": false,
    "lsb": [
     "DEJAR"
+   ],
+   "contextos": [
+    {
+     "cuando": [
+      "DENUNCIA",
+      "QUEJA",
+      "DEMANDA",
+      "RECURSO"
+     ],
+     "descripcion": "Presentar. «Poner una denuncia»: presentarla ante la autoridad.",
+     "lsb": [
+      "PRESENTAR"
+     ]
+    }
    ]
   },
   "POR_CIENTO": {
@@ -3449,6 +3583,24 @@
    "revisada": false,
    "lsb": [
     "CONTINUAR"
+   ],
+   "contextos": [
+    {
+     "cuando": [
+      "INSTRUCCIONES",
+      "INDICACIONES",
+      "PASOS",
+      "RUTA",
+      "REGLAS",
+      "ORDEN",
+      "ORDENES"
+     ],
+     "descripcion": "Hacer lo que dicen. «Seguir las instrucciones»: hacer lo que le indican.",
+     "lsb": [
+      "HACER",
+      "EXPLICAR"
+     ]
+    }
    ]
   },
   "SEGUN": {

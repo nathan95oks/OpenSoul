@@ -1272,6 +1272,20 @@ def info_sin_sena(corpus: dict, avisos: list,
             "revisada": bool(dato.get("revisada")),
             "ejemplo": ejemplos.get(palabra, ""),
         }
+        # Una palabra con varios sentidos («pasar»: ocurrir, entrar, cambiar de
+        # dueño) se explica según la frase. Cada contexto lleva su descripción
+        # en señas del catálogo («lsb»): la app elige el primero cuya palabra
+        # («cuando») está en lo que se dijo, y si ninguno, la general.
+        contextos = []
+        for c in dato.get("contextos") or []:
+            glosas_c = directa(f"{palabra} ({c['cuando'][0]})", c.get("lsb") or [])
+            contextos.append({
+                "cuando": [_norm(x).replace("_", " ") for x in c["cuando"]],
+                "descripcion": c["descripcion"],
+                "descripcionLsb": glosas_c or [],
+            })
+        if contextos:
+            salida[palabra]["contextos"] = contextos
         por_ver += sorted({g[len(SENA_PENDIENTE):] for g in lsb
                            if g.startswith(SENA_PENDIENTE)} - set(salida))
     salida = {p: salida[p] for p in sorted(salida)}

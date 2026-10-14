@@ -20,6 +20,10 @@ class AvatarPlaybackSheet extends ConsumerStatefulWidget {
   /// Las palabras que el avatar deletrea: con ellas cada palabra se ve y se
   /// salta por separado, y no como una sola cadena de letras.
   final List<String> spelledWords;
+
+  /// Lo que se dijo: una palabra deletreada con varios sentidos («pasar») se
+  /// explica con el de esta frase.
+  final String? sentence;
   final bool autoDismissOnFinish;
   final Duration animationDuration;
 
@@ -29,6 +33,7 @@ class AvatarPlaybackSheet extends ConsumerStatefulWidget {
     required this.animationUrls,
     this.animationGlosses,
     this.spelledWords = const [],
+    this.sentence,
     this.autoDismissOnFinish = true,
     this.animationDuration = const Duration(seconds: 3),
   });
@@ -39,6 +44,7 @@ class AvatarPlaybackSheet extends ConsumerStatefulWidget {
     required List<String> animationUrls,
     List<String>? animationGlosses,
     List<String> spelledWords = const [],
+    String? sentence,
     bool autoDismissOnFinish = true,
     Duration animationDuration = const Duration(seconds: 3),
   }) {
@@ -51,6 +57,7 @@ class AvatarPlaybackSheet extends ConsumerStatefulWidget {
         animationUrls: animationUrls,
         animationGlosses: animationGlosses,
         spelledWords: spelledWords,
+        sentence: sentence,
         autoDismissOnFinish: autoDismissOnFinish,
         animationDuration: animationDuration,
       ),
@@ -89,7 +96,12 @@ class _AvatarPlaybackSheetState extends ConsumerState<AvatarPlaybackSheet> {
         PendingSignCatalog.empty;
     if (!identical(catalogo, _catalogoUsado)) {
       _catalogoUsado = catalogo;
-      _ayudas = SpellingHelp.forSteps(_glosses, widget.spelledWords, catalogo);
+      _ayudas = SpellingHelp.forSteps(
+        _glosses,
+        widget.spelledWords,
+        catalogo,
+        sentence: widget.sentence,
+      );
     }
     return _ayudas;
   }

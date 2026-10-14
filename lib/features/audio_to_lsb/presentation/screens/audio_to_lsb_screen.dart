@@ -108,10 +108,12 @@ class _AudioToLsbScreenState extends ConsumerState<AudioToLsbScreen> {
     final catalog =
         ref.watch(pendingSignCatalogProvider).asData?.value ??
         PendingSignCatalog.empty;
-    return SpellingHelp.forSteps(steps, [
-      ...result.unanimatedSigns,
-      ...result.spelledWords,
-    ], catalog);
+    return SpellingHelp.forSteps(
+      steps,
+      [...result.unanimatedSigns, ...result.spelledWords],
+      catalog,
+      sentence: state.pendingSourceText ?? state.recognizedText,
+    );
   }
 
   Widget _buildScreen(

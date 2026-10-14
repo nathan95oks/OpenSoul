@@ -1459,6 +1459,8 @@ def post_process_glosses(bedrock_result: dict, text: str, resolved_senses: dict 
     incidencias += incidencias_pregunta
     raw_glosses, incidencias_ayuda = enforce_help_direction(raw_glosses, text)
     incidencias += incidencias_ayuda
+    raw_glosses, incidencias_formas = enforce_verb_forms(raw_glosses, text)
+    incidencias += incidencias_formas
 
     # Ninguna glosa que salga de aquí puede ser una invención: lo que no está
     # documentado se deletrea en vez de presentarse como una seña real.
@@ -1974,6 +1976,112 @@ def enforce_help_direction(glosses: list, text: str) -> tuple:
         if _clave(g) != nueva:
             incidencias.append({"palabra": g, "accion": "direccion_ayuda",
                                 "glosa": nueva})
+    return resultado, incidencias
+
+
+# ---------------------------------------------------------------------------
+# Formas conjugadas con seña: «va», «tiene», «da»… no se deletrean
+# ---------------------------------------------------------------------------
+# El modelo lematiza casi siempre, pero no siempre: dictada sola, «va» volvía
+# V-A, «van» VAN, «tiene» TIENE, «da» DA, y «pasa» salía como IR. Una forma
+# conjugada cuyo verbo SÍ tiene seña en el catálogo no puede deletrearse:
+# es la misma palabra, con otra desinencia. Solo están las formas que no
+# se confunden con otra palabra («fue» es ir y ser; «iba» no) y cuyo verbo
+# está en AVAILABLE_GLOSSES. «pasar» no tiene seña: de sus formas se ocupa
+# la descripción de la palabra en la app, según la frase.
+_FORMAS_VERBALES = {
+    "IR": "VA VAS VAN VAMOS VOY VAYA VAYAN VAYAMOS IBA IBAS IBAN IBAMOS",
+    "TENER": "TIENE TIENEN TIENES TENGO TENEMOS TENGA TENGAN TENIA TENIAN "
+             "TUVO TUVE TUVIERON TUVIMOS",
+    "VENIR": "VIENE VIENEN VIENES VENGO VENIMOS VENGA VENGAN VENIA VINO "
+             "VINIERON VINE",
+    "DAR": "DA DAN DOY DAMOS DIO DIERON",
+    "QUERER": "QUIERO QUIERE QUIERES QUEREMOS QUIEREN QUERIA",
+    "NECESITAR": "NECESITO NECESITA NECESITAS NECESITAMOS NECESITAN",
+    "SABER": "SABE SABES SABEN SABEMOS SABIA",
+    "PUEDO": "PUEDE PUEDES PUEDEN PODEMOS PODIA",
+}
+FORMAS_VERBALES = {forma: lema
+                   for lema, formas in _FORMAS_VERBALES.items()
+                   for forma in formas.split()}
+# Formas de «ir» que, con «a» + infinitivo, no son el verbo ir sino el futuro
+# próximo: «voy a denunciar» es futuro + DENUNCIAR, no IR.
+_FORMAS_IR_FUTURO = "VOY VAS VA VAMOS VAN VAYA VAYAN".split()
+_IR_A_INFINITIVO = re.compile(
+    r"\b(?:%s)\s+a\s+([a-zñ]{2,}(?:ar|er|ir))\b" % "|".join(_FORMAS_IR_FUTURO).lower())
+# Terminan como un infinitivo pero son lugares o personas: «voy a un bar»,
+# «va a la mujer» no son futuro.
+_NO_INFINITIVO = {"bar", "taller", "hogar", "lugar", "mujer", "mar", "hospital"}
+_FORMAS_PASAR = re.compile(r"\bpas(?:a|an|as|amos|aba|aban|aron|ando|e|en|ó)\b")
+
+
+def enforce_verb_forms(glosses: list, text: str) -> tuple:
+    """Devuelve a su verbo con seña las formas conjugadas que el modelo dejó
+    sin lematizar, y corrige tres sustituciones que el español desmiente.
+
+    * VA, VAN, TIENE, DA… (letras sueltas ya colapsadas por `repair_coverage`)
+      pasan a IR, TENER, DAR. Solo si la palabra está en lo que dijo la
+      persona: nada se agrega por sospecha.
+    * «voy a denunciar»: IR no es el verbo (nadie dijo que fuera a ningún
+      lugar): se retira y el futuro se marca con FUTURO al inicio, donde la
+      regla 4 del prompt pone los marcadores de tiempo.
+    * «pasa»/«pasó»/«pase» no son ir ni el pasado: si el modelo los
+      cambió por IR o PASADO sin que el español los diga, vuelven a ser la
+      palabra que se dijo (PASAR), que se deletrea y la app describe.
+    * COMO_ESTAS sin «cómo está(s)» en el texto (p. ej. «sigue») es una
+      invención: se retira.
+
+    Devuelve (glosas, incidencias).
+    """
+    plano = remove_accents((text or "").upper())
+    dicho = set(_PALABRA.findall(plano))
+    minusculas = (text or "").lower()
+    resultado = list(glosses)
+    incidencias = []
+
+    # 1. Formas conjugadas con seña.
+    for i, g in enumerate(resultado):
+        lema = FORMAS_VERBALES.get(_clave(g))
+        if lema and _clave(g) in dicho and lema in _AVAILABLE_GLOSSES_NORM:
+            incidencias.append({"palabra": g, "accion": "forma_verbal",
+                                "glosa": lema})
+            resultado[i] = lema
+
+    # 2. «va a + infinitivo»: futuro, no el verbo ir.
+    auxiliares = [m for m in _IR_A_INFINITIVO.finditer(remove_accents(minusculas))
+                  if m.group(1) not in _NO_INFINITIVO]
+    if auxiliares:
+        sin_ir = [g for g in resultado if _clave(g) != "IR"]
+        if len(sin_ir) != len(resultado):
+            incidencias.append({"accion": "ir_auxiliar_retirado"})
+            resultado = sin_ir
+        if "FUTURO" not in {_clave(g) for g in resultado}:
+            resultado.insert(0, "FUTURO")
+            incidencias.append({"accion": "futuro_marcado", "glosa": "FUTURO"})
+
+    # 3. Formas de «pasar» cambiadas por otra seña.
+    if _FORMAS_PASAR.search(minusculas):
+        dice_ir = bool(dicho & (set(_FORMAS_IR_FUTURO)
+                                | {"IR", "FUI", "FUIMOS", "IBA", "IBAN"}))
+        dice_pasado = "PASADO" in dicho
+        for i, g in enumerate(resultado):
+            c = _clave(g)
+            if (c == "IR" and not dice_ir) or (c == "PASADO" and not dice_pasado):
+                incidencias.append({"palabra": g, "accion": "pasar_recuperado",
+                                    "glosa": "PASAR"})
+                resultado[i] = "PASAR"
+                break
+
+    # 4. COMO_ESTAS que nadie dijo.
+    if (any(_clave(g) == "COMO_ESTAS" for g in resultado)
+            and not re.search(r"\bc[oó]mo\s+est", minusculas)):
+        resultado = [g for g in resultado if _clave(g) != "COMO_ESTAS"]
+        incidencias.append({"accion": "como_estas_no_dicho_retirado"})
+
+    # Lo dicho no puede quedar mudo.
+    if not resultado and recognize_input(text):
+        resultado = [_clave(w) for w in recognize_input(text)]
+        incidencias.append({"accion": "palabra_recuperada"})
     return resultado, incidencias
 
 

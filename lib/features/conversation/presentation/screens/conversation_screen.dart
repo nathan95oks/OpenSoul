@@ -169,6 +169,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           animationUrls: lastTurn.outputs.animationUrls,
           animationGlosses: lastTurn.outputs.animationGlosses,
           spelledWords: _palabrasDeletreadas(lastTurn),
+          sentence: lastTurn.message.text,
         );
         if (mounted) setState(() => _avatarSignando = false);
       }
@@ -355,6 +356,7 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                                         spelledWords: _palabrasDeletreadas(
                                           turn,
                                         ),
+                                        sentence: turn.message.text,
                                         autoDismissOnFinish: false,
                                       );
                                     },
