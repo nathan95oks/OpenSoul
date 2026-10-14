@@ -11,6 +11,19 @@ class SurfaceSession {
 
   const SurfaceSession(this.ref);
 
+  /// Deja limpios los dos módulos autónomos, Tarjetas LSB y Voz a LSB.
+  ///
+  /// Conversación los usa como piezas suyas: cuando abre un encargo nuevo
+  /// (responder a un turno, abrir uno propio), no puede encontrarlos con lo
+  /// que quedó de un uso anterior —una voz ya traducida, o la última oración
+  /// formal de las tarjetas, que aparecía en vez de la pregunta
+  /// recomendada—.
+  void resetStandaloneModules() {
+    ref.read(audioTranslationControllerProvider.notifier).reset();
+    ref.read(cardsFlowSessionProvider).resetNow();
+    ref.read(openFamilyProvider.notifier).clear();
+  }
+
   Future<void> enter(FlowSurface surface) async {
     if (ref.read(flowSurfaceProvider) == surface) return;
 

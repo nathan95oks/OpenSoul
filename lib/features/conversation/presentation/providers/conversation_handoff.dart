@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/navigation_provider.dart';
+import 'package:lsb_legal_app/app/surface_session.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
 import 'package:lsb_legal_app/core/domain/conversation/graph_matcher.dart';
@@ -9,6 +10,7 @@ import 'package:lsb_legal_app/features/conversation/presentation/providers/conve
 import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/context_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/denuncia_robo_draft_provider.dart';
+import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/guided_flow_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/semantic_zones_provider.dart';
 import 'package:lsb_legal_app/features/lsb_to_text_audio/presentation/providers/sentence_provider.dart';
 
@@ -129,6 +131,13 @@ class ConversationHandoff {
     ref.read(cardsFlowLaunchProvider.notifier).start(launch);
 
     if (!mismoEncargo) {
+      // Un encargo nuevo no hereda nada de Tarjetas LSB ni de Voz a LSB: ni
+      // la última oración formal, ni un recorrido a medias, ni una voz ya
+      // traducida. Se limpia primero, para que lo que se propone a
+      // continuación (el contexto y la pregunta recomendada) sea lo único
+      // que la persona encuentre.
+      ref.read(surfaceSessionProvider).resetStandaloneModules();
+
       final proposedId = launch.proposedContextId;
       final proposed = proposedId == null ? null : contextById(proposedId);
       final contexts = ref.read(contextProvider.notifier);
@@ -140,6 +149,10 @@ class ConversationHandoff {
 
       ref.read(sentenceProvider.notifier).clearSentence();
       ref.read(semanticZonesProvider.notifier).reset();
+      // Con el contexto ya puesto, el recorrido arranca por la pregunta que
+      // la ruta recomienda (o por la primera) aunque el contexto sea el
+      // mismo de antes y no haya cambiado.
+      ref.read(guidedFlowProvider.notifier).reset();
     }
 
     // El acto comunicativo llega al borrador, que es quien lo manda al
