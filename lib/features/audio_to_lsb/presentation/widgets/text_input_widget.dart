@@ -9,8 +9,8 @@ import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/domain/services/input_validator.dart';
 import 'package:lsb_legal_app/features/audio_to_lsb/presentation/controllers/audio_translation_controller.dart';
 
-/// Si el teléfono tiene internet ahora. Sin internet el dictado se intenta
-/// en el propio teléfono, y si tampoco se puede, se pide conectarse.
+/// Si el teléfono tiene internet ahora. Sin internet el dictado por voz no
+/// empieza: al pulsar el micrófono se avisa que hay que conectarse.
 ///
 /// Las pruebas lo sustituyen; en ellas no hay red que consultar.
 final internetProbeProvider = Provider<Future<bool> Function()>(
@@ -29,10 +29,9 @@ Future<bool> _hayInternet() async {
   }
 }
 
-/// El aviso cuando el dictado no puede hacerse sin internet.
+/// El aviso (un toast) cuando se pulsa el micrófono sin internet.
 const sinInternetParaDictar =
-    'Sin conexión a internet: el dictado por voz no está disponible sin '
-    'internet en este teléfono. Conéctate a internet o escribe el mensaje.';
+    'Sin conexión a internet. Conéctate a internet para dictar por voz.';
 
 class TextInputWidget extends ConsumerStatefulWidget {
   final Function(String) onSubmit;
@@ -175,6 +174,13 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
   Future<void> _startRecording() async {
     try {
       FocusScope.of(context).unfocus();
+      // Sin internet no se dicta: se avisa de inmediato, sin abrir el
+      // micrófono ni esperar a que el reconocimiento falle.
+      if (!await ref.read(internetProbeProvider)()) {
+        _warn(sinInternetParaDictar);
+        return;
+      }
+      if (!mounted) return;
       bool available = await _speechToText.initialize(
         onStatus: _onSpeechStatus,
         onError: _onSpeechError,
@@ -187,11 +193,6 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
       _speechToText.errorListener = _onSpeechError;
 
       if (available) {
-        // Sin internet se pide el reconocimiento del propio teléfono (si lo
-        // tiene, con el paquete de español descargado); con internet, el
-        // normal, que reconoce mejor.
-        _sinInternet = !await ref.read(internetProbeProvider)();
-        if (!mounted) return;
         _finalResultSeen = false;
         setState(() {
           _isRecording = true;
@@ -220,21 +221,14 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
                 .read(audioTranslationControllerProvider.notifier)
                 .updateRecognizedText(result.recognizedWords);
           },
-          listenOptions: stt.SpeechListenOptions(
-            localeId: localeId,
-            onDevice: _sinInternet,
-          ),
+          listenOptions: stt.SpeechListenOptions(localeId: localeId),
         );
       } else {
         _warn('Reconocimiento de voz no disponible');
       }
     } catch (_) {
       if (mounted) setState(() => _isRecording = false);
-      _warn(
-        _sinInternet
-            ? sinInternetParaDictar
-            : 'No se pudo iniciar el dictado. Escribe el mensaje.',
-      );
+      _warn('No se pudo iniciar el dictado. Escribe el mensaje.');
     }
   }
 
@@ -248,22 +242,19 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
   /// del reconocimiento: lo dictado hasta ahí está completo y se envía.
   static const _erroresDeSilencio = {'error_no_match', 'error_speech_timeout'};
 
-  /// Fallos del reconocedor que significan que hacía falta internet: el
-  /// reconocimiento en línea sin red, o el del teléfono sin el idioma.
+  /// Fallos del reconocedor que significan que se perdió la conexión a mitad
+  /// del dictado (el reconocimiento es en línea).
   static const _erroresDeRed = {
     'error_network',
     'error_network_timeout',
     'error_server',
     'error_server_disconnected',
-    'error_language_unavailable',
-    'error_language_not_supported',
   };
 
   void _onSpeechError(Object error) {
     if (!_isRecording) return;
     final mensaje = error is SpeechRecognitionError ? error.errorMsg : '';
-    if (_erroresDeRed.contains(mensaje) &&
-        (_sinInternet || mensaje.startsWith('error_network'))) {
+    if (_erroresDeRed.contains(mensaje)) {
       _avisoAlDetener = sinInternetParaDictar;
     }
     _stopRecording(porError: !_erroresDeSilencio.contains(mensaje));
@@ -279,9 +270,6 @@ class _TextInputWidgetState extends ConsumerState<TextInputWidget>
   String _lastRecognizedWords = '';
   bool _finalResultSeen = false;
   bool _deteniendo = false;
-
-  /// El último dictado empezó sin internet (reconocimiento del teléfono).
-  bool _sinInternet = false;
 
   /// Lo que se avisa al terminar, si el reconocedor falló por falta de red.
   String? _avisoAlDetener;

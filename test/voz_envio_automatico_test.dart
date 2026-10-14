@@ -253,39 +253,77 @@ void main() {
       await cerrar(tester);
     });
 
-    testWidgets('sin internet se intenta reconocer en el propio teléfono', (
-      tester,
-    ) async {
-      final enviados = await montar(
-        tester,
-        automatico: true,
-        conInternet: false,
+    testWidgets('sin internet, al pulsar el micrófono sale el aviso de '
+        'conectarse y no se graba', (tester) async {
+      final enviados = <String>[];
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            internetProbeProvider.overrideWithValue(() async => false),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: TextInputWidget(
+                onSubmit: enviados.add,
+                sendSpeechAutomatically: true,
+              ),
+            ),
+          ),
+        ),
       );
-      expect(escuchas.single['onDevice'], isTrue);
-      // Si el teléfono reconoce sin red, se envía como siempre.
-      await oir(tester, 'necesito ayuda');
-      await delMotor(tester, 'notifyStatus', 'done');
-      expect(enviados, ['necesito ayuda']);
+      await tester.tap(find.byTooltip('Grabar voz'));
+      await avanzar(tester);
+
+      // El toast pide conectarse a internet…
+      expect(find.text(sinInternetParaDictar), findsOneWidget);
+      expect(sinInternetParaDictar, contains('Conéctate a internet'));
+      // …y el micrófono no se abrió: ni grabando ni escuchando.
+      expect(find.byTooltip('Detener grabación'), findsNothing);
+      expect(find.byTooltip('Grabar voz'), findsOneWidget);
+      expect(escuchas, isEmpty);
+      expect(enviados, isEmpty);
       await cerrar(tester);
     });
 
-    testWidgets('si no puede reconocer sin internet, pide conectarse', (
+    testWidgets('sin internet el aviso sale cada vez que se pulsa', (
       tester,
     ) async {
-      final enviados = await montar(
-        tester,
-        automatico: true,
-        conInternet: false,
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            internetProbeProvider.overrideWithValue(() async => false),
+          ],
+          child: MaterialApp(
+            home: Scaffold(body: TextInputWidget(onSubmit: (_) {})),
+          ),
+        ),
       );
-      await delMotor(
-        tester,
-        'notifyError',
-        jsonEncode({'errorMsg': 'error_network', 'permanent': true}),
-      );
-      expect(enviados, isEmpty);
-      expect(find.text(sinInternetParaDictar), findsOneWidget);
-      expect(find.byTooltip('Grabar voz'), findsOneWidget);
+      for (var i = 0; i < 2; i++) {
+        await tester.tap(find.byTooltip('Grabar voz'));
+        await avanzar(tester);
+        expect(find.text(sinInternetParaDictar), findsOneWidget);
+        ScaffoldMessenger.of(
+          tester.element(find.byType(Scaffold)),
+        ).clearSnackBars();
+        await avanzar(tester);
+      }
+      expect(escuchas, isEmpty);
       await cerrar(tester);
+    });
+
+    test('Conversación y Voz a LSB dictan con el mismo micrófono', () {
+      // El aviso de conectarse vive en un solo widget: los dos módulos que
+      // dictan tienen que usarlo.
+      for (final pantalla in [
+        'lib/features/audio_to_lsb/presentation/screens/audio_to_lsb_screen.dart',
+        'lib/features/conversation/presentation/screens/conversation_screen.dart',
+      ]) {
+        expect(
+          File(pantalla).readAsStringSync(),
+          contains('TextInputWidget('),
+          reason: pantalla,
+        );
+      }
     });
 
     testWidgets('con internet que se corta a mitad, también lo dice', (
