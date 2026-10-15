@@ -1,9 +1,10 @@
 # OpenSoul — LSB Ciudadano
 
-Aplicación de accesibilidad que permite a una persona sorda y a una persona
-oyente **mantener una conversación** en trámites y situaciones reales ante
-entidades públicas bolivianas: denuncias policiales, defensoría, SEGIP,
-hospitales, alcaldía y fiscalía.
+Aplicación de apoyo a la comunicación que permite a una persona sorda y a una
+persona oyente **mantener una conversación** durante denuncias, consultas y
+trámites ante entidades públicas bolivianas. Su corpus institucional está
+centrado en Cochabamba e incluye, entre otras áreas, Policía, Fiscalía, Órgano
+Judicial, SEGIP, SERECI, Derechos Reales, GAM, notarías y servicios de defensa.
 
 Stack: Flutter + Riverpod + Clean Architecture + AWS (Lambda, API Gateway,
 Bedrock, Polly, S3). El paquete Dart se llama `lsb_legal_app`.
@@ -13,17 +14,15 @@ Bedrock, Polly, S3). El paquete Dart se llama `lsb_legal_app`.
 ## Qué problema resuelve
 
 En Bolivia, una persona sorda que necesita presentar una denuncia o hacer un
-trámite depende de que haya un intérprete de Lengua de Señas Boliviana
-disponible. Casi nunca lo hay. El resultado es que la persona escribe en un
-papel, se hace entender a medias, o desiste del trámite.
+trámite puede encontrar barreras cuando no hay interpretación en Lengua de
+Señas Boliviana disponible. Escribir en español tampoco siempre ofrece una
+comunicación equivalente: para muchas personas sordas es una segunda lengua,
+con una gramática distinta de la LSB.
 
-Escribir en español tampoco es una solución equivalente: para muchas personas
-sordas el español es una segunda lengua, con una gramática distinta de la LSB, y
-un texto escrito con dificultad puede restarle credibilidad a una denuncia
-legítima ante un funcionario.
-
-OpenSoul sustituye al intérprete ausente en ambos sentidos de la conversación,
-sin exigirle a la persona sorda que escriba en español.
+OpenSoul reduce esa barrera en ambos sentidos de la conversación sin exigirle a
+la persona sorda redactar todo en español. Es una ayuda comunicativa: **no
+sustituye automáticamente a un intérprete, no certifica una denuncia y no
+representa consentimiento ni aceptación formal de una institución**.
 
 ## Cómo lo resuelve
 
@@ -34,8 +33,8 @@ turnos alternados:
   —con desambiguación semántica de términos polisémicos en contexto jurídico— y
   un avatar 3D las ejecuta.
 - **La persona sorda** responde construyendo su mensaje con tarjetas de glosas,
-  guiada por preguntas según el contexto. El sistema redacta una declaración en
-  español formal y la reproduce en voz.
+  opciones y editores de datos, guiada por preguntas según el contexto. El
+  sistema compone un mensaje revisable en español y lo reproduce en voz.
 
 La frase de la persona oyente determina el contexto desde el que se le propone
 responder, y el contexto que ella confirma vuelve al motor de traducción para
@@ -56,41 +55,58 @@ Oyente: «¿A qué hora y dónde te robaron?»
         un audio · un turno · de vuelta a la conversación
 ```
 
-Dos preguntas en lugar de las nueve del contexto. Las zonas detectadas guían el
-recorrido pero no lo encierran: agotadas, el resto del árbol sigue disponible
-por si la persona quiere añadir algo que no le preguntaron.
+Dos preguntas en lugar de recorrer el contexto completo. Las zonas y ranuras
+detectadas guían el recorrido, mientras que las respuestas condicionales abren
+o descartan sus preguntas dependientes.
 
-La declaración se genera **una sola vez, al final**. Partirla en una por
+El mensaje se genera **una sola vez, al final**. Partirlo en uno por
 sub-pregunta produciría frases sueltas —«Fue de noche.», «Fue en la calle.»— en
-lugar de una oración con valor documental, y obligaría a pasarse el teléfono una
-vez por cada dato.
+lugar de una respuesta coherente, y obligaría a pasarse el teléfono una vez por
+cada dato.
+
+### Trámites documentados
+
+La familia **Trámites** combina un banco guiado con un corpus RAG local. En el
+estado actual del repositorio contiene:
+
+- **183 escenarios fuente** documentados;
+- **167 recorridos ejecutables** agrupados en 16 áreas institucionales;
+- **616 preguntas** de trámite;
+- recorridos profundizados con ramificaciones y limpieza automática de
+  respuestas que dejan de ser válidas;
+- respuestas completas de Sí/No/No sé, detalles de documentos y editores
+  opcionales para datos como NUREJ, WebID o número de caso.
+
+El grafo conversacional tiene prioridad cuando reconoce una pregunta segura. El
+RAG local entra cuando el grafo no alcanza, conserva la institución o el trámite
+del que se venía hablando y puede usar una consulta semántica remota como
+respaldo. Ante ambigüedad, abre el selector en vez de inventar una ruta.
+
+Los datos en vivo —por ejemplo, una deuda, el fiscal asignado o la fecha de una
+audiencia— no se inventan: la app ayuda a preguntarlos o comunicarlos, pero no
+consulta sistemas internos de las instituciones.
 
 ## Por qué está construido así
 
-**El motor de generación es propio, y la IA solo refina.** Un modelo de lenguaje
-redacta mejor, pero omite contenido: en la evaluación del corpus, generando por
-su cuenta representa el 58,3 % de las glosas declaradas frente al 100 % del
-motor de reglas. En una declaración destinada a una institución pública, omitir
-que se pidió ayuda o que intervino la policía no es una redacción más elegante:
-es otra declaración. Por eso el motor local produce siempre la oración base, el
-refinamiento remoto se descarta cuando pierde contenido, y la app funciona
-aunque el backend no responda.
+**El motor de generación es determinista.** Las intervenciones guiadas se
+redactan desde el mismo banco en Dart y Python. Las rutas históricas pueden usar
+Bedrock para refinar una base local, pero el resultado remoto se rechaza si
+omite o altera contenido. En una comunicación institucional, cambiar un actor,
+una negación o un dato no es una mejora de estilo: es otro mensaje.
 
 **El diccionario vive fuera del código.** Las señas son una lengua viva y
-regional; el vocabulario se sirve desde una fuente canónica versionada con
-sincronización remota, y la comunidad puede proponer señas nuevas desde la app.
+regional; el vocabulario se carga desde una fuente canónica versionada, con un
+asset local de respaldo. Las palabras todavía no incorporadas se muestran como
+“seña a incorporar” y nunca se presentan como animaciones disponibles.
 
 **Toda entrada se normaliza a una misma representación semántica** antes de
 generar cualquier salida. No hay caminos directos de texto a avatar ni de
 tarjetas a audio: ambos sentidos comparten núcleo.
 
-**Un enunciado vale desde que se dice, no desde que el backend contesta.** El
-turno de la persona oyente entra en la conversación de inmediato y el contexto
-se deduce en local, así que la persona sorda puede abrir las tarjetas y empezar
-a responder mientras la traducción todavía viaja; las señas se incorporan al
-mismo turno cuando llegan. Antes ese ida y vuelta era tiempo muerto en el centro
-de la conversación. Si el backend no responde, el turno se queda y se contesta
-igual.
+**La red no decide si la conversación puede continuar.** El turno de la persona
+oyente entra en el hilo y el contexto se deduce localmente. Si la Lambda de
+Texto→LSB no responde, un traductor local limitado usa el léxico y las
+animaciones empaquetadas; el grafo y el corpus RAG local siguen disponibles.
 
 ---
 
@@ -110,17 +126,20 @@ texto generado y su audio.
 ### `lsb_to_text_audio` — de LSB a texto y voz
 
 Dirección de la persona sorda. Flujo guiado por preguntas: el contexto
-situacional (denuncia de robo, violencia, accidente, testigo, orientación)
-define un árbol de zonas semánticas, y cada zona ofrece las tarjetas
-pertinentes.
+situacional se elige entre las familias **Denuncias, Consultas, Trámites y
+Preguntas**. Cada recorrido ofrece únicamente las opciones pertinentes y puede
+abrir editores de nombre, teléfono, monto, documento u otros datos literales.
+Los trámites se agrupan primero por institución para no presentar una lista
+plana de más de cien casos.
 
 Con las glosas seleccionadas, el motor semántico local clasifica roles
-gramaticales y compone la declaración; el backend la refina y sintetiza el
-audio. El resultado se puede escuchar, copiar y enviar a la conversación.
+gramaticales y compone el mensaje. El backend valida el contrato, conserva la
+redacción guiada y sintetiza el audio. El resultado se puede escuchar, copiar y
+enviar a la conversación.
 
 Es el módulo con mayor carga de procesamiento de lenguaje: la entrada es un
 conjunto de glosas sin orden ni morfología y la salida debe ser español bien
-formado con valor documental.
+formado sin agregar hechos que la persona no confirmó.
 
 ### `audio_to_lsb` — de voz y texto a LSB
 
@@ -130,7 +149,8 @@ resolviendo términos polisémicos según el contexto jurídico, y devuelve las
 animaciones que el avatar 3D reproduce en orden.
 
 Las glosas sin seña propia se deletrean con dactilología, y las señas
-compuestas encadenan varias animaciones bajo una sola glosa.
+compuestas encadenan varias animaciones bajo una sola glosa. Si la Lambda no
+está disponible, entra un traductor local de cobertura más limitada.
 
 ---
 
@@ -178,10 +198,10 @@ reaparece como respuesta de un turno. Quien abre "Tarjetas LSB" o "Voz a LSB"
 los encuentra como si nunca los hubiera tocado, y la pregunta del oyente no
 enruta un recorrido que allí nadie pidió.
 
-El precio, asumido: salir de la conversación a una pestaña autónoma descarta una
-respuesta a medio construir. Es preferible a que reaparezca donde no
-corresponde — una declaración que se cuela en otro contexto no es un
-inconveniente, es falsa. El historial de la conversación nunca se toca.
+Reabrir el mismo encargo conversacional conserva el borrador; cambiar a otro
+encargo solicita confirmación antes de descartarlo. Las superficies autónomas
+siguen aisladas para que un mensaje preparado fuera del chat no reaparezca como
+respuesta a una pregunta distinta. El historial de la conversación no se toca.
 
 Verificado en `test/module_isolation_test.dart`.
 
@@ -192,10 +212,14 @@ lib/
 │   └── screens/                  splash y navegación principal
 ├── core/                         núcleo compartido, ordenado por capas
 │   ├── domain/                   capa de dominio (sin Flutter ni IO)
-│   │   ├── entities/             SemanticMessage, Conversation, LsbCard…
+│   │   ├── conversation/         grafo, rutas y semántica de turnos
+│   │   ├── guided/               banco y compositor guiado
+│   │   ├── rag/                  corpus y recuperación de trámites
+│   │   ├── entities/             Conversation, SemanticMessage, LsbCard…
 │   │   ├── repositories/         contratos (translation, audio, lexicon)
-│   │   └── services/             motores: conversación, semántico, contexto,
-│   │                             navegación, inferencia y puertos invertidos
+│   │   ├── services/             motores, inferencia y puertos invertidos
+│   │   ├── session/              propósito y política de la sesión
+│   │   └── text/                 normalización de español
 │   ├── data/                     capa de datos
 │   │   ├── datasources/          HTTP, asset y caché en disco
 │   │   ├── models/               DTOs con (de)serialización
@@ -219,7 +243,7 @@ toda salida se genera desde ella.
 
 | Lambda | Función |
 |---|---|
-| `lambda_function.py` | Glosas LSB → declaración en español (motor de reglas + Bedrock) + audio con Polly |
+| `lambda_function.py` | Tarjetas/datos → español y audio; contrato guiado v4, compatibilidad histórica y consulta RAG semántica |
 | `lambda_text_to_lsb.py` | Texto en español → glosas LSB con desambiguación semántica |
 
 
@@ -251,9 +275,10 @@ Luego, según tu sistema:
 ```
 
 Los scripts leen `.env`, montan un `--dart-define` por línea y llaman a
-`flutter run`. Sin `.env` la app compila pero las traducciones remotas
-fallan, el diccionario cae al asset empaquetado (modo offline) y las
-animaciones 3D caen al placeholder de texto.
+`flutter run`. Sin endpoints válidos no están disponibles Bedrock, Polly, la
+sincronización remota ni el RAG semántico. La app conserva el diccionario, el
+grafo, el corpus RAG, el GLB y una traducción Texto→LSB local de respaldo; su
+cobertura es menor que la del backend.
 
 Variables disponibles y su comportamiento por defecto se documentan en
 [`.env.example`](.env.example).
@@ -261,15 +286,16 @@ Variables disponibles y su comportamiento por defecto se documentan en
 ## Pruebas
 
 ```bash
+flutter analyze                                          # análisis estático
 flutter test                                             # suite completa
-flutter test test/local_sentence_assembler_test.dart     # motor semántico
+flutter test test/qa_conversacion_test.dart              # 35 conversaciones reales
 flutter test test/conversation_bidirectional_test.dart   # ciclo conversacional
-flutter test test/context_inference_engine_test.dart     # inferencia de contexto
-flutter test test/zone_inference_engine_test.dart        # inferencia de preguntas
-flutter test test/composite_sign_test.dart               # señas compuestas
-flutter test test/module_boundaries_test.dart            # fronteras entre módulos
+flutter test test/conversation_routing_exhaustive_test.dart # rutas del grafo
+flutter test test/rag_tramites_test.dart                 # RAG → tarjetas → chat
+flutter test test/tramites_profundizados_test.dart       # ramas y datos editables
+flutter test test/tramites_respuestas_completas_test.dart # respuestas de trámites
+flutter test test/conversacion_sin_internet_test.dart    # respaldo local
 flutter test test/module_isolation_test.dart             # sesión por superficie
-flutter test test/conversation_fluidity_test.dart        # camino crítico del turno
 ```
 
 Regresiones de seguridad del backend. No las ve `flutter test` —son Python—,
@@ -277,11 +303,15 @@ así que tienen job propio en CI:
 
 ```bash
 python3 -m unittest discover -s aws/tests -v
+python3 -m pytest tool/tests -q
+python3 tool/build_rag_corpus.py --check
+python3 tool/build_question_matrix.py --check
 ```
 
-Todo lo anterior se ejecuta en cada push y pull request
-([`.github/workflows/ci.yml`](.github/workflows/ci.yml)): analizador, suite de
-Dart, cobertura del diccionario y las Lambdas sobre Python 3.12 y 3.13.
+El CI ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) ejecuta el
+analizador, la suite Flutter, la cobertura del diccionario y las pruebas de las
+Lambdas sobre Python 3.12 y 3.13. Los `--check` de los generadores deben
+ejecutarse al modificar sus fuentes canónicas.
 
 Evaluación cuantitativa del motor de generación:
 
@@ -300,7 +330,19 @@ Resultados y metodología en
 |---|---|
 | [Fase 1](docs/architecture/fase-1-nucleo-conversacional.md) | Núcleo semántico compartido y conversación unificada |
 | [Fase 2](docs/architecture/fase-2-diccionario-evolutivo.md) | Diccionario fuera del código, fuente canónica única |
-| [Fase 3](docs/architecture/fase-3-propuestas-comunidad.md) | Propuestas de señas desde la aplicación |
+| [Fase 3](docs/architecture/fase-3-propuestas-comunidad.md) | Diseño histórico del ciclo de propuestas; esa UI no está en la superficie actual |
 | [Fase 4](docs/architecture/fase-4-contexto-conversacional.md) | Contexto conversacional entre módulos |
 | [Aislamiento y fluidez](docs/architecture/aislamiento-superficies-y-fluidez.md) | Sesión por superficie y camino crítico del turno |
 | [Evaluación](docs/architecture/evaluacion-motor-semantico.md) | Medición del motor semántico |
+| [Contexto maestro](docs/CONTEXTO_MAESTRO_PARA_IA.md) | Contratos, límites y fuentes canónicas del proyecto |
+| [Flujos de conversación](docs/FLUJOS_CONVERSACION_2026-10-12.md) | 35 conversaciones reproducibles, turno por turno |
+| [RAG institucional](docs/architecture/rag-conocimiento-institucional.md) | Recuperación local/remota y reglas de seguridad |
+| [Corpus de trámites](docs/negocio/rag/README.md) | Cómo ampliar, validar y regenerar escenarios |
+
+## Fuentes generadas
+
+No se editan manualmente `lib/core/domain/rag/tramites_data.g.dart`,
+`assets/rag/escenarios_cbba.json` ni `aws/question_bank.json`. Los escenarios y
+correcciones se modifican en `docs/negocio/rag/` y se regeneran con las
+herramientas de `tool/`; los comandos `--check` comprueban que los artefactos
+empaquetados estén al día.
