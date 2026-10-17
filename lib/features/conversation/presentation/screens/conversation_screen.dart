@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/app_theme.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/conversation/polar_question.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/domain/entities/semantic_message.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
@@ -96,6 +97,12 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     if (!mounted) return;
 
     handoff.openCards(launch);
+  }
+
+  /// Contesta «Sí», «No» o «No sé» a una pregunta de sí o no que el grafo no
+  /// tiene mapeada, sin abrir las tarjetas.
+  void _answerPolar(PolarAnswer answer) {
+    ref.read(conversationHandoffProvider).answerPolar(answer);
   }
 
   /// Un borrador a medias no se pierde en silencio al cambiar de encargo.
@@ -396,6 +403,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 onDeafCards: _openCardsFlow,
                 deafCardsMode: _deafCardsMode(state),
                 llamado: _llamado(state),
+                offerPolar:
+                    _llamado(state) == _LlamadoLsb.responder &&
+                    ref.watch(polarAnswerOfferedProvider),
+                onPolarAnswer: _answerPolar,
                 hearingFocus: _hearingFocus,
               ),
             ],
@@ -412,6 +423,11 @@ class _InputArea extends StatelessWidget {
   final VoidCallback onDeafCards;
   final CardsFlowPurpose deafCardsMode;
   final _LlamadoLsb llamado;
+
+  /// El último turno del oyente es una pregunta de sí o no sin tarjetas
+  /// propias: se ofrece «Sí», «No» y «No sé» además del botón de tarjetas.
+  final bool offerPolar;
+  final void Function(PolarAnswer) onPolarAnswer;
   final FocusNode hearingFocus;
 
   const _InputArea({
@@ -420,6 +436,8 @@ class _InputArea extends StatelessWidget {
     required this.onDeafCards,
     required this.deafCardsMode,
     required this.llamado,
+    required this.offerPolar,
+    required this.onPolarAnswer,
     required this.hearingFocus,
   });
 
@@ -446,6 +464,10 @@ class _InputArea extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (offerPolar) ...[
+            _RespuestasSiNo(onAnswer: onPolarAnswer),
+            const SizedBox(height: 10),
+          ],
           _BotonTarjetasLsb(
             onPressed: onDeafCards,
             responder: deafCardsMode == CardsFlowPurpose.conversationReply,
@@ -597,6 +619,57 @@ enum _LlamadoLsb {
 
   /// El avatar terminó de signar al oyente: le toca a la persona sorda.
   responder,
+}
+
+/// «Sí», «No» y «No sé» para una pregunta de sí o no que no tiene sus propias
+/// tarjetas. Cada una lleva su seña (SÍ, NO, NO_SABER) y se envía de una vez.
+class _RespuestasSiNo extends StatelessWidget {
+  final void Function(PolarAnswer) onAnswer;
+
+  const _RespuestasSiNo({required this.onAnswer});
+
+  static const _keys = {
+    PolarAnswer.yes: Key('responder_si'),
+    PolarAnswer.no: Key('responder_no'),
+    PolarAnswer.unknown: Key('responder_no_se'),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (final answer in PolarAnswer.values) ...[
+          if (answer != PolarAnswer.values.first) const SizedBox(width: 8),
+          Expanded(
+            child: Semantics(
+              button: true,
+              label: 'Responder ${answer.label}',
+              excludeSemantics: true,
+              child: OutlinedButton(
+                key: _keys[answer],
+                onPressed: () => onAnswer(answer),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.lsbViolet,
+                  minimumSize: const Size.fromHeight(44),
+                  side: const BorderSide(color: AppTheme.lsbViolet, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                ),
+                child: Text(
+                  answer.label,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 /// El botón que abre las tarjetas LSB. Lleva el violeta de las glosas y

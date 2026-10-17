@@ -1,10 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:lsb_legal_app/app/navigation_provider.dart';
 import 'package:lsb_legal_app/app/surface_session.dart';
 import 'package:lsb_legal_app/core/domain/entities/conversation.dart';
 import 'package:lsb_legal_app/core/di/injection.dart';
+import 'package:lsb_legal_app/core/domain/conversation/conversation_route.dart';
 import 'package:lsb_legal_app/core/domain/conversation/graph_matcher.dart';
+import 'package:lsb_legal_app/core/domain/conversation/polar_question.dart';
+import 'package:lsb_legal_app/core/domain/entities/translation_result.dart';
+import 'package:lsb_legal_app/core/domain/services/conversation_bridge.dart';
 import 'package:lsb_legal_app/core/presentation/session/cards_flow_launch.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/conversation_provider.dart';
 import 'package:lsb_legal_app/features/conversation/presentation/providers/rag_suggestions_provider.dart';
@@ -50,6 +56,27 @@ class ConversationHandoff {
       );
     }
 
+    final route = replyRouteFor(conversation, pending);
+
+    return CardsFlowLaunch.reply(
+      conversationId: conversation.id,
+      hearingTurnId: pending.message.id,
+      hearingText: pending.outputs.text,
+      hearingSpeechAct: pending.message.speechAct,
+      suggestion: pending.message.contextSuggestion,
+      activeContextId: conversation.activeContextId,
+      need: necesidad,
+      institutionProfileId: perfil,
+      route: route,
+    );
+  }
+
+  /// Con qué parte del grafo (o del trámite documentado) se responde a
+  /// [pending]; `null` si nada lo reconoce.
+  ConversationRoute? replyRouteFor(
+    Conversation conversation,
+    ConversationTurn pending,
+  ) {
     // La parte del grafo con la que se responde. Una conversación restaurada
     // no guarda rutas (son derivadas): se recalculan aquí.
     final graphRoute =
@@ -97,18 +124,51 @@ class ConversationHandoff {
                     const [],
               ) ??
               graphRoute;
+    return route;
+  }
 
-    return CardsFlowLaunch.reply(
-      conversationId: conversation.id,
-      hearingTurnId: pending.message.id,
-      hearingText: pending.outputs.text,
-      hearingSpeechAct: pending.message.speechAct,
-      suggestion: pending.message.contextSuggestion,
-      activeContextId: conversation.activeContextId,
-      need: necesidad,
-      institutionProfileId: perfil,
-      route: route,
-    );
+  /// Si a [pending] se le puede contestar con «Sí», «No» o «No sé» sin pasar
+  /// por las tarjetas: es una pregunta de sí o no ([isPolarQuestion]) y el
+  /// grafo y el RAG no tienen pregunta propia con sus opciones. Cuando sí la
+  /// tienen, esas tarjetas ya ofrecen su sí / no / no sé con la frase
+  /// completa, y esta respuesta genérica sobraría.
+  bool offersPolarAnswer(Conversation conversation, ConversationTurn pending) {
+    if (pending.pending || !isPolarQuestion(pending.message.text)) return false;
+    final route = replyRouteFor(conversation, pending);
+    return route == null ||
+        (!route.opensQuestions && route.targetContextId == null);
+  }
+
+  /// Deja en el chat la respuesta [answer] al turno del oyente que espera.
+  ///
+  /// No abre las tarjetas ni llama a la Lambda: «Sí.», «No.» o «No sé.» con
+  /// su seña, y suena con la voz del dispositivo. No cambia el tema de la
+  /// conversación (no lleva contexto).
+  SubmitOutcome answerPolar(PolarAnswer answer) {
+    final conversation = _conversation;
+    final pending = conversation.pendingReply;
+    if (pending == null) return SubmitOutcome.staleReply;
+
+    final outcome = ref
+        .read(conversationProvider.notifier)
+        .addDeafDeclaration(
+          result: TranslationResult(
+            baseSentence: answer.text,
+            generatedText: answer.text,
+          ),
+          glosses: [answer.gloss],
+          replyToId: pending.message.id,
+          expectedReplyText: pending.message.text,
+          conversationId: conversation.id,
+        );
+    if (outcome == SubmitOutcome.sent) {
+      // Un fallo del audio no deshace la respuesta: el turno conserva su
+      // botón de escuchar.
+      unawaited(
+        ref.read(audioOutputProvider).speak(answer.text).catchError((_) {}),
+      );
+    }
+    return outcome;
   }
 
   /// Abre el módulo de tarjetas con [launch].
@@ -178,3 +238,32 @@ class ConversationHandoff {
 final conversationHandoffProvider = Provider<ConversationHandoff>(
   ConversationHandoff.new,
 );
+
+/// Si ahora mismo se ofrece contestar con «Sí», «No» o «No sé» al último
+/// turno del oyente ([ConversationHandoff.offersPolarAnswer]).
+///
+/// Se recalcula cuando llega la consulta por significado: si el RAG encuentra
+/// el trámite de la pregunta, las respuestas genéricas dejan paso a sus
+/// tarjetas.
+final polarAnswerOfferedProvider = Provider<bool>((ref) {
+  final conversation = ref.watch(
+    conversationProvider.select((state) => state.conversation),
+  );
+  final pending = conversation.pendingReply;
+  if (pending == null || !isPolarQuestion(pending.message.text)) return false;
+
+  final route = pending.route;
+  if (route != null &&
+      ragMayAskRemote(route) &&
+      ref.watch(remoteRagProvider) != null) {
+    final retriever = ref.watch(ragRetrieverProvider);
+    ref.watch(
+      remoteRagSuggestionsProvider(
+        ragRemoteQueryFor(conversation, pending, retriever),
+      ),
+    );
+  }
+  return ref
+      .read(conversationHandoffProvider)
+      .offersPolarAnswer(conversation, pending);
+});
